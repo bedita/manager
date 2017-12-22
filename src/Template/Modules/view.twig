@@ -1,0 +1,25 @@
+{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
+
+
+<body>
+
+{% element 'modules_top_menu' %}
+
+{% element 'left_menu' %}
+
+<div class="head">
+    <h1><?= $data['attributes']['title'] ?></h1>
+    <!-- <h1>{if !empty($object)}{$object.title|escape:'html'|default:"<i>[no title]</i>"}{else}<i>[{t}New item{/t}]</i>{/if}</h1> -->
+</div>
+
+{% element 'commands_menu' %}
+
+<div class="main">
+
+    {% element 'form_object' %}
+</div>
+
+{% element 'right_menu' %}
+
+</body>
+

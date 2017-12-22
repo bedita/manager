@@ -1,0 +1,114 @@
+{% set paging = meta.pagination %}
+<div class="head">
+	<div class="toolbar" style="white-space:nowrap">
+
+<!--		<h2>
+			{if !empty($title)}
+
+				{$title|escape}
+
+			{elseif !empty($sectionSel)}
+
+				{t}{$itemName|default:$moduleName}{/t} in “
+				<span style="color:white" class="evidence">{$sectionSel.title|escape}</span> ”
+
+			{elseif !empty($pubSel)}
+
+				{t}{$itemName|default:$moduleName}{/t} in “
+				<span style="color:white" class="evidence">{$pubSel.title|escape}</span> ”
+
+			{else}
+
+				{t}all {$itemName|default:$moduleName}{/t}
+
+			{/if}
+
+
+			{if $view->SessionFilter->check('query')}
+
+				{if $view->SessionFilter->check('substring')}
+					&nbsp; {t}matching the query containing{/t}
+				{else}
+					&nbsp; {t}matching the query{/t}
+				{/if}
+
+				: “ <span style="color:white" class="evidence">{$view->SessionFilter->read('query')}</span> ”
+
+			{/if}
+		</h2>
+-->
+        <table>
+          <tr>
+<!--			{if ($view->viewVars.module_modify eq '1') && empty($noitem)} -->
+            {% if not currentModule.is_abstract %}
+                <td>
+                    <a href="{{ baseUrl }}{{ currentModule.name }}/new">Create new &nbsp; {{ currentModule.singular }}</a>
+                </td>
+            {% endif %}
+<!--
+				{if !empty($itemName)}
+					{t}{$itemName}{/t}
+				{else}
+					{assign var=leafs value=$conf->objectTypes.leafs}
+					{assign var=isFirst value=true}
+					{foreach from=$conf->objectTypes item=type key=key}
+						{if ( in_array($type.id,$leafs.id) && is_numeric($key) && $type.module_name == $currentModule.name )}
+							{if !$isFirst}
+							&nbsp;/&nbsp;
+							{/if}
+							{t}{$type.model|lower}{/t}
+							{$isFirst=false}
+						{/if}
+					{/foreach}
+				{/if}
+			</a>
+-->
+<!--		{/if}
+-->
+			<td>
+			<span class="evidence">{{ paging.count }} &nbsp;</span> {{ currentModule.name }}
+			</td>
+
+            {% if (paging.page_count > 1) %}
+<!--
+			<td>
+				{$beToolbar->first('page','','page')}
+				<span class="evidence"> {$beToolbar->current()} </span>
+				{t}of{/t}  &nbsp;
+				<span class="evidence">
+					{if ($beToolbar->pages()) > 0}
+					{$beToolbar->last($beToolbar->pages(),'',$beToolbar->pages())}
+					{else}1{/if}
+				</span>
+			</td>
+-->
+            <td>
+                Page {{ paging.page }} / {{ paging.page_count }}
+            </td>
+            <td>
+                <a href="{{ links.first.href }}" > First </a>
+            </td>
+            {% if links.prev.href %}
+                <td>
+                    <a href="{{ links.prev.href }}" > Prev </a>
+                </td>
+            {% endif %}
+            {% if links.next.href %}
+                <td>
+                    <a href="{{ links.next.href }}" > Next </a>
+                </td>
+            {% endif %}
+            <td>
+                <a href="{{ links.last.href }}" > Last </a>
+            </td>
+
+<!--
+            <td>  $this->Paginator->prev() }} <span class="evidence"> &nbsp;</span></td>
+
+            <td>  $this->Paginator->next() }} <span class="evidence"> &nbsp;</span></td> -->
+
+            {% endif %}
+        </tr>
+        </table>
+    </div>
+</div>

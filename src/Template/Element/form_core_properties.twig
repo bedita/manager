@@ -1,0 +1,31 @@
+{% set attributes = data.attributes %}
+{% set meta = data.meta %}
+
+<!-- <div class="tab"><h2>Title & Description</h2></div> -->
+
+<fieldset id="title">
+
+    <label>title:</label>
+    <br />
+    <input type="text" name="data[title]" value="{{ attributes.title }}" id="titleBEObject" style="width:100%" />
+    <br />
+    <label>description:</label>
+    <br />
+    <textarea style="width:100%; margin-bottom:2px; height:30px" class="mceSimple subtitle" name="data[description]">{{ attributes.description }}</textarea>
+    <label>unique name:</label>
+    <br />
+    <input type="text" id="nicknameBEObject" name="data[uniquename]" style="font-style:italic; width:100%" value="{{ attributes.uname }}"/>
+
+</fieldset>
+
+<!-- <div class="tab"><h2>Properties</h2></div> -->
+
+<fieldset id="status">
+
+    <label>status:</label>
+    <br />
+    {% for status in ['on', 'draft', 'off'] %}
+    <label><input type="radio" name="data[status]" value="{{ status }}" {% if status == attributes.status %}checked="checked"{% endif %} />{{ status }}</label>
+    {% endfor %}
+
+</fieldset>

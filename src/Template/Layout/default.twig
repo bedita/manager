@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{ Html.charset()|raw }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
+
+    {{ Html.css('bedita')|raw }}
+    {{ Html.css('bedita-icons')|raw }}
+
+    {{ Html.script('libs/jquery/jquery-2.1.0.min')|raw }}
+    {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
+    {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
+    {{ Html.script('beditaUI')|raw }}
+
+    {{ Html.script('libs/select2/select2.min')|raw }}
+
+    <title>{{ _view.fetch('title') }}</title>
+
+    {% element 'json_meta_config' %}
+
+</head>
+
+{{ _view.fetch('content')|raw }}

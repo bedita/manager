@@ -1,0 +1,18 @@
+{{ _view.assign('title', __('BEdita 4 - Dashboard')) }}
+
+<body class="home">
+{% element 'left_menu' %}
+<div class="dashboardcontainer">
+    <div class="dashboard dashboard-modules">
+        <ul class="modules">
+        {% for mod in modules %}
+            {% if mod.enabled %}
+            <li class="{{ mod.name }}">
+                <a href="{{ baseUrl }}{{ mod.name }}" title="{{ mod.name }}">{{ mod.name }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+</body>

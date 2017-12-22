@@ -1,0 +1,22 @@
+{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
+
+<body>
+
+{% element 'modules_top_menu' %}
+
+{% element 'left_menu' %}
+
+{% element 'commands_menu' %}
+
+{% element 'pagination_toolbar' %}
+
+
+<div class="mainfull">
+
+    {% element 'filters' %}
+
+    {% element 'list_objects' %}
+
+</div>
+
+</body>
