@@ -1,0 +1,43 @@
+# User specific & automatically generated files #
+#################################################
+/.vagrant/*
+/composer.lock
+/config/app.php
+/config/.env
+/coverage/*
+/index.html
+/logs/*
+!/logs/.gitkeep
+/phpunit.xml
+/provision/*
+/tmp/*
+!/tmp/.gitkeep
+/vendor/*
+!/vendor/.gitkeep
+
+# plugins folders #
+##########################
+/plugins/*
+!/logs/.gitkeep
+
+# IDE and editor specific files #
+#################################
+/nbproject
+/tags
+.idea
+.project
+.buildpath
+.settings
+.vscode
+.history
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
