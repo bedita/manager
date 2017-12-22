@@ -354,4 +354,11 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+    'API' => [
+        // API base URL and API KEY
+        'apiBaseUrl' => 'http://api.example.com',
+        'apiKey' => null,
+    ]
+
 ];
