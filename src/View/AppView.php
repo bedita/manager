@@ -39,5 +39,6 @@ class AppView extends TwigView
         parent::initialize();
 
         $this->loadHelper('Html');
+        $this->loadHelper('Url');
     }
 }

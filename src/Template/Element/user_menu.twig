@@ -13,6 +13,9 @@
 -->
 
     <li><a href="{{ baseUrl }}">Home</a></li>
+    {% if user %}
+        <li><a href="{{ baseUrl }}logout">Exit</a></li>
+    {% endif %}
 <!--
     {if !empty($BEAuthUser.userid)}
         <li><a href="{$html->url('/home/profile/')}">{t}Profile{/t}</a></li>
