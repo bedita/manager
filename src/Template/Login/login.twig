@@ -1,0 +1,54 @@
+{# {$html->script("form", false)}
+{$html->script("libs/jquery/plugins/jquery.form", false)}
+{$html->script("libs/jquery/plugins/jquery.metadata", false)} #}
+
+<div class="firstcolumn">
+     <div class="modules"><label class="bedita" rel="{{ baseUrl }}">BEdita 4</label></div>
+    <div class="insidecol colophon">
+        {% element 'colophon' %}
+    </div>
+</div>
+
+<div class="secondcolumn">
+	<div class="modules">
+	   <label class="admin">Login</label>
+	</div>
+</div>
+
+
+<div class="login">
+    <form name="login" action="{{ Url.build('/login') }}" method="post" name="loginForm" id="loginForm" class="cmxform">
+    <fieldset>
+        <input type="hidden" name="URLOK" value="" id="loginURLOK" />
+        <label class="block" id="luserid" for="userid">Username</label>
+        <input class="big" tabindex="1" type="text" name="username" id="userid" class="required:true" title="Username is required"/>
+        <label class="block" id="lpasswd" for="passwd">Password</label>
+        <input class="big" tabindex="2" type="password" name="password" id="passwd" class="required:true" title="Password is required"/>
+
+        <input class="bemaincommands" tabindex="2" type="submit" value="Enter"/>
+    </fieldset>
+    </form>
+
+	{# <label class="block"><a href='javascript:void(0)' onClick="$('#pswforget').toggle('fast')">{t}Forgot your username or password?{/t}</a></label>
+
+	<div id="pswforget" style="margin-top:20px; display:none">
+		<form method="post" action="{$html->url('/authentications/recoverUserPassword')}">
+		{$beForm->csrf()}
+		<input class="big" style="width:280px" type="text" placeholder="{t}Write your email here{/t}" name="data[email]"/>
+		<input class="bemaincommands" type="submit" value="{t}Send{/t}"/>
+		{if isset($conf->projectAdmin)}
+		{t}or{/t} <label><a href="mailto:{$conf->projectAdmin}">{t}contact the project admin{/t}</a></label>{/if}
+		</form>
+	</div>
+	{if !empty($externalAuthServices)}
+	<br>
+	<label>{t}Or use one of this external auth service{/t}</label><br />
+	{foreach from=$externalAuthServices item=service}
+	<form name="login" action="{$html->url('/authentications/login')}" class="auth_form" method="post">
+		{$beForm->csrf()}
+		<input type="hidden" name="data[login][auth_type]" value="{$service.name}">
+		<input type="submit" class="auth_button auth_button_{$service.name|lower}" value="{$service.name}">
+	</form>
+	{/foreach}
+	{/if} #}
+</div>
