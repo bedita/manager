@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Utility\Hash;
 
 /**
@@ -25,5 +26,14 @@ class DashboardController extends AppController
      */
     public function display()
     {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event)
+    {
+        // force read from /home
+        $this->readModules();
     }
 }

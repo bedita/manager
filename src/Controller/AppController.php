@@ -1,16 +1,14 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2017 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App\Controller;
 
@@ -18,38 +16,40 @@ use App\Model\API\BEditaClient;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Network\Exception\NotFoundException;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
 /**
- * Application Controller
+ * Base Application Controller
  *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
 {
 
     /**
-     * BEdita4 API client 
+     * BEdita4 API client
      *
-     * @var [type]
+     * @var \App\Model\API\BEditaClient
      */
     protected $apiClient = null;
 
     /**
-     * available modules 
+     * Available user modules
      *
      * @var array
      */
     protected $modules = null;
 
     /**
-     * Initialization hook method.
+     * Project & versions info
      *
-     * @return void
+     * @var array
+     */
+    protected $project = null;
+
+    /**
+     * {@inheritDoc}
      */
     public function initialize()
     {
@@ -57,7 +57,6 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -65,22 +64,55 @@ class AppController extends Controller
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
 
+        // use JWT auth tokens if stored in session
+        $session = $this->request->session();
+        $tokens = (array)$session->read('tokens');
         $opts = Configure::read('API');
-        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey']);
+        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey'], $tokens);
+
+        $user = $session->read('user');
+        if (empty($user) && $this->name !== 'Login') {
+            return $this->redirect(['_name' => 'login']);
+        }
+        $this->set('user', $user);
+        $this->set('baseUrl', Router::url('/'));
+        $this->modules = (array)$session->read('modules');
+        $this->set('modules', $this->modules);
+        $this->project = (array)$session->read('project');
+        $this->set('project', $this->project);
     }
 
     /**
-     * {@inheritDoc}
+     * Read modules and project info from `/home' endpoint.
+     * Save data in session and view.
+     *
+     * @return void
      */
-    public function beforeFilter(Event $event)
+    protected function readModules()
     {
-        $this->set('baseUrl', Router::url('/'));
-        $this->modules = $this->apiClient->get('/model/object_types', ['enabled' => true]);
-        $this->modules = Hash::extract($this->modules, 'data.{n}.attributes');
+        $home = $this->apiClient->get('/home');
+        if (empty($home['meta']['resources'])) {
+            throw new NotFoundException(__('Modules not found'));
+        }
+        $this->modules = [];
+        // TODO: add info on /home response like "object_type": "true"
+        $exclude = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
+        foreach ($home['meta']['resources'] as $endpoint => $value) {
+            $name = \substr($endpoint, 1);
+            if (!in_array($name, $exclude)) {
+                $this->modules[] = array_merge(compact('name'), $value);
+            }
+        }
         $this->set('modules', $this->modules);
-        // TODO: read from /home
-        $this->set('project', 'BE4 Test');
-        $this->set('version', '4.0.0-beta');
-        $this->set('colophon', '');
+        $this->request->session()->write('modules', $this->modules);
+
+        // this should not be in a user session....
+        $this->project = [
+            'name' => $home['meta']['project']['name'],
+            'version' => $home['meta']['version'],
+            'colophon' => '', // left empty for now
+        ];
+        $this->set('project', $this->project);
+        $this->request->session()->write('project', $this->project);
     }
 }

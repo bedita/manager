@@ -37,7 +37,7 @@ class ModulesController extends AppController
      * @var array
      */
     protected $apiResponse = [];
-    
+
     /**
      * Initialization hook method.
      *
@@ -55,7 +55,9 @@ class ModulesController extends AppController
      */
     public function beforeFilter(Event $event)
     {
-        parent::beforeFilter($event);
+        if (empty($this->modules)) {
+            $this->readModules();
+        }
         $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->objectType . ']')[0];
         $this->set(compact('currentModule'));
     }
