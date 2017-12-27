@@ -45,10 +45,25 @@ Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
 
-    // Dashboard endpoint
+    // Login.
+    $routes->connect(
+        '/login',
+        ['controller' => 'Login', 'action' => 'login'],
+        ['_name' => 'login']
+    );
+
+    // Logout.
+    $routes->connect(
+        '/logout',
+        ['controller' => 'Login', 'action' => 'logout', 'method' => 'GET'],
+        ['_name' => 'logout']
+    );
+
+    // Dashboard
     $routes->connect(
         '/',
-        ['controller' => 'Dashboard', 'action' => 'display', 'method' => 'GET']
+        ['controller' => 'Dashboard', 'action' => 'display', 'method' => 'GET'],
+        ['_name' => 'dashboard']
     );
 
     // GET => list items
