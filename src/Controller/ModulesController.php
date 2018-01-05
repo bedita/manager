@@ -68,8 +68,10 @@ class ModulesController extends AppController
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        foreach ($this->apiResponse as $key => $value) {
-            $this->set($key, $value);
+        if ($this->apiResponse) {
+            foreach ($this->apiResponse as $key => $value) {
+                $this->set($key, $value);
+            }
         }
     }
 
