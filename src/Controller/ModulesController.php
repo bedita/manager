@@ -82,7 +82,7 @@ class ModulesController extends AppController
      */
     public function index()
     {
-        $this->apiResponse = $this->apiClient->get('/' . $this->objectType);
+        $this->apiResponse = $this->apiClient->getObjects($this->objectType);
     }
 
     /**
@@ -93,6 +93,6 @@ class ModulesController extends AppController
      */
     public function view($id)
     {
-        $this->apiResponse = $this->apiClient->get('/' . $this->objectType . '/' . $id);
+        $this->apiResponse = $this->apiClient->getObject($this->objectType, $id);
     }
 }

@@ -107,6 +107,16 @@ class BEditaClient
     }
 
     /**
+     * Get current used tokens
+     *
+     * @return array Current tokens
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
+    /**
      * Get last HTTP response
      *
      * @return ResponseInterface Response PSR interface
@@ -165,6 +175,33 @@ class BEditaClient
     }
 
     /**
+     * GET a list of objects of a given type
+     *
+     * @param string $type Object type name
+     * @param array $query Optional query string
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function getObjects($type = 'objects', $query = [], $headers = [])
+    {
+        return $this->get(sprintf('/%s', $type), $query, $headers);
+    }
+
+    /**
+     * GET a single object of a given type
+     *
+     * @param string $type Object type name
+     * @param int|string $id Object id
+     * @param array $query Optional query string
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function getObject($type = 'objects', $id, $query = [], $headers = [])
+    {
+        return $this->get(sprintf('/%s/%s', $type, $id), $query, $headers);
+    }
+
+    /**
      * Send a POST request for creating resources or objects or other operations like /auth
      *
      * @param string $endpoint Endpoint URL path to invoke
@@ -200,9 +237,11 @@ class BEditaClient
         $this->response = $this->jsonApiClient->sendRequest(new Request($method, $uri, $headers, $body));
         // in case of 401 response with `be_token_expired` code refresh token and send request again
         if ($refresh && $this->getStatusCode() === 401) {
-            $body = $this->getResponseBody();
-            if (!empty($body['error']['code']) &&  $body['error']['code'] === 'be_token_expired') {
+            $respBody = $this->getResponseBody();
+            if (!empty($respBody['error']['code']) &&  $respBody['error']['code'] === 'be_token_expired') {
                 if ($this->refreshTokens()) {
+                    // remove previous Authorization header and force new one usage
+                    unset($headers['Authorization']);
                     return $this->sendRequest($method, $path, $query, $headers, $body, false);
                 }
             }
@@ -220,7 +259,7 @@ class BEditaClient
         if (empty($this->tokens['renew'])) {
             return false;
         }
-        $headers = array_merge($this->defaultHeaders, ['Authorization' => 'Bearer ' . $tokens['renew']]);
+        $headers = array_merge($this->defaultHeaders, ['Authorization' => 'Bearer ' . $this->tokens['renew']]);
         $uri = $this->apiBaseUrl . '/auth';
         $response = $this->jsonApiClient->sendRequest(new Request('POST', $uri, $headers));
         $body = json_decode($response->getBody()->__toString(), true);
