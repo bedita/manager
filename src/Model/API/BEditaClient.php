@@ -199,10 +199,12 @@ class BEditaClient
         // Send the request syncronously to retrieve the response
         $this->response = $this->jsonApiClient->sendRequest(new Request($method, $uri, $headers, $body));
         // in case of 401 response with `be_token_expired` code refresh token and send request again
-        if ($refresh && $this->getStatusCode() === 401 &&
-            Hash::get($this->getResponseBody(), 'error.code') === 'be_token_expired') {
-            if ($this->refreshTokens()) {
-                return $this->sendRequest($method, $path, $query, $headers, $body, false);
+        if ($refresh && $this->getStatusCode() === 401) {
+            $body = $this->getResponseBody();
+            if (!empty($body['error']['code']) &&  $body['error']['code'] === 'be_token_expired') {
+                if ($this->refreshTokens()) {
+                    return $this->sendRequest($method, $path, $query, $headers, $body, false);
+                }
             }
         }
     }
@@ -221,11 +223,11 @@ class BEditaClient
         $headers = array_merge($this->defaultHeaders, ['Authorization' => 'Bearer ' . $tokens['renew']]);
         $uri = $this->apiBaseUrl . '/auth';
         $response = $this->jsonApiClient->sendRequest(new Request('POST', $uri, $headers));
-        $meta = Hash::get(json_decode($this->response->getBody()->__toString(), true), 'meta');
-        if (empty($meta['jwt'])) {
+        $body = json_decode($response->getBody()->__toString(), true);
+        if (empty($body['meta']['jwt'])) {
             return false;
         }
-        $this->setupTokens($meta);
+        $this->setupTokens($body['meta']);
 
         return true;
     }
