@@ -1,9 +1,8 @@
 {% set attributes = data.attributes %}
-{% set meta = data.meta %}
 
-<!-- <div class="tab"><h2>Title & Description</h2></div> -->
+<div class="tab"><h2>{{ __('Main Properties') }}</h2></div>
 
-<fieldset id="title">
+<fieldset id="common_properties">
 
     <label>title:</label>
     <br />
@@ -16,11 +15,8 @@
     <br />
     <input type="text" id="nicknameBEObject" name="data[uniquename]" style="font-style:italic; width:100%" value="{{ attributes.uname }}"/>
 
-</fieldset>
 
 <!-- <div class="tab"><h2>Properties</h2></div> -->
-
-<fieldset id="status">
 
     <label>status:</label>
     <br />

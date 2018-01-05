@@ -1,0 +1,19 @@
+{% set attributes = data.attributes %}
+
+
+<div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
+
+<fieldset id="object_properties">
+
+{% for key, val in attributes %}
+{% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
+
+    <label>{{ key }}:</label>
+    <br />
+    <input type="text" id="{{ key }}BEObject" name="data[{{ key }}]"  style="width:100%"
+        value="{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}"/>
+
+{% endif %}
+{% endfor %}
+
+</fieldset>
