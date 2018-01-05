@@ -49,6 +49,13 @@ class AppController extends Controller
     protected $project = null;
 
     /**
+     * Tokens used in this call
+     *
+     * @var array
+     */
+    protected $tokens = [];
+
+    /**
      * {@inheritDoc}
      */
     public function initialize()
@@ -66,9 +73,9 @@ class AppController extends Controller
 
         // use JWT auth tokens if stored in session
         $session = $this->request->session();
-        $tokens = (array)$session->read('tokens');
+        $this->tokens = (array)$session->read('tokens');
         $opts = Configure::read('API');
-        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey'], $tokens);
+        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey'], $this->tokens);
 
         $user = $session->read('user');
         if (empty($user) && $this->name !== 'Login') {
@@ -80,6 +87,20 @@ class AppController extends Controller
         $this->set('modules', $this->modules);
         $this->project = (array)$session->read('project');
         $this->set('project', $this->project);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Update session tokens if updated/refreshed by client
+     */
+    public function beforeRender(Event $event)
+    {
+        parent::beforeRender($event);
+        if (!empty(array_diff_assoc($this->tokens, $this->apiClient->getTokens()))) {
+            $this->tokens = $this->apiClient->getTokens();
+            $this->request->session()->write('tokens', $this->tokens);
+        }
     }
 
     /**
