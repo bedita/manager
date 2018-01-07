@@ -82,7 +82,7 @@ class ModulesController extends AppController
      */
     public function index()
     {
-        $this->apiResponse = $this->apiClient->getObjects($this->objectType);
+        $this->apiResponse = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
     }
 
     /**

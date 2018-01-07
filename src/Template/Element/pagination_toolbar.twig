@@ -86,20 +86,20 @@
                 Page {{ paging.page }} / {{ paging.page_count }}
             </td>
             <td>
-                <a href="{{ links.first.href }}" > First </a>
+                <a href="{{ Link.fromAPI(links.first) }}" > First </a>
             </td>
-            {% if links.prev.href %}
+            {% if links.prev %}
                 <td>
-                    <a href="{{ links.prev.href }}" > Prev </a>
+                    <a href="{{ Link.fromAPI(links.prev) }}" > Prev </a>
                 </td>
             {% endif %}
-            {% if links.next.href %}
+            {% if links.next %}
                 <td>
-                    <a href="{{ links.next.href }}" > Next </a>
+                    <a href="{{ Link.fromAPI(links.next) }}" > Next </a>
                 </td>
             {% endif %}
             <td>
-                <a href="{{ links.last.href }}" > Last </a>
+                <a href="{{ Link.fromAPI(links.last) }}" > Last </a>
             </td>
 
 <!--

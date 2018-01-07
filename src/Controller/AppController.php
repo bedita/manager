@@ -97,7 +97,7 @@ class AppController extends Controller
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        if (!empty(array_diff_assoc($this->tokens, $this->apiClient->getTokens()))) {
+        if ($this->apiClient && !empty(array_diff_assoc($this->tokens, $this->apiClient->getTokens()))) {
             $this->tokens = $this->apiClient->getTokens();
             $this->request->session()->write('tokens', $this->tokens);
         }
