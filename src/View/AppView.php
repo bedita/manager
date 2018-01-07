@@ -1,38 +1,28 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2018 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     3.0.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App\View;
 
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
- * Application View
+ * Application View default class
  *
- * Your application’s default view class
- *
- * @link https://book.cakephp.org/3.0/en/views.html#the-app-view
  */
 class AppView extends TwigView
 {
 
     /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading helpers.
-     *
-     * e.g. `$this->loadHelper('Html');`
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function initialize()
     {
@@ -40,5 +30,6 @@ class AppView extends TwigView
 
         $this->loadHelper('Html');
         $this->loadHelper('Url');
+        $this->loadHelper('Link');
     }
 }
