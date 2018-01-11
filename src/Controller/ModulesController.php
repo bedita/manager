@@ -55,10 +55,11 @@ class ModulesController extends AppController
      */
     public function beforeFilter(Event $event)
     {
+        parent::beforeFilter($event);
         if (empty($this->modules)) {
             $this->readModules();
         }
-        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->objectType . ']')[0];
+        $currentModule = Hash::extract($this->viewVars['modules'], '{n}[name=' . $this->objectType . ']')[0];
         $this->set(compact('currentModule'));
     }
 

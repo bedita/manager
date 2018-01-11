@@ -86,7 +86,7 @@ class AppController extends Controller
         if ($this->Auth) {
             $user = $this->Auth->user();
             $tokens = $this->apiClient->getTokens();
-            if (!empty(array_diff_assoc((array)$user['tokens'], $tokens))) {
+            if ($user['tokens'] !== $tokens) {
                 $user['tokens'] = $tokens;
                 $this->Auth->setUser($user);
             }
