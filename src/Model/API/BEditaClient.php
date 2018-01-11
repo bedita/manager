@@ -94,13 +94,13 @@ class BEditaClient
      * Setup JWT access and refresh tokens.
      *
      * @param array $tokens JWT tokens as associative array ['jwt' => '###', 'renew' => '###']
-     * @return array Response in array format
+     * @return void
      */
-    protected function setupTokens(array $tokens)
+    public function setupTokens(array $tokens)
     {
         $this->tokens = $tokens;
         if (!empty($tokens['jwt'])) {
-            $this->defaultHeaders['Authorization'] = 'Bearer ' . $tokens['jwt'];
+            $this->defaultHeaders['Authorization'] = sprintf('Bearer %s', $tokens['jwt']);
         } else {
             unset($this->defaultHeaders['Authorization']);
         }
@@ -242,7 +242,7 @@ class BEditaClient
                 if ($this->refreshTokens()) {
                     // remove previous Authorization header and force new one usage
                     unset($headers['Authorization']);
-                    return $this->sendRequest($method, $path, $query, $headers, $body, false);
+                    $this->sendRequest($method, $path, $query, $headers, $body, false);
                 }
             }
         }

@@ -13,16 +13,13 @@
 namespace App\Controller;
 
 use App\Model\API\BEditaClient;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\NotFoundException;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
 
 /**
  * Base Application Controller
- *
  */
 class AppController extends Controller
 {
@@ -33,27 +30,6 @@ class AppController extends Controller
      * @var \App\Model\API\BEditaClient
      */
     protected $apiClient = null;
-
-    /**
-     * Available user modules
-     *
-     * @var array
-     */
-    protected $modules = null;
-
-    /**
-     * Project & versions info
-     *
-     * @var array
-     */
-    protected $project = null;
-
-    /**
-     * Tokens used in this call
-     *
-     * @var array
-     */
-    protected $tokens = [];
 
     /**
      * {@inheritDoc}
@@ -71,22 +47,31 @@ class AppController extends Controller
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
 
-        // use JWT auth tokens if stored in session
-        $session = $this->request->session();
-        $this->tokens = (array)$session->read('tokens');
-        $opts = Configure::read('API');
-        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey'], $this->tokens);
+        $this->apiClient = new BEditaClient(Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey'));
 
-        $user = $session->read('user');
-        if (empty($user) && $this->name !== 'Login') {
-            return $this->redirect(['_name' => 'login']);
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'API' => [
+                    'apiClient' => $this->apiClient,
+                ],
+            ],
+            'loginAction' => ['_name' => 'login'],
+            'loginRedirect' => ['_name' => 'dashboard'],
+        ]);
+        $this->Auth->deny();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+
+        $tokens = $this->Auth->user('tokens');
+        if ($tokens) {
+            $this->apiClient->setupTokens($tokens);
         }
-        $this->set('user', $user);
-        $this->set('baseUrl', Router::url('/'));
-        $this->modules = (array)$session->read('modules');
-        $this->set('modules', $this->modules);
-        $this->project = (array)$session->read('project');
-        $this->set('project', $this->project);
     }
 
     /**
@@ -97,43 +82,52 @@ class AppController extends Controller
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        if ($this->apiClient && !empty(array_diff_assoc($this->tokens, $this->apiClient->getTokens()))) {
-            $this->tokens = $this->apiClient->getTokens();
-            $this->request->session()->write('tokens', $this->tokens);
+
+        if ($this->Auth) {
+            $user = $this->Auth->user();
+            $tokens = $this->apiClient->getTokens();
+            if (!empty(array_diff_assoc((array)$user['tokens'], $tokens))) {
+                $user['tokens'] = $tokens;
+                $this->Auth->setUser($user);
+            }
+
+            $this->set(compact('user'));
+            $this->readModules();
         }
     }
 
     /**
      * Read modules and project info from `/home' endpoint.
-     * Save data in session and view.
      *
      * @return void
      */
     protected function readModules()
     {
-        $home = $this->apiClient->get('/home');
-        if (empty($home['meta']['resources'])) {
-            throw new NotFoundException(__('Modules not found'));
-        }
-        $this->modules = [];
-        // TODO: add info on /home response like "object_type": "true"
-        $exclude = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
-        foreach ($home['meta']['resources'] as $endpoint => $value) {
-            $name = \substr($endpoint, 1);
-            if (!in_array($name, $exclude)) {
-                $this->modules[] = array_merge(compact('name'), $value);
-            }
-        }
-        $this->set('modules', $this->modules);
-        $this->request->session()->write('modules', $this->modules);
+        static $excludedModules = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
 
-        // this should not be in a user session....
-        $this->project = [
+        $home = Cache::remember(
+            sprintf('home_%d', $this->Auth->user('id')),
+            function () {
+                return $this->apiClient->get('/home');
+            }
+        );
+
+        $modules = collection($home['meta']['resources'])
+            ->map(function (array $data, $endpoint) {
+                $name = substr($endpoint, 1);
+
+                return $data + compact('name');
+            })
+            ->reject(function (array $data) use ($excludedModules) {
+                return in_array($data['name'], $excludedModules);
+            })
+            ->toList();
+        $project = [
             'name' => $home['meta']['project']['name'],
             'version' => $home['meta']['version'],
-            'colophon' => '', // left empty for now
+            'colophon' => '', // TODO: populate this value.
         ];
-        $this->set('project', $this->project);
-        $this->request->session()->write('project', $this->project);
+
+        $this->set(compact('modules', 'project'));
     }
 }

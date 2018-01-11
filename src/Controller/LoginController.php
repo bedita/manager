@@ -12,65 +12,52 @@
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Network\Exception\UnauthorizedException;
-
 /**
- * Perform basic login and logout operations
+ * Perform basic login and logout operations.
  */
 class LoginController extends AppController
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function initialize()
-    {
-        parent::initialize();
-
-        if ($this->request->action === 'login') {
-            $this->loadComponent('Auth', [
-                'authenticate' => [
-                'API' => [
-                    'apiClient' => $this->apiClient,
-                        ],
-                    ],
-                    'loginAction' => ['_name' => 'login'],
-                    'loginRedirect' => ['_name' => 'dashboard'],
-                ]);
-        }
-    }
 
     /**
-     * Display login page or perform login via API
+     * Display login page or perform login via API.
+     *
+     * @return \Cake\Http\Response|null
      */
     public function login()
     {
         $this->request->allowMethod(['get', 'post']);
 
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if (!$user) {
-                throw new UnauthorizedException(__('Login not successful'));
-            }
-            $session = $this->request->session();
-            $tokens = $this->Auth->getAuthenticate('API')->getConfig('tokens');
-            $session->write('tokens', $tokens);
-            $session->write('user', $user);
-
-            return $this->redirect(['_name' => 'dashboard']);
+        if (!$this->request->is('post')) {
+            // Display login form.
+            return null;
         }
+
+        // Attempted login.
+        $user = $this->Auth->identify();
+        if ($user) {
+            // Successful login. Redirect.
+            $this->Auth->setUser($user);
+
+            $this->Flash->success(__('Successfully logged in'));
+
+            return $this->redirect($this->Auth->redirectUrl());
+        }
+
+        // Failed login.
+        $this->Flash->error(__('Username or password is incorrect'));
+
+        return null;
     }
 
     /**
-     * Perform user logout
+     * Logout and redirect to login page.
+     *
+     * @return \Cake\Http\Response
      */
     public function logout()
     {
-        $session = $this->request->session();
-        setcookie(Configure::read('Session.cookie', 'CAKEPHP'), '', time() - 42000, '/');
-        $session->destroy();
+        $this->request->allowMethod(['get']);
 
-        return $this->redirect(['_name' => 'login']);
+        return $this->redirect($this->Auth->logout());
     }
 }
