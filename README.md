@@ -1,51 +1,48 @@
 # Simple BEdita4 backend webapp
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
+Minimal BEdita3 like backend webapp for BE4 API.
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
+UI/UX are supposed to be similar to BE3, but may change in the near future.
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+## Prerequisites
 
-## Installation
+* PHP 7.1 (recommended) or 7
+* [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+## Install
 
-If Composer is installed globally, run
-
-```bash
-composer create-project --prefer-dist cakephp/app
-```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+1. Clone repo & run composer
 
 ```bash
-composer create-project --prefer-dist cakephp/app myapp
+~$ composer install
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``.
+
+1. Edit `config/app.php` and configure BEdita 4 API
+
+```php
+    'API' => [
+        // API base URL and API KEY
+        'apiBaseUrl' => 'https://your-bedita-4-project-url',
+        'apiKey' => 'your-bedita4-project-apikey',
+    ],
+```
+
+You are then ready to use the webapp by simply run builtin webserver like this
 
 ```bash
-bin/cake server -p 8765
+~$ bin/cake server
 ```
 
-Then visit `http://localhost:8765` to see the welcome page.
+And then point your browser to `http://localhost:8765/`
 
-## Update
+Or you can configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+## Docker
 
-## Configuration
+TBD
 
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
+## Licensing
 
-## Layout
-
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+BEdita is released under [LGPL](/bedita/bedita/blob/master/LICENSE.LGPL), Lesser General Public License v3.
