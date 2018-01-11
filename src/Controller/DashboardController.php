@@ -12,28 +12,19 @@
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Utility\Hash;
-
 /**
- * Dashboard controller
+ * Dashboard controller.
  */
 class DashboardController extends AppController
 {
-    /**
-     * Displays dashboard
-     */
-    public function display()
-    {
-    }
 
     /**
-     * {@inheritDoc}
+     * Displays dashboard.
+     *
+     * @return void
      */
-    public function beforeFilter(Event $event)
+    public function index()
     {
-        // force read from /home
-        $this->readModules();
+        $this->request->allowMethod(['get']);
     }
 }

@@ -1,0 +1,11 @@
+{{ _view.assign('title', __('Dashboard')) }}
+
+<div class="dashboard">
+    <ul class="dashboard__modules">
+    {% for module in modules %}
+        <li class="dashboard__module dashboard__module--{{ module.name }}">
+            {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
+        </li>
+    {% endfor %}
+    </ul>
+</div>

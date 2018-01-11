@@ -1,0 +1,182 @@
+body {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: .75em;
+    line-height: 1.5em;
+    margin: 1.5em;
+    background-color: #B6B6B6;
+
+    display: flex;
+    justify-content: stretch;
+}
+
+a {
+    color: inherit;
+}
+a, a:link, a:hover, a:active, a:visited {
+    text-decoration: none;
+}
+
+fieldset {
+    border: none;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type=text], input[type=password], textarea {
+    font-size:1em;
+    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
+    line-height: 1.5em;
+    border-radius: .75em;
+    border: 1px solid silver;
+    padding: .5em;
+}
+
+input[type=submit] {
+    background-color: #F2F2F2;
+    line-height: 1.2em;
+    color: #333;
+    border-radius: .75em;
+    border: 1px solid #BBB;
+    cursor: pointer;
+    padding: .15em .5em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+input[type=submit]:hover {
+    background-color: #666;
+    color: #FFF;
+    outline: 0;
+}
+
+/*****************/
+/*** LEFT MENU ***/
+/*****************/
+.left-menu {
+    flex-basis: 140px;
+    margin-right: 10px;
+}
+
+.left-menu__project {
+    display: block;
+    box-sizing: border-box;
+    background: #FFF url(../img/BElogogray.gif) no-repeat right bottom;
+    background-size: 50%;
+    font: normal 1.75em Georgia, 'Times New Roman', Times, serif;
+    line-height: 1em;
+    min-height: 110px;
+    padding: .5em;
+    color: #960;
+    border-bottom: none;
+}
+
+.left-menu__user-menu {
+    list-style: none;
+    padding: 0;
+    border-bottom: .5em solid grey;
+    border-top: .5em solid grey;
+}
+.left-menu__user-menu li {
+    line-height: 1.5em;
+    padding: .5em 0;
+    border-bottom: 1px solid #999;
+}
+.left-menu__user-menu li:last-child {
+    border-bottom: none;
+}
+.left-menu__user-menu a:hover {
+    color: white;
+}
+
+.left-menu__colophon {
+    color: black;
+    padding: 1em 0;
+}
+
+/*********************/
+/*** COMMANDS MENU ***/
+/*********************/
+.commands-menu {
+    flex-basis: 140px;
+    margin-right: 10px;
+}
+
+/*************/
+/*** LOGIN ***/
+/*************/
+.login {
+    flex: auto;
+}
+
+.login label, .login input {
+    display: block;
+}
+
+.login input[type=submit] {
+    margin: 1.75em 0;
+    width: 140px;
+    padding: .5em;
+}
+
+/*****************/
+/*** DASHBOARD ***/
+/*****************/
+.dashboard {
+    flex: auto;
+}
+
+.dashboard__modules {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.dashboard__module {
+    flex-basis: 140px;
+    display: block;
+    float: left;
+    width: 140px;
+    height: 110px;
+    background: rgba(0, 0, 0, .1);
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-bottom: 1.75em solid rgba(0, 0, 0, .3);
+    transition: border 250ms;
+    box-sizing: border-box;
+}
+.dashboard__module:hover {
+    border-bottom: .75em solid rgba(0, 0, 0, .3);
+}
+.dashboard__module a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    color: white;
+}
+
+.dashboard__module--documents {
+    background-color: #f60;
+}
+.dashboard__module--news {
+    background-color: #036;
+}
+.dashboard__module--events {
+    background-color: #09c;
+}
+.dashboard__module--media, .dashboard__module--audio, .dashboard__module--files, .dashboard__module--images, .dashboard__module--videos {
+    background-color: #f03;
+}
+.dashboard__module--locations {
+    background-color: #641;
+}
+.dashboard__module--profiles {
+    background-color: #093;
+}
+.dashboard__module--users {
+    background-color: #555;
+}
