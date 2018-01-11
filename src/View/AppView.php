@@ -28,8 +28,17 @@ class AppView extends TwigView
     {
         parent::initialize();
 
+        $this->loadHelper('Form');
         $this->loadHelper('Html');
-        $this->loadHelper('Url');
         $this->loadHelper('Link');
+        $this->loadHelper('Text');
+        $this->loadHelper('Url');
+
+        $this->getTwig()
+            ->addFilter(new \Twig_SimpleFilter('shuffle', function (array $array) {
+                shuffle($array);
+
+                return $array;
+            }));
     }
 }

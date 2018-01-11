@@ -1,22 +1,16 @@
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        var cw = $('#cw').html();
-        var ch = $('#ch').html();
-    var rndm = Math.floor(Math.random()*2);
-    if (rndm == 0) {
-        $('#ch').html(cw);
-        $('#cw').html(ch);
-    }
-});
-</script>
+<div class="left-menu__colophon">
+    {{ Html.link(__('BEdita {0} ©', project.version), 'https://www.bedita.com/who-are-we', {'title': 'Chialab & Channelweb', 'target': '_blank'})|raw }}
+    <br />
 
-<div class="belinks" style="padding:10px 0px">
-<a href="https://www.bedita.com/who-are-we" title="Chialab&Channelweb" target="besite">BEdita {{ project.version }} © </a><br>
-    <strong id="ch"><a href="https://www.chialab.it" target="_blank">Chialab</a></strong> and <strong id="cw"><a href="https://www.channelweb.it" target="_blank">ChannelWeb</a></strong> <br>
-    {{ "now"|date('Y') }}
-<br />
-<a href="https://www.bedita.com" title="BEdita web site" target="besite">www.bedita.com</a>
+    {% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
+    {{ authors|shuffle|toList(__('and'))|raw }}
+    <br />
+
+    {{ 'now'|date('Y') }}
+    <br />
+
+    {{ Html.link(__('www.bedita.com'), 'https://www.bedita.com', {'title': __('BEdita Web site'), 'target': '_blank'})|raw }}
 </div>
 
 {{ project.colophon }}
