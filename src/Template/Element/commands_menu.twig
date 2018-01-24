@@ -13,9 +13,9 @@
     {% if _view.template != 'index' %}
 
     <div class="insidecol">
-        <input class="bemaincommands" type="button" value=" save " name="save" id="saveBEObject" />
-        <input class="bemaincommands" type="button" value=" publish " name="publish" id="publishBEObject" />
-        <input class="bemaincommands" type="button" value=" clone " name="clone" id="cloneBEObject" />
+        <input class="bemaincommands" type="button" value=" save " name="save" id="saveBEObject" onClick="$('#updateForm').submit();"/>
+        {# <input class="bemaincommands" type="button" value=" publish " name="publish" id="publishBEObject" />
+        <input class="bemaincommands" type="button" value=" clone " name="clone" id="cloneBEObject" /> #}
         <input class="bemaincommands" type="button" value=" delete " name="delete" id="delBEObject" />
 <!--
         {$view->element('prevnext')}
