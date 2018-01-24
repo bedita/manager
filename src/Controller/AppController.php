@@ -116,12 +116,10 @@ class AppController extends Controller
             throw new NotFoundException(__('Modules not found'));
         }
         $this->modules = [];
-        // TODO: add info on /home response like "object_type": "true"
-        $exclude = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
-        foreach ($home['meta']['resources'] as $endpoint => $value) {
+        foreach ($home['meta']['resources'] as $endpoint => $data) {
             $name = \substr($endpoint, 1);
-            if (!in_array($name, $exclude)) {
-                $this->modules[] = array_merge(compact('name'), $value);
+            if (!empty($data['hints']['object_type'])) {
+                $this->modules[] = array_merge(compact('name'), $data);
             }
         }
         $this->set('modules', $this->modules);
