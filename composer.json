@@ -3,7 +3,7 @@
     "description": "BEdita3 like backend webapp for BE4 API",
     "homepage": "https://www.bedita.com",
     "type": "project",
-    "license": "LGPL-3.0",
+    "license": "LGPL-3.0-or-later",
     "support": {
         "source": "https://github.com/bedita/bedita",
         "issues": "https://github.com/bedita/bedita/issues"
