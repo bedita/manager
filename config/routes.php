@@ -72,30 +72,23 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'index', 'method' => 'GET']
     );
 
-    // GET => view item
+    // GET => view single item
     $routes->connect(
-        '/:object_type/:id',
+        '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view', 'method' => 'GET'],
         ['pass' => ['id']]
     );
 
-    // POST => create new item
+    // POST => create new item or edit existing
     $routes->connect(
-        '/:object_type',
-        ['controller' => 'Modules', 'action' => 'create', 'method' => 'POST']
-    );
-
-    // PATCH => edit item
-    $routes->connect(
-        '/:object_type/:id',
-        ['controller' => 'Modules', 'action' => 'edit', 'method' => 'PATCH'],
-        ['pass' => ['id']]
+        '/:object_type/save',
+        ['controller' => 'Modules', 'action' => 'save', 'method' => 'POST']
     );
 
     // DELETE => remove item
     $routes->connect(
-        '/:object_type/:id',
-        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'DELETE'],
+        '/:object_type/delete/:id',
+        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'POST'],
         ['pass' => ['id']]
     );
 
