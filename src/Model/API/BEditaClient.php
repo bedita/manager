@@ -202,6 +202,47 @@ class BEditaClient
     }
 
     /**
+     * Create a new object (POST) or modify an existing one (PATCH)
+     *
+     * @param string $type Object type name
+     * @param array $data Object data to save
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function saveObject($type, $data, $headers = [])
+    {
+        $id = !empty($data['id']) ? $data['id'] : null;
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => $type,
+                'attributes' => $data,
+            ],
+        ];
+        $headers['Content-Type'] = 'application/json';
+        if (!$id) {
+            return $this->post(sprintf('/%s', $type), json_encode($body), $headers);
+        }
+        $body['data']['id'] = $id;
+
+        return $this->patch(sprintf('/%s/%s', $type, $id), json_encode($body), $headers);
+    }
+
+    /**
+     * Send a PATCH request to modify a single resource or object
+     *
+     * @param string $endpoint Endpoint URL path to invoke
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function patch($path, $body, $headers = [])
+    {
+        $this->sendRequest('PATCH', $path, null, $headers, $body);
+
+        return $this->getResponseBody();
+    }
+
+    /**
      * Send a POST request for creating resources or objects or other operations like /auth
      *
      * @param string $endpoint Endpoint URL path to invoke
