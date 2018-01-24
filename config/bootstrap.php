@@ -208,16 +208,16 @@ Type::build('timestamp')
  */
 
 /*
+ * Load TwigView Plugin
+ */
+Plugin::load('WyriHaximus/TwigView', [
+    'bootstrap' => true,
+]);
+
+/*
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
  */
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
-
-/**
- * Load TwigView Plugin
- */
-Plugin::load('WyriHaximus/TwigView', [
-    'bootstrap' => true,
-]);

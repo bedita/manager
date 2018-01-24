@@ -12,11 +12,7 @@
  */
 namespace App\Controller;
 
-use App\Model\API\BEditaClient;
-use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
 
 /**
  * Modules controller: list, add, edit, remove items (default objects)
@@ -32,35 +28,14 @@ class ModulesController extends AppController
     protected $objectType = null;
 
     /**
-     * Main API response array
-     *
-     * @var array
-     */
-    protected $apiResponse = [];
-
-    /**
-     * Initialization hook method.
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function initialize()
     {
         parent::initialize();
 
         $this->objectType = $this->request->getParam('object_type');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeFilter(Event $event)
-    {
-        parent::beforeFilter($event);
-        if (empty($this->modules)) {
-            $this->readModules();
-        }
-        $currentModule = Hash::extract($this->viewVars['modules'], '{n}[name=' . $this->objectType . ']')[0];
-        $this->set(compact('currentModule'));
+        $this->Modules->setConfig('currentModuleName', $this->objectType);
     }
 
     /**
@@ -69,11 +44,8 @@ class ModulesController extends AppController
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        if ($this->apiResponse) {
-            foreach ($this->apiResponse as $key => $value) {
-                $this->set($key, $value);
-            }
-        }
+
+        $this->set('objectType', $this->objectType);
     }
 
     /**
@@ -83,17 +55,25 @@ class ModulesController extends AppController
      */
     public function index()
     {
-        $this->apiResponse = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+        $this->request->allowMethod(['get']);
+
+        $objects = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+
+        $this->set(compact('objects'));
     }
 
     /**
      * View single item
      *
-     * @param mixed $id Item ID.
+     * @param string|int $id Item ID.
      * @return void
      */
     public function view($id)
     {
-        $this->apiResponse = $this->apiClient->getObject($this->objectType, $id);
+        $this->request->allowMethod(['get']);
+
+        $object = $this->apiClient->getObject($this->objectType, $id);
+
+        $this->set(compact('object'));
     }
 }

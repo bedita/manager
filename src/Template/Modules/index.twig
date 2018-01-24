@@ -1,22 +1,15 @@
-{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
+{{ _view.assign('title', currentModule.name)) }}
 
 <body>
 
-{% element 'modules_top_menu' %}
+<div class="module">
 
-{% element 'left_menu' %}
+    {% element 'modules_top_menu' %}
 
-{% element 'commands_menu' %}
-
-{% element 'pagination_toolbar' %}
-
-
-<div class="mainfull">
+    {% element 'pagination_toolbar' %}
 
     {% element 'filters' %}
 
     {% element 'list_objects' %}
 
 </div>
-
-</body>

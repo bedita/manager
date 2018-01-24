@@ -55,47 +55,47 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Logout.
     $routes->connect(
         '/logout',
-        ['controller' => 'Login', 'action' => 'logout', 'method' => 'GET'],
+        ['controller' => 'Login', 'action' => 'logout'],
         ['_name' => 'logout']
     );
 
     // Dashboard
     $routes->connect(
         '/',
-        ['controller' => 'Dashboard', 'action' => 'display', 'method' => 'GET'],
+        ['controller' => 'Dashboard', 'action' => 'index'],
         ['_name' => 'dashboard']
     );
 
     // GET => list items
     $routes->connect(
         '/:object_type',
-        ['controller' => 'Modules', 'action' => 'index', 'method' => 'GET']
+        ['controller' => 'Modules', 'action' => 'index']
     );
 
     // GET => view item
     $routes->connect(
-        '/:object_type/:id',
-        ['controller' => 'Modules', 'action' => 'view', 'method' => 'GET'],
+        '/:object_type/view/:id',
+        ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id']]
     );
 
     // POST => create new item
     $routes->connect(
-        '/:object_type',
-        ['controller' => 'Modules', 'action' => 'create', 'method' => 'POST']
+        '/:object_type/create',
+        ['controller' => 'Modules', 'action' => 'create']
     );
 
     // PATCH => edit item
     $routes->connect(
-        '/:object_type/:id',
-        ['controller' => 'Modules', 'action' => 'edit', 'method' => 'PATCH'],
+        '/:object_type/edit/:id',
+        ['controller' => 'Modules', 'action' => 'edit'],
         ['pass' => ['id']]
     );
 
     // DELETE => remove item
     $routes->connect(
-        '/:object_type/:id',
-        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'DELETE'],
+        '/:object_type/delete/:id',
+        ['controller' => 'Modules', 'action' => 'delete'],
         ['pass' => ['id']]
     );
 

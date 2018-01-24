@@ -55,6 +55,7 @@ input[type=submit]:hover {
 /*****************/
 .left-menu {
     flex-basis: 140px;
+    min-width: 140px;
     margin-right: 10px;
 }
 
@@ -99,7 +100,44 @@ input[type=submit]:hover {
 /*********************/
 .commands-menu {
     flex-basis: 140px;
+    min-width: 140px;
     margin-right: 10px;
+}
+
+.commands-menu__module {
+    display: block;
+    box-sizing: border-box;
+    line-height: 1em;
+    font-size: 1.2em;
+    width: 100%;
+    height: 110px;
+    padding: 1em;
+    margin-bottom: 10px;
+    color: white;
+    background: rgba(0, 0, 0, .1);
+    border-bottom: 1.75em solid rgba(0, 0, 0, .3);
+}
+
+.commands-menu__module--documents {
+    background-color: #f60;
+}
+.commands-menu__module--news {
+    background-color: #036;
+}
+.commands-menu__module--events {
+    background-color: #09c;
+}
+.commands-menu__module--media, .commands-menu__module--audio, .commands-menu__module--files, .commands-menu__module--images, .commands-menu__module--videos {
+    background-color: #f03;
+}
+.commands-menu__module--locations {
+    background-color: #641;
+}
+.commands-menu__module--profiles {
+    background-color: #093;
+}
+.commands-menu__module--users {
+    background-color: #555;
 }
 
 /*************/
@@ -137,6 +175,7 @@ input[type=submit]:hover {
 
 .dashboard__module {
     flex-basis: 140px;
+    min-width: 140px;
     display: block;
     float: left;
     width: 140px;
