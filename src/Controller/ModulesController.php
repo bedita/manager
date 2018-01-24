@@ -93,13 +93,13 @@ class ModulesController extends AppController
      */
     public function view($id)
     {
-        $this->apiResponse = $this->apiClient->getObject($this->objectType, $id);
+        $this->apiResponse = $this->apiClient->getObject($id, $this->objectType);
     }
 
     /**
      * Create or edit single item
      *
-     * @return void
+     * @return \Cake\Http\Response
      */
     public function save()
     {
@@ -107,5 +107,17 @@ class ModulesController extends AppController
         // TODO: error if $this->apiResponse['data']['id'] empty or  $this->apiResponse['error'] not empty
 
         return $this->redirect(Router::url(sprintf('/%s/view/%s', $this->objectType, $this->apiResponse['data']['id'])));
+    }
+
+    /**
+     * Delete single item
+     *
+     * @return \Cake\Http\Response
+     */
+    public function delete()
+    {
+        $this->apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
+
+        return $this->redirect(Router::url(sprintf('/%s', $this->objectType)));
     }
 }
