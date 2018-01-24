@@ -149,7 +149,7 @@ class BEditaClient
     /**
      * Classic authentication via POST /auth using username and password
      *
-     * @param string $username userid
+     * @param string $username username
      * @param string $password password
      * @return array Response in array format
      */
@@ -191,13 +191,13 @@ class BEditaClient
     /**
      * GET a single object of a given type
      *
-     * @param string $type Object type name
      * @param int|string $id Object id
+     * @param string $type Object type name
      * @param array $query Optional query string
      * @param array $headers Custom request headers
      * @return array Response in array format
      */
-    public function getObject($type = 'objects', $id = null, $query = [], $headers = [])
+    public function getObject($id, $type = 'objects', $query = [], $headers = [])
     {
         return $this->get(sprintf('/%s/%s', $type, $id), $query, $headers);
     }
