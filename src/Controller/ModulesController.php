@@ -116,7 +116,7 @@ class ModulesController extends AppController
      */
     public function delete()
     {
-        $this->apiResponse = $this->apiClient->deleteObject($this->objectType, $this->request->getData('id'));
+        $this->apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
 
         return $this->redirect(Router::url(sprintf('/%s', $this->objectType)));
     }

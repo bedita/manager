@@ -232,11 +232,11 @@ class BEditaClient
     /**
      * Delete an object (DELETE).
      *
-     * @param string $type Object type name
      * @param int|string $id Object id
+     * @param string $type Object type name
      * @return array Response in array format
      */
-    public function deleteObject($type, $id)
+    public function deleteObject($id, $type)
     {
         return $this->delete(sprintf('/%s/%s', $type, $id));
     }
