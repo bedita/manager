@@ -10,7 +10,7 @@
 
     <label>{{ key }}:</label>
     <br />
-    <input type="text" id="{{ key }}BEObject" name="data[{{ key }}]"  style="width:100%"
+    <input type="text" id="{{ key }}BEObject" name="{{ key }}"  style="width:100%"
         value="{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}"/>
 
 {% endif %}
