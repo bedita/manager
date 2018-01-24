@@ -87,9 +87,8 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     // DELETE => remove item
     $routes->connect(
-        '/:object_type/delete/:id',
-        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'POST'],
-        ['pass' => ['id']]
+        '/:object_type/delete',
+        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'POST']
     );
 
     $routes->fallbacks(DashedRoute::class);

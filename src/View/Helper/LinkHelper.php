@@ -47,8 +47,8 @@ class LinkHelper extends Helper
      * Transform API url in web app URL, preserving path part.
      * Extremely simple for now
      *
-     * @param string $apiUrl
-     * @return string
+     * @param string $apiUrl Api url
+     * @return void
      */
     public function fromAPI($apiUrl)
     {

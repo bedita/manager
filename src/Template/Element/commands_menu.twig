@@ -16,7 +16,12 @@
         <input class="bemaincommands" type="button" value=" save " name="save" id="saveBEObject" onClick="$('#updateForm').submit();"/>
         {# <input class="bemaincommands" type="button" value=" publish " name="publish" id="publishBEObject" />
         <input class="bemaincommands" type="button" value=" clone " name="clone" id="cloneBEObject" /> #}
-        <input class="bemaincommands" type="button" value=" delete " name="delete" id="delBEObject" />
+
+        <form action="{{ baseUrl }}{{ currentModule.name }}/delete" method="POST" name="deleteForm" id="deleteForm">
+            <input type="hidden" name="id" value="{{ data.id }}" />
+            <input class="bemaincommands" type="button" value=" delete " name="delete" id="delBEObject" onClick="$('#deleteForm').submit();" />
+        </form>
+
 <!--
         {$view->element('prevnext')}
 -->
