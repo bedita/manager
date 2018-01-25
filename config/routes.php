@@ -79,6 +79,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id']]
     );
 
+    // GET => display new single item form
+    $routes->connect(
+        '/:object_type/new',
+        ['controller' => 'Modules', 'action' => 'new', 'method' => 'GET']
+    );
+
     // POST => create new item or edit existing
     $routes->connect(
         '/:object_type/save',

@@ -97,6 +97,17 @@ class ModulesController extends AppController
     }
 
     /**
+     * Display new item form
+     *
+     * @param mixed $id Item ID.
+     * @return void
+     */
+    public function new()
+    {
+        $this->viewBuilder()->setTemplate('view');
+    }
+
+    /**
      * Create or edit single item
      *
      * @return \Cake\Http\Response
