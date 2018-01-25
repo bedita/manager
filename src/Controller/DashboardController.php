@@ -23,6 +23,8 @@ class DashboardController extends AppController
 {
     /**
      * Displays dashboard
+     *
+     * @return void
      */
     public function display()
     {

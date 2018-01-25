@@ -43,6 +43,8 @@ class LoginController extends AppController
 
     /**
      * Display login page or perform login via API
+     *
+     * @return \Cake\Http\Response|null|void
      */
     public function login()
     {
@@ -64,6 +66,8 @@ class LoginController extends AppController
 
     /**
      * Perform user logout
+     *
+     * @return \Cake\Http\Response|null
      */
     public function logout()
     {

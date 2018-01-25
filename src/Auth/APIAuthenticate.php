@@ -104,11 +104,11 @@ class APIAuthenticate extends BaseAuthenticate
         /** @var \App\Model\API\BEditaClient $apiClient */
         $apiClient = $this->_config['apiClient'];
 
-
         $result = $apiClient->get('/auth/user', null, ['Authorization' => 'Bearer ' . $data['jwt']]);
         if (!empty($result['data'])) {
             $this->setConfig('user', $result);
         }
+
         return $result;
     }
 }
