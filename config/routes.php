@@ -66,6 +66,32 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard']
     );
 
+    // Trash | GET => list items
+    $routes->connect(
+        '/trash',
+        ['controller' => 'Trash', 'action' => 'index', 'method' => 'GET'],
+        ['_name' => 'trash']
+    );
+
+    // Trash | GET => view item
+    $routes->connect(
+        '/trash/view/:id',
+        ['controller' => 'Trash', 'action' => 'view', 'method' => 'GET'],
+        ['pass' => ['id']]
+    );
+
+    // Trash | POST => restore item
+    $routes->connect(
+        '/trash/restore',
+        ['controller' => 'Trash', 'action' => 'restore', 'method' => 'POST']
+    );
+
+    // Trash | POST => delete item
+    $routes->connect(
+        '/trash/delete',
+        ['controller' => 'Trash', 'action' => 'delete', 'method' => 'POST']
+    );
+
     // GET => list items
     $routes->connect(
         '/:object_type',

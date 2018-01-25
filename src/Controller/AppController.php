@@ -122,6 +122,10 @@ class AppController extends Controller
                 $this->modules[] = array_merge(compact('name'), $data);
             }
         }
+        if (!empty($home['meta']['resources']['/trash'])) { // force last module: trash
+            $name = 'trash';
+            $this->modules[] = array_merge(compact('name'), $home['meta']['resources']['/trash']);
+        }
         $this->set('modules', $this->modules);
         $this->request->session()->write('modules', $this->modules);
 
