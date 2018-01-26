@@ -230,7 +230,7 @@ class BEditaClient
     }
 
     /**
-     * Delete an object (DELETE).
+     * Delete an object (DELETE) => move to trashcan.
      *
      * @param int|string $id Object id
      * @param string $type Object type name
@@ -239,6 +239,37 @@ class BEditaClient
     public function deleteObject($id, $type)
     {
         return $this->delete(sprintf('/%s/%s', $type, $id));
+    }
+
+    /**
+     * Remove an object => permanently remove object from trashcan.
+     *
+     * @param int|string $id Object id
+     * @return array Response in array format
+     */
+    public function remove($id)
+    {
+        return $this->delete(sprintf('/trash/%s', $id));
+    }
+
+    /**
+     * Restore object from trash
+     *
+     * @param int|string $id Object id
+     * @param string $type Object type name
+     * @return array Response in array format
+     */
+    public function restoreObject($id, $type)
+    {
+        $body = [
+            'data' => [
+                'id' => $id,
+                'type' => $type,
+            ],
+        ];
+        $headers['Content-Type'] = 'application/json';
+
+        return $this->patch(sprintf('/%s/%s', 'trash', $id), json_encode($body), $headers);
     }
 
     /**

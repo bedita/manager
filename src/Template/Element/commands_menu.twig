@@ -10,6 +10,12 @@
         <label class="{{ currentModule.name }}" rel="{{ baseUrl }}{{ currentModule.name }}">{{ currentModule.name }}</label>
    </div>
 
+    {% if currentModule.name != 'trash' %}
+    <div class="trashcan">
+        <a href="{{ baseUrl }}trash?filter[type]={{ currentModule.name }}">{{__('Trashcan')}}</a>
+    </div>
+    {% endif %}
+
     {% if _view.template != 'index' %}
 
     <div class="insidecol">
