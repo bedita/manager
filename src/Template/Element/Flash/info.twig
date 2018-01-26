@@ -1,32 +1,5 @@
-{% if params.escape %}
-{% set message = _view.h(message) %}
-{% endif %}
+{% element 'message' {
+    level: 'info',
+    msg: message
+} %}
 
-<div class="message info">
-
-    <h2>{{ __('Info') }}</h2>
-
-    <p style="display:block; margin-top:10px; min-height: 30px; overflow: visible; word-wrap: break-word;">
-		{{ message }}
-	</p>
-
-    <hr />
-
-    {% if detail %}
-	<a href="javascript:void(0)" onclick="$('.messageDetail').toggle()">{{ __('see detail') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    {% endif %}
-
-	<a class="closemessage" href="javascript:void(0)">{{ __('close') }}</a>
-</div>
-
-{% if detail %}
-<div class="messageDetail shadow" style="display:none">
-
-	<p style="font-family:monospace;">{{ detail }}</p>
-
-	<hr />
-
-	<a class="closemessage" href="javascript:void(0)">{{ __('close') }}</a>
-
-</div>
-{% endif %}
