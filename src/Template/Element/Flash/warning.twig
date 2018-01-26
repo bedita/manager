@@ -1,0 +1,33 @@
+{% if params.escape %}
+{% set message = _view.h(message) %}
+{% endif %}
+
+<div class="message warn">
+
+    <h2>{{ __('Warning') }}</h2>
+
+    <p style="display:block; margin-top:10px; min-height: 30px; overflow: visible; word-wrap: break-word;">
+		{{ message }}
+	</p>
+
+    <hr />
+
+    {% if detail %}
+	<a href="javascript:void(0)" onclick="$('.messageDetail').toggle()">{{ __('see detail') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    {% endif %}
+
+	<a class="closemessage" href="javascript:void(0)">{{ __('close') }}</a>
+
+</div>
+
+{% if detail %}
+<div class="messageDetail shadow" style="display:none">
+
+	<p style="font-family:monospace;">{{ detail }}</p>
+
+	<hr />
+
+	<a class="closemessage" href="javascript:void(0)">{{ __('close') }}</a>
+
+</div>
+{% endif %}

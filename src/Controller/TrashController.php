@@ -83,7 +83,9 @@ class TrashController extends ModulesController
      */
     public function restore()
     {
-        $this->apiResponse = $this->apiClient->restoreObject($this->request->getData('id'));
+        $this->apiResponse = $this->apiClient->restoreObject($this->request->getData('id'), $this->request->getData('object_type'));
+
+        $this->Flash->success('Object restored');
 
         return $this->redir();
     }
@@ -96,6 +98,8 @@ class TrashController extends ModulesController
     public function delete()
     {
         $this->apiResponse = $this->apiClient->remove($this->request->getData('id'));
+
+        $this->Flash->success('Object deleted from trash');
 
         return $this->redir();
     }
