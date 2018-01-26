@@ -25,11 +25,19 @@ class ModulesController extends AppController
 {
 
     /**
-     * Object type name
+     * Object type currently used
      *
      * @var string
      */
     protected $objectType = null;
+
+    /**
+     * Module name, defaults to $objectType
+     * Exceptions: `trash` and optional plugin modules
+     *
+     * @var string
+     */
+    protected $moduleName = null;
 
     /**
      * Main API response array
@@ -48,6 +56,7 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->objectType = $this->request->getParam('object_type');
+        $this->moduleName = $this->objectType;
     }
 
     /**
@@ -58,7 +67,7 @@ class ModulesController extends AppController
         if (empty($this->modules)) {
             $this->readModules();
         }
-        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->objectType . ']')[0];
+        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->moduleName . ']')[0];
         $this->set(compact('currentModule'));
     }
 

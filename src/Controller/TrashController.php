@@ -21,22 +21,8 @@ use Cake\Utility\Hash;
 /**
  * Trash controller: list, restore, delete
  */
-class TrashController extends AppController
+class TrashController extends ModulesController
 {
-    /**
-     * Object type name
-     *
-     * @var string
-     */
-    protected $objectType = null;
-
-    /**
-     * Main API response array
-     *
-     * @var array
-     */
-    protected $apiResponse = [];
-
     /**
      * Initialization hook method.
      *
@@ -46,19 +32,7 @@ class TrashController extends AppController
     {
         parent::initialize();
 
-        $this->objectType = $this->request->getParam('object_type');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeFilter(Event $event)
-    {
-        if (empty($this->modules)) {
-            $this->readModules();
-        }
-        $currentModule = Hash::extract($this->modules, '{n}[name=trash]')[0];
-        $this->set(compact('currentModule'));
+        $this->moduleName = 'trash';
     }
 
     /**
@@ -67,11 +41,6 @@ class TrashController extends AppController
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        if ($this->apiResponse) {
-            foreach ($this->apiResponse as $key => $value) {
-                $this->set($key, $value);
-            }
-        }
         $params = $this->request->getQueryParams();
         if (!empty($params['filter']['type'])) {
             $this->set('filterType', $params['filter']['type']);
