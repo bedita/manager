@@ -259,7 +259,7 @@ class BEditaClient
      * @param string $type Object type name
      * @return array Response in array format
      */
-    public function restoreObject($id, $type = 'objects')
+    public function restoreObject($id, $type)
     {
         $body = [
             'data' => [
