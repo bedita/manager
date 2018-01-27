@@ -125,7 +125,7 @@ class ModulesController extends AppController
         $this->apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
         // TODO: error if $this->apiResponse['data']['id'] empty or  $this->apiResponse['error'] not empty
 
-        $this->Flash->success('Object saved');
+        $this->Flash->success(__('Object saved'));
 
         return $this->redirect(Router::url(sprintf('/%s/view/%s', $this->objectType, $this->apiResponse['data']['id'])));
     }
@@ -139,7 +139,7 @@ class ModulesController extends AppController
     {
         $this->apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
 
-        $this->Flash->success('Object deleted');
+        $this->Flash->success(__('Object deleted'));
 
         return $this->redirect(Router::url(sprintf('/%s', $this->objectType)));
     }
