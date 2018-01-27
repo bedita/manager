@@ -1,0 +1,27 @@
+<div class="secondcolumn">
+
+    <div class="modules">
+        <label class="trash" rel="{{ baseUrl }}trash">trash</label>
+   </div>
+
+    <div class="insidecol">
+
+        <form action="{{ baseUrl }}trash/restore" method="POST" name="restoreForm" id="restoreForm">
+            <input type="hidden" name="id" value="{{ data.id }}" />
+            {% if filterType %}
+            <input type="hidden" name="filter_type" id="filter_type" value="{{filterType}}" />
+            {% endif %}
+            <input type="button" value="{{__('Restore')}}" onclick="$('#restoreForm').submit();" />
+        </form>
+
+        <form action="{{ baseUrl }}trash/delete" method="POST" name="deleteForm" id="deleteForm">
+            <input type="hidden" name="id" value="{{ data.id }}" />
+            {% if filterType %}
+            <input type="hidden" name="filter_type" id="filter_type" value="{{filterType}}" />
+            {% endif %}
+            <input type="button" value="{{__('Delete')}}" onclick="$('#deleteForm').submit();" />
+        </form>
+
+    </div>
+
+</div>

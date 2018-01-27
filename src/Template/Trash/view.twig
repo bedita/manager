@@ -1,0 +1,26 @@
+{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
+
+
+<body>
+
+{% element 'modules_top_menu' %}
+
+{% element 'left_menu' %}
+
+{% set attributes = data.attributes %}
+
+<div class="head">
+    <h1>{{ attributes.title }}</h1>
+</div>
+
+{% element 'commands_menu_trash' %}
+
+<div class="main">
+
+    {% element 'form_object' %}
+
+</div>
+
+{% element 'right_menu' %}
+
+</body>

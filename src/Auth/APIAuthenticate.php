@@ -63,6 +63,7 @@ class APIAuthenticate extends BaseAuthenticate
         $result = $apiClient->get('/auth/user', null, ['Authorization' => sprintf('Bearer %s', $tokens['jwt'])]);
         $user = $result['data'] + compact('tokens');
 
+
         return $user;
     }
 }

@@ -1,8 +1,8 @@
 
-<form action="{{ baseUrl }}{{ currentModule.name }}" method="POST" name="updateForm" id="updateForm" class="cmxform">
+<form action="{{ baseUrl }}{{ currentModule.name }}/save" method="POST" name="updateForm" id="updateForm" class="cmxform">
 <!-- {$beForm->csrf()} -->
 
-    <input type="hidden" name="data[id]" value="{{ data.id }}"/>
+    <input type="hidden" name="id" value="{{ data.id }}"/>
 
     {% element 'form_core_properties' %}
 

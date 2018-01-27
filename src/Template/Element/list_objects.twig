@@ -45,7 +45,7 @@ var sel_copy_to_msg = "{t}Select a destination to 'copy to'{/t}";
 
         {% for object in data %}
 
-        {% set viewUrl = "%s%s/%s"|format(baseUrl, object.type, object.id) %}
+        {% set viewUrl = "%s%s/view/%s"|format(baseUrl, object.type, object.id) %}
         {% set attributes = object.attributes %}
         {% set meta = object.meta %}
 

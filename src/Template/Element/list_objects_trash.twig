@@ -1,0 +1,56 @@
+<script type="text/javascript">
+<!--
+function trashSubmit(objectId, objectType, operation) {
+    $('#id').val(objectId);
+    $('#object_type').val(objectType);
+    $('#trashForm').attr('action', '/trash/' + operation);
+    $('#trashForm').submit();
+}
+//-->
+</script>
+
+<form method="POST" action="{{ baseUrl }}{{ currentModule.name }}/restore" id="trashForm">
+
+    <input type="hidden" name="id" id="id" />
+    <input type="hidden" name="object_type" id="object_type" />
+    <input type="hidden" name="filter_type" id="filter_type" value="{{filterType}}" />
+
+    <table class="indexlist js-header-float">
+
+        <thead>
+            <tr>
+                <th>title</th>
+                <th>id</th>
+                <th>type</th>
+                <th>status</th>
+                <th>modified</th>
+                <th>-</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% if not data %}
+            <tr><td colspan="100">No items found</td></tr>
+        {% else %}
+        {% for object in data %}
+            {% set attributes = object.attributes %}
+            {% set meta = object.meta %}
+            {% set query = (filterType) ? '?filter[type]=' ~ filterType : '' %}
+            {% set uri = baseUrl ~ currentModule.name ~ '/view/' ~ object.id ~ query %}
+            <tr class="obj {{ attributes.status }}">
+                <td style="min-width:300px"><a href="{{ uri }}">{{ attributes.title }}</a></td>
+                <td>{{ object.id }}</td>
+                <td>{{ object.type }}</td>
+                <td>{{ attributes.status }}</td>
+                <td style="white-space:nowrap">{{ meta.modified }}</td>
+                <td>
+                    <input type="button" value="{{__('Restore')}}" onclick="trashSubmit('{{ object.id }}', '{{ object.type }}', 'restore');" />
+                    <input type="button" value="{{__('Delete')}}" onclick="trashSubmit('{{ object.id }}', '{{ object.type }}', 'delete');" />
+                </td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody>
+
+</table>
+</form>

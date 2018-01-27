@@ -149,8 +149,8 @@ class BEditaClient
     /**
      * Classic authentication via POST /auth using username and password
      *
-     * @param string $username
-     * @param string $password
+     * @param string $username username
+     * @param string $password password
      * @return array Response in array format
      */
     public function authenticate($username, $password)
@@ -163,8 +163,9 @@ class BEditaClient
     /**
      * Send a GET request a list of resources or objects or a single resource or object
      *
-     * @param string $endpoint Endpoint URL path to invoke
+     * @param string $path Endpoint URL path to invoke
      * @param array $query Optional query string
+     * @param array $headers Headers
      * @return array Response in array format
      */
     public function get($path, $query = [], $headers = [])
@@ -190,21 +191,107 @@ class BEditaClient
     /**
      * GET a single object of a given type
      *
-     * @param string $type Object type name
      * @param int|string $id Object id
+     * @param string $type Object type name
      * @param array $query Optional query string
      * @param array $headers Custom request headers
      * @return array Response in array format
      */
-    public function getObject($type = 'objects', $id, $query = [], $headers = [])
+    public function getObject($id, $type = 'objects', $query = [], $headers = [])
     {
         return $this->get(sprintf('/%s/%s', $type, $id), $query, $headers);
     }
 
     /**
+     * Create a new object (POST) or modify an existing one (PATCH)
+     *
+     * @param string $type Object type name
+     * @param array $data Object data to save
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function saveObject($type, $data, $headers = [])
+    {
+        $id = !empty($data['id']) ? $data['id'] : null;
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => $type,
+                'attributes' => $data,
+            ],
+        ];
+        $headers['Content-Type'] = 'application/json';
+        if (!$id) {
+            return $this->post(sprintf('/%s', $type), json_encode($body), $headers);
+        }
+        $body['data']['id'] = $id;
+
+        return $this->patch(sprintf('/%s/%s', $type, $id), json_encode($body), $headers);
+    }
+
+    /**
+     * Delete an object (DELETE) => move to trashcan.
+     *
+     * @param int|string $id Object id
+     * @param string $type Object type name
+     * @return array Response in array format
+     */
+    public function deleteObject($id, $type)
+    {
+        return $this->delete(sprintf('/%s/%s', $type, $id));
+    }
+
+    /**
+     * Remove an object => permanently remove object from trashcan.
+     *
+     * @param int|string $id Object id
+     * @return array Response in array format
+     */
+    public function remove($id)
+    {
+        return $this->delete(sprintf('/trash/%s', $id));
+    }
+
+    /**
+     * Restore object from trash
+     *
+     * @param int|string $id Object id
+     * @param string $type Object type name
+     * @return array Response in array format
+     */
+    public function restoreObject($id, $type)
+    {
+        $body = [
+            'data' => [
+                'id' => $id,
+                'type' => $type,
+            ],
+        ];
+        $headers['Content-Type'] = 'application/json';
+
+        return $this->patch(sprintf('/%s/%s', 'trash', $id), json_encode($body), $headers);
+    }
+
+    /**
+     * Send a PATCH request to modify a single resource or object
+     *
+     * @param string $path Endpoint URL path to invoke
+     * @param mixed $body Request body
+     * @param array $headers Custom request headers
+     * @return array Response in array format
+     */
+    public function patch($path, $body, $headers = [])
+    {
+        $this->sendRequest('PATCH', $path, null, $headers, $body);
+
+        return $this->getResponseBody();
+    }
+
+    /**
      * Send a POST request for creating resources or objects or other operations like /auth
      *
-     * @param string $endpoint Endpoint URL path to invoke
+     * @param string $path Endpoint URL path to invoke
+     * @param mixed $body Request body
      * @param array $headers Custom request headers
      * @return array Response in array format
      */
@@ -216,14 +303,28 @@ class BEditaClient
     }
 
     /**
+     * Send a DELETE request
+     *
+     * @param string $path Endpoint URL path to invoke.
+     * @return array Response in array format.
+     */
+    public function delete($path)
+    {
+        $this->sendRequest('DELETE', $path);
+
+        return $this->getResponseBody();
+    }
+
+    /**
      * Send a generic JSON API request and retrieve response $this->response
      *
-     * @param string $endpoint Endpoint URL path to invoke
+     * @param string $method Method
+     * @param string $path Endpoint URL path to invoke
      * @param array $query Optional query string
      * @param array $headers Custom request headers
      * @param mixed $body Request body
-     * @param boolean $refresh In case of token expired response try a token refresh and repeat request. Default 'true'. Used to avoid loops.
-     * @return void
+     * @param bool $refresh In case of token expired response try a token refresh and repeat request. Default 'true'. Used to avoid loops.
+     * @return void|\Cake\Http\Response
      */
     protected function sendRequest($method, $path, $query = [], $headers = [], $body = null, $refresh = true)
     {
@@ -238,11 +339,11 @@ class BEditaClient
         // in case of 401 response with `be_token_expired` code refresh token and send request again
         if ($refresh && $this->getStatusCode() === 401) {
             $respBody = $this->getResponseBody();
-            if (!empty($respBody['error']['code']) &&  $respBody['error']['code'] === 'be_token_expired') {
+            if (!empty($respBody['error']['code']) && $respBody['error']['code'] === 'be_token_expired') {
                 if ($this->refreshTokens()) {
                     // remove previous Authorization header and force new one usage
                     unset($headers['Authorization']);
-                    $this->sendRequest($method, $path, $query, $headers, $body, false);
+                     $this->sendRequest($method, $path, $query, $headers, $body, false);
                 }
             }
         }
@@ -252,7 +353,7 @@ class BEditaClient
      * Send a refresh token request.
      * On success `$this->token` data will be updated with new access and renew tokens.
      *
-     * @return boolean True on success, false on failure
+     * @return bool True on success, false on failure
      */
     public function refreshTokens()
     {

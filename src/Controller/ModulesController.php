@@ -21,11 +21,19 @@ class ModulesController extends AppController
 {
 
     /**
-     * Object type name
+     * Object type currently used
      *
      * @var string
      */
     protected $objectType = null;
+
+    /**
+     * Module name, defaults to $objectType
+     * Exceptions: `trash` and optional plugin modules
+     *
+     * @var string
+     */
+    protected $moduleName = null;
 
     /**
      * {@inheritDoc}
@@ -36,6 +44,19 @@ class ModulesController extends AppController
 
         $this->objectType = $this->request->getParam('object_type');
         $this->Modules->setConfig('currentModuleName', $this->objectType);
+        $this->moduleName = $this->objectType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event)
+    {
+        if (empty($this->modules)) {
+            $this->readModules();
+        }
+        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->moduleName . ']')[0];
+        $this->set(compact('currentModule'));
     }
 
     /**
@@ -72,7 +93,42 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $object = $this->apiClient->getObject($this->objectType, $id);
+        $object = $this->apiClient->getObject($id, $this->objectType);
+    }
+
+    /**
+     * Display new item form
+     *
+     * @return void
+     */
+    public function new()
+    {
+        $this->viewBuilder()->setTemplate('view');
+    }
+
+    /**
+     * Create or edit single item
+     *
+     * @return \Cake\Http\Response
+     */
+    public function save()
+    {
+        $this->apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
+        // TODO: error if $this->apiResponse['data']['id'] empty or  $this->apiResponse['error'] not empty
+
+        return $this->redirect(Router::url(sprintf('/%s/view/%s', $this->objectType, $this->apiResponse['data']['id'])));
+    }
+
+    /**
+     * Delete single item
+     *
+     * @return \Cake\Http\Response
+     */
+    public function delete()
+    {
+        $this->apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
+
+        return $this->redirect(Router::url(sprintf('/%s', $this->objectType)));
 
         $this->set(compact('object'));
     }

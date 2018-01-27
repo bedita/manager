@@ -66,37 +66,61 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard']
     );
 
+    // Trash | GET => list items
+    $routes->connect(
+        '/trash',
+        ['controller' => 'Trash', 'action' => 'index', 'method' => 'GET'],
+        ['_name' => 'trash']
+    );
+
+    // Trash | GET => view item
+    $routes->connect(
+        '/trash/view/:id',
+        ['controller' => 'Trash', 'action' => 'view', 'method' => 'GET'],
+        ['pass' => ['id']]
+    );
+
+    // Trash | POST => restore item
+    $routes->connect(
+        '/trash/restore',
+        ['controller' => 'Trash', 'action' => 'restore', 'method' => 'POST']
+    );
+
+    // Trash | POST => delete item
+    $routes->connect(
+        '/trash/delete',
+        ['controller' => 'Trash', 'action' => 'delete', 'method' => 'POST']
+    );
+
     // GET => list items
     $routes->connect(
         '/:object_type',
         ['controller' => 'Modules', 'action' => 'index']
     );
 
-    // GET => view item
+    // GET => view single item
     $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id']]
     );
 
-    // POST => create new item
+    // GET => display new single item form
     $routes->connect(
-        '/:object_type/create',
-        ['controller' => 'Modules', 'action' => 'create']
+        '/:object_type/new',
+        ['controller' => 'Modules', 'action' => 'new', 'method' => 'GET']
     );
 
-    // PATCH => edit item
+    // POST => create new item or edit existing
     $routes->connect(
-        '/:object_type/edit/:id',
-        ['controller' => 'Modules', 'action' => 'edit'],
-        ['pass' => ['id']]
+        '/:object_type/save',
+        ['controller' => 'Modules', 'action' => 'save', 'method' => 'POST']
     );
 
     // DELETE => remove item
     $routes->connect(
-        '/:object_type/delete/:id',
-        ['controller' => 'Modules', 'action' => 'delete'],
-        ['pass' => ['id']]
+        '/:object_type/delete',
+        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'POST']
     );
 
     $routes->fallbacks(DashedRoute::class);
