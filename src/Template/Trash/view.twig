@@ -2,8 +2,10 @@
 
 <div class="main">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-        'url': {'_name': 'trash:save'},
+        'url': {'_name': 'trash:list'},
     })|raw }}
+
+    <h1>{{ object.attributes.title }}</h1>
 
     {% element 'form_core_properties' %}
 
@@ -13,3 +15,7 @@
 
     {{ Form.end()|raw }}
 </div>
+
+{# Append "Delete" and "Restore" to commands in commands menu. #}
+{{ _view.append('commands', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) }}
+{{ _view.append('commands', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) }}
