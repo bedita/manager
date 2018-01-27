@@ -112,6 +112,11 @@ class AppController extends Controller
     protected function readModules()
     {
         $home = $this->apiClient->get('/home');
+        $status = $this->apiClient->getStatusCode();
+        if (in_array($status, [401, 403])) {
+            return $this->redirect(['_name' => 'logout']);
+        }
+
         if (empty($home['meta']['resources'])) {
             throw new NotFoundException(__('Modules not found'));
         }
