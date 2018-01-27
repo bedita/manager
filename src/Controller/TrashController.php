@@ -70,6 +70,7 @@ class TrashController extends AppController
         $this->request->allowMethod(['post']);
 
         $apiResponse = $this->apiClient->restoreObject($this->request->getData('id'), 'objects');
+        $this->Flash->info(__('Object restored'));
 
         return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
     }
@@ -84,7 +85,8 @@ class TrashController extends AppController
         $this->request->allowMethod(['post']);
 
         $apiResponse = $this->apiClient->remove($this->request->getData('id'));
+        $this->Flash->info(__('Object deleted from trash'));
 
-        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
+        return $this->redir();
     }
 }

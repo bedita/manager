@@ -99,6 +99,7 @@ class ModulesController extends AppController
         $this->request->allowMethod(['post']);
 
         $apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
+        $this->Flash->info(__('Object saved'));
 
         return $this->redirect([
             '_name' => 'modules:view',
@@ -117,6 +118,7 @@ class ModulesController extends AppController
         $this->request->allowMethod(['post']);
 
         $apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
+        $this->Flash->info(__('Object deleted'));
 
         return $this->redirect([
             '_name' => 'modules:list',
