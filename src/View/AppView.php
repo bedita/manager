@@ -28,6 +28,7 @@ class AppView extends TwigView
     {
         parent::initialize();
 
+        $this->loadHelper('Flash');
         $this->loadHelper('Html');
         $this->loadHelper('Url');
         $this->loadHelper('Link');

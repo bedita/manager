@@ -22,4 +22,11 @@
 
 </head>
 
+<body {% if bodyClass %}class="{{ bodyClass }}"{% endif %}>
+
+{% element 'messages' %}
+
 {{ _view.fetch('content')|raw }}
+
+</body>
+</html>

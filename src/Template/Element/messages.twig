@@ -1,0 +1,13 @@
+<script type="text/javascript" charset="utf-8">
+$(document).ready ( function ()  {
+	$('#messagesDiv').triggerMessage('info', 5000);
+	$('#messagesDiv').triggerMessage('warn', 5000);
+	$('#messagesDiv').triggerMessage('error');
+});
+</script>
+
+<div id="messagesDiv">
+
+{{ Flash.render()|raw }}
+
+</div>

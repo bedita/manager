@@ -28,6 +28,7 @@ class DashboardController extends AppController
      */
     public function display()
     {
+        $this->set('bodyClass', 'home');
     }
 
     /**
