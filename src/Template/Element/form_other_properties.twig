@@ -7,7 +7,6 @@
 
 {% for key, value in object.attributes %}
     {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
-        {{ Form.label(key, key|humanize)|raw }}
         {{ Form.control(key)|raw }}
     {% endif %}
 {% endfor %}

@@ -12,16 +12,10 @@
  */
 namespace App\Controller;
 
-use App\Model\API\BEditaClient;
-use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
-
 /**
  * Trash controller: list, restore, delete
  */
-class TrashController extends ModulesController
+class TrashController extends AppController
 {
     /**
      * Initialization hook method.
@@ -32,19 +26,7 @@ class TrashController extends ModulesController
     {
         parent::initialize();
 
-        $this->moduleName = 'trash';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeRender(Event $event)
-    {
-        parent::beforeRender($event);
-        $params = $this->request->getQueryParams();
-        if (!empty($params['filter']['type'])) {
-            $this->set('filterType', $params['filter']['type']);
-        }
+        $this->Modules->setConfig('currentModuleName', 'trash');
     }
 
     /**
@@ -54,15 +36,12 @@ class TrashController extends ModulesController
      */
     public function index()
     {
-        $query = $this->request->getQueryParams();
-        if (!empty($this->objectType)) {
-            $query = [
-                'filter' => [
-                    'type' => $this->objectType,
-                ]
-            ];
-        }
-        $this->apiResponse = $this->apiClient->getObjects('trash', $query);
+        $this->request->allowMethod(['get']);
+
+        $res = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
+        $objects = $res['data'];
+
+        $this->set(compact('objects'));
     }
 
     /**
@@ -73,7 +52,12 @@ class TrashController extends ModulesController
      */
     public function view($id)
     {
-        $this->apiResponse = $this->apiClient->getObject($id, 'trash');
+        $this->request->allowMethod(['get']);
+
+        $res = $this->apiClient->getObject($id, 'trash');
+        $object = $res['data'];
+
+        $this->set(compact('object'));
     }
 
     /**
@@ -83,9 +67,11 @@ class TrashController extends ModulesController
      */
     public function restore()
     {
-        $this->apiResponse = $this->apiClient->restoreObject($this->request->getData('id'));
+        $this->request->allowMethod(['post']);
 
-        return $this->redir();
+        $apiResponse = $this->apiClient->restoreObject($this->request->getData('id'), 'objects');
+
+        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
     }
 
     /**
@@ -95,25 +81,10 @@ class TrashController extends ModulesController
      */
     public function delete()
     {
-        $this->apiResponse = $this->apiClient->remove($this->request->getData('id'));
+        $this->request->allowMethod(['post']);
 
-        return $this->redir();
-    }
+        $apiResponse = $this->apiClient->remove($this->request->getData('id'));
 
-    /**
-     * Redirect to proper page according to object type
-     *
-     * @return \Cake\Http\Response
-     */
-    private function redir()
-    {
-        $destination = '/trash';
-        if (!empty($this->objectType)) {
-            $destination .= '?filter[type]=' . $this->objectType;
-        } elseif (!empty($this->request->getData('filter_type'))) {
-            $destination .= '?filter[type]=' . $this->request->getData('filter_type');
-        }
-
-        return $this->redirect(Router::url($destination));
+        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
     }
 }

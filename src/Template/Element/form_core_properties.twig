@@ -3,17 +3,15 @@
 <div class="tab"><h2>{{ __('Main Properties') }}</h2></div>
 
 <fieldset id="core_properties">
-
-    {{ Form.label('title', __('Title'))|raw }}
-    {{ Form.text('title')|raw }}
-    {{ Form.label('description', __('Description'))|raw }}
-    {{ Form.text('description')|raw }}
-    {{ Form.label('uname', __('Slug'))|raw }}
-    {{ Form.text('uname')|raw }}
-    {{ Form.label('status', __('Status'))|raw }}
-    {{ Form.radio('status', [
-        {'value': 'on', 'text': __('On')},
-        {'value': 'draft', 'text': __('Draft')},
-        {'value': 'off', 'text': __('Off')},
-    ])|raw }}
+    {{ Form.control('title')|raw }}
+    {{ Form.control('description', {'type': 'textarea'})|raw }}
+    {{ Form.control('uname')|raw }}
+    {{ Form.control('status', {
+        'type': 'radio',
+        'options': [
+            {'value': 'on', 'text': __('On')},
+            {'value': 'draft', 'text': __('Draft')},
+            {'value': 'off', 'text': __('Off')},
+        ]
+    })|raw }}
 </fieldset>

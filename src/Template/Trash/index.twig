@@ -17,16 +17,16 @@
         </thead>
 
         <tbody>
-        {% for object in data %}
+        {% for object in objects %}
             <tr class="obj {{ object.attributes.status }}">
-                <td>{{ Html.link(object.attributes.title, {'action': 'view', 'id': object.id})|raw }}</td>
+                <td>{{ Html.link(object.attributes.title, {'_name': 'trash:view', 'id': object.id})|raw }}</td>
                 <td>{{ object.id }}</td>
                 <td>{{ object.type }}</td>
                 <td>{{ object.attributes.status }}</td>
                 <td>{{ Time.format(object.meta.modified) }}</td>
                 <td>
-                    {{ Form.postButton(__('Restore'), {'action': 'restore', 'id': object.id})|raw }}
-                    {{ Form.postButton(__('Delete'), {'action': 'delete', 'id': object.id})|raw }}
+                    {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})|raw }}
+                    {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})|raw }}
                 </td>
             </tr>
         {% else %}

@@ -1,9 +1,8 @@
 {{ _view.assign('title', currentModule.name|humanize) }}
 
 <div class="main">
-    {{ Form.create(null, {
+    {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
         'url': {'_name': 'modules:save', 'object_type': objectType},
-        'value': object.attributes,
     })|raw }}
 
     {% element 'form_core_properties' %}

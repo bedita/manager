@@ -1,11 +1,15 @@
 {{ _view.assign('title', __('Trash')) }}
 
-<div class="head">
-    <h1>{{ object.attributes.title }}</h1>
-</div>
-
 <div class="main">
+    {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+        'url': {'_name': 'trash:save'},
+    })|raw }}
 
-    {% element 'form_object' %}
+    {% element 'form_core_properties' %}
 
+    {% element 'form_other_properties' %}
+
+    {% element 'form_meta' %}
+
+    {{ Form.end()|raw }}
 </div>
