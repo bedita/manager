@@ -13,7 +13,6 @@
 namespace App\Controller;
 
 use App\Model\API\BEditaClient;
-use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;

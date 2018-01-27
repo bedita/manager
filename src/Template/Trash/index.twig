@@ -1,17 +1,37 @@
-{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
+<div class="module">
 
-<body>
+    {% element 'toolbar_pagination' %}
 
-{% element 'modules_top_menu' %}
+    {% element 'toolbar_filters' %}
 
-{% element 'left_menu' %}
+    <table>
+        <thead>
+            <tr>
+                <th>{{ __('title') }}</th>
+                <th>{{ __('id') }}</th>
+                <th>{{ __('type') }}</th>
+                <th>{{ __('status') }}</th>
+                <th>{{ __('modified') }}</th>
+                <th>-</th>
+            </tr>
+        </thead>
 
-{% element 'commands_menu' %}
-
-<div class="mainfull">
-
-    {% element 'list_objects_trash' %}
-
+        <tbody>
+        {% for object in data %}
+            <tr class="obj {{ object.attributes.status }}">
+                <td>{{ Html.link(object.attributes.title, {'action': 'view', 'id': object.id})|raw }}</td>
+                <td>{{ object.id }}</td>
+                <td>{{ object.type }}</td>
+                <td>{{ object.attributes.status }}</td>
+                <td>{{ Time.format(object.meta.modified) }}</td>
+                <td>
+                    {{ Form.postButton(__('Restore'), {'action': 'restore', 'id': object.id})|raw }}
+                    {{ Form.postButton(__('Delete'), {'action': 'delete', 'id': object.id})|raw }}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="100">{{ __('No items found') }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
-
-</body>

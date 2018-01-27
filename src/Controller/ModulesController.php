@@ -21,19 +21,11 @@ class ModulesController extends AppController
 {
 
     /**
-     * Object type currently used
+     * Name of object type currently in use.
      *
      * @var string
      */
     protected $objectType = null;
-
-    /**
-     * Module name, defaults to $objectType
-     * Exceptions: `trash` and optional plugin modules
-     *
-     * @var string
-     */
-    protected $moduleName = null;
 
     /**
      * {@inheritDoc}
@@ -44,19 +36,6 @@ class ModulesController extends AppController
 
         $this->objectType = $this->request->getParam('object_type');
         $this->Modules->setConfig('currentModuleName', $this->objectType);
-        $this->moduleName = $this->objectType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeFilter(Event $event)
-    {
-        if (empty($this->modules)) {
-            $this->readModules();
-        }
-        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->moduleName . ']')[0];
-        $this->set(compact('currentModule'));
     }
 
     /**
@@ -78,7 +57,8 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $objects = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+        $res = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+        $objects = $res['data'];
 
         $this->set(compact('objects'));
     }
@@ -94,6 +74,8 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         $object = $this->apiClient->getObject($id, $this->objectType);
+
+        $this->set(compact('object'));
     }
 
     /**
@@ -101,7 +83,7 @@ class ModulesController extends AppController
      *
      * @return void
      */
-    public function new()
+    public function create()
     {
         $this->viewBuilder()->setTemplate('view');
     }
@@ -113,10 +95,15 @@ class ModulesController extends AppController
      */
     public function save()
     {
-        $this->apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
-        // TODO: error if $this->apiResponse['data']['id'] empty or  $this->apiResponse['error'] not empty
+        $this->request->allowMethod(['post']);
 
-        return $this->redirect(Router::url(sprintf('/%s/view/%s', $this->objectType, $this->apiResponse['data']['id'])));
+        $apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
+
+        return $this->redirect([
+            '_name' => 'modules:view',
+            'object_type' => $this->objectType,
+            'id' => $apiResponse['data']['id'],
+        ]);
     }
 
     /**
@@ -126,10 +113,13 @@ class ModulesController extends AppController
      */
     public function delete()
     {
-        $this->apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
+        $this->request->allowMethod(['post']);
 
-        return $this->redirect(Router::url(sprintf('/%s', $this->objectType)));
+        $apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
 
-        $this->set(compact('object'));
+        return $this->redirect([
+            '_name' => 'modules:list',
+            'object_type' => $this->objectType,
+        ]);
     }
 }

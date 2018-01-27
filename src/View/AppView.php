@@ -32,6 +32,7 @@ class AppView extends TwigView
         $this->loadHelper('Html');
         $this->loadHelper('Link');
         $this->loadHelper('Text');
+        $this->loadHelper('Time');
         $this->loadHelper('Url');
 
         $this->getTwig()

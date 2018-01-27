@@ -51,76 +51,66 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Login', 'action' => 'login'],
         ['_name' => 'login']
     );
-
-    // Logout.
     $routes->connect(
         '/logout',
         ['controller' => 'Login', 'action' => 'logout'],
         ['_name' => 'logout']
     );
 
-    // Dashboard
+    // Dashboard.
     $routes->connect(
         '/',
         ['controller' => 'Dashboard', 'action' => 'index'],
         ['_name' => 'dashboard']
     );
 
-    // Trash | GET => list items
+    // Trash.
     $routes->connect(
         '/trash',
         ['controller' => 'Trash', 'action' => 'index', 'method' => 'GET'],
-        ['_name' => 'trash']
+        ['_name' => 'trash:list']
     );
-
-    // Trash | GET => view item
     $routes->connect(
         '/trash/view/:id',
-        ['controller' => 'Trash', 'action' => 'view', 'method' => 'GET'],
-        ['pass' => ['id']]
+        ['controller' => 'Trash', 'action' => 'view'],
+        ['pass' => ['id'], '_name' => 'trash:view']
     );
-
-    // Trash | POST => restore item
     $routes->connect(
         '/trash/restore',
-        ['controller' => 'Trash', 'action' => 'restore', 'method' => 'POST']
+        ['controller' => 'Trash', 'action' => 'restore'],
+        ['_name' => 'trash:restore']
     );
-
-    // Trash | POST => delete item
     $routes->connect(
         '/trash/delete',
-        ['controller' => 'Trash', 'action' => 'delete', 'method' => 'POST']
+        ['controller' => 'Trash', 'action' => 'delete'],
+        ['_name' => 'trash:delete']
     );
 
-    // GET => list items
+    // Modules.
     $routes->connect(
         '/:object_type',
-        ['controller' => 'Modules', 'action' => 'index']
+        ['controller' => 'Modules', 'action' => 'index'],
+        ['_name' => 'modules:list']
     );
-
-    // GET => view single item
     $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
-        ['pass' => ['id']]
+        ['pass' => ['id'], '_name' => 'modules:view']
     );
-
-    // GET => display new single item form
     $routes->connect(
-        '/:object_type/new',
-        ['controller' => 'Modules', 'action' => 'new', 'method' => 'GET']
+        '/:object_type/create',
+        ['controller' => 'Modules', 'action' => 'create'],
+        ['_name' => 'modules:create']
     );
-
-    // POST => create new item or edit existing
     $routes->connect(
         '/:object_type/save',
-        ['controller' => 'Modules', 'action' => 'save', 'method' => 'POST']
+        ['controller' => 'Modules', 'action' => 'save'],
+        ['_name' => 'modules:save']
     );
-
-    // DELETE => remove item
     $routes->connect(
         '/:object_type/delete',
-        ['controller' => 'Modules', 'action' => 'delete', 'method' => 'POST']
+        ['controller' => 'Modules', 'action' => 'delete'],
+        ['_name' => 'modules:delete']
     );
 
     $routes->fallbacks(DashedRoute::class);

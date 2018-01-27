@@ -1,25 +1,18 @@
-{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
-
-
-<body>
-
-{% element 'modules_top_menu' %}
-
-{% element 'left_menu' %}
-
-<div class="head">
-    <h1><?= $data['attributes']['title'] ?></h1>
-    <!-- <h1>{if !empty($object)}{$object.title|escape:'html'|default:"<i>[no title]</i>"}{else}<i>[{t}New item{/t}]</i>{/if}</h1> -->
-</div>
-
-{% element 'commands_menu' %}
+{{ _view.assign('title', currentModule.name|humanize) }}
 
 <div class="main">
 
-    {% element 'form_object' %}
+    {{ Form.create(null, {
+        'url': {'_name': 'modules:save', 'object_type': objectType}
+    })|raw }}
+
+    {% element 'form_core_properties' %}
+
+    {#{% element 'form_other_properties' %}
+
+    {% element 'form_meta' %}#}
+
+    {{ Form.end()|raw }}
 </div>
 
-{% element 'right_menu' %}
-
-</body>
 

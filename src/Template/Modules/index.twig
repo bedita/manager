@@ -1,15 +1,38 @@
-{{ _view.assign('title', currentModule.name)) }}
-
-<body>
+{{ _view.assign('title', currentModule.name|humanize) }}
 
 <div class="module">
 
-    {% element 'modules_top_menu' %}
+    {% element 'toolbar_pagination' %}
 
-    {% element 'pagination_toolbar' %}
+    {% element 'toolbar_filters' %}
 
-    {% element 'filters' %}
+    <table>
+        <thead>
+            <tr>
+                <th>{{ __('title') }}</th>
+                <th>{{ __('id') }}</th>
+                <th>{{ __('type') }}</th>
+                <th>{{ __('status') }}</th>
+                <th>{{ __('modified') }}</th>
+                <th>-</th>
+            </tr>
+        </thead>
 
-    {% element 'list_objects' %}
-
+        <tbody>
+        {% for object in objects %}
+            <tr class="obj {{ object.attributes.status }}">
+                <td>{{ Html.link(object.attributes.title, {'_name': 'modules:view', 'object_type': objectType, 'id': object.id})|raw }}</td>
+                <td>{{ object.id }}</td>
+                <td>{{ object.type }}</td>
+                <td>{{ object.attributes.status }}</td>
+                <td>{{ Time.format(object.meta.modified) }}</td>
+                <td>
+                    {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})|raw }}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="100">{{ __('No items found') }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
