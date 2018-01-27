@@ -220,7 +220,7 @@ class BEditaClient
                 'attributes' => $data,
             ],
         ];
-        $headers['Content-Type'] = 'application/json';
+        $headers['Content-Type'] = 'application/vnd.api+json';
         if (!$id) {
             return $this->post(sprintf('/%s', $type), json_encode($body), $headers);
         }

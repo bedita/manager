@@ -73,7 +73,8 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $object = $this->apiClient->getObject($id, $this->objectType);
+        $res = $this->apiClient->getObject($id, $this->objectType);
+        $object = $res['data'];
 
         $this->set(compact('object'));
     }

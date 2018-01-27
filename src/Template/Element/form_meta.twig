@@ -1,7 +1,3 @@
-{% set meta = data.meta %}
-
-
-
 <div class="tab"><h2>{{ __('Metadata') }}</h2></div>
 
 <fieldset id="advancedproperties" class="multimediaiteminside">
@@ -10,9 +6,9 @@
     <tbody>
         <tr>
             <th>id:</th>
-            <td>{{ data.id }}</td>
+            <td>{{ object.id }}</td>
         </tr>
-        {% for key, val in meta %}
+        {% for key, val in object.meta %}
         <tr>
             <th>{{ key }}:</th>
             <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
