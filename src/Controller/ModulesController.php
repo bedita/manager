@@ -25,7 +25,7 @@ class ModulesController extends AppController
 {
 
     /**
-     * Object type currently used
+     * Object type name in use
      *
      * @var string
      */
@@ -57,6 +57,11 @@ class ModulesController extends AppController
 
         $this->objectType = $this->request->getParam('object_type');
         $this->moduleName = $this->objectType;
+
+        $this->loadComponent('Schema', [
+            'apiClient' => $this->apiClient,
+            'type' => $this->objectType,
+        ]);
     }
 
     /**
@@ -103,6 +108,7 @@ class ModulesController extends AppController
     public function view($id)
     {
         $this->apiResponse = $this->apiClient->getObject($id, $this->objectType);
+        $this->set('schema', $this->Schema->getSchema());
     }
 
     /**
@@ -113,6 +119,16 @@ class ModulesController extends AppController
     public function new()
     {
         $this->viewBuilder()->setTemplate('view');
+
+        // set 'data' with empty 'attributes' for the view
+        $schema = $this->Schema->getSchema();
+        $this->set('schema', $schema);
+        foreach ($schema['properties'] as $name => $data) {
+            if (empty($data['readOnly'])) {
+                $attributes[$name] = '';
+            }
+        }
+        $this->set('data', compact('attributes'));
     }
 
     /**
