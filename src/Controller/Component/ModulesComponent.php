@@ -63,6 +63,20 @@ class ModulesComponent extends Component
     public function getModules()
     {
         static $excludedModules = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
+        static $modulesOrder = [
+            'objects',
+            'documents',
+            'events',
+            'news',
+            'locations',
+            'media',
+            'audio',
+            'images',
+            'videos',
+            'files',
+            'profiles',
+            'users',
+        ];
 
         $meta = $this->getMeta();
         $modules = collection($meta['resources'])
@@ -73,6 +87,15 @@ class ModulesComponent extends Component
             })
             ->reject(function (array $data) use ($excludedModules) {
                 return in_array($data['name'], $excludedModules);
+            })
+            ->sortBy(function (array $data) use ($modulesOrder) {
+                $idx = array_search($data['name'], $modulesOrder);
+                if ($idx === false) {
+                    // Use hash to preserve custom modules order, and ensure it is after core modules.
+                    $idx = count($modulesOrder) + hexdec(hash('crc32', $data['name']));
+                }
+
+                return -$idx;
             })
             ->toList();
 
