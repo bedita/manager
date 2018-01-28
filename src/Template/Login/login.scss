@@ -1,0 +1,18 @@
+/*************/
+/*** LOGIN ***/
+/*************/
+.login {
+    flex: auto;
+}
+
+.login label, .login input {
+    display: block;
+}
+
+.login input[type=submit] {
+    margin: 1.75em 0;
+    width: 140px;
+    padding: .5em;
+}
+
+

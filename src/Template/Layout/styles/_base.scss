@@ -1,4 +1,52 @@
 body {
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    font-size: 12px;
+    font-size: .75em;
+    line-height: 1.5em;
+    margin: 1.5em;
+    background-color: #B6B6B6;
+
+    display: flex;
+    justify-content: stretch;
 }
+
+a {
+    color: inherit;
+}
+a, a:link, a:hover, a:active, a:visited {
+    text-decoration: none;
+}
+
+fieldset {
+    border: none;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type=text], input[type=password], textarea {
+    font-size:1em;
+    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
+    line-height: 1.5em;
+    border-radius: .75em;
+    border: 1px solid silver;
+    padding: .5em;
+}
+
+input[type=submit] {
+    background-color: #F2F2F2;
+    line-height: 1.2em;
+    color: #333;
+    border-radius: .75em;
+    border: 1px solid #BBB;
+    cursor: pointer;
+    padding: .15em .5em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+input[type=submit]:hover {
+    background-color: #666;
+    color: #FFF;
+    outline: 0;
+}
+

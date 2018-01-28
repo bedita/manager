@@ -1,3 +1,70 @@
 .dashboard {
 
 }
+
+
+
+
+
+/*****************/
+/*** DASHBOARD ***/
+/*****************/
+.dashboard {
+    flex: auto;
+}
+
+.dashboard__modules {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.dashboard__module {
+    flex-basis: 140px;
+    min-width: 140px;
+    display: block;
+    float: left;
+    width: 140px;
+    height: 110px;
+    background: rgba(0, 0, 0, .1);
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-bottom: 1.75em solid rgba(0, 0, 0, .3);
+    transition: border 250ms;
+    box-sizing: border-box;
+}
+.dashboard__module:hover {
+    border-bottom: .75em solid rgba(0, 0, 0, .3);
+}
+.dashboard__module a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    color: white;
+}
+
+.dashboard__module--documents {
+    background-color: #f60;
+}
+.dashboard__module--news {
+    background-color: #036;
+}
+.dashboard__module--events {
+    background-color: #09c;
+}
+.dashboard__module--media, .dashboard__module--audio, .dashboard__module--files, .dashboard__module--images, .dashboard__module--videos {
+    background-color: #f03;
+}
+.dashboard__module--locations {
+    background-color: #641;
+}
+.dashboard__module--profiles {
+    background-color: #093;
+}
+.dashboard__module--users {
+    background-color: #555;
+}

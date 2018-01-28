@@ -10,6 +10,8 @@
 BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 */
 
-@import './styles/reboot';
+@import './styles/normalize';
 @import './styles/base.scss';
+@import '../Element/Menu/menu';
+@import '../Login/login';
 @import '../Dashboard/dashboard';
