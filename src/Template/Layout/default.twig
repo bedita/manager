@@ -6,7 +6,7 @@
 
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
-    {{ Html.css('app')|raw }}
+    {{ Html.css(['app', 'style'])|raw }}
 
     {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
     {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
