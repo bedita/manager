@@ -105,6 +105,19 @@ return [
         ],
 
         /**
+         * Configure the cache used for schema types caching.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_schema_types_' => [
+            'className' => 'File',
+            'prefix' => 'schema_types_',
+            'path' => CACHE . 'schema_types/',
+            'serialize' => true,
+            'duration' => '+1 year',
+            'url' => env('CACHE_SCHEMATYPES_URL', null),
+        ],
+
+        /**
          * Configure the cache for model and datasource caches. This cache
          * configuration is used to store schema descriptions, and table listings
          * in connections.
@@ -356,9 +369,13 @@ return [
     ],
 
     'API' => [
-        // API base URL and API KEY
-        'apiBaseUrl' => 'http://api.example.com',
-        'apiKey' => null,
+        // config from env - RECOMMENDED
+        'apiBaseUrl' => env('BEDITA_API'),
+        'apiKey' => env('BEDITA_API_KEY', null),
+
+        // or set base URL explicitly
+        // 'apiBaseUrl' => 'https://bedita4-api-base-url',
+        // 'apiKey' => 'bedita4-api-key',
     ]
 
 ];

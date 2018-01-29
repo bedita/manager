@@ -9,6 +9,8 @@ RUN curl -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for
 # Copy files
 COPY . /var/www/html
 
+# Set APP_NAME to avoid .env load
+ENV APP_NAME BE4-Web
 ARG DEBUG
 ENV DEBUG ${DEBUG:-false}
 

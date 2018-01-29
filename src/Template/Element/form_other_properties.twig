@@ -1,5 +1,3 @@
-{% set attributes = data.attributes %}
-
 
 <div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
 
@@ -8,6 +6,8 @@
 {% for key, value in object.attributes %}
     {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
         {{ Form.control(key)|raw }}
+
+        {{ Property.display(name, val) }}
     {% endif %}
 {% endfor %}
 

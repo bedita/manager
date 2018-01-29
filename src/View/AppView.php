@@ -12,6 +12,7 @@
  */
 namespace App\View;
 
+use App\View\Event\TwigListener;
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
@@ -32,10 +33,12 @@ class AppView extends TwigView
         $this->loadHelper('Form');
         $this->loadHelper('Html');
         $this->loadHelper('Link');
+        $this->loadHelper('Property');
         $this->loadHelper('Text');
         $this->loadHelper('Time');
         $this->loadHelper('Url');
 
+        $this->eventManager()->on(new TwigListener());
         $this->getTwig()
             ->addFilter(new \Twig_SimpleFilter('shuffle', function (array $array) {
                 shuffle($array);

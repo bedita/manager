@@ -107,6 +107,16 @@ class BEditaClient
     }
 
     /**
+     * Get API base URL used tokens
+     *
+     * @return string API base URL
+     */
+    public function getApiBaseUrl()
+    {
+        return $this->apiBaseUrl;
+    }
+
+    /**
      * Get current used tokens
      *
      * @return array Current tokens
@@ -134,6 +144,16 @@ class BEditaClient
     public function getStatusCode()
     {
         return $this->response->getStatusCode();
+    }
+
+    /**
+     * Get HTTP response status message
+     *
+     * @return string Message related to status code.
+     */
+    public function getStatusMessage()
+    {
+        return $this->response->getReasonPhrase();
     }
 
     /**
@@ -250,6 +270,19 @@ class BEditaClient
     public function remove($id)
     {
         return $this->delete(sprintf('/trash/%s', $id));
+    }
+
+    /**
+     * Get JSON SCHEMA of a resource or object
+     *
+     * @param string $type Object or resource type name
+     * @return array JSON SCHEMA in array format
+     */
+    public function schema($type)
+    {
+        $h = ['Accept' => 'application/schema+json'];
+
+        return $this->get(sprintf('/model/schema/%s', $type), null, $h);
     }
 
     /**

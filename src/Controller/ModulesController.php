@@ -21,7 +21,7 @@ class ModulesController extends AppController
 {
 
     /**
-     * Name of object type currently in use.
+     * Object type currently used
      *
      * @var string
      */
@@ -36,6 +36,11 @@ class ModulesController extends AppController
 
         $this->objectType = $this->request->getParam('object_type');
         $this->Modules->setConfig('currentModuleName', $this->objectType);
+
+        $this->loadComponent('Schema', [
+            'apiClient' => $this->apiClient,
+            'type' => $this->objectType,
+        ]);
     }
 
     /**
@@ -46,6 +51,15 @@ class ModulesController extends AppController
         parent::beforeRender($event);
 
         $this->set('objectType', $this->objectType);
+
+        $status = $this->apiClient->getStatusCode();
+        if ($status >= 400) {
+            $reason = $this->apiClient->getStatusMessage();
+            if (empty($reason)) {
+                $reason = 'Response status code is ' . $status;
+            }
+            $this->Flash->error(__($reason));
+        }
     }
 
     /**
@@ -77,6 +91,7 @@ class ModulesController extends AppController
         $object = $res['data'];
 
         $this->set(compact('object'));
+        $this->set('schema', $this->Schema->getSchema());
     }
 
     /**
@@ -87,6 +102,16 @@ class ModulesController extends AppController
     public function create()
     {
         $this->viewBuilder()->setTemplate('view');
+
+        // set 'data' with empty 'attributes' for the view
+        $schema = $this->Schema->getSchema();
+        $this->set('schema', $schema);
+        foreach ($schema['properties'] as $name => $data) {
+            if (empty($data['readOnly'])) {
+                $attributes[$name] = '';
+            }
+        }
+        $this->set('data', compact('attributes'));
     }
 
     /**
