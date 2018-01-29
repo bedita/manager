@@ -1,9 +1,12 @@
 body {
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    font-size: .75em;
-    line-height: 1.5em;
-    margin: 1.5em;
-    background-color: #B6B6B6;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    margin: 1rem;
+    background-color: $gray-500;
+    color: $gray-900;
+    text-align: left;               // explicit initial text-align value so that we can later use `inherit`
+    background-color: $body-bg;     // best practice, apply a default `background-color`
 
     display: flex;
     justify-content: stretch;
@@ -25,7 +28,7 @@ label {
 }
 
 input[type=text], input[type=password], textarea {
-    font-size:1em;
+    font-size: 1em;
     font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
     line-height: 1.5em;
     border-radius: .75em;
@@ -49,4 +52,3 @@ input[type=submit]:hover {
     color: #FFF;
     outline: 0;
 }
-
