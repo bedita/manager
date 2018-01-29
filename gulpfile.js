@@ -5,7 +5,8 @@ var gulp        = require('gulp'),
     notifier    = require('node-notifier');
 
 var argv = require('yargs').argv;
-const sassPaths = 'src/Template/**/*.scss';
+const sassGlob = 'src/Template/**/*.scss';
+const reloadGlob = ['src/Template/**/*.twig', 'src/Template/**/*.ctp'];
 
 /*
  * ---------------------------------------------------------------------------
@@ -20,8 +21,8 @@ gulp.task('dev', ['sass'], function() {
         proxy: argv.host || 'localhost:8080',
         notify: false,
     });
-    gulp.watch(sassPaths, ['sass']);
-    // gulp.watch("app/*.html").on('change', browserSync.reload);
+    gulp.watch(sassGlob, ['sass']);
+    gulp.watch(reloadGlob).on('change', browserSync.reload);
 });
 
 
