@@ -30,34 +30,12 @@ class SchemaComponent extends Component
     const CACHE_CONFIG = '_schema_types_';
 
     /**
-     * BEdita4 API client
-     *
-     * @var \App\Model\API\BEditaClient
-     */
-    protected $apiClient = null;
-
-    /**
-     * Type name
-     *
-     * @var string
-     */
-    protected $type = null;
-
-    /**
      * {@inheritDoc}
      */
     protected $_defaultConfig = [
-        'apiClient' => null,
+        'apiClient' => null, // BE4 api client
+        'type' => null, // resource or object type name
     ];
-
-    /**
-     * {@inheritDoc}
-     */
-    public function initialize(array $config)
-    {
-        $this->apiClient = Hash::get($config, 'apiClient', null);
-        $this->type = Hash::get($config, 'type', null);
-    }
 
     /**
      * Read type json schema from API using internal cache
@@ -68,7 +46,7 @@ class SchemaComponent extends Component
     public function getSchema($type = null) {
 
         // TODO: handle multiple projects -> key schema may differ
-        $type = empty($type) ? $this->type : $type;
+        $type = empty($type) ? $this->getConfig('type') : $type;
 
         $schema = Cache::remember(
             $type,
@@ -88,6 +66,9 @@ class SchemaComponent extends Component
      * @return array JSON SCHEMA in array format
      */
     public function fetchSchema($type) {
-        return $this->apiClient->schema($type);
+        /** @var \App\Model\API\BEditaClient */
+        $apiClient = $this->getConfig('apiClient');
+
+        return $apiClient->schema($type);
     }
 }
