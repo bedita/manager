@@ -147,6 +147,16 @@ class BEditaClient
     }
 
     /**
+     * Get HTTP response status message
+     *
+     * @return string Message related to status code.
+     */
+    public function getStatusMessage()
+    {
+        return $this->response->getReasonPhrase();
+    }
+
+    /**
      * Get response body serialized into a PHP array
      *
      * @return array Response body as PHP array.

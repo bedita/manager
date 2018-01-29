@@ -72,7 +72,8 @@ class ModulesController extends AppController
         if (empty($this->modules)) {
             $this->readModules();
         }
-        $currentModule = Hash::extract($this->modules, '{n}[name=' . $this->moduleName . ']')[0];
+        $modules = Hash::extract($this->modules, '{n}[name=' . $this->moduleName . ']');
+        $currentModule = (!empty($modules[0])) ? $modules[0] : null;
         $this->set(compact('currentModule'));
     }
 
@@ -85,6 +86,14 @@ class ModulesController extends AppController
         if ($this->apiResponse) {
             foreach ($this->apiResponse as $key => $value) {
                 $this->set($key, $value);
+            }
+            $status = $this->apiClient->getStatusCode();
+            if ($status >= 400) {
+                $reason = $this->apiClient->getStatusMessage();
+                if (empty($reason)) {
+                    $reason = 'Response status code is ' . $status;
+                }
+                $this->Flash->error(__($reason));
             }
         }
     }
