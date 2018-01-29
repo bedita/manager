@@ -14,24 +14,12 @@
 
     {% if config('debug') %}
 
-        {% if error.queryString %}
-        <p class="notice">
-            <strong>SQL Query: </strong>
-            {{ error.queryString }}
+        {% if error %}
+        <p class="error">
+            <strong>Error in: </strong>
+            {{ error.getFile }}, {{ __('line') }} {{ error.getLine }}
         </p>
         {% endif %}
-
-        {% if error.params %}
-        <strong>SQL Query Params: </strong>
-        {{ dump(error.params) }}
-        {% endif %}
-
-        {% if error %}
-        <strong>Error in: </strong>
-        {{ error.getFile }}, {{ __('line') }} {{ error.getLine }}
-        {% endif %}
-
-        {% element 'auto_table_warning' %}
 
     {% endif %}
 
