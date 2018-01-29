@@ -1,0 +1,9 @@
+@mixin hide-text {
+    border: 0;
+    overflow: hidden;
+    font: 0/0 a;
+    white-space: nowrap;
+    text-indent: 100%;
+    color: transparent;
+    text-shadow: none;
+}
