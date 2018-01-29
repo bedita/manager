@@ -5,13 +5,22 @@
     {{ Form.create(null, {
         'url': {'_name': 'login'},
     })|raw }}
+
     <fieldset>
-        {{ Form.label('username', __('Username'))|raw }}
-        {{ Form.text('username')|raw }}
-        {{ Form.label('password', __('Password'))|raw }}
-        {{ Form.password('password')|raw }}
+        {{ Form.control('username', {
+            'autocomplete': 'username',
+            'autocorrect': 'off',
+            'autocapitalize': 'off',
+            'spellcheck': 'false',
+            'label': {'text': __('Username')}
+        })|raw }}
+        {{ Form.control('password', {
+            'autocomplete': 'current-password',
+            'label': {'text': __('Password')}
+        })|raw }}
 
         {{ Form.submit('Enter')|raw }}
     </fieldset>
+
     {{ Form.end()|raw }}
 </div>
