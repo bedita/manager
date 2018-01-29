@@ -12,6 +12,7 @@
  */
 namespace App\View;
 
+use App\View\Event\TwigListener;
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
@@ -33,5 +34,7 @@ class AppView extends TwigView
         $this->loadHelper('Url');
         $this->loadHelper('Link');
         $this->loadHelper('Property');
+
+        $this->eventManager()->on(new TwigListener());
     }
 }

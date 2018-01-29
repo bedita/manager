@@ -1,0 +1,36 @@
+{% element 'modules_top_menu' %}
+
+{% element 'left_menu' %}
+
+<div class="head">
+    <h1>{{ __('An Internal Error Has Occurred') }}</h1>
+</div>
+
+<div class="main">
+
+    <p class="error">
+        {{ message }}
+    </p>
+
+    {% if config('debug') %}
+
+        {% if error.queryString %}
+        <p class="notice">
+            <strong>SQL Query: </strong>
+            {{ error.queryString }}
+        </p>
+        {% endif %}
+
+        {% if error.params %}
+        <strong>SQL Query Params: </strong>
+        {{ dump(error.params) }}
+        {% endif %}
+
+        {% if error %}
+        <strong>Error in: </strong>
+        {{ error.getFile }}, {{ __('line') }} {{ error.getLine }}
+        {% endif %}
+
+    {% endif %}
+
+</div>

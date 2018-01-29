@@ -16,7 +16,9 @@
 
     {{ Html.script('libs/select2/select2.min')|raw }}
 
-    <title>{{ __('Error') }}</title>
+    <title>{{ _view.fetch('title') }}</title>
+
+    {% element 'json_meta_config' %}
 
 </head>
 
