@@ -1,0 +1,25 @@
+input[type=text], input[type=password], textarea {
+    font-size: 1em;
+    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
+    line-height: 1.5em;
+    border-radius: .75em;
+    border: 1px solid silver;
+    padding: .5em;
+}
+
+input[type=submit] {
+    background-color: #F2F2F2;
+    line-height: 1.2em;
+    color: #333;
+    border-radius: .75em;
+    border: 1px solid #BBB;
+    cursor: pointer;
+    padding: .15em .5em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+input[type=submit]:hover {
+    background-color: #666;
+    color: #FFF;
+    outline: 0;
+}

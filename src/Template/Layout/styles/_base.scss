@@ -1,12 +1,11 @@
 body {
     font-family: $font-family-base;
-    font-size: $font-size-base;
+    font-size: $font-size-sm;
     line-height: $line-height-base;
-    margin: 1rem;
-    background-color: $gray-500;
+    margin: $gutter;
+    background-color: $gray-500;    // best practice, apply a default `background-color`
     color: $gray-900;
     text-align: left;               // explicit initial text-align value so that we can later use `inherit`
-    background-color: $body-bg;     // best practice, apply a default `background-color`
 
     display: flex;
     justify-content: stretch;
@@ -27,28 +26,3 @@ label {
     font-weight: bold;
 }
 
-input[type=text], input[type=password], textarea {
-    font-size: 1em;
-    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
-    line-height: 1.5em;
-    border-radius: .75em;
-    border: 1px solid silver;
-    padding: .5em;
-}
-
-input[type=submit] {
-    background-color: #F2F2F2;
-    line-height: 1.2em;
-    color: #333;
-    border-radius: .75em;
-    border: 1px solid #BBB;
-    cursor: pointer;
-    padding: .15em .5em;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-input[type=submit]:hover {
-    background-color: #666;
-    color: #FFF;
-    outline: 0;
-}

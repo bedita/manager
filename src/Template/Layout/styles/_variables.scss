@@ -25,6 +25,7 @@ $line-height-base:            1.5 !default;
 /*
 ** COLORS
 */
+
 // stylelint-disable
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
@@ -52,3 +53,10 @@ $grays: map-merge((
 ), $grays);
 
 
+/*
+** LAYOUT
+*/
+
+$gutter: 1rem;
+$main-grid-column-1: 140px;
+$main-grid-column-2: auto;
