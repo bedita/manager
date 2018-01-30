@@ -36,3 +36,6 @@
         </tbody>
     </table>
 </div>
+
+{# Append "Trashcan" link in commands menu. #}
+{% do _view.append('links', '<li>' ~ Html.link(__('Trashcan'), {'_name': 'trash:list', 'filter': {'type': objectType}}) ~ '</li>') %}

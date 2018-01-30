@@ -73,6 +73,7 @@ class ModulesComponent extends Component
      */
     public function getModules()
     {
+        // TODO: wouldn't it be nice if this were not hardcoded?
         static $excludedModules = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
         static $modulesOrder = [
             'objects',
@@ -108,6 +109,11 @@ class ModulesComponent extends Component
 
                 return -$idx;
             })
+            ->append([
+                [
+                    'name' => 'trash',
+                ],
+            ])
             ->toList();
 
         return $modules;

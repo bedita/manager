@@ -49,7 +49,7 @@ class AppController extends Controller
 
         $this->loadComponent('Auth', [
             'authenticate' => [
-                'API' => [
+                'Api' => [
                     'apiClient' => $this->apiClient,
                 ],
             ],

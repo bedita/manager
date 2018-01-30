@@ -22,7 +22,7 @@ use Cake\Http\ServerRequest;
  *
  * @see https://docs.bedita.net/en/latest/authorization.html#authentication
  */
-class APIAuthenticate extends BaseAuthenticate
+class ApiAuthenticate extends BaseAuthenticate
 {
 
     /**

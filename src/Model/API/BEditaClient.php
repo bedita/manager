@@ -16,6 +16,7 @@ namespace App\Model\API;
 use Cake\Network\Exception\ServiceUnavailableException;
 use Cake\Utility\Hash;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Http\Adapter\Guzzle6\Client;
 use Psr\Http\Message\ResponseInterface;
 use WoohooLabs\Yang\JsonApi\Client\JsonApiClient;
@@ -395,19 +396,20 @@ class BEditaClient
      */
     protected function sendRequest($method, $path, array $query = null, array $headers = null, $body = null)
     {
-        $uri = $this->apiBaseUrl . $path;
+        $uri = new Uri($this->apiBaseUrl);
+        $uri = $uri->withPath($uri->getPath() . '/' . $path);
         if ($query) {
-            $uri .= '?' . http_build_query($query);
+            $uri = $uri->withQuery(http_build_query((array)$query));
         }
-        $headers = array_merge($this->defaultHeaders, $headers);
+        $headers = array_merge($this->defaultHeaders, (array)$headers);
 
-        // Send the request synchronously to retrieve the response
+        // Send the request synchronously to retrieve the response.
         $this->response = $this->jsonApiClient->sendRequest(new Request($method, $uri, $headers, $body));
         if ($this->getStatusCode() >= 400) {
             // Something bad just happened.
+            $statusCode = $this->getStatusCode();
             $response = $this->getResponseBody();
 
-            $statusCode = $this->getStatusCode();
             $code = Hash::get($response, 'error.code', (string)$statusCode);
             $reason = Hash::get($response, 'error.title', $this->getStatusMessage());
 
@@ -420,7 +422,7 @@ class BEditaClient
     /**
      * Refresh JWT access token.
      *
-     * On success `$this->token` data will be updated with new access and renew tokens.
+     * On success `$this->tokens` data will be updated with new access and renew tokens.
      *
      * @throws \BadMethodCallException Throws an exception if client has no renew token available.
      * @throws \Cake\Network\Exception\ServiceUnavailableException Throws an exception if server response doesn't
@@ -434,7 +436,7 @@ class BEditaClient
         }
 
         $headers = [
-            'Authorization' => sprintf('Bearer %', $this->tokens['renew']),
+            'Authorization' => sprintf('Bearer %s', $this->tokens['renew']),
         ];
 
         $this->sendRequest('POST', '/auth', [], $headers);
