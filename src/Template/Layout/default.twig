@@ -24,13 +24,15 @@
 
 {% element 'messages' %}
 
-{% element 'Menu/left' %}
+<main>
+    {% element 'Menu/left' %}
 
-{% element 'Menu/commands' %}
+    {% element 'Menu/commands' %}
 
-{% element 'Menu/modules' %}
+    {% element 'Menu/modules' %}
 
-{{ _view.fetch('content')|raw }}
+    {{ _view.fetch('content')|raw }}
+</main>
 
 </body>
 </html>

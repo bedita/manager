@@ -1,5 +1,5 @@
-{{ _view.assign('title', __('Login')) }}
-{{ _view.setLayout('simple') }}
+{% do _view.assign('title', __('Login')) %}
+{% do _view.setLayout('simple') %}
 
 <div class="login">
     {{ Form.create(null, {
@@ -19,7 +19,7 @@
             'label': {'text': __('Password')}
         })|raw }}
 
-        {{ Form.submit('Enter')|raw }}
+        {{ Form.submit(__('Sign in'))|raw }}
     </fieldset>
 
     {{ Form.end()|raw }}

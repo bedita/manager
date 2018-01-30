@@ -1,8 +1,11 @@
 <?php
 namespace App\Controller\Component;
 
+use App\Model\API\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
+use Cake\Utility\Hash;
+use Psr\Log\LogLevel;
 
 /**
  * Component to load available modules.
@@ -45,12 +48,20 @@ class ModulesComponent extends Component
      */
     protected function getMeta()
     {
-        $home = Cache::remember(
-            sprintf('home_%d', $this->_registry->get('Auth')->user('id')),
-            function () {
-                return $this->getConfig('apiClient')->get('/home');
-            }
-        );
+        try {
+            $home = Cache::remember(
+                sprintf('home_%d', $this->_registry->get('Auth')->user('id')),
+                function () {
+                    return $this->getConfig('apiClient')->get('/home');
+                }
+            );
+        } catch (BEditaClientException $e) {
+            // Something bad happened. Returning an empty array instead.
+            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
+            $this->log($e, LogLevel::ERROR);
+
+            return [];
+        }
 
         return $home['meta'];
     }
@@ -79,7 +90,7 @@ class ModulesComponent extends Component
         ];
 
         $meta = $this->getMeta();
-        $modules = collection($meta['resources'])
+        $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
                 $name = substr($endpoint, 1);
 
@@ -129,8 +140,8 @@ class ModulesComponent extends Component
     {
         $meta = $this->getMeta();
         $project = [
-            'name' => $meta['project']['name'],
-            'version' => $meta['version'],
+            'name' => Hash::get($meta, 'project.name', ''),
+            'version' => Hash::get($meta, 'version', ''),
             'colophon' => '', // TODO: populate this value.
         ];
 

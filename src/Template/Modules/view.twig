@@ -1,4 +1,4 @@
-{{ _view.assign('title', currentModule.name|humanize) }}
+{% do _view.assign('title', currentModule.name|humanize) %}
 
 <div class="main">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
@@ -8,17 +8,17 @@
 
     <h1>{{ object.attributes.title|default(__('New {0}', currentModule.singular)) }}</h1>
 
-    {% element 'form_core_properties' %}
+    {% element 'Form/core_properties' %}
 
-    {% element 'form_other_properties' %}
+    {% element 'Form/other_properties' %}
 
-    {% element 'form_meta' %}
+    {% element 'Form/meta' %}
 
     {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-    {{ _view.append('commands', Form.submit(__('Save'), {'form': 'form--main'})) }}
+    {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form--main'})) %}
 
     {{ Form.end()|raw }}
 </div>
 
 {# Append "Delete" to commands in commands menu. #}
-{{ _view.append('commands', Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) }}
+{% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}

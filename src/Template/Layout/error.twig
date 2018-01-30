@@ -6,8 +6,7 @@
 
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
-    {{ Html.css('bedita')|raw }}
-    {{ Html.css('bedita-icons')|raw }}
+    {{ Html.css(['style'])|raw }}
 
     {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
     {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
@@ -16,7 +15,7 @@
 
     {{ Html.script('libs/select2/select2.min')|raw }}
 
-    <title>{{ __('Error') }}</title>
+    <title>{{ "#{__('Error')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
 </head>
 
@@ -24,7 +23,11 @@
 
 {% element 'messages' %}
 
-{{ _view.fetch('content')|raw }}
+<main>
+    {% element 'Menu/left' %}
+
+    {{ _view.fetch('content')|raw }}
+</main>
 
 </body>
 </html>

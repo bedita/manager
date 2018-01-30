@@ -12,16 +12,17 @@
  */
 namespace App\Controller\Component;
 
+use App\Model\API\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
-use Cake\Utility\Hash;
+use Psr\Log\LogLevel;
 
 /**
- * Handles JSON SCHEMA of objects and resources
- *
+ * Handles JSON Schema of objects and resources.
  */
 class SchemaComponent extends Component
 {
+
     /**
      * Cache config name for type schemas.
      *
@@ -38,34 +39,45 @@ class SchemaComponent extends Component
     ];
 
     /**
-     * Read type json schema from API using internal cache
+     * Read type JSON Schema from API using internal cache.
      *
-     * @param null|string $type Resource or object type (optional)
-     * @return array JSON SCHEMA in array format
+     * @param string|null $type Type to get schema for. By default, configured type is used.
+     * @return array|bool JSON Schema.
      */
-    public function getSchema($type = null) {
-
+    public function getSchema($type = null)
+    {
         // TODO: handle multiple projects -> key schema may differ
-        $type = empty($type) ? $this->getConfig('type') : $type;
+        if ($type === null) {
+            $type = $this->getConfig('type');
+        }
 
-        $schema = Cache::remember(
-            $type,
-            function () use ($type) {
-                return $this->fetchSchema($type);
-            },
-            self::CACHE_CONFIG
-        );
+        try {
+            $schema = Cache::remember(
+                $type,
+                function () use ($type) {
+                    return $this->fetchSchema($type);
+                },
+                self::CACHE_CONFIG
+            );
+        } catch (BEditaClientException $e) {
+            // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
+            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
+            $this->log($e, LogLevel::ERROR);
+
+            return false;
+        }
 
         return $schema;
     }
 
     /**
-     * Fetch JSON SCHEMA via API
+     * Fetch JSON Schema via API.
      *
-     * @param string $type Resource or object type name
-     * @return array JSON SCHEMA in array format
+     * @param string $type Type to get schema for.
+     * @return array|bool JSON Schema.
      */
-    public function fetchSchema($type) {
+    protected function fetchSchema($type)
+    {
         /** @var \App\Model\API\BEditaClient */
         $apiClient = $this->getConfig('apiClient');
 
