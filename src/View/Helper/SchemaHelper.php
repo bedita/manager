@@ -55,6 +55,7 @@ class SchemaHelper extends Helper
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';
                 }
+
                 return 'text';
 
             case 'number':
