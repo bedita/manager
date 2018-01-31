@@ -18,7 +18,9 @@ use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
- * App\View\Helper\SchemaHelper Test Case
+ * {@see \App\View\Helper\SchemaHelper} Test Case
+ *
+ * @coversDefaultClass \App\View\Helper\SchemaHelper
  */
 class SchemaHelperTest extends TestCase
 {
@@ -31,21 +33,18 @@ class SchemaHelperTest extends TestCase
     public $Schema;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function setUp()
     {
         parent::setUp();
+
         $view = new View();
         $this->Schema = new SchemaHelper($view);
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function tearDown()
     {
@@ -55,12 +54,92 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Data provider for `testGetControlTypeFromSchema` test case.
      *
-     * @return void
+     * @return array
      */
-    public function testInitialization()
+    public function getControlTypeFromSchemaProvider()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        return [
+            'string' => [
+                'text',
+                [
+                    'type' => 'string',
+                ],
+            ],
+            'html' => [
+                'textarea',
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/html',
+                ],
+            ],
+            'date' => [
+                'datetime',
+                [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+            ],
+            'number' => [
+                'number',
+                [
+                    'type' => 'integer',
+                ],
+            ],
+            'checkbox' => [
+                'checkbox',
+                [
+                    'type' => 'boolean',
+                ],
+            ],
+            'one of' => [
+                'checkbox',
+                [
+                    'type' => 'string',
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'boolean',
+                        ],
+                    ],
+                ],
+            ],
+            'not an array' => [
+                'text',
+                false,
+            ],
+            'no type' => [
+                'text',
+                [
+                    'const' => 13,
+                ],
+            ],
+            'unknown type' => [
+                'text',
+                [
+                    'type' => 'object',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `getControlTypeFromSchema()` method.
+     *
+     * @param string $expected Expected result.
+     * @param array|bool $schema Schema.
+     * @return void
+     *
+     * @dataProvider getControlTypeFromSchemaProvider()
+     * @covers ::getControlTypeFromSchema()
+     */
+    public function testGetControlTypeFromSchema($expected, $schema)
+    {
+        $actual = $this->Schema->getControlTypeFromSchema($schema);
+
+        static::assertSame($expected, $actual);
     }
 }
