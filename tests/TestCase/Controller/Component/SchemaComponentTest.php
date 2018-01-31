@@ -97,6 +97,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      *
      * @dataProvider getSchemaProvider()
+     * @covers ::fetchSchema()
      * @covers ::getSchema()
      */
     public function testGetSchema($expected, $schema, $type, $config = [])
