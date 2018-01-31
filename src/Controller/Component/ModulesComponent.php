@@ -16,19 +16,25 @@ namespace App\Controller\Component;
 use App\Model\API\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
  * Component to load available modules.
+ *
+ * @property \Cake\Controller\Component\AuthComponent $Auth
  */
 class ModulesComponent extends Component
 {
 
     /**
-     * Default configuration.
-     *
-     * @var array
+     * {@inheritDoc}
+     */
+    public $components = ['Auth'];
+
+    /**
+     * {@inheritDoc}
      */
     protected $_defaultConfig = [
         'apiClient' => null,
@@ -62,7 +68,7 @@ class ModulesComponent extends Component
     {
         try {
             $home = Cache::remember(
-                sprintf('home_%d', $this->_registry->get('Auth')->user('id')),
+                sprintf('home_%d', $this->Auth->user('id')),
                 function () {
                     return $this->getConfig('apiClient')->get('/home');
                 }
@@ -85,22 +91,7 @@ class ModulesComponent extends Component
      */
     public function getModules()
     {
-        // TODO: wouldn't it be nice if this were not hardcoded?
-        static $excludedModules = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
-        static $modulesOrder = [
-            'objects',
-            'documents',
-            'events',
-            'news',
-            'locations',
-            'media',
-            'audio',
-            'images',
-            'videos',
-            'files',
-            'profiles',
-            'users',
-        ];
+        $modulesOrder = Configure::read('Modules.order');
 
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
@@ -109,23 +100,24 @@ class ModulesComponent extends Component
 
                 return $data + compact('name');
             })
-            ->reject(function (array $data) use ($excludedModules) {
-                return in_array($data['name'], $excludedModules);
+            ->reject(function (array $data) {
+                return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
             })
             ->sortBy(function (array $data) use ($modulesOrder) {
-                $idx = array_search($data['name'], $modulesOrder);
+                $name = Hash::get($data, 'name');
+                $idx = array_search($name, $modulesOrder);
                 if ($idx === false) {
-                    // Use hash to preserve custom modules order, and ensure it is after core modules.
-                    $idx = count($modulesOrder) + hexdec(hash('crc32', $data['name']));
+                    // No configured order for this module. Use hash to preserve order, and ensure it is after other modules.
+                    $idx = count($modulesOrder) + hexdec(hash('crc32', $name));
+
+                    if ($name === 'trash') {
+                        // Trash eventually.
+                        $idx = PHP_INT_MAX;
+                    }
                 }
 
                 return -$idx;
             })
-            ->append([
-                [
-                    'name' => 'trash',
-                ],
-            ])
             ->toList();
 
         return $modules;
@@ -141,7 +133,7 @@ class ModulesComponent extends Component
     public function getModuleByName(array $modules, $name)
     {
         foreach ($modules as $module) {
-            if ($module['name'] === $name) {
+            if (Hash::get($module, 'name') === $name) {
                 return $module;
             }
         }

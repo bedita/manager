@@ -368,14 +368,44 @@ return [
         'defaults' => 'php',
     ],
 
+    /**
+     * API configuration.
+     *
+     * Contains an array of setting to use for API client configuration.
+     *
+     * ## Options
+     *
+     * - `apiBaseUrl` - The base URL for BEdita API instance.
+     * - `apiKey` - The API key to use with BEdita API instance.
+     */
     'API' => [
-        // config from env - RECOMMENDED
         'apiBaseUrl' => env('BEDITA_API'),
         'apiKey' => env('BEDITA_API_KEY', null),
+    ],
 
-        // or set base URL explicitly
-        // 'apiBaseUrl' => 'https://bedita4-api-base-url',
-        // 'apiKey' => 'bedita4-api-key',
-    ]
-
+    /**
+     * Modules configuration.
+     *
+     * Contains an array of settings to use for modules configuration.
+     *
+     * ## Options
+     *
+     * - `order` - The order in which modules will be displayed.
+     */
+    'Modules' => [
+        'order' => [
+            'objects',
+            'documents',
+            'events',
+            'news',
+            'locations',
+            'media',
+            'audio',
+            'images',
+            'videos',
+            'files',
+            'profiles',
+            'users',
+        ],
+    ],
 ];
