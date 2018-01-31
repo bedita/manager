@@ -13,8 +13,6 @@
 
 namespace App\Model\API;
 
-use Cake\Network\Exception\ServiceUnavailableException;
-use Cake\Utility\Hash;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Http\Adapter\Guzzle6\Client;
@@ -237,8 +235,11 @@ class BEditaClient
      */
     public function saveObject($type, $data, $headers = [])
     {
-        $id = Hash::get($data, 'id');
-        unset($data['id']);
+        $id = null;
+        if (array_key_exists('id', $data)) {
+            $id = $data['id'];
+            unset($data['id']);
+        }
 
         $body = [
             'data' => [
@@ -370,7 +371,8 @@ class BEditaClient
             return $this->sendRequest($method, $path, $query, $headers, $body);
         } catch (BEditaClientException $e) {
             // Handle error.
-            if ($e->getCode() !== 401 || Hash::get($e->getAttributes(), 'code') !== 'be_token_expired') {
+            $attributes = $e->getAttributes();
+            if ($e->getCode() !== 401 || empty($attributes['code']) || $attributes['code'] !== 'be_token_expired') {
                 // Not an expired token's fault.
                 throw $e;
             }
@@ -410,8 +412,14 @@ class BEditaClient
             $statusCode = $this->getStatusCode();
             $response = $this->getResponseBody();
 
-            $code = Hash::get($response, 'error.code', (string)$statusCode);
-            $reason = Hash::get($response, 'error.title', $this->getStatusMessage());
+            $code = (string)$statusCode;
+            $reason = $this->getStatusMessage();
+            if (!empty($response['error']['code'])) {
+                $code = $response['error']['code'];
+            }
+            if (!empty($response['error']['title'])) {
+                $reason = $response['error']['title'];
+            }
 
             throw new BEditaClientException(compact('code', 'reason'), $statusCode);
         }
@@ -442,7 +450,7 @@ class BEditaClient
         $this->sendRequest('POST', '/auth', [], $headers);
         $body = $this->getResponseBody();
         if (empty($body['meta']['jwt'])) {
-            throw new ServiceUnavailableException(__('Invalid response from server'));
+            throw new BEditaClientException(__('Invalid response from server'));
         }
 
         $this->setupTokens($body['meta']);
