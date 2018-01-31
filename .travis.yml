@@ -2,11 +2,6 @@ sudo: false
 
 language: php
 
-php:
-  - 7.0
-  - 7.1
-  - 7.2
-
 before_install:
   # Use GitHub OAuth token with Composer to increase API limits.
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi
