@@ -1,0 +1,6 @@
+{% set paging = meta.pagination %}
+<div class="pagination">
+    {% if currentModule.hints.object_type|default(false) %}
+    {{ Html.link(__('Create new {0}', currentModule.singular), {'_name': 'modules:create', 'object_type': objectType})|raw }}
+    {% endif %}
+</div>

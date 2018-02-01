@@ -1,0 +1,16 @@
+<div class="left-menu">
+    {{ Html.link((project.name ?: 'BEdita 4'), '/', {'class': 'left-menu__project'})|raw }}
+
+    <ul class="left-menu__links">
+        {{ _view.fetch('links')|raw }}
+    </ul>
+
+    {#{% element 'tree' %}#}
+
+    {% if user %}
+        {% element 'Menu/user' %}
+    {% endif %}
+
+    {% element 'Menu/colophon' %}
+
+</div>

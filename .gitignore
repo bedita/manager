@@ -46,3 +46,8 @@ Thumbs.db
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# node, preprocessors... #
+#################################
+package-lock.json
+node_modules/

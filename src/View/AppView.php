@@ -12,7 +12,7 @@
  */
 namespace App\View;
 
-use App\View\Event\TwigListener;
+use App\View\Twig\BeditaTwigExtension;
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
@@ -30,11 +30,14 @@ class AppView extends TwigView
         parent::initialize();
 
         $this->loadHelper('Flash');
+        $this->loadHelper('Form');
         $this->loadHelper('Html');
+        $this->loadHelper('Schema');
+        $this->loadHelper('Text');
+        $this->loadHelper('Time');
         $this->loadHelper('Url');
-        $this->loadHelper('Link');
-        $this->loadHelper('Property');
 
-        $this->eventManager()->on(new TwigListener());
+        $this->getTwig()
+            ->addExtension(new BeditaTwigExtension());
     }
 }

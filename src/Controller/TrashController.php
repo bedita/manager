@@ -12,112 +12,124 @@
  */
 namespace App\Controller;
 
-use App\Model\API\BEditaClient;
-use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
+use App\Model\API\BEditaClientException;
+use Psr\Log\LogLevel;
 
 /**
  * Trash controller: list, restore, delete
  */
-class TrashController extends ModulesController
+class TrashController extends AppController
 {
+
     /**
-     * Initialization hook method.
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function initialize()
     {
         parent::initialize();
 
-        $this->moduleName = 'trash';
+        $this->Modules->setConfig('currentModuleName', 'trash');
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function beforeRender(Event $event)
-    {
-        parent::beforeRender($event);
-        $params = $this->request->getQueryParams();
-        if (!empty($params['filter']['type'])) {
-            $this->set('filterType', $params['filter']['type']);
-        }
-    }
-
-    /**
-     * Display items index
+     * Display deleted resources list.
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
     public function index()
     {
-        $query = $this->request->getQueryParams();
-        if (!empty($this->objectType)) {
-            $query = [
-                'filter' => [
-                    'type' => $this->objectType,
-                ]
-            ];
+        $this->request->allowMethod(['get']);
+
+        try {
+            $response = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
+        } catch (BEditaClientException $e) {
+            // Error! Back to dashboard.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect(['_name' => 'dashboard']);
         }
-        $this->apiResponse = $this->apiClient->getObjects('trash', $query);
+
+        $objects = (array)$response['data'];
+
+        $this->set(compact('objects'));
+
+        return null;
     }
 
     /**
-     * View single item
+     * View single deleted resource.
      *
-     * @param mixed $id Item ID.
-     * @return void
+     * @param mixed $id Resource ID.
+     * @return \Cake\Http\Response|null
      */
     public function view($id)
     {
-        $this->apiResponse = $this->apiClient->getObject($id, 'trash');
+        $this->request->allowMethod(['get']);
+
+        try {
+            $response = $this->apiClient->getObject($id, 'trash');
+        } catch (BEditaClientException $e) {
+            // Error! Back to index.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect(['_name' => 'trash:list']);
+        }
+
+        $object = $response['data'];
+        $schema = $this->Schema->getSchema($object['type']);
+
+        $this->set(compact('object', 'schema'));
+
+        return null;
     }
 
     /**
-     * Restore object, remove from trashcan
+     * Restore resource.
      *
      * @return \Cake\Http\Response
      */
     public function restore()
     {
-        $this->apiResponse = $this->apiClient->restoreObject($this->request->getData('id'), $this->request->getData('object_type'));
+        $this->request->allowMethod(['post']);
 
-        $this->Flash->info(__('Object restored'));
+        try {
+            $this->apiClient->restoreObject($this->request->getData('id'), 'objects');
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
 
-        return $this->redir();
+            return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+        }
+
+        $this->Flash->success(__('Object restored'));
+
+        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
     }
 
     /**
-     * Delete object, remove from trashcan
+     * Permanently delete resource.
      *
      * @return \Cake\Http\Response
      */
     public function delete()
     {
-        $this->apiResponse = $this->apiClient->remove($this->request->getData('id'));
+        $this->request->allowMethod(['post']);
 
-        $this->Flash->info(__('Object deleted from trash'));
+        try {
+            $this->apiClient->remove($this->request->getData('id'));
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
 
-        return $this->redir();
-    }
-
-    /**
-     * Redirect to proper page according to object type
-     *
-     * @return \Cake\Http\Response
-     */
-    private function redir()
-    {
-        $destination = '/trash';
-        if (!empty($this->objectType)) {
-            $destination .= '?filter[type]=' . $this->objectType;
-        } elseif (!empty($this->request->getData('filter_type'))) {
-            $destination .= '?filter[type]=' . $this->request->getData('filter_type');
+            return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
         }
 
-        return $this->redirect(Router::url($destination));
+        $this->Flash->success(__('Object deleted from trash'));
+
+        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
     }
 }

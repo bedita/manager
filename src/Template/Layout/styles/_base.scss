@@ -1,0 +1,28 @@
+body {
+    font-family: $font-family-base;
+    font-size: $font-size-sm;
+    line-height: $line-height-base;
+    margin: $gutter;
+    background-color: $gray-500;    // best practice, apply a default `background-color`
+    color: $gray-900;
+    text-align: left;               // explicit initial text-align value so that we can later use `inherit`
+
+    display: flex;
+    justify-content: stretch;
+}
+
+a {
+    color: inherit;
+}
+a, a:link, a:hover, a:active, a:visited {
+    text-decoration: none;
+}
+
+fieldset {
+    border: none;
+}
+
+label {
+    font-weight: bold;
+}
+

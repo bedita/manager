@@ -16,13 +16,12 @@ use App\Model\API\BEditaClient;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\NotFoundException;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
 
 /**
- * Base Application Controller
+ * Base Application Controller.
  *
+ * @property \App\Controller\Component\ModulesComponent $Modules
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class AppController extends Controller
 {
@@ -35,27 +34,6 @@ class AppController extends Controller
     protected $apiClient = null;
 
     /**
-     * Available user modules
-     *
-     * @var array
-     */
-    protected $modules = null;
-
-    /**
-     * Project & versions info
-     *
-     * @var array
-     */
-    protected $project = null;
-
-    /**
-     * Tokens used in this call
-     *
-     * @var array
-     */
-    protected $tokens = [];
-
-    /**
      * {@inheritDoc}
      */
     public function initialize()
@@ -64,29 +42,42 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-        /*
-         * Enable the following components for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3.0/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
-        //$this->loadComponent('Csrf');
+        $this->loadComponent('Security');
+        $this->loadComponent('Csrf');
 
-        // use JWT auth tokens if stored in session
-        $session = $this->request->session();
-        $this->tokens = (array)$session->read('tokens');
-        $opts = Configure::read('API');
-        $this->apiClient = new BEditaClient($opts['apiBaseUrl'], $opts['apiKey'], $this->tokens);
+        $this->apiClient = new BEditaClient(Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey'));
 
-        $user = $session->read('user');
-        if (empty($user) && $this->name !== 'Login') {
-            return $this->redirect(['_name' => 'login']);
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Api' => [
+                    'apiClient' => $this->apiClient,
+                ],
+            ],
+            'loginAction' => ['_name' => 'login'],
+            'loginRedirect' => ['_name' => 'dashboard'],
+        ]);
+        $this->Auth->deny();
+
+        $this->loadComponent('Modules', [
+            'apiClient' => $this->apiClient,
+            'currentModuleName' => $this->name,
+        ]);
+        $this->loadComponent('Schema', [
+            'apiClient' => $this->apiClient,
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+
+        $tokens = $this->Auth->user('tokens');
+        if ($tokens) {
+            $this->apiClient->setupTokens($tokens);
         }
-        $this->set('user', $user);
-        $this->set('baseUrl', Router::url('/'));
-        $this->modules = (array)$session->read('modules');
-        $this->set('modules', $this->modules);
-        $this->project = (array)$session->read('project');
-        $this->set('project', $this->project);
     }
 
     /**
@@ -97,50 +88,17 @@ class AppController extends Controller
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        if ($this->apiClient && !empty(array_diff_assoc($this->tokens, $this->apiClient->getTokens()))) {
-            $this->tokens = $this->apiClient->getTokens();
-            $this->request->session()->write('tokens', $this->tokens);
-        }
-    }
 
-    /**
-     * Read modules and project info from `/home' endpoint.
-     * Save data in session and view.
-     *
-     * @return void
-     */
-    protected function readModules()
-    {
-        $home = $this->apiClient->get('/home');
-        $status = $this->apiClient->getStatusCode();
-        if (in_array($status, [401, 403])) {
-            return $this->redirect(['_name' => 'logout']);
-        }
-
-        if (empty($home['meta']['resources'])) {
-            throw new NotFoundException(__('Modules not found'));
-        }
-        $this->modules = [];
-        foreach ($home['meta']['resources'] as $endpoint => $data) {
-            $name = \substr($endpoint, 1);
-            if (!empty($data['hints']['object_type'])) {
-                $this->modules[] = array_merge(compact('name'), $data);
+        if ($this->Auth && $this->Auth->user()) {
+            $user = $this->Auth->user();
+            $tokens = $this->apiClient->getTokens();
+            if ($tokens && $user['tokens'] !== $tokens) {
+                // Update tokens in session.
+                $user['tokens'] = $tokens;
+                $this->Auth->setUser($user);
             }
-        }
-        if (!empty($home['meta']['resources']['/trash'])) { // force last module: trash
-            $name = 'trash';
-            $this->modules[] = array_merge(compact('name'), $home['meta']['resources']['/trash']);
-        }
-        $this->set('modules', $this->modules);
-        $this->request->session()->write('modules', $this->modules);
 
-        // this should not be in a user session....
-        $this->project = [
-            'name' => $home['meta']['project']['name'],
-            'version' => $home['meta']['version'],
-            'colophon' => '', // left empty for now
-        ];
-        $this->set('project', $this->project);
-        $this->request->session()->write('project', $this->project);
+            $this->set(compact('user'));
+        }
     }
 }

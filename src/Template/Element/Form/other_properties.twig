@@ -1,0 +1,12 @@
+
+<div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
+
+<fieldset id="object_properties">
+
+{% for key, value in object.attributes %}
+    {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
+        {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(schema.properties[key])})|raw }}
+    {% endif %}
+{% endfor %}
+
+</fieldset>

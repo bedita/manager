@@ -1,0 +1,39 @@
+{% set level = level|default('info') %}
+
+<div class="message {{ params.class|default('') }}">
+
+    <h2>
+        {% if level == 'error' %}
+            {{ __('Error') }}
+        {% elseif level == 'info' %}
+            {{ __('Info') }}
+        {% elseif level == 'success' %}
+            {{ __('Success') }}
+        {% elseif level == 'warning' %}
+            {{ __('Warning') }}
+        {% else %}
+            {{ __('Message') }}
+        {% endif %}
+    </h2>
+
+    <p>
+        {% if params.escape|default(true) != false %}
+            {{ message }}
+        {% else %}
+            {{ message|raw }}
+        {% endif %}
+    </p>
+
+    <hr />
+
+    {% if params %}
+        <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.setAttribute('hidden', true);">
+            {{ __('Show details') }}
+        </a>
+        <pre hidden><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+    {% endif %}
+
+    <a href="javascript:void(0)" onclick="this.parentNode.setAttribute('hidden', true);">
+        {{ __('Close') }}
+    </a>
+</div>

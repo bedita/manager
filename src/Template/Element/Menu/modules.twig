@@ -1,0 +1,14 @@
+<nav class="modules-menu">
+    <ul class="modules-menu__modules">
+        <li class="modules-menu__module commands-menu__module--dashboard">
+            {{ Html.link(__('Dashboard'), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
+        </li>
+
+        {% for module in modules %}
+        <li class="modules-menu__module commands-menu__module--{{ module.name }} {{ module.name == currentModule.name ? 'commands-menu__module--current' : '' }}">
+            {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
+        </li>
+        {% endfor %}
+
+    </ul>
+</nav>

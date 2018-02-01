@@ -13,31 +13,48 @@
 
 namespace App\View\Twig;
 
+use Cake\Core\Configure;
+
 /**
- * Bedita Twig extension class.
- * Provide bedita utils to twig view.
+ * BEdita Twig extension class.
+ *
+ * Provide BEdita utils to Twig view.
  */
 class BeditaTwigExtension extends \Twig_Extension
 {
-    /**
-     * Get declared functions.
-     *
-     * @return \Twig_SimpleFunction[]
-     */
-    public function getFunctions()
-    {
-        return [
-            new \Twig_SimpleFunction('config', 'Cake\Core\Configure::read'),
-        ];
-    }
 
     /**
-     * Get extension name.
-     *
-     * @return string extension name.
+     * {@inheritDoc}
      */
     public function getName()
     {
         return 'bedita';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('config', [Configure::class, 'read']),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFilters()
+    {
+        return [
+            new \Twig_SimpleFilter(
+                'shuffle',
+                function (array $array) {
+                    shuffle($array);
+
+                    return $array;
+                }
+            ),
+        ];
     }
 }

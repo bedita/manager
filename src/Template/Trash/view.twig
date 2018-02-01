@@ -1,21 +1,22 @@
-{{ _view.assign('title', "%s - %s"|format("BEdita4", currentModule.name)) }}
-
-{% element 'modules_top_menu' %}
-
-{% element 'left_menu' %}
-
-{% set attributes = data.attributes %}
-
-<div class="head">
-    <h1>{{ attributes.title }}</h1>
-</div>
-
-{% element 'commands_menu_trash' %}
+{% do _view.assign('title', __('Trash')) %}
 
 <div class="main">
+    {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+        'url': {'_name': 'trash:list'},
+        'id': 'form--main',
+    })|raw }}
 
-    {% element 'form_object' %}
+    <h1>{{ object.attributes.title }}</h1>
 
+    {% element 'Form/core_properties' %}
+
+    {% element 'Form/other_properties' %}
+
+    {% element 'Form/meta' %}
+
+    {{ Form.end()|raw }}
 </div>
 
-{% element 'right_menu' %}
+{# Append "Delete" and "Restore" to commands in commands menu. #}
+{% do _view.append('commands', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
+{% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}

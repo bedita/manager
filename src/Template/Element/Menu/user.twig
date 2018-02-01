@@ -1,0 +1,8 @@
+<ul class="left-menu__user-menu">
+    <li>
+        {{ __('User: {0}', user.attributes.title ?? user.attributes.username) }}
+    </li>
+
+    <li>{{ Html.link(__('Home'), {'_name': 'dashboard'})|raw }}</li>
+    <li>{{ Html.link(__('Exit'), {'_name': 'logout'})|raw }}</li>
+</ul>
