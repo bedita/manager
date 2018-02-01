@@ -44,7 +44,7 @@ class SchemaComponent extends Component
      * @param string|null $type Type to get schema for. By default, configured type is used.
      * @return array|bool JSON Schema.
      */
-    public function getSchema($type = null)
+    public function getSchema(string $type = null)
     {
         // TODO: handle multiple projects -> key schema may differ
         if ($type === null) {
@@ -76,7 +76,7 @@ class SchemaComponent extends Component
      * @param string $type Type to get schema for.
      * @return array|bool JSON Schema.
      */
-    protected function fetchSchema($type)
+    protected function fetchSchema(string $type)
     {
         /** @var \App\Model\API\BEditaClient */
         $apiClient = $this->getConfig('apiClient');

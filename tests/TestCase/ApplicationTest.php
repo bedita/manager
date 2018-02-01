@@ -32,7 +32,7 @@ class ApplicationTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function testMiddleware()
+    public function testMiddleware() : void
     {
         $app = new Application(dirname(dirname(__DIR__)) . '/config');
         $middleware = new MiddlewareQueue();
