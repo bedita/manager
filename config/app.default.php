@@ -419,7 +419,7 @@ return [
      * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
-    'Plugins' => [
-        'Dogs' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple Dogs plugin
-    ],
+    //'Plugins' => [
+    //    'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
+    //],
 ];
