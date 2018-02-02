@@ -22,7 +22,7 @@ use Cake\Http\ServerRequest;
  *
  * @see https://docs.bedita.net/en/latest/authorization.html#authentication
  */
-class APIAuthenticate extends BaseAuthenticate
+class ApiAuthenticate extends BaseAuthenticate
 {
 
     /**
@@ -62,7 +62,6 @@ class APIAuthenticate extends BaseAuthenticate
         $tokens = $result['meta'];
         $result = $apiClient->get('/auth/user', null, ['Authorization' => sprintf('Bearer %s', $tokens['jwt'])]);
         $user = $result['data'] + compact('tokens');
-
 
         return $user;
     }

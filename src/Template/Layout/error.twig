@@ -15,9 +15,8 @@
 
     {{ Html.script('libs/select2/select2.min')|raw }}
 
-    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
+    <title>{{ "#{__('Error')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
-    {% element 'json_meta_config' %}
 </head>
 
 <body>
@@ -26,10 +25,6 @@
 
 <main>
     {% element 'Menu/left' %}
-
-    {% element 'Menu/commands' %}
-
-    {% element 'Menu/modules' %}
 
     {{ _view.fetch('content')|raw }}
 </main>

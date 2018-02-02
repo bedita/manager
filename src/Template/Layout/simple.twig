@@ -22,9 +22,11 @@
 
 <body>
 
+{% element 'messages' %}
+
 <main>
-    {% element 'messages' %}
     {% element 'Menu/left' %}
+
     {{ _view.fetch('content')|raw }}
 </main>
 

@@ -12,7 +12,9 @@
  */
 namespace App\Controller;
 
+use App\Model\API\BEditaClientException;
 use Cake\Event\Event;
+use Psr\Log\LogLevel;
 
 /**
  * Modules controller: list, add, edit, remove items (default objects)
@@ -21,7 +23,7 @@ class ModulesController extends AppController
 {
 
     /**
-     * Name of object type currently in use.
+     * Object type currently used
      *
      * @var string
      */
@@ -36,6 +38,7 @@ class ModulesController extends AppController
 
         $this->objectType = $this->request->getParam('object_type');
         $this->Modules->setConfig('currentModuleName', $this->objectType);
+        $this->Schema->setConfig('type', $this->objectType);
     }
 
     /**
@@ -49,48 +52,91 @@ class ModulesController extends AppController
     }
 
     /**
-     * Display items index
+     * Display resources list.
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
     public function index()
     {
         $this->request->allowMethod(['get']);
 
-        $res = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
-        $objects = $res['data'];
+        try {
+            $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+        } catch (BEditaClientException $e) {
+            // Error! Back to dashboard.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect(['_name' => 'dashboard']);
+        }
+
+        $objects = (array)$response['data'];
 
         $this->set(compact('objects'));
+
+        return null;
     }
 
     /**
-     * View single item
+     * View single resource.
      *
-     * @param string|int $id Item ID.
-     * @return void
+     * @param string|int $id Resource ID.
+     * @return \Cake\Http\Response|null
      */
     public function view($id)
     {
         $this->request->allowMethod(['get']);
 
-        $res = $this->apiClient->getObject($id, $this->objectType);
-        $object = $res['data'];
+        try {
+            $response = $this->apiClient->getObject($id, $this->objectType);
+        } catch (BEditaClientException $e) {
+            // Error! Back to index.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
 
-        $this->set(compact('object'));
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+
+        $object = $response['data'];
+        $schema = $this->Schema->getSchema();
+
+        $this->set(compact('object', 'schema'));
+
+        return null;
     }
 
     /**
-     * Display new item form
+     * Display new resource form.
      *
      * @return void
      */
     public function create()
     {
         $this->viewBuilder()->setTemplate('view');
+
+        // Create stub object with empty `attributes`.
+        $schema = $this->Schema->getSchema();
+        $attributes = array_fill_keys(
+            array_keys(
+                array_filter(
+                    $schema['properties'],
+                    function ($schema) {
+                        return empty($schema['readOnly']);
+                    }
+                )
+            ),
+            ''
+        );
+        $object = [
+            'type' => $this->objectType,
+            'attributes' => $attributes,
+        ];
+
+        $this->set(compact('object', 'schema'));
     }
 
     /**
-     * Create or edit single item
+     * Create or edit single resource.
      *
      * @return \Cake\Http\Response
      */
@@ -98,18 +144,31 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $apiResponse = $this->apiClient->saveObject($this->objectType, $this->request->getData());
-        $this->Flash->info(__('Object saved'));
+        try {
+            $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view or index.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            if ($this->request->getData('id')) {
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+            }
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+
+        $this->Flash->success(__('Object saved'));
 
         return $this->redirect([
             '_name' => 'modules:view',
             'object_type' => $this->objectType,
-            'id' => $apiResponse['data']['id'],
+            'id' => $response['data']['id'],
         ]);
     }
 
     /**
-     * Delete single item
+     * Delete single resource.
      *
      * @return \Cake\Http\Response
      */
@@ -117,8 +176,17 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $apiResponse = $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
-        $this->Flash->info(__('Object deleted'));
+        try {
+            $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+        }
+
+        $this->Flash->success(__('Object deleted'));
 
         return $this->redirect([
             '_name' => 'modules:list',

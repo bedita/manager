@@ -21,6 +21,7 @@ use Cake\Event\Event;
  * Base Application Controller.
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class AppController extends Controller
 {
@@ -48,7 +49,7 @@ class AppController extends Controller
 
         $this->loadComponent('Auth', [
             'authenticate' => [
-                'API' => [
+                'Api' => [
                     'apiClient' => $this->apiClient,
                 ],
             ],
@@ -60,6 +61,9 @@ class AppController extends Controller
         $this->loadComponent('Modules', [
             'apiClient' => $this->apiClient,
             'currentModuleName' => $this->name,
+        ]);
+        $this->loadComponent('Schema', [
+            'apiClient' => $this->apiClient,
         ]);
     }
 
@@ -89,6 +93,7 @@ class AppController extends Controller
             $user = $this->Auth->user();
             $tokens = $this->apiClient->getTokens();
             if ($tokens && $user['tokens'] !== $tokens) {
+                // Update tokens in session.
                 $user['tokens'] = $tokens;
                 $this->Auth->setUser($user);
             }

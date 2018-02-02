@@ -1,19 +1,40 @@
 <?php
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
+
 namespace App\Controller\Component;
 
+use App\Model\API\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
+use Psr\Log\LogLevel;
 
 /**
  * Component to load available modules.
+ *
+ * @property \Cake\Controller\Component\AuthComponent $Auth
  */
 class ModulesComponent extends Component
 {
 
     /**
-     * Default configuration.
-     *
-     * @var array
+     * {@inheritDoc}
+     */
+    public $components = ['Auth'];
+
+    /**
+     * {@inheritDoc}
      */
     protected $_defaultConfig = [
         'apiClient' => null,
@@ -45,12 +66,20 @@ class ModulesComponent extends Component
      */
     protected function getMeta()
     {
-        $home = Cache::remember(
-            sprintf('home_%d', $this->_registry->get('Auth')->user('id')),
-            function () {
-                return $this->getConfig('apiClient')->get('/home');
-            }
-        );
+        try {
+            $home = Cache::remember(
+                sprintf('home_%d', $this->Auth->user('id')),
+                function () {
+                    return $this->getConfig('apiClient')->get('/home');
+                }
+            );
+        } catch (BEditaClientException $e) {
+            // Something bad happened. Returning an empty array instead.
+            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
+            $this->log($e, LogLevel::ERROR);
+
+            return [];
+        }
 
         return $home['meta'];
     }
@@ -62,37 +91,29 @@ class ModulesComponent extends Component
      */
     public function getModules()
     {
-        static $excludedModules = ['auth', 'admin', 'model', 'roles', 'signup', 'status', 'trash'];
-        static $modulesOrder = [
-            'objects',
-            'documents',
-            'events',
-            'news',
-            'locations',
-            'media',
-            'audio',
-            'images',
-            'videos',
-            'files',
-            'profiles',
-            'users',
-        ];
+        $modulesOrder = Configure::read('Modules.order');
 
         $meta = $this->getMeta();
-        $modules = collection($meta['resources'])
+        $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
                 $name = substr($endpoint, 1);
 
                 return $data + compact('name');
             })
-            ->reject(function (array $data) use ($excludedModules) {
-                return in_array($data['name'], $excludedModules);
+            ->reject(function (array $data) {
+                return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
             })
             ->sortBy(function (array $data) use ($modulesOrder) {
-                $idx = array_search($data['name'], $modulesOrder);
+                $name = Hash::get($data, 'name');
+                $idx = array_search($name, $modulesOrder);
                 if ($idx === false) {
-                    // Use hash to preserve custom modules order, and ensure it is after core modules.
-                    $idx = count($modulesOrder) + hexdec(hash('crc32', $data['name']));
+                    // No configured order for this module. Use hash to preserve order, and ensure it is after other modules.
+                    $idx = count($modulesOrder) + hexdec(hash('crc32', $name));
+
+                    if ($name === 'trash') {
+                        // Trash eventually.
+                        $idx = PHP_INT_MAX;
+                    }
                 }
 
                 return -$idx;
@@ -112,7 +133,7 @@ class ModulesComponent extends Component
     public function getModuleByName(array $modules, $name)
     {
         foreach ($modules as $module) {
-            if ($module['name'] === $name) {
+            if (Hash::get($module, 'name') === $name) {
                 return $module;
             }
         }
@@ -129,8 +150,8 @@ class ModulesComponent extends Component
     {
         $meta = $this->getMeta();
         $project = [
-            'name' => $meta['project']['name'],
-            'version' => $meta['version'],
+            'name' => Hash::get($meta, 'project.name', ''),
+            'version' => Hash::get($meta, 'version', ''),
             'colophon' => '', // TODO: populate this value.
         ];
 

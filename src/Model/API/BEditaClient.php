@@ -14,6 +14,7 @@
 namespace App\Model\API;
 
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Http\Adapter\Guzzle6\Client;
 use Psr\Http\Message\ResponseInterface;
 use WoohooLabs\Yang\JsonApi\Client\JsonApiClient;
@@ -23,9 +24,11 @@ use WoohooLabs\Yang\JsonApi\Client\JsonApiClient;
  */
 class BEditaClient
 {
+
     /**
-     * @var ResponseInterface
+     * Last response.
      *
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
 
@@ -107,6 +110,16 @@ class BEditaClient
     }
 
     /**
+     * Get API base URL used tokens
+     *
+     * @return string API base URL
+     */
+    public function getApiBaseUrl()
+    {
+        return $this->apiBaseUrl;
+    }
+
+    /**
      * Get current used tokens
      *
      * @return array Current tokens
@@ -137,13 +150,23 @@ class BEditaClient
     }
 
     /**
+     * Get HTTP response status message
+     *
+     * @return string Message related to status code.
+     */
+    public function getStatusMessage()
+    {
+        return $this->response->getReasonPhrase();
+    }
+
+    /**
      * Get response body serialized into a PHP array
      *
      * @return array Response body as PHP array.
      */
     public function getResponseBody()
     {
-        return json_decode($this->response->getBody()->__toString(), true);
+        return json_decode((string)$this->response->getBody(), true);
     }
 
     /**
@@ -170,7 +193,7 @@ class BEditaClient
      */
     public function get($path, $query = [], $headers = [])
     {
-        $this->sendRequest('GET', $path, $query, $headers);
+        $this->sendRequestRetry('GET', $path, $query, $headers);
 
         return $this->getResponseBody();
     }
@@ -212,8 +235,12 @@ class BEditaClient
      */
     public function saveObject($type, $data, $headers = [])
     {
-        $id = !empty($data['id']) ? $data['id'] : null;
-        unset($data['id']);
+        $id = null;
+        if (array_key_exists('id', $data)) {
+            $id = $data['id'];
+            unset($data['id']);
+        }
+
         $body = [
             'data' => [
                 'type' => $type,
@@ -253,6 +280,19 @@ class BEditaClient
     }
 
     /**
+     * Get JSON SCHEMA of a resource or object
+     *
+     * @param string $type Object or resource type name
+     * @return array JSON SCHEMA in array format
+     */
+    public function schema($type)
+    {
+        $h = ['Accept' => 'application/schema+json'];
+
+        return $this->get(sprintf('/model/schema/%s', $type), null, $h);
+    }
+
+    /**
      * Restore object from trash
      *
      * @param int|string $id Object id
@@ -282,7 +322,7 @@ class BEditaClient
      */
     public function patch($path, $body, $headers = [])
     {
-        $this->sendRequest('PATCH', $path, null, $headers, $body);
+        $this->sendRequestRetry('PATCH', $path, null, $headers, $body);
 
         return $this->getResponseBody();
     }
@@ -297,7 +337,7 @@ class BEditaClient
      */
     public function post($path, $body, $headers = [])
     {
-        $this->sendRequest('POST', $path, null, $headers, $body);
+        $this->sendRequestRetry('POST', $path, null, $headers, $body);
 
         return $this->getResponseBody();
     }
@@ -310,65 +350,109 @@ class BEditaClient
      */
     public function delete($path)
     {
-        $this->sendRequest('DELETE', $path);
+        $this->sendRequestRetry('DELETE', $path);
 
         return $this->getResponseBody();
     }
 
     /**
-     * Send a generic JSON API request and retrieve response $this->response
+     * Send a generic JSON API request with a basic retry policy on expired token exception.
      *
-     * @param string $method Method
-     * @param string $path Endpoint URL path to invoke
-     * @param array $query Optional query string
-     * @param array $headers Custom request headers
-     * @param mixed $body Request body
-     * @param bool $refresh In case of token expired response try a token refresh and repeat request. Default 'true'. Used to avoid loops.
-     * @return void|\Cake\Http\Response
+     * @param string $method HTTP Method.
+     * @param string $path Endpoint URL path.
+     * @param array|null $query Query string parameters.
+     * @param string[]|null $headers Custom request headers.
+     * @param string|resource|\Psr\Http\Message\StreamInterface|null $body Request body.
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function sendRequest($method, $path, $query = [], $headers = [], $body = null, $refresh = true)
+    protected function sendRequestRetry($method, $path, array $query = null, array $headers = null, $body = null)
     {
-        $uri = $this->apiBaseUrl . $path;
-        if ($query) {
-            $uri .= '?' . http_build_query($query);
-        }
-        $headers = array_merge($this->defaultHeaders, $headers);
-
-        // Send the request syncronously to retrieve the response
-        $this->response = $this->jsonApiClient->sendRequest(new Request($method, $uri, $headers, $body));
-        // in case of 401 response with `be_token_expired` code refresh token and send request again
-        if ($refresh && $this->getStatusCode() === 401) {
-            $respBody = $this->getResponseBody();
-            if (!empty($respBody['error']['code']) && $respBody['error']['code'] === 'be_token_expired') {
-                if ($this->refreshTokens()) {
-                    // remove previous Authorization header and force new one usage
-                    unset($headers['Authorization']);
-                     $this->sendRequest($method, $path, $query, $headers, $body, false);
-                }
+        try {
+            return $this->sendRequest($method, $path, $query, $headers, $body);
+        } catch (BEditaClientException $e) {
+            // Handle error.
+            $attributes = $e->getAttributes();
+            if ($e->getCode() !== 401 || empty($attributes['code']) || $attributes['code'] !== 'be_token_expired') {
+                // Not an expired token's fault.
+                throw $e;
             }
+
+            // Refresh and retry.
+            $this->refreshTokens();
+            unset($headers['Authorization']);
+
+            return $this->sendRequest($method, $path, $query, $headers, $body);
         }
     }
 
     /**
-     * Send a refresh token request.
-     * On success `$this->token` data will be updated with new access and renew tokens.
+     * Send a generic JSON API request and retrieve response $this->response
      *
-     * @return bool True on success, false on failure
+     * @param string $method HTTP Method.
+     * @param string $path Endpoint URL path.
+     * @param array|null $query Query string parameters.
+     * @param string[]|null $headers Custom request headers.
+     * @param string|resource|\Psr\Http\Message\StreamInterface|null $body Request body.
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \App\Model\API\BEditaClientException Throws an exception if server response code is not 20x.
+     */
+    protected function sendRequest($method, $path, array $query = null, array $headers = null, $body = null)
+    {
+        $uri = new Uri($this->apiBaseUrl);
+        $uri = $uri->withPath($uri->getPath() . '/' . $path);
+        if ($query) {
+            $uri = $uri->withQuery(http_build_query((array)$query));
+        }
+        $headers = array_merge($this->defaultHeaders, (array)$headers);
+
+        // Send the request synchronously to retrieve the response.
+        $this->response = $this->jsonApiClient->sendRequest(new Request($method, $uri, $headers, $body));
+        if ($this->getStatusCode() >= 400) {
+            // Something bad just happened.
+            $statusCode = $this->getStatusCode();
+            $response = $this->getResponseBody();
+
+            $code = (string)$statusCode;
+            $reason = $this->getStatusMessage();
+            if (!empty($response['error']['code'])) {
+                $code = $response['error']['code'];
+            }
+            if (!empty($response['error']['title'])) {
+                $reason = $response['error']['title'];
+            }
+
+            throw new BEditaClientException(compact('code', 'reason'), $statusCode);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Refresh JWT access token.
+     *
+     * On success `$this->tokens` data will be updated with new access and renew tokens.
+     *
+     * @throws \BadMethodCallException Throws an exception if client has no renew token available.
+     * @throws \Cake\Network\Exception\ServiceUnavailableException Throws an exception if server response doesn't
+     *      include the expected data.
+     * @return void
      */
     public function refreshTokens()
     {
         if (empty($this->tokens['renew'])) {
-            return false;
+            throw new \BadMethodCallException(__('You must be logged in to renew token'));
         }
-        $headers = array_merge($this->defaultHeaders, ['Authorization' => 'Bearer ' . $this->tokens['renew']]);
-        $uri = $this->apiBaseUrl . '/auth';
-        $response = $this->jsonApiClient->sendRequest(new Request('POST', $uri, $headers));
-        $body = json_decode($response->getBody()->__toString(), true);
-        if (empty($body['meta']['jwt'])) {
-            return false;
-        }
-        $this->setupTokens($body['meta']);
 
-        return true;
+        $headers = [
+            'Authorization' => sprintf('Bearer %s', $this->tokens['renew']),
+        ];
+
+        $this->sendRequest('POST', '/auth', [], $headers);
+        $body = $this->getResponseBody();
+        if (empty($body['meta']['jwt'])) {
+            throw new BEditaClientException(__('Invalid response from server'));
+        }
+
+        $this->setupTokens($body['meta']);
     }
 }

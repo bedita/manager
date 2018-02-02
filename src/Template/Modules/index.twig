@@ -1,4 +1,4 @@
-{{ _view.assign('title', currentModule.name|humanize) }}
+{% do _view.assign('title', currentModule.name|humanize) %}
 
 <div class="module">
 
@@ -36,3 +36,6 @@
         </tbody>
     </table>
 </div>
+
+{# Append "Trashcan" link in commands menu. #}
+{% do _view.append('links', '<li>' ~ Html.link(__('Trashcan'), {'_name': 'trash:list', 'filter': {'type': objectType}}) ~ '</li>') %}

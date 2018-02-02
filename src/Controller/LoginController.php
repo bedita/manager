@@ -38,7 +38,7 @@ class LoginController extends AppController
             // Successful login. Redirect.
             $this->Auth->setUser($user);
 
-            $this->Flash->info(__('Successfully logged in'));
+            $this->Flash->success(__('Successfully logged in'));
 
             return $this->redirect($this->Auth->redirectUrl());
         }

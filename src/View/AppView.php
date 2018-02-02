@@ -12,6 +12,7 @@
  */
 namespace App\View;
 
+use App\View\Twig\BeditaTwigExtension;
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
@@ -31,16 +32,12 @@ class AppView extends TwigView
         $this->loadHelper('Flash');
         $this->loadHelper('Form');
         $this->loadHelper('Html');
-        $this->loadHelper('Link');
+        $this->loadHelper('Schema');
         $this->loadHelper('Text');
         $this->loadHelper('Time');
         $this->loadHelper('Url');
 
         $this->getTwig()
-            ->addFilter(new \Twig_SimpleFilter('shuffle', function (array $array) {
-                shuffle($array);
-
-                return $array;
-            }));
+            ->addExtension(new BeditaTwigExtension());
     }
 }
