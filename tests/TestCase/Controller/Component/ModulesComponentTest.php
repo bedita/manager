@@ -211,6 +211,7 @@ class ModulesComponentTest extends TestCase
                     'supporto',
                     'gustavo',
                     'trash',
+                    'plugin',
                 ],
                 [
                     'resources' => [
@@ -240,6 +241,11 @@ class ModulesComponentTest extends TestCase
                 [
                     'bedita',
                     'supporto',
+                ],
+                [
+                    [
+                        'name' => 'plugin',
+                    ],
                 ],
             ],
             'ok (trash first)' => [
@@ -302,9 +308,10 @@ class ModulesComponentTest extends TestCase
      * @covers ::getMeta()
      * @covers ::getModules()
      */
-    public function testGetModules($expected, $meta, array $order = []) : void
+    public function testGetModules($expected, $meta, array $order = [], array $plugins = []) : void
     {
         Configure::write('Modules.order', $order);
+        Configure::write('Modules.plugins', $plugins);
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
