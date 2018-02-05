@@ -5,8 +5,17 @@
     flex: auto;
 }
 
+label {
+    font-size: 12px;
+    font-weight: normal;
+}
+
 .login label, .login input {
     display: block;
+}
+
+.login input {
+    padding: 6px;
 }
 
 .login input[type=submit] {

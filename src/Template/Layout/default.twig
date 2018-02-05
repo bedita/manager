@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+
+██████╗ ███████╗██████╗ ██╗████████╗ █████╗     ██╗  ██╗
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗    ██║  ██║
+██████╔╝█████╗  ██║  ██║██║   ██║   ███████║    ███████║
+██╔══██╗██╔══╝  ██║  ██║██║   ██║   ██╔══██║    ╚════██║
+██████╔╝███████╗██████╔╝██║   ██║   ██║  ██║         ██║
+╚═════╝ ╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝         ╚═╝
+
+BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
+-->
+
 <html>
 <head>
     {{ Html.charset()|raw }}
@@ -25,13 +37,23 @@
 {% element 'messages' %}
 
 <main>
-    {% element 'Menu/left' %}
+    <aside class="grid-main-sidebar-1">
+        {% element 'Menu/left' %}
+    </aside>
 
-    {% element 'Menu/commands' %}
+    {% if currentModule %}
+        <aside class="grid-main-sidebar-2">
+            {% element 'Menu/commands' %}
+        </aside>
 
-    {% element 'Menu/modules' %}
+        <header class="grid-main-header">
+            {% element 'Menu/modules' %}
+        </header>
+    {% endif %}
 
-    {{ _view.fetch('content')|raw }}
+    <div class="grid-main-content">
+        {{ _view.fetch('content')|raw }}
+    </div>
 </main>
 
 </body>

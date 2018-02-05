@@ -1,3 +1,5 @@
+//  TUTTO DA FARE MA PRIMA L'HTML
+
 input[type=text], input[type=password], textarea {
     font-size: 1em;
     font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif;
@@ -8,18 +10,36 @@ input[type=text], input[type=password], textarea {
 }
 
 input[type=submit] {
-    background-color: #F2F2F2;
-    line-height: 1.2em;
-    color: #333;
-    border-radius: .75em;
-    border: 1px solid #BBB;
-    cursor: pointer;
-    padding: .15em .5em;
-    text-decoration: none;
-    text-transform: uppercase;
+    // background-color: #F2F2F2;
+    // line-height: 1.2em;
+    // color: #333;
+    // border-radius: .75em;
+    // border: 1px solid #BBB;
+    // cursor: pointer;
+    // padding: .15em .5em;
+    // text-decoration: none;
+    // text-transform: uppercase;
 }
 input[type=submit]:hover {
     background-color: #666;
     color: #FFF;
     outline: 0;
+}
+
+.module {
+    form {
+        label {
+            display: block;
+        }
+        input[type=text], textarea {
+            min-width: 480px;
+        }
+        fieldset {
+            padding: 0;
+
+            > div {
+                margin: 10px 0;
+            }
+        }
+    }
 }
