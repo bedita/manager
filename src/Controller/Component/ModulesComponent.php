@@ -119,6 +119,10 @@ class ModulesComponent extends Component
                 return -$idx;
             })
             ->toList();
+        $plugins = Configure::read('Modules.plugins');
+        if ($plugins) {
+            $modules = array_merge($modules, $plugins);
+        }
 
         return $modules;
     }
