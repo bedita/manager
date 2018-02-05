@@ -1,6 +1,7 @@
 main {
     display: grid;
-    grid-template-columns: [grid-column-aside] $main-grid-column-1 [grid-column-content] $main-grid-column-2;
-    grid-template-rows: auto;
-    grid-column-gap: $gutter;
+    grid-template-areas: "sidebar-1 sidebar-2 header"
+                         "sidebar-1 sidebar-2 content"
+                         "footer footer footer";
+    grid-template-columns: auto auto 1fr;
 }
