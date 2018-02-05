@@ -243,7 +243,7 @@ class ModulesComponentTest extends TestCase
                     'supporto',
                 ],
                 [
-                    'resources' => [
+                    [
                         'name' => 'plugin',
                     ],
                 ],
