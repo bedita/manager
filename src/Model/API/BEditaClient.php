@@ -191,7 +191,7 @@ class BEditaClient
      * @param array|null $headers Headers
      * @return array|null Response in array format
      */
-    public function get(string $path, array $query = null, array $headers = null) : ?array
+    public function get(string $path, ?array $query = null, ?array $headers = null) : ?array
     {
         $this->sendRequestRetry('GET', $path, $query, $headers);
 
@@ -206,7 +206,7 @@ class BEditaClient
      * @param array|null $headers Custom request headers
      * @return array|null Response in array format
      */
-    public function getObjects(string $type = 'objects', array $query = null, array $headers = null) : ?array
+    public function getObjects(string $type = 'objects', ?array $query = null, ?array $headers = null) : ?array
     {
         return $this->get(sprintf('/%s', $type), $query, $headers);
     }
@@ -220,7 +220,7 @@ class BEditaClient
      * @param array|null $headers Custom request headers
      * @return array|null Response in array format
      */
-    public function getObject($id, string $type = 'objects', array $query = null, array $headers = null) : ?array
+    public function getObject($id, string $type = 'objects', ?array $query = null, ?array $headers = null) : ?array
     {
         return $this->get(sprintf('/%s/%s', $type, $id), $query, $headers);
     }
@@ -233,7 +233,7 @@ class BEditaClient
      * @param array|null $headers Custom request headers
      * @return array|null Response in array format
      */
-    public function saveObject(string $type, array $data, array $headers = null) : ?array
+    public function saveObject(string $type, array $data, ?array $headers = null) : ?array
     {
         $id = null;
         if (array_key_exists('id', $data)) {
@@ -320,7 +320,7 @@ class BEditaClient
      * @param array|null $headers Custom request headers
      * @return array|null Response in array format
      */
-    public function patch(string $path, $body, array $headers = null) : ?array
+    public function patch(string $path, $body, ?array $headers = null) : ?array
     {
         $this->sendRequestRetry('PATCH', $path, null, $headers, $body);
 
@@ -335,7 +335,7 @@ class BEditaClient
      * @param array|null $headers Custom request headers
      * @return array|null Response in array format
      */
-    public function post(string $path, $body, array $headers = null) : ?array
+    public function post(string $path, $body, ?array $headers = null) : ?array
     {
         $this->sendRequestRetry('POST', $path, null, $headers, $body);
 
@@ -365,7 +365,7 @@ class BEditaClient
      * @param string|resource|\Psr\Http\Message\StreamInterface|null $body Request body.
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function sendRequestRetry(string $method, string $path, array $query = null, array $headers = null, $body = null) : ResponseInterface
+    protected function sendRequestRetry(string $method, string $path, ?array $query = null, ?array $headers = null, $body = null) : ResponseInterface
     {
         try {
             return $this->sendRequest($method, $path, $query, $headers, $body);
@@ -396,7 +396,7 @@ class BEditaClient
      * @return \Psr\Http\Message\ResponseInterface
      * @throws \App\Model\API\BEditaClientException Throws an exception if server response code is not 20x.
      */
-    protected function sendRequest(string $method, string $path, array $query = null, array $headers = null, $body = null) : ResponseInterface
+    protected function sendRequest(string $method, string $path, ?array $query = null, ?array $headers = null, $body = null) : ResponseInterface
     {
         $uri = new Uri($this->apiBaseUrl);
         $uri = $uri->withPath($uri->getPath() . '/' . $path);
