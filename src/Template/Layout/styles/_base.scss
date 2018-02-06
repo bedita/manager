@@ -1,14 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box; // 1
+}
+
 body {
     font-family: $font-family-base;
     font-size: $font-size-sm;
     line-height: $line-height-base;
-    margin: $gutter;
-    background-color: $gray-500;    // best practice, apply a default `background-color`
+    background-color: $gray-200;    // best practice, apply a default `background-color`
     color: $gray-900;
     text-align: left;               // explicit initial text-align value so that we can later use `inherit`
-
-    display: flex;
-    justify-content: stretch;
 }
 
 a {
@@ -24,5 +26,9 @@ fieldset {
 
 label {
     font-weight: bold;
+}
+
+.hide-text {
+    @include hide-text();
 }
 

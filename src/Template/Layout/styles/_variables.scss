@@ -4,6 +4,7 @@
 
 // family
 $font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-serif:           Georgia, 'Times New Roman', Times, serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 
@@ -57,6 +58,5 @@ $grays: map-merge((
 ** LAYOUT
 */
 
-$gutter: 1rem;
-$main-grid-column-1: 140px;
-$main-grid-column-2: auto;
+$gutter: 10px;
+$grid-column-1-width: 140px;

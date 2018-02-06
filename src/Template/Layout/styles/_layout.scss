@@ -1,6 +1,32 @@
 main {
     display: grid;
-    grid-template-columns: [grid-column-aside] $main-grid-column-1 [grid-column-content] $main-grid-column-2;
-    grid-template-rows: auto;
-    grid-column-gap: $gutter;
+    grid-template-areas: "sidebar-1 sidebar-2 header"
+                         "sidebar-1 sidebar-2 content";
+                        //  "footer footer footer";
+    grid-template-columns: $grid-column-1-width * 2 auto 1fr;
+    grid-template-rows: auto 1fr auto;
+    margin: $gutter;
+
+    // andranno delle variabili per i breakpoint delle mediaquery
+    @media screen and (max-width: 960px) {
+        grid-template-columns: ($grid-column-1-width + 10px) auto 1fr;
+    }
 }
+
+.grid-main-sidebar-1 {
+    grid-area: sidebar-1;
+    margin-right: 10px;
+}
+.grid-main-sidebar-2 {
+    grid-area: sidebar-2;
+}
+.grid-main-header {
+    grid-area: header;
+}
+.grid-main-content {
+    grid-area: content;
+}
+// footer {
+//     grid-area: footer;
+//     align-self: end;
+// }
