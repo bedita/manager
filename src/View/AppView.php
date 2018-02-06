@@ -25,7 +25,7 @@ class AppView extends TwigView
     /**
      * {@inheritDoc}
      */
-    public function initialize()
+    public function initialize() : void
     {
         parent::initialize();
 

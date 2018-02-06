@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Model\API\BEditaClientException;
 use Cake\Event\Event;
+use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**
@@ -32,7 +33,7 @@ class ModulesController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize()
+    public function initialize() : void
     {
         parent::initialize();
 
@@ -44,7 +45,7 @@ class ModulesController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeRender(Event $event)
+    public function beforeRender(Event $event) : void
     {
         parent::beforeRender($event);
 
@@ -56,7 +57,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
+    public function index() : ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -83,7 +84,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id)
+    public function view($id) : ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -110,7 +111,7 @@ class ModulesController extends AppController
      *
      * @return void
      */
-    public function create()
+    public function create() : void
     {
         $this->viewBuilder()->setTemplate('view');
 
@@ -140,7 +141,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function save()
+    public function save() : Response
     {
         $this->request->allowMethod(['post']);
 
@@ -172,7 +173,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function delete()
+    public function delete() : Response
     {
         $this->request->allowMethod(['post']);
 

@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use App\Model\API\BEditaClientException;
+use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**
@@ -24,7 +25,7 @@ class TrashController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize()
+    public function initialize() : void
     {
         parent::initialize();
 
@@ -36,7 +37,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
+    public function index() : ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -63,7 +64,7 @@ class TrashController extends AppController
      * @param mixed $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id)
+    public function view($id) : ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -90,7 +91,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function restore()
+    public function restore() : Response
     {
         $this->request->allowMethod(['post']);
 
@@ -114,7 +115,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function delete()
+    public function delete() : Response
     {
         $this->request->allowMethod(['post']);
 

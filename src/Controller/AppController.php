@@ -36,7 +36,7 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function initialize()
+    public function initialize() : void
     {
         parent::initialize();
 
@@ -70,7 +70,7 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(Event $event) : void
     {
         parent::beforeFilter($event);
 
@@ -85,7 +85,7 @@ class AppController extends Controller
      *
      * Update session tokens if updated/refreshed by client
      */
-    public function beforeRender(Event $event)
+    public function beforeRender(Event $event) : void
     {
         parent::beforeRender($event);
 

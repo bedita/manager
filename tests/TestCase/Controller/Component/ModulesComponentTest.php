@@ -39,7 +39,7 @@ class ModulesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -52,7 +52,7 @@ class ModulesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Modules);
 
@@ -64,7 +64,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getModuleByNameProvider()
+    public function getModuleByNameProvider() : array
     {
         return [
             'found' => [
@@ -107,7 +107,7 @@ class ModulesComponentTest extends TestCase
      * @dataProvider getModuleByNameProvider()
      * @covers ::getModuleByName()
      */
-    public function testGetModuleByName($expected, array $modules, $name)
+    public function testGetModuleByName($expected, array $modules, string $name) : void
     {
         $actual = $this->Modules->getModuleByName($modules, $name);
 
@@ -169,7 +169,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::getMeta()
      * @covers ::getProject()
      */
-    public function testGetProject($expected, $meta)
+    public function testGetProject($expected, $meta) : void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -202,7 +202,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getModulesProvider()
+    public function getModulesProvider() : array
     {
         return [
             'ok' => [
@@ -308,7 +308,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::getMeta()
      * @covers ::getModules()
      */
-    public function testGetModules($expected, $meta, array $order = [], array $plugins = [])
+    public function testGetModules($expected, $meta, array $order = [], array $plugins = []) : void
     {
         Configure::write('Modules.order', $order);
         Configure::write('Modules.plugins', $plugins);
@@ -344,7 +344,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function beforeRenderProvider()
+    public function beforeRenderProvider() : array
     {
         return [
             'without current module' => [
@@ -435,7 +435,7 @@ class ModulesComponentTest extends TestCase
      * @dataProvider beforeRenderProvider()
      * @covers ::beforeRender()
      */
-    public function testBeforeRender($modules, $currentModule, $project, array $meta, array $order = [], $currentModuleName = null)
+    public function testBeforeRender($modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
     {
         Configure::write('Modules.order', $order);
 
