@@ -46,7 +46,7 @@ class ModulesComponent extends Component
      *
      * @return void
      */
-    public function beforeRender()
+    public function beforeRender() : void
     {
         $modules = $this->getModules();
         $project = $this->getProject();
@@ -64,7 +64,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    protected function getMeta()
+    protected function getMeta() : array
     {
         try {
             $home = Cache::remember(
@@ -89,7 +89,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    public function getModules()
+    public function getModules() : array
     {
         $modulesOrder = Configure::read('Modules.order');
 
@@ -134,7 +134,7 @@ class ModulesComponent extends Component
      * @param string $name Name of module to extract.
      * @return array|null
      */
-    public function getModuleByName(array $modules, $name)
+    public function getModuleByName(array $modules, string $name) : ?array
     {
         foreach ($modules as $module) {
             if (Hash::get($module, 'name') === $name) {
@@ -150,7 +150,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    public function getProject()
+    public function getProject() : array
     {
         $meta = $this->getMeta();
         $project = [

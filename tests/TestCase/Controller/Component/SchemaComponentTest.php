@@ -25,7 +25,7 @@ class SchemaComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -38,7 +38,7 @@ class SchemaComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Schema);
 
@@ -50,7 +50,7 @@ class SchemaComponentTest extends TestCase
      *
      * @return array
      */
-    public function getSchemaProvider()
+    public function getSchemaProvider() : array
     {
         return [
             'type as argument' => [
@@ -100,7 +100,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::getSchema()
      */
-    public function testGetSchema($expected, $schema, $type, $config = [])
+    public function testGetSchema($expected, $schema, ?string $type, array $config = []) : void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));

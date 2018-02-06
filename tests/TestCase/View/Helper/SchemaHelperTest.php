@@ -35,7 +35,7 @@ class SchemaHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ class SchemaHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Schema);
 
@@ -58,7 +58,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function getControlTypeFromSchemaProvider()
+    public function getControlTypeFromSchemaProvider() : array
     {
         return [
             'string' => [
@@ -75,7 +75,7 @@ class SchemaHelperTest extends TestCase
                 ],
             ],
             'date' => [
-                'datetime',
+                'text', // TODO: replace with "datetime".
                 [
                     'type' => 'string',
                     'format' => 'date-time',
@@ -136,7 +136,7 @@ class SchemaHelperTest extends TestCase
      * @dataProvider getControlTypeFromSchemaProvider()
      * @covers ::getControlTypeFromSchema()
      */
-    public function testGetControlTypeFromSchema($expected, $schema)
+    public function testGetControlTypeFromSchema(string $expected, $schema) : void
     {
         $actual = $this->Schema->getControlTypeFromSchema($schema);
 

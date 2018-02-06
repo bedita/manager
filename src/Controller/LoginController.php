@@ -12,6 +12,8 @@
  */
 namespace App\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Perform basic login and logout operations.
  */
@@ -23,7 +25,7 @@ class LoginController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function login()
+    public function login() : ?Response
     {
         $this->request->allowMethod(['get', 'post']);
 
@@ -54,7 +56,7 @@ class LoginController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function logout()
+    public function logout() : Response
     {
         $this->request->allowMethod(['get']);
 

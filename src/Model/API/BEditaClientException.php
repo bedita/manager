@@ -41,7 +41,7 @@ class BEditaClientException extends \RuntimeException
      * @param int|null $code The code of the error, is also the HTTP status code for the error.
      * @param \Exception|null $previous the previous exception.
      */
-    public function __construct($message = '', $code = null, $previous = null)
+    public function __construct($message = '', ?int $code = null, \Exception $previous = null)
     {
         if ($code === null) {
             $code = $this->defaultCode;
@@ -60,7 +60,7 @@ class BEditaClientException extends \RuntimeException
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes() : array
     {
         return $this->attributes;
     }

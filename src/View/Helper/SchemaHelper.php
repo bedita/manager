@@ -27,7 +27,7 @@ class SchemaHelper extends Helper
      * @param mixed $schema Property schema.
      * @return string
      */
-    public function getControlTypeFromSchema($schema)
+    public function getControlTypeFromSchema($schema) : string
     {
         if (!is_array($schema)) {
             return 'text';
@@ -50,7 +50,7 @@ class SchemaHelper extends Helper
         switch ($schema['type']) {
             case 'string':
                 if (!empty($schema['format']) && $schema['format'] === 'date-time') {
-                    return 'datetime';
+                    return 'text'; // TODO: replace with "datetime".
                 }
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';
