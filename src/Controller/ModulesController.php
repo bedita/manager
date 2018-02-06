@@ -109,14 +109,19 @@ class ModulesController extends AppController
     /**
      * Display new resource form.
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
-    public function create() : void
+    public function create() : ?Response
     {
         $this->viewBuilder()->setTemplate('view');
 
         // Create stub object with empty `attributes`.
         $schema = $this->Schema->getSchema();
+        if (!is_array($schema)) {
+            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
         $attributes = array_fill_keys(
             array_keys(
                 array_filter(
@@ -134,6 +139,8 @@ class ModulesController extends AppController
         ];
 
         $this->set(compact('object', 'schema'));
+
+        return null;
     }
 
     /**
