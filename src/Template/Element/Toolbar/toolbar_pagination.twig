@@ -1,0 +1,57 @@
+{% if currentModule.hints.object_type|default(false) %}
+<div class="creation">
+    {{ Html.link(__('Create new {0}', currentModule.singular), {'_name': 'modules:create', 'object_type': objectType})|raw }}
+</div>
+{% endif %}
+
+<div class="pagesInfo">
+    {{ __('Page') }} {{ meta.pagination.page }} {{ __('of') }} {{ meta.pagination.page_count }}
+    ({{ meta.pagination.count ~ ' ' ~ objectType}})
+</div>
+
+{# pagination variables #}
+{% set currentPage = meta.pagination.page %} {# current #}
+{% set lastPage = meta.pagination.page_count %} {# last #}
+{% set paginationPath = '/' ~ currentModule.name %} {# path #}
+{% set showAlwaysFirstAndLast = false %}
+{# display pagination settings #}
+{% set extremePagesLimit = 2 %} {# the number of first and last pages to be displayed #}
+{% set nearbyPagesLimit = 2 %}{# the number of pages that are displayed around the active page #}
+
+{% if lastPage > 1 %}
+<div class="pagination">
+    <div class="pagination pagination-centered">
+        <ul>
+        {% if currentPage > 1 %}
+            <li><a href="{{ paginationPath }}?page={{ currentPage-1 }}">&larr;</a></li>
+            {% for i in range(1, extremePagesLimit) if ( i < currentPage - nearbyPagesLimit ) %}
+            <li><a href="{{ paginationPath }}?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if extremePagesLimit + 1 < currentPage - nearbyPagesLimit %}
+            <li class="disabled"><i>...</i></li>
+            {% endif %}
+            {% for i in range(currentPage-nearbyPagesLimit, currentPage-1) if ( i > 0 ) %}
+            <li><a href="{{ paginationPath }}?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+        {% elseif showAlwaysFirstAndLast %}
+            <li><a href="#">{{ __('Previous') }}</a></li>
+        {% endif %}
+            <li class="active"><b>{{ currentPage }}</b></li>
+        {% if currentPage < lastPage %}
+            {% for i in range(currentPage+1, currentPage + nearbyPagesLimit) if ( i <= lastPage ) %}
+            <li><a href="{{ paginationPath }}?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if  (lastPage - extremePagesLimit) > (currentPage + nearbyPagesLimit) %}
+            <li class="disabled"><i>...</i></li>
+            {% endif %}
+            {% for i in range(lastPage - extremePagesLimit+1, lastPage) if ( i > currentPage + nearbyPagesLimit ) %}
+            <li><a href="{{ paginationPath }}?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            <li><a href="{{ paginationPath }}?page={{ currentPage+1 }}">&rarr;</a></li>
+        {% elseif showAlwaysFirstAndLast %}
+            <li><a href="{{ paginationPath }}?page={{ currentPage+1 }}">{{ __('Next') }}</a></li>
+        {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}
