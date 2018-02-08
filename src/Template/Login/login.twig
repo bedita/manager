@@ -24,4 +24,14 @@
     {{ Form.submit(__('Sign in'))|raw }}
 
     {{ Form.end()|raw }}
+
+    <footer>
+        © {{ 'now'|date('Y') }} ~
+        {{ Html.link(__('BEdita {0}', project.version), 'https://www.bedita.com/who-are-we', {'title': 'visit bedita.com', 'target': '_blank'})|raw }}
+        <span>~</span>
+        {% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
+        {{ authors|shuffle|toList(__('&'))|raw }}
+        <span>~</span>
+        {{ Html.link(__('www.bedita.com'), 'https://www.bedita.com', {'title': __('BEdita Web site'), 'target': '_blank'})|raw }}
+    </footer>
 </div>
