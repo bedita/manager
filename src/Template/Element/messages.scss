@@ -11,18 +11,20 @@
         align-items: flex-start;
         margin-bottom: $gutter;
         padding: $gutter;
-        background-color: $gray-100;
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        width: 100%;
         min-height: 110px;
+        background-color: $gray-100;
         border-width: 1px 0 0;
         border-style: solid;
         border-color: transparent;
         opacity: 0;
+        visibility: hidden;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         transition: .3s all;
-        width: 100%;
 
         &.on {
             opacity: 1;
+            visibility: visible;
             clip-path: polygon(0 0, 100% 0, 58% 100%, 0 100%);
         }
 
