@@ -5,7 +5,7 @@ main {
                         //  "footer footer footer";
     grid-template-columns: $grid-column-width * 2 + $gutter auto 1fr;
     grid-template-rows: auto 1fr auto;
-    margin: $gutter;
+    padding: $gutter;
 
     // andranno delle variabili per i breakpoint delle mediaquery
     @media screen and (max-width: 960px) {
