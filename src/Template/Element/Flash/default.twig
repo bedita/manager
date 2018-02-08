@@ -1,7 +1,6 @@
 {% set level = level|default('info') %}
 
 <div class="message on {{ level }} {{ params.class|default('') }}">
-
     <h2>
         {% if level == 'error' %}
             {{ __('Error') }}
