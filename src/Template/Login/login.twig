@@ -1,25 +1,27 @@
 {% do _view.assign('title', __('Login')) %}
 
-<div class="login">
+<div class="tpl-login">
     {{ Form.create(null, {
         'url': {'_name': 'login'},
     })|raw }}
 
-    <fieldset>
-        {{ Form.control('username', {
-            'autocomplete': 'username',
-            'autocorrect': 'off',
-            'autocapitalize': 'off',
-            'spellcheck': 'false',
-            'label': {'text': __('Username')}
-        })|raw }}
-        {{ Form.control('password', {
-            'autocomplete': 'current-password',
-            'label': {'text': __('Password')}
-        })|raw }}
+    {{ Form.control('username', {
+        'autocomplete': 'username',
+        'autocorrect': 'off',
+        'autocapitalize': 'off',
+        'spellcheck': 'false',
+        'placeholder': 'e.g. john@example.com',
+        'label': false,
+    })|raw }}
+    <label>{{ __('Username') }}</label>
+    {{ Form.control('password', {
+        'autocomplete': 'current-password',
+        'placeholder': '••••••',
+        'label': false,
+    })|raw }}
+    <label>{{ __('Password') }}</label>
 
-        {{ Form.submit(__('Sign in'))|raw }}
-    </fieldset>
+    {{ Form.submit(__('Sign in'))|raw }}
 
     {{ Form.end()|raw }}
 </div>
