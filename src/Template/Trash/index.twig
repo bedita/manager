@@ -1,5 +1,8 @@
 {% do _view.assign('title', __('Trash')) %}
 
+{# module variables #}
+{% set baseUrl = '/' ~ currentModule.name ~ '?page=' ~ meta.pagination.page ~ '&page_size=' ~ meta.pagination.page_size ~ '&' %}
+
 <div class="module">
 
     {% element 'Toolbar/toolbar_pagination' %}
@@ -9,11 +12,32 @@
     <table>
         <thead>
             <tr>
-                <th>{{ __('title') }}</th>
-                <th>{{ __('id') }}</th>
+                <th>
+                    {% if 'title' in query.sort %}
+                    <i class="sort {% if query.sort == 'title' %}up{% endif %}{% if query.sort == '-title' %}down{% endif %}"></i>
+                    {% endif %}
+                    <a href="{{ baseUrl }}sort={% if query.sort == 'title' %}-{% endif %}title">
+                        {{ __('title') }}
+                    </a>
+                </th>
+                <th>
+                    {% if 'id' in query.sort %}
+                    <i class="sort {% if query.sort == 'id' %}up{% endif %}{% if query.sort == '-id' %}down{% endif %}"></i>
+                    {% endif %}
+                    <a href="{{ baseUrl }}sort={% if query.sort == 'id' %}-{% endif %}id">
+                        {{ __('id') }}
+                    </a>
+                </th>
                 <th>{{ __('type') }}</th>
                 <th>{{ __('status') }}</th>
-                <th>{{ __('modified') }}</th>
+                <th>
+                    {% if 'modified' in query.sort %}
+                    <i class="sort {% if query.sort == 'modified' %}up{% endif %}{% if query.sort == '-modified' %}down{% endif %}"></i>
+                    {% endif %}
+                    <a href="{{ baseUrl }}sort={% if query.sort == 'modified' %}-{% endif %}modified">
+                        {{ __('modified') }}
+                    </a>
+                </th>
                 <th>-</th>
             </tr>
         </thead>
