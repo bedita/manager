@@ -544,7 +544,7 @@ $(document).ready(function(){
             window.open($(this).attr("href"));
         }
     });
-
+/*
     $(document).on('click', '#cleanFilters', function(ev) {
         ev.preventDefault();
         var form = $(this).parents('form:first');
@@ -555,7 +555,7 @@ $(document).ready(function(){
         });
         form.submit();
     });
-
+*/
 /*...........................................
 
    autogrow
@@ -700,6 +700,7 @@ $(document).ready(function(){
 
 ...........................................*/
 
+    /*
     $("select").not('.areaSectionAssociation, [name="filter[parent_id]"]').select2({
         dropdownAutoWidth:true
     }).on('select2-blur', function (e) {
@@ -733,6 +734,7 @@ $(document).ready(function(){
                 }
             }
         });
+    */
 });
 
 /* end of document ready() */
@@ -763,7 +765,7 @@ var toggleSelectTree = function(ev) {
     }
 }
 
-/*...........................................    
+/*...........................................
 
    A[download] links
 
@@ -783,7 +785,7 @@ if (typeof a.download == 'undefined') {
 $(document).on("keydown", function(e) {
     var keycode = e.which;
     if (keycode == 27) {
-        
+
         if ($('.tab').next().is(":visible")) {
             $('.tab').BEtabsclose();
         } else {
