@@ -4,6 +4,8 @@
 {% set page = meta.pagination.page %} {# current #}
 {% set pageCount = meta.pagination.page_count %} {# last #}
 {% set pageSize = meta.pagination.page_size %} {# size #}
+{% set pageUrl = baseUrl ~ '?page=' ~ page %}
+{% set sort = (query.sort) ? query.sort : '' %}
 {# display pagination settings #}
 {% set showAlwaysFirstAndLast = false %}
 {% set extremePagesLimit = 2 %} {# the number of first and last pages to be displayed #}
@@ -12,8 +14,11 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $('select[name=pageSize]').change(function(event){
-        let url = "{{ baseUrl }}?page={{page}}&page_size=" + event.target.value;
-        window.location.replace(url);
+        {% if sort %}
+            window.location.replace("{{ pageUrl }}&page_size=" + event.target.value + "&sort={{sort}}");
+        {% else %}
+            window.location.replace("{{ pageUrl }}&page_size=" + event.target.value);
+        {% endif %}
     });
 });
 </script>
@@ -40,20 +45,33 @@ $(document).ready(function(){
         </select>
     </div>
 
+    {% if sort %}
+    <div class="sort">
+        <label>{{ __('Sort by') }}</label>:
+        <span class="sortField">{{ sort }}</span>
+    </div>
+    {% endif %}
+
     {% if pageCount > 1 %}
     <div class="pagination">
         <div class="pagination pagination-centered">
             <ul>
             {% if page > 1 %}
-                <li><a href="{{ baseUrl }}?page={{ page-1 }}&amp;page_size={{ pageSize }}">&larr;</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ page-1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">&larr;</a>
+                </li>
                 {% for i in range(1, extremePagesLimit) if ( i < page - nearbyPagesLimit ) %}
-                <li><a href="{{ baseUrl }}?page={{ i }}&amp;page_size={{ pageSize }}">{{ i }}</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
+                </li>
                 {% endfor %}
                 {% if extremePagesLimit + 1 < page - nearbyPagesLimit %}
                 <li class="disabled"><i>...</i></li>
                 {% endif %}
                 {% for i in range(page-nearbyPagesLimit, page-1) if ( i > 0 ) %}
-                <li><a href="{{ baseUrl }}?page={{ i }}&amp;page_size={{ pageSize }}">{{ i }}</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
+                </li>
                 {% endfor %}
             {% elseif showAlwaysFirstAndLast %}
                 <li><a href="#">{{ __('Previous') }}</a></li>
@@ -61,17 +79,25 @@ $(document).ready(function(){
                 <li class="active"><b>{{ page }}</b></li>
             {% if page < pageCount %}
                 {% for i in range(page+1, page + nearbyPagesLimit) if ( i <= pageCount ) %}
-                <li><a href="{{ baseUrl }}?page={{ i }}&amp;page_size={{ pageSize }}">{{ i }}</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
+                </li>
                 {% endfor %}
                 {% if  (pageCount - extremePagesLimit) > (page + nearbyPagesLimit) %}
                 <li class="disabled"><i>...</i></li>
                 {% endif %}
                 {% for i in range(pageCount - extremePagesLimit+1, pageCount) if ( i > page + nearbyPagesLimit ) %}
-                <li><a href="{{ baseUrl }}?page={{ i }}&amp;page_size={{ pageSize }}">{{ i }}</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
+                </li>
                 {% endfor %}
-                <li><a href="{{ baseUrl }}?page={{ page+1 }}&amp;page_size={{ pageSize }}">&rarr;</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ page+1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">&rarr;</a>
+                </li>
             {% elseif showAlwaysFirstAndLast %}
-                <li><a href="{{ baseUrl }}?page={{ page+1 }}&amp;page_size={{ pageSize }}">{{ __('Next') }}</a></li>
+                <li>
+                    <a href="{{ baseUrl }}?page={{ page+1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ __('Next') }}</a>
+                </li>
             {% endif %}
             </ul>
         </div>
