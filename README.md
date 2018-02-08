@@ -74,6 +74,16 @@ Run a Docker image setting an initial API KEY and admin username and password li
 
 Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch a local built image.
 
+### Run dev with gulp
+
+Launch gulp with host parameter to proxy your local instance of bedita4web, and watch it with gulp, like this:
+
+```bash
+
+node_modules/.bin/gulp dev --host http://bedita4web.lcl
+
+```
+
 ## Licensing
 
 BEdita is released under [LGPL](/bedita/bedita/blob/master/LICENSE.LGPL), Lesser General Public License v3.
