@@ -56,28 +56,63 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Sort link and direction box
+     * Sort by field direction and link
      *
-     * @param string $baseUrl url.
      * @param string $field the Field.
-     * @param string $sort page sort field.
      * @return void
      */
-    public function sort($baseUrl, $field, $sort)
+    public function sort($field)
     {
         $html = '';
-        $up = $sort === '-' . $field;
-        $down = $sort === $field;
-        if ($up || $down) {
-            $styleClass = ($up) ? 'up' : 'down';
-            $html .= '<i class="sort ' . $styleClass . '"></i>';
+        $query = $this->request->query;
+        $sortValue = $field; // <= ascendant order
+        if (!empty($query) && in_array('sort', array_keys($query))) {
+            if ($query['sort'] === $field) { // it was ascendant sort
+                $html .= '<i class="sort down"></i>';
+                $sortValue = '-' . $field; // <= descendant order
+            } elseif ($query['sort'] === ('-' . $field)) { // it was descendant sort
+                $html .= '<i class="sort up"></i>';
+            }
         }
-        $url = $baseUrl . '&sort=';
-        if ($down) {
-            $url .= '-';
-        }
-        $url .= $field;
+        $url = $this->replaceParamUrl('sort', $sortValue);
         $html .= '<a href="' . $url . '">' . __($field) . '</a>';
         echo $html;
+    }
+
+    /**
+     * Pagination link for page
+     *
+     * @param int $page destination page.
+     * @return void
+     */
+    public function page($page)
+    {
+        echo $this->replaceParamUrl('page', $page);
+    }
+
+    /**
+     * Pagination link for page size
+     *
+     * @param int $pageSize new page size.
+     * @return void
+     */
+    public function pageSize($pageSize)
+    {
+        echo $this->replaceParamUrl('page_size', $pageSize);
+    }
+
+    /**
+     * Replace parameter on url.
+     *
+     * @param string $parameter parameter name.
+     * @param string $value the Value to set for parameter.
+     * @return string url
+     */
+    private function replaceParamUrl($parameter, $value)
+    {
+        $query = $this->request->query;
+        $query[$parameter] = $value;
+
+        return $this->webBaseUrl . $this->request->here . '?' . http_build_query($query);
     }
 }

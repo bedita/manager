@@ -1,24 +1,10 @@
-{# module variables #}
-{% set baseUrl = '/' ~ currentModule.name %} {# path #}
 {# page variables #}
-{% set page = meta.pagination.page %} {# current #}
-{% set pageCount = meta.pagination.page_count %} {# last #}
-{% set pageSize = meta.pagination.page_size %} {# size #}
-{% set pageUrl = baseUrl ~ '?page=' ~ page %}
-{% set sort = (query.sort) ? query.sort : '' %}
-{# display pagination settings #}
-{% set showAlwaysFirstAndLast = false %}
-{% set extremePagesLimit = 2 %} {# the number of first and last pages to be displayed #}
-{% set nearbyPagesLimit = 2 %}{# the number of pages that are displayed around the active page #}
+{% set paging = meta.pagination %}
 
 <script type="text/javascript">
 $(document).ready(function(){
     $('select[name=pageSize]').change(function(event){
-        {% if sort %}
-            window.location.replace("{{ pageUrl }}&page_size=" + event.target.value + "&sort={{sort}}");
-        {% else %}
-            window.location.replace("{{ pageUrl }}&page_size=" + event.target.value);
-        {% endif %}
+        window.location.replace(event.target.value);
     });
 });
 </script>
@@ -27,81 +13,37 @@ $(document).ready(function(){
 
     {% if currentModule.hints.object_type|default(false) %}
     <div class="creation">
-        {{ Html.link(__('Create new {0}', currentModule.singular), {'_name': 'modules:create', 'object_type': objectType})|raw }}
+        {{ Html.link(__('Create new'), {'_name': 'modules:create', 'object_type': objectType})|raw }}
     </div>
     {% endif %}
 
-    <div class="pagesInfo">
-        {{ __('Page') }} {{ page }} {{ __('of') }} {{ pageCount }}
-        ({{ meta.pagination.count ~ ' ' ~ objectType}})
+    <div class="results">
+        {{ paging.count }} {{ currentModule.name }}
     </div>
 
+    {% if (paging.page_count > 1) %}
+    <div class="pagination">
+        <ul>
+            <li>{{ __('Page') }} {{ paging.page }} / {{ paging.page_count }}</li>
+            <li><a href="{{ Link.fromAPI(links.first) }}">{{ __('First') }} </a></li>
+            {% if links.prev %}
+            <li><a href="{{ Link.fromAPI(links.prev) }}">{{ __('Prev') }} </a></li>
+            {% endif %}
+            {% if links.next %}
+            <li><a href="{{ Link.fromAPI(links.next) }}">{{ __('Next') }} </a></li>
+            {% endif %}
+            <li><a href="{{ Link.fromAPI(links.last) }}">{{ __('Last') }} </a></li>
+        </ul>
+    </div>
+    {% endif %}
+
     <div class="pageSize">
-        <label>{{ __('Elements per page') }}</label>:
+        {{ __('Page Size') }}:
         <select name="pageSize">
         {% for page in [10, 20, 50, 100] %}
-            <option value="{{ page }}" {% if pageSize == page %}selected="selected"{% endif %}>{{ page }}</option>
+            <option value="{{ Link.pageSize(page) }}" {% if meta.pagination.page_size == page %}selected="selected"{% endif %}>{{ page }}</option>
         {% endfor %}
         </select>
     </div>
-
-    {% if sort %}
-    <div class="sort">
-        <label>{{ __('Sort by') }}</label>:
-        <span class="sortField">{{ sort }}</span>
-    </div>
-    {% endif %}
-
-    {% if pageCount > 1 %}
-    <div class="pagination">
-        <div class="pagination pagination-centered">
-            <ul>
-            {% if page > 1 %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ page-1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">&larr;</a>
-                </li>
-                {% for i in range(1, extremePagesLimit) if ( i < page - nearbyPagesLimit ) %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
-                </li>
-                {% endfor %}
-                {% if extremePagesLimit + 1 < page - nearbyPagesLimit %}
-                <li class="disabled"><i>...</i></li>
-                {% endif %}
-                {% for i in range(page-nearbyPagesLimit, page-1) if ( i > 0 ) %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
-                </li>
-                {% endfor %}
-            {% elseif showAlwaysFirstAndLast %}
-                <li><a href="#">{{ __('Previous') }}</a></li>
-            {% endif %}
-                <li class="active"><b>{{ page }}</b></li>
-            {% if page < pageCount %}
-                {% for i in range(page+1, page + nearbyPagesLimit) if ( i <= pageCount ) %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
-                </li>
-                {% endfor %}
-                {% if  (pageCount - extremePagesLimit) > (page + nearbyPagesLimit) %}
-                <li class="disabled"><i>...</i></li>
-                {% endif %}
-                {% for i in range(pageCount - extremePagesLimit+1, pageCount) if ( i > page + nearbyPagesLimit ) %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ i }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ i }}</a>
-                </li>
-                {% endfor %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ page+1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">&rarr;</a>
-                </li>
-            {% elseif showAlwaysFirstAndLast %}
-                <li>
-                    <a href="{{ baseUrl }}?page={{ page+1 }}&page_size={{ pageSize }}{% if sort %}&sort={{sort}}{% endif %}">{{ __('Next') }}</a>
-                </li>
-            {% endif %}
-            </ul>
-        </div>
-    </div>
-    {% endif %}
 
 </div>

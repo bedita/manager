@@ -7,23 +7,21 @@
 
     {% element 'Toolbar/toolbar_pagination' %}
 
-    {% element 'Toolbar/pagination_toolbar' %}
-
     {% element 'Toolbar/toolbar_filters' %}
 
     <table>
         <thead>
             <tr>
                 <th>
-                    {{ Link.sort(baseUrl, 'title', query.sort)}}
+                    {{ Link.sort('title')}}
                 </th>
                 <th>
-                    {{ Link.sort(baseUrl, 'id', query.sort)}}
+                    {{ Link.sort('id')}}
                 </th>
                 <th>{{ __('type') }}</th>
                 <th>{{ __('status') }}</th>
                 <th>
-                    {{ Link.sort(baseUrl, 'modified', query.sort)}}
+                    {{ Link.sort('modified')}}
                 </th>
                 <th>-</th>
             </tr>
