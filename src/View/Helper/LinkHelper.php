@@ -105,7 +105,7 @@ class LinkHelper extends Helper
      * Replace parameter on url.
      *
      * @param string $parameter parameter name.
-     * @param string $value the Value to set for parameter.
+     * @param string|int $value the Value to set for parameter.
      * @return string url
      */
     private function replaceParamUrl($parameter, $value)
