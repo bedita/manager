@@ -40,7 +40,7 @@ $(document).ready(function(){
     <div class="pageSize">
         {{ __('Page Size') }}:
         <select name="pageSize">
-        {% for page in [10, 20, 50, 100] %}
+        {% for page in config('Pagination.Sizes') %}
             <option value="{{ Link.pageSize(page) }}" {% if meta.pagination.page_size == page %}selected="selected"{% endif %}>{{ page }}</option>
         {% endfor %}
         </select>
