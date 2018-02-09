@@ -53,10 +53,12 @@ class TrashController extends AppController
 
         $objects = (array)$response['data'];
         $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
         $query = $this->request->query;
 
         $this->set(compact('objects'));
         $this->set(compact('meta'));
+        $this->set(compact('links'));
         $this->set(compact('query'));
 
         return null;

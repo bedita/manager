@@ -7,36 +7,23 @@
 
     {% element 'Toolbar/toolbar_pagination' %}
 
+    {% element 'Toolbar/pagination_toolbar' %}
+
     {% element 'Toolbar/toolbar_filters' %}
 
     <table>
         <thead>
             <tr>
                 <th>
-                    {% if 'title' in query.sort %}
-                    <i class="sort {% if query.sort == 'title' %}up{% endif %}{% if query.sort == '-title' %}down{% endif %}"></i>
-                    {% endif %}
-                    <a href="{{ baseUrl }}sort={% if query.sort == 'title' %}-{% endif %}title">
-                        {{ __('title') }}
-                    </a>
+                    {{ Link.sort(baseUrl, 'title', query.sort)}}
                 </th>
                 <th>
-                    {% if 'id' in query.sort %}
-                    <i class="sort {% if query.sort == 'id' %}up{% endif %}{% if query.sort == '-id' %}down{% endif %}"></i>
-                    {% endif %}
-                    <a href="{{ baseUrl }}sort={% if query.sort == 'id' %}-{% endif %}id">
-                        {{ __('id') }}
-                    </a>
+                    {{ Link.sort(baseUrl, 'id', query.sort)}}
                 </th>
                 <th>{{ __('type') }}</th>
                 <th>{{ __('status') }}</th>
                 <th>
-                    {% if 'modified' in query.sort %}
-                    <i class="sort {% if query.sort == 'modified' %}up{% endif %}{% if query.sort == '-modified' %}down{% endif %}"></i>
-                    {% endif %}
-                    <a href="{{ baseUrl }}sort={% if query.sort == 'modified' %}-{% endif %}modified">
-                        {{ __('modified') }}
-                    </a>
+                    {{ Link.sort(baseUrl, 'modified', query.sort)}}
                 </th>
                 <th>-</th>
             </tr>
