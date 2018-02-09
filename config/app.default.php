@@ -440,9 +440,9 @@ return [
     /**
      * Pagination default settings
      *
-     * - Size => array of page size available on modules view index
+     * - sizeAvailable => available page size on modules view index
      */
     'Pagination' => [
-        'Sizes' => [10, 20, 50, 100]
+        'sizeAvailable' => [10, 20, 50, 100]
     ],
 ];
