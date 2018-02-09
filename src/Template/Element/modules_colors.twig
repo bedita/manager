@@ -1,0 +1,16 @@
+<style type="text/css">
+
+{% for name, color in config('Modules.colors') %}
+
+.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--{{ name }},
+.commands-menu__module--{{ name }} {
+    background-color: {{ color }};
+}
+
+.dashboard__module--{{ name }} {
+    background-color: {{ color }};
+}
+
+{% endfor %}
+
+</style>
