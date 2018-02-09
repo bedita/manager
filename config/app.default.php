@@ -436,4 +436,13 @@ return [
     //'Plugins' => [
     //    'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
     //],
+
+    /**
+     * Pagination default settings
+     *
+     * - sizeAvailable => available page size on modules view index
+     */
+    'Pagination' => [
+        'sizeAvailable' => [10, 20, 50, 100]
+    ],
 ];

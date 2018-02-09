@@ -1,5 +1,12 @@
 .toolbar_pagination {
+    .creation {
+        display: inline-block;
+    }
+    .results {
+        display: inline-block;
+    }
     .pagination {
+        display: inline-block;
         ul {
             display: flex;
             margin: 0;
@@ -13,5 +20,8 @@
                 }
             }
         }
+    }
+    .pageSize {
+        display: inline-block;
     }
 }
