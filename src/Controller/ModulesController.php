@@ -73,9 +73,11 @@ class ModulesController extends AppController
 
         $objects = (array)$response['data'];
         $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
 
         $this->set(compact('objects'));
         $this->set(compact('meta'));
+        $this->set(compact('links'));
 
         return null;
     }

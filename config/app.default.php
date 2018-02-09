@@ -407,6 +407,20 @@ return [
             'profiles',
             'users',
         ],
+
+        'colors' => [
+            'audio' => '#f03',
+            'documents' => '#f60',
+            'events' => '#09c',
+            'files' => '#f03',
+            'images' => '#f03',
+            'locations' => '#641',
+            'media' => '#f03',
+            'news' => '#036',
+            'profiles' => '#093',
+            'users' => '#555',
+            'videos' => '#f03',
+        ]
     ],
 
     /**
@@ -422,4 +436,13 @@ return [
     //'Plugins' => [
     //    'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
     //],
+
+    /**
+     * Pagination default settings
+     *
+     * - sizeAvailable => available page size on modules view index
+     */
+    'Pagination' => [
+        'sizeAvailable' => [10, 20, 50, 100]
+    ],
 ];
