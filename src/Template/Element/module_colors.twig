@@ -1,65 +1,16 @@
- <style type="text/css">
+<style type="text/css">
 
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--documents {
-    background-color: #f60;
-}
+{% for name, color in config('Modules.colors') %}
 
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--news,
-.commands-menu__module--news {
-    background-color: #036;
-}
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--events,
-.commands-menu__module--events {
-    background-color: #09c;
-}
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--locations,
-.commands-menu__module--locations {
-    background-color: #641;
-}
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--profiles,
-.commands-menu__module--profiles {
-    background-color: #093;
-}
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--users,
-.commands-menu__module--users {
-    background-color: #555;
+.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--{{ name }},
+.commands-menu__module--{{ name }} {
+    background-color: {{ color }};
 }
 
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--media,
-.commands-menu__module--media,
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--audio,
-.commands-menu__module--audio,
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--files,
-.commands-menu__module--files,
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--images,
-.commands-menu__module--images,
-.grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--videos,
- .commands-menu__module--videos
-{
-    background-color: #f03;
+.dashboard__module--{{ name }} {
+    background-color: {{ color }};
 }
 
-
-.dashboard__module--documents {
-    background-color: #f60;
-}
-.dashboard__module--news {
-    background-color: #036;
-}
-.dashboard__module--events {
-    background-color: #09c;
-}
-.dashboard__module--media, .dashboard__module--audio, .dashboard__module--files, .dashboard__module--images, .dashboard__module--videos {
-    background-color: #f03;
-}
-.dashboard__module--locations {
-    background-color: #641;
-}
-.dashboard__module--profiles {
-    background-color: #093;
-}
-.dashboard__module--users {
-    background-color: #555;
-}
+{% endfor %}
 
 </style>
