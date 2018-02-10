@@ -1,25 +1,25 @@
 // override default layout
 
-body {
+body.view-login  {
     height: 100vh;
     background-image: linear-gradient(to bottom right, $gray-500 0%, $white 100%);
     background-size: 100% 100vh;
     background-repeat: no-repeat;
-}
 
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    .grid-main-sidebar-1 {
-        display: none;
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .grid-main-sidebar-1 {
+            display: none;
+        }
     }
 }
 
 
 // logint tpl
-.tpl-login {
+body.view-login .tpl-login {
     position: relative;
     display: flex;
 
@@ -39,21 +39,18 @@ main {
     form {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
 
         > div {
             width: 240px;
-            &:last-of-type {
-                margin: $gutter 0 0;
-            }
         }
 
         label {
             font-size: 11px;
-            color: $gray-600;
+            color: $gray-550;
             font-weight: normal;
             padding-left: .25em;
-            margin: 2px 0 $gutter;
+            margin: 1px 0 $gutter;
         }
 
         label, input {
@@ -66,9 +63,11 @@ main {
         position: absolute;
         top: 100%;
         width: 100%;
-        margin-top: $gutter * 2;
-        padding: $gutter 2px 0;
-        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: $gutter;
+        padding: 0 2px 0;
+        font-size: .875em;
         font-weight: 300;
         line-height: 1.4em;
         color: $gray-600;
@@ -84,11 +83,14 @@ main {
             margin: 0 0 $gutter * 2;
         }
 
-        footer span {
+        footer {
             display: block;
-            height: 0;
-            visibility: hidden;
-            overflow: hidden;
+            span {
+                display: block;
+                height: 0;
+                visibility: hidden;
+                overflow: hidden;
+            }
         }
     }
 }
