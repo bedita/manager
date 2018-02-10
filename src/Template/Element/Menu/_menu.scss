@@ -70,6 +70,7 @@
         padding: 0;
 
         .modules-menu__module {
+            position: relative;
             width: 20px;
             height: 20px;
             margin-right: 1px;
@@ -78,6 +79,18 @@
             &.commands-menu__module--dashboard {
                 background-color: $white;
             }
+
+            &.current a:after {
+                content: '\00a0 ';
+                display: block;
+                position: absolute;
+                width: 6px; height: 6px;
+                top: 50%; margin-top: -3px;
+                left: 50%; margin-left: -3px;
+                background-color: $white;
+                opacity: .5;
+            }
+
             a {
                 position: relative;
                 display: block;

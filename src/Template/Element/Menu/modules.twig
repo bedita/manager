@@ -5,10 +5,9 @@
         </li>
 
         {% for module in modules %}
-        <li class="modules-menu__module commands-menu__module--{{ module.name }} {{ module.name == currentModule.name ? 'commands-menu__module--current' : '' }}">
+        <li class="modules-menu__module commands-menu__module--{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
         </li>
         {% endfor %}
-
     </ul>
 </nav>
