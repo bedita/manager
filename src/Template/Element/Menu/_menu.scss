@@ -75,6 +75,9 @@
             margin-right: 1px;
             background-color: $gray-600;
 
+            &.commands-menu__module--dashboard {
+                background-color: $white;
+            }
             a {
                 position: relative;
                 display: block;
