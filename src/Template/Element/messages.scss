@@ -1,7 +1,72 @@
 #messagesDiv {
     position: absolute;
-    width: 140px;
+    width: $grid-column-width - ($gutter *.5);
     font-size: 12px;
-    padding: 10px;
-    box-sizing: border-box;
+    z-index: 1000;
+
+
+    .message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: $gutter;
+        padding: $gutter / 2;
+        width: 100%;
+        min-height: 120px;
+        background-color: $gray-200;
+        border-width: 1px 0 0;
+        border-style: solid;
+        border-color: transparent;
+        opacity: 0;
+        visibility: hidden;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transition: .3s all;
+
+        &.on {
+            opacity: 1;
+            visibility: visible;
+            clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+        }
+
+        &.details {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            width: 580px;
+            pre {
+                display: initial;
+            }
+        }
+
+        h1, h2, p {
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.25em;
+        }
+
+        pre {
+            display: none;
+            width: 100%;
+            overflow: auto;
+        }
+
+        a.btn-close {
+            margin: auto 0 0;
+            border-top: 1px solid $gray-500;
+            padding: 2px 0 0 0;
+        }
+
+        &.success {
+            border-color: $gray-200;
+        }
+        &.info {
+            border-color: rgb(38, 84, 170);
+        }
+        &.error {
+            border-color: rgb(187, 26, 26);
+        }
+        &.warning {
+            border-color: rgb(202, 126, 26);
+        }
+    }
 }
