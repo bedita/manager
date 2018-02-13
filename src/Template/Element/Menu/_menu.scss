@@ -4,7 +4,10 @@
 
 .left-menu {
     > * {
-        margin: 0 0 $gutter 0;
+        margin: 0 0 $gutter * .5 0;
+    }
+    > *:empty {
+        display: none;
     }
 }
 
@@ -28,13 +31,14 @@
 .left-menu__user-menu {
     list-style: none;
     padding: 0;
-    border-top: 1px solid $gray-700;
-    border-bottom: 1px solid $gray-700;
 }
 .left-menu__user-menu li {
     line-height: 1.5em;
     padding: .5em 0;
     border-bottom: 1px solid $gray-500;
+    &:first-child {
+        padding-top: 0;
+    }
 }
 .left-menu__user-menu li:last-child {
     border-bottom: none;
@@ -126,6 +130,14 @@
 .commands-menu {
     width: $gutter * 10;
 
+    > * {
+        margin-bottom: $gutter * .5;
+    }
+
+    button, input[type=submit] {
+        width: 100%;
+    }
+
     a {
         display: block;
     }
@@ -136,7 +148,7 @@
     width: 100%;
     height: $gutter * 7.5;
     padding: 1em;
-    margin-bottom: $gutter;
+    margin-bottom: $gutter * .5;
     color: white;
     background-color: $gray-600;
     border-bottom: $gutter * 1.5 solid rgba(0, 0, 0, .3);

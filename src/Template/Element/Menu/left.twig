@@ -1,9 +1,7 @@
 <div class="left-menu">
     {{ Html.link((project.name ?: 'BEdita 4'), '/', {'class': 'left-menu__project'})|raw }}
 
-    <ul class="left-menu__links">
-        {{ _view.fetch('links')|raw }}
-    </ul>
+    <ul class="left-menu__links">{{ _view.fetch('links')|raw }}</ul>
 
     {#{% element 'tree' %}#}
 
