@@ -30,7 +30,11 @@ class AppView extends TwigView
         parent::initialize();
 
         $this->loadHelper('Flash');
-        $this->loadHelper('Form');
+        $this->loadHelper('Form', [
+            'templates' => [
+                'hiddenBlock' => '{{content}}',
+            ],
+        ]);
         $this->loadHelper('Html');
         $this->loadHelper('Link');
         $this->loadHelper('Schema');

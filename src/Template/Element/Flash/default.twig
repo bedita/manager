@@ -1,7 +1,6 @@
 {% set level = level|default('info') %}
 
-<div class="message {{ params.class|default('') }}">
-
+<div class="message on {{ level }} {{ params.class|default('') }}">
     <h2>
         {% if level == 'error' %}
             {{ __('Error') }}
@@ -24,16 +23,14 @@
         {% endif %}
     </p>
 
-    <hr />
-
     {% if params %}
-        <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.setAttribute('hidden', true);">
+        <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.parentNode.classList.add('details');this.setAttribute('hidden', true);">
             {{ __('Show details') }}
         </a>
-        <pre hidden><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+        <pre><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
     {% endif %}
 
-    <a href="javascript:void(0)" onclick="this.parentNode.setAttribute('hidden', true);">
+    <a href="javascript:void(0)" class="btn-close" onclick="this.parentNode.classList.remove('on');">
         {{ __('Close') }}
     </a>
 </div>

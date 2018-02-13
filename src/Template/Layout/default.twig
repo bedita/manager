@@ -33,12 +33,11 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% element 'json_meta_config' %}
 </head>
 
-<body>
-
-{% element 'messages' %}
+<body class="{% if currentModule %}module-{{ currentModule.name }} {% endif %} {{ _view.fetch('bodyViewClass') }}">
 
 <main>
     <aside class="grid-main-sidebar-1">
+        {% element 'messages' %}
         {% element 'Menu/left' %}
     </aside>
 

@@ -63,20 +63,19 @@ class LinkHelper extends Helper
      */
     public function sort($field)
     {
-        $html = '';
+        $class = '';
         $query = $this->request->query;
         $sortValue = $field; // <= ascendant order
         if (!empty($query) && in_array('sort', array_keys($query))) {
             if ($query['sort'] === $field) { // it was ascendant sort
-                $html .= '<i class="sort down"></i>';
+                $class = 'sort down';
                 $sortValue = '-' . $field; // <= descendant order
             } elseif ($query['sort'] === ('-' . $field)) { // it was descendant sort
-                $html .= '<i class="sort up"></i>';
+                $class = 'sort up';
             }
         }
         $url = $this->replaceParamUrl('sort', $sortValue);
-        $html .= '<a href="' . $url . '">' . __($field) . '</a>';
-        echo $html;
+        echo '<a href="' . $url . '" class="' . $class . '">' . __($field) . '</a>';
     }
 
     /**
