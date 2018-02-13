@@ -19,7 +19,7 @@ input[type=submit] {
     // text-decoration: none;
     // text-transform: uppercase;
 }
-input[type=submit]:hover {
+input[type=submit]:hover, button:hover {
     background-color: #666;
     color: #FFF;
     outline: 0;
