@@ -33,7 +33,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% element 'json_meta_config' %}
 </head>
 
-<body class="{{ currentModule.name }} {{ _view.fetch('bodyViewClass') }}">
+<body class="{% if currentModule %}module-{{ currentModule.name }} {% endif %} {{ _view.fetch('bodyViewClass') }}">
 
 <main>
     <aside class="grid-main-sidebar-1">

@@ -1,6 +1,6 @@
 #messagesDiv {
     position: absolute;
-    width: $grid-column-width * 2;
+    width: $grid-column-width - ($gutter *.5);
     font-size: 12px;
     z-index: 1000;
 
@@ -10,10 +10,10 @@
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: $gutter;
-        padding: $gutter;
+        padding: $gutter / 2;
         width: 100%;
-        min-height: 110px;
-        background-color: $gray-100;
+        min-height: 120px;
+        background-color: $gray-200;
         border-width: 1px 0 0;
         border-style: solid;
         border-color: transparent;
@@ -25,7 +25,7 @@
         &.on {
             opacity: 1;
             visibility: visible;
-            clip-path: polygon(0 0, 100% 0, 58% 100%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
         }
 
         &.details {
@@ -36,9 +36,12 @@
             }
         }
 
-
         h1, h2, p {
-            margin: 0 0 $gutter;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.25em;
         }
 
         pre {
@@ -48,16 +51,16 @@
         }
 
         a.btn-close {
-            justify-self: flex-end;
+            margin: auto 0 0;
             border-top: 1px solid $gray-500;
-            padding: 5px 0 0 0;
+            padding: 2px 0 0 0;
         }
 
         &.success {
-            border-color: rgb(38, 84, 170);
+            border-color: $gray-200;
         }
         &.info {
-            border-color: rgb(53, 119, 62);
+            border-color: rgb(38, 84, 170);
         }
         &.error {
             border-color: rgb(187, 26, 26);

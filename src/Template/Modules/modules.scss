@@ -1,16 +1,73 @@
-.module {
-    i.sort {
-        border: solid black;
-        border-width: 0 3px 3px 0;
-        display: inline-block;
-        padding: 3px;
+.view-modules {
+
+    .list-objects {
+        display: table;
+        border-collapse: collapse;
+
+        > nav {
+            display: table-row;
+
+            &.table-header {
+                border-bottom: 1px solid $gray-500;
+
+                a.sort {
+                    display: flex;
+                    align-items: center;
+
+                    &:after {
+                        content: "›";
+                        margin-left: 10px;
+                        display: inline-block;
+                        font-size: 1.5em;
+                        line-height: 21px;
+                    }
+
+                    &.up:after {
+                        transform: rotate(-90deg);
+                    }
+                    &.down:after {
+                        transform: rotate(90deg);
+                    }
+                }
+            }
+        }
+
+        > a {
+            display: table-row;
+
+            &:hover {
+                background-color: $gray-400;
+            }
+        }
+
+        > nav, > a {
+            div {
+                display: table-cell;
+                padding: $gutter * .5;
+                white-space: nowrap;
+                &:first-child {
+                    padding-left: 2px;
+                    text-overflow: ellipsis;
+                    overflow-x: hidden;
+                }
+                &:last-child { padding-right: 2px; }
+            }
+        }
     }
-    .up {
-        transform: rotate(-135deg);
-        -webkit-transform: rotate(-135deg);
-    }
-    .down {
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-    }
+
+
+    // i.sort {
+    //     border: solid black;
+    //     border-width: 0 3px 3px 0;
+    //     display: inline-block;
+    //     padding: 3px;
+    // }
+    // .up {
+    //     transform: rotate(-135deg);
+    //     -webkit-transform: rotate(-135deg);
+    // }
+    // .down {
+    //     transform: rotate(45deg);
+    //     -webkit-transform: rotate(45deg);
+    // }
 }
