@@ -1,0 +1,30 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    $('input[value=Reset]').click(function(event){
+        event.preventDefault();
+        $('input[name=filterQuery]').val('');
+        $('#form--search').submit();
+    });
+});
+</script>
+
+<div class="toolbar_filters">
+
+    {{ Form.create(null, {
+        'url': {'_name': 'modules:search', 'object_type': objectType},
+        'id': 'form--search',
+    })|raw }}
+
+    {{ Form.text('filterQuery', {
+        'class': 'search',
+        'placeholder': __('Search in BEdita'),
+    }) | raw }}
+
+    {{ Form.submit(__('Apply'))|raw }}
+
+    {% if query %}
+    {{ Form.submit(__('Reset'))|raw }}
+    {% endif %}
+
+    {{ Form.end()|raw }}
+</div>

@@ -99,6 +99,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
+        '/:object_type/search',
+        ['controller' => 'Modules', 'action' => 'search'],
+        ['_name' => 'modules:search']
+    );
+    $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']

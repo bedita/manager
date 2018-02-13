@@ -205,4 +205,41 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
         ]);
     }
+
+    /**
+     * Search applying view filters.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function search() : ?Response
+    {
+        $this->request->allowMethod(['post']);
+        $q = ($this->request->getData()['filterQuery']) ? $this->request->getData()['filterQuery'] : '';
+        $query = compact('q');
+        try {
+            $response = $this->apiClient->getObjects($this->objectType, $query);
+        } catch (BEditaClientException $e) {
+            // Error! Back to dashboard.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect([
+                '_name' => 'modules:list',
+                'object_type' => $this->objectType,
+            ]);
+        }
+
+        $objects = (array)$response['data'];
+        $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
+
+        $this->set(compact('objects'));
+        $this->set(compact('meta'));
+        $this->set(compact('links'));
+        $this->set(compact('query'));
+
+        $this->render('index');
+
+        return null;
+    }
 }
