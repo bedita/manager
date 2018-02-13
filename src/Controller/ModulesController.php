@@ -61,9 +61,8 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $query = $this->request->getQueryParams();
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $query);
+            $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
@@ -79,10 +78,6 @@ class ModulesController extends AppController
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
-
-        if (!empty($query['q'])) {
-            $this->set('searchtext', $query['q']);
-        }
 
         return null;
     }

@@ -121,6 +121,17 @@ class LinkHelper extends Helper
     }
 
     /**
+     * Utility to get query param by name
+     *
+     * @param string|null $name the query parameter.
+     * @return string|null
+     */
+    public function query($name = null)
+    {
+        return $this->request->getQuery($name);
+    }
+
+    /**
      * Replace parameter on url.
      *
      * @param string $parameter parameter name.

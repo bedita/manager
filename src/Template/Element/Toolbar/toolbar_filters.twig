@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 <div class="toolbar_filters">
 
-    <input type="text" class="search" name="filterquery" placeholder="{{ __('Search in BEdita') }}" value="{{ searchtext | raw }}" />
+    <input type="text" class="search" name="filterquery" placeholder="{{ __('Search in BEdita') }}" value="{{ Link.query('q') }}" />
 
     <button name="applysearch">{{ __('Apply') }}</button>
     <button name="resetsearch">{{ __('Reset') }}</button>
