@@ -134,6 +134,10 @@
         margin-bottom: $gutter * .5;
     }
 
+    button, input[type=submit] {
+        width: 100%;
+    }
+
     a {
         display: block;
     }
