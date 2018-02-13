@@ -1,30 +1,31 @@
+{% set here=Link.here({'exclude': 'q'}) %}
+
 <script type="text/javascript">
 $(document).ready(function(){
-    $('input[value=Reset]').click(function(event){
+    $('button[name=applysearch]').click(function(event){
         event.preventDefault();
-        $('input[name=filterQuery]').val('');
-        $('#form--search').submit();
+        let uri = '{{ here }}';
+        if (uri.indexOf('?') > 0) {
+            uri+= '&q=' + $('input[name=filterquery]').val();
+        } else {
+            uri+= '?q=' + $('input[name=filterquery]').val();
+        }
+        window.location.replace(uri);
+    });
+    $('button[name=resetsearch]').click(function(event){
+        event.preventDefault();
+        let uri = '{{ here }}';
+        $('input[name=filterquery]').val('');
+        window.location.replace(uri);
     });
 });
 </script>
 
 <div class="toolbar_filters">
 
-    {{ Form.create(null, {
-        'url': {'_name': 'modules:search', 'object_type': objectType},
-        'id': 'form--search',
-    })|raw }}
+    <input type="text" class="search" name="filterquery" placeholder="{{ __('Search in BEdita') }}" />
 
-    {{ Form.text('filterQuery', {
-        'class': 'search',
-        'placeholder': __('Search in BEdita'),
-    }) | raw }}
+    <button name="applysearch">{{ __('Apply') }}</button>
+    <button name="resetsearch">{{ __('Reset') }}</button>
 
-    {{ Form.submit(__('Apply'))|raw }}
-
-    {% if query %}
-    {{ Form.submit(__('Reset'))|raw }}
-    {% endif %}
-
-    {{ Form.end()|raw }}
 </div>

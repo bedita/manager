@@ -102,6 +102,26 @@ class LinkHelper extends Helper
     }
 
     /**
+     * Return url for current page
+     *
+     * @param array $options options for query
+     * @return string url
+     */
+    public function here($options = [])
+    {
+        $query = $this->request->query;
+        if (empty($query)) {
+            return $this->webBaseUrl . $this->request->here;
+        }
+
+        if ($options['exclude']) {
+            unset($query[$options['exclude']]);
+        }
+
+        return $this->webBaseUrl . $this->request->here . '?' . http_build_query($query);
+    }
+
+    /**
      * Replace parameter on url.
      *
      * @param string $parameter parameter name.
