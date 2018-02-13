@@ -1,5 +1,5 @@
+// index
 .view-modules {
-
     .list-objects {
         display: table;
         border-collapse: collapse;
@@ -47,27 +47,38 @@
                 white-space: nowrap;
                 &:first-child {
                     padding-left: 2px;
+                    max-width: 13em;
                     text-overflow: ellipsis;
                     overflow-x: hidden;
                 }
-                &:last-child { padding-right: 2px; }
+                &:last-child {
+                    padding-right: 2px;
+                }
+            }
+        }
+
+        button {
+            line-height: initial;
+        }
+    }
+}
+
+
+// view
+.view-modules-form {
+    form {
+        label {
+            display: block;
+        }
+        input[type=text], textarea {
+            min-width: 480px;
+        }
+        fieldset {
+            padding: 0;
+
+            > div {
+                margin: 10px 0;
             }
         }
     }
-
-
-    // i.sort {
-    //     border: solid black;
-    //     border-width: 0 3px 3px 0;
-    //     display: inline-block;
-    //     padding: 3px;
-    // }
-    // .up {
-    //     transform: rotate(-135deg);
-    //     -webkit-transform: rotate(-135deg);
-    // }
-    // .down {
-    //     transform: rotate(45deg);
-    //     -webkit-transform: rotate(45deg);
-    // }
 }

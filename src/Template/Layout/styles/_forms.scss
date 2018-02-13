@@ -1,10 +1,11 @@
 //  TUTTO DA FARE MA PRIMA L'HTML
 
-input[type=text], input[type=password], input[type=submit], textarea {
+input[type=text], input[type=password], input[type=submit], textarea, button {
     line-height: 1.5em;
     border-radius: 4px;
     border: 1px solid $gray-500;
     padding: .5em;
+    min-width: 5rem;
 }
 
 input[type=submit] {
@@ -25,20 +26,9 @@ input[type=submit]:hover {
     cursor: pointer;
 }
 
-.module {
-    form {
-        label {
-            display: block;
-        }
-        input[type=text], textarea {
-            min-width: 480px;
-        }
-        fieldset {
-            padding: 0;
-
-            > div {
-                margin: 10px 0;
-            }
-        }
+label {
+    font-weight: normal;
+    > input {
+        margin-right: $gutter * .5;
     }
 }
