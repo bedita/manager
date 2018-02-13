@@ -22,7 +22,8 @@ body.view-login  {
 // logint tpl
 body.view-login .tpl-login {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template: "login-logo login-form" "login-footer login-footer";
 
     &:before {
         content: '\00a0 ';
@@ -61,10 +62,9 @@ body.view-login .tpl-login {
     }
 
     footer {
-        position: absolute;
-        top: 100%;
-        width: 100%;
+        grid-area: login-footer;
         display: flex;
+        flex-grow: 0;
         justify-content: space-between;
         margin-top: $gutter;
         padding: 0 2px 0;
