@@ -83,6 +83,7 @@ class ModulesController extends AppController
         if (!empty($query['q'])) {
             $this->set('searchtext', $query['q']);
         }
+
         return null;
     }
 
