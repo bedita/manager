@@ -12,7 +12,9 @@
  */
 namespace App\Controller;
 
+use App\Model\API\BEditaClientException;
 use Cake\Http\Response;
+use Psr\Log\LogLevel;
 
 /**
  * Perform basic login and logout operations.
@@ -35,18 +37,27 @@ class LoginController extends AppController
         }
 
         // Attempted login.
-        $user = $this->Auth->identify();
-        if ($user) {
+        $user = null;
+        $reason = 'Username or password is incorrect';
+        try {
+            $user = $this->Auth->identify();
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $attributes = $e->getAttributes();
+            if (!empty($attributes['reason'])) {
+                $reason = $attributes['reason'];
+            }
+        }
+        if (!empty($user)) {
             // Successful login. Redirect.
             $this->Auth->setUser($user);
-
             $this->Flash->success(__('Successfully logged in'));
 
             return $this->redirect($this->Auth->redirectUrl());
         }
 
         // Failed login.
-        $this->Flash->error(__('Username or password is incorrect'));
+        $this->Flash->error(__($reason));
 
         return null;
     }

@@ -12,7 +12,10 @@ body.view-login  {
         justify-content: center;
         align-items: center;
         height: 100%;
-        .grid-main-sidebar-1 {
+        .messagesDiv {
+            display: block;
+        }
+        .left-menu {
             display: none;
         }
     }
