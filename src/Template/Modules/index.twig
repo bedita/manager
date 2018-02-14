@@ -18,7 +18,7 @@
 
         {% for object in objects %}
             <a
-                href="{{ Url.build({'_name': 'modules:view', 'object_type': objectType, 'id': object.id}) }}"
+                href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
                 title="{{ object.attributes.title }}"
                 class="object-status-{{ object.attributes.status }}">
                     <div>{{ object.attributes.title }}</div>
@@ -28,7 +28,7 @@
                     <div>{{ Time.format(object.meta.modified) }}</div>
                     <div>
                     {% if in_array('DELETE', currentModule.hints.allow) %}
-                        {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})|raw }}
+                        {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
                     {% endif %}
                     </div>
             </a>
