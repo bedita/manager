@@ -1,4 +1,4 @@
-{% do _view.assign('title', __('Trash')) %}
+{% do _view.assign('title', currentModule.name|humanize) %}
 
 <div class="view-modules">
 
@@ -6,34 +6,37 @@
 
     {% element 'Toolbar/toolbar_filters' %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>{{ Link.sort('title')}}</th>
-                <th>{{ Link.sort('id')}}</th>
-                <th>{{ __('type') }}</th>
-                <th>{{ __('status') }}</th>
-                <th>{{ Link.sort('modified')}}</th>
-                <th>-</th>
-            </tr>
-        </thead>
+    <div class="list-objects">
+        <nav class="table-header">
+            <div>{{ Link.sort('title')}}</div>
+            <div>{{ Link.sort('id')}}</div>
+            <div>{{ __('type') }}</div>
+            <div>{{ __('status') }}</div>
+            <div>{{ Link.sort('modified')}}</div>
+            <div></div>
+        </nav>
 
-        <tbody>
         {% for object in objects %}
-            <tr class="obj {{ object.attributes.status }}">
-                <td>{{ Html.link(object.attributes.title, {'_name': 'trash:view', 'id': object.id})|raw }}</td>
-                <td>{{ object.id }}</td>
-                <td>{{ object.type }}</td>
-                <td>{{ object.attributes.status }}</td>
-                <td>{{ Time.format(object.meta.modified) }}</td>
-                <td>
-                    {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})|raw }}
-                    {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})|raw }}
-                </td>
-            </tr>
+            <a
+                href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
+                title="{{ object.attributes.title }}"
+                class="object-status-{{ object.attributes.status }}">
+                    <div>{{ object.attributes.title }}</div>
+                    <div>{{ object.id }}</div>
+                    <div>{{ object.type }}</div>
+                    <div>{{ object.attributes.status }}</div>
+                    <div>{{ Time.format(object.meta.modified) }}</div>
+                    <div>
+                    {% if in_array('PATCH', currentModule.hints.allow) %}
+                        {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})|raw }}
+                    {% endif %}
+                    {% if in_array('DELETE', currentModule.hints.allow) %}
+                        {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})|raw }}
+                    {% endif %}
+                    </div>
+            </a>
         {% else %}
-            <tr><td colspan="100">{{ __('No items found') }}</td></tr>
+            {{ __('No items found') }}
         {% endfor %}
-        </tbody>
     </table>
 </div>
