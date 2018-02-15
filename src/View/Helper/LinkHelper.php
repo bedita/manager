@@ -109,11 +109,11 @@ class LinkHelper extends Helper
     public function here($options = [])
     {
         $query = $this->request->query;
-        if (empty($query) || $options['no-query']) {
+        if (empty($query) || !empty($options['no-query'])) {
             return $this->webBaseUrl . $this->request->here;
         }
 
-        if ($options['exclude']) {
+        if (isset($options['exclude'])) {
             unset($query[$options['exclude']]);
         }
 
