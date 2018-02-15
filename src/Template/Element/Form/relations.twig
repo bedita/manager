@@ -1,0 +1,37 @@
+{% set here=Link.here({'no-query': true}) %}
+
+<style>
+    .relations button {
+        margin: 0 0 1em;
+    }
+    {% for key, val in object.relationships %}
+    .loader-{{key}} {
+        display: none;
+    }
+    {% endfor %}
+</style>
+<script>
+    $(document).ready(function() {
+        $('.load-relation').on('click', (ev) => {
+            ev.preventDefault();
+            let relationName = ev.currentTarget.getAttribute('data-relation-name');
+            let relationUrl = "{{ here }}/related/" + relationName;
+            let targetSelector = 'div.rel-' + relationName;
+            let loader = 'div.loader-' + relationName;
+            $(loader).show();
+            $.get(relationUrl, function( data ) {
+                $(targetSelector).html(data);
+                $(ev.currentTarget).hide();;
+                $(loader).hide();
+            });
+        });
+    });
+</script>
+<div class="relations">
+{% for key, val in object.relationships %}
+    <h1>{{ key }}</h1>
+    <button class="load-relation" data-relation-name="{{ key }}">{{ __('Load') }}</button>
+    <div class="loader-{{ key }}">{{ __('Loading data ...') }}</div>
+    <div class="rel-{{ key }}"></div>
+{% endfor %}
+</div>
