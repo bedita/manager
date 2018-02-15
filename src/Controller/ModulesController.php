@@ -217,22 +217,22 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
         $response = null;
-        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
+        $path = sprintf('/sss/%s/%s/%s', $this->objectType, $id, $relation);
+        $this->set(compact('relation'));
 
         try {
             $response = $this->apiClient->get($path, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
+            $this->set('error', $e);
+
+            return;
         }
 
-        $objects = $meta = $links = [];
-        if (!empty($response)) {
-            $objects = (array)$response['data'];
-            $meta = (array)$response['meta'];
-            $links = (array)$response['links'];
-        }
+        $objects = (array)$response['data'];
+        $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
 
-        $this->set(compact('relation'));
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
