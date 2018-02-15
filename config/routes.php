@@ -104,6 +104,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:view']
     );
     $routes->connect(
+        '/:object_type/view/:id/related/:relation',
+        ['controller' => 'Modules', 'action' => 'related'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:related']
+    );
+    $routes->connect(
         '/:object_type/create',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']

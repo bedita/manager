@@ -205,4 +205,36 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
         ]);
     }
+
+    /**
+     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     *
+     * @param string|int $id the object identifier.
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function related($id, $relation)
+    {
+        $this->request->allowMethod(['get']);
+        $response = null;
+        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
+        $this->set(compact('relation'));
+
+        try {
+            $response = $this->apiClient->get($path, $this->request->getQueryParams());
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->set('error', $e);
+
+            return;
+        }
+
+        $objects = (array)$response['data'];
+        $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
+
+        $this->set(compact('objects'));
+        $this->set(compact('meta'));
+        $this->set(compact('links'));
+    }
 }

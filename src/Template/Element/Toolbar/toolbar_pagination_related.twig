@@ -1,0 +1,60 @@
+{% set here=Link.here({'no-query': true}) %}
+{% set paging = meta.pagination %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('select[name={{ relation }}PageSize]').change(function(event){
+        let relationUrl = "{{ here }}?page_size=" + event.target.value;
+        let targetSelector = 'div.rel-{{ relation }}';
+        let loader = 'div.loader-{{ relation }}';
+        $(loader).show();
+        $.get(relationUrl, function( data ) {
+            $(targetSelector).html(data);
+            $(loader).hide();
+        });
+    });
+    $('a.relatedPage').on('click', (ev) => {
+        ev.preventDefault();
+        let page = ev.target.getAttribute('data-page');
+        let relationUrl = "{{ here }}?page_size=" + $('select[name={{ relation }}PageSize]').val() + '&page=' + page;
+        let targetSelector = 'div.rel-{{ relation }}';
+        let loader = 'div.loader-{{ relation }}';
+        $(loader).show();
+        $.get(relationUrl, function( data ) {
+            $(targetSelector).html(data);
+            $(loader).hide();
+        });
+    });
+});
+</script>
+
+<div class="toolbar_pagination">
+
+    <div class="results">
+        {{ paging.count }} {{ currentModule.name }}
+    </div>
+
+    <div class="pagination">
+        <ul>
+            <li>{{ __('Page') }} {{ paging.page }} / {{ paging.page_count }}</li>
+            <li><a class="relatedPage" href="#" data-href="{{ Link.fromAPI(links.first) }}">{{ __('First') }} </a></li>
+            {% if links.prev %}
+            <li><a class="relatedPage" data-page="{{ paging.page - 1 }}">{{ __('Prev') }} </a></li>
+            {% endif %}
+            {% if links.next %}
+            <li><a class="relatedPage" data-page="{{ paging.page + 1 }}">{{ __('Next') }} </a></li>
+            {% endif %}
+            <li><a class="relatedPage" data-page="{{ paging.page_count }}">{{ __('Last') }} </a></li>
+        </ul>
+    </div>
+
+    <div class="pageSize">
+        {{ __('Page Size') }}:
+        <select name="{{ relation }}PageSize">
+        {% for size in config('Pagination.sizeAvailable') %}
+            <option value="{{ size }}" {% if paging.page_size == size %}selected="selected"{% endif %}>{{ size }}</option>
+        {% endfor %}
+        </select>
+    </div>
+
+</div>
