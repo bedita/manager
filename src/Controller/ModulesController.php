@@ -217,7 +217,7 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
         $response = null;
-        $path = sprintf('/sss/%s/%s/%s', $this->objectType, $id, $relation);
+        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
         $this->set(compact('relation'));
 
         try {
