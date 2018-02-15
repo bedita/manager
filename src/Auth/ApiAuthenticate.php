@@ -48,7 +48,7 @@ class ApiAuthenticate extends BaseAuthenticate
      */
     public function authenticate(ServerRequest $request, Response $response)
     {
-        /** @var \App\Model\API\BEditaClient $apiClient */
+        /** @var \BEdita\SDK\BEditaClient $apiClient */
         $apiClient = $this->getConfig('apiClient');
 
         $usernameField = $this->getConfig('fields.username', 'username');
