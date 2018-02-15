@@ -12,7 +12,7 @@
  */
 namespace App\Controller;
 
-use App\Model\API\BEditaClient;
+use BEdita\SDK\BEditaClient;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -29,7 +29,7 @@ class AppController extends Controller
     /**
      * BEdita4 API client
      *
-     * @var \App\Model\API\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $apiClient = null;
 

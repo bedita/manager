@@ -12,7 +12,7 @@
  */
 namespace App\Controller\Component;
 
-use App\Model\API\BEditaClientException;
+use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Psr\Log\LogLevel;
@@ -78,7 +78,7 @@ class SchemaComponent extends Component
      */
     protected function fetchSchema(string $type)
     {
-        /** @var \App\Model\API\BEditaClient */
+        /** @var \BEdita\SDK\BEditaClient */
         $apiClient = $this->getConfig('apiClient');
 
         return $apiClient->schema($type);
