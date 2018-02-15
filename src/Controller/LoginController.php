@@ -42,7 +42,7 @@ class LoginController extends AppController
         try {
             $user = $this->Auth->identify();
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log('Login failed - ' . $e->getMessage(), LogLevel::INFO);
             $attributes = $e->getAttributes();
             if (!empty($attributes['reason'])) {
                 $reason = $attributes['reason'];
