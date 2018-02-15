@@ -14,8 +14,8 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
-use App\Model\API\BEditaClient;
-use App\Model\API\BEditaClientException;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;

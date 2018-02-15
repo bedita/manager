@@ -12,7 +12,7 @@
  */
 namespace App\Controller;
 
-use App\Model\API\BEditaClientException;
+use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Psr\Log\LogLevel;

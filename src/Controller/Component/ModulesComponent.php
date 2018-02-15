@@ -13,7 +13,7 @@
 
 namespace App\Controller\Component;
 
-use App\Model\API\BEditaClientException;
+use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
