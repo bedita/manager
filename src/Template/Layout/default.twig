@@ -40,10 +40,12 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 <body class="{% if currentModule %}module-{{ currentModule.name }} {% endif %} {{ _view.fetch('bodyViewClass') }}">
 
 <main>
-    <aside class="grid-main-sidebar-1">
-        {% element 'messages' %}
-        {% element 'Menu/left' %}
-    </aside>
+    {% if _view.template != 'login' %}
+        <aside class="grid-main-sidebar-1">
+            {% element 'Messages/messages' %}
+            {% element 'Menu/left' %}
+        </aside>
+    {% endif %}
 
     {% if currentModule %}
         <aside class="grid-main-sidebar-2">

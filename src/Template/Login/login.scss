@@ -97,4 +97,24 @@ body.view-login .tpl-login {
             }
         }
     }
+
+    #messagesDiv {
+        width: 180px;
+        bottom: 100%;
+        margin-bottom: 1px;
+        @media screen and (max-width: 960px) {
+            width: 100%;
+        }
+
+        .message {
+            margin: 0;
+            border: none;
+            background-color: #900;
+            color: #fff;
+            clip-path: none;
+            min-height: auto;
+            h2 { display: none; }
+            a { display: none; }
+        }
+    }
 }

@@ -2,6 +2,8 @@
 {% do _view.assign('bodyViewClass', 'view-login') %}
 
 <div class="tpl-login">
+    {% element 'Messages/messages' %}
+
     {{ Form.create(null, {
         'url': {'_name': 'login'},
     })|raw }}
