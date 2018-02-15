@@ -19,6 +19,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
     {{ Html.css(['style'])|raw }}
+    {#
+    {{ Html.css(['be-icons-font'])|raw }}
+    {{ Html.css(['be-icons-codes'])|raw }}
+    #}
     {% element 'modules_colors' %}
 
     {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
@@ -36,10 +40,12 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 <body class="{% if currentModule %}module-{{ currentModule.name }} {% endif %} {{ _view.fetch('bodyViewClass') }}">
 
 <main>
-    <aside class="grid-main-sidebar-1">
-        {% element 'messages' %}
-        {% element 'Menu/left' %}
-    </aside>
+    {% if _view.template != 'login' %}
+        <aside class="grid-main-sidebar-1">
+            {% element 'Messages/messages' %}
+            {% element 'Menu/left' %}
+        </aside>
+    {% endif %}
 
     {% if currentModule %}
         <aside class="grid-main-sidebar-2">
