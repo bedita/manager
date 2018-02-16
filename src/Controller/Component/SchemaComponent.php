@@ -84,7 +84,7 @@ class SchemaComponent extends Component
      * @param string $revision Schema revision.
      * @return array|bool Cached schema if revision match, otherwise false
      */
-    protected function loadWithRevision(string $type, string $revision)
+    protected function loadWithRevision(string $type, string $revision = null)
     {
         $schema = Cache::read($type, self::CACHE_CONFIG);
         if ($schema === false) {
