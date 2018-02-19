@@ -27,16 +27,22 @@ $(document).ready(function(){
 
 <fieldset id="object_properties">
 
+{% set jsonKeys = [] %}
 {% for key, value in object.attributes %}
     {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
         {% set property = schema.properties[key] %}
         {% set type = Schema.getTypeFromSchema(property) %}
         {% if type == 'json' %}
+            {% set jsonKeys = jsonKeys|merge([key]) %}
             {{ Form.control(key, {'type': 'textarea', 'class': 'json', 'value': value|json_encode})|raw }}
         {% else %}
             {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
         {% endif %}
     {% endif %}
 {% endfor %}
+{% if jsonKeys %}
+    {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
+{% endif %}
+
 
 </fieldset>
