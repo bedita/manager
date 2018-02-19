@@ -1,3 +1,27 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    $('textarea.json').change(function(event){
+        if (event && event.target && event.target.value) {
+            try {
+                let jsonString = JSON.stringify(JSON.parse(event.target.value), null, "    ");
+                $(event.target).val(jsonString);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    });
+    $('textarea.json').each(function(){
+        if (this.value) {
+            try {
+                let jsonString = JSON.stringify(JSON.parse(this.value), null, "    ");
+                $(this).val(jsonString);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    });
+});
+</script>
 
 <div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
 
@@ -5,7 +29,13 @@
 
 {% for key, value in object.attributes %}
     {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
-        {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(schema.properties[key])})|raw }}
+        {% set property = schema.properties[key] %}
+        {% set type = Schema.getTypeFromSchema(property) %}
+        {% if type == 'json' %}
+        <textarea class="json">{{ value|json_encode }}</textarea>
+        {% else %}
+        {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
+        {% endif %}
     {% endif %}
 {% endfor %}
 

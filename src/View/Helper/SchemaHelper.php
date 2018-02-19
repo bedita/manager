@@ -64,8 +64,44 @@ class SchemaHelper extends Helper
 
             case 'boolean':
                 return 'checkbox';
+
+            case 'object':
+                return 'textarea';
         }
 
         return 'text';
+    }
+
+    /**
+     * Get object type from property schema.
+     *
+     * @param mixed $schema Property schema.
+     * @return string|null
+     */
+    public function getTypeFromSchema($schema) : string
+    {
+        if (!is_array($schema)) {
+            return null;
+        }
+
+        if (!empty($schema['oneOf'])) {
+            foreach ($schema['oneOf'] as $subSchema) {
+                if (!empty($subSchema['type']) && $subSchema['type'] === 'null') {
+                    continue;
+                }
+
+                return $this->getTypeFromSchema($subSchema);
+            }
+        }
+
+        if (empty($schema['type'])) {
+            return null;
+        }
+
+        if ($schema['type'] === 'object') {
+            return 'json';
+        }
+
+        return $schema['type'];
     }
 }
