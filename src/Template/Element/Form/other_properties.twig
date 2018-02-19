@@ -34,7 +34,7 @@ $(document).ready(function(){
         {% if type == 'json' %}
             {{ Form.control(key, {'type': 'textarea', 'class': 'json', 'value': value|json_encode})|raw }}
         {% else %}
-        {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
+            {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
         {% endif %}
     {% endif %}
 {% endfor %}
