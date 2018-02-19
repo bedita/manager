@@ -13,8 +13,9 @@ $(document).ready(function(){
     $('textarea.json').each(function(){
         if (this.value) {
             try {
-                let jsonString = JSON.stringify(JSON.parse(this.value), null, "    ");
-                $(this).val(jsonString);
+                let key = 'json-' + this.getAttribute('id');
+                let val = $('#'+key).val();
+                $(this).val(JSON.stringify(JSON.parse(val), null, "    "));
             } catch(e) {
                 console.error(e);
             }
@@ -32,7 +33,8 @@ $(document).ready(function(){
         {% set property = schema.properties[key] %}
         {% set type = Schema.getTypeFromSchema(property) %}
         {% if type == 'json' %}
-        <textarea class="json">{{ value|json_encode }}</textarea>
+            {{ Form.control(key, {'type': 'textarea', 'class': 'json'})|raw }}
+            <textarea id="json-{{ key }}" class="hidden">{{ value|json_encode }}</textarea>
         {% else %}
         {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
         {% endif %}
