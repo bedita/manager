@@ -160,9 +160,9 @@ class ModulesController extends AppController
         if (!empty($data['_jsonKeys'])) {
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
-                $decoded = json_decode($data[$key]);
-                $this->request->data[$key] = $decoded;
+                $this->request->data[$key] = json_decode($data[$key]);
             }
+            unset($this->request->data['_jsonKeys']);
         }
         try {
             $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
