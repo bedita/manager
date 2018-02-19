@@ -64,9 +64,6 @@ class SchemaHelper extends Helper
 
             case 'boolean':
                 return 'checkbox';
-
-            case 'object':
-                return 'textarea';
         }
 
         return 'text';
