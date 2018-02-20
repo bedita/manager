@@ -15,6 +15,7 @@ namespace App\Controller;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -103,7 +104,8 @@ class ModulesController extends AppController
         }
 
         $object = $response['data'];
-        $schema = $this->Schema->getSchema();
+        $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
+        $schema = $this->Schema->getSchema($this->objectType, $revision);
 
         $this->set(compact('object', 'schema'));
 
@@ -155,7 +157,7 @@ class ModulesController extends AppController
     public function save() : Response
     {
         $this->request->allowMethod(['post']);
-
+        $this->prepareRequest();
         try {
             $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
         } catch (BEditaClientException $e) {

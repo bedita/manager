@@ -25,9 +25,26 @@
 {% element 'messages' %}
 
 <main>
-    {% element 'Menu/left' %}
+    {% if _view.template != 'login' %}
+        <aside class="grid-main-sidebar-1">
+            {% element 'Messages/messages' %}
+            {% element 'Menu/left' %}
+        </aside>
+    {% endif %}
 
-    {{ _view.fetch('content')|raw }}
+    {% if currentModule %}
+        <aside class="grid-main-sidebar-2">
+            {% element 'Menu/commands' %}
+        </aside>
+
+        <header class="grid-main-header">
+            {% element 'Menu/modules' %}
+        </header>
+    {% endif %}
+
+    <div class="grid-main-content">
+        {{ _view.fetch('content')|raw }}
+    </div>
 </main>
 
 </body>
