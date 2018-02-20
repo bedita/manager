@@ -33,6 +33,7 @@ class AppView extends TwigView
         $this->loadHelper('Form', [
             'templates' => [
                 'hiddenBlock' => '{{content}}',
+                'submitContainer' => '{{content}}',
             ],
         ]);
         $this->loadHelper('Html');
