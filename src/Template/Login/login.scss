@@ -66,7 +66,7 @@ body.view-login .tpl-login {
 
     footer {
         grid-area: login-footer;
-        display: flex;
+        // display: flex;
         flex-grow: 0;
         justify-content: space-between;
         margin-top: $gutter;
@@ -76,9 +76,14 @@ body.view-login .tpl-login {
         line-height: 1.4em;
         color: $gray-600;
         white-space: nowrap;
+        letter-spacing: .25px;
+
+        span {
+            margin: 0 .25em;
+        }
     }
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 780px) {
         display: block;
 
         &:before {
@@ -99,15 +104,20 @@ body.view-login .tpl-login {
     }
 
     #messagesDiv {
+        display: block;
+        top: auto;
         width: 180px;
+        height: auto;
         bottom: 100%;
+        background: none;
         margin-bottom: 1px;
-        @media screen and (max-width: 960px) {
+        @media screen and (max-width: 780px) {
             width: 100%;
         }
 
         .message {
             margin: 0;
+            width: 100%;
             border: none;
             background-color: #900;
             color: #fff;
