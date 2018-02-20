@@ -155,15 +155,7 @@ class ModulesController extends AppController
     public function save() : Response
     {
         $this->request->allowMethod(['post']);
-        // prepare json fields before saving
-        $data = $this->request->getData();
-        if (!empty($data['_jsonKeys'])) {
-            $keys = explode(',', $data['_jsonKeys']);
-            foreach ($keys as $key) {
-                $this->request->data[$key] = json_decode($data[$key]);
-            }
-            unset($this->request->data['_jsonKeys']);
-        }
+        $this->prepareRequest();
         try {
             $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
         } catch (BEditaClientException $e) {
