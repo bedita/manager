@@ -3,27 +3,17 @@ main {
     grid-template-areas: "sidebar-1 sidebar-2 header"
                          "sidebar-1 sidebar-2 content";
                         //  "footer footer footer";
-    grid-template-columns: $gutter * 12 auto 1fr;
+    grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr auto;
-    padding: $gutter / 2;
-
-    // andranno delle variabili per i breakpoint delle mediaquery
-    @media screen and (max-width: 960px) {
-        grid-template-columns: ($grid-column-width) auto 1fr;
-    }
-
-    >* {
-        position: relative;
-    }
+    padding: $gutter;
 }
 
 .grid-main-sidebar-1 {
     grid-area: sidebar-1;
-    margin-right: $gutter * .5;
+    margin-right: 2px;
 }
 .grid-main-sidebar-2 {
     grid-area: sidebar-2;
-    margin-right: $gutter * .5;
 }
 .grid-main-header {
     grid-area: header;

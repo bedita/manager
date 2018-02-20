@@ -3,6 +3,7 @@
     .list-objects {
         display: table;
         border-collapse: collapse;
+        min-width: 100%;
 
         > nav {
             display: table-row;
@@ -36,7 +37,7 @@
             display: table-row;
 
             &:hover {
-                background-color: $gray-400;
+                background-color: $gray-700;
             }
         }
 
@@ -50,9 +51,15 @@
                     max-width: 13em;
                     text-overflow: ellipsis;
                     overflow-x: hidden;
+                    &:empty:before {
+                        content: 'untitled object';
+                        color: $gray-600;
+                        font-style: italic;
+                    }
                 }
                 &:last-child {
                     padding-right: 2px;
+                    text-align: right;
                 }
             }
         }
