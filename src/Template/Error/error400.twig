@@ -1,9 +1,5 @@
-{% element 'modules_top_menu' %}
-
-{% element 'left_menu' %}
-
 <div class="head">
-    <h1>{{ __('An Internal Error Has Occurred') }}</h1>
+    <h1>{{ __('Bad Request') }}</h1>
 </div>
 
 <div class="main">
@@ -17,7 +13,7 @@
         {% if error %}
         <p class="error">
             <strong>Error in: </strong>
-            {{ error.getFile }}, {{ __('line') }} {{ error.getLine }}
+            {{ error.getFile }}, line {{ error.getLine }}
         </p>
         {% endif %}
 
