@@ -1,6 +1,9 @@
 .toolbar_pagination {
+    margin-bottom: $gutter;
+
     .results {
         display: inline-block;
+        margin-right: 1em;
     }
     .pagination {
         display: inline-block;
@@ -20,5 +23,8 @@
     }
     .pageSize {
         display: inline-block;
+        > select {
+            margin-left: .5em;
+        }
     }
 }
