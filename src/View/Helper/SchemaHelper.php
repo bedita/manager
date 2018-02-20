@@ -75,7 +75,7 @@ class SchemaHelper extends Helper
      * @param mixed $schema Property schema.
      * @return string|null
      */
-    public function getTypeFromSchema($schema) : string
+    public function getTypeFromSchema($schema) : ?string
     {
         if (!is_array($schema)) {
             return null;
