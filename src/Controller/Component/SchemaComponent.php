@@ -42,13 +42,19 @@ class SchemaComponent extends Component
      * Read type JSON Schema from API using internal cache.
      *
      * @param string|null $type Type to get schema for. By default, configured type is used.
+     * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(string $type = null)
+    public function getSchema(string $type = null, string $revision = null)
     {
         // TODO: handle multiple projects -> key schema may differ
         if ($type === null) {
             $type = $this->getConfig('type');
+        }
+
+        $schema = $this->loadWithRevision($type, $revision);
+        if ($schema !== false) {
+            return $schema;
         }
 
         try {
@@ -68,6 +74,30 @@ class SchemaComponent extends Component
         }
 
         return $schema;
+    }
+
+    /**
+     * Load schema from cache with revision check.
+     * If cached revision don't match cache is removed.
+     *
+     * @param string $type Type to get schema for. By default, configured type is used.
+     * @param string $revision Schema revision.
+     * @return array|bool Cached schema if revision match, otherwise false
+     */
+    protected function loadWithRevision(string $type, string $revision = null)
+    {
+        $schema = Cache::read($type, self::CACHE_CONFIG);
+        if ($schema === false) {
+            return false;
+        }
+        $cacheRevision = empty($schema['revision']) ? null : $schema['revision'];
+        if ($cacheRevision === $revision) {
+            return $schema;
+        }
+        // remove from cache if revision don't match
+        Cache::delete($type, self::CACHE_CONFIG);
+
+        return false;
     }
 
     /**
