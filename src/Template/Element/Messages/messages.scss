@@ -1,9 +1,16 @@
 #messagesDiv {
     position: absolute;
-    width: $grid-column-width - ($gutter *.5);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0, 0, .65);
     font-size: 12px;
     z-index: 1000;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:empty {
+        display: none;
+    }
 
     .message {
         display: flex;
@@ -11,21 +18,24 @@
         align-items: flex-start;
         margin-bottom: $gutter;
         padding: $gutter / 2;
-        width: 100%;
-        min-height: 120px;
-        background-color: $gray-200;
-        border-width: 1px 0 0;
+        width: $gutter * 25;
+        min-height: $gutter * 11;
+        background-color: $gray-100;
+        color: $gray-900;
+        border-width: .5rem;
         border-style: solid;
         border-color: transparent;
+        border-radius: 1rem;
         opacity: 0;
         visibility: hidden;
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        clip-path: polygon(0 0, 100% 0, 20% 100%, 0 100%);
         transition: .3s all;
 
         &.on {
             opacity: 1;
             visibility: visible;
-            clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+            transform: translateY(0);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         }
 
         &.details {
@@ -57,7 +67,7 @@
         }
 
         &.success {
-            border-color: $gray-200;
+            border-color: $gray-100;
         }
         &.info {
             border-color: rgb(38, 84, 170);
