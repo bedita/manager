@@ -155,7 +155,7 @@ class ModulesController extends AppController
     public function save() : Response
     {
         $this->request->allowMethod(['post']);
-
+        $this->prepareRequest();
         try {
             $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
         } catch (BEditaClientException $e) {

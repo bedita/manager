@@ -101,4 +101,22 @@ class AppController extends Controller
             $this->set(compact('user'));
         }
     }
+
+    /**
+     * Prepare request, set properly json data.
+     *
+     * @return void
+     */
+    protected function prepareRequest() : void
+    {
+        // prepare json fields before saving
+        $data = $this->request->getData();
+        if (!empty($data['_jsonKeys'])) {
+            $keys = explode(',', $data['_jsonKeys']);
+            foreach ($keys as $key) {
+                $this->request->data[$key] = json_decode($data[$key]);
+            }
+            unset($this->request->data['_jsonKeys']);
+        }
+    }
 }
