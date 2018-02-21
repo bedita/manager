@@ -18,6 +18,7 @@
     height: 282px;
     overflow: hidden;
     padding: 140px 1rem 1rem;
+    margin-bottom: $gutter * 1.5;
     border-bottom: none;
     color: #bd8411;
     &.dark {
@@ -58,7 +59,7 @@
 .left-menu__user-menu li {
     line-height: 1.5em;
     padding: .5em 0;
-    border-bottom: 1px solid $gray-800;
+    border-bottom: 1px solid $gray-700;
     &:first-child {
         padding-top: 0;
     }
@@ -90,60 +91,68 @@
 /*** COMMANDS MENU ***/
 /*********************/
 .grid-main-header {
-    .modules-menu__modules {
+    .main-header {
         display: flex;
-        list-style: none;
-        margin: 0 0 $gutter * 3; // make room for the tooltip
-        padding: 0;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 148px;
 
-        .modules-menu__module {
-            position: relative;
-            width: 20px;
-            height: 20px;
-            margin-right: 1px;
-            background-color: $gray-600;
+        .modules-menu__modules {
+            display: flex;
+            list-style: none;
+            margin: 0 0 $gutter * 3; // make room for the tooltip
+            padding: 0;
 
-            &.commands-menu__module--dashboard {
-                background-color: $white;
-            }
-
-            &.current a:after {
-                content: '\00a0 ';
-                display: block;
-                position: absolute;
-                width: 6px; height: 6px;
-                top: 50%; margin-top: -3px;
-                left: 50%; margin-left: -3px;
-                background-color: $white;
-                opacity: .5;
-            }
-
-            a {
+            .modules-menu__module {
                 position: relative;
-                display: block;
-                width: 100%;
-                height: 100%;
-                @extend .hide-text;
+                width: 20px;
+                height: 20px;
+                margin-right: 1px;
+                background-color: $gray-600;
 
-                &:hover:before {
-                    position: absolute;
-                    content: attr(title);
-                    top: 22px;
-                    left: 0;
-                    z-index: 1;
-                    padding: $gutter * .5 $gutter;
-                    border-radius: 3px;
-                    text-indent: initial;
-
-                    font: .75rem $font-family-sans-serif;
-                    white-space: nowrap;
-                    color: $gray-700;
+                &.commands-menu__module--dashboard {
                     background-color: $white;
+                }
+
+                &.current a:after {
+                    content: '\00a0 ';
+                    display: block;
+                    position: absolute;
+                    width: 6px; height: 6px;
+                    top: 50%; margin-top: -3px;
+                    left: 50%; margin-left: -3px;
+                    background-color: $white;
+                    opacity: .5;
+                }
+
+                a {
+                    position: relative;
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    @extend .hide-text;
+
+                    &:hover:before {
+                        position: absolute;
+                        content: attr(title);
+                        top: 22px;
+                        left: 0;
+                        z-index: 1;
+                        padding: $gutter * .5 $gutter;
+                        border-radius: 3px;
+                        text-indent: initial;
+
+                        font: .75rem $font-family-sans-serif;
+                        white-space: nowrap;
+                        color: $gray-700;
+                        background-color: $white;
+                    }
                 }
             }
         }
     }
 }
+
 
 .left-menu__colophon {
     font-size: 11px;

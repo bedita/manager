@@ -1,5 +1,7 @@
 // index
 .view-modules {
+    margin-top: $gutter;
+
     .list-objects {
         display: table;
         border-collapse: collapse;
@@ -9,7 +11,7 @@
             display: table-row;
 
             &.table-header {
-                border-bottom: 1px solid $gray-500;
+                border-bottom: 1px solid $gray-700;
 
                 a.sort {
                     display: flex;
@@ -60,6 +62,9 @@
                 &:last-child {
                     padding-right: 2px;
                     text-align: right;
+                    > form {
+                        display: inline-block;
+                    }
                 }
             }
         }
