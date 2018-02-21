@@ -161,6 +161,8 @@
 }
 
 .commands-menu {
+    position: sticky;
+    top: $gutter;
     width: 90px;
     margin-right: $gutter;
 
