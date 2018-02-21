@@ -118,11 +118,12 @@ body.view-login .tpl-login {
         .message {
             margin: 0;
             width: 100%;
+            min-height: auto;
             border: none;
+            border-radius: 0;
             background-color: #900;
             color: #fff;
             clip-path: none;
-            min-height: auto;
             h2 { display: none; }
             a { display: none; }
         }
