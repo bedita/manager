@@ -38,6 +38,11 @@ label {
     font-weight: bold;
 }
 
+h1, h2 {
+    margin-top: 0;
+    line-height: 1.125em;
+}
+
 .hide-text {
     @include hide-text();
 }
