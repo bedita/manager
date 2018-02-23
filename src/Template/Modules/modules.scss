@@ -107,7 +107,7 @@
         }
         .relation {
             border: solid darkblue 1px;
-            button.close-relation, button.close-dialog {
+            .loader, .dialog, .result, button.close-relation, button.close-dialog {
                 display: none;
             }
             .cart {

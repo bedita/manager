@@ -1,4 +1,3 @@
-{% element 'Form/_relations_style' %}
 {% element 'Form/_relations_script' %}
 
 <div class="relations">
@@ -14,7 +13,7 @@
         </div>
 
         {# Loader for Load button #}
-        <div id="loader_{{ relationName }}">{{ __('Loading data ...') }}</div>
+        <div id="loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
 
         {# Destination for relation related data loaded by Load button #}
         <div id="related_{{ relationName }}" class="related-list"></div>
@@ -32,10 +31,10 @@
         </div>
 
         {# Add relation loader #}
-        <div id="add-relation-loader_{{ relationName }}">{{ __('Loading data ...') }}</div>
+        <div id="add-relation-loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
 
         {# Add relation dialog area | TODO: modal view through (s)css #}
-        <div id="add-relation-dialog_{{ relationName }}">
+        <div id="add-relation-dialog_{{ relationName }}" class="dialog">
 
             {# Relationships data, loaded after click on Add #}
             <div id="relationships_{{ relationName }}"></div>
@@ -53,12 +52,10 @@
             </fieldset>
 
             {# Loader for relationable items search #}
-            <div id="relationable-loader_{{ relationName }}">
-                {{ __('Loading...') }}
-            </div>
+            <div id="relationable-loader_{{ relationName }}" class="loader">{{ __('Loading...') }}</div>
 
             {# Relationable items list result #}
-            <ul id="relationable-list_{{ relationName }}"></ul>
+            <ul id="relationable-list_{{ relationName }}" class="result"></ul>
 
         </div>
 
