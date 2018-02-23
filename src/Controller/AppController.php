@@ -127,7 +127,7 @@ class AppController extends Controller
                 $methods = array_keys($relationData);
                 foreach ($methods as $method) {
                     $data = $relationData[$method];
-                    $api[] = compact('method', 'id', 'relation', 'data');;
+                    $api[] = compact('method', 'id', 'relation', 'data');
                 }
             }
             $this->request->data['api'] = $api;
