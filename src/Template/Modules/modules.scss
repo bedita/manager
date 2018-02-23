@@ -81,6 +81,11 @@
     margin-top: $gutter;
 
     form {
+        h1.missing-title {
+            color: $gray-600;
+            font-style: italic;
+        }
+
         label {
             display: block;
         }

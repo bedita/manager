@@ -6,7 +6,9 @@
         'id': 'form--main',
     })|raw }}
 
-    <h1>{{ object.attributes.title|default(__('New {0}', currentModule.singular)) }}</h1>
+    {% if object.id %}
+        <h1 {{ object.attributes.title ? '' : 'class="missing-title"' }}>{{ object.attributes.title|default(__('Untitled')) }}</h1>
+    {% endif %}
 
     {% element 'Form/core_properties' %}
 
