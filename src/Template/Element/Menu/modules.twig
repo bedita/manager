@@ -13,8 +13,10 @@
         </ul>
     </nav>
 
+    {% if meta.pagination %}
     <nav class="page-toolbar">
         {% element 'Toolbar/toolbar_pagination' %}
         {% element 'Toolbar/toolbar_filters' %}
     </nav>
+    {% endif %}
 </div>
