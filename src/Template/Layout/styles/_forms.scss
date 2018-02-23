@@ -15,7 +15,7 @@ button {
 }
 
 textarea {
-    padding: 0 .5em;
+    padding: .25em .5em;
     min-width: 5rem;
     border-radius: 2px;
     border: none;
@@ -26,6 +26,7 @@ input[type=email],
 input[type=tel],
 input[type=password],
 textarea {
+    font-family: $font-family-sans-serif;
     line-height: 1.5em;
 }
 

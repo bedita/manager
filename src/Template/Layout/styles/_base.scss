@@ -43,6 +43,10 @@ h1, h2 {
     line-height: 1.125em;
 }
 
+h1 {
+    margin-bottom: $gutter;
+}
+
 .hide-text {
     @include hide-text();
 }

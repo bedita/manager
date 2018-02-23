@@ -4,7 +4,7 @@ main {
                          "sidebar-1 sidebar-2 content";
                         //  "footer footer footer";
     grid-template-columns: auto auto 1fr;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     padding: $gutter;
 }
 

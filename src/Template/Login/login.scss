@@ -1,5 +1,4 @@
 // override default layout
-
 body.view-login  {
     height: 100vh;
     background-color: $white;
@@ -22,7 +21,7 @@ body.view-login  {
 }
 
 
-// logint tpl
+// login tpl
 body.view-login .tpl-login {
     position: relative;
     display: grid;

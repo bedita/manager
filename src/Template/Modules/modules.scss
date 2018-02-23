@@ -84,16 +84,22 @@
         label {
             display: block;
         }
+
         input[type=text], textarea {
             min-width: 480px;
         }
+
         fieldset {
             padding: 0;
 
             > div {
                 margin: 10px 0;
+                &:first-child {
+                    margin-top: 0;
+                }
             }
         }
+
         .hidden {
             display: none;
         }
