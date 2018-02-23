@@ -8,8 +8,8 @@
 
         {# Load button #}
         <div class="load">
-            <button class="load-relation" data-relation-name="{{ relationName }}">{{ __('Load') }}</button>
-            <button class="close-relation" data-relation-name="{{ relationName }}">{{ __('Close') }}</button>
+            {{ Form.button(__('Load'), {'class': 'load-relation', 'data-relation-name': relationName})|raw }}
+            {{ Form.button(__('Close'), {'class': 'close-relation', 'data-relation-name': relationName})|raw }}
         </div>
 
         {# Loader for Load button #}
@@ -26,8 +26,8 @@
 
         {# Add button #}
         <div class="add">
-            <button class="load-dialog" data-relation-name="{{ relationName }}">{{ __('Add') }}</button>
-            <button class="close-dialog" data-relation-name="{{ relationName }}">{{ __('Close') }}</button>
+            {{ Form.button(__('Add'), {'class': 'load-dialog', 'data-relation-name': relationName})|raw }}
+            {{ Form.button(__('Close'), {'class': 'close-dialog', 'data-relation-name': relationName})|raw }}
         </div>
 
         {# Add relation loader #}
@@ -39,17 +39,61 @@
             {# Relationships data, loaded after click on Add #}
             <div id="relationships_{{ relationName }}"></div>
 
-            {# Fieldset with form data for search relationable items #}
-            <fieldset class="relation_properties">
-                {{ Form.hidden('relation', {'value': relationName})|raw }}
-                {{ Form.hidden('type', {'value': object.name})|raw }}
-                {{ Form.hidden('related')|raw }}
+            {# Pagination filter #}
+
+            {# Search relationable items filter #}
+            <div class="search-relationable-filter">
                 {{ Form.control('search-relationable_' ~ relationName, {
-                    'label': __('Search item to associate'),
+                    'label': __('Filter'),
                     'class': 'search-relationable',
                     'data-relation-name': relationName,
                 })|raw }}
             </fieldset>
+
+            {# Toolbar pagination #}
+            <div class="toolbar_pagination">
+
+                {# Count of items per module #}
+                <div class="results">
+                    {{ paging.count }} {{ currentModule.name }}
+                </div>
+
+                {# Pagination data #}
+                <div class="pagination">
+                    <ul>
+                        <li>
+                            {{ __('Page') }} {{ paging.page }} / {{ paging.page_count }}
+                        </li>
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
+                            {{ __('First') }}
+                        </li>
+                        {% if links.prev %}
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page - 1 }}">
+                            {{ __('Prev') }}
+                        </li>
+                        {% endif %}
+                        {% if links.next %}
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page + 1 }}">
+                            {{ __('Next') }}
+                        </li>
+                        {% endif %}
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page_count }}">
+                            {{ __('Last') }}
+                        </li>
+                    </ul>
+                </div>
+
+                {# Page size combo #}
+                <div class="page-size">
+                    {{ __('Page Size') }}:
+                    {{ Form.select(relationName ~ '-page-size', Array.combine(config('Pagination.sizeAvailable')) , {
+                        'data-page': paging.page|default(1),
+                        'value': paging.page_size|default(20),
+                    }) | raw }}
+                    {{ Form.unlockField(relationName ~ '-page-size') }}
+                </div>
+
+            </div>
 
             {# Loader for relationable items search #}
             <div id="relationable-loader_{{ relationName }}" class="loader">{{ __('Loading...') }}</div>

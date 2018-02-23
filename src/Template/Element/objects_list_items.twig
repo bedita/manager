@@ -1,0 +1,14 @@
+{% for object in objects %}
+<li data-id="{{ object.id }}" data-object-type="{{ object.type }}" data-title="{{ object.attributes.title|default('untitled') }}">
+    <label>{{ object.attributes.title|default('untitled') }}</label>
+    <span>({{ object.type }} {{ object.id }}, {{ __('last modified') }} {{ Time.format(object.meta.modified) }})</span>
+</li>
+{% endfor %}
+
+{% set count = meta.pagination.page_size * (meta.pagination.page - 1) + meta.pagination.page_items %}
+<li class="info">
+    {{ count }} {{ __('of') }} {{ meta.pagination.count }}
+    {% if count < meta.pagination.count %}
+    <button class="relationNextPage" data-next-page="{{ meta.pagination.page + 1 }}">{{ __('Show more') }}</button>
+    {% endif %}
+</li>

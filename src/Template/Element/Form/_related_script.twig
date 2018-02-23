@@ -1,16 +1,39 @@
-<script>
-$(document).ready(() => {
-    $('button.remove-cart').on('click', (event) => {
-        event.preventDefault();
-        let relation = event.currentTarget.getAttribute('data-relation-name');
-        let cart = '#remove-relation-cart_' + relation;
-        let id = event.currentTarget.getAttribute('data-id');
-        if (id && $(cart + ' li[data-id=' + id + ']').length < 1) {
-            let title = event.currentTarget.getAttribute('data-title');
-            let objectTypeName = event.currentTarget.getAttribute('data-object-type');
-            $(cart).append('<li data-id="' + id + '" data-object-type="' + objectTypeName + '">[ X ] ' + title + ' (' + objectTypeName + ' ' + id + ')</li>');
-            $(event.currentTarget.parentNode.parentNode).addClass('in-cart');
-        }
+{% set here=Link.here({'no-query': true}) %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        /**
+         * Page size pagination combo handler.
+         * On change: reload related items list.
+         */
+        $('div.related-list select[name={{ relation }}-page-size]').change(function(event){
+            let input = $('#search-related_{{ relation }}')[0];
+            let page = event.currentTarget.getAttribute('data-page');
+            let pageSize = event.currentTarget.value;
+            loadRelated("{{ relation }}", input, page, event.currentTarget.value);
+        });
+
+        /**
+         * Pagination navigation items click handler
+         */
+        $('div.related-list li.related-page').click(function(event){
+            event.preventDefault();
+            let input = $('#search-related_{{ relation }}')[0];
+            let page = event.target.getAttribute('data-page');
+            let pageSize = event.target.getAttribute('data-page-size');
+            loadRelated("{{ relation }}", input, page, pageSize);
+        });
+
+        /**
+         * Text search for relationable items keyup handler.
+         * If text value is more than 3 chars, it performs search using proper `relationship.links.available` url
+         */
+        $('div.related-list .search-related').on('keyup', (event) => {
+            event.preventDefault();
+            if (event.currentTarget.value.length === 0 || event.currentTarget.value.length > 2) {
+                loadRelated("{{ relation }}", event.currentTarget);
+            }
+        });
     });
-});
 </script>

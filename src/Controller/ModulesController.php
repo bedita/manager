@@ -239,11 +239,10 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
         $response = null;
-        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
         $this->set(compact('relation'));
 
         try {
-            $response = $this->apiClient->get($path, $this->request->getQueryParams());
+            $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->set('error', $e);
