@@ -1,0 +1,187 @@
+{% set here=Link.here({'no-query': true}) %}
+
+<script type="text/javascript">
+    /**
+    * Load relationable items for input search
+    *
+    * @param {Object} input text element.
+    * @param {Number} page for pagination.
+    * @return {void}
+    */
+    function loadRelationable(input, page) {
+        if (!page) {
+            page = 1;
+        }
+        let query = input.value;
+        let relation = input.getAttribute('data-relation-name');
+        let url = $('#relationship_' + relation)[0].getAttribute('data-available') + '&autocomplete=true&page_size=10&page=' + page;
+        if (query) {
+            url += '&q=' + query;
+        }
+        let loader = '#relationable-loader_' + relation;
+        let cart = '#add-relation-cart_' + relation;
+        let target = '#relationable-list_' + relation;
+        $.get(url, function( data ) {
+            if (page && page > 1) {
+                $(target).append(data);
+            } else {
+                $(target).html(data);
+            }
+            $(target).show();
+            $(loader).hide();
+            $(target + ' li').on('click', (e) => {
+                e.preventDefault();
+                let id = e.currentTarget.getAttribute('data-id');
+                if (id) {
+                    if ($(cart + ' li[data-id=' + id + ']').length > 0) {
+                        if (!$(e.currentTarget).hasClass('in-cart')) {
+                            $(e.currentTarget).addClass('in-cart');
+                        }
+                    } else {
+                        let title = e.currentTarget.getAttribute('data-title');
+                        let objectTypeName = e.currentTarget.getAttribute('data-object-type');
+                        $(cart).append('<li data-id="' + id + '" data-object-type="' + objectTypeName + '">[ + ] ' + title + ' (' + objectTypeName + ' ' + id + ')</li>');
+                        $(e.currentTarget).addClass('in-cart');
+                    }
+                }
+            });
+        })
+        .done(() => { // handle "Show more" button
+            $('button.relationNextPage').on('click', (event) => {
+                event.preventDefault();
+                let input = $('input[name=search-relationable_' + relation + ']')[0];
+                let page = event.currentTarget.getAttribute('data-next-page');
+                loadRelationable(input, page);
+                $(event.currentTarget.parentNode).remove();
+            });
+        });
+    }
+
+    $(document).ready(() => {
+        /**
+         * Load relation button click handler.
+         * Load related items list calling `GET /:module/:id/related/:relation`.
+         */
+        $('button.load-relation').on('click', (event) => {
+            event.preventDefault();
+            let button = event.currentTarget; // loading button
+            let relation = button.getAttribute('data-relation-name'); // the relation
+            let url = "{{ here }}/related/" + relation; // url to ajax call
+            let target = 'div#related_' + relation; // destination DOM element selector
+            let loader = 'div#loader_' + relation; // loader DOM element selector
+            $(loader).show();
+            $.get(url, function( data ) {
+                $(target).html(data);
+                $(button).hide();
+                $(loader).hide();
+                $('div.load > button[data-relation-name=' + relation + ']:nth-child(1)').hide(); // hide Load button
+                $('div.load > button[data-relation-name=' + relation + ']:nth-child(2)').show(); // show Close button
+            });
+        });
+        /**
+         * Close relation button click handler.
+         * Empty relation data container and show Load button.
+         */
+        $('button.close-relation').on('click', (event) => {
+            event.preventDefault();
+            let relation = event.currentTarget.getAttribute('data-relation-name'); // the relation
+            $('div.load > button[data-relation-name=' + relation + ']:nth-child(1)').show(); // show Load button
+            $('div.load > button[data-relation-name=' + relation + ']:nth-child(2)').hide(); // hide Close button
+            $('div#related_' + relation).html('');
+        });
+        /**
+         * Add relation button click handler.
+         * Load data to search and select items to add to relation cart.
+         * Load relationship details with `GET /:module/:id/relationships/:relation`.
+         */
+        $('button.load-dialog').on('click', (event) => {
+            event.preventDefault();
+            let button = event.currentTarget;
+            let relation = button.getAttribute('data-relation-name');
+            let url = "{{ here }}/relationships/" + relation;
+            let loader = 'div#add-relation-loader_' + relation;
+            let dialog = 'div#add-relation-dialog_' + relation;
+            let target = 'div#relationships_' + relation;
+            $(loader).show();
+            $.get(url, function( data ) {
+                $(target).html(data);
+                $(dialog).show();
+                $(loader).hide();
+                $('div.add > button[data-relation-name=' + relation + ']:nth-child(1)').hide(); // hide Add button
+                $('div.add > button[data-relation-name=' + relation + ']:nth-child(2)').show(); // show Close button
+            })
+            .done(() => { // load relationable objects
+                let input = $('input[name=search-relationable_' + relation + ']')[0];
+                loadRelationable(input);
+            })
+            .fail((e) => {
+                console.log("error", e);
+            });
+        });
+        /**
+         * Close relationable items button click handler.
+         * Empty relationable items container and show Add button.
+         */
+        $('button.close-dialog').on('click', (event) => {
+            event.preventDefault();
+            let relation = event.currentTarget.getAttribute('data-relation-name');
+            $('div.add > button[data-relation-name=' + relation + ']:nth-child(1)').show(); // show Add button
+            $('div.add > button[data-relation-name=' + relation + ']:nth-child(2)').hide(); // hide Close button
+            $('div#add-relation-dialog_' + relation).hide();
+        });
+
+        /**
+         * Text search for relationable items keyup handler.
+         * If text value is more than 3 chars, it performs search using proper `relationship.links.available` url
+         */
+        $('.search-relationable').on('keyup', (event) => {
+            event.preventDefault();
+            if (event.currentTarget.value.length === 0 || event.currentTarget.value.length > 2) {
+                loadRelationable(event.currentTarget);
+            }
+        });
+
+        {# Save all relation data according to cart(s) #}
+        {# Parse cart(s) contents and generate a proper json, then stringify it inside form hidden field 'cart' #}
+        /**
+         * Save relation data button click handler
+         */
+         $('button#apply-relation-carts').click(function(event) {
+            event.preventDefault();
+            const cart = {};
+            $('div.cart').each(function(){
+                let relationName = this.getAttribute('data-relation-name');
+                let relationData = {};
+                if ($('div.cart[data-relation-name=' + relationName + '] ul.delete-from-cart li').length > 0) {
+                    relationData.removeRelated = [];
+                    $('div.cart[data-relation-name=' + relationName + '] ul.delete-from-cart li').each(function(){
+                        if (this.hasAttribute('data-id') && this.hasAttribute('data-object-type')) {
+                            relationData.removeRelated.push({
+                                type: this.getAttribute('data-object-type'),
+                                id: this.getAttribute('data-id')
+                            });
+                        }
+                    });
+                }
+                if ($('div.cart[data-relation-name=' + relationName + '] ul.add-to-cart li').length > 0) {
+                    relationData.addRelated = [];
+                    $('div.cart[data-relation-name=' + relationName + '] ul.add-to-cart li').each(function(){
+                        if (this.hasAttribute('data-id') && this.hasAttribute('data-object-type')) {
+                            relationData.addRelated.push({
+                                type: this.getAttribute('data-object-type'),
+                                id: this.getAttribute('data-id')
+                            });
+                        }
+                    });
+                }
+                if (Object.keys(relationData).length > 0) {
+                    cart[relationName] = relationData;
+                }
+            });
+            if (Object.keys(cart).length > 0) {
+                $('#cart').val(JSON.stringify(cart));
+                $('#form--main').submit();
+            }
+        });
+    });
+</script>

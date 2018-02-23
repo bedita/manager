@@ -1,0 +1,16 @@
+<script>
+$(document).ready(() => {
+    $('button.remove-cart').on('click', (event) => {
+        event.preventDefault();
+        let relation = event.currentTarget.getAttribute('data-relation-name');
+        let cart = '#remove-relation-cart_' + relation;
+        let id = event.currentTarget.getAttribute('data-id');
+        if (id && $(cart + ' li[data-id=' + id + ']').length < 1) {
+            let title = event.currentTarget.getAttribute('data-title');
+            let objectTypeName = event.currentTarget.getAttribute('data-object-type');
+            $(cart).append('<li data-id="' + id + '" data-object-type="' + objectTypeName + '">[ X ] ' + title + ' (' + objectTypeName + ' ' + id + ')</li>');
+            $(event.currentTarget.parentNode.parentNode).addClass('in-cart');
+        }
+    });
+});
+</script>

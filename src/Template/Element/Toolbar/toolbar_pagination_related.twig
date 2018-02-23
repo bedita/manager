@@ -1,32 +1,6 @@
-{% set here=Link.here({'no-query': true}) %}
 {% set paging = meta.pagination %}
 
-<script type="text/javascript">
-$(document).ready(function(){
-    $('select[name={{ relation }}PageSize]').change(function(event){
-        let relationUrl = "{{ here }}?page_size=" + event.target.value;
-        let targetSelector = 'div.rel-{{ relation }}';
-        let loader = 'div.loader-{{ relation }}';
-        $(loader).show();
-        $.get(relationUrl, function( data ) {
-            $(targetSelector).html(data);
-            $(loader).hide();
-        });
-    });
-    $('a.relatedPage').on('click', (ev) => {
-        ev.preventDefault();
-        let page = ev.target.getAttribute('data-page');
-        let relationUrl = "{{ here }}?page_size=" + $('select[name={{ relation }}PageSize]').val() + '&page=' + page;
-        let targetSelector = 'div.rel-{{ relation }}';
-        let loader = 'div.loader-{{ relation }}';
-        $(loader).show();
-        $.get(relationUrl, function( data ) {
-            $(targetSelector).html(data);
-            $(loader).hide();
-        });
-    });
-});
-</script>
+{% element 'Toolbar/_toolbar_pagination_related_script' %}
 
 <div class="toolbar_pagination">
 

@@ -1,3 +1,5 @@
+{% element 'Form/_related_script' %}
+
 <div class="view-modules">
 
     {% if error %}
@@ -15,24 +17,22 @@
                 <div>{{ __('type') }}</div>
                 <div>{{ __('status') }}</div>
                 <div>{{ __('modified')}}</div>
-                {# <div></div> #}
+                <div></div>
             </nav>
 
             {% for object in objects %}
                 <a
                     href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
-                    title="{{ object.attributes.title }}"
+                    title="{{ object.attributes.title|default('untitled') }}"
                     class="object-status-{{ object.attributes.status }}">
                         <div>{{ object.attributes.title }}</div>
                         <div>{{ object.id }}</div>
                         <div>{{ object.type }}</div>
                         <div>{{ object.attributes.status }}</div>
                         <div>{{ Time.format(object.meta.modified) }}</div>
-                        {# <div>
-                        {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
-                        {% endif %}
-                        </div> #}
+                        <div>
+                            <button class="remove-cart" data-relation-name="{{ relation }}" data-id="{{ object.id }}" data-object-type="{{ object.type }}"  data-title="{{ object.attributes.title|default('untitled') }}">{{ __('Remove') }}</button>
+                        </div>
                 </a>
             {% else %}
                 {{ __('No items found') }}

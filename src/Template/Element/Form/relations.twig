@@ -1,37 +1,82 @@
-{% set here=Link.here({'no-query': true}) %}
+{% element 'Form/_relations_style' %}
+{% element 'Form/_relations_script' %}
 
-<style>
-    .relations button {
-        margin: 0 0 1em;
-    }
-    {% for key, val in object.relationships %}
-    .loader-{{key}} {
-        display: none;
-    }
-    {% endfor %}
-</style>
-<script>
-    $(document).ready(function() {
-        $('.load-relation').on('click', (ev) => {
-            ev.preventDefault();
-            let relationName = ev.currentTarget.getAttribute('data-relation-name');
-            let relationUrl = "{{ here }}/related/" + relationName;
-            let targetSelector = 'div.rel-' + relationName;
-            let loader = 'div.loader-' + relationName;
-            $(loader).show();
-            $.get(relationUrl, function( data ) {
-                $(targetSelector).html(data);
-                $(ev.currentTarget).hide();;
-                $(loader).hide();
-            });
-        });
-    });
-</script>
 <div class="relations">
-{% for key, val in object.relationships %}
-    <h1>{{ key }}</h1>
-    <button class="load-relation" data-relation-name="{{ key }}">{{ __('Load') }}</button>
-    <div class="loader-{{ key }}">{{ __('Loading data ...') }}</div>
-    <div class="rel-{{ key }}"></div>
+{% for relationName, val in object.relationships %}
+    <div class="relation">
+        {# The relation #}
+        <h1>{{ relationName }}</h1>
+
+        {# Load button #}
+        <div class="load">
+            <button class="load-relation" data-relation-name="{{ relationName }}">{{ __('Load') }}</button>
+            <button class="close-relation" data-relation-name="{{ relationName }}">{{ __('Close') }}</button>
+        </div>
+
+        {# Loader for Load button #}
+        <div id="loader_{{ relationName }}">{{ __('Loading data ...') }}</div>
+
+        {# Destination for relation related data loaded by Load button #}
+        <div id="related_{{ relationName }}" class="related-list"></div>
+
+        {# Cart items (removed) #}
+        <div class="cart" data-relation-name="{{ relationName }}">
+            <h2>{{ __('Cart of items to remove') }}</h2>
+            <ul id="remove-relation-cart_{{ relationName }}" class="delete-from-cart"></ul>
+        </div>
+
+        {# Add button #}
+        <div class="add">
+            <button class="load-dialog" data-relation-name="{{ relationName }}">{{ __('Add') }}</button>
+            <button class="close-dialog" data-relation-name="{{ relationName }}">{{ __('Close') }}</button>
+        </div>
+
+        {# Add relation loader #}
+        <div id="add-relation-loader_{{ relationName }}">{{ __('Loading data ...') }}</div>
+
+        {# Add relation dialog area | TODO: modal view through (s)css #}
+        <div id="add-relation-dialog_{{ relationName }}">
+
+            {# Relationships data, loaded after click on Add #}
+            <div id="relationships_{{ relationName }}"></div>
+
+            {# Fieldset with form data for search relationable items #}
+            <fieldset class="relation_properties">
+                {{ Form.hidden('relation', {'value': relationName})|raw }}
+                {{ Form.hidden('type', {'value': object.name})|raw }}
+                {{ Form.hidden('related')|raw }}
+                {{ Form.control('search-relationable_' ~ relationName, {
+                    'label': __('Search item to associate'),
+                    'class': 'search-relationable',
+                    'data-relation-name': relationName,
+                })|raw }}
+            </fieldset>
+
+            {# Loader for relationable items search #}
+            <div id="relationable-loader_{{ relationName }}">
+                {{ __('Loading...') }}
+            </div>
+
+            {# Relationable items list result #}
+            <ul id="relationable-list_{{ relationName }}"></ul>
+
+        </div>
+
+        {# Cart items (added) #}
+        <div class="cart" data-relation-name="{{ relationName }}">
+            <h2>{{ __('Cart of items to add') }}</h2>
+            <ul id="add-relation-cart_{{ relationName }}" class="add-to-cart"></ul>
+        </div>
+
+    </div>
 {% endfor %}
+</div>
+
+<div class="save-relations">
+    {# Cart serialized json form element #}
+    {{ Form.control('cart', {'type': 'hidden', 'value': ''})|raw }}
+    {{ Form.unlockField('cart')}}
+
+    {# Cart(s) relation save button #}
+    {{ Form.button(__('Save relation data'), {'id': 'apply-relation-carts'})|raw }}
 </div>

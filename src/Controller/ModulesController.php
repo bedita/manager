@@ -65,6 +65,13 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
+            // no error flash for autocomplete
+            if (!empty($this->request->getQueryParams()['autocomplete'])) {
+                $this->render('autocomplete');
+
+                return null;
+            }
+
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e);
@@ -79,6 +86,10 @@ class ModulesController extends AppController
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
+
+        if (!empty($this->request->getQueryParams()['autocomplete'])) {
+            $this->render('autocomplete');
+        }
 
         return null;
     }
@@ -158,8 +169,17 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
         $this->prepareRequest();
+        $requestData = $this->request->getData();
         try {
-            $response = $this->apiClient->saveObject($this->objectType, $this->request->getData());
+            if (!empty($requestData['api'])) {
+                foreach ($requestData['api'] as $api) {
+                    extract($api); // method, id, type, relation, data
+                    if (in_array($method, ['addRelated', 'removeRelated'])) {
+                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $data);
+                    }
+                }
+            }
+            $response = $this->apiClient->saveObject($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
@@ -209,13 +229,45 @@ class ModulesController extends AppController
     }
 
     /**
-     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     * Relation data load callig api `GET /:object_type/:id/related/:relation`
      *
      * @param string|int $id the object identifier.
      * @param string $relation the relating name.
      * @return void
      */
     public function related($id, $relation)
+    {
+        $this->request->allowMethod(['get']);
+        $response = null;
+        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
+        $this->set(compact('relation'));
+
+        try {
+            $response = $this->apiClient->get($path, $this->request->getQueryParams());
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->set('error', $e);
+
+            return;
+        }
+
+        $objects = (array)$response['data'];
+        $meta = (array)$response['meta'];
+        $links = (array)$response['links'];
+
+        $this->set(compact('objects'));
+        $this->set(compact('meta'));
+        $this->set(compact('links'));
+    }
+
+    /**
+     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     *
+     * @param string|int $id the object identifier.
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function relationships($id, $relation)
     {
         $this->request->allowMethod(['get']);
         $response = null;
