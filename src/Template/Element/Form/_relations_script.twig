@@ -224,7 +224,7 @@
         /**
          * Save relation data button click handler
          */
-         $('button#apply-relation-carts').click(function(event) {
+         $('form#form--main').submit(function(event) {
             event.preventDefault();
             const cart = {};
             $('div.cart').each(function(){
@@ -258,8 +258,8 @@
             });
             if (Object.keys(cart).length > 0) {
                 $('#cart').val(JSON.stringify(cart));
-                $('#form--main').submit();
             }
+            $('#form--main')[0].submit();
         });
     });
 </script>
