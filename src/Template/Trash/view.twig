@@ -1,6 +1,6 @@
 {% do _view.assign('title', __('Trash')) %}
 
-<div class="main">
+<div class="view-modules-form">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
         'url': {'_name': 'trash:list'},
         'id': 'form--main',

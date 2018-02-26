@@ -109,4 +109,31 @@
             display: none;
         }
     }
+
+    // relations
+    .relations {
+        border: solid darkcyan 1px;
+        button {
+            margin: 0 0 1em;
+        }
+        .relation {
+            border: solid darkblue 1px;
+            .loader, .dialog, .result, button.close-relation, button.close-dialog {
+                display: none;
+            }
+            .cart {
+                border: solid skyblue 1px;
+            }
+            .related-list {
+                border: solid green 1px;
+                a.in-cart {
+                    text-decoration: line-through;
+                }
+            }
+            li.in-cart {
+                text-decoration: line-through;
+            }
+        }
+    }
 }
+

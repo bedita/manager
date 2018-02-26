@@ -118,5 +118,19 @@ class AppController extends Controller
             }
             unset($this->request->data['_jsonKeys']);
         }
+        // relations data for view/save - prepare api calls
+        if (!empty($data['relations'])) {
+            $json = json_decode($data['relations'], true);
+            $api = [];
+            foreach ($json as $relation => $relationData) {
+                $id = $data['id'];
+                $methods = array_keys($relationData);
+                foreach ($methods as $method) {
+                    $data = $relationData[$method];
+                    $api[] = compact('method', 'id', 'relation', 'data');
+                }
+            }
+            $this->request->data['api'] = $api;
+        }
     }
 }

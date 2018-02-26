@@ -6,7 +6,9 @@
         <nav class="table-header">
             <div>{{ Link.sort('title')}}</div>
             <div>{{ Link.sort('id')}}</div>
-            <div>{{ __('type') }}</div>
+            {% if currentModule.hints.multiple_types %}
+                <div>{{ __('type') }}</div>
+            {% endif %}
             <div>{{ __('status') }}</div>
             <div>{{ Link.sort('modified')}}</div>
             <div></div>
@@ -19,7 +21,9 @@
                 class="object-status-{{ object.attributes.status }}">
                     <div>{{ object.attributes.title }}</div>
                     <div>{{ object.id }}</div>
-                    <div>{{ object.type }}</div>
+                    {% if currentModule.hints.multiple_types %}
+                        <div>{{ object.type }}</div>
+                    {% endif %}
                     <div>{{ object.attributes.status }}</div>
                     <div>{{ Time.format(object.meta.modified) }}</div>
                     <div>

@@ -10,6 +10,7 @@
 !/logs/.gitkeep
 /phpunit.xml
 /provision/*
+/tests/.env
 /tmp/*
 !/tmp/.gitkeep
 /vendor/*
@@ -35,6 +36,7 @@
 ######################
 .DS_Store
 .DS_Store?
+.directory
 ._*
 .Spotlight-V100
 .Trashes
