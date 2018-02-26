@@ -1,13 +1,18 @@
-{% set here=Link.here() %}
 {% set paging = meta.pagination %}
 
+{% if paging.count > 0 %}
 {% element 'Form/_related_script' %}
+{% endif %}
 
 <div id="related-items_{{ relation }}" class="view-modules">
 
 {% if error %}
 
     <div class="error">{{ error.message }}</div>
+
+{% elseif paging.count == 0 %}
+
+    {{ __('No items found') }}
 
 {% else %}
 
@@ -27,7 +32,7 @@
 
         {# Count of items per module #}
         <div class="results">
-            {{ paging.count }} {{ currentModule.name }}
+            {{ paging.count }}
         </div>
 
         {# Pagination data #}

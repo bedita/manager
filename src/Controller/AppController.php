@@ -118,9 +118,9 @@ class AppController extends Controller
             }
             unset($this->request->data['_jsonKeys']);
         }
-        // 'cart' for relations view/save - prepare api calls
-        if (!empty($data['cart'])) {
-            $json = json_decode($data['cart'], true);
+        // relations data for view/save - prepare api calls
+        if (!empty($data['relations'])) {
+            $json = json_decode($data['relations'], true);
             $api = [];
             foreach ($json as $relation => $relationData) {
                 $id = $data['id'];
