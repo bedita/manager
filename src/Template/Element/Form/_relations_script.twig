@@ -41,7 +41,20 @@
                     } else {
                         let title = e.currentTarget.getAttribute('data-title');
                         let objectTypeName = e.currentTarget.getAttribute('data-object-type');
-                        $(cart).append('<li data-id="' + id + '" data-object-type="' + objectTypeName + '">[ + ] ' + title + ' (' + objectTypeName + ' ' + id + ')</li>');
+                        let li = $('<li/>', {
+                            'data-id': id,
+                            'data-object-type': objectTypeName,
+                            text: '[ + ] ' + title + ' (' + objectTypeName + ' ' + id + ')'
+                        });
+                        let button = $('<button/>', { class: 'undo', text: ' x ' });
+                        button.click(function(event){
+                            event.preventDefault();
+                            $('ul#related-list_' + relation + ' > li[data-id=' + id + ']').removeClass('in-cart');
+                            $(this.parentNode).remove();
+                        });
+                        button.appendTo(li);
+                        li.appendTo(cart);
+
                         $(e.currentTarget).addClass('in-cart');
                     }
                 }
@@ -101,7 +114,19 @@
                     } else {
                         let title = e.currentTarget.getAttribute('data-title');
                         let objectTypeName = e.currentTarget.getAttribute('data-object-type');
-                        $(cart).append('<li data-id="' + id + '" data-object-type="' + objectTypeName + '">[ + ] ' + title + ' (' + objectTypeName + ' ' + id + ')</li>');
+                        let li = $('<li/>', {
+                            'data-id': id,
+                            'data-object-type': objectTypeName,
+                            text: '[ + ] ' + title + ' (' + objectTypeName + ' ' + id + ')'
+                        });
+                        let button = $('<button/>', { class: 'undo', text: ' x ' });
+                        button.click(function(event){
+                            event.preventDefault();
+                            $('ul#relationable-list_' + relation + ' > li[data-id=' + id + ']').removeClass('in-cart');
+                            $(this.parentNode).remove();
+                        });
+                        button.appendTo(li);
+                        li.appendTo(cart);
                         $(e.currentTarget).addClass('in-cart');
                     }
                 }
@@ -151,6 +176,17 @@
                 if (event.currentTarget.value.length === 0 || event.currentTarget.value.length > 2) {
                     loadRelationable(relation, event.currentTarget);
                 }
+            });
+
+            /**
+             * Cart item X button click handler
+             */
+            $('ul.add-to-cart li button.undo').each(function(node){
+                console.log(node);
+                $(node).click(function(event){
+                    event.preventDefault();
+                    console.log('undo');
+                });
             });
         });
     }

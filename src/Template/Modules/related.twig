@@ -20,6 +20,7 @@
             'data-relation-name': relation,
             'value': Link.query('q')|default(''),
         })|raw }}
+        {{ Form.unlockField('search-related_' ~ relation) }}
     </div>
 
     {# Toolbar pagination #}
