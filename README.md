@@ -84,6 +84,17 @@ node_modules/.bin/gulp dev --host http://bedita4web.lcl
 
 ```
 
+### Run tests
+
+To setup tests locally simply copy tests/.env.default to tests/.env and set env vars accordingly
+To launch tests:
+
+```bash
+
+vendors/bin/phpunit [test folder or file, default '/tests']
+
+```
+
 ## Licensing
 
 BEdita is released under [LGPL](/bedita/bedita/blob/master/LICENSE.LGPL), Lesser General Public License v3.
