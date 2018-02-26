@@ -36,6 +36,7 @@ class AppView extends TwigView
                 'submitContainer' => '{{content}}',
             ],
         ]);
+        $this->loadHelper('Array');
         $this->loadHelper('Html');
         $this->loadHelper('Link');
         $this->loadHelper('Schema');

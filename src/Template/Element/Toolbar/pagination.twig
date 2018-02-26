@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('select[name=pageSize]').change(function(event){
+    $('select[name=page-size]').change(function(event){
         window.location.replace(event.target.value);
     });
 });
@@ -31,9 +31,9 @@ $(document).ready(function(){
     </div>
     {% endif %}
 
-    <div class="pageSize">
+    <div class="page-size">
         {{ __('Page Size') }}:
-        <select name="pageSize">
+        <select name="page-size">
         {% for size in config('Pagination.sizeAvailable') %}
             <option value="{{ Link.pageSize(size) }}" {% if paging.page_size == size %}selected="selected"{% endif %}>{{ size }}</option>
         {% endfor %}
