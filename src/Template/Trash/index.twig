@@ -13,7 +13,7 @@
 
         {% for object in objects %}
             <a
-                href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
+                href="{{ Url.build({'_name': 'trash:view', 'id': object.id}) }}"
                 title="{{ object.attributes.title }}"
                 class="object-status-{{ object.attributes.status }}">
                     <div>{{ object.attributes.title }}</div>
