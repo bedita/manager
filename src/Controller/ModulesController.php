@@ -65,12 +65,7 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
-            // no error flash for autocomplete
-            if (!empty($this->request->getQueryParams()['autocomplete'])) {
-                $this->render('autocomplete');
-
-                return null;
-            }
+            // @TODO: ajax error display
 
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);

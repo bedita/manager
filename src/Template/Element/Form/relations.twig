@@ -55,31 +55,27 @@
 
                 {# Count of items per module #}
                 <div class="results">
-                    {{ paging.count }} {{ currentModule.name }}
+                    {{ __('items') }}: <span class="pagination-count"></span>
                 </div>
 
                 {# Pagination data #}
                 <div class="pagination">
                     <ul>
                         <li>
-                            {{ __('Page') }} {{ paging.page }} / {{ paging.page_count }}
+                            {{ __('Page') }} <span class="pagination-page"></span> / <span class="pagination-page_count"></span>
                         </li>
-                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
+                        {# <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
                             {{ __('First') }}
                         </li>
-                        {% if links.prev %}
                         <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page - 1 }}">
                             {{ __('Prev') }}
                         </li>
-                        {% endif %}
-                        {% if links.next %}
                         <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page + 1 }}">
                             {{ __('Next') }}
                         </li>
-                        {% endif %}
                         <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page_count }}">
                             {{ __('Last') }}
-                        </li>
+                        </li> #}
                     </ul>
                 </div>
 

@@ -121,7 +121,7 @@
                         let button = $('<button/>', { class: 'undo', text: ' x ' });
                         button.click(function(event){
                             event.preventDefault();
-                            $('ul#relationable-list_' + relation + ' > li[data-id=' + id + ']').removeClass('in-cart');
+                            $(target + ' > li[data-id=' + id + ']').removeClass('in-cart');
                             $(this.parentNode).remove();
                         });
                         button.appendTo(li);
@@ -133,9 +133,21 @@
         })
         .done(() => {
             /**
+             * Set pagination data according to ajax get result.
+             */
+            let count = $(target + ' div.pagination-data')[0].getAttribute('data-pagination-count');
+            $(target).parent().find('.pagination-count').text(count);
+            let page = $(target + ' div.pagination-data')[0].getAttribute('data-pagination-page');
+            $(target).parent().find('.pagination-page').text(page);
+            let page_count = $(target + ' div.pagination-data')[0].getAttribute('data-pagination-page_count');
+            $(target).parent().find('.pagination-page_count').text(page_count);
+            let page_items = $(target + ' div.pagination-data')[0].getAttribute('data-pagination-page_items');
+            let page_size = $(target + ' div.pagination-data')[0].getAttribute('data-pagination-page_size');
+            $(target).parent().find('.pagination-count').text(count);
+            /**
              * Button "Show more" relationNextPage click handler
              */
-            $('ul#relationable-list_' + relation + ' button.relationNextPage').on('click', (event) => {
+            $(target + ' button.relationNextPage').on('click', (event) => {
                 event.preventDefault();
                 let input = $('input[name=search-relationable_' + relation + ']')[0];
                 let page = event.currentTarget.getAttribute('data-next-page');
