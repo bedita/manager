@@ -1,0 +1,13 @@
+{# publish status properties #}
+
+<fieldset id="core_properties">
+    {{ Form.control('uname')|raw }}
+    {{ Form.control('status', {
+        'type': 'radio',
+        'options': [
+            {'value': 'on', 'text': __('On')},
+            {'value': 'draft', 'text': __('Draft')},
+            {'value': 'off', 'text': __('Off')},
+        ]
+    })|raw }}
+</fieldset>
