@@ -48,7 +48,6 @@
                     'class': 'search-relationable',
                     'data-relation-name': relationName,
                 })|raw }}
-                {{ Form.unlockField('search-relationable_' ~ relation) }}
             </fieldset>
 
             {# Toolbar pagination #}
@@ -87,11 +86,10 @@
                 {# Page size combo #}
                 <div class="page-size">
                     {{ __('Page Size') }}:
-                    {{ Form.select(relationName ~ '-page-size', Array.combine(config('Pagination.sizeAvailable')) , {
+                    {{ Form.select('page-size_' ~ relationName, Array.combine(config('Pagination.sizeAvailable')) , {
                         'data-page': paging.page|default(1),
                         'value': paging.page_size|default(20),
                     }) | raw }}
-                    {{ Form.unlockField(relationName ~ '-page-size') }}
                 </div>
 
             </div>
@@ -111,6 +109,11 @@
         </div>
 
     </div>
+
+    {# unlock fields (could be loaded by ajax call) #}
+    {{ Form.unlockField('page-size_' ~ relationName) }}
+    {{ Form.unlockField('search-related_' ~ relationName) }}
+    {{ Form.unlockField('search-relationable_' ~ relationName) }}
 {% endfor %}
 </div>
 

@@ -20,7 +20,6 @@
             'data-relation-name': relation,
             'value': Link.query('q')|default(''),
         })|raw }}
-        {{ Form.unlockField('search-related_' ~ relation) }}
     </div>
 
     {# Toolbar pagination #}
@@ -59,11 +58,10 @@
         {# Page size combo #}
         <div class="page-size">
             {{ __('Page Size') }}:
-            {{ Form.select(relation ~ '-page-size', Array.combine(config('Pagination.sizeAvailable')) , {
+            {{ Form.select('page-size_' ~ relation, Array.combine(config('Pagination.sizeAvailable')) , {
                 'data-page': paging.page|default(1),
                 'value': paging.page_size|default(20),
             }) | raw }}
-            {{ Form.unlockField(relation ~ '-page-size') }}
         </div>
 
     </div>

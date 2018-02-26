@@ -7,7 +7,7 @@
          * Page size pagination combo handler.
          * On change: reload related items list.
          */
-        $('div.related-list select[name={{ relation }}-page-size]').change(function(event){
+        $('div.related-list select[name=page-size_{{ relation }}]').change(function(event){
             let input = $('#search-related_{{ relation }}')[0];
             let page = event.currentTarget.getAttribute('data-page');
             let pageSize = event.currentTarget.value;

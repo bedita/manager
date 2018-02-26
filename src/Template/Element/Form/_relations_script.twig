@@ -54,7 +54,6 @@
                         });
                         button.appendTo(li);
                         li.appendTo(cart);
-
                         $(e.currentTarget).addClass('in-cart');
                     }
                 }
@@ -140,7 +139,7 @@
                 event.preventDefault();
                 let input = $('input[name=search-relationable_' + relation + ']')[0];
                 let page = event.currentTarget.getAttribute('data-next-page');
-                let pageSize = $('select[name=' + relation + '-page-size]').val();
+                let pageSize = $('select[name=page-size_' + relation + ']').val();
                 loadRelationable(relation, input, page, pageSize);
                 $(event.currentTarget.parentNode).remove();
             });
@@ -149,7 +148,7 @@
             * Page size pagination combo handler.
             * On change: reload related items list.
             */
-            $('div.search-relationable-filter select[name=' + relation + '-page-size]').change(function(event){
+            $('div.search-relationable-filter select[name=page-size_' + relation + ']').change(function(event){
                 let input = $('#search-relationable_' + relation)[0];
                 let page = event.currentTarget.getAttribute('data-page');
                 let pageSize = event.currentTarget.value;
