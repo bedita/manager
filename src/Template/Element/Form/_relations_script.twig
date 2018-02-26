@@ -14,13 +14,13 @@
         let url = "{{ here }}/related/" + relation + "?";
         let query = (input && input.value) ? input.value : '';
         if (query) {
-            url += "q=" + query + "&";
+            url += 'q=' + query + '&';
         }
         if (pageSize) {
             url += 'page_size=' + pageSize + "&";
         }
         if (page) {
-            url += "page=" + page;
+            url += 'page=' + page;
         }
         let target = 'div#related_' + relation;
         let list = 'ul#related-list_' + relation;
@@ -83,13 +83,13 @@
         let url = $('#relationship_' + relation)[0].getAttribute('data-available') + '&autocomplete=true';
         let query = (input && input.value) ? input.value : '';
         if (query) {
-            url += "&q=" + query;
+            url += '&q=' + query;
         }
         if (pageSize) {
             url += '&page_size=' + pageSize;
         }
         if (page) {
-            url += "&page=" + page;
+            url += '&page=' + page;
         }
         let loader = '#relationable-loader_' + relation;
         let cart = '#add-relation-cart_' + relation;
@@ -175,17 +175,6 @@
                 if (event.currentTarget.value.length === 0 || event.currentTarget.value.length > 2) {
                     loadRelationable(relation, event.currentTarget);
                 }
-            });
-
-            /**
-             * Cart item X button click handler
-             */
-            $('ul.add-to-cart li button.undo').each(function(node){
-                console.log(node);
-                $(node).click(function(event){
-                    event.preventDefault();
-                    console.log('undo');
-                });
             });
         });
     }
