@@ -1,27 +1,4 @@
-<script type="text/javascript">
-$(document).ready(function(){
-    $('textarea.json').change(function(event){
-        if (event && event.target && event.target.value) {
-            try {
-                let jsonString = JSON.stringify(JSON.parse(event.target.value), null, "    ");
-                $(event.target).val(jsonString);
-            } catch(e) {
-                console.error(e);
-            }
-        }
-    });
-    $('textarea.json').each(function(){
-        if (this.value) {
-            try {
-                let jsonString = JSON.stringify(JSON.parse(this.value), null, "    ");
-                $(this).val(jsonString);
-            } catch(e) {
-                console.error(e);
-            }
-        }
-    });
-});
-</script>
+{% element 'Form/_other_properties_script' %}
 
 <div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
 
@@ -37,6 +14,28 @@ $(document).ready(function(){
             {{ Form.control(key, {'type': 'textarea', 'class': 'json', 'value': value|json_encode})|raw }}
         {% else %}
             {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
+
+            {% if key == 'username' and currentModule.name == 'users' %}
+                <div class="password-component">
+                    {{ Form.control('password', {
+                        'class': 'password',
+                        'placeholder': 'new password',
+                        'autocomplete': 'new-password',
+                        'default': ''
+                    })|raw }}
+
+                    {{ Form.control('password', {
+                        'label': 'Retype password',
+                        'id': 'confirm_password',
+                        'name': 'confirm-password',
+                        'class': 'confirm-password',
+                        'placeholder': 'confirm password',
+                        'autocomplete': 'new-password',
+                        'default': ''
+                    })|raw }}
+                </div>
+            {% endif %}
+
         {% endif %}
     {% endif %}
 {% endfor %}

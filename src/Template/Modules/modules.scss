@@ -84,11 +84,11 @@
         label {
             display: block;
         }
-        input[type=text], textarea {
+        input[type=text], input[type=password], textarea {
             min-width: 480px;
         }
         fieldset {
-            padding: 0;
+            // padding: 0;
 
             > div {
                 margin: 10px 0;
