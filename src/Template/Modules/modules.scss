@@ -90,8 +90,17 @@
                 width: 100%;
             }
             &:nth-child(even) {
-                width: 66%;
+                width: 67%;
                 padding-right: $gutter;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        > section {
+            width: 50%;
+            &:nth-child(even) {
+                width: 50%;
             }
         }
     }
