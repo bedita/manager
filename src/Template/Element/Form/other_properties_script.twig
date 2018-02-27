@@ -1,0 +1,120 @@
+<script type="text/javascript">
+
+    let isValidKey = (e) => {
+        var scope = this;
+        var k = e.which;
+
+        // Verify that the key entered is not a special key
+        if (k == 20 /* Caps lock */
+            || k == 16 /* Shift */
+            || k == 9 /* Tab */
+            || k == 27 /* Escape Key */
+            || k == 17 /* Control Key */
+            || k == 91 /* Windows Command Key */
+            || k == 19 /* Pause Break */
+            || k == 18 /* Alt Key */
+            || k == 93 /* Right Click Point Key */
+            || ( k >= 35 && k <= 40 ) /* Home, End, Arrow Keys */
+            || k == 45 /* Insert Key */
+            || ( k >= 33 && k <= 34 ) /*Page Down, Page Up */
+            || (k >= 112 && k <= 123) /* F1 - F12 */
+            || (k >= 144 && k <= 145 )) { /* Num Lock, Scroll Lock */
+            return false;
+        }
+        return true;
+    }
+
+    let cleanupForm = () => {
+        // reset messages/styles for password validation
+        let form = document.getElementById('form--main');
+        let confirm_password = form && form.elements.confirm_password;
+        if (confirm_password) {
+            confirm_password.classList.remove('error', 'empty', 'different');
+            confirm_password.closest('div').removeAttribute('message-tooltip');
+        }
+    }
+
+
+    /**
+
+    */
+    let validateForm = (event, callback) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let form = document.getElementById('form--main');
+        let password = form.elements.password;
+        let confirm_password = form.elements.confirm_password;
+
+        if (form) {
+            if (password.value && password.value.length) {
+                if (confirm_password.value !== password.value) {
+                    // show which type of error happened
+                    let message = '';
+                    if (confirm_password.value.length === 0) {
+                        confirm_password.classList.add('error', 'empty');
+                        message = 'repeat password here';
+                    } else {
+                        confirm_password.classList.add('error', 'different');
+                        message = 'passwords are differents... retry';
+                    }
+
+                    confirm_password.closest('div').setAttribute('message-tooltip', message);
+                    $('html,body').animate({ scrollTop: confirm_password.closest('fieldset').offsetTop }, 500);
+
+                    return false;
+                }
+            }
+            form.submit();
+            return true;
+        }
+
+        return false;
+    }
+
+    $(document).ready(function(){
+        // page events
+
+        // right now the only form that needs validating is for module User
+        {% if currentModule.name == 'users' %}
+            // validate form on submit
+            let saveButton = document.querySelector('input[type="submit"]');
+            saveButton.addEventListener('click', validateForm);
+
+            $('input[type=password]').on('keydown', (event) => {
+                if (isValidKey(event)) {
+                    cleanupForm();
+                }
+            });
+
+            $('input[name=repeat_password]').on('keydown', (event) => {
+                if (isValidKey(event)) {
+                    cleanupForm();
+                }
+            });
+        {% endif %}
+
+        $('textarea.json').change(function(event){
+            if (event && event.target && event.target.value) {
+                try {
+                    let jsonString = JSON.stringify(JSON.parse(event.target.value), null, "    ");
+                    $(event.target).val(jsonString);
+                } catch(e) {
+                    console.error(e);
+                }
+            }
+        });
+
+        $('textarea.json').each(function(){
+            if (this.value) {
+                try {
+                    let jsonString = JSON.stringify(JSON.parse(this.value), null, "    ");
+                    $(this).val(jsonString);
+                } catch(e) {
+                    console.error(e);
+                }
+            }
+        });
+    });
+</script>
+
