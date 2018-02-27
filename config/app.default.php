@@ -433,9 +433,12 @@ return [
      * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
-    //'Plugins' => [
-    //    'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
-    //],
+    'Plugins' => [
+        // 'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
+
+        // Uncomment to enable `DebugKit` - 'debug' mode is required
+        //'DebugKit' => ['bootstrap' => true, 'debugOnly' => true],
+    ],
 
     /**
      * Pagination default settings

@@ -27,6 +27,7 @@ class ErrorController extends AppController
      * Initialization hook method.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function initialize() : void
     {
@@ -38,6 +39,7 @@ class ErrorController extends AppController
      *
      * @param \Cake\Event\Event $event Event.
      * @return \Cake\Http\Response|null|void
+     * @codeCoverageIgnore
      */
     public function beforeFilter(Event $event) : void
     {
@@ -48,11 +50,13 @@ class ErrorController extends AppController
      *
      * @param \Cake\Event\Event $event Event.
      * @return \Cake\Http\Response|null|void
+     * @codeCoverageIgnore
      */
     public function beforeRender(Event $event) : void
     {
         parent::beforeRender($event);
 
+        $this->viewBuilder()->setClassName('App\View\AppView');
         $this->viewBuilder()->setTemplatePath('Error');
     }
 
@@ -61,6 +65,7 @@ class ErrorController extends AppController
      *
      * @param \Cake\Event\Event $event Event.
      * @return \Cake\Http\Response|null|void
+     * @codeCoverageIgnore
      */
     public function afterFilter(Event $event) : void
     {
