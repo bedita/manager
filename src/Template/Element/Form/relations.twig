@@ -1,37 +1,120 @@
-{% set here=Link.here({'no-query': true}) %}
+{% element 'Form/_relations_script' %}
 
-<style>
-    .relations button {
-        margin: 0 0 1em;
-    }
-    {% for key, val in object.relationships %}
-    .loader-{{key}} {
-        display: none;
-    }
-    {% endfor %}
-</style>
-<script>
-    $(document).ready(function() {
-        $('.load-relation').on('click', (ev) => {
-            ev.preventDefault();
-            let relationName = ev.currentTarget.getAttribute('data-relation-name');
-            let relationUrl = "{{ here }}/related/" + relationName;
-            let targetSelector = 'div.rel-' + relationName;
-            let loader = 'div.loader-' + relationName;
-            $(loader).show();
-            $.get(relationUrl, function( data ) {
-                $(targetSelector).html(data);
-                $(ev.currentTarget).hide();;
-                $(loader).hide();
-            });
-        });
-    });
-</script>
 <div class="relations">
-{% for key, val in object.relationships %}
-    <h1>{{ key }}</h1>
-    <button class="load-relation" data-relation-name="{{ key }}">{{ __('Load') }}</button>
-    <div class="loader-{{ key }}">{{ __('Loading data ...') }}</div>
-    <div class="rel-{{ key }}"></div>
+{% for relationName, val in object.relationships %}
+    <div class="relation">
+        {# The relation #}
+        <h1>{{ relationName }}</h1>
+
+        {# Load button #}
+        <div class="load">
+            {{ Form.button(__('Load'), {'class': 'load-relation', 'data-relation-name': relationName})|raw }}
+            {{ Form.button(__('Close'), {'class': 'close-relation', 'data-relation-name': relationName})|raw }}
+        </div>
+
+        {# Loader for Load button #}
+        <div id="loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
+
+        {# Destination for relation related data loaded by Load button #}
+        <div id="related_{{ relationName }}" class="related-list"></div>
+
+        {# Cart items (removed) #}
+        <div class="cart" data-relation-name="{{ relationName }}">
+            <h2>{{ __('Cart of items to remove') }}</h2>
+            <ul id="remove-relation-cart_{{ relationName }}" class="delete-from-cart"></ul>
+        </div>
+
+        {# Add button #}
+        <div class="add">
+            {{ Form.button(__('Add'), {'class': 'load-dialog', 'data-relation-name': relationName})|raw }}
+            {{ Form.button(__('Close'), {'class': 'close-dialog', 'data-relation-name': relationName})|raw }}
+        </div>
+
+        {# Add relation loader #}
+        <div id="add-relation-loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
+
+        {# Add relation dialog area | TODO: modal view through (s)css #}
+        <div id="add-relation-dialog_{{ relationName }}" class="dialog">
+
+            {# Relationships data, loaded after click on Add #}
+            <div id="relationships_{{ relationName }}"></div>
+
+            {# Pagination filter #}
+
+            {# Search relationable items filter #}
+            <div class="search-relationable-filter">
+                {{ Form.control('search-relationable_' ~ relationName, {
+                    'label': __('Filter'),
+                    'class': 'search-relationable',
+                    'data-relation-name': relationName,
+                })|raw }}
+            </div>
+
+            {# Toolbar pagination #}
+            <div class="toolbar_pagination">
+
+                {# Count of items per module #}
+                <div class="results">
+                    {{ __('items') }}: <span class="pagination-count"></span>
+                </div>
+
+                {# Pagination data #}
+                <div class="pagination">
+                    <ul>
+                        <li>
+                            {{ __('Page') }} <span class="pagination-page"></span> / <span class="pagination-page_count"></span>
+                        </li>
+                        {# <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
+                            {{ __('First') }}
+                        </li>
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page - 1 }}">
+                            {{ __('Prev') }}
+                        </li>
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page + 1 }}">
+                            {{ __('Next') }}
+                        </li>
+                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page_count }}">
+                            {{ __('Last') }}
+                        </li> #}
+                    </ul>
+                </div>
+
+                {# Page size combo #}
+                <div class="page-size">
+                    {{ __('Page Size') }}:
+                    {{ Form.select('page-size_' ~ relationName, Array.combine(config('Pagination.sizeAvailable')) , {
+                        'data-page': paging.page|default(1),
+                        'value': paging.page_size|default(20),
+                    }) | raw }}
+                </div>
+
+            </div>
+
+            {# Loader for relationable items search #}
+            <div id="relationable-loader_{{ relationName }}" class="loader">{{ __('Loading...') }}</div>
+
+            {# Relationable items list result #}
+            <ul id="relationable-list_{{ relationName }}" class="result"></ul>
+
+        </div>
+
+        {# Cart items (added) #}
+        <div class="cart" data-relation-name="{{ relationName }}">
+            <h2>{{ __('Cart of items to add') }}</h2>
+            <ul id="add-relation-cart_{{ relationName }}" class="add-to-cart"></ul>
+        </div>
+
+    </div>
+
+    {# unlock fields (could be loaded by ajax call) #}
+    {{ Form.unlockField('page-size_' ~ relationName) }}
+    {{ Form.unlockField('search-related_' ~ relationName) }}
+    {{ Form.unlockField('search-relationable_' ~ relationName) }}
 {% endfor %}
+</div>
+
+<div class="save-relations">
+    {# Relations serialized json form element #}
+    {{ Form.control('relations', {'type': 'hidden', 'value': ''})|raw }}
+    {{ Form.unlockField('relations')}}
 </div>

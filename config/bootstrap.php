@@ -216,14 +216,6 @@ Plugin::load('WyriHaximus/TwigView', [
 ]);
 
 /*
- * Only try to load DebugKit in development mode
- * Debug Kit should not be installed on a production system
- */
-if (Configure::read('debug')) {
-    Plugin::load('DebugKit', ['bootstrap' => true]);
-}
-
-/*
  * Load other custom / 3rd party plugins via configuration key 'Plugins'.
  */
 Plugin::loadFromConfig();

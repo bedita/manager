@@ -1,42 +1,80 @@
-<div class="view-modules">
+{% set paging = meta.pagination %}
 
-    {% if error %}
-        <div class="error">{{ error.message }}</div>
-    {% else %}
+{% if paging.count > 0 %}
+{% element 'Form/_related_script' %}
+{% endif %}
 
-        {% element 'Toolbar/toolbar_pagination_related' %}
+<div id="related-items_{{ relation }}" class="view-modules">
 
-        {# {% element 'Toolbar/toolbar_filters' %} #}
+{% if error %}
 
-        <div class="list-objects">
-            <nav class="table-header">
-                <div>{{ __('title') }}</div>
-                <div>{{ __('id') }}</div>
-                <div>{{ __('type') }}</div>
-                <div>{{ __('status') }}</div>
-                <div>{{ __('modified')}}</div>
-                {# <div></div> #}
-            </nav>
+    <div class="error">{{ error.message }}</div>
 
-            {% for object in objects %}
-                <a
-                    href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
-                    title="{{ object.attributes.title }}"
-                    class="object-status-{{ object.attributes.status }}">
-                        <div>{{ object.attributes.title }}</div>
-                        <div>{{ object.id }}</div>
-                        <div>{{ object.type }}</div>
-                        <div>{{ object.attributes.status }}</div>
-                        <div>{{ Time.format(object.meta.modified) }}</div>
-                        {# <div>
-                        {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
-                        {% endif %}
-                        </div> #}
-                </a>
-            {% else %}
-                {{ __('No items found') }}
-            {% endfor %}
+{% elseif paging.count == 0 %}
+
+    {{ __('No items found') }}
+
+{% else %}
+
+    {# Filter - search related items filter #}
+    <div class="toolbar_filters">
+        {{ Form.control('search-related_' ~ relation, {
+            'id': 'search-related_' ~ relation,
+            'label': __('Filter'),
+            'class': 'search-related',
+            'data-relation-name': relation,
+            'value': Link.query('q')|default(''),
+        })|raw }}
+    </div>
+
+    {# Toolbar pagination #}
+    <div class="toolbar_pagination">
+
+        {# Count of items per module #}
+        <div class="results">
+            {{ __('items') }}: {{ paging.count }}
         </div>
-    {% endif %}
+
+        {# Pagination data #}
+        <div class="pagination">
+            <ul>
+                <li>
+                    {{ __('Page') }} {{ paging.page }} / {{ paging.page_count }}
+                </li>
+                <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
+                    {{ __('First') }}
+                </li>
+                {% if links.prev %}
+                <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page - 1 }}">
+                    {{ __('Prev') }}
+                </li>
+                {% endif %}
+                {% if links.next %}
+                <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page + 1 }}">
+                    {{ __('Next') }}
+                </li>
+                {% endif %}
+                <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page_count }}">
+                    {{ __('Last') }}
+                </li>
+            </ul>
+        </div>
+
+        {# Page size combo #}
+        <div class="page-size">
+            {{ __('Page Size') }}:
+            {{ Form.select('page-size_' ~ relation, Array.combine(config('Pagination.sizeAvailable')) , {
+                'data-page': paging.page|default(1),
+                'value': paging.page_size|default(20),
+            }) | raw }}
+        </div>
+
+    </div>
+
+    {# Related items list #}
+    <ul id="related-list_{{ relation }}">
+        {% element 'objects_list_items' %}
+    </ul>
+
+{% endif %}
 </div>
