@@ -43,10 +43,10 @@
         event.stopPropagation();
 
         let form = document.getElementById('form--main');
-        let password = form.elements.password;
-        let confirm_password = form.elements.confirm_password;
 
         if (form) {
+            let password = form.elements.password;
+            let confirm_password = form.elements.confirm_password;
             if (password.value && password.value.length) {
                 if (confirm_password.value !== password.value) {
                     // show which type of error happened
