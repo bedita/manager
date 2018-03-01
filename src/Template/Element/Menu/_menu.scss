@@ -1,8 +1,8 @@
-/*****************/
-/*** User MENU ***/
-/*****************/
+/********************/
+/*** Project MENU ***/
+/********************/
 
-.user-menu {
+.element-menu {
     > * {
         margin: 0 0 $gutter 0;
     }
@@ -10,7 +10,7 @@
         display: none;
     }
 
-    > .user-project {
+    > .project {
         display: block;
         width: 282px;
         height: 282px;
@@ -151,73 +151,6 @@
 
         input[type=submit] {
             margin-bottom: 2px;
-        }
-    }
-}
-
-/*********************/
-/*** COMMANDS MENU ***/
-/*********************/
-
-.main-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 148px;
-
-    .modules-menu {
-        > ul {
-            display: flex;
-            list-style: none;
-            margin: 0 0 $gutter * 3; // make room for the tooltip
-            padding: 0;
-
-            > li {
-                position: relative;
-                width: 20px;
-                height: 20px;
-                margin-right: 1px;
-                background-color: $gray-600;
-
-                &.menu-dashboard {
-                    background-color: $white;
-                }
-
-                &.current a:after {
-                    content: '\00a0 ';
-                    display: block;
-                    position: absolute;
-                    width: 6px; height: 6px;
-                    top: 50%; margin-top: -3px;
-                    left: 50%; margin-left: -3px;
-                    background-color: $white;
-                    opacity: .5;
-                }
-
-                a {
-                    position: relative;
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    @extend .hide-text;
-
-                    &:hover:before {
-                        position: absolute;
-                        content: attr(title);
-                        top: 22px;
-                        left: 0;
-                        z-index: 1;
-                        padding: $gutter * .5 $gutter;
-                        border-radius: 3px;
-                        text-indent: initial;
-
-                        font: .75rem $font-family-sans-serif;
-                        white-space: nowrap;
-                        color: $gray-700;
-                        background-color: $white;
-                    }
-                }
-            }
         }
     }
 }

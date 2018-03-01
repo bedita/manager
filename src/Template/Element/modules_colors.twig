@@ -2,12 +2,6 @@
 
     {% for name, color in config('Modules.colors') %}
 
-        .content-header .main-header .modules-menu__modules .modules-menu__module.commands-menu__module--{{ name }},
-        .commands-menu__module--{{ name }} {
-            background-color: {{ color }};
-        }
-
-        .menu-module-color-{{ name }},
         .module-color-{{ name }} {
             background-color: {{ color }} !important;
         }

@@ -1,4 +1,4 @@
-main.grid {
+main.layout {
     display: grid;
     grid-template-areas: "main-sidebar secondary-sidebar content-header"
                         "main-sidebar secondary-sidebar content";
@@ -6,20 +6,20 @@ main.grid {
     grid-template-rows: auto 1fr auto;
     padding: $gutter;
 
-    > .main-sidebar {
+    > .layout-sidebar-primary {
         grid-area: main-sidebar;
         margin-right: 2px;
     }
 
-    > .secondary-sidebar {
+    > .layout-sidebar-secondary {
         grid-area: secondary-sidebar;
     }
 
-    > .content-header {
+    > .layout-header {
         grid-area: content-header;
     }
 
-    > .content {
+    > .layout-content {
         grid-area: content;
     }
 }
