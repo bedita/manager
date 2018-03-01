@@ -112,6 +112,7 @@
     #{$text-inputs},
     textarea {
         width: 100%;
+        background-color: $gray-200;
     }
 
     fieldset {
@@ -169,14 +170,19 @@
         display: none;
     }
 
+
+
     // relations
     .relations {
-        border: solid darkcyan 1px;
+
         button {
             margin: 0 0 1em;
         }
         .relation {
-            border: solid darkblue 1px;
+            margin: 4em 0;
+
+            h1 { font-size: 1.5rem; color: magenta; }
+
             .loader, .dialog, .result, button.close-relation, button.close-dialog {
                 display: none;
             }

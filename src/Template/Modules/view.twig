@@ -6,7 +6,6 @@
 })|raw }}
 {{ Form.hidden('id', {'value': object.id})|raw }}
 <div class="view-modules-form">
-
     <section>
         {% if object.id %}
             <h1 {{ object.attributes.title ? '' : 'class="missing-title"' }}>{{ object.attributes.title|default(__('Untitled')) }}</h1>
@@ -14,18 +13,12 @@
     </section>
     <section>
         {% element 'Form/core_properties' %}
+        {% element 'Form/other_properties' %}
+        {% element 'Form/meta' %}
     </section>
     <section>
         {% element 'Form/status' %}
-    </section>
-    <section>
-        {% element 'Form/other_properties' %}
-    </section>
-    <section>
         {% element 'Form/relations' %}
-    </section>
-    <section>
-        {% element 'Form/meta' %}
     </section>
 
     {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
