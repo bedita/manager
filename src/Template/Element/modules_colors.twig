@@ -2,18 +2,19 @@
 
     {% for name, color in config('Modules.colors') %}
 
-            .grid-main-header .modules-menu__modules .modules-menu__module.commands-menu__module--{{ name }},
-            .commands-menu__module--{{ name }} {
-                background-color: {{ color }};
-            }
+        .content-header .main-header .modules-menu__modules .modules-menu__module.commands-menu__module--{{ name }},
+        .commands-menu__module--{{ name }} {
+            background-color: {{ color }};
+        }
 
-            .module-color-{{ name }} {
-                background-color: {{ color }} !important;
-            }
+        .menu-module-color-{{ name }},
+        .module-color-{{ name }} {
+            background-color: {{ color }} !important;
+        }
 
-            .border-color-{{ name }} {
-                border-color:  {{ color }} !important;
-            }
+        .border-color-{{ name }} {
+            border-color:  {{ color }} !important;
+        }
 
     {% endfor %}
 

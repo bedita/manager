@@ -4,6 +4,8 @@
 <div class="dashboard">
     <ul class="dashboard-items">
     {% for module in modules %}
+
+        {# We should comment nearby any variable dependent class either a list of outcomes, when shor, or the logic behind it #}
         <li class="module-color-{{ module.name }}">
             {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
         </li>

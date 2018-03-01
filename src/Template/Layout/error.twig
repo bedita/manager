@@ -21,26 +21,26 @@
 
 <body>
 
-<main>
-    <aside class="grid-main-sidebar-1">
-        {% element 'Messages/messages' %}
-        {% element 'Menu/left' %}
-    </aside>
-
-    {% if currentModule %}
-        <aside class="grid-main-sidebar-2">
-            {% element 'Menu/commands' %}
+    <main class="grid">
+        <aside class="main-sidebar">
+            {% element 'Messages/messages' %}
+            {% element 'Menu/left' %}
         </aside>
 
-        <header class="grid-main-header">
-            {% element 'Menu/modules' %}
-        </header>
-    {% endif %}
+        {% if currentModule %}
+            <aside class="secondary-sidebar">
+                {% element 'Menu/commands' %}
+            </aside>
 
-    <div class="grid-main-content">
-        {{ _view.fetch('content')|raw }}
-    </div>
-</main>
+            <header class="content-header">
+                {% element 'Menu/modules' %}
+            </header>
+        {% endif %}
+
+        <div class="main-content">
+            {{ _view.fetch('content')|raw }}
+        </div>
+    </main>
 
 {{ Html.script('beditaUI')|raw }}
 {{ Html.script('libs/select2/select2.min')|raw }}
