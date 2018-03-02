@@ -38,28 +38,28 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-<main>
-    {% if _view.template != 'login' %}
-        <aside class="grid-main-sidebar-1">
-            {% element 'Messages/messages' %}
-            {% element 'Menu/left' %}
-        </aside>
-    {% endif %}
+    <main class="layout">
+        {% if _view.template != 'login' %}
+            <aside class="layout-sidebar-primary">
+                {% element 'Messages/messages' %}
+                {% element 'project' %}
+            </aside>
+        {% endif %}
 
-    {% if currentModule %}
-        <aside class="grid-main-sidebar-2">
-            {% element 'Menu/commands' %}
-        </aside>
+        {% if currentModule %}
+            <aside class="layout-sidebar-secondary">
+                {% element 'Menu/commands' %}
+            </aside>
 
-        <header class="grid-main-header">
-            {% element 'Menu/modules' %}
-        </header>
-    {% endif %}
+            <header class="layout-header">
+                {% element 'Modules/header' %}
+            </header>
+        {% endif %}
 
-    <div class="grid-main-content">
-        {{ _view.fetch('content')|raw }}
-    </div>
-</main>
+        <div class="layout-content">
+            {{ _view.fetch('content')|raw }}
+        </div>
+    </main>
 
 {{ Html.script('beditaUI')|raw }}
 {{ Html.script('libs/select2/select2.min')|raw }}

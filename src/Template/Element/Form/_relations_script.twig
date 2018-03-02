@@ -260,7 +260,7 @@
         /**
          * Save relation data button click handler
          */
-         $('form#form--main').submit(function(event) {
+         $('form#form-main').submit(function(event) {
             event.preventDefault();
             const cart = {};
             $('div.cart').each(function(){
@@ -295,7 +295,7 @@
             if (Object.keys(cart).length > 0) {
                 $('#relations').val(JSON.stringify(cart));
             }
-            $('#form--main')[0].submit();
+            $('#form-main')[0].submit();
         });
     });
 </script>

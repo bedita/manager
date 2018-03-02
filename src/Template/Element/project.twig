@@ -1,0 +1,13 @@
+<div class="element-menu">
+    {{ Html.link((project.name ?: 'BEdita 4'), '/', {'class': "project border-color-#{currentModule.name}"})|raw }}
+    <ul class="menu-links">{{ _view.fetch('links')|raw }}</ul>
+
+    {#{% element 'tree' %}#}
+
+    {% if user %}
+        {% element 'Menu/user' %}
+    {% endif %}
+
+    {% element 'Menu/colophon' %}
+
+</div>

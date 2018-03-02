@@ -1,13 +1,13 @@
 <div class="commands-menu">
-    <div>
-    {% if currentModule %}
-        {{ Html.link(currentModule.name|humanize, {'_name': 'modules:list', 'object_type': currentModule.name}, {'class': "commands-menu__module commands-menu__module--#{currentModule.name}"})|raw }}
-    {% else %}
-        {{ Html.link(_view.request.params.controller|humanize, _view.request.params, {'class': 'commands-menu__module'})|raw }}
-    {% endif %}
+    <div class="commands-header squared">
+        {% if currentModule %}
+            {{ Html.link(currentModule.name|humanize, {'_name': 'modules:list', 'object_type': currentModule.name}, {'class': "module-color-#{currentModule.name}"})|raw }}
+        {% else %}
+            {{ Html.link(_view.request.params.controller|humanize, _view.request.params, {'class': 'commands-menu__module'})|raw }}
+        {% endif %}
     </div>
 
-    <div class="commands-menu-buttons">
+    <div class="commands-buttons">
         {{ _view.fetch('commands')|raw }}
     </div>
 </div>

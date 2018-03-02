@@ -12,7 +12,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 @import './styles/variables';   // common variables used for color, margins, typography
 @import './styles/mixins';
-@import './styles/dev';         // dev, remove in production
 
 // general
 @import './styles/normalize';
@@ -20,16 +19,19 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/layout';      // main grid base layout
 @import './styles/forms';
 
-// modules (new styles for modules)
-@import '../Modules/modules';
-
 // elements
+@import '../Element/elements';
 @import '../Element/Messages/messages';
 @import '../Element/Toolbar/filters';
 @import '../Element/Toolbar/pagination';
 @import '../Element/Menu/menu';
-@import '../Login/login';
-@import '../Dashboard/dashboard';
+@import '../Element/Modules/modules';
+
+// Pages
+@import '../Pages/Error/error';
+@import '../Pages/Login/login';
+@import '../Pages/Dashboard/dashboard';
+@import '../Pages/Modules/modules';
 
 // TODO: organize and move to ../Modules/modules
 @import './styles/modules';

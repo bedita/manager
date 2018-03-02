@@ -26,7 +26,7 @@
 
     let cleanupForm = () => {
         // reset messages/styles for password validation
-        let form = document.getElementById('form--main');
+        let form = document.getElementById('form-main');
         let confirm_password = form && form.elements.confirm_password;
         if (confirm_password) {
             confirm_password.classList.remove('error', 'empty', 'different');
@@ -42,7 +42,7 @@
         event.preventDefault();
         event.stopPropagation();
 
-        let form = document.getElementById('form--main');
+        let form = document.getElementById('form-main');
 
         if (form) {
             let password = form.elements.password;
