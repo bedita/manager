@@ -3,7 +3,7 @@
 <div class="module-form">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
         'url': {'_name': 'trash:list'},
-        'id': 'form--main',
+        'id': 'form-main',
     })|raw }}
 
     <h1>{{ object.attributes.title }}</h1>
