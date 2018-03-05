@@ -10,7 +10,7 @@
 
 {% for key, fieldName in core_properties %}
     {% set type = Schema.getControlTypeFromSchema(fieldName) %}
-    {% set options = Schema.getControlOptionFromTypeAndName(type, fieldName) %}
+    {% set options = Schema.getControlOptionFromTypeAndName(type, fieldName, attributes.fieldName) %}
     {{ Form.control(fieldName, options)|raw }}
 {% endfor %}
 </fieldset>

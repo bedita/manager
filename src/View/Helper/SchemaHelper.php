@@ -103,13 +103,14 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Get control option object for field type and name
+     * Get control option object for field type, name and value.
      *
-     * @param string $type The type (i.e. 'radio', 'text', 'textarea', etc.)
+     * @param string $type The type (i.e. 'radio', 'text', 'textarea', 'json', etc.)
      * @param string $name The field name.
+     * @param string $value The field value.
      * @return array
      */
-    public function getControlOptionFromTypeAndName($type, $name) : array
+    public function getControlOptionFromTypeAndName($type, $name, $value) : array
     {
         if ($name === 'status') {
             return [
@@ -139,6 +140,13 @@ class SchemaHelper extends Helper
                 'autocomplete' => 'new-password',
                 'default' => '',
                 'type' => 'password',
+            ];
+        }
+        if ($type === 'json') {
+            return [
+                'type' => 'textarea',
+                'class' => 'json',
+                'value' => json_encode($value),
             ];
         }
 

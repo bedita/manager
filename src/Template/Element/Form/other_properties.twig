@@ -10,15 +10,12 @@
 
 <fieldset id="object_properties">
 {% set jsonKeys = [] %}
-{% for key, value in other_properties %}
-    {% set property = schema.properties[key] %}
-    {% set type = Schema.getTypeFromSchema(property) %}
-    {% if type == 'json' %}
-        {% set jsonKeys = jsonKeys|merge([key]) %}
-        {{ Form.control(key, {'type': 'textarea', 'class': 'json', 'value': value|json_encode})|raw }}
-    {% else %}
-        {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
-    {% endif %}
+{% for fieldName, value in other_properties %}
+    {% set property = schema.properties[fieldName] %}
+    {% set ptype = Schema.getTypeFromSchema(property) %}
+    {% set type = (ptype == 'json') ? 'json' : Schema.getControlTypeFromSchema(fieldName, ptype) %}
+    {% set options = Schema.getControlOptionFromTypeAndName(type, fieldName, value) %}
+    {{ Form.control(fieldName, options)|raw }}
 {% endfor %}
 {% if jsonKeys %}
     {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
