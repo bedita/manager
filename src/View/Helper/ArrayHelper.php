@@ -41,13 +41,6 @@ class ArrayHelper extends Helper
      */
     public function removeKeys(array $arr, array $keys) : array
     {
-        $result = [];
-        foreach ($arr as $k => $v) {
-            if (!in_array($k, $keys)) {
-                $result[$k] = $v;
-            }
-        }
-
-        return $result;
+        return array_diff_key($arr, array_flip($keys));
     }
 }
