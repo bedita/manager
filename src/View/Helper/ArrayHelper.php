@@ -25,7 +25,6 @@ class ArrayHelper extends Helper
      * Return array_combine of array using values as keys.
      *
      * @param array $arr The array.
-     *
      * @return array combined array.
      */
     public function combine(array $arr) : array
@@ -36,9 +35,8 @@ class ArrayHelper extends Helper
     /**
      * Return array without specified keys.
      *
-     * @param array $arr  The array.
+     * @param array $arr The array.
      * @param array $keys The keys to remove.
-     *
      * @return array The array without keys.
      */
     public function removeKeys(array $arr, array $keys) : array

@@ -426,6 +426,7 @@ return [
             'core_attributes' => [
                 'username',
                 'password',
+                'confirm-password',
                 'name',
                 'surname',
                 'email',
