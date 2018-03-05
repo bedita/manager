@@ -420,7 +420,18 @@ return [
             'profiles' => '#093',
             'users' => '#555',
             'videos' => '#f03',
-        ]
+        ],
+
+        'users' => [
+            'core_attributes' => [
+                'username',
+                'password',
+                'confirm-password',
+                'name',
+                'surname',
+                'email',
+            ],
+        ],
     ],
 
     /**

@@ -31,4 +31,16 @@ class ArrayHelper extends Helper
     {
         return array_combine(array_values($arr), array_values($arr));
     }
+
+    /**
+     * Return array without specified keys.
+     *
+     * @param array $arr The array.
+     * @param array $keys The keys to remove.
+     * @return array The array without keys.
+     */
+    public function removeKeys(array $arr, array $keys) : array
+    {
+        return array_diff_key($arr, array_flip($keys));
+    }
 }

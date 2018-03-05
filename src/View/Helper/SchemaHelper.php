@@ -101,4 +101,55 @@ class SchemaHelper extends Helper
 
         return $schema['type'];
     }
+
+    /**
+     * Get control option object for field type, name and value.
+     *
+     * @param string $type The type (i.e. 'radio', 'text', 'textarea', 'json', etc.)
+     * @param string $name The field name.
+     * @param string $value The field value.
+     * @return array
+     */
+    public function getControlOptionFromTypeAndName($type, $name, $value) : array
+    {
+        if ($name === 'status') {
+            return [
+                'type' => 'radio',
+                'options' => [
+                    ['value' => 'on', 'text' => __('On')],
+                    ['value' => 'draft', 'text' => __('Draft')],
+                    ['value' => 'off', 'text' => __('Off')],
+                ],
+            ];
+        }
+        if ($name === 'password') {
+            return [
+                'class' => 'password',
+                'placeholder' => __('new password'),
+                'autocomplete' => 'new-password',
+                'default' => '',
+            ];
+        }
+        if ($name === 'confirm-password') {
+            return [
+                'label' => __('Retype password'),
+                'id' => 'confirm_password',
+                'name' => 'confirm-password',
+                'class' => 'confirm-password',
+                'placeholder' => __('confirm password'),
+                'autocomplete' => 'new-password',
+                'default' => '',
+                'type' => 'password',
+            ];
+        }
+        if ($type === 'json') {
+            return [
+                'type' => 'textarea',
+                'class' => 'json',
+                'value' => json_encode($value),
+            ];
+        }
+
+        return compact('type');
+    }
 }

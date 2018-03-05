@@ -142,4 +142,91 @@ class SchemaHelperTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Data provider for `testGetControlOptionFromTypeAndName` test case.
+     *
+     * @return array
+     */
+    public function getControlOptionFromTypeAndNameSchemaProvider() : array
+    {
+        return [
+            'text' => [
+                // expected result
+                [
+                    'type' => 'text',
+                ],
+                // params (type, name, value)
+                'text', 'test', '',
+            ],
+            'status' => [
+                // expected result
+                [
+                    'type' => 'radio',
+                    'options' => [
+                        ['value' => 'on', 'text' => __('On')],
+                        ['value' => 'draft', 'text' => __('Draft')],
+                        ['value' => 'off', 'text' => __('Off')],
+                    ],
+                ],
+                // params (type, name, value)
+                'radio', 'status', '',
+            ],
+            'password' => [
+                // expected result
+                [
+                    'class' => 'password',
+                    'placeholder' => __('new password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                ],
+                // params (type, name, value)
+                'text', 'password', '',
+            ],
+            'confirm-password' => [
+                // expected result
+                [
+                    'label' => __('Retype password'),
+                    'id' => 'confirm_password',
+                    'name' => 'confirm-password',
+                    'class' => 'confirm-password',
+                    'placeholder' => __('confirm password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                    'type' => 'password',
+                ],
+                // params (type, name, value)
+                'text', 'confirm-password', '',
+            ],
+            'json' => [
+                // expected result
+                [
+                    'type' => 'textarea',
+                    'class' => 'json',
+                    'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
+                ],
+                // params (type, name, value)
+                'json', '', '{ "example": { "this": "is", "an": "example" } }',
+            ],
+        ];
+    }
+
+    /**
+     * Test `getControlOptionFromTypeAndName()` method.
+     *
+     * @param string $expected Expected result.
+     * @param string $type The type (i.e. 'radio', 'text', 'textarea', 'json', etc.)
+     * @param string $name The field name.
+     * @param string $value The field value.
+     * @return void
+     *
+     * @dataProvider getControlOptionFromTypeAndNameSchemaProvider()
+     * @covers ::getControlOptionFromTypeAndName()
+     */
+    public function testGetControlOptionFromTypeAndName(array $expected, $type, $name, $value) : void
+    {
+        $actual = $this->Schema->getControlOptionFromTypeAndName($type, $name, $value);
+
+        static::assertSame($expected, $actual);
+    }
 }
