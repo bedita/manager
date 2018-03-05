@@ -1,18 +1,45 @@
 {% set attributes = data.attributes %}
+{% set module = currentModule.name|default('') %}
+{% set core_properties = config('Modules.' ~ module ~ '.core_attributes')|default(['title', 'description', 'uname', 'status']) %}
 
 <div class="tab"><h2>{{ __('Main Properties') }}</h2></div>
 
 <fieldset id="core_properties">
     {{ Form.hidden('id', {'value': object.id})|raw }}
-    {{ Form.control('title')|raw }}
-    {{ Form.control('description', {'type': 'textarea'})|raw }}
-    {{ Form.control('uname')|raw }}
-    {{ Form.control('status', {
-        'type': 'radio',
-        'options': [
-            {'value': 'on', 'text': __('On')},
-            {'value': 'draft', 'text': __('Draft')},
-            {'value': 'off', 'text': __('Off')},
-        ]
-    })|raw }}
+
+
+{% for key, property in core_properties %}
+    {% if property == 'password' %}
+    <div class="password-component">
+        {{ Form.control('password', {
+            'class': 'password',
+            'placeholder': 'new password',
+            'autocomplete': 'new-password',
+            'default': ''
+        })|raw }}
+        {{ Form.control('password', {
+            'label': 'Retype password',
+            'id': 'confirm_password',
+            'name': 'confirm-password',
+            'class': 'confirm-password',
+            'placeholder': 'confirm password',
+            'autocomplete': 'new-password',
+            'default': ''
+        })|raw }}
+    </div>
+    {% elseif property == 'description' %}
+        {{ Form.control('description', {'type': 'textarea'})|raw }}
+    {% elseif property == 'status' %}
+        {{ Form.control('status', {
+            'type': 'radio',
+            'options': [
+                {'value': 'on', 'text': __('On')},
+                {'value': 'draft', 'text': __('Draft')},
+                {'value': 'off', 'text': __('Off')},
+            ]
+        })|raw }}
+    {% else %}
+        {{ Form.control(property, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
+    {% endif %}
+{% endfor %}
 </fieldset>
