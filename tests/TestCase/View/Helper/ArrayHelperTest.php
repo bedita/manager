@@ -181,5 +181,4 @@ class ArrayHelperTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
-
 }
