@@ -1,16 +1,13 @@
-{% set default_core_attributes = ['title', 'description', 'uname', 'status'] %}
-{% set attributes = data.attributes %}
-{% set module = currentModule.name|default('') %}
-{% set core_properties = config('Modules.' ~ module ~ '.core_attributes')|default(default_core_attributes) %}
 
 <div class="tab"><h2>{{ __('Main Properties') }}</h2></div>
 
 <fieldset id="core_properties">
     {{ Form.hidden('id', {'value': object.id})|raw }}
 
-{% for key, fieldName in core_properties %}
-    {% set type = Schema.getControlTypeFromSchema(fieldName) %}
-    {% set options = Schema.getControlOptionFromTypeAndName(type, fieldName, attributes.fieldName) %}
-    {{ Form.control(fieldName, options)|raw }}
+{% for key, value in core_properties %}
+
+    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+    {{ Form.control(key, options)|raw }}
+
 {% endfor %}
 </fieldset>

@@ -136,4 +136,50 @@ class ArrayHelperTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Data provider for `testOnlyKeys` test case.
+     *
+     * @return array
+     */
+    public function onlyKeysProvider() : array
+    {
+        return [
+            'basic' => [
+                [
+                    'extra' => 'object',
+                    'description' => 'string',
+                ], // expected
+                [
+                    'title' => 'string',
+                    'description' => 'string',
+                    'uname' => 'string',
+                    'status' => 'string',
+                    'extra' => 'object',
+                ], // data
+                [
+                    'extra',
+                    'description'
+                ], // keys to keep
+            ]
+        ];
+    }
+
+    /**
+     * Test `onlyKeys()` method.
+     *
+     * @dataProvider onlyKeysProvider()
+     * @covers ::onlyKeys()
+     * @param array $expected The expected array.
+     * @param array $arr The array.
+     * @param array $keys The keys to keep.
+     * @return void
+     */
+    public function testOnlyKeys(array $expected, array $arr, array $keys)
+    {
+        $actual = $this->Array->onlyKeys($arr, $keys);
+
+        static::assertSame($expected, $actual);
+    }
+
 }

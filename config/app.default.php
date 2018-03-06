@@ -421,15 +421,29 @@ return [
             'users' => '#555',
             'videos' => '#f03',
         ],
+    ],
 
+    /**
+     * Properties display configuration settings.
+     *
+     * For each module name:
+     *  - 'core' list of properties to present as `core`
+     *  - 'index' properties to display in index view (other than id, status and modified)
+     */
+    'Properties' => [
         'users' => [
-            'core_attributes' => [
+            'core' => [
                 'username',
                 'password',
                 'confirm-password',
                 'name',
                 'surname',
                 'email',
+            ],
+            'index' => [
+                'name',
+                'surname',
+                'username',
             ],
         ],
     ],

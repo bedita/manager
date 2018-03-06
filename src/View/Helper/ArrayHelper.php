@@ -43,4 +43,24 @@ class ArrayHelper extends Helper
     {
         return array_diff_key($arr, array_flip($keys));
     }
+
+    /**
+     * Return array with only specified keys maintaining order.
+     *
+     * @param array $arr The array.
+     * @param array $keys The ordered keys to maintain.
+     * @return array The array with only selected keys.
+     */
+    public function onlyKeys(array $arr, array $keys) : array
+    {
+        $res = [];
+        foreach ($keys as $k) {
+            $res[$k] = null;
+            if (isset($arr[$k])) {
+                $res[$k] = $arr[$k];
+            }
+        }
+
+        return $res;
+    }
 }
