@@ -54,11 +54,11 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testGetControlTypeFromSchema` test case.
+     * Data provider for `testControlTypeFromSchema` test case.
      *
      * @return array
      */
-    public function getControlTypeFromSchemaProvider() : array
+    public function controlTypeFromSchemaProvider() : array
     {
         return [
             'string' => [
@@ -117,47 +117,58 @@ class SchemaHelperTest extends TestCase
                     'const' => 13,
                 ],
             ],
-            'unknown type' => [
-                'text',
+            'json' => [
+                'json',
                 [
                     'type' => 'object',
+                ],
+            ],
+            'unknown' => [
+                'text',
+                [
+                    'type' => 'unknown',
                 ],
             ],
         ];
     }
 
     /**
-     * Test `getControlTypeFromSchema()` method.
+     * Test `controlTypeFromSchema()` method.
      *
      * @param string $expected Expected result.
      * @param array|bool $schema Schema.
      * @return void
      *
-     * @dataProvider getControlTypeFromSchemaProvider()
-     * @covers ::getControlTypeFromSchema()
+     * @dataProvider controlTypeFromSchemaProvider()
+     * @covers ::controlTypeFromSchema()
      */
-    public function testGetControlTypeFromSchema(string $expected, $schema) : void
+    public function testControlTypeFromSchema(string $expected, $schema) : void
     {
-        $actual = $this->Schema->getControlTypeFromSchema($schema);
+        $actual = $this->Schema->controlTypeFromSchema($schema);
 
         static::assertSame($expected, $actual);
     }
 
     /**
-     * Data provider for `testGetControlOptionFromTypeAndName` test case.
+     * Data provider for `testControlOptions` test case.
      *
      * @return array
      */
-    public function getControlOptionFromTypeAndNameSchemaProvider() : array
+    public function controlOptionsSchemaProvider() : array
     {
         return [
             'text' => [
                 // expected result
                 [
                     'type' => 'text',
+                    'value' => 'test',
                 ],
-                // params (type, name, value)
-                'text', 'test', '',
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'name',
+                'test',
             ],
             'status' => [
                 // expected result
@@ -169,8 +180,12 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'off', 'text' => __('Off')],
                     ],
                 ],
-                // params (type, name, value)
-                'radio', 'status', '',
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'status',
+                'on'
             ],
             'password' => [
                 // expected result
@@ -180,8 +195,12 @@ class SchemaHelperTest extends TestCase
                     'autocomplete' => 'new-password',
                     'default' => '',
                 ],
-                // params (type, name, value)
-                'text', 'password', '',
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'password',
+                ''
             ],
             'confirm-password' => [
                 // expected result
@@ -195,8 +214,12 @@ class SchemaHelperTest extends TestCase
                     'default' => '',
                     'type' => 'password',
                 ],
-                // params (type, name, value)
-                'text', 'confirm-password', '',
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'confirm-password',
+                ''
             ],
             'json' => [
                 // expected result
@@ -205,27 +228,46 @@ class SchemaHelperTest extends TestCase
                     'class' => 'json',
                     'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
                 ],
-                // params (type, name, value)
-                'json', '', '{ "example": { "this": "is", "an": "example" } }',
+                // schema type
+                [
+                    'type' => 'object',
+                ],
+                'extra',
+                '{ "example": { "this": "is", "an": "example" } }',
+            ],
+            'title' => [
+                // expected result
+                [
+                    'class' => 'title',
+                    'type' => 'text',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/html',
+                ],
+                'title',
+                'test',
             ],
         ];
     }
 
     /**
-     * Test `getControlOptionFromTypeAndName()` method.
+     * Test `controlOptions` method.
      *
      * @param string $expected Expected result.
-     * @param string $type The type (i.e. 'radio', 'text', 'textarea', 'json', etc.)
+     * @param array $type The JSON schema type
      * @param string $name The field name.
      * @param string $value The field value.
      * @return void
      *
-     * @dataProvider getControlOptionFromTypeAndNameSchemaProvider()
-     * @covers ::getControlOptionFromTypeAndName()
+     * @dataProvider controlOptionsSchemaProvider()
+     * @covers ::controlOptions()
+     * @covers ::customControlOptions()
      */
-    public function testGetControlOptionFromTypeAndName(array $expected, $type, $name, $value) : void
+    public function testControlOptions(array $expected, $type, $name, $value) : void
     {
-        $actual = $this->Schema->getControlOptionFromTypeAndName($type, $name, $value);
+        $actual = $this->Schema->controlOptions($name, $value, $type);
 
         static::assertSame($expected, $actual);
     }

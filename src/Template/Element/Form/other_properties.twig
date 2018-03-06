@@ -1,21 +1,18 @@
 {% element 'Form/_other_properties_script' %}
 
-{% set default_core_attributes = ['title', 'description', 'uname', 'status'] %}
-{% set all_attributes = object.attributes|default([]) %}
-{% set module = currentModule.name|default('') %}
-{% set core_properties = config('Modules.' ~ module ~ '.core_attributes')|default(default_core_attributes) %}
-{% set other_properties = Array.removeKeys(all_attributes, core_properties) %}
-
 <div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
 
 <fieldset id="object_properties">
 {% set jsonKeys = [] %}
-{% for fieldName, value in other_properties %}
-    {% set property = schema.properties[fieldName] %}
-    {% set ptype = Schema.getTypeFromSchema(property) %}
-    {% set type = (ptype == 'json') ? 'json' : Schema.getControlTypeFromSchema(fieldName, ptype) %}
-    {% set options = Schema.getControlOptionFromTypeAndName(type, fieldName, value) %}
-    {{ Form.control(fieldName, options)|raw }}
+{% for key, value in other_properties %}
+
+    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+    {% if options.class and  options.class == 'json' %}
+        {% set jsonKeys = jsonKeys|merge([key]) %}
+    {% endif %}
+
+    {{ Form.control(key, options)|raw }}
+
 {% endfor %}
 {% if jsonKeys %}
     {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}

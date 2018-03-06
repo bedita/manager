@@ -27,7 +27,7 @@ class SchemaHelper extends Helper
      * @param mixed $schema Property schema.
      * @return string
      */
-    public function getControlTypeFromSchema($schema) : string
+    public function controlTypeFromSchema($schema) : string
     {
         if (!is_array($schema)) {
             return 'text';
@@ -39,7 +39,7 @@ class SchemaHelper extends Helper
                     continue;
                 }
 
-                return $this->getControlTypeFromSchema($subSchema);
+                return $this->controlTypeFromSchema($subSchema);
             }
         }
 
@@ -48,6 +48,9 @@ class SchemaHelper extends Helper
         }
 
         switch ($schema['type']) {
+            case 'object':
+                return 'json';
+
             case 'string':
                 if (!empty($schema['format']) && $schema['format'] === 'date-time') {
                     return 'text'; // TODO: replace with "datetime".
@@ -70,78 +73,71 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Get object type from property schema.
+     * Get controls option by property name.
      *
-     * @param mixed $schema Property schema.
-     * @return string|null
+     * @param string $name The field name.
+     * @return array
      */
-    public function getTypeFromSchema($schema) : ?string
+    protected function customControlOptions($name) : array
     {
-        if (!is_array($schema)) {
-            return null;
+        switch ($name) {
+            case 'status':
+                return [
+                    'type' => 'radio',
+                    'options' => [
+                        ['value' => 'on', 'text' => __('On')],
+                        ['value' => 'draft', 'text' => __('Draft')],
+                        ['value' => 'off', 'text' => __('Off')],
+                    ],
+                ];
+
+            case 'password':
+                return [
+                    'class' => 'password',
+                    'placeholder' => __('new password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                ];
+
+            case 'confirm-password':
+                return [
+                    'label' => __('Retype password'),
+                    'id' => 'confirm_password',
+                    'name' => 'confirm-password',
+                    'class' => 'confirm-password',
+                    'placeholder' => __('confirm password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                    'type' => 'password',
+                ];
+
+            case 'title':
+                return [
+                    'class' => 'title',
+                    'type' => 'text',
+                ];
+
+            default:
+                return [];
         }
-
-        if (!empty($schema['oneOf'])) {
-            foreach ($schema['oneOf'] as $subSchema) {
-                if (!empty($subSchema['type']) && $subSchema['type'] === 'null') {
-                    continue;
-                }
-
-                return $this->getTypeFromSchema($subSchema);
-            }
-        }
-
-        if (empty($schema['type'])) {
-            return null;
-        }
-
-        if ($schema['type'] === 'object') {
-            return 'json';
-        }
-
-        return $schema['type'];
     }
 
     /**
-     * Get control option object for field type, name and value.
+     * Get control options for a property schema.
      *
-     * @param string $type The type (i.e. 'radio', 'text', 'textarea', 'json', etc.)
-     * @param string $name The field name.
-     * @param string $value The field value.
+     * @param string $name Property name.
+     * @param string $value Property value.
+     * @param array $schema Object schema array.
      * @return array
      */
-    public function getControlOptionFromTypeAndName($type, $name, $value) : array
+    public function controlOptions($name, $value, $schema) : array
     {
-        if ($name === 'status') {
-            return [
-                'type' => 'radio',
-                'options' => [
-                    ['value' => 'on', 'text' => __('On')],
-                    ['value' => 'draft', 'text' => __('Draft')],
-                    ['value' => 'off', 'text' => __('Off')],
-                ],
-            ];
+        $options = $this->customControlOptions($name);
+        if ($options) {
+            return $options;
         }
-        if ($name === 'password') {
-            return [
-                'class' => 'password',
-                'placeholder' => __('new password'),
-                'autocomplete' => 'new-password',
-                'default' => '',
-            ];
-        }
-        if ($name === 'confirm-password') {
-            return [
-                'label' => __('Retype password'),
-                'id' => 'confirm_password',
-                'name' => 'confirm-password',
-                'class' => 'confirm-password',
-                'placeholder' => __('confirm password'),
-                'autocomplete' => 'new-password',
-                'default' => '',
-                'type' => 'password',
-            ];
-        }
+
+        $type = $this->controlTypeFromSchema($schema);
         if ($type === 'json') {
             return [
                 'type' => 'textarea',
@@ -150,6 +146,6 @@ class SchemaHelper extends Helper
             ];
         }
 
-        return compact('type');
+        return compact('type', 'value');
     }
 }
