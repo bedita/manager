@@ -1,5 +1,7 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
+{% set index_properties = config('Properties.' ~ currentModule.name ~ '.index')|default(['title']) %}
+
 <modules-index inline-template>
     <div>
         {% element 'Modules/header' %}
@@ -8,7 +10,9 @@
 
             <div class="list-objects">
                 <nav class="table-header">
-                    <div>{{ Link.sort('title')}}</div>
+                    {% for prop in index_properties %}
+                        <div>{{ Link.sort(prop) }}</div>
+                    {% endfor %}
                     <div>{{ Link.sort('id')}}</div>
                     {% if currentModule.hints.multiple_types %}
                         <div>{{ __('type') }}</div>
@@ -23,7 +27,11 @@
                         href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
                         title="{{ object.attributes.title }}"
                         class="object-status-{{ object.attributes.status }}">
-                            <div>{{ object.attributes.title }}</div>
+
+                            {% for prop in index_properties %}
+                                <div>{{ object.attributes[prop] }}</div>
+                            {% endfor %}
+
                             <div>{{ object.id }}</div>
                             {% if currentModule.hints.multiple_types %}
                                 <div>{{ object.type }}</div>
@@ -53,5 +61,4 @@
             Html.link(__('Trashcan'), {'_name': 'trash:list', 'filter': {'type': objectType}})
         )%}
     </div>
-
 </modules-index>

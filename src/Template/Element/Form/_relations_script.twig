@@ -80,7 +80,7 @@
     * @return {void}
     */
     function loadRelationable(relation, input, page, pageSize) {
-        let url = $('#relationship_' + relation)[0].getAttribute('data-available') + '&autocomplete=true';
+        let url = $('#relationship_' + relation)[0].getAttribute('data-available') + '?autocomplete=true';
         let query = (input && input.value) ? input.value : '';
         if (query) {
             url += '&q=' + query;

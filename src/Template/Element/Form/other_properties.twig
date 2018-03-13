@@ -3,45 +3,18 @@
 <div class="tab"><h2>{{ __('Other Properties') }}</h2></div>
 
 <fieldset id="object_properties">
-
 {% set jsonKeys = [] %}
-{% for key, value in object.attributes %}
-    {% if not in_array(key, ['title', 'description', 'uname', 'status']) %}
-        {% set property = schema.properties[key] %}
-        {% set type = Schema.getTypeFromSchema(property) %}
-        {% if type == 'json' %}
-            {% set jsonKeys = jsonKeys|merge([key]) %}
-            {{ Form.control(key, {'type': 'textarea', 'class': 'json', 'value': value|json_encode})|raw }}
-        {% else %}
-            {{ Form.control(key, {'type': Schema.getControlTypeFromSchema(property)})|raw }}
+{% for key, value in other_properties %}
 
-            {% if key == 'username' and currentModule.name == 'users' %}
-                <div class="password-component">
-                    {{ Form.control('password', {
-                        'class': 'password',
-                        'placeholder': 'new password',
-                        'autocomplete': 'new-password',
-                        'default': ''
-                    })|raw }}
-
-                    {{ Form.control('password', {
-                        'label': 'Retype password',
-                        'id': 'confirm_password',
-                        'name': 'confirm-password',
-                        'class': 'confirm-password',
-                        'placeholder': 'confirm password',
-                        'autocomplete': 'new-password',
-                        'default': ''
-                    })|raw }}
-                </div>
-            {% endif %}
-
-        {% endif %}
+    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+    {% if options.class and  options.class == 'json' %}
+        {% set jsonKeys = jsonKeys|merge([key]) %}
     {% endif %}
+
+    {{ Form.control(key, options)|raw }}
+
 {% endfor %}
 {% if jsonKeys %}
     {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
 {% endif %}
-
-
 </fieldset>

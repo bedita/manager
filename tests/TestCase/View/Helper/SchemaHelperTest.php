@@ -54,11 +54,11 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testGetControlTypeFromSchema` test case.
+     * Data provider for `testControlTypeFromSchema` test case.
      *
      * @return array
      */
-    public function getControlTypeFromSchemaProvider() : array
+    public function controlTypeFromSchemaProvider() : array
     {
         return [
             'string' => [
@@ -117,28 +117,157 @@ class SchemaHelperTest extends TestCase
                     'const' => 13,
                 ],
             ],
-            'unknown type' => [
-                'text',
+            'json' => [
+                'json',
                 [
                     'type' => 'object',
+                ],
+            ],
+            'unknown' => [
+                'text',
+                [
+                    'type' => 'unknown',
                 ],
             ],
         ];
     }
 
     /**
-     * Test `getControlTypeFromSchema()` method.
+     * Test `controlTypeFromSchema()` method.
      *
      * @param string $expected Expected result.
      * @param array|bool $schema Schema.
      * @return void
      *
-     * @dataProvider getControlTypeFromSchemaProvider()
-     * @covers ::getControlTypeFromSchema()
+     * @dataProvider controlTypeFromSchemaProvider()
+     * @covers ::controlTypeFromSchema()
      */
-    public function testGetControlTypeFromSchema(string $expected, $schema) : void
+    public function testControlTypeFromSchema(string $expected, $schema) : void
     {
-        $actual = $this->Schema->getControlTypeFromSchema($schema);
+        $actual = $this->Schema->controlTypeFromSchema($schema);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testControlOptions` test case.
+     *
+     * @return array
+     */
+    public function controlOptionsSchemaProvider() : array
+    {
+        return [
+            'text' => [
+                // expected result
+                [
+                    'type' => 'text',
+                    'value' => 'test',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'name',
+                'test',
+            ],
+            'status' => [
+                // expected result
+                [
+                    'type' => 'radio',
+                    'options' => [
+                        ['value' => 'on', 'text' => __('On')],
+                        ['value' => 'draft', 'text' => __('Draft')],
+                        ['value' => 'off', 'text' => __('Off')],
+                    ],
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'status',
+                'on'
+            ],
+            'password' => [
+                // expected result
+                [
+                    'class' => 'password',
+                    'placeholder' => __('new password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'password',
+                ''
+            ],
+            'confirm-password' => [
+                // expected result
+                [
+                    'label' => __('Retype password'),
+                    'id' => 'confirm_password',
+                    'name' => 'confirm-password',
+                    'class' => 'confirm-password',
+                    'placeholder' => __('confirm password'),
+                    'autocomplete' => 'new-password',
+                    'default' => '',
+                    'type' => 'password',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'confirm-password',
+                ''
+            ],
+            'json' => [
+                // expected result
+                [
+                    'type' => 'textarea',
+                    'class' => 'json',
+                    'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
+                ],
+                // schema type
+                [
+                    'type' => 'object',
+                ],
+                'extra',
+                '{ "example": { "this": "is", "an": "example" } }',
+            ],
+            'title' => [
+                // expected result
+                [
+                    'class' => 'title',
+                    'type' => 'text',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/html',
+                ],
+                'title',
+                'test',
+            ],
+        ];
+    }
+
+    /**
+     * Test `controlOptions` method.
+     *
+     * @param string $expected Expected result.
+     * @param array $type The JSON schema type
+     * @param string $name The field name.
+     * @param string $value The field value.
+     * @return void
+     *
+     * @dataProvider controlOptionsSchemaProvider()
+     * @covers ::controlOptions()
+     * @covers ::customControlOptions()
+     */
+    public function testControlOptions(array $expected, $type, $name, $value) : void
+    {
+        $actual = $this->Schema->controlOptions($name, $value, $type);
 
         static::assertSame($expected, $actual);
     }
