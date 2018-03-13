@@ -1,0 +1,7 @@
+
+
+Vue.component('modules-view', {
+
+});
+
+
