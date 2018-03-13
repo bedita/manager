@@ -92,6 +92,13 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'trash:delete']
     );
 
+    // Upload.
+    $routes->connect(
+        '/upload',
+        ['controller' => 'Modules', 'action' => 'upload'],
+        ['_name' => 'modules:upload']
+    );
+
     // Modules.
     $routes->connect(
         '/:object_type',

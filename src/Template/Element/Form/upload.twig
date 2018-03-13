@@ -1,0 +1,6 @@
+{{ Form.create(null, {'id': 'form-upload', 'type': 'file', 'url': '/upload'})|raw }}
+    {{ __('Type') }}:
+    {{ Form.select('model-type', config('Upload.models')) | raw }}
+    {{ Form.control('file', { 'type': 'file' }) | raw }}
+    {{ Form.submit(__('Upload')) | raw }}
+{{ Form.end()|raw }}

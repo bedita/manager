@@ -1,5 +1,9 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
+<div class="upload-form">
+    {% element 'Form/upload' %}
+</div>
+
 <div class="module-form">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
         'url': {'_name': 'modules:save', 'object_type': objectType},
