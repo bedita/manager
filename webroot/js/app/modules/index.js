@@ -13,6 +13,7 @@ Vue.component('modules-index', {
             searchQuery: '',
             pageSize: '100',
             page: '',
+            sort: '',
         };
     },
 
@@ -52,6 +53,14 @@ Vue.component('modules-index', {
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(pageExp, '$1'));
                     this.page = this.isNumeric(matches[0]) ? matches[0] : '';
+                }
+
+                // search for page='some string' both after ? and & tokens
+                let sortExp = /[?&]sort=([^&#]*)/g;
+                matches = urlParams.match(sortExp);
+                if (matches && matches.length) {
+                    matches = matches.map(e => e.replace(sortExp, '$1'));
+                    this.sort = matches[0];
                 }
             }
         },
@@ -114,6 +123,7 @@ Vue.component('modules-index', {
                 q: this.searchQuery,
                 page_size: this.pageSize,
                 page: this.page,
+                sort: this.sort,
             });
             window.location.replace(url);
         },
