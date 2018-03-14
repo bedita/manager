@@ -1,5 +1,14 @@
 
 
+/**
+ * Templates that uses this component (directly or indirectly)
+ *
+ * Template/Modules/index.twig
+ * - Element/Toolbar/filter.twig
+ * - Element/Toolbar/pagination.twig
+ *
+ */
+
 Vue.component('modules-index', {
 
     /**
@@ -26,6 +35,12 @@ Vue.component('modules-index', {
      * component methods
      */
     methods: {
+
+        /**
+         * extract params from page url
+         *
+         * @returns {void}
+         */
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
@@ -55,7 +70,7 @@ Vue.component('modules-index', {
                     this.page = this.isNumeric(matches[0]) ? matches[0] : '';
                 }
 
-                // search for page='some string' both after ? and & tokens
+                // search for sort='some string' both after ? and & tokens
                 let sortExp = /[?&]sort=([^&#]*)/g;
                 matches = urlParams.match(sortExp);
                 if (matches && matches.length) {
@@ -72,6 +87,7 @@ Vue.component('modules-index', {
          * - page_size
          *
          * @param {Object} params
+         * @returns {String} url
          */
         buildUrlParams(params) {
             let url = `${window.location.origin}${window.location.pathname}`;
@@ -90,6 +106,8 @@ Vue.component('modules-index', {
 
         /**
          * update pagination keeping searched string
+         *
+         * @returns {void}
          */
         updatePagination() {
             this.page = '';
@@ -99,6 +117,7 @@ Vue.component('modules-index', {
         /**
          * search queryString keeping pagination options
          *
+         * @returns {void}
          */
         search() {
             this.page = '';
@@ -108,6 +127,8 @@ Vue.component('modules-index', {
 
         /**
          * reset queryString in search keeping pagination options
+         *
+         * @returns {void}
          */
         resetResearch() {
             this.searchQuery = '';
@@ -117,6 +138,7 @@ Vue.component('modules-index', {
         /**
          * apply page filters such as query string or pagination
          *
+         * @returns {void}
          */
         applyFilters() {
             let url = this.buildUrlParams({
@@ -128,6 +150,12 @@ Vue.component('modules-index', {
             window.location.replace(url);
         },
 
+        /**
+         * Helper function
+         *
+         * @param {String|Number} num
+         * @returns {Boolean}
+         */
         isNumeric(num){
             return !isNaN(num)
         }
