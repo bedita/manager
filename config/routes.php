@@ -92,13 +92,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'trash:delete']
     );
 
-    // Upload.
-    $routes->connect(
-        '/upload',
-        ['controller' => 'Modules', 'action' => 'upload'],
-        ['_name' => 'modules:upload']
-    );
-
     // Modules.
     $routes->connect(
         '/:object_type',
@@ -124,6 +117,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/create',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
+    );
+    $routes->connect(
+        '/:object_type/upload',
+        ['controller' => 'Modules', 'action' => 'upload'],
+        ['_name' => 'modules:upload']
     );
     $routes->connect(
         '/:object_type/save',

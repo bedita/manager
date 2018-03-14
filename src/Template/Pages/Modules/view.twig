@@ -1,8 +1,11 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
+{% if ((object.id is empty) and (objectType in ['images', 'audio', 'video'])) %}
 <div class="upload-form">
+    <h1>{{ __('Upload {0}', currentModule.singular) }}</h1>
     {% element 'Form/upload' %}
 </div>
+{% endif %}
 
 <div class="module-form">
     {{ Form.create({'defaults': object.attributes, 'schema': {}}, {

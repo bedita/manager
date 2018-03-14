@@ -308,17 +308,20 @@ class ModulesController extends AppController
             $data = compact('type', 'attributes');
             $body = compact('data');
             $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
-            // fill data for view
-            $object = (array)$response['data'];
-            $included = (array)$response['included'][0];
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->set('error', $e);
+            $this->Flash->error($e);
 
-            return;
+            return $this->redirect([
+                '_name' => 'modules:create',
+                'object_type' => $this->objectType,
+            ]);
         }
 
-        $this->set(compact('object'));
-        $this->set(compact('included'));
+        return $this->redirect([
+            '_name' => 'modules:view',
+            'object_type' => $this->objectType,
+            'id' => $response['data']['id'],
+        ]);
     }
 }

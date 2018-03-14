@@ -473,18 +473,4 @@ return [
     'Pagination' => [
         'sizeAvailable' => [10, 20, 50, 100]
     ],
-
-    /**
-     * Upload default settings
-     *
-     * - models => available models (value => label) to associate to upload
-     */
-    'Upload' => [
-        'models' => [
-            'images' => 'Image',
-            'audios' => 'Audio',
-            'videos' => 'Video',
-            'files' => 'File',
-        ],
-    ],
 ];
