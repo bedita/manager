@@ -5,6 +5,3 @@ filter:
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
-  excluded_paths:
-    # exclude js files for now, re-enable when more stabòe
-    - webroot/js/*
