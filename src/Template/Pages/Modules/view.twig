@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% if ((object.id is empty) and (objectType in ['images', 'audio', 'videos'])) %}
+{% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
 <div class="upload-form">
     <h1>{{ __('Upload') }}</h1>
     {% element 'Form/upload' %}
