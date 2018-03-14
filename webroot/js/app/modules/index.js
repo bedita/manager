@@ -18,7 +18,6 @@ Vue.component('modules-index', {
      */
     data() {
         return {
-            message: 'from modules-index component',
             searchQuery: '',
             pageSize: '100',
             page: '',
