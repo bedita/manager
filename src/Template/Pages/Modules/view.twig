@@ -1,8 +1,8 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% if ((object.id is empty) and (objectType in ['images', 'audio', 'video'])) %}
+{% if ((object.id is empty) and (objectType in ['images', 'audio', 'videos'])) %}
 <div class="upload-form">
-    <h1>{{ __('Upload {0}', currentModule.singular) }}</h1>
+    <h1>{{ __('Upload') }}</h1>
     {% element 'Form/upload' %}
 </div>
 {% endif %}
@@ -13,7 +13,7 @@
         'id': 'form-main',
     })|raw }}
 
-    <h1>{{ object.attributes.title|default(__('New {0}', currentModule.singular)) }}</h1>
+    <h1>{{ object.attributes.title|default(__('New')) }}</h1>
 
     {# Extract `core` & `other` properties sets from object.attributes, pass to elements #}
     {% set core_properties = config('Properties.' ~ currentModule.name ~ '.core')|default(['title', 'description', 'uname', 'status']) %}
