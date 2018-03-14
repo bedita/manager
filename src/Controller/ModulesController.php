@@ -285,4 +285,43 @@ class ModulesController extends AppController
         $this->set(compact('meta'));
         $this->set(compact('links'));
     }
+
+    /**
+     * Upload a file and store it in a media stream
+     *
+     * @return void
+     */
+    public function upload()
+    {
+        $object = $included = [];
+        try {
+            // upload file
+            $filename = $this->request->getData('file.name');
+            $filepath = $this->request->getData('file.tmp_name');
+            $headers = ['Content-type' => $this->request->getData('file.type')];
+            $response = $this->apiClient->upload($filename, $filepath, $headers);
+            // create media from stream
+            $streamId = $response['data']['id'];
+            $type = $this->request->getData('model-type');
+            $title = $filename;
+            $attributes = compact('title');
+            $data = compact('type', 'attributes');
+            $body = compact('data');
+            $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e);
+
+            return $this->redirect([
+                '_name' => 'modules:create',
+                'object_type' => $this->objectType,
+            ]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:view',
+            'object_type' => $this->objectType,
+            'id' => $response['data']['id'],
+        ]);
+    }
 }
