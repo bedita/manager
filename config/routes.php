@@ -119,6 +119,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:create']
     );
     $routes->connect(
+        '/:object_type/upload',
+        ['controller' => 'Modules', 'action' => 'upload'],
+        ['_name' => 'modules:upload']
+    );
+    $routes->connect(
         '/:object_type/save',
         ['controller' => 'Modules', 'action' => 'save'],
         ['_name' => 'modules:save']

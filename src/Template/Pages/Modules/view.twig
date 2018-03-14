@@ -5,19 +5,27 @@
         <header class="layout-header">
             {% element 'Modules/header' %}
         </header>
+
+        {% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
+        <div class="upload-form">
+          <h1>{{ __('Upload') }}</h1>
+          {% element 'Form/upload' %}
+        </div>
+        {% endif %}
+
         <div class="module-form">
             {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
                 'url': {'_name': 'modules:save', 'object_type': objectType},
                 'id': 'form-main',
             })|raw }}
 
-            <h1>{{ object.attributes.title|default(__('New {0}', currentModule.singular)) }}</h1>
+            <h1>{{ object.attributes.title|default(__('New')) }}</h1>
+            
+            {# Extract `core` & `other` properties sets from object.attributes, pass to elements #}
+            {% set core_properties = config('Properties.' ~ currentModule.name ~ '.core')|default(['title', 'description', 'uname', 'status']) %}
+            {% element 'Form/core_properties' { 'core_properties': Array.onlyKeys(object.attributes, core_properties)} %}
 
-    {# Extract `core` & `other` properties sets from object.attributes, pass to elements #}
-    {% set core_properties = config('Properties.' ~ currentModule.name ~ '.core')|default(['title', 'description', 'uname', 'status']) %}
-    {% element 'Form/core_properties' { 'core_properties': Array.onlyKeys(object.attributes, core_properties)} %}
-
-    {% element 'Form/other_properties' { 'other_properties': Array.removeKeys(object.attributes, core_properties)} %}
+            {% element 'Form/other_properties' { 'other_properties': Array.removeKeys(object.attributes, core_properties)} %}
 
             {% element 'Form/relations' %}
 
