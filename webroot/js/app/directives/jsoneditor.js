@@ -1,6 +1,6 @@
 /**
  *
- * v-richeditor directive to activate ckeditor on element
+ * v-jsoneditor directive to activate jsoneditor on element
  *
  */
 
