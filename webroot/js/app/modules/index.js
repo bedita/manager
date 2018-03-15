@@ -18,6 +18,7 @@ Vue.component('modules-index', {
      */
     data() {
         return {
+            urlPagination: '',
             searchQuery: '',
             pageSize: '100',
             page: '',
@@ -109,8 +110,7 @@ Vue.component('modules-index', {
          * @returns {void}
          */
         updatePagination() {
-            this.page = '';
-            this.applyFilters();
+            window.location.replace(this.urlPagination);
         },
 
         /**

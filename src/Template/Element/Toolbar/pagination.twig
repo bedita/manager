@@ -25,9 +25,11 @@
 
     <div class="page-size">
         {{ __('Page Size') }}:
-        <select name="page-size" v-model="pageSize" @change="updatePagination()">
+        <select name="page-size" v-on:change="urlPagination = $event.target.value" @change="updatePagination()">
         {% for size in config('Pagination.sizeAvailable') %}
-            <option value="{{ size }}" {% if paging.page_size == size %}selected="selected"{% endif %}>{{ size }}</option>
+
+
+            <option value="{{ Link.pageSize(size) }}" {% if paging.page_size == size %}selected="selected"{% endif %}>{{ size }}</option>
         {% endfor %}
         </select>
     </div>
