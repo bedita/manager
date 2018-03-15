@@ -44,10 +44,10 @@ Vue.component('modules-index', {
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                let urlParams = window.location.search;
+                const urlParams = window.location.search;
 
                 // search for q='some string' both after ? and & tokens
-                let queryStringExp = /[?&]q=([^&#]*)/g;
+                const queryStringExp = /[?&]q=([^&#]*)/g;
                 let matches = urlParams.match(queryStringExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(queryStringExp, '$1'));
@@ -55,7 +55,7 @@ Vue.component('modules-index', {
                 }
 
                 // search for page_size='some string' both after ? and & tokens
-                let pageSizeExp = /[?&]page_size=([^&#]*)/g;
+                const pageSizeExp = /[?&]page_size=([^&#]*)/g;
                 matches = urlParams.match(pageSizeExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(pageSizeExp, '$1'));
@@ -63,7 +63,7 @@ Vue.component('modules-index', {
                 }
 
                 // search for page='some string' both after ? and & tokens
-                let pageExp = /[?&]page=([^&#]*)/g;
+                const pageExp = /[?&]page=([^&#]*)/g;
                 matches = urlParams.match(pageExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(pageExp, '$1'));
@@ -71,7 +71,7 @@ Vue.component('modules-index', {
                 }
 
                 // search for sort='some string' both after ? and & tokens
-                let sortExp = /[?&]sort=([^&#]*)/g;
+                const sortExp = /[?&]sort=([^&#]*)/g;
                 matches = urlParams.match(sortExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(sortExp, '$1'));
