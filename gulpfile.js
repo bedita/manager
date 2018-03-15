@@ -19,7 +19,7 @@ gulp.task('dev', ['sass'], function() {
     browserSync.init({
         //server: "./app"
         proxy: argv.host || 'localhost:8080',
-        notify: false,
+        notify: true,
     });
     gulp.watch(sassGlob, ['sass']);
     gulp.watch(reloadGlob).on('change', browserSync.reload);

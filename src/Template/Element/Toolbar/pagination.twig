@@ -1,14 +1,6 @@
 {# page variables #}
 {% set paging = meta.pagination %}
 
-<script type="text/javascript">
-$(document).ready(function(){
-    $('select[name=page-size]').change(function(event){
-        window.location.replace(event.target.value);
-    });
-});
-</script>
-
 <div class="toolbar-pagination">
 
     <div class="results">
@@ -33,8 +25,10 @@ $(document).ready(function(){
 
     <div class="page-size">
         {{ __('Page Size') }}:
-        <select name="page-size">
+        <select name="page-size" v-on:change="urlPagination = $event.target.value" @change="updatePagination()">
         {% for size in config('Pagination.sizeAvailable') %}
+
+
             <option value="{{ Link.pageSize(size) }}" {% if paging.page_size == size %}selected="selected"{% endif %}>{{ size }}</option>
         {% endfor %}
         </select>

@@ -1,16 +1,4 @@
 <div class="module-header">
-    <ul role="menu">
-        <li>
-            {{ Html.link(__('Dashboard'), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
-        </li>
-
-        {% for module in modules %}
-        <li class="module-color-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
-            {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
-        </li>
-        {% endfor %}
-    </ul>
-
     {% if meta.pagination %}
     <nav class="module-toolbar">
         {% element 'Toolbar/pagination' %}
