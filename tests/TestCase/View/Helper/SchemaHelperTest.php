@@ -249,6 +249,38 @@ class SchemaHelperTest extends TestCase
                 'title',
                 'test',
             ],
+            'description' => [
+                // expected result
+                [
+                    'class' => 'description',
+                    'v-richeditor' => '',
+                    'ckconfig' => 'configNormal',
+                    'type' => 'textarea',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/html',
+                ],
+                'description',
+                'test',
+            ],
+            'body' => [
+                // expected result
+                [
+                    'class' => 'body',
+                    'v-richeditor' => '',
+                    'ckconfig' => 'configFull',
+                    'type' => 'textarea',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/html',
+                ],
+                'body',
+                'test',
+            ],
         ];
     }
 
