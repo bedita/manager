@@ -28,7 +28,7 @@ Vue.directive('jsoneditor', {
         this.element = element;
         const content = element.value;
         try {
-            const json = JSON.parse(content);
+            const json = JSON.parse(content) || {};
 
             if (json) {
                 element.style.display = "none";
