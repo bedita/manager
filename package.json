@@ -1,13 +1,28 @@
 {
+    "name": "be4-web",
+    "version": "0.1.0",
+    "description": "BEdita 4 WebManager (BE3-alike)",
+    "keywords": [
+        "BEdita",
+        "CMS",
+        "Be-web",
+        "BEdita3"
+    ],
+    "author": "Channelweb & Chialab",
+    "license": "LGPL-3.0",
+    "bugs": {
+        "url": "https://github.com/bedita/web/issues"
+    },
+    "homepage": "https://github.com/bedita/web#README",
     "scripts": {
-      "start": "gulp dev"
+        "start": "gulp dev"
     },
     "dependencies": {
-    "browser-sync": "^2.23.6",
-    "gulp": "^3.9.1",
-    "gulp-flatten": "^0.4.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "node-notifier": "^5.2.1"
-  }
+        "browser-sync": "^2.23.6",
+        "gulp": "^3.9.1",
+        "gulp-flatten": "^0.4.0",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.4",
+        "node-notifier": "^5.2.1"
+    }
 }
