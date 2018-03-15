@@ -121,7 +121,7 @@ class SchemaHelper extends Helper
                 return [
                     'class' => 'description',
                     'v-richeditor' => '',
-                    'ckconfig' => 'configNormal',
+                    'ckconfig' => 'configSimple',
                     'type' => 'textarea',
                 ];
 
