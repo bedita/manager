@@ -1,14 +1,13 @@
-
-
 /**
  * Templates that uses this component (directly or indirectly)
+ *  Template/Modules/index.twig
+ *  - Element/Toolbar/filter.twig
+ *  - Element/Toolbar/pagination.twig
  *
- * Template/Modules/index.twig
- * - Element/Toolbar/filter.twig
- * - Element/Toolbar/pagination.twig
+ *
+ * <modules-index> component used for ModulesPage -> Index
  *
  */
-
 Vue.component('modules-index', {
 
     /**
