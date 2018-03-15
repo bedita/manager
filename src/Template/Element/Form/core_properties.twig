@@ -4,10 +4,10 @@
 <fieldset id="core_properties">
     {{ Form.hidden('id', {'value': object.id})|raw }}
 
-{% for key, value in core_properties %}
+    {% for key, value in core_properties %}
 
-    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-    {{ Form.control(key, options)|raw }}
+        {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+        {{ Form.control(key, options)|raw }}
 
-{% endfor %}
+    {% endfor %}
 </fieldset>
