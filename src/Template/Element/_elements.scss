@@ -111,3 +111,27 @@ div.square-loader {
         }
     }
 }
+
+// json editor
+
+.jsoneditor-container {
+    background-color: $gray-550;
+    .jsoneditor {
+        border: 0;
+
+        .jsoneditor-menu {
+            background: $gray-700;
+            border: 0;
+        }
+
+        .jsoneditor-contextmenu {
+            .jsoneditor-menu {
+                background: $gray-300;
+            }
+        }
+
+        button {
+            min-width: unset;
+        }
+    }
+}

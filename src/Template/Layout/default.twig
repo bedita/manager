@@ -34,6 +34,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css" rel="stylesheet" type="text/css">
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -73,6 +76,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {# Vue directives #}
     {{ Html.script('app/directives/richeditor')|raw }}
+    {{ Html.script('app/directives/jsoneditor')|raw }}
 
     {# Modules Page #}
     {{ Html.script('app/modules/view')|raw }}
@@ -87,3 +91,4 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 </body>
 </html>
+
