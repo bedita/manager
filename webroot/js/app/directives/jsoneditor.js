@@ -5,14 +5,19 @@
  */
 
 const jsonEditorOptions = {
-    "mode": "tree",
+    "mode": "code",
     "modes": ["tree", "code"],
     "history": true,
     "search": true,
     onChange: function () {
         if (element) {
             const json = element.jsonEditor.get();
-            element.value = JSON.stringify(json);
+
+            try {
+                element.value = JSON.stringify(json);
+            } catch(e) {
+                console.error(e);
+            }
         }
     },
 };
