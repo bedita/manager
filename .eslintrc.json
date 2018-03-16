@@ -4,6 +4,7 @@
         "sourceType": "module"
     },
     "globals": {
-        "vue": true
+        "vue": true,
+        "ClassicEditor": true
     }
 }

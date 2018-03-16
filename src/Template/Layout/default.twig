@@ -30,7 +30,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
     {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
     {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
+
+    {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -53,7 +56,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
                 {% element 'Menu/commands' %}
             </aside>
 
-             <header class="layout-header">
+            <header class="layout-header">
                 {% element 'layout_header' %}
             </header>
         {% endif %}
@@ -68,6 +71,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('beditaUI')|raw }}
     {{ Html.script('libs/select2/select2.min')|raw }}
 
+    {# Vue directives #}
+    {{ Html.script('app/directives/richeditor')|raw }}
+
     {# Modules Page #}
     {{ Html.script('app/modules/view')|raw }}
     {{ Html.script('app/modules/index')|raw }}
@@ -75,6 +81,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# Trash Page #}
     {{ Html.script('app/trash/view')|raw }}
     {{ Html.script('app/trash/index')|raw }}
+
+    {# Main App #}
     {{ Html.script('app/app')|raw }}
 
 </body>

@@ -144,6 +144,12 @@ class SchemaHelper extends Helper
                 'class' => 'json',
                 'value' => json_encode($value),
             ];
+        } elseif ($type === 'textarea') {
+            return [
+                'type' => 'textarea',
+                'v-richeditor' => '',
+                'ckconfig' => 'configNormal',
+            ];
         }
 
         return compact('type', 'value');

@@ -5,8 +5,19 @@
  * <modules-view> component used for ModulesPage -> View
  *
  */
+
 Vue.component('modules-view', {
 
+    /**
+     * component properties
+     *
+     * @returns {Object}
+     */
+    data() {
+        return {
+
+        };
+    },
 });
 
 
