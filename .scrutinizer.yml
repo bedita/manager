@@ -1,0 +1,7 @@
+checks:
+  php: true
+filter:
+  paths:
+    - 'src/*'
+  dependency_paths:
+    - 'vendor/*'
