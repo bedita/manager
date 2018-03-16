@@ -2,4 +2,5 @@
 
 Vue.config.devtools = true;
 
-Vue.options.delimiters = ['@(', ')'];
+// ERB & underscore style delimiters, avoid conflict with Twig {{ }}
+Vue.options.delimiters = ['<%', '%>']
