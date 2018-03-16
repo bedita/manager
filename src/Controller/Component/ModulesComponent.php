@@ -80,6 +80,9 @@ class ModulesComponent extends Component
 
             return [];
         }
+        if (empty($home['meta'])) {
+            return [];
+        }
 
         return $home['meta'];
     }
