@@ -81,7 +81,7 @@ class ModulesComponent extends Component
             return [];
         }
 
-        return $home['meta'];
+        return !empty($home['meta']) ? $home['meta'] : [];
     }
 
     /**
