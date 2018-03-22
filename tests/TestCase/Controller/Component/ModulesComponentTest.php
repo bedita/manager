@@ -465,7 +465,8 @@ class ModulesComponentTest extends TestCase
             ->with('/home')
             ->willReturn(compact('meta'));
 
-        $this->Modules->setConfig(compact('apiClient', 'currentModuleName'));
+        $clearHomeCache = true;
+        $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
 
         $controller = $this->Modules->getController();
         $controller->dispatchEvent('Controller.beforeRender');
