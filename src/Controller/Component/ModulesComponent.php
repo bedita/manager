@@ -49,6 +49,12 @@ class ModulesComponent extends Component
      */
     public function beforeRender() : void
     {
+        if (empty($this->Auth->user('id'))) {
+            $this->getController()->set(['modules' => [], 'project' => []]);
+
+            return;
+        }
+
         if ($this->getConfig('clearHomeCache')) {
             Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
         }
