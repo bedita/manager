@@ -174,8 +174,6 @@ class ModulesController extends AppController
                     }
                 }
             }
-            debug($requestData);
-            exit;
             $response = $this->apiClient->saveObject($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
