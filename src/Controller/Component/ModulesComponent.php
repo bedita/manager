@@ -39,6 +39,7 @@ class ModulesComponent extends Component
     protected $_defaultConfig = [
         'apiClient' => null,
         'currentModuleName' => null,
+        'clearHomeCache' => false,
     ];
 
     /**
@@ -48,6 +49,10 @@ class ModulesComponent extends Component
      */
     public function beforeRender() : void
     {
+        if ($this->getConfig('clearHomeCache')) {
+            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+        }
+
         $modules = $this->getModules();
         $project = $this->getProject();
 
