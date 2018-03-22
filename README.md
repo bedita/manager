@@ -1,8 +1,8 @@
 # BEdita4 backend webapp
 
 [![Build Status](https://travis-ci.org/bedita/web.svg)](https://travis-ci.org/bedita/web)
-<!-- [![Code Coverage](https://codecov.io/gh/bedita/web/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/web/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/web/)
+<!-- [![Code Coverage](https://codecov.io/gh/bedita/web/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
 Backend webapp for BE4 API.
 
@@ -18,7 +18,7 @@ UI/UX similar to BEdita3, but may change in the near future.
 1. Clone repo & run composer
 
 ```bash
-~$ composer install
+composer install
 ```
 
 If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``.
@@ -35,7 +35,7 @@ export BEDITA_API_KEY="{bedita4-api-key}"
 You are then ready to use the webapp by simply run builtin webserver like this
 
 ```bash
-~$ bin/cake server
+bin/cake server
 ```
 
 And then point your browser to `http://localhost:8765/`
@@ -49,8 +49,8 @@ Or you can configure your preferred web server like Nginx/Apache and point to `w
 Get latest offical image build from Docker Hub
 
 ```bash
-~$ docker pull bedita/web
- ```
+docker pull bedita/web
+```
 
 ### Build image
 
@@ -58,7 +58,7 @@ If you want to build an image from local sources you can do it like this from ro
 
 ```bash
 
-~$ docker build -t be4web-local .
+docker build -t be4web-local .
 
 ```
 
@@ -70,7 +70,7 @@ Run a Docker image setting API base url and API KEY like this:
 
 ```bash
 
-~$ docker run -p 8080:80 \
+docker run -p 8080:80 \
      --env BEDITA_API={bedita-api-url} --env BEDITA_API_KEY={bedita-api-key} \
     bedita/web:latest
 
@@ -83,9 +83,7 @@ Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch 
 Launch gulp with host parameter to proxy your local instance of bedita4web, and watch it with gulp, like this:
 
 ```bash
-
 node_modules/.bin/gulp dev --host http://localhost:8765
-
 ```
 
 Host passed via `--host` option points to your local instance, builtin webserver is used in this example.
@@ -96,9 +94,7 @@ To setup tests locally simply copy tests/.env.default to tests/.env and set env 
 To launch tests:
 
 ```bash
-
 vendors/bin/phpunit [test folder or file, default '/tests']
-
 ```
 
 ## Licensing
