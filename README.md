@@ -1,8 +1,12 @@
-# Simple BEdita4 backend webapp
+# BEdita4 backend webapp
 
-Minimal BEdita3 like backend webapp for BE4 API.
+[![Build Status](https://travis-ci.org/bedita/web.svg)](https://travis-ci.org/bedita/web)
+<!-- [![Code Coverage](https://codecov.io/gh/bedita/web/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/web/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/web/)
 
-UI/UX are supposed to be similar to BE3, but may change in the near future.
+Backend webapp for BE4 API.
+
+UI/UX similar to BEdita3, but may change in the near future.
 
 ## Prerequisites
 
@@ -62,7 +66,7 @@ You may of course choose whatever name you like for the generated image instead 
 
 ### Run
 
-Run a Docker image setting an initial API KEY and admin username and password like this:
+Run a Docker image setting API base url and API KEY like this:
 
 ```bash
 
@@ -80,9 +84,11 @@ Launch gulp with host parameter to proxy your local instance of bedita4web, and 
 
 ```bash
 
-node_modules/.bin/gulp dev --host http://bedita4web.lcl
+node_modules/.bin/gulp dev --host http://localhost:8765
 
 ```
+
+Host passed via `--host` option points to your local instance, builtin webserver is used in this example.
 
 ### Run tests
 
