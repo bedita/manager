@@ -12,7 +12,7 @@ class Result
      *
      * @var int
      */
-    protected $created;
+    protected $objects;
 
     /**
      * Counter of errors (not created)
