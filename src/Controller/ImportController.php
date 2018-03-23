@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
@@ -41,24 +40,23 @@ class ImportController extends AppController
     {
         try {
             // prepare import filter
-
             $filter = $this->request->getData('filter');
             if (empty($filter)) {
-                throw new BEditaClientException('Import filter not selected', 500);
+                throw new BadRequestException('Import filter not selected', 500);
             }
             $importFilter = new $filter($this->apiClient);
             if (empty($importFilter)) {
-                throw new BEditaClientException('Import filter class not found', 500);
+                throw new RuntimeException('Import filter class not found', 500);
             }
             // read file
             $filename = $this->request->getData('file.name');
             $filepath = $this->request->getData('file.tmp_name');
             if (!file_exists($filepath)) {
-                throw new BEditaClientException('File not found', 500);
+                throw new RuntimeException('File not found', 500);
             }
             $result = $importFilter->import($filename, $filepath);
             $this->set(compact('result'));
-        } catch (BEditaClientException $e) {
+        } catch (Exception $e) {
             $this->Flash->error($e);
 
             return $this->redirect(['_name' => 'import:index']);

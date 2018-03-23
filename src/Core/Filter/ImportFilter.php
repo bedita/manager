@@ -31,8 +31,5 @@ abstract class ImportFilter
      * @param array $options The import options
      * @return App\Core\Result\ImportResult The result
      */
-    public function import($filename, $filepath, ?array $options = []) : ImportResult
-    {
-        return new ImportResult($filename, 0, 0, '', '');
-    }
+    abstract public function import($filename, $filepath, ?array $options = []) : ImportResult;
 }
