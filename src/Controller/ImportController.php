@@ -38,22 +38,16 @@ class ImportController extends AppController
      */
     public function file() : ?Response
     {
+        // prepare import filter
+        $filter = $this->request->getData('filter');
+        if (empty($filter)) {
+            throw new BadRequestException('Import filter not selected', 500);
+        }
+        $importFilter = new $filter($this->apiClient);
+        // read file
+        $filename = $this->request->getData('file.name');
+        $filepath = $this->request->getData('file.tmp_name');
         try {
-            // prepare import filter
-            $filter = $this->request->getData('filter');
-            if (empty($filter)) {
-                throw new BadRequestException('Import filter not selected', 500);
-            }
-            $importFilter = new $filter($this->apiClient);
-            if (empty($importFilter)) {
-                throw new RuntimeException('Import filter class not found', 500);
-            }
-            // read file
-            $filename = $this->request->getData('file.name');
-            $filepath = $this->request->getData('file.tmp_name');
-            if (!file_exists($filepath)) {
-                throw new RuntimeException('File not found', 500);
-            }
             $result = $importFilter->import($filename, $filepath);
             $this->set(compact('result'));
         } catch (Exception $e) {
