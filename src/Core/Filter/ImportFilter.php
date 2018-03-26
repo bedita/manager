@@ -16,6 +16,7 @@ abstract class ImportFilter
      * Constructor
      *
      * @param BEditaApiClient|null $apiClient the api client
+     * @codeCoverageIgnore
      */
     public function __construct($apiClient = null)
     {
