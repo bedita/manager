@@ -15,6 +15,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Network\Exception\BadRequestException;
 
 /**
  * Import controller: upload and load using filters
@@ -25,6 +26,7 @@ class ImportController extends AppController
      * Display import page.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function index() : void
     {
