@@ -1,0 +1,68 @@
+{% do _view.assign('title', __('Import Page')) %}
+
+<div class="import">
+
+    <h1>{{ __('Data Import') }}</h1>
+
+    {{ Form.create(null, {
+        'id': 'form-import',
+        'type': 'file',
+        'url': {'_name': 'import:file'},
+    })|raw }}
+    <fieldset>
+
+    <div class="source-data">
+        <h2>{{ __('Source data') }}</h2>
+        <div class="import-type">
+            {{ Form.radio('filter', filters)|raw }}
+        </div>
+    </div>
+
+    <div class="import-options">
+        <h2>{{ __('Options') }}</h2>
+        <div id="options">
+            {% for f in filters %}
+                <div id="{{ f.name }}">
+                    {% for k,v in f.options %}
+                    <div>{{ k }}:{{ v }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="source-file">
+        {{ Form.control('file', { 'type': 'file' }) | raw }}
+        {{ Form.submit(__('Load')) | raw }}
+    </div>
+
+    </fieldset>
+    {{ Form.end()|raw }}
+
+</div>
+
+{% if result %}
+
+{% if result.error %}
+<div class="import-message import-error">
+	<h2>{{ __('Import error') }}</h2>
+	<div>{{ result.error }}</div>
+</div>
+{% endif %}
+
+<div class="result">
+    <h2>{{ __('Result') }}</h2>
+</div>
+
+<fieldset id="import-result">
+    <div class="import-message">
+        <h2>{{ result.message|default('') }}</h2>
+        <p>{{ __('Number of imported objects') }}: {{ result.objects|default(0) }}</p>
+        {% if result.errors %}
+            <p>{{ __('Number of not imported objects / errors') }}: {{ result.errors }}</p>
+        {% endif %}
+    </div>
+</fieldset>
+
+{% endif %}

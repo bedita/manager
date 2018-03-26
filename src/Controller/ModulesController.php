@@ -289,7 +289,7 @@ class ModulesController extends AppController
     /**
      * Upload a file and store it in a media stream
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
     public function upload()
     {
