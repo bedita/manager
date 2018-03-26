@@ -30,7 +30,7 @@ abstract class ImportFilter
      * @param string $filename The file name
      * @param string $filepath The file path
      * @param array $options The import options
-     * @return App\Core\Result\ImportResult The result
+     * @return \App\Core\Result\ImportResult The result
      */
     abstract public function import($filename, $filepath, ?array $options = []) : ImportResult;
 }

@@ -89,12 +89,12 @@ class ImportControllerTest extends TestCase
     protected $filename = 'test.png';
 
     /**
-     * Setup test
+     * Setup import controller for test
      *
      * @param string $filter The filter class full path.
      * @return void
      */
-    public function setup(string $filter = null) : void
+    public function setupController(string $filter = null) : void
     {
         $config = [
             'environment' => [
@@ -122,7 +122,7 @@ class ImportControllerTest extends TestCase
      */
     public function testFile() : void
     {
-        $this->setup('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
 
         $response = $this->Import->file();
         static::assertNull($response);
@@ -145,7 +145,7 @@ class ImportControllerTest extends TestCase
         $this->expectExceptionCode($expected->getCode());
         $this->expectExceptionMessage($expected->getMessage());
 
-        $this->setup();
+        $this->setupController();
         $response = $this->Import->file();
         static::assertNull($response);
     }
@@ -164,7 +164,7 @@ class ImportControllerTest extends TestCase
         $this->expectExceptionCode($expected->getCode());
         $this->expectExceptionMessage($expected->getMessage());
 
-        $this->setup('App\Test\TestCase\Controller\ImportFilterSampleError');
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSampleError');
         $response = $this->Import->file();
     }
 }
