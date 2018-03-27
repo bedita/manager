@@ -111,7 +111,13 @@ class TrashController extends AppController
 
         $this->Flash->success(__('Object restored'));
 
-        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
+        $query = $this->request->getData('query');
+        if (!empty($query)) {
+            $query = htmlspecialchars_decode($query);
+            $query = unserialize($query);
+        }
+
+        return $this->redirect(['_name' => 'trash:list'] + $query);
     }
 
     /**
@@ -135,6 +141,12 @@ class TrashController extends AppController
 
         $this->Flash->success(__('Object deleted from trash'));
 
-        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
+        $query = $this->request->getData('query');
+        if (!empty($query)) {
+            $query = htmlspecialchars_decode($query);
+            $query = unserialize($query);
+        }
+
+        return $this->redirect(['_name' => 'trash:list'] + $query);
     }
 }

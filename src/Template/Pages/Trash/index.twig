@@ -1,5 +1,7 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
+{% set q = _view.request.query|serialize|escape %}
+
 <trash-index inline-template>
     <div>
 
@@ -28,10 +30,10 @@
                             <div>{{ Time.format(object.meta.modified) }}</div>
                             <div>
                             {% if in_array('PATCH', currentModule.hints.allow) %}
-                                {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})|raw }}
+                                {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id, 'query': q}})|raw }}
                             {% endif %}
                             {% if in_array('DELETE', currentModule.hints.allow) %}
-                                {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})|raw }}
+                                {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id, 'query': q}})|raw }}
                             {% endif %}
                             </div>
                     </a>
