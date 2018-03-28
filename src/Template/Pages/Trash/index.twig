@@ -41,6 +41,11 @@
                     {{ __('No items found') }}
                 {% endfor %}
             </div>
+
+            {# Append "Empty" button in commands menu. #}
+            {% do _view.append('commands',
+                Form.postButton(__('Empty'), {'_name': 'trash:empty'}, {'data': {'query': q}})|raw
+            )%}
         </div>
     </div>
 </trash-index>
