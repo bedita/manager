@@ -180,10 +180,9 @@ class TrashControllerTest extends TestCase
     {
         $id = $this->setupControllerAndData(false);
         $this->Trash->restore();
-        $expected = new BEditaClientException('[404] Record not found in table "objects"', 404);
+        $expected = new BEditaClientException('Not Found', 404);
         static::expectException(get_class($expected));
         static::expectExceptionCode($expected->getCode());
-        static::expectExceptionMessage($expected->getMessage());
         $response = $this->client->getObject($id);
     }
 
@@ -202,17 +201,15 @@ class TrashControllerTest extends TestCase
         try {
             $this->client->getObject($id);
         } catch (BEditaClientException $e) {
-            $expected = new BEditaClientException('[404] Record not found in table "objects"', 404);
+            $expected = new BEditaClientException('Not Found', 404);
             static::assertEquals($expected->getCode(), $e->getCode());
-            static::assertEquals($expected->getMessage(), $e->getMessage());
         }
 
         try {
             $this->client->get(sprintf('/trash/%d', $id));
         } catch (BEditaClientException $e) {
-            $expected = new BEditaClientException('[404] Record not found in table "objects"', 404);
+            $expected = new BEditaClientException('Not Found', 404);
             static::assertEquals($expected->getCode(), $e->getCode());
-            static::assertEquals($expected->getMessage(), $e->getMessage());
         }
     }
 
