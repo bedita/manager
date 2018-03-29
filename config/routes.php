@@ -103,6 +103,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Trash', 'action' => 'delete'],
         ['_name' => 'trash:delete']
     );
+    $routes->connect(
+        '/trash/empty',
+        ['controller' => 'Trash', 'action' => 'empty'],
+        ['_name' => 'trash:empty']
+    );
 
     // Modules.
     $routes->connect(

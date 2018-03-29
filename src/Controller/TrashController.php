@@ -24,6 +24,7 @@ class TrashController extends AppController
 
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore
      */
     public function initialize() : void
     {
@@ -36,6 +37,7 @@ class TrashController extends AppController
      * Display deleted resources list.
      *
      * @return \Cake\Http\Response|null
+     * @codeCoverageIgnore
      */
     public function index() : ?Response
     {
@@ -67,6 +69,7 @@ class TrashController extends AppController
      *
      * @param mixed $id Resource ID.
      * @return \Cake\Http\Response|null
+     * @codeCoverageIgnore
      */
     public function view($id) : ?Response
     {
@@ -111,7 +114,13 @@ class TrashController extends AppController
 
         $this->Flash->success(__('Object restored'));
 
-        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
+        $query = $this->request->getData('query');
+        if (!empty($query)) {
+            $query = htmlspecialchars_decode($query);
+            $query = unserialize($query);
+        }
+
+        return $this->redirect(['_name' => 'trash:list'] + $query);
     }
 
     /**
@@ -135,6 +144,55 @@ class TrashController extends AppController
 
         $this->Flash->success(__('Object deleted from trash'));
 
-        return $this->redirect(['_name' => 'trash:list'] + $this->request->getQuery());
+        $query = $this->request->getData('query');
+        if (!empty($query)) {
+            $query = htmlspecialchars_decode($query);
+            $query = unserialize($query);
+        }
+
+        return $this->redirect(['_name' => 'trash:list'] + $query);
+    }
+
+    /**
+     * Permanently delete multiple data.
+     * If filter type is active, empty trash by type
+     *
+     * @return \Cake\Http\Response
+     */
+    public function empty() : Response
+    {
+        $this->request->allowMethod(['post']);
+
+        $query = [];
+        $q = $this->request->getData('query');
+        if (!empty($q)) {
+            $q = htmlspecialchars_decode($q);
+            $q = unserialize($q);
+            if (!empty($q['filter'])) {
+                $query['filter'] = $q['filter'];
+            }
+        }
+
+        // cycle over trash results
+        $response = $this->apiClient->getObjects('trash', $query);
+        $counter = 0;
+        while (!empty($response['meta']['pagination']['count']) && $response['meta']['pagination']['count'] > 0) {
+            foreach ($response['data'] as $index => $data) {
+                try {
+                    $this->apiClient->remove($data['id'], $query);
+                    $counter++;
+                } catch (BEditaClientException $e) {
+                    // Error! Back to trash index.
+                    $this->log($e, LogLevel::ERROR);
+                    $this->Flash->error($e);
+
+                    return $this->redirect(['_name' => 'trash:index'] + $query);
+                }
+            }
+            $response = $this->apiClient->getObjects('trash', $query);
+        }
+        $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
+
+        return $this->redirect(['_name' => 'trash:list'] + $query);
     }
 }
