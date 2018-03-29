@@ -20,6 +20,9 @@ const jsonEditorOptions = {
             }
         }
     },
+    onModeChange () {
+        element.jsonEditor.editor.setOptions({maxLines: Infinity});
+    }
 };
 
 Vue.directive('jsoneditor', {
