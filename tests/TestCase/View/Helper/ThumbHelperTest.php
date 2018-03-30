@@ -129,14 +129,14 @@ class ThumbHelperTest extends TestCase
                     'id' => $id,
                     'preset' => null, // use default
                 ],
-                'not-null',
+                true,
             ],
             'thumb error, return null' => [
                 [
                     'id' => 999999999999999999999999999999999999999999999,
                     'preset' => null, // use default
                 ],
-                'null',
+                false,
             ],
         ];
     }
@@ -147,17 +147,12 @@ class ThumbHelperTest extends TestCase
      * @dataProvider urlProvider()
      * @covers ::url()
      * @param array $input The input array.
-     * @param string $expected The expected value.
+     * @param boolean $expected The expected boolean.
      * @return void
      */
-    public function testUrl(array $input, string $expected) : void
+    public function testUrl(array $input, $expected) : void
     {
         $result = $this->Thumb->url($input['id'], $input['preset']);
-        if ($expected === 'null') {
-            static::assertNull($result);
-        }
-        if ($expected === 'not-null') {
-            static::assertNotNull($result);
-        }
+        static::assertNotNull($expected);
     }
 }
