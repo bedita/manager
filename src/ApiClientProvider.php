@@ -61,7 +61,6 @@ class ApiClientProvider
      *
      * @param \BEdita\SDK\BEditaClient|null $client New API client to set
      * @return void
-     * @codeCoverageIgnore
      */
     public static function setApiClient(?BEditaClient $client) : void
     {
