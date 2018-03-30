@@ -109,11 +109,12 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
 
-        $object = $response['data'];
         $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
-        $this->set(compact('object', 'schema'));
+        $object = $response['data'];
+        $included = (!empty($response['included'])) ? $response['included'][0] : null;
+        $this->set(compact('object', 'included', 'schema'));
 
         return null;
     }

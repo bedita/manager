@@ -1,0 +1,21 @@
+{% if included %}
+{% set imageattributes = { 0: 'url' } %}
+{% set attributes = Array.removeKeys(included.attributes|merge(included.meta), imageattributes) %}
+{% set readonly = { 'readonly': 'readonly' } %}
+<div class="tab"><h2>{{ __('Stream') }}</h2></div>
+
+<div class="thumb">
+    {% set thumburl = Thumb.url(object.id)|default(Url.build('/img/iconMissingImage.gif')) %}
+    <a href={{ included.meta.url }}>
+        <img src={{ thumburl }} />
+    </a>
+</div>
+
+<fieldset id="included_properties">
+    {% for key, value in attributes %}
+        {% set options = Schema.controlOptions(key, value, schema.properties[key])|merge(readonly) %}
+        {{ Form.control(key, options)|raw }}
+    {% endfor %}
+</fieldset>
+
+{% endif %}
