@@ -12,7 +12,7 @@
  */
 namespace App\Controller;
 
-use BEdita\SDK\BEditaClient;
+use App\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -45,13 +45,11 @@ class AppController extends Controller
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
 
-        $this->apiClient = new BEditaClient(Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey'));
+        $this->apiClient = ApiClientProvider::getApiClient();
 
         $this->loadComponent('Auth', [
             'authenticate' => [
-                'Api' => [
-                    'apiClient' => $this->apiClient,
-                ],
+                'Api' => [],
             ],
             'loginAction' => ['_name' => 'login'],
             'loginRedirect' => ['_name' => 'dashboard'],
@@ -59,12 +57,9 @@ class AppController extends Controller
         $this->Auth->deny();
 
         $this->loadComponent('Modules', [
-            'apiClient' => $this->apiClient,
             'currentModuleName' => $this->name,
         ]);
-        $this->loadComponent('Schema', [
-            'apiClient' => $this->apiClient,
-        ]);
+        $this->loadComponent('Schema');
     }
 
     /**

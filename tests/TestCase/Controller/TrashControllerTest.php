@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\ApiClientProvider;
 use App\Controller\TrashController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -36,17 +37,6 @@ class TrashControllerSample extends TrashController
     public function redirect($url, $status = 302) : Response
     {
         return new Response();
-    }
-
-    /**
-     * Set api client for controller
-     *
-     * @param BEditaClient $client the Api Client
-     * @return void
-     */
-    public function setApiClient(BEditaClient $client) : void
-    {
-        $this->apiClient = $client;
     }
 }
 
@@ -78,9 +68,7 @@ class TrashControllerTest extends TestCase
      */
     private function setupApi() : void
     {
-        $apiBaseUrl = getenv('BEDITA_API');
-        $apiKey = getenv('BEDITA_API_KEY');
-        $this->client = new BEditaClient($apiBaseUrl, $apiKey);
+        $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
@@ -142,7 +130,6 @@ class TrashControllerTest extends TestCase
         if (!$auth) {
             $this->client->setupTokens(['jwt' => '']);
         }
-        $this->Trash->setApiClient($this->client);
 
         return $id;
     }
