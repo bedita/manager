@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use App\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Log\LogTrait;
 use Cake\View\Helper;
@@ -31,7 +32,7 @@ class ThumbHelper extends Helper
     {
         $result = null;
         try {
-            $apiClient = $this->_View->viewVars['apiClient'];
+            $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->thumbs($imageId, compact('preset'));
             if (!empty($response['meta']['thumbnails'][0]['url'])) {
                 return $response['meta']['thumbnails'][0]['url'];
