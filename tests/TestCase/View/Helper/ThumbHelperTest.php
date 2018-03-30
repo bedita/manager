@@ -147,6 +147,7 @@ class ThumbHelperTest extends TestCase
      * @dataProvider urlProvider()
      * @covers ::url()
      * @param array $input The input array.
+     * @param string $expected The expected value.
      * @return void
      */
     public function testUrl(array $input, string $expected) : void

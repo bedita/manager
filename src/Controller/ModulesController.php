@@ -113,7 +113,7 @@ class ModulesController extends AppController
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
         $object = $response['data'];
-        $included = (!empty($response['included'])) ? $response['included'][0] : null;
+        $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
 
         return null;
