@@ -94,6 +94,8 @@ class AppController extends Controller
             }
 
             $this->set(compact('user'));
+
+            $this->set('apiClient', $this->apiClient);
         }
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
