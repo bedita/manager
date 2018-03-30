@@ -225,6 +225,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
+                    'v-jsoneditor' => '',
                     'class' => 'json',
                     'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
                 ],
@@ -254,7 +255,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'class' => 'description',
                     'v-richeditor' => '',
-                    'ckconfig' => 'configNormal',
+                    'ckconfig' => 'configSimple',
                     'type' => 'textarea',
                 ],
                 // schema type
