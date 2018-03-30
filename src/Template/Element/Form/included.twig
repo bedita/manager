@@ -1,0 +1,37 @@
+{% if included %}
+<div class="tab"><h2>{{ __('Streams') }}</h2></div>
+
+{# attributes to filter: hide from fieldset properties #}
+{% set imageattributes = { 0: 'url' } %}
+
+{# readonly mode for form elements #}
+{% set readonly = { 'readonly': 'readonly' } %}
+
+{# cycle over included elements, show only streams #}
+{% for o in included %}
+    {% if o.type == 'streams' %}
+    {% set stream = o %}
+
+    {# the stream #}
+    <div class="stream">
+        {% set attributes = Array.removeKeys(stream.attributes|merge(stream.meta), imageattributes) %}
+
+        {# thumb #}
+        <div class="thumb">
+            {% set thumburl = Thumb.url(object.id)|default(Url.build('/img/iconMissingImage.gif')) %}
+            <a href={{ stream.meta.url }}>
+                <img src={{ thumburl }} />
+            </a>
+        </div>
+
+        {# fields #}
+        <fieldset id="included_properties">
+            {% for akey, avalue in attributes %}
+                {% set options = Schema.controlOptions(akey, avalue, schema.properties[akey])|merge(readonly) %}
+                {{ Form.control(akey, options)|raw }}
+            {% endfor %}
+        </fieldset>
+    </div>
+    {% endif %}
+{% endfor %}
+{% endif %}
