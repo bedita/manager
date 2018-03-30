@@ -200,9 +200,6 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->getProject();
 
         static::assertEquals($expected, $actual);
-
-        // reset client, force new client creation
-        ApiClientProvider::setApiClient(null);
     }
 
     /**
