@@ -105,7 +105,7 @@ class TrashControllerTest extends TestCase
      * @param bool $auth Set authorized api client on test controller if true
      * @return int The object ID
      */
-    public function setupControllerAndData($auth = true) : int
+    public function setupControllerAndData($auth = true, $query = true) : int
     {
         // setup and auth
         $this->setupApi();
@@ -115,7 +115,11 @@ class TrashControllerTest extends TestCase
 
         // set request and trash controller
         $serialized = serialize(['filter' => ['type' => 'documents']]);
-        $query = htmlspecialchars($serialized);
+        if ($query) {
+            $query = htmlspecialchars($serialized);
+        } else {
+            $query = [];
+        }
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
@@ -228,7 +232,7 @@ class TrashControllerTest extends TestCase
      */
     public function testEmpty() : void
     {
-        $this->setupControllerAndData();
+        $this->setupControllerAndData(true, false);
         $this->Trash->empty();
         $response = $this->client->get('/trash');
         static::assertEquals(200, $this->client->getStatusCode());
