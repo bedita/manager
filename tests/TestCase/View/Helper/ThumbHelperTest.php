@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\ApiClientProvider;
 use App\View\Helper\ThumbHelper;
 use BEdita\SDK\BEditaClient;
 use Cake\TestSuite\TestCase;
@@ -25,13 +26,6 @@ use Cake\View\View;
  */
 class ThumbHelperTest extends TestCase
 {
-    /**
-     * Test apiClient class
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    private $apiClient = null;
-
     /**
      * Test subject
      *
@@ -49,12 +43,8 @@ class ThumbHelperTest extends TestCase
         // set api client in view for helper
         $this->_initApi();
 
-        // create view
-        $view = new View();
-        $view->set('apiClient', $this->apiClient);
-
         // create helper
-        $this->Thumb = new ThumbHelper($view);
+        $this->Thumb = new ThumbHelper(new View());
     }
 
     /**
@@ -70,21 +60,15 @@ class ThumbHelperTest extends TestCase
     /**
      * Init api client
      *
-     * @return BEditaClient
+     * @return void
      */
-    private function _initApi() : BEditaClient
+    private function _initApi() : void
     {
-        if ($this->apiClient === null) {
-            $apiBaseUrl = getenv('BEDITA_API');
-            $apiKey = getenv('BEDITA_API_KEY');
-            $this->apiClient = new BEditaClient($apiBaseUrl, $apiKey);
-            $adminUser = getenv('BEDITA_ADMIN_USR');
-            $adminPassword = getenv('BEDITA_ADMIN_PWD');
-            $response = $this->apiClient->authenticate($adminUser, $adminPassword);
-            $this->apiClient->setupTokens($response['meta']);
-        }
-
-        return $this->apiClient;
+        $apiClient = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $apiClient->authenticate($adminUser, $adminPassword);
+        $apiClient->setupTokens($response['meta']);
     }
 
     /**
@@ -95,21 +79,21 @@ class ThumbHelperTest extends TestCase
      */
     private function _image() : int
     {
-        $this->_initApi();
+        $apiClient = ApiClientProvider::getApiClient();
 
         $filename = 'test.png';
         $filepath = sprintf('%s/tests/files/%s', getcwd(), $filename);
-        $response = $this->apiClient->upload($filename, $filepath);
+        $response = $apiClient->upload($filename, $filepath);
 
         $streamId = $response['data']['id'];
-        $response = $this->apiClient->get(sprintf('/streams/%s', $streamId));
+        $response = $apiClient->get(sprintf('/streams/%s', $streamId));
 
         $type = 'images';
         $title = 'The test image';
         $attributes = compact('title');
         $data = compact('type', 'attributes');
         $body = compact('data');
-        $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
+        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
 
         return $response['data']['id'];
     }
@@ -121,12 +105,10 @@ class ThumbHelperTest extends TestCase
      */
     public function urlProvider() : array
     {
-        $id = $this->_image();
-
         return [
             'basic thumb default preset' => [
                 [
-                    'id' => $id,
+                    'id' => null,
                     'preset' => null, // use default
                 ],
                 true,
@@ -152,7 +134,9 @@ class ThumbHelperTest extends TestCase
      */
     public function testUrl(array $input, $expected) : void
     {
-        $result = $this->Thumb->url($input['id'], $input['preset']);
+        $id = empty($input['id']) ? $this->_image() : $input['id'];
+
+        $result = $this->Thumb->url($id, $input['preset']);
         static::assertNotNull($expected);
     }
 }

@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller\Component;
 
+use App\ApiClientProvider;
 use App\Controller\Component\ModulesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -58,6 +59,8 @@ class ModulesComponentTest extends TestCase
     {
         unset($this->Modules);
 
+        // reset client, force new client creation
+        ApiClientProvider::setApiClient(null);
         parent::tearDown();
     }
 
@@ -192,7 +195,7 @@ class ModulesComponentTest extends TestCase
                 ->with('/home')
                 ->willReturn(compact('meta'));
         }
-        $this->Modules->setConfig(compact('apiClient'));
+        ApiClientProvider::setApiClient($apiClient);
 
         $actual = $this->Modules->getProject();
 
@@ -334,7 +337,7 @@ class ModulesComponentTest extends TestCase
                 ->with('/home')
                 ->willReturn(compact('meta'));
         }
-        $this->Modules->setConfig(compact('apiClient'));
+        ApiClientProvider::setApiClient($apiClient);
 
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
@@ -464,6 +467,8 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('get')
             ->with('/home')
             ->willReturn(compact('meta'));
+
+        ApiClientProvider::setApiClient($apiClient);
 
         $clearHomeCache = true;
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));

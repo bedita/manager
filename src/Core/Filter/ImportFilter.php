@@ -2,6 +2,7 @@
 
 namespace App\Core\Filter;
 
+use App\ApiClientProvider;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaApiClient;
 
@@ -15,12 +16,11 @@ abstract class ImportFilter
     /**
      * Constructor
      *
-     * @param BEditaApiClient|null $apiClient the api client
      * @codeCoverageIgnore
      */
-    public function __construct($apiClient = null)
+    public function __construct()
     {
-        $this->apiClient = $apiClient;
+        $this->apiClient = ApiClientProvider::getApiClient();
     }
 
     /**

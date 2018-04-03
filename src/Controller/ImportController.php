@@ -71,7 +71,7 @@ class ImportController extends AppController
     private function loadFilters()
     {
         $filters = [];
-        $importFilters = Configure::read('Filters.import');
+        $importFilters = Configure::read('Filters.import', []);
         foreach ($importFilters as $filter) {
             $value = $filter['class'];
             $text = $filter['label'];
