@@ -16,6 +16,7 @@ namespace App\Test\TestCase\View\Helper;
 use App\ApiClientProvider;
 use App\View\Helper\ThumbHelper;
 use BEdita\SDK\BEditaClient;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -75,13 +76,13 @@ class ThumbHelperTest extends TestCase
      * Create image and media stream for test.
      * Return id
      *
+     * @param string $filename the File name.
      * @return int The image ID.
      */
-    private function _image() : int
+    private function _image($filename = 'test.png') : int
     {
         $apiClient = ApiClientProvider::getApiClient();
 
-        $filename = 'test.png';
         $filepath = sprintf('%s/tests/files/%s', getcwd(), $filename);
         $response = $apiClient->upload($filename, $filepath);
 
@@ -128,6 +129,9 @@ class ThumbHelperTest extends TestCase
      *
      * @dataProvider urlProvider()
      * @covers ::url()
+     * @covers ::isAcceptable()
+     * @covers ::isReady()
+     * @covers ::hasUrl()
      * @param array $input The input array.
      * @param boolean $expected The expected boolean.
      * @return void
@@ -135,8 +139,98 @@ class ThumbHelperTest extends TestCase
     public function testUrl(array $input, $expected) : void
     {
         $id = empty($input['id']) ? $this->_image() : $input['id'];
-
+        $this->Thumb = new ThumbHelper(new View());
         $result = $this->Thumb->url($id, $input['preset']);
-        static::assertNotNull($expected);
+
+        if ($expected === true) {
+            static::assertNotNull($result);
+        } else {
+            static::assertNull($result);
+        }
+    }
+
+    /**
+     * Test `isAcceptable()` method.
+     *
+     * @covers ::url()
+     * @covers ::isAcceptable()
+     * @return void
+     */
+    public function testIsAcceptable() : void
+    {
+        $apiMockClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setMethods(['thumbs'])
+        ->getMock();
+        $response = [
+            'meta' => [
+                'thumbnails' => [
+                    [
+                        'ready' => true,
+                        'acceptable' => false,
+                    ]
+                ]
+            ]
+        ];
+        $apiMockClient->method('thumbs')->willReturn($response);
+        ApiClientProvider::setApiClient($apiMockClient);
+        $result = $this->Thumb->url(1, null);
+        static::assertNull($result);
+    }
+
+    /**
+     * Test `isReady()` method.
+     *
+     * @covers ::url()
+     * @covers ::isReady()
+     * @return void
+     */
+    public function testIsReady() : void
+    {
+        $apiMockClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setMethods(['thumbs'])
+        ->getMock();
+        $response = [
+            'meta' => [
+                'thumbnails' => [
+                    [
+                        'ready' => false,
+                    ]
+                ]
+            ]
+        ];
+        $apiMockClient->method('thumbs')->willReturn($response);
+        ApiClientProvider::setApiClient($apiMockClient);
+        $result = $this->Thumb->url(1, null);
+        static::assertNull($result);
+    }
+
+    /**
+     * Test `hasUrl()` method.
+     *
+     * @covers ::url()
+     * @covers ::hasUrl()
+     * @return void
+     */
+    public function testHasUrl() : void
+    {
+        $apiMockClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setMethods(['thumbs'])
+        ->getMock();
+        $response = [
+            'meta' => [
+                'thumbnails' => [
+                    [
+                        'ready' => true,
+                    ]
+                ]
+            ]
+        ];
+        $apiMockClient->method('thumbs')->willReturn($response);
+        ApiClientProvider::setApiClient($apiMockClient);
+        $result = $this->Thumb->url(1, null);
+        static::assertNull($result);
     }
 }
