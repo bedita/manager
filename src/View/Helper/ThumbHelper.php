@@ -81,16 +81,15 @@ class ThumbHelper extends Helper
                 if (!$this->hasUrl($thumb)) {
                     return static::NO_URL;
                 }
-
                 $url = $thumb['url'];
-
-                return static::OK;
             }
         } catch (\Exception $e) {
             $this->log($e, 'error');
+
+            return static::NOT_AVAILABLE;
         }
 
-        return static::NOT_AVAILABLE;
+        return static::OK;
     }
 
     /**
