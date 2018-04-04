@@ -158,6 +158,7 @@ class ThumbHelperTest extends TestCase
      */
     public function testStatus(array $input, $expected) : void
     {
+        // case response with api call
         $id = empty($input['id']) ? $this->_image() : $input['id'];
         $this->Thumb = new ThumbHelper(new View());
         $status = $this->Thumb->status($id, $input['preset'], $result);
@@ -168,6 +169,18 @@ class ThumbHelperTest extends TestCase
             static::assertNull($result);
             static::assertEquals($status, $expected);
         }
+        // case response empty, with mock
+        $apiMockClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setMethods(['thumbs'])
+        ->getMock();
+        $response = null;
+        $apiMockClient->method('thumbs')->willReturn($response);
+        ApiClientProvider::setApiClient($apiMockClient);
+        $result = null;
+        $status = $this->Thumb->status(1, null, $result);
+        static::assertNull($result);
+        static::assertEquals($status, ThumbHelper::NOT_AVAILABLE);
     }
 
     /**

@@ -67,22 +67,23 @@ class ThumbHelper extends Helper
         try {
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->thumbs($imageId, compact('preset'));
-            if (!empty($response['meta']['thumbnails'][0])) {
-                $thumb = $response['meta']['thumbnails'][0];
-                // check thumb is ready
-                if (!$this->isReady($thumb)) {
-                    return static::NOT_READY;
-                }
-                // check thumb is acceptable
-                if (!$this->isAcceptable($thumb)) {
-                    return static::NOT_ACCEPTABLE;
-                }
-                // check thumb has url
-                if (!$this->hasUrl($thumb)) {
-                    return static::NO_URL;
-                }
-                $url = $thumb['url'];
+            if (empty($response['meta']['thumbnails'][0])) {
+                return static::NOT_AVAILABLE;
             }
+            $thumb = $response['meta']['thumbnails'][0];
+            // check thumb is ready
+            if (!$this->isReady($thumb)) {
+                return static::NOT_READY;
+            }
+            // check thumb is acceptable
+            if (!$this->isAcceptable($thumb)) {
+                return static::NOT_ACCEPTABLE;
+            }
+            // check thumb has url
+            if (!$this->hasUrl($thumb)) {
+                return static::NO_URL;
+            }
+            $url = $thumb['url'];
         } catch (\Exception $e) {
             $this->log($e, 'error');
 
