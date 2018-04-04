@@ -13,9 +13,11 @@
 
 namespace App\Test\TestCase\Controller\Component;
 
+use App\ApiClientProvider;
 use App\Controller\Component\ModulesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -47,6 +49,7 @@ class ModulesComponentTest extends TestCase
         $registry = $controller->components();
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
+        $this->Auth = $registry->load(AuthComponent::class);
     }
 
     /**
@@ -56,6 +59,8 @@ class ModulesComponentTest extends TestCase
     {
         unset($this->Modules);
 
+        // reset client, force new client creation
+        ApiClientProvider::setApiClient(null);
         parent::tearDown();
     }
 
@@ -190,7 +195,7 @@ class ModulesComponentTest extends TestCase
                 ->with('/home')
                 ->willReturn(compact('meta'));
         }
-        $this->Modules->setConfig(compact('apiClient'));
+        ApiClientProvider::setApiClient($apiClient);
 
         $actual = $this->Modules->getProject();
 
@@ -332,7 +337,7 @@ class ModulesComponentTest extends TestCase
                 ->with('/home')
                 ->willReturn(compact('meta'));
         }
-        $this->Modules->setConfig(compact('apiClient'));
+        ApiClientProvider::setApiClient($apiClient);
 
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
@@ -348,6 +353,7 @@ class ModulesComponentTest extends TestCase
     {
         return [
             'without current module' => [
+                1,
                 [
                     'gustavo',
                     'supporto',
@@ -383,6 +389,7 @@ class ModulesComponentTest extends TestCase
                 ],
             ],
             'with current module' => [
+                1,
                 [
                     'gustavo',
                     'supporto',
@@ -418,12 +425,22 @@ class ModulesComponentTest extends TestCase
                 ],
                 'supporto',
             ],
+            'no user' => [
+                null,
+                [],
+                null,
+                [],
+                [],
+                [],
+                null,
+            ],
         ];
     }
 
     /**
      * Test `beforeRender()` method.
      *
+     * @param int|null $userId User id.
      * @param string[] $modules Expected module names.
      * @param string|null $currentModule Expected current module name.
      * @param array $project Expected project info.
@@ -435,9 +452,13 @@ class ModulesComponentTest extends TestCase
      * @dataProvider beforeRenderProvider()
      * @covers ::beforeRender()
      */
-    public function testBeforeRender($modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
+    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
     {
         Configure::write('Modules.order', $order);
+
+        if ($userId) {
+            $this->Auth->setUser(['id' => $userId]);
+        }
 
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -447,7 +468,10 @@ class ModulesComponentTest extends TestCase
             ->with('/home')
             ->willReturn(compact('meta'));
 
-        $this->Modules->setConfig(compact('apiClient', 'currentModuleName'));
+        ApiClientProvider::setApiClient($apiClient);
+
+        $clearHomeCache = true;
+        $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
 
         $controller = $this->Modules->getController();
         $controller->dispatchEvent('Controller.beforeRender');

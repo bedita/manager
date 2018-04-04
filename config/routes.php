@@ -70,6 +70,18 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard']
     );
 
+    // Import.
+    $routes->connect(
+        '/import',
+        ['controller' => 'Import', 'action' => 'index'],
+        ['_name' => 'import:index']
+    );
+    $routes->connect(
+        '/import/file',
+        ['controller' => 'Import', 'action' => 'file'],
+        ['_name' => 'import:file']
+    );
+
     // Trash.
     $routes->connect(
         '/trash',
@@ -90,6 +102,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/trash/delete',
         ['controller' => 'Trash', 'action' => 'delete'],
         ['_name' => 'trash:delete']
+    );
+    $routes->connect(
+        '/trash/empty',
+        ['controller' => 'Trash', 'action' => 'empty'],
+        ['_name' => 'trash:empty']
     );
 
     // Modules.

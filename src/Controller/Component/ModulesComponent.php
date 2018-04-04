@@ -13,6 +13,7 @@
 
 namespace App\Controller\Component;
 
+use App\ApiClientProvider;
 use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -37,8 +38,8 @@ class ModulesComponent extends Component
      * {@inheritDoc}
      */
     protected $_defaultConfig = [
-        'apiClient' => null,
         'currentModuleName' => null,
+        'clearHomeCache' => false,
     ];
 
     /**
@@ -48,6 +49,16 @@ class ModulesComponent extends Component
      */
     public function beforeRender() : void
     {
+        if (empty($this->Auth->user('id'))) {
+            $this->getController()->set(['modules' => [], 'project' => []]);
+
+            return;
+        }
+
+        if ($this->getConfig('clearHomeCache')) {
+            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+        }
+
         $modules = $this->getModules();
         $project = $this->getProject();
 
@@ -70,7 +81,7 @@ class ModulesComponent extends Component
             $home = Cache::remember(
                 sprintf('home_%d', $this->Auth->user('id')),
                 function () {
-                    return $this->getConfig('apiClient')->get('/home');
+                    return ApiClientProvider::getApiClient()->get('/home');
                 }
             );
         } catch (BEditaClientException $e) {
@@ -81,7 +92,7 @@ class ModulesComponent extends Component
             return [];
         }
 
-        return $home['meta'];
+        return !empty($home['meta']) ? $home['meta'] : [];
     }
 
     /**

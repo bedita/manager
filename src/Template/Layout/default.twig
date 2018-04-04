@@ -58,7 +58,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
             <aside class="layout-sidebar-secondary">
                 {% element 'Menu/commands' %}
             </aside>
+        {% endif %}
 
+        {% if _view.name != 'Dashboard' and _view.name != 'Login' %}
             <header class="layout-header">
                 {% element 'layout_header' %}
             </header>

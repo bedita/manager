@@ -117,22 +117,6 @@ class SchemaHelper extends Helper
                     'type' => 'text',
                 ];
 
-            case 'description':
-                return [
-                    'class' => 'description',
-                    'v-richeditor' => '',
-                    'ckconfig' => 'configSimple',
-                    'type' => 'textarea',
-                ];
-
-            case 'body':
-                return [
-                    'class' => 'body',
-                    'v-richeditor' => '',
-                    'ckconfig' => 'configFull',
-                    'type' => 'textarea',
-                ];
-
             default:
                 return [];
         }
@@ -160,6 +144,12 @@ class SchemaHelper extends Helper
                 'v-jsoneditor' => '',
                 'class' => 'json',
                 'value' => json_encode($value),
+            ];
+        } elseif ($type === 'textarea') {
+            return [
+                'type' => 'textarea',
+                'v-richeditor' => '',
+                'ckconfig' => 'configNormal',
             ];
         }
 
