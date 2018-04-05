@@ -67,6 +67,8 @@ class AppController extends Controller
      */
     public function beforeFilter(Event $event) : void
     {
+        // $this->Security->unlockedFields = ['relations'];
+
         parent::beforeFilter($event);
 
         $tokens = $this->Auth->user('tokens');
@@ -108,6 +110,7 @@ class AppController extends Controller
     {
         // prepare json fields before saving
         $data = $this->request->getData();
+
         if (!empty($data['_jsonKeys'])) {
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
@@ -115,19 +118,39 @@ class AppController extends Controller
             }
             unset($this->request->data['_jsonKeys']);
         }
+
         // relations data for view/save - prepare api calls
         if (!empty($data['relations'])) {
-            $json = json_decode($data['relations'], true);
             $api = [];
-            foreach ($json as $relation => $relationData) {
+            foreach ($data['relations'] as $relation => $relationData) {
                 $id = $data['id'];
-                $methods = array_keys($relationData);
-                foreach ($methods as $method) {
-                    $data = $relationData[$method];
-                    $api[] = compact('method', 'id', 'relation', 'data');
+
+                foreach ($relationData as $method => $ids) {
+                    $relatedIds = json_decode($ids, true);
+                    if (!empty($relatedIds)) {
+                        $api[] = compact('method', 'id', 'relation', 'relatedIds');
+                    }
                 }
             }
+
             $this->request->data['api'] = $api;
         }
+
+        // // relations data for view/save - prepare api calls
+        // if (!empty($data['relations'])) {
+        //     $json = json_decode($data['relations'], true);
+        //     $api = [];
+        //     foreach ($json as $relation => $relationData) {
+        //         $id = $data['id'];
+        //         $methods = array_keys($relationData);
+        //         foreach ($methods as $method) {
+        //             $data = $relationData[$method];
+        //             $api[] = compact('method', 'ids', 'relation', 'data');
+        //         }
+        //     }
+
+        //     var_dump($api);
+        //     exit();
+        //     $this->request->data['api'] = $api;
     }
 }

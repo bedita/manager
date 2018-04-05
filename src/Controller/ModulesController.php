@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -166,15 +167,22 @@ class ModulesController extends AppController
         $this->request->allowMethod(['post']);
         $this->prepareRequest();
         $requestData = $this->request->getData();
+
         try {
             if (!empty($requestData['api'])) {
                 foreach ($requestData['api'] as $api) {
-                    extract($api); // method, id, type, relation, data
+                    extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated'])) {
-                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $data);
+//                         var_dump($api);
+// exit();
+                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
+
+            //             var_dump($response);
+            // exit();
                     }
                 }
             }
+
             $response = $this->apiClient->saveObject($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
@@ -311,6 +319,38 @@ class ModulesController extends AppController
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
+    }
+
+    /**
+     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     * Json response
+     *
+     * @param string|int $id the object identifier.
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function relationshipsJson($id, $relation)
+    {
+        $this->request->allowMethod(['get']);
+        $response = null;
+        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
+
+        try {
+            $response = $this->apiClient->get($path, $this->request->getQueryParams());
+
+            $available = $response['links']['available'];
+            $response = $this->apiClient->get($available);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
     }
 
     /**
