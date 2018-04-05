@@ -173,12 +173,7 @@ class ModulesController extends AppController
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated'])) {
-//                         var_dump($api);
-// exit();
                         $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
-
-            //             var_dump($response);
-            // exit();
                     }
                 }
             }

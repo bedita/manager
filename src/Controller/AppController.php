@@ -67,8 +67,6 @@ class AppController extends Controller
      */
     public function beforeFilter(Event $event) : void
     {
-        // $this->Security->unlockedFields = ['relations'];
-
         parent::beforeFilter($event);
 
         $tokens = $this->Auth->user('tokens');
@@ -135,22 +133,5 @@ class AppController extends Controller
 
             $this->request->data['api'] = $api;
         }
-
-        // // relations data for view/save - prepare api calls
-        // if (!empty($data['relations'])) {
-        //     $json = json_decode($data['relations'], true);
-        //     $api = [];
-        //     foreach ($json as $relation => $relationData) {
-        //         $id = $data['id'];
-        //         $methods = array_keys($relationData);
-        //         foreach ($methods as $method) {
-        //             $data = $relationData[$method];
-        //             $api[] = compact('method', 'ids', 'relation', 'data');
-        //         }
-        //     }
-
-        //     var_dump($api);
-        //     exit();
-        //     $this->request->data['api'] = $api;
     }
 }
