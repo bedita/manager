@@ -1,120 +1,149 @@
-{% element 'Form/_relations_script' %}
+{# {% element 'Form/_relations_script' %} #}
 
 <div class="relations">
 {% for relationName, val in object.relationships %}
     <div class="relation">
+
         {# The relation #}
         <h1>{{ relationName }}</h1>
 
-        {# Load button #}
-        <div class="load">
-            {{ Form.button(__('Load'), {'class': 'load-relation', 'data-relation-name': relationName})|raw }}
-            {{ Form.button(__('Close'), {'class': 'close-relation', 'data-relation-name': relationName})|raw }}
-        </div>
+        <relation-view inline-template relation-name={{ relationName }} load-on-start=true>
 
-        {# Loader for Load button #}
-        <div id="loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
+            <div class="relation-view">
+                <div class="related-list">
+                    <div class="list-actions">
+                        <button @click.prevent="loadRelatedObjects()">load Json</button>
+                        <button @click.prevent="showRelationshipsModal()">Add Objects</button>
+                        {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
+                    </div>
 
-        {# Destination for relation related data loaded by Load button #}
-        <div id="related_{{ relationName }}" class="related-list"></div>
+                    <div class="list-header">
+                        {# <span></span> #}
+                        <span class="title">title</span>
+                        <span class="id">id</span>
+                        <span class="uname">uname</span>
+                        <span class="status">status</span>
+                    </div>
 
-        {# Cart items (removed) #}
-        <div class="cart" data-relation-name="{{ relationName }}">
-            <h2>{{ __('Cart of items to remove') }}</h2>
-            <ul id="remove-relation-cart_{{ relationName }}" class="delete-from-cart"></ul>
-        </div>
+                    {# Loader for Load button #}
+                    {% element 'loader' %}
+                    {# related objects #}
+                    <div class="related-objects-list">
 
-        {# Add button #}
-        <div class="add">
-            {{ Form.button(__('Add'), {'class': 'load-dialog', 'data-relation-name': relationName})|raw }}
-            {{ Form.button(__('Close'), {'class': 'close-dialog', 'data-relation-name': relationName})|raw }}
-        </div>
+                        <div class="related-object" v-for="related in objects" v-show="!containsId(removedRelated, related.id)">
+                            {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                            <span class="title"><% related.attributes.title %></span>
+                            <span class="id"><% related.id %></span>
+                            <span class="uname"><% related.attributes.uname %></span>
+                            <span class="status"><% related.attributes.status %></span>
+                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                            <button class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
+                        </div>
+                    </div>
 
-        {# Add relation loader #}
-        <div id="add-relation-loader_{{ relationName }}" class="loader">{{ __('Loading data ...') }}</div>
+                    {# staged objects to be added #}
+                    <div class="added-objects-list">
+                        <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
+                            {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                            <span class="title"><% related.attributes.title %></span>
+                            <span class="id"><% related.id %></span>
+                            <span class="uname"><% related.attributes.uname %></span>
+                            <span class="status"><% related.attributes.status %></span>
+                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                            <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
+                        </div>
+                    </div>
 
-        {# Add relation dialog area | TODO: modal view through (s)css #}
-        <div id="add-relation-dialog_{{ relationName }}" class="dialog">
+                    <div class="remove-relations">
+                        {# Relations serialized json form element #}
+                        {{ Form.control('', {
+                            'type': 'hidden',
+                            'name': 'relations[' ~ relationName ~ '][removeRelated]',
+                            'v-model': 'relationsData'
+                        })|raw }}
+                        {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+                    </div>
+                </div>
 
-            {# Relationships data, loaded after click on Add #}
-            <div id="relationships_{{ relationName }}"></div>
+                {# component used to add new relations #}
+                <relationships-view
+                    inline-template
+                    relation-name={{ relationName }}
 
-            {# Pagination filter #}
+                    {# set viewVisibility of relationships-view with relation-view's showRelationshipsPanel value #}
+                    :view-visibility="showRelationshipsPanel"
+                    {# bind event visibility-setter of relationships-view to setRelationshipPanelVisibility method of relations-view#}
+                    @visibility-setter="setRelationshipPanelVisibility"
 
-            {# Search relationable items filter #}
-            <div class="search-relationable-filter">
-                {{ Form.control('search-relationable_' ~ relationName, {
-                    'label': __('Filter'),
-                    'class': 'search-relationable',
-                    'data-relation-name': relationName,
-                })|raw }}
+                    :added-relations="addedRelations"
+                    @append-relations="appendRelations"
+
+                    :hide-relations="hideRelations">
+                    <div class="relationships-view">
+                        <transition name="fade">
+                            <div class="modal-view" v-show="isVisible">
+                                <div class="modal-box">
+                                    <div class="modal-header">
+                                        <button class="close" @click.prevent="hideRelationshipModal()">x</button>
+                                    </div>
+                                    <div class="filter-bar">
+                                        <input type="text" placeholder="filter..." class="search-relationable"/>
+                                    </div>
+                                    <div class="modal-content">
+                                        <div class="add-related-list">
+                                            <div class="add-related-list-header">
+                                                <span></span>
+                                                <span class="title">title</span>
+                                                <span class="id">id</span>
+                                                <span class="uname">uname</span>
+                                                <span class="status">status</span>
+
+                                            </div>
+
+                                            <div class="add-related-object"
+                                                v-for="related in objects"
+                                                v-show="!containsId(hideRelations, related.id)">
+                                                {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                                                <span>
+                                                    <input type="checkbox"
+                                                        :value="related"
+                                                        v-model="pendingRelations"/>
+                                                    </span>
+                                                <span class="title"><% related.attributes.title %></span>
+                                                <span class="id"><% related.id %></span>
+                                                <span class="uname"><% related.attributes.uname %></span>
+                                                <span class="status"><% related.attributes.status %></span>
+                                            </div>
+
+                                            <div class="list-actions">
+                                                <button @click.prevent="appendRelations()">Add Objects</button>
+                                            </div>
+
+                                            <div class="save-relations">
+                                                {# Relations serialized json form element #}
+                                                {{ Form.control('', {
+                                                    'type': 'hidden',
+                                                    'name': 'relations[' ~ relationName ~ '][addRelated]',
+                                                    'v-model': 'relationsData'
+                                                })|raw }}
+                                                {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+
+                </relationship-view>
+
             </div>
 
-            {# Toolbar pagination #}
-            <div class="toolbar_pagination">
-
-                {# Count of items per module #}
-                <div class="results">
-                    {{ __('items') }}: <span class="pagination-count"></span>
-                </div>
-
-                {# Pagination data #}
-                <div class="pagination">
-                    <ul>
-                        <li>
-                            {{ __('Page') }} <span class="pagination-page"></span> / <span class="pagination-page_count"></span>
-                        </li>
-                        {# <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="1">
-                            {{ __('First') }}
-                        </li>
-                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page - 1 }}">
-                            {{ __('Prev') }}
-                        </li>
-                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page + 1 }}">
-                            {{ __('Next') }}
-                        </li>
-                        <li class="related-page" data-page-size="{{ paging.page_size }}" data-page="{{ paging.page_count }}">
-                            {{ __('Last') }}
-                        </li> #}
-                    </ul>
-                </div>
-
-                {# Page size combo #}
-                <div class="page-size">
-                    {{ __('Page Size') }}:
-                    {{ Form.select('page-size_' ~ relationName, Array.combine(config('Pagination.sizeAvailable')) , {
-                        'data-page': paging.page|default(1),
-                        'value': paging.page_size|default(20),
-                    }) | raw }}
-                </div>
-
-            </div>
-
-            {# Loader for relationable items search #}
-            <div id="relationable-loader_{{ relationName }}" class="loader">{{ __('Loading...') }}</div>
-
-            {# Relationable items list result #}
-            <ul id="relationable-list_{{ relationName }}" class="result"></ul>
-
-        </div>
-
-        {# Cart items (added) #}
-        <div class="cart" data-relation-name="{{ relationName }}">
-            <h2>{{ __('Cart of items to add') }}</h2>
-            <ul id="add-relation-cart_{{ relationName }}" class="add-to-cart"></ul>
-        </div>
+        </relation-view>
 
     </div>
 
-    {# unlock fields (could be loaded by ajax call) #}
-    {{ Form.unlockField('page-size_' ~ relationName) }}
-    {{ Form.unlockField('search-related_' ~ relationName) }}
-    {{ Form.unlockField('search-relationable_' ~ relationName) }}
 {% endfor %}
 </div>
 
-<div class="save-relations">
-    {# Relations serialized json form element #}
-    {{ Form.control('relations', {'type': 'hidden', 'value': ''})|raw }}
-    {{ Form.unlockField('relations')}}
-</div>

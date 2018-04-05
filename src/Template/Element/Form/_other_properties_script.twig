@@ -94,27 +94,5 @@
             });
         {% endif %}
 
-        $('textarea.json').change(function(event){
-            if (event && event.target && event.target.value) {
-                try {
-                    let jsonString = JSON.stringify(JSON.parse(event.target.value), null, "    ");
-                    $(event.target).val(jsonString);
-                } catch(e) {
-                    console.error(e);
-                }
-            }
-        });
-
-        $('textarea.json').each(function(){
-            if (this.value) {
-                try {
-                    let jsonString = JSON.stringify(JSON.parse(this.value), null, "    ");
-                    $(this).val(jsonString);
-                } catch(e) {
-                    console.error(e);
-                }
-            }
-        });
     });
 </script>
-

@@ -8,8 +8,8 @@
 
         {% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
         <div class="upload-form">
-          <h1>{{ __('Upload') }}</h1>
-          {% element 'Form/upload' %}
+            <h1>{{ __('Upload') }}</h1>
+            {% element 'Form/upload' %}
         </div>
         {% endif %}
 
