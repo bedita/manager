@@ -17,7 +17,7 @@
                         {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
                     </div>
 
-                    <div class="list-header">
+                    <div class="list-header" v-show="hasElementsToShow">
                         {# <span></span> #}
                         <span class="title">title</span>
                         <span class="id">id</span>

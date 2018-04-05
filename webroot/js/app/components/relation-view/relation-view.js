@@ -95,6 +95,10 @@ Vue.component('relation-view', {
             this.showRelationshipsPanel = true;
         },
 
+        hasElementsToShow() {
+            return this.objects.length && this.addedRelations.length;
+        },
+
         /**
          * Event 'added-relations' callback
          * retrieve last added relations from relationships-view

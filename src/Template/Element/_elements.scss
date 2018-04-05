@@ -155,10 +155,13 @@
 body {
     .relation-view {
         .related-list{
-            .added-related-object, .related-object {
+            .added-related-object {
                 &:first-child {
                     border-top: 1px solid;
                 }
+            }
+            .list-header {
+                border-bottom: 1px solid;
             }
             .related-object, .list-header, .added-related-object {
                 display: grid;
