@@ -47,33 +47,39 @@
     z-index: 200;
     height: 25px;
     margin: 15px 15px;
+    overflow:hidden;
 
     div.square-loader {
         div {
+            transform: translateX(-100vw);
+            // left: -100vw;
             width: 25px;
             height: 25px;
-            position: absolute;
+            position: relative;
+            float: left;
+            // display: flex;
+            // flex-direction: row;
 
-            $duration: 2s;
+            $duration: 1.8s;
 
             &:nth-child(1) {
                 background-color: #ff5460;
-                animation: move $duration infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+                animation: move $duration infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
             }
 
             &:nth-child(2) {
                 background-color: #ff9d84;
-                animation: move $duration 150ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+                animation: move $duration 350ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
             }
 
             &:nth-child(3) {
                 background-color: #f0e797;
-                animation: move $duration 300ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+                animation: move $duration 700ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
             }
 
             &:nth-child(4) {
                 background-color: #75b08a;
-                animation: move $duration 450ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+                animation: move $duration 1050ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
             }
         }
     }
@@ -81,10 +87,14 @@
 
 @keyframes move {
     0% {
-        left: 0%;
+        transform: translateX(0);
+       /*  left: 0%;
+        display: block; */
     }
     100% {
-        left: 100%;
+        transform: translateX(70vw);
+        // display: block;
+        // left: 100%;
     }
 }
 
@@ -275,6 +285,35 @@ body {
                 opacity: 0;
             }
         }
+
+        .related-object {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .animated-list-enter-active {
+            transition: all 0.5s;
+        }
+        .animated-list-enter/* .list-leave-active below version 2.1.8 */ {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .staggered-transition {
+            transition: all .5s ease;
+            opacity: 1;
+        }
+        .staggered-enter, .staggered-leave {
+            opacity: 0;
+        }
+
+        // .animated-list-leave-active {
+        //     transition: all 0.1s;
+        // }
+
+        // .animated-list-leave-to {
+        //     opacity: 0;
+        // }
 
         .modal-view {
             position: fixed;

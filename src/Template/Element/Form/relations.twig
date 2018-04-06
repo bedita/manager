@@ -27,9 +27,9 @@
 
                     {# Loader for Load button #}
                     {% element 'loader' %}
+
                     {# related objects #}
                     <div class="related-objects-list">
-
                         <div class="related-object" v-for="related in objects" v-show="!containsId(removedRelated, related.id)">
                             {# <span class="priority"><% related.meta.relation.priority %></span> #}
                             <span class="title"><% related.attributes.title %></span>
