@@ -5,12 +5,20 @@ namespace App\Core\Filter;
 use App\ApiClientProvider;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaApiClient;
+use Cake\Log\LogTrait;
 
 /**
  * Import abstract class
  */
 abstract class ImportFilter
 {
+    use LogTrait;
+
+    /**
+     * BEdita Api client
+     *
+     * @var \BEdita\SDK\BEditaApiClient
+     */
     protected $apiClient = null;
 
     /**
