@@ -53,7 +53,7 @@ class ImportController extends AppController
             $result = $importFilter->import($filename, $filepath);
             $this->set(compact('result'));
         } catch (Exception $e) {
-            $this->Flash->error($e);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
             return $this->redirect(['_name' => 'import:index']);
         }
