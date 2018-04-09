@@ -12,28 +12,28 @@ class Result
      *
      * @var int
      */
-    protected $objects;
+    public $objects;
 
     /**
      * Counter of errors (not created)
      *
      * @var int
      */
-    protected $errors;
+    public $errors;
 
     /**
      * Result message
      *
      * @var string
      */
-    protected $message;
+    public $message;
 
     /**
      * Result error
      *
      * @var string
      */
-    protected $error;
+    public $error;
 
     /**
      * Constructor
