@@ -14,7 +14,8 @@
                     <div class="list-actions">
                         <button @click.prevent="loadRelatedObjects()">Reload</button>
                         <button @click.prevent="showRelationshipsModal()">Add</button>
-                        {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
+                        <button class="show-more" @click.prevent="showMoreRelated()">Show More</button>
+                        <button @click.prevent="nextPage()">next</button>
                     </div>
 
                     <div class="list-header" v-show="hasElementsToShow">
@@ -30,15 +31,22 @@
 
                     {# related objects #}
                     <div class="related-objects-list">
-                        <div class="related-object" v-for="related in objects" v-show="!containsId(removedRelated, related.id)">
-                            {# <span class="priority"><% related.meta.relation.priority %></span> #}
-                            <span class="title"><% related.attributes.title || related.attributes.name %></span>
-                            <span class="id"><% related.id %></span>
-                            <span class="uname"><% related.attributes.uname  %></span>
-                            <span class="status"><% related.attributes.status %></span>
-                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
-                            <button class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
-                        </div>
+                        <staggered-list stagger="25">
+                            <div class="related-object"
+                                v-for="(related, index) in objects"
+                                :data-index="index"
+                                :key="related.id"
+                                v-show="!containsId(removedRelated, related.id)">
+
+                                {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                                <span class="title"><% related.attributes.title || related.attributes.name %></span>
+                                <span class="id"><% related.id %></span>
+                                <span class="uname"><% related.attributes.uname %></span>
+                                <span class="status"><% related.attributes.status %></span>
+                                <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                                <button class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
+                            </div>
+                        </staggered-list>
                     </div>
 
                     {# staged objects to be added #}
@@ -54,7 +62,7 @@
                         </div>
                     </div>
 
-                    <div v-if="!loading && objects.length === 0 && addedRelations.length === 0"  class="emptyResults">
+                    <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                         <span>- no related objects -</span>
                     </div>
 
@@ -107,20 +115,24 @@
                                             {# Loader for Load button #}
                                             {% element 'loader' %}
 
-                                            <div class="add-related-object"
-                                                v-for="related in objects"
-                                                v-show="!containsId(hideRelations, related.id)">
-                                                {# <span class="priority"><% related.meta.relation.priority %></span> #}
-                                                <span>
-                                                    <input type="checkbox"
-                                                        :value="related"
-                                                        v-model="pendingRelations"/>
-                                                    </span>
-                                                <span class="title"><% related.attributes.title || related.attributes.name %></span>
-                                                <span class="id"><% related.id %></span>
-                                                <span class="uname"><% related.attributes.uname %></span>
-                                                <span class="status"><% related.attributes.status %></span>
-                                            </div>
+                                            <staggered-list stagger="50">
+                                                <div class="add-related-object"
+                                                    v-for="(related, index) in objects"
+                                                    :data-index="index"
+                                                    :key="related.id"
+                                                    v-show="!containsId(hideRelations, related.id)">
+                                                    {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                                                    <span>
+                                                        <input type="checkbox"
+                                                            :value="related"
+                                                            v-model="pendingRelations"/>
+                                                        </span>
+                                                    <span class="title"><% related.attributes.title || related.attributes.name %></span>
+                                                    <span class="id"><% related.id %></span>
+                                                    <span class="uname"><% related.attributes.uname %></span>
+                                                    <span class="status"><% related.attributes.status %></span>
+                                                </div>
+                                            </staggered-list>
 
                                             <div v-if="!loading && objects.length === 0"  class="emptyResults">
                                                 <span>- no results -</span>

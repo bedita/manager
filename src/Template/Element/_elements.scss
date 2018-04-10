@@ -167,6 +167,23 @@ body {
         }
     }
     .relation-view {
+        .staggered-enter-active {
+            opacity: 0;
+            transition: opacity .4s ease-in;
+            will-change: opacity;
+        }
+
+        // .staggered-enter {
+        //     opacity: 0;
+        //     transition: opacity .4s ease-in;
+        //     will-change: opacity;
+        // }
+
+        .staggered-enter-to {
+            transition: none;
+            opacity: 1;
+        }
+
         .related-list{
             .added-related-object {
                 &:first-child {
@@ -309,14 +326,6 @@ body {
         .staggered-enter, .staggered-leave {
             opacity: 0;
         }
-
-        // .animated-list-leave-active {
-        //     transition: all 0.1s;
-        // }
-
-        // .animated-list-leave-to {
-        //     opacity: 0;
-        // }
 
         .modal-view {
             position: fixed;

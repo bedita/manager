@@ -332,7 +332,6 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->get($path, $this->request->getQueryParams());
-
             $available = $response['links']['available'];
             $response = $this->apiClient->get($available);
         } catch (BEditaClientException $error) {

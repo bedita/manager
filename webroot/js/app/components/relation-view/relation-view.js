@@ -71,9 +71,13 @@ Vue.component('relation-view', {
             }
         },
 
-        // showMoreRelated() {
-        //     this.nextPage();
-        // },
+        /**
+         * show next page of paginated content
+         *
+         */
+        showMoreRelated() {
+            this.loadMore();
+        },
 
         /**
          * remove element with matched id from staged relations
