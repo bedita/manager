@@ -18,10 +18,26 @@
 
         {# thumb #}
         <div class="thumb">
-            {% set thumburl = Thumb.url(object.id)|default(Url.build('/img/iconMissingImage.gif')) %}
-            <a href={{ stream.meta.url }}>
-                <img src={{ thumburl }} />
-            </a>
+            {% set thumb = Thumb.url(object.id) %}
+            {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
+                <p>{{ __('Thumb not available') }}</p>
+                <a href={{ stream.meta.url }}>
+                    <img src={{ Url.build('/img/iconMissingImage.gif') }} />
+                </a>
+            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_READY') %}
+                <p>{{ __('Thumb not ready: coming soon') }}</p>
+            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
+                <p>{{ __('Image not acceptable for thumb') }}</p>
+            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NO_URL') %}
+                <p>{{ __('Missing thumb url') }}</p>
+                <a href={{ stream.meta.url }}>
+                    <img src={{ Url.build('/img/iconMissingImage.gif') }} />
+                </a>
+            {% else %}
+                <a href={{ stream.meta.url }}>
+                    <img src={{ thumb }} />
+                </a>
+            {% endif %}
         </div>
 
         {# fields #}

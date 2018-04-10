@@ -5,7 +5,10 @@
 
     {% for module in modules %}
     <li class="module-color-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
-        {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
+        {{ Html.link(
+            module.name|humanize,
+            {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
+            {'title': module.name|humanize})|raw }}
     </li>
     {% endfor %}
 </ul>
