@@ -21,14 +21,23 @@ class ImportResult extends Result
      * Constructor
      *
      * @param string $filename the filename
-     * @param int|null $objects the counter of created objects
+     * @param int|null $created the counter of created objects
+     * @param int|null $updated the counter of updated objects
      * @param int|null $errors the counter of errors (not created)
-     * @param string|null $message the result message
+     * @param string|null $info the info message
+     * @param string|null $warn the warn message
      * @param string|null $error the error message
      */
-    public function __construct($filename, $objects, $errors, $message, $error)
-    {
-        parent::__construct($objects, $errors, $message, $error);
+    public function __construct(
+        $filename,
+        $created = 0,
+        $updated = 0,
+        $errors = 0,
+        $info = null,
+        $warn = null,
+        $error = null
+    ) {
+        parent::__construct($created, $updated, $errors, $info, $warn, $error);
         $this->filename = $filename;
     }
 }

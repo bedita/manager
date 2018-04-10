@@ -18,6 +18,8 @@
         </div>
     </div>
 
+    <br/>
+
     <div class="import-options">
         <h2>{{ __('Options') }}</h2>
         <div id="options">
@@ -33,7 +35,7 @@
     </div>
 
     <div class="source-file">
-        {{ Form.control('file', { 'type': 'file' }) | raw }}
+        {{ Form.control('file', { 'type': 'file' }) | raw }} <br/>
         {{ Form.submit(__('Load')) | raw }}
     </div>
 
@@ -44,23 +46,29 @@
 
 {% if result %}
 
-{% if result.error %}
-<div class="import-message import-error">
-	<h2>{{ __('Import error') }}</h2>
-	<div>{{ result.error }}</div>
-</div>
-{% endif %}
-
 <div class="result">
     <h2>{{ __('Result') }}</h2>
 </div>
 
 <fieldset id="import-result">
     <div class="import-message">
-        <h2>{{ result.message|default('') }}</h2>
-        <p>{{ __('Number of imported objects') }}: {{ result.objects|default(0) }}</p>
-        {% if result.errors %}
-            <p>{{ __('Number of not imported objects / errors') }}: {{ result.errors }}</p>
+        <h2>{{ result.info|default('') }}</h2>
+        <p>{{ __('Number of created objects') }}: {{ result.created|default(0) }}</p>
+        <p>{{ __('Number of updated objects') }}: {{ result.updated|default(0) }}</p>
+        <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
+
+        {% if result.warn %}
+        <div class="import-message import-warn">
+            <h2>{{ __('Import warn') }}</h2>
+            <div>{{ result.warn|raw }}</div>
+        </div>
+        {% endif %}
+
+        {% if result.error %}
+        <div class="import-message import-error">
+            <h2>{{ __('Import error') }}</h2>
+            <div>{{ result.error|raw }}</div>
+        </div>
         {% endif %}
     </div>
 </fieldset>
