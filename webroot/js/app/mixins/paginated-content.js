@@ -41,7 +41,7 @@ let PaginatedContentMixin = {
                 return fetch(requestUrl, options)
                     .then((response) => response.json())
                     .then((json) => {
-                        this.objects = json.data;
+                        this.objects = json.data || [];
                     })
                     .catch((error) => {
                         console.error(error);
