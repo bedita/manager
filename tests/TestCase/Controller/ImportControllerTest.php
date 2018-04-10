@@ -49,7 +49,7 @@ class ImportFilterSample extends ImportFilter
      */
     public function import($filename, $filepath, ?array $options = []) : ImportResult
     {
-        return new ImportResult($filename, 10, 0, 'ok', '');
+        return new ImportResult($filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
     }
 }
 
@@ -127,7 +127,7 @@ class ImportControllerTest extends TestCase
         $response = $this->Import->file();
         static::assertNull($response);
         $result = $this->Import->viewVars['result'];
-        $expected = new ImportResult($this->filename, 10, 0, 'ok', '');
+        $expected = new ImportResult($this->filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
         static::assertEquals($result, $expected);
     }
 

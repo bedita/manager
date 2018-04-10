@@ -12,24 +12,38 @@ class Result
      *
      * @var int
      */
-    public $objects;
+    public $created;
 
     /**
-     * Counter of errors (not created)
+     * Counter of updated objects
+     *
+     * @var int
+     */
+    public $updated;
+
+    /**
+     * Counter of errors
      *
      * @var int
      */
     public $errors;
 
     /**
-     * Result message
+     * Info message
      *
      * @var string
      */
-    public $message;
+    public $info;
 
     /**
-     * Result error
+     * Warning message
+     *
+     * @var string
+     */
+    public $warn;
+
+    /**
+     * Error message
      *
      * @var string
      */
@@ -38,16 +52,26 @@ class Result
     /**
      * Constructor
      *
-     * @param int|null $objects the counter of created objects
+     * @param int|null $created the counter of created objects
+     * @param int|null $updated the counter of updated objects
      * @param int|null $errors the counter of errors (not created)
-     * @param string|null $message the result message
+     * @param string|null $info the info message
+     * @param string|null $warn the warn message
      * @param string|null $error the error message
      */
-    public function __construct($objects = 0, $errors = 0, $message = null, $error = null)
-    {
-        $this->objects = $objects;
+    public function __construct(
+        $created = 0,
+        $updated = 0,
+        $errors = 0,
+        $info = null,
+        $warn = null,
+        $error = null
+    ) {
+        $this->created = $created;
+        $this->updated = $updated;
         $this->errors = $errors;
-        $this->message = $message;
+        $this->info = $info;
+        $this->warn = $warn;
         $this->error = $error;
     }
 }
