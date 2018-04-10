@@ -12,8 +12,8 @@
             <div class="relation-view">
                 <div class="related-list">
                     <div class="list-actions">
-                        <button @click.prevent="loadRelatedObjects()">load Json</button>
-                        <button @click.prevent="showRelationshipsModal()">Add Objects</button>
+                        <button @click.prevent="loadRelatedObjects()">Reload</button>
+                        <button @click.prevent="showRelationshipsModal()">Add</button>
                         {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
                     </div>
 
@@ -32,9 +32,9 @@
                     <div class="related-objects-list">
                         <div class="related-object" v-for="related in objects" v-show="!containsId(removedRelated, related.id)">
                             {# <span class="priority"><% related.meta.relation.priority %></span> #}
-                            <span class="title"><% related.attributes.title %></span>
+                            <span class="title"><% related.attributes.title || related.attributes.name %></span>
                             <span class="id"><% related.id %></span>
-                            <span class="uname"><% related.attributes.uname %></span>
+                            <span class="uname"><% related.attributes.uname  %></span>
                             <span class="status"><% related.attributes.status %></span>
                             <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                             <button class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
@@ -52,6 +52,10 @@
                             <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                             <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
                         </div>
+                    </div>
+
+                    <div v-if="!loading && objects.length === 0 && addedRelations.length === 0"  class="emptyResults">
+                        <span>- no related objects -</span>
                     </div>
 
                     <div class="remove-relations">
@@ -100,6 +104,9 @@
 
                                             </div>
 
+                                            {# Loader for Load button #}
+                                            {% element 'loader' %}
+
                                             <div class="add-related-object"
                                                 v-for="related in objects"
                                                 v-show="!containsId(hideRelations, related.id)">
@@ -109,14 +116,18 @@
                                                         :value="related"
                                                         v-model="pendingRelations"/>
                                                     </span>
-                                                <span class="title"><% related.attributes.title %></span>
+                                                <span class="title"><% related.attributes.title || related.attributes.name %></span>
                                                 <span class="id"><% related.id %></span>
                                                 <span class="uname"><% related.attributes.uname %></span>
                                                 <span class="status"><% related.attributes.status %></span>
                                             </div>
 
+                                            <div v-if="!loading && objects.length === 0"  class="emptyResults">
+                                                <span>- no results -</span>
+                                            </div>
+
                                             <div class="list-actions">
-                                                <button @click.prevent="appendRelations()">Add Objects</button>
+                                                <button @click.prevent="appendRelations()">Add</button>
                                             </div>
 
                                             <div class="save-relations">

@@ -5,7 +5,6 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: $gray-900;
     z-index: 200;
     overflow:hidden;
 
@@ -43,7 +42,6 @@
 }
 
 #loader-wrapper {
-    background-color: $gray-900;
     z-index: 200;
     height: 25px;
     margin: 15px 15px;
@@ -52,13 +50,10 @@
     div.square-loader {
         div {
             transform: translateX(-100vw);
-            // left: -100vw;
             width: 25px;
             height: 25px;
             position: relative;
             float: left;
-            // display: flex;
-            // flex-direction: row;
 
             $duration: 1.8s;
 
@@ -163,6 +158,14 @@
 // RelatedObjects
 
 body {
+    .relations {
+        padding: 0.35em 0 1.55em 0;
+
+        .emptyResults {
+            text-align: center;
+            padding: 0.45em 0;
+        }
+    }
     .relation-view {
         .related-list{
             .added-related-object {
@@ -225,6 +228,7 @@ body {
         }
 
         .list-actions {
+            margin-top: 10px;
             text-align: center;
         }
 
@@ -288,7 +292,6 @@ body {
 
         .related-object {
             display: inline-block;
-            margin-right: 10px;
         }
 
         .animated-list-enter-active {
