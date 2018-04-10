@@ -54,7 +54,7 @@
                         </div>
                     </div>
 
-                    <div v-if="!loading && objects.length === 0 && addedRelations.length === 0"  class="emptyResults">
+                    <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                         <span>- no related objects -</span>
                     </div>
 

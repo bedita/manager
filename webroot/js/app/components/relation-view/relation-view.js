@@ -95,8 +95,13 @@ Vue.component('relation-view', {
             this.showRelationshipsPanel = true;
         },
 
+        /**
+         * helper function for template
+         *
+         * @return {Boolean} true if has at least a related object or a newly added object
+         */
         hasElementsToShow() {
-            return this.objects.length && this.addedRelations.length;
+            return this.objects.length || this.addedRelations.length;
         },
 
         /**
