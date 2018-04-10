@@ -34,6 +34,11 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
+    {# polyfill fetch just in case #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css" rel="stylesheet" type="text/css">
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -59,7 +64,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
         {% if _view.name != 'Dashboard' and _view.name != 'Login' %}
             <header class="layout-header">
-                {% element 'layout_header' %}
+                 {% element 'layout_header' %}
             </header>
         {% endif %}
 
@@ -75,17 +80,26 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {# Vue directives #}
     {{ Html.script('app/directives/richeditor')|raw }}
+    {{ Html.script('app/directives/jsoneditor')|raw }}
+
+    {# Vue mixins #}
+    {{ Html.script('app/mixins/paginated-content')|raw }}
+
+    {# Vue components #}
+    {{ Html.script('app/components/relation-view/relation-view')|raw }}
+    {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
 
     {# Modules Page #}
-    {{ Html.script('app/modules/view')|raw }}
-    {{ Html.script('app/modules/index')|raw }}
+    {{ Html.script('app/pages/modules/view')|raw }}
+    {{ Html.script('app/pages/modules/index')|raw }}
 
     {# Trash Page #}
-    {{ Html.script('app/trash/view')|raw }}
-    {{ Html.script('app/trash/index')|raw }}
+    {{ Html.script('app/pages/trash/view')|raw }}
+    {{ Html.script('app/pages/trash/index')|raw }}
 
     {# Main App #}
     {{ Html.script('app/app')|raw }}
 
 </body>
 </html>
+

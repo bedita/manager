@@ -141,6 +141,7 @@ class SchemaHelper extends Helper
         if ($type === 'json') {
             return [
                 'type' => 'textarea',
+                'v-jsoneditor' => '',
                 'class' => 'json',
                 'value' => json_encode($value),
             ];
