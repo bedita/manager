@@ -22,45 +22,93 @@ class ThumbHelper extends Helper
     use LogTrait;
 
     /**
-     * Obtain thumbnail using API thumbs
+     * @var int Thumb not available
+     */
+    public const NOT_AVAILABLE = -10;
+
+    /**
+     * @var int Thumb not ready
+     */
+    public const NOT_READY = -20;
+
+    /**
+     * @var int Thumb not acceptable
+     */
+    public const NOT_ACCEPTABLE = -30;
+
+    /**
+     * @var int Thumb has no url
+     */
+    public const NO_URL = -40;
+
+    /**
+     * @var int Thumb is OK
+     */
+    public const OK = 1;
+
+    /**
+     * Verify status of image thumb.
+     * Return int representing status.
+     * Possible values:
+     *
+     *   NOT_AVAILABLE: something went wrong during api call
+     *   NOT_READY: thumb is available, but not ready
+     *   NOT_ACCEPTABLE: image is not acceptable, api won't create thumb
+     *   NO_URL: url not present in api response
+     *   OK: thumb available, ready and with a proper url
      *
      * @param int $imageId The image ID
      * @param string|null $preset The preset name for thumbs options
-     * @return string|null The url if available, null otherwise
+     * @param string|null $url The thumb url to populate when static::OK
+     * @return int|null
      */
-    public function url($imageId, $preset = 'default') : ?string
+    public function status($imageId, $preset = 'default', &$url = '') : ?int
     {
         try {
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->thumbs($imageId, compact('preset'));
-            if (!empty($response['meta']['thumbnails'][0])) {
-                $thumb = $response['meta']['thumbnails'][0];
-                // check thumb is ready
-                if (!$this->isReady($thumb)) {
-                    $this->log(sprintf('Thumb for image %d not created: not ready', $imageId), 'warn');
-
-                    return null;
-                }
-                // check thumb is acceptable
-                if (!$this->isAcceptable($thumb)) {
-                    $this->log(sprintf('Thumb for image %d not created: not acceptable', $imageId), 'error');
-
-                    return null;
-                }
-                // check thumb has url
-                if (!$this->hasUrl($thumb)) {
-                    $this->log(sprintf('Missing url for thumb for image %d', $imageId), 'error');
-
-                    return null;
-                }
-
-                return $thumb['url'];
+            if (empty($response['meta']['thumbnails'][0])) {
+                return static::NOT_AVAILABLE;
             }
+            $thumb = $response['meta']['thumbnails'][0];
+            // check thumb is ready
+            if (!$this->isReady($thumb)) {
+                return static::NOT_READY;
+            }
+            // check thumb is acceptable
+            if (!$this->isAcceptable($thumb)) {
+                return static::NOT_ACCEPTABLE;
+            }
+            // check thumb has url
+            if (!$this->hasUrl($thumb)) {
+                return static::NO_URL;
+            }
+            $url = $thumb['url'];
         } catch (\Exception $e) {
             $this->log($e, 'error');
+
+            return static::NOT_AVAILABLE;
         }
 
-        return null;
+        return static::OK;
+    }
+
+    /**
+     * Obtain thumbnail using API thumbs.
+     *
+     * @param int $imageId The image ID.
+     * @param string|null $preset The preset name for thumbs options.
+     * @return string|int The url if available, the status code otherwise (see Thumb constants).
+     */
+    public function url($imageId, $preset = 'default')
+    {
+        $url = null;
+        $status = $this->status($imageId, $preset, $url);
+        if ($status === static::OK) {
+            return $url;
+        }
+
+        return $status;
     }
 
     /**
