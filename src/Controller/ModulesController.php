@@ -234,7 +234,7 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function relatedJson(mixed $id, string $relation) : void
+    public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
 
@@ -261,16 +261,27 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function relationshipsJson(mixed $id, string $relation) : void
+    public function relationshipsJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
         $response = null;
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
 
         try {
-            $response = $this->apiClient->get($path, $this->request->getQueryParams());
+            // TO-DO links.available for children / parent / parents is null
+            switch ($relation) {
+                case 'children':
+                    $available = '/objects';
+                    break;
+                case 'parent':
+                case 'parents':
+                    $available = '/folders';
+                    break;
+                default:
+                    $response = $this->apiClient->get($path, $this->request->getQueryParams());
+                    $available = $response['links']['available'];
+            }
 
-            $available = $response['links']['available'];
             $response = $this->apiClient->get($available);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
