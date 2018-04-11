@@ -234,38 +234,7 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function related($id, $relation)
-    {
-        $this->request->allowMethod(['get']);
-        $response = null;
-        $this->set(compact('relation'));
-
-        try {
-            $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->set('error', $e);
-
-            return;
-        }
-
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
-    }
-
-    /**
-     * Relation data load callig api `GET /:object_type/:id/related/:relation`
-     *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
-     * @return void
-     */
-    public function relatedJson($id, $relation)
+    public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
 
@@ -286,53 +255,33 @@ class ModulesController extends AppController
 
     /**
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
-     *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
-     * @return void
-     */
-    public function relationships($id, $relation)
-    {
-        $this->request->allowMethod(['get']);
-        $response = null;
-        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
-        $this->set(compact('relation'));
-
-        try {
-            $response = $this->apiClient->get($path, $this->request->getQueryParams());
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->set('error', $e);
-
-            return;
-        }
-
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
-    }
-
-    /**
-     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
      * @param string|int $id the object identifier.
      * @param string $relation the relating name.
      * @return void
      */
-    public function relationshipsJson($id, $relation)
+    public function relationshipsJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
         $response = null;
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
 
         try {
-            $response = $this->apiClient->get($path, $this->request->getQueryParams());
-            $available = $response['links']['available'];
+            // TO-DO links.available for children / parent / parents is null
+            switch ($relation) {
+                case 'children':
+                    $available = '/objects';
+                    break;
+                case 'parent':
+                case 'parents':
+                    $available = '/folders';
+                    break;
+                default:
+                    $response = $this->apiClient->get($path, $this->request->getQueryParams());
+                    $available = $response['links']['available'];
+            }
+
             $response = $this->apiClient->get($available);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);

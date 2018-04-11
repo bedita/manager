@@ -255,7 +255,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '',
-                    'ckconfig' => 'configSimple',
+                    'ckconfig' => 'configNormal',
                     'type' => 'textarea',
                 ],
                 // schema type
