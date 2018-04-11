@@ -14,8 +14,6 @@
                     <div class="list-actions">
                         <button @click.prevent="loadRelatedObjects()">Reload</button>
                         <button @click.prevent="showRelationshipsModal()">Add</button>
-                        <button class="show-more" @click.prevent="showMoreRelated()">Show More</button>
-                        <button @click.prevent="nextPage()">next</button>
                     </div>
 
                     <div class="list-header" v-show="hasElementsToShow">
@@ -26,9 +24,6 @@
                         <span class="status">status</span>
                     </div>
 
-                    {# Loader for Load button #}
-                    {% element 'loader' %}
-
                     {# related objects #}
                     <div class="related-objects-list">
                         <staggered-list stagger="25">
@@ -36,7 +31,7 @@
                                 v-for="(related, index) in objects"
                                 :data-index="index"
                                 :key="related.id"
-                                v-show="!containsId(removedRelated, related.id)">
+                                :class="containsId(removedRelated, related.id) ? 'deleted' : '' ">
 
                                 {# <span class="priority"><% related.meta.relation.priority %></span> #}
                                 <span class="title"><% related.attributes.title || related.attributes.name %></span>
@@ -44,10 +39,14 @@
                                 <span class="uname"><% related.attributes.uname %></span>
                                 <span class="status"><% related.attributes.status %></span>
                                 <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
-                                <button class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
+                                <button v-show="containsId(removedRelated, related.id)" class="add" @click.prevent="reAddRelations(related.id, related.type)">+</button>
+                                <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
                             </div>
                         </staggered-list>
                     </div>
+
+                    {# Loader for Load button #}
+                    {% element 'loader' %}
 
                     {# staged objects to be added #}
                     <div class="added-objects-list">
@@ -60,6 +59,23 @@
                             <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                             <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
                         </div>
+                    </div>
+
+                    <div class="list-actions">
+                        {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
+
+                        <select class="page-size-selector" v-model="step">
+                            <option v-for="size in pageSizeOptions"><% size %></option>
+                        </select>
+                        <button @click.prevent="firstPage()">first</button>
+                        <button @click.prevent="prevPage()">prev</button>
+                        <button @click.prevent="nextPage()">next</button>
+                        <button @click.prevent="lastPage()">last</button>
+                    </div>
+
+                    <div class="list-actions">
+                        <span><% pagination.page %> / <% pagination.page_count %></span>
+                        <span>Items: <% pagination.page_items %></span>
                     </div>
 
                     <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
@@ -93,13 +109,13 @@
                     :hide-relations="hideRelations">
                     <div class="relationships-view">
                         <transition name="fade">
-                            <div class="modal-view" v-show="isVisible">
+                            <div class="modal-view" v-show="isVisible" @keyup.esc="handleKeyboard($event)">
                                 <div class="modal-box">
                                     <div class="modal-header">
                                         <button class="close" @click.prevent="hideRelationshipModal()">x</button>
                                     </div>
                                     <div class="filter-bar">
-                                        <input type="text" placeholder="filter..." class="search-relationable"/>
+                                        <input ref="inputFilter" type="text" placeholder="filter..." class="search-relationable"/>
                                     </div>
                                     <div class="modal-content">
                                         <div class="add-related-list">
@@ -111,9 +127,6 @@
                                                 <span class="status">status</span>
 
                                             </div>
-
-                                            {# Loader for Load button #}
-                                            {% element 'loader' %}
 
                                             <staggered-list stagger="50">
                                                 <div class="add-related-object"
@@ -134,7 +147,10 @@
                                                 </div>
                                             </staggered-list>
 
-                                            <div v-if="!loading && objects.length === 0"  class="emptyResults">
+                                            {# Loader for Load button #}
+                                            {% element 'loader' %}
+
+                                            <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                                                 <span>- no results -</span>
                                             </div>
 

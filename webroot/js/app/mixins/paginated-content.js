@@ -23,16 +23,18 @@ let PaginatedContentMixin = {
 
     methods: {
         /**
-         * fetch objects based on this.endpoint value
+         * fetch paginated objects based on this.endpoint value
          *
-         * TO-DO pagination
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
          *
-         * @return {Promise}
+         * @return {Promise} repsonse from server
          */
-        getPaginatedObjects(avoidReloading = false) {
+        getPaginatedObjects(autoload = true) {
             let baseUrl = window.location.href;
 
-            this.objects = [];
+            if (autoload) {
+                this.objects = [];
+            }
 
             if (this.endpoint) {
                 let requestUrl = `${baseUrl}/${this.endpoint}`;
@@ -48,8 +50,12 @@ let PaginatedContentMixin = {
                 return fetch(requestUrl, options)
                     .then((response) => response.json())
                     .then((json) => {
-                        this.objects = json.data || [];
-                        this.pagination = json.meta.pagination;
+                        if (autoload) {
+                            this.objects = json.data || [];
+                        }
+                        this.pagination = json.meta && json.meta.pagination || this.pagination;
+
+                        return json.data || [];
                     })
                     .catch((error) => {
                         console.error(error);
@@ -59,6 +65,13 @@ let PaginatedContentMixin = {
             }
         },
 
+        /**
+         * Add pagination info to endpoint url
+         *
+         * @param {String} url
+         *
+         * @return {String} formatted url
+         */
         setPagination(url) {
             let pagination = '';
             let qi = '?';
@@ -75,30 +88,102 @@ let PaginatedContentMixin = {
             return `${url}${qi}${pagination}`;
         },
 
-        loadMore(qty = DEFAULT_PAGINATION.page_size) {
-            if (this.pagination.page_size + qty <= this.pagination.count ) {
-                this.pagination.page_size += qty;
-            } else {
-                this.pagination.page_size = this.pagination.count;
-            }
+        /**
+         * append more objects to current array of objects
+         *
+         * @param {Number} qty number of elements to load
+         *
+         * @return {Promise} repsonse from server
+         */
+        async loadMore(qty = DEFAULT_PAGINATION.page_size) {
+            if (this.pagination.page_items < this.pagination.count) {
+                let moreObjects = await this.nextPage(false);
+                this.pagination.page_items = this.pagination.page_items + qty <= this.pagination.count ? this.pagination.page_items + qty : this.pagination.count;
+                // this.pagination.page--;
 
-            this.getPaginatedObjects(true);
+                const last = this.objects.length;
+                this.objects.splice(last, 0, ...moreObjects);
+            }
         },
 
-        nextPage() {
+        /**
+         * load first page of content
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        firstPage(autoload = true) {
+            if (this.pagination.page !== 1) {
+                this.pagination.page = 1;
+
+                return this.getPaginatedObjects(autoload);
+            }
+
+            return Promise.resolve([]);
+        },
+
+        /**
+         * load last page of content
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        lastPage(autoload = true) {
+            if (this.pagination.page !== this.pagination.page_count) {
+                this.pagination.page = this.pagination.page_count;
+
+                return this.getPaginatedObjects(autoload);
+            }
+
+            return Promise.resolve([]);
+        },
+
+        /**
+         * load next page of content
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        nextPage(autoload = true) {
             if (this.pagination.page < this.pagination.page_count) {
                 this.pagination.page = this.pagination.page + 1;
 
-                this.getPaginatedObjects();
+                return this.getPaginatedObjects(autoload);
             }
+
+            return Promise.resolve([]);
         },
 
+        /**
+         * load previous page of content
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
         prevPage() {
             if (this.pagination.page > 1) {
                 this.pagination.page = this.pagination.page - 1;
 
-                this.getPaginatedObjects();
+                return this.getPaginatedObjects();
             }
+
+            return Promise.resolve();
+        },
+
+        /**
+         * set Pagination page size
+         *
+         * @param {Number} size
+         *
+         * @return {void}
+         */
+        setPageSize(size) {
+            this.pagination.page_size = size;
+            this.pagination.page = 1;
         },
     }
 }
