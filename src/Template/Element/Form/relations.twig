@@ -1,4 +1,3 @@
-{# {% element 'Form/_relations_script' %} #}
 
 <div class="relations">
 {% for relationName, val in object.relationships %}
@@ -12,16 +11,16 @@
             <div class="relation-view">
                 <div class="related-list">
                     <div class="list-actions">
-                        <button @click.prevent="loadRelatedObjects()">Reload</button>
-                        <button @click.prevent="showRelationshipsModal()">Add</button>
+                        <button @click.prevent="loadRelatedObjects()">{{ __('Reload') }}</button>
+                        <button @click.prevent="showRelationshipsModal()">{{ __('Add') }}</button>
                     </div>
 
                     <div class="list-header" v-show="hasElementsToShow">
                         {# <span></span> #}
-                        <span class="title">title</span>
-                        <span class="id">id</span>
-                        <span class="uname">uname</span>
-                        <span class="status">status</span>
+                        <span class="title">{{ __('title') }}</span>
+                        <span class="id">{{ __('id') }}</span>
+                        <span class="uname">{{ __('uname') }}</span>
+                        <span class="status">{{ __('status') }}</span>
                     </div>
 
                     {# related objects #}
@@ -40,7 +39,7 @@
                                 <span class="status"><% related.attributes.status %></span>
                                 <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                                 <button v-show="containsId(removedRelated, related.id)" class="add" @click.prevent="reAddRelations(related.id, related.type)">+</button>
-                                <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related.id, related.type)">x</button>
+                                <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related.id, related.type)">&times;</button>
                             </div>
                         </staggered-list>
                     </div>
@@ -67,10 +66,10 @@
                         <select class="page-size-selector" v-model="step">
                             <option v-for="size in pageSizeOptions"><% size %></option>
                         </select>
-                        <button @click.prevent="firstPage()">first</button>
-                        <button @click.prevent="prevPage()">prev</button>
-                        <button @click.prevent="nextPage()">next</button>
-                        <button @click.prevent="lastPage()">last</button>
+                        <button @click.prevent="firstPage()">{{ __('first') }}</button>
+                        <button @click.prevent="prevPage()">{{ __('prev') }}</button>
+                        <button @click.prevent="nextPage()">{{ __('next') }}</button>
+                        <button @click.prevent="lastPage()">{{ __('last') }}</button>
                     </div>
 
                     <div class="list-actions">
@@ -79,7 +78,7 @@
                     </div>
 
                     <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
-                        <span>- no related objects -</span>
+                        <span>{{ __('no related objects')}}</span>
                     </div>
 
                     <div class="remove-relations">
@@ -112,7 +111,7 @@
                             <div class="modal-view" v-show="isVisible" @keyup.esc="handleKeyboard($event)">
                                 <div class="modal-box">
                                     <div class="modal-header">
-                                        <button class="close" @click.prevent="hideRelationshipModal()">x</button>
+                                        <button class="close" @click.prevent="hideRelationshipModal()">&times;</button>
                                     </div>
                                     <div class="filter-bar">
                                         <input ref="inputFilter" type="text" placeholder="filter..." class="search-relationable"/>
@@ -121,11 +120,10 @@
                                         <div class="add-related-list">
                                             <div class="add-related-list-header">
                                                 <span></span>
-                                                <span class="title">title</span>
-                                                <span class="id">id</span>
-                                                <span class="uname">uname</span>
-                                                <span class="status">status</span>
-
+                                                <span class="title">{{ __('title') }}</span>
+                                                <span class="id">{{ __('id') }}</span>
+                                                <span class="uname">{{ __('uname') }}</span>
+                                                <span class="status">{{ __('status') }}</span>
                                             </div>
 
                                             <staggered-list stagger="50">
@@ -151,11 +149,11 @@
                                             {% element 'loader' %}
 
                                             <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
-                                                <span>- no results -</span>
+                                                <span>{{ __('no result')}}</span>
                                             </div>
 
                                             <div class="list-actions">
-                                                <button @click.prevent="appendRelations()">Add</button>
+                                                <button @click.prevent="appendRelations()">{{ __('Add') }}</button>
                                             </div>
 
                                             <div class="save-relations">
@@ -167,22 +165,18 @@
                                                 })|raw }}
                                                 {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </transition>
                     </div>
-
                 </relationship-view>
 
             </div>
-
         </relation-view>
 
     </div>
-
 {% endfor %}
 </div>
 
