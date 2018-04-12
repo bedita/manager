@@ -85,6 +85,12 @@ Vue.component('relationships-view', {
             if (!this.objects.length) {
                 this.loadObjects();
             }
+            // avoid problem with vue rendering queue
+            this.$nextTick( () => {
+                if (this.isVisible) {
+                    this.$refs.inputFilter.focus();
+                }
+            });
 
             // emit event to pass data to parent
             this.$emit('visibility-setter', this.isVisible);
@@ -119,6 +125,17 @@ Vue.component('relationships-view', {
         },
 
         /**
+         * handles ESC keyboard up event to hide current view
+         *
+         * @param {Event} event
+         */
+        handleKeyboard(event) {
+            if (this.isVisible) {
+                this.hideRelationshipModal()
+            }
+        },
+
+        /**
          * set component view's visibility to false
          * reset pendingRelations
          *
@@ -127,6 +144,18 @@ Vue.component('relationships-view', {
         hideRelationshipModal() {
             this.pendingRelations = this.addedRelations;
             this.isVisible = false;
+        },
+
+        /**
+         * helper function for template
+         *
+         * @return {Boolean} true if has at least a related object or a newly added object
+         */
+        hasElementsToShow() {
+            const visible = this.objects.filter((obj) => {
+                return !this.hideRelations.filter( (hidden) => obj.id === hidden.id).length;
+            });
+            return visible.length;
         },
 
         /**

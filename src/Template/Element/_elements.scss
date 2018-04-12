@@ -167,6 +167,23 @@ body {
         }
     }
     .relation-view {
+        .staggered-enter-active {
+            opacity: 0;
+            transition: opacity .4s ease-in;
+            will-change: opacity;
+        }
+
+        // .staggered-enter {
+        //     opacity: 0;
+        //     transition: opacity .4s ease-in;
+        //     will-change: opacity;
+        // }
+
+        .staggered-enter-to {
+            transition: none;
+            opacity: 1;
+        }
+
         .related-list{
             .added-related-object {
                 &:first-child {
@@ -176,6 +193,16 @@ body {
             .list-header {
                 border-bottom: 1px solid;
             }
+
+            .related-object {
+                &.deleted {
+                    span {
+                        text-decoration: line-through;
+                        color: $gray-700;
+                    }
+                }
+            }
+
             .related-object, .list-header, .added-related-object {
                 display: grid;
                 grid-template-columns: auto 40px 175px 50px 80px 35px;
@@ -213,7 +240,7 @@ body {
                 }
 
                 button {
-                    &.remove {
+                    &.remove, &.add {
                         padding: 0;
                         height: 25px;
                         margin: 5px 5px;
@@ -309,14 +336,6 @@ body {
         .staggered-enter, .staggered-leave {
             opacity: 0;
         }
-
-        // .animated-list-leave-active {
-        //     transition: all 0.1s;
-        // }
-
-        // .animated-list-leave-to {
-        //     opacity: 0;
-        // }
 
         .modal-view {
             position: fixed;

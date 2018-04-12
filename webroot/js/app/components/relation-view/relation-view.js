@@ -21,6 +21,14 @@ Vue.component('relation-view', {
             addedRelations: [],             // staged added objects to be saved
             hideRelations: [],              // hide already added relations in relationships-view
             relationsData: [],              // hidden field containing serialized json passed on form submit
+
+            step: DEFAULT_PAGINATION.page_size,     // step value for pagination page size
+
+            pageSizeOptions: [
+                20,
+                50,
+                100,
+            ]
         }
     },
 
@@ -37,6 +45,18 @@ Vue.component('relation-view', {
         }
     },
 
+    watch: {
+        /**
+         * watcher for step variable, change pageSize and reload relations
+         *
+         * @param {Number} value
+         */
+        step(value) {
+            this.setPageSize(value);
+            this.loadRelatedObjects();
+        },
+    },
+
     methods: {
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
@@ -46,7 +66,7 @@ Vue.component('relation-view', {
         async loadRelatedObjects() {
             this.loading = true;
 
-            const resp = await this.getPaginatedObjects();
+            let resp = await this.getPaginatedObjects();
             this.loading = false;
 
             return resp;
@@ -71,9 +91,97 @@ Vue.component('relation-view', {
             }
         },
 
-        // showMoreRelated() {
-        //     this.nextPage();
-        // },
+        /**
+         * re-add removed related object: removing it from removedRelated Array
+         *
+         * @param {Number} id
+         * @param {String} type
+         *
+         * @returns {void}
+         */
+        reAddRelations(id, type) {
+            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== id);
+
+            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+        },
+
+        /**
+         * show next page of paginated content
+         *
+         */
+        async showMoreRelated() {
+            this.loading = true;
+            await this.loadMore(this.step);
+            this.loading = false;
+        },
+
+        /**
+         * load first page of content returns newly loaded objects
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async firstPage(autoload = true) {
+            this.loading = true;
+
+            // calling Mixin's method
+            let resp =  await PaginatedContentMixin.methods.firstPage.call(this, autoload);
+            this.loading = false;
+
+            return resp;
+        },
+
+        /**
+         * load last page of content returns newly loaded objects
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async lastPage(autoload = true) {
+            this.loading = true;
+
+            // calling Mixin's method
+            let resp =  await PaginatedContentMixin.methods.lastPage.call(this, autoload);
+            this.loading = false;
+
+            return resp;
+        },
+
+        /**
+         * load next page of content returns newly loaded objects
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async nextPage(autoload = true) {
+            this.loading = true;
+
+            // calling Mixin's method
+            let resp =  await PaginatedContentMixin.methods.nextPage.call(this, autoload);
+            this.loading = false;
+
+            return resp;
+        },
+
+        /**
+         * load prev page of content returns newly loaded objects
+         *
+         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async prevPage(autoload = true) {
+            this.loading = true;
+
+            // calling Mixin's method
+            let resp =  await PaginatedContentMixin.methods.prevPage.call(this, autoload);
+            this.loading = false;
+
+            return resp;
+        },
 
         /**
          * remove element with matched id from staged relations
@@ -95,8 +203,13 @@ Vue.component('relation-view', {
             this.showRelationshipsPanel = true;
         },
 
+        /**
+         * helper function for template
+         *
+         * @return {Boolean} true if has at least a related object or a newly added object
+         */
         hasElementsToShow() {
-            return this.objects.length && this.addedRelations.length;
+            return (this.objects && this.objects.length) || (this.addedRelations && this.addedRelations.length);;
         },
 
         /**
