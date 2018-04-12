@@ -153,7 +153,7 @@ Vue.component('relationships-view', {
          */
         hasElementsToShow() {
             const visible = this.objects.filter((obj) => {
-                return this.hideRelations.map( (hidden) => obj.id === hidden.id).length;
+                return !this.hideRelations.filter( (hidden) => obj.id === hidden.id).length;
             });
             return visible.length;
         },

@@ -60,25 +60,29 @@
                         </div>
                     </div>
 
-                    <div class="list-actions">
-                        {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
 
-                        <select class="page-size-selector" v-model="step">
-                            <option v-for="size in pageSizeOptions"><% size %></option>
-                        </select>
-                        <button @click.prevent="firstPage()">{{ __('first') }}</button>
-                        <button @click.prevent="prevPage()">{{ __('prev') }}</button>
-                        <button @click.prevent="nextPage()">{{ __('next') }}</button>
-                        <button @click.prevent="lastPage()">{{ __('last') }}</button>
-                    </div>
-
-                    <div class="list-actions">
-                        <span><% pagination.page %> / <% pagination.page_count %></span>
-                        <span>Items: <% pagination.page_items %></span>
-                    </div>
 
                     <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                         <span>{{ __('no related objects')}}</span>
+                    </div>
+
+                    <div v-else>
+                        <div class="list-actions">
+                            {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
+
+                            <select class="page-size-selector" v-model="step">
+                                <option v-for="size in pageSizeOptions"><% size %></option>
+                            </select>
+                            <button @click.prevent="firstPage()">{{ __('first') }}</button>
+                            <button @click.prevent="prevPage()">{{ __('prev') }}</button>
+                            <button @click.prevent="nextPage()">{{ __('next') }}</button>
+                            <button @click.prevent="lastPage()">{{ __('last') }}</button>
+                        </div>
+
+                        <div class="list-actions">
+                            <span><% pagination.page %> / <% pagination.page_count %></span>
+                            <span>Items: <% pagination.page_items %></span>
+                        </div>
                     </div>
 
                     <div class="remove-relations">
