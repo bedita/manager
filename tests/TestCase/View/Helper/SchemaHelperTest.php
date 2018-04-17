@@ -236,6 +236,18 @@ class SchemaHelperTest extends TestCase
                 'extra',
                 '{ "example": { "this": "is", "an": "example" } }',
             ],
+            'date-time' => [
+                // expected result
+                [
+                    'type' => 'text',
+                    'v-datepicker' => '',
+                    'time' => 'true',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+            ],
             'title' => [
                 // expected result
                 [
