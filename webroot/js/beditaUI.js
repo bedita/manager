@@ -263,42 +263,6 @@ $(document).ready(function(){
 
 /*...........................................
 
-   gray TABs
-
-...........................................*/
-
-    var currentclassmodule = BEDITA.currentModule.name || '';
-
-    jQuery.fn.BEtabstoggle = function() {
-        $(this).toggleClass("open").next().slideToggle('fast', function() { $(window).trigger('resize') }).toggleClass('open').trigger('slideToggle');
-        $("h2", this).toggleClass("open").toggleClass(BEDITA.currentModule.name || '');
-
-    };
-
-    jQuery.fn.BEtabsopen = function() {
-
-        $(this).addClass("open").next().slideDown('fast', function() { $(window).trigger('resize') }).addClass('open').trigger('slideDown');
-        $("h2",this).addClass("open").addClass(BEDITA.currentModule.name || '');
-
-    };
-
-    jQuery.fn.BEtabsclose = function() {
-
-        $(this).removeClass("open").next().slideUp('fast', function() { $(window).trigger('resize') }).removeClass('open').trigger('slideUp');
-        $("h2",this).removeClass("open").removeClass(BEDITA.currentModule.name || '');
-
-    };
-
-    $(document).on('click', '.tab:not(.stayopen), .trigger', function () {
-        $(this).BEtabstoggle();
-    });
-
-
-    $(".tab.stayopen H2").addClass("open").addClass(BEDITA.currentModule.name || '');
-
-
-/*...........................................
-
    horizontal TABs
 
 ...........................................*/
@@ -782,24 +746,24 @@ if (typeof a.download == 'undefined') {
 
 ...........................................*/
 
-$(document).on("keydown", function(e) {
-    var keycode = e.which;
-    if (keycode == 27) {
+// $(document).on("keydown", function(e) {
+//     var keycode = e.which;
+//     if (keycode == 27) {
 
-        if ($('.tab').next().is(":visible")) {
-            $('.tab').BEtabsclose();
-        } else {
-            $('.tab').BEtabsopen();
-        }
+//         if ($('.tab').next().is(":visible")) {
+//             $('.tab').BEtabsclose();
+//         } else {
+//             $('.tab').BEtabsopen();
+//         }
 
-        if ($('.tab2').next().is(":visible")) {
-            $('.tab2').BEtabsclose();
-        } else {
-            $('.tab2').BEtabsopen();
-        }
+//         if ($('.tab2').next().is(":visible")) {
+//             $('.tab2').BEtabsclose();
+//         } else {
+//             $('.tab2').BEtabsopen();
+//         }
 
-    }
-})
+//     }
+// })
 
 
 /*...........................................
@@ -830,41 +794,41 @@ $(document).on('click', '.showmore', function() {
 
 ...........................................*/
 
-function openAtStart(openTabs) {
-    var title = 'tabs.' + BEDITA.currentModule.name + '.' + BEDITA.action,
-        openTabs = ('localStorage' in window && window['localStorage'] !== null) ? (localStorage.getItem(title) || openTabs) : openTabs;
+// function openAtStart(openTabs) {
+//     var title = 'tabs.' + BEDITA.currentModule.name + '.' + BEDITA.action,
+//         openTabs = ('localStorage' in window && window['localStorage'] !== null) ? (localStorage.getItem(title) || openTabs) : openTabs;
 
-    openTabs = openTabs.split(',');
-    for (var i = 0; i < openTabs.length; i++) {
-        // avoid bad id selector
-        var tabId = openTabs[i];
-        if (tabId != '#' && tabId.length > 1) {
-            if(!$(tabId).prev('.tab, .tab2').hasClass("filteractive")){
-                $(tabId).prev('.tab, .tab2').click();
-            }
-        }
-    }
+//     openTabs = openTabs.split(',');
+//     for (var i = 0; i < openTabs.length; i++) {
+//         // avoid bad id selector
+//         var tabId = openTabs[i];
+//         if (tabId != '#' && tabId.length > 1) {
+//             if(!$(tabId).prev('.tab, .tab2').hasClass("filteractive")){
+//                 $(tabId).prev('.tab, .tab2').click();
+//             }
+//         }
+//     }
 
-    if (!('localStorage' in window) || window['localStorage'] === null) {
-        console.warn('LocalStorage disabled!');
-        return;
-    }
-    $(window).unload(function() {
-        var openTabs = [];
-        $('.tab, .tab2').each(function(i) {
-            if (!$(this).next().is(':visible')) {
-                return;
-            }
+//     if (!('localStorage' in window) || window['localStorage'] === null) {
+//         console.warn('LocalStorage disabled!');
+//         return;
+//     }
+//     $(window).unload(function() {
+//         var openTabs = [];
+//         $('.tab, .tab2').each(function(i) {
+//             if (!$(this).next().is(':visible')) {
+//                 return;
+//             }
 
-            var idAttr = $(this).next().attr('id');
-            if (idAttr != '' && typeof idAttr !== 'undefined') {
-                openTabs.push('#' + idAttr);
-            }
-        });
+//             var idAttr = $(this).next().attr('id');
+//             if (idAttr != '' && typeof idAttr !== 'undefined') {
+//                 openTabs.push('#' + idAttr);
+//             }
+//         });
 
-        localStorage.setItem(title, openTabs);
-    });
-}
+//         localStorage.setItem(title, openTabs);
+//     });
+// }
 
 /*...........................................
 

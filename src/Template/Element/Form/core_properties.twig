@@ -1,13 +1,16 @@
+<property-view
+    :tab-open="tabsOpen"
+    label={{ __('Main Properties') }}>
 
-<div class="tab"><h2>{{ __('Main Properties') }}</h2></div>
+    <fieldset id="core_properties">
+        {# <% label %> #}
+        {{ Form.hidden('id', {'value': object.id})|raw }}
 
-<fieldset id="core_properties">
-    {{ Form.hidden('id', {'value': object.id})|raw }}
+        {% for key, value in core_properties %}
+            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+            {{ Form.control(key, options)|raw }}
+        {% endfor %}
 
-    {% for key, value in core_properties %}
+    </fieldset>
 
-        {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-        {{ Form.control(key, options)|raw }}
-
-    {% endfor %}
-</fieldset>
+</property-view>

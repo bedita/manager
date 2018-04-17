@@ -15,9 +15,27 @@ Vue.component('modules-view', {
      */
     data() {
         return {
-
+            tabsOpen: true,
         };
     },
+
+    computed: {
+        keyEvents() {
+            return {
+                'esc': {
+                    keydown: this.toggleTabs,
+                    keyup: this.toggleTabs,
+                }
+            }
+        }
+    },
+
+    methods: {
+        toggleTabs() {
+            console.log('toggle');
+            return this.tabsOpen = !this.tabsOpen;
+        }
+    }
 });
 
 

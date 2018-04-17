@@ -37,7 +37,7 @@
                                 <span class="id"><% related.id %></span>
                                 <span class="uname"><% related.attributes.uname %></span>
                                 <span class="status"><% related.attributes.status %></span>
-                                <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                                <a class="open" :href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                                 <button v-show="containsId(removedRelated, related.id)" class="add" @click.prevent="reAddRelations(related.id, related.type)">+</button>
                                 <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related.id, related.type)">&times;</button>
                             </div>
@@ -81,13 +81,13 @@
 
                         <div class="list-actions">
                             <span><% pagination.page %> / <% pagination.page_count %></span>
-                            <span>Items: <% pagination.page_items %></span>
+                            <span>{{ __('Items') }}: <% pagination.page_items %></span>
                         </div>
                     </div>
 
                     <div class="remove-relations">
                         {# Relations serialized json form element #}
-                        {{ Form.control('', {
+                        {{ Form.control(relationName ~ 'removeRelated', {
                             'type': 'hidden',
                             'name': 'relations[' ~ relationName ~ '][removeRelated]',
                             'v-model': 'relationsData'
@@ -112,10 +112,15 @@
                     :hide-relations="hideRelations">
                     <div class="relationships-view">
                         <transition name="fade">
-                            <div class="modal-view" v-show="isVisible" @keyup.esc="handleKeyboard($event)">
+                            <div class="modal-view" v-show="isVisible"
+                                {# @keyup.esc.prevent.stop="handleKeyboard($event)"> #}
+
+                                v-hotkey="keyEvents">
+
                                 <div class="modal-box">
                                     <div class="modal-header">
-                                        <button class="close" @click.prevent="hideRelationshipModal()">&times;</button>
+                                        <button class="close"
+                                            @click.prevent="hideRelationshipModal()">&times;</button>
                                     </div>
                                     <div class="filter-bar">
                                         <input ref="inputFilter" type="text" placeholder="filter..." class="search-relationable"/>
@@ -162,7 +167,7 @@
 
                                             <div class="save-relations">
                                                 {# Relations serialized json form element #}
-                                                {{ Form.control('', {
+                                                {{ Form.control(relationName ~ 'addRelated', {
                                                     'type': 'hidden',
                                                     'name': 'relations[' ~ relationName ~ '][addRelated]',
                                                     'v-model': 'relationsData'

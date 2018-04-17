@@ -1,3 +1,4 @@
+Vue.use(VueHotkey);
 
 window._vueInstance = new Vue({
     el: 'main',

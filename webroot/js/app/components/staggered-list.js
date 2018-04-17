@@ -12,8 +12,7 @@ Vue.component('staggered-list', {
     template: `
         <transition-group appear
             name="${NAME}"
-            v-on:enter=enter
-            >
+            v-on:enter=enter>
             <slot></slot>
         </transition-group>`,
 

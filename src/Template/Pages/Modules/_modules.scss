@@ -77,7 +77,55 @@ body.view-module {
             }
         }
     }
+    .slide-container {
+        overflow: hidden;
 
+        .tab-container {
+            will-change: max-height;
+            transition: max-height 0.4s linear;
+            max-height: 1500px;
+
+            &.slide-leave-active {
+                max-height: 1500px;
+            }
+
+            &.slide-leave-to {
+                max-height: 0px;
+            }
+
+            &.slide-enter-active {
+                max-height: 0px;
+            }
+
+            &.slide-enter-to {
+                max-height: 1500px;
+            }
+        }
+
+        // .tab-container {
+        //     // will-change: transform;
+        //     // transition: max-height 0.4s linear;
+
+        //     transform-origin: top;
+        //     transition: transform 0.66s ease;
+
+        //     // &.slide-leave-active {
+        //     //     max-height: auto;
+        //     // }
+
+        //     &.slide-leave-to {
+        //         transform: translateY(-100%);
+        //     }
+
+        //     // &.slide-enter-active {
+        //     //     max-height: 0px;
+        //     // }
+
+        //     &.slide-enter-to {
+        //         transform: translateY(0);
+        //     }
+        // }
+    }
 
     // view
     .module-form {

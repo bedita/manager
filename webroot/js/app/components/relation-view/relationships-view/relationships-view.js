@@ -30,6 +30,17 @@ Vue.component('relationships-view', {
         }
     },
 
+    computed: {
+        keyEvents() {
+            return {
+                'esc': {
+                    keydown: this.handleKeyboard,
+                    keyup: this.handleKeyboard,
+                }
+            };
+        },
+    },
+
     data() {
         return {
             method: 'relationshipsJson',    // define AppController method to be used
@@ -131,6 +142,9 @@ Vue.component('relationships-view', {
          */
         handleKeyboard(event) {
             if (this.isVisible) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+
                 this.hideRelationshipModal()
             }
         },
