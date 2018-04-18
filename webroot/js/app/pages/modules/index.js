@@ -220,6 +220,11 @@ Vue.component('modules-index', {
             this.exportids = this.checked;
         },
 
+        /**
+         * Submit bulk export form, if at least one item is checked
+         *
+         * @return {void}
+         */
         exportSelected() {
             if (this.checked.length < 1) {
                 return;
@@ -227,6 +232,11 @@ Vue.component('modules-index', {
             document.getElementById('form-export').submit();
         },
 
+        /**
+         * Submit bulk change status form, if at least one item is checked and status is not empty
+         *
+         * @return {void}
+         */
         changeStatus() {
             if (this.statusids.length < 1 || !this.status) {
                 return;
@@ -234,6 +244,11 @@ Vue.component('modules-index', {
             document.getElementById('form-status').submit();
         },
 
+        /**
+         * Submit bulk delete form, if at least one item is checked
+         *
+         * @return {void}
+         */
         trash() {
             if (this.trashids.length < 1) {
                 return;
