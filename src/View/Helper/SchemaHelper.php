@@ -53,7 +53,7 @@ class SchemaHelper extends Helper
 
             case 'string':
                 if (!empty($schema['format']) && $schema['format'] === 'date-time') {
-                    return 'text'; // TODO: replace with "datetime".
+                    return 'date-time'; // TODO: replace with "datetime".
                 }
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';
@@ -150,6 +150,12 @@ class SchemaHelper extends Helper
                 'type' => 'textarea',
                 'v-richeditor' => '',
                 'ckconfig' => 'configNormal',
+            ];
+        } elseif ($type === 'date-time') {
+            return [
+                'type' => 'text',
+                'v-datepicker' => '',
+                'time' => 'true',
             ];
         }
 
