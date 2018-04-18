@@ -34,7 +34,6 @@ Vue.component('relationships-view', {
         keyEvents() {
             return {
                 'esc': {
-                    keydown: this.handleKeyboard,
                     keyup: this.handleKeyboard,
                 }
             };
@@ -109,7 +108,6 @@ Vue.component('relationships-view', {
     },
 
     methods: {
-
         /**
          * load objects using PaginatedContentMixin.getPaginatedObjects()
          *
@@ -144,7 +142,6 @@ Vue.component('relationships-view', {
             if (this.isVisible) {
                 event.stopImmediatePropagation();
                 event.preventDefault();
-
                 this.hideRelationshipModal()
             }
         },

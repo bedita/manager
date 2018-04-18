@@ -1,8 +1,15 @@
 /**
  * Templates that uses this component (directly or indirectly):
- *  Template/Elements/relations.twig
+ *  Template/Elements/Form/other_properties.twig
+ *  Template/Elements/Form/core_properties.twig
+ *  Template/Elements/Form/meta.twig
  *
- * <relation-view> component used for ModulesPage -> View
+ * <property-view> component used for ModulesPage -> View
+ *
+ * Component that wraps group of properties in the object View
+ *
+ * @prop {Boolean} tabOpen
+ * @prop {String} label
  *
  */
 
@@ -18,19 +25,22 @@ Vue.component('property-view', {
             </transition>
         </div>`,
 
-    props: ['tabOpen', 'label'],
+    props: {
+        tabOpen: {
+            type: Boolean,
+            default: true,
+        },
+        label: {
+            type: String,
+            default: 'Properties',
+        }
+    },
 
     data() {
         return {
             isOpen: true,
         }
     },
-
-    // computed: {
-    //     isOpen() {
-    //         return this.visibility || !this.visibility && this.tabsOpen
-    //     }
-    // },
 
     watch: {
         tabOpen() {

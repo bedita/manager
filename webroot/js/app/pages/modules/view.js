@@ -23,7 +23,6 @@ Vue.component('modules-view', {
         keyEvents() {
             return {
                 'esc': {
-                    keydown: this.toggleTabs,
                     keyup: this.toggleTabs,
                 }
             }
@@ -32,7 +31,6 @@ Vue.component('modules-view', {
 
     methods: {
         toggleTabs() {
-            console.log('toggle');
             return this.tabsOpen = !this.tabsOpen;
         }
     }

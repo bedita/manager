@@ -167,27 +167,30 @@ body {
         }
     }
     .relation-view {
-        .staggered-enter-active {
-            opacity: 0;
-            transition: opacity .4s ease-in;
-            will-change: opacity;
-        }
-
-        // .staggered-enter {
-        //     opacity: 0;
-        //     transition: opacity .4s ease-in;
-        //     will-change: opacity;
-        // }
-
-        .staggered-enter-to {
-            transition: none;
+        .related-object, .add-related-object {
+            // max-height: 60px;
             opacity: 1;
+            transition: opacity .5s ease-in, max-height 0.4s ease-in;
+            will-change: opacity, max-height;
+
+            &.staggered-enter-active {
+                opacity: 0;
+                // max-height: 0;
+            }
+
+            &.staggered-leave-to {
+                transition: none;
+                will-change: none;
+            }
         }
 
         .related-list{
             .added-related-object {
-                &:first-child {
-                    border-top: 1px solid;
+                // opacity: 0.7;
+                color: #75b08a;
+
+                &:last-child {
+                    border-bottom: 1px solid;
                 }
             }
             .list-header {
@@ -198,8 +201,23 @@ body {
                 &.deleted {
                     span {
                         text-decoration: line-through;
-                        color: $gray-700;
+                        color: #ff5460;
                     }
+
+                    & + .related-object:not(.deleted) {
+                        border-top: 1px solid;
+                        border-color: #ff5460;
+                    }
+
+                    & + .related-object.deleted {
+                        border-top: 0;
+                        border-color: #ff5460;
+                    }
+                }
+
+                & + .related-object.deleted {
+                    border-top: 1px solid;
+                    border-color: #ff5460;
                 }
             }
 
@@ -329,13 +347,6 @@ body {
             transform: translateY(30px);
         }
 
-        .staggered-transition {
-            transition: all .5s ease;
-            opacity: 1;
-        }
-        .staggered-enter, .staggered-leave {
-            opacity: 0;
-        }
 
         .modal-view {
             position: fixed;

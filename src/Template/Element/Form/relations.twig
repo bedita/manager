@@ -6,7 +6,7 @@
         {# The relation #}
         <h1>{{ relationName }}</h1>
 
-        <relation-view inline-template relation-name={{ relationName }} load-on-start=true>
+        <relation-view inline-template relation-name={{ relationName }} :load-on-start="true">
 
             <div class="relation-view">
                 <div class="related-list">
@@ -23,9 +23,22 @@
                         <span class="status">{{ __('status') }}</span>
                     </div>
 
+                    {# staged objects to be added #}
+                    <div class="added-objects-list">
+                        <div class="added-related-object" v-for="related in addedRelations">
+                            {# <span class="priority"><% related.meta.relation.priority %></span> #}
+                            <span class="title"><% related.attributes.title %></span>
+                            <span class="id"><% related.id %></span>
+                            <span class="uname"><% related.attributes.uname %></span>
+                            <span class="status"><% related.attributes.status %></span>
+                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                            <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
+                        </div>
+                    </div>
+
                     {# related objects #}
                     <div class="related-objects-list">
-                        <staggered-list stagger="25">
+                        <staggered-list stagger="15">
                             <div class="related-object"
                                 v-for="(related, index) in objects"
                                 :data-index="index"
@@ -46,21 +59,6 @@
 
                     {# Loader for Load button #}
                     {% element 'loader' %}
-
-                    {# staged objects to be added #}
-                    <div class="added-objects-list">
-                        <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
-                            {# <span class="priority"><% related.meta.relation.priority %></span> #}
-                            <span class="title"><% related.attributes.title %></span>
-                            <span class="id"><% related.id %></span>
-                            <span class="uname"><% related.attributes.uname %></span>
-                            <span class="status"><% related.attributes.status %></span>
-                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
-                            <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
-                        </div>
-                    </div>
-
-
 
                     <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                         <span>{{ __('no related objects')}}</span>
@@ -135,7 +133,7 @@
                                                 <span class="status">{{ __('status') }}</span>
                                             </div>
 
-                                            <staggered-list stagger="50">
+                                            <staggered-list stagger="15">
                                                 <div class="add-related-object"
                                                     v-for="(related, index) in objects"
                                                     :data-index="index"

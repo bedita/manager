@@ -4,12 +4,25 @@
  *
  * <relation-view> component used for ModulesPage -> View
  *
+ * @prop {String} relationName
+ * @prop {Boolean} loadOnStart load content on component init
+ *
  */
 
 Vue.component('relation-view', {
     mixins: [ PaginatedContentMixin ],
 
-    props: ['relationName', 'loadOnStart'],
+    // defining props with validation
+    props: {
+        relationName: {
+            type: String,
+            required: true,
+        },
+        loadOnStart: {
+            type: Boolean,
+            default: true,
+        }
+    },
 
     data() {
         return {
@@ -40,6 +53,14 @@ Vue.component('relation-view', {
     created() {
         this.endpoint = `${this.method}/${this.relationName}`;
 
+    },
+
+    /**
+     * load content if flag set to true after component is mounted
+     *
+     * @return {void}
+     */
+    mounted() {
         if (this.loadOnStart) {
             this.loadRelatedObjects();
         }
