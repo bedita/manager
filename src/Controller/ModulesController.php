@@ -223,14 +223,17 @@ class ModulesController extends AppController
     /**
      * Delete single resource.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function delete() : Response
+    public function delete() : ?Response
     {
         $this->request->allowMethod(['post']);
         $ids = [];
         if (!empty($this->request->getData('ids'))) {
-            $ids = explode(',', $this->request->getData('ids'));
+            $ids = $this->request->getData('ids');
+            if (is_string($ids)) {
+                $ids = explode(',', $this->request->getData('ids'));
+            }
         } else {
             $ids = [$this->request->getData('id')];
         }
