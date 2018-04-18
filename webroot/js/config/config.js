@@ -2,8 +2,8 @@
 
 Vue.config.devtools = true;
 
-// ERB & underscore style delimiters, avoid conflict with Twig {{ }}
-Vue.options.delimiters = ['<%', '%>']
+// Custom delimiters, avoid `visual` conflict with Twig {{ }} and {% %}
+Vue.options.delimiters = ['<:', ':>']
 
 // CKeditor configs...
 
