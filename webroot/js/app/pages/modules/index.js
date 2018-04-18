@@ -11,6 +11,18 @@
 Vue.component('modules-index', {
 
     /**
+     * Component properties
+     *
+     * @type {Object} props properties
+     */
+    props: {
+        ids: {
+            type: String,
+            default: () => [],
+        },
+    },
+
+    /**
      * component properties
      *
      * @returns {Object}
@@ -22,12 +34,51 @@ Vue.component('modules-index', {
             pageSize: '100',
             page: '',
             sort: '',
+            isAllChecked: false,
+            all: [],
+            checked: [],
+            exportids: [],
+            statusids: [],
+            trashids: [],
+            status: '',
         };
     },
 
+    /**
+     * @inheritDoc
+     */
     created() {
         // load url params when component initialized
         this.loadUrlParams();
+        try {
+            this.all = JSON.parse(this.ids);
+            this.all = this.all.map(Number);
+        } catch(error) {
+            console.error(error);
+        }
+    },
+
+    /**
+     * watched vars handlers
+     */
+    watch: {
+
+        /**
+         * Checked checkboxes change handler.
+         * If necessary, set isAllChecked.
+         *
+         * @return {void}
+         */
+        checked() {
+            if (!this.isAllChecked && (this.all.length === this.checked.length)) {
+                this.isAllChecked = true;
+            } else if (this.isAllChecked && (this.all.length > this.checked.length)) {
+                this.isAllChecked = false;
+            }
+            this.exportids = this.checked;
+            this.statusids = this.checked;
+            this.trashids = this.checked;
+        },
     },
 
     /**
@@ -154,9 +205,41 @@ Vue.component('modules-index', {
          * @param {String|Number} num
          * @returns {Boolean}
          */
-        isNumeric(num){
-            return !isNaN(num)
-        }
+        isNumeric(num) {
+            return !isNaN(num);
+        },
+
+        /**
+         * Click con check/uncheck all
+         *
+         * @return {void}
+         */
+        checkAll() {
+            this.isAllChecked = !this.isAllChecked;
+            this.checked = (this.isAllChecked) ? this.all : [];
+            this.exportids = this.checked;
+        },
+
+        exportSelected() {
+            if (this.checked.length < 1) {
+                return;
+            }
+            document.getElementById('form-export').submit();
+        },
+
+        changeStatus() {
+            if (this.statusids.length < 1 || !this.status) {
+                return;
+            }
+            document.getElementById('form-status').submit();
+        },
+
+        trash() {
+            if (this.trashids.length < 1) {
+                return;
+            }
+            document.getElementById('form-delete').submit();
+        },
     }
 });
 

@@ -2,14 +2,20 @@
 
 {% set index_properties = config('Properties.' ~ currentModule.name ~ '.index')|default(['title']) %}
 
-<modules-index inline-template>
+{% set ids = Array.extract(objects, '{*}.id') %}
+
+<modules-index inline-template ids='{{ ids|json_encode }}'>
     <div>
         {% element 'Modules/header' %}
 
         <div class="module-content">
 
             <div class="list-objects">
+                {% if objects %}
                 <nav class="table-header">
+                    <div>
+                        {{ Form.checkbox('allItems', { 'v-bind:checked': 'isAllChecked', '@click': 'checkAll' })|raw }}
+                    </div>
                     {% for prop in index_properties %}
                         <div>{{ Link.sort(prop) }}</div>
                     {% endfor %}
@@ -21,12 +27,15 @@
                     <div>{{ Link.sort('modified')}}</div>
                     <div></div>
                 </nav>
+                {% endif %}
 
                 {% for object in objects %}
                     <a
                         href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
                         title="{{ object.attributes.title }}"
                         class="object-status-{{ object.attributes.status }}">
+
+                            {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
 
                             {% for prop in index_properties %}
                                 <div>{{ object.attributes[prop] }}</div>
@@ -48,6 +57,28 @@
                     {{ __('No items found') }}
                 {% endfor %}
             </div>
+            {% if objects %}
+            <h2>{{ __('Bulk actions') }}</h2>
+            <div>
+                {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'modules:export', 'object_type': objectType}})|raw }}
+                    {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
+                    <button @click.prevent="exportSelected">{{ __('Export') }}</button>
+                {{ Form.end()|raw }}
+
+                {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
+                    {{ Form.hidden('ids', {'v-model': 'statusids'})|raw }}
+                    <button @click.prevent="changeStatus">{{ __('Set status') }}</button>
+                    {{ Form.select('status', { 'on': __('On'), 'draft': __('Draft'), 'off': __('Off') }, { 'v-model': 'status' }) | raw }}
+                {{ Form.end()|raw }}
+
+                {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
+                    {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
+                        {{ Form.hidden('ids', {'v-model': 'trashids'})|raw }}
+                        <button @click.prevent="trash">{{ __('Move to trash') }}</button>
+                    {{ Form.end()|raw }}
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
 
         {% if in_array('POST', currentModule.hints.allow) %}

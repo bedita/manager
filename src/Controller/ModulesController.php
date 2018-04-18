@@ -55,6 +55,26 @@ class ModulesController extends AppController
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event) : void
+    {
+        parent::beforeFilter($event);
+
+        $actions = [
+            'export', 'delete', 'changeStatus',
+        ];
+
+        if (in_array($this->request->params['action'], $actions)) {
+            // for csrf
+            $this->eventManager()->off($this->Csrf);
+
+            // for security component
+            $this->Security->config('unlockedActions', $actions);
+        }
+    }
+
+    /**
      * Display resources list.
      *
      * @return \Cake\Http\Response|null
@@ -208,18 +228,26 @@ class ModulesController extends AppController
     public function delete() : Response
     {
         $this->request->allowMethod(['post']);
-
-        try {
-            $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
-        } catch (BEditaClientException $e) {
-            // Error! Back to object view.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+        $ids = [];
+        if (!empty($this->request->getData('ids'))) {
+            $ids = explode(',', $this->request->getData('ids'));
+        } else {
+            $ids = [$this->request->getData('id')];
         }
+        foreach ($ids as $id) {
+            try {
+                $this->apiClient->deleteObject($id, $this->objectType);
+            } catch (BEditaClientException $e) {
+                $this->log($e, LogLevel::ERROR);
+                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                if (!empty($this->request->getData('id'))) {
+                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+                }
 
-        $this->Flash->success(__('Object deleted'));
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType]);
+            }
+        }
+        $this->Flash->success(__('Object(s) deleted'));
 
         return $this->redirect([
             '_name' => 'modules:list',
@@ -333,5 +361,105 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
             'id' => $response['data']['id'],
         ]);
+    }
+
+    /**
+     * Export data in csv format
+     *
+     * @return \Cake\Http\Response
+     */
+    public function changeStatus() : Response
+    {
+        $this->request->allowMethod(['post']);
+        $ids = $this->request->getData('ids');
+        $status = $this->request->getData('status');
+        if (!empty($ids)) { // export selected (filter by id)
+            $ids = explode(',', $ids);
+            foreach ($ids as $id) {
+                $data = [
+                    'id' => $id,
+                    'status' => $status,
+                ];
+                $this->apiClient->saveObject($this->objectType, $data);
+            }
+        }
+
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+    }
+
+    /**
+     * Export data in csv format
+     *
+     * @return void
+     */
+    public function export() : void
+    {
+        $this->request->allowMethod(['post']);
+        $fields = ['id', 'title', 'description', 'uname', 'status', 'body', 'lang', 'extra'];
+        $delimiter = ',';
+        $ids = $this->request->getData('ids');
+        $csv = implode($delimiter, $fields) . "\n";
+        if (!empty($ids)) { // export selected (filter by id)
+            $response = $this->apiClient->getObjects($this->objectType, ['filter' => ['id' => $ids]]);
+            $csv .= $this->csvRows($response, $fields, $delimiter);
+            $csv = rtrim($csv, "\n"); // remove last newline
+            $this->set('csv', $csv);
+        } else { // export all
+            $response = $this->apiClient->getObjects($this->objectType, [
+                'page' => 1,
+                'page_size' => 100,
+            ]);
+            while (!empty($response['links']['next'])) {
+                $csv .= $this->csvRows($response, $fields, $delimiter);
+                $response = $this->apiClient->get($response['links']['next']);
+            }
+            $csv .= $this->csvRows($response, $fields, $delimiter);
+            $csv = rtrim($csv, "\n"); // remove last newline
+        }
+
+        // Output csv file
+        header("Content-type: text/csv");
+        header("Content-Disposition: attachment; filename=" . $this->objectType . "_" . date('Ymd-His') . ".csv");
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header("Pragma: no-cache");
+        print $csv;
+        exit;
+    }
+
+    /**
+     * Csv rows per response data
+     *
+     * @param array $response the Response
+     * @param array $fields the Fields to export for object
+     * @param string $delimiter the Delimiter char
+     * @return string The csv data
+     */
+    private function csvRows($response = [], $fields = [], $delimiter = ',') : string
+    {
+        if (empty($response) || empty($response['data'])) {
+            return '';
+        }
+        $csv = '';
+        foreach ($response['data'] as $index => $data) {
+            $cells = [];
+            foreach ($fields as $field) {
+                if (!empty($data[$field])) {
+                    $cells[] = '"' . preg_replace('/"/', '""', $data[$field]) . '"';
+                } elseif (!empty($data['attributes'][$field])) {
+                    if (is_array($data['attributes'][$field])) {
+                        $cells[] = '"' . preg_replace('/"/', '""', json_encode($data['attributes'][$field])) . '"';
+                    } else {
+                        $cells[] = '"' . preg_replace('/"/', '""', $data['attributes'][$field]) . '"';
+                    }
+                } else {
+                    $cells[] = '';
+                }
+            }
+            $csv .= implode($delimiter, $cells) . "\n";
+        }
+
+        return $csv;
     }
 }

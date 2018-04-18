@@ -160,6 +160,16 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
     );
+    $routes->connect(
+        '/:object_type/export',
+        ['controller' => 'Modules', 'action' => 'export'],
+        ['_name' => 'modules:export']
+    );
+    $routes->connect(
+        '/:object_type/changeStatus',
+        ['controller' => 'Modules', 'action' => 'changeStatus'],
+        ['_name' => 'modules:changeStatus']
+    );
 
     $routes->fallbacks(DashedRoute::class);
 });
