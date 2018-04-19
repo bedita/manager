@@ -53,12 +53,14 @@ class ExportController extends AppController
             return;
         }
         $this->request->allowMethod(['post']);
-        $delimiter = ',';
         $ids = $this->request->getData('ids');
         if (empty($ids)) {
             return;
         }
         $objectType = $this->request->getData('objectType');
+        if (!is_string($objectType)) {
+            return;
+        }
         $filename = $objectType . "_" . date('Ymd-His');
         $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
         if (empty($response)) {
@@ -86,11 +88,12 @@ class ExportController extends AppController
             }
             $data[] = $row;
         }
+        $csv = '';
         try {
             $tmpfilename = tempnam('/tmp', $filename);
             if ($tmpfilename) {
                 $fp = fopen($tmpfilename, 'w+');
-                if ($fp) {
+                if (!empty($fp)) {
                     fputcsv($fp, $fields);
                     foreach ($data as $row) {
                         fputcsv($fp, $row);
@@ -99,7 +102,7 @@ class ExportController extends AppController
                     fclose($fp);
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log('Error during export', 'error');
         }
         unlink($tmpfilename);
