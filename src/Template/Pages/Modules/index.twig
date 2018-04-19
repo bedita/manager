@@ -60,10 +60,13 @@
             {% if objects %}
             <h2>{{ __('Bulk actions') }}</h2>
             <div>
-                {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'modules:export', 'object_type': objectType}})|raw }}
+                {% if not currentModule.hints.multiple_types %}
+                {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
                     {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
+                    {{ Form.hidden('objectType', {'value': objectType})|raw }}
                     <button @click.prevent="exportSelected">{{ __('Export') }}</button>
                 {{ Form.end()|raw }}
+                {% endif %}
 
                 {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
                     {{ Form.hidden('ids', {'v-model': 'statusids'})|raw }}
