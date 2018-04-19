@@ -70,7 +70,7 @@ class ModulesController extends AppController
             $this->getEventManager()->off($this->Csrf);
 
             // for security component
-            $this->Security->config('unlockedActions', $actions);
+            $this->Security->setConfig('unlockedActions', $actions);
         }
     }
 
