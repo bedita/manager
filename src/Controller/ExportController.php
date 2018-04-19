@@ -35,10 +35,10 @@ class ExportController extends AppController
 
         if (in_array($this->request->params['action'], $actions)) {
             // for csrf
-            $this->eventManager()->off($this->Csrf);
+            $this->getEventManager()->off($this->Csrf);
 
             // for security component
-            $this->Security->config('unlockedActions', $actions);
+            $this->Security->setConfig('unlockedActions', $actions);
         }
     }
 
@@ -49,6 +49,9 @@ class ExportController extends AppController
      */
     public function export() : void
     {
+        if (empty($this->request)) {
+            return;
+        }
         $this->request->allowMethod(['post']);
         $delimiter = ',';
         $ids = $this->request->getData('ids');
