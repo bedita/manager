@@ -52,56 +52,63 @@ class ExportController extends AppController
         $this->request->allowMethod(['post']);
         $delimiter = ',';
         $ids = $this->request->getData('ids');
-        $objectType = $this->request->getData('objectType');
-        $csv = null;
-        if (!empty($ids)) { // export selected (filter by id)
-            $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
-            $csv = $this->fillCsv($response, $delimiter);
+        if (empty($ids)) {
+            return;
         }
+        $objectType = $this->request->getData('objectType');
+        $filename = $objectType . "_" . date('Ymd-His');
+        $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
+        if (empty($response)) {
+            return;
+        }
+        $fields = ['id'] + array_keys($response['data']['0']['attributes']);
+        $data = [];
+        foreach ($response['data'] as $key => $val) {
+            $row = [];
+            foreach ($fields as $field) {
+                $row[$field] = '';
+                if (isset($val[$field])) {
+                    if (is_array($val[$field])) {
+                        $row[$field] = json_encode($val[$field]);
+                    } else {
+                        $row[$field] = $val[$field];
+                    }
+                } elseif (isset($val['attributes'][$field])) {
+                    if (is_array($val['attributes'][$field])) {
+                        $row[$field] = json_encode($val['attributes'][$field]);
+                    } else {
+                        $row[$field] = $val['attributes'][$field];
+                    }
+                }
+            }
+            $data[] = $row;
+        }
+        try {
+            $tmpfilename = tempnam('/tmp', $filename);
+            if ($tmpfilename) {
+                $fp = fopen($tmpfilename, 'w+');
+                if ($fp) {
+                    fputcsv($fp, $fields);
+                    foreach ($data as $row) {
+                        fputcsv($fp, $row);
+                    }
+                    $csv = file_get_contents($tmpfilename);
+                    fclose($fp);
+                }
+            }
+        } catch (Exception $e) {
+            $this->log('Error during export', 'error');
+        }
+        unlink($tmpfilename);
 
         // Output csv file
         header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=" . $objectType . "_" . date('Ymd-His') . ".csv");
+        header("Content-Disposition: attachment; filename=" . $filename . ".csv");
         header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header("Pragma: no-cache");
         print $csv;
         exit;
-    }
-
-    /**
-     * Csv rows per response data
-     *
-     * @param array $response the Response
-     * @param string $delimiter the Delimiter char
-     * @return string the csv string
-     */
-    private function fillCsv($response = [], $delimiter = ',') : string
-    {
-        if (empty($response) || empty($response['data'])) {
-            return '';
-        }
-        $fields = ['id'] + array_keys($response['data'][0]['attributes']);
-        $csv = implode($delimiter, $fields) . "\n";
-        foreach ($response['data'] as $index => $data) {
-            $cells = [];
-            foreach ($fields as $field) {
-                if (!empty($data[$field])) {
-                    $cells[] = '"' . preg_replace('/"/', '""', $data[$field]) . '"';
-                } elseif (!empty($data['attributes'][$field])) {
-                    if (is_array($data['attributes'][$field])) {
-                        $cells[] = '"' . preg_replace('/"/', '""', json_encode($data['attributes'][$field])) . '"';
-                    } else {
-                        $cells[] = '"' . preg_replace('/"/', '""', $data['attributes'][$field]) . '"';
-                    }
-                } else {
-                    $cells[] = '';
-                }
-            }
-            $csv .= implode($delimiter, $cells) . "\n";
-        }
-
-        return $csv;
     }
 }
