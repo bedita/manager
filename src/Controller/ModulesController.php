@@ -67,7 +67,7 @@ class ModulesController extends AppController
 
         if (in_array($this->request->params['action'], $actions)) {
             // for csrf
-            $this->eventManager()->off($this->Csrf);
+            $this->getEventManager()->off($this->Csrf);
 
             // for security component
             $this->Security->config('unlockedActions', $actions);
