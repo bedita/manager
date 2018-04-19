@@ -40,7 +40,7 @@
                             <div>{{ Time.format(object.meta.modified) }}</div>
                             <div>
                             {% if in_array('DELETE', currentModule.hints.allow) %}
-                                {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
+                                {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': 'icon-trash-1', 'data': {'id': object.id}})|raw }}
                             {% endif %}
                             </div>
                     </a>
