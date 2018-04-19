@@ -1,0 +1,64 @@
+{% do _view.assign('title', currentModule.name|humanize) %}
+
+{% set index_properties = config('Properties.' ~ currentModule.name ~ '.index')|default(['title']) %}
+
+<modules-index inline-template>
+    <div>
+        {% element 'Modules/header' %}
+
+        <div class="module-content">
+
+            <div class="list-objects">
+                <nav class="table-header">
+                    {% for prop in index_properties %}
+                        <div>{{ Link.sort(prop) }}</div>
+                    {% endfor %}
+                    <div>{{ Link.sort('id')}}</div>
+                    {% if currentModule.hints.multiple_types %}
+                        <div>{{ __('type') }}</div>
+                    {% endif %}
+                    <div>{{ __('status') }}</div>
+                    <div>{{ Link.sort('modified')}}</div>
+                    <div></div>
+                </nav>
+
+                {% for object in objects %}
+                    <a
+                        href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
+                        title="{{ object.attributes.title }}"
+                        class="object-status-{{ object.attributes.status }}">
+
+                            {% for prop in index_properties %}
+                                <div>{{ object.attributes[prop] }}</div>
+                            {% endfor %}
+
+                            <div>{{ object.id }}</div>
+                            {% if currentModule.hints.multiple_types %}
+                                <div>{{ object.type }}</div>
+                            {% endif %}
+                            <div>{{ object.attributes.status }}</div>
+                            <div>{{ Time.format(object.meta.modified) }}</div>
+                            <div>
+                            {% if in_array('DELETE', currentModule.hints.allow) %}
+                                {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
+                            {% endif %}
+                            </div>
+                    </a>
+                {% else %}
+                    {{ __('No items found') }}
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if in_array('POST', currentModule.hints.allow) %}
+            {% do _view.append('commands',
+                Html.link(__('Create new'), {'_name': 'modules:create', 'object_type': objectType})|raw
+            ) %}
+        {% endif %}
+
+        {# Append "Trashcan" link in commands menu. #}
+        {% do _view.append('commands',
+            Html.link(__('Trashcan'), {'_name': 'trash:list', 'filter': {'type': objectType}})
+        )%}
+    </div>
+</modules-index>

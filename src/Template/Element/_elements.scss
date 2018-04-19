@@ -1,0 +1,438 @@
+
+#full-page-loader-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 200;
+    overflow:hidden;
+
+
+    div.square-loader {
+        div {
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            top: 45%;
+
+            $duration: 2s;
+
+            &:nth-child(1) {
+                background-color: #ff5460;
+                animation: move $duration infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+            }
+
+            &:nth-child(2) {
+                background-color: #ff9d84;
+                animation: move $duration 150ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+            }
+
+            &:nth-child(3) {
+                background-color: #f0e797;
+                animation: move $duration 300ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+            }
+
+            &:nth-child(4) {
+                background-color: #75b08a;
+                animation: move $duration 450ms infinite cubic-bezier(0.2, 0.64, 0.81, 0.23);
+            }
+        }
+    }
+}
+
+#loader-wrapper {
+    z-index: 200;
+    height: 25px;
+    margin: 15px 15px;
+    overflow:hidden;
+
+    div.square-loader {
+        div {
+            transform: translateX(-100vw);
+            width: 25px;
+            height: 25px;
+            position: relative;
+            float: left;
+
+            $duration: 1.8s;
+
+            &:nth-child(1) {
+                background-color: #ff5460;
+                animation: move $duration infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
+            }
+
+            &:nth-child(2) {
+                background-color: #ff9d84;
+                animation: move $duration 350ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
+            }
+
+            &:nth-child(3) {
+                background-color: #f0e797;
+                animation: move $duration 700ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
+            }
+
+            &:nth-child(4) {
+                background-color: #75b08a;
+                animation: move $duration 1050ms infinite cubic-bezier(0.11, 0.64, 0.61, 0.23);
+            }
+        }
+    }
+}
+
+@keyframes move {
+    0% {
+        transform: translateX(0);
+       /*  left: 0%;
+        display: block; */
+    }
+    100% {
+        transform: translateX(70vw);
+        // display: block;
+        // left: 100%;
+    }
+}
+
+// header.twig
+.layout-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 79px;
+
+    ul[role='menu'] {
+        display: flex;
+        list-style: none;
+        margin: 0 0 $gutter * 3; // make room for the tooltip
+        padding: 0;
+
+        > li {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            margin-right: 1px;
+            background-color: $gray-600;
+
+            &:first-child {
+                background-color: $white;
+            }
+
+            &.current a:after {
+                content: '\00a0 ';
+                display: block;
+                position: absolute;
+                width: 6px; height: 6px;
+                top: 50%; margin-top: -3px;
+                left: 50%; margin-left: -3px;
+                background-color: $white;
+                opacity: .5;
+            }
+
+            a {
+                position: relative;
+                display: block;
+                width: 100%;
+                height: 100%;
+                @extend .hide-text;
+
+                &:hover:before {
+                    position: absolute;
+                    content: attr(title);
+                    top: 22px;
+                    left: 0;
+                    z-index: 1;
+                    padding: $gutter * .5 $gutter;
+                    border-radius: 3px;
+                    text-indent: initial;
+
+                    font: .75rem $font-family-sans-serif;
+                    white-space: nowrap;
+                    color: $gray-700;
+                    background-color: $white;
+                }
+            }
+        }
+    }
+}
+
+// Date Picker
+
+.clear-button {
+    transition: all 0.4s ease-in-out;
+    display: inline-block;
+    z-index: 10;
+    color: $gray-900;
+    font-size: 1.3em;
+    line-height: 25px;
+    margin-left: -30px;
+    padding: 0px 9px;
+    cursor: pointer;
+
+
+    &:hover {
+        background-color: $gray-800;
+        border-radius: 100%;
+        color: $white;
+    }
+}
+
+// RelatedObjects
+
+body {
+    .relations {
+        padding: 0.35em 0 1.55em 0;
+
+        .emptyResults {
+            text-align: center;
+            padding: 0.45em 0;
+        }
+    }
+    .relation-view {
+        .staggered-enter-active {
+            opacity: 0;
+            transition: opacity .4s ease-in;
+            will-change: opacity;
+        }
+
+        // .staggered-enter {
+        //     opacity: 0;
+        //     transition: opacity .4s ease-in;
+        //     will-change: opacity;
+        // }
+
+        .staggered-enter-to {
+            transition: none;
+            opacity: 1;
+        }
+
+        .related-list{
+            .added-related-object {
+                &:first-child {
+                    border-top: 1px solid;
+                }
+            }
+            .list-header {
+                border-bottom: 1px solid;
+            }
+
+            .related-object {
+                &.deleted {
+                    span {
+                        text-decoration: line-through;
+                        color: $gray-700;
+                    }
+                }
+            }
+
+            .related-object, .list-header, .added-related-object {
+                display: grid;
+                grid-template-columns: auto 40px 175px 50px 80px 35px;
+
+                span {
+                    padding: 5px 5px;
+                    // border: 1px solid white;
+
+                    &.title {
+                        padding-left: 10px;
+                        flex-grow: 2;
+                    }
+                    &.uname {
+                        flex-grow: 1;
+                    }
+                }
+
+                a {
+                    &.open {
+                        height: 25px;
+                        margin: 5px 5px;
+                        color: black;
+                        background-color: white;
+                        border-radius: 2px;
+                        line-height: 24px;
+                        text-align: center;
+
+                        &:hover {
+                            background-color: $gray-700;
+                            color: $white;
+                            outline: 0;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                button {
+                    &.remove, &.add {
+                        padding: 0;
+                        height: 25px;
+                        margin: 5px 5px;
+                        min-width: unset;
+                    }
+                }
+            }
+
+            .header {
+                background-color: $gray-700;
+            }
+        }
+
+        .list-actions {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .relationships-view {
+            .filter-bar {
+                padding: 0 10px;
+
+                input[type=text] {
+                    width: 100%;
+                }
+            }
+
+            .add-related-object, .add-related-list-header {
+                display: grid;
+                grid-template-columns: 20px auto 75px 105px 50px;
+
+                span {
+                    padding: 5px 5px;
+
+                    &.title {
+                        padding-left: 10px;
+                    }
+                }
+
+                a {
+                    &.open {
+                        height: 25px;
+                        margin: 5px 5px;
+                        color: black;
+                        background-color: $white;
+                        border-radius: 2px;
+                        line-height: 24px;
+                        text-align: center;
+
+                        &:hover {
+                            background-color: $gray-700;
+                            color: $white;
+                            outline: 0;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                button {
+                    &.remove {
+                        padding: 0;
+                        height: 25px;
+                        margin: 5px 5px;
+                        min-width: unset;
+                    }
+                }
+            }
+
+            .fade-enter-active, .fade-leave-active {
+                transition: opacity .5s;
+            }
+            .fade-enter, .fade-leave-to {
+                opacity: 0;
+            }
+        }
+
+        .related-object {
+            display: inline-block;
+        }
+
+        .animated-list-enter-active {
+            transition: all 0.5s;
+        }
+        .animated-list-enter/* .list-leave-active below version 2.1.8 */ {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .staggered-transition {
+            transition: all .5s ease;
+            opacity: 1;
+        }
+        .staggered-enter, .staggered-leave {
+            opacity: 0;
+        }
+
+        .modal-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            background: rgba(0,0,0, 0.5);
+            overflow-y: hidden;
+
+            .modal-box {
+                display: flex;
+                flex-direction: column;
+                background-color: black;
+                margin: 13% auto;
+                width: 60%;
+                height: 70%;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5),0 6px 20px 0 rgba(0,0,0,0.5);
+
+                .modal-header {
+                    text-align: right;
+
+                    button.close {
+                        background: transparent;
+                        color: $white;
+                        min-width: auto;
+                        font-size: 25px;
+                        margin: 0;
+                    }
+                }
+
+                .modal-content {
+                    padding: 10px;
+                    overflow-y: auto;
+
+                    &::-webkit-scrollbar {
+                        width: 15px;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background: $black;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        background: #dddddd;
+                    }
+
+                    &::-webkit-scrollbar-thumb:hover {
+                        background: $white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// json editor
+
+.jsoneditor-container {
+    background-color: $gray-550;
+    .jsoneditor {
+        border: 0;
+
+        .jsoneditor-menu {
+            background: $gray-700;
+            border: 0;
+        }
+
+        .jsoneditor-contextmenu {
+            .jsoneditor-menu {
+                background: $gray-300;
+            }
+        }
+
+        button {
+            min-width: unset;
+        }
+    }
+}

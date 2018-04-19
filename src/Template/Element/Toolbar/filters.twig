@@ -1,31 +1,15 @@
 {% set here=Link.here({'exclude': 'q'}) %}
 
-<script type="text/javascript">
-$(document).ready(function(){
-    $('button[name=applysearch]').click(function(event){
-        event.preventDefault();
-        let uri = '{{ here }}';
-        if (uri.indexOf('?') > 0) {
-            uri+= '&q=' + $('input[name=filterquery]').val();
-        } else {
-            uri+= '?q=' + $('input[name=filterquery]').val();
-        }
-        window.location.replace(uri);
-    });
-    $('button[name=resetsearch]').click(function(event){
-        event.preventDefault();
-        let uri = '{{ here }}';
-        $('input[name=filterquery]').val('');
-        window.location.replace(uri);
-    });
-});
-</script>
+<div class="toolbar-filters">
 
-<div class="toolbar_filters">
+    <input type="text"
+        class="search"
+        name="filterquery"
+        placeholder="{{ __('Search in BEdita') }}"
+        v-model="searchQuery"
+        @keyup.enter="search()"/>
 
-    <input type="text" class="search" name="filterquery" placeholder="{{ __('Search in BEdita') }}" value="{{ Link.query('q') }}" />
-
-    <button name="applysearch">{{ __('Apply') }}</button>
-    <button name="resetsearch">{{ __('Reset') }}</button>
+    <button name="applysearch" v-on:click="search()">{{ __('Apply') }}</button>
+    <button name="resetsearch" v-on:click="resetResearch()">{{ __('Reset') }}</button>
 
 </div>

@@ -28,6 +28,7 @@ input[type=password],
 textarea {
     font-family: $font-family-sans-serif;
     line-height: 1.5em;
+
 }
 
 input[type=submit] {
@@ -52,5 +53,39 @@ label {
     font-weight: normal;
     > input {
         margin-right: $gutter * .5;
+    }
+}
+
+form fieldset {
+
+    textarea, input {
+        &.error {
+            background-color: red;
+
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: white;
+                opacity: 1; /* Firefox */
+            }
+        }
+    }
+}
+
+div {
+    &[message-tooltip] {
+        position:relative;
+
+    }
+    &[message-tooltip]:after {
+        content: attr(message-tooltip);
+        position: absolute;
+        // left: 0px;
+        padding: 5px 8px;
+        background: red;
+        z-index: 9;
+        height: 32px;
+        border-radius: 3px;
+        white-space: nowrap;
+        word-wrap: normal;
+        margin-left: 15px;
     }
 }

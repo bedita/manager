@@ -17,6 +17,16 @@ namespace App\Controller;
  */
 class DashboardController extends AppController
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function initialize() : void
+    {
+        parent::initialize();
+
+        // force `GET /home` reload
+        $this->Modules->setConfig('clearHomeCache', true);
+    }
 
     /**
      * Displays dashboard.

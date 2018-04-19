@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -69,7 +70,7 @@ class ModulesController extends AppController
 
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
             return $this->redirect(['_name' => 'dashboard']);
         }
@@ -104,16 +105,17 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
 
-        $object = $response['data'];
         $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
-        $this->set(compact('object', 'schema'));
+        $object = $response['data'];
+        $included = (!empty($response['included'])) ? $response['included'] : [];
+        $this->set(compact('object', 'included', 'schema'));
 
         return null;
     }
@@ -165,20 +167,22 @@ class ModulesController extends AppController
         $this->request->allowMethod(['post']);
         $this->prepareRequest();
         $requestData = $this->request->getData();
+
         try {
             if (!empty($requestData['api'])) {
                 foreach ($requestData['api'] as $api) {
-                    extract($api); // method, id, type, relation, data
+                    extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated'])) {
-                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $data);
+                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
             }
+
             $response = $this->apiClient->saveObject($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
@@ -210,7 +214,7 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to object view.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
         }
@@ -230,59 +234,104 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function related($id, $relation)
+    public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-        $response = null;
-        $this->set(compact('relation'));
 
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->set('error', $e);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
 
             return;
         }
 
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
     }
 
     /**
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     * Json response
      *
      * @param string|int $id the object identifier.
      * @param string $relation the relating name.
      * @return void
      */
-    public function relationships($id, $relation)
+    public function relationshipsJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
         $response = null;
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
-        $this->set(compact('relation'));
 
         try {
-            $response = $this->apiClient->get($path, $this->request->getQueryParams());
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->set('error', $e);
+            // TO-DO links.available for children / parent / parents is null
+            switch ($relation) {
+                case 'children':
+                    $available = '/objects';
+                    break;
+                case 'parent':
+                case 'parents':
+                    $available = '/folders';
+                    break;
+                default:
+                    $response = $this->apiClient->get($path, $this->request->getQueryParams());
+                    $available = $response['links']['available'];
+            }
+
+            $response = $this->apiClient->get($available);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
 
             return;
         }
 
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
 
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
+    /**
+     * Upload a file and store it in a media stream
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function upload()
+    {
+        $object = $included = [];
+        try {
+            // upload file
+            $filename = $this->request->getData('file.name');
+            $filepath = $this->request->getData('file.tmp_name');
+            $headers = ['Content-type' => $this->request->getData('file.type')];
+            $response = $this->apiClient->upload($filename, $filepath, $headers);
+            // create media from stream
+            $streamId = $response['data']['id'];
+            $type = $this->request->getData('model-type');
+            $title = $filename;
+            $attributes = compact('title');
+            $data = compact('type', 'attributes');
+            $body = compact('data');
+            $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+
+            return $this->redirect([
+                '_name' => 'modules:create',
+                'object_type' => $this->objectType,
+            ]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:view',
+            'object_type' => $this->objectType,
+            'id' => $response['data']['id'],
+        ]);
     }
 }

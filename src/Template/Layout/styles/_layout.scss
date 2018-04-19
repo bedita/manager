@@ -1,28 +1,35 @@
-main {
+main.layout {
+    opacity: 0;
     display: grid;
-    grid-template-areas: "sidebar-1 sidebar-2 header"
-                         "sidebar-1 sidebar-2 content";
-                        //  "footer footer footer";
+    grid-template-areas: "main-sidebar secondary-sidebar content-header"
+                        "main-sidebar secondary-sidebar content";
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr;
     padding: $gutter;
-}
 
-.grid-main-sidebar-1 {
-    grid-area: sidebar-1;
-    margin-right: 2px;
-}
-.grid-main-sidebar-2 {
-    grid-area: sidebar-2;
-}
-.grid-main-header {
-    grid-area: header;
-}
-.grid-main-content {
-    grid-area: content;
-}
+    > .layout-sidebar-primary {
+        grid-area: main-sidebar;
+        margin-right: 2px;
+    }
 
-// footer {
-//     grid-area: footer;
-//     align-self: end;
-// }
+    > .layout-sidebar-secondary {
+        grid-area: secondary-sidebar;
+    }
+
+    > .layout-header {
+        grid-area: content-header;
+    }
+
+    > .layout-content {
+        grid-area: content;
+    }
+
+    $duration: 0.1s;
+
+    // serve per dare il tempo a Vue di inizializzarsi e renderizzare le viste
+    &.fadein {
+        -webkit-transition: opacity $duration;
+                transition: opacity $duration;
+        opacity: 1;
+    }
+}

@@ -13,6 +13,7 @@
 
 namespace App\Auth;
 
+use App\ApiClientProvider;
 use Cake\Auth\BaseAuthenticate;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -29,7 +30,6 @@ class ApiAuthenticate extends BaseAuthenticate
      * Default config for this object.
      *
      * - `fields` The fields to use to perform classic authentication.
-     * - 'apiClient' API client instance
      *
      * @var array
      */
@@ -38,7 +38,6 @@ class ApiAuthenticate extends BaseAuthenticate
             'username' => 'username',
             'password' => 'password',
         ],
-        'apiClient' => null,
     ];
 
     /**
@@ -49,7 +48,7 @@ class ApiAuthenticate extends BaseAuthenticate
     public function authenticate(ServerRequest $request, Response $response)
     {
         /** @var \BEdita\SDK\BEditaClient $apiClient */
-        $apiClient = $this->getConfig('apiClient');
+        $apiClient = ApiClientProvider::getApiClient();
 
         $usernameField = $this->getConfig('fields.username', 'username');
         $passwordField = $this->getConfig('fields.password', 'password');

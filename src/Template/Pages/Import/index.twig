@@ -1,0 +1,76 @@
+{% do _view.assign('title', __('Import Page')) %}
+
+<div class="import">
+
+    <h1>{{ __('Data Import') }}</h1>
+
+    {{ Form.create(null, {
+        'id': 'form-import',
+        'type': 'file',
+        'url': {'_name': 'import:file'},
+    })|raw }}
+    <fieldset>
+
+    <div class="source-data">
+        <h2>{{ __('Source data') }}</h2>
+        <div class="import-type">
+            {{ Form.radio('filter', filters)|raw }}
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="import-options">
+        <h2>{{ __('Options') }}</h2>
+        <div id="options">
+            {% for f in filters %}
+                <div id="{{ f.name }}">
+                    {% for k,v in f.options %}
+                    <div>{{ k }}:{{ v }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="source-file">
+        {{ Form.control('file', { 'type': 'file' }) | raw }} <br/>
+        {{ Form.submit(__('Load')) | raw }}
+    </div>
+
+    </fieldset>
+    {{ Form.end()|raw }}
+
+</div>
+
+{% if result %}
+
+<div class="result">
+    <h2>{{ __('Result') }}</h2>
+</div>
+
+<fieldset id="import-result">
+    <div class="import-message">
+        <h2>{{ result.info|default('') }}</h2>
+        <p>{{ __('Number of created objects') }}: {{ result.created|default(0) }}</p>
+        <p>{{ __('Number of updated objects') }}: {{ result.updated|default(0) }}</p>
+        <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
+
+        {% if result.warn %}
+        <div class="import-message import-warn">
+            <h2>{{ __('Import warn') }}</h2>
+            <div>{{ result.warn|raw }}</div>
+        </div>
+        {% endif %}
+
+        {% if result.error %}
+        <div class="import-message import-error">
+            <h2>{{ __('Import error') }}</h2>
+            <div>{{ result.error|raw }}</div>
+        </div>
+        {% endif %}
+    </div>
+</fieldset>
+
+{% endif %}

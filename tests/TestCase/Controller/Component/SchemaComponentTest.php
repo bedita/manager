@@ -1,6 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller\Component;
 
+use App\ApiClientProvider;
 use App\Controller\Component\SchemaComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -42,6 +43,8 @@ class SchemaComponentTest extends TestCase
     {
         unset($this->Schema);
 
+        // reset client, force new client creation
+        ApiClientProvider::setApiClient(null);
         parent::tearDown();
     }
 
@@ -121,7 +124,9 @@ class SchemaComponentTest extends TestCase
                 ->with($type ?: $config['type'])
                 ->willReturn($schema);
         }
-        $this->Schema->setConfig($config + compact('apiClient'));
+
+        ApiClientProvider::setApiClient($apiClient);
+        $this->Schema->setConfig($config);
 
         $actual = $this->Schema->getSchema($type);
 

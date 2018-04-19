@@ -27,3 +27,9 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 \Cake\Cache\Cache::disable();
 
 $_SERVER['PHP_SELF'] = '/';
+
+// make sure env vars are used for API client setup
+\Cake\Core\Configure::write('API', [
+    'apiBaseUrl' => env('BEDITA_API'),
+    'apiKey' => env('BEDITA_API_KEY', null),
+    ]);

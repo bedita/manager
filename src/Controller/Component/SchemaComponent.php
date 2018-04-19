@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Component;
 
+use App\ApiClientProvider;
 use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -34,7 +35,6 @@ class SchemaComponent extends Component
      * {@inheritDoc}
      */
     protected $_defaultConfig = [
-        'apiClient' => null, // BE4 api client
         'type' => null, // resource or object type name
     ];
 
@@ -108,9 +108,6 @@ class SchemaComponent extends Component
      */
     protected function fetchSchema(string $type)
     {
-        /** @var \BEdita\SDK\BEditaClient */
-        $apiClient = $this->getConfig('apiClient');
-
-        return $apiClient->schema($type);
+        return ApiClientProvider::getApiClient()->schema($type);
     }
 }

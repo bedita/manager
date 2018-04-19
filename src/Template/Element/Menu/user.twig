@@ -1,8 +1,7 @@
-<ul class="left-menu__user-menu">
+<ul class="menu-actions">
     <li>
         {{ __('User: {0}', user.attributes.title ?? user.attributes.username) }}
     </li>
-
-    <li>{{ Html.link(__('Home'), {'_name': 'dashboard'})|raw }}</li>
+    <li>{{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}</li>
     <li>{{ Html.link(__('Exit'), {'_name': 'logout'})|raw }}</li>
 </ul>

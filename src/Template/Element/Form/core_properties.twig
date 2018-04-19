@@ -1,6 +1,11 @@
-{% set attributes = data.attributes %}
 
 <fieldset id="core_properties">
-    {{ Form.control('title')|raw }}
-    {{ Form.control('description', {'type': 'textarea'})|raw }}
+    {{ Form.hidden('id', {'value': object.id})|raw }}
+
+    {% for key, value in core_properties %}
+
+        {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+        {{ Form.control(key, options)|raw }}
+
+    {% endfor %}
 </fieldset>

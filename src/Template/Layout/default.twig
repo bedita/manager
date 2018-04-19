@@ -30,6 +30,18 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
     {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
 
+    {# Temporarily fetching libraries' build from cdn #}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.js"></script>
+
+    {# polyfill fetch just in case #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.css">
+
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
     {% element 'json_meta_config' %}
@@ -37,31 +49,61 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-<main>
-    {% if _view.template != 'login' %}
-        <aside class="grid-main-sidebar-1">
-            {% element 'Messages/messages' %}
-            {% element 'Menu/left' %}
-        </aside>
-    {% endif %}
+    <main class="layout" v-bind:class="{ 'fadein': vueLoaded }">
 
-    {% if currentModule %}
-        <aside class="grid-main-sidebar-2">
-            {% element 'Menu/commands' %}
-        </aside>
+        {% if _view.template != 'login' %}
+            <aside class="layout-sidebar-primary">
+                {% element 'Messages/messages' %}
+                {% element 'project' %}
+            </aside>
+        {% endif %}
 
-        <header class="grid-main-header">
-            {% element 'Menu/modules' %}
-        </header>
-    {% endif %}
+        {% if currentModule %}
+            <aside class="layout-sidebar-secondary">
+                {% element 'Menu/commands' %}
+            </aside>
+        {% endif %}
 
-    <div class="grid-main-content">
-        {{ _view.fetch('content')|raw }}
-    </div>
-</main>
+        {% if _view.name != 'Dashboard' and _view.name != 'Login' %}
+            <header class="layout-header">
+                {% element 'layout_header' %}
+            </header>
+        {% endif %}
 
-{{ Html.script('beditaUI')|raw }}
-{{ Html.script('libs/select2/select2.min')|raw }}
+        <div class="layout-content">
+            {{ _view.fetch('content')|raw }}
+        </div>
+    </main>
+
+    {{ Html.script('config/config')|raw }}
+
+    {{ Html.script('beditaUI')|raw }}
+    {{ Html.script('libs/select2/select2.min')|raw }}
+
+    {# Vue directives #}
+    {{ Html.script('app/directives/richeditor')|raw }}
+    {{ Html.script('app/directives/jsoneditor')|raw }}
+    {{ Html.script('app/directives/datepicker')|raw }}
+
+    {# Vue mixins #}
+    {{ Html.script('app/mixins/paginated-content')|raw }}
+    {{ Html.script('app/components/staggered-list')|raw }}
+
+    {# Vue components #}
+    {{ Html.script('app/components/relation-view/relation-view')|raw }}
+    {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
+
+    {# Modules Page #}
+    {{ Html.script('app/pages/modules/view')|raw }}
+    {{ Html.script('app/pages/modules/index')|raw }}
+
+    {# Trash Page #}
+    {{ Html.script('app/pages/trash/view')|raw }}
+    {{ Html.script('app/pages/trash/index')|raw }}
+
+    {# Main App #}
+    {{ Html.script('app/app')|raw }}
 
 </body>
 </html>
+
