@@ -233,7 +233,7 @@ class ModulesController extends AppController
         $ids = [];
         if (!empty($this->request->getData('ids'))) {
             if (is_string($this->request->getData('ids'))) {
-                $ids = explode(',', /* @scrutinizer ignore-type */ $this->request->getData('ids'));
+                $ids = explode(',', $this->request->getData('ids'));
             }
         } else {
             $ids = [$this->request->getData('id')];
@@ -387,7 +387,7 @@ class ModulesController extends AppController
             $ids = $this->request->getData('ids');
             $status = $this->request->getData('status');
             if (!empty($ids)) { // export selected (filter by id)
-                $ids = explode(',', /* @scrutinizer ignore-type */ $ids);
+                $ids = explode(',', $ids);
                 foreach ($ids as $id) {
                     $data = [
                         'id' => $id,
