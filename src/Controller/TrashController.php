@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Event\Event;
 use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
@@ -31,6 +32,26 @@ class TrashController extends AppController
         parent::initialize();
 
         $this->Modules->setConfig('currentModuleName', 'trash');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event) : void
+    {
+        parent::beforeFilter($event);
+
+        $actions = [
+            'restore', 'delete',
+        ];
+
+        if (in_array($this->request->params['action'], $actions)) {
+            // for csrf
+            $this->eventManager()->off($this->Csrf);
+
+            // for security component
+            $this->Security->config('unlockedActions', $actions);
+        }
     }
 
     /**
@@ -96,50 +117,79 @@ class TrashController extends AppController
     /**
      * Restore resource.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function restore() : Response
+    public function restore() : ?Response
     {
         $this->request->allowMethod(['post']);
+        $ids = [];
+        if (!empty($this->request->getData('ids'))) {
+            $ids = $this->request->getData('ids');
+            if (is_string($ids)) {
+                $ids = explode(',', $this->request->getData('ids'));
+            }
+        } else {
+            $ids = [$this->request->getData('id')];
+        }
+        foreach ($ids as $id) {
+            try {
+                $this->apiClient->restoreObject($id, 'objects');
+            } catch (BEditaClientException $e) {
+                // Error! Back to object view.
+                $this->log($e, LogLevel::ERROR);
+                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                if (!empty($this->request->getData('id'))) {
+                    return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+                }
 
-        try {
-            $this->apiClient->restoreObject($this->request->getData('id'), 'objects');
-        } catch (BEditaClientException $e) {
-            // Error! Back to object view.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-            return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+                return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
+            }
         }
 
-        $this->Flash->success(__('Object restored'));
+        $this->Flash->success(__('Object(s) restored'));
 
         $query = $this->request->getData('query');
         if (!empty($query)) {
             $query = htmlspecialchars_decode($query);
             $query = unserialize($query);
+
+            return $this->redirect(['_name' => 'trash:list'] + $query);
         }
 
-        return $this->redirect(['_name' => 'trash:list'] + $query);
+        return $this->redirect(['_name' => 'trash:list']);
     }
 
     /**
      * Permanently delete resource.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function delete() : Response
+    public function delete() : ?Response
     {
         $this->request->allowMethod(['post']);
+        $ids = [];
+        if (!empty($this->request->getData('ids'))) {
+            $ids = $this->request->getData('ids');
+            if (is_string($ids)) {
+                $ids = explode(',', $this->request->getData('ids'));
+            }
+        } else {
+            $ids = [$this->request->getData('id')];
+        }
+        foreach ($ids as $id) {
+            try {
+                $this->apiClient->remove($id);
+            } catch (BEditaClientException $e) {
+                // Error! Back to object view.
+                $this->log($e, LogLevel::ERROR);
+                $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
-        try {
-            $this->apiClient->remove($this->request->getData('id'));
-        } catch (BEditaClientException $e) {
-            // Error! Back to object view.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                if (!empty($this->request->getData('id'))) {
+                    return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+                }
 
-            return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+                return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
+            }
         }
 
         $this->Flash->success(__('Object deleted from trash'));
@@ -148,18 +198,20 @@ class TrashController extends AppController
         if (!empty($query)) {
             $query = htmlspecialchars_decode($query);
             $query = unserialize($query);
+
+            return $this->redirect(['_name' => 'trash:list'] + $query);
         }
 
-        return $this->redirect(['_name' => 'trash:list'] + $query);
+        return $this->redirect(['_name' => 'trash:list']);
     }
 
     /**
      * Permanently delete multiple data.
      * If filter type is active, empty trash by type
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function empty() : Response
+    public function empty() : ?Response
     {
         $this->request->allowMethod(['post']);
 
@@ -193,6 +245,10 @@ class TrashController extends AppController
         }
         $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
 
-        return $this->redirect(['_name' => 'trash:list'] + $query);
+        if (!empty($query)) {
+            return $this->redirect(['_name' => 'trash:list'] + $query);
+        }
+
+        return $this->redirect(['_name' => 'trash:list']);
     }
 }

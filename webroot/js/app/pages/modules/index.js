@@ -40,6 +40,7 @@ Vue.component('modules-index', {
             exportids: [],
             statusids: [],
             trashids: [],
+            restoreids: [], // used in trash
             status: '',
         };
     },
@@ -78,6 +79,7 @@ Vue.component('modules-index', {
             this.exportids = this.checked;
             this.statusids = this.checked;
             this.trashids = this.checked;
+            this.restoreids = this.checked;
         },
     },
 
@@ -254,6 +256,18 @@ Vue.component('modules-index', {
                 return;
             }
             document.getElementById('form-delete').submit();
+        },
+
+        /**
+         * Submit bulk restore form, if at least one item is checked
+         *
+         * @return {void}
+         */
+        restore() {
+            if (this.restoreids.length < 1) {
+                return;
+            }
+            document.getElementById('form-restore').submit();
         },
     }
 });
