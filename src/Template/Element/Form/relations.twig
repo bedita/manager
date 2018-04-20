@@ -26,7 +26,6 @@
                     {# staged objects to be added #}
                     <div class="added-objects-list">
                         <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
-                            {# <span class="priority"><: related.meta.relation.priority :></span> #}
                             <span class="title"><: related.attributes.title :></span>
                             <span class="id"><: related.id :></span>
                             <span class="uname"><: related.attributes.uname :></span>
@@ -66,8 +65,6 @@
 
                     <div v-else>
                         <div class="list-actions">
-                            {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
-
                             <select class="page-size-selector" v-model="step">
                                 <option v-for="size in pageSizeOptions"><: size :></option>
                             </select>
@@ -79,7 +76,7 @@
 
                         <div class="list-actions">
                             <span><: pagination.page :> / <: pagination.page_count :></span>
-                            <span>{{ __('Items') }} <: pagination.page_items :></span>
+                            <span>{{ __('Items') }}: <: pagination.page_items :></span>
                         </div>
                     </div>
 
@@ -110,9 +107,8 @@
                     :hide-relations="hideRelations">
                     <div class="relationships-view">
                         <transition name="fade">
-                            <div class="modal-view" v-show="isVisible"
-                                {# @keyup.esc.prevent.stop="handleKeyboard($event)"> #}
-
+                            <div class="modal-view"
+                                v-show="isVisible"
                                 v-hotkey="keyEvents">
 
                                 <div class="modal-box">
@@ -139,7 +135,6 @@
                                                     :data-index="index"
                                                     :key="related.id"
                                                     v-show="!containsId(hideRelations, related.id)">
-                                                    {# <span class="priority"><: related.meta.relation.priority :></span> #}
                                                     <span>
                                                         <input type="checkbox"
                                                             :value="related"

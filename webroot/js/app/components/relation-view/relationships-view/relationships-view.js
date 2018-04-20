@@ -97,7 +97,7 @@ Vue.component('relationships-view', {
             }
             // avoid problem with vue rendering queue
             this.$nextTick( () => {
-                if (this.isVisible) {
+                if (this.isVisible && this.$refs.inputFilter) {
                     this.$refs.inputFilter.focus();
                 }
             });
