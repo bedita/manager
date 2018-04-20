@@ -181,4 +181,23 @@ class ArrayHelperTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test `extract()` method.
+     *
+     * @covers ::extract()
+     * @return void
+     */
+    public function testExtract()
+    {
+        $data = [
+            [ 'id' => 1, 'title' => 'one', ],
+            [ 'id' => 2, 'title' => 'two', ],
+            [ 'id' => 3, 'title' => 'three', ],
+        ];
+        $expected = [1, 2, 3];
+        $pattern = '{*}.id';
+        $actual = $this->Array->extract($data, $pattern);
+        static::assertSame($expected, $actual);
+    }
 }

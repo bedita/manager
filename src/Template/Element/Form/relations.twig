@@ -25,11 +25,11 @@
 
                     {# staged objects to be added #}
                     <div class="added-objects-list">
-                        <div class="added-related-object" v-for="related in addedRelations">
-                            <span class="title"><% related.attributes.title %></span>
-                            <span class="id"><% related.id %></span>
-                            <span class="uname"><% related.attributes.uname %></span>
-                            <span class="status"><% related.attributes.status %></span>
+                        <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
+                            <span class="title"><: related.attributes.title :></span>
+                            <span class="id"><: related.id :></span>
+                            <span class="uname"><: related.attributes.uname :></span>
+                            <span class="status"><: related.attributes.status :></span>
                             <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                             <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
                         </div>
@@ -44,11 +44,12 @@
                                 :key="related.id"
                                 :class="containsId(removedRelated, related.id) ? 'deleted' : '' ">
 
-                                <span class="title"><% related.attributes.title || related.attributes.name %></span>
-                                <span class="id"><% related.id %></span>
-                                <span class="uname"><% related.attributes.uname %></span>
-                                <span class="status"><% related.attributes.status %></span>
-                                <a class="open" :href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                                {# <span class="priority"><: related.meta.relation.priority :></span> #}
+                                <span class="title"><: related.attributes.title || related.attributes.name :></span>
+                                <span class="id"><: related.id :></span>
+                                <span class="uname"><: related.attributes.uname :></span>
+                                <span class="status"><: related.attributes.status :></span>
+                                <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
                                 <button v-show="containsId(removedRelated, related.id)" class="add" @click.prevent="reAddRelations(related.id, related.type)">+</button>
                                 <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related.id, related.type)">&times;</button>
                             </div>
@@ -65,7 +66,7 @@
                     <div v-else>
                         <div class="list-actions">
                             <select class="page-size-selector" v-model="step">
-                                <option v-for="size in pageSizeOptions"><% size %></option>
+                                <option v-for="size in pageSizeOptions"><: size :></option>
                             </select>
                             <button @click.prevent="firstPage()">{{ __('first') }}</button>
                             <button @click.prevent="prevPage()">{{ __('prev') }}</button>
@@ -74,8 +75,8 @@
                         </div>
 
                         <div class="list-actions">
-                            <span><% pagination.page %> / <% pagination.page_count %></span>
-                            <span>{{ __('Items') }}: <% pagination.page_items %></span>
+                            <span><: pagination.page :> / <: pagination.page_count :></span>
+                            <span>{{ __('Items') }}: <: pagination.page_items :></span>
                         </div>
                     </div>
 
@@ -139,10 +140,10 @@
                                                             :value="related"
                                                             v-model="pendingRelations"/>
                                                         </span>
-                                                    <span class="title"><% related.attributes.title || related.attributes.name %></span>
-                                                    <span class="id"><% related.id %></span>
-                                                    <span class="uname"><% related.attributes.uname %></span>
-                                                    <span class="status"><% related.attributes.status %></span>
+                                                    <span class="title"><: related.attributes.title || related.attributes.name :></span>
+                                                    <span class="id"><: related.id :></span>
+                                                    <span class="uname"><: related.attributes.uname :></span>
+                                                    <span class="status"><: related.attributes.status :></span>
                                                 </div>
                                             </staggered-list>
 

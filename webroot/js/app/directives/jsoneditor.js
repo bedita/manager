@@ -28,7 +28,7 @@ const jsonEditorOptions = {
 Vue.directive('jsoneditor', {
     element: null,
     /**
-     * When the bound element is inserted into the init CKeditor
+     * create jsoneditor instance when element is inserted
      *
      * @param {Object} element DOM object
      */

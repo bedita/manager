@@ -16,7 +16,7 @@
 Vue.component('property-view', {
     template: `
         <div class="slide-container">
-            <div @click.prevent="toggleVisibility()" class="tab"><h2><% label %></h2></div>
+            <div @click.prevent="toggleVisibility()" class="tab"><h2><: label :></h2></div>
 
             <transition name="slide">
                 <div v-if="isOpen" class="tab-container">
