@@ -30,7 +30,7 @@ class CacheShell extends BaseCacheShell
         $twigCachePath = CACHE . 'twigView';
         $folder = new Folder($twigCachePath);
         if (file_exists($twigCachePath) && !$folder->delete()) {
-            $this->error("Error removing Twig cache files in $twigCachePath");
+            $this->abort("Error removing Twig cache files in $twigCachePath");
 
             return;
         }
