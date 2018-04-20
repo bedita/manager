@@ -77,8 +77,9 @@ class SchemaHelperTest extends TestCase
             'date' => [
                 'text', // TODO: replace with "datetime".
                 [
-                    'type' => 'string',
-                    'format' => 'date-time',
+                    'type' => 'text',
+                        'v-datepicker' => '',
+                        'time' => 'true',
                 ],
             ],
             'number' => [
