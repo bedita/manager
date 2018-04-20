@@ -13,7 +13,7 @@ Vue.component('staggered-list', {
         <transition-group appear
             name="${NAME}"
             v-on:enter="enter"
-            v-on:after-enter=afterEnter>
+            v-on:after-enter="afterEnter">
             <slot></slot>
         </transition-group>`,
 

@@ -3,7 +3,6 @@
     label={{ __('Main Properties') }}>
 
     <fieldset id="core_properties">
-        {# <% label %> #}
         {{ Form.hidden('id', {'value': object.id})|raw }}
 
         {% for key, value in core_properties %}

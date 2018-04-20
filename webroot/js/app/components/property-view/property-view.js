@@ -8,8 +8,8 @@
  *
  * Component that wraps group of properties in the object View
  *
- * @prop {Boolean} tabOpen
- * @prop {String} label
+ * @prop {Boolean} tabOpen determines whether the property content is visible or not
+ * @prop {String} label label of the property view
  *
  */
 
