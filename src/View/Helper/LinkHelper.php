@@ -12,7 +12,6 @@
  */
 namespace App\View\Helper;
 
-use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 
@@ -39,7 +38,7 @@ class LinkHelper extends Helper
      */
     public function initialize(array $config)
     {
-        $this->apiBaseUrl = Configure::read('API.apiBaseUrl');
+        $this->apiBaseUrl = env('BEDITA_API');
         $this->webBaseUrl = Router::fullBaseUrl();
     }
 

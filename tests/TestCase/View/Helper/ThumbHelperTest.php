@@ -16,7 +16,6 @@ namespace App\Test\TestCase\View\Helper;
 use App\ApiClientProvider;
 use App\View\Helper\ThumbHelper;
 use BEdita\SDK\BEditaClient;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -171,7 +170,7 @@ class ThumbHelperTest extends TestCase
         }
         // case response empty, with mock
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = null;
@@ -194,7 +193,7 @@ class ThumbHelperTest extends TestCase
     {
         // case thumb image is acceptable
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = [
@@ -216,7 +215,7 @@ class ThumbHelperTest extends TestCase
 
         // case thumb image is not acceptable
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $url = 'http://...';
@@ -250,7 +249,7 @@ class ThumbHelperTest extends TestCase
     {
         // case thumb ready
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = [
@@ -271,7 +270,7 @@ class ThumbHelperTest extends TestCase
 
         // case thumb not ready
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $url = 'http://...';
@@ -304,7 +303,7 @@ class ThumbHelperTest extends TestCase
     {
         // case url not available
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = [
@@ -325,7 +324,7 @@ class ThumbHelperTest extends TestCase
 
         // case url available
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
+            ->setConstructorArgs([env('BEDITA_API'), env('BEDITA_API_KEY')])
             ->setMethods(['thumbs'])
         ->getMock();
         $url = 'http://...';
