@@ -200,7 +200,7 @@ class ModulesController extends AppController
                 }
             }
 
-            $this->apiClient->saveObject($this->objectType, $requestData);
+            $response = $this->apiClient->saveObject($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
@@ -218,7 +218,7 @@ class ModulesController extends AppController
         return $this->redirect([
             '_name' => 'modules:view',
             'object_type' => $this->objectType,
-            'id' => $response['data']['id'],
+            'id' => Hash::get($response, 'data.id'),
         ]);
     }
 
