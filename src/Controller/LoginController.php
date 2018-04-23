@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -34,7 +33,6 @@ class LoginController extends AppController
 
         if (!$this->request->is('post')) {
             // Display login form.
-
             return null;
         }
 
