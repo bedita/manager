@@ -34,7 +34,6 @@ class LoginController extends AppController
 
         if (!$this->request->is('post')) {
             // Display login form.
-            $this->set('redirect', Hash::get($this->request->getQueryParams(), 'redirect'));
 
             return null;
         }
