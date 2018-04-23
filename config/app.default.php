@@ -369,21 +369,6 @@ return [
     ],
 
     /**
-     * API configuration.
-     *
-     * Contains an array of setting to use for API client configuration.
-     *
-     * ## Options
-     *
-     * - `apiBaseUrl` - The base URL for BEdita API instance.
-     * - `apiKey` - The API key to use with BEdita API instance.
-     */
-    'API' => [
-        'apiBaseUrl' => env('BEDITA_API'),
-        'apiKey' => env('BEDITA_API_KEY', null),
-    ],
-
-    /**
      * Modules configuration.
      *
      * Contains an array of settings to use for modules configuration.
