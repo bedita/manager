@@ -5,7 +5,7 @@
     {% element 'Messages/messages' %}
 
     {{ Form.create(null, {
-        'url': {'_name': 'login'},
+        'url': {'_name': 'login', 'redirect': redirect },
     })|raw }}
 
     {{ Form.control('username', {
