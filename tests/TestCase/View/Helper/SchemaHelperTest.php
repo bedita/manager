@@ -295,7 +295,7 @@ class SchemaHelperTest extends TestCase
                     'v-datepicker' => '',
                     'time' => 'true',
                 ],
-                // schema
+                // schema type
                 [
                     'type' => 'string',
                     'format' => 'date-time',
@@ -312,7 +312,7 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'bad', 'text' => 'bad'],
                     ],
                 ],
-                // schem
+                // schema type
                 [
                     'type' => 'string',
                     'enum' => [
@@ -329,7 +329,7 @@ class SchemaHelperTest extends TestCase
     /**
      * Test `controlOptions` method.
      *
-     * @param string $expected Expected result.
+     * @param array $expected Expected result.
      * @param array $schema The JSON schema
      * @param string $name The field name.
      * @param string $value The field value.
@@ -339,7 +339,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::controlOptions()
      * @covers ::customControlOptions()
      */
-    public function testControlOptions(array $expected, $schema, $name, $value) : void
+    public function testControlOptions(array $expected, array $schema, $name, $value) : void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
