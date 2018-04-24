@@ -13,7 +13,7 @@
 
 namespace App\View\Helper;
 
-use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
@@ -164,9 +164,12 @@ class SchemaHelper extends Helper
         } elseif ($type === 'enum') {
             return [
                 'type' => 'select',
-                'options' => Hash::map($schema['enum'], '{n}', function ($v) {
-                    return ['value' => $v, 'text' => $v];
-                }),
+                'options' => array_map(
+                    function ($value) {
+                        return ['value' => $value, 'text' => Inflector::humanize($value)];
+                    },
+                    $schema['enum']
+                ),
             ];
         }
 
