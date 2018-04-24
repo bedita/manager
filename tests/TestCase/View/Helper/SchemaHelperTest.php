@@ -308,8 +308,8 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'select',
                     'options' => [
-                        ['value' => 'good', 'text' => 'good'],
-                        ['value' => 'bad', 'text' => 'bad'],
+                        ['value' => 'good', 'text' => 'Good'],
+                        ['value' => 'bad', 'text' => 'Bad'],
                     ],
                 ],
                 // schema type
