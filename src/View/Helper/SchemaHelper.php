@@ -13,6 +13,7 @@
 
 namespace App\View\Helper;
 
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -57,6 +58,9 @@ class SchemaHelper extends Helper
                 }
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';
+                }
+                if (!empty($schema['enum']) && is_array($schema['enum'])) {
+                    return 'enum';
                 }
 
                 return 'text';
@@ -156,6 +160,13 @@ class SchemaHelper extends Helper
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'true',
+            ];
+        } elseif ($type === 'enum') {
+            return [
+                'type' => 'select',
+                'options' => Hash::map($schema['enum'], '{n}', function ($v) {
+                    return ['value' => $v, 'text' => $v];
+                }),
             ];
         }
 
