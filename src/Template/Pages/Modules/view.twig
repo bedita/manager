@@ -1,7 +1,9 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
 <modules-view inline-template>
-    <div>
+
+    <div class="modules-view"
+        v-hotkey="keyEvents">
         <header class="layout-header">
             {% element 'Modules/header' %}
         </header>

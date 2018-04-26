@@ -77,7 +77,35 @@ body.view-module {
             }
         }
     }
+    .slide-container {
+        overflow: hidden;
 
+        .tab {
+            cursor: pointer;
+        }
+
+        .tab-container {
+            will-change: max-height;
+            transition: max-height 0.4s linear;
+            max-height: auto;
+
+            &.slide-leave-active {
+                max-height: 100vh;
+            }
+
+            &.slide-leave-to {
+                max-height: 0;
+            }
+
+            &.slide-enter-active {
+                max-height: 0;
+            }
+
+            &.slide-enter-to {
+                max-height: 100vh;
+            }
+        }
+    }
 
     // view
     .module-form {
@@ -99,32 +127,6 @@ body.view-module {
             }
             .hidden {
                 display: none;
-            }
-        }
-
-        // relations
-        .relations {
-            // border: solid darkcyan 1px;
-            button {
-                margin: 0 0 1em;
-            }
-            .relation {
-                // border: solid darkblue 1px;
-                .loader, .dialog, .result, button.close-relation, button.close-dialog {
-                    display: none;
-                }
-                .cart {
-                    // border: solid skyblue 1px;
-                }
-                .related-list {
-                    // border: solid green 1px;
-                    a.in-cart {
-                        text-decoration: line-through;
-                    }
-                }
-                li.in-cart {
-                    text-decoration: line-through;
-                }
             }
         }
     }
