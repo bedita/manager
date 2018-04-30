@@ -64,6 +64,7 @@
                 {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
                     {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
                     {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                    {{ Form.unlockField('ids') }}
                     <button @click.prevent="exportSelected">{{ __('Export') }}</button>
                 {{ Form.end()|raw }}
                 {% endif %}
