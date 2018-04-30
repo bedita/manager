@@ -187,8 +187,7 @@ class ModulesController extends AppController
     public function save() : ?Response
     {
         $this->request->allowMethod(['post']);
-        $this->prepareRequest();
-        $requestData = $this->request->getData();
+        $requestData = $this->prepareRequest($this->objectType);
 
         try {
             if (!empty($requestData['api'])) {
