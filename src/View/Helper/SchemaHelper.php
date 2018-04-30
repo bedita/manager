@@ -154,6 +154,7 @@ class SchemaHelper extends Helper
                 'type' => 'textarea',
                 'v-richeditor' => '',
                 'ckconfig' => 'configNormal',
+                'value' => $value,
             ];
         } elseif ($type === 'date-time') {
             return [
