@@ -121,6 +121,7 @@ class AppController extends Controller
             foreach ($keys as $key) {
                 $data[$key] = json_decode($data[$key]);
             }
+            unset($data['_jsonKeys']);
         }
 
         // relations data for view/save - prepare api calls
