@@ -62,13 +62,10 @@ class ThumbHelper extends Helper
      * @param string|null $url The thumb url to populate when static::OK
      * @return int|null
      */
-    public function status($imageId, $options, &$url = '') : ?int
+    public function status($imageId, ?array $options = ['preset' => 'default'], &$url = '') : ?int
     {
         try {
             $apiClient = ApiClientProvider::getApiClient();
-            if (empty($options)) {
-                $options = ['preset' => 'default'];
-            }
             $response = $apiClient->thumbs($imageId, $options);
             if (empty($response['meta']['thumbnails'][0])) {
                 return static::NOT_AVAILABLE;
