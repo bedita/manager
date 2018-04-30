@@ -58,15 +58,18 @@ class ThumbHelper extends Helper
      *   OK: thumb available, ready and with a proper url
      *
      * @param int $imageId The image ID
-     * @param string|null $preset The preset name for thumbs options
+     * @param array|null $options The thumbs options
      * @param string|null $url The thumb url to populate when static::OK
      * @return int|null
      */
-    public function status($imageId, $preset = 'default', &$url = '') : ?int
+    public function status($imageId, $options, &$url = '') : ?int
     {
         try {
             $apiClient = ApiClientProvider::getApiClient();
-            $response = $apiClient->thumbs($imageId, compact('preset'));
+            if (empty($options)) {
+                $options = ['preset' => 'default'];
+            }
+            $response = $apiClient->thumbs($imageId, $options);
             if (empty($response['meta']['thumbnails'][0])) {
                 return static::NOT_AVAILABLE;
             }
@@ -97,13 +100,13 @@ class ThumbHelper extends Helper
      * Obtain thumbnail using API thumbs.
      *
      * @param int $imageId The image ID.
-     * @param string|null $preset The preset name for thumbs options.
+     * @param array|null $options The thumbs options.
      * @return string|int The url if available, the status code otherwise (see Thumb constants).
      */
-    public function url($imageId, $preset = 'default')
+    public function url($imageId, $options)
     {
         $url = null;
-        $status = $this->status($imageId, $preset, $url);
+        $status = $this->status($imageId, $options, $url);
         if ($status === static::OK) {
             return $url;
         }

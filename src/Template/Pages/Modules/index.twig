@@ -37,6 +37,8 @@
 
                             {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
 
+                            {% element 'Modules/thumb' { 'object': object } %}
+
                             {% for prop in index_properties %}
                                 <div>{{ object.attributes[prop] }}</div>
                             {% endfor %}
