@@ -110,14 +110,14 @@ class ThumbHelperTest extends TestCase
             'basic thumb default preset' => [
                 [
                     'id' => null,
-                    'preset' => null, // use default
+                    'options' => null, // use default preset
                 ],
                 true,
             ],
             'thumb error, return null' => [
                 [
                     'id' => 999999999999999999999999999999999999999999999,
-                    'preset' => null, // use default
+                    'options' => null, // use default preset
                 ],
                 ThumbHelper::NOT_AVAILABLE,
             ],
@@ -138,7 +138,7 @@ class ThumbHelperTest extends TestCase
     {
         $id = empty($input['id']) ? $this->_image() : $input['id'];
         $this->Thumb = new ThumbHelper(new View());
-        $result = $this->Thumb->url($id, $input['preset']);
+        $result = $this->Thumb->url($id, $input['options']);
 
         if ($expected === true) {
             static::assertNotNull($result);
@@ -161,7 +161,7 @@ class ThumbHelperTest extends TestCase
         // case response with api call
         $id = empty($input['id']) ? $this->_image() : $input['id'];
         $this->Thumb = new ThumbHelper(new View());
-        $status = $this->Thumb->status($id, $input['preset'], $result);
+        $status = $this->Thumb->status($id, $input['options'], $result);
 
         if ($expected === true) {
             static::assertEquals($status, ThumbHelper::OK);
