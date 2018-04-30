@@ -18,7 +18,7 @@
 
         {# thumb #}
         <div class="thumb">
-            {% set thumb = Thumb.url(object.id) %}
+            {% set thumb = Thumb.url(object.id, { 'options': { 'w': 600 } } ) %}
             {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
                 <p>{{ __('Thumb not available') }}</p>
                 <a href={{ stream.meta.url }}>
