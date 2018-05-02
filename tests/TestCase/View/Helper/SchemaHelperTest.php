@@ -75,11 +75,10 @@ class SchemaHelperTest extends TestCase
                 ],
             ],
             'date' => [
-                'text', // TODO: replace with "datetime".
+                'date-time',
                 [
-                    'type' => 'text',
-                        'v-datepicker' => '',
-                        'time' => 'true',
+                    'type' => 'string',
+                    'format' => 'date-time',
                 ],
             ],
             'number' => [
@@ -128,6 +127,13 @@ class SchemaHelperTest extends TestCase
                 'text',
                 [
                     'type' => 'unknown',
+                ],
+            ],
+            'enum' => [
+                'enum',
+                [
+                    'type' => 'string',
+                    'enum' => ['a', 'b', 'c'],
                 ],
             ],
         ];
@@ -282,14 +288,49 @@ class SchemaHelperTest extends TestCase
                 'body',
                 'test',
             ],
+            'publish_start' => [
+                // expected result
+                [
+                    'type' => 'text',
+                    'v-datepicker' => '',
+                    'time' => 'true',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+                'publish_start',
+                'test',
+            ],
+            'enum' => [
+                // expected result
+                [
+                    'type' => 'select',
+                    'options' => [
+                        ['value' => 'good', 'text' => 'Good'],
+                        ['value' => 'bad', 'text' => 'Bad'],
+                    ],
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                    'enum' => [
+                        'good',
+                        'bad',
+                    ],
+                ],
+                'enum',
+                'good',
+            ],
         ];
     }
 
     /**
      * Test `controlOptions` method.
      *
-     * @param string $expected Expected result.
-     * @param array $type The JSON schema type
+     * @param array $expected Expected result.
+     * @param array $schema The JSON schema
      * @param string $name The field name.
      * @param string $value The field value.
      * @return void
@@ -298,9 +339,9 @@ class SchemaHelperTest extends TestCase
      * @covers ::controlOptions()
      * @covers ::customControlOptions()
      */
-    public function testControlOptions(array $expected, $type, $name, $value) : void
+    public function testControlOptions(array $expected, array $schema, $name, $value) : void
     {
-        $actual = $this->Schema->controlOptions($name, $value, $type);
+        $actual = $this->Schema->controlOptions($name, $value, $schema);
 
         static::assertSame($expected, $actual);
     }
