@@ -323,6 +323,19 @@ class SchemaHelperTest extends TestCase
                 'enum',
                 'good',
             ],
+            'checkbox' => [
+                // expected result
+                [
+                    'type' => 'checkbox',
+                    'checked' => true,
+                ],
+                // schema type
+                [
+                    'type' => 'boolean',
+                ],
+                'company',
+                true,
+            ],
         ];
     }
 

@@ -161,6 +161,11 @@ class SchemaHelper extends Helper
                 'v-datepicker' => '',
                 'time' => 'true',
             ];
+        } elseif ($type === 'checkbox') {
+            return [
+                'type' => 'checkbox',
+                'checked' => $value,
+            ];
         } elseif ($type === 'enum') {
             return [
                 'type' => 'select',
