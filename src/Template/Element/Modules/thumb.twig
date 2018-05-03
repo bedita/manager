@@ -1,14 +1,14 @@
 {# thumb #}
+{% set width = 50 %}
 
 {# Use external provider thumbnail if available #}
 {% if object.attributes.provider_thumbnail %}
 
-        <img src={{ object.attributes.provider_thumbnail }} width="50" />
+        <img src={{ object.attributes.provider_thumbnail }} width={{ width }} />
 
 {# Otherwise create/display thumb if type is an image #}
 {% elseif object.type ==  'images' %}
 
-    {% set width = 50 %}
     {% set thumb = Thumb.url(object.id, { 'options': { 'w': width } }) %}
 
     {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
