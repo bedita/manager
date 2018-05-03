@@ -29,7 +29,7 @@
                         {# staged objects to be added #}
                         <div class="added-objects-list">
                             <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
-                                <span class="title"><: related.attributes.title :></span>
+                                <span class="title"><: related.attributes.title || related.attributes.name :></span>
                                 <span class="id"><: related.id :></span>
                                 <span class="uname"><: related.attributes.uname :></span>
                                 <span class="status"><: related.attributes.status :></span>
