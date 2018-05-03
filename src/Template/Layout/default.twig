@@ -19,10 +19,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
     {{ Html.css(['style'])|raw }}
-    {#
+
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
-    #}
+
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     {% element 'modules_colors' %}
@@ -97,6 +97,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('app/components/property-view/property-view')|raw }}
     {{ Html.script('app/components/relation-view/relation-view')|raw }}
     {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
+    {{ Html.script('app/components/tree-view/tree-list/tree-list')|raw }}
+    {{ Html.script('app/components/tree-view/tree-view')|raw }}
 
     {# Modules Page #}
     {{ Html.script('app/pages/modules/view')|raw }}

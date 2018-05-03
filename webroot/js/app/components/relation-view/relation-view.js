@@ -1,6 +1,7 @@
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
+ *  Template/Elements/trees.twig
  *
  * <relation-view> component used for ModulesPage -> View
  *
@@ -52,7 +53,6 @@ Vue.component('relation-view', {
      */
     created() {
         this.endpoint = `${this.method}/${this.relationName}`;
-
     },
 
     /**
@@ -101,12 +101,9 @@ Vue.component('relation-view', {
          *
          * @returns {void}
          */
-        removeRelations(id, type) {
-            if (!this.containsId(this.removedRelated, id)) {
-                this.removedRelated.push({
-                    id,
-                    type,
-                });
+        removeRelations(related) {
+            if (!this.containsId(this.removedRelated, related.id)) {
+                this.removedRelated.push(related);
 
                 this.relationsData = this.relationFormatterHelper(this.removedRelated);
             }
@@ -120,9 +117,21 @@ Vue.component('relation-view', {
          *
          * @returns {void}
          */
-        reAddRelations(id, type) {
-            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== id);
+        reAddRelations(related) {
+            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
 
+            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+        },
+
+        /**
+         * prepare removeRelated Array for saving using serialized json input field
+         *
+         * @param {Array} relations
+         *
+         * @returns {void}
+         */
+        setRemovedRelated(relations) {
+            this.removedRelated = relations;
             this.relationsData = this.relationFormatterHelper(this.removedRelated);
         },
 
