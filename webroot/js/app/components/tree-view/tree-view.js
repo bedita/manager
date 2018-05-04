@@ -110,7 +110,7 @@ Vue.component('tree-view', {
                 return;
             }
             if (!this.containsId(this.pendingRelations, related.id)) {
-                this.pendingRelations.push(rel);
+                this.pendingRelations.push(related);
             }
         },
 
@@ -123,7 +123,7 @@ Vue.component('tree-view', {
          *
          * @return {void}
          */
-        removeRelation(rerelatedl) {
+        removeRelation(related) {
             if (!related || !related.id) {
                 console.error('[removeRelation] needs first param (related) as {object} with property id set');
                 return;

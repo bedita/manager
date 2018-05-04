@@ -101,6 +101,9 @@ Vue.component('tree-list', {
          * @return {Boolean}
          */
         isRelated() {
+            if (!this.item.id) {
+                return false;
+            }
             return this.relatedObjects.filter(related => related.id === this.item.id).length;
         },
 
@@ -137,6 +140,9 @@ Vue.component('tree-list', {
          * @return {void}
          */
         related(value) {
+            if (!this.item.object) {
+                return;
+            }
             if (value) {
                 this.$emit('add-relation', this.item.object);
             } else {

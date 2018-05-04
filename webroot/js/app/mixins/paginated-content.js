@@ -51,6 +51,11 @@ let PaginatedContentMixin = {
                     .then((response) => response.json())
                     .then((json) => {
                         let objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
+                        if (!json.data) {
+                            // api response with error
+                            objects = [];
+                        }
+
                         if (autoload) {
                             this.objects = objects;
                         }
