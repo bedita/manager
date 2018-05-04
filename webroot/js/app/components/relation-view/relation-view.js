@@ -102,9 +102,12 @@ Vue.component('relation-view', {
          * @returns {void}
          */
         removeRelations(related) {
+            if (!related || !related.id) {
+                console.error('[removeRelations] needs first param as object with id propperty set');
+                return;
+            }
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removedRelated.push(related);
-
                 this.relationsData = this.relationFormatterHelper(this.removedRelated);
             }
         },
@@ -118,8 +121,11 @@ Vue.component('relation-view', {
          * @returns {void}
          */
         reAddRelations(related) {
+            if (!related || !related.id) {
+                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+                return;
+            }
             this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
-
             this.relationsData = this.relationFormatterHelper(this.removedRelated);
         },
 
@@ -219,6 +225,10 @@ Vue.component('relation-view', {
          * @param {Number} id
          */
         removeAddedRelations(id) {
+            if (!id) {
+                console.error('[removeAddedRelations] needs first param (id) as {Number|String}');
+                return;
+            }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
         },
 
@@ -286,7 +296,13 @@ Vue.component('relation-view', {
          * @return {String} string version of relations
          */
         relationFormatterHelper(relations) {
-            return JSON.stringify(relations);
+            let jsonString = '';
+            try {
+                jsonString = JSON.stringify(relations);
+            } catch(err) {
+                console.error(err);
+            }
+            return jsonString;
         },
 
         /**

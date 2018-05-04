@@ -186,7 +186,13 @@ Vue.component('relationships-view', {
          * @return {String} string version of relations
          */
         relationFormatterHelper(relations, objectType) {
-            return JSON.stringify(relations);
+            let jsonString = '';
+            try {
+                jsonString = JSON.stringify(relations);
+            } catch(err) {
+                console.error(err);
+            }
+            return jsonString;
         },
 
         /**

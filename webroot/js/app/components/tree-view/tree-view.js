@@ -104,8 +104,12 @@ Vue.component('tree-view', {
          *
          * @return {void}
          */
-        addRelation(rel) {
-            if (!this.containsId(this.pendingRelations, rel.id)) {
+        addRelation(related) {
+            if (!related || !related.id) {
+                console.error('[addRelation] needs first param (related) as {object} with property id set');
+                return;
+            }
+            if (!this.containsId(this.pendingRelations, related.id)) {
                 this.pendingRelations.push(rel);
             }
         },
@@ -119,8 +123,12 @@ Vue.component('tree-view', {
          *
          * @return {void}
          */
-        removeRelation(rel) {
-            this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== rel.id);
+        removeRelation(rerelatedl) {
+            if (!related || !related.id) {
+                console.error('[removeRelation] needs first param (related) as {object} with property id set');
+                return;
+            }
+            this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== related.id);
         },
 
         /**
