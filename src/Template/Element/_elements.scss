@@ -422,6 +422,69 @@ body {
             }
         }
     }
+
+    .tree-view {
+        .list-actions {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .tree-related-object{
+            background-color: #ff5460;
+        }
+
+        .tree-entry-list {
+
+            .tree-list-node {
+                // margin-left: 23px;
+
+                .node-children {
+                    margin-left: 23px;
+                }
+
+                &.root-node {
+                    margin-left: 0;
+                }
+
+                .icon-blank {
+                    width: 23px;
+                    visibility: hidden;
+                }
+
+                .icon {
+                    cursor: pointer;
+                }
+
+                .toggle-tree-children {
+                    display: inline-block;
+                    transition: all 0.3s linear;
+                    font-size: 20px;
+                    width: 12px;
+                    height: 12px;
+                    line-height: 12px;
+                    padding: 0;
+                    cursor: pointer;
+
+                    &.open {
+                        transform: rotate(90deg);
+                    }
+                }
+
+                input {
+                    cursor: pointer;
+                    display: inline-block;
+                }
+
+                label {
+                    display: inline-block;
+
+                    &.is-folder {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // json editor
