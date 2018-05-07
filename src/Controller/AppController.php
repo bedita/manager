@@ -102,19 +102,26 @@ class AppController extends Controller
     /**
      * Prepare request, set properly json data.
      *
-     * @return void
+     * @param string $type Object type
+     * @return array request data
      */
-    protected function prepareRequest() : void
+    protected function prepareRequest($type) : array
     {
         // prepare json fields before saving
         $data = $this->request->getData();
 
+        // when saving users, if password is empty, unset it
+        if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
+            unset($data['password']);
+            unset($data['confirm-password']);
+        }
+
         if (!empty($data['_jsonKeys'])) {
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
-                $this->request->data[$key] = json_decode($data[$key]);
+                $data[$key] = json_decode($data[$key]);
             }
-            unset($this->request->data['_jsonKeys']);
+            unset($data['_jsonKeys']);
         }
 
         // relations data for view/save - prepare api calls
@@ -131,7 +138,9 @@ class AppController extends Controller
                 }
             }
 
-            $this->request->data['api'] = $api;
+            $data['api'] = $api;
         }
+
+        return $data;
     }
 }

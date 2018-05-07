@@ -6,7 +6,7 @@
         {# The relation #}
         <h1>{{ relationName }}</h1>
 
-        <relation-view inline-template relation-name={{ relationName }} load-on-start=true>
+        <relation-view inline-template relation-name={{ relationName }} :load-on-start="true">
 
             <div class="relation-view">
                 <div class="related-list">
@@ -23,9 +23,21 @@
                         <span class="status">{{ __('status') }}</span>
                     </div>
 
+                    {# staged objects to be added #}
+                    <div class="added-objects-list">
+                        <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
+                            <span class="title"><: related.attributes.title || related.attributes.name :></span>
+                            <span class="id"><: related.id :></span>
+                            <span class="uname"><: related.attributes.uname :></span>
+                            <span class="status"><: related.attributes.status :></span>
+                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
+                            <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
+                        </div>
+                    </div>
+
                     {# related objects #}
                     <div class="related-objects-list">
-                        <staggered-list stagger="25">
+                        <staggered-list stagger="15">
                             <div class="related-object"
                                 v-for="(related, index) in objects"
                                 :data-index="index"
@@ -47,29 +59,12 @@
                     {# Loader for Load button #}
                     {% element 'loader' %}
 
-                    {# staged objects to be added #}
-                    <div class="added-objects-list">
-                        <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
-                            {# <span class="priority"><: related.meta.relation.priority :></span> #}
-                            <span class="title"><: related.attributes.title :></span>
-                            <span class="id"><: related.id :></span>
-                            <span class="uname"><: related.attributes.uname :></span>
-                            <span class="status"><: related.attributes.status :></span>
-                            <a class="open" v-bind:href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
-                            <button class="remove" @click.prevent="removeAddedRelations(related.id)">x</button>
-                        </div>
-                    </div>
-
-
-
                     <div v-if="!loading && !hasElementsToShow()"  class="emptyResults">
                         <span>{{ __('no related objects')}}</span>
                     </div>
 
                     <div v-else>
                         <div class="list-actions">
-                            {# <button class="show-more" @click.prevent="showMoreRelated()">Show More</button> #}
-
                             <select class="page-size-selector" v-model="step">
                                 <option v-for="size in pageSizeOptions"><: size :></option>
                             </select>
@@ -81,13 +76,13 @@
 
                         <div class="list-actions">
                             <span><: pagination.page :> / <: pagination.page_count :></span>
-                            <span>Items: <: pagination.page_items :></span>
+                            <span>{{ __('Items') }}: <: pagination.page_items :></span>
                         </div>
                     </div>
 
                     <div class="remove-relations">
                         {# Relations serialized json form element #}
-                        {{ Form.control('', {
+                        {{ Form.control(relationName ~ 'removeRelated', {
                             'type': 'hidden',
                             'name': 'relations[' ~ relationName ~ '][removeRelated]',
                             'v-model': 'relationsData'
@@ -112,10 +107,14 @@
                     :hide-relations="hideRelations">
                     <div class="relationships-view">
                         <transition name="fade">
-                            <div class="modal-view" v-show="isVisible" @keyup.esc="handleKeyboard($event)">
+                            <div class="modal-view"
+                                v-show="isVisible"
+                                v-hotkey="keyEvents">
+
                                 <div class="modal-box">
                                     <div class="modal-header">
-                                        <button class="close" @click.prevent="hideRelationshipModal()">&times;</button>
+                                        <button class="close"
+                                            @click.prevent="hideRelationshipModal()">&times;</button>
                                     </div>
                                     <div class="filter-bar">
                                         <input ref="inputFilter" type="text" placeholder="filter..." class="search-relationable"/>
@@ -130,13 +129,12 @@
                                                 <span class="status">{{ __('status') }}</span>
                                             </div>
 
-                                            <staggered-list stagger="50">
+                                            <staggered-list stagger="15">
                                                 <div class="add-related-object"
                                                     v-for="(related, index) in objects"
                                                     :data-index="index"
                                                     :key="related.id"
                                                     v-show="!containsId(hideRelations, related.id)">
-                                                    {# <span class="priority"><: related.meta.relation.priority :></span> #}
                                                     <span>
                                                         <input type="checkbox"
                                                             :value="related"
@@ -162,7 +160,7 @@
 
                                             <div class="save-relations">
                                                 {# Relations serialized json form element #}
-                                                {{ Form.control('', {
+                                                {{ Form.control(relationName ~ 'addRelated', {
                                                     'type': 'hidden',
                                                     'name': 'relations[' ~ relationName ~ '][addRelated]',
                                                     'v-model': 'relationsData'

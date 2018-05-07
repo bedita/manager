@@ -30,6 +30,16 @@ Vue.component('relationships-view', {
         }
     },
 
+    computed: {
+        keyEvents() {
+            return {
+                'esc': {
+                    keyup: this.handleKeyboard,
+                }
+            };
+        },
+    },
+
     data() {
         return {
             method: 'relationshipsJson',    // define AppController method to be used
@@ -87,7 +97,7 @@ Vue.component('relationships-view', {
             }
             // avoid problem with vue rendering queue
             this.$nextTick( () => {
-                if (this.isVisible) {
+                if (this.isVisible && this.$refs.inputFilter) {
                     this.$refs.inputFilter.focus();
                 }
             });
@@ -98,7 +108,6 @@ Vue.component('relationships-view', {
     },
 
     methods: {
-
         /**
          * load objects using PaginatedContentMixin.getPaginatedObjects()
          *
@@ -131,6 +140,8 @@ Vue.component('relationships-view', {
          */
         handleKeyboard(event) {
             if (this.isVisible) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
                 this.hideRelationshipModal()
             }
         },

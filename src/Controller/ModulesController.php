@@ -39,9 +39,11 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
-        $this->objectType = $this->request->getParam('object_type');
-        $this->Modules->setConfig('currentModuleName', $this->objectType);
-        $this->Schema->setConfig('type', $this->objectType);
+        if (!empty($this->request)) {
+            $this->objectType = $this->request->getParam('object_type');
+            $this->Modules->setConfig('currentModuleName', $this->objectType);
+            $this->Schema->setConfig('type', $this->objectType);
+        }
     }
 
     /**
@@ -52,6 +54,26 @@ class ModulesController extends AppController
         parent::beforeRender($event);
 
         $this->set('objectType', $this->objectType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeFilter(Event $event) : void
+    {
+        parent::beforeFilter($event);
+
+        $actions = [
+            'delete', 'changeStatus',
+        ];
+
+        if (in_array($this->request->params['action'], $actions)) {
+            // for csrf
+            $this->getEventManager()->off($this->Csrf);
+
+            // for security component
+            $this->Security->setConfig('unlockedActions', $actions);
+        }
     }
 
     /**
@@ -160,20 +182,19 @@ class ModulesController extends AppController
     /**
      * Create or edit single resource.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function save() : Response
+    public function save() : ?Response
     {
         $this->request->allowMethod(['post']);
-        $this->prepareRequest();
-        $requestData = $this->request->getData();
+        $requestData = $this->prepareRequest($this->objectType);
 
         try {
             if (!empty($requestData['api'])) {
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated'])) {
-                        $response = $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
+                        $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
             }
@@ -196,30 +217,40 @@ class ModulesController extends AppController
         return $this->redirect([
             '_name' => 'modules:view',
             'object_type' => $this->objectType,
-            'id' => $response['data']['id'],
+            'id' => Hash::get($response, 'data.id'),
         ]);
     }
 
     /**
      * Delete single resource.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function delete() : Response
+    public function delete() : ?Response
     {
         $this->request->allowMethod(['post']);
-
-        try {
-            $this->apiClient->deleteObject($this->request->getData('id'), $this->objectType);
-        } catch (BEditaClientException $e) {
-            // Error! Back to object view.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+        $ids = [];
+        if (!empty($this->request->getData('ids'))) {
+            if (is_string($this->request->getData('ids'))) {
+                $ids = explode(',', $this->request->getData('ids'));
+            }
+        } else {
+            $ids = [$this->request->getData('id')];
         }
+        foreach ($ids as $id) {
+            try {
+                $this->apiClient->deleteObject($id, $this->objectType);
+            } catch (BEditaClientException $e) {
+                $this->log($e, LogLevel::ERROR);
+                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                if (!empty($this->request->getData('id'))) {
+                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+                }
 
-        $this->Flash->success(__('Object deleted'));
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType]);
+            }
+        }
+        $this->Flash->success(__('Object(s) deleted'));
 
         return $this->redirect([
             '_name' => 'modules:list',
@@ -303,15 +334,23 @@ class ModulesController extends AppController
      */
     public function upload()
     {
-        $object = $included = [];
         try {
             // upload file
+            if (empty($this->request->getData('file.name')) || !is_string($this->request->getData('file.name'))) {
+                throw new Exception('Invalid form data: file.name');
+            }
             $filename = $this->request->getData('file.name');
+            if (empty($this->request->getData('file.tmp_name')) || !is_string($this->request->getData('file.tmp_name'))) {
+                throw new Exception('Invalid form data: file.tmp_name');
+            }
             $filepath = $this->request->getData('file.tmp_name');
             $headers = ['Content-type' => $this->request->getData('file.type')];
             $response = $this->apiClient->upload($filename, $filepath, $headers);
             // create media from stream
             $streamId = $response['data']['id'];
+            if (empty($this->request->getData('model-type')) || !is_string($this->request->getData('model-type'))) {
+                throw new Exception('Invalid form data: model-type');
+            }
             $type = $this->request->getData('model-type');
             $title = $filename;
             $attributes = compact('title');
@@ -333,5 +372,31 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
             'id' => $response['data']['id'],
         ]);
+    }
+
+    /**
+     * Bulk change status for objects
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function changeStatus() : ?Response
+    {
+        $this->request->allowMethod(['post']);
+        if (!empty($this->request->getData('ids') && is_string($this->request->getData('ids')))) {
+            $ids = $this->request->getData('ids');
+            $status = $this->request->getData('status');
+            if (!empty($ids)) { // export selected (filter by id)
+                $ids = explode(',', $ids);
+                foreach ($ids as $id) {
+                    $data = [
+                        'id' => $id,
+                        'status' => $status,
+                    ];
+                    $this->apiClient->saveObject($this->objectType, $data);
+                }
+            }
+        }
+
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
     }
 }
