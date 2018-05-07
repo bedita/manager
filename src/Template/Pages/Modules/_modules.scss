@@ -77,35 +77,7 @@ body.view-module {
             }
         }
     }
-    .slide-container {
-        overflow: hidden;
 
-        .tab {
-            cursor: pointer;
-        }
-
-        .tab-container {
-            will-change: max-height;
-            transition: max-height 0.4s linear;
-            max-height: auto;
-
-            &.slide-leave-active {
-                max-height: 100vh;
-            }
-
-            &.slide-leave-to {
-                max-height: 0;
-            }
-
-            &.slide-enter-active {
-                max-height: 0;
-            }
-
-            &.slide-enter-to {
-                max-height: 100vh;
-            }
-        }
-    }
 
     // view
     .module-form {

@@ -15,14 +15,11 @@
 
 Vue.component('property-view', {
     template: `
-        <div class="slide-container">
-            <div @click.prevent="toggleVisibility()" class="tab"><h2><: label :></h2></div>
-
-            <transition name="slide">
-                <div v-if="isOpen" class="tab-container">
-                    <slot></slot>
-                </div>
-            </transition>
+        <div>
+            <div v-if="label" @click.prevent="toggleVisibility()" class="tab"><h2><: label :></h2></div>
+            <div v-show="isOpen" class="tab-container">
+                <slot></slot>
+            </div>
         </div>`,
 
     props: {
@@ -32,7 +29,7 @@ Vue.component('property-view', {
         },
         label: {
             type: String,
-            default: 'Properties',
+            default: '',
         }
     },
 
@@ -44,7 +41,9 @@ Vue.component('property-view', {
 
     watch: {
         tabOpen() {
-            this.isOpen = this.tabOpen;
+            if(label) {
+                this.isOpen = this.tabOpen;
+            }
         },
     },
 

@@ -49,7 +49,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-    <main class="layout" v-bind:class="{ 'fadein': vueLoaded }">
+    <main class="layout" v-show="vueLoaded">
 
         {% if _view.template != 'login' %}
             <aside class="layout-sidebar-primary">
