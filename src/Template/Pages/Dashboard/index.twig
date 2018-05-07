@@ -5,9 +5,7 @@
     <ul class="dashboard-items">
 
     {% for module in modules %}
-
-        {# We should comment nearby any variable dependent class either a list of outcomes, when shor, or the logic behind it #}
-        <li class="module-color-{{ module.name }}">
+        <li class="module-color-{{ module.name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
             {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
         </li>
     {% endfor %}
