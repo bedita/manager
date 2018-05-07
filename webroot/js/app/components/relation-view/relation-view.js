@@ -1,6 +1,7 @@
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
+ *  Template/Elements/trees.twig
  *
  * <relation-view> component used for ModulesPage -> View
  *
@@ -52,7 +53,6 @@ Vue.component('relation-view', {
      */
     created() {
         this.endpoint = `${this.method}/${this.relationName}`;
-
     },
 
     /**
@@ -101,13 +101,13 @@ Vue.component('relation-view', {
          *
          * @returns {void}
          */
-        removeRelations(id, type) {
-            if (!this.containsId(this.removedRelated, id)) {
-                this.removedRelated.push({
-                    id,
-                    type,
-                });
-
+        removeRelations(related) {
+            if (!related || !related.id) {
+                console.error('[removeRelations] needs first param as object with id propperty set');
+                return;
+            }
+            if (!this.containsId(this.removedRelated, related.id)) {
+                this.removedRelated.push(related);
                 this.relationsData = this.relationFormatterHelper(this.removedRelated);
             }
         },
@@ -120,9 +120,27 @@ Vue.component('relation-view', {
          *
          * @returns {void}
          */
-        reAddRelations(id, type) {
-            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== id);
+        reAddRelations(related) {
+            if (!related || !related.id) {
+                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+                return;
+            }
+            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
+            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+        },
 
+        /**
+         * prepare removeRelated Array for saving using serialized json input field
+         *
+         * @param {Array} relations
+         *
+         * @returns {void}
+         */
+        setRemovedRelated(relations) {
+            if (!relations ) {
+                return;
+            }
+            this.removedRelated = relations;
             this.relationsData = this.relationFormatterHelper(this.removedRelated);
         },
 
@@ -210,6 +228,10 @@ Vue.component('relation-view', {
          * @param {Number} id
          */
         removeAddedRelations(id) {
+            if (!id) {
+                console.error('[removeAddedRelations] needs first param (id) as {Number|String}');
+                return;
+            }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
         },
 
@@ -277,7 +299,13 @@ Vue.component('relation-view', {
          * @return {String} string version of relations
          */
         relationFormatterHelper(relations) {
-            return JSON.stringify(relations);
+            let jsonString = '';
+            try {
+                jsonString = JSON.stringify(relations);
+            } catch(err) {
+                console.error(err);
+            }
+            return jsonString;
         },
 
         /**

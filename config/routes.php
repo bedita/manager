@@ -121,24 +121,19 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:view']
     );
     $routes->connect(
-        '/:object_type/view/:id/related/:relation',
-        ['controller' => 'Modules', 'action' => 'related'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:related']
-    );
-    $routes->connect(
         '/:object_type/view/:id/relatedJson/:relation',
         ['controller' => 'Modules', 'action' => 'relatedJson'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relatedJson']
     );
     $routes->connect(
-        '/:object_type/view/:id/relationships/:relation',
-        ['controller' => 'Modules', 'action' => 'relationships'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:relationships']
-    );
-    $routes->connect(
         '/:object_type/view/:id/relationshipsJson/:relation',
         ['controller' => 'Modules', 'action' => 'relationshipsJson'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationshipsJson']
+    );
+    $routes->connect(
+        '/:object_type/view/:id/treeJson/:relation',
+        ['controller' => 'Modules', 'action' => 'treeJson'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:treeJson']
     );
     $routes->connect(
         '/:object_type/create',

@@ -2,7 +2,7 @@
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
  *
- * <relation-view> component used for ModulesPage -> View
+ * <relationships-view> component used for ModulesPage -> View
  *
  */
 
@@ -46,7 +46,6 @@ Vue.component('relationships-view', {
             loading: false,
             pendingRelations: [],           // pending elements to be added
             relationsData: [],              // hidden field containing serialized json passed on form submit
-
             isVisible: false,
         }
     },
@@ -62,7 +61,7 @@ Vue.component('relationships-view', {
 
     watch: {
         /**
-         * receive elements staged from relation-view (view can delete just added elements before saving)
+         * watch elements staged from relation-view (view can delete last added elements before saving)
          *
          * @param {Array} relations
          *
@@ -70,6 +69,16 @@ Vue.component('relationships-view', {
          */
         addedRelations(relations) {
             this.pendingRelations = relations;
+        },
+
+        /**
+         * watch pendingRelations Array and prepare it for saving using serialized json input field
+         *
+         * @param {Array} relations
+         *
+         * @return {void}
+         */
+        pendingRelations(relations) {
             this.relationsData = this.relationFormatterHelper(relations);
         },
 
@@ -177,7 +186,13 @@ Vue.component('relationships-view', {
          * @return {String} string version of relations
          */
         relationFormatterHelper(relations, objectType) {
-            return JSON.stringify(relations);
+            let jsonString = '';
+            try {
+                jsonString = JSON.stringify(relations);
+            } catch(err) {
+                console.error(err);
+            }
+            return jsonString;
         },
 
         /**
