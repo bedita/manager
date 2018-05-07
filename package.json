@@ -15,7 +15,8 @@
     },
     "homepage": "https://github.com/bedita/web#README",
     "scripts": {
-        "start": "gulp dev"
+        "start": "gulp dev",
+        "watch": "gulp watch"
     },
     "dependencies": {
         "browser-sync": "^2.23.6",

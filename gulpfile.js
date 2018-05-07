@@ -37,6 +37,11 @@ gulp.task('dev', ['sass'], function() {
     gulp.watch(reloadGlob).on('change', browserSync.reload);
 });
 
+// Watching scss/html only without serve
+gulp.task('watch', ['sass'], function() {
+    gulp.watch(sassGlob, ['sass']);
+});
+
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {
