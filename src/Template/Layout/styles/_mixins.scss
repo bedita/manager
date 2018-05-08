@@ -7,3 +7,33 @@
     color: transparent;
     text-shadow: none;
 }
+
+$text-inputs:   'input[type="color"]',
+                'input[type="date"]',
+                'input[type="datetime"]',
+                'input[type="datetime-local"]',
+                'input[type="email"]',
+                'input[type="month"]',
+                'input[type="number"]',
+                'input[type="password"]',
+                'input[type="search"]',
+                'input[type="tel"]',
+                'input[type="text"]',
+                'input[type="time"]',
+                'input[type="url"]',
+                'input[type="week"]',
+                'input:not([type])';
+// use like
+// #{$text-inputs} {
+//     background-color: red;
+// }
+
+
+
+// media breakpoint
+// $max-1024w:      "(max-width: 1024px)";
+// $max-768w:       "(max-width: 770px)";
+// $tablet:         "(min-width: 768px) and (max-width: 1023px)";
+// $desktop:        "(min-width: 1024px)";
+// @media screen and (max-width: 780px) {
+// }

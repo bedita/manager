@@ -41,6 +41,11 @@ label {
 h1, h2 {
     margin-top: 0;
     line-height: 1.125em;
+    font-weight: $font-weight-normal;
+}
+
+h1 {
+    margin-bottom: $gutter;
 }
 
 .hide-text {

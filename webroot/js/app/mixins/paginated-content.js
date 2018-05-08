@@ -50,12 +50,18 @@ let PaginatedContentMixin = {
                 return fetch(requestUrl, options)
                     .then((response) => response.json())
                     .then((json) => {
+                        let objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
+                        if (!json.data) {
+                            // api response with error
+                            objects = [];
+                        }
+
                         if (autoload) {
-                            this.objects = json.data || [];
+                            this.objects = objects;
                         }
                         this.pagination = json.meta && json.meta.pagination || this.pagination;
 
-                        return json.data || [];
+                        return objects;
                     })
                     .catch((error) => {
                         console.error(error);

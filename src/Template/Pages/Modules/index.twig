@@ -37,6 +37,8 @@
 
                             {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
 
+                            {% element 'Modules/thumb' { 'object': object } %}
+
                             {% for prop in index_properties %}
                                 <div>{{ object.attributes[prop] }}</div>
                             {% endfor %}
@@ -49,7 +51,7 @@
                             <div>{{ Time.format(object.meta.modified) }}</div>
                             <div>
                             {% if in_array('DELETE', currentModule.hints.allow) %}
-                                {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'data': {'id': object.id}})|raw }}
+                                {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': 'icon-trash-1', 'data': {'id': object.id}})|raw }}
                             {% endif %}
                             </div>
                     </a>
@@ -64,6 +66,7 @@
                 {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
                     {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
                     {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                    {{ Form.unlockField('ids') }}
                     <button @click.prevent="exportSelected">{{ __('Export') }}</button>
                 {{ Form.end()|raw }}
                 {% endif %}

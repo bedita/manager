@@ -1,7 +1,9 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
 <modules-view inline-template>
-    <div>
+
+    <div class="modules-view"
+        v-hotkey="keyEvents">
         <header class="layout-header">
             {% element 'Modules/header' %}
         </header>
@@ -30,6 +32,8 @@
             {% element 'Form/other_properties' { 'other_properties': Array.removeKeys(object.attributes, core_properties)} %}
 
             {% element 'Form/relations' %}
+
+            {% element 'Form/trees' %}
 
             {% element 'Form/meta' %}
 

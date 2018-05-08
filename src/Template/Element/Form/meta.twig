@@ -1,20 +1,24 @@
-<div class="tab"><h2>{{ __('Metadata') }}</h2></div>
+<property-view
+    :tab-open="tabsOpen"
+    label={{ __('Metadata') }}>
 
-<fieldset id="advancedproperties" class="multimediaiteminside">
+    <fieldset id="advancedproperties" class="multimediaiteminside">
 
-<table class="bordered">
-    <tbody>
-        <tr>
-            <th>id:</th>
-            <td>{{ object.id }}</td>
-        </tr>
-        {% for key, val in object.meta %}
-        <tr>
-            <th>{{ key }}:</th>
-            <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <table class="bordered">
+            <tbody>
+                <tr>
+                    <th>{{ __('id') }}:</th>
+                    <td>{{ object.id }}</td>
+                </tr>
+                {% for key, val in object.meta %}
+                <tr>
+                    <th>{{ key }}:</th>
+                    <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-</fieldset>
+    </fieldset>
+
+</property-view>

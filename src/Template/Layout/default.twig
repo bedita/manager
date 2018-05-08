@@ -18,11 +18,12 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
+    {# fonts #}
     {{ Html.css(['style'])|raw }}
-    {#
+
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
-    #}
+
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     {% element 'modules_colors' %}
@@ -81,6 +82,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('beditaUI')|raw }}
     {{ Html.script('libs/select2/select2.min')|raw }}
 
+    {# Vue Libs #}
+    {{ Html.script('libs/v-hotkey')|raw }}
+
     {# Vue directives #}
     {{ Html.script('app/directives/richeditor')|raw }}
     {{ Html.script('app/directives/jsoneditor')|raw }}
@@ -91,8 +95,11 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('app/components/staggered-list')|raw }}
 
     {# Vue components #}
+    {{ Html.script('app/components/property-view/property-view')|raw }}
     {{ Html.script('app/components/relation-view/relation-view')|raw }}
     {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
+    {{ Html.script('app/components/tree-view/tree-list/tree-list')|raw }}
+    {{ Html.script('app/components/tree-view/tree-view')|raw }}
 
     {# Modules Page #}
     {{ Html.script('app/pages/modules/view')|raw }}
