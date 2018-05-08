@@ -16,6 +16,7 @@ namespace App\Test\TestCase\View\Helper;
 use App\ApiClientProvider;
 use App\View\Helper\ThumbHelper;
 use BEdita\SDK\BEditaClient;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
