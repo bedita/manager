@@ -38,7 +38,7 @@ class LinkHelper extends Helper
      */
     public function initialize(array $config)
     {
-        $this->apiBaseUrl = env('BEDITA_API');
+        $this->apiBaseUrl = Configure::read('API.apiBaseUrl', env('BEDITA_API'));
         $this->webBaseUrl = Router::fullBaseUrl();
     }
 

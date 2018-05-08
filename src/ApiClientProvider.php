@@ -13,6 +13,7 @@
 namespace App;
 
 use BEdita\SDK\BEditaClient;
+use Cake\Core\Configure;
 
 /**
  * BEdita4 API client provider singleton class.
@@ -50,7 +51,10 @@ class ApiClientProvider
      */
     private function createClient() : BEditaClient
     {
-        $this->apiClient = new BEditaClient(env('BEDITA_API'), env('BEDITA_API_KEY'));
+        $this->apiClient = new BEditaClient(
+            Configure::read('API.apiBaseUrl', env('BEDITA_API')),
+            Configure::read('API.apiKey', env('BEDITA_API_KEY'))
+        );
 
         return $this->apiClient;
     }
