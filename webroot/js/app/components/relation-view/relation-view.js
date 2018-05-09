@@ -141,6 +141,9 @@ Vue.component('relation-view', {
          * @returns {void}
          */
         setRemovedRelated(relations) {
+            if (!relations ) {
+                return;
+            }
             this.removedRelated = relations;
             this.relationsData = this.relationFormatterHelper(this.removedRelated);
         },

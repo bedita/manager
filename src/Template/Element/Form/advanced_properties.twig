@@ -1,12 +1,14 @@
 <property-view
     :tab-open="tabsOpen"
-    label={{ __('Other Properties') }}>
+    label={{ __('Advanced') }}>
 
-    <fieldset id="other_properties">
+    <fieldset id="advanced_properties">
+
         {% set jsonKeys = [] %}
-        {% for key, value in properties.other %}
+        {% for key, value in properties.advanced %}
 
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+
             {% if options.class and  options.class == 'json' %}
                 {% set jsonKeys = jsonKeys|merge([key]) %}
             {% endif %}

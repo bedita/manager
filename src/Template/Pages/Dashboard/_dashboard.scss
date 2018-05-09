@@ -27,7 +27,21 @@ body.view-dashboard {
                 margin-bottom: $gutter * .125;
                 margin-right: $gutter * .125;
 
+                // used for icon inside
                 &:before {
+                    position: absolute;
+                    top: 0;
+                    right: .25rem;
+                    color: $white;
+                    font-size: 12px;
+                    text-align: right !important;
+                    line-height: 1.5rem !important;
+                    opacity: 1 !important;
+                    transition: .3s all;
+                    z-index: 11;
+                }
+
+                &:after {
                     content: '\00a0 ';
                     position: absolute;
                     display: block;
@@ -57,9 +71,14 @@ body.view-dashboard {
                         line-height: 2rem;
                         padding-left: 12px;
                     }
-                    &:before {
+
+                    &:after {
                         height: 2rem;
                         opacity: .5;
+                    }
+
+                    &:before {
+                        line-height: 2rem !important;
                     }
                 }
             }
