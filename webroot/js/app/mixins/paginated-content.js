@@ -95,6 +95,18 @@ let PaginatedContentMixin = {
         },
 
         /**
+         * find object with specific id
+         *
+         * @param {Number} id
+         *
+         * @return {Object}
+         */
+        findObjectById(id) {
+            let obj = this.objects.filter(o => o.id === id);
+            return obj.length && obj[0];
+        },
+
+        /**
          * append more objects to current array of objects
          *
          * @param {Number} qty number of elements to load

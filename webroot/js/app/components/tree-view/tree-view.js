@@ -197,11 +197,18 @@ Vue.component('tree-view', {
                             currentLevel = existingPath.children;
                         } else {
                             // create a new node
+                            let currentObj = obj;
+
+                            // if current object is not the same as the discovered node get it from objects array
+                            if (currentObj.id !== id) {
+                                currentObj = this.findObjectById(id);
+                            }
+
                             let newNode = {
                                 id: id,
                                 related: this.isRelated(id),
-                                name: obj.attributes.title || '',
-                                object: obj,
+                                name: currentObj.attributes.title || '',
+                                object: currentObj,
                                 children: [],
                             };
 
