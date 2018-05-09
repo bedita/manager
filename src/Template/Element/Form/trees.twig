@@ -51,7 +51,17 @@
                                 @remove-all-relations="removeAllRelations">
                             </tree-list>
 
-                            <div class="save-relations">
+                            <div v-if="multipleChoice" class="save-relations">
+                                {# Relations serialized json form element #}
+                                {{ Form.control(relationName ~ 'addRelated', {
+                                    'type': 'hidden',
+                                    'name': 'relations[' ~ relationName ~ '][addRelated]',
+                                    'v-model': 'relationsData'
+                                })|raw }}
+                                {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                            </div>
+
+                            <div v-else class="patch-relations">
                                 {# Relations serialized json form element #}
                                 {{ Form.control(relationName ~ 'replaceRelated', {
                                     'type': 'hidden',
@@ -64,6 +74,16 @@
 
                     </div>
                 </tree-view>
+
+                <div v-if="multipleChoice" class="remove-relations">
+                    {# Relations serialized json form element #}
+                    {{ Form.control(relationName ~ 'removeRelated', {
+                        'type': 'hidden',
+                        'name': 'relations[' ~ relationName ~ '][removeRelated]',
+                        'v-model': 'relationsData'
+                    })|raw }}
+                    {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+                </div>
 
             </div>
     </relation-view
