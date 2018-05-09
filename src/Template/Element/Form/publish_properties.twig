@@ -1,10 +1,10 @@
 <property-view
-    :tab-open="tabsOpen">
+    :tab-open="tabsOpen"
+    label={{ __('Publish') }}>
 
-    <fieldset id="core_properties">
-        {{ Form.hidden('id', {'value': object.id})|raw }}
+    <fieldset id="publish_properties">
 
-        {% for key, value in properties.core %}
+        {% for key, value in properties.publish %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
             {{ Form.control(key, options)|raw }}
         {% endfor %}

@@ -24,6 +24,35 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    /**
+     * Default properties groups
+     *
+     * @var array
+     */
+    protected $defaultGroups = [
+        // always open on the top
+        'core' => [
+            'title',
+            'description',
+        ],
+        // publishing related
+        'publish' => [
+            'status',
+            'uname',
+            'publish_start',
+            'publish_end',
+        ],
+        // power users
+        'advanced' => [
+            'extra',
+        ],
+        // remaining attributes
+        'other' => [
+            'body',
+            'lang',
+            // other properties
+        ],
+    ];
 
     /**
      * Object type currently used
@@ -138,8 +167,30 @@ class ModulesController extends AppController
         $object = $response['data'];
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
+        $this->setupPropertiesGroups($object);
 
         return null;
+    }
+
+    /**
+     * Setup object attributes into groups from configuration for the view.
+     * A `properties` array with a key for each group will be available.
+     *
+     * @param array $object Object data to view
+     * @return void
+     */
+    protected function setupPropertiesGroups(array $object)
+    {
+        $properties = $used = [];
+        foreach (array_keys($this->defaultGroups) as $group) {
+            $list = Configure::read(sprintf('Properties.%s.%s', $this->objectType, $group), $this->defaultGroups[$group]);
+            $properties[$group] = array_merge(array_fill_keys($list, ''), array_intersect_key($object['attributes'], array_flip($list)));
+            $used = array_merge($used, $list);
+        }
+        // add remaining properties to 'other' group
+        $properties['other'] += array_diff_key($object['attributes'], array_flip($used));
+
+        $this->set(compact('properties'));
     }
 
     /**
@@ -175,6 +226,7 @@ class ModulesController extends AppController
         ];
 
         $this->set(compact('object', 'schema'));
+        $this->setupPropertiesGroups($object);
 
         return null;
     }

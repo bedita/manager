@@ -19,13 +19,15 @@
 
             <h1>{{ object.attributes.title|default(__('New')) }}</h1>
 
-            {# Extract `core` & `other` properties sets from object.attributes, pass to elements #}
-            {% set core_properties = config('Properties.' ~ currentModule.name ~ '.core')|default(['title', 'description', 'uname', 'status']) %}
-            {% element 'Form/core_properties' { 'core_properties': Array.onlyKeys(object.attributes, core_properties)} %}
+            {% element 'Form/core_properties' %}
 
             {% element 'Form/included' %}
 
-            {% element 'Form/other_properties' { 'other_properties': Array.removeKeys(object.attributes, core_properties)} %}
+            {% element 'Form/publish_properties' %}
+
+            {% element 'Form/advanced_properties' %}
+
+            {% element 'Form/other_properties' %}
 
             {% element 'Form/relations' %}
 
