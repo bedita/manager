@@ -367,6 +367,7 @@ class ModulesController extends AppController
 
             $response = $this->apiClient->get($available);
 
+            // to avoid object repetition I remove from the response the current object (if present)
             foreach ($response['data'] as $index => $obj) {
                 if ($obj['id'] == $id) {
                     array_splice($response['data'], $index, 1);

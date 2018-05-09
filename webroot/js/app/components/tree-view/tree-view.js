@@ -126,7 +126,7 @@ Vue.component('tree-view', {
         },
 
         /**
-         * remove an object from prendingRelations Array
+         * remove an object from pendingRelations Array
          *
          * @event remove-relation triggered from sub components
          *
@@ -143,7 +143,7 @@ Vue.component('tree-view', {
         },
 
         /**
-         * remove all related objets from prendingRelations Array
+         * remove all related objects from pendingRelations Array
          *
          * @event remove-all-relations triggered from sub components
          *
