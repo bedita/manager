@@ -25,7 +25,13 @@ Vue.component('tree-list', {
             :class="treeListMode">
 
             <div v-if="!isRoot">
-                <div v-if="multipleChoice" class="node-element" :class="{ 'tree-related-object': isRelated }">
+                <div v-if="multipleChoice"
+                    class="node-element"
+                    :class="{
+                        'tree-related-object': isRelated,
+                        'disabled': isCurrentObjectInPath
+                    }">
+
                     <span
                         @click.prevent.stop="toggle"
                         class="icon"
@@ -40,7 +46,13 @@ Vue.component('tree-list', {
                         @click.prevent.stop="toggle"
                         :class="isFolder ? 'is-folder' : ''"><: caption :></label>
                 </div>
-                <div v-else class="node-element" :class="{ 'tree-related-object': isRelated || stageRelated, 'was-related-object': isRelated && !stageRelated }"
+                <div v-else class="node-element"
+                    :class="{
+                        'tree-related-object': isRelated || stageRelated,
+                        'was-related-object': isRelated && !stageRelated,
+                        'disabled': isCurrentObjectInPath
+                    }"
+
                     @click.prevent.stop="select">
                     <span
                         @click.prevent.stop="toggle"
@@ -59,7 +71,8 @@ Vue.component('tree-list', {
                     :key="index"
                     :item="child"
                     :multiple-choice="multipleChoice"
-                    :related-objects="relatedObjects">
+                    :related-objects="relatedObjects"
+                    :object-id=objectId>
                 </tree-list>
             </div>
         </div>
@@ -97,6 +110,10 @@ Vue.component('tree-list', {
             type: Array,
             default: () => [],
         },
+        objectId: {
+            type: String,
+            required: false,
+        }
     },
 
     computed: {
@@ -142,6 +159,13 @@ Vue.component('tree-list', {
         },
 
         /**
+         * check if current object is in item path
+         */
+        isCurrentObjectInPath() {
+            return this.item && this.item.object && this.item.object.meta.path.indexOf(this.objectId) !== -1;
+        },
+
+        /**
          * compute correct icon css class name according to this node
          *
          * @return {String} css class name
@@ -167,8 +191,15 @@ Vue.component('tree-list', {
             if (this.isRoot) {
                 css.push('root-node');
             }
+
             if (!this.multipleChoice) {
-                css.push('tree-list-single-choice')
+                css.push('tree-list-single-choice');
+            } else {
+                css.push('tree-list-multiple-choice');
+            }
+
+            if (this.isCurrentObject) {
+                css.push('disabled');
             }
 
             return css.join(' ');
@@ -265,6 +296,10 @@ Vue.component('tree-list', {
          * @return {void}
          */
         select() {
+            // avoid user selecting same tree item (or in path) as current object
+            if (this.isCurrentObjectInPath) {
+                return;
+            }
             // TO-DO handle folder removal from tree or folder as root
 
             // let oldValue = this.stageRelated;

@@ -437,10 +437,14 @@ body {
         .tree-list-single-choice {
             .node-element {
                 border: 1px solid transparent;
-                cursor: pointer;
 
-                &:hover {
+                &.disabled {
+                    opacity: 0.7;
+                }
+
+                &:not(.disabled):hover {
                     border: 1px solid #ff5460;
+                    cursor: pointer;
                 }
 
                 &.tree-related-object{
