@@ -2,11 +2,7 @@
 
 <modules-view inline-template>
 
-    <div class="modules-view"
-        v-hotkey="keyEvents">
-        <header class="layout-header">
-            {% element 'Modules/header' %}
-        </header>
+    <div class="modules-view" v-hotkey="keyEvents">
 
         {% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
         <div class="upload-form">

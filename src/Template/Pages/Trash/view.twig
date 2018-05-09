@@ -2,10 +2,6 @@
 
 <trash-view inline-template>
     <div v-hotkey="keyEvents">
-        <header class="layout-header">
-            {% element 'Modules/header' %}
-        </header>
-
         <div class="module-form">
             {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
                 'url': {'_name': 'trash:list'},
