@@ -431,6 +431,32 @@ body {
 
         .tree-related-object{
             background-color: #ff5460;
+            border: 1px solid #ff5460;
+        }
+
+        .tree-list-single-choice {
+            .node-element {
+                border: 1px solid transparent;
+
+                &.disabled {
+                    opacity: 0.7;
+                }
+
+                &:not(.disabled):hover {
+                    border: 1px solid #ff5460;
+                    cursor: pointer;
+                }
+
+                &.tree-related-object{
+                    background-color: #ff5460;
+                    border: 1px solid #ff5460;
+
+                    &.was-related-object{
+                        background-color: transparent;
+                        border: 1px dashed #ff5460;
+                    }
+                }
+            }
         }
 
         .tree-entry-list {

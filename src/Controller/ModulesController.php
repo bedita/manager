@@ -245,7 +245,7 @@ class ModulesController extends AppController
             if (!empty($requestData['api'])) {
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
-                    if (in_array($method, ['addRelated', 'removeRelated'])) {
+                    if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
