@@ -162,7 +162,7 @@ Vue.component('tree-view', {
          * @param {any} dataValue
          */
         _setChildrenData(obj, dataName, dataValue) {
-            if (dataName in obj) {
+            if (obj !== undefined && dataName in obj) {
                 obj[dataName] = dataValue;
             }
 
