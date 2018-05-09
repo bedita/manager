@@ -6,6 +6,7 @@
  *
  * @prop {String} relationName
  * @prop {Boolean} loadOnStart load content on component init
+ * @prop {Boolean} multipleChoice
  *
  */
 
@@ -22,7 +23,11 @@ Vue.component('tree-view', {
         loadOnStart: {
             type: Boolean,
             default: true,
-        }
+        },
+        multipleChoice: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     data() {
@@ -52,6 +57,12 @@ Vue.component('tree-view', {
             let relationsToAdd = pendingRels.filter((rel) => {
                 return !this.isRelated(rel.id);
             });
+
+            if (!this.multipleChoice) {
+                if(relationsToAdd.length) {
+                    relationsToAdd = relationsToAdd[0];
+                }
+            }
 
             this.relationsData = this.relationFormatterHelper(relationsToAdd);
 
@@ -100,12 +111,12 @@ Vue.component('tree-view', {
          *
          * @event add-relation triggered from sub components
          *
-         * @param {Object} rel
+         * @param {Object} related
          *
          * @return {void}
          */
         addRelation(related) {
-            if (!related || !related.id) {
+            if (!related || !related.id === undefined) {
                 console.error('[addRelation] needs first param (related) as {object} with property id set');
                 return;
             }
@@ -115,11 +126,11 @@ Vue.component('tree-view', {
         },
 
         /**
-         * remove an object from prendingrelations Array
+         * remove an object from prendingRelations Array
          *
          * @event remove-relation triggered from sub components
          *
-         * @param {Object} rel
+         * @param {Object} related
          *
          * @return {void}
          */
@@ -129,6 +140,35 @@ Vue.component('tree-view', {
                 return;
             }
             this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== related.id);
+        },
+
+        /**
+         * remove all related objets from prendingRelations Array
+         *
+         * @event remove-all-relations triggered from sub components
+         *
+         * @return {void}
+         */
+        removeAllRelations() {
+            this.pendingRelations = [];
+            this._setChildrenData(this, 'stageRelated', false);
+        },
+
+        /**
+         * util function to set recursively all sub-components 'dataName' var with dataValue
+         *
+         * @param {Object} obj
+         * @param {String} dataName
+         * @param {any} dataValue
+         */
+        _setChildrenData(obj, dataName, dataValue) {
+            if (dataName in obj) {
+                obj[dataName] = dataValue;
+            }
+
+            obj.$children.forEach(child => {
+                this._setChildrenData(child, dataName, dataValue);
+            });
         },
 
         /**

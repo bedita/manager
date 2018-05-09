@@ -3,7 +3,7 @@
 
 {% for relationName, val in object.relationships %}
 
-    {% if relationName != 'parents' %}
+    {% if relationName != 'parents' and relationName != 'parent' %}
         <div class="relation">
 
             {# The relation #}

@@ -22,7 +22,11 @@ Vue.component('relation-view', {
         loadOnStart: {
             type: Boolean,
             default: true,
-        }
+        },
+        multipleChoice: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     data() {

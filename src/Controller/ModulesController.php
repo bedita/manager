@@ -193,7 +193,7 @@ class ModulesController extends AppController
             if (!empty($requestData['api'])) {
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
-                    if (in_array($method, ['addRelated', 'removeRelated'])) {
+                    if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
@@ -314,6 +314,12 @@ class ModulesController extends AppController
             }
 
             $response = $this->apiClient->get($available);
+
+            foreach ($response['data'] as $index => $obj) {
+                if ($obj['id'] == $id) {
+                    array_splice($response['data'], $index, 1);
+                }
+            }
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
