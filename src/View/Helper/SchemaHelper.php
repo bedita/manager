@@ -101,6 +101,8 @@ class SchemaHelper extends Helper
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
+                    'v-validate' => 'validate.password',
+                    ':class' => 'validateResult("password")',
                 ];
 
             case 'confirm-password':
@@ -113,6 +115,8 @@ class SchemaHelper extends Helper
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
+                    'v-validate' => 'validate.confirmPassword',
+                    ':class' => 'validateResult("confirm-password")',
                 ];
 
             case 'title':
