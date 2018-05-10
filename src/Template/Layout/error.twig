@@ -7,13 +7,12 @@
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
     {{ Html.css(['style'])|raw }}
+
+    {{ Html.css(['be-icons-font'])|raw }}
+    {{ Html.css(['be-icons-codes'])|raw }}
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     {% element 'modules_colors' %}
-
-    {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
-    {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
-    {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
 
     <title>{{ "#{__('Error')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -41,9 +40,6 @@
             {{ _view.fetch('content')|raw }}
         </div>
     </main>
-
-{{ Html.script('beditaUI')|raw }}
-{{ Html.script('libs/select2/select2.min')|raw }}
 
 </body>
 </html>
