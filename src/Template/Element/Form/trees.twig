@@ -1,93 +1,96 @@
 
 <div class="trees">
 
-{# TO-DO put it in config #}
-{% if objectType == 'folders' %}
-    {% set trees = {'parent': 'parent'} %}
-    {% set options = {'multiple': 'false' }%}
-{% else %}
-    {% set trees = {'parents': 'parents'} %}
-    {% set options = {'multiple': 'true' }%}
-{% endif %}
+    {# TO-DO put it in config #}
+    {% if objectType == 'folders' %}
+        {% set trees = {'parent': 'parent'} %}
+        {% set options = {'multiple': 'false' }%}
+    {% else %}
+        {% set trees = {'parents': 'parents'} %}
+        {% set options = {'multiple': 'true' }%}
+    {% endif %}
 
-{% for relationName, val in trees %}
-    <relation-view
-        inline-template
-        relation-name={{ relationName }}
-        :multiple-choice={{ options.multiple }}
-        :load-on-start="true">
+    {% if _view.request.params.action != 'create' %}
 
-            <div class="tree-{{ relationName }}">
+        {% for relationName, val in trees %}
+            <relation-view
+                inline-template
+                relation-name={{ relationName }}
+                :multiple-choice={{ options.multiple }}
+                :load-on-start="true">
 
-                {# The relation #}
-                <h1>{{ relationName }}</h1>
+                    <div class="tree-{{ relationName }}">
 
-                <tree-view
-                    inline-template
-                    relation-name={{ relationName }}
-                    :related-objects="objects"
-                    :load-on-start="true"
-                    :multiple-choice="multipleChoice"
+                        {# The relation #}
+                        <h1>{{ relationName }}</h1>
 
-                    @remove-relations="setRemovedRelated">
+                        <tree-view
+                            inline-template
+                            relation-name={{ relationName }}
+                            :related-objects="objects"
+                            :load-on-start="true"
+                            :multiple-choice="multipleChoice"
 
-                    <div class="tree-view">
+                            @remove-relations="setRemovedRelated">
 
-                        <div class="list-actions">
-                            <button @click.prevent="loadObjects()">{{ __('Reload') }}</button>
-                        </div>
+                            <div class="tree-view">
 
-                        {# Loader for Load button #}
-                        {% element 'loader' %}
+                                <div class="list-actions">
+                                    <button @click.prevent="loadObjects()">{{ __('Reload') }}</button>
+                                </div>
 
-                        <div class="tree-entry-list">
-                            <tree-list
-                                :item="jsonTree"
-                                :related-objects="relatedObjects"
-                                :multiple-choice="multipleChoice"
-                                object-id="{{ object.id }}"
+                                {# Loader for Load button #}
+                                {% element 'loader' %}
 
-                                @add-relation="addRelation"
-                                @remove-relation="removeRelation"
-                                @remove-all-relations="removeAllRelations">
-                            </tree-list>
+                                <div class="tree-entry-list">
+                                    <tree-list
+                                        :item="jsonTree"
+                                        :related-objects="relatedObjects"
+                                        :multiple-choice="multipleChoice"
+                                        object-id="{{ object.id }}"
 
-                            <div v-if="multipleChoice" class="save-relations">
-                                {# Relations serialized json form element #}
-                                {{ Form.control(relationName ~ 'addRelated', {
-                                    'type': 'hidden',
-                                    'name': 'relations[' ~ relationName ~ '][addRelated]',
-                                    'v-model': 'relationsData'
-                                })|raw }}
-                                {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                        @add-relation="addRelation"
+                                        @remove-relation="removeRelation"
+                                        @remove-all-relations="removeAllRelations">
+                                    </tree-list>
+
+                                    <div v-if="multipleChoice" class="save-relations">
+                                        {# Relations serialized json form element #}
+                                        {{ Form.control(relationName ~ 'addRelated', {
+                                            'type': 'hidden',
+                                            'name': 'relations[' ~ relationName ~ '][addRelated]',
+                                            'v-model': 'relationsData'
+                                        })|raw }}
+                                        {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                    </div>
+
+                                    <div v-else class="patch-relations">
+                                        {# Relations serialized json form element #}
+                                        {{ Form.control(relationName ~ 'replaceRelated', {
+                                            'type': 'hidden',
+                                            'name': 'relations[' ~ relationName ~ '][replaceRelated]',
+                                            'v-model': 'relationsData'
+                                        })|raw }}
+                                        {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
+                                    </div>
+                                </div>
+
                             </div>
+                        </tree-view>
 
-                            <div v-else class="patch-relations">
-                                {# Relations serialized json form element #}
-                                {{ Form.control(relationName ~ 'replaceRelated', {
-                                    'type': 'hidden',
-                                    'name': 'relations[' ~ relationName ~ '][replaceRelated]',
-                                    'v-model': 'relationsData'
-                                })|raw }}
-                                {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
-                            </div>
+                        <div v-if="multipleChoice" class="remove-relations">
+                            {# Relations serialized json form element #}
+                            {{ Form.control(relationName ~ 'removeRelated', {
+                                'type': 'hidden',
+                                'name': 'relations[' ~ relationName ~ '][removeRelated]',
+                                'v-model': 'relationsData'
+                            })|raw }}
+                            {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
                         </div>
 
                     </div>
-                </tree-view>
-
-                <div v-if="multipleChoice" class="remove-relations">
-                    {# Relations serialized json form element #}
-                    {{ Form.control(relationName ~ 'removeRelated', {
-                        'type': 'hidden',
-                        'name': 'relations[' ~ relationName ~ '][removeRelated]',
-                        'v-model': 'relationsData'
-                    })|raw }}
-                    {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
-                </div>
-
-            </div>
-    </relation-view
-{% endfor %}
+            </relation-view
+        {% endfor %}
+    {% endif %}
 </div>
 
