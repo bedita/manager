@@ -1,7 +1,5 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% set index_properties = config('Properties.' ~ currentModule.name ~ '.index')|default(['title']) %}
-
 {% set ids = Array.extract(objects, '{*}.id') %}
 
 <modules-index inline-template ids='{{ ids|json_encode }}'>
@@ -16,7 +14,7 @@
                     <div>
                         {{ Form.checkbox('allItems', { 'v-bind:checked': 'isAllChecked', '@click': 'checkAll' })|raw }}
                     </div>
-                    {% for prop in index_properties %}
+                    {% for prop in properties %}
                         <div>{{ Link.sort(prop) }}</div>
                     {% endfor %}
                     <div>{{ Link.sort('id')}}</div>
@@ -39,7 +37,7 @@
 
                             {% element 'Modules/thumb' { 'object': object } %}
 
-                            {% for prop in index_properties %}
+                            {% for prop in properties %}
                                 <div>{{ object.attributes[prop] }}</div>
                             {% endfor %}
 
