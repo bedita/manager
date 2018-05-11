@@ -87,7 +87,13 @@ class PropertiesComponent extends Component
         foreach ($this->defaultGroups['view'] as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $list = Configure::read($key, $items);
-            $properties[$group] = array_intersect_key($attributes, array_flip($list));
+            $p = [];
+            foreach ($list as $item) {
+                if (isset($attributes[$item])) {
+                    $p[$item] = $attributes[$item];
+                }
+            }
+            $properties[$group] = $p;
             $used = array_merge($used, $list);
         }
         // add remaining properties to 'other' group
