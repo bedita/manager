@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 
