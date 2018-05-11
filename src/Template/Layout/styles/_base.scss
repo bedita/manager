@@ -25,6 +25,10 @@ a, a:link, a:hover, a:active, a:visited {
     text-decoration: none;
 }
 
+figure {
+    margin: 0;
+}
+
 fieldset {
     border: none;
 }
@@ -51,4 +55,10 @@ h1 {
 .hide-text {
     @include hide-text();
 }
+
+.order-top    { order: 0 !important; }
+.order-1      { order: 1 !important; }
+.order-2      { order: 2 !important; }
+.order-3      { order: 3 !important; }
+.order-bottom { order: 100 !important; }
 

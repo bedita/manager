@@ -1,72 +1,77 @@
+<property-view inline-template :tab-open="tabsOpen">
+<div class="relations">
 
-<div class="trees">
+    <header @click.prevent="toggleVisibility()" class="tab">
+        <h2>{{ __('Folders') }}</h2>
+    </header>
 
-{# TO-DO put it in config #}
-{% set trees = {'parents': 'parents'} %}
+    <div v-show="isOpen" class="tab-container">
 
-{% for relationName, val in trees %}
-    <relation-view
-        inline-template
-        relation-name={{ relationName }}
-        :load-on-start="true">
+        <div class="trees">
 
-            <div class="tree-{{ relationName }}">
+        {# TO-DO put it in config #}
+        {% set trees = {'parents': 'parents'} %}
 
-                {# The relation #}
-                <h1>{{ relationName }}</h1>
+        {% for relationName, val in trees %}
+            <relation-view
+                inline-template
+                relation-name={{ relationName }}
+                :load-on-start="true">
 
-                <tree-view
-                    inline-template
-                    relation-name={{ relationName }}
-                    :related-objects="objects"
-                    :load-on-start="true"
+                    <div class="tree-{{ relationName }}">
 
-                    @remove-relations="setRemovedRelated">
+                        <tree-view
+                            inline-template
+                            relation-name={{ relationName }}
+                            :related-objects="objects"
+                            :load-on-start="true"
 
-                    <div class="tree-view">
+                            @remove-relations="setRemovedRelated">
 
-                        <div class="list-actions">
-                            <button @click.prevent="loadObjects()">{{ __('Reload') }}</button>
-                        </div>
+                            <div class="tree-view">
 
-                        {# Loader for Load button #}
-                        {% element 'loader' %}
+                                {# Loader for Load button #}
+                                {% element 'loader' %}
 
-                        <div class="tree-entry-list">
-                            <tree-list
-                                :item="jsonTree"
-                                :related-objects="relatedObjects"
+                                <div class="tree-entry-list">
+                                    <tree-list
+                                        :item="jsonTree"
+                                        :related-objects="relatedObjects"
 
-                                @add-relation="addRelation"
-                                @remove-relation="removeRelation">
-                            </tree-list>
+                                        @add-relation="addRelation"
+                                        @remove-relation="removeRelation">
+                                    </tree-list>
 
-                            <div class="save-relations">
-                                {# Relations serialized json form element #}
-                                {{ Form.control(relationName ~ 'addRelated', {
-                                    'type': 'hidden',
-                                    'name': 'relations[' ~ relationName ~ '][addRelated]',
-                                    'v-model': 'relationsData'
-                                })|raw }}
-                                {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                    <div class="save-relations">
+                                        {# Relations serialized json form element #}
+                                        {{ Form.control(relationName ~ 'addRelated', {
+                                            'type': 'hidden',
+                                            'name': 'relations[' ~ relationName ~ '][addRelated]',
+                                            'v-model': 'relationsData'
+                                        })|raw }}
+                                        {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                    </div>
+                                </div>
+
                             </div>
+                        </tree-view>
+
+                        <div class="remove-relations">
+                            {# Relations serialized json form element #}
+                            {{ Form.control(relationName ~ 'removeRelated', {
+                                'type': 'hidden',
+                                'name': 'relations[' ~ relationName ~ '][removeRelated]',
+                                'v-model': 'relationsData'
+                            })|raw }}
+                            {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
                         </div>
 
                     </div>
-                </tree-view>
+            </relation-view
+        {% endfor %}
+        </div>
 
-                <div class="remove-relations">
-                    {# Relations serialized json form element #}
-                    {{ Form.control(relationName ~ 'removeRelated', {
-                        'type': 'hidden',
-                        'name': 'relations[' ~ relationName ~ '][removeRelated]',
-                        'v-model': 'relationsData'
-                    })|raw }}
-                    {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
-                </div>
+    </div>
 
-            </div>
-    </relation-view
-{% endfor %}
 </div>
-
+</property-view>

@@ -4,45 +4,74 @@
 
     <div class="modules-view" v-hotkey="keyEvents">
 
-        {% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
-        <div class="upload-form">
-            <h1>{{ __('Upload') }}</h1>
-            {% element 'Form/upload' %}
-        </div>
-        {% endif %}
+        <header>
+            <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
+        </header>
 
         <div class="module-form">
-            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-                'url': {'_name': 'modules:save', 'object_type': objectType},
-                'id': 'form-main',
-            })|raw }}
 
-            <h1>{{ object.attributes.title|default(__('New')) }}</h1>
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'modules:save', 'object_type': objectType},
+            'id': 'form-main',
+        })|raw }}
 
-            {% element 'Form/core_properties' %}
+            <div class="column">
+                <section class="fieldset" id="core_properties">
+                    {% element 'Form/core_properties' %}
+                </section>
 
-            {% element 'Form/included' %}
+                {# media #}
+                {% if objectType in ['images', 'files', 'audio', 'videos'] %}
+                    {% if object.id is empty %}
+                    <section class="fieldset order-1">
+                        <div class="upload-form">
+                            <h1>{{ __('Upload') }}</h1>
+                            {% element 'Form/upload' %}
+                        </div>
+                    </section>
+                    {% else %}
+                        <section class="fieldset order-1" id="included"> {# content #}
+                            {% element 'Form/included' %}
+                        </section>
+                    {% endif %}
+                {% endif %}
 
-            {% element 'Form/publish_properties' %}
+                <section class="fieldset order-3" id="other_properties">
+                    {% element 'Form/other_properties' %}
+                </section>
+            </div>
 
-            {% element 'Form/advanced_properties' %}
+            <div class="column">
+                <section class="fieldset order-2" id="publish_properties">
+                    {% element 'Form/publish_properties' %}
+                </section>
 
-            {% element 'Form/other_properties' %}
+                <section class="fieldset order-2" id="trees">
+                    {% element 'Form/trees' %}
+                </section>
 
-            {% element 'Form/relations' %}
+                <section class="fieldset order-3" id="advanced_properties">
+                    {% element 'Form/advanced_properties' %}
+                </section>
 
-            {% element 'Form/trees' %}
+                <section class="fieldset order-bottom" id="meta">
+                    {% element 'Form/meta' %}
+                </section>
+            </div>
 
-            {% element 'Form/meta' %}
+            <section class="fieldset order-2">
+                {% element 'Form/relations' %}
+            </section>
+{#
+#}
 
             {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
             {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+            {# Append "Delete" to commands in commands menu. #}
+            {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
 
-            {{ Form.end()|raw }}
+        {{ Form.end()|raw }}
         </div>
-
-        {# Append "Delete" to commands in commands menu. #}
-        {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
 
     </div>
 

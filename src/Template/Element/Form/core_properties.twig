@@ -1,14 +1,6 @@
-<property-view
-    :tab-open="tabsOpen">
+{% for key, value in properties.core %}
+    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+    {{ Form.control(key, options)|raw }}
+{% endfor %}
 
-    <fieldset id="core_properties">
-        {{ Form.hidden('id', {'value': object.id})|raw }}
-
-        {% for key, value in properties.core %}
-            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-            {{ Form.control(key, options)|raw }}
-        {% endfor %}
-
-    </fieldset>
-
-</property-view>
+{{ Form.hidden('id', {'value': object.id})|raw }}

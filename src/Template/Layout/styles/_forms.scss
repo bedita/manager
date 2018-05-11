@@ -1,48 +1,27 @@
 //  TUTTO DA FARE MA PRIMA L'HTML
 
-input[type=submit],
-input[type=text],
-input[type=email],
-input[type=tel],
-input[type=password],
+#{$text-inputs} ,
+#{$button-inputs},
 button {
+    font-family: $font-family-sans-serif;
+    line-height: 1.5em;
     height: 2rem;
     padding: 0 .5em;
     min-width: 5rem;
     border-radius: 2px;
     border: none;
-    // border: 1px solid $gray-500;
 }
 
 textarea {
+    font-family: $font-family-sans-serif;
     padding: .25em .5em;
     min-width: 5rem;
     border-radius: 2px;
     border: none;
 }
 
-input[type=text],
-input[type=email],
-input[type=tel],
-input[type=password],
-textarea {
-    font-family: $font-family-sans-serif;
-    line-height: 1.5em;
-
-}
-
-input[type=submit] {
-    // background-color: #F2F2F2;
-    // line-height: 1.2em;
-    // color: #333;
-    // border-radius: .75em;
-    // border: 1px solid #BBB;
-    // cursor: pointer;
-    // padding: .15em .5em;
-    // text-decoration: none;
-    // text-transform: uppercase;
-}
-input[type=submit]:hover, button:hover {
+#{$button-inputs-hover},
+button:hover {
     background-color: #666;
     color: #FFF;
     outline: 0;
@@ -56,8 +35,10 @@ label {
     }
 }
 
-form fieldset {
 
+form .fieldset,
+form fieldset {
+    padding: 0;
     textarea, input {
         &.error {
             background-color: red;
@@ -73,7 +54,6 @@ form fieldset {
 div {
     &[message-tooltip] {
         position:relative;
-
     }
     &[message-tooltip]:after {
         content: attr(message-tooltip);

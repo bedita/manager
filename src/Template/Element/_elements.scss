@@ -98,9 +98,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 148px;
 
 
-    ul[role='menu'] {
+    ul[role="menu"] {
         display: flex;
         list-style: none;
         margin: 0 0 $gutter * 3; // make room for the tooltip
@@ -180,8 +181,6 @@
 
 body {
     .relations {
-        padding: 0.35em 0 1.55em 0;
-
         .emptyResults {
             text-align: center;
             padding: 0.45em 0;

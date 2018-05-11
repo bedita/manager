@@ -14,23 +14,11 @@
  */
 
 Vue.component('property-view', {
-    template: `
-        <div>
-            <div v-if="label" @click.prevent="toggleVisibility()" class="tab"><h2><: label :></h2></div>
-            <div v-show="isOpen" class="tab-container">
-                <slot></slot>
-            </div>
-        </div>`,
-
     props: {
         tabOpen: {
             type: Boolean,
             default: true,
         },
-        label: {
-            type: String,
-            default: '',
-        }
     },
 
     data() {
@@ -41,9 +29,7 @@ Vue.component('property-view', {
 
     watch: {
         tabOpen() {
-            if(label) {
-                this.isOpen = this.tabOpen;
-            }
+            this.isOpen = this.tabOpen;
         },
     },
 
