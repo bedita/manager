@@ -51,10 +51,7 @@ class ApiClientProvider
      */
     private function createClient() : BEditaClient
     {
-        $this->apiClient = new BEditaClient(
-            Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-            Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-        );
+        $this->apiClient = new BEditaClient(Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey'));
 
         return $this->apiClient;
     }

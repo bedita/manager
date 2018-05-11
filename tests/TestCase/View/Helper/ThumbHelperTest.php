@@ -171,12 +171,9 @@ class ThumbHelperTest extends TestCase
         }
         // case response empty, with mock
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $response = null;
         $apiMockClient->method('thumbs')->willReturn($response);
         ApiClientProvider::setApiClient($apiMockClient);
@@ -197,12 +194,9 @@ class ThumbHelperTest extends TestCase
     {
         // case thumb image is acceptable
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $response = [
             'meta' => [
                 'thumbnails' => [
@@ -222,10 +216,7 @@ class ThumbHelperTest extends TestCase
 
         // case thumb image is not acceptable
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
         ->getMock();
         $url = 'http://...';
@@ -259,10 +250,7 @@ class ThumbHelperTest extends TestCase
     {
         // case thumb ready
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = [
@@ -283,10 +271,7 @@ class ThumbHelperTest extends TestCase
 
         // case thumb not ready
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
         ->getMock();
         $url = 'http://...';
@@ -319,10 +304,7 @@ class ThumbHelperTest extends TestCase
     {
         // case url not available
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
         ->getMock();
         $response = [
@@ -343,12 +325,9 @@ class ThumbHelperTest extends TestCase
 
         // case url available
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs([
-                Configure::read('API.apiBaseUrl', env('BEDITA_API')),
-                Configure::read('API.apiKey', env('BEDITA_API_KEY'))
-            ])
+            ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $url = 'http://...';
         $response = [
             'meta' => [
