@@ -169,6 +169,41 @@ class PropertiesComponentTest extends TestCase
                     ],
                 ]
             ],
+            'new order' => [
+                [
+                    'core' => [
+                        'description' => '...',
+                        'title' => 'A',
+                    ],
+                    'publish' => [
+                        'uname' => 'test',
+                        'status' => 'on',
+                    ],
+                    'advanced' => [
+                    ],
+                    'other' => [
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'title' => 'A',
+                        'description' => '...',
+                        'status' => 'on',
+                        'uname' => 'test',
+                    ],
+                ],
+                'gifts',
+                [
+                    'core' => [
+                        'description',
+                        'title',
+                    ],
+                    'publish' => [
+                        'uname',
+                        'status',
+                    ],
+                ]
+            ],
         ];
     }
 
