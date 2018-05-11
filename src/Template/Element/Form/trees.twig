@@ -1,30 +1,35 @@
-<property-view inline-template :tab-open="tabsOpen">
-<div class="relations">
 
-    <header @click.prevent="toggleVisibility()" class="tab">
-        <h2>{{ __('Folders') }}</h2>
-    </header>
+<div class="trees">
 
-    <div v-show="isOpen" class="tab-container">
-
-        <div class="trees">
-
-        {# TO-DO put it in config #}
+    {# TO-DO put it in config #}
+    {% if objectType == 'folders' %}
+        {% set trees = {'parent': 'parent'} %}
+        {% set options = {'multiple': 'false' }%}
+    {% else %}
         {% set trees = {'parents': 'parents'} %}
+        {% set options = {'multiple': 'true' }%}
+    {% endif %}
+
+    {% if _view.request.params.action != 'create' %}
 
         {% for relationName, val in trees %}
             <relation-view
                 inline-template
                 relation-name={{ relationName }}
+                :multiple-choice={{ options.multiple }}
                 :load-on-start="true">
 
                     <div class="tree-{{ relationName }}">
+
+                        {# The relation #}
+                        <h1>{{ relationName }}</h1>
 
                         <tree-view
                             inline-template
                             relation-name={{ relationName }}
                             :related-objects="objects"
                             :load-on-start="true"
+                            :multiple-choice="multipleChoice"
 
                             @remove-relations="setRemovedRelated">
 
@@ -41,12 +46,15 @@
                                     <tree-list
                                         :item="jsonTree"
                                         :related-objects="relatedObjects"
+                                        :multiple-choice="multipleChoice"
+                                        object-id="{{ object.id }}"
 
                                         @add-relation="addRelation"
-                                        @remove-relation="removeRelation">
+                                        @remove-relation="removeRelation"
+                                        @remove-all-relations="removeAllRelations">
                                     </tree-list>
 
-                                    <div class="save-relations">
+                                    <div v-if="multipleChoice" class="save-relations">
                                         {# Relations serialized json form element #}
                                         {{ Form.control(relationName ~ 'addRelated', {
                                             'type': 'hidden',
@@ -55,12 +63,22 @@
                                         })|raw }}
                                         {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
                                     </div>
+
+                                    <div v-else class="patch-relations">
+                                        {# Relations serialized json form element #}
+                                        {{ Form.control(relationName ~ 'replaceRelated', {
+                                            'type': 'hidden',
+                                            'name': 'relations[' ~ relationName ~ '][replaceRelated]',
+                                            'v-model': 'relationsData'
+                                        })|raw }}
+                                        {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
+                                    </div>
                                 </div>
 
                             </div>
                         </tree-view>
 
-                        <div class="remove-relations">
+                        <div v-if="multipleChoice" class="remove-relations">
                             {# Relations serialized json form element #}
                             {{ Form.control(relationName ~ 'removeRelated', {
                                 'type': 'hidden',
@@ -73,9 +91,6 @@
                     </div>
             </relation-view
         {% endfor %}
-        </div>
-
-    </div>
-
+    {% endif %}
 </div>
-</property-view>
+

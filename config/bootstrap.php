@@ -150,6 +150,16 @@ Email::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
 Security::setSalt(Configure::consume('Security.salt'));
 
+/**
+ * Setup API config if missing
+ */
+if (!Configure::check('API')) {
+    Configure::write('API', [
+        'apiBaseUrl' => env('BEDITA_API'),
+        'apiKey' => env('BEDITA_API_KEY'),
+    ]);
+}
+
 /*
  * The default crypto extension in 3.0 is OpenSSL.
  * If you are migrating from 2.x uncomment this code to

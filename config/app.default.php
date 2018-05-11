@@ -427,18 +427,29 @@ return [
      * Properties display configuration settings.
      *
      * For each module name:
-     *  - 'core' list of properties to present as `core`
+     *  - 'view' properties groups to present as in object view, where groups are:
+     *      + '_keep' properties to keep even if not found in object
+     *      + 'core' always open on the top
+     *      + 'publish' publishing related
+     *      + 'advanced' for power users
+     *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
      */
     'Properties' => [
         'users' => [
-            'core' => [
-                'username',
-                'password',
-                'confirm-password',
-                'name',
-                'surname',
-                'email',
+            'view' => [
+                '_keep' => [
+                    'password',
+                    'confirm-password'
+                ],
+                'core' => [
+                    'username',
+                    'password',
+                    'confirm-password',
+                    'name',
+                    'surname',
+                    'email',
+                ],
             ],
             'index' => [
                 'name',
