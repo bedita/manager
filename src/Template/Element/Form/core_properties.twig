@@ -8,6 +8,8 @@
         {% for key, value in properties.core %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
             {{ Form.control(key, options)|raw }}
+
+            <span class="error-message"> <: this.errors.first('{{ key }}') :> </span>
         {% endfor %}
 
     </fieldset>
