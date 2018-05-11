@@ -13,7 +13,6 @@
 
             {{ Form.control(key, options)|raw }}
 
-            <span class="error-message"> <: this.errors.first('{{ key }}') :> </span>
         {% endfor %}
         {% if jsonKeys %}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
