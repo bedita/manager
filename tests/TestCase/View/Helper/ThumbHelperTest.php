@@ -173,7 +173,7 @@ class ThumbHelperTest extends TestCase
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $response = null;
         $apiMockClient->method('thumbs')->willReturn($response);
         ApiClientProvider::setApiClient($apiMockClient);
@@ -196,7 +196,7 @@ class ThumbHelperTest extends TestCase
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $response = [
             'meta' => [
                 'thumbnails' => [
@@ -327,7 +327,7 @@ class ThumbHelperTest extends TestCase
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
-        ->getMock();
+            ->getMock();
         $url = 'http://...';
         $response = [
             'meta' => [
