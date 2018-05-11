@@ -62,8 +62,7 @@
             <section class="fieldset order-2">
                 {% element 'Form/relations' %}
             </section>
-{#
-#}
+
 
             {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
             {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}

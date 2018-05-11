@@ -37,8 +37,8 @@ class ModulesController extends AppController
         ],
         // publishing related
         'publish' => [
-            'status',
             'uname',
+            'status',
             'publish_start',
             'publish_end',
         ],

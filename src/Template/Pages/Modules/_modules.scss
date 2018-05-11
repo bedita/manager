@@ -96,7 +96,6 @@ body.view-module {
             .column {
                 display: contents;
                 width: 100%;
-                overflow: hidden;
 
                 @media screen and (min-width: 780px) {
                     display: block;
