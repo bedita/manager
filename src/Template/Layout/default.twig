@@ -28,9 +28,12 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {% element 'modules_colors' %}
 
+    {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
+    {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
+    {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
+
     {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/2.0.9/vee-validate.js"></script>
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.js"></script>
@@ -75,6 +78,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     </main>
 
     {{ Html.script('config/config')|raw }}
+
+    {{ Html.script('beditaUI')|raw }}
+    {{ Html.script('libs/select2/select2.min')|raw }}
 
     {# Vue Libs #}
     {{ Html.script('libs/v-hotkey')|raw }}

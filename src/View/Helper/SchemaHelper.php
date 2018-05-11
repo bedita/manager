@@ -101,8 +101,6 @@ class SchemaHelper extends Helper
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
-                    'v-validate' => 'validate.password', // vue directive for vee-validate validation schema
-                    ':class' => 'validateResult("password")', // validation results method (ModulesView component)
                 ];
 
             case 'confirm-password':
@@ -115,8 +113,6 @@ class SchemaHelper extends Helper
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
-                    'v-validate' => 'validate.confirmPassword', // vue directive for vee-validate validation schema
-                    ':class' => 'validateResult("confirm-password")', // validation results method (ModulesView component)
                 ];
 
             case 'title':
