@@ -58,34 +58,22 @@ label {
 
 form fieldset {
 
-    textarea, input {
-        &.error {
+    textarea, input, span {
+        &.valid-field {
+            border: 1px solid palegreen;
+        }
+        &.has-error {
             background-color: red;
+
+            &.need-confirmation {
+                background-color: peru;
+                // border: 1px solid peru;
+            }
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
                 color: white;
                 opacity: 1; /* Firefox */
             }
         }
-    }
-}
-
-div {
-    &[message-tooltip] {
-        position:relative;
-
-    }
-    &[message-tooltip]:after {
-        content: attr(message-tooltip);
-        position: absolute;
-        // left: 0px;
-        padding: 5px 8px;
-        background: red;
-        z-index: 9;
-        height: 32px;
-        border-radius: 3px;
-        white-space: nowrap;
-        word-wrap: normal;
-        margin-left: 15px;
     }
 }

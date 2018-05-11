@@ -19,6 +19,7 @@
             {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
                 'url': {'_name': 'modules:save', 'object_type': objectType},
                 'id': 'form-main',
+                '@submit': 'validateBeforeSubmit($event)',
             })|raw }}
 
             <h1>{{ object.attributes.title|default(__('New')) }}</h1>
