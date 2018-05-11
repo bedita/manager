@@ -171,6 +171,13 @@ class SchemaHelper extends Helper
                 'checked' => $value,
             ];
         } elseif ($type === 'enum') {
+            if (!empty($schema['oneOf'])) {
+                foreach ($schema['oneOf'] as $one) {
+                    if (!empty($one['enum'])) {
+                        $schema['enum'] = ['-1' => ''] + $one['enum'];
+                    }
+                }
+            }
             return [
                 'type' => 'select',
                 'options' => array_map(
