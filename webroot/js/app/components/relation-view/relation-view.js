@@ -80,6 +80,10 @@ Vue.component('relation-view', {
             this.setPageSize(value);
             this.loadRelatedObjects();
         },
+
+        loading(value) {
+            this.$emit('loading', value);
+        }
     },
 
     methods: {
