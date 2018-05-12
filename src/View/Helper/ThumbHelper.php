@@ -66,9 +66,9 @@ class ThumbHelper extends Helper
      * @param int $imageId The image ID
      * @param array|null $options The thumbs options
      * @param string|null $url The thumb url to populate when static::OK
-     * @return int|null
+     * @return int Thumbnail processing status
      */
-    public function status($imageId, ?array $options = ['preset' => 'default'], &$url = '') : ?int
+    public function status($imageId, ?array $options = [], &$url = '') : int
     {
         try {
             $apiClient = ApiClientProvider::getApiClient();

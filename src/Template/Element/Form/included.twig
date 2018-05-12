@@ -1,7 +1,14 @@
+
+<div class="media">
+
+    {{ Media.view(object, included, {'options': {'w': 600}, 'mediaUrl': true})|raw }}
+
 {# Display embedded video if available #}
-{% if object.attributes.provider_extra.html %}
+{# {% if object.attributes.provider_extra.html %}
     {{ object.attributes.provider_extra.html|raw }}
-{% endif %}
+{% endif %} #}
+
+</div>
 
 {# Display included streams#}
 {% if included %}
@@ -15,27 +22,6 @@
 
     {# the stream #}
     <div class="stream">
-
-        {# thumb #}
-        {% if object.type == 'images' %}
-        <div class="thumb">
-            {% set thumb = Thumb.url(object.id, { 'options': { 'w': 600 } } ) %}
-            {% if thumb == constant('App\\View\\Helper\\ThumbHelper::ERROR') %}
-                <p>{{ __('Thumbnail error') }}</p>
-                <a href={{ stream.meta.url }}>
-                    <img src={{ Url.build('/img/iconMissingImage.gif') }} />
-                </a>
-            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_READY') %}
-                <p>{{ __('Thumb not ready: coming soon') }}</p>
-            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
-                <p>{{ __('Image not acceptable for thumb') }}</p>
-            {% else %}
-                <a href={{ stream.meta.url }}>
-                    <img src={{ thumb }} />
-                </a>
-            {% endif %}
-        </div>
-        {% endif %}
 
         {# Stream properties #}
         {# Display properties list without edit inputs, they're not changeable #}
