@@ -76,7 +76,7 @@ class MediaHelper extends Helper
      * @param array $options Display options.
      * @return string An HTML view of the media object.
      */
-    public function view(array $media, ?array $streams = [], array $options = [])
+    public function view(array $media, ?array $streams = [], array $options = []): string
     {
         $options = array_merge($this->defaults, $options);
 
@@ -109,7 +109,7 @@ class MediaHelper extends Helper
      * @param array $options Display options.
      * @return string An HTML view of the media object.
      */
-    protected function providerThumb(string $providerThumb, array $options)
+    protected function providerThumb(string $providerThumb, array $options): string
     {
         $attributes = ['fullBase' => true];
         if (!empty($options['w'])) {
@@ -129,7 +129,7 @@ class MediaHelper extends Helper
      * @param array $options Display options.
      * @return string An HTML view of the media object.
      */
-    protected function image(array $image, array $options)
+    protected function image(array $image, array $options): string
     {
         $mediaUrl = $options['mediaUrl'];
         unset($options['mediaUrl']);
@@ -156,7 +156,8 @@ class MediaHelper extends Helper
      * @return string|int
      * @codeCoverageIgnore
      */
-    protected function thumb($imageId, array $options) {
+    protected function thumb($imageId, array $options)
+    {
         return $this->Thumb->url($imageId, $options);
     }
 }
