@@ -14,10 +14,10 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\ApiClientProvider;
+use App\Test\ApiTestCase;
 use App\View\Helper\ThumbHelper;
 use BEdita\SDK\BEditaClient;
 use Cake\Core\Configure;
-use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
@@ -25,7 +25,7 @@ use Cake\View\View;
  *
  * @coversDefaultClass \App\View\Helper\ThumbHelper
  */
-class ThumbHelperTest extends TestCase
+class ThumbHelperTest extends ApiTestCase
 {
     /**
      * Test subject
@@ -41,9 +41,7 @@ class ThumbHelperTest extends TestCase
     {
         parent::setUp();
 
-        // set api client in view for helper
-        $this->_initApi();
-
+        $this->adminAuth();
         // create helper
         $this->Thumb = new ThumbHelper(new View());
     }
@@ -59,20 +57,6 @@ class ThumbHelperTest extends TestCase
     }
 
     /**
-     * Init api client
-     *
-     * @return void
-     */
-    private function _initApi() : void
-    {
-        $apiClient = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $apiClient->authenticate($adminUser, $adminPassword);
-        $apiClient->setupTokens($response['meta']);
-    }
-
-    /**
      * Create image and media stream for test.
      * Return id
      *
@@ -81,20 +65,18 @@ class ThumbHelperTest extends TestCase
      */
     private function _image($filename = 'test.png') : int
     {
-        $apiClient = ApiClientProvider::getApiClient();
-
         $filepath = sprintf('%s/tests/files/%s', getcwd(), $filename);
-        $response = $apiClient->upload($filename, $filepath);
+        $response = $this->apiClient->upload($filename, $filepath);
 
         $streamId = $response['data']['id'];
-        $response = $apiClient->get(sprintf('/streams/%s', $streamId));
+        $response = $this->apiClient->get(sprintf('/streams/%s', $streamId));
 
         $type = 'images';
         $title = 'The test image';
         $attributes = compact('title');
         $data = compact('type', 'attributes');
         $body = compact('data');
-        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+        $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
 
         return $response['data']['id'];
     }
@@ -119,7 +101,7 @@ class ThumbHelperTest extends TestCase
                     'id' => 999999999999999999999999999999999999999999999,
                     'options' => null, // use default preset
                 ],
-                ThumbHelper::NOT_AVAILABLE,
+                ThumbHelper::ERROR,
             ],
         ];
     }
@@ -180,7 +162,7 @@ class ThumbHelperTest extends TestCase
         $result = null;
         $status = $this->Thumb->status(1, null, $result);
         static::assertNull($result);
-        static::assertEquals($status, ThumbHelper::NOT_AVAILABLE);
+        static::assertEquals($status, ThumbHelper::ERROR);
     }
 
     /**
@@ -201,6 +183,7 @@ class ThumbHelperTest extends TestCase
             'meta' => [
                 'thumbnails' => [
                     [
+                        'url' => 'http://something',
                         'ready' => true,
                         'acceptable' => false,
                     ]
@@ -253,11 +236,14 @@ class ThumbHelperTest extends TestCase
             ->setConstructorArgs([Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey')])
             ->setMethods(['thumbs'])
         ->getMock();
+        $url = 'http://...';
         $response = [
             'meta' => [
                 'thumbnails' => [
                     [
                         'ready' => false,
+                        'acceptable' => true,
+                        'url' => $url,
                     ]
                 ]
             ]
@@ -266,7 +252,7 @@ class ThumbHelperTest extends TestCase
         ApiClientProvider::setApiClient($apiMockClient);
         $result = null;
         $status = $this->Thumb->status(1, null, $result);
-        static::assertNull($result);
+        static::assertEquals($url, $result);
         static::assertEquals($status, ThumbHelper::NOT_READY);
 
         // case thumb not ready
@@ -294,10 +280,9 @@ class ThumbHelperTest extends TestCase
     }
 
     /**
-     * Test `hasUrl()` method.
+     * Test thumbnail with on URL case.
      *
      * @covers ::status()
-     * @covers ::hasUrl()
      * @return void
      */
     public function testHasUrl() : void
@@ -321,7 +306,7 @@ class ThumbHelperTest extends TestCase
         $result = null;
         $status = $this->Thumb->status(1, null, $result);
         static::assertNull($result);
-        static::assertEquals($status, ThumbHelper::NO_URL);
+        static::assertEquals($status, ThumbHelper::ERROR);
 
         // case url available
         $apiMockClient = $this->getMockBuilder(BEditaClient::class)
