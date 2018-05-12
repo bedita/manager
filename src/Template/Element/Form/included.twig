@@ -3,11 +3,6 @@
 
     {{ Media.view(object, included, {'options': {'w': 600}, 'mediaUrl': true})|raw }}
 
-{# Display embedded video if available #}
-{# {% if object.attributes.provider_extra.html %}
-    {{ object.attributes.provider_extra.html|raw }}
-{% endif %} #}
-
 </div>
 
 {# Display included streams#}
