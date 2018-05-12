@@ -47,17 +47,19 @@ class MediaHelper extends Helper
     public const IMG_URL_WAIT = '/img/iconMissingImage.gif';
 
     /**
-     * HTML helper
+     * Default options
      *
-     * @var Cake\View\Helper\HtmlHelper
+     *  - 'providerThumb' boolean, display provider thumbnail if available?
+     *  - 'mediaUrl' boolean, use media url to wrap image tag
+     *  - 'preset' string, use thumbnail preset
+     *  - 'options' array, thumbnail options
+     *
+     * @var array
      */
     protected $defaults = [
         'providerThumb' => false,
-        // provide link to original media URL
         'mediaUrl' => null,
-        // thumbnail preset
         'preset' => null,
-        // thumbnail options
         'options' => [],
     ];
 

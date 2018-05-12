@@ -13,6 +13,7 @@
 namespace App\View\Helper;
 
 use App\ApiClientProvider;
+use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Log\LogTrait;
 use Cake\Utility\Hash;
@@ -63,7 +64,7 @@ class ThumbHelper extends Helper
      *   ERROR: url not present in API response or missing thumbnail data,
      *          something went wrong during api call
      *
-     * @param int $imageId The image ID
+     * @param string|int $imageId The image ID
      * @param array|null $options The thumbs options
      * @param string|null $url The thumb url to populate when static::OK
      * @return int Thumbnail processing status
@@ -73,7 +74,7 @@ class ThumbHelper extends Helper
         try {
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->thumbs($imageId, $options);
-        } catch (\Exception $e) {
+        } catch (BEditaClientException $e) {
             $this->log($e, 'error');
 
             return static::ERROR;
@@ -106,7 +107,7 @@ class ThumbHelper extends Helper
     /**
      * Obtain thumbnail using API thumbs.
      *
-     * @param int $imageId The image ID.
+     * @param string|int $imageId The image ID.
      * @param array|null $options The thumbs options.
      * @return string|int The url if available, the status code otherwise (see Thumb constants).
      */
