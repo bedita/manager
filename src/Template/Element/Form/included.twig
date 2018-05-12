@@ -1,7 +1,7 @@
 <property-view inline-template :tab-open="tabsOpen">
-<div>
+<section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
-    <header @click.prevent="toggleVisibility()" class="tab">
+    <header @click.prevent="toggleVisibility()" class="tab unselectable">
         <h2>{{ __('Media') }}</h2>
     </header>
 
@@ -63,16 +63,18 @@
                 <table>
                     <tbody>
                         {% for akey, val in attributes %}
-                        <tr>
-                            <th>{{ akey }} :</th>
-                            <td>
-                                {% if akey == 'url' %}
-                                    <a href={{ val }} target="_blank">{{ val }}</a>
-                                {% else %}
-                                    {% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}
-                                {% endif %}
-                            </td>
-                        </tr>
+                        {% if val %}
+                            <tr>
+                                <th>{{ akey }} :</th>
+                                <td>
+                                    {% if akey == 'url' %}
+                                        <a href={{ val }} target="_blank">{{ val }}</a>
+                                    {% else %}
+                                        {% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -83,5 +85,5 @@
 
     </div>
 
-</div>
+</section>
 </property-view>

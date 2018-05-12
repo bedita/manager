@@ -1,26 +1,26 @@
 <property-view inline-template :tab-open="tabsOpen">
-    <div>
+<section class="fieldset order-{{ order|default('0') }}" id="meta" :class="isOpen? '' : 'closed'">
 
-        <header @click.prevent="toggleVisibility()" class="tab">
-            <h2>{{ __('Metadata') }}</h2>
-        </header>
+    <header @click.prevent="toggleVisibility()" class="tab unselectable">
+        <h2>{{ __('Metadata') }}</h2>
+    </header>
 
-        <div v-show="isOpen" class="tab-container">
-            <table>
-                <tbody>
-                    <tr>
-                        <th>{{ __('id') }}:</th>
-                        <td>{{ object.id }}</td>
-                    </tr>
-                    {% for key, val in object.meta %}
-                    <tr>
-                        <th>{{ key }}:</th>
-                        <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+    <div v-show="isOpen" class="tab-container">
+        <table>
+            <tbody>
+                <tr>
+                    <th>{{ __('id') }}:</th>
+                    <td>{{ object.id }}</td>
+                </tr>
+                {% for key, val in object.meta %}
+                <tr>
+                    <th>{{ key }}:</th>
+                    <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+</section>
 </property-view>

@@ -24,6 +24,7 @@ Vue.component('property-view', {
     data() {
         return {
             isOpen: true,
+            isLoading: false,
         }
     },
 
@@ -37,6 +38,9 @@ Vue.component('property-view', {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
         },
+        onToggleLoading(status) {
+            this.isLoading = status;
+        }
     }
 
 });

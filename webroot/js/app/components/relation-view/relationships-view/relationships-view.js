@@ -113,6 +113,10 @@ Vue.component('relationships-view', {
 
             // emit event to pass data to parent
             this.$emit('visibility-setter', this.isVisible);
+        },
+
+        loading(value) {
+            this.$parent.$emit('loading', value);
         }
     },
 

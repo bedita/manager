@@ -1,0 +1,99 @@
+body.view-module {
+
+    // index
+    .module-content {
+        margin-top: $gutter;
+
+        .list-objects {
+            display: table;
+            border-collapse: collapse;
+            min-width: 100%;
+
+            > nav {
+                display: table-row;
+
+                &.table-header {
+                    border-bottom: 1px solid $gray-700;
+
+                    a.sort {
+                        display: flex;
+                        align-items: center;
+
+                        &:after {
+                            content: "›";
+                            margin-left: 10px;
+                            display: inline-block;
+                            font-size: 1.5em;
+                            line-height: 21px;
+                        }
+
+                        &.up:after {
+                            transform: rotate(-90deg);
+                        }
+                        &.down:after {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
+            }
+
+            > a {
+                display: table-row;
+
+                &:hover {
+                    background-color: $gray-700;
+                }
+            }
+
+            > nav, > a {
+                div {
+                    display: table-cell;
+                    padding: $gutter * .5;
+                    white-space: nowrap;
+                    &:first-child {
+                        padding-left: 2px;
+                        max-width: 13em;
+                        text-overflow: ellipsis;
+                        overflow-x: hidden;
+                        &:empty:before {
+                            content: 'untitled object';
+                            color: $gray-600;
+                            font-style: italic;
+                        }
+                    }
+                    &:last-child {
+                        padding-right: 2px;
+                        text-align: right;
+                        > form {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+
+            button {
+                line-height: initial;
+            }
+        }
+
+        .bulk-actions {
+            margin-top: $gutter * 2;
+            header {
+                width: 100%;
+            }
+
+            nav {
+                display: flex;
+                form {
+                    margin-right: $gutter;
+                }
+            }
+        }
+    }
+
+    .section.relations {
+        width: 100%;
+        margin-top: $gutter;
+    }
+
+}

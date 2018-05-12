@@ -145,5 +145,3 @@ window._vueInstance = new Vue({
         },
     }
 });
-
-

@@ -3,21 +3,30 @@
 #{$text-inputs} ,
 #{$button-inputs},
 button {
-    font-family: $font-family-sans-serif;
-    line-height: 1.5em;
-    height: 2rem;
     padding: 0 .5em;
     min-width: 5rem;
-    border-radius: 2px;
+    height: 2rem;
     border: none;
+    border-radius: 2px;
+    font-family: $font-family-sans-serif;
+    line-height: 1.5em;
+    &[class^="icon-"] {
+        min-width: auto;
+        height: auto;
+        padding: 0;
+    }
+    &:focus {
+        outline: none;
+    }
 }
 
+
 textarea {
-    font-family: $font-family-sans-serif;
     padding: .25em .5em;
     min-width: 5rem;
     border-radius: 2px;
     border: none;
+    font-family: $font-family-sans-serif;
 }
 
 #{$button-inputs-hover},

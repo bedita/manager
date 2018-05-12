@@ -428,10 +428,13 @@ body {
             text-align: center;
         }
 
-        .tree-related-object{
-            background-color: #ff5460;
-            border: 1px solid #ff5460;
+        label {
+            color: $gray-600;
         }
+        .tree-related-object label {
+            color: $gray-100;
+        }
+
 
         .tree-list-single-choice {
             .node-element {

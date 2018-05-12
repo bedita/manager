@@ -7,7 +7,6 @@
         <div class="list-objects">
 
             {# list objects : table header #}
-
             {% if objects %}
             <nav class="table-header">
                 <div>
@@ -49,7 +48,7 @@
                         <div>{{ Time.format(object.meta.modified) }}</div>
                         <div>
                         {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': 'icon-trash-1', 'data': {'id': object.id}})|raw }}
+                            {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw }}
                         {% endif %}
                         </div>
                 </a>
@@ -62,30 +61,34 @@
 
         {# bulk actions #}
         {% if objects %}
-        <h2>{{ __('Bulk actions') }}</h2>
-        <div>
-            {% if not currentModule.hints.multiple_types %}
-            {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-                {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
-                {{ Form.hidden('objectType', {'value': objectType})|raw }}
-                {{ Form.unlockField('ids') }}
-                <button @click.prevent="exportSelected">{{ __('Export') }}</button>
-            {{ Form.end()|raw }}
-            {% endif %}
+            <div class="bulk-actions">
+                <header>
+                    <h3>{{ __('Actions on selected items') }}</h3>
+                </eader>
+                <nav>
+                    {% if not currentModule.hints.multiple_types %}
+                    {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
+                        {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
+                        {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                        {{ Form.unlockField('ids') }}
+                        <button @click.prevent="exportSelected">{{ __('Export') }}</button>
+                    {{ Form.end()|raw }}
+                    {% endif %}
 
-            {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
-                {{ Form.hidden('ids', {'v-model': 'statusids'})|raw }}
-                <button @click.prevent="changeStatus">{{ __('Set status') }}</button>
-                {{ Form.select('status', { 'on': __('On'), 'draft': __('Draft'), 'off': __('Off') }, { 'v-model': 'status' }) | raw }}
-            {{ Form.end()|raw }}
+                    {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
+                        {{ Form.hidden('ids', {'v-model': 'statusids'})|raw }}
+                        <button @click.prevent="changeStatus">{{ __('Set status') }}</button>
+                        {{ Form.select('status', { 'on': __('On'), 'draft': __('Draft'), 'off': __('Off') }, { 'v-model': 'status' }) | raw }}
+                    {{ Form.end()|raw }}
 
-            {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
-                {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
-                    {{ Form.hidden('ids', {'v-model': 'trashids'})|raw }}
-                    <button @click.prevent="trash">{{ __('Move to trash') }}</button>
-                {{ Form.end()|raw }}
-            {% endif %}
-        </div>
+                    {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
+                        {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
+                            {{ Form.hidden('ids', {'v-model': 'trashids'})|raw }}
+                            <button @click.prevent="trash">{{ __('Move to trash') }}</button>
+                        {{ Form.end()|raw }}
+                    {% endif %}
+                </nav>
+            <div>
         {% endif %}
 
 

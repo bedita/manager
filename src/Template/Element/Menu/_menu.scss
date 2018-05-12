@@ -31,7 +31,7 @@
         background-repeat: no-repeat;
         background-position: 1rem 1rem;
         font: normal 1.5em $font-family-serif;
-        word-break: break-all;
+        word-break: break-word;
 
         // andranno delle variabili per i breakpoint delle mediaquery
         @media screen and (max-width: 960px) {
