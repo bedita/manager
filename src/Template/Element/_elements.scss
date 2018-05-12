@@ -14,10 +14,15 @@
 
         > li {
             position: relative;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             margin-right: 1px;
             background-color: $gray-600;
+            padding: 4px 6px;
+            @media screen and (min-width: 780px) {
+                width: 38px;
+                height: 38px;
+            }
 
             &:first-child {
                 background-color: $white;
@@ -27,34 +32,42 @@
                 content: '\00a0 ';
                 display: block;
                 position: absolute;
-                width: 6px; height: 6px;
-                top: 50%; margin-top: -3px;
-                left: 50%; margin-left: -3px;
+                width: 100%; height: 6px;
+                bottom: 0;
+                left: 0;
                 background-color: $white;
-                opacity: .5;
+                opacity: .3;
+                @media screen and (max-width: 780px) {
+                    width: 6px; height: 6px;
+                    top: 50%; margin-top: -3px;
+                    left: 50%; margin-left: -3px;
+                }
             }
 
             a {
-                position: relative;
                 display: block;
                 width: 100%;
                 height: 100%;
-                @extend .hide-text;
+                line-height: 1;
+                @media screen and (max-width: 780px) {
+                    @include hide-text;
+                }
 
                 &:hover:before {
                     position: absolute;
                     content: attr(title);
-                    top: 22px;
+                    top: 24px;
                     left: 0;
                     z-index: 1;
-                    padding: $gutter * .5 $gutter;
-                    border-radius: 3px;
                     text-indent: initial;
 
-                    font: .75rem $font-family-sans-serif;
                     white-space: nowrap;
-                    color: $gray-700;
-                    background-color: $white;
+                    font: .75rem $font-family-sans-serif;
+                    color: $gray-200;
+
+                    @media screen and (min-width: 780px) {
+                        top: 42px;
+                    }
                 }
             }
         }

@@ -1,12 +1,12 @@
 <ul role="menu">
     <li>
-        {{ Html.link(__('Dashboard'), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
+        {{ Html.link(__(''), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
     </li>
 
     {% for module in modules %}
     <li class="module-color-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
         {{ Html.link(
-            module.name|humanize,
+            module.name|humanize|slice(0, 2),
             {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
             {'title': module.name|humanize})|raw }}
     </li>
