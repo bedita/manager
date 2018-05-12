@@ -11,14 +11,12 @@
 
     {% set thumb = Thumb.url(object.id, { 'options': { 'w': width } }) %}
 
-    {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
-        <img src={{ Url.build('/img/iconMissingImage.gif') }} width={{ width }} alt={{ __('Thumb not available') }} />
+    {% if thumb == constant('App\\View\\Helper\\ThumbHelper::ERROR') %}
+        <img src={{ Url.build('/img/iconMissingImage.gif') }} width={{ width }} alt={{ __('Thumbnail error') }} />
     {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_READY') %}
         <img src={{ Url.build('/img/iconMissingImage.gif') }} width={{ width }} alt={{ __('Thumb not ready: coming soon') }} />
     {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
         <img src={{ Url.build('/img/iconMissingImage.gif') }} width={{ width }} alt={{ __('Image not acceptable for thumb') }} />
-    {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NO_URL') %}
-        <img src={{ Url.build('/img/iconMissingImage.gif') }} width={{ width }} alt={{ __('Missing thumb url') }}/>
     {% else %}
         <img src={{ thumb }} />
     {% endif %}

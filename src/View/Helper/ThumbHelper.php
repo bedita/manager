@@ -15,31 +15,16 @@ namespace App\View\Helper;
 use App\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Log\LogTrait;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
+/**
+ * Helper class to create/retrieve image thumbnails
+ *
+ */
 class ThumbHelper extends Helper
 {
     use LogTrait;
-
-    /**
-     * @var int Thumb not available
-     */
-    public const NOT_AVAILABLE = -10;
-
-    /**
-     * @var int Thumb not ready
-     */
-    public const NOT_READY = -20;
-
-    /**
-     * @var int Thumb not acceptable
-     */
-    public const NOT_ACCEPTABLE = -30;
-
-    /**
-     * @var int Thumb has no url
-     */
-    public const NO_URL = -40;
 
     /**
      * @var int Thumb is OK
@@ -47,15 +32,36 @@ class ThumbHelper extends Helper
     public const OK = 1;
 
     /**
+     * Thumb not yet ready, creation in progress
+     *
+     * @var int
+     */
+    public const NOT_READY = -10;
+
+    /**
+     * Thumb request not acceptable, not able to create a thumbnail
+     *
+     * @var int
+     */
+    public const NOT_ACCEPTABLE = -20;
+
+    /**
+     * Thumb request problem, malformed response or missing data
+     *
+     * @var int
+     */
+    public const ERROR = -30;
+
+    /**
      * Verify status of image thumb.
      * Return int representing status.
      * Possible values:
      *
-     *   NOT_AVAILABLE: something went wrong during api call
+     *   OK: thumb available, ready and with a proper url
      *   NOT_READY: thumb is available, but not ready
      *   NOT_ACCEPTABLE: image is not acceptable, api won't create thumb
-     *   NO_URL: url not present in api response
-     *   OK: thumb available, ready and with a proper url
+     *   ERROR: url not present in API response or missing thumbnail data,
+     *          something went wrong during api call
      *
      * @param int $imageId The image ID
      * @param array|null $options The thumbs options
@@ -67,27 +73,31 @@ class ThumbHelper extends Helper
         try {
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->thumbs($imageId, $options);
-            if (empty($response['meta']['thumbnails'][0])) {
-                return static::NOT_AVAILABLE;
-            }
-            $thumb = $response['meta']['thumbnails'][0];
-            // check thumb is ready
-            if (!$this->isReady($thumb)) {
-                return static::NOT_READY;
-            }
-            // check thumb is acceptable
-            if (!$this->isAcceptable($thumb)) {
-                return static::NOT_ACCEPTABLE;
-            }
-            // check thumb has url
-            if (!$this->hasUrl($thumb)) {
-                return static::NO_URL;
-            }
-            $url = $thumb['url'];
         } catch (\Exception $e) {
             $this->log($e, 'error');
 
-            return static::NOT_AVAILABLE;
+            return static::ERROR;
+        }
+
+        if (empty($response)) {
+            return static::ERROR;
+        }
+
+        $thumb = Hash::get($response, 'meta.thumbnails.0');
+        if (empty($thumb) || empty($thumb['url'])) {
+            return static::ERROR;
+        }
+
+        // check thumb is acceptable
+        if (!$this->isAcceptable($thumb)) {
+            return static::NOT_ACCEPTABLE;
+        }
+
+        $url = $thumb['url'];
+
+        // check thumb is ready
+        if (!$this->isReady($thumb)) {
+            return static::NOT_READY;
         }
 
         return static::OK;
@@ -117,7 +127,7 @@ class ThumbHelper extends Helper
      * @param array $thumb The thumbnail data
      * @return bool the acceptable flag
      */
-    private function isAcceptable($thumb = []) :bool
+    private function isAcceptable(array $thumb) :bool
     {
         if (isset($thumb['acceptable']) && $thumb['acceptable'] === false) {
             return false;
@@ -132,24 +142,9 @@ class ThumbHelper extends Helper
      * @param array $thumb The thumbnail data
      * @return bool the ready flag
      */
-    private function isReady($thumb = []) :bool
+    private function isReady(array $thumb) :bool
     {
         if (!empty($thumb['ready']) && $thumb['ready'] === true) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Verify if thumb has url
-     *
-     * @param array $thumb The thumbnail data
-     * @return bool the url availability
-     */
-    private function hasUrl($thumb = []) :bool
-    {
-        if (!empty($thumb['url'])) {
             return true;
         }
 

@@ -20,8 +20,8 @@
         {% if object.type == 'images' %}
         <div class="thumb">
             {% set thumb = Thumb.url(object.id, { 'options': { 'w': 600 } } ) %}
-            {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
-                <p>{{ __('Thumb not available') }}</p>
+            {% if thumb == constant('App\\View\\Helper\\ThumbHelper::ERROR') %}
+                <p>{{ __('Thumbnail error') }}</p>
                 <a href={{ stream.meta.url }}>
                     <img src={{ Url.build('/img/iconMissingImage.gif') }} />
                 </a>
@@ -29,11 +29,6 @@
                 <p>{{ __('Thumb not ready: coming soon') }}</p>
             {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
                 <p>{{ __('Image not acceptable for thumb') }}</p>
-            {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NO_URL') %}
-                <p>{{ __('Missing thumb url') }}</p>
-                <a href={{ stream.meta.url }}>
-                    <img src={{ Url.build('/img/iconMissingImage.gif') }} />
-                </a>
             {% else %}
                 <a href={{ stream.meta.url }}>
                     <img src={{ thumb }} />
