@@ -180,7 +180,7 @@ class ModulesController extends AppController
         ];
 
         $this->set(compact('object', 'schema'));
-        $this->set('properties', $this->Properties->viewGroups($object));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
         return null;
     }
