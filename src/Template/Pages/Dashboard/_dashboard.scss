@@ -107,6 +107,10 @@ body.view-dashboard {
                 opacity: .2 !important;
                 transition: none;
             }
+            >li.has-text-danger:before {
+                opacity: .4 !important;
+            }
+
 
             >li:after {
                 content: '';
