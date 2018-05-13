@@ -4,11 +4,30 @@
     </li>
 
     {% for module in modules %}
-    <li class="module-color-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
-        {{ Html.link(
-            module.name|humanize|slice(0, 2),
-            {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
-            {'title': module.name|humanize})|raw }}
-    </li>
+    {% if module.name != "trash" %}
+        <li class="module-color-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
+            {{ Html.link(
+                module.name|humanize|slice(0, 2),
+                {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
+                {'title': module.name|humanize})|raw }}
+        </li>
+    {% endif %}
     {% endfor %}
+
+
+    <li class="module-color-trash trash icon-trash-2 center-icon">
+        {{ Html.link('', {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'}, {'title': __('Trash')})|raw }}
+    </li>
+
+    <li class="has-background-transparent">&nbsp;</li>
+
+    <li class="has-background-black icon-wrench center-icon">
+        &nbsp;
+    </li>
+    <li class="has-background-black icon-user center-icon">
+        &nbsp;
+    </li>
+    <li class="has-background-black has-text-danger icon-logout center-icon">
+        {{ Html.link(__(''), {'_name': 'logout'}, {'title': 'log out'})|raw }}
+    </li>
 </ul>

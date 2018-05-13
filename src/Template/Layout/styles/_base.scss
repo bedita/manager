@@ -61,6 +61,17 @@ h1 {
     @include hide-text();
 }
 
+.center-icon {
+    position: relative;
+    &:before {
+        position: absolute;
+        width: 100% !important;
+        text-align: center !important;
+        top: 50%;
+        left: 0;
+        margin-top: -.5em;
+    }
+}
 
 // colors
 .has-background-transparent { background-color: transparent !important; }
