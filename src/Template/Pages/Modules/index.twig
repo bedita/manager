@@ -64,7 +64,7 @@
             <div class="bulk-actions">
                 <header>
                     <h3>{{ __('Actions on selected items') }}</h3>
-                </eader>
+                </header>
                 <nav>
                     {% if not currentModule.hints.multiple_types %}
                     {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
@@ -88,7 +88,7 @@
                         {{ Form.end()|raw }}
                     {% endif %}
                 </nav>
-            <div>
+            </div>
         {% endif %}
 
 
