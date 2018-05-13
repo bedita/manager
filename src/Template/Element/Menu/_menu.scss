@@ -53,16 +53,8 @@
     > .menu-links {
         list-style: none;
         padding: 0;
-
         li {
             margin: $gutter 0;
-        }
-
-        a {
-            display: block;
-            background-color: $gray-400;
-            padding: 2px 8px;
-            border-radius: 3px;
         }
     }
 

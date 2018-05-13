@@ -8,16 +8,22 @@ body.view-dashboard {
     .dashboard {
         flex: auto;
 
+        header {
+            h2 {
+                margin-bottom: $gutter * .75;
+            }
+        }
+
         .dashboard-items {
-            list-style: none;
-            padding: 0;
-            margin: 0;
             display: flex;
             align-items: stretch;
             flex-wrap: wrap;
+            padding: 0;
+            margin: 0 0 $gutter * 1.5;
             min-width: calc(100% + #{$gutter / 2});
+            list-style: none;
 
-            & > li {
+            > li {
                 position: relative;
                 display: block;
                 flex-basis: $gutter * 8.75;
@@ -39,6 +45,9 @@ body.view-dashboard {
                     opacity: 1 !important;
                     transition: .3s all;
                     z-index: 11;
+                }
+                &.has-text-danger:before {
+                    color: $danger !important;
                 }
 
                 &:after {
@@ -82,6 +91,39 @@ body.view-dashboard {
                     }
                 }
             }
+        }
+
+        .dashboard-items.dashboard-utility {
+            // used for icon inside
+            >li:before {
+                top: 50%;
+                left: 0;
+                margin-top: -1rem;
+                width: 100%;
+                color: $white;
+                font-size: 2rem;
+                text-align: center !important;
+                line-height: 1 !important;
+                opacity: .5 !important;
+            }
+
+            >li:after {
+                content: '';
+                display: none;
+            }
+
+            >li:hover {
+                a {
+                    line-height: 1.5rem;
+                    padding-left: 8px;
+                }
+
+                &:before {
+                    line-height: 1 !important;
+                    opacity: .8 !important;
+                }
+            }
+
         }
     }
 }

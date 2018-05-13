@@ -76,6 +76,8 @@ h1 {
 .has-background-gray-700    { background-color: $gray-700 !important; }
 .has-background-gray-800    { background-color: $gray-800 !important; }
 .has-background-gray-900    { background-color: $gray-900 !important; }
+.has-background-danger      { background-color: $danger !important; }
+.has-background-info      { background-color: $info !important; }
 
 .has-text-transparent { color: transparent !important; }
 .has-text-white       { color: $white !important; }
@@ -90,6 +92,8 @@ h1 {
 .has-text-gray-700    { color: $gray-700 !important; }
 .has-text-gray-800    { color: $gray-800 !important; }
 .has-text-gray-900    { color: $gray-900 !important; }
+.has-text-danger      { color: $danger !important; }
+.has-text-info        { color: $info !important; }
 
 // orders
 .order-top    { order: 0 !important; }
