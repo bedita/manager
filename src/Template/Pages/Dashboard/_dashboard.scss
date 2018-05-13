@@ -104,7 +104,8 @@ body.view-dashboard {
                 font-size: 2rem;
                 text-align: center !important;
                 line-height: 1 !important;
-                opacity: .5 !important;
+                opacity: .2 !important;
+                transition: none;
             }
 
             >li:after {

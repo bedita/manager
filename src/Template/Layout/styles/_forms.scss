@@ -8,6 +8,7 @@ button {
     height: 2rem;
     border: none;
     border-radius: 2px;
+    background-color: $gray-100;
     font-family: $font-family-sans-serif;
     line-height: 1.5em;
     user-select: none;
@@ -34,7 +35,7 @@ textarea {
 
 #{$button-inputs-hover},
 button:hover {
-    background-color: #666;
+    background-color: $gray-600;
     color: #FFF;
     outline: 0;
     cursor: pointer;

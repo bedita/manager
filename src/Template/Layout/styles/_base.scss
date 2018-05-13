@@ -52,6 +52,12 @@ h1 {
     margin-bottom: $gutter;
 }
 
+div, section {
+    &:focus {
+        outline: none;
+    }
+}
+
 // helper classes
 .unselectable {
     user-select: none;

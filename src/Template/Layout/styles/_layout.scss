@@ -1,10 +1,12 @@
 main.layout {
     display: grid;
-    grid-template-areas: "main-sidebar secondary-sidebar content-header"
-                        "main-sidebar secondary-sidebar content";
+    grid-template-areas: "main-sidebar  secondary-sidebar  content-header"
+                         "main-sidebar  secondary-sidebar  content"
+                         "main-sidebar  secondary-sidebar  footer";
     grid-template-columns: auto auto 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     padding: $gutter;
+    min-height: 100vh;
 
     > .layout-sidebar-primary {
         grid-area: main-sidebar;
@@ -21,5 +23,12 @@ main.layout {
 
     > .layout-content {
         grid-area: content;
+    }
+
+    > .layout-footer {
+        grid-area: footer;
+        margin-top: $gutter * 4;
+        border-top: 1px solid #495057;
+        padding: $gutter * .5 0 0;
     }
 }

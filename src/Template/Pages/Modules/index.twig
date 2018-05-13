@@ -3,7 +3,7 @@
 {% set ids = Array.extract(objects, '{*}.id') %}
 
 <modules-index inline-template ids='{{ ids|json_encode }}'>
-    <div class="module-content">
+    <div class="module-index">
         <div class="list-objects">
 
             {# list objects : table header #}
@@ -12,6 +12,9 @@
                 <div>
                     {{ Form.checkbox('allItems', { 'v-bind:checked': 'isAllChecked', '@click': 'checkAll' })|raw }}
                 </div>
+
+                <div class="thumb-cell"></div>
+
                 {% for prop in properties %}
                     <div>{{ Link.sort(prop) }}</div>
                 {% endfor %}
@@ -19,6 +22,7 @@
                 {% if currentModule.hints.multiple_types %}
                     <div>{{ __('type') }}</div>
                 {% endif %}
+
                 <div>{{ __('status') }}</div>
                 <div>{{ Link.sort('modified')}}</div>
                 <div></div>
@@ -32,21 +36,27 @@
                     title="{{ object.attributes.title }}"
                     class="object-status-{{ object.attributes.status }}">
 
-                        {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
+                        <div class="{{ prop }}-cell">
+                            {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
+                        </div>
 
-                        {% element 'Modules/thumb' { 'object': object } %}
+                        <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                         {% for prop in properties %}
-                            <div>{{ object.attributes[prop] }}</div>
+                            <div class="{{ prop }}-cell">{{ object.attributes[prop] }} {{ prop }}</div>
                         {% endfor %}
 
                         <div>{{ object.id }}</div>
+
                         {% if currentModule.hints.multiple_types %}
                             <div>{{ object.type }}</div>
                         {% endif %}
+
                         <div>{{ object.attributes.status }}</div>
+
                         <div>{{ Time.format(object.meta.modified) }}</div>
-                        <div>
+
+                        <div class="buttons">
                         {% if in_array('DELETE', currentModule.hints.allow) %}
                             {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw }}
                         {% endif %}
@@ -100,7 +110,10 @@
         {% endif %}
 
         {% do _view.append('commands',
-            Html.link(__('Trashcan'), {'_name': 'trash:list', 'filter': {'type': objectType}})
+            Html.link(__(''),
+                {'_name': 'trash:list', 'filter': {'type': objectType}},
+                {'class': 'trashcan icon-trash-2'}
+            )
         )%}
 
     </div> {# end module-content #}
