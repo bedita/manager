@@ -28,9 +28,12 @@
     {% if user %}
     <section>
         <header class="has-text-gray-550">
-            <h2>User and settings</h2>
+            <h2>{{ __('Preferences') }}</h2>
         </header>
         <ul class="dashboard-items dashboard-utility">
+            <li class="has-background-black icon-wrench">
+                <a>{{ __('Settings') }}</a>
+            </li>
             <li class="has-background-black icon-user">
                 <a>{{ (user.attributes.title ?? user.attributes.username) }}</a>
             </li>
