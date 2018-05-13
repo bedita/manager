@@ -178,6 +178,7 @@ class SchemaHelper extends Helper
                     }
                 }
             }
+
             return [
                 'type' => 'select',
                 'options' => array_map(
