@@ -145,3 +145,9 @@ window._vueInstance = new Vue({
         },
     }
 });
+
+// helper functions
+async function sleep(t) {
+    return new Promise(resolve => setTimeout(resolve, t));
+}
+

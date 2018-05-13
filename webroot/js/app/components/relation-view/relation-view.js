@@ -21,7 +21,7 @@ Vue.component('relation-view', {
         },
         loadOnStart: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         multipleChoice: {
             type: Boolean,
