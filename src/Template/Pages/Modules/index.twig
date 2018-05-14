@@ -43,7 +43,7 @@
                         <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                         {% for prop in properties %}
-                            <div class="{{ prop }}-cell">{{ object.attributes[prop] }} {{ prop }}</div>
+                            <div class="{{ prop }}-cell">{{ object.attributes[prop] }}</div>
                         {% endfor %}
 
                         <div>{{ object.id }}</div>
