@@ -343,11 +343,11 @@ class ModulesController extends AppController
         try {
             // upload file
             if (empty($this->request->getData('file.name')) || !is_string($this->request->getData('file.name'))) {
-                throw new Exception('Invalid form data: file.name');
+                throw new \RuntimeException('Invalid form data: file.name');
             }
             $filename = $this->request->getData('file.name');
             if (empty($this->request->getData('file.tmp_name')) || !is_string($this->request->getData('file.tmp_name'))) {
-                throw new Exception('Invalid form data: file.tmp_name');
+                throw new \RuntimeException('Invalid form data: file.tmp_name');
             }
             $filepath = $this->request->getData('file.tmp_name');
             $headers = ['Content-type' => $this->request->getData('file.type')];
@@ -355,7 +355,7 @@ class ModulesController extends AppController
             // create media from stream
             $streamId = $response['data']['id'];
             if (empty($this->request->getData('model-type')) || !is_string($this->request->getData('model-type'))) {
-                throw new Exception('Invalid form data: model-type');
+                throw new \RuntimeException('Invalid form data: model-type');
             }
             $type = $this->request->getData('model-type');
             $title = $filename;
