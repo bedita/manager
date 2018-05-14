@@ -31,6 +31,8 @@ class TrashController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Properties');
+
         $this->Modules->setConfig('currentModuleName', 'trash');
     }
 
@@ -82,6 +84,8 @@ class TrashController extends AppController
         $this->set(compact('meta'));
         $this->set(compact('links'));
 
+        $this->set('properties', $this->Properties->indexList($this->objectType));
+
         return null;
     }
 
@@ -110,6 +114,7 @@ class TrashController extends AppController
         $schema = $this->Schema->getSchema($object['type']);
 
         $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
         return null;
     }
