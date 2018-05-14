@@ -28,7 +28,12 @@ $text-inputs:   'input[type="color"]',
 //     background-color: red;
 // }
 
-
+$button-inputs: 'input[type="submit"]',
+                'input[type="button"]',
+                'input[type="reset"]';
+$button-inputs-hover: 'input[type="submit"]:hover',
+                      'input[type="button"]:hover',
+                      'input[type="reset"]:hover';
 
 // media breakpoint
 // $max-1024w:      "(max-width: 1024px)";

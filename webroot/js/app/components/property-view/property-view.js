@@ -14,31 +14,17 @@
  */
 
 Vue.component('property-view', {
-    template: `
-        <div class="slide-container">
-            <div @click.prevent="toggleVisibility()" class="tab"><h2><: label :></h2></div>
-
-            <transition name="slide">
-                <div v-if="isOpen" class="tab-container">
-                    <slot></slot>
-                </div>
-            </transition>
-        </div>`,
-
     props: {
         tabOpen: {
             type: Boolean,
             default: true,
         },
-        label: {
-            type: String,
-            default: 'Properties',
-        }
     },
 
     data() {
         return {
             isOpen: true,
+            isLoading: false,
         }
     },
 
@@ -52,6 +38,9 @@ Vue.component('property-view', {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
         },
+        onToggleLoading(status) {
+            this.isLoading = status;
+        }
     }
 
 });

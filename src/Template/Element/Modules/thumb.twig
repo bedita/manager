@@ -1,0 +1,6 @@
+{# thumb #}
+{{ Media.view(object, included, {'options': {'w': 50}, 'providerThumb': true})|raw }}
+
+{% if object.type == 'files' %}
+    <span class="icon icon-doc"></span>
+{% endif %}

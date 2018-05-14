@@ -34,6 +34,7 @@ class AppView extends TwigView
             'templates' => [
                 'hiddenBlock' => '{{content}}',
                 'submitContainer' => '{{content}}',
+                'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
         $this->loadHelper('Array');
