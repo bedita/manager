@@ -89,6 +89,7 @@ class PropertiesComponentTest extends TestCase
                     'publish' => [
                         'uname' => 'an-object',
                         'status' => 'on',
+                        'publish_start' => null,
                     ],
                     'advanced' => [
                     ],
@@ -100,6 +101,7 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                         'status' => 'on',
                         'uname' => 'an-object',
+                        'publish_start' => null,
                     ],
                 ],
                 'foos',
@@ -172,7 +174,7 @@ class PropertiesComponentTest extends TestCase
             'new order' => [
                 [
                     'core' => [
-                        'description' => '...',
+                        'description' => null,
                         'title' => 'A',
                     ],
                     'publish' => [
@@ -187,7 +189,7 @@ class PropertiesComponentTest extends TestCase
                 [
                     'attributes' => [
                         'title' => 'A',
-                        'description' => '...',
+                        'description' => null,
                         'status' => 'on',
                         'uname' => 'test',
                     ],
