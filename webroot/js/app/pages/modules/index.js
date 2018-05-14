@@ -137,6 +137,13 @@ Vue.component('modules-index', {
             }
             document.getElementById('form-restore').submit();
         },
+
+        selectRow(event) {
+            if(event.target.type != 'checkbox') {
+                event.preventDefault();
+                event.target.querySelector('input[type=checkbox]').checked = !event.target.querySelector('input[type=checkbox]').checked;
+            }
+        }
     }
 });
 
