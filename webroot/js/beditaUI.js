@@ -12,17 +12,6 @@
 
 
 /*
-* Date - force two date pickers to work as a date range
-*/
-
-function customRange(input)
-{
-    return {minDate: (input.id == 'end' ? $('#start').datepicker( "getDate" ) : null),
-            maxDate: (input.id == 'start' ? $('#end').datepicker( "getDate" )  : null)};
-}
-
-
-/*
  * Extend JQuery
  */
 
@@ -181,16 +170,6 @@ jQuery.fn.extend({
 
 
 $(document).ready(function(){
-
-/*...........................................
-
-   primacolonna
-
-...........................................*/
-
-    $(".primacolonna").click(function () {
-        $("BODY").toggleClass("leftmenuopen");
-    });
 
 
 /*...........................................

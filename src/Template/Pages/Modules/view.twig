@@ -1,53 +1,59 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
 <modules-view inline-template>
+<div class="modules-view" v-hotkey="keyEvents">
 
-    <div class="modules-view"
-        v-hotkey="keyEvents">
-        <header class="layout-header">
-            {% element 'Modules/header' %}
-        </header>
+    <header>
+        <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
+    </header>
 
-        {% if ((object.id is empty) and (objectType in ['images', 'files', 'audio', 'videos'])) %}
-        <div class="upload-form">
-            <h1>{{ __('Upload') }}</h1>
-            {% element 'Form/upload' %}
-        </div>
-        {% endif %}
+    <div class="module-form">
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'modules:save', 'object_type': objectType},
+            'id': 'form-main',
+        })|raw }}
 
-        <div class="module-form">
-            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-                'url': {'_name': 'modules:save', 'object_type': objectType},
-                'id': 'form-main',
-            })|raw }}
+            {# Inside column there are form elements, they may have a cssOrder property that reorders
+                the elements in single column view, in small viewports. cssOrder may assume the string
+                values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
 
-            <h1>{{ object.attributes.title|default(__('New')) }}</h1>
+            <div class="column">
+                {% element 'Form/core_properties' %}
 
-            {% element 'Form/core_properties' %}
+                {# media #}
+                {% if objectType in ['images', 'files', 'audio', 'videos'] %}
+                    {% if object.id is empty %}
+                        {% element 'Form/upload' %}
+                    {% else %}
+                        {% element 'Form/included' %}
+                    {% endif %}
+                {% endif %}
 
-            {% element 'Form/included' %}
+                {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
+            </div>
 
-            {% element 'Form/publish_properties' %}
+            <div class="column">
+                {% element 'Form/publish_properties' {'cssOrder': '1'} %}
 
-            {% element 'Form/advanced_properties' %}
+                {% if _view.request.params.action != 'create' %}
+                    {% element 'Form/trees' {'cssOrder': '2'} %}
+                {% endif %}
 
-            {% element 'Form/other_properties' %}
+                {% element 'Form/advanced_properties' %}
 
+                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+            </div>
+
+            {# temp relations view #}
             {% element 'Form/relations' %}
 
-            {% element 'Form/trees' %}
+        {{ Form.end()|raw }}
 
-            {% element 'Form/meta' %}
-
-            {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-            {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
-
-            {{ Form.end()|raw }}
-        </div>
-
+        {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
+        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
         {# Append "Delete" to commands in commands menu. #}
         {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
-
     </div>
 
+</div>
 </modules-view>

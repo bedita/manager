@@ -35,8 +35,8 @@ class PropertiesComponent extends Component
             ],
             // publishing related
             'publish' => [
-                'status',
                 'uname',
+                'status',
                 'publish_start',
                 'publish_end',
             ],
@@ -89,7 +89,7 @@ class PropertiesComponent extends Component
             $list = Configure::read($key, $items);
             $p = [];
             foreach ($list as $item) {
-                if (isset($attributes[$item])) {
+                if (array_key_exists($item, $attributes)) {
                     $p[$item] = $attributes[$item];
                 }
             }
