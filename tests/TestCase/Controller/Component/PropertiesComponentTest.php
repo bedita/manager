@@ -87,8 +87,8 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                     ],
                     'publish' => [
-                        'status' => 'on',
                         'uname' => 'an-object',
+                        'status' => 'on',
                     ],
                     'advanced' => [
                     ],
@@ -110,8 +110,8 @@ class PropertiesComponentTest extends TestCase
                         'something' => '',
                     ],
                     'publish' => [
-                        'status' => 'on',
                         'uname' => 'test',
+                        'status' => 'on',
                     ],
                     'advanced' => [
                     ],
@@ -140,8 +140,8 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                     ],
                     'publish' => [
-                        'status' => 'draft',
                         'uname' => 'test',
+                        'status' => 'draft',
                     ],
                     'advanced' => [
                         'json_field' => 'json',
