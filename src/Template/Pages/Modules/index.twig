@@ -43,7 +43,7 @@
                         <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                         {% for prop in properties %}
-                            <div class="{{ prop }}-cell">{{ object.attributes[prop] }}</div>
+                            <div class="{{ prop }}-cell" untitled="{{ __('Untitled') }}">{{ object.attributes[prop] }}</div>
                         {% endfor %}
 
                         <div>{{ object.id }}</div>
@@ -58,7 +58,7 @@
 
                         <div class="buttons">
                         {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw }}
+                            {{ Form.postButton(__('Trash'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw }}
                         {% endif %}
                         </div>
                 </a>
@@ -73,7 +73,7 @@
         {% if objects %}
             <div class="bulk-actions">
                 <header>
-                    <h3>{{ __('Actions on selected items') }}</h3>
+                    <p>{{ __('Actions on selected items') }}</p>
                 </header>
                 <nav>
                     {% if not currentModule.hints.multiple_types %}
@@ -109,12 +109,12 @@
             ) %}
         {% endif %}
 
-        {% do _view.append('commands',
+        {# {% do _view.append('commands-footer',
             Html.link(__(''),
                 {'_name': 'trash:list', 'filter': {'type': objectType}},
                 {'class': 'trashcan icon-trash-2'}
             )
-        )%}
+        )%} #}
 
     </div> {# end module-content #}
 </modules-index>

@@ -2,6 +2,15 @@ body.view-module {
 
     .modules-view {
         padding-left: $gutter * .5;
+        >header {
+            h1:empty {
+                &:before {
+                    content: attr(untitled);
+                    color: $gray-600;
+                    font-style: italic;
+                }
+            }
+        }
     }
 
     // view

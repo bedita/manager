@@ -3,9 +3,11 @@
 <modules-view inline-template>
 <div class="modules-view" v-hotkey="keyEvents">
 
+    {% if object.id %}
     <header>
-        <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
+        <h1 untitled="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
     </header>
+    {% endif %}
 
     <div class="module-form">
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {

@@ -6,7 +6,7 @@
         <ul class="dashboard-items">
         {% for module in modules %}
             {% if module.name != "trash" %}
-                <li class="module-color-{{ module.name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
+                <li class="has-background-module-{{ module.name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
                     {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
                 </li>
             {% endif %}
@@ -16,7 +16,7 @@
 
     <section>
         <ul class="dashboard-items dashboard-utility">
-            <li class="module-color-trash icon-trash-2">
+            <li class="has-background-module-trash icon-trash-2">
                 {{ Html.link(__('Trash can'), {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'}, {'title': __('Trash')})|raw }}
             </li>
             <li class="has-background-black icon-download-alt">

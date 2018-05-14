@@ -2,12 +2,16 @@
 
     {% for name, color in config('Modules.colors') %}
 
-        .module-color-{{ name }} {
+        .has-background-module-{{ name }} {
             background-color: {{ color }} !important;
         }
 
-        .border-color-{{ name }} {
+        .has-border-module-{{ name }} {
             border-color:  {{ color }} !important;
+        }
+
+        .has-text-module-{{ name }} {
+            color:  {{ color }} !important;
         }
 
     {% endfor %}
