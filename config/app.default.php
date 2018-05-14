@@ -419,9 +419,9 @@ return [
             'media' => '#b3001b',
             'news' => '#036',
             'profiles' => '#093',
-            'users' => '#494960',
+            'users' => '#38374f',
             'videos' => '#d5002b',
-            'trash' => '#52271e',
+            'trash' => '#411d15',
         ],
     ],
 
