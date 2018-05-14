@@ -50,7 +50,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     <main class="layout" v-show="vueLoaded">
         {% if _view.name == 'Dashboard' and _view.name != 'login' %}
             <aside class="layout-sidebar-primary">
-                {% element 'project' %}
+                {% element 'Menu/project' %}
             </aside>
         {% endif %}
 
@@ -62,7 +62,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
         {% if _view.name != 'Dashboard' and _view.name != 'Login' %}
             <header class="layout-header">
-                {% element 'layout_header' %}
+                {% element 'Menu/menu' %}
             </header>
         {% endif %}
 

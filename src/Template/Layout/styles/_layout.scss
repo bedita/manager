@@ -10,6 +10,7 @@ main.layout {
 
     > .layout-sidebar-primary {
         grid-area: main-sidebar;
+
         margin-right: 2px;
     }
 
@@ -19,6 +20,11 @@ main.layout {
 
     > .layout-header {
         grid-area: content-header;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 110px;
     }
 
     > .layout-content {
@@ -27,6 +33,7 @@ main.layout {
 
     > .layout-footer {
         grid-area: footer;
+
         margin-top: $gutter * 4;
         border-top: 1px solid #495057;
         padding: $gutter * .5 0 0;
