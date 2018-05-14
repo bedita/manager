@@ -10,6 +10,12 @@
     {% endif %}
 
     <div class="module-form">
+
+        {# Upload available only for new media objects #}
+        {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
+            {% element 'Form/upload' %}
+        {% endif %}
+
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
             'url': {'_name': 'modules:save', 'object_type': objectType},
             'id': 'form-main',
@@ -22,14 +28,8 @@
             <div class="column">
                 {% element 'Form/core_properties' %}
 
-                {# media #}
-                {% if objectType in ['images', 'files', 'audio', 'videos'] %}
-                    {% if object.id is empty %}
-                        {% element 'Form/upload' %}
-                    {% else %}
-                        {% element 'Form/included' %}
-                    {% endif %}
-                {% endif %}
+                {# media streams & other resources included #}
+                {% element 'Form/included' %}
 
                 {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
             </div>
