@@ -421,7 +421,7 @@ return [
             'profiles' => '#093',
             'users' => '#494960',
             'videos' => '#d5002b',
-            'trash' => '##52271e',
+            'trash' => '#52271e',
         ],
     ],
 
