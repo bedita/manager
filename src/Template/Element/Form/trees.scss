@@ -1,0 +1,91 @@
+.tree-view {
+    .list-actions {
+        margin: 10px;
+        text-align: center;
+    }
+
+    label {
+        color: $gray-600;
+    }
+    .tree-related-object label {
+        color: $gray-100;
+    }
+
+
+    .tree-list-single-choice {
+        .node-element {
+            border: 1px solid transparent;
+
+            &.disabled {
+                opacity: 0.7;
+            }
+
+            &:not(.disabled):hover {
+                border: 1px solid #ff5460;
+                cursor: pointer;
+            }
+
+            &.tree-related-object{
+                background-color: #ff5460;
+                border: 1px solid #ff5460;
+
+                &.was-related-object{
+                    background-color: transparent;
+                    border: 1px dashed #ff5460;
+                }
+            }
+        }
+    }
+
+    .tree-entry-list {
+
+        .tree-list-node {
+            // margin-left: 23px;
+
+            .node-children {
+                margin-left: 23px;
+            }
+
+            &.root-node {
+                margin-left: 0;
+            }
+
+            .icon-blank {
+                width: 23px;
+                visibility: hidden;
+            }
+
+            .icon {
+                cursor: pointer;
+            }
+
+            .toggle-tree-children {
+                display: inline-block;
+                transition: all 0.3s linear;
+                font-size: 20px;
+                width: 12px;
+                height: 12px;
+                line-height: 12px;
+                padding: 0;
+                cursor: pointer;
+
+                &.open {
+                    transform: rotate(90deg);
+                }
+            }
+
+            input {
+                cursor: pointer;
+                display: inline-block;
+            }
+
+            label {
+                display: inline-block;
+
+                &.is-folder {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

@@ -1,11 +1,4 @@
-// header.twig
 .layout-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 110px;
-
-
     ul[role="menu"] {
         display: flex;
         list-style: none;
