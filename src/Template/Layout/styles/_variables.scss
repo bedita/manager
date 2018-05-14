@@ -1,5 +1,5 @@
 /*
-** FONTS
+** FONTS & TYPOGRAPHY
 */
 
 // family
@@ -55,12 +55,19 @@ $grays: map-merge((
   "900": $gray-900
 ), $grays);
 
-
 $info: hsl(204, 86%, 53%);
 $danger: hsl(348, 100%, 61%);
+
 
 /*
 ** LAYOUT
 */
 
 $gutter: 16px;
+
+
+/*
+** Animations & transitions
+*/
+
+$animation-duration-base: .3s;

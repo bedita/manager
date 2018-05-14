@@ -64,21 +64,47 @@ form fieldset {
     }
 }
 
-div {
-    &[message-tooltip] {
-        position:relative;
+
+// json editor
+.jsoneditor-container {
+    background-color: $gray-550;
+    .jsoneditor {
+        border: 0;
+
+        .jsoneditor-menu {
+            background: $gray-700;
+            border: 0;
+        }
+
+        .jsoneditor-contextmenu {
+            .jsoneditor-menu {
+                background: $gray-300;
+            }
+        }
+
+        button {
+            min-width: unset;
+        }
     }
-    &[message-tooltip]:after {
-        content: attr(message-tooltip);
-        position: absolute;
-        // left: 0px;
-        padding: 5px 8px;
-        background: red;
-        z-index: 9;
-        height: 32px;
-        border-radius: 3px;
-        white-space: nowrap;
-        word-wrap: normal;
-        margin-left: 15px;
+}
+
+
+// Date Picker
+.clear-button {
+    transition: all 0.4s ease-in-out;
+    display: inline-block;
+    z-index: 10;
+    color: $gray-900;
+    font-size: 1.3em;
+    line-height: 25px;
+    margin-left: -30px;
+    padding: 0px 9px;
+    cursor: pointer;
+
+
+    &:hover {
+        background-color: $gray-800;
+        border-radius: 100%;
+        color: $white;
     }
 }
