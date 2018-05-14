@@ -1,5 +1,10 @@
 <div class="commands-menu">
-    <div class="commands-header squared">
+
+    <div class="project">
+        {{ Html.link(__(''), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
+    </div>
+
+    <div class="commands-module squared">
         {% if currentModule %}
             {{ Html.link(currentModule.name|humanize, {'_name': 'modules:list', 'object_type': currentModule.name}, {'class': "module-color-#{currentModule.name}"})|raw }}
         {% else %}

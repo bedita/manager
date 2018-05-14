@@ -1,24 +1,26 @@
-<property-view
-    :tab-open="tabsOpen"
-    label={{ __('Other Properties') }}>
+<property-view inline-template :tab-open="tabsOpen">
+    <section class="fieldset order-{{ cssOrder }}" id="other_properties" :class="isOpen? '' : 'closed'">
 
-    <fieldset id="other_properties">
-        {% set jsonKeys = [] %}
-        {% for key, value in properties.other %}
+        <header @click.prevent="toggleVisibility()" class="tab unselectable">
+            <h2>{{ __('Content') }}</h2>
+        </header>
 
-            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-            {% if options.class and  options.class == 'json' %}
-                {% set jsonKeys = jsonKeys|merge([key]) %}
+        <div v-show="isOpen" class="tab-container">
+            {% set jsonKeys = [] %}
+            {% for key, value in properties.other %}
+
+                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                {% if options.class and  options.class == 'json' %}
+                    {% set jsonKeys = jsonKeys|merge([key]) %}
+                {% endif %}
+
+                {{ Form.control(key, options)|raw }}
+
+            {% endfor %}
+            {% if jsonKeys %}
+                {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
             {% endif %}
+        </div>
 
-            {{ Form.control(key, options)|raw }}
-
-            <span class="error-message"> <: this.errors.first('{{ key }}') :> </span>
-        {% endfor %}
-        {% if jsonKeys %}
-            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
-        {% endif %}
-
-    </fieldset>
-
+    </section>
 </property-view>

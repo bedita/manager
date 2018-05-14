@@ -21,7 +21,7 @@ Vue.component('relation-view', {
         },
         loadOnStart: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         multipleChoice: {
             type: Boolean,
@@ -80,6 +80,10 @@ Vue.component('relation-view', {
             this.setPageSize(value);
             this.loadRelatedObjects();
         },
+
+        loading(value) {
+            this.$emit('loading', value);
+        }
     },
 
     methods: {

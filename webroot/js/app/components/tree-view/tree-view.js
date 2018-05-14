@@ -20,10 +20,7 @@ Vue.component('tree-view', {
             type: Array,
             default: () => [],
         },
-        loadOnStart: {
-            type: Boolean,
-            default: true,
-        },
+        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -95,8 +92,9 @@ Vue.component('tree-view', {
          */
         async loadTree() {
             if (this.loadOnStart) {
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 1;
+                await sleep(t);
                 await this.loadObjects();
-
                 this.jsonTree = {
                     name: 'Root',
                     root: true,

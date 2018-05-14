@@ -1,0 +1,23 @@
+.is-loading-spinner:after {
+    animation: spinAround .5s infinite linear;
+    border: 2px solid #dbdbdb;
+    border-radius: 290486px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    height: 16px;
+    position: relative;
+    width: 16px;
+}
+
+@keyframes spinAround {
+    from {
+        transform: rotate(0)
+    }
+
+    to {
+        transform: rotate(359deg)
+    }
+}
+

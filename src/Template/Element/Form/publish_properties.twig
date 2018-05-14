@@ -1,14 +1,8 @@
-<property-view
-    :tab-open="tabsOpen"
-    label={{ __('Publish') }}>
-
-    <fieldset id="publish_properties">
-
+<section class="fieldset order-{{ cssOrder }}" id="publish_properties">
+    <div class="tab-container">
         {% for key, value in properties.publish %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
             {{ Form.control(key, options)|raw }}
         {% endfor %}
-
-    </fieldset>
-
-</property-view>
+    </div>
+</section>

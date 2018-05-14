@@ -1,7 +1,5 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% set index_properties = config('Properties.' ~ currentModule.name ~ '.index')|default(['title']) %}
-
 {% set ids = Array.extract(objects, '{*}.id') %}
 
 {% set q = _view.request.query|serialize|escape %}
@@ -10,16 +8,14 @@
 
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div>
-        {% element 'Modules/header' %}
-
-        <div class="module-content">
+        <div class="module-index">
             <div class="list-objects">
                 {% if objects %}
                 <nav class="table-header">
                     <div>
                         {{ Form.checkbox('allItems', { 'v-bind:checked': 'isAllChecked', '@click': 'checkAll' })|raw }}
                     </div>
-                    {% for prop in index_properties %}
+                    {% for prop in properties %}
                         <div>{{ Link.sort(prop) }}</div>
                     {% endfor %}
                     <div>{{ Link.sort('id')}}</div>
@@ -40,7 +36,7 @@
 
                             {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
 
-                            {% for prop in index_properties %}
+                            {% for prop in properties %}
                                 <div>{{ object.attributes[prop] }}</div>
                             {% endfor %}
 

@@ -2,14 +2,45 @@
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
 <div class="dashboard">
-    <ul class="dashboard-items">
+    <section>
+        <ul class="dashboard-items">
+        {% for module in modules %}
+            {% if module.name != "trash" %}
+                <li class="module-color-{{ module.name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
+                    {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </section>
 
-    {% for module in modules %}
-        <li class="module-color-{{ module.name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
-            {{ Html.link(module.name|humanize, {'controller': 'Modules', 'action': 'index', 'object_type': module.name}, {'title': module.name|humanize})|raw }}
-        </li>
-    {% endfor %}
+    <section>
+        <ul class="dashboard-items dashboard-utility">
+            <li class="module-color-trash icon-trash-2">
+                {{ Html.link(__('Trash can'), {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'}, {'title': __('Trash')})|raw }}
+            </li>
+            <li class="has-background-black icon-download-alt">
+                {{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}
+            </li>
+        </ul>
+    </section>
 
-    </ul>
+    {% if user %}
+    <section>
+        <header class="has-text-gray-550">
+            <h2>{{ __('Preferences') }}</h2>
+        </header>
+        <ul class="dashboard-items dashboard-utility">
+            <li class="has-background-black icon-wrench">
+                <a>{{ __('Settings') }}</a>
+            </li>
+            <li class="has-background-black icon-user">
+                <a>{{ (user.attributes.title ?? user.attributes.username) }}</a>
+            </li>
+            <li class="has-background-black has-text-danger icon-logout">
+                {{ Html.link(__('Log out'), {'_name': 'logout'})|raw }}
+            </li>
+        </ul>
+    </section>
+    {% endif %}
 </div>
-
