@@ -19,6 +19,8 @@ use Psr\Log\LogLevel;
 
 /**
  * Trash controller: list, restore, delete
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class TrashController extends AppController
 {
@@ -84,7 +86,7 @@ class TrashController extends AppController
         $this->set(compact('meta'));
         $this->set(compact('links'));
 
-        $this->set('properties', $this->Properties->indexList($this->objectType));
+        $this->set('properties', $this->Properties->indexList('trash'));
 
         return null;
     }
@@ -114,7 +116,7 @@ class TrashController extends AppController
         $schema = $this->Schema->getSchema($object['type']);
 
         $this->set(compact('object', 'schema'));
-        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        $this->set('properties', $this->Properties->viewGroups($object, 'trash'));
 
         return null;
     }
