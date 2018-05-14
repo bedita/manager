@@ -1,5 +1,9 @@
 body.view-module {
 
+    .modules-view {
+        padding-left: $gutter * .5;
+    }
+
     // view
     .module-form {
         width: 100%;
