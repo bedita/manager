@@ -40,7 +40,7 @@
                             {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
                         </div>
 
-                        <div class="thumb-cell">{{ Media.view(object, included, {'options': {'w': 50}, 'providerThumb': true})|raw }}/div>
+                        <div class="thumb-cell">{% element 'Modules/thumb' {'object': object} %}</div>
 
                         {% for prop in properties %}
                             <div class="{{ prop }}-cell">{{ object.attributes[prop] }}</div>
