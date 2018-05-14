@@ -93,6 +93,9 @@ class SchemaHelper extends Helper
                         ['value' => 'draft', 'text' => __('Draft')],
                         ['value' => 'off', 'text' => __('Off')],
                     ],
+                    'templateVars' => [
+                        'containerClass' => 'status',
+                    ],
                 ];
 
             case 'password':

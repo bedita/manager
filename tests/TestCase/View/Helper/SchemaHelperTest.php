@@ -186,6 +186,9 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'draft', 'text' => __('Draft')],
                         ['value' => 'off', 'text' => __('Off')],
                     ],
+                    'templateVars' => [
+                        'containerClass' => 'status',
+                    ],
                 ],
                 // schema type
                 [

@@ -1,10 +1,5 @@
-<property-view
-    :tab-open="tabsOpen"
-    label={{ __('Main Properties') }}>
-
-    <fieldset id="core_properties">
-        {{ Form.hidden('id', {'value': object.id})|raw }}
-
+<section class="fieldset order-{{ order|default('0') }}" id="core_properties">
+    <div class="tab-container">
         {% for key, value in properties.core %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
             {{ Form.control(key, options)|raw }}
@@ -12,6 +7,6 @@
             <span class="error-message"> <: this.errors.first('{{ key }}') :> </span>
         {% endfor %}
 
-    </fieldset>
-
-</property-view>
+        {{ Form.hidden('id', {'value': object.id})|raw }}
+    </div>
+</section>

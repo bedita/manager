@@ -35,8 +35,8 @@ class PropertiesComponent extends Component
             ],
             // publishing related
             'publish' => [
-                'status',
                 'uname',
+                'status',
                 'publish_start',
                 'publish_end',
             ],
@@ -87,7 +87,13 @@ class PropertiesComponent extends Component
         foreach ($this->defaultGroups['view'] as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $list = Configure::read($key, $items);
-            $properties[$group] = array_intersect_key($attributes, array_flip($list));
+            $p = [];
+            foreach ($list as $item) {
+                if (array_key_exists($item, $attributes)) {
+                    $p[$item] = $attributes[$item];
+                }
+            }
+            $properties[$group] = $p;
             $used = array_merge($used, $list);
         }
         // add remaining properties to 'other' group

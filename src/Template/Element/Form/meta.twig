@@ -1,10 +1,12 @@
-<property-view
-    :tab-open="tabsOpen"
-    label={{ __('Metadata') }}>
+<property-view inline-template :tab-open="tabsOpen">
+<section class="fieldset order-{{ order|default('0') }}" id="meta" :class="isOpen? '' : 'closed'">
 
-    <fieldset id="advancedproperties" class="multimediaiteminside">
+    <header @click.prevent="toggleVisibility()" class="tab unselectable">
+        <h2>{{ __('Metadata') }}</h2>
+    </header>
 
-        <table class="bordered">
+    <div v-show="isOpen" class="tab-container">
+        <table>
             <tbody>
                 <tr>
                     <th>{{ __('id') }}:</th>
@@ -18,7 +20,7 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
 
-    </fieldset>
-
+</section>
 </property-view>

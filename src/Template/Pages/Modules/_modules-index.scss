@@ -1,0 +1,146 @@
+body.view-module {
+
+    // index
+    .module-header {
+        height: 86px;
+        margin-left: $gutter * .5;
+
+        .module-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            @media screen and (max-width: 960px) {
+                height: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                >* {
+                    margin-bottom: $gutter;
+                }
+            }
+        }
+    }
+
+    .module-index {
+
+        .list-objects {
+            display: table;
+            border-collapse: collapse;
+            min-width: 100%;
+
+            > nav {
+                display: table-row;
+
+                &.table-header {
+                    border-bottom: 1px solid $gray-700;
+
+                    a.sort {
+                        display: flex;
+                        align-items: center;
+
+                        &:after {
+                            content: "›";
+                            margin-left: 10px;
+                            display: inline-block;
+                            font-size: 1.5em;
+                            line-height: 21px;
+                        }
+
+                        &.up:after {
+                            transform: rotate(-90deg);
+                        }
+                        &.down:after {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
+            }
+
+            > a {
+                display: table-row;
+
+                &:hover {
+                    background-color: $gray-700;
+                }
+            }
+
+            > nav, > a {
+                div {
+                    display: table-cell;
+                    padding: $gutter * .5;
+                    white-space: nowrap;
+
+                    &.title-cell {
+                        max-width: 310px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        &:empty:before {
+                            content: 'untitled object';
+                            color: $gray-600;
+                            font-style: italic;
+                        }
+                    }
+
+                    &.thumb-cell {
+                        max-width: $gutter * 2.5;
+                        height: $gutter * 2;
+                        padding: 0;
+                        overflow: hidden;
+                        img {
+                            padding: 1px;
+                            display: inline-block;
+                            max-height: 100%;
+                            max-width: 100%;
+                            vertical-align: middle;
+                            background-color: $gray-200;
+                        }
+                        .icon {
+                            display: inline-block;
+                            width: 100%;
+                            font-size: 18px;
+                            padding: 6px;
+                        }
+                    }
+
+                    &:last-child {
+                        text-align: right;
+                        > form {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+
+            button {
+                line-height: initial;
+            }
+        }
+
+        .bulk-actions {
+            margin-top: $gutter * 2;
+            header {
+                width: 100%;
+            }
+
+            nav {
+                display: flex;
+                form {
+                    margin-right: $gutter;
+                }
+            }
+        }
+    }
+
+    // TODO: da fare meglio
+    &.module-media, &.module-images, &.module-video, &.module-audio, &.module-objects {
+       .module-index .list-objects > a div.title-cell {
+           max-width: 210px;
+       }
+    }
+
+    .section.relations {
+        width: 100%;
+        margin-top: $gutter;
+    }
+
+}
