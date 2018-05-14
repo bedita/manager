@@ -75,7 +75,7 @@ body.view-module {
                         text-overflow: ellipsis;
                         overflow: hidden;
                         &:empty:before {
-                            content: 'untitled object';
+                            content: attr(untitled);
                             color: $gray-600;
                             font-style: italic;
                         }
@@ -117,7 +117,8 @@ body.view-module {
         }
 
         .bulk-actions {
-            margin-top: $gutter * 2;
+            border-top: 1px solid $gray-700;
+
             header {
                 width: 100%;
             }

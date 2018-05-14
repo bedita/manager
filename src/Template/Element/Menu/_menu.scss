@@ -39,6 +39,7 @@
             height: 140px;
             padding: 75px .5rem .5rem;
             background-position: .5rem .55rem;
+            margin-right: 16px;
         }
 
         body.view-module & {
@@ -101,7 +102,10 @@
     position: sticky;
     top: $gutter;
     width: 90px;
+    height: 100%;
     margin-right: $gutter;
+    display: flex;
+    flex-direction: column;
 
     button, input[type=submit] {
         width: 100%;
@@ -165,22 +169,27 @@
             line-height: 2rem;
         }
 
-        .trashcan {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80px;
-            margin-top: $gutter;
-            background-color: transparent;
-            color: $gray-200;
-            font-size: 2rem;
-            &:before {
-                margin: 0;
-            }
-        }
-
         input[type=submit] {
             margin-bottom: 2px;
         }
+
     }
+
+    > .commands-footer {
+        flex-grow: 1;
+    }
+
+    // .trashcan {
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     height: 80px;
+    //     margin-top: $gutter;
+    //     background-color: transparent;
+    //     color: $gray-200;
+    //     font-size: 2rem;
+    //     &:before {
+    //         margin: 0;
+    //     }
+    // }
 }
