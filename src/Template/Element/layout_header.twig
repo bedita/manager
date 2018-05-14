@@ -14,12 +14,12 @@
     {% endif %}
     {% endfor %}
 
-        <li class="has-background-transparent has-text-module-{{ currentModule.name }} trash icon-trash-2 center-icon">
-            {{ Html.link('',
-                {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'},
-                {'tooltip': __('View trashed ') ~ currentModule.name|humanize}
-            )|raw }}
-        </li>
+    <li class="has-background-transparent has-text-module-{{ currentModule.name }} trash icon-trash-2 center-icon">
+        {{ Html.link('',
+            {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'},
+            {'tooltip': __('View trashed ') ~ currentModule.name|humanize}
+        )|raw }}
+    </li>
 
     <li class="has-background-transparent separator">&nbsp;</li>
 
