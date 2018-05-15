@@ -1,3 +1,20 @@
+// simple tag
+.tag:not(body) {
+    align-items: center;
+    background-color: $gray-600;
+    border-radius: 4px;
+    color: $white;
+    display: inline-flex;
+    font-size: $font-size-sssm;
+    height: 2em;
+    justify-content: center;
+    line-height: 1.5;
+    padding-left: .75em;
+    padding-right: .75em;
+    white-space: nowrap;
+}
+
+// loader
 .is-loading-spinner:after {
     animation: spinAround .5s infinite linear;
     border: 2px solid #dbdbdb;
@@ -20,4 +37,3 @@
         transform: rotate(359deg)
     }
 }
-
