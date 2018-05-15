@@ -21,6 +21,7 @@
                 inline-template
                 relation-name={{ relationName }}
                 :multiple-choice={{ options.multiple }}
+                :load-on-start="200"
                 @loading="onToggleLoading">
 
                     <div class="tree-{{ relationName }} unselectable">

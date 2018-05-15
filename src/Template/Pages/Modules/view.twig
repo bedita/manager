@@ -21,11 +21,11 @@
             'id': 'form-main',
         })|raw }}
 
-            {# Inside column there are form elements, they may have a cssOrder property that reorders
+            {# Inside form-column there are form elements, they may have a cssOrder property that reorders
                 the elements in single column view, in small viewports. cssOrder may assume the string
                 values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
 
-            <div class="column">
+            <div class="form-column">
                 {% element 'Form/core_properties' %}
 
                 {# media streams & other resources included #}
@@ -34,7 +34,7 @@
                 {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
             </div>
 
-            <div class="column">
+            <div class="form-column">
                 {% element 'Form/publish_properties' {'cssOrder': '1'} %}
 
                 {% if _view.request.params.action != 'create' %}
