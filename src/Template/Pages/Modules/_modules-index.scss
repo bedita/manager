@@ -69,6 +69,7 @@ body.view-module {
                     display: table-cell;
                     padding: $gutter * .5;
                     white-space: nowrap;
+                    vertical-align: middle;
 
                     &.title-cell {
                         max-width: 310px;
@@ -120,6 +121,7 @@ body.view-module {
             border-top: 1px solid $gray-700;
 
             header {
+                margin: $gutter 0;
                 width: 100%;
             }
 

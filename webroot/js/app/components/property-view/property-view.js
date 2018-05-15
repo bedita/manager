@@ -25,6 +25,7 @@ Vue.component('property-view', {
         return {
             isOpen: true,
             isLoading: false,
+            count: 0,
         }
     },
 
@@ -40,7 +41,10 @@ Vue.component('property-view', {
         },
         onToggleLoading(status) {
             this.isLoading = status;
-        }
+        },
+        onCount(n) {
+            this.count = n;
+        },
     }
 
 });

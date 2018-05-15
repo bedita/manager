@@ -85,6 +85,24 @@ body.view-module {
                         &:first-letter {
                             text-transform: capitalize;
                         }
+
+                        span {
+                            display: inline-block;
+                            position: relative;
+                            top: 2px;
+                            left: 8px;
+                            background-color: $black;
+                            border-radius: 50%;
+                            width: $gutter;
+                            text-align: center;
+                            height: $gutter;
+                            font-size: $font-size-sssm;
+                            line-height: $gutter;
+                            overflow: hidden;
+                            &.empty {
+                                opacity: .3;
+                            }
+                        }
                     }
                 }
 
@@ -102,6 +120,7 @@ body.view-module {
 
                 label {
                     flex: 1 0 100%;
+                    margin-right: 16px;
                 }
 
                 div.input.status {

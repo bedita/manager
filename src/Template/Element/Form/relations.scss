@@ -1,3 +1,27 @@
+.related-objects-list {
+    &.isLoading {
+        opacity: .2;
+        pointer-events: none;
+    }
+    &:not(:first-child) {
+        margin-top: $gutter;
+        padding-top: $gutter;
+        border-top: 1px solid $gray-800;
+    }
+}
+
+nav.pagination {
+    margin: 0 0 $gutter;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    > div:not(:last-child) {
+        margin-right: $gutter;
+    }
+}
+
+
+// a related object element
 .related-object {
     position: relative;
 
@@ -18,6 +42,10 @@
                 font-weight: $font-weight-light;
                 line-height: $font-size-lg;
                 min-height: $font-size-lg * 2;
+                &:empty {
+                    content: 'untitled';
+                    opacity: .5;
+                }
             }
             .prop-id {
                 opacity: .5;
@@ -29,14 +57,32 @@
 
         >div {
             margin-bottom: $gutter;
+            &.thumbnail {
+                display: none;
+                figure {
+                    // placeholder in attesa di mettere il thumb
+                    background-color: $gray-700;
+                    min-width: 100%;
+                    min-height: 60px;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        &.images {
+            div.thumbnail {
+                display: block;
+            }
         }
 
         footer {
             position: relative;
             display: flex;
             justify-content: flex-end;
-            height: 24px;
-            a { opacity: .5; }
+            a { opacity: .5; line-height: 1rem; cursor: pointer; }
             a:hover { opacity: 1; }
         }
     }
@@ -70,13 +116,6 @@
             transform: rotate(0);
             padding-top: 1px;
         }
-    }
-}
-
-.related-objects-list {
-    transition: .3s opacity;
-    &.isLoading {
-        opacity: .5;
     }
 }
 

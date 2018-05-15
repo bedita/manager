@@ -13,7 +13,9 @@
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>{{ relationName|humanize|lower }}</h2>
+                        <h2>{{ relationName|humanize|lower }}<span class="has-text-size-base"
+                                                                v-bind:class="!count? 'empty' : ''"
+                                                                v-show:class="!isLoading" style="display: none"><: count :></span></h2>
                     </header>
 
                     <div v-show="isOpen" class="tab-container">

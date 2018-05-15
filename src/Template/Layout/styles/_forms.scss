@@ -53,11 +53,11 @@ button, a.button {
         border: 1px solid $gray-600;
     }
 
-    &[class^="icon-"] {
-        min-width: auto;
-        height: auto;
-        padding: 0;
-    }
+    // &[class^="icon-"] {
+    //     min-width: auto;
+    //     height: auto;
+    //     padding: 0;
+    // }
 
     &:focus {
         outline: none;
@@ -92,7 +92,6 @@ select {
 }
 
 label {
-    font-weight: normal;
     > input {
         margin-right: $gutter * .5;
     }

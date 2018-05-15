@@ -34,6 +34,7 @@ Vue.component('relation-view', {
             method: 'relatedJson',          // define AppController method to be used
             loading: false,
             showRelationshipsPanel: false,
+            count: 0,                       // count number of related objects, on change triggers an event
 
             removedRelated: [],             // currently related objects to be removed
             addedRelations: [],             // staged added objects to be saved
@@ -43,6 +44,7 @@ Vue.component('relation-view', {
             step: DEFAULT_PAGINATION.page_size,     // step value for pagination page size
 
             pageSizeOptions: [
+                10,
                 20,
                 50,
                 100,
@@ -83,6 +85,10 @@ Vue.component('relation-view', {
 
         loading(value) {
             this.$emit('loading', value);
+        },
+
+        count(value) {
+            this.$emit('count', value);
         }
     },
 
@@ -97,7 +103,7 @@ Vue.component('relation-view', {
 
             let resp = await this.getPaginatedObjects();
             this.loading = false;
-
+            this.count = resp.length;
             return resp;
         },
 
@@ -256,15 +262,6 @@ Vue.component('relation-view', {
             // this.hideRelations is passed as prop to relationships-view
             this.hideRelations = this.objects;
             this.showRelationshipsPanel = true;
-        },
-
-        /**
-         * helper function for template
-         *
-         * @return {Boolean} true if has at least a related object or a newly added object
-         */
-        hasElementsToShow() {
-            return (this.objects && this.objects.length) || (this.addedRelations && this.addedRelations.length);;
         },
 
         /**
