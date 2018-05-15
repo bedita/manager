@@ -18,11 +18,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/base';
 @import './styles/layout';      // main grid base layout
 @import './styles/forms';
-@import './styles/utility';
+@import './styles/elements';
 
 // elements
-// @import '../Element/elements';
-@import '../Element/header';
 @import '../Element/Form/trees';
 @import '../Element/Form/relations';
 @import '../Element/Messages/messages';

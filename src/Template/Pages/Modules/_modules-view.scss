@@ -82,6 +82,9 @@ body.view-module {
                         flex-grow: 1;
                         margin: 0; padding: 0;
                         font-size: 1.25rem;
+                        &:first-letter {
+                            text-transform: capitalize;
+                        }
                     }
                 }
 
