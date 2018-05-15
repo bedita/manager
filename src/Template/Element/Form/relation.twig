@@ -8,13 +8,6 @@
                 <p>{{ __('Empty')}}</p>
             </div>
 
-            <div class="list-header" v-if="hasElementsToShow()">
-                <span class="title">{{ __('title') }}</span>
-                <span class="id">{{ __('id') }}</span>
-                <span class="uname">{{ __('uname') }}</span>
-                <span class="status">{{ __('status') }}</span>
-            </div>
-
             {# staged objects to be added #}
             <div class="added-objects-list">
                 <div style="opacity: 0.7" class="added-related-object" v-for="related in addedRelations">
@@ -28,24 +21,49 @@
             </div>
 
             {# related objects #}
-            <div class="related-objects-list">
-                <staggered-list stagger="15">
-                    <div class="related-object"
-                        v-for="(related, index) in objects"
-                        :data-index="index"
-                        :key="related.id"
-                        :class="containsId(removedRelated, related.id) ? 'deleted' : '' ">
+            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
+                <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                    v-for="(related, index) in objects"
+                    :key="related.id"
+                    v-bind:class="containsId(removedRelated, related.id) ? 'removed' : '' ">
+                    <article class="box has-background-black has-text-gray-100 has-text-size-smaller">
+                        <header>
+                            <h1><: related.attributes.title || related.attributes.name :></h1>
+                            <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                        </header>
 
-                        {# <span class="priority"><: related.meta.relation.priority :></span> #}
-                        <span class="title"><: related.attributes.title || related.attributes.name :></span>
-                        <span class="id"><: related.id :></span>
-                        <span class="uname"><: related.attributes.uname :></span>
-                        <span class="status"><: related.attributes.status :></span>
-                        <a class="open" :href="buildViewUrl(related.type, related.id)" target="_blank">Open</a>
-                        <button v-show="containsId(removedRelated, related.id)" class="add" @click.prevent="reAddRelations(related)">+</button>
-                        <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related)">&times;</button>
-                    </div>
-                </staggered-list>
+                        <div>
+                            <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                            <div class="tag-group">
+                                <span class="tag has-background-gray-500 has-text-gray-800">status</span>
+                                <span class="tag"><: related.attributes.status :></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="has-text-size-smallest"
+                                v-for="(paramValue, paramName) in related.meta.relation.params"><: paramName :>: <: paramValue :></p>
+                        </div>
+
+                        <footer>
+                            {# <button
+                                class="has-background-gray-700 has-text-gray-100"
+                                v-html="!containsId(removedRelated, related.id)? 'remove' : 'undo remove'"
+                                @click.prevent="reAddRelations(related)"></button>
+                            <button v-show="!containsId(removedRelated, related.id)" class="remove" @click.prevent="removeRelations(related)">remove</button> #}
+                            <a class="icon-edit icon-only-icon has-text-size-larger" :href="buildViewUrl(related.type, related.id)" target="_blank"></a>
+                        </footer>
+                    </article>
+
+                    <footer>
+                        <a
+                            class="icon-plus-1 has-text-size-largest"
+                            @click.prevent="relationToggle(related)"></a>
+                    </footer>
+                </div>
+
+                <!-- empty element -->
+                <div class="column"></div>
             </div>
 
             <div v-if="hasElementsToShow()">
@@ -53,10 +71,10 @@
                     <select class="page-size-selector" v-model="step">
                         <option v-for="size in pageSizeOptions"><: size :></option>
                     </select>
-                    <button @click.prevent="firstPage()">{{ __('first') }}</button>
-                    <button @click.prevent="prevPage()">{{ __('prev') }}</button>
-                    <button @click.prevent="nextPage()">{{ __('next') }}</button>
-                    <button @click.prevent="lastPage()">{{ __('last') }}</button>
+                    <button @click.prevent="firstPage()">{{ __('first page') }}</button>
+                    <button @click.prevent="prevPage()">{{ __('previous page') }}</button>
+                    <button @click.prevent="nextPage()">{{ __('next page') }}</button>
+                    <button @click.prevent="lastPage()">{{ __('last page') }}</button>
                 </div>
 
                 <div class="list-actions">
@@ -77,8 +95,8 @@
         </div>
 
         <div class="list-actions">
-            <button @click.prevent="loadRelatedObjects()">{{ __('Reload') }}</button>
-            <button @click.prevent="showRelationshipsModal()">{{ __('Add') }}</button>
+            <button @click.prevent="loadRelatedObjects()">{{ __('reload') }}</button>
+            <button @click.prevent="showRelationshipsModal()">{{ __('add object') }}</button>
         </div>
 
         {# component used to add new relations #}
