@@ -1,18 +1,137 @@
 // simple tag
 .tag:not(body) {
+    display: inline-flex;
+    justify-content: center;
     align-items: center;
+    height: 2em;
+    margin-right: $gutter * .25;
+    margin-bottom: $gutter * .25;
+    padding-left: .75em;
+    padding-right: .75em;
     background-color: $gray-600;
     border-radius: 4px;
     color: $white;
-    display: inline-flex;
     font-size: $font-size-sssm;
-    height: 2em;
-    justify-content: center;
     line-height: 1.5;
-    padding-left: .75em;
-    padding-right: .75em;
     white-space: nowrap;
+    user-select: none;
 }
+.tag-group {
+    align-items: center;
+    display: inline-flex;
+    justify-content: flex-start;
+    .tag {
+        margin-right: 0;
+        &:not(:first-child) {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-right: $gutter * .25;
+        }
+        &:not(:last-child) {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+    }
+}
+
+
+// simple box
+.box {
+    display: block;
+    padding: $gutter * .5;
+    border-radius: 4px;
+    background-color: $gray-200;
+    color: $gray-900;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    overflow: hidden;
+}
+
+// flex columns
+.columns {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -($gutter * .5);
+    margin-right: -($gutter * .5);
+    margin-top: -($gutter * .5);
+}
+
+.column {
+    display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: ($gutter * .5);
+    &.is-1 {
+        flex: none;
+        width: 100%;
+    }
+    &.is-2 {
+        flex: none;
+        width: 50%;
+    }
+    &.is-3 {
+        flex: none;
+        width: 33.33333%;
+    }
+    &.is-4 {
+        flex: none;
+        width: 25%;
+    }
+
+    &.is-one-third-1024 {
+        @media screen and (min-width: 769px) {
+            flex: none;
+            width: 33.33333%;
+        }
+    }
+    &.is-one-quarter-1024 {
+        @media screen and (min-width: 769px) {
+            flex: none;
+            width: 25%;
+        }
+    }
+
+    &.is-one-third-desktop {
+        @media screen and (min-width: 1088px) {
+            flex: none;
+            width: 33.33333%;
+        }
+    }
+    &.is-one-quarter-desktop {
+        @media screen and (min-width: 1088px) {
+            flex: none;
+            width: 25%;
+        }
+    }
+    &.is-one-fifth-desktop {
+        @media screen and (min-width: 1088px) {
+            flex: none;
+            width: 20%;
+        }
+    }
+
+    &.is-one-eight-bigscreen {
+        @media screen and (min-width: 1580px) {
+            flex: none;
+            width: 12.5%;
+        }
+    }
+
+
+    &.is-one-third-768 {
+        @media screen and (max-width: 768px) {
+            flex: none;
+            width: 33.33333%;
+        }
+    }
+    &.is-one-quarter-768 {
+        @media screen and (max-width: 768px) {
+            flex: none;
+            width: 25%;
+        }
+    }
+}
+
 
 // loader
 .is-loading-spinner:after {
