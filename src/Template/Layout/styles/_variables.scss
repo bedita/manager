@@ -10,7 +10,9 @@ $font-family-base:            $font-family-sans-serif !default;
 
 // size
 $font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
-$font-size-lg:                ($font-size-base * 1.25) !default;
+$font-size-lg:                ($font-size-base * 1.125) !default;
+$font-size-llg:               ($font-size-base * 1.25) !default;
+$font-size-lllg:              ($font-size-base * 1.5) !default;
 $font-size-sm:                ($font-size-base * .875) !default;
 $font-size-ssm:               ($font-size-base * .8125) !default;
 $font-size-sssm:              ($font-size-base * .75) !default;
