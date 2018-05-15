@@ -13,6 +13,8 @@
 namespace App\View;
 
 use App\View\Twig\BeditaTwigExtension;
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use WyriHaximus\TwigView\View\TwigView;
 
 /**
@@ -48,5 +50,23 @@ class AppView extends TwigView
 
         $this->getTwig()
             ->addExtension(new BeditaTwigExtension());
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Retrieve custom view `element` from configuration mappings.
+     *
+     * If `Elements.{module_name}.{element_name}` exists in configuration a custom element is loaded
+     */
+    protected function _getElementFileName($name, $pluginCheck = true)
+    {
+        $module = $this->get('currentModule');
+        $custom = Configure::read(sprintf('Elements.%s', Hash::get($module, 'name', '')));
+        if (!empty($custom[$name])) {
+            $name = sprintf('%s.%s', $custom[$name], $name);
+        }
+
+        return parent::_getElementFileName($name, $pluginCheck);
     }
 }
