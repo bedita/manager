@@ -61,7 +61,7 @@ class AppView extends TwigView
      */
     protected function _getElementFileName($name, $pluginCheck = true)
     {
-        $module = $this->get('currentModule');
+        $module = (array)$this->get('currentModule', []);
         $custom = Configure::read(sprintf('Elements.%s', Hash::get($module, 'name', '')));
         if (!empty($custom[$name])) {
             $name = sprintf('%s.%s', $custom[$name], $name);
