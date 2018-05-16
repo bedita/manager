@@ -462,6 +462,25 @@ return [
     ],
 
     /**
+     * Custom view elements configuration.
+     * Load an element from a `Plugin` and not from core App inside a module.
+     *
+     * Example configuration:
+     *
+     * ```
+     *   'documents` => [
+     *     'Form/included' => 'MyPlugin',
+     *  ],
+     * ```
+     * In this example: if current module is `documents` => `Form/included` element is loaded from `MyPlugin` plugin
+     */
+    'Elements' => [
+        // 'documents' => [
+        //     'Form/included' => 'MyPlugin',
+        // ],
+    ],
+
+    /**
      * Additional plugins to load with this format: 'PluginName' => load options array
      * Where options array may contain
      *
