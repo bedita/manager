@@ -40,7 +40,7 @@ class AppViewTest extends TestCase
     }
 
     /**
-     * Test `initialize` method
+     * Test `_getElementFileName` method
      *
      * @return void
      * @covers ::_getElementFileName()
