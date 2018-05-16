@@ -186,6 +186,9 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'draft', 'text' => __('Draft')],
                         ['value' => 'off', 'text' => __('Off')],
                     ],
+                    'templateVars' => [
+                        'containerClass' => 'status',
+                    ],
                 ],
                 // schema type
                 [
@@ -201,8 +204,6 @@ class SchemaHelperTest extends TestCase
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
-                    'v-validate' => 'validate.password',
-                    ':class' => 'validateResult("password")',
                 ],
                 // schema type
                 [
@@ -222,8 +223,6 @@ class SchemaHelperTest extends TestCase
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
-                    'v-validate' => 'validate.confirmPassword',
-                    ':class' => 'validateResult("confirm-password")',
                 ],
                 // schema type
                 [

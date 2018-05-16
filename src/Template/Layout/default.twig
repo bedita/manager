@@ -30,7 +30,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/2.0.9/vee-validate.js"></script>
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.js"></script>
@@ -48,11 +47,15 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-    <main class="layout" v-bind:class="{ 'fadein': vueLoaded }">
+    <main class="layout" v-show="vueLoaded">
 
-        {% if _view.template != 'login' %}
+        {% if _view.name != 'login' %}
+            {% element 'Messages/messages' %}
+        {% endif %}
+
+
+        {% if _view.name == 'Dashboard' and _view.name != 'login' %}
             <aside class="layout-sidebar-primary">
-                {% element 'Messages/messages' %}
                 {% element 'project' %}
             </aside>
         {% endif %}
@@ -70,8 +73,16 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% endif %}
 
         <div class="layout-content">
+            {% element 'Modules/header' %}
             {{ _view.fetch('content')|raw }}
         </div>
+
+        {% if currentModule %}
+            <div class="layout-footer">
+                {{ project.name }}<br>
+                {% element 'Menu/colophon' %}
+            </div>
+        {% endif %}
     </main>
 
     {{ Html.script('config/config')|raw }}
@@ -95,15 +106,15 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('app/components/tree-view/tree-list/tree-list')|raw }}
     {{ Html.script('app/components/tree-view/tree-view')|raw }}
 
-    {# Modules Page #}
+    {# Vue Modules Page #}
     {{ Html.script('app/pages/modules/view')|raw }}
     {{ Html.script('app/pages/modules/index')|raw }}
 
-    {# Trash Page #}
+    {# Vue Trash Page #}
     {{ Html.script('app/pages/trash/view')|raw }}
     {{ Html.script('app/pages/trash/index')|raw }}
 
-    {# Main App #}
+    {# VueMain App #}
     {{ Html.script('app/app')|raw }}
 
 </body>

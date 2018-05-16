@@ -1,49 +1,41 @@
 //  TUTTO DA FARE MA PRIMA L'HTML
 
-input[type=submit],
-input[type=text],
-input[type=email],
-input[type=tel],
-input[type=password],
+#{$text-inputs} ,
+#{$button-inputs},
 button {
-    height: 2rem;
     padding: 0 .5em;
     min-width: 5rem;
-    border-radius: 2px;
+    height: 2rem;
     border: none;
-    // border: 1px solid $gray-500;
+    border-radius: 2px;
+    background-color: $gray-100;
+    font-family: $font-family-sans-serif;
+    line-height: 1.5em;
+    user-select: none;
+
+    &[class^="icon-"] {
+        min-width: auto;
+        height: auto;
+        padding: 0;
+    }
+
+    &:focus {
+        outline: none;
+    }
 }
+
 
 textarea {
     padding: .25em .5em;
     min-width: 5rem;
     border-radius: 2px;
     border: none;
-}
-
-input[type=text],
-input[type=email],
-input[type=tel],
-input[type=password],
-textarea {
     font-family: $font-family-sans-serif;
-    line-height: 1.5em;
-
 }
 
-input[type=submit] {
-    // background-color: #F2F2F2;
-    // line-height: 1.2em;
-    // color: #333;
-    // border-radius: .75em;
-    // border: 1px solid #BBB;
-    // cursor: pointer;
-    // padding: .15em .5em;
-    // text-decoration: none;
-    // text-transform: uppercase;
-}
-input[type=submit]:hover, button:hover {
-    background-color: #666;
+#{$button-inputs-hover},
+button:hover {
+    background-color: $gray-600;
     color: #FFF;
     outline: 0;
     cursor: pointer;
@@ -56,24 +48,37 @@ label {
     }
 }
 
+
+form .fieldset,
 form fieldset {
-
-    textarea, input, span {
-        &.valid-field {
-            border: 1px solid palegreen;
-        }
-        &.has-error {
+    padding: 0;
+    textarea, input {
+        &.error {
             background-color: red;
-
-            &.need-confirmation {
-                background-color: peru;
-                // border: 1px solid peru;
-            }
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
                 color: white;
                 opacity: 1; /* Firefox */
             }
         }
+    }
+}
+
+div {
+    &[message-tooltip] {
+        position:relative;
+    }
+    &[message-tooltip]:after {
+        content: attr(message-tooltip);
+        position: absolute;
+        // left: 0px;
+        padding: 5px 8px;
+        background: red;
+        z-index: 9;
+        height: 32px;
+        border-radius: 3px;
+        white-space: nowrap;
+        word-wrap: normal;
+        margin-left: 15px;
     }
 }

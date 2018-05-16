@@ -1,0 +1,85 @@
+// header.twig
+.layout-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 110px;
+
+
+    ul[role="menu"] {
+        display: flex;
+        list-style: none;
+        margin: 0 0 $gutter * 3 $gutter * .5;
+        padding: 0;
+
+        > li {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            margin-right: 1px;
+            background-color: $gray-600;
+            @media screen and (min-width: 780px) {
+                width: 38px;
+                height: 38px;
+            }
+
+            &:first-child {
+                background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTUwLjQgMTIxLjkiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDE1MC40IDEyMS45OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4uc3Qwe2ZpbGw6IzAxMDEwMTt9PC9zdHlsZT48Zz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjgsMTA3LjZjLTQuNS01LTYuOC0xMi4zLTYuOC0yMmMwLTcuMiwyLjQtMTMuMSw3LjMtMTcuOGM0LjgtNC42LDExLjgtNywyMC43LTdjMy43LDAsNi44LDAsOS4zLDAuMWMyLjUsMC4xLDQuNCwwLjIsNS43LDAuMnY0Mi45YzAsMy42LTEuNSw2LjMtNC40LDguMmMtMi45LDEuOC03LDIuNy0xMi4yLDIuN0MzOS4xLDExNS4xLDMyLjUsMTEyLjYsMjgsMTA3LjYgTTMzLjEsNDYuN2MtMi4xLTIuNS0zLjYtNS4yLTQuNC04LjFjLTAuOC0yLjktMS4yLTYuNC0xLjItMTAuNGMwLTYuNywxLjgtMTIsNS41LTE1LjhjMy43LTMuOCw5LjQtNS43LDE3LjMtNS43YzAuMiwwLDAuNSwwLDAuNywwYzUuNCwwLDguMiwxLjcsOS45LDMuMmMxLjQsMS4zLDMuMywzLjQsMy4zLDkuNXYzNC41SDUzLjNjLTQuNywwLTguNy0wLjYtMTItMS44QzM3LjksNTAuOSwzNS4yLDQ5LjEsMzMuMSw0Ni43IE0xNDQuMiw4NmMtMC44LDIuNi0yLjcsNi43LTUuNSwxMi4zYy0yLjksNS42LTUuNyw5LjctOC4zLDEyLjVjLTEsMS0yLjYsMS44LTQuOSwyLjRjLTIuMywwLjYtNC42LDEtNi43LDEuMmMtMi4xLDAuMi00LjcsMC4zLTcuOCwwLjNoLTcuNWMtNC44LDAtOC40LTAuMi0xMS0wLjVjLTIuNi0wLjMtNC42LTEtNi4xLTIuMWMtMS41LTEuMS0yLjUtMi43LTMtNC44Yy0wLjUtMi4xLTAuOC01LTAuOC04LjdWNjIuM2gxMy43YzMuNywwLDYuNywwLjMsOSwxYzIuMywwLjcsNC4zLDIuMSw2LjEsNC40YzEuMSwxLjQsMi4xLDMuNiwzLjEsNi43YzEsMy4xLDEuNiw2LDEuOCw4LjdoNi40VjM1LjNoLTYuNGMtMC4zLDIuNS0wLjksNS4xLTEuOCw3LjljLTAuOSwyLjgtMiw1LTMuMiw2LjdjLTEuNSwxLjktMy4zLDMuMy01LjQsNC4yYy0yLDAuOC01LjMsMS4yLTkuNywxLjJIODIuNVY2LjhoMTkuMmMzLjIsMCw2LDAuMSw4LjQsMC4yYzIuNSwwLjEsNC42LDAuMyw2LjQsMC41YzMuNCwwLjUsNy4xLDMuMSwxMC45LDhjMy44LDQuOSw2LjMsOS41LDcuNCwxMy45aDYuNFYwaC05OWMtNC40LDAtOC41LDAuNC0xMi41LDEuM2MtNCwwLjktNy44LDIuNC0xMS40LDQuNmMtMy40LDItNi4yLDQuNy04LjMsOC4yYy0yLjIsMy40LTMuMyw3LjYtMy4zLDEyLjVjMCw0LjMsMC44LDguMSwyLjMsMTEuNWMxLjUsMy40LDMuNyw2LjIsNi41LDguNmMyLjYsMi4zLDUuNyw0LjIsOS4xLDUuOGMzLjQsMS42LDcuMSwyLjgsMTEsMy43djAuOGMtMy41LDAuNC03LjQsMS4zLTExLjcsMi42Yy00LjMsMS4zLTguMiwzLjItMTEuNiw1LjZjLTMuNiwyLjQtNi41LDUuNi04LjgsOS40QzEuMiw3OC41LDAsODMuMiwwLDg4LjdjMCw1LjcsMS4yLDEwLjYsMy43LDE0LjhjMi41LDQuMiw1LjcsNy42LDkuNiwxMC4zYzMuOCwyLjYsOC4yLDQuNiwxMyw2YzQuOCwxLjQsOS44LDIuMSwxNSwyLjFoMTA2LjdsMi4zLTM1LjlIMTQ0LjJ6Ii8+PC9nPjwvc3ZnPg==");
+                background-color: $white;
+                background-size: 60%;
+                background-repeat: no-repeat;
+                background-position: 4px 5px;
+            }
+
+            &.current a:after {
+                content: '\00a0 ';
+                display: block;
+                position: absolute;
+                width: 100%; height: 6px;
+                bottom: 0;
+                left: 0;
+                background-color: $white;
+                opacity: .3;
+                @media screen and (max-width: 780px) {
+                    width: 6px; height: 6px;
+                    top: 50%; margin-top: -3px;
+                    left: 50%; margin-left: -3px;
+                }
+            }
+
+            &.trash {
+                font-size: 12px;
+            }
+
+            a {
+                position: relative;
+                display: block;
+                width: 100%;
+                height: 100%;
+                line-height: 1;
+                padding: 4px 6px;
+
+                @media screen and (max-width: 780px) {
+                    @include hide-text;
+                }
+
+                &:hover:before {
+                    position: absolute;
+                    content: attr(title);
+                    top: 24px;
+                    left: 0;
+                    z-index: 1;
+                    text-indent: initial;
+
+                    white-space: nowrap;
+                    font: .75rem $font-family-sans-serif;
+                    color: $gray-200;
+
+                    @media screen and (min-width: 780px) {
+                        top: 42px;
+                    }
+                }
+            }
+        }
+    }
+}

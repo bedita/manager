@@ -18,9 +18,11 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/base';
 @import './styles/layout';      // main grid base layout
 @import './styles/forms';
+@import './styles/utility';
 
 // elements
 @import '../Element/elements';
+@import '../Element/header';
 @import '../Element/Messages/messages';
 @import '../Element/Toolbar/filters';
 @import '../Element/Toolbar/pagination';
@@ -30,7 +32,5 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Pages/Error/error';
 @import '../Pages/Login/login';
 @import '../Pages/Dashboard/dashboard';
-@import '../Pages/Modules/modules';
-
-// TODO: organize and move to ../Modules/modules
-@import './styles/modules';
+@import '../Pages/Modules/modules-index';
+@import '../Pages/Modules/modules-view';

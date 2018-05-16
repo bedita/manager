@@ -23,4 +23,6 @@
         <img src={{ thumb }} />
     {% endif %}
 
+{% elseif object.type == 'files' %}
+    <span class="icon icon-doc"></span>
 {% endif %}

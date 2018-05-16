@@ -87,8 +87,9 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                     ],
                     'publish' => [
-                        'status' => 'on',
                         'uname' => 'an-object',
+                        'status' => 'on',
+                        'publish_start' => null,
                     ],
                     'advanced' => [
                     ],
@@ -100,6 +101,7 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                         'status' => 'on',
                         'uname' => 'an-object',
+                        'publish_start' => null,
                     ],
                 ],
                 'foos',
@@ -110,8 +112,8 @@ class PropertiesComponentTest extends TestCase
                         'something' => '',
                     ],
                     'publish' => [
-                        'status' => 'on',
                         'uname' => 'test',
+                        'status' => 'on',
                     ],
                     'advanced' => [
                     ],
@@ -140,8 +142,8 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                     ],
                     'publish' => [
-                        'status' => 'draft',
                         'uname' => 'test',
+                        'status' => 'draft',
                     ],
                     'advanced' => [
                         'json_field' => 'json',
@@ -166,6 +168,41 @@ class PropertiesComponentTest extends TestCase
                     ],
                     'advanced' => [
                         'json_field',
+                    ],
+                ]
+            ],
+            'new order' => [
+                [
+                    'core' => [
+                        'description' => null,
+                        'title' => 'A',
+                    ],
+                    'publish' => [
+                        'uname' => 'test',
+                        'status' => 'on',
+                    ],
+                    'advanced' => [
+                    ],
+                    'other' => [
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'title' => 'A',
+                        'description' => null,
+                        'status' => 'on',
+                        'uname' => 'test',
+                    ],
+                ],
+                'gifts',
+                [
+                    'core' => [
+                        'description',
+                        'title',
+                    ],
+                    'publish' => [
+                        'uname',
+                        'status',
                     ],
                 ]
             ],
