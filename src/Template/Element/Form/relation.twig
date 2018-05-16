@@ -37,7 +37,7 @@
 
                         <div class="thumbnail">
                             <figure>
-                                <img />
+                                <img src="https://source.unsplash.com/random" />
                             </figure>
                         </div>
 
@@ -66,9 +66,10 @@
                     </footer>
                 </div>
 
-                <!-- empty element -->
+                {# empty element: keep for flex layout #}
                 <div class="column"></div>
             </div>
+
 
             {# staged objects to be added #}
             <div class="related-objects-list columns" v-if="addedRelations.length">
@@ -104,7 +105,7 @@
                     </article>
                 </div>
 
-                <!-- empty element -->
+                {# empty element: keep for flex layout #}
                 <div class="column"></div>
             </div>
 
@@ -125,10 +126,6 @@
             <button class="icon-plus-1" @click.prevent="showRelationshipsModal()">{{ __('add objects') }}</button>
             <button @click.prevent="loadRelatedObjects()">{{ __('reload') }}</button>
         </div>
-
-
-        {# component used to add new relations #}
-        {% element 'Form/relation_add' {'relationName': relationName} %}
 
     </div>
 </relation-view>
