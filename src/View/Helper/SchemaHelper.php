@@ -174,7 +174,8 @@ class SchemaHelper extends Helper
             if (!empty($schema['oneOf'])) {
                 foreach ($schema['oneOf'] as $one) {
                     if (!empty($one['enum'])) {
-                        $schema['enum'] = ['-1' => ''] + $one['enum'];
+                        $schema['enum'] = $one['enum'];
+                        array_unshift($schema['enum'], '');
                     }
                 }
             }

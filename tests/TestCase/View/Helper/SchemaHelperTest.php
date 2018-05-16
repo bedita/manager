@@ -327,6 +327,34 @@ class SchemaHelperTest extends TestCase
                 'enum',
                 'good',
             ],
+            'enum nullable' => [
+                // expected result
+                [
+                    'type' => 'select',
+                    'options' => [
+                        ['value' => '', 'text' => ''],
+                        ['value' => 'good', 'text' => 'Good'],
+                        ['value' => 'bad', 'text' => 'Bad'],
+                    ],
+                ],
+                // schema type
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'enum' => [
+                                'good',
+                                'bad',
+                            ],
+                        ],
+                    ],
+                ],
+                'enum',
+                'good',
+            ],
             'checkbox' => [
                 // expected result
                 [
