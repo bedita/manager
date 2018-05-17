@@ -9,11 +9,12 @@
 
         <div class="relation">
 
-            <property-view inline-template :tab-open="tabsOpen">
+            <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>{{ relationName|humanize|lower }}<span class="has-text-size-base"
+                        {# TODO: conta tutti gli oggetti #}
+                        <h2>{{ relationName|humanize|lower }}<span class="small-notification"
                                                                 v-bind:class="!count? 'empty' : ''"
                                                                 v-show:class="!isLoading" style="display: none"><: count :></span></h2>
                     </header>

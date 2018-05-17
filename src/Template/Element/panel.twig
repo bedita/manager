@@ -1,0 +1,61 @@
+<aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
+    <section class="fieldset main-panel-body">
+
+
+        {# add relation component #}
+        <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+            <div class="relations-add">
+                <header class="tab unselectable" v-bind:class="!objects.length && relationName? 'is-loading-spinner' : ''">
+                    <h2><span v-show="relationName">add to <: relationHumanizedName :></span> &nbsp;</h2>
+                    <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
+                </header>
+
+                {# <nav>filter</nav> #}
+
+                {# staged objects to be added #}
+                <div class="related-objects-list columns">
+                    <div class="related-object column is-3"
+                        v-for="related in objects">
+                        <article class="box has-text-gray-100 has-text-size-smaller"
+                                v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
+                                               alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
+                                @click.prevent="toggle(related, $event)">
+
+                            <header>
+                                <h1><: related.attributes.title || related.attributes.name :></h1>
+                                <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                            </header>
+
+                            <div class="thumbnail">
+                                <figure>
+                                    <img />
+                                </figure>
+                            </div>
+
+                            <div>
+                                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                            </div>
+
+                            <footer>
+                                <a>open</a>
+                            </footer>
+                        </article>
+                    </div>
+
+                    {# empty element: keep for flex layout #}
+                    <div class="column"></div>
+                </div>
+
+                <footer>
+                    <p>
+                        <button :disabled="!selectedObjects.length"
+                            @click.prevent="returnData()">Add objects to <: relationHumanizedName :></button>
+                    </p>
+                </footer>
+
+            </div>
+        </relations-add inline-template>
+
+
+    </section>
+</aside>

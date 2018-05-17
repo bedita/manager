@@ -60,49 +60,8 @@ body.view-module {
 
                 .tab-container {
                     margin-bottom: $gutter * 3;
-                }
-
-                .tab {
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: $gutter;
-                    padding: .25rem .5rem;
-                    background-color: $gray-800;
-                    color: $gray-500;
-                    border-radius: 3px;
-                    cursor: pointer;
-
-                    &.is-loading-spinner {
-                        button {
-                            display: none;
-                        }
-                    }
-
-                    h2 {
-                        flex-grow: 1;
-                        margin: 0; padding: 0;
-                        font-size: 1.25rem;
-                        &:first-letter {
-                            text-transform: capitalize;
-                        }
-
-                        span {
-                            display: inline-block;
-                            position: relative;
-                            top: 2px;
-                            left: 8px;
-                            background-color: $black;
-                            border-radius: 50%;
-                            width: $gutter;
-                            text-align: center;
-                            height: $gutter;
-                            font-size: $font-size-sssm;
-                            line-height: $gutter;
-                            overflow: hidden;
-                            &.empty {
-                                opacity: .3;
-                            }
-                        }
+                    .tab {
+                        cursor: pointer;
                     }
                 }
 
@@ -174,6 +133,31 @@ body.view-module {
         section.relations {
             width: 100%;
             margin-top: $gutter * 3;
+        }
+    }
+}
+
+.fieldset .tab {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter;
+    padding: .25rem .5rem;
+    background-color: $gray-800;
+    color: $gray-500;
+    border-radius: 3px;
+
+    &.is-loading-spinner {
+        button {
+            display: none;
+        }
+    }
+
+    h2 {
+        flex-grow: 1;
+        margin: 0; padding: 0;
+        font-size: 1.25rem;
+        &:first-letter {
+            text-transform: capitalize;
         }
     }
 }

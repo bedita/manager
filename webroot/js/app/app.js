@@ -11,6 +11,8 @@ window._vueInstance = new Vue({
             pageSize: '100',
             page: '',
             sort: '',
+            panelIsOpen: false,
+            addRelation: {},
         }
     },
 
@@ -22,6 +24,28 @@ window._vueInstance = new Vue({
     },
 
     methods: {
+        // panel
+        onRequestPanelToggle(evt) {
+            this.panelIsOpen = !this.panelIsOpen;
+
+            // return data from panel
+            if(evt.returnData) {
+                if(evt.returnData.relationName){
+                    this.$refs["moduleView"]
+                        .$refs[evt.returnData.relationName]
+                        .$refs["relation"].appendRelations(evt.returnData.objects);
+                }
+            }
+
+            // open panel for relations add
+            if(this.panelIsOpen && evt.relation && evt.relation.name) {
+                this.addRelation = evt.relation;
+            } else {
+                sleep(500).then(() => this.addRelation = {}); // 500ms is the panel transition duration
+            }
+        },
+
+
         /**
          * extract params from page url
          *
@@ -149,5 +173,24 @@ window._vueInstance = new Vue({
 // helper functions
 async function sleep(t) {
     return new Promise(resolve => setTimeout(resolve, t));
+}
+
+function humanize(s) {
+    if(!s) {
+        return '';
+    }
+
+    // decamelize (credits: https://github.com/sindresorhus/decamelize)
+    var separator = '_';
+    var regex1 = XRegExp('([\\p{Ll}\\d])(\\p{Lu})', 'g');
+    var regex2 = XRegExp('(\\p{Lu}+)(\\p{Lu}[\\p{Ll}\\d]+)', 'g');
+    s = s.replace(regex1, `$1${separator}$2`)
+    .replace(regex2, `$1${separator}$2`)
+    .toLowerCase();
+
+    // humanize (credits: https://github.com/sindresorhus/decamelize)
+    s = s.toLowerCase().replace(/[_-]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+    s = s.charAt(0).toUpperCase() + s.slice(1);
+    return s;
 }
 

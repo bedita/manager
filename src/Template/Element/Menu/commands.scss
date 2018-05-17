@@ -1,5 +1,5 @@
 .commands-menu {
-    position: sticky;
+    position: fixed;
     top: $gutter;
     width: 90px;
     margin-right: $gutter;
@@ -91,4 +91,8 @@
     //         margin: 0;
     //     }
     // }
+}
+
+.commands-menu ~ div {
+    min-width: 90px + $gutter;
 }

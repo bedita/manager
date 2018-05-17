@@ -61,12 +61,21 @@ div, section {
 }
 
 // helper classes
+.full-size-absolute { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 !important; }
 .unselectable {
     user-select: none;
 }
 
-.hide-text {
+.is-text-hidden {
     @include hide-text();
+}
+
+.is-clipped {
+    overflow: hidden!important;
+}
+
+.is-expanded {
+    width: 100%;
 }
 
 .center-icon {
@@ -86,6 +95,7 @@ div, section {
         margin-right: 0 !important;
     }
 }
+
 
 // typography
 .has-text-size-base     { font-size: $font-size-base; }

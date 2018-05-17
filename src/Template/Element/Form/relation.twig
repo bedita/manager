@@ -1,4 +1,5 @@
 <relation-view inline-template relation-name={{ relationName }}
+    ref="relation"
     :load-on-start="true" @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view">
@@ -35,7 +36,7 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail">
+                        <div class="thumbnail" v-if="related.type == 'images'">
                             <figure>
                                 <img src="https://source.unsplash.com/random" />
                             </figure>
@@ -73,11 +74,12 @@
 
             {# staged objects to be added #}
             <div class="related-objects-list columns" v-if="addedRelations.length">
+                <p class="column is-1 has-text-size-smallest">new relations (save to keep)</p>
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="related in addedRelations"
                     :key="related.id"
                     v-bind:class="containsId(removedRelated, related.id) ? 'removed' : '' ">
-                    <article class="box has-background-light-danger has-text-gray-100 has-text-size-smaller"
+                    <article class="box has-background-gray-700 has-text-gray-100 has-text-size-smaller"
                             v-bind:class="related.type">
 
                         <header>
@@ -111,7 +113,6 @@
 
 
 
-
             {# hidden field - relations serialized json #}
             {{ Form.control(relationName ~ 'removeRelated', {
                 'type': 'hidden',
@@ -119,11 +120,22 @@
                 'v-model': 'relationsData'
             })|raw }}
             {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+
+            {# Relations serialized json form element #}
+            {{ Form.control(relationName ~ 'addRelated', {
+                'type': 'hidden',
+                'name': 'relations[' ~ relationName ~ '][addRelated]',
+                'v-model': 'newRelationsData'
+            })|raw }}
+            {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
         </div>
 
 
         <div class="list-actions">
-            <button class="icon-plus-1" @click.prevent="showRelationshipsModal()">{{ __('add objects') }}</button>
+            <button
+                v-bind:class="$root.panelIsOpen? 'icon-coffee' : 'icon-hdd'"
+                v-html="$root.panelIsOpen? 'cancel' : '{{ __('add objects') }}'"
+                @click.prevent="requestPanel()"></button>
             <button @click.prevent="loadRelatedObjects()">{{ __('reload') }}</button>
         </div>
 

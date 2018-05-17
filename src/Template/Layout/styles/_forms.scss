@@ -53,6 +53,11 @@ button, a.button {
         border: 1px solid $gray-600;
     }
 
+    &:disabled {
+        color: $gray-700;
+        background-color: $gray-500;
+        pointer-events: none;
+    }
     // &[class^="icon-"] {
     //     min-width: auto;
     //     height: auto;
@@ -67,6 +72,11 @@ button, a.button {
     &.is-dark {
         background-color: $gray-700;
         color: $gray-300;
+    }
+
+    &.is-larger {
+        padding-left: 3em;
+        padding-right: 3em;
     }
 }
 

@@ -38,8 +38,10 @@ Vue.component('relation-view', {
 
             removedRelated: [],             // currently related objects to be removed
             addedRelations: [],             // staged added objects to be saved
-            hideRelations: [],              // hide already added relations in relationships-view
+            hideRelations: [],              // hide already added relations in add-relations-view
             relationsData: [],              // hidden field containing serialized json passed on form submit
+            newRelationsData: [],           // array of serialized new relations
+
 
             step: DEFAULT_PAGINATION.page_size,     // step value for pagination page size
 
@@ -49,6 +51,15 @@ Vue.component('relation-view', {
                 50,
                 100,
             ]
+        }
+    },
+
+    computed: {
+        // array of ids of objects in view
+        alreadyInView() {
+            var a = this.addedRelations.map(o => o.id);
+            var b = this.objects.map(o => o.id);
+            return a.concat(b);
         }
     },
 
@@ -272,8 +283,18 @@ Vue.component('relation-view', {
          *
          * @return {void}
          */
-        appendRelations(relations) {
-            this.addedRelations = relations;
+        appendRelations(items) {
+            if (!this.addedRelations.length) {
+                this.addedRelations = items;
+            } else {
+                var existingIds = this.addedRelations.map(a => a.id);
+                for (var i = 0; i < items.length; i++) {
+                    if (existingIds.indexOf(items[i].id) < 0) {
+                        this.addedRelations.push(items[i]);
+                    }
+                }
+            }
+            this.newRelationsData = JSON.stringify(this.addedRelations);
         },
 
         /**
@@ -328,6 +349,25 @@ Vue.component('relation-view', {
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
+
+
+
+
+
+
+
+
+
+
+        requestPanel() {
+            // emit event in module view
+            this.$parent.$parent.$emit('request-panel', {
+                relation: {
+                    name: this.relationName,
+                    alreadyInView: this.alreadyInView,
+                },
+            });
+        }
     }
 
 });

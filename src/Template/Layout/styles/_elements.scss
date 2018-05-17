@@ -133,6 +133,26 @@
 }
 
 
+// small circled notification
+.small-notification {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    left: 8px;
+    background-color: $black;
+    border-radius: 50%;
+    width: $gutter;
+    text-align: center;
+    height: $gutter;
+    font-size: $font-size-sssm;
+    line-height: $gutter;
+    overflow: hidden;
+    &.empty {
+        opacity: .3;
+    }
+}
+
+
 // loader
 .is-loading-spinner:after {
     animation: spinAround .5s infinite linear;
