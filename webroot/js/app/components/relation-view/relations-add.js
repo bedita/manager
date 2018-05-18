@@ -27,9 +27,11 @@ Vue.component('relations-add', {
         relationName: {
             immediate: true,
             handler(newVal, oldVal) {
-                this.selectedObjects = [];
-                this.endpoint = `${this.method}/${newVal}`;
-                this.loadObjects();
+                if(newVal) {
+                    this.selectedObjects = [];
+                    this.endpoint = `${this.method}/${newVal}`;
+                    this.loadObjects();
+                }
             },
         }
     },
