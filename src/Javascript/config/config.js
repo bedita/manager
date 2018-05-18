@@ -1,13 +1,21 @@
 // Vue configs...
 
-Vue.config.devtools = true;
+export const VueConfig = {
+    devtools: true,
+}
+
+export const VueOptions = {
+    delimiters: ['<:', ':>'],
+}
+
+// Vue.config.devtools = true;
 
 // Custom delimiters, avoid `visual` conflict with Twig {{ }} and {% %}
-Vue.options.delimiters = ['<:', ':>']
+// Vue.options.delimiters = ['<:', ':>'];
 
 // CKeditor configs...
 
-var ckeditorConfig = {
+export const CkeditorConfig = {
     configFull: {
         toolbar: [
             { name: 'document', groups: [ 'mode' ], items: [ 'Source'] },

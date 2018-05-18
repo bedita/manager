@@ -13,7 +13,13 @@
  *
  */
 
-Vue.component('property-view', {
+import RelationView from 'app/components/relation-view/relation-view';
+
+export default {
+    components: {
+        RelationView,
+    },
+
     props: {
         tabOpen: {
             type: Boolean,
@@ -42,5 +48,4 @@ Vue.component('property-view', {
             this.isLoading = status;
         }
     }
-
-});
+}

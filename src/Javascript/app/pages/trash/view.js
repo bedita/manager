@@ -7,10 +7,11 @@
  * @extends ModulesView
  */
 
-const ModulesView = Vue.options.components["modules-view"];
+import ModulesIndex from 'app/pages/modules/index';
 
-Vue.component('trash-view', {
+
+export default {
     extends: ModulesView,
-});
+}
 
 

@@ -4,14 +4,14 @@
  *
  */
 
-const DEFAULT_PAGINATION = {
+export const DEFAULT_PAGINATION = {
     count: 1,
     page: 1,
     page_size: 20,
     page_count: 1,
 }
 
-let PaginatedContentMixin = {
+export const PaginatedContentMixin = {
     data() {
         return {
             objects: [],
@@ -205,7 +205,3 @@ let PaginatedContentMixin = {
         },
     }
 }
-
-;(function(root) {
-    root.PaginatedContentMixin = PaginatedContentMixin;
-}(this));

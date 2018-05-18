@@ -10,10 +10,14 @@
  *
  */
 
-const RelationshipsView = Vue.options.components["relationships-view"];
+import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
+import TreeList from 'app/components/tree-view/tree-list/tree-list';
 
-Vue.component('tree-view', {
+export default {
     extends: RelationshipsView,
+    components: {
+        TreeList
+    },
 
     props: {
         relatedObjects: {
@@ -93,7 +97,7 @@ Vue.component('tree-view', {
         async loadTree() {
             if (this.loadOnStart) {
                 var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 1;
-                await sleep(t);
+                // await sleep(t);
                 await this.loadObjects();
                 this.jsonTree = {
                     name: 'Root',
@@ -259,4 +263,4 @@ Vue.component('tree-view', {
             }).length ? true : false;
         },
     }
-});
+}

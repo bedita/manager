@@ -1,7 +1,45 @@
+import Vue from 'vue/dist/vue.min.js';
+
+import 'Template/Layout/style.scss';
+
+import ModulesIndex from 'app/pages/modules/index';
+import ModulesView from 'app/pages/modules/view';
+import TrashIndex from 'app/pages/modules/index';
+import TrashView from 'app/pages/modules/view';
+
+import datepicker from 'app/directives/datepicker';
+import jsoneditor from 'app/directives/jsoneditor';
+import richeditor from 'app/directives/richeditor';
+import VueHotkey from 'v-hotkey';
+
+Vue.use(jsoneditor);
+Vue.use(datepicker);
+Vue.use(richeditor);
 Vue.use(VueHotkey);
+
+import { VueConfig, VueOptions } from 'config/config';
+
+for (let property in VueConfig) {
+    if (VueConfig.hasOwnProperty(property)) {
+        Vue.config[property] = VueConfig[property];
+    }
+}
+
+for (let property in VueOptions) {
+    if (VueOptions.hasOwnProperty(property)) {
+        Vue.options[property] = VueOptions[property];
+    }
+}
 
 window._vueInstance = new Vue({
     el: 'main',
+
+    components: {
+        ModulesIndex,
+        ModulesView,
+        TrashIndex,
+        TrashView,
+    },
 
     data() {
         return {

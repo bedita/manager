@@ -8,7 +8,7 @@
 
 const NAME = 'staggered';
 
-Vue.component('staggered-list', {
+export default {
     template: `
         <transition-group appear
             name="${NAME}"
@@ -51,4 +51,4 @@ Vue.component('staggered-list', {
             return el.dataset && el.dataset.index * this.stagger + 5;
         }
     }
-});
+}

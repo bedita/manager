@@ -6,7 +6,14 @@
  *
  */
 
-Vue.component('modules-view', {
+import PropertyView from 'app/components/property-view/property-view';
+import RelationView from 'app/components/relation-view/relation-view';
+
+export default {
+    components: {
+        PropertyView,
+        RelationView,
+    },
 
     /**
      * component properties
@@ -24,7 +31,7 @@ Vue.component('modules-view', {
             return {
                 'esc': {
                     keyup: this.toggleTabs,
-                }
+                },
             }
         }
     },
@@ -34,6 +41,6 @@ Vue.component('modules-view', {
             return this.tabsOpen = !this.tabsOpen;
         }
     }
-});
+}
 
 

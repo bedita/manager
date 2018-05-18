@@ -16,7 +16,7 @@
  *
  */
 
-Vue.component('tree-list', {
+export default {
     name: 'tree-list',
 
     template: `
@@ -310,4 +310,4 @@ Vue.component('tree-list', {
             this.stageRelated = !this.stageRelated;
         }
     }
-});
+}

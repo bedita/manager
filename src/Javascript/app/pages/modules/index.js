@@ -8,8 +8,9 @@
  * <modules-index> component used for ModulesPage -> Index
  *
  */
-Vue.component('modules-index', {
+// Vue.component('modules-index', {
 
+export default {
     /**
      * Component properties
      *
@@ -145,6 +146,6 @@ Vue.component('modules-index', {
             }
         }
     }
-});
+}
 
 
