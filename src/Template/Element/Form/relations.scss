@@ -30,7 +30,7 @@
         }
     }
 
-    main.panel-is-open & {
+    main.panel-is-open .module-form & {
         cursor: auto;
         pointer-events: none;
     }
