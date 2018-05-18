@@ -16,9 +16,6 @@
     },
     "homepage": "https://github.com/bedita/web#README",
     "scripts": {
-        "startg": "gulp dev",
-        "watch": "gulp watch",
-        "start": "webpack-dev-server --config ./webpack.config.js",
         "build": "webpack --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development"
