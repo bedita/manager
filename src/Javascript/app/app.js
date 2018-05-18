@@ -19,6 +19,7 @@ Vue.use(VueHotkey);
 
 import { VueConfig, VueOptions } from 'config/config';
 
+// merge vue options, config from configuration file
 for (let property in VueConfig) {
     if (VueConfig.hasOwnProperty(property)) {
         Vue.config[property] = VueConfig[property];
@@ -31,7 +32,7 @@ for (let property in VueOptions) {
     }
 }
 
-window._vueInstance = new Vue({
+const _vueInstance = new Vue({
     el: 'main',
 
     components: {
@@ -183,6 +184,8 @@ window._vueInstance = new Vue({
         },
     }
 });
+
+window._vueInstance = _vueInstance;
 
 // helper functions
 async function sleep(t) {
