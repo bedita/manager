@@ -29,13 +29,9 @@ Vue.component('modules-index', {
      */
     data() {
         return {
-            isAllChecked: false,
-            all: [],
-            checked: [],
-            exportids: [],
-            statusids: [],
+            allIds: [],
             trashids: [],
-            restoreids: [], // used in trash
+            selectedRows: [],
             status: '',
         };
     },
@@ -45,34 +41,20 @@ Vue.component('modules-index', {
      */
     created() {
         try {
-            this.all = JSON.parse(this.ids);
-            this.all = this.all.map(Number);
+            this.allIds = JSON.parse(this.ids);
+            // this.allIds = this.allIds.map(Number);
         } catch(error) {
             console.error(error);
         }
     },
 
-    /**
-     * watched vars handlers
-     */
-    watch: {
-        /**
-         * Checked checkboxes change handler.
-         * If necessary, set isAllChecked.
-         *
-         * @return {void}
-         */
-        checked() {
-            if (!this.isAllChecked && (this.all.length === this.checked.length)) {
-                this.isAllChecked = true;
-            } else if (this.isAllChecked && (this.all.length > this.checked.length)) {
-                this.isAllChecked = false;
-            }
-            this.exportids = this.checked;
-            this.statusids = this.checked;
-            this.trashids = this.checked;
-            this.restoreids = this.checked;
+    computed: {
+        selectedIds() {
+            return JSON.stringify(this.selectedRows);
         },
+        allChecked() {
+            return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
+        }
     },
 
     /**
@@ -84,64 +66,77 @@ Vue.component('modules-index', {
          *
          * @return {void}
          */
+        toggleAll() {
+            console.log(this.allChecked);
+            if (this.allChecked) {
+                this.unCheckAll();
+            } else {
+                this.checkAll();
+            }
+        },
         checkAll() {
-            this.isAllChecked = !this.isAllChecked;
-            this.checked = (this.isAllChecked) ? this.all : [];
-            this.exportids = this.checked;
+            this.selectedRows = JSON.parse(JSON.stringify(this.allIds));
+        },
+        unCheckAll() {
+            this.selectedRows = [];
         },
 
         /**
-         * Submit bulk export form, if at least one item is checked
+         * Submit bulk export form
          *
          * @return {void}
          */
         exportSelected() {
-            if (this.checked.length < 1) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
             document.getElementById('form-export').submit();
         },
 
         /**
-         * Submit bulk change status form, if at least one item is checked and status is not empty
+         * Submit bulk change status form
          *
          * @return {void}
          */
-        changeStatus() {
-            if (this.statusids.length < 1 || !this.status) {
+        setStatus(status, evt) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
-            document.getElementById('form-status').submit();
+            this.status = status;
+            this.$nextTick( () => {
+                document.getElementById('form-status').submit();
+            });
         },
 
         /**
-         * Submit bulk delete form, if at least one item is checked
+         * Submit bulk trash form
          *
          * @return {void}
          */
         trash() {
-            if (this.trashids.length < 1) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
-            document.getElementById('form-delete').submit();
+            if (confirm('Move ' + this.selectedRows.length + ' item to trash')) {
+                document.getElementById('form-delete').submit();
+            }
         },
 
         /**
-         * Submit bulk restore form, if at least one item is checked
+         * selects a row when triggered from a container target that is parent of the relative checkbox
          *
          * @return {void}
          */
-        restore() {
-            if (this.restoreids.length < 1) {
-                return;
-            }
-            document.getElementById('form-restore').submit();
-        },
-
         selectRow(event) {
             if(event.target.type != 'checkbox') {
                 event.preventDefault();
-                event.target.querySelector('input[type=checkbox]').checked = !event.target.querySelector('input[type=checkbox]').checked;
+                var cb = event.target.querySelector('input[type=checkbox]');
+                let position = this.selectedRows.indexOf(cb.value);
+                if (position != -1) {
+                    this.selectedRows.splice(position, 1);
+                } else {
+                    this.selectedRows.push(cb.value);
+                }
             }
         }
     }
