@@ -27,6 +27,8 @@ window._vueInstance = new Vue({
         // panel
         onRequestPanelToggle(evt) {
             this.panelIsOpen = !this.panelIsOpen;
+            var cl = document.querySelector('html').classList;
+            cl.contains('is-clipped')? cl.remove('is-clipped') : cl.add('is-clipped');
 
             // return data from panel
             if(evt.returnData) {

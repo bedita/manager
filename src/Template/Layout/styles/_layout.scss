@@ -6,8 +6,6 @@ main.layout {
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr auto;
     padding: $gutter;
-    height: 100%;
-    overflow: hidden;
 
 
     > .layout-sidebar-primary {
@@ -63,16 +61,17 @@ main.layout {
     }
 }
 
+// side panel
 .main-panel {
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 0; right: 0;
-    min-width: 400px;
+    min-width: 25 * $gutter;
     width: 60%;
     height: 100vh;
     z-index: 100;
-    background-color: #000;
+    background-color: $black;
     box-shadow: 0 0 0 black;
     transform: translateX(101%);
     transition: .3s transform;
