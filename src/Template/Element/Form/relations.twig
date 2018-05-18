@@ -13,10 +13,8 @@
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        {# TODO: conta tutti gli oggetti #}
                         <h2>{{ relationName|humanize|lower }}<span class="small-notification"
-                                                                v-bind:class="!count? 'empty' : ''"
-                                                                v-show:class="!isLoading" style="display: none"><: count :></span></h2>
+                                                                v-bind:class="!count? 'empty' : ''"><: count :></span></h2>
                     </header>
 
                     <div v-show="isOpen" class="tab-container">

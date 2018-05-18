@@ -124,6 +124,12 @@ let PaginatedContentMixin = {
             }
         },
 
+
+        toPage(i) {
+            this.pagination.page = i || 1;
+            return this.getPaginatedObjects(true);
+        },
+
         /**
          * load first page of content
          *

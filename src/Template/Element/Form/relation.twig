@@ -1,24 +1,35 @@
-<relation-view inline-template relation-name={{ relationName }}
+<relation-view inline-template
+    relation-name={{ relationName }}
+    config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+
     ref="relation"
     :load-on-start="true" @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view">
-
         <div class="related-list">
-            <nav v-if="pagination.page_count > 1" class="pagination has-text-size-smallest">
+            <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
                 <div>
-                    <span>page <: pagination.page :> of <: pagination.page_count :></span>
-                    <br>
                     <span><: pagination.page_items :> {{ __('objects') }}</span>
                 </div>
                 <div>
+                    <span>Page size:</span>
+                </div>
+                <div>
                     <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="step">
-                        <option v-for="size in pageSizeOptions"><: size :></option>
+                        <option v-for="size in paginateSizes"><: size :></option>
                     </select>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="firstPage()">« {{ __('first') }}</button>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="prevPage()">‹ {{ __('previous') }}</button>
+
+                    <button
+                        v-for="i in pagination.page_count" :key="i"
+                        v-if="pagination.page_count > 1"
+                        v-bind:class="pagination.page == i? '' : 'is-dark'"
+                        v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                        class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+
+                    {# <button class="is-dark has-text-size-smallest" @click.prevent="prevPage()"><:pagination.page :></button>
+                    <button class="is-dark has-text-size-smallest" @click.prevent="prevPage()"><:pagination.page :></button>
                     <button class="is-dark has-text-size-smallest" @click.prevent="nextPage()">{{ __('next') }} ›</button>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="lastPage()">{{ __('last') }} »</button>
+                    <button class="is-dark has-text-size-smallest" @click.prevent="lastPage()">{{ __('last') }} »</button> #}
                 </div>
             </nav>
 
@@ -95,10 +106,7 @@
 
                         <div>
                             <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            <div class="tag-group">
-                                <span class="tag has-background-gray-500 has-text-gray-800">status</span>
-                                <span class="tag"><: related.attributes.status :></span>
-                            </div>
+                            <span class="tag"><: related.attributes.status :></span>
                         </div>
 
                         <footer>

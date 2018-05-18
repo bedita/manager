@@ -32,18 +32,6 @@
 }
 
 
-nav.pagination {
-    margin: 0 0 $gutter;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    > div:not(:last-child) {
-        margin-right: $gutter;
-    }
-}
-
-
-
 
 // single related object
 .related-object {
@@ -181,7 +169,7 @@ nav.pagination {
         margin-left: $gutter;
         margin-top: $gutter;
         margin-bottom: 0;
-
+        cursor: auto;
     }
     .related-objects-list {
         flex-grow: 1;

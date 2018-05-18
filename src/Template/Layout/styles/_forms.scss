@@ -54,8 +54,8 @@ button, a.button {
     }
 
     &:disabled {
-        color: $gray-700;
-        background-color: $gray-500;
+        color: $gray-700 !important;
+        background-color: $gray-500 !important;
         pointer-events: none;
     }
     // &[class^="icon-"] {

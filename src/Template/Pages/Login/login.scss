@@ -123,6 +123,11 @@ body.view-login {
                     clip-path: none;
                     h2 { display: none; }
                     a { display: none; }
+                    display: none;
+
+                    &:last-of-type {
+                        display: block;
+                    }
                 }
             }
         }

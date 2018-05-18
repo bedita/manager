@@ -133,6 +133,31 @@
 }
 
 
+
+// pagination
+nav.pagination {
+    margin: 0 0 $gutter;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    > div {
+        margin: 0 $gutter *.5;
+        &:last-child {
+            margin-right: 0;
+            display: flex;
+            button {
+                margin-left: $gutter * .5;
+                min-width: 2.5em;
+                border-radius: 4px;
+                &:first-of-type {
+                    margin-left: $gutter * 1.5;
+                }
+            }
+        }
+    }
+}
+
+
 // small circled notification
 .small-notification {
     display: inline-block;

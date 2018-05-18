@@ -27,6 +27,10 @@ Vue.component('relation-view', {
             type: Boolean,
             default: true,
         },
+        configPaginateSizes: {
+            type: String,
+            default: '[]',
+        },
     },
 
     data() {
@@ -42,15 +46,7 @@ Vue.component('relation-view', {
             relationsData: [],              // hidden field containing serialized json passed on form submit
             newRelationsData: [],           // array of serialized new relations
 
-
             step: DEFAULT_PAGINATION.page_size,     // step value for pagination page size
-
-            pageSizeOptions: [
-                10,
-                20,
-                50,
-                100,
-            ]
         }
     },
 
@@ -60,6 +56,9 @@ Vue.component('relation-view', {
             var a = this.addedRelations.map(o => o.id);
             var b = this.objects.map(o => o.id);
             return a.concat(b);
+        },
+        paginateSizes() {
+            return JSON.parse(this.configPaginateSizes);
         }
     },
 
@@ -97,10 +96,6 @@ Vue.component('relation-view', {
         loading(value) {
             this.$emit('loading', value);
         },
-
-        count(value) {
-            this.$emit('count', value);
-        }
     },
 
     methods: {
@@ -114,7 +109,7 @@ Vue.component('relation-view', {
 
             let resp = await this.getPaginatedObjects();
             this.loading = false;
-            this.count = resp.length;
+            this.$emit('count', this.pagination.count);
             return resp;
         },
 
@@ -182,6 +177,21 @@ Vue.component('relation-view', {
             await this.loadMore(this.step);
             this.loading = false;
         },
+
+        /**
+         * fo to specific page
+         *
+         * @param {Number} page number
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async toPage(i) {
+            this.loading = true;
+            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
+            this.loading = false;
+            return resp;
+        },
+
 
         /**
          * load first page of content returns newly loaded objects
