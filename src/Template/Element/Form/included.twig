@@ -1,3 +1,4 @@
+{% if included or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen">
 <section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
@@ -87,3 +88,4 @@
 
 </section>
 </property-view>
+{% endif %}

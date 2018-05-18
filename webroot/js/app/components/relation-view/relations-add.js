@@ -8,7 +8,16 @@
 
 Vue.component('relations-add', {
     mixins: [ PaginatedContentMixin ],
-    props: ['relationName', 'alreadyInView'],
+    props: {
+        relationName: {
+            type: String,
+            default: '',
+        },
+        alreadyInView: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             method: 'relationshipsJson',
