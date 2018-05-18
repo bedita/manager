@@ -74,6 +74,13 @@ button, a.button {
         color: $gray-300;
     }
 
+    &.is-small {
+        height: $gutter * 1.5;
+        padding-left: .5em;
+        padding-right: .5em;
+        font-size: $font-size-sssm;
+    }
+
     &.is-larger {
         padding-left: 3em;
         padding-right: 3em;

@@ -117,31 +117,13 @@
     > footer{
         position: absolute;
         transform: translateY(-100%);
-        padding-bottom: $gutter * .25;
-        padding-left: $gutter * .25;
-        a {
-            display: inline-block;
-            transform: rotate(135deg);
-            transition: .2s transform;
-            width: $gutter * 1.5;
-            height: $gutter * 1.5;
-            line-height: $gutter * 1.5;
-            cursor: pointer;
-            opacity: .5;
-            &:hover { opacity: 1; }
-            &:before {
-                margin: 0 !important;
-            }
-        }
+        padding-bottom: $gutter * .5;
+        padding-left: $gutter * .5;
     }
 
     &.removed {
         article {
             opacity: .2;
-        }
-        >footer a {
-            transform: rotate(0);
-            padding-top: 1px;
         }
     }
 }
