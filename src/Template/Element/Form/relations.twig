@@ -1,14 +1,9 @@
 {% if relations %}
 <section class="relations">
 
-    <header>
-        <h2>{{ __('Relations') }}</h2>
-    </header>
-
     {% for relationName in relations %}
 
         <div class="relation">
-
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 

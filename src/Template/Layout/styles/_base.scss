@@ -78,6 +78,10 @@ div, section {
     width: 100%;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .center-icon {
     position: relative;
     &:before {
