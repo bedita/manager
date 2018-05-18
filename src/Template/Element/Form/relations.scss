@@ -29,6 +29,11 @@
             }
         }
     }
+
+    main.panel-is-open & {
+        cursor: auto;
+        pointer-events: none;
+    }
 }
 
 
