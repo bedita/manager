@@ -150,14 +150,15 @@ form fieldset {
 
 // Date Picker
 .clear-button {
-    transition: all 0.4s ease-in-out;
-    display: inline-block;
+    display: inline-flex;
     z-index: 10;
-    color: $gray-900;
-    font-size: 1.3em;
-    line-height: 25px;
-    margin-left: -30px;
-    padding: 0px 9px;
+    color: $gray-800;
+    font-size: 1.25em;
+    margin-left: -25px;
+    width: 21px;
+    height: 21px;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 
 
