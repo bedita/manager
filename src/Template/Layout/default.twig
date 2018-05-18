@@ -19,26 +19,18 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
     {# fonts #}
-    {{ Html.css(['style'])|raw }}
-
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
+
+    {{ Html.css(['vendors'])|raw }}
+    {{ Html.css(['style'])|raw }}
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     {% element 'modules_colors' %}
 
     {# Temporarily fetching libraries' build from cdn #}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.js"></script>
-
-    {# polyfill fetch just in case #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.css">
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -83,38 +75,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% element 'Messages/messages' %}
     {% endif %}
 
-
-    {{ Html.script('config/config')|raw }}
-
-    {# Vue Libs #}
-    {{ Html.script('libs/v-hotkey')|raw }}
-
-    {# Vue directives #}
-    {{ Html.script('app/directives/richeditor')|raw }}
-    {{ Html.script('app/directives/jsoneditor')|raw }}
-    {{ Html.script('app/directives/datepicker')|raw }}
-
-    {# Vue mixins #}
-    {{ Html.script('app/mixins/paginated-content')|raw }}
-    {{ Html.script('app/components/staggered-list')|raw }}
-
-    {# Vue components #}
-    {{ Html.script('app/components/property-view/property-view')|raw }}
-    {{ Html.script('app/components/relation-view/relation-view')|raw }}
-    {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
-    {{ Html.script('app/components/tree-view/tree-list/tree-list')|raw }}
-    {{ Html.script('app/components/tree-view/tree-view')|raw }}
-
-    {# Vue Modules Page #}
-    {{ Html.script('app/pages/modules/view')|raw }}
-    {{ Html.script('app/pages/modules/index')|raw }}
-
-    {# Vue Trash Page #}
-    {{ Html.script('app/pages/trash/view')|raw }}
-    {{ Html.script('app/pages/trash/index')|raw }}
-
-    {# VueMain App #}
-    {{ Html.script('app/app')|raw }}
+    {{ Html.script('manifest.bundle')|raw }}
+    {{ Html.script('vendors.bundle')|raw }}
+    {{ Html.script('app.bundle')|raw }}
 
 </body>
 </html>
