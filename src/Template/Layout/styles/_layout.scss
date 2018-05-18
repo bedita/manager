@@ -6,8 +6,9 @@ main.layout {
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr auto;
     padding: $gutter;
-    min-height: 100vh;
-    overflow: auto;
+    height: 100%;
+    overflow: hidden;
+
 
     > .layout-sidebar-primary {
         grid-area: main-sidebar;

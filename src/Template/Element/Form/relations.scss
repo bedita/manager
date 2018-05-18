@@ -1,12 +1,36 @@
 .related-objects-list {
+    .column:empty { padding: 0; }
     &.isLoading {
         opacity: .2;
         pointer-events: none;
     }
+    & ~ p {
+        margin-top: $gutter;
+    }
     & ~ .related-objects-list {
-        padding-top: $gutter;
+        padding: $gutter * .5;
+        background-color: $gray-800;
+        margin: 0 0 $gutter * 2;
+        border-radius: $gutter * .5;
+        border: 1px solid $gray-700;
+        .column:not(:last-child) {
+            flex-shrink: 0;
+            flex-basis: 12 * $gutter;
+            article { position: relative; padding-bottom: $gutter * 1.5; }
+            footer {
+                @extend .full-size-absolute;
+                a {
+                    @extend .full-size-absolute;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                    padding-bottom: $gutter * .25;
+                }
+            }
+        }
     }
 }
+
 
 nav.pagination {
     margin: 0 0 $gutter;
@@ -19,7 +43,9 @@ nav.pagination {
 }
 
 
-// a related object element
+
+
+// single related object
 .related-object {
     position: relative;
 
@@ -134,6 +160,8 @@ nav.pagination {
 }
 
 
+
+// in panel
 .relations-add {
     display: flex;
     flex-direction: column;
@@ -174,7 +202,7 @@ nav.pagination {
         background-color: $gray-700;
         cursor: pointer;
 
-        &.selected { background-color: $light-danger; }
+        &.selected { background-color: $info; }
 
         footer {
             justify-content: center;

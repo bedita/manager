@@ -73,9 +73,9 @@
 
 
             {# staged objects to be added #}
+            <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">New relations (save to keep)</p>
             <div class="related-objects-list columns" v-if="addedRelations.length">
-                <p class="column is-1 has-text-size-smallest">new relations (save to keep)</p>
-                <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                <div class="related-object column"
                     v-for="related in addedRelations"
                     :key="related.id"
                     v-bind:class="containsId(removedRelated, related.id) ? 'removed' : '' ">
@@ -108,6 +108,10 @@
                 </div>
 
                 {# empty element: keep for flex layout #}
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
                 <div class="column"></div>
             </div>
 
