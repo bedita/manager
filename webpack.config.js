@@ -21,6 +21,10 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
+// import WatchExternalFilesPlugin from 'webpack-watch-files-plugin';
+
+console.dir(WatchExternalFilesPlugin);
 
 // vue dependencies
 const { VueLoaderPlugin } = require('vue-loader');
@@ -101,6 +105,7 @@ let webpackPlugins = [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
     }),
+
     extractVendorsCSS,
     extractSass,
 
@@ -139,6 +144,15 @@ if (devMode) {
             host: ENVIRONMENT.host,
             port: ENVIRONMENT.port,
         })
+    );
+
+    // used to watch twig template files
+    webpackPlugins.push(
+        new WatchExternalFilesPlugin.default({
+            files: [
+            `./${BUNDLE.templateRoot}/**/*.twig`,
+            ]
+        }),
     );
 } else {
     // Production Plugins
