@@ -32,10 +32,6 @@ let PaginatedContentMixin = {
         getPaginatedObjects(autoload = true) {
             let baseUrl = window.location.href;
 
-            if (autoload) {
-                this.objects = [];
-            }
-
             if (this.endpoint) {
                 let requestUrl = `${baseUrl}/${this.endpoint}`;
                 const options =  {
