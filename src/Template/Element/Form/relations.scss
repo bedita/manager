@@ -1,12 +1,12 @@
 .related-objects-list {
+    margin-bottom: 16px;
+
     .column:empty { padding: 0; }
     &.isLoading {
         opacity: .2;
         pointer-events: none;
     }
-    & ~ p {
-        margin-top: $gutter;
-    }
+
     & ~ .related-objects-list {
         padding: $gutter * .5;
         background-color: $gray-800;
@@ -201,8 +201,3 @@
     }
 }
 
-
-// da rimuovere
-.list-actions {
-    margin-top: 1rem;
-}
