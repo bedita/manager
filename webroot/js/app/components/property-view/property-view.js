@@ -19,6 +19,10 @@ Vue.component('property-view', {
             type: Boolean,
             default: true,
         },
+        isDefaultOpen: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -27,6 +31,10 @@ Vue.component('property-view', {
             isLoading: false,
             count: 0,
         }
+    },
+
+    mounted() {
+        this.isOpen = this.isDefaultOpen;
     },
 
     watch: {
