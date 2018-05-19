@@ -15,7 +15,7 @@
                     <span>Page size:</span>
                 </div>
                 <div>
-                    <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="step">
+                    <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
                         <option v-for="size in paginateSizes"><: size :></option>
                     </select>
 
@@ -25,11 +25,6 @@
                         v-bind:class="pagination.page == i? '' : 'is-dark'"
                         v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
                         class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
-
-                    {# <button class="is-dark has-text-size-smallest" @click.prevent="prevPage()"><:pagination.page :></button>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="prevPage()"><:pagination.page :></button>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="nextPage()">{{ __('next') }} ›</button>
-                    <button class="is-dark has-text-size-smallest" @click.prevent="lastPage()">{{ __('last') }} »</button> #}
                 </div>
             </nav>
 

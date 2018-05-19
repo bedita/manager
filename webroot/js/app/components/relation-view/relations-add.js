@@ -2,7 +2,7 @@
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
  *
- * <add-relations-view> component used for Panel
+ * <relations-add> component used for Panel
  *
  */
 
