@@ -29,7 +29,8 @@ Vue.component('tree-list', {
                     class="node-element"
                     :class="{
                         'tree-related-object': isRelated,
-                        'disabled': isCurrentObjectInPath
+                        'disabled': isCurrentObjectInPath,
+                        'node-folder': isFolder,
                     }">
 
                     <span
@@ -176,7 +177,7 @@ Vue.component('tree-list', {
                 ? this.open
                     ? 'icon-down-dir'
                     : 'icon-right-dir'
-                : 'icon-blank'
+                : 'unicode-branch'
 
             return css;
         },
