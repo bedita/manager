@@ -19,10 +19,7 @@ Vue.component('relation-view', {
             type: String,
             required: true,
         },
-        loadOnStart: {
-            type: Boolean,
-            default: false,
-        },
+        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -77,9 +74,7 @@ Vue.component('relation-view', {
      * @return {void}
      */
     mounted() {
-        if (this.loadOnStart) {
-            this.loadRelatedObjects();
-        }
+        this.loadOnMounted();
     },
 
     watch: {
@@ -99,6 +94,14 @@ Vue.component('relation-view', {
     },
 
     methods: {
+        async loadOnMounted() {
+            if (this.loadOnStart) {
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                await sleep(t);
+                await this.loadRelatedObjects();
+            }
+        },
+
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *

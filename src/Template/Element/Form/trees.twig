@@ -1,3 +1,10 @@
+{#
+    load-on-start, loading events timing
+    800ms  - all folders (tree-view)
+    1000ms - relations with folders
+#}
+
+{% set relationName = 'parents' %}
 <property-view inline-template :tab-open="tabsOpen">
     <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
@@ -7,7 +14,7 @@
 
     <div v-show="isOpen" class="tab-container">
 
-        {# TO-DO put it in config #}
+        {# TODO put it in config #}
         {% if objectType == 'folders' %}
             {% set trees = {'parent': 'parent'} %}
             {% set options = {'multiple': 'false' }%}
@@ -21,7 +28,7 @@
                 inline-template
                 relation-name={{ relationName }}
                 :multiple-choice={{ options.multiple }}
-                :load-on-start="200"
+                :load-on-start="1200"
                 @loading="onToggleLoading">
 
                     <div class="tree-{{ relationName }} unselectable">
@@ -33,9 +40,7 @@
                             :load-on-start="800"
                             :multiple-choice="multipleChoice"
                             @remove-relations="setRemovedRelated">
-
                             <div class="tree-view">
-
                                 <div class="tree-entry-list" v-show="Object.keys(objects).length">
                                     <tree-list
                                         :item="jsonTree"

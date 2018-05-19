@@ -1,3 +1,9 @@
+{#
+    load-on-start, loading events timing:
+    1300ms    - first relation
+    gap 300ms - till last relation
+#}
+
 {% if relations %}
 <section class="relations">
 
@@ -13,7 +19,8 @@
                     </header>
 
                     <div v-show="isOpen" class="tab-container">
-                        {% element 'Form/relation' {'relationName': relationName} %}
+                        {% set wait = 1300 + (loop.index * 300) %}
+                        {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
                     </div>
 
                 </section>

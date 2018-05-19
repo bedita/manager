@@ -1,9 +1,9 @@
 <relation-view inline-template
     relation-name={{ relationName }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
-
     ref="relation"
-    :load-on-start="true" @loading="onToggleLoading" @count="onCount">
+    :load-on-start={{ loadOnStart }}
+    @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view">
         <div class="related-list">
