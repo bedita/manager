@@ -21,17 +21,17 @@
             }
 
             &:not(.disabled):hover {
-                border: 1px solid #ff5460;
                 cursor: pointer;
             }
 
-            &.tree-related-object{
-                background-color: #ff5460;
-                border: 1px solid #ff5460;
+            label {
+                cursor: inherit;
+                text-decoration: inherit;
+            }
 
+            &.tree-related-object{
                 &.was-related-object{
-                    background-color: transparent;
-                    border: 1px dashed #ff5460;
+                    text-decoration: line-through;
                 }
             }
         }
@@ -57,21 +57,6 @@
 
             .icon {
                 cursor: pointer;
-            }
-
-            .toggle-tree-children {
-                display: inline-block;
-                transition: all 0.3s linear;
-                font-size: 20px;
-                width: 12px;
-                height: 12px;
-                line-height: 12px;
-                padding: 0;
-                cursor: pointer;
-
-                &.open {
-                    transform: rotate(90deg);
-                }
             }
 
             input {
