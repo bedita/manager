@@ -1,5 +1,4 @@
 // override default layout
-
 body.view-login {
 
     height: 100vh;
@@ -58,6 +57,15 @@ body.view-login {
                 label, input {
                     display: block;
                     width: 100%;
+
+                    &[type='submit'] {
+                        &:focus {
+                            background-color: $gray-400;
+                        }
+                        &:hover {
+                            background-color: $gray-900;
+                        }
+                    }
                 }
             }
 
