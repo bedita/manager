@@ -33,15 +33,16 @@ let devMode = process.env.NODE_ENV !== 'production';
 // from args
 const args = process.argv;
 let index = args.indexOf('--mode');
-if (index) {
+if (index !== -1) {
     let paramIndex = ++index;
     if (paramIndex <= args.length) {
         devMode = args[paramIndex] !== 'production';
     }
 }
-index = args.indexOf('--proxy');
+
 let proxy = 'localhost:8080';
-if (index) {
+index = args.indexOf('--proxy');
+if (index !== -1) {
     let paramIndex = ++index;
     if (paramIndex <= args.length) {
         proxy = args[paramIndex];
