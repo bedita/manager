@@ -48,6 +48,10 @@
                     margin-left: $gutter * .5;
                 }
 
+                > span.icon, > input, > label {
+                    cursor: pointer;
+                }
+
                 &.node-folder {
                     margin-left: $gutter * 1.5;
                     label {
@@ -61,6 +65,7 @@
                     &.unicode-branch {
                         width: 20px;
                         text-align: center;
+                        cursor: default;
                         &:before {
                             content: '└';
                             color: $gray-800;
@@ -78,10 +83,6 @@
 
             .node-children {
                 margin-left: $gutter * 3;
-            }
-
-            &.root-node {
-                cursor: pointer;
             }
         }
     }
