@@ -83,8 +83,10 @@ Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch 
 ## Development
 
 ```bash
-yarn run develop
+yarn run develop --proxy localhost:1234
 ```
+
+proxy: local webserver (default: localhost:8080)
 
 ## Build
 

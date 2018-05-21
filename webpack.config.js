@@ -39,14 +39,24 @@ if (index) {
         devMode = args[paramIndex] !== 'production';
     }
 }
+index = args.indexOf('--proxy');
+let proxy = 'localhost:8080';
+if (index) {
+    let paramIndex = ++index;
+    if (paramIndex <= args.length) {
+        proxy = args[paramIndex];
+    }
+}
 
 // Env Config Object
 const ENVIRONMENT = {
     mode: devMode ? 'develop' : 'production',
-    proxy: 'localhost:8080',
+    proxy: proxy,
     host: 'localhost',
     port: 3000,
 }
+
+console.dir(ENVIRONMENT)
 
 // Bundle Config Object
 const BUNDLE = {
