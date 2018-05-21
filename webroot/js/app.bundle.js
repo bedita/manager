@@ -15,12 +15,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var app_pages_modules_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/pages/modules/index */ "./src/Template/Layout/js/app/pages/modules/index.js");
 /* harmony import */ var app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/pages/modules/view */ "./src/Template/Layout/js/app/pages/modules/view.js");
-/* harmony import */ var app_directives_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/directives/datepicker */ "./src/Template/Layout/js/app/directives/datepicker.js");
-/* harmony import */ var app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/directives/jsoneditor */ "./src/Template/Layout/js/app/directives/jsoneditor.js");
-/* harmony import */ var app_directives_richeditor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/directives/richeditor */ "./src/Template/Layout/js/app/directives/richeditor.js");
-/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! v-hotkey */ "./node_modules/v-hotkey/index.js");
-/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(v_hotkey__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var config_config__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! config/config */ "./src/Template/Layout/js/config/config.js");
+/* harmony import */ var app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/components/relation-view/relations-add */ "./src/Template/Layout/js/app/components/relation-view/relations-add.js");
+/* harmony import */ var app_directives_datepicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/directives/datepicker */ "./src/Template/Layout/js/app/directives/datepicker.js");
+/* harmony import */ var app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/directives/jsoneditor */ "./src/Template/Layout/js/app/directives/jsoneditor.js");
+/* harmony import */ var app_directives_richeditor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/directives/richeditor */ "./src/Template/Layout/js/app/directives/richeditor.js");
+/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-hotkey */ "./node_modules/v-hotkey/index.js");
+/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_hotkey__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var config_config__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! config/config */ "./src/Template/Layout/js/config/config.js");
 
 
 
@@ -35,23 +36,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_5__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_richeditor__WEBPACK_IMPORTED_MODULE_6__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(v_hotkey__WEBPACK_IMPORTED_MODULE_7___default.a);
+
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_6__["default"]);
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_datepicker__WEBPACK_IMPORTED_MODULE_5__["default"]);
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_richeditor__WEBPACK_IMPORTED_MODULE_7__["default"]);
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(v_hotkey__WEBPACK_IMPORTED_MODULE_8___default.a);
 
 
 
 // merge vue options, config from configuration file
-for (let property in config_config__WEBPACK_IMPORTED_MODULE_8__["VueConfig"]) {
-    if (config_config__WEBPACK_IMPORTED_MODULE_8__["VueConfig"].hasOwnProperty(property)) {
-        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.config[property] = config_config__WEBPACK_IMPORTED_MODULE_8__["VueConfig"][property];
+for (let property in config_config__WEBPACK_IMPORTED_MODULE_9__["VueConfig"]) {
+    if (config_config__WEBPACK_IMPORTED_MODULE_9__["VueConfig"].hasOwnProperty(property)) {
+        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.config[property] = config_config__WEBPACK_IMPORTED_MODULE_9__["VueConfig"][property];
     }
 }
 
-for (let property in config_config__WEBPACK_IMPORTED_MODULE_8__["VueOptions"]) {
-    if (config_config__WEBPACK_IMPORTED_MODULE_8__["VueOptions"].hasOwnProperty(property)) {
-        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.options[property] = config_config__WEBPACK_IMPORTED_MODULE_8__["VueOptions"][property];
+for (let property in config_config__WEBPACK_IMPORTED_MODULE_9__["VueOptions"]) {
+    if (config_config__WEBPACK_IMPORTED_MODULE_9__["VueOptions"].hasOwnProperty(property)) {
+        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.options[property] = config_config__WEBPACK_IMPORTED_MODULE_9__["VueOptions"][property];
     }
 }
 
@@ -63,6 +65,7 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
         ModulesView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__["default"],
         TrashIndex: app_pages_modules_index__WEBPACK_IMPORTED_MODULE_2__["default"],
         TrashView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__["default"],
+        RelationsAdd: app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_4__["default"],
     },
 
     data() {
@@ -73,6 +76,8 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
             pageSize: '100',
             page: '',
             sort: '',
+            panelIsOpen: false,
+            addRelation: {},
         }
     },
 
@@ -84,6 +89,30 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
     },
 
     methods: {
+        // panel
+        onRequestPanelToggle(evt) {
+            this.panelIsOpen = !this.panelIsOpen;
+            var cl = document.querySelector('html').classList;
+            cl.contains('is-clipped')? cl.remove('is-clipped') : cl.add('is-clipped');
+
+            // return data from panel
+            if(evt.returnData) {
+                if(evt.returnData.relationName){
+                    this.$refs["moduleView"]
+                        .$refs[evt.returnData.relationName]
+                        .$refs["relation"].appendRelations(evt.returnData.objects);
+                }
+            }
+
+            // open panel for relations add
+            if(this.panelIsOpen && evt.relation && evt.relation.name) {
+                this.addRelation = evt.relation;
+            } else {
+                sleep(500).then(() => this.addRelation = {}); // 500ms is the panel transition duration
+            }
+        },
+
+
         /**
          * extract params from page url
          *
@@ -210,12 +239,6 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
 
 window._vueInstance = _vueInstance;
 
-// helper functions
-async function sleep(t) {
-    return new Promise(resolve => setTimeout(resolve, t));
-}
-
-
 
 /***/ }),
 
@@ -256,13 +279,22 @@ __webpack_require__.r(__webpack_exports__);
             type: Boolean,
             default: true,
         },
+        isDefaultOpen: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             isOpen: true,
             isLoading: false,
+            count: 0,
         }
+    },
+
+    mounted() {
+        this.isOpen = this.isDefaultOpen;
     },
 
     watch: {
@@ -277,7 +309,10 @@ __webpack_require__.r(__webpack_exports__);
         },
         onToggleLoading(status) {
             this.isLoading = status;
-        }
+        },
+        onCount(n) {
+            this.count = n;
+        },
     }
 });
 
@@ -296,10 +331,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_components_staggered_list__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/components/staggered-list */ "./src/Template/Layout/js/app/components/staggered-list.js");
 /* harmony import */ var app_components_relation_view_relationships_view_relationships_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/components/relation-view/relationships-view/relationships-view */ "./src/Template/Layout/js/app/components/relation-view/relationships-view/relationships-view.js");
 /* harmony import */ var app_components_tree_view_tree_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/components/tree-view/tree-view */ "./src/Template/Layout/js/app/components/tree-view/tree-view.js");
-/* harmony import */ var app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/mixins/paginated-content */ "./src/Template/Layout/js/app/mixins/paginated-content.js");
+/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
+/* harmony import */ var app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/mixins/paginated-content */ "./src/Template/Layout/js/app/mixins/paginated-content.js");
 /**
- * Templates that uses this component (directly or indirectly):
+ *  Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
+ *  Template/Elements/trees.twig
  *  Template/Elements/trees.twig
  *
  * <relation-view> component used for ModulesPage -> View
@@ -315,27 +352,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [ app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["PaginatedContentMixin"] ],
+    mixins: [ app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_4__["PaginatedContentMixin"] ],
     components: {
         StaggeredList: app_components_staggered_list__WEBPACK_IMPORTED_MODULE_0__["default"],
         RelationshipsView: app_components_relation_view_relationships_view_relationships_view__WEBPACK_IMPORTED_MODULE_1__["default"],
         TreeView: app_components_tree_view_tree_view__WEBPACK_IMPORTED_MODULE_2__["default"],
     },
 
-    // defining props with validation
     props: {
         relationName: {
             type: String,
             required: true,
         },
-        loadOnStart: {
-            type: Boolean,
-            default: false,
-        },
+        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
+        },
+        configPaginateSizes: {
+            type: String,
+            default: '[]',
         },
     },
 
@@ -343,20 +381,26 @@ __webpack_require__.r(__webpack_exports__);
         return {
             method: 'relatedJson',          // define AppController method to be used
             loading: false,
-            showRelationshipsPanel: false,
+            count: 0,                       // count number of related objects, on change triggers an event
 
             removedRelated: [],             // currently related objects to be removed
             addedRelations: [],             // staged added objects to be saved
-            hideRelations: [],              // hide already added relations in relationships-view
             relationsData: [],              // hidden field containing serialized json passed on form submit
+            newRelationsData: [],           // array of serialized new relations
 
-            step: app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_PAGINATION"].page_size,     // step value for pagination page size
+            pageSize: app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_4__["DEFAULT_PAGINATION"].page_size,     // pageSize value for pagination page size
+        }
+    },
 
-            pageSizeOptions: [
-                20,
-                50,
-                100,
-            ]
+    computed: {
+        // array of ids of objects in view
+        alreadyInView() {
+            var a = this.addedRelations.map(o => o.id);
+            var b = this.objects.map(o => o.id);
+            return a.concat(b);
+        },
+        paginateSizes() {
+            return JSON.parse(this.configPaginateSizes);
         }
     },
 
@@ -375,28 +419,34 @@ __webpack_require__.r(__webpack_exports__);
      * @return {void}
      */
     mounted() {
-        if (this.loadOnStart) {
-            this.loadRelatedObjects();
-        }
+        this.loadOnMounted();
     },
 
     watch: {
         /**
-         * watcher for step variable, change pageSize and reload relations
+         * watcher for pageSize variable, change pageSize and reload relations
          *
          * @param {Number} value
          */
-        step(value) {
+        pageSize(value) {
             this.setPageSize(value);
             this.loadRelatedObjects();
         },
 
         loading(value) {
             this.$emit('loading', value);
-        }
+        },
     },
 
     methods: {
+        async loadOnMounted() {
+            if (this.loadOnStart) {
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                await Object(sleep_promise__WEBPACK_IMPORTED_MODULE_3__["default"])(t);
+                await this.loadRelatedObjects();
+            }
+        },
+
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
@@ -407,27 +457,41 @@ __webpack_require__.r(__webpack_exports__);
 
             let resp = await this.getPaginatedObjects();
             this.loading = false;
-
+            this.$emit('count', this.pagination.count);
             return resp;
         },
+
+
+        /**
+         * toggle relation
+         *
+         * @param {object}
+         *
+         * @returns {void}
+         */
+        relationToggle(related) {
+            if (!related || !related.id) {
+                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+                return;
+            }
+            if (!this.containsId(this.removedRelated, related.id)) {
+                this.removeRelation(related);
+            } else {
+                this.undoRemoveRelation(related);
+            }
+        },
+
 
         /**
          * remove related object: adding it to removedRelated Array
          *
-         * @param {Number} id
          * @param {String} type
          *
          * @returns {void}
          */
-        removeRelations(related) {
-            if (!related || !related.id) {
-                console.error('[removeRelations] needs first param as object with id propperty set');
-                return;
-            }
-            if (!this.containsId(this.removedRelated, related.id)) {
-                this.removedRelated.push(related);
-                this.relationsData = this.relationFormatterHelper(this.removedRelated);
-            }
+        removeRelation(related) {
+            this.removedRelated.push(related);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
 
         /**
@@ -438,14 +502,11 @@ __webpack_require__.r(__webpack_exports__);
          *
          * @returns {void}
          */
-        reAddRelations(related) {
-            if (!related || !related.id) {
-                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
-                return;
-            }
+        undoRemoveRelation(related) {
             this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
-            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
+
 
         /**
          * prepare removeRelated Array for saving using serialized json input field
@@ -459,86 +520,24 @@ __webpack_require__.r(__webpack_exports__);
                 return;
             }
             this.removedRelated = relations;
-            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
 
-        /**
-         * show next page of paginated content
-         *
-         */
-        async showMoreRelated() {
-            this.loading = true;
-            await this.loadMore(this.step);
-            this.loading = false;
-        },
 
         /**
-         * load first page of content returns newly loaded objects
+         * go to specific page
          *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         * @param {Number} page number
          *
          * @return {Promise} repsonse from server with new data
          */
-        async firstPage(autoload = true) {
+        async toPage(i) {
             this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["PaginatedContentMixin"].methods.firstPage.call(this, autoload);
+            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_4__["PaginatedContentMixin"].methods.toPage.call(this, i);
             this.loading = false;
-
             return resp;
         },
 
-        /**
-         * load last page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async lastPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["PaginatedContentMixin"].methods.lastPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
-
-        /**
-         * load next page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async nextPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["PaginatedContentMixin"].methods.nextPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
-
-        /**
-         * load prev page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async prevPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_3__["PaginatedContentMixin"].methods.prevPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
 
         /**
          * remove element with matched id from staged relations
@@ -553,25 +552,6 @@ __webpack_require__.r(__webpack_exports__);
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
         },
 
-        /**
-         * Show relationships-view and pass objects already related which need to be hidden
-         *
-         * @return {void}
-         */
-        showRelationshipsModal() {
-            // this.hideRelations is passed as prop to relationships-view
-            this.hideRelations = this.objects;
-            this.showRelationshipsPanel = true;
-        },
-
-        /**
-         * helper function for template
-         *
-         * @return {Boolean} true if has at least a related object or a newly added object
-         */
-        hasElementsToShow() {
-            return (this.objects && this.objects.length) || (this.addedRelations && this.addedRelations.length);;
-        },
 
         /**
          * Event 'added-relations' callback
@@ -581,21 +561,20 @@ __webpack_require__.r(__webpack_exports__);
          *
          * @return {void}
          */
-        appendRelations(relations) {
-            this.addedRelations = relations;
+        appendRelations(items) {
+            if (!this.addedRelations.length) {
+                this.addedRelations = items;
+            } else {
+                var existingIds = this.addedRelations.map(a => a.id);
+                for (var i = 0; i < items.length; i++) {
+                    if (existingIds.indexOf(items[i].id) < 0) {
+                        this.addedRelations.push(items[i]);
+                    }
+                }
+            }
+            this.newRelationsData = JSON.stringify(this.addedRelations);
         },
 
-        /**
-         * Event 'visibility-setter' callback
-         * set current view's relationships-view visibility from child view
-         *
-         * @param {Boolean} isVisible
-         *
-         * @return {void}
-         */
-        setRelationshipPanelVisibility(isVisible) {
-            this.showRelationshipsPanel = isVisible;
-        },
 
         /**
          * helper function: check if array relations has element with id -> id
@@ -609,22 +588,6 @@ __webpack_require__.r(__webpack_exports__);
             return relations.filter((rel) => rel.id === id).length;
         },
 
-        /**
-         * helper function: convert array to string
-         *
-         * @param {Array} relations
-         *
-         * @return {String} string version of relations
-         */
-        relationFormatterHelper(relations) {
-            let jsonString = '';
-            try {
-                jsonString = JSON.stringify(relations);
-            } catch(err) {
-                console.error(err);
-            }
-            return jsonString;
-        },
 
         /**
          * helper function: build open view url
@@ -636,6 +599,120 @@ __webpack_require__.r(__webpack_exports__);
          */
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
+        },
+
+
+        /**
+         * request panel emitting event in module view
+         *
+         * @param {String} objectType
+         * @param {Number} objectId
+         *
+         * @return {String} url
+         */
+        requestPanel() {
+            // emit event in module view
+            this.$parent.$parent.$emit('request-panel', {
+                relation: {
+                    name: this.relationName,
+                    alreadyInView: this.alreadyInView,
+                },
+            });
+        }
+    }
+
+});
+
+
+/***/ }),
+
+/***/ "./src/Template/Layout/js/app/components/relation-view/relations-add.js":
+/*!******************************************************************************!*\
+  !*** ./src/Template/Layout/js/app/components/relation-view/relations-add.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/mixins/paginated-content */ "./src/Template/Layout/js/app/mixins/paginated-content.js");
+/* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! decamelize */ "./node_modules/decamelize/index.js");
+/* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(decamelize__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * Templates that uses this component (directly or indirectly):
+ *  Template/Elements/relations.twig
+ *
+ * <relations-add> component used for Panel
+ *
+ */
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mixins: [ app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["PaginatedContentMixin"] ],
+    props: {
+        relationName: {
+            type: String,
+            default: '',
+        },
+        alreadyInView: {
+            type: Array,
+            default: () => [],
+        },
+    },
+    data() {
+        return {
+            method: 'relationshipsJson',
+            endpoint: '',
+            selectedObjects: [],
+        }
+    },
+
+    computed: {
+        relationHumanizedName() {
+            return decamelize__WEBPACK_IMPORTED_MODULE_1___default()(this.relationName);
+        }
+    },
+
+    watch: {
+        relationName: {
+            immediate: true,
+            handler(newVal, oldVal) {
+                if(newVal) {
+                    this.selectedObjects = [];
+                    this.endpoint = `${this.method}/${newVal}`;
+                    this.loadObjects();
+                }
+            },
+        }
+    },
+
+    methods: {
+        returnData() {
+            var data = {
+                objects: this.selectedObjects,
+                relationName: this.relationName,
+            };
+            this.$root.onRequestPanelToggle({ returnData: data });
+        },
+        toggle(object, evt) {
+            let position = this.selectedObjects.indexOf(object);
+            if(position != -1) {
+                this.selectedObjects.splice(position, 1);
+            } else {
+                this.selectedObjects.push(object);
+            }
+        },
+        isAlreadyRelated() {
+            return true;
+        },
+        // form mixin
+        async loadObjects() {
+            this.loading = true;
+            let resp = await this.getPaginatedObjects();
+            this.loading = false;
+            return resp;
         },
     }
 
@@ -988,7 +1065,8 @@ __webpack_require__.r(__webpack_exports__);
                     class="node-element"
                     :class="{
                         'tree-related-object': isRelated,
-                        'disabled': isCurrentObjectInPath
+                        'disabled': isCurrentObjectInPath,
+                        'node-folder': isFolder,
                     }">
 
                     <span
@@ -1135,7 +1213,7 @@ __webpack_require__.r(__webpack_exports__);
                 ? this.open
                     ? 'icon-down-dir'
                     : 'icon-right-dir'
-                : 'icon-blank'
+                : 'unicode-branch'
 
             return css;
         },
@@ -1285,6 +1363,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_components_relation_view_relationships_view_relationships_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/components/relation-view/relationships-view/relationships-view */ "./src/Template/Layout/js/app/components/relation-view/relationships-view/relationships-view.js");
 /* harmony import */ var app_components_tree_view_tree_list_tree_list__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/components/tree-view/tree-list/tree-list */ "./src/Template/Layout/js/app/components/tree-view/tree-list/tree-list.js");
+/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
@@ -1296,6 +1375,7 @@ __webpack_require__.r(__webpack_exports__);
  * @prop {Boolean} multipleChoice
  *
  */
+
 
 
 
@@ -1383,8 +1463,8 @@ __webpack_require__.r(__webpack_exports__);
          */
         async loadTree() {
             if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 1;
-                // await sleep(t);
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                await Object(sleep_promise__WEBPACK_IMPORTED_MODULE_2__["default"])(t);
                 await this.loadObjects();
                 this.jsonTree = {
                     name: 'Root',
@@ -1634,8 +1714,8 @@ const datepickerOptions = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jsoneditor/dist/jsoneditor-minimalist */ "./node_modules/jsoneditor/dist/jsoneditor-minimalist.js");
-/* harmony import */ var jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jsoneditor_dist_jsoneditor_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jsoneditor/dist/jsoneditor.min */ "./node_modules/jsoneditor/dist/jsoneditor.min.js");
+/* harmony import */ var jsoneditor_dist_jsoneditor_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsoneditor_dist_jsoneditor_min__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var jsoneditor_dist_jsoneditor_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jsoneditor/dist/jsoneditor.min.css */ "./node_modules/jsoneditor/dist/jsoneditor.min.css");
 /* harmony import */ var jsoneditor_dist_jsoneditor_min_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jsoneditor_dist_jsoneditor_min_css__WEBPACK_IMPORTED_MODULE_1__);
 /**
@@ -1690,7 +1770,7 @@ const jsonEditorOptions = {
                         let jsonEditor = document.createElement('div');
                         jsonEditor.className = "jsoneditor-container";
                         element.parentElement.insertBefore(jsonEditor, element);
-                        element.jsonEditor = new jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default.a(jsonEditor, jsonEditorOptions);
+                        element.jsonEditor = new jsoneditor_dist_jsoneditor_min__WEBPACK_IMPORTED_MODULE_0___default.a(jsonEditor, jsonEditorOptions);
                         element.jsonEditor.set(json);
                         // this.el = element;
                     }
@@ -1792,10 +1872,6 @@ const PaginatedContentMixin = {
         getPaginatedObjects(autoload = true) {
             let baseUrl = window.location.href;
 
-            if (autoload) {
-                this.objects = [];
-            }
-
             if (this.endpoint) {
                 let requestUrl = `${baseUrl}/${this.endpoint}`;
                 const options =  {
@@ -1882,6 +1958,12 @@ const PaginatedContentMixin = {
                 const last = this.objects.length;
                 this.objects.splice(last, 0, ...moreObjects);
             }
+        },
+
+
+        toPage(i) {
+            this.pagination.page = i || 1;
+            return this.getPaginatedObjects(true);
         },
 
         /**
@@ -2010,13 +2092,8 @@ __webpack_require__.r(__webpack_exports__);
      */
     data() {
         return {
-            isAllChecked: false,
-            all: [],
-            checked: [],
-            exportids: [],
-            statusids: [],
-            trashids: [],
-            restoreids: [], // used in trash
+            allIds: [],
+            selectedRows: [],
             status: '',
         };
     },
@@ -2026,34 +2103,19 @@ __webpack_require__.r(__webpack_exports__);
      */
     created() {
         try {
-            this.all = JSON.parse(this.ids);
-            this.all = this.all.map(Number);
+            this.allIds = JSON.parse(this.ids);
         } catch(error) {
             console.error(error);
         }
     },
 
-    /**
-     * watched vars handlers
-     */
-    watch: {
-        /**
-         * Checked checkboxes change handler.
-         * If necessary, set isAllChecked.
-         *
-         * @return {void}
-         */
-        checked() {
-            if (!this.isAllChecked && (this.all.length === this.checked.length)) {
-                this.isAllChecked = true;
-            } else if (this.isAllChecked && (this.all.length > this.checked.length)) {
-                this.isAllChecked = false;
-            }
-            this.exportids = this.checked;
-            this.statusids = this.checked;
-            this.trashids = this.checked;
-            this.restoreids = this.checked;
+    computed: {
+        selectedIds() {
+            return JSON.stringify(this.selectedRows);
         },
+        allChecked() {
+            return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
+        }
     },
 
     /**
@@ -2065,64 +2127,76 @@ __webpack_require__.r(__webpack_exports__);
          *
          * @return {void}
          */
+        toggleAll() {
+            if (this.allChecked) {
+                this.unCheckAll();
+            } else {
+                this.checkAll();
+            }
+        },
         checkAll() {
-            this.isAllChecked = !this.isAllChecked;
-            this.checked = (this.isAllChecked) ? this.all : [];
-            this.exportids = this.checked;
+            this.selectedRows = JSON.parse(JSON.stringify(this.allIds));
+        },
+        unCheckAll() {
+            this.selectedRows = [];
         },
 
         /**
-         * Submit bulk export form, if at least one item is checked
+         * Submit bulk export form
          *
          * @return {void}
          */
         exportSelected() {
-            if (this.checked.length < 1) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
             document.getElementById('form-export').submit();
         },
 
         /**
-         * Submit bulk change status form, if at least one item is checked and status is not empty
+         * Submit bulk change status form
          *
          * @return {void}
          */
-        changeStatus() {
-            if (this.statusids.length < 1 || !this.status) {
+        setStatus(status, evt) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
-            document.getElementById('form-status').submit();
+            this.status = status;
+            this.$nextTick( () => {
+                document.getElementById('form-status').submit();
+            });
         },
 
         /**
-         * Submit bulk delete form, if at least one item is checked
+         * Submit bulk trash form
          *
          * @return {void}
          */
         trash() {
-            if (this.trashids.length < 1) {
+            if (this.selectedRows.length < 1) {
                 return;
             }
-            document.getElementById('form-delete').submit();
+            if (confirm('Move ' + this.selectedRows.length + ' item to trash')) {
+                document.getElementById('form-delete').submit();
+            }
         },
 
         /**
-         * Submit bulk restore form, if at least one item is checked
+         * selects a row when triggered from a container target that is parent of the relative checkbox
          *
          * @return {void}
          */
-        restore() {
-            if (this.restoreids.length < 1) {
-                return;
-            }
-            document.getElementById('form-restore').submit();
-        },
-
         selectRow(event) {
             if(event.target.type != 'checkbox') {
                 event.preventDefault();
-                event.target.querySelector('input[type=checkbox]').checked = !event.target.querySelector('input[type=checkbox]').checked;
+                var cb = event.target.querySelector('input[type=checkbox]');
+                let position = this.selectedRows.indexOf(cb.value);
+                if (position != -1) {
+                    this.selectedRows.splice(position, 1);
+                } else {
+                    this.selectedRows.push(cb.value);
+                }
             }
         }
     }

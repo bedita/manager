@@ -6,6 +6,7 @@ import ModulesIndex from 'app/pages/modules/index';
 import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/modules/index';
 import TrashView from 'app/pages/modules/view';
+import RelationsAdd from 'app/components/relation-view/relations-add';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -40,6 +41,7 @@ const _vueInstance = new Vue({
         ModulesView,
         TrashIndex,
         TrashView,
+        RelationsAdd,
     },
 
     data() {
@@ -212,28 +214,3 @@ const _vueInstance = new Vue({
 });
 
 window._vueInstance = _vueInstance;
-
-// helper functions
-async function sleep(t) {
-    return new Promise(resolve => setTimeout(resolve, t));
-}
-
-function humanize(s) {
-    if(!s) {
-        return '';
-    }
-
-    // decamelize (credits: https://github.com/sindresorhus/decamelize)
-    var separator = '_';
-    var regex1 = XRegExp('([\\p{Ll}\\d])(\\p{Lu})', 'g');
-    var regex2 = XRegExp('(\\p{Lu}+)(\\p{Lu}[\\p{Ll}\\d]+)', 'g');
-    s = s.replace(regex1, `$1${separator}$2`)
-    .replace(regex2, `$1${separator}$2`)
-    .toLowerCase();
-
-    // humanize (credits: https://github.com/sindresorhus/decamelize)
-    s = s.toLowerCase().replace(/[_-]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
-    s = s.charAt(0).toUpperCase() + s.slice(1);
-    return s;
-}
-

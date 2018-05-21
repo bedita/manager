@@ -12,6 +12,7 @@
 
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 import TreeList from 'app/components/tree-view/tree-list/tree-list';
+import sleep from 'sleep-promise';
 
 export default {
     extends: RelationshipsView,

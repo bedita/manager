@@ -14,6 +14,7 @@
 import StaggeredList from 'app/components/staggered-list';
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 import TreeView from 'app/components/tree-view/tree-view';
+import sleep from 'sleep-promise';
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 

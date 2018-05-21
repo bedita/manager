@@ -6,7 +6,10 @@
  *
  */
 
-Vue.component('relations-add', {
+import { PaginatedContentMixin } from 'app/mixins/paginated-content';
+import decamelize from 'decamelize';
+
+export default {
     mixins: [ PaginatedContentMixin ],
     props: {
         relationName: {
@@ -28,7 +31,7 @@ Vue.component('relations-add', {
 
     computed: {
         relationHumanizedName() {
-            return humanize(this.relationName);
+            return decamelize(this.relationName);
         }
     },
 
@@ -73,4 +76,4 @@ Vue.component('relations-add', {
         },
     }
 
-});
+}
