@@ -21,7 +21,6 @@
         "develop": "webpack --mode development"
     },
     "dependencies": {
-        "ckeditor": "^4.9.2",
         "decamelize": "^2.0.0",
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",
