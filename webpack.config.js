@@ -56,8 +56,6 @@ const ENVIRONMENT = {
     port: 3000,
 }
 
-console.dir(ENVIRONMENT)
-
 // Bundle Config Object
 const BUNDLE = {
     // source

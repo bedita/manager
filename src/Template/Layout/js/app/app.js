@@ -13,6 +13,8 @@ import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
+import sleep from 'sleep-promise';
+
 Vue.use(jsoneditor);
 Vue.use(datepicker);
 Vue.use(richeditor);
