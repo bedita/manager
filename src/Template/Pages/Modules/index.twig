@@ -9,8 +9,8 @@
             {# list objects : table header #}
             {% if objects %}
             <nav class="table-header">
-                <div>
-                    {{ Form.checkbox('allItems', { 'v-bind:checked': 'isAllChecked', '@click': 'checkAll' })|raw }}
+                <div @click="toggleAll">
+                    <input type="checkbox" :checked="allChecked">
                 </div>
 
                 <div class="thumb-cell"></div>
@@ -37,7 +37,8 @@
                     class="object-status-{{ object.attributes.status }}">
 
                         <div class="{{ prop }}-cell" @click="selectRow">
-                            {{ Form.checkbox('oneItem', { 'v-bind:value': object.id, 'v-model': 'checked' })|raw }}
+                            {{ Form.unlockField('oneItem') }}
+                            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows">
                         </div>
 
                         <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
@@ -76,26 +77,32 @@
                     <p>{{ __('Actions on selected items') }}</p>
                 </header>
                 <nav>
-                    {% if not currentModule.hints.multiple_types %}
-                    {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-                        {{ Form.hidden('ids', {'v-model': 'exportids'})|raw }}
-                        {{ Form.hidden('objectType', {'value': objectType})|raw }}
-                        {{ Form.unlockField('ids') }}
-                        <button @click.prevent="exportSelected">{{ __('Export') }}</button>
-                    {{ Form.end()|raw }}
-                    {% endif %}
-
+                    {# status #}
                     {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
-                        {{ Form.hidden('ids', {'v-model': 'statusids'})|raw }}
-                        <button @click.prevent="changeStatus">{{ __('Set status') }}</button>
-                        {{ Form.select('status', { 'on': __('On'), 'draft': __('Draft'), 'off': __('Off') }, { 'v-model': 'status' }) | raw }}
+                        {{ Form.unlockField('ids') }}
+                        <input type="hidden" name="ids" v-bind:value="selectedRows">
+                        {{ Form.unlockField('status') }}
+                        <input type="hidden" name="status" v-bind:value="status">
+                        <button @click.prevent="setStatus('on')" :disabled="!selectedRows.length">{{ __('Set on') }}</button>
+                        <button @click.prevent="setStatus('draft')" :disabled="!selectedRows.length">{{ __('Set draft') }}</button>
+                        <button @click.prevent="setStatus('off')" :disabled="!selectedRows.length">{{ __('Set off') }}</button>
                     {{ Form.end()|raw }}
 
+                    {# trash #}
                     {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
                         {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
-                            {{ Form.hidden('ids', {'v-model': 'trashids'})|raw }}
-                            <button @click.prevent="trash">{{ __('Move to trash') }}</button>
+                            <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            <button @click.prevent="trash" :disabled="!selectedRows.length">{{ __('Move to trash') }}</button>
                         {{ Form.end()|raw }}
+                    {% endif %}
+
+                    {# export #}
+                    {% if not currentModule.hints.multiple_types %}
+                    {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
+                        <input type="hidden" name="ids" v-bind:value="selectedRows">
+                        {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                        <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
+                    {{ Form.end()|raw }}
                     {% endif %}
                 </nav>
             </div>
