@@ -50,13 +50,12 @@
 
                         <div>
                             <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            <span class="tag"><: related.attributes.status :></span>
+                            <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
-                        <div>
+                        <div v-if="related.meta.relation">
                             <p class="has-text-size-smallest"
                                 v-for="(paramValue, paramName) in related.meta.relation.params"><: paramName :>: <: paramValue :></p>
-                            <p class="has-text-size-smallest" v-if="!related.meta.relation.params">&nbsp;</p>
                         </div>
 
                         <footer>

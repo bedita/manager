@@ -113,7 +113,7 @@
             position: relative;
             display: flex;
             justify-content: flex-end;
-            margin-top: $gutter * .5;
+            margin-top: $gutter * 1.5;
             a { opacity: .5; line-height: 1rem; cursor: pointer; }
             a:hover { opacity: 1; }
         }
