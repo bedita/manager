@@ -286,13 +286,21 @@ module.exports = {
                 ],
                 use: extractVendorsCSS.extract({
                     fallback: 'style-loader',
-                    use: {
-                        loader: 'css-loader',
-                        options: {
-                            minimize: !devMode,
-                            sourceMap: devMode,
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: !devMode,
+                                sourceMap: devMode,
+                            }
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: devMode
+                            }
                         }
-                    },
+                    ]
                 }),
             },
             {
