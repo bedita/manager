@@ -98,7 +98,7 @@
 
                         <div>
                             <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            <span class="tag"><: related.attributes.status :></span>
+                            <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
                         <footer>
