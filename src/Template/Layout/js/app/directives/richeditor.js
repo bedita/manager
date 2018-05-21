@@ -7,8 +7,8 @@
 import { CkeditorConfig } from 'config/config';
 
 export default {
-            install(Vue) {
-                Vue.directive('richeditor', {
+    install(Vue) {
+        Vue.directive('richeditor', {
             /**
              * When the bound element is inserted into the init CKeditor
              *

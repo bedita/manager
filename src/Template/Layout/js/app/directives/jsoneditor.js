@@ -15,7 +15,6 @@ const jsonEditorOptions = {
     onChange: function (element) {
         if (element) {
             const json = element.jsonEditor.get();
-
             try {
                 element.value = JSON.stringify(json);
             } catch(e) {
@@ -23,11 +22,6 @@ const jsonEditorOptions = {
             }
         }
     },
-    onModeChange: function(element ,a,b,c) {
-        this.editor.setOptions({maxLines: Infinity});
-
-        // element.jsonEditor.editor.setOptions({maxLines: Infinity});
-    }
 };
 
 export default {
@@ -52,7 +46,6 @@ export default {
                         element.parentElement.insertBefore(jsonEditor, element);
                         element.jsonEditor = new JSONEditor(jsonEditor, jsonEditorOptions);
                         element.jsonEditor.set(json);
-                        // this.el = element;
                     }
                 } catch (err) {
                     console.error(err);

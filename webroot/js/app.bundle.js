@@ -1735,7 +1735,6 @@ const jsonEditorOptions = {
     onChange: function (element) {
         if (element) {
             const json = element.jsonEditor.get();
-
             try {
                 element.value = JSON.stringify(json);
             } catch(e) {
@@ -1743,11 +1742,6 @@ const jsonEditorOptions = {
             }
         }
     },
-    onModeChange: function(element ,a,b,c) {
-        this.editor.setOptions({maxLines: Infinity});
-
-        // element.jsonEditor.editor.setOptions({maxLines: Infinity});
-    }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1772,7 +1766,6 @@ const jsonEditorOptions = {
                         element.parentElement.insertBefore(jsonEditor, element);
                         element.jsonEditor = new jsoneditor_dist_jsoneditor_min__WEBPACK_IMPORTED_MODULE_0___default.a(jsonEditor, jsonEditorOptions);
                         element.jsonEditor.set(json);
-                        // this.el = element;
                     }
                 } catch (err) {
                     console.error(err);
@@ -1804,8 +1797,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-            install(Vue) {
-                Vue.directive('richeditor', {
+    install(Vue) {
+        Vue.directive('richeditor', {
             /**
              * When the bound element is inserted into the init CKeditor
              *
