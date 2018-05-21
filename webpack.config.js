@@ -21,12 +21,10 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // vue dependencies
 const { VueLoaderPlugin } = require('vue-loader');
-
-// config
-const appEntry = `${path.resolve(__dirname, 'src/Javascript/app')}/app.js`;
 
 // Environment: default true
 // from Node env
@@ -53,7 +51,9 @@ const ENVIRONMENT = {
 // Bundle Config Object
 const BUNDLE = {
     // source
-    appRoot: 'src/Javascript',                     // source .js
+    jsRoot: 'src/Template/Layout/js',               // source .js
+    appPath: 'app',
+    appName: 'app.js',
     templateRoot: 'src/Template',                   // source .scss/ .twig
 
     // destination
@@ -64,6 +64,9 @@ const BUNDLE = {
     jsDir: 'js',                                    // destination js dir
     bundleFileName: '[name].bundle.js'              // [name] == entry name [app, vendors]
 }
+
+// config
+const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
 
 // Show Bundle Report
 let forceReport = false;
@@ -76,12 +79,12 @@ if (index) {
 const extractVendorsCSS = new ExtractTextPlugin({
         filename: `${BUNDLE.cssDir}/${BUNDLE.cssVendors}`,
         allChunks: true,
-        disable: devMode,
+        // disable: devMode,
     });
 const extractSass = new ExtractTextPlugin({
         filename: `${BUNDLE.cssDir}/${BUNDLE.cssStyle}`,
         allChunks: true,
-        disable: devMode,
+        // disable: devMode,
     });
 
 
@@ -98,6 +101,15 @@ bundler.printMessage(message, separator);
 // Create webpack plugins list
 // Common Plugins
 let webpackPlugins = [
+    new CleanWebpackPlugin([
+        BUNDLE.jsDir,
+        BUNDLE.cssDir,
+    ], {
+        root: path.resolve(__dirname, BUNDLE.webroot),
+        verbose: false,
+        // temp
+        exclude: ['be-icons-codes.css', 'be-icons-font.css'],
+    }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
     }),
@@ -163,20 +175,20 @@ if (devMode) {
     );
 }
 
-// Read dynamically src dir [BUNDLE.appRoot] direct subdir and create aliases for import
+// Read dynamically src dir [BUNDLE.jsRoot] direct subdir and create aliases for import
 // Add template dir [BUNDLE.templateRoot] alias
 const { readdirSync, statSync } = require('fs')
 const { join } = require('path')
 
 const readDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
-const entries = readDirs(BUNDLE.appRoot);
+const entries = readDirs(BUNDLE.jsRoot);
 
 const SRC_TEMPLATE_ALIAS = {
     Template: path.resolve(__dirname, BUNDLE.templateRoot),
 };
 
 for (const dir of entries) {
-    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.appRoot}/${dir}`);
+    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.jsRoot}/${dir}`);
 }
 
 module.exports = {
@@ -198,6 +210,7 @@ module.exports = {
         }
     },
 
+    // extract vendors import and put them in separate file
     optimization: {
         runtimeChunk: {
             name: "manifest"
@@ -267,7 +280,7 @@ module.exports = {
                 }),
             },
             {
-                test: /\.css$/,
+                test: /\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, 'node_modules'),
                 ],
@@ -285,7 +298,7 @@ module.exports = {
             {
                 test: /\.vue$/,
                 include: [
-                    path.resolve(__dirname, `${BUNDLE.appRoot}`),
+                    path.resolve(__dirname, `${BUNDLE.jsRoot}`),
                 ],
                 use: 'vue-loader'
             },
