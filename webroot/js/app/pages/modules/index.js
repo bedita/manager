@@ -41,7 +41,6 @@ Vue.component('modules-index', {
     created() {
         try {
             this.allIds = JSON.parse(this.ids);
-            // this.allIds = this.allIds.map(Number);
         } catch(error) {
             console.error(error);
         }
