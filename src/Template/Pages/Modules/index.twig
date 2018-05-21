@@ -9,8 +9,8 @@
             {# list objects : table header #}
             {% if objects %}
             <nav class="table-header">
-                <div>
-                    <input type="checkbox" @click="toggleAll" :checked="allChecked">
+                <div @click="toggleAll">
+                    <input type="checkbox" :checked="allChecked">
                 </div>
 
                 <div class="thumb-cell"></div>
