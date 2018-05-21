@@ -23,22 +23,26 @@
         {% endif %}
     </p>
 
-    {% if params %}
-        <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.parentNode.classList.add('details');this.setAttribute('hidden', true);">
-            {{ __('Show details') }}
-        </a>
-        <pre><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
-    {% endif %}
+    {% if _view.name != 'Login' %}
 
-    <script>
-        function closeMessage(el) {
-            el.parentNode.classList.remove('on');
-            setTimeout(() => {
-                el.parentNode.parentNode.removeChild(el.parentNode);
-            }, 300);
-        }
-    </script>
-    <a href="javascript:void(0)" class="btn-close" onclick="closeMessage(this);">
-        {{ __('Close') }}
-    </a>
+        {% if params %}
+            <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.parentNode.classList.add('details');this.setAttribute('hidden', true);">
+                {{ __('Show details') }}
+            </a>
+            <pre><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+        {% endif %}
+
+        <script>
+            function closeMessage(el) {
+                el.parentNode.classList.remove('on');
+                setTimeout(() => {
+                    el.parentNode.parentNode.removeChild(el.parentNode);
+                }, 300);
+            }
+        </script>
+        <a href="javascript:void(0)" class="btn-close" onclick="closeMessage(this);">
+            {{ __('Close') }}
+        </a>
+
+    {% endif %}
 </div>

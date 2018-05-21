@@ -35,5 +35,3 @@ Vue.component('modules-view', {
         }
     }
 });
-
-

@@ -1,30 +1,31 @@
-{% if object.relationships %}
+{#
+    load-on-start, loading events timing:
+    1300ms    - first relation
+    gap 300ms - till last relation
+#}
+
+{% if relations %}
 <section class="relations">
 
-    <header>
-        <h2>{{ __('Relations') }}</h2>
-    </header>
+    {% for relationName in relations %}
 
-    {% for relationName, val in object.relationships %}
-
-        {% if relationName != 'parents' and relationName != 'parent' %}
-            <div class="relation">
-
-            <property-view inline-template :tab-open="tabsOpen">
+        <div class="relation">
+            <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>{{ relationName }}</h2>
+                        <h2>{{ relationName|humanize|lower }}<span class="small-notification"
+                                                                v-bind:class="!count? 'empty' : ''"><: count :></span></h2>
                     </header>
 
                     <div v-show="isOpen" class="tab-container">
-                        {% element 'Form/relation' {'relationName': relationName} %}
+                        {% set wait = 1300 + (loop.index * 300) %}
+                        {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
                     </div>
 
                 </section>
             </property-view>
-            </div>
-        {% endif %}
+        </div>
 
     {% endfor %}
 

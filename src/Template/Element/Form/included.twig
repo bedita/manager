@@ -1,3 +1,4 @@
+{% if included or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen">
 <section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
@@ -56,7 +57,7 @@
                 {% endif %}
             </div>
 
-            <div class="stream-properties">
+            <div>
                 {# Stream properties #}
                 {# Display properties list without edit inputs, they're not changeable #}
                 {% set attributes = stream.attributes|merge(stream.meta) %}
@@ -65,7 +66,7 @@
                         {% for akey, val in attributes %}
                         {% if val %}
                             <tr>
-                                <th>{{ akey }} :</th>
+                                <th class="nowrap">{{ akey }} :</th>
                                 <td>
                                     {% if akey == 'url' %}
                                         <a href={{ val }} target="_blank">{{ val }}</a>
@@ -87,3 +88,4 @@
 
 </section>
 </property-view>
+{% endif %}

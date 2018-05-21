@@ -34,6 +34,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.4.4/flatpickr.js"></script>
 
+    {# used in humanize script in app.js, to be removed and change the method #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xregexp/3.2.0/xregexp-all.min.js"></script>
+
     {# polyfill fetch just in case #}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
 
@@ -47,7 +50,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-    <main class="layout" v-show="vueLoaded">
+    <main class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
         {% if _view.name == 'Dashboard' and _view.name != 'login' %}
             <aside class="layout-sidebar-primary">
                 {% element 'Menu/project' %}
@@ -77,6 +80,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
                 {% element 'Menu/colophon' %}
             </div>
         {% endif %}
+
+        {# component add relations with its own container #}
+        {# {% element 'Form/relation_add' {'relationName': relationName} %} #}
+        {% element 'panel' %}
     </main>
 
     {% if _view.name != 'login' %}
@@ -102,6 +109,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('app/components/property-view/property-view')|raw }}
     {{ Html.script('app/components/relation-view/relation-view')|raw }}
     {{ Html.script('app/components/relation-view/relationships-view/relationships-view')|raw }}
+    {{ Html.script('app/components/relation-view/relations-add')|raw }}
     {{ Html.script('app/components/tree-view/tree-list/tree-list')|raw }}
     {{ Html.script('app/components/tree-view/tree-view')|raw }}
 

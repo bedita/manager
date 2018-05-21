@@ -9,7 +9,8 @@
  */
 
 const datepickerOptions = {
-    enableTime: false,
+    enableTime: true,
+    time_24hr: true,
     dateFormat: "Y-m-d H:i",
     altInput: true,
     altFormat: "F j, Y - H:i",

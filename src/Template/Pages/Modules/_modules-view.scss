@@ -18,10 +18,6 @@ body.view-module {
         width: 100%;
         margin-top: $gutter;
 
-        header {
-            width: 100%;
-        }
-
         form {
             // layout
             display: flex;
@@ -62,32 +58,6 @@ body.view-module {
                     margin-bottom: $gutter * 3;
                 }
 
-                .tab {
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: $gutter;
-                    padding: .25rem .5rem;
-                    background-color: $gray-800;
-                    color: $gray-500;
-                    border-radius: 3px;
-                    cursor: pointer;
-
-                    &.is-loading-spinner {
-                        button {
-                            display: none;
-                        }
-                    }
-
-                    h2 {
-                        flex-grow: 1;
-                        margin: 0; padding: 0;
-                        font-size: 1.25rem;
-                        &:first-letter {
-                            text-transform: capitalize;
-                        }
-                    }
-                }
-
                 &.closed {
                     .tab {
                         color: $gray-600;
@@ -102,6 +72,7 @@ body.view-module {
 
                 label {
                     flex: 1 0 100%;
+                    margin-right: 16px;
                 }
 
                 div.input.status {
@@ -145,16 +116,35 @@ body.view-module {
             }
         }
 
-        .stream-properties {
-            th {
-                font-weight: $font-weight-normal;
-                white-space: nowrap;
-            }
-        }
-
         section.relations {
             width: 100%;
             margin-top: $gutter * 3;
+        }
+    }
+}
+
+.fieldset .tab {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter;
+    padding: .25rem .5rem;
+    background-color: $gray-800;
+    color: $gray-500;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &.is-loading-spinner {
+        button {
+            display: none;
+        }
+    }
+
+    h2 {
+        flex-grow: 1;
+        margin: 0; padding: 0;
+        font-size: 1.25rem;
+        &:first-letter {
+            text-transform: capitalize;
         }
     }
 }

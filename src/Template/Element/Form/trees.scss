@@ -1,9 +1,4 @@
 .tree-view {
-    .list-actions {
-        margin: 10px;
-        text-align: center;
-    }
-
     label {
         color: $gray-600;
     }
@@ -21,70 +16,73 @@
             }
 
             &:not(.disabled):hover {
-                border: 1px solid #ff5460;
                 cursor: pointer;
             }
 
-            &.tree-related-object{
-                background-color: #ff5460;
-                border: 1px solid #ff5460;
+            label {
+                cursor: inherit;
+                text-decoration: inherit;
+            }
 
+            &.tree-related-object{
                 &.was-related-object{
-                    background-color: transparent;
-                    border: 1px dashed #ff5460;
+                    text-decoration: line-through;
                 }
             }
         }
     }
 
     .tree-entry-list {
+        padding: 0 $gutter * .5;
+        margin-left: - ($gutter * 1.5);
+        line-height: 1;
 
         .tree-list-node {
-            // margin-left: 23px;
+            .node-element {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                height: $gutter * 1.5;
 
-            .node-children {
-                margin-left: 23px;
-            }
-
-            &.root-node {
-                margin-left: 0;
-            }
-
-            .icon-blank {
-                width: 23px;
-                visibility: hidden;
-            }
-
-            .icon {
-                cursor: pointer;
-            }
-
-            .toggle-tree-children {
-                display: inline-block;
-                transition: all 0.3s linear;
-                font-size: 20px;
-                width: 12px;
-                height: 12px;
-                line-height: 12px;
-                padding: 0;
-                cursor: pointer;
-
-                &.open {
-                    transform: rotate(90deg);
+                > input, > label {
+                    margin-left: $gutter * .5;
                 }
-            }
 
-            input {
-                cursor: pointer;
-                display: inline-block;
-            }
-
-            label {
-                display: inline-block;
-
-                &.is-folder {
+                > span.icon, > input, > label {
                     cursor: pointer;
                 }
+
+                &.node-folder {
+                    margin-left: $gutter * 1.5;
+                    label {
+                        margin-left: 11px;
+                    }
+                }
+
+                .icon {
+                    font-size: 20px;
+                    &:before { margin-right: 0; }
+                    &.unicode-branch {
+                        width: 20px;
+                        text-align: center;
+                        cursor: default;
+                        &:before {
+                            content: '└';
+                            color: $gray-800;
+                        }
+                    }
+                }
+
+                label {
+                    flex-basis: auto;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+            }
+
+            .node-children {
+                margin-left: $gutter * 3;
             }
         }
     }

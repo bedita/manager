@@ -19,13 +19,22 @@ Vue.component('property-view', {
             type: Boolean,
             default: true,
         },
+        isDefaultOpen: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             isOpen: true,
             isLoading: false,
+            count: 0,
         }
+    },
+
+    mounted() {
+        this.isOpen = this.isDefaultOpen;
     },
 
     watch: {
@@ -40,7 +49,10 @@ Vue.component('property-view', {
         },
         onToggleLoading(status) {
             this.isLoading = status;
-        }
+        },
+        onCount(n) {
+            this.count = n;
+        },
     }
 
 });

@@ -32,10 +32,6 @@ let PaginatedContentMixin = {
         getPaginatedObjects(autoload = true) {
             let baseUrl = window.location.href;
 
-            if (autoload) {
-                this.objects = [];
-            }
-
             if (this.endpoint) {
                 let requestUrl = `${baseUrl}/${this.endpoint}`;
                 const options =  {
@@ -122,6 +118,12 @@ let PaginatedContentMixin = {
                 const last = this.objects.length;
                 this.objects.splice(last, 0, ...moreObjects);
             }
+        },
+
+
+        toPage(i) {
+            this.pagination.page = i || 1;
+            return this.getPaginatedObjects(true);
         },
 
         /**

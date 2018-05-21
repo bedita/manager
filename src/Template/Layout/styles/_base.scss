@@ -38,8 +38,8 @@ textarea:focus, input:focus{
     box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
 }
 
-label {
-    font-weight: bold;
+label, th {
+    font-weight: normal;
 }
 
 h1, h2, h3 {
@@ -61,12 +61,25 @@ div, section {
 }
 
 // helper classes
+.full-size-absolute { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 !important; }
 .unselectable {
     user-select: none;
 }
 
-.hide-text {
+.is-text-hidden {
     @include hide-text();
+}
+
+.is-clipped {
+    overflow: hidden!important;
+}
+
+.is-expanded {
+    width: 100%;
+}
+
+.nowrap {
+    white-space: nowrap;
 }
 
 .center-icon {
@@ -87,6 +100,7 @@ div, section {
     }
 }
 
+
 // typography
 .has-text-size-base     { font-size: $font-size-base; }
 .has-text-size-large    { font-size: $font-size-lg; }
@@ -95,24 +109,30 @@ div, section {
 .has-text-size-small    { font-size: $font-size-sm; }
 .has-text-size-smaller  { font-size: $font-size-ssm; }
 .has-text-size-smallest { font-size: $font-size-sssm; }
+.has-text-size-smallest { font-size: $font-size-sssm; }
+.has-font-weight-light  { font-weight: $font-weight-light; }
+.has-font-weight-normal { font-weight: $font-weight-normal; }
+.has-font-weight-bold   { font-weight: $font-weight-bold; }
+
 
 
 // colors
-.has-background-transparent { background-color: transparent !important; }
-.has-background-white       { background-color: $white !important; }
-.has-background-black       { background-color: $black !important; }
-.has-background-gray-100    { background-color: $gray-100 !important; }
-.has-background-gray-200    { background-color: $gray-200 !important; }
-.has-background-gray-300    { background-color: $gray-300 !important; }
-.has-background-gray-400    { background-color: $gray-400 !important; }
-.has-background-gray-500    { background-color: $gray-500 !important; }
-.has-background-gray-550    { background-color: $gray-550 !important; }
-.has-background-gray-600    { background-color: $gray-600 !important; }
-.has-background-gray-700    { background-color: $gray-700 !important; }
-.has-background-gray-800    { background-color: $gray-800 !important; }
-.has-background-gray-900    { background-color: $gray-900 !important; }
-.has-background-danger      { background-color: $danger !important; }
-.has-background-info      { background-color: $info !important; }
+.has-background-transparent  { background-color: transparent !important; }
+.has-background-white        { background-color: $white !important; }
+.has-background-black        { background-color: $black !important; }
+.has-background-gray-100     { background-color: $gray-100 !important; }
+.has-background-gray-200     { background-color: $gray-200 !important; }
+.has-background-gray-300     { background-color: $gray-300 !important; }
+.has-background-gray-400     { background-color: $gray-400 !important; }
+.has-background-gray-500     { background-color: $gray-500 !important; }
+.has-background-gray-550     { background-color: $gray-550 !important; }
+.has-background-gray-600     { background-color: $gray-600 !important; }
+.has-background-gray-700     { background-color: $gray-700 !important; }
+.has-background-gray-800     { background-color: $gray-800 !important; }
+.has-background-gray-900     { background-color: $gray-900 !important; }
+.has-background-danger       { background-color: $danger !important; }
+.has-background-light-danger { background-color: $light-danger !important; }
+.has-background-info         { background-color: $info !important; }
 
 .has-text-transparent { color: transparent !important; }
 .has-text-white       { color: $white !important; }
@@ -129,6 +149,24 @@ div, section {
 .has-text-gray-900    { color: $gray-900 !important; }
 .has-text-danger      { color: $danger !important; }
 .has-text-info        { color: $info !important; }
+
+.has-border-transparent { border-color: transparent !important; }
+.has-border-white       { border-color: $white !important; }
+.has-border-black       { border-color: $black !important; }
+.has-border-gray-100    { border-color: $gray-100 !important; }
+.has-border-gray-200    { border-color: $gray-200 !important; }
+.has-border-gray-300    { border-color: $gray-300 !important; }
+.has-border-gray-400    { border-color: $gray-400 !important; }
+.has-border-gray-500    { border-color: $gray-500 !important; }
+.has-border-gray-550    { border-color: $gray-550 !important; }
+.has-border-gray-600    { border-color: $gray-600 !important; }
+.has-border-gray-700    { border-color: $gray-700 !important; }
+.has-border-gray-800    { border-color: $gray-800 !important; }
+.has-border-gray-900    { border-color: $gray-900 !important; }
+.has-border-danger      { border-color: $danger !important; }
+.has-border-info        { border-color: $info !important; }
+
+
 
 // orders
 .order-top    { order: 0 !important; }

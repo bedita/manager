@@ -1,6 +1,7 @@
 /**
- * Templates that uses this component (directly or indirectly):
+ *  Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
+ *  Template/Elements/trees.twig
  *  Template/Elements/trees.twig
  *
  * <relation-view> component used for ModulesPage -> View
@@ -13,19 +14,19 @@
 Vue.component('relation-view', {
     mixins: [ PaginatedContentMixin ],
 
-    // defining props with validation
     props: {
         relationName: {
             type: String,
             required: true,
         },
-        loadOnStart: {
-            type: Boolean,
-            default: false,
-        },
+        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
+        },
+        configPaginateSizes: {
+            type: String,
+            default: '[]',
         },
     },
 
@@ -33,20 +34,26 @@ Vue.component('relation-view', {
         return {
             method: 'relatedJson',          // define AppController method to be used
             loading: false,
-            showRelationshipsPanel: false,
+            count: 0,                       // count number of related objects, on change triggers an event
 
             removedRelated: [],             // currently related objects to be removed
             addedRelations: [],             // staged added objects to be saved
-            hideRelations: [],              // hide already added relations in relationships-view
             relationsData: [],              // hidden field containing serialized json passed on form submit
+            newRelationsData: [],           // array of serialized new relations
 
-            step: DEFAULT_PAGINATION.page_size,     // step value for pagination page size
+            pageSize: DEFAULT_PAGINATION.page_size,     // pageSize value for pagination page size
+        }
+    },
 
-            pageSizeOptions: [
-                20,
-                50,
-                100,
-            ]
+    computed: {
+        // array of ids of objects in view
+        alreadyInView() {
+            var a = this.addedRelations.map(o => o.id);
+            var b = this.objects.map(o => o.id);
+            return a.concat(b);
+        },
+        paginateSizes() {
+            return JSON.parse(this.configPaginateSizes);
         }
     },
 
@@ -65,28 +72,34 @@ Vue.component('relation-view', {
      * @return {void}
      */
     mounted() {
-        if (this.loadOnStart) {
-            this.loadRelatedObjects();
-        }
+        this.loadOnMounted();
     },
 
     watch: {
         /**
-         * watcher for step variable, change pageSize and reload relations
+         * watcher for pageSize variable, change pageSize and reload relations
          *
          * @param {Number} value
          */
-        step(value) {
+        pageSize(value) {
             this.setPageSize(value);
             this.loadRelatedObjects();
         },
 
         loading(value) {
             this.$emit('loading', value);
-        }
+        },
     },
 
     methods: {
+        async loadOnMounted() {
+            if (this.loadOnStart) {
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                await sleep(t);
+                await this.loadRelatedObjects();
+            }
+        },
+
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
@@ -97,27 +110,41 @@ Vue.component('relation-view', {
 
             let resp = await this.getPaginatedObjects();
             this.loading = false;
-
+            this.$emit('count', this.pagination.count);
             return resp;
         },
+
+
+        /**
+         * toggle relation
+         *
+         * @param {object}
+         *
+         * @returns {void}
+         */
+        relationToggle(related) {
+            if (!related || !related.id) {
+                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+                return;
+            }
+            if (!this.containsId(this.removedRelated, related.id)) {
+                this.removeRelation(related);
+            } else {
+                this.undoRemoveRelation(related);
+            }
+        },
+
 
         /**
          * remove related object: adding it to removedRelated Array
          *
-         * @param {Number} id
          * @param {String} type
          *
          * @returns {void}
          */
-        removeRelations(related) {
-            if (!related || !related.id) {
-                console.error('[removeRelations] needs first param as object with id propperty set');
-                return;
-            }
-            if (!this.containsId(this.removedRelated, related.id)) {
-                this.removedRelated.push(related);
-                this.relationsData = this.relationFormatterHelper(this.removedRelated);
-            }
+        removeRelation(related) {
+            this.removedRelated.push(related);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
 
         /**
@@ -128,14 +155,11 @@ Vue.component('relation-view', {
          *
          * @returns {void}
          */
-        reAddRelations(related) {
-            if (!related || !related.id) {
-                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
-                return;
-            }
+        undoRemoveRelation(related) {
             this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
-            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
+
 
         /**
          * prepare removeRelated Array for saving using serialized json input field
@@ -149,86 +173,24 @@ Vue.component('relation-view', {
                 return;
             }
             this.removedRelated = relations;
-            this.relationsData = this.relationFormatterHelper(this.removedRelated);
+            this.relationsData = JSON.stringify(this.removedRelated);
         },
 
-        /**
-         * show next page of paginated content
-         *
-         */
-        async showMoreRelated() {
-            this.loading = true;
-            await this.loadMore(this.step);
-            this.loading = false;
-        },
 
         /**
-         * load first page of content returns newly loaded objects
+         * go to specific page
          *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         * @param {Number} page number
          *
          * @return {Promise} repsonse from server with new data
          */
-        async firstPage(autoload = true) {
+        async toPage(i) {
             this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await PaginatedContentMixin.methods.firstPage.call(this, autoload);
+            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
             this.loading = false;
-
             return resp;
         },
 
-        /**
-         * load last page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async lastPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await PaginatedContentMixin.methods.lastPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
-
-        /**
-         * load next page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async nextPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await PaginatedContentMixin.methods.nextPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
-
-        /**
-         * load prev page of content returns newly loaded objects
-         *
-         * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async prevPage(autoload = true) {
-            this.loading = true;
-
-            // calling Mixin's method
-            let resp =  await PaginatedContentMixin.methods.prevPage.call(this, autoload);
-            this.loading = false;
-
-            return resp;
-        },
 
         /**
          * remove element with matched id from staged relations
@@ -243,25 +205,6 @@ Vue.component('relation-view', {
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
         },
 
-        /**
-         * Show relationships-view and pass objects already related which need to be hidden
-         *
-         * @return {void}
-         */
-        showRelationshipsModal() {
-            // this.hideRelations is passed as prop to relationships-view
-            this.hideRelations = this.objects;
-            this.showRelationshipsPanel = true;
-        },
-
-        /**
-         * helper function for template
-         *
-         * @return {Boolean} true if has at least a related object or a newly added object
-         */
-        hasElementsToShow() {
-            return (this.objects && this.objects.length) || (this.addedRelations && this.addedRelations.length);;
-        },
 
         /**
          * Event 'added-relations' callback
@@ -271,21 +214,20 @@ Vue.component('relation-view', {
          *
          * @return {void}
          */
-        appendRelations(relations) {
-            this.addedRelations = relations;
+        appendRelations(items) {
+            if (!this.addedRelations.length) {
+                this.addedRelations = items;
+            } else {
+                var existingIds = this.addedRelations.map(a => a.id);
+                for (var i = 0; i < items.length; i++) {
+                    if (existingIds.indexOf(items[i].id) < 0) {
+                        this.addedRelations.push(items[i]);
+                    }
+                }
+            }
+            this.newRelationsData = JSON.stringify(this.addedRelations);
         },
 
-        /**
-         * Event 'visibility-setter' callback
-         * set current view's relationships-view visibility from child view
-         *
-         * @param {Boolean} isVisible
-         *
-         * @return {void}
-         */
-        setRelationshipPanelVisibility(isVisible) {
-            this.showRelationshipsPanel = isVisible;
-        },
 
         /**
          * helper function: check if array relations has element with id -> id
@@ -299,22 +241,6 @@ Vue.component('relation-view', {
             return relations.filter((rel) => rel.id === id).length;
         },
 
-        /**
-         * helper function: convert array to string
-         *
-         * @param {Array} relations
-         *
-         * @return {String} string version of relations
-         */
-        relationFormatterHelper(relations) {
-            let jsonString = '';
-            try {
-                jsonString = JSON.stringify(relations);
-            } catch(err) {
-                console.error(err);
-            }
-            return jsonString;
-        },
 
         /**
          * helper function: build open view url
@@ -327,6 +253,25 @@ Vue.component('relation-view', {
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
+
+
+        /**
+         * request panel emitting event in module view
+         *
+         * @param {String} objectType
+         * @param {Number} objectId
+         *
+         * @return {String} url
+         */
+        requestPanel() {
+            // emit event in module view
+            this.$parent.$parent.$emit('request-panel', {
+                relation: {
+                    name: this.relationName,
+                    alreadyInView: this.alreadyInView,
+                },
+            });
+        }
     }
 
 });

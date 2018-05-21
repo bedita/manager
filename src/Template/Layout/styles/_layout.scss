@@ -6,16 +6,19 @@ main.layout {
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr auto;
     padding: $gutter;
-    min-height: 100vh;
+
 
     > .layout-sidebar-primary {
         grid-area: main-sidebar;
-
         margin-right: 2px;
     }
 
     > .layout-sidebar-secondary {
         grid-area: secondary-sidebar;
+
+        > * {
+            transition: .3s transform;
+        }
     }
 
     > .layout-header {
@@ -25,10 +28,12 @@ main.layout {
         flex-direction: column;
         justify-content: space-between;
         height: 110px;
+        transition: .3s transform;
     }
 
     > .layout-content {
         grid-area: content;
+        transition: .3s transform;
     }
 
     > .layout-footer {
@@ -38,5 +43,42 @@ main.layout {
         border-top: 1px solid #495057;
         padding: $gutter * .5 0 0;
         margin-left: 90px + $gutter;
+    }
+
+    &.panel-is-open {
+        > .layout-header, > .layout-content {
+            transform: translateX(-114px);
+        }
+        > .layout-sidebar-secondary {
+            > * {
+                transform: translateX(-114px);
+            }
+        }
+        .main-panel.on {
+            transform: translateX(0);
+            box-shadow: 0 0 32px black;
+        }
+    }
+}
+
+// side panel
+.main-panel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; right: 0;
+    min-width: 25 * $gutter;
+    width: 60%;
+    height: 100vh;
+    z-index: 100;
+    background-color: $black;
+    box-shadow: 0 0 0 black;
+    transform: translateX(101%);
+    transition: .3s transform;
+    overflow: hidden;
+    will-change: transform;
+    .main-panel-body {
+        flex: 1 1 0;
+        overflow: hidden;
     }
 }

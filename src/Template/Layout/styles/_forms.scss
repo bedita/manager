@@ -53,11 +53,16 @@ button, a.button {
         border: 1px solid $gray-600;
     }
 
-    &[class^="icon-"] {
-        min-width: auto;
-        height: auto;
-        padding: 0;
+    &:disabled {
+        color: $gray-700 !important;
+        background-color: $gray-500 !important;
+        pointer-events: none;
     }
+    // &[class^="icon-"] {
+    //     min-width: auto;
+    //     height: auto;
+    //     padding: 0;
+    // }
 
     &:focus {
         outline: none;
@@ -67,6 +72,18 @@ button, a.button {
     &.is-dark {
         background-color: $gray-700;
         color: $gray-300;
+    }
+
+    &.is-small {
+        height: $gutter * 1.5;
+        padding-left: .5em;
+        padding-right: .5em;
+        font-size: $font-size-sssm;
+    }
+
+    &.is-larger {
+        padding-left: 3em;
+        padding-right: 3em;
     }
 }
 
@@ -92,7 +109,6 @@ select {
 }
 
 label {
-    font-weight: normal;
     > input {
         margin-right: $gutter * .5;
     }
@@ -141,14 +157,15 @@ form fieldset {
 
 // Date Picker
 .clear-button {
-    transition: all 0.4s ease-in-out;
-    display: inline-block;
+    display: inline-flex;
     z-index: 10;
-    color: $gray-900;
-    font-size: 1.3em;
-    line-height: 25px;
-    margin-left: -30px;
-    padding: 0px 9px;
+    color: $gray-800;
+    font-size: 1.25em;
+    margin-left: -25px;
+    width: 21px;
+    height: 21px;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 
 
