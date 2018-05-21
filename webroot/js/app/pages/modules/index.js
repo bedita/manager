@@ -30,7 +30,6 @@ Vue.component('modules-index', {
     data() {
         return {
             allIds: [],
-            trashids: [],
             selectedRows: [],
             status: '',
         };
@@ -67,7 +66,6 @@ Vue.component('modules-index', {
          * @return {void}
          */
         toggleAll() {
-            console.log(this.allChecked);
             if (this.allChecked) {
                 this.unCheckAll();
             } else {
