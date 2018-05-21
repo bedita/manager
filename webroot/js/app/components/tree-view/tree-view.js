@@ -92,7 +92,7 @@ Vue.component('tree-view', {
          */
         async loadTree() {
             if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 1;
+                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
                 await sleep(t);
                 await this.loadObjects();
                 this.jsonTree = {
