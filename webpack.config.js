@@ -12,19 +12,15 @@ const bundler = {
 
 // node dependencies
 const path = require('path');
-const webpack = require('webpack');
 const chalk = require('chalk');
 
 // webpack dependencies
+const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const CompressionPlugin = require('compression-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
-// import WatchExternalFilesPlugin from 'webpack-watch-files-plugin';
-
-console.dir(WatchExternalFilesPlugin);
 
 // vue dependencies
 const { VueLoaderPlugin } = require('vue-loader');
@@ -58,7 +54,7 @@ const ENVIRONMENT = {
 const BUNDLE = {
     // source
     appRoot: 'src/Javascript',                     // source .js
-    templateRoot: 'src/Template',                   // source .scss
+    templateRoot: 'src/Template',                   // source .scss/ .twig
 
     // destination
     webroot: 'webroot',    // destination webroot
@@ -156,15 +152,6 @@ if (devMode) {
     );
 } else {
     // Production Plugins
-    // webpackPlugins.push(
-    //     new CompressionPlugin({
-    //         asset: "[path].gz[query]",
-    //         algorithm: "gzip",
-    //         test: /\.js$|\.css$|\.html$/,
-    //         threshold: 10240,
-    //         minRatio: 0.8
-    //     })
-    // );
 
     webpackPlugins.push(
         new OptimizeCssAssetsPlugin({
