@@ -78,12 +78,24 @@ docker run -p 8080:80 \
 
 Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch a local built image.
 
-### Run dev with gulp
+### Run dev with webpack
 
-Launch gulp with host parameter to proxy your local instance of bedita4web, and watch it with gulp, like this:
+## Development
 
 ```bash
-node_modules/.bin/gulp dev --host http://localhost:8765
+yarn run develop
+```
+
+## Build
+
+```bash
+yarn run build
+```
+
+## Bundle Report
+
+```bash
+yarn run bundle-report
 ```
 
 Host passed via `--host` option points to your local instance, builtin webserver is used in this example.
