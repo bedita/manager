@@ -12,7 +12,7 @@
                     <span><: pagination.page_items :> {{ __('objects') }}</span>
                 </div>
                 <div>
-                    <span>Page size:</span>
+                    <span>{{ __('Page size') }}:</span>
                 </div>
                 <div>
                     <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
@@ -66,7 +66,7 @@
 
                     <footer>
                         <a class="button is-dark is-small" @click.prevent="relationToggle(related)"
-                            v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'">rimuovi</a>
+                            v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
                     </footer>
                 </div>
 
@@ -76,7 +76,7 @@
 
 
             {# staged objects to be added #}
-            <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">New relations (save to keep)</p>
+            <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
             <div class="related-objects-list columns" v-if="addedRelations.length">
                 <div class="related-object column"
                     v-for="related in addedRelations"
@@ -102,7 +102,7 @@
                         </div>
 
                         <footer>
-                            <a @click.prevent="removeAddedRelations(related.id)">click to remove</a>
+                            <a @click.prevent="removeAddedRelations(related.id)">{{ __('click to remove') }}</a>
                         </footer>
                     </article>
                 </div>
