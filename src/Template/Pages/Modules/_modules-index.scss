@@ -119,6 +119,7 @@ body.view-module {
 
         .bulk-actions {
             border-top: 1px solid $gray-700;
+            padding: 0 $gutter * .5;
 
             header {
                 margin: $gutter 0;
@@ -129,6 +130,10 @@ body.view-module {
                 display: flex;
                 form {
                     margin-right: $gutter;
+                    &:last-of-type {
+                        margin-right: 0;
+                        margin-left: auto;
+                    }
                 }
             }
         }
