@@ -100,6 +100,15 @@ div, section {
     }
 }
 
+.space-around {
+    margin-left: $gutter;
+    margin-right: $gutter;
+}
+.space-around-half {
+    margin-left: $gutter * .5;
+    margin-right: $gutter * .5;
+}
+
 
 // typography
 .has-text-size-base     { font-size: $font-size-base; }
