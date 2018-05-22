@@ -55,3 +55,6 @@ package-lock.json
 node_modules/
 .cache/
 yarn-error.log
+*.css.map
+*.bundle.js.map
+bundle-report.develop.html
