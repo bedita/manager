@@ -119,11 +119,15 @@ body.view-module {
 
         .bulk-actions {
             border-top: 1px solid $gray-700;
-            padding: 0 $gutter * .5;
 
             header {
-                margin: $gutter 0;
+                margin: $gutter 0 $gutter * .5;
                 width: 100%;
+                opacity: .3;
+            }
+
+            &.enabled {
+                header { opacity: 1; }
             }
 
             nav {

@@ -72,7 +72,7 @@
 
         {# bulk actions #}
         {% if objects %}
-            <div class="bulk-actions">
+            <div class="bulk-actions" :class="!selectedRows.length? '' : 'enabled'">
                 <header>
                     <p>{{ __('Actions on selected items') }}</p>
                 </header>
