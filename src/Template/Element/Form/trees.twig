@@ -1,7 +1,7 @@
 {#
     load-on-start, loading events timing
     800ms  - all folders (tree-view)
-    1000ms - relations with folders
+    900ms - relations with folders
 #}
 
 {% set relationName = 'parents' %}
@@ -28,7 +28,7 @@
                 inline-template
                 relation-name={{ relationName }}
                 :multiple-choice={{ options.multiple }}
-                :load-on-start="1200"
+                :load-on-start="900"
                 @loading="onToggleLoading">
 
                     <div class="tree-{{ relationName }} unselectable">
@@ -37,7 +37,7 @@
                             inline-template
                             relation-name={{ relationName }}
                             :related-objects="objects"
-                            :load-on-start="800"
+                            :load-on-start="700"
                             :multiple-choice="multipleChoice"
                             @remove-relations="setRemovedRelated">
                             <div class="tree-view">
