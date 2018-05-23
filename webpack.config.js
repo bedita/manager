@@ -1,18 +1,8 @@
 #!/usr/bin/env node
 'use strict'
 
-// util
-const bundler = {
-    printMessage(message, separator) {
-        console.log(chalk.red.bold(separator));
-        console.log(chalk.blue.bold(message));
-        console.log(chalk.red.bold(separator));
-    }
-}
-
-// node dependencies
-const path = require('path');
-const chalk = require('chalk');
+// erquire environment setup
+require('./webpack.config.environment');
 
 // webpack dependencies
 const webpack = require('webpack');
@@ -26,63 +16,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // vue dependencies
 const { VueLoaderPlugin } = require('vue-loader');
 
-// Environment: default true
-// from Node env
-let devMode = process.env.NODE_ENV !== 'production';
-
-// from args
-const args = process.argv;
-let index = args.indexOf('--mode');
-if (index !== -1) {
-    let paramIndex = ++index;
-    if (paramIndex <= args.length) {
-        devMode = args[paramIndex] !== 'production';
-    }
-}
-
-let proxy = 'localhost:8080';
-index = args.indexOf('--proxy');
-if (index !== -1) {
-    let paramIndex = ++index;
-    if (paramIndex <= args.length) {
-        proxy = args[paramIndex];
-    }
-}
-
-// Env Config Object
-const ENVIRONMENT = {
-    mode: devMode ? 'develop' : 'production',
-    proxy: proxy,
-    host: 'localhost',
-    port: 3000,
-}
-
-// Bundle Config Object
-const BUNDLE = {
-    // source
-    jsRoot: 'src/Template/Layout/js',               // source .js
-    appPath: 'app',
-    appName: 'app.js',
-    templateRoot: 'src/Template',                   // source .scss/ .twig
-
-    // destination
-    webroot: 'webroot',    // destination webroot
-    cssDir: 'css',                                  // destination css dir
-    cssStyle: 'style.css',                          // destination app styles filename [app/ ....scss]
-    cssVendors: 'vendors.css',                      // destination vendors styles [node_modules]
-    jsDir: 'js',                                    // destination js dir
-    bundleFileName: '[name].bundle.js'              // [name] == entry name [app, vendors]
-}
-
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
-
-// Show Bundle Report
-let forceReport = false;
-index = args.indexOf('--report');
-if (index) {
-    forceReport = true;
-}
 
 // Create multiple instances of ExtractTextPlugin for Vendors and src/.scss
 const extractVendorsCSS = new ExtractTextPlugin({
@@ -186,10 +121,6 @@ if (devMode) {
 
 // Read dynamically src dir [BUNDLE.jsRoot] direct subdir and create aliases for import
 // Add template dir [BUNDLE.templateRoot] alias
-const { readdirSync, statSync } = require('fs')
-const { join } = require('path')
-
-const readDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
 const entries = readDirs(BUNDLE.jsRoot);
 
 const SRC_TEMPLATE_ALIAS = {
@@ -198,6 +129,13 @@ const SRC_TEMPLATE_ALIAS = {
 
 for (const dir of entries) {
     SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.jsRoot}/${dir}`);
+}
+
+// aliases for vendors TO-DO
+if (devMode) {
+    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue';
+} else {
+    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
 }
 
 module.exports = {
@@ -245,10 +183,21 @@ module.exports = {
 
     module: {
         rules: [
+            {
+                test: /\.vue$/,
+                include: [
+                    // path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}`),
+
+                ],
+                use: 'vue-loader'
+            },
             // if dev mode don't use babel
             devMode ? {} : {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
+                include: [
+                    path.resolve(__dirname, `webroot/modules`),
+                ],
                 loader: 'babel-loader',
                 options: {
                     compact: false,
@@ -259,6 +208,7 @@ module.exports = {
                             // browsers: ['last 1 version'],
                             useBuiltIns: "usage",
                             // debug: true,
+                            plugins: ["dynamic-import-node"]
                         }]
                     ]
                 }
@@ -272,6 +222,7 @@ module.exports = {
                 use: extractSass.extract({
                     fallback: 'style-loader',
                     use: [
+                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {
@@ -296,6 +247,7 @@ module.exports = {
                 use: extractVendorsCSS.extract({
                     fallback: 'style-loader',
                     use: [
+                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {
@@ -311,13 +263,6 @@ module.exports = {
                         }
                     ]
                 }),
-            },
-            {
-                test: /\.vue$/,
-                include: [
-                    path.resolve(__dirname, `${BUNDLE.jsRoot}`),
-                ],
-                use: 'vue-loader'
             },
             {
                 test: /\.(woff|eot|gif)$/,
