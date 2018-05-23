@@ -18,7 +18,9 @@
     "scripts": {
         "build": "webpack --mode production",
         "bundle-report": "webpack --mode production --report",
-        "develop": "webpack --mode development"
+        "develop": "webpack --mode development",
+        "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
+        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
     },
     "dependencies": {
         "decamelize": "^2.0.0",

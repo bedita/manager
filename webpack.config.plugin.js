@@ -82,4 +82,14 @@ module.exports = {
             // },
         ]
     },
+    devtool: devMode ? "source-map" : false,
+
+    watch: devMode,
+
+    stats: {
+        // Display the entry points with the corresponding bundles
+        entrypoints: false,
+        modules: false,
+        warnings: devMode,
+    },
 };
