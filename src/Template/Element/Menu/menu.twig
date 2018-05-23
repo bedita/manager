@@ -15,7 +15,12 @@
     {% endfor %}
 
     {% if currentModule.name != "trash" %}
-    <li class="has-background-transparent has-text-module-{{ currentModule.name }} icon-trash-2 center-icon">
+        {% if currentModule.hints.multiple_types %}
+            {% set elementClass = "space-around-half has-background-module-" ~ currentModule.name %}
+        {% else %}
+            {% set elementClass = "has-text-module-" ~ currentModule.name %}
+        {% endif %}
+        <li class="has-background-transparent {{ elementClass }} icon-trash-2 center-icon">
         {{ Html.link(__(''),
             {'_name': 'trash:list', 'filter': {'type': objectType}},
             {'tooltip': __('View trashed ') ~ currentModule.name|humanize}

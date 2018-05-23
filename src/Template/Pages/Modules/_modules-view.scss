@@ -85,8 +85,12 @@ body.view-module {
                     }
                 }
 
+                .stream {
+                    display: flex;
+                }
                 .thumb {
                     background-color: $gray-400;
+                    display: inline-block;
                     a {
                         display: block;
                         background-image: linear-gradient(45deg, $gray-300 25%, transparent 25%), linear-gradient(-45deg, $gray-300 25%, transparent 25%), linear-gradient(45deg, transparent 75%, $gray-300 75%), linear-gradient(-45deg, transparent 75%, $gray-300 75%);
@@ -94,7 +98,7 @@ body.view-module {
                         background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
                         img {
                             display: block;
-                            width: 100%;
+                            max-width: 100%;
                         }
                     }
                 }

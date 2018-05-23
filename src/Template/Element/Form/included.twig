@@ -1,5 +1,5 @@
 {% if included or object.attributes.provider_extra.html %}
-<property-view inline-template :tab-open="tabsOpen">
+<property-view inline-template :tab-open="tabsOpen" is-default-open="true">
 <section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
@@ -29,7 +29,7 @@
                 {# thumb #}
                 {% if object.type == 'images' %}
                     {# TODO process below #}
-                    {% set thumb = Thumb.url(object.id, { 'options': { 'w': 600 } } ) %}
+                    {% set thumb = Thumb.url(object.id, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
                     {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
                         <p>{{ __('The thumbnail is not available') }}</p>
                         <p>

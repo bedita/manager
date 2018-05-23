@@ -70,7 +70,7 @@ if (devMode || forceReport) {
         new BundleAnalyzerPlugin({
             openAnalyzer: false,
             analyzerMode: 'static',
-            reportFilename: `report/bundle-report.${ENVIRONMENT.mode}.html`,
+            reportFilename: `bundle-report/bundle-report.${ENVIRONMENT.mode}.html`,
         })
     );
 }

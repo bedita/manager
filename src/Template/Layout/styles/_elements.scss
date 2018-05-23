@@ -15,6 +15,28 @@
     line-height: 1.5;
     white-space: nowrap;
     user-select: none;
+
+    &.is-smallest {
+        font-size: 10px;
+        height: 16px;
+        vertical-align: middle;
+        margin-bottom: 2px;
+        line-height: 16px;
+    }
+
+    &.is-black {
+        background-color: $black;
+        color: $gray-100;
+    }
+
+    &.is-dark {
+        background-color: $gray-900;
+        color: $gray-100;
+    }
+
+    &.empty {
+        opacity: .3;
+    }
 }
 .tag-group {
     align-items: center;

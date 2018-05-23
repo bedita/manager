@@ -1,7 +1,7 @@
 {#
     load-on-start, loading events timing:
-    1300ms    - first relation
-    gap 300ms - till last relation
+    1000ms    - first relation
+    gap 200ms - till last relation
 #}
 
 {% if relations %}
@@ -14,12 +14,12 @@
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>{{ relationName|humanize|lower }}<span class="small-notification"
+                        <h2>{{ relationName|humanize|lower }}<span class="tag is-smallest is-black space-around-half"
                                                                 v-bind:class="!count? 'empty' : ''"><: count :></span></h2>
                     </header>
 
                     <div v-show="isOpen" class="tab-container">
-                        {% set wait = 1300 + (loop.index * 300) %}
+                        {% set wait = 1000 + (loop.index * 200) %}
                         {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
                     </div>
 
