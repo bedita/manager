@@ -1,6 +1,8 @@
-import Vue from 'vue/dist/vue.min.js';
+import Vue from 'vue';
 
 import 'Template/Layout/style.scss';
+
+import { BELoader } from 'libs/bedita';
 
 import ModulesIndex from 'app/pages/modules/index';
 import ModulesView from 'app/pages/modules/view';
@@ -59,7 +61,10 @@ const _vueInstance = new Vue({
         }
     },
 
-    created() {
+    async created() {
+        // load BEplugins's components
+        BELoader.loadBeditaPlugins();
+
         this.vueLoaded = true;
 
         // load url params when component initialized

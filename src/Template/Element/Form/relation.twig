@@ -53,7 +53,7 @@
                             <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
-                        <div v-if="related.meta.relation">
+                        <div v-if="related.meta && related.meta.relation">
                             <p class="has-text-size-smallest"
                                 v-for="(paramValue, paramName) in related.meta.relation.params"><: paramName :>: <: paramValue :></p>
                         </div>
