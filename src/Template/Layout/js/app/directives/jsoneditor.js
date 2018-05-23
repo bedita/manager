@@ -4,7 +4,7 @@
  *
  */
 
-import JSONEditor from 'jsoneditor/dist/jsoneditor.min';
+import JSONEditor from 'jsoneditor/dist/jsoneditor-minimalist';
 import 'jsoneditor/dist/jsoneditor.min.css';
 
 const jsonEditorOptions = {
