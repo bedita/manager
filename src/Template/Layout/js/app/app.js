@@ -77,6 +77,14 @@ const _vueInstance = new Vue({
     },
 
     methods: {
+        pageClick(event) {
+            if (this.panelIsOpen) {
+                this.panelIsOpen = !this.panelIsOpen;
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        },
+
         // panel
         onRequestPanelToggle(evt) {
             this.panelIsOpen = !this.panelIsOpen;

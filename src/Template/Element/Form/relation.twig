@@ -139,8 +139,8 @@
             <button
                 v-bind:class="$root.panelIsOpen? 'icon-coffee' : 'icon-hdd'"
                 v-html="$root.panelIsOpen? 'cancel' : '{{ __('add objects') }}'"
-                @click.prevent="requestPanel()"></button>
-            <button @click.prevent="loadRelatedObjects()">{{ __('reload') }}</button>
+                @click.prevent.stop="requestPanel()"></button>
+            <button @click.prevent.stop="loadRelatedObjects()">{{ __('reload') }}</button>
         </div>
 
     </div>
