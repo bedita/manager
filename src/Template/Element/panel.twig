@@ -19,7 +19,7 @@
                         <article class="box has-text-gray-100 has-text-size-smaller"
                                 v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
                                     alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
-                                @click.prevent="toggle(related, $event)">
+                                @click.prevent.stop="toggle(related, $event)">
 
                             <header>
                                 <h1><: related.attributes.title || related.attributes.name :></h1>
@@ -49,7 +49,7 @@
                 <footer>
                     <p>
                         <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent="returnData()">Add objects to <: relationHumanizedName :></button>
+                            @click.prevent.stop="returnData()">Add objects to <: relationHumanizedName :></button>
                     </p>
                 </footer>
 
