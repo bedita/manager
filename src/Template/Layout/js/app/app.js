@@ -1,4 +1,6 @@
 import Vue from 'vue';
+
+import 'libs/filters';
 import 'config/config';
 
 import 'Template/Layout/style.scss';
@@ -43,6 +45,18 @@ const _vueInstance = new Vue({
     },
 
     /**
+     * properties or methods available for injection into its descendants
+     * (inject: ['property'])
+     */
+    provide() {
+        return {
+            requestPanel: (...args) => this.requestPanel(...args),
+            closePanel: (...args) => this.closePanel(...args),
+            returnDataFromPanel: (...args) => this.returnDataFromPanel(...args),
+        }
+    },
+
+    /**
      * setup Vue instance before creation
      *
      * @return {void}
@@ -77,35 +91,63 @@ const _vueInstance = new Vue({
     },
 
     methods: {
+        /**
+         * on page click:
+         * - if panel is open, close it and stop event propagation
+         * - if panel is closed do nothing
+         *
+         * @return {void}
+         */
         pageClick(event) {
             if (this.panelIsOpen) {
-                this.panelIsOpen = !this.panelIsOpen;
+                this.closePanel();
                 event.preventDefault();
                 event.stopPropagation();
             }
         },
 
-        // panel
-        onRequestPanelToggle(evt) {
-            this.panelIsOpen = !this.panelIsOpen;
-
-            // return data from panel
-            if(evt.returnData) {
-                if(evt.returnData.relationName){
-                    this.$refs["moduleView"]
-                        .$refs[evt.returnData.relationName]
-                        .$refs["relation"].appendRelations(evt.returnData.objects);
-                }
-            }
-
-            // open panel for relations add
-            if(this.panelIsOpen && evt.relation && evt.relation.name) {
-                this.addRelation = evt.relation;
-            } else {
-                sleep(500).then(() => this.addRelation = {}); // 500ms is the panel transition duration
+        /**
+         * return data from panel
+         *
+         * @param {Object} data
+         *
+         * @return {void}
+         */
+        returnDataFromPanel(data) {
+            this.closePanel();
+            if(data.relationName){
+                this.$refs["moduleView"]
+                    .$refs[data.relationName]
+                    .$refs["relation"].appendRelations(data.objects);
             }
         },
 
+        /**
+         * close panel and clear data
+         *
+         * @return {void}
+         */
+        closePanel() {
+            this.panelIsOpen = false;
+            this.addRelation = {
+                name: '',
+                alreadyInView: [],
+            };
+        },
+
+        /**
+         * request panel and pass data
+         *
+         * @param {Object} data
+         */
+        requestPanel(data) {
+            this.panelIsOpen = true;
+
+            // open panel for relations add
+            if(this.panelIsOpen && data.relation && data.relation.name) {
+                this.addRelation = data.relation;
+            }
+        },
 
         /**
          * extract params from page url

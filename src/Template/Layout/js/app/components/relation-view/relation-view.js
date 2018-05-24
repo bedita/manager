@@ -19,7 +19,10 @@ import sleep from 'sleep-promise';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 
 export default {
+    // injected methods provided by Main App
+    inject: ['requestPanel', 'closePanel'],
     mixins: [ PaginatedContentMixin ],
+
     components: {
         StaggeredList,
         RelationshipsView,
@@ -215,6 +218,7 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            this.newRelationsData = JSON.stringify(this.addedRelations);
         },
 
 
@@ -265,25 +269,6 @@ export default {
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
-
-
-        /**
-         * request panel emitting event in module view
-         *
-         * @param {String} objectType
-         * @param {Number} objectId
-         *
-         * @return {String} url
-         */
-        requestPanel() {
-            // emit event in module view
-            this.$parent.$parent.$emit('request-panel', {
-                relation: {
-                    name: this.relationName,
-                    alreadyInView: this.alreadyInView,
-                },
-            });
-        }
     }
 
 }

@@ -8,8 +8,11 @@
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import decamelize from 'decamelize';
+import sleep from 'sleep-promise';
 
 export default {
+    inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
+
     mixins: [ PaginatedContentMixin ],
     props: {
         relationName: {
@@ -29,12 +32,6 @@ export default {
         }
     },
 
-    computed: {
-        relationHumanizedName() {
-            return decamelize(this.relationName);
-        }
-    },
-
     watch: {
         relationName: {
             immediate: true,
@@ -44,18 +41,15 @@ export default {
                     this.endpoint = `${this.method}/${newVal}`;
                     this.loadObjects();
                 }
+                // clear objects when relationName is empty (panel closed)
+                if (newVal === '') {
+                    sleep(500).then(() => this.objects = []);
+                }
             },
-        }
+        },
     },
 
     methods: {
-        returnData() {
-            var data = {
-                objects: this.selectedObjects,
-                relationName: this.relationName,
-            };
-            this.$root.onRequestPanelToggle({ returnData: data });
-        },
         toggle(object, evt) {
             let position = this.selectedObjects.indexOf(object);
             if(position != -1) {

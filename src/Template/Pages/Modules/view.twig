@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-<modules-view inline-template v-on:request-panel="onRequestPanelToggle" ref="moduleView">
+<modules-view inline-template ref="moduleView">
 <div class="modules-view" v-hotkey="keyEvents">
 
     {% if object.id %}

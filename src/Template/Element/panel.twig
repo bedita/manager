@@ -1,13 +1,12 @@
 <aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
     <section class="fieldset main-panel-body">
 
-
         {# add relation component #}
         <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
                 <header class="tab unselectable" v-bind:class="!objects.length && relationName? 'is-loading-spinner' : ''">
-                    <h2><span v-show="relationName">add to <: relationHumanizedName :></span> &nbsp;</h2>
-                    <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
+                    <h2><span v-show="relationName">add to <: relationName | humanize :></span> &nbsp;</h2>
+                    <a href="#" v-show="objects.length" @click.prevent="closePanel()">close</a>
                 </header>
 
                 {# <nav>filter</nav> #}
@@ -49,7 +48,10 @@
                 <footer>
                     <p>
                         <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent.stop="returnData()">Add objects to <: relationHumanizedName :></button>
+                            @click.prevent="returnDataFromPanel({
+                                objects: selectedObjects,
+                                relationName: relationName,
+                            })">Add objects to <: relationName | humanize :></button>
                     </p>
                 </footer>
 
