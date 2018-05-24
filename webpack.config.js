@@ -119,25 +119,6 @@ if (devMode) {
     );
 }
 
-// Read dynamically src dir [BUNDLE.jsRoot] direct subdir and create aliases for import
-// Add template dir [BUNDLE.templateRoot] alias
-const entries = readDirs(BUNDLE.jsRoot);
-
-const SRC_TEMPLATE_ALIAS = {
-    Template: path.resolve(__dirname, BUNDLE.templateRoot),
-};
-
-for (const dir of entries) {
-    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.jsRoot}/${dir}`);
-}
-
-// aliases for vendors TO-DO
-if (devMode) {
-    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue';
-} else {
-    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
-}
-
 module.exports = {
     entry: {
         app: [appEntry],

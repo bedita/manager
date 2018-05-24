@@ -73,6 +73,28 @@ const bundler = {
     }
 }
 
+// Read dynamically src dir [BUNDLE.jsRoot] direct subdir and create aliases for import
+// Add template dir [BUNDLE.templateRoot] alias
+const entries = readDirs(BUNDLE.jsRoot);
+
+let SRC_TEMPLATE_ALIAS = {
+    Template: path.resolve(__dirname, BUNDLE.templateRoot),
+};
+
+for (const dir of entries) {
+    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.jsRoot}/${dir}`);
+}
+
+// auto aliases for vendors dependencies TO-DO
+const packageJson = require("./package.json");
+const dependencies = packageJson.dependencies;
+
+if (devMode) {
+    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue';
+} else {
+    SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
+}
+
 global.readDirs = readDirs;
 global.path = path;
 global.devMode = devMode;
@@ -80,3 +102,4 @@ global.forceReport = forceReport;
 global.ENVIRONMENT = ENVIRONMENT;
 global.BUNDLE = BUNDLE;
 global.bundler = bundler;
+global.SRC_TEMPLATE_ALIAS = SRC_TEMPLATE_ALIAS;

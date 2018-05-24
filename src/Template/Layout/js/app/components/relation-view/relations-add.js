@@ -7,7 +7,6 @@
  */
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
-import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
 
 export default {

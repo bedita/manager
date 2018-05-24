@@ -23,7 +23,6 @@
         "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
     },
     "dependencies": {
-        "decamelize": "^2.0.0",
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",
         "sleep-promise": "^6.0.0",
