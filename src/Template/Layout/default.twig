@@ -85,12 +85,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.script('manifest.bundle')|raw }}
     {{ Html.script('vendors.bundle')|raw }}
 
-    {# run-time plugins script loader  #}
-    {% for plugin, value in config('Plugins') %}
-        {% if plugin != 'DebugKit' %}
-            {{ Html.script(plugin ~ '.' ~ plugin ~ '.plugin.js')|raw }}
-        {% endif %}
-    {% endfor %}
+    {{ Html.script('vendors.bundle')|raw }}
+
+    {{ Link.pluginsJsBundle()|raw }}
 
     {{ Html.script('app.bundle')|raw }}
 
