@@ -17,6 +17,11 @@ use Cake\Core\Plugin;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 
+/**
+ * Helper class to generate links or link tags
+ *
+ * @property \Cake\View\Helper\HtmlHelper $Html
+ */
 class LinkHelper extends Helper
 {
 
