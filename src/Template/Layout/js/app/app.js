@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import 'config/config';
 
 import 'Template/Layout/style.scss';
 
@@ -16,26 +17,6 @@ import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
 import sleep from 'sleep-promise';
-
-Vue.use(jsoneditor);
-Vue.use(datepicker);
-Vue.use(richeditor);
-Vue.use(VueHotkey);
-
-import { VueConfig, VueOptions } from 'config/config';
-
-// merge vue options, config from configuration file
-for (let property in VueConfig) {
-    if (VueConfig.hasOwnProperty(property)) {
-        Vue.config[property] = VueConfig[property];
-    }
-}
-
-for (let property in VueOptions) {
-    if (VueOptions.hasOwnProperty(property)) {
-        Vue.options[property] = VueOptions[property];
-    }
-}
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -61,22 +42,44 @@ const _vueInstance = new Vue({
         }
     },
 
-    async created() {
+    /**
+     * setup Vue instance before creation
+     *
+     * @return {void}
+     */
+    beforeCreate() {
+        // Register directives
+        Vue.use(jsoneditor);
+        Vue.use(datepicker);
+        Vue.use(richeditor);
+        Vue.use(VueHotkey);
+
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
+    },
 
+    created() {
         this.vueLoaded = true;
 
         // load url params when component initialized
         this.loadUrlParams();
     },
 
+    watch: {
+        panelIsOpen(value) {
+            var cl = document.querySelector('html').classList;
+            if (value) {
+                cl.add('is-clipped');
+            } else {
+                cl.remove('is-clipped');
+            }
+        },
+    },
+
     methods: {
         // panel
         onRequestPanelToggle(evt) {
             this.panelIsOpen = !this.panelIsOpen;
-            var cl = document.querySelector('html').classList;
-            cl.contains('is-clipped')? cl.remove('is-clipped') : cl.add('is-clipped');
 
             // return data from panel
             if(evt.returnData) {

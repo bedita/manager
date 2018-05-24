@@ -88,7 +88,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# run-time plugins script loader  #}
     {% for plugin, value in config('Plugins') %}
         {% if plugin != 'DebugKit' %}
-            <script src='/plugins/{{ plugin }}/webroot/js/{{ plugin }}.plugin.js'></script>
+            {{ Html.script(plugin ~ '.' ~ plugin ~ '.plugin.js')|raw }}
         {% endif %}
     {% endfor %}
 

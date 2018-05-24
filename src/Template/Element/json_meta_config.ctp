@@ -19,6 +19,9 @@
     if (BEDITA.plugins) {
         try {
             BEDITA.plugins = JSON.parse(BEDITA.plugins);
+            if (BEDITA.plugins.hasOwnProperty('DebugKit')) {
+                delete BEDITA.plugins['DebugKit'];
+            }
         } catch(e) {
             console.err(e);
         }

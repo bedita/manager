@@ -1,5 +1,7 @@
 // Vue configs...
 
+import Vue from 'vue';
+
 export const VueConfig = {
     devtools: true,
 }
@@ -8,10 +10,18 @@ export const VueOptions = {
     delimiters: ['<:', ':>'],
 }
 
-// Vue.config.devtools = true;
+// merge vue options and configs
+for (let property in VueConfig) {
+    if (VueConfig.hasOwnProperty(property)) {
+        Vue.config[property] = VueConfig[property];
+    }
+}
 
-// Custom delimiters, avoid `visual` conflict with Twig {{ }} and {% %}
-// Vue.options.delimiters = ['<:', ':>'];
+for (let property in VueOptions) {
+    if (VueOptions.hasOwnProperty(property)) {
+        Vue.options[property] = VueOptions[property];
+    }
+}
 
 // CKeditor configs...
 
