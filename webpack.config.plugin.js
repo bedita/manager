@@ -1,4 +1,4 @@
-// erquire environment setup
+// require environment setup
 require('./webpack.config.environment');
 
 const webpack = require('webpack');
@@ -13,9 +13,12 @@ const webpack = require('webpack');
 // auto load installed plugins
 const pluginsFound = readDirs(BUNDLE.beditaPluginsRoot);
 
-const entries = {};
+let entries = {};
+let aliases = {};
+
 pluginsFound.forEach(plugin => {
     entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`);
+    aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`)
 });
 
 module.exports = {
@@ -32,10 +35,7 @@ module.exports = {
     },
 
     resolve: {
-        // aliases for import
-        alias: {
-            style: path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/OpenCorporation/${BUNDLE.templateRoot}/Layout`),
-        },
+        alias: aliases,
 
         extensions: ['.js', '.vue', '.json', '.scss', '.css'],
     },
@@ -45,6 +45,9 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
+                include: [
+                    path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/[name]/node_modules`),
+                ],
                 options: {
                     compact: false,
                     presets: [

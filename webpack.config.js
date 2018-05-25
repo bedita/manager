@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-// erquire environment setup
+// require environment setup
 require('./webpack.config.environment');
 
 // webpack dependencies
