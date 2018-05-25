@@ -14,7 +14,7 @@ const BELoader = {
     loadBeditaPlugins() {
         const plugins = BEDITA.plugins;
 
-        Object.keys(plugins).forEach(element => {
+        plugins.forEach(element => {
             const BEPlugins = (window[element] || global[element]).default;
 
             Object.keys(BEPlugins).forEach(componentName => {

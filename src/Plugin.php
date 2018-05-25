@@ -54,4 +54,17 @@ class Plugin extends CakePlugin
             }
         }
     }
+
+    /**
+     * Loaded BE4Web application plugins
+     * Auxiliary system plugins like `DebugKit` and `TwigView` are exluded
+     *
+     * @return array
+     */
+    public static function loadedAppPlugins()
+    {
+        $sysPlugins = ['Bake', 'DebugKit', 'Migrations', 'WyriHaximus/TwigView'];
+
+        return array_values(array_diff(static::loaded(), $sysPlugins));
+    }
 }

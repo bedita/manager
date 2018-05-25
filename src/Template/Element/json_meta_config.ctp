@@ -13,15 +13,12 @@
         'currentModule': <?php if (!empty($currentModule)): ?> <?= json_encode($currentModule, true) ?> <?php else: ?>{ name: 'home' }<?php endif; ?>,
         'action': '{$view->action|default:"index"}',
         'relations': {},
-        'plugins': '<?= json_encode(\Cake\Core\Configure::read('Plugins')) ?>'
+        'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>'
     };
 
     if (BEDITA.plugins) {
         try {
             BEDITA.plugins = JSON.parse(BEDITA.plugins);
-            if (BEDITA.plugins.hasOwnProperty('DebugKit')) {
-                delete BEDITA.plugins['DebugKit'];
-            }
         } catch(e) {
             console.err(e);
         }
