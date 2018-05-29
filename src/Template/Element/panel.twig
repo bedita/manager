@@ -10,7 +10,26 @@
                     <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
                 </header>
 
-                {# <nav>filter</nav> #}
+                {# <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
+                    <div>
+                        <span><: pagination.page_items :> {{ __('objects') }}</span>
+                    </div>
+                    <div>
+                        <span>{{ __('Page size') }}:</span>
+                    </div>
+                    <div>
+                        <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
+                            <option v-for="size in paginateSizes"><: size :></option>
+                        </select>
+
+                        <button
+                            v-for="i in pagination.page_count" :key="i"
+                            v-if="pagination.page_count > 1"
+                            v-bind:class="pagination.page == i? '' : 'is-dark'"
+                            v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                            class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+                    </div>
+                </nav> #}
 
                 {# objects #}
                 <div class="related-objects-list columns">
@@ -49,8 +68,9 @@
                 <footer>
                     <p>
                         <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent="returnData()">Add objects to <: relationHumanizedName :></button>
+                            @click.prevent="returnData()">{{ __('Add objects to') }} <: relationHumanizedName :></button>
                     </p>
+                    <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
                 </footer>
 
             </div>
