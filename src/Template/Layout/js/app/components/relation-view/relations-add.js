@@ -20,6 +20,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        configPaginateSizes: {
+            type: String,
+            default: '[]',
+        },
     },
     data() {
         return {
@@ -32,6 +36,11 @@ export default {
     computed: {
         relationHumanizedName() {
             return decamelize(this.relationName);
+        },
+        paginateSizes() {
+            console.log(this.configPaginateSizes);
+            console.log(JSON.parse(this.configPaginateSizes));
+            return JSON.parse(this.configPaginateSizes);
         }
     },
 
@@ -39,7 +48,7 @@ export default {
         relationName: {
             immediate: true,
             handler(newVal, oldVal) {
-                if(newVal) {
+                if (newVal) {
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
                     this.loadObjects();
@@ -72,6 +81,7 @@ export default {
             this.loading = true;
             let resp = await this.getPaginatedObjects();
             this.loading = false;
+            this.$emit('count', this.pagination.count);
             return resp;
         },
     }
