@@ -676,6 +676,7 @@ __webpack_require__.r(__webpack_exports__);
             pageSize: app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_PAGINATION"].page_size,
             filter: '',
             queryFilter: {},
+            timer: null,
         };
     },
 
@@ -727,21 +728,24 @@ __webpack_require__.r(__webpack_exports__);
          * @return {void}
          */
         filter(value) {
-            this.filter = value;
-            if (this.filter.length >= 3 || this.filter.length == 0) {
-                this.queryFilter = {
-                    q: this.filter
-                };
-                this.loadObjects();
-            }
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.filter = value;
+                if (this.filter.length >= 3 || this.filter.length == 0) {
+                    this.queryFilter = {
+                        q: this.filter
+                    };
+                    this.loadObjects();
+                }
+            }, 300);
         }
     },
 
     methods: {
         /**
-         * Return data for panel.
+         * Load data for panel.
          *
-         * @return {Object} The data for panel
+         * @return {void}
          */
         returnData() {
             var data = {

@@ -33,6 +33,7 @@ export default {
             pageSize: DEFAULT_PAGINATION.page_size,
             filter: '',
             queryFilter: {},
+            timer: null,
         };
     },
 
@@ -84,13 +85,16 @@ export default {
          * @return {void}
          */
         filter(value) {
-            this.filter = value;
-            if (this.filter.length >= 3 || this.filter.length == 0) {
-                this.queryFilter = {
-                    q: this.filter
-                };
-                this.loadObjects();
-            }
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.filter = value;
+                if (this.filter.length >= 3 || this.filter.length == 0) {
+                    this.queryFilter = {
+                        q: this.filter
+                    };
+                    this.loadObjects();
+                }
+            }, 300);
         }
     },
 
