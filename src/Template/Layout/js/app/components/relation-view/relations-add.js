@@ -31,7 +31,9 @@ export default {
             endpoint: '',
             selectedObjects: [],
             pageSize: DEFAULT_PAGINATION.page_size,
-        }
+            filter: '',
+            queryFilter: {},
+        };
     },
 
     computed: {
@@ -64,12 +66,40 @@ export default {
             this.loadObjects();
         },
 
+        /**
+         * Loading event emit
+         *
+         * @param {String} value The value associated to loading
+         * @return {void}
+         */
         loading(value) {
             this.$emit('loading', value);
         },
+
+        /**
+         * watcher for text filter
+         * if value is more than 3 chars, trigger api call to search by filter
+         *
+         * @param {String} value The filter string
+         * @return {void}
+         */
+        filter(value) {
+            this.filter = value;
+            if (this.filter.length >= 3 || this.filter.length == 0) {
+                this.queryFilter = {
+                    q: this.filter
+                };
+                this.loadObjects();
+            }
+        }
     },
 
     methods: {
+        /**
+         * Return data for panel.
+         *
+         * @return {Object} The data for panel
+         */
         returnData() {
             var data = {
                 objects: this.selectedObjects,
@@ -77,6 +107,14 @@ export default {
             };
             this.$root.onRequestPanelToggle({ returnData: data });
         },
+
+        /**
+         * Add/remove elements to selectedObjects list
+         *
+         * @param {Object} object The object
+         * @param {Event} evt The event
+         * @return {void}
+         */
         toggle(object, evt) {
             let position = this.selectedObjects.indexOf(object);
             if(position != -1) {
@@ -85,28 +123,28 @@ export default {
                 this.selectedObjects.push(object);
             }
         },
-        isAlreadyRelated() {
-            return true;
-        },
-        // form mixin
+
+        /**
+         * Load objects (using filter and pagination)
+         *
+         * @return {Promise} repsonse from server
+         */
         async loadObjects() {
-            console.log('LOAD OBJECTS');
             this.loading = true;
-            let resp = await this.getPaginatedObjects();
+            let response = await this.getPaginatedObjects(true, this.queryFilter);
             this.loading = false;
             this.$emit('count', this.pagination.count);
-            return resp;
+
+            return response;
         },
 
         /**
-         * go to specific page
+         * Go to specific page
          *
-         * @param {Number} page number
-         *
-         * @return {Promise} repsonse from server with new data
+         * @param {Number} page The page number
+         * @return {Promise} The response from server with new data
          */
         async toPage(i) {
-            console.log('TO PAGE');
             this.loading = true;
             let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
             this.loading = false;

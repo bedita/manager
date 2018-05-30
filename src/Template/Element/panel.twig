@@ -1,18 +1,22 @@
 <aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
     <section class="fieldset main-panel-body">
 
-
         {# add relation component #}
         <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects.length && relationName? 'is-loading-spinner' : ''">
+                <header class="tab unselectable" v-bind:class="!objects && relationName? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">add to <: relationHumanizedName :></span> &nbsp;</h2>
                     <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
                 </header>
 
-                <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
+                <nav class="pagination has-text-size-smallest">
                     <div>
                         <span><: pagination.page_items :> {{ __('objects') }}</span>
+                    </div>
+                    <div>
+                        <span>
+                            <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
+                        </span>
                     </div>
                     <div>
                         <span>{{ __('Page size') }}:</span>
