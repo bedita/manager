@@ -1,16 +1,39 @@
 <aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
     <section class="fieldset main-panel-body">
 
-
         {# add relation component #}
-        <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+        <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects.length && relationName? 'is-loading-spinner' : ''">
+                <header class="tab unselectable" v-bind:class="!objects && relationName? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">add to <: relationHumanizedName :></span> &nbsp;</h2>
                     <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
                 </header>
 
-                {# <nav>filter</nav> #}
+                <nav class="pagination has-text-size-smallest">
+                    <div>
+                        <span><: pagination.page_items :> {{ __('objects') }}</span>
+                    </div>
+                    <div>
+                        <span>
+                            <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
+                        </span>
+                    </div>
+                    <div>
+                        <span>{{ __('Page size') }}:</span>
+                    </div>
+                    <div>
+                        <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
+                            <option v-for="size in paginateSizes"><: size :></option>
+                        </select>
+
+                        <button
+                            v-for="i in pagination.page_count" :key="i"
+                            v-if="pagination.page_count > 1"
+                            v-bind:class="pagination.page == i? '' : 'is-dark'"
+                            v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                            class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+                    </div>
+                </nav>
 
                 {# objects #}
                 <div class="related-objects-list columns">
@@ -49,8 +72,9 @@
                 <footer>
                     <p>
                         <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent="returnData()">Add objects to <: relationHumanizedName :></button>
+                            @click.prevent="returnData()">{{ __('Add objects to') }} <: relationHumanizedName :></button>
                     </p>
+                    <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
                 </footer>
 
             </div>
