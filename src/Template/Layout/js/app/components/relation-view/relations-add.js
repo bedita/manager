@@ -96,9 +96,9 @@ export default {
 
     methods: {
         /**
-         * Return data for panel.
+         * Load data for panel.
          *
-         * @return {Object} The data for panel
+         * @return {void}
          */
         returnData() {
             var data = {

@@ -317,7 +317,7 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, ['page' => 1]); // page 1: we need just the available link from response
+                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available link from response
                     $available = $response['links']['available'];
             }
             $response = $this->apiClient->get($available, $this->request->getQueryParams());
