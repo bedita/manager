@@ -308,7 +308,6 @@ class ModulesController extends AppController
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
 
         try {
-            // TO-DO links.available for children / parent / parents is null
             switch ($relation) {
                 case 'children':
                     $available = '/objects';
@@ -318,11 +317,10 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, $this->request->getQueryParams());
+                    $response = $this->apiClient->get($path, ['page' => 1]); // page 1: we need just the available link from response
                     $available = $response['links']['available'];
             }
-
-            $response = $this->apiClient->get($available);
+            $response = $this->apiClient->get($available, $this->request->getQueryParams());
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 

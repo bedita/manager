@@ -673,6 +673,7 @@ __webpack_require__.r(__webpack_exports__);
             method: 'relationshipsJson',
             endpoint: '',
             selectedObjects: [],
+            pageSize: app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_PAGINATION"].page_size,
         }
     },
 
@@ -681,8 +682,6 @@ __webpack_require__.r(__webpack_exports__);
             return decamelize__WEBPACK_IMPORTED_MODULE_1___default()(this.relationName);
         },
         paginateSizes() {
-            console.log(this.configPaginateSizes);
-            console.log(JSON.parse(this.configPaginateSizes));
             return JSON.parse(this.configPaginateSizes);
         }
     },
@@ -697,7 +696,20 @@ __webpack_require__.r(__webpack_exports__);
                     this.loadObjects();
                 }
             },
-        }
+        },
+        /**
+         * watcher for pageSize variable, change pageSize and reload relations
+         *
+         * @param {Number} value
+         */
+        pageSize(value) {
+            this.setPageSize(value);
+            this.loadObjects();
+        },
+
+        loading(value) {
+            this.$emit('loading', value);
+        },
     },
 
     methods: {
@@ -721,10 +733,26 @@ __webpack_require__.r(__webpack_exports__);
         },
         // form mixin
         async loadObjects() {
+            console.log('LOAD OBJECTS');
             this.loading = true;
             let resp = await this.getPaginatedObjects();
             this.loading = false;
             this.$emit('count', this.pagination.count);
+            return resp;
+        },
+
+        /**
+         * go to specific page
+         *
+         * @param {Number} page number
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async toPage(i) {
+            console.log('TO PAGE');
+            this.loading = true;
+            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["PaginatedContentMixin"].methods.toPage.call(this, i);
+            this.loading = false;
             return resp;
         },
     }

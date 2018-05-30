@@ -6,7 +6,7 @@
  *
  */
 
-import { PaginatedContentMixin } from 'app/mixins/paginated-content';
+import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import decamelize from 'decamelize';
 
 export default {
@@ -30,6 +30,7 @@ export default {
             method: 'relationshipsJson',
             endpoint: '',
             selectedObjects: [],
+            pageSize: DEFAULT_PAGINATION.page_size,
         }
     },
 
@@ -38,8 +39,6 @@ export default {
             return decamelize(this.relationName);
         },
         paginateSizes() {
-            console.log(this.configPaginateSizes);
-            console.log(JSON.parse(this.configPaginateSizes));
             return JSON.parse(this.configPaginateSizes);
         }
     },
@@ -54,7 +53,20 @@ export default {
                     this.loadObjects();
                 }
             },
-        }
+        },
+        /**
+         * watcher for pageSize variable, change pageSize and reload relations
+         *
+         * @param {Number} value
+         */
+        pageSize(value) {
+            this.setPageSize(value);
+            this.loadObjects();
+        },
+
+        loading(value) {
+            this.$emit('loading', value);
+        },
     },
 
     methods: {
@@ -78,10 +90,26 @@ export default {
         },
         // form mixin
         async loadObjects() {
+            console.log('LOAD OBJECTS');
             this.loading = true;
             let resp = await this.getPaginatedObjects();
             this.loading = false;
             this.$emit('count', this.pagination.count);
+            return resp;
+        },
+
+        /**
+         * go to specific page
+         *
+         * @param {Number} page number
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async toPage(i) {
+            console.log('TO PAGE');
+            this.loading = true;
+            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
+            this.loading = false;
             return resp;
         },
     }
