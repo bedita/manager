@@ -681,12 +681,23 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     computed: {
+        /**
+         * Return relation name in "human" format (decamelized)
+         *
+         * @return {string} The relation name
+         */
         relationHumanizedName() {
             return decamelize__WEBPACK_IMPORTED_MODULE_1___default()(this.relationName);
         },
+
+        /**
+         * Return json parse of config for pagination
+         *
+         * @return {Object} json representation of pagination config
+         */
         paginateSizes() {
             return JSON.parse(this.configPaginateSizes);
-        }
+        },
     },
 
     watch: {
@@ -743,6 +754,26 @@ __webpack_require__.r(__webpack_exports__);
 
     methods: {
         /**
+         * Return true if specified pagination page link must be shown
+         *
+         * @param {Number} page The pagination page number
+         * @return {boolean} True if show page link
+         */
+        paginationPageLinkVisible(page) {
+            if (this.pagination.page_count <= 7) { // show till 7 links
+                return true;
+            }
+            if (page === 1 || page === this.pagination.page_count) { // show first and last page link
+                return true;
+            }
+            if ( (page >= this.pagination.page-1) && page <= this.pagination.page+1) { // show previous and next page link
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
          * Load data for panel.
          *
          * @return {void}
@@ -777,6 +808,7 @@ __webpack_require__.r(__webpack_exports__);
          * @return {Promise} repsonse from server
          */
         async loadObjects() {
+            this.objects = [];
             this.loading = true;
             let response = await this.getPaginatedObjects(true, this.queryFilter);
             this.loading = false;
@@ -791,11 +823,18 @@ __webpack_require__.r(__webpack_exports__);
          * @param {Number} page The page number
          * @return {Promise} The response from server with new data
          */
-        async toPage(i) {
+        async toPage(page) {
+            this.objects = [];
             this.loading = true;
-            let resp =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["PaginatedContentMixin"].methods.toPage.call(this, i);
+            if (this.filter) {
+                this.queryFilter = {
+                    q: this.filter
+                }
+            }
+            let response =  await app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["PaginatedContentMixin"].methods.toPage.call(this, page, this.queryFilter);
             this.loading = false;
-            return resp;
+
+            return response;
         },
     }
 
@@ -2069,10 +2108,15 @@ const PaginatedContentMixin = {
             }
         },
 
-
-        toPage(i) {
-            this.pagination.page = i || 1;
-            return this.getPaginatedObjects(true);
+        /**
+         * Load page by page number and query string
+         *
+         * @param {Number} page The page number
+         * @param {Object} query The query object (i.e. { q: 'search me' })
+         */
+        toPage(page, query = {}) {
+            this.pagination.page = page || 1;
+            return this.getPaginatedObjects(true, query);
         },
 
         /**

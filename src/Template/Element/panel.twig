@@ -4,9 +4,9 @@
         {# add relation component #}
         <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects && relationName? 'is-loading-spinner' : ''">
-                    <h2><span v-show="relationName">add to <: relationHumanizedName :></span> &nbsp;</h2>
-                    <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">close</a>
+                <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
+                    <h2><span v-show="relationName">{{ __('add to') }} <: relationHumanizedName :></span> &nbsp;</h2>
+                    <a href="#" v-show="objects.length" @click.prevent="$parent.onRequestPanelToggle">{{ __('close') }}</a>
                 </header>
 
                 <nav class="pagination has-text-size-smallest">
@@ -28,7 +28,7 @@
 
                         <button
                             v-for="i in pagination.page_count" :key="i"
-                            v-if="pagination.page_count > 1"
+                            v-if="paginationPageLinkVisible(i)"
                             v-bind:class="pagination.page == i? '' : 'is-dark'"
                             v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
                             class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
@@ -79,7 +79,6 @@
 
             </div>
         </relations-add inline-template>
-
 
     </section>
 </aside>

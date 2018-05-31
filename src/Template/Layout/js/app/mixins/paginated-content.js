@@ -153,10 +153,15 @@ export const PaginatedContentMixin = {
             }
         },
 
-
-        toPage(i) {
-            this.pagination.page = i || 1;
-            return this.getPaginatedObjects(true);
+        /**
+         * Load page by page number and query string
+         *
+         * @param {Number} page The page number
+         * @param {Object} query The query object (i.e. { q: 'search me' })
+         */
+        toPage(page, query = {}) {
+            this.pagination.page = page || 1;
+            return this.getPaginatedObjects(true, query);
         },
 
         /**

@@ -38,12 +38,23 @@ export default {
     },
 
     computed: {
+        /**
+         * Return relation name in "human" format (decamelized)
+         *
+         * @return {string} The relation name
+         */
         relationHumanizedName() {
             return decamelize(this.relationName);
         },
+
+        /**
+         * Return json parse of config for pagination
+         *
+         * @return {Object} json representation of pagination config
+         */
         paginateSizes() {
             return JSON.parse(this.configPaginateSizes);
-        }
+        },
     },
 
     watch: {
@@ -100,6 +111,26 @@ export default {
 
     methods: {
         /**
+         * Return true if specified pagination page link must be shown
+         *
+         * @param {Number} page The pagination page number
+         * @return {boolean} True if show page link
+         */
+        paginationPageLinkVisible(page) {
+            if (this.pagination.page_count <= 7) { // show till 7 links
+                return true;
+            }
+            if (page === 1 || page === this.pagination.page_count) { // show first and last page link
+                return true;
+            }
+            if ( (page >= this.pagination.page-1) && page <= this.pagination.page+1) { // show previous and next page link
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
          * Load data for panel.
          *
          * @return {void}
@@ -134,6 +165,7 @@ export default {
          * @return {Promise} repsonse from server
          */
         async loadObjects() {
+            this.objects = [];
             this.loading = true;
             let response = await this.getPaginatedObjects(true, this.queryFilter);
             this.loading = false;
@@ -148,11 +180,18 @@ export default {
          * @param {Number} page The page number
          * @return {Promise} The response from server with new data
          */
-        async toPage(i) {
+        async toPage(page) {
+            this.objects = [];
             this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
+            if (this.filter) {
+                this.queryFilter = {
+                    q: this.filter
+                }
+            }
+            let response =  await PaginatedContentMixin.methods.toPage.call(this, page, this.queryFilter);
             this.loading = false;
-            return resp;
+
+            return response;
         },
     }
 
