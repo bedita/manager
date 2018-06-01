@@ -147,7 +147,8 @@
     }
 
     > nav {
-        display: none; // for filters whenever...
+        padding: $gutter $gutter 0;
+        margin: 0;
     }
 
     > header.tab {
@@ -167,6 +168,8 @@
     }
 
     > footer {
+        display: flex;
+        justify-content: space-between;
         padding: $gutter;
     }
 

@@ -18,6 +18,7 @@ export const PaginatedContentMixin = {
             endpoint: null,
 
             pagination: DEFAULT_PAGINATION,
+            query: {},
         }
     },
 
@@ -26,22 +27,26 @@ export const PaginatedContentMixin = {
          * fetch paginated objects based on this.endpoint value
          *
          * @param {Boolean} autoload if false it doesn't update this.objects [DEFAULT = true]
+         * @param {Object} query The query filter object
          *
          * @return {Promise} repsonse from server
          */
-        getPaginatedObjects(autoload = true) {
+        getPaginatedObjects(autoload = true, query = {}) {
             let baseUrl = window.location.href;
 
             if (this.endpoint) {
+                if (query) {
+                    this.query = query;
+                }
                 let requestUrl = `${baseUrl}/${this.endpoint}`;
                 const options =  {
                     credentials: 'same-origin',
                     headers: {
                         'accept': 'application/json',
                     }
-                }
+                };
 
-                requestUrl = this.setPagination(requestUrl);
+                requestUrl = this.getUrlWithPaginationAndQuery(requestUrl);
 
                 return fetch(requestUrl, options)
                     .then((response) => response.json())
@@ -91,6 +96,34 @@ export const PaginatedContentMixin = {
         },
 
         /**
+         * Get formatted url with query filter
+         *
+         * @param {String} url The endpoint url
+         * @return {String} The formatted url
+         */
+        getUrlWithPaginationAndQuery(url) {
+            let queryString = '';
+            let qi = '?';
+            const separator = '&';
+
+            Object.keys(this.pagination).forEach((key, index) => {
+                queryString += `${index ? separator : ''}${key}=${this.pagination[key]}`;
+            });
+            if (queryString.length > 1) {
+                queryString += separator;
+            }
+            Object.keys(this.query).forEach((key, index) => {
+                queryString += `${index ? separator : ''}${key}=${this.query[key]}`;
+            });
+
+            let hasQueryIdentifier = url.indexOf(qi) === -1;
+            if (!hasQueryIdentifier) {
+                qi = '&';
+            }
+            return `${url}${qi}${queryString}`;
+        },
+
+        /**
          * find object with specific id
          *
          * @param {Number} id
@@ -120,10 +153,15 @@ export const PaginatedContentMixin = {
             }
         },
 
-
-        toPage(i) {
-            this.pagination.page = i || 1;
-            return this.getPaginatedObjects(true);
+        /**
+         * Load page by page number and query string
+         *
+         * @param {Number} page The page number
+         * @param {Object} query The query object (i.e. { q: 'search me' })
+         */
+        toPage(page, query = {}) {
+            this.pagination.page = page || 1;
+            return this.getPaginatedObjects(true, query);
         },
 
         /**

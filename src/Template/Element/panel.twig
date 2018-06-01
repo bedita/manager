@@ -2,14 +2,38 @@
     <section class="fieldset main-panel-body">
 
         {# add relation component #}
-        <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+        <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView" config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects.length && relationName? 'is-loading-spinner' : ''">
-                    <h2><span v-show="relationName">add to <: relationName | humanize :></span> &nbsp;</h2>
+                <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
+                    <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
                     <a href="#" v-show="objects.length" @click.prevent="closePanel()">close</a>
                 </header>
 
-                {# <nav>filter</nav> #}
+                <nav class="pagination has-text-size-smallest">
+                    <div>
+                        <span><: pagination.page_items :> {{ __('objects') }}</span>
+                    </div>
+                    <div>
+                        <span>
+                            <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
+                        </span>
+                    </div>
+                    <div>
+                        <span>{{ __('Page size') }}:</span>
+                    </div>
+                    <div>
+                        <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
+                            <option v-for="size in paginateSizes"><: size :></option>
+                        </select>
+
+                        <button
+                            v-for="i in pagination.page_count" :key="i"
+                            v-if="paginationPageLinkVisible(i)"
+                            v-bind:class="pagination.page == i? '' : 'is-dark'"
+                            v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                            class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+                    </div>
+                </nav>
 
                 {# objects #}
                 <div class="related-objects-list columns">
@@ -51,13 +75,13 @@
                             @click.prevent="returnDataFromPanel({
                                 objects: selectedObjects,
                                 relationName: relationName,
-                            })">Add objects to <: relationName | humanize :></button>
+                            })">{{ __('Add objects to') }} <: relationName | humanize :></button>
                     </p>
+                    <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
                 </footer>
 
             </div>
         </relations-add inline-template>
-
 
     </section>
 </aside>

@@ -99,11 +99,12 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         pageClick(event) {
-            if (this.panelIsOpen) {
-                this.closePanel();
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            // temporary comment: we do not want that panel is closed, when it contains pagination...
+            // if (this.panelIsOpen) {
+            //     this.closePanel();
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            // }
         },
 
         /**
