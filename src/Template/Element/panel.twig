@@ -2,11 +2,11 @@
     <section class="fieldset main-panel-body">
 
         {# add relation component #}
-        <relations-add inline-template :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView" config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+        <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
                 <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
-                    <a href="#" v-show="objects.length" @click.prevent="closePanel()">close</a>
+                    <a href="#" v-show="objects.length" @click.prevent="closePanel()">{{ __('close') }}</a>
                 </header>
 
                 <nav class="pagination has-text-size-smallest">

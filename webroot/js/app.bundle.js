@@ -685,7 +685,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/mixins/paginated-content */ "./src/Template/Layout/js/app/mixins/paginated-content.js");
-/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
+/* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! decamelize */ "./node_modules/decamelize/index.js");
+/* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(decamelize__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
@@ -693,6 +695,7 @@ __webpack_require__.r(__webpack_exports__);
  * <relations-add> component used for Panel
  *
  */
+
 
 
 
@@ -749,13 +752,10 @@ __webpack_require__.r(__webpack_exports__);
                 }
                 // clear objects when relationName is empty (panel closed)
                 if (newVal === '') {
-                    Object(sleep_promise__WEBPACK_IMPORTED_MODULE_1__["default"])(500).then(() => this.objects = []);
+                    Object(sleep_promise__WEBPACK_IMPORTED_MODULE_2__["default"])(500).then(() => this.objects = []);
                 }
             },
         },
-    },
-
-    methods: {
         /**
          * watcher for pageSize variable, change pageSize and reload relations
          *
@@ -794,8 +794,10 @@ __webpack_require__.r(__webpack_exports__);
                     this.loadObjects();
                 }
             }, 300);
-        },
+        }
+    },
 
+    methods: {
         /**
          * Return true if specified pagination page link must be shown
          *

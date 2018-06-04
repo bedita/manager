@@ -7,6 +7,7 @@
  */
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
 
 export default {
@@ -65,9 +66,6 @@ export default {
                 }
             },
         },
-    },
-
-    methods: {
         /**
          * watcher for pageSize variable, change pageSize and reload relations
          *
@@ -106,8 +104,10 @@ export default {
                     this.loadObjects();
                 }
             }, 300);
-        },
+        }
+    },
 
+    methods: {
         /**
          * Return true if specified pagination page link must be shown
          *
