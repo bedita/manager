@@ -8,8 +8,11 @@
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import decamelize from 'decamelize';
+import sleep from 'sleep-promise';
 
 export default {
+    inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
+
     mixins: [ PaginatedContentMixin ],
     props: {
         relationName: {
@@ -39,15 +42,6 @@ export default {
 
     computed: {
         /**
-         * Return relation name in "human" format (decamelized)
-         *
-         * @return {string} The relation name
-         */
-        relationHumanizedName() {
-            return decamelize(this.relationName);
-        },
-
-        /**
          * Return json parse of config for pagination
          *
          * @return {Object} json representation of pagination config
@@ -65,6 +59,10 @@ export default {
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
                     this.loadObjects();
+                }
+                // clear objects when relationName is empty (panel closed)
+                if (newVal === '') {
+                    sleep(500).then(() => this.objects = []);
                 }
             },
         },
@@ -194,5 +192,4 @@ export default {
             return response;
         },
     }
-
 }

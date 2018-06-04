@@ -55,4 +55,20 @@ class PluginTest extends TestCase
 
         Configure::write('debug', $debug);
     }
+
+    /**
+     * Test loaded app plugins
+     *
+     * @return void
+     *
+     * @covers ::loadFromConfig()
+     */
+    public function testLoadedAppPlugins()
+    {
+        $appPlugins = Configure::read('Plugins', []);
+        $appPlugins = array_keys($appPlugins);
+        sort($appPlugins);
+        $loaded = Plugin::loadedAppPlugins();
+        static::assertEquals($appPlugins, $loaded);
+    }
 }

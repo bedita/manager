@@ -13,11 +13,25 @@
 namespace App\View\Helper;
 
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 
+/**
+ * Helper class to generate links or link tags
+ *
+ * @property \Cake\View\Helper\HtmlHelper $Html
+ */
 class LinkHelper extends Helper
 {
+
+    /**
+     * List of helpers used by this helper
+     *
+     * @var array
+     */
+    public $helpers = ['Html'];
+
     /**
      * API base URL
      *
@@ -144,5 +158,23 @@ class LinkHelper extends Helper
         $query[$parameter] = $value;
 
         return $this->webBaseUrl . $this->request->here . '?' . http_build_query($query);
+    }
+
+    /**
+     * Include plugin JS bundles.
+     *
+     * Plugin bundle MUST be in `plugins/MyPlugin/webroot/js/MyPlugin.plugin.js`
+     *
+     * @return void
+     */
+    public function pluginsJsBundle()
+    {
+        $plugins = Configure::read('Plugins');
+        foreach ($plugins as $plugin => $v) {
+            $path = Plugin::path($plugin) . sprintf('webroot%sjs%s%s.plugin.js', DS, DS, $plugin);
+            if (file_exists($path)) {
+                echo $this->Html->script(sprintf('%s.%s.plugin.js', $plugin, $plugin));
+            }
+        }
     }
 }

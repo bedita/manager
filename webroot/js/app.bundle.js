@@ -9,20 +9,22 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! Template/Layout/style.scss */ "./src/Template/Layout/style.scss");
-/* harmony import */ var Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var app_pages_modules_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/pages/modules/index */ "./src/Template/Layout/js/app/pages/modules/index.js");
-/* harmony import */ var app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/pages/modules/view */ "./src/Template/Layout/js/app/pages/modules/view.js");
-/* harmony import */ var app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/components/relation-view/relations-add */ "./src/Template/Layout/js/app/components/relation-view/relations-add.js");
-/* harmony import */ var app_directives_datepicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/directives/datepicker */ "./src/Template/Layout/js/app/directives/datepicker.js");
-/* harmony import */ var app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/directives/jsoneditor */ "./src/Template/Layout/js/app/directives/jsoneditor.js");
-/* harmony import */ var app_directives_richeditor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/directives/richeditor */ "./src/Template/Layout/js/app/directives/richeditor.js");
-/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-hotkey */ "./node_modules/v-hotkey/index.js");
-/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_hotkey__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
-/* harmony import */ var config_config__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! config/config */ "./src/Template/Layout/js/config/config.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var libs_filters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! libs/filters */ "./src/Template/Layout/js/libs/filters.js");
+/* harmony import */ var config_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! config/config */ "./src/Template/Layout/js/config/config.js");
+/* harmony import */ var Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! Template/Layout/style.scss */ "./src/Template/Layout/style.scss");
+/* harmony import */ var Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(Template_Layout_style_scss__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var libs_bedita__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! libs/bedita */ "./src/Template/Layout/js/libs/bedita.js");
+/* harmony import */ var app_pages_modules_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/pages/modules/index */ "./src/Template/Layout/js/app/pages/modules/index.js");
+/* harmony import */ var app_pages_modules_view__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/pages/modules/view */ "./src/Template/Layout/js/app/pages/modules/view.js");
+/* harmony import */ var app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/components/relation-view/relations-add */ "./src/Template/Layout/js/app/components/relation-view/relations-add.js");
+/* harmony import */ var app_directives_datepicker__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/directives/datepicker */ "./src/Template/Layout/js/app/directives/datepicker.js");
+/* harmony import */ var app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! app/directives/jsoneditor */ "./src/Template/Layout/js/app/directives/jsoneditor.js");
+/* harmony import */ var app_directives_richeditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! app/directives/richeditor */ "./src/Template/Layout/js/app/directives/richeditor.js");
+/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! v-hotkey */ "./node_modules/v-hotkey/index.js");
+/* harmony import */ var v_hotkey__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(v_hotkey__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
 
 
 
@@ -40,35 +42,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_6__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_datepicker__WEBPACK_IMPORTED_MODULE_5__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_richeditor__WEBPACK_IMPORTED_MODULE_7__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.use(v_hotkey__WEBPACK_IMPORTED_MODULE_8___default.a);
 
 
 
-// merge vue options, config from configuration file
-for (let property in config_config__WEBPACK_IMPORTED_MODULE_10__["VueConfig"]) {
-    if (config_config__WEBPACK_IMPORTED_MODULE_10__["VueConfig"].hasOwnProperty(property)) {
-        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.config[property] = config_config__WEBPACK_IMPORTED_MODULE_10__["VueConfig"][property];
-    }
-}
 
-for (let property in config_config__WEBPACK_IMPORTED_MODULE_10__["VueOptions"]) {
-    if (config_config__WEBPACK_IMPORTED_MODULE_10__["VueOptions"].hasOwnProperty(property)) {
-        vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a.options[property] = config_config__WEBPACK_IMPORTED_MODULE_10__["VueOptions"][property];
-    }
-}
 
-const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a({
+const _vueInstance = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     el: 'main',
 
     components: {
-        ModulesIndex: app_pages_modules_index__WEBPACK_IMPORTED_MODULE_2__["default"],
-        ModulesView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__["default"],
-        TrashIndex: app_pages_modules_index__WEBPACK_IMPORTED_MODULE_2__["default"],
-        TrashView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_3__["default"],
-        RelationsAdd: app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_4__["default"],
+        ModulesIndex: app_pages_modules_index__WEBPACK_IMPORTED_MODULE_5__["default"],
+        ModulesView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_6__["default"],
+        TrashIndex: app_pages_modules_index__WEBPACK_IMPORTED_MODULE_5__["default"],
+        TrashView: app_pages_modules_view__WEBPACK_IMPORTED_MODULE_6__["default"],
+        RelationsAdd: app_components_relation_view_relations_add__WEBPACK_IMPORTED_MODULE_7__["default"],
     },
 
     data() {
@@ -84,6 +71,34 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
         }
     },
 
+    /**
+     * properties or methods available for injection into its descendants
+     * (inject: ['property'])
+     */
+    provide() {
+        return {
+            requestPanel: (...args) => this.requestPanel(...args),
+            closePanel: (...args) => this.closePanel(...args),
+            returnDataFromPanel: (...args) => this.returnDataFromPanel(...args),
+        }
+    },
+
+    /**
+     * setup Vue instance before creation
+     *
+     * @return {void}
+     */
+    beforeCreate() {
+        // Register directives
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_jsoneditor__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_datepicker__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(app_directives_richeditor__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(v_hotkey__WEBPACK_IMPORTED_MODULE_11___default.a);
+
+        // load BEplugins's components
+        libs_bedita__WEBPACK_IMPORTED_MODULE_4__["BELoader"].loadBeditaPlugins();
+    },
+
     created() {
         this.vueLoaded = true;
 
@@ -91,30 +106,76 @@ const _vueInstance = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___defaul
         this.loadUrlParams();
     },
 
-    methods: {
-        // panel
-        onRequestPanelToggle(evt) {
-            this.panelIsOpen = !this.panelIsOpen;
+    watch: {
+        panelIsOpen(value) {
             var cl = document.querySelector('html').classList;
-            cl.contains('is-clipped')? cl.remove('is-clipped') : cl.add('is-clipped');
-
-            // return data from panel
-            if(evt.returnData) {
-                if(evt.returnData.relationName){
-                    this.$refs["moduleView"]
-                        .$refs[evt.returnData.relationName]
-                        .$refs["relation"].appendRelations(evt.returnData.objects);
-                }
-            }
-
-            // open panel for relations add
-            if(this.panelIsOpen && evt.relation && evt.relation.name) {
-                this.addRelation = evt.relation;
+            if (value) {
+                cl.add('is-clipped');
             } else {
-                Object(sleep_promise__WEBPACK_IMPORTED_MODULE_9__["default"])(500).then(() => this.addRelation = {}); // 500ms is the panel transition duration
+                cl.remove('is-clipped');
+            }
+        },
+    },
+
+    methods: {
+        /**
+         * on page click:
+         * - if panel is open, close it and stop event propagation
+         * - if panel is closed do nothing
+         *
+         * @return {void}
+         */
+        pageClick(event) {
+            // temporary comment: we do not want that panel is closed, when it contains pagination...
+            // if (this.panelIsOpen) {
+            //     this.closePanel();
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            // }
+        },
+
+        /**
+         * return data from panel
+         *
+         * @param {Object} data
+         *
+         * @return {void}
+         */
+        returnDataFromPanel(data) {
+            this.closePanel();
+            if(data.relationName){
+                this.$refs["moduleView"]
+                    .$refs[data.relationName]
+                    .$refs["relation"].appendRelations(data.objects);
             }
         },
 
+        /**
+         * close panel and clear data
+         *
+         * @return {void}
+         */
+        closePanel() {
+            this.panelIsOpen = false;
+            this.addRelation = {
+                name: '',
+                alreadyInView: [],
+            };
+        },
+
+        /**
+         * request panel and pass data
+         *
+         * @param {Object} data
+         */
+        requestPanel(data) {
+            this.panelIsOpen = true;
+
+            // open panel for relations add
+            if(this.panelIsOpen && data.relation && data.relation.name) {
+                this.addRelation = data.relation;
+            }
+        },
 
         /**
          * extract params from page url
@@ -357,7 +418,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    // injected methods provided by Main App
+    inject: ['requestPanel', 'closePanel'],
     mixins: [ app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_4__["PaginatedContentMixin"] ],
+
     components: {
         StaggeredList: app_components_staggered_list__WEBPACK_IMPORTED_MODULE_0__["default"],
         RelationshipsView: app_components_relation_view_relationships_view_relationships_view__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -553,6 +617,7 @@ __webpack_require__.r(__webpack_exports__);
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            this.newRelationsData = JSON.stringify(this.addedRelations);
         },
 
 
@@ -603,25 +668,6 @@ __webpack_require__.r(__webpack_exports__);
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
-
-
-        /**
-         * request panel emitting event in module view
-         *
-         * @param {String} objectType
-         * @param {Number} objectId
-         *
-         * @return {String} url
-         */
-        requestPanel() {
-            // emit event in module view
-            this.$parent.$parent.$emit('request-panel', {
-                relation: {
-                    name: this.relationName,
-                    alreadyInView: this.alreadyInView,
-                },
-            });
-        }
     }
 
 });
@@ -641,6 +687,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/mixins/paginated-content */ "./src/Template/Layout/js/app/mixins/paginated-content.js");
 /* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! decamelize */ "./node_modules/decamelize/index.js");
 /* harmony import */ var decamelize__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(decamelize__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var sleep_promise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sleep-promise */ "./node_modules/sleep-promise/build/esm.mjs");
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
@@ -652,7 +699,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+    inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
+
     mixins: [ app_mixins_paginated_content__WEBPACK_IMPORTED_MODULE_0__["PaginatedContentMixin"] ],
     props: {
         relationName: {
@@ -682,15 +732,6 @@ __webpack_require__.r(__webpack_exports__);
 
     computed: {
         /**
-         * Return relation name in "human" format (decamelized)
-         *
-         * @return {string} The relation name
-         */
-        relationHumanizedName() {
-            return decamelize__WEBPACK_IMPORTED_MODULE_1___default()(this.relationName);
-        },
-
-        /**
          * Return json parse of config for pagination
          *
          * @return {Object} json representation of pagination config
@@ -708,6 +749,10 @@ __webpack_require__.r(__webpack_exports__);
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
                     this.loadObjects();
+                }
+                // clear objects when relationName is empty (panel closed)
+                if (newVal === '') {
+                    Object(sleep_promise__WEBPACK_IMPORTED_MODULE_2__["default"])(500).then(() => this.objects = []);
                 }
             },
         },
@@ -837,7 +882,6 @@ __webpack_require__.r(__webpack_exports__);
             return response;
         },
     }
-
 });
 
 
@@ -2433,7 +2477,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VueConfig", function() { return VueConfig; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VueOptions", function() { return VueOptions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CkeditorConfig", function() { return CkeditorConfig; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 // Vue configs...
+
+
 
 const VueConfig = {
     devtools: true,
@@ -2443,10 +2491,18 @@ const VueOptions = {
     delimiters: ['<:', ':>'],
 }
 
-// Vue.config.devtools = true;
+// merge vue options and configs
+for (let property in VueConfig) {
+    if (VueConfig.hasOwnProperty(property)) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.config[property] = VueConfig[property];
+    }
+}
 
-// Custom delimiters, avoid `visual` conflict with Twig {{ }} and {% %}
-// Vue.options.delimiters = ['<:', ':>'];
+for (let property in VueOptions) {
+    if (VueOptions.hasOwnProperty(property)) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.options[property] = VueOptions[property];
+    }
+}
 
 // CKeditor configs...
 
@@ -2503,6 +2559,90 @@ const CkeditorConfig = {
         startupOutlineBlocks: true,
     },
 };
+
+
+/***/ }),
+
+/***/ "./src/Template/Layout/js/libs/bedita.js":
+/*!***********************************************!*\
+  !*** ./src/Template/Layout/js/libs/bedita.js ***!
+  \***********************************************/
+/*! exports provided: BELoader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BELoader", function() { return BELoader; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+
+/**
+ * BEdita Helper Object
+ */
+const BELoader = {
+
+    /**
+     * load Beplugins' Vue components (global)
+     *
+     * @return {void}
+     */
+    loadBeditaPlugins() {
+        const plugins = BEDITA.plugins;
+
+        plugins.forEach(element => {
+            const BEPlugins = (window[element] || global[element]).default;
+
+            Object.keys(BEPlugins).forEach(componentName => {
+                if (typeof BEPlugins[componentName] === 'object') {
+                    vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(componentName, BEPlugins[componentName]);
+
+                    console.debug(
+                        `%c[${componentName}]%c component succesfully registred from %c${element}%c Plugin`,
+                        'color: blue',
+                        'color: black',
+                        'color: red',
+                        'color: black'
+                    );
+                }
+            });
+        });
+    }
+}
+
+
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./src/Template/Layout/js/libs/filters.js":
+/*!************************************************!*\
+  !*** ./src/Template/Layout/js/libs/filters.js ***!
+  \************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * Converts a snake case string to title case.
+ * Example: snake_case => Snake Case
+ *
+ * @param  {String} str the string to convert
+ * @return {String}
+ */
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('humanize', function (str) {
+    return str.split('_').map(function (item) {
+        return item.charAt(0).toUpperCase() + item.substring(1);
+    }).join(' ');
+});
 
 
 /***/ }),

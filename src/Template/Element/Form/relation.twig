@@ -136,11 +136,18 @@
 
 
         <div>
-            <button
-                v-bind:class="$root.panelIsOpen? 'icon-coffee' : 'icon-hdd'"
-                v-html="$root.panelIsOpen? 'cancel' : '{{ __('add objects') }}'"
-                @click.prevent="requestPanel()"></button>
-            <button @click.prevent="loadRelatedObjects()">{{ __('reload') }}</button>
+            <button v-if="$root.panelIsOpen" class="icon-coffee"
+                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+            <button v-else
+                class="icon-hdd"
+                @click.prevent.stop="requestPanel({
+                    relation: {
+                        name: relationName,
+                        alreadyInView: alreadyInView,
+                    },
+                })">{{ __('add objects') }}</button>
+
+            <button @click.prevent.stop="loadRelatedObjects()">{{ __('reload') }}</button>
         </div>
 
     </div>

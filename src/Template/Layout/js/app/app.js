@@ -1,6 +1,11 @@
-import Vue from 'vue/dist/vue.min.js';
+import Vue from 'vue';
+
+import 'libs/filters';
+import 'config/config';
 
 import 'Template/Layout/style.scss';
+
+import { BELoader } from 'libs/bedita';
 
 import ModulesIndex from 'app/pages/modules/index';
 import ModulesView from 'app/pages/modules/view';
@@ -14,26 +19,6 @@ import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
 import sleep from 'sleep-promise';
-
-Vue.use(jsoneditor);
-Vue.use(datepicker);
-Vue.use(richeditor);
-Vue.use(VueHotkey);
-
-import { VueConfig, VueOptions } from 'config/config';
-
-// merge vue options, config from configuration file
-for (let property in VueConfig) {
-    if (VueConfig.hasOwnProperty(property)) {
-        Vue.config[property] = VueConfig[property];
-    }
-}
-
-for (let property in VueOptions) {
-    if (VueOptions.hasOwnProperty(property)) {
-        Vue.options[property] = VueOptions[property];
-    }
-}
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -59,6 +44,34 @@ const _vueInstance = new Vue({
         }
     },
 
+    /**
+     * properties or methods available for injection into its descendants
+     * (inject: ['property'])
+     */
+    provide() {
+        return {
+            requestPanel: (...args) => this.requestPanel(...args),
+            closePanel: (...args) => this.closePanel(...args),
+            returnDataFromPanel: (...args) => this.returnDataFromPanel(...args),
+        }
+    },
+
+    /**
+     * setup Vue instance before creation
+     *
+     * @return {void}
+     */
+    beforeCreate() {
+        // Register directives
+        Vue.use(jsoneditor);
+        Vue.use(datepicker);
+        Vue.use(richeditor);
+        Vue.use(VueHotkey);
+
+        // load BEplugins's components
+        BELoader.loadBeditaPlugins();
+    },
+
     created() {
         this.vueLoaded = true;
 
@@ -66,30 +79,76 @@ const _vueInstance = new Vue({
         this.loadUrlParams();
     },
 
-    methods: {
-        // panel
-        onRequestPanelToggle(evt) {
-            this.panelIsOpen = !this.panelIsOpen;
+    watch: {
+        panelIsOpen(value) {
             var cl = document.querySelector('html').classList;
-            cl.contains('is-clipped')? cl.remove('is-clipped') : cl.add('is-clipped');
-
-            // return data from panel
-            if(evt.returnData) {
-                if(evt.returnData.relationName){
-                    this.$refs["moduleView"]
-                        .$refs[evt.returnData.relationName]
-                        .$refs["relation"].appendRelations(evt.returnData.objects);
-                }
-            }
-
-            // open panel for relations add
-            if(this.panelIsOpen && evt.relation && evt.relation.name) {
-                this.addRelation = evt.relation;
+            if (value) {
+                cl.add('is-clipped');
             } else {
-                sleep(500).then(() => this.addRelation = {}); // 500ms is the panel transition duration
+                cl.remove('is-clipped');
+            }
+        },
+    },
+
+    methods: {
+        /**
+         * on page click:
+         * - if panel is open, close it and stop event propagation
+         * - if panel is closed do nothing
+         *
+         * @return {void}
+         */
+        pageClick(event) {
+            // temporary comment: we do not want that panel is closed, when it contains pagination...
+            // if (this.panelIsOpen) {
+            //     this.closePanel();
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            // }
+        },
+
+        /**
+         * return data from panel
+         *
+         * @param {Object} data
+         *
+         * @return {void}
+         */
+        returnDataFromPanel(data) {
+            this.closePanel();
+            if(data.relationName){
+                this.$refs["moduleView"]
+                    .$refs[data.relationName]
+                    .$refs["relation"].appendRelations(data.objects);
             }
         },
 
+        /**
+         * close panel and clear data
+         *
+         * @return {void}
+         */
+        closePanel() {
+            this.panelIsOpen = false;
+            this.addRelation = {
+                name: '',
+                alreadyInView: [],
+            };
+        },
+
+        /**
+         * request panel and pass data
+         *
+         * @param {Object} data
+         */
+        requestPanel(data) {
+            this.panelIsOpen = true;
+
+            // open panel for relations add
+            if(this.panelIsOpen && data.relation && data.relation.name) {
+                this.addRelation = data.relation;
+            }
+        },
 
         /**
          * extract params from page url
