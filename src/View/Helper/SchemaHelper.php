@@ -70,6 +70,7 @@ class SchemaHelper extends Helper
                 return 'number';
 
             case 'boolean':
+            case 'array':
                 return 'checkbox';
         }
 
@@ -165,6 +166,27 @@ class SchemaHelper extends Helper
                 'time' => 'true',
             ];
         } elseif ($type === 'checkbox') {
+            if (!empty($schema['oneOf'])) {
+                $options = [];
+                foreach ($schema['oneOf'] as $one) {
+                    if (!empty($one['type']) && ($one['type'] === 'array')) {
+                        $options = array_map(
+                            function ($value) {
+                                return ['value' => $value, 'text' => Inflector::humanize($value)];
+                            },
+                            $one['items']['enum']
+                        );
+                    }
+                }
+                if (!empty($options)) {
+                    return [
+                        'type' => 'select',
+                        'options' => $options,
+                        'multiple' => 'checkbox',
+                    ];
+                }
+            }
+
             return [
                 'type' => 'checkbox',
                 'checked' => $value,
