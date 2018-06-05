@@ -13,6 +13,7 @@
 
 namespace App\View\Helper;
 
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
@@ -174,7 +175,7 @@ class SchemaHelper extends Helper
                             function ($value) {
                                 return ['value' => $value, 'text' => Inflector::humanize($value)];
                             },
-                            $one['items']['enum']
+                            Hash::extract($one, 'items.enum')
                         );
                     }
                 }
