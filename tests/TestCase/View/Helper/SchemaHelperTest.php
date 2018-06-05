@@ -136,6 +136,25 @@ class SchemaHelperTest extends TestCase
                     'enum' => ['a', 'b', 'c'],
                 ],
             ],
+            'array' => [
+                'checkbox',
+                [
+                    'type' => 'array',
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'array',
+                            'uniqueItems' => true,
+                            'items' => [
+                                'type' => 'string',
+                                'enum' => ['a', 'b', 'c', 'd'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -366,6 +385,50 @@ class SchemaHelperTest extends TestCase
                 ],
                 'company',
                 true,
+            ],
+            'array multiple checkbox' => [
+                // expected result
+                [
+                    'type' => 'select',
+                    'options' => [
+                        [
+                            'value' => 'a',
+                            'text' => 'A',
+                        ],
+                        [
+                            'value' => 'b',
+                            'text' => 'B',
+                        ],
+                        [
+                            'value' => 'c',
+                            'text' => 'C',
+                        ],
+                        [
+                            'value' => 'd',
+                            'text' => 'D',
+                        ],
+                    ],
+                    'multiple' => 'checkbox',
+                ],
+                // schema type
+                [
+                    'type' => 'array',
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'array',
+                            'uniqueItems' => true,
+                            'items' => [
+                                'type' => 'string',
+                                'enum' => ['a', 'b', 'c', 'd'],
+                            ],
+                        ],
+                    ],
+                ],
+                'test_array',
+                null,
             ],
         ];
     }
