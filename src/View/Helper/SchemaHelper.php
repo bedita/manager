@@ -175,7 +175,7 @@ class SchemaHelper extends Helper
                             function ($value) {
                                 return ['value' => $value, 'text' => Inflector::humanize($value)];
                             },
-                            Hash::extract($one, 'items.enum')
+                            (array)Hash::extract($one, 'items.enum')
                         );
                     }
                 }
