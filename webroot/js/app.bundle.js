@@ -1893,44 +1893,43 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const jsonEditorOptions = {
-    "mode": "code",
-    "modes": ["tree", "code"],
-    "history": true,
-    "search": true,
-    onChange: function (element) {
-        if (element) {
-            const json = element.jsonEditor.get();
-            try {
-                element.value = JSON.stringify(json);
-            } catch(e) {
-                console.error(e);
-            }
-        }
-    },
+const options = {
+    mode: 'code',
+    modes: ['tree', 'code'],
+    history: true,
+    search: true,
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     install(Vue) {
         Vue.directive('jsoneditor', {
-            // element: null,
-
             /**
              * create jsoneditor instance when element is inserted
              *
              * @param {Object} element DOM object
              */
-            inserted (element, binding, vnode, oldVnode) {
+            inserted (element) {
                 const content = element.value;
                 try {
                     const json = JSON.parse(content) || {};
 
                     if (json) {
                         element.style.display = "none";
-                        let jsonEditor = document.createElement('div');
-                        jsonEditor.className = "jsoneditor-container";
-                        element.parentElement.insertBefore(jsonEditor, element);
-                        element.jsonEditor = new jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default.a(jsonEditor, jsonEditorOptions);
+                        let container = document.createElement('div');
+                        container.className = 'jsoneditor-container';
+                        element.parentElement.insertBefore(container, element);
+                        let editorOptions = Object.assign(options, {
+                            onChange: function () {
+                                try {
+                                    const json = element.jsonEditor.get();
+                                    element.value = JSON.stringify(json);
+                                    console.info('valid json :)');
+                                } catch(e) {
+                                    console.warn('still not valid json');
+                                }
+                            },
+                        });
+                        element.jsonEditor = new jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default.a(container, editorOptions);
                         element.jsonEditor.set(json);
                     }
                 } catch (err) {
