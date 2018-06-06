@@ -1909,7 +1909,7 @@ __webpack_require__.r(__webpack_exports__);
                     if (json) {
                         element.style.display = "none";
                         let container = document.createElement('div');
-                        container.className = "jsoneditor-container";
+                        container.className = 'jsoneditor-container';
                         element.parentElement.insertBefore(container, element);
                         let options = {
                             mode: 'code',
