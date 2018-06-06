@@ -1893,6 +1893,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const options = {
+    mode: 'code',
+    modes: ['tree', 'code'],
+    history: true,
+    search: true,
+};
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     install(Vue) {
         Vue.directive('jsoneditor', {
@@ -1901,7 +1908,7 @@ __webpack_require__.r(__webpack_exports__);
              *
              * @param {Object} element DOM object
              */
-            inserted (element, binding, vnode, oldVnode) {
+            inserted (element) {
                 const content = element.value;
                 try {
                     const json = JSON.parse(content) || {};
@@ -1911,11 +1918,7 @@ __webpack_require__.r(__webpack_exports__);
                         let container = document.createElement('div');
                         container.className = 'jsoneditor-container';
                         element.parentElement.insertBefore(container, element);
-                        let options = {
-                            mode: 'code',
-                            modes: ['tree', 'code'],
-                            history: true,
-                            search: true,
+                        let editorOptions = Object.assign(options, {
                             onChange: function () {
                                 try {
                                     const json = element.jsonEditor.get();
@@ -1925,8 +1928,8 @@ __webpack_require__.r(__webpack_exports__);
                                     console.warn('still not valid json');
                                 }
                             },
-                        }
-                        element.jsonEditor = new jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default.a(container, options);
+                        });
+                        element.jsonEditor = new jsoneditor_dist_jsoneditor_minimalist__WEBPACK_IMPORTED_MODULE_0___default.a(container, editorOptions);
                         element.jsonEditor.set(json);
                     }
                 } catch (err) {

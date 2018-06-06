@@ -7,6 +7,13 @@
 import JSONEditor from 'jsoneditor/dist/jsoneditor-minimalist';
 import 'jsoneditor/dist/jsoneditor.min.css';
 
+const options = {
+    mode: 'code',
+    modes: ['tree', 'code'],
+    history: true,
+    search: true,
+};
+
 export default {
     install(Vue) {
         Vue.directive('jsoneditor', {
@@ -15,7 +22,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            inserted (element, binding, vnode, oldVnode) {
+            inserted (element) {
                 const content = element.value;
                 try {
                     const json = JSON.parse(content) || {};
@@ -25,11 +32,7 @@ export default {
                         let container = document.createElement('div');
                         container.className = 'jsoneditor-container';
                         element.parentElement.insertBefore(container, element);
-                        let options = {
-                            mode: 'code',
-                            modes: ['tree', 'code'],
-                            history: true,
-                            search: true,
+                        let editorOptions = Object.assign(options, {
                             onChange: function () {
                                 try {
                                     const json = element.jsonEditor.get();
@@ -39,8 +42,8 @@ export default {
                                     console.warn('still not valid json');
                                 }
                             },
-                        }
-                        element.jsonEditor = new JSONEditor(container, options);
+                        });
+                        element.jsonEditor = new JSONEditor(container, editorOptions);
                         element.jsonEditor.set(json);
                     }
                 } catch (err) {
