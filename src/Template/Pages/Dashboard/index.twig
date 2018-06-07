@@ -36,7 +36,7 @@
             </li>
             <li class="has-background-black icon-user">
                 <a>{{ __('User Profile') }}</a>
-                {{ Html.link(__(''), {'_name': 'profile:view'}, {'title': 'User Profile'})|raw }}
+                {{ Html.link(__(''), {'_name': 'profile:view'}, {'title': __('User Profile')})|raw }}
             </li>
             <li class="has-background-black has-text-danger icon-logout">
                 {{ Html.link(__('Log out'), {'_name': 'logout'})|raw }}
