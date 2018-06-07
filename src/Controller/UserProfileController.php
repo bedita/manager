@@ -57,7 +57,7 @@ class UserProfileController extends AppController
         $object = $response['data'];
         $this->set('schema', $schema);
         $this->set('object', $object);
-        $this->set('properties', $this->Properties->viewGroups($object, 'userprofile'));
+        $this->set('properties', $this->Properties->viewGroups($object, 'user_profile'));
     }
 
     /**
@@ -76,6 +76,6 @@ class UserProfileController extends AppController
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
         }
 
-        return $this->redirect(['_name' => 'profile:view']);
+        return $this->redirect(['_name' => 'user_profile:view']);
     }
 }

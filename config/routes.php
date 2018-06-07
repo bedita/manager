@@ -72,14 +72,14 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     // Profile.
     $routes->connect(
-        '/profile',
+        '/user_profile',
         ['controller' => 'UserProfile', 'action' => 'view'],
-        ['_name' => 'profile:view']
+        ['_name' => 'user_profile:view']
     );
     $routes->connect(
-        '/profile/save',
+        '/user_profile/save',
         ['controller' => 'UserProfile', 'action' => 'save'],
-        ['_name' => 'profile:save']
+        ['_name' => 'user_profile:save']
     );
 
     // Import.

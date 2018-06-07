@@ -11,7 +11,7 @@
     <div class="profile-form">
 
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-            'url': {'_name': 'profile:save', 'object_type': 'users'},
+            'url': {'_name': 'user_profile:save', 'object_type': 'users'},
             'id': 'form-main',
         })|raw }}
 
