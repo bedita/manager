@@ -45,7 +45,6 @@ class UserProfileController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $id = $this->Auth->user('id');
         try {
             $response = $this->apiClient->get('/auth/user');
         } catch (BEditaClientException $e) {
