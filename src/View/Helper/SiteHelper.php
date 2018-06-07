@@ -55,7 +55,7 @@ class SiteHelper extends Helper
     }
 
     /**
-     * Layout content visibility
+     * Layout content visibility. Always visible (for now)
      *
      * @return bool True if visible for view
      */

@@ -42,9 +42,7 @@ class UserProfileController extends AppController
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
         }
 
-        $object = $response['data'];
-        $this->set('object', $object);
-        $this->set('currentModule', ['name' => 'profile']);
+        $this->set('object', $response['data']);
     }
 
     /**
