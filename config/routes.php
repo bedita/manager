@@ -70,6 +70,18 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard']
     );
 
+    // Profile.
+    $routes->connect(
+        '/profile',
+        ['controller' => 'UserProfile', 'action' => 'view'],
+        ['_name' => 'profile:view']
+    );
+    $routes->connect(
+        '/profile/save',
+        ['controller' => 'UserProfile', 'action' => 'save'],
+        ['_name' => 'profile:save']
+    );
+
     // Import.
     $routes->connect(
         '/import',

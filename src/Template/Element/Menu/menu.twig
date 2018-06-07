@@ -30,7 +30,9 @@
 
     <li class="has-background-transparent separator">&nbsp;</li>
     <li class="has-background-black icon-wrench center-icon">&nbsp;</li>
-    <li class="has-background-black icon-user center-icon">&nbsp;</li>
+    <li class="has-background-black icon-user center-icon">
+        {{ Html.link(__(''), {'_name': 'profile:view'}, {'title': 'User Profile'})|raw }}
+    </li>
     <li class="has-background-black has-text-danger icon-logout center-icon">
         {{ Html.link(__(''), {'_name': 'logout'}, {'title': 'log out'})|raw }}
     </li>

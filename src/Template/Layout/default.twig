@@ -43,30 +43,33 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
     <main @click="pageClick($event)" class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
-        {% if _view.name == 'Dashboard' and _view.name != 'login' %}
+
+        {% if Site.primarySidebar() %}
             <aside class="layout-sidebar-primary">
                 {% element 'Menu/project' %}
             </aside>
         {% endif %}
 
-        {% if currentModule %}
+        {% if Site.secondarySidebar() %}
             <aside class="layout-sidebar-secondary">
                 {% element 'Menu/commands' %}
             </aside>
         {% endif %}
 
-        {% if _view.name != 'Dashboard' and _view.name != 'Login' %}
+        {% if Site.layoutHeader() %}
             <header class="layout-header">
                 {% element 'Menu/menu' %}
             </header>
         {% endif %}
 
-        <div class="layout-content">
-            {% element 'Modules/header' %}
-            {{ _view.fetch('content')|raw }}
-        </div>
+        {% if Site.layoutContent() %}
+            <div class="layout-content">
+                {% element 'Modules/header' %}
+                {{ _view.fetch('content')|raw }}
+            </div>
+        {% endif %}
 
-        {% if currentModule %}
+        {% if Site.layoutFooter() %}
             <div class="layout-footer">
                 {{ project.name }}<br>
                 {% element 'Menu/colophon' %}
@@ -78,7 +81,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% element 'panel' %}
     </main>
 
-    {% if _view.name != 'login' %}
+    {% if Site.messages() %}
         {% element 'Messages/messages' %}
     {% endif %}
 
