@@ -44,32 +44,32 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     <main @click="pageClick($event)" class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
 
-        {% if Site.primarySidebar() %}
+        {% if Layout.primarySidebar() %}
             <aside class="layout-sidebar-primary">
                 {% element 'Menu/project' %}
             </aside>
         {% endif %}
 
-        {% if Site.secondarySidebar() %}
+        {% if Layout.secondarySidebar() %}
             <aside class="layout-sidebar-secondary">
                 {% element 'Menu/commands' %}
             </aside>
         {% endif %}
 
-        {% if Site.layoutHeader() %}
+        {% if Layout.layoutHeader() %}
             <header class="layout-header">
                 {% element 'Menu/menu' %}
             </header>
         {% endif %}
 
-        {% if Site.layoutContent() %}
+        {% if Layout.layoutContent() %}
             <div class="layout-content">
                 {% element 'Modules/header' %}
                 {{ _view.fetch('content')|raw }}
             </div>
         {% endif %}
 
-        {% if Site.layoutFooter() %}
+        {% if Layout.layoutFooter() %}
             <div class="layout-footer">
                 {{ project.name }}<br>
                 {% element 'Menu/colophon' %}
@@ -81,7 +81,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% element 'panel' %}
     </main>
 
-    {% if Site.messages() %}
+    {% if Layout.messages() %}
         {% element 'Messages/messages' %}
     {% endif %}
 

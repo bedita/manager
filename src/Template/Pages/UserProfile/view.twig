@@ -22,16 +22,16 @@
                     </div>
                 </section>
 
-                {% for key,group in Site.profileGroups() %}
+                {% for key,group in ['core', 'advanced'] %}
                 <section class="fieldset order-{{key + 1}}">
                     {% if key != '0' %}
                     <header>
-                        <h2>{{ __(group) }}</h2>
+                        <h2>{{ __('Details') }}</h2>
                     </header>
                     {% endif %}
                     <div class="tab-container">
                         {% set jsonKeys = [] %}
-                        {% set attributes = Site.profileFields(object.attributes, group) %}
+                        {% set attributes = properties[group] %}
                         {% for key, value in attributes %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class and  options.class == 'json' %}

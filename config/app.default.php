@@ -461,6 +461,27 @@ return [
                 'username',
             ],
         ],
+        'userprofile' => [
+            'view' => [
+                'core' => [
+                    'username',
+                    'name',
+                    'surname',
+                    'email',
+                    'person_title',
+                    'gender',
+                ],
+                'advanced' => [
+                    'phone',
+                    'website',
+                    'street_address',
+                    'city',
+                    'zipcode',
+                    'country',
+                    'state_name',
+                ],
+            ],
+        ],
     ],
 
     /**

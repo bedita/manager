@@ -16,9 +16,9 @@ use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
- * Helper for site (utils and config)
+ * Helper for site layout
  */
-class SiteHelper extends Helper
+class LayoutHelper extends Helper
 {
     /**
      * Primary sidebar visibility
@@ -51,7 +51,7 @@ class SiteHelper extends Helper
      */
     public function layoutHeader() : bool
     {
-        return !in_array($this->_View->name, ['Dashboard']) && ($this->_View->name != 'Login');
+        return !in_array($this->_View->name, ['Dashboard', 'Login']);
     }
 
     /**
@@ -85,40 +85,19 @@ class SiteHelper extends Helper
     }
 
     /**
-     * Return name of group of profile fields
+     * Return style class for command link
      *
-     * @return array
+     * @return string
      */
-    public function profileGroups() : array
+    public function commandLinkClass() : string
     {
-        return ['Core', 'Contact info', 'Change password'];
-    }
-
-    /**
-     * Return profile attributes (and value) for specified field(s) group
-     *
-     * @param array $attributes The profile attributes
-     * @param string $group The field(s) group
-     * @return array The filtered profile attributes
-     */
-    public function profileFields($attributes, $group = 'Core') : array
-    {
-        if ($group === 'Change password') {
-            return [ 'password' => '*********', 'confirm-password' => '*********' ];
+        if ($this->_View->name === 'UserProfile') {
+            return 'icon-user';
         }
-        $groups = [
-            'Core' => ['username', 'name', 'surname', 'email', 'person_title', 'gender'],
-            'Contact info' => ['phone', 'website', 'street_address', 'city', 'zipcode', 'country', 'state_name'],
-            'Change password' => ['password', 'confirm-password'],
-        ];
-        $allowed = $groups[$group];
+        if ($this->_View->name === 'Import') {
+            return 'icon-download-alt';
+        }
 
-        return array_filter(
-            $attributes,
-            function ($key) use ($allowed) {
-                return in_array($key, $allowed);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        return 'commands-menu__module';
     }
 }

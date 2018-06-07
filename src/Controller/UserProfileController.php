@@ -16,6 +16,7 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -25,6 +26,16 @@ use Psr\Log\LogLevel;
  */
 class UserProfileController extends AppController
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function initialize() : void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Properties');
+    }
+
     /**
      * View profile data
      *
@@ -36,13 +47,18 @@ class UserProfileController extends AppController
 
         $id = $this->Auth->user('id');
         try {
-            $response = $this->apiClient->getObject($id, 'users');
+            $response = $this->apiClient->get('/auth/user');
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
         }
 
-        $this->set('object', $response['data']);
+        $revision = Hash::get($response, 'meta.schema.users.revision', null);
+        $schema = $this->Schema->getSchema('users', $revision);
+        $object = $response['data'];
+        $this->set('schema', $schema);
+        $this->set('object', $object);
+        $this->set('properties', $this->Properties->viewGroups($object, 'userprofile'));
     }
 
     /**
@@ -53,16 +69,8 @@ class UserProfileController extends AppController
     public function save() : ?Response
     {
         $data = $this->request->getData();
-        if (empty($data['password'])) {
-            unset($data['password']);
-            unset($data['confirm-password']);
-        } elseif ($data['password'] != $data['confirm-password']) {
-            $this->Flash->error(__('Invalid data: password and confirm-password do not match'));
-
-            return $this->redirect(['_name' => 'profile:view']);
-        }
         try {
-            $this->apiClient->saveObject('users', $data);
+            $this->apiClient->patch('/auth/user', json_encode($data));
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
