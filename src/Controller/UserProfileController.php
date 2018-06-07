@@ -62,7 +62,7 @@ class UserProfileController extends AppController
             return $this->redirect(['_name' => 'profile:view']);
         }
         try {
-            $response = $this->apiClient->saveObject('users', $data);
+            $this->apiClient->saveObject('users', $data);
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
