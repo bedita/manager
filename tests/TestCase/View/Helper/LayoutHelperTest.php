@@ -249,11 +249,11 @@ class LayoutHelperTest extends TestCase
         return [
             'user profile' => [
                 'UserProfile',
-                'icon-user',
+                'has-background-black icon-user',
             ],
             'import' => [
                 'Import',
-                'icon-download-alt',
+                'has-background-black icon-download-alt',
             ],
             'objects' => [
                 'Objects',

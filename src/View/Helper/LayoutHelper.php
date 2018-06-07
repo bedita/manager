@@ -37,7 +37,7 @@ class LayoutHelper extends Helper
      */
     public function secondarySidebar() : bool
     {
-        if (in_array($this->_View->name, ['Import', 'UserProfile'])) {
+        if (in_array($this->_View->name, ['Import', 'UserProfile', 'Model'])) {
             return true;
         }
 
@@ -92,10 +92,10 @@ class LayoutHelper extends Helper
     public function commandLinkClass() : string
     {
         if ($this->_View->name === 'UserProfile') {
-            return 'icon-user';
+            return 'has-background-black icon-user';
         }
         if ($this->_View->name === 'Import') {
-            return 'icon-download-alt';
+            return 'has-background-black icon-download-alt';
         }
 
         return 'commands-menu__module';
