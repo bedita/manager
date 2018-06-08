@@ -167,7 +167,7 @@ class ModulesComponent extends Component
         $project = [
             'name' => Hash::get($meta, 'project.name', ''),
             'version' => Hash::get($meta, 'version', ''),
-            'colophon' => '',
+            'colophon' => '', // TODO: populate this value.
         ];
 
         return $project;

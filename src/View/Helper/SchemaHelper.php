@@ -55,7 +55,7 @@ class SchemaHelper extends Helper
 
             case 'string':
                 if (!empty($schema['format']) && $schema['format'] === 'date-time') {
-                    return 'date-time';
+                    return 'date-time'; // TODO: replace with "datetime".
                 }
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';

@@ -90,6 +90,8 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
+            // @TODO: ajax error display
+
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);

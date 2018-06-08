@@ -11,34 +11,33 @@ import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
 
 export default {
-    inject: ['returnDataFromPanel', 'closePanel'], // injected methods provided by Main App
+    inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
 
-        mixins: [ PaginatedContentMixin ],
-        props: {
-            relationName: {
-                type: String,
-                default: '',
-                    },
-                    alreadyInView: {
-                        type: Array,
-                        default: () => [],
-                            },
-                            configPaginateSizes: {
-                                type: String,
-                                default: '[]',
-                                    },
-                                    },
-                                    data() {
-
-                                        return {
-                                            method: 'relationshipsJson',
-                                            endpoint: '',
-                                            selectedObjects: [],
-                                            pageSize: DEFAULT_PAGINATION.page_size,
-                                            filter: '',
-                                            queryFilter: {},
-                                            timer: null,
-                                        };
+    mixins: [ PaginatedContentMixin ],
+    props: {
+        relationName: {
+            type: String,
+            default: '',
+        },
+        alreadyInView: {
+            type: Array,
+            default: () => [],
+        },
+        configPaginateSizes: {
+            type: String,
+            default: '[]',
+        },
+    },
+    data() {
+        return {
+            method: 'relationshipsJson',
+            endpoint: '',
+            selectedObjects: [],
+            pageSize: DEFAULT_PAGINATION.page_size,
+            filter: '',
+            queryFilter: {},
+            timer: null,
+        };
     },
 
     computed: {
@@ -48,7 +47,6 @@ export default {
          * @return {Object} json representation of pagination config
          */
         paginateSizes() {
-
             return JSON.parse(this.configPaginateSizes);
         },
     },
@@ -59,7 +57,7 @@ export default {
             handler(newVal, oldVal) {
                 if (newVal) {
                     this.selectedObjects = [];
-                    this.endpoint = `${this.method} / ${newVal}`;
+                    this.endpoint = `${this.method}/${newVal}`;
                     this.loadObjects();
                 }
                 // clear objects when relationName is empty (panel closed)
@@ -123,7 +121,7 @@ export default {
             if (page === 1 || page === this.pagination.page_count) { // show first and last page link
                 return true;
             }
-            if ( (page >= this.pagination.page - 1) && page <= this.pagination.page + 1) { // show previous and next page link
+            if ( (page >= this.pagination.page-1) && page <= this.pagination.page+1) { // show previous and next page link
                 return true;
             }
 
@@ -152,7 +150,7 @@ export default {
          */
         toggle(object, evt) {
             let position = this.selectedObjects.indexOf(object);
-            if (position != -1) {
+            if(position != -1) {
                 this.selectedObjects.splice(position, 1);
             } else {
                 this.selectedObjects.push(object);
@@ -188,7 +186,7 @@ export default {
                     q: this.filter
                 }
             }
-            let response = await PaginatedContentMixin.methods.toPage.call(this, page, this.queryFilter);
+            let response =  await PaginatedContentMixin.methods.toPage.call(this, page, this.queryFilter);
             this.loading = false;
 
             return response;

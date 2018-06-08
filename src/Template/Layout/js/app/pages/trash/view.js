@@ -12,6 +12,6 @@ import ModulesIndex from 'app/pages/modules/index';
 
 export default {
     extends: ModulesView,
-    }
+}
 
 

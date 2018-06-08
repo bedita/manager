@@ -11,8 +11,8 @@ import StaggeredList from 'app/components/staggered-list';
 
 export default {
     mixins: [ PaginatedContentMixin ],
-        components: {
-            StaggeredList,
+    components: {
+        StaggeredList,
     },
 
     // props used by parent
@@ -24,36 +24,34 @@ export default {
         viewVisibility: {
             type: Boolean,
             default: () => false,
-                },
-                addedRelations: {
-                    type: Array,
-                    default: () => [],
-                        },
-                // relations already related to the object
-                        hideRelations: {
-                            type: Array,
-                            default: () => [],
-                                }
-                                },
+        },
+        addedRelations: {
+            type: Array,
+            default: () => [],
+        },
+        // relations already related to the object
+        hideRelations: {
+            type: Array,
+            default: () => [],
+        }
+    },
 
-                                computed: {
-                                    keyEvents() {
-
-                                        return {
-                                            'esc': {
-                                                keyup: this.handleKeyboard,
-                                            }
-                                        };
-                                    },
+    computed: {
+        keyEvents() {
+            return {
+                'esc': {
+                    keyup: this.handleKeyboard,
+                }
+            };
+        },
     },
 
     data() {
-
         return {
-            method: 'relationshipsJson', // define AppController method to be used
+            method: 'relationshipsJson',    // define AppController method to be used
             loading: false,
-            pendingRelations: [], // pending elements to be added
-            relationsData: [], // hidden field containing serialized json passed on form submit
+            pendingRelations: [],           // pending elements to be added
+            relationsData: [],              // hidden field containing serialized json passed on form submit
             isVisible: false,
         }
     },
@@ -64,7 +62,7 @@ export default {
      * @return {void}
      */
     created() {
-        this.endpoint = `${this.method} / ${this.relationName}`;
+        this.endpoint = `${this.method}/${this.relationName}`;
     },
 
     watch: {
@@ -113,7 +111,7 @@ export default {
                 this.loadObjects();
             }
             // avoid problem with vue rendering queue
-            this.$nextTick(() => {
+            this.$nextTick( () => {
                 if (this.isVisible && this.$refs.inputFilter) {
                     this.$refs.inputFilter.focus();
                 }
@@ -185,10 +183,8 @@ export default {
          */
         hasElementsToShow() {
             const visible = this.objects.filter((obj) => {
-
-                return !this.hideRelations.filter((hidden) => obj.id === hidden.id).length;
+                return !this.hideRelations.filter( (hidden) => obj.id === hidden.id).length;
             });
-
             return visible.length;
         },
 
@@ -203,10 +199,9 @@ export default {
             let jsonString = '';
             try {
                 jsonString = JSON.stringify(relations);
-            } catch (err) {
+            } catch(err) {
                 console.error(err);
             }
-
             return jsonString;
         },
 
@@ -219,7 +214,6 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-
             return relations.filter((rel) => rel.id === id).length;
         },
 

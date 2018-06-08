@@ -32,7 +32,6 @@ const _vueInstance = new Vue({
     },
 
     data() {
-
         return {
             vueLoaded: false,
             urlPagination: '',
@@ -50,7 +49,6 @@ const _vueInstance = new Vue({
      * (inject: ['property'])
      */
     provide() {
-
         return {
             requestPanel: (...args) => this.requestPanel(...args),
             closePanel: (...args) => this.closePanel(...args),
@@ -118,7 +116,7 @@ const _vueInstance = new Vue({
          */
         returnDataFromPanel(data) {
             this.closePanel();
-            if (data.relationName) {
+            if(data.relationName){
                 this.$refs["moduleView"]
                     .$refs[data.relationName]
                     .$refs["relation"].appendRelations(data.objects);
@@ -147,7 +145,7 @@ const _vueInstance = new Vue({
             this.panelIsOpen = true;
 
             // open panel for relations add
-            if (this.panelIsOpen && data.relation && data.relation.name) {
+            if(this.panelIsOpen && data.relation && data.relation.name) {
                 this.addRelation = data.relation;
             }
         },
@@ -208,9 +206,9 @@ const _vueInstance = new Vue({
             let url = `${window.location.origin}${window.location.pathname}`;
             let first = true;
 
-            Object.keys(params).forEach((key) => {
+            Object.keys(params).forEach((key) =>  {
                 if (params[key] && params[key] !== '') {
-                    url += `${first ? '?' : '&'}${key} = ${params[key]}`;
+                    url += `${first ? '?' : '&'}${key}=${params[key]}`;
                     first = false;
                 }
             });
@@ -271,7 +269,6 @@ const _vueInstance = new Vue({
          * @returns {Boolean}
          */
         isNumeric(num) {
-
             return !isNaN(num);
         },
     }

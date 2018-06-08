@@ -22,7 +22,7 @@ const BELoader = {
                     Vue.component(componentName, BEPlugins[componentName]);
 
                     console.debug(
-                        ` % c[${componentName}] % c component succesfully registred from % c${element} % c Plugin`,
+                        `%c[${componentName}]%c component succesfully registred from %c${element}%c Plugin`,
                         'color: blue',
                         'color: black',
                         'color: red',

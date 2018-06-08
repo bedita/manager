@@ -20,21 +20,20 @@ export default {
         ids: {
             type: String,
             default: () => [],
-                },
-                },
+        },
+    },
 
     /**
      * component properties
      *
      * @returns {Object}
      */
-                data() {
-
-                    return {
-                        allIds: [],
-                        selectedRows: [],
-                        status: '',
-                    };
+    data() {
+        return {
+            allIds: [],
+            selectedRows: [],
+            status: '',
+        };
     },
 
     /**
@@ -43,18 +42,16 @@ export default {
     created() {
         try {
             this.allIds = JSON.parse(this.ids);
-        } catch (error) {
+        } catch(error) {
             console.error(error);
         }
     },
 
     computed: {
         selectedIds() {
-
             return JSON.stringify(this.selectedRows);
         },
         allChecked() {
-
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
         }
     },
@@ -104,7 +101,7 @@ export default {
                 return;
             }
             this.status = status;
-            this.$nextTick(() => {
+            this.$nextTick( () => {
                 document.getElementById('form-status').submit();
             });
         },
@@ -129,7 +126,7 @@ export default {
          * @return {void}
          */
         selectRow(event) {
-            if (event.target.type != 'checkbox') {
+            if(event.target.type != 'checkbox') {
                 event.preventDefault();
                 var cb = event.target.querySelector('input[type=checkbox]');
                 let position = this.selectedRows.indexOf(cb.value);
