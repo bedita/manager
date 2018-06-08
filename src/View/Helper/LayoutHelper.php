@@ -45,7 +45,7 @@ class LayoutHelper extends Helper
     }
 
     /**
-     * Menu header visibility
+     * Layout header visibility
      *
      * @return bool True if visible for view
      */
