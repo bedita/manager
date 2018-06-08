@@ -14,7 +14,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            inserted (element) {
+            inserted(element) {
                 const configKey = element.getAttribute('ckconfig');
                 let loadedConfig = null;
                 if (CkeditorConfig) {

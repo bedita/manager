@@ -47,7 +47,6 @@ class SchemaComponent extends Component
      */
     public function getSchema(string $type = null, string $revision = null)
     {
-        // TODO: handle multiple projects -> key schema may differ
         if ($type === null) {
             $type = $this->getConfig('type');
         }

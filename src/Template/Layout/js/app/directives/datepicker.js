@@ -26,7 +26,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            inserted (element, dir, vueEl) {
+            inserted(element, dir, vueEl) {
                 let options = datepickerOptions;
 
                 if (vueEl.data && vueEl.data.attrs && vueEl.data.attrs.time) {

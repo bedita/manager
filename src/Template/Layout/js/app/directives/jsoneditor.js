@@ -22,7 +22,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            inserted (element) {
+            inserted(element) {
                 const content = element.value;
                 try {
                     const json = JSON.parse(content) || {};
@@ -38,7 +38,7 @@ export default {
                                     const json = element.jsonEditor.get();
                                     element.value = JSON.stringify(json);
                                     console.info('valid json :)');
-                                } catch(e) {
+                                } catch (e) {
                                     console.warn('still not valid json');
                                 }
                             },

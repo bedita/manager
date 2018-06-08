@@ -13,6 +13,7 @@ export const DEFAULT_PAGINATION = {
 
 export const PaginatedContentMixin = {
     data() {
+
         return {
             objects: [],
             endpoint: null,
@@ -38,8 +39,8 @@ export const PaginatedContentMixin = {
                 if (query) {
                     this.query = query;
                 }
-                let requestUrl = `${baseUrl}/${this.endpoint}`;
-                const options =  {
+                let requestUrl = `${baseUrl} / ${this.endpoint}`;
+                const options = {
                     credentials: 'same-origin',
                     headers: {
                         'accept': 'application/json',
@@ -85,13 +86,14 @@ export const PaginatedContentMixin = {
             const separator = '&';
 
             Object.keys(this.pagination).forEach((key, index) => {
-                pagination += `${index ? separator : ''}${key}=${this.pagination[key]}`;
+                pagination += `${index ? separator : ''}${key} = ${this.pagination[key]}`;
             });
 
             let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
-                qi = '&';
-            }
+        if (!hasQueryIdentifier) {
+            qi = '&';
+        }
+
             return `${url}${qi}${pagination}`;
         },
 
@@ -107,19 +109,20 @@ export const PaginatedContentMixin = {
             const separator = '&';
 
             Object.keys(this.pagination).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.pagination[key]}`;
+                queryString += `${index ? separator : ''}${key} = ${this.pagination[key]}`;
             });
-            if (queryString.length > 1) {
-                queryString += separator;
-            }
+        if (queryString.length > 1) {
+            queryString += separator;
+        }
             Object.keys(this.query).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.query[key]}`;
+                queryString += `${index ? separator : ''}${key} = ${this.query[key]}`;
             });
 
             let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
-                qi = '&';
-            }
+        if (!hasQueryIdentifier) {
+            qi = '&';
+        }
+
             return `${url}${qi}${queryString}`;
         },
 
@@ -132,6 +135,7 @@ export const PaginatedContentMixin = {
          */
         findObjectById(id) {
             let obj = this.objects.filter(o => o.id === id);
+
             return obj.length && obj[0];
         },
 
@@ -161,6 +165,7 @@ export const PaginatedContentMixin = {
          */
         toPage(page, query = {}) {
             this.pagination.page = page || 1;
+
             return this.getPaginatedObjects(true, query);
         },
 

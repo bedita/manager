@@ -21,12 +21,12 @@ import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-
 export default {
     // injected methods provided by Main App
     inject: ['requestPanel', 'closePanel'],
-    mixins: [ PaginatedContentMixin ],
+        mixins: [ PaginatedContentMixin ],
 
-    components: {
-        StaggeredList,
-        RelationshipsView,
-        TreeView,
+        components: {
+            StaggeredList,
+            RelationshipsView,
+            TreeView,
     },
 
     props: {
@@ -38,26 +38,27 @@ export default {
         multipleChoice: {
             type: Boolean,
             default: true,
-        },
-        configPaginateSizes: {
-            type: String,
-            default: '[]',
-        },
-    },
+                },
+                configPaginateSizes: {
+                    type: String,
+                    default: '[]',
+                        },
+                        },
 
-    data() {
-        return {
-            method: 'relatedJson',          // define AppController method to be used
-            loading: false,
-            count: 0,                       // count number of related objects, on change triggers an event
+                        data() {
 
-            removedRelated: [],             // currently related objects to be removed
-            addedRelations: [],             // staged added objects to be saved
-            relationsData: [],              // hidden field containing serialized json passed on form submit
-            newRelationsData: [],           // array of serialized new relations
+                            return {
+                                method: 'relatedJson', // define AppController method to be used
+                                loading: false,
+                                count: 0, // count number of related objects, on change triggers an event
 
-            pageSize: DEFAULT_PAGINATION.page_size,     // pageSize value for pagination page size
-        }
+                                removedRelated: [], // currently related objects to be removed
+                                addedRelations: [], // staged added objects to be saved
+                                relationsData: [], // hidden field containing serialized json passed on form submit
+                                newRelationsData: [], // array of serialized new relations
+
+                                pageSize: DEFAULT_PAGINATION.page_size, // pageSize value for pagination page size
+                            }
     },
 
     computed: {
@@ -65,9 +66,11 @@ export default {
         alreadyInView() {
             var a = this.addedRelations.map(o => o.id);
             var b = this.objects.map(o => o.id);
+
             return a.concat(b);
         },
         paginateSizes() {
+
             return JSON.parse(this.configPaginateSizes);
         }
     },
@@ -78,7 +81,7 @@ export default {
      * @return {void}
      */
     created() {
-        this.endpoint = `${this.method}/${this.relationName}`;
+        this.endpoint = `${this.method} / ${this.relationName}`;
     },
 
     /**
@@ -126,6 +129,7 @@ export default {
             let resp = await this.getPaginatedObjects();
             this.loading = false;
             this.$emit('count', this.pagination.count);
+
             return resp;
         },
 
@@ -140,6 +144,7 @@ export default {
         relationToggle(related) {
             if (!related || !related.id) {
                 console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+
                 return;
             }
             if (!this.containsId(this.removedRelated, related.id)) {
@@ -201,8 +206,9 @@ export default {
          */
         async toPage(i) {
             this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
+            let resp = await PaginatedContentMixin.methods.toPage.call(this, i);
             this.loading = false;
+
             return resp;
         },
 
@@ -215,6 +221,7 @@ export default {
         removeAddedRelations(id) {
             if (!id) {
                 console.error('[removeAddedRelations] needs first param (id) as {Number|String}');
+
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
@@ -235,7 +242,8 @@ export default {
                 this.addedRelations = items;
             } else {
                 var existingIds = this.addedRelations.map(a => a.id);
-                for (var i = 0; i < items.length; i++) {
+                let len = items.length;
+                for (var i = 0; i < len; i++) {
                     if (existingIds.indexOf(items[i].id) < 0) {
                         this.addedRelations.push(items[i]);
                     }
@@ -254,6 +262,7 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
+
             return relations.filter((rel) => rel.id === id).length;
         },
 
@@ -267,6 +276,7 @@ export default {
          * @return {String} url
          */
         buildViewUrl(objectType, objectId) {
+
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
     }

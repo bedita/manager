@@ -24,19 +24,20 @@ export default {
         tabOpen: {
             type: Boolean,
             default: true,
-        },
-        isDefaultOpen: {
-            type: Boolean,
-            default: false,
-        },
-    },
+                },
+                isDefaultOpen: {
+                    type: Boolean,
+                    default: false,
+                        },
+                        },
 
-    data() {
-        return {
-            isOpen: true,
-            isLoading: false,
-            count: 0,
-        }
+                        data() {
+
+                            return {
+                                isOpen: true,
+                                isLoading: false,
+                                count: 0,
+                            }
     },
 
     mounted() {

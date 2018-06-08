@@ -21,6 +21,7 @@ export default {
      * @returns {Object}
      */
     data() {
+
         return {
             tabsOpen: true,
         };
@@ -28,6 +29,7 @@ export default {
 
     computed: {
         keyEvents() {
+
             return {
                 'esc': {
                     keyup: this.toggleTabs,
@@ -38,6 +40,7 @@ export default {
 
     methods: {
         toggleTabs() {
+
             return this.tabsOpen = !this.tabsOpen;
         }
     }

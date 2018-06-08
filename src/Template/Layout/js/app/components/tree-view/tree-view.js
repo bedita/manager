@@ -16,26 +16,27 @@ import sleep from 'sleep-promise';
 
 export default {
     extends: RelationshipsView,
-    components: {
-        TreeList
+        components: {
+            TreeList
     },
 
     props: {
         relatedObjects: {
             type: Array,
             default: () => [],
-        },
-        loadOnStart: [Boolean, Number],
-        multipleChoice: {
-            type: Boolean,
-            default: true,
-        },
-    },
+                },
+                loadOnStart: [Boolean, Number],
+                multipleChoice: {
+                    type: Boolean,
+                    default: true,
+                        },
+                        },
 
-    data() {
-        return {
-            jsonTree: {},   // json tree version of the objects list based on path
-        }
+                        data() {
+
+                            return {
+                                jsonTree: {}, // json tree version of the objects list based on path
+                            }
     },
 
     /**
@@ -57,19 +58,21 @@ export default {
         pendingRelations(pendingRels) {
             // handles relations to be added
             let relationsToAdd = pendingRels.filter((rel) => {
+
                 return !this.isRelated(rel.id);
             });
 
-            if (!this.multipleChoice) {
-                if(relationsToAdd.length) {
-                    relationsToAdd = relationsToAdd[0];
-                }
+        if (!this.multipleChoice) {
+            if (relationsToAdd.length) {
+                relationsToAdd = relationsToAdd[0];
             }
+        }
 
             this.relationsData = this.relationFormatterHelper(relationsToAdd);
 
             // handles relations to be removes
             let relationsToRemove = this.relatedObjects.filter((rel) => {
+
                 return !this.isPending(rel.id);
             });
 
@@ -84,6 +87,7 @@ export default {
          */
         objects() {
             this.pendingRelations = this.objects.filter((rel) => {
+
                 return this.isRelated(rel.id);
             });
         },
@@ -121,6 +125,7 @@ export default {
         addRelation(related) {
             if (!related || !related.id === undefined) {
                 console.error('[addRelation] needs first param (related) as {object} with property id set');
+
                 return;
             }
             if (!this.containsId(this.pendingRelations, related.id)) {
@@ -140,6 +145,7 @@ export default {
         removeRelation(related) {
             if (!related || !related.id) {
                 console.error('[removeRelation] needs first param (related) as {object} with property id set');
+
                 return;
             }
             this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== related.id);
@@ -235,6 +241,7 @@ export default {
          */
         findPath(paths, part) {
             let path = paths.filter(path => path.id === part);
+
             return path.length ? path[0] : false;
         },
 
@@ -246,7 +253,9 @@ export default {
          * @return {Boolean}
          */
         isRelated(id) {
+
             return this.relatedObjects.filter((relatedObject) => {
+
                 return id === relatedObject.id;
             }).length ? true : false;
         },
@@ -259,7 +268,9 @@ export default {
          * @return {Boolean}
          */
         isPending(id) {
+
             return this.pendingRelations.filter((pendingRelation) => {
+
                 return id === pendingRelation.id;
             }).length ? true : false;
         },
