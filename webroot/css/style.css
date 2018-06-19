@@ -1940,4 +1940,107 @@ body.view-module .module-form {
     .fieldset .tab h2:first-letter {
       text-transform: capitalize; }
 
+body .userprofile-view {
+  padding-left: 8px; }
+  body .userprofile-view > header h1:empty:before {
+    content: attr(untitled);
+    color: #6c757d;
+    font-style: italic; }
+
+body .profile-form {
+  width: 100%;
+  margin-top: 16px; }
+  body .profile-form form {
+    display: flex;
+    flex-wrap: wrap; }
+    body .profile-form form .form-column {
+      display: contents;
+      width: 100%; }
+      @media screen and (min-width: 780px) {
+        body .profile-form form .form-column {
+          display: block; }
+          body .profile-form form .form-column:first-of-type {
+            width: 67%;
+            padding-right: 16px; }
+          body .profile-form form .form-column:last-of-type {
+            width: 33%; } }
+      @media screen and (min-width: 1024px) {
+        body .profile-form form .form-column:first-of-type {
+          width: 55%;
+          padding-right: 32px; }
+        body .profile-form form .form-column:last-of-type {
+          width: 45%; } }
+    body .profile-form form section.fieldset {
+      width: 100%;
+      order: 0; }
+    body .profile-form form section.fieldset > div,
+    body .profile-form form section.fieldset .tab-container > div {
+      margin: 16px 0; }
+      body .profile-form form section.fieldset > div:first-child,
+      body .profile-form form section.fieldset .tab-container > div:first-child {
+        margin-top: 0; }
+    body .profile-form form section.fieldset .tab-container {
+      margin-bottom: 48px; }
+    body .profile-form form section.fieldset.closed .tab {
+      color: #6c757d;
+      background: linear-gradient(to right, #343a40, #212529); }
+    body .profile-form form section.fieldset input[type="color"], body .profile-form form section.fieldset input[type="date"], body .profile-form form section.fieldset input[type="datetime"], body .profile-form form section.fieldset input[type="datetime-local"], body .profile-form form section.fieldset input[type="email"], body .profile-form form section.fieldset input[type="month"], body .profile-form form section.fieldset input[type="number"], body .profile-form form section.fieldset input[type="password"], body .profile-form form section.fieldset input[type="search"], body .profile-form form section.fieldset input[type="tel"], body .profile-form form section.fieldset input[type="text"], body .profile-form form section.fieldset input[type="time"], body .profile-form form section.fieldset input[type="url"], body .profile-form form section.fieldset input[type="week"], body .profile-form form section.fieldset input:not([type]), body .profile-form form section.fieldset textarea {
+      width: 100%;
+      background-color: #e9ecef; }
+    body .profile-form form section.fieldset label {
+      flex: 1 0 100%;
+      margin-right: 16px; }
+    body .profile-form form section.fieldset div.input.status {
+      display: flex;
+      flex-wrap: wrap; }
+      body .profile-form form section.fieldset div.input.status label:not(:first-child) {
+        flex: 0 0 auto;
+        margin-right: 16px;
+        cursor: pointer; }
+    body .profile-form form section.fieldset .stream {
+      display: flex; }
+    body .profile-form form section.fieldset .thumb {
+      background-color: #ced4da;
+      display: inline-block; }
+      body .profile-form form section.fieldset .thumb a {
+        display: block;
+        background-image: linear-gradient(45deg, #dee2e6 25%, transparent 25%), linear-gradient(-45deg, #dee2e6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #dee2e6 75%), linear-gradient(-45deg, transparent 75%, #dee2e6 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+        body .profile-form form section.fieldset .thumb a img {
+          display: block;
+          max-width: 100%; }
+    body .profile-form form section.fieldset .embedded-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      padding-top: 30px;
+      height: 0;
+      overflow: hidden; }
+      body .profile-form form section.fieldset .embedded-container iframe, body .profile-form form section.fieldset .embedded-container object, body .profile-form form section.fieldset .embedded-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; }
+  body .profile-form section.relations {
+    width: 100%;
+    margin-top: 48px; }
+
+.fieldset .tab {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: .25rem .5rem;
+  background-color: #343a40;
+  color: #adb5bd;
+  border-radius: 3px;
+  cursor: pointer; }
+  .fieldset .tab h2 {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    font-size: 1.25rem; }
+    .fieldset .tab h2:first-letter {
+      text-transform: capitalize; }
+
 /*# sourceMappingURL=style.css.map*/

@@ -39,6 +39,7 @@ class AppView extends TwigView
                 'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
+        $this->loadHelper('Layout');
         $this->loadHelper('Array');
         $this->loadHelper('Html');
         $this->loadHelper('Link');

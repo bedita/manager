@@ -1,0 +1,148 @@
+body {
+
+    .userprofile-view {
+        padding-left: $gutter * .5;
+        >header {
+            h1:empty {
+                &:before {
+                    content: attr(untitled);
+                    color: $gray-600;
+                    font-style: italic;
+                }
+            }
+        }
+    }
+
+    // view
+    .profile-form {
+        width: 100%;
+        margin-top: $gutter;
+
+        form {
+            // layout
+            display: flex;
+            flex-wrap: wrap;
+
+            .form-column {
+                display: contents;
+                width: 100%;
+
+                @media screen and (min-width: 780px) {
+                    display: block;
+                    &:first-of-type { width: 67%; padding-right: $gutter; }
+                    &:last-of-type { width: 33%; }
+                }
+                @media screen and (min-width: 1024px) {
+                    &:first-of-type { width: 55%; padding-right: 2 * $gutter; }
+                    &:last-of-type { width: 45%; }
+                }
+            }
+
+            section.fieldset {
+                width: 100%;
+                order: 0;
+            }
+
+
+            // section content
+            section.fieldset {
+                > div,
+                .tab-container >div {
+                    margin: $gutter 0;
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+
+                .tab-container {
+                    margin-bottom: $gutter * 3;
+                }
+
+                &.closed {
+                    .tab {
+                        color: $gray-600;
+                        background: linear-gradient(to right, $gray-800, $gray-900);
+                    }
+                }
+
+                #{$text-inputs}, textarea {
+                    width: 100%;
+                    background-color: $gray-200;
+                }
+
+                label {
+                    flex: 1 0 100%;
+                    margin-right: 16px;
+                }
+
+                div.input.status {
+                    display: flex;
+                    flex-wrap: wrap;
+                    label:not(:first-child) {
+                        flex: 0 0 auto;
+                        margin-right: $gutter;
+                        cursor: pointer;
+                    }
+                }
+
+                .stream {
+                    display: flex;
+                }
+                .thumb {
+                    background-color: $gray-400;
+                    display: inline-block;
+                    a {
+                        display: block;
+                        background-image: linear-gradient(45deg, $gray-300 25%, transparent 25%), linear-gradient(-45deg, $gray-300 25%, transparent 25%), linear-gradient(45deg, transparent 75%, $gray-300 75%), linear-gradient(-45deg, transparent 75%, $gray-300 75%);
+                        background-size: 20px 20px;
+                        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+                        img {
+                            display: block;
+                            max-width: 100%;
+                        }
+                    }
+                }
+
+                .embedded-container {
+                    position: relative;
+                    padding-bottom: 56.25%; // default 16/9
+                    padding-top: 30px;
+                    height: 0;
+                    overflow: hidden;
+                    iframe, object, embed {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+
+        section.relations {
+            width: 100%;
+            margin-top: $gutter * 3;
+        }
+    }
+}
+
+.fieldset .tab {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter;
+    padding: .25rem .5rem;
+    background-color: $gray-800;
+    color: $gray-500;
+    border-radius: 3px;
+    cursor: pointer;
+
+    h2 {
+        flex-grow: 1;
+        margin: 0; padding: 0;
+        font-size: 1.25rem;
+        &:first-letter {
+            text-transform: capitalize;
+        }
+    }
+}

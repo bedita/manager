@@ -440,27 +440,28 @@ return [
      *  - 'index' properties to display in index view (other than id, status and modified)
      */
     'Properties' => [
-        'users' => [
-            'view' => [
-                '_keep' => [
-                    'password',
-                    'confirm-password'
-                ],
-                'core' => [
-                    'username',
-                    'password',
-                    'confirm-password',
-                    'name',
-                    'surname',
-                    'email',
-                ],
-            ],
-            'index' => [
-                'name',
-                'surname',
-                'username',
-            ],
-        ],
+        // 'foos' => [
+        //     'view' => [
+        //         '_keep' => [
+        //             'some_field',
+        //         ],
+        //         'core' => [
+        //              'some_field',
+        //              'title',
+        //         ],
+        //         'publish' => [
+        //              'publish_field',
+        //         ],
+        //         'advanced' => [
+        //              'extra_field',
+        //         ],
+        //     ],
+        //     'index' => [
+        //         'name',
+        //         'surname',
+        //         'username',
+        //     ],
+        // ],
     ],
 
     /**

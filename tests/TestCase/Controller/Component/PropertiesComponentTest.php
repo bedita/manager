@@ -38,23 +38,23 @@ class PropertiesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
-    {
-        parent::setUp();
-
-        $controller = new Controller();
-        $registry = $controller->components();
-        $this->Properties = $registry->load(PropertiesComponent::class);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function tearDown() : void
     {
         unset($this->Properties);
 
         parent::tearDown();
+    }
+
+    /**
+     * Create test case component
+     *
+     * @return void
+     */
+    protected function createComponent()
+    {
+        $controller = new Controller();
+        $registry = $controller->components();
+        $this->Properties = $registry->load(PropertiesComponent::class);
     }
 
     /**
@@ -68,6 +68,8 @@ class PropertiesComponentTest extends TestCase
     {
         $index = ['legs', 'pet_name'];
         Configure::write('Properties.cats.index', $index);
+
+        $this->createComponent();
 
         $list = $this->Properties->indexList('cats');
         static::assertEquals($index, $list);
@@ -220,12 +222,15 @@ class PropertiesComponentTest extends TestCase
      *
      * @dataProvider viewGroupsProvider()
      * @covers ::viewGroups()
+     * @covers ::initialize()
      */
     public function testViewGroups($expected, $object, string $type, array $config = []) : void
     {
         if (!empty($config)) {
             Configure::write(sprintf('Properties.%s.view', $type), $config);
         }
+
+        $this->createComponent();
 
         $result = $this->Properties->viewGroups($object, $type);
 
