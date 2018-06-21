@@ -15,7 +15,7 @@ class Countries
      * Return list of countries pairs <code> =>  >name> by specified code
      *
      * @param string $code The code type: can be alpha2, alpha3, numeric, name
-     * @return array The countries list (<code>: <name>)
+     * @return array The countries list
      */
     public function list($code = 'alpha3') : array
     {
