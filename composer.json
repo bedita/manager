@@ -26,6 +26,7 @@
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",
         "josegonzalez/dotenv": "2.*",
+        "league/iso3166": "^2.0",
         "mobiledetect/mobiledetectlib": "2.*",
         "php-http/guzzle6-adapter": "^1.1",
         "woohoolabs/yang": "^1.4",
