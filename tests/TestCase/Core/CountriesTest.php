@@ -13,8 +13,8 @@
 
 namespace App\Test\TestCase\Core;
 
+use App\Core\Countries;
 use Cake\TestSuite\TestCase;
-use OpenCorporation\Core\Countries;
 
 /**
  * {@see \App\Core\Countries} Test Case
