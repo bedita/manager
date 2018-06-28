@@ -17,6 +17,7 @@ use App\ApiClientProvider;
 use Cake\Auth\BaseAuthenticate;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Utility\Hash;
 
 /**
  * An authentication adapter for authenticating using BEdita 4 API /auth endpoint.
@@ -60,7 +61,8 @@ class ApiAuthenticate extends BaseAuthenticate
 
         $tokens = $result['meta'];
         $result = $apiClient->get('/auth/user', null, ['Authorization' => sprintf('Bearer %s', $tokens['jwt'])]);
-        $user = $result['data'] + compact('tokens');
+        $roles = Hash::extract($result, 'included.{n}.attributes.name');
+        $user = $result['data'] + compact('tokens') + compact('roles');
 
         return $user;
     }
