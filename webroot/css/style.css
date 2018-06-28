@@ -2043,4 +2043,187 @@ body .profile-form {
     .fieldset .tab h2:first-letter {
       text-transform: capitalize; }
 
+body.view-model .model-header {
+  height: 86px;
+  margin-left: 8px; }
+  body.view-model .model-header .model-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    @media screen and (max-width: 960px) {
+      body.view-model .model-header .model-toolbar {
+        height: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start; }
+        body.view-model .model-header .model-toolbar > * {
+          margin-bottom: 16px; } }
+
+body.view-model .model-index .list-resources {
+  display: table;
+  border-collapse: collapse;
+  min-width: 100%; }
+  body.view-model .model-index .list-resources > nav {
+    display: table-row; }
+    body.view-model .model-index .list-resources > nav.table-header {
+      border-bottom: 1px solid #495057; }
+      body.view-model .model-index .list-resources > nav.table-header a.sort {
+        display: flex;
+        align-items: center; }
+        body.view-model .model-index .list-resources > nav.table-header a.sort:after {
+          content: "\203A";
+          margin-left: 10px;
+          display: inline-block;
+          font-size: 1.5em;
+          line-height: 21px; }
+        body.view-model .model-index .list-resources > nav.table-header a.sort.up:after {
+          transform: rotate(-90deg); }
+        body.view-model .model-index .list-resources > nav.table-header a.sort.down:after {
+          transform: rotate(90deg); }
+  body.view-model .model-index .list-resources > a {
+    display: table-row; }
+    body.view-model .model-index .list-resources > a:hover {
+      background-color: #495057; }
+  body.view-model .model-index .list-resources > nav div, body.view-model .model-index .list-resources > a div {
+    display: table-cell;
+    padding: 8px;
+    white-space: nowrap;
+    vertical-align: middle; }
+    body.view-model .model-index .list-resources > nav div.title-cell, body.view-model .model-index .list-resources > a div.title-cell {
+      max-width: 310px;
+      text-overflow: ellipsis;
+      overflow: hidden; }
+      body.view-model .model-index .list-resources > nav div.title-cell:empty:before, body.view-model .model-index .list-resources > a div.title-cell:empty:before {
+        content: attr(untitled);
+        color: #6c757d;
+        font-style: italic; }
+    body.view-model .model-index .list-resources > nav div.thumb-cell, body.view-model .model-index .list-resources > a div.thumb-cell {
+      max-width: 40px;
+      height: 32px;
+      padding: 0;
+      overflow: hidden; }
+      body.view-model .model-index .list-resources > nav div.thumb-cell img, body.view-model .model-index .list-resources > a div.thumb-cell img {
+        padding: 1px;
+        display: inline-block;
+        max-height: 100%;
+        max-width: 100%;
+        vertical-align: middle;
+        background-color: #e9ecef; }
+      body.view-model .model-index .list-resources > nav div.thumb-cell .icon, body.view-model .model-index .list-resources > a div.thumb-cell .icon {
+        display: inline-block;
+        width: 100%;
+        font-size: 18px;
+        padding: 6px; }
+    body.view-model .model-index .list-resources > nav div:last-child, body.view-model .model-index .list-resources > a div:last-child {
+      text-align: right; }
+      body.view-model .model-index .list-resources > nav div:last-child > form, body.view-model .model-index .list-resources > a div:last-child > form {
+        display: inline-block; }
+  body.view-model .model-index .list-resources button {
+    line-height: initial; }
+
+body.view-model .model-index .bulk-actions {
+  border-top: 1px solid #495057; }
+  body.view-model .model-index .bulk-actions header {
+    margin: 16px 0 8px;
+    width: 100%;
+    opacity: .3; }
+  body.view-model .model-index .bulk-actions.enabled header {
+    opacity: 1; }
+  body.view-model .model-index .bulk-actions nav {
+    display: flex; }
+    body.view-model .model-index .bulk-actions nav form {
+      margin-right: 16px; }
+      body.view-model .model-index .bulk-actions nav form:last-of-type {
+        margin-right: 0;
+        margin-left: auto; }
+
+body.view-model .model-view {
+  padding-left: 8px; }
+  body.view-model .model-view > header h1:empty:before {
+    content: attr(untitled);
+    color: #6c757d;
+    font-style: italic; }
+
+body.view-model .model-form {
+  width: 100%;
+  margin-top: 16px; }
+  body.view-model .model-form form {
+    display: flex;
+    flex-wrap: wrap; }
+    body.view-model .model-form form .form-column {
+      display: contents;
+      width: 100%; }
+      @media screen and (min-width: 780px) {
+        body.view-model .model-form form .form-column {
+          display: block; }
+          body.view-model .model-form form .form-column:first-of-type {
+            width: 67%;
+            padding-right: 16px; }
+          body.view-model .model-form form .form-column:last-of-type {
+            width: 33%; } }
+      @media screen and (min-width: 1024px) {
+        body.view-model .model-form form .form-column:first-of-type {
+          width: 55%;
+          padding-right: 32px; }
+        body.view-model .model-form form .form-column:last-of-type {
+          width: 45%; } }
+    body.view-model .model-form form section.fieldset {
+      width: 100%;
+      order: 0; }
+    body.view-model .model-form form section.fieldset > div,
+    body.view-model .model-form form section.fieldset .tab-container > div {
+      margin: 16px 0; }
+      body.view-model .model-form form section.fieldset > div:first-child,
+      body.view-model .model-form form section.fieldset .tab-container > div:first-child {
+        margin-top: 0; }
+    body.view-model .model-form form section.fieldset .tab-container {
+      margin-bottom: 48px; }
+    body.view-model .model-form form section.fieldset.closed .tab {
+      color: #6c757d;
+      background: linear-gradient(to right, #343a40, #212529); }
+    body.view-model .model-form form section.fieldset input[type="color"], body.view-model .model-form form section.fieldset input[type="date"], body.view-model .model-form form section.fieldset input[type="datetime"], body.view-model .model-form form section.fieldset input[type="datetime-local"], body.view-model .model-form form section.fieldset input[type="email"], body.view-model .model-form form section.fieldset input[type="month"], body.view-model .model-form form section.fieldset input[type="number"], body.view-model .model-form form section.fieldset input[type="password"], body.view-model .model-form form section.fieldset input[type="search"], body.view-model .model-form form section.fieldset input[type="tel"], body.view-model .model-form form section.fieldset input[type="text"], body.view-model .model-form form section.fieldset input[type="time"], body.view-model .model-form form section.fieldset input[type="url"], body.view-model .model-form form section.fieldset input[type="week"], body.view-model .model-form form section.fieldset input:not([type]), body.view-model .model-form form section.fieldset textarea {
+      width: 100%;
+      background-color: #e9ecef; }
+    body.view-model .model-form form section.fieldset label {
+      flex: 1 0 100%;
+      margin-right: 16px; }
+    body.view-model .model-form form section.fieldset div.input.status {
+      display: flex;
+      flex-wrap: wrap; }
+      body.view-model .model-form form section.fieldset div.input.status label:not(:first-child) {
+        flex: 0 0 auto;
+        margin-right: 16px;
+        cursor: pointer; }
+    body.view-model .model-form form section.fieldset .embedded-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      padding-top: 30px;
+      height: 0;
+      overflow: hidden; }
+      body.view-model .model-form form section.fieldset .embedded-container iframe, body.view-model .model-form form section.fieldset .embedded-container object, body.view-model .model-form form section.fieldset .embedded-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; }
+
+.fieldset .tab {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: .25rem .5rem;
+  background-color: #343a40;
+  color: #adb5bd;
+  border-radius: 3px;
+  cursor: pointer; }
+  .fieldset .tab.is-loading-spinner button {
+    display: none; }
+  .fieldset .tab h2 {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    font-size: 1.25rem; }
+    .fieldset .tab h2:first-letter {
+      text-transform: capitalize; }
+
 /*# sourceMappingURL=style.css.map*/
