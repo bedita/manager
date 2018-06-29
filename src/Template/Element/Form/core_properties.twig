@@ -5,6 +5,6 @@
             {{ Form.control(key, options)|raw }}
         {% endfor %}
 
-        {{ Form.hidden('id', {'value': object.id})|raw }}
+        {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
     </div>
 </section>
