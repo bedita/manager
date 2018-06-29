@@ -1,4 +1,5 @@
-{% do _view.assign('title', currentModule.name|humanize) %}
+{% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
+{% do _view.assign('bodyViewClass', 'view-model') %}
 
 <modules-view inline-template ref="moduleView">
 <div class="model-view" v-hotkey="keyEvents">
@@ -12,7 +13,7 @@
     <div class="model-form">
 
         {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
-            'url': {'_name': 'modules:save', 'resource_type': resourceType},
+            'url': {'_name': 'model:save', 'resource_type': resourceType},
             'id': 'form-main',
         })|raw }}
 
@@ -22,24 +23,17 @@
 
             <div class="form-column">
                 {% element 'Form/core_properties' %}
-
-                {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
             </div>
 
             <div class="form-column">
-                {% element 'Form/publish_properties' {'cssOrder': '1'} %}
-
                 {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
             </div>
-
-            {# temp relations view #}
-            {# loads first relation after 1200ms, than every 300ms till last relation, see file #}
-            {% element 'Form/relations' %}
 
         {{ Form.end()|raw }}
 
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
+
         {# Append "Delete" to commands in commands menu. #}
         {# {% do _view.append('commands', Form.postButton(__('Trash'), {'_name': 'modules:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
     </div>
