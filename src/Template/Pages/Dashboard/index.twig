@@ -24,7 +24,7 @@
             </li>
             {% if in_array('admin', user.roles) %}
             <li class="has-background-black icon-database">
-                {{ Html.link(__('Model'), {'_name': 'model:list', 'resource_type': 'property_types'})|raw }}
+                {{ Html.link(__('Model'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
             </li>
             {% endif %}
         </ul>
