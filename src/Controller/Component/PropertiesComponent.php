@@ -126,4 +126,17 @@ class PropertiesComponent extends Component
 
         return array_diff($list, ['id', 'status', 'modified']);
     }
+
+    /**
+     * Load schema properties from configuration.
+     *
+     * @param string $type Resource type name
+     * @return array
+     */
+    public function loadSchemaProperties(string $type): array
+    {
+        Configure::load('schema_properties');
+
+        return Configure::read(sprintf('SchemaProperties.%s', $type), []);
+    }
 }

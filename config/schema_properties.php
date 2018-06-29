@@ -1,0 +1,165 @@
+<?php
+return [
+    /**
+     * Default properties schema for internal resources.
+     * Schema properties are described using JSON Schema.
+     *
+     */
+    'SchemaProperties' => [
+
+        // model/object_types
+        'object_types' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'model unique name',
+                'maxLength' => 32
+            ],
+            'singular' => [
+                'type' => 'string',
+                '$id' => '/properties/singular',
+                'title' => 'Singular name',
+                'description' => 'Model unique singular name',
+                'maxLength' => 32
+            ],
+            'description' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html'
+                    ],
+                ],
+                '$id' => '/properties/description',
+                'title' => 'Description',
+                'description' => 'object type description'
+            ],
+            'is_abstract' => [
+                'type' => 'boolean',
+                '$id' => '/properties/is_abstract',
+                'title' => 'Is Abstract',
+                'description' => '',
+                'default' => false,
+            ],
+            'enabled' => [
+                'type' => 'boolean',
+                '$id' => '/properties/enabled',
+                'title' => 'Enabled',
+                'description' => '',
+                'default' => true,
+            ],
+            'associations' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'object',
+                    ],
+                ],
+                '$id' => '/properties/associations',
+                'title' => 'Associations',
+                'description' => 'Object type entity associations'
+            ],
+            'hidden' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'object',
+                    ],
+                ],
+                '$id' => '/properties/hidden',
+                'title' => 'Hidden',
+                'description' => 'Object type entity associations'
+            ],
+        ],
+
+        // model/property_types
+        'property_types' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'property unique name',
+                'maxLength' => 32
+            ],
+            'params' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'object',
+                    ],
+                ],
+                '$id' => '/properties/hidden',
+                'title' => 'Params',
+                'description' => 'Property params, JSON Schema format'
+            ],
+        ],
+
+        // model/relations
+        'relations' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Relation unique name',
+                'maxLength' => 32
+            ],
+            'description' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html'
+                    ],
+                ],
+                '$id' => '/properties/description',
+                'title' => 'Description',
+                'description' => 'Relation description'
+            ],
+            'params' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null'
+                    ],
+                    [
+                        'type' => 'object',
+                    ],
+                ],
+                '$id' => '/properties/hidden',
+                'title' => 'Params',
+                'description' => 'Property params, JSON Schema format'
+            ],
+        ],
+    ],
+];
