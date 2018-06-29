@@ -72,6 +72,11 @@ return [
 
         // model/property_types
         'property_types' => [
+            'view' => [
+                'core' => [
+                    'name',
+                ],
+            ],
             'index' => [
                 'name',
                 'params',
@@ -80,6 +85,11 @@ return [
 
         // model/object_types
         'object_types' => [
+            'view' => [
+                'core' => [
+                    'name',
+                ],
+            ],
             'index' => [
                 'name',
                 'enabled',
@@ -89,6 +99,16 @@ return [
 
         // model/relations
         'relations' => [
+            'view' => [
+                'core' => [
+                    'name',
+                    'label',
+                    'inverse_name',
+                    'inverse_label',
+                    'description',
+                    'params',
+                ],
+            ],
             'index' => [
                 'name',
                 'inverse_name',

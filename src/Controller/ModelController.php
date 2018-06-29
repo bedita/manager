@@ -70,6 +70,7 @@ class ModelController extends AppController
         parent::beforeRender($event);
 
         $this->set('resourceType', $this->resourceType);
+        $this->set('moduleLink', ['_name' => 'model:list', 'resource_type' => 'property_types']);
     }
 
     /**
@@ -121,7 +122,9 @@ class ModelController extends AppController
             return $this->redirect(['_name' => 'model:list', 'resource_type' => $this->resourceType]);
         }
 
-        $this->set('resource', $response['data']);
+        $resource = $response['data'];
+        $this->set(compact('resource'));
+        $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
     }
