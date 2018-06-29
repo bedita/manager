@@ -93,6 +93,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Model', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'model:view']
     );
+    $routes->connect(
+        '/model/:resource_type/save',
+        ['controller' => 'Model', 'action' => 'save'],
+        ['_name' => 'model:save']
+    );
 
     // Import.
     $routes->connect(
