@@ -75,6 +75,7 @@ return [
             'view' => [
                 'core' => [
                     'name',
+                    'params',
                 ],
             ],
             'index' => [
@@ -88,6 +89,14 @@ return [
             'view' => [
                 'core' => [
                     'name',
+                    'singular',
+                    'is_abstract',
+                    'description',
+                    'associations',
+                    'hidden',
+                    'enabled',
+                    'table',
+                    'parent_name'
                 ],
             ],
             'index' => [
