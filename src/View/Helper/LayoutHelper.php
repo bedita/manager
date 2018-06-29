@@ -13,13 +13,23 @@
 namespace App\View\Helper;
 
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
  * Helper for site layout
+ *
+ * @property \Cake\View\Helper\HtmlHelper $Html
  */
 class LayoutHelper extends Helper
 {
+    /**
+     * List of helpers used by this helper
+     *
+     * @var array
+     */
+    public $helpers = ['Html'];
+
     /**
      * Primary sidebar visibility
      *
@@ -85,11 +95,36 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Module main link
+     *
+     * @return string The link
+     */
+    public function moduleLink() : string
+    {
+        if (!empty($this->_View->viewVars['currentModule'])) {
+            $name = $this->_View->viewVars['currentModule']['name'];
+
+            return $this->Html->link(
+                Inflector::humanize($name),
+                ['_name' => 'modules:list', 'object_type' => $name],
+                ['class' => sprintf('has-background-module-%s', $name)]
+            );
+        }
+
+        // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
+        return $this->Html->link(
+            Inflector::humanize($this->_View->name),
+            Hash::get($this->_View->viewVars, 'moduleLink', []),
+            ['class' => $this->commandLinkClass()]
+        );
+    }
+
+    /**
      * Return style class for command link
      *
      * @return string
      */
-    public function commandLinkClass() : string
+    protected function commandLinkClass() : string
     {
         if ($this->_View->name === 'UserProfile') {
             return 'has-background-black icon-user';

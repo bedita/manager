@@ -37,6 +37,15 @@ class UserProfileController extends AppController
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function beforeRender(Event $event) : void
+    {
+        parent::beforeRender($event);
+        $this->set('moduleLink', ['_name' => 'user_profile:view']);
+    }
+
+    /**
      * View profile data
      *
      * @return void

@@ -4,11 +4,7 @@
     </div>
 
     <div class="commands-module squared">
-        {% if currentModule %}
-            {{ Html.link(currentModule.name|humanize, {'_name': 'modules:list', 'object_type': currentModule.name}, {'class': "has-background-module-#{currentModule.name}"})|raw }}
-        {% else %}
-            {{ Html.link(_view.request.params.controller|humanize, {}, {'class': Layout.commandLinkClass()})|raw }}
-        {% endif %}
+        {{ Layout.moduleLink()|raw }}
 
         {% if _view.request.getQuery('filter.type') != 'objects' %}
             {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
