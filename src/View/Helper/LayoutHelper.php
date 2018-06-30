@@ -101,7 +101,7 @@ class LayoutHelper extends Helper
      */
     public function moduleLink() : string
     {
-        if (!empty($this->_View->viewVars['currentModule'])) {
+        if (!empty($this->_View->viewVars['currentModule']['name'])) {
             $name = $this->_View->viewVars['currentModule']['name'];
 
             return $this->Html->link(
@@ -126,16 +126,12 @@ class LayoutHelper extends Helper
      */
     protected function commandLinkClass() : string
     {
-        if ($this->_View->name === 'UserProfile') {
-            return 'has-background-black icon-user';
-        }
-        if ($this->_View->name === 'Import') {
-            return 'has-background-black icon-download-alt';
-        }
-        if ($this->_View->name === 'Model') {
-            return 'has-background-black icon-database';
-        }
+        $moduleClasses = [
+            'UserProfile' => 'has-background-black icon-user',
+            'Import' => 'has-background-black icon-download-alt',
+            'Model' => 'has-background-black icon-database',
+        ];
 
-        return 'commands-menu__module';
+        return Hash::get($moduleClasses, $this->_View->name, 'commands-menu__module');
     }
 }

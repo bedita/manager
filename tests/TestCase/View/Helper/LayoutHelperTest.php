@@ -240,43 +240,56 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testCommandLinkClass` test case.
+     * Data provider for `testModuleLink` test case.
      *
      * @return array
      */
-    public function commandLinkClassProvider() : array
+    public function moduleLinkProvider() : array
     {
         return [
             'user profile' => [
+                '<a href="/user_profile" class="has-background-black icon-user">UserProfile</a>',
                 'UserProfile',
-                'icon-user',
+                [
+                    'moduleLink' => ['_name' => 'user_profile:view']
+                ],
             ],
             'import' => [
+                '<a href="/import" class="has-background-black icon-download-alt">Import</a>',
                 'Import',
-                'icon-download-alt',
+                [
+                    'moduleLink' => ['_name' => 'import:index']
+                ],
             ],
             'objects' => [
-                'Objects',
-                'commands-menu__module',
+                '<a href="/objects" class="has-background-module-objects">Objects</a>',
+                'Module',
+                [
+                    'currentModule' => ['name' => 'objects']
+                ],
             ],
         ];
     }
 
     /**
-     * Test commandLinkClass
+     * Test `moduleLink` method
      *
+     * @param string $expected The expected link
      * @param string $name The view name
-     * @param string $expected The expected class
+     * @param array $viewVars The view vars
      *
-     * @dataProvider commandLinkClassProvider()
+     * @dataProvider moduleLinkProvider()
+     * @covers ::moduleLink()
      * @covers ::commandLinkClass()
      */
-    public function testCommandLinkClass($name, $expected) : void
+    public function testModuleLink($expected, $name, array $viewVars = []) : void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
-        $layout = new LayoutHelper(new View($request, $response, $events, $data));
-        $result = $layout->commandLinkClass();
-        static::assertSame($result, $expected);
+        $view = new View($request, $response, $events, $data);
+        $view->viewVars += $viewVars;
+        $layout = new LayoutHelper($view);
+        $result = $layout->moduleLink();
+        static::assertSame($expected, $result);
     }
 }
