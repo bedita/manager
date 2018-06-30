@@ -24,6 +24,8 @@ class ImportController extends AppController
 {
     /**
      * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function beforeRender(Event $event) : void
     {
