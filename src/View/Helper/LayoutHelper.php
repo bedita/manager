@@ -114,7 +114,7 @@ class LayoutHelper extends Helper
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
             Inflector::humanize($this->_View->name),
-            Hash::get($this->_View->viewVars, 'moduleLink', []),
+            (array)Hash::get($this->_View->viewVars, 'moduleLink', []),
             ['class' => $this->commandLinkClass()]
         );
     }
@@ -132,6 +132,6 @@ class LayoutHelper extends Helper
             'Model' => 'has-background-black icon-database',
         ];
 
-        return Hash::get($moduleClasses, $this->_View->name, 'commands-menu__module');
+        return (string)Hash::get($moduleClasses, $this->_View->name, 'commands-menu__module');
     }
 }
