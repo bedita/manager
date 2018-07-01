@@ -236,4 +236,21 @@ class PropertiesComponentTest extends TestCase
 
         static::assertSame($expected, $result);
     }
+
+    /**
+     * Test `loadSchemaProperties()` method.
+     *
+     * @return void
+     *
+     * @covers ::loadSchemaProperties()
+     */
+    public function testLoadSchemaProperties(): void
+    {
+        $this->createComponent();
+        $list = $this->Properties->loadSchemaProperties('object_types');
+        static::assertNotEmpty($list);
+
+        $list = $this->Properties->loadSchemaProperties('gustavo');
+        static::assertEmpty($list);
+    }
 }
