@@ -46,6 +46,10 @@ class ModelController extends AppController
 
         if (!empty($this->request)) {
             $this->resourceType = $this->request->getParam('resource_type');
+            $this->Schema->setConfig([
+                'type' => $this->resourceType,
+                'internalSchema' => true,
+            ]);
         }
     }
 
@@ -122,10 +126,10 @@ class ModelController extends AppController
             return $this->redirect(['_name' => 'model:list', 'resource_type' => $this->resourceType]);
         }
 
-        $resource = $response['data'];
+        $resource = (array)$response['data'];
         $this->set(compact('resource'));
+        $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
-        $this->set('schema', ['properties' => $this->Properties->loadSchemaProperties($this->resourceType)]);
 
         return null;
     }

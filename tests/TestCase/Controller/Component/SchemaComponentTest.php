@@ -132,4 +132,23 @@ class SchemaComponentTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test load internal schema from configuration.
+     *
+     * @return void
+     * @covers ::getSchema()
+     * @covers ::loadInternalSchema
+     */
+    public function testInternalSchema()
+    {
+        $this->Schema->setConfig([
+            'type' => 'object_types',
+            'internalSchema' => true,
+        ]);
+
+        $result = $this->Schema->getSchema();
+        static::assertNotEmpty($result);
+        static::assertNotEmpty($result['properties']);
+    }
 }
