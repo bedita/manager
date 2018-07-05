@@ -23,6 +23,17 @@ use Cake\Network\Exception\BadRequestException;
 class ImportController extends AppController
 {
     /**
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function beforeRender(Event $event) : void
+    {
+        parent::beforeRender($event);
+        $this->set('moduleLink', ['_name' => 'import:index']);
+    }
+
+    /**
      * Display import page.
      *
      * @return void

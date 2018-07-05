@@ -16,6 +16,7 @@ use App\ApiClientProvider;
 use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
+use Cake\Core\Configure;
 use Psr\Log\LogLevel;
 
 /**
@@ -36,6 +37,7 @@ class SchemaComponent extends Component
      */
     protected $_defaultConfig = [
         'type' => null, // resource or object type name
+        'internalSchema' => false, // use internal schema
     ];
 
     /**
@@ -50,6 +52,10 @@ class SchemaComponent extends Component
         // TODO: handle multiple projects -> key schema may differ
         if ($type === null) {
             $type = $this->getConfig('type');
+        }
+
+        if ($this->getConfig('internalSchema')) {
+            return $this->loadInternalSchema($type);
         }
 
         $schema = $this->loadWithRevision($type, $revision);
@@ -109,5 +115,19 @@ class SchemaComponent extends Component
     protected function fetchSchema(string $type)
     {
         return ApiClientProvider::getApiClient()->schema($type);
+    }
+
+    /**
+     * Load internal schema properties from configuration.
+     *
+     * @param string $type Resource type name
+     * @return array
+     */
+    protected function loadInternalSchema(string $type): array
+    {
+        Configure::load('schema_properties');
+        $properties = (array)Configure::read(sprintf('SchemaProperties.%s', $type), []);
+
+        return compact('properties');
     }
 }

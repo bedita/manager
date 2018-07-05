@@ -82,6 +82,23 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'user_profile:save']
     );
 
+    // Model.
+    $routes->connect(
+        '/model/:resource_type',
+        ['controller' => 'Model', 'action' => 'index'],
+        ['_name' => 'model:list']
+    );
+    $routes->connect(
+        '/model/:resource_type/view/:id',
+        ['controller' => 'Model', 'action' => 'view'],
+        ['pass' => ['id'], '_name' => 'model:view']
+    );
+    $routes->connect(
+        '/model/:resource_type/save',
+        ['controller' => 'Model', 'action' => 'save'],
+        ['_name' => 'model:save']
+    );
+
     // Import.
     $routes->connect(
         '/import',

@@ -59,6 +59,17 @@ class TrashController extends AppController
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function beforeRender(Event $event) : void
+    {
+        parent::beforeRender($event);
+        $this->set('moduleLink', ['_name' => 'trash:list']);
+    }
+
+    /**
      * Display deleted resources list.
      *
      * @return \Cake\Http\Response|null

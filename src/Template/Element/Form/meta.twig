@@ -1,3 +1,6 @@
+{% set meta = (object) ? object.meta : resource.meta %}
+
+{% if meta %}
 <property-view inline-template :tab-open="tabsOpen">
 <section class="fieldset order-{{ order|default('0') }}" id="meta" :class="isOpen? '' : 'closed'">
 
@@ -10,9 +13,9 @@
             <tbody>
                 <tr>
                     <th>{{ __('id') }}:</th>
-                    <td>{{ object.id }}</td>
+                    <td>{{ (object) ? object.id : resource.id }}</td>
                 </tr>
-                {% for key, val in object.meta %}
+                {% for key, val in meta %}
                 <tr>
                     <th>{{ key }}:</th>
                     <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
@@ -24,3 +27,4 @@
 
 </section>
 </property-view>
+{% endif %}

@@ -22,6 +22,11 @@
             <li class="has-background-black icon-download-alt">
                 {{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}
             </li>
+            {% if in_array('admin', user.roles) %}
+            <li class="has-background-black icon-database">
+                {{ Html.link(__('Model'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
+            </li>
+            {% endif %}
         </ul>
     </section>
 

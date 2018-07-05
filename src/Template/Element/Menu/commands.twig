@@ -4,11 +4,7 @@
     </div>
 
     <div class="commands-module squared">
-        {% if currentModule %}
-            {{ Html.link(currentModule.name|humanize, {'_name': 'modules:list', 'object_type': currentModule.name}, {'class': "has-background-module-#{currentModule.name}"})|raw }}
-        {% else %}
-            {{ Html.link(_view.request.params.controller|humanize, {}, {'class': Layout.commandLinkClass()})|raw }}
-        {% endif %}
+        {{ Layout.moduleLink()|raw }}
 
         {% if _view.request.getQuery('filter.type') != 'objects' %}
             {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
@@ -18,6 +14,10 @@
 
     <div class="commands-buttons">
         {{ _view.fetch('commands')|raw }}
+    </div>
+
+    <div class="commands-links">
+        {{ _view.fetch('commands-links')|raw }}
     </div>
 
     <div class="commands-footer">
