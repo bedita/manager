@@ -44,13 +44,11 @@ class ModelController extends AppController
 
         $this->loadComponent('Properties');
 
-        if (!empty($this->request)) {
-            $this->resourceType = $this->request->getParam('resource_type');
-            $this->Schema->setConfig([
-                'type' => $this->resourceType,
-                'internalSchema' => true,
-            ]);
-        }
+        $this->resourceType = $this->request->getParam('resource_type', 'object_types');
+        $this->Schema->setConfig([
+            'type' => $this->resourceType,
+            'internalSchema' => true,
+        ]);
     }
 
     /**
