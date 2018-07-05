@@ -53,9 +53,10 @@
                             <div class="{{ prop }}-cell" untitled="{{ __('Untitled') }}">{{ propVal }}</div>
                         {% endfor %}
 
+                        {# TODO: uncomment `delete` action once controller part is available #}
                         {# <div class="buttons">
                         {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Trash'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw }}
+                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
                         {% endif %}
                         </div> #}
                 </a>

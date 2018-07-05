@@ -31,11 +31,9 @@
 
         {{ Form.end()|raw }}
 
-        {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
+        {# TODO: uncomment `save` and `delete` actions once controller part is available #}
         {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
-
-        {# Append "Delete" to commands in commands menu. #}
-        {# {% do _view.append('commands', Form.postButton(__('Trash'), {'_name': 'modules:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
+        {# {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
     </div>
 
     {# commands links to append in left side bar (commands menu) #}
