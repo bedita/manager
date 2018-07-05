@@ -143,15 +143,16 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'A',
                     ],
+                    'advanced' => [
+                        'json_field' => 'json',
+                    ],
                     'publish' => [
                         'uname' => 'test',
                         'status' => 'draft',
                     ],
-                    'advanced' => [
-                        'json_field' => 'json',
-                    ],
                     'other' => [
                         'description' => 'desc',
+                        'other_field' => null,
                     ],
                 ],
                 [
@@ -161,6 +162,7 @@ class PropertiesComponentTest extends TestCase
                         'status' => 'draft',
                         'json_field' => 'json',
                         'uname' => 'test',
+                        'other_field' => null,
                     ],
                 ],
                 'geeks',
@@ -208,6 +210,44 @@ class PropertiesComponentTest extends TestCase
                     ],
                 ]
             ],
+            'custom groups' => [
+                [
+                    'core' => [
+                        'title' => 'A',
+                    ],
+                    'publish' => [
+                        'status' => 'on',
+                    ],
+                    'advanced' => [
+                    ],
+                    'custom' => [
+                        'model' => 'bianchi',
+                    ],
+                    'other' => [
+                        'color' => 'blue',
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'title' => 'A',
+                        'status' => 'on',
+                        'color' => 'blue',
+                        'model' => 'bianchi',
+                    ],
+                ],
+                'bikes',
+                [
+                    'core' => [
+                        'title',
+                    ],
+                    'publish' => [
+                        'status',
+                    ],
+                    'custom' => [
+                        'model',
+                    ],
+                ]
+            ],
         ];
     }
 
@@ -234,6 +274,6 @@ class PropertiesComponentTest extends TestCase
 
         $result = $this->Properties->viewGroups($object, $type);
 
-        static::assertSame($expected, $result);
+        static::assertSame(sort($expected), sort($result));
     }
 }

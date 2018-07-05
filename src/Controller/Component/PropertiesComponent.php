@@ -95,8 +95,10 @@ class PropertiesComponent extends Component
         $properties = $used = [];
         $keep = $this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
         $attributes = array_merge(array_fill_keys($keep, ''), $object['attributes']);
+        $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
+        unset($defaults['_keep']);
 
-        foreach ($this->defaultGroups['view'] as $group => $items) {
+        foreach ($defaults as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $list = $this->getConfig($key, $items);
             $p = [];
