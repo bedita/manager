@@ -169,7 +169,7 @@ class LinkHelper extends Helper
      */
     public function pluginsJsBundle()
     {
-        $plugins = Configure::read('Plugins');
+        $plugins = Configure::read('Plugins', []);
         foreach ($plugins as $plugin => $v) {
             $path = Plugin::path($plugin) . sprintf('webroot%sjs%s%s.plugin.js', DS, DS, $plugin);
             if (file_exists($path)) {
