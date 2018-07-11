@@ -6,7 +6,7 @@
             <div class="relations-add">
                 <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
-                    <a href="#" v-show="objects.length" @click.prevent="closePanel()">{{ __('close') }}</a>
+                    <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
                 </header>
 
                 <nav class="pagination has-text-size-smallest">
