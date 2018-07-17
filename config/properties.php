@@ -50,8 +50,16 @@ return [
         // user profile
         'user_profile' => [
             'view' => [
+                '_keep' => [
+                    'old_password',
+                    'password',
+                    'confirm-password'
+                ],
                 'core' => [
                     'username',
+                    'old_password',
+                    'password',
+                    'confirm-password',
                     'name',
                     'surname',
                     'email',

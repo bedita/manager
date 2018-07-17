@@ -100,6 +100,27 @@ class SchemaHelper extends Helper
                     ],
                 ];
 
+            case 'username':
+                return [
+                    'class' => 'email',
+                'readonly' => true,
+            ];
+
+            case 'email':
+                return [
+                    'class' => 'email',
+                    'readonly' => true,
+                ];
+
+            case 'old_password':
+                return [
+                    'class' => 'password',
+                    'label' => __('Current password'),
+                    'placeholder' => __('current password'),
+                    'autocomplete' => 'current-password',
+                    'default' => '',
+                ];
+
             case 'password':
                 return [
                     'class' => 'password',

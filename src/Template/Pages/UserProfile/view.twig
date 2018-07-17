@@ -23,27 +23,27 @@
                 </section>
 
                 {% for key,group in ['core', 'advanced'] %}
-                <section class="fieldset order-{{key + 1}}">
-                    {% if key != '0' %}
-                    <header>
-                        <h2>{{ __('Details') }}</h2>
-                    </header>
-                    {% endif %}
-                    <div class="tab-container">
-                        {% set jsonKeys = [] %}
-                        {% set attributes = properties[group] %}
-                        {% for key, value in attributes %}
-                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                            {% if options.class and  options.class == 'json' %}
-                                {% set jsonKeys = jsonKeys|merge([key]) %}
-                            {% endif %}
-                            {{ Form.control(key, options)|raw }}
-                        {% endfor %}
-                        {% if jsonKeys %}
-                            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
+                    <section class="fieldset order-{{key + 1}}">
+                        {% if key != '0' %}
+                        <header>
+                            <h2>{{ __('Details') }}</h2>
+                        </header>
                         {% endif %}
-                    </div>
-                </section>
+                        <div class="tab-container">
+                            {% set jsonKeys = [] %}
+                            {% set attributes = properties[group] %}
+                            {% for key, value in attributes %}
+                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                                {% if options.class and  options.class == 'json' %}
+                                    {% set jsonKeys = jsonKeys|merge([key]) %}
+                                {% endif %}
+                                {{ Form.control(key, options)|raw }}
+                            {% endfor %}
+                            {% if jsonKeys %}
+                                {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
+                            {% endif %}
+                        </div>
+                    </section>
                 {% endfor %}
             </div>
 
