@@ -103,7 +103,8 @@
             }
         }
 
-        &.images {
+        &.images,
+        &.videos {
             div.thumbnail {
                 display: block;
             }

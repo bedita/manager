@@ -289,8 +289,35 @@ class ModulesController extends AppController
             return;
         }
 
+        $this->updateMediaUrls($response);
+
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Provide stream media URL of related objects in `meta.url` if present.
+     *
+     * @param array $response Related objects response.
+     * @return void
+     */
+    protected function updateMediaUrls(array &$response) : void
+    {
+        if (empty($response['data'])) {
+            return;
+        }
+        $included = Hash::combine($response, 'included.{n}.id', 'included.{n}');
+        foreach ($response['data'] as &$item) {
+            $thumbnail = Hash::get($item, 'attributes.provider_thumbnail');
+            if ($thumbnail) {
+                $item['meta']['url'] = $thumbnail;
+            } else {
+                $streamId = Hash::get($item, 'relationships.streams.data.0.id');
+                if ($streamId) {
+                    $item['meta']['url'] = Hash::get($included, sprintf('%s.meta.url', $streamId));
+                }
+            }
+        }
     }
 
     /**

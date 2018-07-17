@@ -1186,7 +1186,7 @@ nav.pagination {
           display: block;
           height: 100%;
           transform: translateX(-50%); }
-    .related-object article.images div.thumbnail {
+    .related-object article.images div.thumbnail, .related-object article.videos div.thumbnail {
       display: block; }
     .related-object article footer {
       position: relative;
