@@ -7,7 +7,7 @@
  * @extends ModulesView
  */
 
-import ModulesIndex from 'app/pages/modules/index';
+import ModulesView from 'app/pages/modules/view';
 
 
 export default {
