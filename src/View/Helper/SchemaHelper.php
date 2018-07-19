@@ -103,8 +103,8 @@ class SchemaHelper extends Helper
             case 'username':
                 return [
                     'class' => 'email',
-                'readonly' => true,
-            ];
+                    'readonly' => true,
+                ];
 
             case 'email':
                 return [
@@ -118,6 +118,7 @@ class SchemaHelper extends Helper
                     'label' => __('Current password'),
                     'placeholder' => __('current password'),
                     'autocomplete' => 'current-password',
+                    'type' => 'password',
                     'default' => '',
                 ];
 
