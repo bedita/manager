@@ -102,14 +102,12 @@ class SchemaHelper extends Helper
 
             case 'username':
                 return [
-                    'class' => 'email',
-                    'readonly' => true,
+                    'class' => 'username',
                 ];
 
             case 'email':
                 return [
                     'class' => 'email',
-                    'readonly' => true,
                 ];
 
             case 'old_password':

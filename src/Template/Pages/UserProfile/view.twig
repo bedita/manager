@@ -34,9 +34,14 @@
                             {% set attributes = properties[group] %}
                             {% for key, value in attributes %}
                                 {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                                {% if options.class and  options.class == 'json' %}
+                                {% if options.class and options.class == 'json' %}
                                     {% set jsonKeys = jsonKeys|merge([key]) %}
                                 {% endif %}
+
+                                {% if key == 'email' or key == 'username' %}
+                                    {% set options = options|merge({'readonly': 'true'}) %}
+                                {% endif %}
+
                                 {{ Form.control(key, options)|raw }}
                             {% endfor %}
                             {% if jsonKeys %}
