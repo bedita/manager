@@ -100,16 +100,6 @@ class SchemaHelper extends Helper
                     ],
                 ];
 
-            case 'username':
-                return [
-                    'class' => 'username',
-                ];
-
-            case 'email':
-                return [
-                    'class' => 'email',
-                ];
-
             case 'old_password':
                 return [
                     'class' => 'password',
