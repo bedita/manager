@@ -34,7 +34,7 @@
 
     .tree-entry-list {
         padding: 0 $gutter * .5;
-        margin-left: - ($gutter * 1.5);
+        // margin-left: - ($gutter * 1.5);
         line-height: 1;
 
         .tree-list-node {
@@ -53,7 +53,6 @@
                 }
 
                 &.node-folder {
-                    margin-left: $gutter * 1.5;
                     label {
                         margin-left: 11px;
                     }
