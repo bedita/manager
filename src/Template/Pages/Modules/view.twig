@@ -28,6 +28,8 @@
             <div class="form-column">
                 {% element 'Form/core_properties' %}
 
+                {% element 'Form/custom_left' %}
+
                 {# media streams & other resources included #}
                 {% element 'Form/included' %}
 
@@ -42,6 +44,8 @@
                 {% endif %}
 
                 {% element 'Form/advanced_properties' %}
+
+                {% element 'Form/custom_right' %}
 
                 {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
             </div>
