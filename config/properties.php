@@ -57,16 +57,17 @@ return [
                 ],
                 'core' => [
                     'username',
-                    'old_password',
-                    'password',
-                    'confirm-password',
                     'name',
                     'surname',
                     'email',
-                    'person_title',
-                    'gender',
+                    'title',
                 ],
-                'advanced' => [
+                'password_change' => [
+                    'old_password',
+                    'password',
+                    'confirm-password',
+                ],
+                'details' => [
                     'phone',
                     'website',
                     'street_address',
@@ -74,6 +75,10 @@ return [
                     'zipcode',
                     'country',
                     'state_name',
+                ],
+                'advanced' => [
+                ],
+                'publish' => [
                 ],
             ],
         ],
