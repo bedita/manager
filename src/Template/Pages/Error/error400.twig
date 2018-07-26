@@ -1,22 +1,23 @@
-<div class="head">
-    <h1>{{ __('Bad Request') }}</h1>
-</div>
+<section class="error-page-container">
+    <header>
+        <h1>{{ __('Error ') }} {{ error.code }}</h1>
+    </header>
 
-<div class="main">
-
-    <p class="error">
-        {{ message }}
-    </p>
-
-    {% if config('debug') %}
-
-        {% if error %}
-        <p class="error">
-            <strong>Error in: </strong>
-            {{ error.getFile }}, line {{ error.getLine }}
+    <div>
+        <p class="error-message">
+            {{ message }}
         </p>
+
+        {% if config('debug') %}
+
+            {% if error %}
+            <hr>
+            <p class="error-message">
+                <strong>Error in: </strong>
+                {{ error.getFile }}, line {{ error.getLine }}
+            </p>
+            {% endif %}
+
         {% endif %}
-
-    {% endif %}
-
-</div>
+    </div>
+</section>
