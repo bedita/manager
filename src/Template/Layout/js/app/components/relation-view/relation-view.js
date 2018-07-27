@@ -160,6 +160,7 @@ export default {
         removeRelation(related) {
             this.removedRelated.push(related);
             this.relationsData = JSON.stringify(this.removedRelated);
+            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
         /**
@@ -171,8 +172,10 @@ export default {
          * @returns {void}
          */
         undoRemoveRelation(related) {
-            this.removedRelated = this.removedRelated.filter((rel) => rel.id !== related.id);
+            let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
+            this.removedRelated.splice(index, 1);
             this.relationsData = JSON.stringify(this.removedRelated);
+            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
 
@@ -242,6 +245,7 @@ export default {
                 }
             }
             this.newRelationsData = JSON.stringify(this.addedRelations);
+            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
 
