@@ -55,7 +55,8 @@ return [
                     'password',
                     'confirm-password'
                 ],
-                'core' => [
+                // intentionally left blank (no title displayed)
+                ' ' => [
                     'username',
                     'name',
                     'surname',
@@ -75,6 +76,9 @@ return [
                     'zipcode',
                     'country',
                     'state_name',
+                ],
+                // intentionally empty
+                'core' => [
                 ],
                 'advanced' => [
                 ],
