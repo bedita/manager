@@ -46,16 +46,16 @@ body.view-module {
 
             // section content
             section.fieldset {
+                .tab-container {
+                    margin-bottom: $gutter * 1.5;
+                }
+
                 > div,
                 .tab-container >div {
                     margin: $gutter 0;
                     &:first-child {
                         margin-top: 0;
                     }
-                }
-
-                .tab-container {
-                    margin-bottom: $gutter * 2;
                 }
 
                 &.closed {
