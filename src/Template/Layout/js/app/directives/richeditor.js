@@ -16,12 +16,20 @@ export default {
              */
             inserted (element) {
                 const configKey = element.getAttribute('ckconfig');
-                let loadedConfig = null;
+                let loadedConfig = {};
                 if (CkeditorConfig) {
                     loadedConfig = CkeditorConfig[configKey];
                 }
 
-                CKEDITOR.replace(element, loadedConfig);
+                let editor = CKEDITOR.replace(element, loadedConfig);
+                editor.on('change', () => {
+                    element.value = editor.getData();
+                    element.dispatchEvent(new Event('change'));
+                    let form = element.closest('form');
+                    if (form) {
+                        form.dispatchEvent(new Event('change'));
+                    }
+                });
             },
         })
     }

@@ -11,7 +11,7 @@
         'base': '<?= \Cake\Routing\Router::fullBaseUrl() ?>',
         <?php if (!empty($object['id'])): ?>'id': <?= $object['id'] ?>,<?php endif; ?>
         'currentModule': <?php if (!empty($currentModule)): ?> <?= json_encode($currentModule, true) ?> <?php else: ?>{ name: 'home' }<?php endif; ?>,
-        'action': '{$view->action|default:"index"}',
+        'template': '<?= $this->template ?>',
         'relations': {},
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>'
     };

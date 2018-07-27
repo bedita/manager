@@ -90,6 +90,34 @@ const _vueInstance = new Vue({
         },
     },
 
+    mounted: function () {
+        this.$nextTick(function () {
+            if(BEDITA.template == 'view') {
+                var forms = [...document.querySelectorAll('form')];
+                forms.forEach((form) => {
+                    form.addEventListener('change', () => {
+                        form.changed = true;
+                    });
+
+                    form.addEventListener('submit', (ev) => {
+                        if (form.action.endsWith('/delete')) {
+                            if (!confirm("Do you really want to trash the object?")) {
+                                ev.preventDefault();
+                                return;
+                            }
+                        }
+                        form.submitting = true;
+                    });
+                });
+                window.onbeforeunload = function() {
+                    if (forms.some((f) => f.changed) && !forms.some((f) => f.submitting)) {
+                        return "There are unsaved. Are you sure you want to leave page?";
+                    }
+                }
+            }
+        })
+    },
+
     methods: {
         /**
          * on page click:
