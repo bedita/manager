@@ -100,6 +100,16 @@ class SchemaHelper extends Helper
                     ],
                 ];
 
+            case 'old_password':
+                return [
+                    'class' => 'password',
+                    'label' => __('Current password'),
+                    'placeholder' => __('current password'),
+                    'autocomplete' => 'current-password',
+                    'type' => 'password',
+                    'default' => '',
+                ];
+
             case 'password':
                 return [
                     'class' => 'password',
