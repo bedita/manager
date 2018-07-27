@@ -45,6 +45,7 @@ export const CkeditorConfig = {
         fillEmptyBlocks:false,
         forcePasteAsPlainText:true,
         startupOutlineBlocks: true,
+        height: 208, // 13em (16px)
     },
 
     configNormal: {
@@ -60,6 +61,7 @@ export const CkeditorConfig = {
         fillEmptyBlocks:false,
         forcePasteAsPlainText:true,
         startupOutlineBlocks: true,
+        height: 208, // 13em (16px)
     },
 
     configSimple: {
@@ -76,5 +78,6 @@ export const CkeditorConfig = {
         fillEmptyBlocks:false,
         forcePasteAsPlainText:true,
         startupOutlineBlocks: true,
+        height: 208, // 13em (16px)
     },
 };

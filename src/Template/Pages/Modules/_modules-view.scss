@@ -55,7 +55,7 @@ body.view-module {
                 }
 
                 .tab-container {
-                    margin-bottom: $gutter * 3;
+                    margin-bottom: $gutter * 2;
                 }
 
                 &.closed {
@@ -72,7 +72,8 @@ body.view-module {
 
                 label {
                     flex: 1 0 100%;
-                    margin-right: 16px;
+                    margin-right: $gutter;
+                    line-height: $gutter * 1.5;
                 }
 
                 div.input.status {
@@ -122,7 +123,7 @@ body.view-module {
 
         section.relations {
             width: 100%;
-            margin-top: $gutter * 3;
+            margin-top: $gutter * 4;
         }
     }
 }
@@ -131,7 +132,9 @@ body.view-module {
     display: flex;
     align-items: center;
     margin-bottom: $gutter;
-    padding: .25rem .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    min-height: 32px;
     background-color: $gray-800;
     color: $gray-500;
     border-radius: 3px;
