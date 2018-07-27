@@ -24,11 +24,9 @@ export default {
                 let editor = CKEDITOR.replace(element, loadedConfig);
                 editor.on('change', () => {
                     element.value = editor.getData();
-                    element.dispatchEvent(new Event('change'));
-                    let form = element.closest('form');
-                    if (form) {
-                        form.dispatchEvent(new Event('change'));
-                    }
+                    element.dispatchEvent(new Event('change', {
+                        bubbles: true,
+                    }));
                 });
             },
         })
