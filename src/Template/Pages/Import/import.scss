@@ -1,0 +1,11 @@
+#data-import {
+    section.fieldset {
+        >div {
+            margin-bottom: $gutter * 2;
+
+        }
+        label {
+            display: block;
+        }
+    }
+}
