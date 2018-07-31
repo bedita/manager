@@ -1,5 +1,6 @@
 {% do _view.assign('title', __('Data Import')) %}
 
+<import-view inline-template ref="moduleView">
 <div id="data-import">
 
     <h1>{{ __('Data Import') }}</h1>
@@ -8,35 +9,59 @@
         'type': 'file',
         'url': {'_name': 'import:file'},
     })|raw }}
-    <section class="fieldset">
-
-        <div class="file-type">
-            <label>{{ __('File type') }}</label>
-            {# <div class="import-type">
-                {{ Form.radio('filter', filters)|raw }}
-            </div> #}
-        </div>
-
-        <div class="import-options">
-            <label>{{ __('Options') }}</label>
-            <div id="options">
-                {% for f in filters %}
-                    <div id="{{ f.name }}">
-                        {% for k,v in f.options %}
-                        <div>{{ k }}:{{ v }}</div>
-                        {% endfor %}
+        <div class="columns">
+            <div class="column">
+                <section class="fieldset">
+                    <header class="tab">
+                        <h2>{{ __('File type') }}</h2>
+                    </header>
+                    <div class="tab-container">
+                        {{ Form.radio('filter', filters)|raw }}
                     </div>
-                {% endfor %}
-                </ul>
+                </section>
+            </div>
+
+            <div class="column">
+                <section class="fieldset">
+                    <header class="tab">
+                        <h2>{{ __('Options') }}</h2>
+                    </header>
+                    <div class="tab-container">
+                        {# {% for f in filters %}
+                            <div id="{{ f.name }}">
+                                {% for k,v in f.options %}
+                                <div>{{ k }}:{{ v }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %} #}
+                        <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
+                    </div>
+                </section>
             </div>
         </div>
 
-        {{ Form.control(__('File upload'), { 'type': 'file' }) | raw }} <br/>
+        <section>
+            {# {{ Form.control(__('File upload'), { 'type': 'file' }) | raw }} <br/> #}
 
-        {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %}
+            {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
+            {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %}
 
-    </section>
+
+            <div class="file has-name">
+                <label class="file-label">
+                    {{ Form.file('file', {
+                        'class': 'file-input',
+                        'accept': 'text/xml,text/csv',
+                        'v-on:change': 'onFileChanged',
+                    }) | raw }}
+                    <span class="file-cta icon-upload">
+                        <span class="file-label">Choose a file</span>
+                    </span>
+                    <span class="file-name" v-cloak><span v-bind:title="fileName"><: fileName :></span></span>
+                </label>
+            </div>
+        </section>
+
     {{ Form.end()|raw }}
 
 
@@ -74,3 +99,4 @@
     {% endif %}
 
 </div>
+</import-view>

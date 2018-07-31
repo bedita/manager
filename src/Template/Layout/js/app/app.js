@@ -11,6 +11,7 @@ import ModulesIndex from 'app/pages/modules/index';
 import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/trash/index';
 import TrashView from 'app/pages/trash/view';
+import ImportView from 'app/pages/import/index';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 
 import datepicker from 'app/directives/datepicker';
@@ -28,6 +29,7 @@ const _vueInstance = new Vue({
         ModulesView,
         TrashIndex,
         TrashView,
+        ImportView,
         RelationsAdd,
     },
 
