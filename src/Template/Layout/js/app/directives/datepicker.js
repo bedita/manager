@@ -16,6 +16,7 @@ const datepickerOptions = {
     dateFormat: "Y-m-d H:i",
     altInput: true,
     altFormat: "F j, Y - H:i",
+    animate: false,
 };
 
 export default {
