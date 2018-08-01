@@ -1,76 +1,99 @@
-{% do _view.assign('title', __('Import Page')) %}
+{% do _view.assign('title', __('Data Import')) %}
 
-<div class="import">
+<import-view inline-template ref="moduleView">
+<div id="data-import">
 
     <h1>{{ __('Data Import') }}</h1>
-
     {{ Form.create(null, {
         'id': 'form-import',
         'type': 'file',
         'url': {'_name': 'import:file'},
     })|raw }}
-    <fieldset>
+        <div class="columns">
+            <div class="column">
+                <section class="fieldset">
+                    <header class="tab">
+                        <h2>{{ __('File type') }}</h2>
+                    </header>
+                    <div class="tab-container">
+                        {{ Form.radio('filter', filters)|raw }}
+                    </div>
+                </section>
+            </div>
 
-    <div class="source-data">
-        <h2>{{ __('Source data') }}</h2>
-        <div class="import-type">
-            {{ Form.radio('filter', filters)|raw }}
+            <div class="column">
+                <section class="fieldset">
+                    <header class="tab">
+                        <h2>{{ __('Options') }}</h2>
+                    </header>
+                    <div class="tab-container">
+                        {% for f in filters %}
+                            <div id="{{ f.name }}">
+                                {% for k,v in f.options %}
+                                <div>{{ k }}:{{ v }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
+                    </div>
+                </section>
+            </div>
         </div>
-    </div>
 
-    <br/>
+        <section>
 
-    <div class="import-options">
-        <h2>{{ __('Options') }}</h2>
-        <div id="options">
-            {% for f in filters %}
-                <div id="{{ f.name }}">
-                    {% for k,v in f.options %}
-                    <div>{{ k }}:{{ v }}</div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
+            {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
+            {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %}
 
-    <div class="source-file">
-        {{ Form.control('file', { 'type': 'file' }) | raw }} <br/>
-        {{ Form.submit(__('Load')) | raw }}
-    </div>
+            <div class="file has-name">
+                <label class="file-label">
+                    {{ Form.file('file', {
+                        'class': 'file-input',
+                        'accept': 'text/xml,text/csv',
+                        'v-on:change': 'onFileChanged',
+                    }) | raw }}
+                    <span class="file-cta icon-upload">
+                        <span class="file-label">Choose a file</span>
+                    </span>
+                    <span class="file-name" v-cloak><span v-bind:title="fileName"><: fileName :></span></span>
+                </label>
+            </div>
+        </section>
 
-    </fieldset>
     {{ Form.end()|raw }}
 
-</div>
+    {% if result %}
+    <section>
 
-{% if result %}
-
-<div class="result">
-    <h2>{{ __('Result') }}</h2>
-</div>
-
-<fieldset id="import-result">
-    <div class="import-message">
-        <h2>{{ result.info|default('') }}</h2>
-        <p>{{ __('Number of created objects') }}: {{ result.created|default(0) }}</p>
-        <p>{{ __('Number of updated objects') }}: {{ result.updated|default(0) }}</p>
-        <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
-
-        {% if result.warn %}
-        <div class="import-message import-warn">
-            <h2>{{ __('Import warn') }}</h2>
-            <div>{{ result.warn|raw }}</div>
+        <div class="result">
+            <h2>{{ __('Result') }}</h2>
         </div>
-        {% endif %}
 
-        {% if result.error %}
-        <div class="import-message import-error">
-            <h2>{{ __('Import error') }}</h2>
-            <div>{{ result.error|raw }}</div>
-        </div>
-        {% endif %}
-    </div>
-</fieldset>
+        <fieldset id="import-result">
+            <div class="import-message">
+                <h2>{{ result.info|default('') }}</h2>
+                <p>{{ __('Number of created objects') }}: {{ result.created|default(0) }}</p>
+                <p>{{ __('Number of updated objects') }}: {{ result.updated|default(0) }}</p>
+                <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
 
-{% endif %}
+                {% if result.warn %}
+                <div class="import-message import-warn">
+                    <h2>{{ __('Import warn') }}</h2>
+                    <div>{{ result.warn|raw }}</div>
+                </div>
+                {% endif %}
+
+                {% if result.error %}
+                <div class="import-message import-error">
+                    <h2>{{ __('Import error') }}</h2>
+                    <div>{{ result.error|raw }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </fieldset>
+
+    </section>
+    {% endif %}
+
+</div>
+</import-view>
