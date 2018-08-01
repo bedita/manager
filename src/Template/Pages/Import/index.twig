@@ -40,11 +40,9 @@
             </div>
         </div>
 
-        <section>
-
+        <section class="fieldset">
             {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
-            {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %}
-
+            {# {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %} #}
             <div class="file has-name">
                 <label class="file-label">
                     {{ Form.file('file', {
@@ -58,6 +56,13 @@
                     <span class="file-name" v-cloak><span v-bind:title="fileName"><: fileName :></span></span>
                 </label>
             </div>
+        </section>
+
+        <section class="fieldset">
+            {{ Form.button(__('Import'), {
+                'class': 'submit',
+                'onclick': 'this.classList.add(\'is-loading-spinner\')',
+            }) | raw }}
         </section>
 
     {{ Form.end()|raw }}

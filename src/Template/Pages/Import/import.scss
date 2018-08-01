@@ -1,11 +1,19 @@
 #data-import {
-    section.fieldset {
-        margin-bottom: $gutter * 2;
+    .fieldset {
+        margin-bottom: $gutter * 1.5;
+    }
+
+    .tab-container {
         label {
             display: block;
             & ~ label {
                 margin-top: $gutter * .5;
             }
         }
+    }
+
+    button.submit {
+        padding-left:  3 * $gutter;
+        padding-right: 3 * $gutter;
     }
 }

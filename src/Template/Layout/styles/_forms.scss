@@ -1,4 +1,4 @@
-//  TUTTO DA FARE MA PRIMA L'HTML
+/* buttons, and inputs are defined in mixins.scss */
 
 #{$text-inputs} {
     padding: 0 .5em;
@@ -85,6 +85,17 @@ button, a.button {
         padding-left: 3em;
         padding-right: 3em;
     }
+
+    &.is-loading-spinner {
+        color: transparent!important;
+        pointer-events: none;
+        &:after {
+            position: absolute;
+            border-color: $gray-900;
+            border-right-color: transparent;
+            border-top-color: transparent;
+        }
+    }
 }
 
 #{$button-inputs-hover},
@@ -95,6 +106,7 @@ a.button:hover {
     outline: 0;
     cursor: pointer;
 }
+
 
 textarea {
     padding: .25em .5em;
@@ -167,7 +179,6 @@ form fieldset {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-
 
     &:hover {
         background-color: $gray-800;
