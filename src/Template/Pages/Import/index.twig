@@ -27,13 +27,13 @@
                         <h2>{{ __('Options') }}</h2>
                     </header>
                     <div class="tab-container">
-                        {# {% for f in filters %}
+                        {% for f in filters %}
                             <div id="{{ f.name }}">
                                 {% for k,v in f.options %}
                                 <div>{{ k }}:{{ v }}</div>
                                 {% endfor %}
                             </div>
-                        {% endfor %} #}
+                        {% endfor %}
                         <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
                     </div>
                 </section>
@@ -41,11 +41,9 @@
         </div>
 
         <section>
-            {# {{ Form.control(__('File upload'), { 'type': 'file' }) | raw }} <br/> #}
 
             {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
             {% do _view.append('commands', Form.submit(__('Upload'), {'form': 'form-import'})) %}
-
 
             <div class="file has-name">
                 <label class="file-label">
@@ -63,7 +61,6 @@
         </section>
 
     {{ Form.end()|raw }}
-
 
     {% if result %}
     <section>
