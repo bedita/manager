@@ -79,11 +79,6 @@ class LayoutHelperTest extends TestCase
                 null,
                 true,
             ],
-            'currentModule empty' => [
-                null,
-                null,
-                false,
-            ],
             'currentModule not empty' => [
                 null,
                 'Objects',
@@ -173,8 +168,12 @@ class LayoutHelperTest extends TestCase
     public function layoutFooterProvider() : array
     {
         return [
-            'currentModule empty' => [
-                null,
+            'login' => [
+                'Login',
+                false,
+            ],
+            'dashboard' => [
+                'Dashboard',
                 false,
             ],
             'currentModule not empty' => [
@@ -193,11 +192,10 @@ class LayoutHelperTest extends TestCase
      * @dataProvider layoutFooterProvider()
      * @covers ::layoutFooter()
      */
-    public function testLayoutFooter($currentModule, $expected) : void
+    public function testLayoutFooter($name, $expected) : void
     {
-        $view = new View();
-        $view->set('currentModule', $currentModule);
-        $layout = new LayoutHelper($view);
+        $data = ['name' => $name];
+        $layout = new LayoutHelper(new View(null, null, null, $data));
         $result = $layout->layoutFooter();
         static::assertSame($result, $expected);
     }
