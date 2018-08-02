@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+
+██████╗ ███████╗██████╗ ██╗████████╗ █████╗     ██╗  ██╗
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗    ██║  ██║
+██████╔╝█████╗  ██║  ██║██║   ██║   ███████║    ███████║
+██╔══██╗██╔══╝  ██║  ██║██║   ██║   ██╔══██║    ╚════██║
+██████╔╝███████╗██████╔╝██║   ██║   ██║  ██║         ██║
+╚═════╝ ╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝         ╚═╝
+
+BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
+-->
+
 <html>
 <head>
     {{ Html.charset()|raw }}
@@ -6,44 +18,39 @@
 
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
+    {# fonts #}
+    {{ Html.css(['be-icons-font'])|raw }}
+    {{ Html.css(['be-icons-codes'])|raw }}
+
+    {{ Html.css(['vendors'])|raw }}
     {{ Html.css(['style'])|raw }}
+
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     {% element 'modules_colors' %}
 
-    {{ Html.script('libs/jquery/jquery-3.3.1.min')|raw }}
-    {{ Html.script('libs/jquery/plugins/jquery.autosize.min')|raw }}
-    {{ Html.script('libs/jquery/plugins/jquery.float_thead.min')|raw }}
+    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
-    <title>{{ "#{__('Error')} | #{project.name ?: 'BEdita 4'}" }}</title>
-
+    {% element 'json_meta_config' %}
 </head>
 
-<body>
+<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
 
-    <main class="grid">
-        <aside class="main-sidebar">
-            {% element 'Messages/messages' %}
-            {% element 'Menu/left' %}
-        </aside>
+    <main @click="pageClick($event)" class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
 
-        {% if currentModule %}
-            <aside class="secondary-sidebar">
-                {% element 'Menu/commands' %}
+        {% if Layout.primarySidebar() %}
+            <aside class="layout-sidebar-primary">
+                {% element 'Menu/project' %}
             </aside>
-
-            <header class="content-header">
-                {% element 'Menu/modules' %}
-            </header>
         {% endif %}
 
-        <div class="main-content">
-            {{ _view.fetch('content')|raw }}
-        </div>
+        {% if Layout.layoutContent() %}
+            <div class="layout-content">
+                {% element 'Modules/header' %}
+                {{ _view.fetch('content')|raw }}
+            </div>
+        {% endif %}
     </main>
-
-{{ Html.script('beditaUI')|raw }}
-{{ Html.script('libs/select2/select2.min')|raw }}
 
 </body>
 </html>

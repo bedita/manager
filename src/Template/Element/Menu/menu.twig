@@ -1,17 +1,22 @@
 <ul role="menu">
-    {# <li>
-        {{ Html.link(__(''), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
-    </li> #}
 
-    {% for module in modules %}
-    {% if module.name != "trash" %}
+    {# Core object modules #}
+    {% for module in modules if module.name != 'trash' %}
         <li class="has-background-module-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(
                 module.name|humanize|slice(0, 2),
                 {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
                 {'tooltip': module.name|humanize})|raw }}
         </li>
-    {% endif %}
+    {% endfor %}
+
+    {# Plugin modules #}
+    {% for k, plugin in config('PluginModules') %}
+        <li class="{{ plugin.class.menu }}">
+            {{ Html.link(plugin.title|humanize|slice(0, 2),
+                plugin.route,
+                {'tooltip': plugin.title|humanize})|raw }}
+        </li>
     {% endfor %}
 
     {% if currentModule.name != "trash" %}

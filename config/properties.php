@@ -50,15 +50,25 @@ return [
         // user profile
         'user_profile' => [
             'view' => [
-                'core' => [
+                '_keep' => [
+                    'old_password',
+                    'password',
+                    'confirm-password'
+                ],
+                // intentionally left blank (no title displayed)
+                ' ' => [
                     'username',
                     'name',
                     'surname',
                     'email',
-                    'person_title',
-                    'gender',
+                    'title',
                 ],
-                'advanced' => [
+                'password_change' => [
+                    'old_password',
+                    'password',
+                    'confirm-password',
+                ],
+                'details' => [
                     'phone',
                     'website',
                     'street_address',
@@ -66,6 +76,13 @@ return [
                     'zipcode',
                     'country',
                     'state_name',
+                ],
+                // intentionally empty
+                'core' => [
+                ],
+                'advanced' => [
+                ],
+                'publish' => [
                 ],
             ],
         ],

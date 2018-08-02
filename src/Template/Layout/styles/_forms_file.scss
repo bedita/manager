@@ -1,0 +1,132 @@
+$file-border-color: $gray-600;
+$file-radius: 2px;
+$file-cta-background-color: $gray-100;
+$file-cta-color: $gray-600;
+$file-cta-hover-color: $black;
+$file-cta-active-color: $black;
+$file-name-border-color: $gray-600;
+$file-name-border-style: solid;
+$file-name-border-width: 1px 1px 1px 0;
+$file-name-max-width: 24em;
+
+.file {
+    user-select: none;
+    align-items: stretch;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    max-width: 100%;
+
+    // Modifiers
+    &.has-name {
+        .file-cta {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+        .file-name {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+        &.is-empty {
+            .file-cta {
+                border-radius: $file-radius;
+                .file-name {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.file-label {
+    align-items: stretch;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+        .file-cta {
+            background-color: darken($file-cta-background-color, 2.5%);
+            color: $file-cta-hover-color;
+        }
+        .file-name {
+            border-color: darken($file-name-border-color, 2.5%);
+        }
+    }
+
+    &:active {
+        .file-cta {
+            background-color: darken($file-cta-background-color, 5%);
+            color: $file-cta-active-color;
+        }
+        .file-name {
+            border-color: darken($file-name-border-color, 5%);
+        }
+    }
+}
+
+.file-input {
+    height: 0.01em;
+    left: 0;
+    outline: none;
+    position: absolute;
+    top: 0;
+    width: 0.01em;
+}
+
+.file-cta,
+.file-name {
+    display: flex;
+    align-items: center;
+    clear: both; //fixes the icon floating out of the input when help text is floated right
+    position: relative;
+    padding-left: 1em;
+    padding-right: 1em;
+    height: $gutter * 2;
+    border-color: $file-border-color;
+    border-radius: $file-radius;
+    font-size: $font-size-sm;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.file-cta {
+    background-color: $file-cta-background-color;
+    color: $file-cta-color;
+}
+
+.file-name {
+    border-color: $file-name-border-color;
+    border-style: $file-name-border-style;
+    border-width: $file-name-border-width;
+    max-width: $file-name-max-width;
+    align-items: center;
+    box-shadow: none;
+    justify-content: flex-start;
+    text-align: left;
+    min-width: 0;
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:empty {
+            &:before {
+                content: '-';
+                font-size: $font-size-sssm;
+                color: $gray-600;
+            }
+        }
+    }
+}
+
+.file-icon {
+    align-items: center;
+    display: flex;
+    height: 1em;
+    justify-content: center;
+    margin-right: 0.5em;
+    width: 1em;
+    .fa {
+        font-size: 14px;
+    }
+}

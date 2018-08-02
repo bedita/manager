@@ -501,6 +501,29 @@ return [
     ],
 
     /**
+     * Plugin modules settings.
+     *
+     * Default empty.
+     * Configuration generally written by plugins via bootstrap.
+     */
+    'PluginModules' => [
+        /*
+        // plugin module example
+        // unique name
+        'My Module' => [
+            'title' => 'My Module',
+            // routing rules
+            'route' => Router::url(['_name': 'my_module:index']),
+            // css class
+            'class' => [
+                'dashboard' => 'has-background-black icon-sample',
+                'menu' => 'has-background-black',
+            ],
+        ],
+        */
+    ],
+
+    /**
      * Pagination default settings
      *
      * - sizeAvailable => available page size on modules view index
