@@ -11,20 +11,17 @@
         </header>
 
         <div v-show="isOpen" class="tab-container">
-            {% set jsonKeys = [] %}
             {% for key, value in props %}
 
                 {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                {% if options.class and  options.class == 'json' %}
-                    {% set jsonKeys = jsonKeys|merge([key]) %}
-                {% endif %}
 
                 {{ Form.control(key, options)|raw }}
 
+                {% if options.class == 'json' %}
+                    {{ write_config('_jsonKeys', config('_jsonKeys')|merge([key])) }}
+                {% endif %}
+
             {% endfor %}
-            {% if jsonKeys %}
-                {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
-            {% endif %}
         </div>
 
     </section>
