@@ -203,6 +203,7 @@ class ModulesController extends AppController
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
+                        // dd($requestData);
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
@@ -319,6 +320,34 @@ class ModulesController extends AppController
                 }
             }
         }
+    }
+
+    /**
+     * Relation schema request callig api `GET /model/relations/:relation`
+     * Json response
+     *
+     * @param string|int $id the object identifier.
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function relationData($id, string $relation) : void
+    {
+        $this->request->allowMethod(['get']);
+        $response = null;
+
+        try {
+            $response = $this->apiClient->relationData($relation);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
     }
 
     /**
