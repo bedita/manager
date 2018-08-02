@@ -15,13 +15,15 @@ import StaggeredList from 'app/components/staggered-list';
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 import TreeView from 'app/components/tree-view/tree-view';
 import sleep from 'sleep-promise';
+import flatpickr from 'flatpickr/dist/flatpickr.min';
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 
 export default {
     // injected methods provided by Main App
     inject: ['requestPanel', 'closePanel'],
-    mixins: [ PaginatedContentMixin ],
+    mixins: [ PaginatedContentMixin, RelationSchemaMixin ],
 
     components: {
         StaggeredList,
@@ -53,6 +55,7 @@ export default {
 
             removedRelated: [],             // currently related objects to be removed
             addedRelations: [],             // staged added objects to be saved
+            modifiedRelations: [],
             relationsData: [],              // hidden field containing serialized json passed on form submit
             newRelationsData: [],           // array of serialized new relations
 
@@ -110,7 +113,12 @@ export default {
         async loadOnMounted() {
             if (this.loadOnStart) {
                 var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+
                 await sleep(t);
+                if (this.relationSchema === null) {
+                    await this.getRelationData();
+                }
+
                 await this.loadRelatedObjects();
             }
         },
@@ -218,7 +226,7 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
-            this.newRelationsData = JSON.stringify(this.addedRelations);
+            this.setRelationsToSave();
         },
 
 
@@ -241,9 +249,65 @@ export default {
                     }
                 }
             }
-            this.newRelationsData = JSON.stringify(this.addedRelations);
+            this.setRelationsToSave();
         },
 
+        /**
+         *
+         *
+         * @param {Object} data
+         */
+        updateRelationParams(data) {
+            // id of edited related object
+            const id = data.related.id;
+
+            // extract related object from view
+            const rel = this.objects.filter((object) => {
+                if (object.id === id) {
+                    return object;
+                }
+            }).pop();
+
+            if (this.containsId(this.modifiedRelations, id)) {
+                // if object has been already modified we replace it within the modifiedRelations array
+                this.modifiedRelations = this.modifiedRelations.map((object) => {
+                    if (object.id === id) {
+                        return rel;
+                    }
+                    return object;
+                });
+            } else {
+                // otherwise we add it to it
+                this.modifiedRelations.push(rel);
+            }
+            this.setRelationsToSave();
+        },
+
+        /**
+         * set relations to be saved from both newly added and modified
+         *
+         */
+        setRelationsToSave() {
+            const relations = this.addedRelations.concat(this.modifiedRelations);
+            this.newRelationsData = JSON.stringify(relations);
+        },
+
+        /**
+         * frontend specific formatting for relation params
+         *
+         * @param {string} key
+         * @param {any} value
+         */
+        formatParam(key, value) {
+            const schema = this.getRelationSchema();
+
+            // formatting ISO 8061 date to human
+            if (schema !== undefined && schema[key].format === 'date-time') {
+                return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
+            }
+
+            return value;
+        },
 
         /**
          * helper function: check if array relations has element with id -> id
