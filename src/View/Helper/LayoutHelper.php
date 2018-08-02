@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -47,11 +48,7 @@ class LayoutHelper extends Helper
      */
     public function secondarySidebar() : bool
     {
-        if (in_array($this->_View->name, ['Import', 'UserProfile', 'Model'])) {
-            return true;
-        }
-
-        return !empty($this->_View->viewVars['currentModule']);
+        return !in_array($this->_View->name, ['Dashboard', 'Login']);
     }
 
     /**
@@ -81,7 +78,7 @@ class LayoutHelper extends Helper
      */
     public function layoutFooter() : bool
     {
-        return !empty($this->_View->viewVars['currentModule']);
+        return !in_array($this->_View->name, ['Dashboard', 'Login']);
     }
 
     /**
@@ -126,6 +123,11 @@ class LayoutHelper extends Helper
      */
     protected function commandLinkClass() : string
     {
+        $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->name));
+        if ($pluginClass) {
+            return $pluginClass;
+        }
+
         $moduleClasses = [
             'UserProfile' => 'has-background-black icon-user',
             'Import' => 'has-background-black icon-download-alt',

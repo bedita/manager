@@ -11,6 +11,11 @@
                 </li>
             {% endif %}
         {% endfor %}
+        {% for k, plugin in config('PluginModules') %}
+            <li class="{{ plugin.class.dashboard }}">
+                {{ Html.link(plugin.title|humanize, plugin.route, {'title': plugin.title|humanize})|raw }}
+            </li>
+        {% endfor %}
         </ul>
     </section>
 
