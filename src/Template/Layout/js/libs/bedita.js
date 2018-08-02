@@ -15,21 +15,24 @@ const BELoader = {
         const plugins = BEDITA.plugins;
 
         plugins.forEach(element => {
-            const BEPlugins = (window[element] || global[element]).default;
+            const vueComponent = window[element] || global[element];
+            if (vueComponent) {
+                const BEPlugins = vueComponent.default;
 
-            Object.keys(BEPlugins).forEach(componentName => {
-                if (typeof BEPlugins[componentName] === 'object') {
-                    Vue.component(componentName, BEPlugins[componentName]);
+                Object.keys(BEPlugins).forEach(componentName => {
+                    if (typeof BEPlugins[componentName] === 'object') {
+                        Vue.component(componentName, BEPlugins[componentName]);
 
-                    console.debug(
-                        `%c[${componentName}]%c component succesfully registred from %c${element}%c Plugin`,
-                        'color: blue',
-                        'color: black',
-                        'color: red',
-                        'color: black'
-                    );
-                }
-            });
+                        console.debug(
+                            `%c[${componentName}]%c component succesfully registred from %c${element}%c Plugin`,
+                            'color: blue',
+                            'color: black',
+                            'color: red',
+                            'color: black'
+                        );
+                    }
+                });
+            }
         });
     }
 }
