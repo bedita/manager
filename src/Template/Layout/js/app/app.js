@@ -12,6 +12,7 @@ import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/trash/index';
 import TrashView from 'app/pages/trash/view';
 import RelationsAdd from 'app/components/relation-view/relations-add';
+import EditRelationParams from 'app/components/edit-relation-params';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -29,6 +30,7 @@ const _vueInstance = new Vue({
         TrashIndex,
         TrashView,
         RelationsAdd,
+        EditRelationParams,
     },
 
     data() {
@@ -41,6 +43,7 @@ const _vueInstance = new Vue({
             sort: '',
             panelIsOpen: false,
             addRelation: {},
+            editingRelationParams: null,
         }
     },
 
@@ -116,10 +119,20 @@ const _vueInstance = new Vue({
          */
         returnDataFromPanel(data) {
             this.closePanel();
-            if(data.relationName){
+
+            // return data from RelationsAdd view component
+            if (data.action === 'add-relation') {
                 this.$refs["moduleView"]
                     .$refs[data.relationName]
                     .$refs["relation"].appendRelations(data.objects);
+            }
+
+            // return data from EditRelationParams view component
+            if (data.action === 'edit-params') {
+                const relationName = data.item.name;
+                this.$refs["moduleView"]
+                    .$refs[relationName]
+                    .$refs["relation"].updateRelationParams(data.item);
             }
         },
 
@@ -134,6 +147,8 @@ const _vueInstance = new Vue({
                 name: '',
                 alreadyInView: [],
             };
+
+            this.editingRelationParams = null;
         },
 
         /**
@@ -147,6 +162,8 @@ const _vueInstance = new Vue({
             // open panel for relations add
             if(this.panelIsOpen && data.relation && data.relation.name) {
                 this.addRelation = data.relation;
+            } else if (this.panelIsOpen && data.editRelationParams && data.editRelationParams.name) {
+                this.editingRelationParams = data.editRelationParams;
             }
         },
 

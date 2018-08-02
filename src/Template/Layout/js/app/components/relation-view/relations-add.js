@@ -129,19 +129,6 @@ export default {
         },
 
         /**
-         * Load data for panel.
-         *
-         * @return {void}
-         */
-        returnData() {
-            var data = {
-                objects: this.selectedObjects,
-                relationName: this.relationName,
-            };
-            this.$root.onRequestPanelToggle({ returnData: data });
-        },
-
-        /**
          * Add/remove elements to selectedObjects list
          *
          * @param {Object} object The object
