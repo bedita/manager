@@ -38,6 +38,7 @@ class BeditaTwigExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('config', [Configure::class, 'read']),
+            new \Twig_SimpleFunction('write_config', [Configure::class, 'write']),
         ];
     }
 
