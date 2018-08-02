@@ -186,7 +186,7 @@ class LayoutHelperTest extends TestCase
     /**
      * Test layoutFooter
      *
-     * @param string $currentModule The current module
+     * @param string $name View name
      * @param bool $expected The expected result
      *
      * @dataProvider layoutFooterProvider()
