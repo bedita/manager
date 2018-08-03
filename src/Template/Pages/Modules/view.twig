@@ -59,7 +59,7 @@
             {% element 'Form/relations' %}
 
         {# Set `_jsonKeys` hidden input from config #}
-        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys')|join(',')})|raw }}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
 
         {{ Form.end()|raw }}
 
