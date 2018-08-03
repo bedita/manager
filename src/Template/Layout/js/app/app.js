@@ -12,11 +12,13 @@ import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/trash/index';
 import TrashView from 'app/pages/trash/view';
 import ImportView from 'app/pages/import/index';
-import RelationsAdd from 'app/components/relation-view/relations-add';
+import Panel from 'app/components/panel';
 
+// vendor related imports
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
+import VueDraggable from 'vue-draggable';
 import VueHotkey from 'v-hotkey';
 
 import sleep from 'sleep-promise';
@@ -30,7 +32,7 @@ const _vueInstance = new Vue({
         TrashIndex,
         TrashView,
         ImportView,
-        RelationsAdd,
+        Panel,
     },
 
     data() {
@@ -68,6 +70,7 @@ const _vueInstance = new Vue({
         Vue.use(jsoneditor);
         Vue.use(datepicker);
         Vue.use(richeditor);
+        Vue.use(VueDraggable);
         Vue.use(VueHotkey);
 
         // load BEplugins's components

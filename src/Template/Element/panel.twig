@@ -1,87 +1,96 @@
-<aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
-    <section class="fieldset main-panel-body">
+<panel inline-template :panelIsOpen="panelIsOpen" :addRelation="addRelation">
+<div class="main-panel-container" v-bind:class="panelIsOpen? 'on' : ''" v-drag-and-drop:options="draggableOptions">
 
-        {# add relation component #}
-        <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
-            <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
-                    <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
-                    <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
-                </header>
+    <aside class="main-panel-mask" @click="closePanel()" droppable></aside>
 
-                <nav class="pagination has-text-size-smallest">
-                    <div>
-                        <span><: pagination.page_items :> {{ __('objects') }}</span>
+    <aside class="main-panel">
+        <section class="fieldset main-panel-body">
+
+            {# add relation component #}
+            <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+                <div class="relations-add">
+                    <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
+                        <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
+                        <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
+                    </header>
+
+                    <nav class="pagination has-text-size-smallest">
+                        <div>
+                            <span><: pagination.page_items :> {{ __('objects') }}</span>
+                        </div>
+                        <div>
+                            <span>
+                                <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
+                            </span>
+                        </div>
+                        <div>
+                            <span>{{ __('Page size') }}:</span>
+                        </div>
+                        <div>
+                            <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
+                                <option v-for="size in paginateSizes"><: size :></option>
+                            </select>
+
+                            <button
+                                v-for="i in pagination.page_count" :key="i"
+                                v-if="paginationPageLinkVisible(i)"
+                                v-bind:class="pagination.page == i? '' : 'is-dark'"
+                                v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                                class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+                        </div>
+                    </nav>
+
+                    {# objects #}
+                    <div class="related-objects-list columns">
+                        <div class="related-object column is-3"
+                            v-for="related in objects">
+                            <article class="box has-text-gray-100 has-text-size-smaller"
+                                    {# v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '', #}
+                                    v-bind:class="alreadyInView.indexOf(related.id) != -1? 'unselectable':''"
+                                    @click.prevent.stop="toggle(related, $event)"
+                                    draggable>
+
+                                <header>
+                                    <h1><: related.attributes.title || related.attributes.name :></h1>
+                                    <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                                </header>
+
+                                <div class="thumbnail">
+                                    <figure>
+                                        <img />
+                                    </figure>
+                                </div>
+
+                                <div>
+                                    <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                                </div>
+
+                                <footer>
+                                    <a>{{ __('open') }}</a>
+                                </footer>
+                            </article>
+                        </div>
+
+                        {# empty element: keep for flex layout #}
+                        <div class="column"></div>
                     </div>
-                    <div>
-                        <span>
-                            <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
-                        </span>
-                    </div>
-                    <div>
-                        <span>{{ __('Page size') }}:</span>
-                    </div>
-                    <div>
-                        <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
-                            <option v-for="size in paginateSizes"><: size :></option>
-                        </select>
 
-                        <button
-                            v-for="i in pagination.page_count" :key="i"
-                            v-if="paginationPageLinkVisible(i)"
-                            v-bind:class="pagination.page == i? '' : 'is-dark'"
-                            v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
-                            class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
-                    </div>
-                </nav>
+                    <footer>
+                        <p>
+                            <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
+                                @click.prevent="returnDataFromPanel({
+                                    objects: selectedObjects,
+                                    relationName: relationName,
+                                })">{{ __('Add objects to') }} <: relationName | humanize :></button>
+                        </p>
+                        <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
+                    </footer>
 
-                {# objects #}
-                <div class="related-objects-list columns">
-                    <div class="related-object column is-3"
-                        v-for="related in objects">
-                        <article class="box has-text-gray-100 has-text-size-smaller"
-                                v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
-                                    alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
-                                @click.prevent.stop="toggle(related, $event)">
-
-                            <header>
-                                <h1><: related.attributes.title || related.attributes.name :></h1>
-                                <span class="has-text-size-smaller prop-id"><: related.id :></span>
-                            </header>
-
-                            <div class="thumbnail">
-                                <figure>
-                                    <img />
-                                </figure>
-                            </div>
-
-                            <div>
-                                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            </div>
-
-                            <footer>
-                                <a>{{ __('open') }}</a>
-                            </footer>
-                        </article>
-                    </div>
-
-                    {# empty element: keep for flex layout #}
-                    <div class="column"></div>
                 </div>
+            </relations-add inline-template>
 
-                <footer>
-                    <p>
-                        <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent="returnDataFromPanel({
-                                objects: selectedObjects,
-                                relationName: relationName,
-                            })">{{ __('Add objects to') }} <: relationName | humanize :></button>
-                    </p>
-                    <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
-                </footer>
+        </section>
+    </aside>
 
-            </div>
-        </relations-add inline-template>
-
-    </section>
-</aside>
+</div>
+</panel>

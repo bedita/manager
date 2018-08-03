@@ -180,7 +180,8 @@
         background-color: $gray-700;
         cursor: pointer;
 
-        &.selected { background-color: $info; }
+        // &.selected { background-color: $info; }
+        &[aria-grabbed="true"] { background-color: $info; }
 
         footer {
             justify-content: center;
