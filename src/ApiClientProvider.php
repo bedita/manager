@@ -53,6 +53,11 @@ class ApiClientProvider
     {
         $this->apiClient = new BEditaClient(Configure::read('API.apiBaseUrl'), Configure::read('API.apiKey'));
 
+        // init logger in `debug` mode
+        if (Configure::read('debug')) {
+            $this->apiClient->initLogger(['log_file' => LOGS . 'api.log']);
+        }
+
         return $this->apiClient;
     }
 
