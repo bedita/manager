@@ -38,6 +38,12 @@ class BeditaTwigExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('config', [Configure::class, 'read']),
+            new \Twig_SimpleFunction('write_config', function ($key, $val) {
+                // avoid unwanted return value display in templates
+                Configure::write($key, $val);
+
+                return;
+            }),
         ];
     }
 

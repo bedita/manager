@@ -21,6 +21,10 @@
             'id': 'form-main',
         })|raw }}
 
+
+            {# Init `_jsonKeys` data #}
+            {{ write_config('_jsonKeys', []) }}
+
             {# Inside form-column there are form elements, they may have a cssOrder property that reorders
                 the elements in single column view, in small viewports. cssOrder may assume the string
                 values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
@@ -53,6 +57,9 @@
             {# temp relations view #}
             {# loads first relation after 1200ms, than every 300ms till last relation, see file #}
             {% element 'Form/relations' %}
+
+        {# Set `_jsonKeys` hidden input from config #}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
 
         {{ Form.end()|raw }}
 
