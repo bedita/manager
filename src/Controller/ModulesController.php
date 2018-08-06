@@ -203,7 +203,6 @@ class ModulesController extends AppController
                 foreach ($requestData['api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
-                        // dd($requestData);
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
@@ -333,7 +332,6 @@ class ModulesController extends AppController
     public function relationData($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-        $response = null;
 
         try {
             $response = $this->apiClient->relationData($relation);
@@ -347,7 +345,7 @@ class ModulesController extends AppController
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->set('_serialize', true);
     }
 
     /**
