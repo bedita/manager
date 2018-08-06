@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 
 Project-Id-Version: BEdita 4
-POT-Creation-Date: 2018-08-06 12:20:06
+POT-Creation-Date: 2018-08-06 12:30:31
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Language-Team: BEdita I18N & I10N Team

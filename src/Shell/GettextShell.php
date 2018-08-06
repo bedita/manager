@@ -112,7 +112,7 @@ class GettextShell extends Shell
         foreach ($ls[0] as $loc) {
             if ($loc[0] != '.') { // only "regular" dirs...
                 $this->out(sprintf('Language: %s', $loc));
-                $poFile = sprintf('%s%s/LC_MESSAGES/%s', $localePath, $loc, $poName);
+                $poFile = sprintf('%s/%s/%s', $localePath, $loc, $poName);
                 if (!file_exists($poFile)) {
                     $newPoFile = new File($poFile, true);
                     $newPoFile->write($header);

@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+
+Project-Id-Version: BEdita 4
+POT-Creation-Date: 2018-08-06 12:30:31
+PO-Revision-Date: 
+Last-Translator: 
+Language-Team: BEdita I18N & I10N Team
+Language: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Plural-Forms: nplurals=2; plural=(n != 1);
