@@ -9,8 +9,17 @@
                 </header>
 
                 <div class="object-attributes">
-                    <h2>{{ __('Object')}}: {{ properties.core.title }}</h2>
-                    <h2>{{ __('Related to')}}: <: relation.related.title :></h2>
+                    <h2>{{ __('Object')}}: {{ object.attributes.title }}</h2>
+                    <div>
+                        <span class="tag has-background-module-{{object.type}}">{{ object.type }}</span>
+                        <span class="tag">{{ object.attributes.status }}</span>
+                    </div>
+
+                    <h2>{{ __('Related to')}}: <: relatedName :></h2>
+                    <div>
+                        <span class="tag" :class="`has-background-module-${this.relatedType}`"><: relatedType :></span>
+                        <span class="tag"><: relatedStatus :></span>
+                    </div>
                 </div>
 
                 <form ref="paramsForm" v-if="relation.schema" class="params-list">
@@ -37,7 +46,7 @@
                                     </select>
                                 </div>
                                 {# String -> input text #}
-                                <input v-else type="textarea" v-model="editingParams[key]">
+                                <input v-else type="text" v-model="editingParams[key]">
                             </div>
 
                             {# Number -> input number #}

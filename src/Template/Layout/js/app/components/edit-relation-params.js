@@ -15,6 +15,28 @@ export default {
         },
     },
 
+    computed: {
+        relatedStatus() {
+            return this.relation.related.attributes.status;
+        },
+        relatedType() {
+            let type = '(not available)';
+            if (this.relation && this.relation.related) {
+                type = this.relation.related.type;
+            }
+
+            return type;
+        },
+        relatedName() {
+            let name = '(empty)';
+            if (this.relation && this.relation.related) {
+                name = this.relation.related.attributes.title;
+            }
+
+            return name;
+        }
+    },
+
     data() {
         return {
             editingParams: {},
