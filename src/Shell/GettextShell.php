@@ -93,7 +93,9 @@ class GettextShell extends Shell
         $pot->write($this->header('pot'));
         sort($this->poResult);
         foreach ($this->poResult as $res) {
-            $pot->write(sprintf('%smsgid "%s"%smsgstr ""%s', "\n", $res, "\n", "\n"));
+            if (!empty($res)) {
+                $pot->write(sprintf('%smsgid "%s"%smsgstr ""%s', "\n", $res, "\n", "\n"));
+            }
         }
         $pot->close();
         $this->hr();
@@ -146,9 +148,9 @@ class GettextShell extends Shell
                 'Language-Team' => 'BEdita I18N & I10N Team',
                 'Language' => '',
                 'MIME-Version' => '1.0',
-                'Content-Type' => 'text/plain; charset=utf-8',
                 'Content-Transfer-Encoding' => '8bit',
                 'Plural-Forms' => 'nplurals=2; plural=(n != 1);',
+                'Content-Type' => 'text/plain; charset=utf-8',
             ],
             'pot' => [
                 'Project-Id-Version' => 'BEdita 4',
@@ -161,7 +163,7 @@ class GettextShell extends Shell
             ],
         ];
         foreach ($contents[$type] as $k => $v) {
-            $result .= "$k: $v\n";
+            $result .= sprintf('"%s: %s"%s', $k, $v, "\n");
         }
 
         return $result;
@@ -190,7 +192,10 @@ class GettextShell extends Shell
             }
         }
         $translated = $numItems - $numNotTranslated;
-        $percent = number_format(( $translated * 100. ) / $numItems, 1);
+        $percent = 0;
+        if ($numItems > 0) {
+            $percent = number_format(($translated * 100.) / $numItems, 1);
+        }
         $this->out(sprintf('Translated %s of items - %s %', $translated, $numItems, $percent));
     }
 
