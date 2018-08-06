@@ -90,12 +90,10 @@ class GettextShell extends Shell
         $potFilename = sprintf('%s/master.pot', $localePath);
         $this->out(sprintf('Writing new .pot file: %s', $potFilename));
         $pot = new File($potFilename, true);
-        $headerPot = $this->header('pot');
-        $pot->write($headerPot);
+        $pot->write($this->header('pot'));
         sort($this->poResult);
         foreach ($this->poResult as $res) {
-            $pot->write(sprintf('%smsgid "%s"', "\n\n", $res));
-            $pot->write(sprintf('%smsgstr ""', "\n\n"));
+            $pot->write(sprintf('%smsgid "%s"%smsgstr ""%s', "\n", $res, "\n", "\n"));
         }
         $pot->close();
         $this->hr();
@@ -108,7 +106,7 @@ class GettextShell extends Shell
 
             return;
         }
-        $headerPo = $this->header('po');
+        $header = $this->header('po');
         $folder = new Folder($localePath);
         $ls = $folder->read();
         foreach ($ls[0] as $loc) {
@@ -117,7 +115,7 @@ class GettextShell extends Shell
                 $poFile = sprintf('%s%s/LC_MESSAGES/%s', $localePath, $loc, $poName);
                 if (!file_exists($poFile)) {
                     $newPoFile = new File($poFile, true);
-                    $newPoFile->write($headerPo);
+                    $newPoFile->write($header);
                     $newPoFile->close();
                 }
                 $this->out(sprintf('Merging %s', $poFile));
@@ -138,7 +136,7 @@ class GettextShell extends Shell
      */
     private static function header(string $type = 'po') : string
     {
-        $result = sprintf('msgid ""%smsgstr ""', "\n", "\n");
+        $result = sprintf('msgid ""%smsgstr ""%s', "\n", "\n\n");
         $contents = [
             'po' => [
                 'Project-Id-Version' => 'BEdita 4',
