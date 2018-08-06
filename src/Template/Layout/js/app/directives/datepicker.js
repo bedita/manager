@@ -11,11 +11,19 @@
 import flatpickr from 'flatpickr/dist/flatpickr.min';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const datepickerOptions = {
-    enableTime: false,
+const dateTimePickerOptions = {
+    enableTime: true,
     dateFormat: "Y-m-d H:i",
     altInput: true,
     altFormat: "F j, Y - H:i",
+    animate: false,
+};
+
+const datepickerOptions = {
+    enableTime: false,
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "F j, Y",
     animate: false,
 };
 
@@ -30,8 +38,8 @@ export default {
             inserted (element, dir, vueEl) {
                 let options = datepickerOptions;
 
-                if (vueEl.data && vueEl.data.attrs && vueEl.data.attrs.time) {
-                    options.enableTime = vueEl.data.attrs.time;
+                if (vueEl.data && vueEl.data.attrs && vueEl.data.attrs.time === 'true') {
+                    options = dateTimePickerOptions;
                 }
 
                 try {

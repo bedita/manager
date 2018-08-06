@@ -54,8 +54,11 @@ class SchemaHelper extends Helper
                 return 'json';
 
             case 'string':
-                if (!empty($schema['format']) && $schema['format'] === 'date-time') {
+                if (!empty($schema['format']) && ($schema['format'] === 'date-time')) {
                     return 'date-time'; // TODO: replace with "datetime".
+                }
+                if (!empty($schema['format']) && $schema['format'] === 'date') {
+                    return 'date';
                 }
                 if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
                     return 'textarea';
@@ -175,6 +178,12 @@ class SchemaHelper extends Helper
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'true',
+            ];
+        } elseif ($type === 'date') {
+            return [
+                'type' => 'text',
+                'v-datepicker' => '',
+                'time' => 'false',
             ];
         } elseif ($type === 'checkbox') {
             if (!empty($schema['oneOf'])) {
