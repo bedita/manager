@@ -4,7 +4,7 @@
         <edit-relation-params inline-template :relation=editingRelationParams>
             <div v-if="relation" class="edit-relation">
                 <header class="tab unselectable">
-                    <h2><span>{{ __('Edit') }} <: relation.name | humanize :></span> &nbsp;</h2>
+                    <h2><span>{{ __('Edit parameters of') }}: <: relation.name | humanize :></span> &nbsp;</h2>
                     <a href="#" @click.prevent="closeParamsView()">{{ __('close') }}</a>
                 </header>
 
