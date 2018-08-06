@@ -78,6 +78,11 @@
             }
         }
 
+        ul.params-list {
+            list-style: none;
+            padding: $gutter * 0.25;
+        }
+
         >div {
             &:not(:last-of-type) {
                 margin-bottom: $gutter;
@@ -137,7 +142,54 @@
 
 
 // in panel
-.relations-add {
+
+.edit-relation {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    // layout
+    > nav, >header.tab, >footer {
+        flex-shrink: 0;
+    }
+
+    > nav {
+        padding: $gutter $gutter 0;
+        margin: 0;
+    }
+
+    > header.tab {
+        margin-right: $gutter;
+        margin-left: $gutter;
+        margin-top: $gutter;
+        margin-bottom: 0;
+        cursor: auto;
+    }
+    .object-attributes, .params-list {
+        overflow: auto;
+        margin-right: 0;
+        margin-left: $gutter;
+        margin-top: $gutter;
+        padding-right: $gutter;
+    }
+
+    .params-list {
+        flex-grow: 1;
+
+        input, select {
+            width: 100%;
+        }
+    }
+
+    > footer {
+        display: flex;
+        justify-content: space-between;
+        padding: $gutter;
+    }
+
+}
+
+.relations-add,{
     display: flex;
     flex-direction: column;
     height: 100%;

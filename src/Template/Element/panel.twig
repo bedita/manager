@@ -1,8 +1,84 @@
 <aside class="main-panel" v-bind:class="panelIsOpen? 'on' : ''">
     <section class="fieldset main-panel-body">
 
+        <edit-relation-params inline-template :relation=editingRelationParams>
+            <div v-if="relation" class="edit-relation">
+                <header class="tab unselectable">
+                    <h2><span>{{ __('Edit parameters of') }}: <: relation.name | humanize :></span> &nbsp;</h2>
+                    <a href="#" @click.prevent="closeParamsView()">{{ __('close') }}</a>
+                </header>
+
+                <div class="object-attributes">
+                    <h2>{{ __('Object')}}: {{ object.attributes.title }}</h2>
+                    <div>
+                        <span class="tag has-background-module-{{object.type}}">{{ object.type }}</span>
+                        <span class="tag">{{ object.attributes.status }}</span>
+                    </div>
+
+                    <h2>{{ __('Related to')}}: <: relatedName :></h2>
+                    <div>
+                        <span class="tag" :class="`has-background-module-${this.relatedType}`"><: relatedType :></span>
+                        <span class="tag"><: relatedStatus :></span>
+                    </div>
+                </div>
+
+                <form ref="paramsForm" v-if="relation.schema" class="params-list">
+                    <div v-for="(param, key) in relation.schema">
+                        <label :title="key"><: param.description :>
+
+                            {# Boolean -> switch button true/false  #}
+                            <div v-if="param.type == 'boolean'">
+                                <label class="switch">
+                                    <input type="checkbox" v-model="editingParams[key]">
+                                    <span class="slider round"></span>
+                                <label>
+                            </div>
+
+
+                            <div v-if="param.type == 'string'">
+                                {# String, format: date-time -> datepicker #}
+                                <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
+
+                                {# String Enum -> select/option #}
+                                <div v-else-if="param.enum !== undefined">
+                                    <select v-model="editingParams[key]">
+                                        <option v-for="item in param.enum" :value="item"><: item :></option>
+                                    </select>
+                                </div>
+                                {# String -> input text #}
+                                <input v-else type="text" v-model="editingParams[key]">
+                            </div>
+
+                            {# Number -> input number #}
+                            <div v-if="param.type == 'number'">
+                                <label>
+                                    <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
+                                <label>
+                            </div>
+
+                            {# Integer -> input integer #}
+                            <div v-if="param.type == 'integer'">
+                                <label>
+                                    <input type="number" :name="key" v-model.number="editingParams[key]">
+                                <label>
+                            </div>
+
+                        </label>
+                    </div>
+                </form>
+
+                <footer>
+                    <p>
+                        <button class="has-background-info has-text-white"
+                            @click.prevent="saveParams()">{{ __('Save ') }}</button>
+                    </p>
+                </footer>
+            </div>
+        </edit-relation-params>
+
+
         {# add relation component #}
-        <relations-add inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+        <relations-add v-if="addRelation.name" inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
                 <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
@@ -73,8 +149,9 @@
                     <p>
                         <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
                             @click.prevent="returnDataFromPanel({
-                                objects: selectedObjects,
+                                action: 'add-relation',
                                 relationName: relationName,
+                                objects: selectedObjects,
                             })">{{ __('Add objects to') }} <: relationName | humanize :></button>
                     </p>
                     <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>

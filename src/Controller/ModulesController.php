@@ -322,6 +322,33 @@ class ModulesController extends AppController
     }
 
     /**
+     * Relation schema request callig api `GET /model/relations/:relation`
+     * Json response
+     *
+     * @param string|int $id the object identifier.
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function relationData($id, string $relation) : void
+    {
+        $this->request->allowMethod(['get']);
+
+        try {
+            $response = $this->apiClient->relationData($relation);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', true);
+    }
+
+    /**
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
