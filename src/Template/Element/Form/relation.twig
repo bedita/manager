@@ -54,7 +54,7 @@
                         </div>
 
                         <div v-if="relationHasParams">
-                            <ul>
+                            <ul class="params-list">
                                 <li v-for="(param, key) in relationSchema">
                                     <span><: key :></span>&nbsp;
                                         <span v-if="getParamHelper(related, key)" class="tag param-value">{{ __('value') }}: <: formatParam(key, getParamHelper(related, key)) :></span>
