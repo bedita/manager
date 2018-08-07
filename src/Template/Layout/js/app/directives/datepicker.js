@@ -13,17 +13,17 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 const dateTimePickerOptions = {
     enableTime: true,
-    dateFormat: "Y-m-d H:i",
+    dateFormat: 'Y-m-d H:i',
     altInput: true,
-    altFormat: "F j, Y - H:i",
+    altFormat: 'F j, Y - H:i',
     animate: false,
 };
 
 const datepickerOptions = {
     enableTime: false,
-    dateFormat: "Y-m-d",
+    dateFormat: 'Y-m-d',
     altInput: true,
-    altFormat: "F j, Y",
+    altFormat: 'F j, Y',
     animate: false,
 };
 
