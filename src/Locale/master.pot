@@ -1,0 +1,367 @@
+msgid ""
+msgstr ""
+
+"Project-Id-Version: BEdita 4"
+"POT-Creation-Date: 2018-08-06 12:43:54"
+"MIME-Version: 1.0"
+"Content-Transfer-Encoding: 8bit"
+"Language-Team: BEdita I18N & I10N Team"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Content-Type: text/plain; charset=utf-8"
+
+msgid "&"
+msgstr ""
+
+msgid "Actions on selected items"
+msgstr ""
+
+msgid "Add objects to"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "BEdita Web site"
+msgstr ""
+
+msgid "BEdita {0}"
+msgstr ""
+
+msgid "Cannot create abstract objects or objects without schema"
+msgstr ""
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Create new"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Data Import"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Error "
+msgstr ""
+
+msgid "Exit"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "File type"
+msgstr ""
+
+msgid "First"
+msgstr ""
+
+msgid "Folders"
+msgstr ""
+
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+msgid "Image not acceptable for thumb"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import error"
+msgstr ""
+
+msgid "Import warn"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Media"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Metadata"
+msgstr ""
+
+msgid "Missing thumb url"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Module access not authorized"
+msgstr ""
+
+msgid "Move item to trash?"
+msgstr ""
+
+msgid "Move to trash"
+msgstr ""
+
+msgid "New entry in"
+msgstr ""
+
+msgid "New relations (save to keep)"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "No items found"
+msgstr ""
+
+msgid "No options for this file type"
+msgstr ""
+
+msgid "Number of created objects"
+msgstr ""
+
+msgid "Number of errors"
+msgstr ""
+
+msgid "Number of updated objects"
+msgstr ""
+
+msgid "Object deleted from trash"
+msgstr ""
+
+msgid "Object saved"
+msgstr ""
+
+msgid "Object types"
+msgstr ""
+
+msgid "Object(s) deleted"
+msgstr ""
+
+msgid "Object(s) restored"
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Open image"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+msgid "Page Size"
+msgstr ""
+
+msgid "Page size"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Prev"
+msgstr ""
+
+msgid "Property types"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Restore"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Retype password"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search in BEdita"
+msgstr ""
+
+msgid "Set draft"
+msgstr ""
+
+msgid "Set off"
+msgstr ""
+
+msgid "Set on"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Show details"
+msgstr ""
+
+msgid "Show more"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Successfully logged in"
+msgstr ""
+
+msgid "The thumbnail is not available"
+msgstr ""
+
+msgid "Thumb not available"
+msgstr ""
+
+msgid "Thumb not ready: coming soon"
+msgstr ""
+
+msgid "Thumbnail is not ready"
+msgstr ""
+
+msgid "Trash"
+msgstr ""
+
+msgid "Trash can"
+msgstr ""
+
+msgid "Trashcan"
+msgstr ""
+
+msgid "Untitled"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "User Profile"
+msgstr ""
+
+msgid "User profile saved"
+msgstr ""
+
+msgid "User: {0}"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "View original"
+msgstr ""
+
+msgid "View trashed "
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "add objects"
+msgstr ""
+
+msgid "add to"
+msgstr ""
+
+msgid "cancel"
+msgstr ""
+
+msgid "click to remove"
+msgstr ""
+
+msgid "close"
+msgstr ""
+
+msgid "confirm password"
+msgstr ""
+
+msgid "current password"
+msgstr ""
+
+msgid "id"
+msgstr ""
+
+msgid "last modified"
+msgstr ""
+
+msgid "log out"
+msgstr ""
+
+msgid "new password"
+msgstr ""
+
+msgid "objects"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "open"
+msgstr ""
+
+msgid "reload"
+msgstr ""
+
+msgid "remove"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "text to translate"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "undo remove"
+msgstr ""
+
+msgid "www.bedita.com"
+msgstr ""
