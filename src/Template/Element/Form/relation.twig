@@ -53,9 +53,26 @@
                             <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
-                        <div v-if="related.meta && related.meta.relation">
-                            <p class="has-text-size-smallest"
-                                v-for="(paramValue, paramName) in related.meta.relation.params"><: paramName :>: <: paramValue :></p>
+                        <div v-if="relationHasParams()">
+                            <ul class="params-list">
+                                <li v-for="(param, key) in relationSchema">
+                                    <span><: key :></span>&nbsp;
+                                        <span v-if="getParamHelper(related, key)" class="tag param-value">{{ __('value') }}: <: formatParam(key, getParamHelper(related, key)) :></span>
+                                        <span v-else class="tag">{{ __('type') }}: <: param.format || param.type :></span>
+                                </li>
+                            </ul>
+
+                            <button v-if="$root.panelIsOpen" class="icon-coffee"
+                                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+                            <button v-else
+                                class="icon-edit"
+                                @click.prevent.stop="requestPanel({
+                                    editRelationParams: {
+                                        name: relationName,
+                                        related: related,
+                                        schema: relationSchema,
+                                    },
+                                })">{{ __('Edit Params') }}</button>
                         </div>
 
                         <footer>
