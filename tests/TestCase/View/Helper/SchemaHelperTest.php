@@ -74,11 +74,18 @@ class SchemaHelperTest extends TestCase
                     'contentMediaType' => 'text/html',
                 ],
             ],
-            'date' => [
+            'date-time' => [
                 'date-time',
                 [
                     'type' => 'string',
                     'format' => 'date-time',
+                ],
+            ],
+            'date' => [
+                'date',
+                [
+                    'type' => 'string',
+                    'format' => 'date',
                 ],
             ],
             'number' => [
