@@ -13,8 +13,8 @@
 
 namespace App\Controller\Component;
 
-use BEdita\WebTools\ApiClientProvider;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;

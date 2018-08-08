@@ -54,6 +54,7 @@ class AppController extends Controller
             'loginAction' => ['_name' => 'login'],
             'loginRedirect' => ['_name' => 'dashboard'],
         ]);
+
         $this->Auth->deny();
 
         $this->loadComponent('Modules', [
