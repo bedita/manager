@@ -13,10 +13,10 @@
 
 namespace App\Test\TestCase\Controller;
 
-use BEdita\WebTools\ApiClientProvider;
 use App\Controller\TrashController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
