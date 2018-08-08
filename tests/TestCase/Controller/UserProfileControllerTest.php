@@ -13,7 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\ApiClientProvider;
+use BEdita\WebTools\ApiClientProvider;
 use App\Controller\UserProfileController;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;

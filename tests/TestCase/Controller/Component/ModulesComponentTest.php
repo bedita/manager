@@ -13,7 +13,7 @@
 
 namespace App\Test\TestCase\Controller\Component;
 
-use App\ApiClientProvider;
+use BEdita\WebTools\ApiClientProvider;
 use App\Controller\Component\ModulesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;

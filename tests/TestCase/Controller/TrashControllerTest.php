@@ -13,7 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\ApiClientProvider;
+use BEdita\WebTools\ApiClientProvider;
 use App\Controller\TrashController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
