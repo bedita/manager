@@ -12,7 +12,7 @@
  */
 namespace App\Controller;
 
-use App\ApiClientProvider;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -49,7 +49,7 @@ class AppController extends Controller
 
         $this->loadComponent('Auth', [
             'authenticate' => [
-                'Api' => [],
+                'BEdita/WebTools.Api' => [],
             ],
             'loginAction' => ['_name' => 'login'],
             'loginRedirect' => ['_name' => 'dashboard'],

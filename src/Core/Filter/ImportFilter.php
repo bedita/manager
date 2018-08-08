@@ -2,7 +2,7 @@
 
 namespace App\Core\Filter;
 
-use App\ApiClientProvider;
+use BEdita\WebTools\ApiClientProvider;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaApiClient;
 use Cake\Log\LogTrait;
