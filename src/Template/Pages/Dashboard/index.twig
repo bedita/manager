@@ -24,9 +24,11 @@
             <li class="has-background-module-trash icon-trash-2">
                 {{ Html.link(__('Trash can'), {'controller': 'Modules', 'action': 'index', 'object_type': 'trash'}, {'title': __('Trash')})|raw }}
             </li>
+            {% if config('Filters.import') %}
             <li class="has-background-black icon-download-alt">
                 {{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}
             </li>
+            {% endif %}
             {% if in_array('admin', user.roles) %}
             <li class="has-background-black icon-database">
                 {{ Html.link(__('Model'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
