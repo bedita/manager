@@ -121,7 +121,7 @@
             {{ Form.control(relationName ~ 'removeRelated', {
                 'type': 'hidden',
                 'name': 'relations[' ~ relationName ~ '][removeRelated]',
-                'v-model': 'relationsData'
+                'v-model': 'removedRelationsData'
             })|raw }}
             {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
 
@@ -129,7 +129,7 @@
             {{ Form.control(relationName ~ 'addRelated', {
                 'type': 'hidden',
                 'name': 'relations[' ~ relationName ~ '][addRelated]',
-                'v-model': 'newRelationsData'
+                'v-model': 'addedRelationsData'
             })|raw }}
             {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
         </div>

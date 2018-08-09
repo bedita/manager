@@ -1,4 +1,6 @@
 /**
+ *  Extends RelationView: handles children relation
+ *
  *  Templates that uses this component (directly or indirectly):
  *  Template/Elements/Form/children.twig
  *
@@ -22,6 +24,14 @@ export default {
     },
 
     methods: {
+
+        /**
+         * update relation position and stage for saving
+         *
+         * @param {Object} related
+         *
+         * @returns {void}
+         */
         updatePosition(related) {
             const oldPosition = related.meta.relation.position;
             const newPosition = this.positions[related.id] !== '' ? this.positions[related.id] : undefined;
@@ -33,32 +43,11 @@ export default {
                     this.modifyRelation(copy);
                 } catch (exp) {
                     // silent error
-                    console.error('[ChildreView -> updatePosition] something\'s wrong with the data');
+                    console.error('[ChildrenView -> updatePosition] something\'s wrong with the data');
                 }
             } else {
                 this.removeModifiedRelations(related.id);
             }
-        },
-
-                /**
-         * set modified relation to be saved
-         *
-         * @param {Object} related
-         */
-        modifyRelation(related) {
-            if (this.containsId(this.modifiedRelations, related.id)) {
-                // if object has been already modified we replace it within the modifiedRelations array
-                this.modifiedRelations = this.modifiedRelations.map((object) => {
-                    if (object.id === related.id) {
-                        return related;
-                    }
-                    return object;
-                });
-            } else {
-                // otherwise we add it to it
-                this.modifiedRelations.push(related);
-            }
-            this.setRelationsToSave();
         },
     }
 }
