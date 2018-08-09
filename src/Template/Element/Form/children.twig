@@ -1,0 +1,154 @@
+<children-view inline-template
+    relation-name="children"
+    config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+    ref="relation"
+    :load-on-start={{ loadOnStart }}
+    @loading="onToggleLoading" @count="onCount">
+
+    <div class="relation-view children-view">
+        <div class="related-list">
+            <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
+                <div>
+                    <span><: pagination.page_item-grids :> {{ __('objects') }}</span>
+                </div>
+                <div>
+                    <span>{{ __('Page size') }}:</span>
+                </div>
+                <div>
+                    <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
+                        <option v-for="size in paginateSizes"><: size :></option>
+                    </select>
+
+                    <button
+                        v-for="i in pagination.page_count" :key="i"
+                        v-if="pagination.page_count > 1"
+                        v-bind:class="pagination.page == i? '' : 'is-dark'"
+                        v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                        class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
+                </div>
+            </nav>
+
+            {# related objects #}
+            <div class="related-objects-list columns" v-bind:class="loading ? 'isLoading' : ''">
+                <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                    v-for="(related, index) in objects"
+                    :key="related.id"
+                    v-bind:class="containsId(removedRelated, related.id)? 'removed' : ''">
+
+                    <article class="box has-background-black has-text-gray-100 has-text-size-smaller"
+                            v-bind:class="related.type">
+
+                        <header>
+                            <h1><a :href="buildViewUrl(related.type, related.id)" target="_blank"><: related.attributes.title || related.attributes.name :></a></h1>
+                            <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                        </header>
+
+                        <div class="thumbnail" v-if="related.meta.url">
+                            <figure>
+                                <img :src="related.meta.url" />
+                            </figure>
+                        </div>
+
+                        <div>
+                            <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                            <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
+                        </div>
+
+                        <div class="container-grid">
+                            <div class="item-grid">{{ __('position') }}:</div>
+                            <div class="item-grid"><input class="inline-input" disabled type="number" value="related.meta.relation.position" /></div>
+                            <div class="item-grid"><label>{{ __('move to') }}:</div>
+                            <div class="item-grid"><input class="inline-input" type="number" min="1" step="1" v-model="positions[related.id]" @change="updatePosition(related)" @keyup="updatePosition(related)"/></div>
+                        </div>
+
+                        <footer>
+                            <a class="icon-edit icon-only-icon has-text-size-larger" :href="buildViewUrl(related.type, related.id)" target="_blank"></a>
+                        </footer>
+
+                    </article>
+
+                    <footer>
+                        <a class="button is-dark is-small" @click.prevent="relationToggle(related)"
+                            v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
+                    </footer>
+                </div>
+
+                {# empty element: keep for flex layout #}
+                <div class="column"></div>
+            </div>
+
+            {# staged objects to be added #}
+            <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
+            <div class="related-objects-list columns" v-if="addedRelations.length">
+                <div class="related-object column"
+                    v-for="related in addedRelations"
+                    :key="related.id"
+                    v-bind:class="containsId(removedRelated, related.id) ? 'removed' : '' ">
+                    <article class="box has-background-gray-700 has-text-gray-100 has-text-size-smaller"
+                            v-bind:class="related.type">
+
+                        <header>
+                            <h1><: related.attributes.title || related.attributes.name :></h1>
+                            <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                        </header>
+
+                        <div class="thumbnail">
+                            <figure>
+                                <img />
+                            </figure>
+                        </div>
+
+                        <div>
+                            <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                            <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
+                        </div>
+
+                        <footer>
+                            <a @click.prevent="removeAddedRelations(related.id)">{{ __('click to remove') }}</a>
+                        </footer>
+                    </article>
+                </div>
+
+                {# empty element: keep for flex layout #}
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+            </div>
+
+            {# hidden field - relations serialized json #}
+            {{ Form.control(relationName ~ 'removeRelated', {
+                'type': 'hidden',
+                'name': 'relations[' ~ relationName ~ '][removeRelated]',
+                'v-model': 'relationsData'
+            })|raw }}
+            {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+
+            {# Relations serialized json form element #}
+            {{ Form.control(relationName ~ 'addRelated', {
+                'type': 'hidden',
+                'name': 'relations[' ~ relationName ~ '][addRelated]',
+                'v-model': 'newRelationsData'
+            })|raw }}
+            {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+        </div>
+
+
+        <div>
+            <button v-if="$root.panelIsOpen" class="icon-coffee"
+                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+            <button v-else
+                class="icon-hdd"
+                @click.prevent.stop="requestPanel({
+                    relation: {
+                        name: relationName,
+                        alreadyInView: alreadyInView,
+                    },
+                })">{{ __('add objects') }}</button>
+
+            <button @click.prevent.stop="loadRelatedObjects()">{{ __('reload') }}</button>
+        </div>
+
+    </div>
+</children-view>
