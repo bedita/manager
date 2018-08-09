@@ -81,6 +81,9 @@ export const PaginatedContentMixin = {
          * @returns {Array} of formatted objects
          */
         formatObjects(objects) {
+            if (objects === undefined) {
+                return [];
+            }
             const formattedObjects = [];
 
             objects.forEach((obj) => {

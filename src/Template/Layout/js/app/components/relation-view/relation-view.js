@@ -167,6 +167,12 @@ export default {
         removeRelation(related) {
             this.removedRelated.push(related);
             this.prepareRelationsToRemove(this.removedRelated);
+
+            // after relation is set to be removed we check if it was modified(therefore staged to be saved)
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if yes we unstage it
+                this.prepareRelationsToSave();
+            }
         },
 
         /**
@@ -181,6 +187,12 @@ export default {
             let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
             this.removedRelated.splice(index, 1);
             this.prepareRelationsToRemove(this.removedRelated);
+
+            // after restore previously removed relation, we check if it was modified
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if yes we stage it for saving
+                this.prepareRelationsToSave();
+            }
         },
 
         /**
@@ -223,6 +235,29 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            this.prepareRelationsToSave();
+        },
+
+        /**
+         * set modified relation to be saved
+         *
+         * @param {Object} related
+         *
+         * @returns {void}
+         */
+        modifyRelation(related) {
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if object has been already modified we replace it within the modifiedRelations array
+                this.modifiedRelations = this.modifiedRelations.map((object) => {
+                    if (object.id === related.id) {
+                        return related;
+                    }
+                    return object;
+                });
+            } else {
+                // otherwise we add it to it
+                this.modifiedRelations.push(related);
+            }
             this.prepareRelationsToSave();
         },
 
@@ -286,36 +321,15 @@ export default {
         },
 
         /**
-         * set modified relation to be saved
-         *
-         * @param {Object} related
-         *
-         * @returns {void}
-         */
-        modifyRelation(related) {
-            if (this.containsId(this.modifiedRelations, related.id)) {
-                // if object has been already modified we replace it within the modifiedRelations array
-                this.modifiedRelations = this.modifiedRelations.map((object) => {
-                    if (object.id === related.id) {
-                        return related;
-                    }
-                    return object;
-                });
-            } else {
-                // otherwise we add it to it
-                this.modifiedRelations.push(related);
-            }
-            this.prepareRelationsToSave();
-        },
-
-        /**
          * set relations to be saved from both newly added and modified
          *
          * @returns {void}
          */
         prepareRelationsToSave() {
             const relations = this.addedRelations.concat(this.modifiedRelations);
-            this.addedRelationsData = JSON.stringify(this.formatObjects(relations));
+            let difference = relations.filter(rel => !this.containsId(this.removedRelated, rel.id));
+
+            this.addedRelationsData = JSON.stringify(this.formatObjects(difference));
             this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
