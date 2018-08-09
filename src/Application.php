@@ -12,6 +12,7 @@
  */
 namespace App;
 
+use BEdita\WebTools\Shell\CacheShell;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
@@ -26,6 +27,18 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  */
 class Application extends BaseApplication
 {
+
+    /**
+     * {@inheritDoc}
+     *
+     * Replace CakePHP `cache` command with \BEdita\WebTools\Shell\CacheShell
+     */
+    public function console($commands)
+    {
+        return $commands->addMany($commands->autoDiscover())
+            ->add('cache', CacheShell::class);
+    }
+
     /**
      * Setup the middleware queue your application will use.
      *
