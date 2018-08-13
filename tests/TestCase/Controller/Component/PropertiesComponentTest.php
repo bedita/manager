@@ -12,7 +12,6 @@
  */
 namespace App\Test\TestCase\Controller\Component;
 
-use App\ApiClientProvider;
 use App\Controller\Component\PropertiesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
