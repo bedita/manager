@@ -22,14 +22,14 @@
                     </div>
                 </div>
 
-                <form ref="paramsForm" v-if="relation.schema" class="params-list">
+                <form ref="paramsForm" v-if="relation.schema" class="params-list" @change="checkParams()" @keyup="checkParams()">
                     <div v-for="(param, key) in relation.schema">
                         <label :title="key"><: param.description :>
 
                             {# Boolean -> switch button true/false  #}
                             <div v-if="param.type == 'boolean'">
                                 <label class="switch">
-                                    <input type="checkbox" v-model="editingParams[key]">
+                                    <input type="checkbox" v-model="editingParams[key] ">
                                     <span class="slider round"></span>
                                 <label>
                             </div>
@@ -37,7 +37,7 @@
 
                             <div v-if="param.type == 'string'">
                                 {# String, format: date-time -> datepicker #}
-                                <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
+                                <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]" @change="checkParams()"></input>
 
                                 {# String Enum -> select/option #}
                                 <div v-else-if="param.enum !== undefined">
@@ -46,18 +46,18 @@
                                     </select>
                                 </div>
                                 {# String -> input text #}
-                                <input v-else type="text" v-model="editingParams[key]">
+                                <input v-else type="text" v-model="editingParams[key]" @change="checkParams()">
                             </div>
 
                             {# Number -> input number #}
-                            <div v-if="param.type == 'number'">
+                            <div v-if="param.type == 'number'" @change="checkParams()">
                                 <label>
                                     <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
                                 <label>
                             </div>
 
                             {# Integer -> input integer #}
-                            <div v-if="param.type == 'integer'">
+                            <div v-if="param.type == 'integer'" @change="checkParams()">
                                 <label>
                                     <input type="number" :name="key" v-model.number="editingParams[key]">
                                 <label>
@@ -69,7 +69,7 @@
 
                 <footer>
                     <p>
-                        <button class="has-background-info has-text-white"
+                        <button v-show="isModified" class="has-background-info has-text-white"
                             @click.prevent="saveParams()">{{ __('Save ') }}</button>
                     </p>
                 </footer>
