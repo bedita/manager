@@ -37,7 +37,7 @@
 
                             <div v-if="param.type == 'string'">
                                 {# String, format: date-time -> datepicker #}
-                                <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]" @change="checkParams()"></input>
+                                <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
 
                                 {# String Enum -> select/option #}
                                 <div v-else-if="param.enum !== undefined">
@@ -46,18 +46,18 @@
                                     </select>
                                 </div>
                                 {# String -> input text #}
-                                <input v-else type="text" v-model="editingParams[key]" @change="checkParams()">
+                                <input v-else type="text" v-model="editingParams[key]">
                             </div>
 
                             {# Number -> input number #}
-                            <div v-if="param.type == 'number'" @change="checkParams()">
+                            <div v-if="param.type == 'number'">
                                 <label>
                                     <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
                                 <label>
                             </div>
 
                             {# Integer -> input integer #}
-                            <div v-if="param.type == 'integer'" @change="checkParams()">
+                            <div v-if="param.type == 'integer'">
                                 <label>
                                     <input type="number" :name="key" v-model.number="editingParams[key]">
                                 <label>
