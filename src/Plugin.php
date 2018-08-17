@@ -63,7 +63,7 @@ class Plugin extends CakePlugin
      */
     public static function loadedAppPlugins()
     {
-        $sysPlugins = ['Bake', 'DebugKit', 'Migrations', 'WyriHaximus/TwigView'];
+        $sysPlugins = ['Bake', 'DebugKit', 'BEdita/WebTools', 'Migrations', 'WyriHaximus/TwigView'];
 
         return array_values(array_diff((array)static::loaded(), $sysPlugins));
     }

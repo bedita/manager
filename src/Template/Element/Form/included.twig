@@ -30,18 +30,18 @@
                 {% if object.type == 'images' %}
                     {# TODO process below #}
                     {% set thumb = Thumb.url(object.id, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
-                    {% if thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
+                    {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
                         <p>{{ __('The thumbnail is not available') }}</p>
                         <p>
                             <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
                                 {{ __('View original') }}
                             </a>
                         </p>
-                    {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_READY') %}
+                    {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
                         <p>{{ __('Thumbnail is not ready') }}</p>
-                    {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
+                    {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
                         <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
-                    {% elseif thumb == constant('App\\View\\Helper\\ThumbHelper::NO_URL') %}
+                    {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
                         <p>
                             <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
                                 {{ __('View original') }}

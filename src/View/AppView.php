@@ -12,10 +12,9 @@
  */
 namespace App\View;
 
-use App\View\Twig\BeditaTwigExtension;
+use BEdita\WebTools\View\TwigView;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
-use WyriHaximus\TwigView\View\TwigView;
 
 /**
  * Application View default class
@@ -46,11 +45,8 @@ class AppView extends TwigView
         $this->loadHelper('Schema');
         $this->loadHelper('Text');
         $this->loadHelper('Time');
-        $this->loadHelper('Thumb');
+        $this->loadHelper('BEdita/WebTools.Thumb');
         $this->loadHelper('Url');
-
-        $this->getTwig()
-            ->addExtension(new BeditaTwigExtension());
     }
 
     /**

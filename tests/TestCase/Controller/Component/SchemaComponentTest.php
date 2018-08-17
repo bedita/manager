@@ -1,10 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller\Component;
 
-use App\ApiClientProvider;
 use App\Controller\Component\SchemaComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\TestSuite\TestCase;
 
