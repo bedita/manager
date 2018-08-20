@@ -42,6 +42,24 @@ class ModulesControllerTest extends TestCase
     public $client;
 
     /**
+     * Setup modules controller for test
+     *
+     * @return void
+     */
+    private function setupController() : void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesController($request);
+    }
+
+    /**
      * Setup api client and auth
      *
      * @return void
@@ -56,6 +74,44 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `index` method
+     *
+     * @covers ::index()
+     *
+     * @return void
+     */
+    public function testIndex() : void
+    {
+        $this->setupController();
+        $result = $this->controller->index();
+        static::assertNull($result);
+        static::assertEquals(200, $this->controller->response->statusCode());
+        static::assertEquals('text/html', $this->controller->response->type());
+    }
+
+    /**
+     * Test `view` method
+     *
+     * @covers ::view()
+     *
+     * @return void
+     */
+    public function testView() : void
+    {
+        $this->setupController();
+        $response = $this->client->get('/documents', ['page' => 1, 'page_size' => 5]);
+        foreach ($response['data'] as $object) {
+            // test 200 OK
+            $this->setupController(); // renew controller
+            $this->controller->objectType = $object['type'];
+            $result = $this->controller->view($object['id']);
+            static::assertNull($result);
+            static::assertEquals(200, $this->controller->response->statusCode());
+            static::assertEquals('text/html', $this->controller->response->type());
+        }
+    }
+
+    /**
      * Test `uname` method
      *
      * @covers ::uname()
@@ -64,11 +120,10 @@ class ModulesControllerTest extends TestCase
      */
     public function testUname() : void
     {
-        $this->setupApi();
+        $this->setupController();
         $response = $this->client->get('/objects', ['page' => 1, 'page_size' => 5]);
         foreach ($response['data'] as $object) {
-            $request = new ServerRequest(['environment' => ['REQUEST_METHOD' => 'GET']]);
-            $this->controller = new ModulesController();
+            $this->setupController(); // renew controller
             // by id
             $result = $this->controller->uname($object['id']);
             $header = $result->header();
