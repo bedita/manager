@@ -151,7 +151,8 @@ class ModulesController extends AppController
     }
 
     /**
-     * View single resource by id.
+     * View single resource by id, doing a proper redirect (302) to resource module view by type.
+     * If no resource found by ID, redirect to referer.
      *
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
@@ -167,9 +168,9 @@ class ModulesController extends AppController
                 return $this->redirect($this->referer());
             }
         }
-        $id = $response['data']['id'];
-        $object_type = $response['data']['type'];
         $_name = 'modules:view';
+        $object_type = $response['data']['type'];
+        $id = $response['data']['id'];
 
         return $this->redirect(compact('_name', 'object_type', 'id'));
     }
