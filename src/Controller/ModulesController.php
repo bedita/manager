@@ -151,6 +151,30 @@ class ModulesController extends AppController
     }
 
     /**
+     * View single resource by id.
+     *
+     * @param string|int $id Resource ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function uname($id) : ?Response
+    {
+        try {
+            $response = $this->apiClient->get(sprintf('/objects/%s', $id));
+        } catch (BEditaClientException $e) {
+            if ($e->getCode() === 404) {
+                $this->Flash->error(__(sprintf('Resource "%s" not found', $id)));
+
+                return $this->redirect($this->referer());
+            }
+        }
+        $id = $response['data']['id'];
+        $object_type = $response['data']['type'];
+        $_name = 'modules:view';
+
+        return $this->redirect(compact('_name', 'object_type', 'id'));
+    }
+
+    /**
      * Display new resource form.
      *
      * @return \Cake\Http\Response|null
