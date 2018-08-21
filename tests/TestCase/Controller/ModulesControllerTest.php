@@ -199,4 +199,45 @@ class ModulesControllerTest extends TestCase
         static::assertEquals(302, $result->statusCode()); // redir to referer
         static::assertEquals('/', $header['Location']);
     }
+
+    /**
+     * Test `create` method
+     *
+     * @covers ::create()
+     *
+     * @return void
+     */
+    public function testCreate() : void
+    {
+        $objectType = 'documents';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $result = $this->controller->create();
+        foreach (['object', 'schema', 'properties'] as $var) {
+            static::assertNotEmpty($this->controller->viewVars[$var]);
+        }
+    }
+
+    /**
+     * Test `create` method
+     *
+     * @covers ::create()
+     *
+     * @return void
+     */
+    public function testCreate302() : void
+    {
+        $this->setupController();
+        $result = $this->controller->create();
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
 }
