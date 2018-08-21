@@ -60,10 +60,10 @@ class ModulesControllerTest extends TestCase
     /**
      * Setup modules controller for test
      *
-     * @param array $config The config for request
+     * @param array|null $config The config for request
      * @return void
      */
-    private function setupController(array $config) : void
+    private function setupController(array $config = []) : void
     {
         $this->setupApi();
         if (empty($config)) {
