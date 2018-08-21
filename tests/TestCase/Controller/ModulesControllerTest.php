@@ -21,6 +21,22 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
+ * Sample controller wrapper, to add useful methods for test
+ */
+class ModulesControllerSample extends ModulesController
+{
+    /**
+     * Getter for objectType protected var
+     *
+     * @return string
+     */
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
+}
+
+/**
  * {@see \App\Controller\ModulesController} Test Case
  *
  * @coversDefaultClass \App\Controller\ModulesController
@@ -30,7 +46,7 @@ class ModulesControllerTest extends TestCase
     /**
      * Test Modules controller
      *
-     * @var App\Controller\ModulesController
+     * @var App\Test\TestCase\Controller\ModulesControllerSample
      */
     public $controller;
 
@@ -44,19 +60,22 @@ class ModulesControllerTest extends TestCase
     /**
      * Setup modules controller for test
      *
+     * @param array $config The config for request
      * @return void
      */
-    private function setupController() : void
+    private function setupController(array $config) : void
     {
         $this->setupApi();
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-        ];
+        if (empty($config)) {
+            $config = [
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ];
+        }
         $request = new ServerRequest($config);
-        $this->controller = new ModulesController($request);
+        $this->controller = new ModulesControllerSample($request);
     }
 
     /**
@@ -71,6 +90,31 @@ class ModulesControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Test `initialize` method
+     *
+     * @covers ::initialize()
+     *
+     * @return void
+     */
+    public function testInitialize() : void
+    {
+        $objectType = 'documents';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        static::assertEquals($objectType, $this->controller->getObjectType());
+        static::assertEquals($objectType, $this->controller->Modules->getConfig('currentModuleName'));
+        static::assertEquals($objectType, $this->controller->Schema->getConfig('type'));
     }
 
     /**
