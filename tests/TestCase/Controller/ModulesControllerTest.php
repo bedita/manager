@@ -240,4 +240,31 @@ class ModulesControllerTest extends TestCase
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
     }
+
+    /**
+     * Test `save` method
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSave() : void
+    {
+        $objectType = 'documents';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'title' => 'sample',
+            ],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $result = $this->controller->save();
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
 }
