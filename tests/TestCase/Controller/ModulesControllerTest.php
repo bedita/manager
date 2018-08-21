@@ -267,4 +267,48 @@ class ModulesControllerTest extends TestCase
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
     }
+
+    /**
+     * Test `delete` method
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDelete() : void
+    {
+        $objectType = 'documents';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'title' => 'sample',
+            ],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $result = $this->controller->save();
+        $header = $result->header();
+        $location = $header['Location'];
+        $tmp = explode('/', $location);
+        $id = end($tmp);
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => $id,
+            ],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $result = $this->controller->delete();
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
 }
