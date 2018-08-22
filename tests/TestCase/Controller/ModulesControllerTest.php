@@ -26,13 +26,42 @@ use Cake\TestSuite\TestCase;
 class ModulesControllerSample extends ModulesController
 {
     /**
+     * The api client
+     *
+     * @var \BEdita\SDK\BEditaClient The api client
+     */
+    protected $safeApiClient = null;
+
+    /**
      * Getter for objectType protected var
      *
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->objectType;
+    }
+
+    /**
+     * Set api client for test (using mock)
+     *
+     * @param \BEdita\SDK\BEditaClient $apiClient The api client
+     * @return void
+     */
+    public function setApiClient($apiClient) : void
+    {
+        $this->apiClient = $apiClient;
+    }
+
+    /**
+     * Update media urls, public for testing
+     *
+     * @param array $response The response
+     * @return void
+     */
+    public function updateMediaUrls(array &$response) : void
+    {
+        parent::updateMediaUrls($response);
     }
 }
 
@@ -220,7 +249,7 @@ class ModulesControllerTest extends TestCase
             ],
         ];
         $this->setupController($config);
-        $result = $this->controller->create();
+        $this->controller->create();
         foreach (['object', 'schema', 'properties'] as $var) {
             static::assertNotEmpty($this->controller->viewVars[$var]);
         }
@@ -277,24 +306,7 @@ class ModulesControllerTest extends TestCase
      */
     public function testDelete() : void
     {
-        $objectType = 'documents';
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'title' => 'sample',
-            ],
-            'params' => [
-                'object_type' => $objectType,
-            ],
-        ];
-        $this->setupController($config);
-        $result = $this->controller->save();
-        $header = $result->header();
-        $location = $header['Location'];
-        $tmp = explode('/', $location);
-        $id = end($tmp);
+        $id = $this->createDocument();
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
@@ -303,12 +315,561 @@ class ModulesControllerTest extends TestCase
                 'ids' => $id,
             ],
             'params' => [
-                'object_type' => $objectType,
+                'object_type' => 'documents',
             ],
         ];
         $this->setupController($config);
         $result = $this->controller->delete();
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+     * Test `relatedJson` method
+     *
+     * @covers ::relatedJson()
+     *
+     * @return void
+     */
+    public function testRelatedJson() : void
+    {
+        $objectType = 'documents';
+        $id = $this->createDocument();
+        $relation = 'download';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $expected = [
+            'data' => [
+                [
+                    'id' => 9991,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'another doc',
+                    ],
+                ],
+                [
+                    'id' => 9992,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'again a doc',
+                    ],
+                ],
+            ],
+        ];
+        // Setup mock API client.
+        $this->safeApiClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('getRelated')
+            ->willReturn($expected);
+        ApiClientProvider::setApiClient($apiClient);
+        $this->controller->setApiClient($apiClient);
+        // do controller call
+        $this->controller->relatedJson($id, $relation);
+        foreach (['_serialize', 'data'] as $var) {
+            static::assertNotEmpty($this->controller->viewVars[$var]);
+        }
+        static::assertEquals($expected['data'], $this->controller->viewVars['data']);
+        ApiClientProvider::setApiClient($this->safeApiClient);
+        $this->deleteDocument($id);
+    }
+
+    /**
+     * Test `updateMediaUrls` method
+     *
+     * @covers ::updateMediaUrls()
+     *
+     * @return void
+     */
+    public function testUpdateMediaUrls() : void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->setupController($config);
+        $response = [
+            'data' => [
+                [
+                    'id' => 99911,
+                    'type' => 'images',
+                    'attributes' => [
+                        'provider_thumbnail' => 'https://thumb/99911',
+                    ],
+                ],
+                [
+                    'id' => 99922,
+                    'type' => 'images',
+                    'relationships' => [
+                        'streams' => [
+                            'data' => [
+                                [
+                                    'id' => '99922999999999',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'included' => [
+                '9991' => [
+                    'id' => '9991',
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'first doc',
+                    ],
+                ],
+                '9992' => [
+                    'id' => '9992',
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'second doc',
+                    ],
+                ],
+                '99922999999999' => [
+                    'id' => '99922999999999',
+                    'type' => 'streams',
+                    'meta' => [
+                        'url' => 'https://thumb/99922',
+                    ]
+                ],
+            ],
+        ];
+        $this->controller->updateMediaUrls($response);
+        foreach ($response['data'] as $item) {
+            static::assertNotEmpty($item['meta']['url']);
+            static::assertEquals(sprintf('https://thumb/%s', $item['id']), $item['meta']['url']);
+        }
+    }
+
+    /**
+     * Test `relationData` method
+     *
+     * @covers ::relationData()
+     *
+     * @return void
+     */
+    public function testRelationData() : void
+    {
+        $objectType = 'documents';
+        $id = $this->createDocument();
+        $relation = 'download';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $expected = [
+            'data' => [
+                [
+                    'id' => 9991,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'another doc',
+                    ],
+                ],
+                [
+                    'id' => 9992,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'again a doc',
+                    ],
+                ],
+            ],
+        ];
+        // Setup mock API client.
+        $this->safeApiClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('relationData')
+            ->willReturn($expected);
+        ApiClientProvider::setApiClient($apiClient);
+        $this->controller->setApiClient($apiClient);
+        // do controller call
+        $this->controller->relationData($id, $relation);
+        foreach (['_serialize', 'data'] as $var) {
+            static::assertNotEmpty($this->controller->viewVars[$var]);
+        }
+        static::assertEquals($expected['data'], $this->controller->viewVars['data']);
+        ApiClientProvider::setApiClient($this->safeApiClient);
+        $this->deleteDocument($id);
+    }
+
+    /**
+     * Data provider for `testRelationshipsJson` test case.
+     *
+     * @return array
+     */
+    public function relationshipsJsonProvider() : array
+    {
+        return [
+            'children' => [
+                'children',
+                'objects',
+                [
+                    'data' => [
+                        [
+                            'id' => 991,
+                            'type' => 'documents',
+                            'attributes' => [
+                                'title' => 'a doc',
+                            ],
+                        ],
+                        [
+                            'id' => 992,
+                            'type' => 'documents',
+                            'attributes' => [
+                                'title' => 'another doc',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'parent' => [ // folders
+                'parent',
+                'folders',
+                [
+                    'data' => [
+                        [
+                            'id' => 9991,
+                            'type' => 'folders',
+                            'attributes' => [
+                                'title' => 'a folder',
+                            ],
+                        ],
+                        [
+                            'id' => 9992,
+                            'type' => 'folders',
+                            'attributes' => [
+                                'title' => 'again a folder',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'parents' => [ // folders
+                'parents',
+                'folders',
+                [
+                    'data' => [
+                        [
+                            'id' => 9991,
+                            'type' => 'folders',
+                            'attributes' => [
+                                'title' => 'a folder',
+                            ],
+                        ],
+                        [
+                            'id' => 9992,
+                            'type' => 'folders',
+                            'attributes' => [
+                                'title' => 'again a folder',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'dummy' => [
+                'dummy',
+                'dummies',
+                [
+                    'data' => [
+                        [
+                            'id' => 99991,
+                            'type' => 'dummies',
+                            'attributes' => [
+                                'title' => 'a dummy',
+                            ],
+                        ],
+                        [
+                            'id' => 99992,
+                            'type' => 'dummies',
+                            'attributes' => [
+                                'title' => 'again a dummy',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `relationshipsJson` method
+     *
+     * @param string $relation The relation to test
+     * @param string $objectType The object type / endpoint
+     * @param array $expected The expected data
+     *
+     * @covers ::relationshipsJson()
+     * @dataProvider relationshipsJsonProvider()
+     * @return void
+     */
+    public function testRelationshipsJson(string $relation, string $objectType, array $expected) : void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        // Setup mock API client.
+        $this->safeApiClient = ApiClientProvider::getApiClient();
+        $id = '123456789';
+        $query = [];
+        $headers = null;
+        $map = [
+            [sprintf('/%s', $objectType), $query, $headers, $expected],
+        ];
+        if ($relation === 'dummy') {
+            $map[] = [
+                sprintf('/%s/%s/%s', $objectType, $id, $relation),
+                ['page_size' => 1],
+                $headers,
+                [
+                    'links' => [
+                        'available' => sprintf('/%s', $objectType)
+                    ]
+                ],
+            ];
+        }
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->will($this->returnValueMap($map));
+        ApiClientProvider::setApiClient($apiClient);
+        $this->controller->setApiClient($apiClient);
+        // do controller call
+        $this->controller->relationshipsJson($id, $relation);
+        foreach (['_serialize', 'data'] as $var) {
+            static::assertNotEmpty($this->controller->viewVars[$var]);
+        }
+        static::assertEquals($expected['data'], $this->controller->viewVars['data']);
+        ApiClientProvider::setApiClient($this->safeApiClient);
+    }
+
+    /**
+     * Data provider for `testUpload` test case.
+     *
+     * @return array
+     */
+    public function uploadProvider() : array
+    {
+        $redir = [
+            'unexpected-error' => '/documents/create',
+            'validation-error' => '/documents/view/999',
+            'ok' => '/documents/view/999',
+        ];
+
+        return [
+            'file.name empty' => [
+                [], // params
+                $redir['validation-error'], // redir
+                new \RuntimeException('Invalid form data: file.name'), // exception
+            ],
+            'file.name not a string' => [
+                [
+                    'file' => ['name' => 12345],
+                ],
+                $redir['validation-error'],
+                new \RuntimeException('Invalid form data: file.name'),
+            ],
+            'file.tmp_name (filepath) empty' => [
+                [
+                    'file' => ['name' => 'dummy.txt'],
+                ],
+                $redir['validation-error'],
+                new \RuntimeException('Invalid form data: file.tmp_name'),
+            ],
+            'file.tmp_name (filepath) not a string' => [
+                [
+                    'file' => [
+                        'name' => 'dummy.txt',
+                        'tmp_name' => 12345,
+                    ],
+                ],
+                $redir['validation-error'],
+                new \RuntimeException('Invalid form data: file.tmp_name'),
+            ],
+            'model-type empty' => [
+                [
+                    'file' => [
+                        'name' => 'dummy.txt',
+                        'tmp_name' => '/tmp/dummy.txt',
+                    ],
+                ],
+                $redir['validation-error'],
+                new \RuntimeException('Invalid form data: model-type'),
+            ],
+            'model-type not a string' => [
+                [
+                    'file' => [
+                        'name' => 'dummy.txt',
+                        'tmp_name' => '/tmp/dummy.txt',
+                        'model-type' => 12345,
+                    ],
+                ],
+                $redir['validation-error'],
+                new \RuntimeException('Invalid form data: model-type'),
+            ],
+            'upload ok' => [
+                [
+                    'file' => [
+                        'name' => 'dummy.txt',
+                        'tmp_name' => '/tmp/dummy.txt',
+                    ],
+                    'model-type' => 'dummies',
+                ],
+                $redir['ok'],
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * Test `upload` method
+     *
+     * @param array $params The form params
+     * @param string $redir The redir url
+     * @param \Exception|null The exception expected on upload test
+     *
+     * @covers ::upload()
+     * @dataProvider uploadProvider()
+     * @return void
+     */
+    public function testUpload(array $params, string $redir, $exception) : void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => $params,
+            'params' => ['object_type' => 'documents'],
+        ];
+        $this->setupController($config);
+        // Setup mock API client.
+        $this->safeApiClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('upload')
+            ->willReturn(['data' => ['id' => 999]]);
+        $apiClient->method('createMediaFromStream')
+            ->willReturn(['data' => ['id' => 999]]);
+        ApiClientProvider::setApiClient($apiClient);
+        $this->controller->setApiClient($apiClient);
+        try {
+            // do controller call
+            $result = $this->controller->upload();
+            $header = $result->header();
+            static::assertEquals(302, $result->statusCode());
+            static::assertEquals('text/html', $result->type());
+            static::assertEquals($redir, $header['Location']);
+            ApiClientProvider::setApiClient($this->safeApiClient);
+        } catch (\Exception $e) {
+            ApiClientProvider::setApiClient($this->safeApiClient);
+            $this->controller->setApiClient($this->safeApiClient);
+            if ($exception instanceof \Exception) {
+                static::assertEquals($exception->getMessage(), $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Test `changeStatus` method
+     *
+     * @covers ::changeStatus()
+     *
+     * @return void
+     */
+    public function testChangeStatus() : void
+    {
+        $this->setupController();
+        $id = $this->createDocument();
+        $expectedStatus = 'off';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => $id,
+                'status' => $expectedStatus,
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->setupController($config);
+        $result = $this->controller->save();
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+        $response = $this->client->get(sprintf('/documents/%s', $id));
+        $status = $response['data']['attributes']['status'];
+        static::assertEquals($status, $expectedStatus);
+        $this->deleteDocument($id);
+    }
+
+    /**
+     * Create a new document and return ID
+     *
+     * @return string The new document ID
+     */
+    private function createDocument() : string
+    {
+        $objectType = 'documents';
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->setupController($config);
+        $response = $this->client->save('documents', [
+            'title' => 'sample DOC',
+            'status' => 'draft',
+        ]);
+
+        return $response['data']['id'];
+    }
+
+    /**
+     * Delete the document by ID
+     *
+     * @param string|int $id The document ID
+     * @return void
+     */
+    private function deleteDocument($id) : void
+    {
+        $this->setupController();
+        $this->client->delete(sprintf('/documents/%s', $id));
+        $this->client->delete(sprintf('/trash/%s', $id));
     }
 }
