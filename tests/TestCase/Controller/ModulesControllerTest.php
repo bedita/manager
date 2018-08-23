@@ -156,7 +156,6 @@ class ModulesControllerTest extends TestCase
     public function testIndex() : void
     {
         // Setup mock API client.
-        $this->safeApiClient = ApiClientProvider::getApiClient();
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
