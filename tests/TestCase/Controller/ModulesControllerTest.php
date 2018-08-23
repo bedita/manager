@@ -88,41 +88,6 @@ class ModulesControllerTest extends TestCase
     public $client;
 
     /**
-     * Setup modules controller for test
-     *
-     * @param array|null $config The config for request
-     * @return void
-     */
-    private function setupController(array $config = []) : void
-    {
-        $this->setupApi();
-        if (empty($config)) {
-            $config = [
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
-                ],
-                'get' => [],
-            ];
-        }
-        $request = new ServerRequest($config);
-        $this->controller = new ModulesControllerSample($request);
-    }
-
-    /**
-     * Setup api client and auth
-     *
-     * @return void
-     */
-    private function setupApi() : void
-    {
-        $this->client = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $this->client->authenticate($adminUser, $adminPassword);
-        $this->client->setupTokens($response['meta']);
-    }
-
-    /**
      * Test `initialize` method
      *
      * @covers ::initialize()
@@ -131,20 +96,20 @@ class ModulesControllerTest extends TestCase
      */
     public function testInitialize() : void
     {
-        $objectType = 'documents';
-        $config = [
+        // Setup controller for test
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
             'get' => [],
             'params' => [
-                'object_type' => $objectType,
+                'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
-        static::assertEquals($objectType, $this->controller->getObjectType());
-        static::assertEquals($objectType, $this->controller->Modules->getConfig('currentModuleName'));
-        static::assertEquals($objectType, $this->controller->Schema->getConfig('type'));
+        $this->initController([], $request); // it already calls initialize, internally
+        static::assertEquals('documents', $this->controller->getObjectType());
+        static::assertEquals('documents', $this->controller->Modules->getConfig('currentModuleName'));
+        static::assertEquals('documents', $this->controller->Schema->getConfig('type'));
     }
 
     /**
@@ -156,42 +121,29 @@ class ModulesControllerTest extends TestCase
      */
     public function testIndex() : void
     {
-        // Setup mock API client.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('getObjects')
-            ->willReturn([
-                'data' => [
-                    [
-                        'id' => 1,
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'a sample doc',
-                        ],
-                    ],
-                    [
-                        'id' => 2,
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'another doc',
-                        ],
+        // Setup controller for test
+        $method = 'getObjects';
+        $response = [
+            'data' => [
+                [
+                    'id' => 1,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'a sample doc',
                     ],
                 ],
-                'meta' => [],
-                'links' => [],
-            ]);
-        ApiClientProvider::setApiClient($apiClient);
-        // create controller with mock api client
-        $this->controller = new ModulesControllerSample(
-            new ServerRequest([
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
+                [
+                    'id' => 2,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'another doc',
+                    ],
                 ],
-                'get' => [],
-            ])
-        );
-        $this->controller->setApiClient($apiClient);
+            ],
+            'meta' => [],
+            'links' => [],
+        ];
+        $this->initController(compact('method', 'response'));
         // do controller call
         $result = $this->controller->index();
         static::assertNull($result);
@@ -208,33 +160,19 @@ class ModulesControllerTest extends TestCase
      */
     public function testView() : void
     {
-        // Setup mock API client.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('getObject')
-            ->willReturn([
-                'data' => [
-                    'id' => 1,
-                    'type' => 'documents',
-                    'attributes' => [
-                        'title' => 'a sample doc',
-                    ],
-                    'relationships' => [],
+        // Setup controller for test
+        $method = 'getObject';
+        $response = [
+            'data' => [
+                'id' => 1,
+                'type' => 'documents',
+                'attributes' => [
+                    'title' => 'a sample doc',
                 ],
-            ]);
-        ApiClientProvider::setApiClient($apiClient);
-        // create controller with mock api client
-        $this->controller = new ModulesControllerSample(
-            new ServerRequest([
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
-                ],
-                'get' => [],
-            ])
-        );
-        $this->controller->setApiClient($apiClient);
-        $this->controller->objectType = 'documents';
+                'relationships' => [],
+            ],
+        ];
+        $this->initController(compact('method', 'response'));
         // do controller call
         $result = $this->controller->view(1);
         static::assertNull($result);
@@ -251,29 +189,15 @@ class ModulesControllerTest extends TestCase
      */
     public function testUname() : void
     {
-        // Setup mock API client.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->willReturn([
-                'data' => [
-                    'id' => 1,
-                    'type' => 'documents',
-                ],
-            ]);
-        ApiClientProvider::setApiClient($apiClient);
-        // create controller with mock api client
-        $this->controller = new ModulesControllerSample(
-            new ServerRequest([
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
-                ],
-                'get' => [],
-            ])
-        );
-        $this->controller->setApiClient($apiClient);
-        $this->controller->objectType = 'documents';
+        // Setup controller for test
+        $method = 'get';
+        $response = [
+            'data' => [
+                'id' => 1,
+                'type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'));
         // do controller call
         $result = $this->controller->uname(1);
         $header = $result->header();
@@ -291,27 +215,10 @@ class ModulesControllerTest extends TestCase
      */
     public function testUname404() : void
     {
-        // Setup mock API client.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->will($this->throwException(
-                new BEditaClientException('Not Found', 404)
-            )
-        );
-        ApiClientProvider::setApiClient($apiClient);
-        // create controller with mock api client
-        $this->controller = new ModulesControllerSample(
-            new ServerRequest([
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
-                ],
-                'get' => [],
-            ])
-        );
-        $this->controller->setApiClient($apiClient);
-        $this->controller->objectType = 'documents';
+        // Setup controller for test
+        $method = 'get';
+        $exception = new BEditaClientException('Not Found', 404);
+        $this->initController(compact('method', 'exception'));
         // do controller call
         $result = $this->controller->uname('just-a-wrong-uname');
         $header = $result->header();
@@ -328,17 +235,18 @@ class ModulesControllerTest extends TestCase
      */
     public function testCreate() : void
     {
-        $objectType = 'documents';
-        $config = [
+        // Setup controller for test
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
             'get' => [],
             'params' => [
-                'object_type' => $objectType,
+                'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
+        $this->initController([], $request);
+        // do controller call
         $this->controller->create();
         foreach (['object', 'schema', 'properties'] as $var) {
             static::assertNotEmpty($this->controller->viewVars[$var]);
@@ -354,7 +262,9 @@ class ModulesControllerTest extends TestCase
      */
     public function testCreate302() : void
     {
-        $this->setupController();
+        // Setup controller for test
+        $this->initController([]);
+        // do controller call
         $result = $this->controller->create();
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
@@ -369,8 +279,15 @@ class ModulesControllerTest extends TestCase
      */
     public function testSave() : void
     {
-        $objectType = 'documents';
-        $config = [
+        // Setup controller for test
+        $method = 'save';
+        $response = [
+            'data' => [
+                'id' => 1,
+                'type' => 'documents',
+            ],
+        ];
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
@@ -378,10 +295,11 @@ class ModulesControllerTest extends TestCase
                 'title' => 'sample',
             ],
             'params' => [
-                'object_type' => $objectType,
+                'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
         $result = $this->controller->save();
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
@@ -396,19 +314,22 @@ class ModulesControllerTest extends TestCase
      */
     public function testDelete() : void
     {
-        $id = $this->createDocument();
-        $config = [
+        // Setup controller for test
+        $method = 'deleteObject';
+        $response = [];
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'ids' => $id,
+                'ids' => 1,
             ],
             'params' => [
                 'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
         $result = $this->controller->delete();
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
@@ -423,20 +344,9 @@ class ModulesControllerTest extends TestCase
      */
     public function testRelatedJson() : void
     {
-        $objectType = 'documents';
-        $id = $this->createDocument();
-        $relation = 'download';
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => $objectType,
-            ],
-        ];
-        $this->setupController($config);
-        $expected = [
+        // Setup controller for test
+        $method = 'getRelated';
+        $response = [
             'data' => [
                 [
                     'id' => 9991,
@@ -454,23 +364,22 @@ class ModulesControllerTest extends TestCase
                 ],
             ],
         ];
-        // Setup mock API client.
-        $this->safeApiClient = ApiClientProvider::getApiClient();
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('getRelated')
-            ->willReturn($expected);
-        ApiClientProvider::setApiClient($apiClient);
-        $this->controller->setApiClient($apiClient);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
         // do controller call
-        $this->controller->relatedJson($id, $relation);
+        $this->controller->relatedJson(1, 'something');
         foreach (['_serialize', 'data'] as $var) {
             static::assertNotEmpty($this->controller->viewVars[$var]);
         }
-        static::assertEquals($expected['data'], $this->controller->viewVars['data']);
-        ApiClientProvider::setApiClient($this->safeApiClient);
-        $this->deleteDocument($id);
+        static::assertEquals($response['data'], $this->controller->viewVars['data']);
     }
 
     /**
@@ -482,7 +391,8 @@ class ModulesControllerTest extends TestCase
      */
     public function testUpdateMediaUrls() : void
     {
-        $config = [
+        // Setup controller for test
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
@@ -491,7 +401,8 @@ class ModulesControllerTest extends TestCase
                 'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
+        $this->initController([], $request);
+        // do controller call
         $response = [
             'data' => [
                 [
@@ -555,20 +466,9 @@ class ModulesControllerTest extends TestCase
      */
     public function testRelationData() : void
     {
-        $objectType = 'documents';
-        $id = $this->createDocument();
-        $relation = 'download';
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => $objectType,
-            ],
-        ];
-        $this->setupController($config);
-        $expected = [
+        // Setup controller for test
+        $method = 'relationData';
+        $response = [
             'data' => [
                 [
                     'id' => 9991,
@@ -586,23 +486,22 @@ class ModulesControllerTest extends TestCase
                 ],
             ],
         ];
-        // Setup mock API client.
-        $this->safeApiClient = ApiClientProvider::getApiClient();
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('relationData')
-            ->willReturn($expected);
-        ApiClientProvider::setApiClient($apiClient);
-        $this->controller->setApiClient($apiClient);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
         // do controller call
-        $this->controller->relationData($id, $relation);
+        $this->controller->relationData(1, 'something');
         foreach (['_serialize', 'data'] as $var) {
             static::assertNotEmpty($this->controller->viewVars[$var]);
         }
-        static::assertEquals($expected['data'], $this->controller->viewVars['data']);
-        ApiClientProvider::setApiClient($this->safeApiClient);
-        $this->deleteDocument($id);
+        static::assertEquals($response['data'], $this->controller->viewVars['data']);
     }
 
     /**
@@ -717,18 +616,26 @@ class ModulesControllerTest extends TestCase
      */
     public function testRelationshipsJson(string $relation, string $objectType, array $expected) : void
     {
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => $objectType,
+        // Setup controller for test
+        $method = 'get';
+        $expected = [
+            'data' => [
+                [
+                    'id' => 9991,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'another doc',
+                    ],
+                ],
+                [
+                    'id' => 9992,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'again a doc',
+                    ],
+                ],
             ],
         ];
-        $this->setupController($config);
-        // Setup mock API client.
-        $this->safeApiClient = ApiClientProvider::getApiClient();
         $id = '123456789';
         $query = [];
         $headers = null;
@@ -747,20 +654,22 @@ class ModulesControllerTest extends TestCase
                 ],
             ];
         }
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->will($this->returnValueMap($map));
-        ApiClientProvider::setApiClient($apiClient);
-        $this->controller->setApiClient($apiClient);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => $objectType,
+            ],
+        ];
+        $this->initController(compact('method', 'map'), $request);
         // do controller call
         $this->controller->relationshipsJson($id, $relation);
         foreach (['_serialize', 'data'] as $var) {
             static::assertNotEmpty($this->controller->viewVars[$var]);
         }
         static::assertEquals($expected['data'], $this->controller->viewVars['data']);
-        ApiClientProvider::setApiClient($this->safeApiClient);
     }
 
     /**
@@ -854,36 +763,25 @@ class ModulesControllerTest extends TestCase
      */
     public function testUpload(array $params, string $redir, $exception) : void
     {
-        $config = [
+        // Setup controller for test
+        $methods = ['upload', 'createMediaFromStream'];
+        $response = ['data' => ['id' => 999]];
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => $params,
             'params' => ['object_type' => 'documents'],
         ];
-        $this->setupController($config);
-        // Setup mock API client.
-        $this->safeApiClient = ApiClientProvider::getApiClient();
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('upload')
-            ->willReturn(['data' => ['id' => 999]]);
-        $apiClient->method('createMediaFromStream')
-            ->willReturn(['data' => ['id' => 999]]);
-        ApiClientProvider::setApiClient($apiClient);
-        $this->controller->setApiClient($apiClient);
+        $this->initController(compact('methods', 'response'), $request);
+        // do controller call
         try {
-            // do controller call
             $result = $this->controller->upload();
             $header = $result->header();
             static::assertEquals(302, $result->statusCode());
             static::assertEquals('text/html', $result->type());
             static::assertEquals($redir, $header['Location']);
-            ApiClientProvider::setApiClient($this->safeApiClient);
         } catch (\Exception $e) {
-            ApiClientProvider::setApiClient($this->safeApiClient);
-            $this->controller->setApiClient($this->safeApiClient);
             if ($exception instanceof \Exception) {
                 static::assertEquals($exception->getMessage(), $e->getMessage());
             }
@@ -899,67 +797,84 @@ class ModulesControllerTest extends TestCase
      */
     public function testChangeStatus() : void
     {
-        $this->setupController();
-        $id = $this->createDocument();
-        $expectedStatus = 'off';
-        $config = [
+        // Setup controller for test
+        $method = 'save';
+        $response = [
+            'data' => [
+                'id' => 1,
+                'type' => 'documents',
+                'attributes' => [
+                    'title' => 'test',
+                    'status' => 'off',
+                ],
+            ]
+        ];
+        $request = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'id' => $id,
-                'status' => $expectedStatus,
+                'id' => 1,
+                'status' => 'off',
             ],
             'params' => [
                 'object_type' => 'documents',
             ],
         ];
-        $this->setupController($config);
-        $result = $this->controller->save();
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
+        $result = $this->controller->changeStatus();
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
-        $response = $this->client->get(sprintf('/documents/%s', $id));
-        $status = $response['data']['attributes']['status'];
-        static::assertEquals($status, $expectedStatus);
-        $this->deleteDocument($id);
     }
 
     /**
-     * Create a new document and return ID
+     * Setup api client mock, create the controller for test
      *
-     * @return string The new document ID
-     */
-    private function createDocument() : string
-    {
-        $objectType = 'documents';
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => $objectType,
-            ],
-        ];
-        $this->setupController($config);
-        $response = $this->client->save('documents', [
-            'title' => 'sample DOC',
-            'status' => 'draft',
-        ]);
-
-        return $response['data']['id'];
-    }
-
-    /**
-     * Delete the document by ID
-     *
-     * @param string|int $id The document ID
+     * @param array $mockParams The mock params: 'method', 'response', 'exception'
+     * @param Exception|null $mockException The exception that mock method should raise
+     * @param array|null $request The request parameters
      * @return void
      */
-    private function deleteDocument($id) : void
+    private function initController(array $mockParams, ?array $request = null) : void
     {
-        $this->setupController();
-        $this->client->delete(sprintf('/documents/%s', $id));
-        $this->client->delete(sprintf('/trash/%s', $id));
+        if (!empty($mockParams)) {
+            foreach (['methods', 'method', 'response', 'exception', 'map'] as $param) {
+                ${$param} = (!empty($mockParams[$param])) ? $mockParams[$param] : null;
+            }
+        }
+        $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://api.example.org'])->getMock();
+        if (!empty($methods)) {
+            foreach ($methods as $m) {
+                if (!empty($exception)) {
+                    $apiClient->method($m)->will($this->throwException($exception));
+                } elseif (!empty($response)) {
+                    $apiClient->method($m)->willReturn($response);
+                } elseif (!empty($map)) {
+                    $apiClient->method($m)->will($this->returnValueMap($map));
+                }
+            }
+        }
+        if (!empty($method)) {
+            if (!empty($exception)) {
+                $apiClient->method($method)->will($this->throwException($exception));
+            } elseif (!empty($response)) {
+                $apiClient->method($method)->willReturn($response);
+            } elseif (!empty($map)) {
+                $apiClient->method($method)->will($this->returnValueMap($map));
+            }
+        }
+        ApiClientProvider::setApiClient($apiClient);
+        if (empty($request)) {
+            $request = [
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ];
+        }
+        $this->controller = new ModulesControllerSample(new ServerRequest($request));
+        $this->controller->setApiClient($apiClient);
+        $this->controller->objectType = (!empty($request['params']['object_type'])) ? $request['params']['object_type'] : 'documents';
     }
 }
