@@ -166,9 +166,11 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             if ($e->getCode() === 404) {
                 $this->Flash->error(__(sprintf('Resource "%s" not found', $id)));
-
-                return $this->redirect($this->referer());
+            } else {
+                $this->Flash->error(__(sprintf('Resource "%s" not available. Error: ', $id)) . $e->getMessage());
             }
+
+            return $this->redirect($this->referer());
         }
         $_name = 'modules:view';
         $object_type = $response['data']['type'];

@@ -227,6 +227,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `uname` method, case 500 Internal Error (or just an error different from 404)
+     *
+     * @covers ::uname()
+     *
+     * @return void
+     */
+    public function testUname500() : void
+    {
+        // Setup controller for test
+        $method = 'get';
+        $exception = new BEditaClientException('Internal Error', 500);
+        $this->initController(compact('method', 'exception'));
+        // do controller call
+        $result = $this->controller->uname('just-a-wrong-uname');
+        $header = $result->header();
+        static::assertEquals(302, $result->statusCode()); // redir to referer
+        static::assertEquals('/', $header['Location']);
+    }
+
+    /**
      * Test `create` method
      *
      * @covers ::create()
