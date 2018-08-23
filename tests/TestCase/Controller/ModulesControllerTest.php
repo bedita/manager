@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -233,8 +234,8 @@ class ModulesControllerTest extends TestCase
             ])
         );
         $this->controller->setApiClient($apiClient);
-        // test 200 OK
         $this->controller->objectType = 'documents';
+        // do controller call
         $result = $this->controller->view(1);
         static::assertNull($result);
         static::assertEquals(200, $this->controller->response->statusCode());
@@ -250,23 +251,35 @@ class ModulesControllerTest extends TestCase
      */
     public function testUname() : void
     {
-        $this->setupController();
-        $response = $this->client->get('/objects', ['page' => 1, 'page_size' => 5]);
-        foreach ($response['data'] as $object) {
-            $this->setupController(); // renew controller
-            // by id
-            $result = $this->controller->uname($object['id']);
-            $header = $result->header();
-            static::assertEquals(302, $result->statusCode());
-            static::assertEquals('text/html', $result->type());
-            static::assertEquals(sprintf('/%s/view/%s', $object['type'], $object['id']), $header['Location']);
-            // by uname
-            $result = $this->controller->uname($object['attributes']['uname']);
-            $header = $result->header();
-            static::assertEquals(302, $result->statusCode());
-            static::assertEquals('text/html', $result->type());
-            static::assertEquals(sprintf('/%s/view/%s', $object['type'], $object['id']), $header['Location']);
-        }
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn([
+                'data' => [
+                    'id' => 1,
+                    'type' => 'documents',
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // create controller with mock api client
+        $this->controller = new ModulesControllerSample(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ])
+        );
+        $this->controller->setApiClient($apiClient);
+        $this->controller->objectType = 'documents';
+        // do controller call
+        $result = $this->controller->uname(1);
+        $header = $result->header();
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+        static::assertEquals('/documents/view/1', $header['Location']);
     }
 
     /**
@@ -278,8 +291,28 @@ class ModulesControllerTest extends TestCase
      */
     public function testUname404() : void
     {
-        $request = new ServerRequest(['environment' => ['REQUEST_METHOD' => 'GET']]);
-        $this->controller = new ModulesController();
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->will($this->throwException(
+                new BEditaClientException('Not Found', 404)
+            )
+        );
+        ApiClientProvider::setApiClient($apiClient);
+        // create controller with mock api client
+        $this->controller = new ModulesControllerSample(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ])
+        );
+        $this->controller->setApiClient($apiClient);
+        $this->controller->objectType = 'documents';
+        // do controller call
         $result = $this->controller->uname('just-a-wrong-uname');
         $header = $result->header();
         static::assertEquals(302, $result->statusCode()); // redir to referer
