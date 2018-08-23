@@ -207,17 +207,38 @@ class ModulesControllerTest extends TestCase
      */
     public function testView() : void
     {
-        $this->setupController();
-        $response = $this->client->get('/documents', ['page' => 1, 'page_size' => 5]);
-        foreach ($response['data'] as $object) {
-            // test 200 OK
-            $this->setupController(); // renew controller
-            $this->controller->objectType = $object['type'];
-            $result = $this->controller->view($object['id']);
-            static::assertNull($result);
-            static::assertEquals(200, $this->controller->response->statusCode());
-            static::assertEquals('text/html', $this->controller->response->type());
-        }
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('getObject')
+            ->willReturn([
+                'data' => [
+                    'id' => 1,
+                    'type' => 'documents',
+                    'attributes' => [
+                        'title' => 'a sample doc',
+                    ],
+                    'relationships' => [],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // create controller with mock api client
+        $this->controller = new ModulesControllerSample(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ])
+        );
+        $this->controller->setApiClient($apiClient);
+        // test 200 OK
+        $this->controller->objectType = 'documents';
+        $result = $this->controller->view(1);
+        static::assertNull($result);
+        static::assertEquals(200, $this->controller->response->statusCode());
+        static::assertEquals('text/html', $this->controller->response->type());
     }
 
     /**
