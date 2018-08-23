@@ -155,7 +155,44 @@ class ModulesControllerTest extends TestCase
      */
     public function testIndex() : void
     {
-        $this->setupController();
+        // Setup mock API client.
+        $this->safeApiClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('getObjects')
+            ->willReturn([
+                'data' => [
+                    [
+                        'id' => 1,
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title' => 'a sample doc',
+                        ],
+                    ],
+                    [
+                        'id' => 2,
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title' => 'another doc',
+                        ],
+                    ],
+                ],
+                'meta' => [],
+                'links' => [],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // create controller with mock api client
+        $this->controller = new ModulesControllerSample(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ])
+        );
+        $this->controller->setApiClient($apiClient);
+        // do controller call
         $result = $this->controller->index();
         static::assertNull($result);
         static::assertEquals(200, $this->controller->response->statusCode());
