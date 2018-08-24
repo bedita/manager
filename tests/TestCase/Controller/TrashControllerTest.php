@@ -24,6 +24,17 @@ use Cake\TestSuite\TestCase;
 class TrashControllerSample extends TrashController
 {
     /**
+     * Set api client for test (using mock)
+     *
+     * @param \BEdita\SDK\BEditaClient $apiClient The api client
+     * @return void
+     */
+    public function setApiClient($apiClient) : void
+    {
+        $this->apiClient = $apiClient;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function render($view = null, $layout = null)
@@ -52,7 +63,7 @@ class TrashControllerTest extends TestCase
      *
      * @var App\Test\TestCase\Controller\TrashControllerSample
      */
-    public $Trash;
+    public $controller;
 
     /**
      * Test api client
@@ -60,83 +71,6 @@ class TrashControllerTest extends TestCase
      * @var BEdita\SDK\BEditaClient
      */
     public $client;
-
-    /**
-     * Setup api client and auth
-     *
-     * @return void
-     */
-    private function setupApi() : void
-    {
-        $this->client = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $this->client->authenticate($adminUser, $adminPassword);
-        $this->client->setupTokens($response['meta']);
-    }
-
-    /**
-     * Create an object and "soft" delete it
-     *
-     * @return int The object ID.
-     */
-    private function createTrashObject() : int
-    {
-        $type = 'documents';
-        $body = [
-            'data' => [
-                'type' => $type,
-                'attributes' => [
-                    'title' => 'this is a test object',
-                    'status' => 'on',
-                ],
-            ],
-        ];
-        $response = $this->client->post(sprintf('/%s', $type), json_encode($body));
-        $id = $response['data']['id'];
-        $response = $this->client->delete(sprintf('/%s/%s', $type, $id));
-
-        return $id;
-    }
-
-    /**
-     * Setup controller for test and create an object for test.
-     *
-     * @param bool $auth Set authorized api client on test controller if true
-     * @return int The object ID
-     */
-    public function setupControllerAndData($auth = true, $query = true) : int
-    {
-        // setup and auth
-        $this->setupApi();
-
-        // post a new object and move it to trash (soft delete)
-        $id = $this->createTrashObject();
-
-        // set request and trash controller
-        $serialized = serialize(['filter' => ['type' => 'documents']]);
-        if ($query) {
-            $query = htmlspecialchars($serialized);
-        } else {
-            $query = [];
-        }
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'id' => $id,
-                'query' => $query,
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->Trash = new TrashControllerSample($request);
-        if (!$auth) {
-            $this->client->setupTokens(['jwt' => '']);
-        }
-
-        return $id;
-    }
 
     /**
      * Test `restore` method
@@ -147,17 +81,27 @@ class TrashControllerTest extends TestCase
      */
     public function testRestore() : void
     {
-        $id = $this->setupControllerAndData();
-        $this->Trash->restore();
-
-        $response = $this->client->getObject($id);
-        static::assertEquals(200, $this->client->getStatusCode());
-        static::assertEquals('OK', $this->client->getStatusMessage());
-        static::assertNotEmpty($response);
-        static::assertArrayHasKey('data', $response);
-        static::assertArrayNotHasKey('error', $response);
-        static::assertArrayHasKey('id', $response['data']);
-        static::assertEquals($id, $response['data']['id']);
+        // Setup controller for test
+        $method = 'restoreObject';
+        $response = [
+            'data' => [
+                'id' => 999
+            ],
+        ];
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
+        $result = $this->controller->restore();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
     }
 
     /**
@@ -169,12 +113,23 @@ class TrashControllerTest extends TestCase
      */
     public function testRestoreUnauthorized() : void
     {
-        $id = $this->setupControllerAndData(false);
-        $this->Trash->restore();
-        $expected = new BEditaClientException('Not Found', 404);
-        static::expectException(get_class($expected));
-        static::expectExceptionCode($expected->getCode());
-        $response = $this->client->getObject($id);
+        // Setup controller for test
+        $method = 'restoreObject';
+        $exception = new BEditaClientException('Unauthorized', 401);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'exception'), $request);
+        // do controller call
+        $result = $this->controller->restore();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
     }
 
     /**
@@ -186,22 +141,27 @@ class TrashControllerTest extends TestCase
      */
     public function testDelete() : void
     {
-        $id = $this->setupControllerAndData();
-        $this->Trash->delete();
-
-        try {
-            $this->client->getObject($id);
-        } catch (BEditaClientException $e) {
-            $expected = new BEditaClientException('Not Found', 404);
-            static::assertEquals($expected->getCode(), $e->getCode());
-        }
-
-        try {
-            $this->client->get(sprintf('/trash/%d', $id));
-        } catch (BEditaClientException $e) {
-            $expected = new BEditaClientException('Not Found', 404);
-            static::assertEquals($expected->getCode(), $e->getCode());
-        }
+        // Setup controller for test
+        $method = 'remove';
+        $response = [
+            'data' => [
+                'id' => 999
+            ],
+        ];
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
+        $result = $this->controller->delete();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
     }
 
     /**
@@ -213,14 +173,23 @@ class TrashControllerTest extends TestCase
      */
     public function testDeleteUnauthorized() : void
     {
-        $this->setupControllerAndData(false);
-        $this->Trash->delete();
-        $response = $this->client->get('/trash');
-        static::assertEquals(200, $this->client->getStatusCode());
-        static::assertEquals('OK', $this->client->getStatusMessage());
-        static::assertNotEmpty($response);
-        static::assertArrayHasKey('data', $response);
-        static::assertNotEmpty($response['data']);
+        // Setup controller for test
+        $method = 'remove';
+        $exception = new BEditaClientException('Unauthorized', 401);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'exception'), $request);
+        // do controller call
+        $result = $this->controller->delete();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
     }
 
     /**
@@ -232,14 +201,58 @@ class TrashControllerTest extends TestCase
      */
     public function testEmpty() : void
     {
-        $this->setupControllerAndData(true, false);
-        $this->Trash->empty();
-        $response = $this->client->get('/trash');
-        static::assertEquals(200, $this->client->getStatusCode());
-        static::assertEquals('OK', $this->client->getStatusMessage());
-        static::assertNotEmpty($response);
-        static::assertArrayHasKey('data', $response);
-        static::assertEmpty($response['data']);
+        // Setup controller for test
+        $method = 'getObjects';
+        $response = [
+            'data' => [],
+        ];
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
+        $result = $this->controller->empty();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+     * Test `empty` method, passing query filter
+     *
+     * @covers ::empty()
+     *
+     * @return void
+     */
+    public function testEmptyWithFilter() : void
+    {
+        // Setup controller for test
+        $method = 'getObjects';
+        $response = [
+            'data' => [],
+        ];
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+                'filter' => [
+                    'object_type' => 'documents',
+                ],
+            ],
+        ];
+        $this->initController(compact('method', 'response'), $request);
+        // do controller call
+        $result = $this->controller->empty();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
     }
 
     /**
@@ -251,13 +264,72 @@ class TrashControllerTest extends TestCase
      */
     public function testEmptyUnauthorized() : void
     {
-        $this->setupControllerAndData(false);
-        $this->Trash->empty();
-        $response = $this->client->get('/trash');
-        static::assertEquals(200, $this->client->getStatusCode());
-        static::assertEquals('OK', $this->client->getStatusMessage());
-        static::assertNotEmpty($response);
-        static::assertArrayHasKey('data', $response);
-        static::assertNotEmpty($response['data']);
+        // Setup controller for test
+        $method = 'remove';
+        $exception = new BEditaClientException('Unauthorized', 401);
+        $request = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $this->initController(compact('method', 'exception'), $request);
+        // do controller call
+        $result = $this->controller->empty();
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+     * Setup api client mock, create the controller for test
+     *
+     * @param array $mockParams The mock params: 'method', 'response', 'exception'
+     * @param Exception|null $mockException The exception that mock method should raise
+     * @param array|null $request The request parameters
+     * @return void
+     */
+    private function initController(array $mockParams, ?array $request = null) : void
+    {
+        if (!empty($mockParams)) {
+            foreach (['methods', 'method', 'response', 'exception', 'map'] as $param) {
+                ${$param} = (!empty($mockParams[$param])) ? $mockParams[$param] : null;
+            }
+        }
+        $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://api.example.org'])->getMock();
+        if (!empty($methods)) {
+            foreach ($methods as $m) {
+                if (!empty($exception)) {
+                    $apiClient->method($m)->will($this->throwException($exception));
+                } elseif (!empty($response)) {
+                    $apiClient->method($m)->willReturn($response);
+                } elseif (!empty($map)) {
+                    $apiClient->method($m)->will($this->returnValueMap($map));
+                }
+            }
+        }
+        if (!empty($method)) {
+            if (!empty($exception)) {
+                $apiClient->method($method)->will($this->throwException($exception));
+            } elseif (!empty($response)) {
+                $apiClient->method($method)->willReturn($response);
+            } elseif (!empty($map)) {
+                $apiClient->method($method)->will($this->returnValueMap($map));
+            }
+        }
+        ApiClientProvider::setApiClient($apiClient);
+        if (empty($request)) {
+            $request = [
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'get' => [],
+            ];
+        }
+        $this->controller = new TrashControllerSample(new ServerRequest($request));
+        $this->controller->setApiClient($apiClient);
+        $this->controller->objectType = (!empty($request['params']['object_type'])) ? $request['params']['object_type'] : 'documents';
     }
 }
