@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -266,6 +267,38 @@ class ModulesControllerTest extends TestCase
             ],
         ];
         $this->initController([], $request);
+        // mock Schema->getSchema();
+        $testSchema = [
+            'definitions' => [],
+            '$id' => 'https://example.com/model/schema/documents',
+            '"$schema' => 'http://json-schema.org/draft-06/schema#',
+            'type' => 'object',
+            'properties' => [
+                'title' => [
+                    'oneOf' => [
+                        [
+                            'type' => null,
+                        ],
+                        [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
+                    ],
+                ],
+                '$id' => '/properties/title',
+                'title' => 'Title',
+                'description' => ''
+            ],
+            'required' => [],
+            'revision' => '3954685133',
+        ];
+        $schema = $this->getMockBuilder(SchemaComponent::class)
+            ->setConstructorArgs([$this->controller->components()])
+            ->getMock();
+        $schema->method('getSchema')->willReturn($testSchema);
+        $this->controller->Schema = $this->controller
+            ->components()
+            ->set('Schema', $schema)->get('Schema');
         // do controller call
         $this->controller->create();
         foreach (['object', 'schema', 'properties'] as $var) {
