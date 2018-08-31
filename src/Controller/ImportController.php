@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
+use Exception;
 
 /**
  * Import controller: upload and load using filters
@@ -51,16 +52,19 @@ class ImportController extends AppController
      */
     public function file() : ?Response
     {
-        // prepare import filter
-        $filter = $this->request->getData('filter');
-        if (empty($filter)) {
-            throw new BadRequestException('Import filter not selected', 500);
-        }
-        $importFilter = new $filter($this->apiClient);
-        // read file
-        $filename = $this->request->getData('file.name');
-        $filepath = $this->request->getData('file.tmp_name');
         try {
+            $filter = $this->request->getData('filter');
+            if (empty($filter)) {
+                throw new BadRequestException(__('Import filter not selected'));
+            }
+            $importFilter = new $filter($this->apiClient);
+
+            $filename = $this->request->getData('file.name');
+            $filepath = $this->request->getData('file.tmp_name');
+            if (empty($filename) || empty($filepath)) {
+                throw new BadRequestException(__('Missing import file'));
+            }
+
             $result = $importFilter->import($filename, $filepath);
             $this->set(compact('result'));
         } catch (Exception $e) {
