@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Core\Exception as CakeException;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
@@ -61,7 +62,7 @@ class ImportController extends AppController
             $importFilter = new $filter($this->apiClient);
 
             // see http://php.net/manual/en/features.file-upload.errors.php
-            $fileError = $this->request->getData('file.error', 4);
+            $fileError = (int)$this->request->getData('file.error', 4);
             if ($fileError > 0) {
                 throw new BadRequestException($this->uploadErrorMessage($fileError));
             }
@@ -72,7 +73,8 @@ class ImportController extends AppController
             );
             $this->set(compact('result'));
         } catch (Exception $e) {
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $params = $e instanceof CakeException ? $e->getAttributes() : [];
+            $this->Flash->error($e, compact('params'));
 
             return $this->redirect(['_name' => 'import:index']);
         }
@@ -101,7 +103,7 @@ class ImportController extends AppController
             8 => __('an extension stopped the file upload'),
         ];
 
-        return Hash::get($errors, $code, __('Unkown upload error'));
+        return (string)Hash::get($errors, (string)$code, __('Unkown upload error'));
     }
 
     /**
