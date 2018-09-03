@@ -13,7 +13,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Core\Exception as CakeException;
+use Cake\Core\Exception\Exception as CakeException;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
@@ -72,9 +72,12 @@ class ImportController extends AppController
                 $this->request->getData('file.tmp_name')
             );
             $this->set(compact('result'));
+        } catch (CakeException $e) {
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+
+            return $this->redirect(['_name' => 'import:index']);
         } catch (Exception $e) {
-            $params = $e instanceof CakeException ? $e->getAttributes() : [];
-            $this->Flash->error($e, compact('params'));
+            $this->Flash->error($e, ['params' => ['code' => 500]]);
 
             return $this->redirect(['_name' => 'import:index']);
         }

@@ -17,10 +17,9 @@ use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use Cake\Http\ServerRequest;
-use Cake\Network\Exception\BadRequestException;
-use Cake\Network\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use RuntimeException;
 
 class ImportControllerSample extends ImportController
 {
@@ -57,7 +56,7 @@ class ImportFilterSampleError extends ImportFilter
      */
     public function import($filename, $filepath, ?array $options = []) : ImportResult
     {
-        throw new InternalErrorException('An expected exception');
+        throw new RuntimeException('An expected exception');
     }
 }
 
