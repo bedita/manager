@@ -62,8 +62,8 @@ class ImportController extends AppController
             $importFilter = new $filter($this->apiClient);
 
             // see http://php.net/manual/en/features.file-upload.errors.php
-            $fileError = (int)$this->request->getData('file.error', 4);
-            if ($fileError > 0) {
+            $fileError = (int)$this->request->getData('file.error', UPLOAD_ERR_NO_FILE);
+            if ($fileError > UPLOAD_ERR_OK) {
                 throw new BadRequestException($this->uploadErrorMessage($fileError));
             }
 
@@ -94,13 +94,13 @@ class ImportController extends AppController
     protected function uploadErrorMessage(int $code)
     {
         $errors = [
-            1 => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
-            2 => __('File is too big, form MAX_FILE_SIZE exceeded'),
-            3 => __('File only partially uploaded'),
-            4 => __('Missing import file'),
-            6 => __('Temporary folder missing'),
-            6 => __('Failed to write file to disk'),
-            8 => __('an extension stopped the file upload'),
+            UPLOAD_ERR_INI_SIZE => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
+            UPLOAD_ERR_FORM_SIZE => __('File is too big, form MAX_FILE_SIZE exceeded'),
+            UPLOAD_ERR_PARTIAL => __('File only partially uploaded'),
+            UPLOAD_ERR_NO_FILE => __('Missing import file'),
+            UPLOAD_ERR_NO_TMP_DIR => __('Temporary folder missing'),
+            UPLOAD_ERR_CANT_WRITE => __('Failed to write file to disk'),
+            UPLOAD_ERR_EXTENSION => __('An extension stopped the file upload'),
         ];
 
         return (string)Hash::get($errors, (string)$code, __('Unkown upload error'));
