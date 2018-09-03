@@ -83,6 +83,13 @@ class ImportControllerTest extends TestCase
     protected $filename = 'test.png';
 
     /**
+     * Test file error
+     *
+     * @var string
+     */
+    protected $fileError = 0;
+
+    /**
      * Setup import controller for test
      *
      * @param string $filter The filter class full path.
@@ -98,6 +105,7 @@ class ImportControllerTest extends TestCase
                 'file' => [
                     'name' => $this->filename,
                     'tmp_name' => sprintf('%s/tests/files/%s', getcwd(), $this->filename),
+                    'error' => $this->fileError,
                 ],
                 'filter' => $filter,
             ],
@@ -146,12 +154,13 @@ class ImportControllerTest extends TestCase
      * Test `file` fail method, missing files
      *
      * @covers ::file()
+     * @covers:: uploadErrorMessage()
      *
      * @return void
      */
     public function testFileBadRequestFile() : void
     {
-        $this->filename = null;
+        $this->fileError = 4;
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
 
         $response = $this->Import->file();
