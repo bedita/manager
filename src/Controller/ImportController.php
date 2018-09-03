@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Utility\Hash;
 use Exception;
 
 /**
@@ -59,13 +60,16 @@ class ImportController extends AppController
             }
             $importFilter = new $filter($this->apiClient);
 
-            $filename = $this->request->getData('file.name');
-            $filepath = $this->request->getData('file.tmp_name');
-            if (empty($filename) || empty($filepath)) {
-                throw new BadRequestException(__('Missing import file'));
+            // see http://php.net/manual/en/features.file-upload.errors.php
+            $fileError = $this->request->getData('file.error', 4);
+            if ($fileError > 0) {
+                throw new BadRequestException($this->uploadErrorMessage($fileError));
             }
 
-            $result = $importFilter->import($filename, $filepath);
+            $result = $importFilter->import(
+                $this->request->getData('file.name'),
+                $this->request->getData('file.tmp_name')
+            );
             $this->set(compact('result'));
         } catch (Exception $e) {
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
@@ -76,6 +80,28 @@ class ImportController extends AppController
         $this->render('index');
 
         return null;
+    }
+
+    /**
+     * Return a meaningful upload error message
+     * see http://php.net/manual/en/features.file-upload.errors.php
+     *
+     * @param int $code Upload error code
+     * @return string
+     */
+    protected function uploadErrorMessage(int $code)
+    {
+        $errors = [
+            1 => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
+            2 => __('File is too big, form MAX_FILE_SIZE exceeded'),
+            3 => __('File only partially uploaded'),
+            4 => __('Missing import file'),
+            6 => __('Temporary folder missing'),
+            6 => __('Failed to write file to disk'),
+            8 => __('an extension stopped the file upload'),
+        ];
+
+        return Hash::get($errors, $code, __('Unkown upload error'));
     }
 
     /**
