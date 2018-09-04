@@ -17,8 +17,9 @@ use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use Cake\Http\ServerRequest;
-use Cake\Network\Exception\BadRequestException;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
+use RuntimeException;
 
 class ImportControllerSample extends ImportController
 {
@@ -28,14 +29,6 @@ class ImportControllerSample extends ImportController
     public function render($view = null, $layout = null)
     {
         // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function redirect($url, $status = 302)
-    {
-        return null;
     }
 }
 
@@ -63,7 +56,7 @@ class ImportFilterSampleError extends ImportFilter
      */
     public function import($filename, $filepath, ?array $options = []) : ImportResult
     {
-        throw new \Exception('An expected exception');
+        throw new RuntimeException('An expected exception');
     }
 }
 
@@ -89,6 +82,13 @@ class ImportControllerTest extends TestCase
     protected $filename = 'test.png';
 
     /**
+     * Test file error
+     *
+     * @var string
+     */
+    protected $fileError = 0;
+
+    /**
      * Setup import controller for test
      *
      * @param string $filter The filter class full path.
@@ -104,6 +104,7 @@ class ImportControllerTest extends TestCase
                 'file' => [
                     'name' => $this->filename,
                     'tmp_name' => sprintf('%s/tests/files/%s', getcwd(), $this->filename),
+                    'error' => $this->fileError,
                 ],
                 'filter' => $filter,
             ],
@@ -132,26 +133,44 @@ class ImportControllerTest extends TestCase
     }
 
     /**
-     * Test `file` fail method
+     * Test `file` fail method, missing filter
      *
      * @covers ::file()
      *
      * @return void
      */
-    public function testFileBadRequest() : void
+    public function testFileBadRequestFilter() : void
     {
-        $expected = new BadRequestException('Import filter not selected', 500);
-        $this->expectException(get_class($expected));
-        $this->expectExceptionCode($expected->getCode());
-        $this->expectExceptionMessage($expected->getMessage());
-
         $this->setupController();
         $response = $this->Import->file();
-        static::assertNull($response);
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = $this->Import->request->session()->read('Flash.flash');
+        static::assertEquals('Import filter not selected', Hash::get($flash, '0.message'));
+        static::assertEquals(400, Hash::get($flash, '0.params.code'));
     }
 
     /**
-     * Test `file` fail method
+     * Test `file` fail method, missing files
+     *
+     * @covers ::file()
+     * @covers:: uploadErrorMessage()
+     *
+     * @return void
+     */
+    public function testFileBadRequestFile() : void
+    {
+        $this->fileError = 4;
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+
+        $response = $this->Import->file();
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = $this->Import->request->session()->read('Flash.flash');
+        static::assertEquals('Missing import file', Hash::get($flash, '0.message'));
+        static::assertEquals(400, Hash::get($flash, '0.params.code'));
+    }
+
+    /**
+     * Test `file` fail method, internal error
      *
      * @covers ::file()
      *
@@ -159,12 +178,11 @@ class ImportControllerTest extends TestCase
      */
     public function testFileError() : void
     {
-        $expected = new \Exception('An expected exception');
-        $this->expectException(get_class($expected));
-        $this->expectExceptionCode($expected->getCode());
-        $this->expectExceptionMessage($expected->getMessage());
-
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSampleError');
         $response = $this->Import->file();
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = $this->Import->request->session()->read('Flash.flash');
+        static::assertEquals('An expected exception', Hash::get($flash, '0.message'));
+        static::assertEquals(500, Hash::get($flash, '0.params.code'));
     }
 }
