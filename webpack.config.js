@@ -14,7 +14,7 @@ const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // vue dependencies
-const { VueLoaderPlugin } = require('vue-loader');
+const VueLoaderPlugin = require('vue-loader/lib/loader');
 
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
@@ -58,10 +58,12 @@ let webpackPlugins = [
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
     }),
 
+    // new VueLoaderPlugin({
+    //     path: BUNDLE.jsDir,
+    // }),
+
     extractVendorsCSS,
     extractSass,
-
-    new VueLoaderPlugin(),
 ];
 
 // Development or report bundle Plugin
@@ -166,10 +168,10 @@ module.exports = {
         rules: [
             {
                 test: /\.vue$/,
-                include: [
-                    // path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}`),
+                // include: [
+                //     // path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}`),
 
-                ],
+                // ],
                 use: 'vue-loader'
             },
             // if dev mode don't use babel
