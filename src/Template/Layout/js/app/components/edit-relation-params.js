@@ -1,5 +1,5 @@
 /**
- *
+ * View component used for editing relations param
  *
  */
 
@@ -39,16 +39,20 @@ export default {
 
     data() {
         return {
+            oldParams: {},
             editingParams: {},
+            isModified: false,
         }
     },
 
     watch: {
         relation(value) {
             if (value) {
+                Object.assign(this.oldParams, value.related.meta.relation.params);
                 Object.assign(this.editingParams, value.related.meta.relation.params);
             } else {
                 this.editingParams = {};
+                this.isModified = false;
             }
         },
     },
@@ -66,6 +70,12 @@ export default {
         closeParamsView() {
             this.editingParams = {};
             this.closePanel();
+        },
+
+        checkParams() {
+            this.isModified = !!Object.keys(this.editingParams).filter((index) => {
+                return this.editingParams[index] !== '' && this.editingParams[index] !== this.oldParams[index];
+            }).length;
         },
     },
 }

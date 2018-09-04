@@ -22,14 +22,14 @@
                     </div>
                 </div>
 
-                <form ref="paramsForm" v-if="relation.schema" class="params-list">
+                <form ref="paramsForm" v-if="relation.schema" class="params-list" @change="checkParams()" @keyup="checkParams()">
                     <div v-for="(param, key) in relation.schema">
                         <label :title="key"><: param.description :>
 
                             {# Boolean -> switch button true/false  #}
                             <div v-if="param.type == 'boolean'">
                                 <label class="switch">
-                                    <input type="checkbox" v-model="editingParams[key]">
+                                    <input type="checkbox" v-model="editingParams[key] ">
                                     <span class="slider round"></span>
                                 <label>
                             </div>
@@ -69,7 +69,7 @@
 
                 <footer>
                     <p>
-                        <button class="has-background-info has-text-white"
+                        <button v-show="isModified" class="has-background-info has-text-white"
                             @click.prevent="saveParams()">{{ __('Save ') }}</button>
                     </p>
                 </footer>
