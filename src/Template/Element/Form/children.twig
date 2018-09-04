@@ -56,7 +56,7 @@
 
                         <div class="container-grid">
                             <div class="item-grid">{{ __('position') }}:</div>
-                            <div class="item-grid"><input class="inline-input" disabled type="number" value="related.meta.relation.position" /></div>
+                            <div class="item-grid"><input class="inline-input" disabled type="number" :value="index + 1" /></div>
                             <div class="item-grid"><label>{{ __('move to') }}:</div>
                             <div class="item-grid"><input class="inline-input" type="number" min="1" step="1" v-model="positions[related.id]" @change="updatePosition(related)" @keyup="updatePosition(related)"/></div>
                         </div>
