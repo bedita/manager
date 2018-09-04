@@ -12,6 +12,7 @@ import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/trash/index';
 import TrashView from 'app/pages/trash/view';
 import ImportView from 'app/pages/import/index';
+import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
 
@@ -32,6 +33,7 @@ const _vueInstance = new Vue({
         TrashView,
         ImportView,
         RelationsAdd,
+        FilterBoxView,
         EditRelationParams,
     },
 
@@ -46,6 +48,15 @@ const _vueInstance = new Vue({
             panelIsOpen: false,
             addRelation: {},
             editingRelationParams: null,
+
+            urlFilterQuery: {
+                q: '',
+            },
+
+            pagination: {
+                page: '',
+                page_size: '100',
+            }
         }
     },
 
@@ -93,6 +104,10 @@ const _vueInstance = new Vue({
                 cl.remove('is-clipped');
             }
         },
+
+        pageSize(value) {
+            this.pagination.page_size = value;
+        }
     },
 
     mounted: function () {
@@ -104,6 +119,46 @@ const _vueInstance = new Vue({
     },
 
     methods: {
+        // Events Listeners
+
+        /**
+         * listen to FilterBoxView event filter-objects
+         *
+         * @param {Object} filter
+         *
+         * @return {void}
+         */
+        onFilterObjects(filter) {
+            this.urlFilterQuery = filter;
+            this.page = '';
+            this.applyFilters(this.urlFilterQuery);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-page-size
+         *
+         * @param {Number} pageSize
+         *
+         * @return {void}
+         */
+        onUpdatePageSize(pageSize) {
+            this.pageSize = pageSize;
+            this.page = '';
+            this.applyFilters(this.urlFilterQuery);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-current-page
+         *
+         * @param {Number} page
+         *
+         * @return {void}
+         */
+        onUpdateCurrentPage(page) {
+            this.page = page;
+            this.applyFilters(this.urlFilterQuery);
+        },
+
         /**
          * on page click:
          * - if panel is open, close it and stop event propagation
@@ -192,7 +247,7 @@ const _vueInstance = new Vue({
                 let matches = urlParams.match(queryStringExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(queryStringExp, '$1'));
-                    this.searchQuery = matches[0];
+                    this.urlFilterQuery = { q: matches[0] };
                 }
 
                 // search for page_size='some string' both after ? and & tokens
@@ -243,35 +298,18 @@ const _vueInstance = new Vue({
             return url;
         },
 
-
-        /**
-         * update pagination keeping searched string
-         *
-         * @returns {void}
-         */
-        updatePagination() {
-            window.location.replace(this.urlPagination);
-        },
-
-        /**
-         * search queryString keeping pagination options
-         *
-         * @returns {void}
-         */
-        search() {
-            this.page = '';
-            this.applyFilters();
-        },
-
-
         /**
          * reset queryString in search keeping pagination options
          *
          * @returns {void}
          */
-        resetResearch() {
-            this.searchQuery = '';
-            this.applyFilters();
+        resetFilters() {
+            this.page = '';
+            this.pageSize = 100;
+            let filter = {
+                q: '',
+            }
+            this.applyFilters(filter);
         },
 
         /**
@@ -279,9 +317,9 @@ const _vueInstance = new Vue({
          *
          * @returns {void}
          */
-        applyFilters() {
+        applyFilters(filters) {
             let url = this.buildUrlParams({
-                q: this.searchQuery,
+                q: filters.q,
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,

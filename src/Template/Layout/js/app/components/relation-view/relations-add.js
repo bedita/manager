@@ -6,6 +6,7 @@
  *
  */
 
+import FilterBoxView from 'app/components/filter-box';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
@@ -14,6 +15,11 @@ export default {
     inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
 
     mixins: [ PaginatedContentMixin ],
+
+    components: {
+        FilterBoxView,
+    },
+
     props: {
         relationName: {
             type: String,
@@ -33,22 +39,10 @@ export default {
             method: 'relationshipsJson',
             endpoint: '',
             selectedObjects: [],
-            pageSize: DEFAULT_PAGINATION.page_size,
-            filter: '',
-            queryFilter: {},
-            timer: null,
-        };
-    },
 
-    computed: {
-        /**
-         * Return json parse of config for pagination
-         *
-         * @return {Object} json representation of pagination config
-         */
-        paginateSizes() {
-            return JSON.parse(this.configPaginateSizes);
-        },
+            activeFilter: {},
+            loading: false,
+        };
     },
 
     watch: {
@@ -66,48 +60,59 @@ export default {
                 }
             },
         },
-        /**
-         * watcher for pageSize variable, change pageSize and reload relations
-         *
-         * @param {Number} value
-         */
-        pageSize(value) {
-            this.setPageSize(value);
-            this.loadObjects();
-        },
 
         /**
          * Loading event emit
          *
          * @param {String} value The value associated to loading
+         *
+         * @emits Event#loading
+         *
          * @return {void}
          */
         loading(value) {
             this.$emit('loading', value);
         },
-
-        /**
-         * watcher for text filter
-         * if value is more than 3 chars, trigger api call to search by filter
-         *
-         * @param {String} value The filter string
-         * @return {void}
-         */
-        filter(value) {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.filter = value;
-                if (this.filter.length >= 3 || this.filter.length == 0) {
-                    this.queryFilter = {
-                        q: this.filter
-                    };
-                    this.loadObjects();
-                }
-            }, 300);
-        }
     },
 
     methods: {
+        // Events Listeners
+
+        /**
+         * listen to FilterBoxView event filter-objects
+         *
+         * @param {Object} filter
+         *
+         * @return {void}
+         */
+        onFilterObjects(filter) {
+            this.activeFilter = filter;
+            this.toPage(1, this.activeFilter);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-page-size
+         *
+         * @param {Number} pageSize
+         *
+         * @return {void}
+         */
+        onUpdatePageSize(pageSize) {
+            this.setPageSize(pageSize);
+            this.loadObjects(this.activeFilter);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-current-page
+         *
+         * @param {Number} page
+         *
+         * @return {void}
+         */
+        onUpdateCurrentPage(page) {
+            this.toPage(page, this.activeFilter);
+        },
+
         /**
          * Return true if specified pagination page link must be shown
          *
@@ -147,12 +152,14 @@ export default {
         /**
          * Load objects (using filter and pagination)
          *
+         * @emits Event#count
+         *
          * @return {Promise} repsonse from server
          */
-        async loadObjects() {
+        async loadObjects(filter) {
             this.objects = [];
             this.loading = true;
-            let response = await this.getPaginatedObjects(true, this.queryFilter);
+            let response = await this.getPaginatedObjects(true, filter);
             this.loading = false;
             this.$emit('count', this.pagination.count);
 
@@ -165,15 +172,10 @@ export default {
          * @param {Number} page The page number
          * @return {Promise} The response from server with new data
          */
-        async toPage(page) {
+        async toPage(page ,filter) {
             this.objects = [];
             this.loading = true;
-            if (this.filter) {
-                this.queryFilter = {
-                    q: this.filter
-                }
-            }
-            let response =  await PaginatedContentMixin.methods.toPage.call(this, page, this.queryFilter);
+            let response =  await PaginatedContentMixin.methods.toPage.call(this, page, filter);
             this.loading = false;
 
             return response;
