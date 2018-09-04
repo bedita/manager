@@ -66,6 +66,6 @@ export default {
         closeParamsView() {
             this.editingParams = {};
             this.closePanel();
-        }
-    }
+        },
+    },
 }

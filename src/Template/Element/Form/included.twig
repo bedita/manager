@@ -1,5 +1,5 @@
 {% if included or object.attributes.provider_extra.html %}
-<property-view inline-template :tab-open="tabsOpen" is-default-open="true">
+<property-view inline-template :tab-open="tabsOpen" :is-default-open=true>
 <section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
