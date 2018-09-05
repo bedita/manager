@@ -23,6 +23,10 @@
                 </div>
 
                 <form ref="paramsForm" v-if="relation.schema" class="params-list" @change="checkParams()" @keyup="checkParams()">
+                    <div>
+                        <input type="number" step="1" v-model.number="priority" />
+                    </div>
+
                     <div v-for="(param, key) in relation.schema">
                         <label :title="key"><: param.description :>
 

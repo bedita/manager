@@ -53,6 +53,11 @@
                             <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
+                        <div class="priority">
+                            <label>Priority</label>
+                            <span class="tag"><: related.meta.relation.priority :></span>
+                        </div>
+
                         <div v-if="relationHasParams()">
                             <ul class="params-list">
                                 <li v-for="(param, key) in relationSchema">
