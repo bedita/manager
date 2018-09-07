@@ -28,7 +28,7 @@ export default {
         /**
          * update relation position and stage for saving
          *
-         * @param {Object} related
+         * @param {Object} related related object
          *
          * @returns {void}
          */

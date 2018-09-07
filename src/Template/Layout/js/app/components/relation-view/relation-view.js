@@ -198,7 +198,7 @@ export default {
         /**
          * format and serialize object relations
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to format
          *
          * @returns {void}
          */
@@ -210,7 +210,7 @@ export default {
         /**
          * prepare removeRelated Array for saving using serialized json input field
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to be removed
          *
          * @returns {void}
          */
@@ -302,18 +302,18 @@ export default {
          * Event 'added-relations' callback
          * retrieve last added relations from relationships-view
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to add
          *
          * @return {void}
          */
-        appendRelations(items) {
+        appendRelations(relations) {
             if (!this.addedRelations.length) {
-                this.addedRelations = items;
+                this.addedRelations = relations;
             } else {
-                var existingIds = this.addedRelations.map(a => a.id);
-                for (var i = 0; i < items.length; i++) {
-                    if (existingIds.indexOf(items[i].id) < 0) {
-                        this.addedRelations.push(items[i]);
+                let existingIds = this.addedRelations.map(a => a.id);
+                for (let i = 0; i < relations.length; i++) {
+                    if (existingIds.indexOf(relations[i].id) < 0) {
+                        this.addedRelations.push(relations[i]);
                     }
                 }
             }
@@ -387,7 +387,7 @@ export default {
          * @return {String} url
          */
         buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
+            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
     }
 
