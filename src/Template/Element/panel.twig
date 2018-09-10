@@ -76,9 +76,21 @@
             </div>
         </edit-relation-params>
 
+        <create-related-object inline-template v-if="panelAction === 'create-related-object'" :relation-types="panelData">
+            <div class="create-related-object">
+                {# <header class="tab unselectable" v-bind:class="loading ? 'is-loading-spinner' : ''"> #}
+                <header class="tab unselectable">
+                    <h2><span >{{ __('Create related object') }}</span></h2>
+                    <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
+                </header>
+
+                <: JSON.stringify(relationTypes) :>
+            </div>
+        </create-related-object>
+
 
         {# add relation component #}
-        <relations-add v-if="addRelation.name" inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
+        <relations-add inline-template v-if="addRelation.name" config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
                 <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>

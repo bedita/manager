@@ -153,6 +153,11 @@
 
 
         <div>
+            <button class="icon-file"
+                @click.prevent.stop="requestPanel({
+                    action: 'create-related-object',
+                    data: relationTypes,
+                })">{{ __('create new object') }}</button>
             <button v-if="$root.panelIsOpen" class="icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
             <button v-else

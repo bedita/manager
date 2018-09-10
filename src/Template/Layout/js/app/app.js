@@ -14,6 +14,7 @@ import TrashView from 'app/pages/trash/view';
 import ImportView from 'app/pages/import/index';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
+import CreateRelatedObject from 'app/components/create-related-object';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -33,6 +34,7 @@ const _vueInstance = new Vue({
         ImportView,
         RelationsAdd,
         EditRelationParams,
+        CreateRelatedObject,
     },
 
     data() {
@@ -44,6 +46,8 @@ const _vueInstance = new Vue({
             page: '',
             sort: '',
             panelIsOpen: false,
+            panelAction: null,
+            panelData: null,
             addRelation: {},
             editingRelationParams: null,
         }
@@ -166,14 +170,16 @@ const _vueInstance = new Vue({
          *
          * @param {Object} data
          */
-        requestPanel(data) {
+        requestPanel(request) {
             this.panelIsOpen = true;
+            this.panelAction = request.action;
+            this.panelData = request.data;
 
             // open panel for relations add
-            if(this.panelIsOpen && data.relation && data.relation.name) {
-                this.addRelation = data.relation;
-            } else if (this.panelIsOpen && data.editRelationParams && data.editRelationParams.name) {
-                this.editingRelationParams = data.editRelationParams;
+            if(request.relation && request.relation.name) {
+                this.addRelation = request.relation;
+            } else if (request.editRelationParams && request.editRelationParams.name) {
+                this.editingRelationParams = request.editRelationParams;
             }
         },
 

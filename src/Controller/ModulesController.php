@@ -335,6 +335,15 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->relationData($relation);
+
+            $id = $response['id'];
+            $right = $this->apiClient->get(sprintf('/model/relations/%s/right_object_types', $name));
+            $response['data']['right'] = $right['data'];
+            $left = $this->apiClient->get(sprintf('/model/relations/%s/left_object_types', $name));
+            $response['data']['left'] = $left['data'];
+
+            dd($response);
+
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
