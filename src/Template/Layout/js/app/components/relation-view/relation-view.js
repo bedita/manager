@@ -62,7 +62,8 @@ export default {
             removedRelationsData: [],                   // hidden field containing serialized json passed on form submit
             addedRelationsData: [],                     // array of serialized new relations
 
-            activeFilter: {},               // current active filter for objects list
+            relationsData: [], // hidden field containing serialized json passed on form submit
+            activeFilter: {}, // current active filter for objects list
         }
     },
 
