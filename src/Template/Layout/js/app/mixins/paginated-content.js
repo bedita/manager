@@ -19,6 +19,7 @@ export const PaginatedContentMixin = {
 
             pagination: DEFAULT_PAGINATION,
             query: {},
+            formatObjetsFilter: ['params', 'priority', 'position'],
         }
     },
 
@@ -70,6 +71,45 @@ export const PaginatedContentMixin = {
             } else {
                 return Promise.reject();
             }
+        },
+
+        /**
+         * format objects for api calls
+         *
+         * @param {Array} objects
+         *
+         * @returns {Array} of formatted objects
+         */
+        formatObjects(objects) {
+            if (objects === undefined) {
+                return [];
+            }
+            const formattedObjects = [];
+
+            objects.forEach((obj) => {
+                let formattedObj = {};
+                // keep id and type
+                formattedObj.id = obj.id;
+                formattedObj.type = obj.type;
+
+                // search for meta.relation using this.formatObjectsFilter
+                const metaRelation = obj.meta.relation;
+                if (metaRelation) {
+                    let formattedMeta = {};
+                    this.formatObjetsFilter.forEach((filter) => {
+                        if (metaRelation[filter]) {
+                            formattedMeta[filter] = metaRelation[filter];
+                        }
+                    });
+
+                    if (Object.keys(formattedMeta).length) {
+                        formattedObj.meta = { relation: formattedMeta };
+                    }
+                }
+                formattedObjects.push(formattedObj);
+            });
+
+            return formattedObjects;
         },
 
         /**
