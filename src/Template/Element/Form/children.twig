@@ -7,26 +7,19 @@
 
     <div class="relation-view children-view">
         <div class="related-list">
-            <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
-                <div>
-                    <span><: pagination.page_item-grids :> {{ __('objects') }}</span>
-                </div>
-                <div>
-                    <span>{{ __('Page size') }}:</span>
-                </div>
-                <div>
-                    <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
-                        <option v-for="size in paginateSizes"><: size :></option>
-                    </select>
+            {# FilterBoxView #}
+            <filter-box-view
+                :config-paginate-sizes="configPaginateSizes"
+                :pagination.sync="pagination"
+                :show-filter-buttons=false
 
-                    <button
-                        v-for="i in pagination.page_count" :key="i"
-                        v-if="pagination.page_count > 1"
-                        v-bind:class="pagination.page == i? '' : 'is-dark'"
-                        v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
-                        class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
-                </div>
-            </nav>
+                page-sizes-label={{ __('Page size') }}
+                objects-label={{ __('objects') }}
+
+                @filter-update-current-page="onUpdateCurrentPage"
+                @filter-update-page-size="onUpdatePageSize"
+                @filter-objects="onFilterObjects">
+            </filter-box-view>
 
             {# related objects #}
             <div class="related-objects-list columns" v-bind:class="loading ? 'isLoading' : ''">
