@@ -377,10 +377,14 @@ return [
      *
      * - `apiBaseUrl` - The base URL for BEdita API instance.
      * - `apiKey` - The API key to use with BEdita API instance.
+     * - `log` - Loggin options, optional log file with `log_file`.
      */
     'API' => [
         'apiBaseUrl' => env('BEDITA_API'),
         'apiKey' => env('BEDITA_API_KEY', null),
+        'log' => [
+            //'log_file' => LOGS . 'api.log',
+        ],
     ],
 
     /**
