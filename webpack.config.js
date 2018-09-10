@@ -51,16 +51,11 @@ let webpackPlugins = [
     ], {
         root: path.resolve(__dirname, BUNDLE.webroot),
         verbose: false,
-        // temp
         exclude: ['be-icons-codes.css', 'be-icons-font.css'],
     }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
     }),
-
-    // new VueLoaderPlugin({
-    //     path: BUNDLE.jsDir,
-    // }),
 
     extractVendorsCSS,
     extractSass,
@@ -168,10 +163,6 @@ module.exports = {
         rules: [
             {
                 test: /\.vue$/,
-                // include: [
-                //     // path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}`),
-
-                // ],
                 use: 'vue-loader'
             },
             // if dev mode don't use babel
@@ -205,7 +196,6 @@ module.exports = {
                 use: extractSass.extract({
                     fallback: 'style-loader',
                     use: [
-                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {
@@ -230,7 +220,6 @@ module.exports = {
                 use: extractVendorsCSS.extract({
                     fallback: 'style-loader',
                     use: [
-                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {
