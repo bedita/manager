@@ -1,15 +1,15 @@
-<relation-view inline-template
-    relation-name={{ relationName }}
+<children-view inline-template
+    relation-name="children"
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     :load-on-start={{ loadOnStart }}
     @loading="onToggleLoading" @count="onCount">
 
-    <div class="relation-view">
+    <div class="relation-view children-view">
         <div class="related-list">
             <nav v-if="pagination.count > Math.min.apply(null, paginateSizes)" class="pagination has-text-size-smallest">
                 <div>
-                    <span><: pagination.page_items :> {{ __('objects') }}</span>
+                    <span><: pagination.page_item-grids :> {{ __('objects') }}</span>
                 </div>
                 <div>
                     <span>{{ __('Page size') }}:</span>
@@ -29,11 +29,12 @@
             </nav>
 
             {# related objects #}
-            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
+            <div class="related-objects-list columns" v-bind:class="loading ? 'isLoading' : ''">
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="(related, index) in objects"
                     :key="related.id"
                     v-bind:class="containsId(removedRelated, related.id)? 'removed' : ''">
+
                     <article class="box has-background-black has-text-gray-100 has-text-size-smaller"
                             v-bind:class="related.type">
 
@@ -53,26 +54,11 @@
                             <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
                         </div>
 
-                        <div v-if="relationHasParams()">
-                            <ul class="params-list">
-                                <li v-for="(param, key) in relationSchema">
-                                    <span><: key :></span>&nbsp;
-                                        <span v-if="getParamHelper(related, key)" class="tag param-value">{{ __('value') }}: <: formatParam(key, getParamHelper(related, key)) :></span>
-                                        <span v-else class="tag">{{ __('type') }}: <: param.format || param.type :></span>
-                                </li>
-                            </ul>
-
-                            <button v-if="$root.panelIsOpen" class="icon-coffee"
-                                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
-                            <button v-else
-                                class="icon-edit"
-                                @click.prevent.stop="requestPanel({
-                                    editRelationParams: {
-                                        name: relationName,
-                                        related: related,
-                                        schema: relationSchema,
-                                    },
-                                })">{{ __('Edit Params') }}</button>
+                        <div class="container-grid">
+                            <div class="item-grid">{{ __('position') }}:</div>
+                            <div class="item-grid"><input class="inline-input" disabled type="number" :value="index + 1" /></div>
+                            <div class="item-grid"><label>{{ __('move to') }}:</div>
+                            <div class="item-grid"><input class="inline-input" type="number" min="1" step="1" v-model="positions[related.id]" @change="updatePosition(related)" @keyup="updatePosition(related)"/></div>
                         </div>
 
                         <footer>
@@ -90,7 +76,6 @@
                 {# empty element: keep for flex layout #}
                 <div class="column"></div>
             </div>
-
 
             {# staged objects to be added #}
             <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
@@ -166,4 +151,4 @@
         </div>
 
     </div>
-</relation-view>
+</children-view>

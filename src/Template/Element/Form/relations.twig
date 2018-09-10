@@ -18,10 +18,17 @@
                                                                 v-bind:class="!count? 'empty' : ''"><: count :></span></h2>
                     </header>
 
-                    <div v-show="isOpen" class="tab-container">
-                        {% set wait = 1000 + (loop.index * 200) %}
-                        {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
-                    </div>
+                    {% if relationName == 'children' %}
+                        <div v-show="isOpen" class="tab-container">
+                            {% set wait = 500 + (loop.index * 200) %}
+                            {% element 'Form/children' {'relationName': relationName, 'loadOnStart': wait } %}
+                        </div>
+                    {% else %}
+                        <div v-show="isOpen" class="tab-container">
+                            {% set wait = 500 + (loop.index * 200) %}
+                            {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
+                        </div>
+                    {% endif %}
 
                 </section>
             </property-view>
