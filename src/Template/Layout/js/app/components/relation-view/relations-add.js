@@ -172,6 +172,8 @@ export default {
          * Go to specific page
          *
          * @param {Number} page The page number
+         * @param {Object} filter filter object
+         *
          * @return {Promise} The response from server with new data
          */
         async toPage(page ,filter) {
