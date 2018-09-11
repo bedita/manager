@@ -14,7 +14,7 @@ const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // vue dependencies
-const { VueLoaderPlugin } = require('vue-loader');
+const VueLoaderPlugin = require('vue-loader/lib/loader');
 
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
@@ -51,7 +51,6 @@ let webpackPlugins = [
     ], {
         root: path.resolve(__dirname, BUNDLE.webroot),
         verbose: false,
-        // temp
         exclude: ['be-icons-codes.css', 'be-icons-font.css'],
     }),
     new webpack.DefinePlugin({
@@ -60,8 +59,6 @@ let webpackPlugins = [
 
     extractVendorsCSS,
     extractSass,
-
-    new VueLoaderPlugin(),
 ];
 
 // Development or report bundle Plugin
@@ -166,10 +163,6 @@ module.exports = {
         rules: [
             {
                 test: /\.vue$/,
-                include: [
-                    // path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}`),
-
-                ],
                 use: 'vue-loader'
             },
             // if dev mode don't use babel
@@ -203,7 +196,6 @@ module.exports = {
                 use: extractSass.extract({
                     fallback: 'style-loader',
                     use: [
-                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {
@@ -228,7 +220,6 @@ module.exports = {
                 use: extractVendorsCSS.extract({
                     fallback: 'style-loader',
                     use: [
-                        // 'vue-style-loader',
                         {
                             loader: 'css-loader',
                             options: {

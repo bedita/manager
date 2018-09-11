@@ -77,5 +77,5 @@ export default {
                 return this.editingParams[index] !== '' && this.editingParams[index] !== this.oldParams[index];
             }).length;
         },
-    }
+    },
 }

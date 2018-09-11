@@ -1,15 +1,22 @@
 {% set here=Link.here({'exclude': 'q'}) %}
 
 <div class="toolbar-filters">
+    {# FilterBoxView #}
+    <filter-box-view
+        :pagination={{ meta.pagination|json_encode|raw }}
+        :init-filter="urlFilterQuery"
 
-    <input type="text"
-        class="search"
-        name="filterquery"
+        config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
         placeholder="{{ __('Search in BEdita') }}"
-        v-model="searchQuery"
-        @keyup.enter="search()"/>
+        apply-filter-label={{ __('Apply') }}
+        reset-filter-label={{ __('Reset') }}
+        page-sizes-label={{ __('Page size') }}
+        objects-label={{ __(currentModule.name) }}
+        page-size={{ meta.pagination.page_size }}
 
-    <button name="applysearch" v-on:click="search()">{{ __('Apply') }}</button>
-    <button name="resetsearch" v-on:click="resetResearch()">{{ __('Reset') }}</button>
-
+        @filter-objects-submit="onFilterObjects"
+        @filter-reset="resetFilters"
+        @filter-update-current-page="onUpdateCurrentPage"
+        @filter-update-page-size="onUpdatePageSize">
+    </filter-box-view>
 </div>
