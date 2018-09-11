@@ -96,11 +96,11 @@ export default {
 
     data() {
         return {
-            filter: '',                             // Text string filter
-            queryFilter: this.initFilter,           // QueryFilter Object
+            filter: '', // Text string filter
+            queryFilter: this.initFilter, // QueryFilter Object
             timer: null,
 
-            pageSize: this.pagination.page_size,     // pageSize value for pagination page size
+            pageSize: this.pagination.page_size, // pageSize value for pagination page size
         }
     },
 
@@ -176,6 +176,8 @@ export default {
 
         /**
          * change page with index {index}
+         *
+         * @param {Number} index page number
          *
          * @emits Event#filter-update-current-page
          */

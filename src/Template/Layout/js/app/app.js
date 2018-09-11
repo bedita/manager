@@ -105,6 +105,11 @@ const _vueInstance = new Vue({
             }
         },
 
+        /**
+         * watch pageSize variable and update pagination.page_size accordingly
+         *
+         * @param {Number} value page size number
+         */
         pageSize(value) {
             this.pagination.page_size = value;
         }
@@ -314,6 +319,8 @@ const _vueInstance = new Vue({
 
         /**
          * apply page filters such as query string or pagination
+         *
+         * @params {Object} filters filters object
          *
          * @returns {void}
          */

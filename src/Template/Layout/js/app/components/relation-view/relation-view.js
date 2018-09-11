@@ -86,7 +86,7 @@ export default {
     },
 
     /**
-     * load content if flag set to true after component is mounted
+     * load content after component is mounted
      *
      * @return {void}
      */
@@ -148,7 +148,9 @@ export default {
         },
 
         /**
+         * load content if flag set to true
          *
+         * @return {void}
          */
         async loadOnMounted() {
             if (this.loadOnStart) {

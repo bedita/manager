@@ -154,6 +154,8 @@ export default {
          *
          * @emits Event#count
          *
+         * @param {Object} filter filter object
+         *
          * @return {Promise} repsonse from server
          */
         async loadObjects(filter) {
