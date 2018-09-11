@@ -82,7 +82,7 @@
                             {{ Form.control(relationName ~ 'removeRelated', {
                                 'type': 'hidden',
                                 'name': 'relations[' ~ relationName ~ '][removeRelated]',
-                                'v-model': 'relationsData'
+                                'v-model': 'removedRelationsData'
                             })|raw }}
                             {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
                         </div>

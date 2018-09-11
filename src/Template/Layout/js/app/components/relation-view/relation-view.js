@@ -49,15 +49,16 @@ export default {
 
     data() {
         return {
-            method: 'relatedJson',          // define AppController method to be used
+            method: 'relatedJson',                      // define AppController method to be used
             loading: false,
-            count: 0,                       // count number of related objects, on change triggers an event
+            count: 0,                                   // count number of related objects, on change triggers an event
 
-            removedRelated: [],             // currently related objects to be removed
-            addedRelations: [],             // staged added objects to be saved
-            modifiedRelations: [],
-            relationsData: [],              // hidden field containing serialized json passed on form submit
-            newRelationsData: [],           // array of serialized new relations
+            removedRelated: [],                         // staged removed related objects
+            addedRelations: [],                         // staged added objects to be saved
+            modifiedRelations: [],                      // staged modified relation params
+
+            removedRelationsData: [],                   // hidden field containing serialized json passed on form submit
+            addedRelationsData: [],                     // array of serialized new relations
 
             pageSize: DEFAULT_PAGINATION.page_size,     // pageSize value for pagination page size
         }
@@ -137,7 +138,6 @@ export default {
             return resp;
         },
 
-
         /**
          * toggle relation
          *
@@ -147,16 +147,15 @@ export default {
          */
         relationToggle(related) {
             if (!related || !related.id) {
-                console.error('[reAddRelations] needs first param (related) as {object} with property id set');
+                console.error('[relationToggle] needs first param (related) as {object} with property id set');
                 return;
             }
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removeRelation(related);
             } else {
-                this.undoRemoveRelation(related);
+                this.restoreRemovedRelation(related);
             }
         },
-
 
         /**
          * remove related object: adding it to removedRelated Array
@@ -167,8 +166,13 @@ export default {
          */
         removeRelation(related) {
             this.removedRelated.push(related);
-            this.relationsData = JSON.stringify(this.removedRelated);
-            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            this.prepareRelationsToRemove(this.removedRelated);
+
+            // after relation is set to be removed we check if it was modified(therefore staged to be saved)
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if yes we unstage it
+                this.prepareRelationsToSave();
+            }
         },
 
         /**
@@ -179,49 +183,51 @@ export default {
          *
          * @returns {void}
          */
-        undoRemoveRelation(related) {
+        restoreRemovedRelation(related) {
             let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
             this.removedRelated.splice(index, 1);
-            this.relationsData = JSON.stringify(this.removedRelated);
-            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            this.prepareRelationsToRemove(this.removedRelated);
+
+            // after restore previously removed relation, we check if it was modified
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if yes we stage it for saving
+                this.prepareRelationsToSave();
+            }
         },
 
+        /**
+         * format and serialize object relations
+         *
+         * @param {Array} relations list of related objects to format
+         *
+         * @returns {void}
+         */
+        prepareRelationsToRemove(relations) {
+            this.removedRelationsData = JSON.stringify(this.formatObjects(relations));
+            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+        },
 
         /**
          * prepare removeRelated Array for saving using serialized json input field
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to be removed
          *
          * @returns {void}
          */
         setRemovedRelated(relations) {
-            if (!relations ) {
+            if (!relations) {
                 return;
             }
             this.removedRelated = relations;
-            this.relationsData = JSON.stringify(this.removedRelated);
+            this.prepareRelationsToRemove(this.removedRelated);
         },
-
-
-        /**
-         * go to specific page
-         *
-         * @param {Number} page number
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async toPage(i) {
-            this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
-            this.loading = false;
-            return resp;
-        },
-
 
         /**
          * remove element with matched id from staged relations
          *
          * @param {Number} id
+         *
+         * @returns {void}
          */
         removeAddedRelations(id) {
             if (!id) {
@@ -229,36 +235,54 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
-            this.setRelationsToSave();
+            this.prepareRelationsToSave();
         },
 
-
         /**
-         * Event 'added-relations' callback
-         * retrieve last added relations from relationships-view
+         * set modified relation to be saved
          *
-         * @param {Array} relations
+         * @param {Object} related
          *
-         * @return {void}
+         * @returns {void}
          */
-        appendRelations(items) {
-            if (!this.addedRelations.length) {
-                this.addedRelations = items;
-            } else {
-                var existingIds = this.addedRelations.map(a => a.id);
-                for (var i = 0; i < items.length; i++) {
-                    if (existingIds.indexOf(items[i].id) < 0) {
-                        this.addedRelations.push(items[i]);
+        modifyRelation(related) {
+            if (this.containsId(this.modifiedRelations, related.id)) {
+                // if object has been already modified we replace it within the modifiedRelations array
+                this.modifiedRelations = this.modifiedRelations.map((object) => {
+                    if (object.id === related.id) {
+                        return related;
                     }
-                }
+                    return object;
+                });
+            } else {
+                // otherwise we add it to it
+                this.modifiedRelations.push(related);
             }
-            this.setRelationsToSave();
+            this.prepareRelationsToSave();
         },
 
         /**
+         * remove element with matched id from staged relations
          *
+         * @param {Number} id
+         *
+         * @returns {void}
+         */
+        removeModifiedRelations(id) {
+            if (!id) {
+                console.error('[removeModifiedRelations] needs first param (id) as {Number|String}');
+                return;
+            }
+            this.modifiedRelations = this.modifiedRelations.filter((rel) => rel.id !== id);
+            this.prepareRelationsToSave();
+        },
+
+        /**
+         * extract relation with modified params and set it to staging
          *
          * @param {Object} data
+         *
+         * @returns {void}
          */
         updateRelationParams(data) {
             // id of edited related object
@@ -271,28 +295,41 @@ export default {
                 }
             }).pop();
 
-            if (this.containsId(this.modifiedRelations, id)) {
-                // if object has been already modified we replace it within the modifiedRelations array
-                this.modifiedRelations = this.modifiedRelations.map((object) => {
-                    if (object.id === id) {
-                        return rel;
-                    }
-                    return object;
-                });
+            this.modifyRelation(rel);
+        },
+
+        /**
+         * Event 'added-relations' callback
+         * retrieve last added relations from relationships-view
+         *
+         * @param {Array} relations list of related objects to add
+         *
+         * @return {void}
+         */
+        appendRelations(relations) {
+            if (!this.addedRelations.length) {
+                this.addedRelations = relations;
             } else {
-                // otherwise we add it to it
-                this.modifiedRelations.push(rel);
+                let existingIds = this.addedRelations.map(a => a.id);
+                for (let i = 0; i < relations.length; i++) {
+                    if (existingIds.indexOf(relations[i].id) < 0) {
+                        this.addedRelations.push(relations[i]);
+                    }
+                }
             }
-            this.setRelationsToSave();
+            this.prepareRelationsToSave();
         },
 
         /**
          * set relations to be saved from both newly added and modified
          *
+         * @returns {void}
          */
-        setRelationsToSave() {
+        prepareRelationsToSave() {
             const relations = this.addedRelations.concat(this.modifiedRelations);
-            this.newRelationsData = JSON.stringify(relations);
+            let difference = relations.filter(rel => !this.containsId(this.removedRelated, rel.id));
+
+            this.addedRelationsData = JSON.stringify(this.formatObjects(difference));
             this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
@@ -301,6 +338,8 @@ export default {
          *
          * @param {string} key
          * @param {any} value
+         *
+         * @returns {String} formatted value
          */
         formatParam(key, value) {
             const schema = this.getRelationSchema();
@@ -325,6 +364,19 @@ export default {
             return relations.filter((rel) => rel.id === id).length;
         },
 
+        /**
+         * go to specific page
+         *
+         * @param {Number} page number
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async toPage(i) {
+            this.loading = true;
+            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
+            this.loading = false;
+            return resp;
+        },
 
         /**
          * helper function: build open view url
