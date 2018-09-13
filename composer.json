@@ -28,7 +28,6 @@
         "cakephp/plugin-installer": "^1.0",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
-        "monolog/monolog": "@dev",
         "wikimedia/composer-merge-plugin": "^1.4"
     },
     "require-dev": {
