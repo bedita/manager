@@ -39,7 +39,7 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta.url">
+                        <div class="thumbnail" v-if="related.meta && related.meta.url">
                             <figure>
                                 <img :src="related.meta.url" />
                             </figure>
