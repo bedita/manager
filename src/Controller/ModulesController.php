@@ -351,7 +351,6 @@ class ModulesController extends AppController
 
             $response['data']['right'] = $right['data'];
             $response['data']['left'] = $left['data'];
-
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
