@@ -81,6 +81,9 @@ class TrashController extends AppController
 
         try {
             $response = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
+
+            // get list of object types
+            $descendents = $this->apiClient->get('/model/object_types');
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
@@ -92,10 +95,12 @@ class TrashController extends AppController
         $objects = (array)$response['data'];
         $meta = (array)$response['meta'];
         $links = (array)$response['links'];
+        $types['right'] = (array)$descendents['data'];
 
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
+        $this->set(compact('types'));
 
         $this->set('properties', $this->Properties->indexList('trash'));
 
