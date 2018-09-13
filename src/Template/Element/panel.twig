@@ -84,36 +84,24 @@
         {# add relation component #}
         <relations-add v-if="addRelation.name" inline-template config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }} :relation-name="addRelation.name" :already-in-view="addRelation.alreadyInView">
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects ? 'is-loading-spinner' : ''">
+                <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
                     <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
                     <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
                 </header>
 
-                <nav class="pagination has-text-size-smallest">
-                    <div>
-                        <span><: pagination.page_items :> {{ __('objects') }}</span>
-                    </div>
-                    <div>
-                        <span>
-                            <input type="text" placeholder="{{ __('Search') }}" v-model="filter" />
-                        </span>
-                    </div>
-                    <div>
-                        <span>{{ __('Page size') }}:</span>
-                    </div>
-                    <div>
-                        <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
-                            <option v-for="size in paginateSizes"><: size :></option>
-                        </select>
+                {# FilterBoxView #}
+                <filter-box-view
+                    :config-paginate-sizes="configPaginateSizes"
+                    :pagination.sync="pagination"
+                    :show-filter-buttons=false
 
-                        <button
-                            v-for="i in pagination.page_count" :key="i"
-                            v-if="paginationPageLinkVisible(i)"
-                            v-bind:class="pagination.page == i? '' : 'is-dark'"
-                            v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
-                            class="has-text-size-smallest" @click.prevent="toPage(i)"><: i :></button>
-                    </div>
-                </nav>
+                    page-sizes-label={{ __('Page size') }}
+                    objects-label={{ __('objects') }}
+
+                    @filter-update-current-page="onUpdateCurrentPage"
+                    @filter-update-page-size="onUpdatePageSize"
+                    @filter-objects="onFilterObjects">
+                </filter-box-view>
 
                 {# objects #}
                 <div class="related-objects-list columns">

@@ -45,7 +45,8 @@ class AppController extends Controller
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
 
-        $this->apiClient = ApiClientProvider::getApiClient();
+        $options = ['Log' => (array)Configure::read('API.log', [])];
+        $this->apiClient = ApiClientProvider::getApiClient($options);
 
         $this->loadComponent('Auth', [
             'authenticate' => [

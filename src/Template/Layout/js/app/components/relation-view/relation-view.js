@@ -13,6 +13,7 @@
 
 import StaggeredList from 'app/components/staggered-list';
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
+import FilterBoxView from 'app/components/filter-box';
 import TreeView from 'app/components/tree-view/tree-view';
 import sleep from 'sleep-promise';
 import flatpickr from 'flatpickr/dist/flatpickr.min';
@@ -28,6 +29,7 @@ export default {
     components: {
         StaggeredList,
         RelationshipsView,
+        FilterBoxView,
         TreeView,
     },
 
@@ -60,7 +62,8 @@ export default {
             removedRelationsData: [],                   // hidden field containing serialized json passed on form submit
             addedRelationsData: [],                     // array of serialized new relations
 
-            pageSize: DEFAULT_PAGINATION.page_size,     // pageSize value for pagination page size
+            relationsData: [], // hidden field containing serialized json passed on form submit
+            activeFilter: {}, // current active filter for objects list
         }
     },
 
@@ -71,9 +74,6 @@ export default {
             var b = this.objects.map(o => o.id);
             return a.concat(b);
         },
-        paginateSizes() {
-            return JSON.parse(this.configPaginateSizes);
-        }
     },
 
     /**
@@ -86,7 +86,7 @@ export default {
     },
 
     /**
-     * load content if flag set to true after component is mounted
+     * load content after component is mounted
      *
      * @return {void}
      */
@@ -96,21 +96,62 @@ export default {
 
     watch: {
         /**
-         * watcher for pageSize variable, change pageSize and reload relations
+         * Loading event emit
          *
-         * @param {Number} value
+         * @param {String} value The value associated to loading
+         *
+         * @emits Event#loading
+         *
+         * @return {void}
          */
-        pageSize(value) {
-            this.setPageSize(value);
-            this.loadRelatedObjects();
-        },
-
         loading(value) {
             this.$emit('loading', value);
         },
     },
 
     methods: {
+        // Events Listeners
+
+        /**
+         * listen to FilterBoxView event filter-objects
+         *
+         * @param {Object} filter
+         *
+         * @return {void}
+         */
+        onFilterObjects(filter) {
+            this.activeFilter = filter;
+            this.toPage(1, this.activeFilter);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-page-size
+         *
+         * @param {Number} pageSize
+         *
+         * @return {void}
+         */
+        onUpdatePageSize(pageSize) {
+            this.setPageSize(pageSize);
+            this.loadRelatedObjects(this.activeFilter);
+        },
+
+        /**
+         * listen to FilterBoxView event filter-update-current-page
+         *
+         * @param {Number} page
+         *
+         * @return {void}
+         */
+        onUpdateCurrentPage(page) {
+            this.toPage(page, this.activeFilter);
+        },
+
+        /**
+         * load content if flag set to true
+         *
+         * @return {void}
+         */
         async loadOnMounted() {
             if (this.loadOnStart) {
                 var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
@@ -127,12 +168,13 @@ export default {
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
+         * @param {Object} filter
+         *
          * @return {Boolean} response;
          */
-        async loadRelatedObjects() {
+        async loadRelatedObjects(filter = {}) {
             this.loading = true;
-
-            let resp = await this.getPaginatedObjects();
+            let resp = await this.getPaginatedObjects(true, filter);
             this.loading = false;
             this.$emit('count', this.pagination.count);
             return resp;
@@ -198,7 +240,7 @@ export default {
         /**
          * format and serialize object relations
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to format
          *
          * @returns {void}
          */
@@ -207,10 +249,11 @@ export default {
             this.$el.dispatchEvent(new Event('change', { bubbles: true }));
         },
 
+
         /**
          * prepare removeRelated Array for saving using serialized json input field
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to be removed
          *
          * @returns {void}
          */
@@ -221,6 +264,7 @@ export default {
             this.removedRelated = relations;
             this.prepareRelationsToRemove(this.removedRelated);
         },
+
 
         /**
          * remove element with matched id from staged relations
@@ -302,18 +346,18 @@ export default {
          * Event 'added-relations' callback
          * retrieve last added relations from relationships-view
          *
-         * @param {Array} relations
+         * @param {Array} relations list of related objects to add
          *
          * @return {void}
          */
-        appendRelations(items) {
+        appendRelations(relations) {
             if (!this.addedRelations.length) {
-                this.addedRelations = items;
+                this.addedRelations = relations;
             } else {
-                var existingIds = this.addedRelations.map(a => a.id);
-                for (var i = 0; i < items.length; i++) {
-                    if (existingIds.indexOf(items[i].id) < 0) {
-                        this.addedRelations.push(items[i]);
+                let existingIds = this.addedRelations.map(a => a.id);
+                for (let i = 0; i < relations.length; i++) {
+                    if (existingIds.indexOf(relations[i].id) < 0) {
+                        this.addedRelations.push(relations[i]);
                     }
                 }
             }
@@ -353,6 +397,20 @@ export default {
         },
 
         /**
+         * go to specific page
+         *
+         * @param {Number} page number
+         *
+         * @return {Promise} repsonse from server with new data
+         */
+        async toPage(page, filter) {
+            this.loading = true;
+            let resp =  await PaginatedContentMixin.methods.toPage.call(this, page, filter);
+            this.loading = false;
+            return resp;
+        },
+
+        /**
          * helper function: check if array relations has element with id -> id
          *
          * @param {Array} relations
@@ -365,20 +423,6 @@ export default {
         },
 
         /**
-         * go to specific page
-         *
-         * @param {Number} page number
-         *
-         * @return {Promise} repsonse from server with new data
-         */
-        async toPage(i) {
-            this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, i);
-            this.loading = false;
-            return resp;
-        },
-
-        /**
          * helper function: build open view url
          *
          * @param {String} objectType
@@ -387,7 +431,7 @@ export default {
          * @return {String} url
          */
         buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
+            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
     }
 

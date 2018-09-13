@@ -87,5 +87,5 @@ export default {
                 return this.editingParams[index] !== '' && this.editingParams[index] !== this.oldParams[index];
             }).length || this.relation.related.meta.relation.priority !== this.priority;
         },
-    }
+    },
 }
