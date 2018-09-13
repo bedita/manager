@@ -16,6 +16,8 @@
                 :config-paginate-sizes="configPaginateSizes"
                 :pagination.sync="pagination"
                 :show-filter-buttons=false
+                :relation-types="relationTypes"
+                :init-filter="activeFilter"
 
                 page-sizes-label={{ __('Page size') }}
                 objects-label={{ __('objects') }}
@@ -148,11 +150,6 @@
 
 
         <div>
-            <button class="icon-file"
-                @click.prevent.stop="requestPanel({
-                    action: 'create-related-object',
-                    data: relationTypes,
-                })">{{ __('create new object') }}</button>
             <button v-if="$root.panelIsOpen" class="icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
             <button v-else
@@ -161,10 +158,11 @@
                     relation: {
                         name: relationName,
                         alreadyInView: alreadyInView,
+                        relationTypes: relationTypes,
                     },
                 })">{{ __('add objects') }}</button>
 
-            <button @click.prevent.stop="loadRelatedObjects()">{{ __('reload') }}</button>
+            <button @click.prevent.stop="reloadRelations()">{{ __('reload') }}</button>
         </div>
 
     </div>

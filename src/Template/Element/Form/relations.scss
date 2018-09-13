@@ -6,6 +6,16 @@
             flex: 1;
             order: 1;
             margin: 0;
+
+            display: flex;
+
+            .search-query {
+                flex: 1;
+            }
+
+            .search-types {
+                margin-left: $gutter / 2;
+            }
         }
 
         .pagination-items, .page-size, .pagination-buttons {

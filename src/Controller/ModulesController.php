@@ -89,6 +89,10 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+
+            // get object_type descendents if available
+            $currentType = $this->apiClient->get(sprintf('/model/object_types/%s', $this->objectType));
+            $descendents = $this->apiClient->get(sprintf('/model/object_types?filter[parent]=%s', $currentType['data']['id']));
         } catch (BEditaClientException $e) {
             // @TODO: ajax error display
 
@@ -102,10 +106,12 @@ class ModulesController extends AppController
         $objects = (array)$response['data'];
         $meta = (array)$response['meta'];
         $links = (array)$response['links'];
+        $types['right'] = (array)$descendents['data'];
 
         $this->set(compact('objects'));
         $this->set(compact('meta'));
         $this->set(compact('links'));
+        $this->set(compact('types'));
 
         if (!empty($this->request->getQueryParams()['autocomplete'])) {
             $this->render('autocomplete');
@@ -336,13 +342,15 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->relationData($relation);
 
-            $id = $response['id'];
-            $right = $this->apiClient->get(sprintf('/model/relations/%s/right_object_types', $name));
-            $response['data']['right'] = $right['data'];
-            $left = $this->apiClient->get(sprintf('/model/relations/%s/left_object_types', $name));
-            $response['data']['left'] = $left['data'];
+            // retrieve right and left objects of relation
+            $rightUrl = $response['data']['relationships']['right_object_types']['links']['related'];
+            $right = $this->apiClient->get($rightUrl);
 
-            dd($response);
+            $leftUrl = $response['data']['relationships']['left_object_types']['links']['related'];
+            $left = $this->apiClient->get($leftUrl);
+
+            $response['data']['right'] = $right['data'];
+            $response['data']['left'] = $left['data'];
 
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);

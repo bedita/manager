@@ -170,7 +170,7 @@ export default {
          *
          * @param {Object} filter
          *
-         * @return {Boolean} response;
+         * @return {Boolean} response
          */
         async loadRelatedObjects(filter = {}) {
             this.loading = true;
@@ -178,6 +178,21 @@ export default {
             this.loading = false;
             this.$emit('count', this.pagination.count);
             return resp;
+        },
+
+        /**
+         * reset filters and reload content
+         *
+         * @return {void}
+         */
+        reloadRelations() {
+            this.activeFilter = {
+                q: '',
+                filter: {
+                    type: '',
+                }
+            }
+            this.loadRelatedObjects();
         },
 
         /**
