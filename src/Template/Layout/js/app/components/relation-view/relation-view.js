@@ -189,6 +189,7 @@ export default {
          * @return {Array} objs objects retrieved
          */
         reloadObjects() {
+            this.activeFilter = {};
             return this.loadRelatedObjects({}, true);
         },
 

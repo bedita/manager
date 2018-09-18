@@ -179,14 +179,16 @@ export default {
                 }, 300);
             }
         },
-    },
 
-    mounted() {
         /**
-         * init filter from queryFilter
-         */
-        if (this.queryFilter !== undefined) {
-            this.filter = this.queryFilter.q || '';
+         * watch initFilter and set filter accordingly
+        */
+        initFilter: {
+            deep: true,
+            immediate: true,
+            handler: function(value) {
+                this.filter = value && value.q || '';
+            }
         }
     },
 
