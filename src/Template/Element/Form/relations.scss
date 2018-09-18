@@ -8,16 +8,17 @@
             margin: 0;
         }
 
-        .pagination-items, .page-size, .pagination-buttons {
+        .page-size, .pagination-buttons {
             display: none;
         }
 
+        .count-items {
+            order: 2;
+        }
+
         &.show-pagination {
-            .pagination-items, .page-size, .pagination-buttons {
+            .page-size, .pagination-buttons {
                 display: block;
-            }
-            .pagination-items {
-                order: 2;
             }
             .page-size {
                 order: 3;
