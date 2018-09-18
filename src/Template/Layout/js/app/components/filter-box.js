@@ -24,7 +24,7 @@ export default {
         <nav class="pagination has-text-size-smallest" :class="pagination.count > 4 && 'show-pagination'">
 
             <div class="pagination-items">
-                <span><: pagination.page_items :> <: objectsLabel :></span>
+                <span><: pagination.count :> <: objectsLabel :></span>
             </div>
 
             <div class="filter-search">
