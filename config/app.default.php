@@ -535,4 +535,13 @@ return [
     'Pagination' => [
         'sizeAvailable' => [10, 20, 50, 100]
     ],
+
+    /**
+     * Internazionalization Format default settings
+     *
+     * - timezone => app client timezone
+     */
+    'I18n' => [
+        'timezone' => 'Europe/Rome',
+    ]
 ];
