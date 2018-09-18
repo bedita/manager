@@ -174,10 +174,23 @@ export default {
          */
         async loadRelatedObjects(filter = {}) {
             this.loading = true;
-            let resp = await this.getPaginatedObjects(true, filter);
-            this.loading = false;
-            this.$emit('count', this.pagination.count);
-            return resp;
+            let response = this.getPaginatedObjects(true, filter);
+
+            response
+                .then((objs) => {
+                    this.$emit('count', this.pagination.count);
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);
+                    }
+                });
+
+            return response;
         },
 
         /**
@@ -401,13 +414,24 @@ export default {
          *
          * @param {Number} page number
          *
-         * @return {Promise} repsonse from server with new data
+         * @return {void}
          */
-        async toPage(page, filter) {
+        toPage(page, filter) {
             this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, page, filter);
-            this.loading = false;
-            return resp;
+            let response = PaginatedContentMixin.methods.toPage.call(this, page, filter);
+
+            response
+                .then((objs) => {
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);
+                    }
+                });
         },
 
         /**
