@@ -16,10 +16,15 @@
                     <td>{{ (object) ? object.id : resource.id }}</td>
                 </tr>
                 {% for key, val in meta %}
-                <tr>
-                    <th>{{ key }}:</th>
-                    <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
-                </tr>
+                    <tr>
+                        <th>{{ key }}:</th>
+                        {% if key in ['created', 'modified', 'published', 'last_login', 'verified'] %}
+                            <td>{{ Time.format(val) }}</td>
+                        {% else %}
+                            <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
+                        {% endif %}
+                    </tr>
+
                 {% endfor %}
             </tbody>
         </table>
