@@ -42,7 +42,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         v-show="vueLoaded"
         class="layout"
         :class="panelIsOpen? 'panel-is-open' : ''"
-        :time-zone="{{ config('Timezone')|json_encode }}"
 
         @click="pageClick($event)">
 

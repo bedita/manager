@@ -37,13 +37,6 @@ const _vueInstance = new Vue({
         EditRelationParams,
     },
 
-    props: {
-        timeZone: {
-            type: String,
-            default: 'Europe/Rome',
-        }
-    },
-
     data() {
         return {
             vueLoaded: false,

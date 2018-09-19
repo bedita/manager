@@ -1,10 +1,5 @@
-// flatpickr
-
 /**
- * Templates that uses this component (directly or indirectly):
- *  Template/Elements/relations.twig
- *
- * <staggered-list> component used for lists with staggered animation
+ * Datepicker vue directive
  *
  */
 
