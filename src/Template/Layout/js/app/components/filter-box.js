@@ -21,7 +21,7 @@ import { DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 export default {
     template:
     `
-        <nav class="pagination has-text-size-smallest" :class="pagination.count > 10 && 'show-pagination'">
+        <nav class="pagination has-text-size-smallest" :class="pagination.count > pagination.page_size && 'show-pagination'">
 
             <div class="count-items" v-if="pagination.count">
                 <span><: pagination.count :> <: objectsLabel :></span>
@@ -116,7 +116,7 @@ export default {
         },
         configPaginateSizes: {
             type: String,
-            default: '[]',
+            default: '[10]',
         },
     },
 
