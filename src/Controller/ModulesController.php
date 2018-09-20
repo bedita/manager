@@ -50,6 +50,7 @@ class ModulesController extends AppController
 
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore
      */
     public function beforeRender(Event $event) : void
     {
@@ -60,6 +61,7 @@ class ModulesController extends AppController
 
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore
      */
     public function beforeFilter(Event $event) : void
     {
@@ -148,6 +150,34 @@ class ModulesController extends AppController
         $this->set('relations', array_diff(array_keys($object['relationships']), $excluded));
 
         return null;
+    }
+
+    /**
+     * View single resource by id, doing a proper redirect (302) to resource module view by type.
+     * If no resource found by ID, redirect to referer.
+     *
+     * @param string|int $id Resource ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function uname($id) : ?Response
+    {
+        try {
+            $response = $this->apiClient->get(sprintf('/objects/%s', $id));
+        } catch (BEditaClientException $e) {
+            if ($e->getCode() === 404) {
+                $error = sprintf(__('Resource "%s" not found', true), $id);
+            } else {
+                $error = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $e->getMessage());
+            }
+            $this->Flash->error($error);
+
+            return $this->redirect($this->referer());
+        }
+        $_name = 'modules:view';
+        $object_type = $response['data']['type'];
+        $id = $response['data']['id'];
+
+        return $this->redirect(compact('_name', 'object_type', 'id'));
     }
 
     /**
