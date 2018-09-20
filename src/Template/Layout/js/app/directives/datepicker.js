@@ -52,7 +52,7 @@ export default {
                     let offset = now.getTimezoneOffset();
                     let tmz = offset / 60;
                     let sgn = tmz < 0 ? '+' : '-';
-                    let formatUTC = `${format} (${sgn}${Math.abs(tmz)} UTC)`;
+                    let formatUTC = `${format} (UTC${sgn}${Math.abs(tmz)})`;
                     return moment(dateObj).format(formatUTC);
                 }
 
