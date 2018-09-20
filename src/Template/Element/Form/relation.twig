@@ -62,19 +62,19 @@
                                         <span v-if="getParamHelper(related, key)" class="tag param-value"><: formatParam(key, getParamHelper(related, key)) :></span>
                                 </li>
                             </ul>
-
-                            <button v-if="$root.panelIsOpen" class="icon-coffee"
-                                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
-                            <button v-else
-                                class="icon-edit"
-                                @click.prevent.stop="requestPanel({
-                                    editRelationParams: {
-                                        name: relationName,
-                                        related: related,
-                                        schema: relationSchema,
-                                    },
-                                })">{{ __('Edit Params') }}</button>
                         </div>
+
+                        <button v-if="$root.panelIsOpen" class="icon-coffee"
+                                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+                        <button v-else
+                            class="icon-edit"
+                            @click.prevent.stop="requestPanel({
+                                editRelationParams: {
+                                    name: relationName,
+                                    related: related,
+                                    schema: relationSchema,
+                                },
+                            })">{{ __('Edit Params') }}</button>
 
                         <footer>
                             <a class="icon-edit icon-only-icon has-text-size-larger" :href="buildViewUrl(related.type, related.id)" target="_blank"></a>
