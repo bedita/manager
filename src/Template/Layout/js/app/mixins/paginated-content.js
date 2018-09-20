@@ -29,7 +29,7 @@ export const PaginatedContentMixin = {
 
             pagination: DEFAULT_PAGINATION,
             query: {},
-            formatObjetsFilter: ['params', 'priority', 'position'],
+            formatObjetsFilter: ['params', 'priority', 'position', 'url'],
         }
     },
 

@@ -138,6 +138,13 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'trash:empty']
     );
 
+    // view resource by id / uname
+    $routes->connect(
+        '/view/:id',
+        ['controller' => 'Modules', 'action' => 'uname'],
+        ['pass' => ['id'], '_name' => 'modules:uname']
+    );
+
     // Modules.
     $routes->connect(
         '/:object_type',

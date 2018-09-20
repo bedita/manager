@@ -25,7 +25,7 @@ export default {
         <nav class="pagination has-text-size-smallest" :class="pagination.count > 4 && 'show-pagination'">
 
             <div class="pagination-items">
-                <span><: pagination.page_items :> <: objectsLabel :></span>
+                <span><: pagination.count :> <: objectsLabel :></span>
             </div>
 
             <div class="filter-search">
@@ -53,12 +53,38 @@ export default {
                     <option v-for="size in paginateSizes"><: size :></option>
                 </select>
 
-                <button
-                    v-for="i in pagination.page_count" :key="i"
-                    v-if="pagination.page_count > 1"
-                    v-bind:class="pagination.page == i? '' : 'is-dark'"
-                    v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
-                    class="has-text-size-smallest" @click.prevent="changePage(i)"><: i :></button>
+                <div class="pages-buttons full-layout" v-if="isFullPaginationLayout">
+                    <button
+                        v-for="i in pagination.page_count" :key="i"
+                        v-bind:class="pagination.page == i? '' : 'is-dark'"
+                        v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
+                        class="has-text-size-smallest" @click.prevent="changePage(i)"><: i :>
+                    </button>
+                </div>
+
+                <div class="pages-buttons full-layout" v-if="!isFullPaginationLayout">
+                    <!-- first page --->
+                    <button v-if="pagination.page > 1" class="has-text-size-smallest" @click.prevent="changePage(1)"><: 1 :></button>
+
+                    <!-- delimiter --->
+                    <span v-if="pagination.page > 3" class="pages-delimiter">...</span>
+
+                    <!-- prev page --->
+                    <button v-if="pagination.page > 2" class="has-text-size-smallest" @click.prevent="changePage(pagination.page - 1)"><: pagination.page - 1:></button>
+
+                    <!-- current page --->
+                    <button class="is-dark current-page has-text-size-smallest" @click.prevent="changePage(pagination.page)"><: pagination.page :></button>
+
+                    <!-- next page --->
+                    <button v-if="pagination.page < pagination.page_count-1" class="has-text-size-smallest" @click.prevent="changePage(pagination.page + 1)"><: pagination.page + 1:></button>
+
+                    <!-- delimiter --->
+                    <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter">...</span>
+
+                    <!-- last page --->
+                    <button v-if="pagination.page < pagination.page_count" class="has-text-size-smallest" @click.prevent="changePage(pagination.page_count)"><: pagination.page_count :></button>
+                </div>
+
             </div>
         </nav>
     `,
@@ -136,6 +162,15 @@ export default {
         rightTypes() {
             return this.relationTypes && this.relationTypes.right || [];
         },
+
+        /**
+         * check which navigation layout needs to be rendered
+         *
+         * @return {void}
+         */
+        isFullPaginationLayout() {
+            return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
+        }
     },
 
     watch: {
