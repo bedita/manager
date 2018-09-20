@@ -259,7 +259,9 @@ export default {
          */
         prepareRelationsToRemove(relations) {
             this.removedRelationsData = JSON.stringify(this.formatObjects(relations));
-            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            if (relations.length) {
+                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         },
 
 
