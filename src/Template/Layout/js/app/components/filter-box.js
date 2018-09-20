@@ -21,7 +21,7 @@ import { DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 export default {
     template:
     `
-        <nav class="pagination has-text-size-smallest" :class="pagination.count > pagination.page_size && 'show-pagination'">
+        <nav class="pagination has-text-size-smallest">
 
             <div class="count-items" v-if="pagination.count">
                 <span><: pagination.count :> <: objectsLabel :></span>
@@ -36,15 +36,14 @@ export default {
                 <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()"><: resetFilterLabel :></button>
             </div>
 
-            <div class="page-size">
+            <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
                 <span><: pageSizesLabel :>:</span>
                 <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
                     <option v-for="size in paginateSizes"><: size :></option>
                 </select>
             </div>
 
-            <div class="pagination-buttons">
-
+            <div class="pagination-buttons" :class="pagination.count <= pagination.page_size && 'hide'">
                 <div class="pages-buttons full-layout" v-if="isFullPaginationLayout">
                     <button
                         v-for="i in pagination.page_count" :key="i"

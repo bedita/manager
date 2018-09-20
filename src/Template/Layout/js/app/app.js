@@ -42,7 +42,7 @@ const _vueInstance = new Vue({
             vueLoaded: false,
             urlPagination: '',
             searchQuery: '',
-            pageSize: '100',
+            pageSize: '',
             page: '',
             sort: '',
             panelIsOpen: false,
@@ -55,7 +55,7 @@ const _vueInstance = new Vue({
 
             pagination: {
                 page: '',
-                page_size: '100',
+                page_size: '',
             }
         }
     },
@@ -136,6 +136,9 @@ const _vueInstance = new Vue({
         onFilterObjects(filter) {
             this.urlFilterQuery = filter;
             this.page = '';
+            this.page = '';
+            this.page = '';
+
             this.applyFilters(this.urlFilterQuery);
         },
 
@@ -310,7 +313,7 @@ const _vueInstance = new Vue({
          */
         resetFilters() {
             this.page = '';
-            this.pageSize = 100;
+            this.pageSize = '';
             let filter = {
                 q: '',
             }

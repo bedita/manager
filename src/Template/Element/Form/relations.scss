@@ -1,34 +1,31 @@
-.relation-view {
-    nav.pagination {
-        justify-content: flex-start;
 
-        .filter-search {
-            flex: 1;
-            order: 1;
-            margin: 0;
-        }
+nav.pagination {
+    justify-content: flex-start;
 
-        .page-size, .pagination-buttons {
+    .filter-search {
+        flex: 1;
+        order: 1;
+        margin: 0;
+    }
+
+    .page-size, .pagination-buttons {
+        &.hide {
             display: none;
         }
+    }
 
-        .count-items {
-            order: 2;
-        }
+    .count-items {
+        order: 2;
+    }
 
-        &.show-pagination {
-            .page-size, .pagination-buttons {
-                display: block;
-            }
-            .page-size {
-                order: 3;
-            }
-            .pagination-buttons {
-                order: 4;
-            }
-        }
+    .page-size {
+        order: 3;
+    }
+    .pagination-buttons {
+        order: 4;
     }
 }
+
 
 .related-objects-list {
     margin-bottom: 16px;
