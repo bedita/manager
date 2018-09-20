@@ -1,43 +1,41 @@
-.relation-view {
-    nav.pagination {
-        justify-content: flex-start;
 
-        .filter-search {
+nav.pagination {
+    justify-content: flex-start;
+
+    .filter-search {
+        flex: 1;
+        order: 1;
+        margin: 0;
+
+        display: flex;
+
+        .search-query {
             flex: 1;
-            order: 1;
-            margin: 0;
-
-            display: flex;
-
-            .search-query {
-                flex: 1;
-            }
-
-            .search-types {
-                margin-left: $gutter / 2;
-            }
         }
 
-        .pagination-items, .page-size, .pagination-buttons {
-            display: none;
-        }
-
-        &.show-pagination {
-            .pagination-items, .page-size, .pagination-buttons {
-                display: block;
-            }
-            .pagination-items {
-                order: 2;
-            }
-            .page-size {
-                order: 3;
-            }
-            .pagination-buttons {
-                order: 4;
-            }
+        .search-types, button {
+            margin-left: $gutter / 2;
         }
     }
+
+    .page-size, .pagination-buttons {
+        &.hide {
+            display: none;
+        }
+    }
+
+    .count-items {
+        order: 2;
+    }
+
+    .page-size {
+        order: 3;
+    }
+    .pagination-buttons {
+        order: 4;
+    }
 }
+
 
 .related-objects-list {
     margin-bottom: 16px;
@@ -120,6 +118,10 @@
         ul.params-list {
             list-style: none;
             padding: $gutter * 0.25;
+        }
+
+        .priority {
+            margin-bottom: $gutter;
         }
 
         >div {

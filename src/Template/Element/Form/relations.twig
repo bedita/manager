@@ -14,8 +14,12 @@
                 <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>{{ relationName|humanize|lower }}<span class="tag is-smallest is-black space-around-half"
-                                                                v-bind:class="!count? 'empty' : ''"><: count :></span></h2>
+                        <h2>
+                            {{ relationName|humanize|lower }}
+                            <span class="tag is-smallest is-black space-around-half"
+                                :class="!totalObjects? 'empty' : ''"><: totalObjects :>
+                            </span>
+                        </h2>
                     </header>
 
                     {% if relationName == 'children' %}

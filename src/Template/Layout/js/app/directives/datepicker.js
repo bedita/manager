@@ -1,30 +1,29 @@
-// flatpickr
-
 /**
- * Templates that uses this component (directly or indirectly):
- *  Template/Elements/relations.twig
- *
- * <staggered-list> component used for lists with staggered animation
+ * Datepicker vue directive
  *
  */
 
 import flatpickr from 'flatpickr/dist/flatpickr.min';
+import moment from 'moment';
 import 'flatpickr/dist/flatpickr.min.css';
+
 
 const dateTimePickerOptions = {
     enableTime: true,
-    dateFormat: 'Y-m-d H:i',
     altInput: true,
-    altFormat: 'F j, Y - H:i',
+    dateFormat: 'Z', // ISO8601 for db
+    altFormat: 'D/M/Y HH:MM', // moment format / visible
     animate: false,
+    time_24hr: true,
 };
 
 const datepickerOptions = {
     enableTime: false,
-    dateFormat: 'Y-m-d',
     altInput: true,
-    altFormat: 'F j, Y',
+    dateFormat: 'Z', // ISO8601 for db
+    altFormat: 'D/M/Y', // moment format / visible
     animate: false,
+    time_24hr: true,
 };
 
 export default {
@@ -40,6 +39,21 @@ export default {
 
                 if (vueEl.data && vueEl.data.attrs && vueEl.data.attrs.time === 'true') {
                     options = dateTimePickerOptions;
+                }
+
+                // custom format Date so we can show the current timezone
+                options.formatDate = (dateObj, format) => {
+                    // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
+                    if (format === 'Z') {
+                        return moment(dateObj).toISOString();
+                    }
+                    // or else timezone infos will be added to date string
+                    let now = new Date();
+                    let offset = now.getTimezoneOffset();
+                    let tmz = offset / 60;
+                    let sgn = tmz < 0 ? '+' : '-';
+                    let formatUTC = `${format} (UTC${sgn}${Math.abs(tmz)})`;
+                    return moment(dateObj).format(formatUTC);
                 }
 
                 try {

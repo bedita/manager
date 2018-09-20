@@ -41,6 +41,7 @@ export default {
         return {
             oldParams: {},
             editingParams: {},
+            priority: null,
             isModified: false,
         }
     },
@@ -50,16 +51,25 @@ export default {
             if (value) {
                 Object.assign(this.oldParams, value.related.meta.relation.params);
                 Object.assign(this.editingParams, value.related.meta.relation.params);
+
+                this.priority = value.related.meta.relation.priority;
             } else {
+                this.oldParams = {};
                 this.editingParams = {};
                 this.isModified = false;
+                this.priority = null;
             }
         },
     },
 
     methods: {
         saveParams() {
-            this.relation.related.meta.relation.params = this.editingParams;
+            if (Object.keys(this.editingParams).length) {
+                this.relation.related.meta.relation.params = this.editingParams;
+            } else {
+                delete this.relation.related.meta.relation.params;
+            }
+            this.relation.related.meta.relation.priority = this.priority;
             this.closeParamsView();
             this.returnDataFromPanel({
                 action: 'edit-params',
@@ -75,7 +85,7 @@ export default {
         checkParams() {
             this.isModified = !!Object.keys(this.editingParams).filter((index) => {
                 return this.editingParams[index] !== '' && this.editingParams[index] !== this.oldParams[index];
-            }).length;
+            }).length || this.relation.related.meta.relation.priority !== this.priority;
         },
     },
 }
