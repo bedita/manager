@@ -48,10 +48,11 @@ class LoginController extends AppController
                 $reason = $attributes['reason'];
             }
         }
-        if (!empty($user)) {
+        if (!empty($user) && is_array($user)) {
+            // setup timezone from request
+            $user['timezone'] = $this->request->getData('timezone');
             // Successful login. Redirect.
             $this->Auth->setUser($user);
-            // $this->Flash->success(__('Successfully logged in'));
 
             return $this->redirect($this->Auth->redirectUrl());
         }

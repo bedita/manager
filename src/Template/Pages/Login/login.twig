@@ -24,6 +24,12 @@
     })|raw }}
     <label>{{ __('Password') }}</label>
 
+    {{ Form.control('timezone', {
+        'label': false,
+        'value': 'UTC',
+        'style': 'display: none'
+    })|raw }}
+
     {{ Form.submit(__('Sign in'))|raw }}
 
     {{ Form.end()|raw }}
