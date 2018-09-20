@@ -110,6 +110,10 @@ nav.pagination {
             padding: $gutter * 0.25;
         }
 
+        .priority {
+            margin-bottom: $gutter;
+        }
+
         >div {
             &:not(:last-of-type) {
                 margin-bottom: $gutter;
