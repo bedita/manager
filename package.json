@@ -25,6 +25,7 @@
     "dependencies": {
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",
+        "moment": "^2.22.2",
         "sleep-promise": "^6.0.0",
         "v-hotkey": "^0.2.3",
         "vue": "^2.5.16"
