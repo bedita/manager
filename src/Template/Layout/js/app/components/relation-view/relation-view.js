@@ -168,16 +168,29 @@ export default {
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
-         * @param {Object} filter
+         * @emits Event#count count objects event
          *
-         * @return {Boolean} response;
+         * @param {Object} filter object containing filters
+         * @param {Boolean} force force recount of related objects
+         *
+         * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}) {
+        async loadRelatedObjects(filter = {}, force = false) {
             this.loading = true;
-            let resp = await this.getPaginatedObjects(true, filter);
+            let objs = await this.getPaginatedObjects(true, filter);
             this.loading = false;
-            this.$emit('count', this.pagination.count);
-            return resp;
+            this.$emit('count', this.pagination.count, force);
+            return objs;
+        },
+
+        /**
+         * reload all related objects
+         *
+         * @return {Array} objs objects retrieved
+         */
+        reloadObjects() {
+            this.activeFilter = {};
+            return this.loadRelatedObjects({}, true);
         },
 
         /**
