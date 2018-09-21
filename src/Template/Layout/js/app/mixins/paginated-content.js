@@ -88,7 +88,7 @@ export const PaginatedContentMixin = {
                     })
                     .catch((error) => {
                         this.requestsQueue.pop();
-                        // code 20 is aberted fetch by user which needs to be passed down the promise road
+                        // code 20 is aborted fetch by user which needs to be passed down the promise road
                         if (error.code === 20) {
                             throw error;
                         } else {
