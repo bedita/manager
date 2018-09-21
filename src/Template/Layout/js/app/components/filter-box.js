@@ -35,8 +35,8 @@ export default {
 
                 <span v-if="rightTypes.length > 1" class="search-types">
                     <select v-model="filterType">
-                        <option value="" label="types"></option>
-                        <option v-for="type in rightTypes"><: type.attributes.name :> </option>
+                        <option value="" label="All Types"></option>
+                        <option v-for="type in rightTypes"><: type :> </option>
                     </select>
                 </span>
 
