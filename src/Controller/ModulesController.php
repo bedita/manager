@@ -19,7 +19,7 @@ use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
- * Modules controller: list, add, edit, remove items (default objects)
+ * Modules controller: list, add, edit, remove objects
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
@@ -57,6 +57,9 @@ class ModulesController extends AppController
         parent::beforeRender($event);
 
         $this->set('objectType', $this->objectType);
+        if ($this->request->getParam('action') === 'index') {
+            $this->set('types', ['right' => $this->descendants()]);
+        }
     }
 
     /**
@@ -91,13 +94,7 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
-
-            // get object_type descendents if available
-            $currentType = $this->apiClient->get(sprintf('/model/object_types/%s', $this->objectType));
-            $descendents = $this->apiClient->get(sprintf('/model/object_types?filter[parent]=%s', $currentType['data']['id']));
         } catch (BEditaClientException $e) {
-            // @TODO: ajax error display
-
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
@@ -105,15 +102,9 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-        $types['right'] = (array)$descendents['data'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
-        $this->set(compact('types'));
+        $this->set('objects', (array)$response['data']);
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
 
         if (!empty($this->request->getQueryParams()['autocomplete'])) {
             $this->render('autocomplete');
@@ -122,6 +113,32 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->indexList($this->objectType));
 
         return null;
+    }
+
+    /**
+     * Retrieve descendants of `$this->objectType` if any
+     *
+     * @return array
+     */
+    protected function descendants() : array
+    {
+        if (!$this->Modules->isAbstract($this->objectType)) {
+            return [];
+        }
+        $filter = [
+            'parent' => $this->objectType,
+            'enabled' => true,
+        ];
+        try {
+            $descendants = $this->apiClient->get('/model/object_types', compact('filter') + ['fields' => 'name']);
+        } catch (BEditaClientException $e) {
+            // Error! Return empty list.
+            $this->log($e, LogLevel::ERROR);
+
+            return [];
+        }
+
+        return Hash::extract($descendants, 'data.{n}.attributes.name');
     }
 
     /**
@@ -379,8 +396,8 @@ class ModulesController extends AppController
             $leftUrl = $response['data']['relationships']['left_object_types']['links']['related'];
             $left = $this->apiClient->get($leftUrl);
 
-            $response['data']['right'] = $right['data'];
-            $response['data']['left'] = $left['data'];
+            $response['data']['right'] = Hash::extract($right, 'data.{n}.attributes.name');
+            $response['data']['left'] = Hash::extract($left, 'data.{n}.attributes.name');
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 

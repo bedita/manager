@@ -18,7 +18,7 @@ use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**
- * Trash controller: list, restore, delete
+ * Trash can controller: list, restore & remove permanently objects
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
@@ -67,6 +67,7 @@ class TrashController extends AppController
     {
         parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'trash:list']);
+        $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
     }
 
     /**
@@ -81,9 +82,6 @@ class TrashController extends AppController
 
         try {
             $response = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
-
-            // get list of object types
-            $descendents = $this->apiClient->get('/model/object_types');
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
@@ -92,15 +90,9 @@ class TrashController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-        $types['right'] = (array)$descendents['data'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
-        $this->set(compact('types'));
+        $this->set('objects', (array)$response['data']);
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
 
         $this->set('properties', $this->Properties->indexList('trash'));
 
