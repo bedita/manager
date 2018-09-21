@@ -37,7 +37,7 @@ export default {
         return {
             isOpen: true,
             isLoading: false,
-            count: 0,
+            totalObjects: 0,
         }
     },
 
@@ -58,8 +58,10 @@ export default {
         onToggleLoading(status) {
             this.isLoading = status;
         },
-        onCount(n) {
-            this.count = n;
+        onCount(n, force = false) {
+            if (this.totalObjects === 0 || force) {
+                this.totalObjects = n;
+            }
         },
     }
 }

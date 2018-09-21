@@ -7,7 +7,7 @@ import { throws } from "assert";
  */
 
 export const DEFAULT_PAGINATION = {
-    count: 1,
+    count: 0,
     page: 1,
     page_size: 20,
     page_count: 1,

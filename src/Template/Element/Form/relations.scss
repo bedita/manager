@@ -1,33 +1,31 @@
-.relation-view {
-    nav.pagination {
-        justify-content: flex-start;
 
-        .filter-search {
-            flex: 1;
-            order: 1;
-            margin: 0;
-        }
+nav.pagination {
+    justify-content: flex-start;
 
-        .pagination-items, .page-size, .pagination-buttons {
+    .filter-search {
+        flex: 1;
+        order: 1;
+        margin: 0;
+    }
+
+    .page-size, .pagination-buttons {
+        &.hide {
             display: none;
         }
+    }
 
-        &.show-pagination {
-            .pagination-items, .page-size, .pagination-buttons {
-                display: block;
-            }
-            .pagination-items {
-                order: 2;
-            }
-            .page-size {
-                order: 3;
-            }
-            .pagination-buttons {
-                order: 4;
-            }
-        }
+    .count-items {
+        order: 2;
+    }
+
+    .page-size {
+        order: 3;
+    }
+    .pagination-buttons {
+        order: 4;
     }
 }
+
 
 .related-objects-list {
     margin-bottom: 16px;
@@ -110,6 +108,10 @@
         ul.params-list {
             list-style: none;
             padding: $gutter * 0.25;
+        }
+
+        .priority {
+            margin-bottom: $gutter;
         }
 
         >div {

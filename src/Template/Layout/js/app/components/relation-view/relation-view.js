@@ -168,11 +168,14 @@ export default {
         /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
-         * @param {Object} filter
+         * @emits Event#count count objects event
          *
-         * @return {Boolean} response;
+         * @param {Object} filter object containing filters
+         * @param {Boolean} force force recount of related objects
+         *
+         * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}) {
+        async loadRelatedObjects(filter = {}, force = false) {
             this.loading = true;
             let response = this.getPaginatedObjects(true, filter);
 
@@ -186,11 +189,21 @@ export default {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
                         this.loading = false;
-                        console.error(error);
+                        console.error(error);s
                     }
                 });
 
             return response;
+        },
+
+        /**
+         * reload all related objects
+         *
+         * @return {Array} objs objects retrieved
+         */
+        reloadObjects() {
+            this.activeFilter = {};
+            return this.loadRelatedObjects({}, true);
         },
 
         /**
@@ -259,7 +272,9 @@ export default {
          */
         prepareRelationsToRemove(relations) {
             this.removedRelationsData = JSON.stringify(this.formatObjects(relations));
-            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            if (relations.length) {
+                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         },
 
 
