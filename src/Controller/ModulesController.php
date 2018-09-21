@@ -172,10 +172,19 @@ class ModulesController extends AppController
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
-        $translation = Hash::extract($response, 'data.attributes');
-        $object = Hash::extract($response, 'included.0.attributes');
+
+        $this->set('schema', $this->Schema->getSchema($this->objectType));
+
+        $translation = Hash::extract($response, 'data');
+        $object = Hash::extract($response, 'included.0');
         $this->set('translation', $translation);
         $this->set('object', $object);
+
+        $this->set('translatable', [
+            'title',
+            'description',
+            'body',
+        ]);
 
         return null;
     }

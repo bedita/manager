@@ -1,2 +1,66 @@
-{{ dump(object) }} <hr/>
-{{ dump(translation) }}
+{% do _view.assign('bodyViewClass', 'translation-module') %}
+
+<modules-view inline-template ref="moduleView">
+<div class="modules-view" v-hotkey="keyEvents">
+
+    {% if object.id %}
+    <header>
+        <h1 untitled="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+    </header>
+    {% endif %}
+
+    <div class="module-form">
+
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'modules:save', 'object_type': objectType},
+            'id': 'form-translate',
+        })|raw }}
+
+            <div class="form-column">
+                <section class="fieldset order-{{ order|default('0') }}">
+                    <div class="tab-container">
+                        {% for field in translatable %}
+                            <div class="input text ">
+                                <label for="title">{{ field }}</label>
+                                <input type="text" name="{{ field }}" id="{{ field }}" value="{{ object.attributes[field] }}" class="{{ field }}">
+                            </div>
+                        -{{ Schema.controlTypeFromSchema(schema.properties[field]) }}-
+
+                            {# in view is: #}
+                            {# {% set options = Schema.controlOptions(field, value, schema.properties[field]) %}
+                            {{ Form.control(field, options)|raw }} #}
+                        {% endfor %}
+                        <pre>
+                        {{ dump(object) }}
+                        </pre>
+                    </div>
+            </div>
+
+            <div class="form-column">
+                <section class="fieldset order-{{ order|default('0') }}">
+                    <div class="tab-container">
+                        {% for field in translatable %}
+                            <div class="input text ">
+                                <label for="title">{{ field }}</label>
+                                <input type="text" name="{{ field }}" id="{{ field }}" value="{{ translation.attributes.translated_fields[field] }}" class="{{ field }}">
+                            </div>
+                        {% endfor %}
+
+                        <pre>
+                        {{ dump(translation) }}
+                        </pre>
+                    </div>
+                </section>
+            </div>
+
+        {{ Form.end()|raw }}
+
+        {# TODO: da fare salvataggio e eliminazione #}
+        {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
+        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-translate'})) %} #}
+        {# Append "Delete" to commands in commands menu. #}
+        {# {% do _view.append('commands', Form.postButton(__('Trash'), {'_name': 'modules:deleteTranslation', 'object_type': objectType}, {'data': {'id': object.id}})) %} #}
+    </div>
+
+</div>
+</modules-view>

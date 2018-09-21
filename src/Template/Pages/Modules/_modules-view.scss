@@ -1,4 +1,4 @@
-body.view-module {
+body.view-module, body.translation-module {
 
     .modules-view {
         padding-left: $gutter * .5;
@@ -26,6 +26,14 @@ body.view-module {
             .form-column {
                 display: contents;
                 width: 100%;
+
+                // REMOVE
+                pre {
+                    max-width: 400px;
+                    overflow: auto;
+                    background-color: $gray-800;
+                    padding: .5rem;
+                }
 
                 @media screen and (min-width: 780px) {
                     display: block;
