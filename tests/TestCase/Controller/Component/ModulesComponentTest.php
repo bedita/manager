@@ -65,61 +65,6 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Data provider for `testGetModuleByName` test case.
-     *
-     * @return array
-     */
-    public function getModuleByNameProvider() : array
-    {
-        return [
-            'found' => [
-                [
-                    'name' => 'gustavo',
-                ],
-                [
-                    [
-                        'name' => 'gustavo',
-                    ],
-                    [
-                        'whereTheModulesHaveNoName' => 'supporto',
-                    ],
-                ],
-                'gustavo',
-            ],
-            'not found' => [
-                null,
-                [
-                    [
-                        'name' => 'gustavo',
-                    ],
-                    [
-                        'whereTheModulesHaveNoName' => 'supporto',
-                    ],
-                ],
-                'bedita',
-            ],
-        ];
-    }
-
-    /**
-     * Test `getModuleByName()` method.
-     *
-     * @param array|null $expected Expected result.
-     * @param array $modules List of modules.
-     * @param string $name Name of module to get.
-     * @return void
-     *
-     * @dataProvider getModuleByNameProvider()
-     * @covers ::getModuleByName()
-     */
-    public function testGetModuleByName($expected, array $modules, string $name) : void
-    {
-        $actual = $this->Modules->getModuleByName($modules, $name);
-
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
      * Data provider for `testGetProject` test case.
      *
      * @return array
