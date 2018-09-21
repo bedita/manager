@@ -427,7 +427,8 @@ export default {
         /**
          * go to specific page
          *
-         * @param {Number} page number
+         * @param {Number} page The page number
+         * @param {Object} filter The filter to apply
          *
          * @return {void}
          */
