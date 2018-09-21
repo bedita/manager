@@ -64,7 +64,7 @@ class ModulesComponent extends Component
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (isset($currentModuleName)) {
-            $currentModule = $this->getModuleByName($modules, $currentModuleName);
+            $currentModule = Hash::get($modules, $currentModuleName);
         }
 
         $this->getController()->set(compact('currentModule', 'modules', 'project'));
@@ -96,7 +96,7 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Get list of available modules.
+     * Get list of available modules as an array with `name` as key
      *
      * @return array
      */
@@ -135,25 +135,7 @@ class ModulesComponent extends Component
             $modules = array_merge($modules, $plugins);
         }
 
-        return $modules;
-    }
-
-    /**
-     * Get a module by its name.
-     *
-     * @param array $modules List of all modules.
-     * @param string $name Name of module to extract.
-     * @return array|null
-     */
-    public function getModuleByName(array $modules, string $name) : ?array
-    {
-        foreach ($modules as $module) {
-            if (Hash::get($module, 'name') === $name) {
-                return $module;
-            }
-        }
-
-        return null;
+        return Hash::combine($modules, '{n}.name', '{n}');
     }
 
     /**
@@ -171,5 +153,44 @@ class ModulesComponent extends Component
         ];
 
         return $project;
+    }
+
+    /**
+     * Check if an object type is abstract or concrete.
+     * This method must be called in `beforeRender` since controller `viewVars` is used
+     *
+     * @param string $name Name of object type.
+     * @return bool True if abstract, false if concrete
+     */
+    public function isAbstract(string $name) : bool
+    {
+        $modules = Hash::get($this->getController()->viewVars, 'modules', []);
+
+        return (bool)Hash::get($modules, sprintf('%s.hints.multiple_types', $name), false);
+    }
+
+    /**
+     * Get list of object types
+     * This method must be called in `beforeRender` since controller `viewVars` is used
+     *
+     * @param bool|null $abstract Only abstract or concrete types.
+     * @return array Type names list
+     */
+    public function objectTypes(?bool $abstract = null) : array
+    {
+        $modules = Hash::get($this->getController()->viewVars, 'modules', []);
+        $types = [];
+        foreach ($modules as $name => $data) {
+            if (!$data['hints']['object_type']) {
+                continue;
+            }
+            if ($abstract === null) {
+                $types[] = $name;
+            } elseif ($abstract === $data['hints']['multiple_types']) {
+                $types[] = $name;
+            }
+        }
+
+        return $types;
     }
 }
