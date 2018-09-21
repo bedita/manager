@@ -153,6 +153,34 @@ class ModulesController extends AppController
     }
 
     /**
+     * View single translation.
+     *
+     * @param string|int $id Resource ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function translation($id) : ?Response
+    {
+        $this->request->allowMethod(['get']);
+
+        try {
+            $include = 'object';
+            $response = $this->apiClient->getObject($id, 'translations', compact('include'));
+        } catch (BEditaClientException $e) {
+            // Error! Back to index.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+        $translation = Hash::extract($response, 'data.attributes');
+        $object = Hash::extract($response, 'included.0.attributes');
+        $this->set('translation', $translation);
+        $this->set('object', $object);
+
+        return null;
+    }
+
+    /**
      * View single resource by id, doing a proper redirect (302) to resource module view by type.
      * If no resource found by ID, redirect to referer.
      *

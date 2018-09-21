@@ -157,6 +157,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:view']
     );
     $routes->connect(
+        '/:object_type/translation/:translationid',
+        ['controller' => 'Modules', 'action' => 'translation'],
+        ['pass' => ['translationid'], '_name' => 'modules:translation']
+    );
+    $routes->connect(
         '/:object_type/view/:id/relatedJson/:relation',
         ['controller' => 'Modules', 'action' => 'relatedJson'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relatedJson']
