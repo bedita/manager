@@ -76,7 +76,7 @@ class LoginController extends AppController
         if (empty($offset)) {
             return 'UTC';
         }
-        $data = explode(' ', $offset);
+        $data = explode(' ', (string)$offset);
         $dst = empty($data[1]) ? 0 : 1;
 
         return timezone_name_from_abbr('', intval($data[0]), $dst);
