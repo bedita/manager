@@ -50,7 +50,7 @@ class LoginController extends AppController
         }
         if (!empty($user) && is_array($user)) {
             // setup timezone from request
-            $user['timezone'] = $this->request->getData('timezone');
+            $user['timezone'] = $this->userTimezone();
             // Successful login. Redirect.
             $this->Auth->setUser($user);
 
@@ -61,6 +61,25 @@ class LoginController extends AppController
         $this->Flash->error(__($reason));
 
         return null;
+    }
+
+    /**
+     * Retrieve user timezone from request data.
+     *
+     * @return string User timezone
+     */
+    protected function userTimezone()
+    {
+        // 'timezone_offset' must contain UTC offset in seconds
+        // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
+        $offset = $this->request->getData('timezone_offset');
+        if (empty($offset)) {
+            return 'UTC';
+        }
+        $data = explode(' ', $offset);
+        $dst = empty($data[1]) ? 0 : 1;
+
+        return timezone_name_from_abbr('', intval($data[0]), $dst);
     }
 
     /**
