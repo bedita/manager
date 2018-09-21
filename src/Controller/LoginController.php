@@ -68,7 +68,7 @@ class LoginController extends AppController
      *
      * @return string User timezone
      */
-    protected function userTimezone()
+    protected function userTimezone() : string
     {
         // 'timezone_offset' must contain UTC offset in seconds
         // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
