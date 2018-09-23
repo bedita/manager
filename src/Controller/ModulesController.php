@@ -389,15 +389,13 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->relationData($relation);
 
-            // retrieve right and left objects of relation
-            $rightUrl = $response['data']['relationships']['right_object_types']['links']['related'];
-            $right = $this->apiClient->get($rightUrl);
+            // retrieve relation right and left object types
+            $leftTypes = Hash::extract($response, 'data.relationships.left_object_types.data.{n}.id');
+            $rightTypes = Hash::extract($response, 'data.relationships.right_object_types.data.{n}.id');
+            $typeNames = Hash::combine($response, 'included.{n}.id', 'included.{n}.attributes.name');
 
-            $leftUrl = $response['data']['relationships']['left_object_types']['links']['related'];
-            $left = $this->apiClient->get($leftUrl);
-
-            $response['data']['right'] = Hash::extract($right, 'data.{n}.attributes.name');
-            $response['data']['left'] = Hash::extract($left, 'data.{n}.attributes.name');
+            $response['data']['left'] = array_values(array_intersect_key($typeNames, array_flip($leftTypes)));
+            $response['data']['right'] = array_values(array_intersect_key($typeNames, array_flip($rightTypes)));
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
