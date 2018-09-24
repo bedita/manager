@@ -2,6 +2,9 @@
 
 import Vue from 'vue';
 
+// Polyfill
+import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
+
 export const VueConfig = {
     devtools: true,
 }
