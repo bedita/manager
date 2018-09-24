@@ -264,7 +264,6 @@ export default {
             }
         },
 
-
         /**
          * prepare removeRelated Array for saving using serialized json input field
          *
@@ -279,7 +278,6 @@ export default {
             this.removedRelated = relations;
             this.prepareRelationsToRemove(this.removedRelated);
         },
-
 
         /**
          * remove element with matched id from staged relations

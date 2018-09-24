@@ -11,6 +11,16 @@ export const DEFAULT_PAGINATION = {
     page_count: 1,
 }
 
+/**
+ * default filter object
+ */
+export const DEFAULT_FILTER = {
+    q: '',
+    filter: {
+        type: '',
+    }
+}
+
 export const PaginatedContentMixin = {
     data() {
         return {
@@ -153,7 +163,21 @@ export const PaginatedContentMixin = {
                 queryString += separator;
             }
             Object.keys(this.query).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.query[key]}`;
+                const query = this.query[key];
+                let entry = `${key}=${query}`;
+
+                // parse filter property
+                if (key === 'filter') {
+                    let filter = '';
+                    Object.keys(query).forEach((filterKey) => {
+                        if (query[filterKey] !== '') {
+                            filter += `filter[${filterKey}]=${query[filterKey]}`;
+                        }
+                    });
+
+                    entry = filter;
+                }
+                queryString += `${index ? separator : ''}${entry}`;
             });
 
             let hasQueryIdentifier = url.indexOf(qi) === -1;

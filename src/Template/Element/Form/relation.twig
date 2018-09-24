@@ -17,6 +17,8 @@
                 :pagination.sync="pagination"
                 :init-filter="activeFilter"
                 :show-filter-buttons=false
+                :relation-types="relationTypes"
+                :init-filter="activeFilter"
 
                 objects-label={{ __('objects') }}
 
@@ -160,6 +162,7 @@
                     relation: {
                         name: relationName,
                         alreadyInView: alreadyInView,
+                        relationTypes: relationTypes,
                     },
                 })">{{ __('add objects') }}</button>
 

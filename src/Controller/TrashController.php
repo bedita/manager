@@ -18,7 +18,7 @@ use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**
- * Trash controller: list, restore, delete
+ * Trash can controller: list, restore & remove permanently objects
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
@@ -89,13 +89,10 @@ class TrashController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $objects = (array)$response['data'];
-        $meta = (array)$response['meta'];
-        $links = (array)$response['links'];
-
-        $this->set(compact('objects'));
-        $this->set(compact('meta'));
-        $this->set(compact('links'));
+        $this->set('objects', (array)$response['data']);
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
 
         $this->set('properties', $this->Properties->indexList('trash'));
 

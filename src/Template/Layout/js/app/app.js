@@ -46,11 +46,14 @@ const _vueInstance = new Vue({
             page: '',
             sort: '',
             panelIsOpen: false,
+            panelAction: null,
+            panelData: null,
             addRelation: {},
             editingRelationParams: null,
 
             urlFilterQuery: {
                 q: '',
+                filter: {},
             },
 
             pagination: {
@@ -229,14 +232,16 @@ const _vueInstance = new Vue({
          *
          * @param {Object} data
          */
-        requestPanel(data) {
+        requestPanel(request) {
             this.panelIsOpen = true;
+            this.panelAction = request.action;
+            this.panelData = request.data;
 
             // open panel for relations add
-            if(this.panelIsOpen && data.relation && data.relation.name) {
-                this.addRelation = data.relation;
-            } else if (this.panelIsOpen && data.editRelationParams && data.editRelationParams.name) {
-                this.editingRelationParams = data.editRelationParams;
+            if(request.relation && request.relation.name) {
+                this.addRelation = request.relation;
+            } else if (request.editRelationParams && request.editRelationParams.name) {
+                this.editingRelationParams = request.editRelationParams;
             }
         },
 
@@ -255,7 +260,16 @@ const _vueInstance = new Vue({
                 let matches = urlParams.match(queryStringExp);
                 if (matches && matches.length) {
                     matches = matches.map(e => e.replace(queryStringExp, '$1'));
-                    this.urlFilterQuery = { q: matches[0] };
+                    this.urlFilterQuery.q = matches[0];
+                }
+
+                // search for filter['filter_name']='filter_value' both after ? and & tokens
+                const filterExp = /[?&]filter\[(.*?)\]=([^&#]*)/g;
+                matches = filterExp.exec(urlParams);
+                if (matches && matches.length === 3) {
+                    const filterKey = matches[1];
+                    const filterValue = matches[2]
+                    this.urlFilterQuery.filter[filterKey] = filterValue;
                 }
 
                 // search for page_size='some string' both after ? and & tokens
@@ -295,10 +309,27 @@ const _vueInstance = new Vue({
         buildUrlParams(params) {
             let url = `${window.location.origin}${window.location.pathname}`;
             let first = true;
+            let queryId = '?';
+            const separator = '&';
 
             Object.keys(params).forEach((key) =>  {
                 if (params[key] && params[key] !== '') {
-                    url += `${first ? '?' : '&'}${key}=${params[key]}`;
+                    const query = params[key];
+                    let entry = `${key}=${query}`;
+
+                    // parse filter property
+                    if (key === 'filter') {
+                        let filter = '';
+                        Object.keys(query).forEach((filterKey) => {
+                            if (query[filterKey] !== '') {
+                                filter += `filter[${filterKey}]=${query[filterKey]}`;
+                            }
+                        });
+
+                        entry = filter;
+                    }
+
+                    url += `${first ? queryId : separator}${entry}`;
                     first = false;
                 }
             });
@@ -330,6 +361,7 @@ const _vueInstance = new Vue({
         applyFilters(filters) {
             let url = this.buildUrlParams({
                 q: filters.q,
+                filter: filters.filter,
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
