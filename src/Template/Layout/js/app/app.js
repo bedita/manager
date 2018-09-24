@@ -15,7 +15,6 @@ import ImportView from 'app/pages/import/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
-import CreateRelatedObject from 'app/components/create-related-object';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -36,7 +35,6 @@ const _vueInstance = new Vue({
         RelationsAdd,
         FilterBoxView,
         EditRelationParams,
-        CreateRelatedObject,
     },
 
     data() {

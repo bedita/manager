@@ -238,9 +238,7 @@ export default {
             this.queryFilter.filter.type = this.filterType;
 
             clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.$emit('filter-objects', this.queryFilter);
-            }, 300);
+            this.$emit('filter-objects', this.queryFilter);
         },
 
         /**
