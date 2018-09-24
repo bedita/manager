@@ -379,7 +379,7 @@ const _vueInstance = new Vue({
         alertBeforePageUnload() {
             var forms = [...document.querySelectorAll('form')];
             forms.forEach((form) => {
-                form.addEventListener('change', () => {
+                form.addEventListener('change', (ev) => {
                     form.changed = true;
                 });
                 form.addEventListener('submit', (ev) => {
