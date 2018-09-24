@@ -43,11 +43,18 @@ class ModulesComponent extends Component
     ];
 
     /**
+     * Project modules for a user from `/home` endpoint
+     *
+     * @var array
+     */
+    protected $modules = [];
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
      */
-    public function beforeRender() : void
+    public function startup() : void
     {
         if (empty($this->Auth->user('id'))) {
             $this->getController()->set(['modules' => [], 'project' => []]);
@@ -96,7 +103,9 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Get list of available modules as an array with `name` as key
+     * Create internal list of available modules in `$this->modules` as an array with `name` as key
+     * and return it.
+     * Modules are read from `/home` endpoint
      *
      * @return array
      */
@@ -134,8 +143,9 @@ class ModulesComponent extends Component
         if ($plugins) {
             $modules = array_merge($modules, $plugins);
         }
+        $this->modules = Hash::combine($modules, '{n}.name', '{n}');
 
-        return Hash::combine($modules, '{n}.name', '{n}');
+        return $this->modules;
     }
 
     /**
@@ -157,16 +167,14 @@ class ModulesComponent extends Component
 
     /**
      * Check if an object type is abstract or concrete.
-     * This method must be called in `beforeRender` since controller `viewVars` is used
+     * This method MUST NOT be called from `beforeRender` since `$this->modules` array is still not initialized.
      *
      * @param string $name Name of object type.
      * @return bool True if abstract, false if concrete
      */
     public function isAbstract(string $name) : bool
     {
-        $modules = Hash::get($this->getController()->viewVars, 'modules', []);
-
-        return (bool)Hash::get($modules, sprintf('%s.hints.multiple_types', $name), false);
+        return (bool)Hash::get($this->modules, sprintf('%s.hints.multiple_types', $name), false);
     }
 
     /**
@@ -178,9 +186,8 @@ class ModulesComponent extends Component
      */
     public function objectTypes(?bool $abstract = null) : array
     {
-        $modules = Hash::get($this->getController()->viewVars, 'modules', []);
         $types = [];
-        foreach ($modules as $name => $data) {
+        foreach ($this->modules as $name => $data) {
             if (!$data['hints']['object_type']) {
                 continue;
             }

@@ -419,7 +419,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
 
         $controller = $this->Modules->getController();
-        $controller->dispatchEvent('Controller.beforeRender');
+        $controller->dispatchEvent('Controller.startup');
 
         $viewVars = $controller->viewVars;
         static::assertArrayHasKey('project', $viewVars);
