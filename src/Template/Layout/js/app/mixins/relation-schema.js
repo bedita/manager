@@ -12,6 +12,7 @@ export const RelationSchemaMixin = {
         return {
             relationData: null,
             relationSchema: null,
+            relationTypes: null,
         }
     },
 
@@ -46,6 +47,10 @@ export const RelationSchemaMixin = {
                         if (json.data && json.data.attributes) {
                             this.relationData = json.data.attributes;
                             this.relationSchema = this.getRelationSchema();
+                            this.relationTypes = {
+                                left: json.data.left,
+                                right: json.data.right,
+                            }
                             return this.relationData;
                         }
                     })

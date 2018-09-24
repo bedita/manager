@@ -65,61 +65,6 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Data provider for `testGetModuleByName` test case.
-     *
-     * @return array
-     */
-    public function getModuleByNameProvider() : array
-    {
-        return [
-            'found' => [
-                [
-                    'name' => 'gustavo',
-                ],
-                [
-                    [
-                        'name' => 'gustavo',
-                    ],
-                    [
-                        'whereTheModulesHaveNoName' => 'supporto',
-                    ],
-                ],
-                'gustavo',
-            ],
-            'not found' => [
-                null,
-                [
-                    [
-                        'name' => 'gustavo',
-                    ],
-                    [
-                        'whereTheModulesHaveNoName' => 'supporto',
-                    ],
-                ],
-                'bedita',
-            ],
-        ];
-    }
-
-    /**
-     * Test `getModuleByName()` method.
-     *
-     * @param array|null $expected Expected result.
-     * @param array $modules List of modules.
-     * @param string $name Name of module to get.
-     * @return void
-     *
-     * @dataProvider getModuleByNameProvider()
-     * @covers ::getModuleByName()
-     */
-    public function testGetModuleByName($expected, array $modules, string $name) : void
-    {
-        $actual = $this->Modules->getModuleByName($modules, $name);
-
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
      * Data provider for `testGetProject` test case.
      *
      * @return array
@@ -349,7 +294,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function beforeRenderProvider() : array
+    public function startupProvider() : array
     {
         return [
             'without current module' => [
@@ -438,7 +383,7 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Test `beforeRender()` method.
+     * Test `startup()` method.
      *
      * @param int|null $userId User id.
      * @param string[] $modules Expected module names.
@@ -449,8 +394,8 @@ class ModulesComponentTest extends TestCase
      * @param string|null $currentModuleName Current module.
      * @return void
      *
-     * @dataProvider beforeRenderProvider()
-     * @covers ::beforeRender()
+     * @dataProvider startupProvider()
+     * @covers ::startup()
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
     {
@@ -474,7 +419,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
 
         $controller = $this->Modules->getController();
-        $controller->dispatchEvent('Controller.beforeRender');
+        $controller->dispatchEvent('Controller.startup');
 
         $viewVars = $controller->viewVars;
         static::assertArrayHasKey('project', $viewVars);

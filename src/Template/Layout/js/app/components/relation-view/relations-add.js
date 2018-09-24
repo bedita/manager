@@ -4,6 +4,11 @@
  *
  * <relations-add> component used for Panel
  *
+ * @prop {String} relationName relation name
+ * @prop {Array} alreadyInView array of objects already added
+ * @prop {Object} relationTypes list of available object types
+ * @prop {String} configPaginateSizes list of sizes for pagination
+ *
  */
 
 import FilterBoxView from 'app/components/filter-box';
@@ -28,6 +33,9 @@ export default {
         alreadyInView: {
             type: Array,
             default: () => [],
+        },
+        relationTypes: {
+            type: Object,
         },
         configPaginateSizes: {
             type: String,
