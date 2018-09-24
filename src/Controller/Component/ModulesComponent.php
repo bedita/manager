@@ -191,9 +191,7 @@ class ModulesComponent extends Component
             if (!$data['hints']['object_type']) {
                 continue;
             }
-            if ($abstract === null) {
-                $types[] = $name;
-            } elseif ($abstract === $data['hints']['multiple_types']) {
+            if ($abstract === null || $data['hints']['multiple_types'] === $abstract) {
                 $types[] = $name;
             }
         }
