@@ -294,7 +294,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function beforeRenderProvider() : array
+    public function startupProvider() : array
     {
         return [
             'without current module' => [
@@ -383,7 +383,7 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Test `beforeRender()` method.
+     * Test `startup()` method.
      *
      * @param int|null $userId User id.
      * @param string[] $modules Expected module names.
@@ -394,8 +394,8 @@ class ModulesComponentTest extends TestCase
      * @param string|null $currentModuleName Current module.
      * @return void
      *
-     * @dataProvider beforeRenderProvider()
-     * @covers ::beforeRender()
+     * @dataProvider startupProvider()
+     * @covers ::startup()
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
     {
