@@ -179,7 +179,7 @@ class ModulesComponent extends Component
 
     /**
      * Get list of object types
-     * This method must be called in `beforeRender` since controller `viewVars` is used
+     * This method MUST NOT be called from `beforeRender` since `$this->modules` array is still not initialized.
      *
      * @param bool|null $abstract Only abstract or concrete types.
      * @return array Type names list
