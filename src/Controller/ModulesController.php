@@ -136,7 +136,7 @@ class ModulesController extends AppController
             return [];
         }
 
-        return Hash::extract($descendants, 'data.{n}.attributes.name');
+        return (array)Hash::extract($descendants, 'data.{n}.attributes.name');
     }
 
     /**
@@ -388,8 +388,8 @@ class ModulesController extends AppController
             $response = $this->apiClient->relationData($relation);
 
             // retrieve relation right and left object types
-            $leftTypes = Hash::extract($response, 'data.relationships.left_object_types.data.{n}.id');
-            $rightTypes = Hash::extract($response, 'data.relationships.right_object_types.data.{n}.id');
+            $leftTypes = (array)Hash::extract($response, 'data.relationships.left_object_types.data.{n}.id');
+            $rightTypes = (array)Hash::extract($response, 'data.relationships.right_object_types.data.{n}.id');
             $typeNames = Hash::combine($response, 'included.{n}.id', 'included.{n}.attributes.name');
 
             $response['data']['left'] = array_values(array_intersect_key($typeNames, array_flip($leftTypes)));
