@@ -57,9 +57,6 @@ class ModulesController extends AppController
         parent::beforeRender($event);
 
         $this->set('objectType', $this->objectType);
-        if ($this->request->getParam('action') === 'index') {
-            $this->set('types', ['right' => $this->descendants()]);
-        }
     }
 
     /**
@@ -105,6 +102,7 @@ class ModulesController extends AppController
         $this->set('objects', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
+        $this->set('types', ['right' => $this->descendants()]);
 
         if (!empty($this->request->getQueryParams()['autocomplete'])) {
             $this->render('autocomplete');

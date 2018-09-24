@@ -67,7 +67,6 @@ class TrashController extends AppController
     {
         parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'trash:list']);
-        $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
     }
 
     /**
@@ -93,6 +92,7 @@ class TrashController extends AppController
         $this->set('objects', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
+        $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
 
         $this->set('properties', $this->Properties->indexList('trash'));
 
