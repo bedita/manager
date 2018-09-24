@@ -101,6 +101,11 @@ date_default_timezone_set('UTC');
  */
 mb_internal_encoding(Configure::read('App.encoding'));
 
+/**
+ * Set default output timezone, can be overridden by user session timezone
+ */
+Configure::write('I18n.timezone', 'UTC');
+
 /*
  * Set the default locale. This controls how dates, number and currency is
  * formatted and sets the default language to use for translations.

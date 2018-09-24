@@ -63,9 +63,10 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test `login` method
+     * Test `login` method, no user timezone set
      *
      * @covers ::login()
+     * @covers ::userTimezone()
      *
      * @return void
      */
@@ -81,6 +82,31 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->login();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `userTimezone` method
+     *
+     * @covers ::userTimezone()
+     *
+     * @return void
+     */
+    public function testLoginTimezone()
+    {
+        $this->setupController([
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+                'timezone_offset' => '7200 0'
+            ]
+        ]);
+
+        $response = $this->Login->login();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/', $response->getHeaderLine('Location'));
+
+        $tz = $this->Login->Auth->user('timezone');
+        static::assertNotEquals('UTC', $tz);
     }
 
     /**
