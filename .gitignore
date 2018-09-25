@@ -58,4 +58,4 @@ node_modules/
 yarn-error.log
 *.css.map
 *.bundle.js.map
-bundle-report.develop.html
+bundle-report.*.html
