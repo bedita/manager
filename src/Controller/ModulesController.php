@@ -408,6 +408,33 @@ class ModulesController extends AppController
     }
 
     /**
+     * dsf
+     *
+     * @param string $relation the relating name.
+     * @return void
+     */
+    public function resourcesJson($id, string $type) : void
+    {
+        $this->request->allowMethod(['get']);
+        $response = null;
+
+        try {
+            $response = $this->apiClient->get($type, $this->request->getQueryParams());
+
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
+
+    /**
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
