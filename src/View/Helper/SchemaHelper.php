@@ -156,6 +156,7 @@ class SchemaHelper extends Helper
     {
         $options = $this->customControlOptions($name);
         if ($options) {
+            $options['value'] = $value;
             return $options;
         }
 
@@ -172,18 +173,21 @@ class SchemaHelper extends Helper
                 'type' => 'textarea',
                 'v-richeditor' => '',
                 'ckconfig' => 'configNormal',
+                'value' => $value,
             ];
         } elseif ($type === 'date-time') {
             return [
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'true',
+                'value' => $value,
             ];
         } elseif ($type === 'date') {
             return [
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'false',
+                'value' => $value,
             ];
         } elseif ($type === 'checkbox') {
             if (!empty($schema['oneOf'])) {

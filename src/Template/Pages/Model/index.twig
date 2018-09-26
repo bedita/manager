@@ -50,7 +50,7 @@
                                 {% set propVal = 'N' %}
                             {% endif %}
 
-                            <div class="{{ prop }}-cell" untitled="{{ __('Untitled') }}">{{ propVal }}</div>
+                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ propVal }}</div>
                         {% endfor %}
 
                         {# TODO: uncomment `delete` action once controller part is available #}
