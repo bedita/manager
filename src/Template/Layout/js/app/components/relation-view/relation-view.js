@@ -13,6 +13,7 @@
 
 import StaggeredList from 'app/components/staggered-list';
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
+import RolesListView from 'app/components/relation-view/roles-list-view';
 import FilterBoxView from 'app/components/filter-box';
 import TreeView from 'app/components/tree-view/tree-view';
 import sleep from 'sleep-promise';
@@ -29,6 +30,7 @@ export default {
     components: {
         StaggeredList,
         RelationshipsView,
+        RolesListView,
         FilterBoxView,
         TreeView,
     },
