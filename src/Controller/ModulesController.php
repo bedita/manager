@@ -408,9 +408,11 @@ class ModulesController extends AppController
     }
 
     /**
-     * dsf
+     * Load resources of $type callig api `GET /:type/`
+     * Json response
      *
-     * @param string $relation the relating name.
+     * @param string|int $id the object identifier.
+     * @param string $type the resource type name.
      * @return void
      */
     public function resourcesJson($id, string $type) : void
