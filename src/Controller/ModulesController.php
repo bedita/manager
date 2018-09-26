@@ -422,7 +422,6 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->get($type, $this->request->getQueryParams());
-
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
