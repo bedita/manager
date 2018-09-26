@@ -8,7 +8,7 @@
     </header>
 
     <div class="module-form">
-           {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
                 'url': {'_name': 'trash:list'},
                 'id': 'form-main',
             })|raw }}
@@ -34,10 +34,6 @@
 
             <div class="form-column">
                 {% element 'Form/publish_properties' {'cssOrder': '1'} %}
-
-                {% if _view.request.params.action != 'create' %}
-                    {% element 'Form/trees' {'cssOrder': '2'} %}
-                {% endif %}
 
                 {% element 'Form/advanced_properties' %}
 

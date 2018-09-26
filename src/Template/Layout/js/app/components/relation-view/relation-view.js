@@ -2,7 +2,7 @@
  *  Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
  *  Template/Elements/trees.twig
- *  Template/Elements/trees.twig
+ *  Template/Elements/roles.twig
  *
  * <relation-view> component used for ModulesPage -> View
  *
