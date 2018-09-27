@@ -216,6 +216,7 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
+        $translation = [];
         try {
             $response = $this->apiClient->getObject($id, $this->objectType, compact('lang'));
 
@@ -262,7 +263,7 @@ class ModulesController extends AppController
         }
         $lang = $requestData['lang'];
         try {
-            $response = $this->apiClient->save('translations', $requestData);
+            $this->apiClient->save('translations', $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
@@ -302,20 +303,28 @@ class ModulesController extends AppController
         $this->request->allowMethod(['post']);
         $requestData = $this->request->getData();
         foreach ($requestData as $translation) {
-            try {
-                // remove completely the translation
-                $this->apiClient->deleteObject($translation['id'], 'translations');
-            } catch (BEditaClientException $e) {
-                $this->log($e, LogLevel::ERROR);
-                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            if (!empty($translation['id'])) {
+                try {
+                    // remove completely the translation
+                    $this->apiClient->deleteObject($translation['id'], 'translations');
+                } catch (BEditaClientException $e) {
+                    $this->log($e, LogLevel::ERROR);
+                    $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
+                    if (!empty($translation['object_id'])) {
+                        // redir to main object view
+                        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
+                    }
+
+                    // redir to list of objects view
+                    return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+                }
             }
         }
         $this->Flash->success(__('Translation(s) deleted'));
 
         // if only one translation deleted, redir to main object view
-        if (count($requestData) === 1) {
+        if (count($requestData) === 1 && !empty($translation['object_id'])) {
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
         }
 
