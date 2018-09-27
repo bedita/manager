@@ -216,7 +216,6 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $response = $translation = null;
         try {
             $response = $this->apiClient->getObject($id, $this->objectType, compact('lang'));
 
