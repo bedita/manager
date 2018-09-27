@@ -177,10 +177,23 @@ export default {
          */
         async loadRelatedObjects(filter = {}, force = false) {
             this.loading = true;
-            let objs = await this.getPaginatedObjects(true, filter);
-            this.loading = false;
-            this.$emit('count', this.pagination.count, force);
-            return objs;
+            let response = this.getPaginatedObjects(true, filter);
+
+            response
+                .then((objs) => {
+                    this.$emit('count', this.pagination.count);
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);s
+                    }
+                });
+
+            return response;
         },
 
         /**
@@ -264,7 +277,6 @@ export default {
             }
         },
 
-
         /**
          * prepare removeRelated Array for saving using serialized json input field
          *
@@ -279,7 +291,6 @@ export default {
             this.removedRelated = relations;
             this.prepareRelationsToRemove(this.removedRelated);
         },
-
 
         /**
          * remove element with matched id from staged relations
@@ -414,15 +425,27 @@ export default {
         /**
          * go to specific page
          *
-         * @param {Number} page number
+         * @param {Number} page The page number
+         * @param {Object} filter The filter to apply
          *
-         * @return {Promise} repsonse from server with new data
+         * @return {void}
          */
-        async toPage(page, filter) {
+        toPage(page, filter) {
             this.loading = true;
-            let resp =  await PaginatedContentMixin.methods.toPage.call(this, page, filter);
-            this.loading = false;
-            return resp;
+            let response = PaginatedContentMixin.methods.toPage.call(this, page, filter);
+
+            response
+                .then((objs) => {
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);
+                    }
+                });
         },
 
         /**

@@ -1,12 +1,12 @@
 <ul role="menu">
 
     {# Core object modules #}
-    {% for module in modules if module.name != 'trash' %}
-        <li class="has-background-module-{{ module.name }} {{ module.name == currentModule.name ? 'current' : '' }}">
+    {% for name, module in modules if name != 'trash' %}
+        <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(
-                module.name|humanize|slice(0, 2),
-                {'controller': 'Modules', 'action': 'index', 'object_type': module.name, 'plugin': null},
-                {'tooltip': module.name|humanize})|raw }}
+                name|humanize|slice(0, 2),
+                {'_name': 'modules:list', 'object_type': name, 'plugin': null},
+                {'tooltip': name|humanize})|raw }}
         </li>
     {% endfor %}
 

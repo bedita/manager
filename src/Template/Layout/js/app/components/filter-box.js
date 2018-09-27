@@ -12,11 +12,12 @@
  * @prop {String} placeholder
  * @prop {Boolean} showFilterButtons
  * @prop {Object} initFilter
+ * @prop {Object} relationTypes relation types available for relation (left/right)
  * @prop {Object} pagination
  * @prop {String} configPaginateSizes
  */
 
-import { DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
 
 export default {
     template:
@@ -28,8 +29,15 @@ export default {
             </div>
 
             <div class="filter-search">
-                <span>
+                <span class="search-query">
                     <input type="text" :placeholder="placeholder" v-model="filter" @keyup.enter.prevent.stop="applyFilter()"/>
+                </span>
+
+                <span v-if="rightTypes.length > 1" class="search-types">
+                    <select v-model="filterType">
+                        <option value="" label="All Types"></option>
+                        <option v-for="type in rightTypes"><: type :> </option>
+                    </select>
                 </span>
 
                 <button v-show="showFilterButtons" name="applysearch" @click.prevent="applyFilter()"><: applyFilterLabel :></button>
@@ -107,7 +115,17 @@ export default {
         },
         initFilter: {
             type: Object,
-            default: () => {},
+            default: () => {
+                return {
+                    q: '',
+                    filter: {
+                        type: '',
+                    }
+                }
+            },
+        },
+        relationTypes: {
+            type: Object,
         },
         pagination: {
             type: Object,
@@ -122,7 +140,8 @@ export default {
     data() {
         return {
             filter: '', // Text string filter
-            queryFilter: this.initFilter, // QueryFilter Object
+            filterType: '', // Object type filter
+            queryFilter: DEFAULT_FILTER, // QueryFilter Object
             timer: null,
 
             pageSize: this.pagination.page_size, // pageSize value for pagination page size
@@ -132,6 +151,15 @@ export default {
     computed: {
         paginateSizes() {
             return JSON.parse(this.configPaginateSizes);
+        },
+
+        /**
+         * get relation's right object types
+         *
+         * @returns {Array} array of object types
+         */
+        rightTypes() {
+            return this.relationTypes && this.relationTypes.right || [];
         },
 
         /**
@@ -146,9 +174,27 @@ export default {
 
     watch: {
         /**
+         * watch initFilter and assign it to queryFilter, filter, filterType
+         *
+         * @param {Object} value filter object
+         *
+         * @returns {void}
+         */
+        initFilter(value) {
+            Object.assign(this.queryFilter, this.queryFilter, value);
+
+            this.filter = value.q;
+            this.filterType = value.filter.type;
+        },
+
+        /**
          * watcher for pageSize variable, change pageSize and reload relations
          *
          * @param {Number} value
+         *
+         * @emits Event#filter-update-page-size
+         *
+         * @returns {void}
          */
         pageSize(value) {
             this.$emit('filter-update-page-size', this.pageSize);
@@ -167,9 +213,7 @@ export default {
          */
         filter(value) {
             this.filter = value;
-            this.queryFilter = {
-                q: this.filter
-            };
+            this.queryFilter.q = this.filter;
 
             clearTimeout(this.timer);
             if (value.length >= 3 || value.length == 0) {
@@ -180,14 +224,45 @@ export default {
         },
 
         /**
+         * watcher for object type filter
+         * emits a filter-objects event with queryFilter as params
+         *
+         * @param {String} value The filter object type
+         *
+         * @emits Event#filter-objects
+         *
+         * @return {void}
+         */
+        filterType(value) {
+            this.filterType = value;
+            this.queryFilter.filter.type = this.filterType;
+
+            clearTimeout(this.timer);
+            this.$emit('filter-objects', this.queryFilter);
+        },
+
+        /**
          * watch initFilter and set filter accordingly
-        */
+         */
         initFilter: {
             deep: true,
             immediate: true,
             handler: function(value) {
                 this.filter = value && value.q || '';
             }
+        }
+    },
+
+    mounted() {
+        // merge default filters with initFilter
+        Object.assign(this.queryFilter, this.queryFilter,this.initFilter);
+
+        /**
+         * init filter from queryFilter
+         */
+        if (this.queryFilter !== undefined) {
+            this.filter = this.queryFilter.q || '';
+            this.filterType = this.queryFilter.filter.type || '';
         }
     },
 

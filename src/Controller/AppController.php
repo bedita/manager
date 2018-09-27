@@ -75,8 +75,21 @@ class AppController extends Controller
         if ($tokens) {
             $this->apiClient->setupTokens($tokens);
         }
+        $this->setupOutputTimezone();
     }
 
+    /**
+     * Setup output timezone from user session
+     *
+     * @return void
+     */
+    protected function setupOutputTimezone(): void
+    {
+        $timezone = $this->Auth->user('timezone');
+        if ($timezone) {
+            Configure::write('I18n.timezone', $timezone);
+        }
+    }
     /**
      * {@inheritDoc}
      *

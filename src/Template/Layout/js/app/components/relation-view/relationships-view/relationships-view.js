@@ -135,10 +135,22 @@ export default {
         async loadObjects() {
             this.loading = true;
 
-            let resp = await this.getPaginatedObjects();
-            this.loading = false;
+            let response = this.getPaginatedObjects();
 
-            return resp;
+            response
+                .then((objs) => {
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);
+                    }
+                });
+
+            return response;
         },
 
         /**

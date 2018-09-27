@@ -5,6 +5,7 @@
     <filter-box-view
         :pagination={{ meta.pagination|json_encode|raw }}
         :init-filter="urlFilterQuery"
+        :relation-types='{{ types|json_encode()|raw }}'
 
         config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
         placeholder="{{ __('Search in BEdita') }}"

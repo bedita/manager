@@ -43,11 +43,18 @@ class ModulesComponent extends Component
     ];
 
     /**
+     * Project modules for a user from `/home` endpoint
+     *
+     * @var array
+     */
+    protected $modules = [];
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
      */
-    public function beforeRender() : void
+    public function startup() : void
     {
         if (empty($this->Auth->user('id'))) {
             $this->getController()->set(['modules' => [], 'project' => []]);
@@ -64,7 +71,7 @@ class ModulesComponent extends Component
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (isset($currentModuleName)) {
-            $currentModule = $this->getModuleByName($modules, $currentModuleName);
+            $currentModule = Hash::get($modules, $currentModuleName);
         }
 
         $this->getController()->set(compact('currentModule', 'modules', 'project'));
@@ -96,7 +103,9 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Get list of available modules.
+     * Create internal list of available modules in `$this->modules` as an array with `name` as key
+     * and return it.
+     * Modules are read from `/home` endpoint
      *
      * @return array
      */
@@ -134,26 +143,9 @@ class ModulesComponent extends Component
         if ($plugins) {
             $modules = array_merge($modules, $plugins);
         }
+        $this->modules = Hash::combine($modules, '{n}.name', '{n}');
 
-        return $modules;
-    }
-
-    /**
-     * Get a module by its name.
-     *
-     * @param array $modules List of all modules.
-     * @param string $name Name of module to extract.
-     * @return array|null
-     */
-    public function getModuleByName(array $modules, string $name) : ?array
-    {
-        foreach ($modules as $module) {
-            if (Hash::get($module, 'name') === $name) {
-                return $module;
-            }
-        }
-
-        return null;
+        return $this->modules;
     }
 
     /**
@@ -171,5 +163,39 @@ class ModulesComponent extends Component
         ];
 
         return $project;
+    }
+
+    /**
+     * Check if an object type is abstract or concrete.
+     * This method MUST NOT be called from `beforeRender` since `$this->modules` array is still not initialized.
+     *
+     * @param string $name Name of object type.
+     * @return bool True if abstract, false if concrete
+     */
+    public function isAbstract(string $name) : bool
+    {
+        return (bool)Hash::get($this->modules, sprintf('%s.hints.multiple_types', $name), false);
+    }
+
+    /**
+     * Get list of object types
+     * This method MUST NOT be called from `beforeRender` since `$this->modules` array is still not initialized.
+     *
+     * @param bool|null $abstract Only abstract or concrete types.
+     * @return array Type names list
+     */
+    public function objectTypes(?bool $abstract = null) : array
+    {
+        $types = [];
+        foreach ($this->modules as $name => $data) {
+            if (!$data['hints']['object_type']) {
+                continue;
+            }
+            if ($abstract === null || $data['hints']['multiple_types'] === $abstract) {
+                $types[] = $name;
+            }
+        }
+
+        return $types;
     }
 }

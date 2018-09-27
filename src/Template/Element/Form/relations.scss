@@ -6,6 +6,16 @@ nav.pagination {
         flex: 1;
         order: 1;
         margin: 0;
+
+        display: flex;
+
+        .search-query {
+            flex: 1;
+        }
+
+        .search-types, button {
+            margin-left: $gutter / 2;
+        }
     }
 
     .page-size, .pagination-buttons {
@@ -170,6 +180,35 @@ nav.pagination {
     }
 }
 
+.create-related-object {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    // layout
+    > nav, >header.tab, >footer {
+        flex-shrink: 0;
+    }
+
+    > nav {
+        padding: $gutter $gutter 0;
+        margin: 0;
+    }
+
+    > header.tab {
+        margin-right: $gutter;
+        margin-left: $gutter;
+        margin-top: $gutter;
+        margin-bottom: 0;
+        cursor: auto;
+    }
+
+    > footer {
+        display: flex;
+        justify-content: space-between;
+        padding: $gutter;
+    }
+}
 
 // in panel
 
@@ -195,6 +234,7 @@ nav.pagination {
         margin-bottom: 0;
         cursor: auto;
     }
+
     .object-attributes, .params-list {
         overflow: auto;
         margin-right: 0;

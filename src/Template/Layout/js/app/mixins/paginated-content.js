@@ -1,3 +1,5 @@
+import { throws } from "assert";
+
 /**
  * Mixins: PaginatedContentMixin
  *
@@ -11,9 +13,22 @@ export const DEFAULT_PAGINATION = {
     page_count: 1,
 }
 
+/**
+ * default filter object
+ */
+export const DEFAULT_FILTER = {
+    q: '',
+    filter: {
+        type: '',
+    }
+}
+
 export const PaginatedContentMixin = {
     data() {
         return {
+            requestsQueue: [], // array of queued fetch requests
+            requestController: new AbortController(), // AbortController instance
+
             objects: [],
             endpoint: null,
 
@@ -49,25 +64,51 @@ export const PaginatedContentMixin = {
 
                 requestUrl = this.getUrlWithPaginationAndQuery(requestUrl);
 
-                return fetch(requestUrl, options)
+                // if requestQueue is populated then abort all fetch request and start over
+                if (this.requestsQueue.length > 0) {
+                    this.requestController.abort();
+                    this.requestController = new AbortController();
+                }
+
+                options.signal = this.requestController.signal;
+
+                let currentRequest = fetch(requestUrl, options)
                     .then((response) => response.json())
                     .then((json) => {
+                        this.requestsQueue.pop();
+
                         let objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
                         if (!json.data) {
                             // api response with error
                             objects = [];
                         }
 
-                        if (autoload) {
-                            this.objects = objects;
-                        }
-                        this.pagination = json.meta && json.meta.pagination || this.pagination;
+                        // if requestQueue is empty it means that this request is the last of the queue
+                        // therefore it can load objects and pagination
+                        if (this.requestsQueue.length < 1) {
+                            if (autoload) {
+                                this.objects = objects;
+                            }
+                            this.pagination = json.meta && json.meta.pagination || this.pagination;
 
-                        return objects;
+                            return objects;
+                        }
+
+                        return false;
                     })
                     .catch((error) => {
-                        console.error(error);
+                        this.requestsQueue.pop();
+                        // code 20 is aborted fetch by user which needs to be passed down the promise road
+                        if (error.code === 20) {
+                            throw error;
+                        } else {
+                            console.error(error);
+                        }
                     });
+
+                this.requestsQueue.push(currentRequest);
+
+                return currentRequest;
             } else {
                 return Promise.reject();
             }
@@ -153,7 +194,21 @@ export const PaginatedContentMixin = {
                 queryString += separator;
             }
             Object.keys(this.query).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.query[key]}`;
+                const query = this.query[key];
+                let entry = `${key}=${query}`;
+
+                // parse filter property
+                if (key === 'filter') {
+                    let filter = '';
+                    Object.keys(query).forEach((filterKey) => {
+                        if (query[filterKey] !== '') {
+                            filter += `filter[${filterKey}]=${query[filterKey]}`;
+                        }
+                    });
+
+                    entry = filter;
+                }
+                queryString += `${index ? separator : ''}${entry}`;
             });
 
             let hasQueryIdentifier = url.indexOf(qi) === -1;
