@@ -13,6 +13,7 @@
 
 namespace App\View\Helper;
 
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -90,6 +91,23 @@ class SchemaHelper extends Helper
     protected function customControlOptions($name) : array
     {
         switch ($name) {
+            case 'lang':
+                $languages = Configure::read('Project.I18n.languages');
+                if (empty($languages)) {
+                    return [
+                        'type' => 'text',
+                    ];
+                }
+                $options = [];
+                foreach ($languages as $key => $description) {
+                    $options[] = ['value' => $key, 'text' => __($description)];
+                }
+
+                return [
+                    'type' => 'select',
+                    'options' => $options,
+                ];
+
             case 'status':
                 return [
                     'type' => 'radio',

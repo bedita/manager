@@ -40,6 +40,7 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Properties');
+        $this->loadComponent('ProjectConfiguration');
 
         if (!empty($this->request)) {
             $this->objectType = $this->request->getParam('object_type');
@@ -158,6 +159,7 @@ class ModulesController extends AppController
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
+        $this->ProjectConfiguration->read();
 
         $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
         $schema = $this->Schema->getSchema($this->objectType, $revision);
