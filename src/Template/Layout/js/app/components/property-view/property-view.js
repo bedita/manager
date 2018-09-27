@@ -25,7 +25,11 @@ export default {
     props: {
         tabOpen: {
             type: Boolean,
-            default: true,
+            default: false,
+        },
+        tabOpenAtStart: {
+            type: Boolean,
+            default: false,
         },
         isDefaultOpen: {
             type: Boolean,
@@ -35,14 +39,14 @@ export default {
 
     data() {
         return {
-            isOpen: true,
+            isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
         }
     },
 
     mounted() {
-        this.isOpen = this.isDefaultOpen;
+        this.isOpen = this.tabOpenAtStart;
     },
 
     watch: {
