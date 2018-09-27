@@ -418,7 +418,6 @@ class ModulesController extends AppController
     public function resourcesJson($id, string $type) : void
     {
         $this->request->allowMethod(['get']);
-        $response = null;
 
         try {
             $response = $this->apiClient->get($type, $this->request->getQueryParams());
@@ -446,7 +445,6 @@ class ModulesController extends AppController
     public function relationshipsJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-        $response = null;
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
 
         try {

@@ -53,10 +53,7 @@ export default {
              * @returns {Array} all checked relations
              */
             get: function() {
-                let allrelations = this.relatedObjects.concat(this.pendingRelations).filter(rel => {
-                    return !this.isRemoved(rel.id)}
-                );
-                return allrelations;
+                return this.relatedObjects.concat(this.pendingRelations).filter(rel => !this.containsId(this.removedRelations, rel.id));
             },
 
             /**
@@ -70,17 +67,11 @@ export default {
             */
             set: function(newValue) {
                 // handles relations to be added
-                let relationsToAdd = newValue.filter((rel) => {
-                    return !this.isRelated(rel.id);
-                });
-
+                let relationsToAdd = newValue.filter((rel) => !this.containsId(this.relatedObjects, rel.id));
                 this.pendingRelations = relationsToAdd;
 
                 // handles relations to be removed
-                let relationsToRemove = this.relatedObjects.filter((rel) => {
-                    return !this.containsId(newValue, rel.id);
-                });
-
+                let relationsToRemove = this.relatedObjects.filter((rel) => !this.containsId(newValue, rel.id));
                 this.removedRelations = relationsToRemove;
 
                 // emit event to pass data to parent
@@ -88,32 +79,4 @@ export default {
             }
         }
     },
-
-    methods: {
-        /**
-         * check if removedRelations contains object with a specific id
-         *
-         * @param {Number} id
-         *
-         * @return {Boolean}
-         */
-        isRemoved(id) {
-            return this.removedRelations.filter((obj) => {
-                return id === obj.id;
-            }).length ? true : false;
-        },
-
-        /**
-         * check if relatedObjects contains object with a specific id
-         *
-         * @param {Number} id
-         *
-         * @return {Boolean}
-         */
-        isRelated(id) {
-            return this.relatedObjects.filter((relatedObject) => {
-                return id === relatedObject.id;
-            }).length ? true : false;
-        },
-    }
 }
