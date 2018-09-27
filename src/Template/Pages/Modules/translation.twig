@@ -11,24 +11,19 @@
 
     <div class="module-form">
 
-        {# TODO: route di salvataggio e action da vedere #}
         {{ Form.create(null, {
-            'url': {'_name': 'modules:save', 'object_type': objectType},
+            'url': {'_name': 'modules:saveTranslation', 'object_type': objectType},
             'id': 'form-translate',
         })|raw }}
 
             <header class="form-header">
                 <section class="fieldset">
-                    {{ Form.control('status', {
-                        'type': 'radio',
-                        'options': {
-                            'on': 'on',
-                            'off': 'off',
-                            'draft': 'draft',
-                            'todo': 'to do',
-                        },
-                        'value': translation.attributes.status,
-                    })|raw }}
+                    {% set options = Schema.controlOptions(
+                        'status',
+                        translation.attributes.status|default('draft'),
+                        schema.properties['status']
+                    ) %}
+                    {{ Form.control('status', options)|raw }}
                 </section>
                 <section class="fieldset">
                     {% set languageLabel = "#{__('Language')} (#{__('original')}: #{object.attributes.lang})" %}
@@ -36,14 +31,16 @@
                         'label': languageLabel,
                         'type': 'select',
                         'options': {
-                            'mul': 'muliseno',
-                            'it': 'itulieno',
+                            'en': __('English'),
+                            'it': __('Italian'),
                         },
                         'value': translation.attributes.lang,
+                        'default': 'it',
                     })|raw }}
-
                 </section>
             </header>
+
+            {% set translatable = Schema.translatableFields(schema.properties) %}
 
             <div class="form-column">
                 <section class="fieldset order-{{ order|default('0') }}">
@@ -51,7 +48,7 @@
                         {% for key in translatable %}
                             <div class="input text ">
                                 {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
-                                {{ Form.control(key, options)|raw }}
+                                {{ Form.control('translated_fields.' ~ key, options)|raw }}
                             </div>
                         {% endfor %}
                     </div>
@@ -71,13 +68,26 @@
                     </div>
             </div>
 
+        {# The ID of the resource translated #}
+        {{ Form.hidden('object_id', {'value': object.id})|raw }}
+
+        {% if translation.id %}
+            {# The translation ID #}
+            {{ Form.hidden('id', {'value': translation.id})|raw }}
+        {% endif %}
         {{ Form.end()|raw }}
 
-        {# TODO: da fare salvataggio e eliminazione #}
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-translate'})) %} #}
-        {# Append "Delete" to commands in commands menu. #}
-        {# {% do _view.append('commands', Form.postButton(__('Trash'), {'_name': 'modules:deleteTranslation', 'object_type': objectType}, {'data': {'id': object.id}})) %} #}
+        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-translate'})) %}
+
+        {% if translation.id %}
+            {# Append "Remove" to commands in commands menu. #}
+            {% do _view.append('commands',
+                Form.postButton(__('Remove'),
+                {'_name': 'modules:deleteTranslation', 'object_type': objectType},
+                {'data': [{'id': translation.id, 'object_id': object.id, 'lang': translation.attributes.lang}]})) %}
+        {% endif %}
+        {{ Form.end()|raw }}
     </div>
 
 </div>

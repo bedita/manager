@@ -238,4 +238,46 @@ class SchemaHelper extends Helper
 
         return compact('type', 'value');
     }
+
+    /**
+     * Provides list of translatable fields per schema properties
+     *
+     * @param array $properties The array of schema properties
+     * @return array
+     */
+    public function translatableFields(array $properties) : array
+    {
+        if (empty($properties)) {
+            return [];
+        }
+
+        $fields = [];
+        foreach ($properties as $name => $property) {
+            if (!empty($property['oneOf'])) {
+                foreach ($property['oneOf'] as $one) {
+                    if (!empty($one['type']) && $one['type'] === 'null') {
+                        continue;
+                    }
+
+                    if (!empty($one['type']) && !empty($one['contentMediaType']) && $one['type'] === 'string' && $one['contentMediaType'] === 'text/html') {
+                        $fields[] = $name;
+                    }
+                }
+            } elseif (!empty($property['type']) && $property['type'] === 'string') {
+                if (!empty($property['contentMediaType']) && $property['contentMediaType'] === 'text/html') { // textarea
+                    $fields[] = $name;
+                }
+            }
+        }
+        // put specific fields at the beginning of the fields array
+        $prefields = array_reverse(['title', 'description']);
+        foreach ($prefields as $field) {
+            if (in_array($field, $fields)) {
+                unset($fields[array_search($field, $fields)]);
+                array_unshift($fields, $field);
+            }
+        }
+
+        return $fields;
+    }
 }
