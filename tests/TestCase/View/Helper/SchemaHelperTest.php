@@ -215,6 +215,7 @@ class SchemaHelperTest extends TestCase
                     'templateVars' => [
                         'containerClass' => 'status',
                     ],
+                    'value' => 'on',
                 ],
                 // schema type
                 [
@@ -230,6 +231,7 @@ class SchemaHelperTest extends TestCase
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
+                    'value' => '',
                 ],
                 // schema type
                 [
@@ -249,6 +251,7 @@ class SchemaHelperTest extends TestCase
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
+                    'value' => '',
                 ],
                 // schema type
                 [
@@ -277,6 +280,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'class' => 'title',
                     'type' => 'text',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -293,6 +297,7 @@ class SchemaHelperTest extends TestCase
                     'v-richeditor' => '',
                     'ckconfig' => 'configNormal',
                     'type' => 'textarea',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -308,6 +313,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'textarea',
                     'v-richeditor' => '',
                     'ckconfig' => 'configNormal',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -323,6 +329,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'text',
                     'v-datepicker' => '',
                     'time' => 'true',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
