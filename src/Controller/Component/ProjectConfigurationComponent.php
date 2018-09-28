@@ -73,7 +73,7 @@ class ProjectConfigurationComponent extends Component
     }
 
     /**
-     * Fetch Peoject configuration via API and manipulate response array.
+     * Fetch Project configuration via API and manipulate response array.
      *
      * @return array Configuration array with a config key => data structure.
      */

@@ -476,8 +476,8 @@ class SchemaHelperTest extends TestCase
             'languages' => [
                 'en' => 'English',
                 'de' => 'German',
-            ]
-            ];
+            ],
+        ];
         Configure::write('Project.I18n', $i18n);
         $actual = $this->Schema->controlOptions('lang', null, []);
 
