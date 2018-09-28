@@ -156,26 +156,28 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
     );
+    // Translations
     $routes->connect(
         '/:object_type/translation/save',
-        ['controller' => 'Modules', 'action' => 'saveTranslation'],
-        ['_name' => 'modules:saveTranslation']
+        ['controller' => 'Translations', 'action' => 'save'],
+        ['_name' => 'translations:save']
     );
     $routes->connect(
         '/:object_type/translation/delete',
-        ['controller' => 'Modules', 'action' => 'deleteTranslation'],
-        ['_name' => 'modules:deleteTranslation']
+        ['controller' => 'Translations', 'action' => 'delete'],
+        ['_name' => 'translations:delete']
     );
     $routes->connect(
-        '/:object_type/translation/:id/create',
-        ['controller' => 'Modules', 'action' => 'createTranslation'],
-        ['pass' => ['id'], '_name' => 'modules:createTranslation']
+        '/:object_type/translation/:id/add',
+        ['controller' => 'Translations', 'action' => 'add'],
+        ['pass' => ['id'], '_name' => 'translations:add']
     );
     $routes->connect(
         '/:object_type/translation/:id/:lang',
-        ['controller' => 'Modules', 'action' => 'translation'],
-        ['pass' => ['id', 'lang'], '_name' => 'modules:translation']
+        ['controller' => 'Translations', 'action' => 'edit'],
+        ['pass' => ['id', 'lang'], '_name' => 'translations:edit']
     );
+    // Relations ...
     $routes->connect(
         '/:object_type/view/:id/relatedJson/:relation',
         ['controller' => 'Modules', 'action' => 'relatedJson'],
