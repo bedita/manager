@@ -43,8 +43,12 @@
             <div class="form-column">
                 {% element 'Form/publish_properties' {'cssOrder': '1'} %}
 
+                {% if 'roles' in relations %}
+                    {% element 'Form/roles' {'cssOrder': '2'} %}
+                {% endif %}
+
                 {% if _view.request.params.action != 'create' %}
-                    {% element 'Form/trees' {'cssOrder': '2'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
+                    {% element 'Form/trees' {'cssOrder': '3'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
                 {% element 'Form/advanced_properties' %}
