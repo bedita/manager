@@ -477,7 +477,7 @@ class SchemaHelperTest extends TestCase
     {
         Configure::write('Project.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
-        static::assertSame(['type' => 'text'], $actual);
+        static::assertSame(['type' => 'text', 'value' => null], $actual);
 
         $i18n = [
             'languages' => [
@@ -500,6 +500,7 @@ class SchemaHelperTest extends TestCase
                     'text' => 'German',
                 ],
             ],
+            'value' => null,
         ];
         static::assertSame($expected, $actual);
     }
