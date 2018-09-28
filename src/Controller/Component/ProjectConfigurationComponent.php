@@ -21,7 +21,7 @@ use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
- * Read and update project configuration from `/config`.
+ * Read project configuration from `/config`.
  */
 class ProjectConfigurationComponent extends Component
 {
@@ -35,7 +35,7 @@ class ProjectConfigurationComponent extends Component
     /**
      * Read project configuration from API using cache ad write it in `Project` config key.
      *
-     * @return array JSON Schema.
+     * @return array Project configuration in `key => value` format.
      */
     public function read() : array
     {
