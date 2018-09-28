@@ -77,7 +77,7 @@ class ProjectConfigurationComponent extends Component
      *
      * @return array Configuration array with a config key => data structure.
      */
-    protected function fetchConfig()
+    protected function fetchConfig() : array
     {
         $response = ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
 

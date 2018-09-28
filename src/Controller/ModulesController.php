@@ -21,6 +21,7 @@ use Psr\Log\LogLevel;
 /**
  * Modules controller: list, add, edit, remove objects
  *
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class ModulesController extends AppController
