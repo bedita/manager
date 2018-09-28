@@ -119,6 +119,7 @@ class ModulesControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
         $this->setupApi();
+        $this->createTestObject();
     }
 
     /**
@@ -374,6 +375,9 @@ class ModulesControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
+
+        // restore test object
+        $this->restoreTestObject($o['id'], 'documents');
     }
 
     /**
@@ -707,16 +711,50 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Call index() and get first available object, for test view
+     * Get an object for test purposes
      *
      * @return array
      */
     private function getTestObject()
     {
-        // call index and get first available object, for test view
-        $this->controller->index();
+        $response = $this->client->getObjects('documents', ['filter' => ['uname' => 'modules-controller-test-document']]);
 
-        return $this->controller->viewVars['objects'][0];
+        if (!empty($response['data'][0])) {
+            return $response['data'][0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Create a object for test purposes (if not available already)
+     *
+     * @return array
+     */
+    private function createTestObject()
+    {
+        $o = $this->getTestObject();
+        if ($o == null) {
+            $response = $this->client->save('documents', ['title' => 'modules controller test document', 'uname' => 'modules-controller-test-document']);
+            $o = $response['data'];
+        }
+
+        return $o;
+    }
+
+    /**
+     * Restore object by id
+     *
+     * @param string|int $id The object ID
+     * @param string $type The object type
+     * @return void
+     */
+    private function restoreTestObject($id, $type)
+    {
+        $o = $this->getTestObject();
+        if ($o == null) {
+            $response = $this->client->restoreObject($id, $type);
+        }
     }
 
     /**
