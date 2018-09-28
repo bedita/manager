@@ -110,7 +110,7 @@ export default {
         },
 
         /**
-         * add an object from prendingrelations Array if not present
+         * add an object from pendingrelations Array if not present
          *
          * @event add-relation triggered from sub components
          *
