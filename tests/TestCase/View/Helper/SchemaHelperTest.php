@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\SchemaHelper;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -457,6 +458,42 @@ class SchemaHelperTest extends TestCase
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `lang` property
+     *
+     * @return void
+     */
+    public function testLang()
+    {
+        Configure::write('Project.I18n', null);
+        $actual = $this->Schema->controlOptions('lang', null, []);
+        static::assertSame(['type' => 'text'], $actual);
+
+        $i18n = [
+            'languages' => [
+                'en' => 'English',
+                'de' => 'German',
+            ]
+            ];
+        Configure::write('Project.I18n', $i18n);
+        $actual = $this->Schema->controlOptions('lang', null, []);
+
+        $expected = [
+            'type' => 'select',
+            'options' => [
+                [
+                    'value' => 'en',
+                    'text' => 'English',
+                ],
+                [
+                    'value' => 'de',
+                    'text' => 'German',
+                ],
+            ],
+        ];
         static::assertSame($expected, $actual);
     }
 }

@@ -103,10 +103,7 @@ class SchemaHelper extends Helper
                     $options[] = ['value' => $key, 'text' => __($description)];
                 }
 
-                return [
-                    'type' => 'select',
-                    'options' => $options,
-                ];
+                return ['type' => 'select'] + compact('options');
 
             case 'status':
                 return [
