@@ -1,3 +1,12 @@
+{% set baseUrl= Url.build(
+    {
+        '_name': 'translations:edit',
+        'object_type': object.type,
+        'id': object.id,
+        'lang': ''
+    }, true)
+%}
+
 <div class="resource">
     <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start=true ref={{ resourceName }}>
         <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
@@ -31,8 +40,13 @@
 
                                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768">
                                     <article class="box has-background-black has-text-gray-100 has-text-size-smaller">
-                                        {# {{ Html.link('+', {'_name': 'translation:list' }} #}
-                                        <a>+</a>
+                                        {{ Html.link('+', {
+                                            '_name': 'translations:add',
+                                            'object_type': object.type,
+                                            'id': object.id
+                                        }, {
+                                            'target': "_blank",
+                                        })|raw }}
                                     </article>
                                 </div>
 
@@ -44,8 +58,12 @@
                                             v-bind:class="related.type">
 
                                         <header>
-                                            <h1 v-if="related.attributes.name"><a target="_blank"><: related.attributes.name :></a></h1>
-                                            <h2 v-if="related.attributes.translated_fields && related.attributes.translated_fields.title "><a target="_blank"><: related.attributes.translated_fields.title :></a></h2>
+                                            <h1 v-if="related.attributes.name">
+                                                <a target="_blank" :href="`{{ baseUrl }}${related.attributes.lang}`"><: related.attributes.name :></a>
+                                            </h1>
+                                            <h2 v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                                                <a target="_blank" :href="`{{ baseUrl }}${related.attributes.lang}`"><: related.attributes.translated_fields.title :></a>
+                                            </h2>
                                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                                         </header>
 
@@ -61,7 +79,10 @@
                                         </div>
 
                                         <footer>
-                                            <a class="icon-edit icon-only-icon has-text-size-larger" target="_blank"></a>
+                                            <a class="icon-edit icon-only-icon has-text-size-larger"
+                                                target="_blank"
+                                                :href="`{{ baseUrl }}${related.attributes.lang}`">
+                                            </a>
                                         </footer>
 
                                     </article>
