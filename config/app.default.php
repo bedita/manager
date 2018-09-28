@@ -113,8 +113,21 @@ return [
             'prefix' => 'schema_types_',
             'path' => CACHE . 'schema_types/',
             'serialize' => true,
-            'duration' => '+1 year',
+            'duration' => '+1 day',
             'url' => env('CACHE_SCHEMATYPES_URL', null),
+        ],
+
+        /**
+         * Configure the cache used for project configuration caching.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_project_config_' => [
+            'className' => 'File',
+            'prefix' => '_project_config_',
+            'path' => CACHE . 'project_config/',
+            'serialize' => true,
+            'duration' => '+1 day',
+            'url' => env('CACHE_PROJECTCONFIG_URL', null),
         ],
 
         /**
