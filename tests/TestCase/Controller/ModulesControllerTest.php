@@ -79,10 +79,10 @@ class ModulesControllerTest extends TestCase
     public $client;
 
     /**
-    * Test request config
-    *
-    * @var array
-    */
+     * Test request config
+     *
+     * @var array
+     */
     public $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
