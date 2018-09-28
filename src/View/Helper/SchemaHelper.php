@@ -157,6 +157,7 @@ class SchemaHelper extends Helper
         $options = $this->customControlOptions($name);
         if ($options) {
             $options['value'] = $value;
+
             return $options;
         }
 
