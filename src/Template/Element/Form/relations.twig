@@ -7,11 +7,11 @@
 {% if relations %}
 <section class="relations">
 
-    {% for relationName in relations %}
+    {% for relationName in relations if relationName != 'roles' %}
 
         <div class="relation">
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
-                <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
+                <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                         <h2>

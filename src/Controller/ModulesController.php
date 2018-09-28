@@ -408,6 +408,33 @@ class ModulesController extends AppController
     }
 
     /**
+     * Load resources of $type callig api `GET /:type/`
+     * Json response
+     *
+     * @param string|int $id the object identifier.
+     * @param string $type the resource type name.
+     * @return void
+     */
+    public function resourcesJson($id, string $type) : void
+    {
+        $this->request->allowMethod(['get']);
+
+        try {
+            $response = $this->apiClient->get($type, $this->request->getQueryParams());
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
+
+    /**
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
@@ -418,7 +445,6 @@ class ModulesController extends AppController
     public function relationshipsJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-        $response = null;
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
 
         try {
