@@ -98,6 +98,15 @@
                             </div>
 
                         </div>
+
+                        {# hidden field - relations serialized json #}
+                        {{ Form.control(resourceName ~ 'removeRelated', {
+                            'type': 'hidden',
+                            'name': 'relations[' ~ resourceName ~ '][removeRelated]',
+                            'v-model': 'removedRelationsData'
+                        })|raw }}
+                        {{ Form.unlockField('relations.' ~ resourceName ~ '.removeRelated')}}
+
                     </div>
                 </relation-view>
             </div>
