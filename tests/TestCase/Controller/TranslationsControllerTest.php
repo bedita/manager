@@ -15,7 +15,6 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
 use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -264,7 +263,11 @@ class TranslationsControllerTest extends TestCase
     {
         $response = $this->client->getObject($id, $objectType, compact('lang'));
 
-        if (!empty($response['included'])) {
+        if (empty($response['included'])) { // if not found, create dummy translation
+            $response = $this->client->save('translations', ['object_id' => $id, 'status' => 'draft', 'lang' => 'it', 'translated_fields' => [ 'title' => 'Titolo di test' ]]);
+
+            return $response['data']['id'];
+        } else {
             foreach ($response['included'] as $included) {
                 if ($included['type'] === 'translations' && $included['attributes']['object_id'] == $id && $included['attributes']['lang'] === $lang) {
                     return $included['id'];

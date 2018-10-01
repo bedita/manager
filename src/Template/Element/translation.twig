@@ -27,16 +27,12 @@
                 </section>
                 <section class="fieldset">
                     {% set languageLabel = "#{__('Language')} (#{__('original')}: #{object.attributes.lang})" %}
-                    {{ Form.control('lang', {
+                    {% set options = Schema.controlOptions('lang', null, []) %}
+                    {% set options = options|merge({
                         'label': languageLabel,
-                        'type': 'select',
-                        'options': {
-                            'en': __('English'),
-                            'it': __('Italian'),
-                        },
                         'value': translation.attributes.lang,
-                        'default': 'it',
-                    })|raw }}
+                    }) %}
+                    {{ Form.control('lang', options)|raw }}
                 </section>
             </header>
 
