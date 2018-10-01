@@ -216,6 +216,7 @@ class SchemaHelperTest extends TestCase
                     'templateVars' => [
                         'containerClass' => 'status',
                     ],
+                    'value' => 'on',
                 ],
                 // schema type
                 [
@@ -231,6 +232,7 @@ class SchemaHelperTest extends TestCase
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
+                    'value' => '',
                 ],
                 // schema type
                 [
@@ -250,6 +252,7 @@ class SchemaHelperTest extends TestCase
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
+                    'value' => '',
                 ],
                 // schema type
                 [
@@ -278,6 +281,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'class' => 'title',
                     'type' => 'text',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -294,6 +298,7 @@ class SchemaHelperTest extends TestCase
                     'v-richeditor' => '',
                     'ckconfig' => 'configNormal',
                     'type' => 'textarea',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -309,6 +314,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'textarea',
                     'v-richeditor' => '',
                     'ckconfig' => 'configNormal',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -324,6 +330,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'text',
                     'v-datepicker' => '',
                     'time' => 'true',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -470,7 +477,7 @@ class SchemaHelperTest extends TestCase
     {
         Configure::write('Project.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
-        static::assertSame(['type' => 'text'], $actual);
+        static::assertSame(['type' => 'text', 'value' => null], $actual);
 
         $i18n = [
             'languages' => [
@@ -493,6 +500,7 @@ class SchemaHelperTest extends TestCase
                     'text' => 'German',
                 ],
             ],
+            'value' => null,
         ];
         static::assertSame($expected, $actual);
     }
