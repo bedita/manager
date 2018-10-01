@@ -118,6 +118,9 @@ class ModulesControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
+        // force modules load
+        $this->controller->Auth->setUser(['id' => 'dummy']);
+        $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
     }
@@ -171,14 +174,14 @@ class ModulesControllerTest extends TestCase
      */
     public function testDescendants() : void
     {
-        // Setup controller for test
+        // Setup controller for test / on documents
         $this->setupController();
 
         // do controller call
         $result = $this->controller->descendants();
 
         // verify response status code and type
-        static::assertTrue(is_array($result));
+        static::assertEmpty($result);
         static::assertEquals(200, $this->controller->response->statusCode());
         static::assertEquals('text/html', $this->controller->response->type());
     }
