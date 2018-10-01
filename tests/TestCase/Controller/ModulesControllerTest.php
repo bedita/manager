@@ -166,13 +166,13 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `descendants` method
+     * Test `descendants` method on concrete type
      *
      * @covers ::descendants()
      *
      * @return void
      */
-    public function testDescendants() : void
+    public function testEmptyDescendants() : void
     {
         // Setup controller for test / on documents
         $this->setupController();
@@ -186,6 +186,51 @@ class ModulesControllerTest extends TestCase
         static::assertEquals('text/html', $this->controller->response->type());
     }
 
+    /**
+     * Test `descendants` method on abstract type
+     *
+     * @covers ::descendants()
+     *
+     * @return void
+     */
+    public function testDescendants() : void
+    {
+        // Setup controller with `objects` as type
+        $this->setupController([
+            'params' => [
+                'object_type' => 'objects',
+            ],
+        ]);
+
+        $result = $this->controller->descendants();
+
+        // verify response status code and type
+        static::assertNotEmpty($result);
+        static::assertEquals(200, $this->controller->response->statusCode());
+    }
+
+    /**
+     * Test `descendants` method on missing type
+     *
+     * @covers ::descendants()
+     *
+     * @return void
+     */
+    public function testWrongDescendants() : void
+    {
+        // Setup controller with `objects` as type
+        $this->setupController([
+            'params' => [
+                'object_type' => 'gustavos',
+            ],
+        ]);
+
+        $result = $this->controller->descendants();
+
+        // verify response status code and type
+        static::assertEmpty($result);
+        static::assertEquals(200, $this->controller->response->statusCode());
+    }
     /**
      * Test `view` method
      *
