@@ -14,8 +14,11 @@ namespace App\Controller;
 
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClientException;
+use BEdita\SDK\BEditaException;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Network\Exception\BadRequestException;
+use Cake\Network\Exception\NotFoundException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -77,9 +80,9 @@ class TranslationsController extends ModulesController
                 }
             }
             if (empty($translation)) {
-                throw new BEditaClientException(sprintf('Translation not found per %s %s and lang %s', $this->objectType, $id, $lang));
+                throw new NotFoundException(sprintf('Translation not found per %s %s and lang %s', $this->objectType, $id, $lang));
             }
-        } catch (BEditaClientException $e) {
+        } catch (\Exception $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
@@ -142,31 +145,44 @@ class TranslationsController extends ModulesController
     }
 
     /**
-     * Delete translation(s).
+     * Delete single translation.
+     * Expected request:
+     *     data: [
+     *         {
+     *             id: <translation id>,
+     *             object_id: <translated object id>,
+     *         }
+     *     ]
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      */
-    public function delete() : ?Response
+    public function delete() : Response
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->request->getData();
-        foreach ($requestData as $translation) {
-            if (!empty($translation['id'])) {
-                try {
-                    // remove completely the translation
-                    $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
-                } catch (BEditaClientException $e) {
-                    $this->log($e, LogLevel::ERROR);
-                    $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-                    // redir to main object view
-                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
-                }
+        try {
+            if (empty($requestData[0])) {
+                throw new BadRequestException(__('Empty request data'));
             }
+            $translation = $requestData[0];
+            if (empty($translation['id'])) {
+                throw new BadRequestException(__('Empty translation "id"'));
+            }
+            if (empty($translation['object_id'])) {
+                throw new BadRequestException(__('Empty translation "object_id"'));
+            }
+            // remove completely the translation
+            $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
+        } catch (BEditaException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+
+            // redir to main object view
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
         }
         $this->Flash->success(__('Translation(s) deleted'));
 
-        // redir to referer
+        // redir to main object view
         return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
     }
 }
