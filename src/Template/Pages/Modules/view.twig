@@ -5,7 +5,7 @@
 
     {% if object.id %}
     <header>
-        <h1 untitled="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+        <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
     </header>
     {% endif %}
 
@@ -43,12 +43,14 @@
             <div class="form-column">
                 {% element 'Form/publish_properties' {'cssOrder': '1'} %}
 
+                {% element 'Form/resources' {'cssOrder': '2'} %}
+
                 {% if 'roles' in relations %}
-                    {% element 'Form/roles' {'cssOrder': '2'} %}
+                    {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
                 {% if _view.request.params.action != 'create' %}
-                    {% element 'Form/trees' {'cssOrder': '3'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
+                    {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
                 {% element 'Form/advanced_properties' %}
@@ -58,7 +60,7 @@
                 {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
             </div>
 
-            {# temp relations view #}
+            {# relations view #}
             {# loads first relation after 1200ms, than every 300ms till last relation, see file #}
             {% element 'Form/relations' %}
 

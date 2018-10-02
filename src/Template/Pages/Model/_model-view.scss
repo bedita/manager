@@ -5,7 +5,7 @@ body.view-model {
         >header {
             h1:empty {
                 &:before {
-                    content: attr(untitled);
+                    content: attr(untitled-label);
                     color: $gray-600;
                     font-style: italic;
                 }

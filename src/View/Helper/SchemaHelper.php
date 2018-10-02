@@ -13,6 +13,7 @@
 
 namespace App\View\Helper;
 
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -90,6 +91,20 @@ class SchemaHelper extends Helper
     protected function customControlOptions($name) : array
     {
         switch ($name) {
+            case 'lang':
+                $languages = Configure::read('Project.I18n.languages');
+                if (empty($languages)) {
+                    return [
+                        'type' => 'text',
+                    ];
+                }
+                $options = [];
+                foreach ($languages as $key => $description) {
+                    $options[] = ['value' => $key, 'text' => __($description)];
+                }
+
+                return ['type' => 'select'] + compact('options');
+
             case 'status':
                 return [
                     'type' => 'radio',
@@ -156,6 +171,8 @@ class SchemaHelper extends Helper
     {
         $options = $this->customControlOptions($name);
         if ($options) {
+            $options['value'] = $value;
+
             return $options;
         }
 
@@ -172,18 +189,21 @@ class SchemaHelper extends Helper
                 'type' => 'textarea',
                 'v-richeditor' => '',
                 'ckconfig' => 'configNormal',
+                'value' => $value,
             ];
         } elseif ($type === 'date-time') {
             return [
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'true',
+                'value' => $value,
             ];
         } elseif ($type === 'date') {
             return [
                 'type' => 'text',
                 'v-datepicker' => '',
                 'time' => 'false',
+                'value' => $value,
             ];
         } elseif ($type === 'checkbox') {
             if (!empty($schema['oneOf'])) {
@@ -233,5 +253,47 @@ class SchemaHelper extends Helper
         }
 
         return compact('type', 'value');
+    }
+
+    /**
+     * Provides list of translatable fields per schema properties
+     *
+     * @param array $properties The array of schema properties
+     * @return array
+     */
+    public function translatableFields(array $properties) : array
+    {
+        if (empty($properties)) {
+            return [];
+        }
+
+        $fields = [];
+        foreach ($properties as $name => $property) {
+            if (!empty($property['oneOf'])) {
+                foreach ($property['oneOf'] as $one) {
+                    if (!empty($one['type']) && $one['type'] === 'null') {
+                        continue;
+                    }
+
+                    if (!empty($one['type']) && !empty($one['contentMediaType']) && $one['type'] === 'string' && $one['contentMediaType'] === 'text/html') {
+                        $fields[] = $name;
+                    }
+                }
+            } elseif (!empty($property['type']) && $property['type'] === 'string') {
+                if (!empty($property['contentMediaType']) && $property['contentMediaType'] === 'text/html') { // textarea
+                    $fields[] = $name;
+                }
+            }
+        }
+        // put specific fields at the beginning of the fields array
+        $prefields = array_reverse(['title', 'description']);
+        foreach ($prefields as $field) {
+            if (in_array($field, $fields)) {
+                unset($fields[array_search($field, $fields)]);
+                array_unshift($fields, $field);
+            }
+        }
+
+        return $fields;
     }
 }

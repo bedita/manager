@@ -156,6 +156,28 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
     );
+    // Translations
+    $routes->connect(
+        '/:object_type/translation/save',
+        ['controller' => 'Translations', 'action' => 'save'],
+        ['_name' => 'translations:save']
+    );
+    $routes->connect(
+        '/:object_type/translation/delete',
+        ['controller' => 'Translations', 'action' => 'delete'],
+        ['_name' => 'translations:delete']
+    );
+    $routes->connect(
+        '/:object_type/translation/:id/add',
+        ['controller' => 'Translations', 'action' => 'add'],
+        ['pass' => ['id'], '_name' => 'translations:add']
+    );
+    $routes->connect(
+        '/:object_type/translation/:id/:lang',
+        ['controller' => 'Translations', 'action' => 'edit'],
+        ['pass' => ['id', 'lang'], '_name' => 'translations:edit']
+    );
+    // Relations ...
     $routes->connect(
         '/:object_type/view/:id/relatedJson/:relation',
         ['controller' => 'Modules', 'action' => 'relatedJson'],

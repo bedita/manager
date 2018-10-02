@@ -1,11 +1,11 @@
-body.view-module {
+body.view-module, body.translation-module {
 
     .modules-view {
         padding-left: $gutter * .5;
         >header {
             h1:empty {
                 &:before {
-                    content: attr(untitled);
+                    content: attr(untitled-label);
                     color: $gray-600;
                     font-style: italic;
                 }
@@ -26,6 +26,14 @@ body.view-module {
             .form-column {
                 display: contents;
                 width: 100%;
+
+                // REMOVE
+                pre {
+                    max-width: 400px;
+                    overflow: auto;
+                    background-color: $gray-800;
+                    padding: .5rem;
+                }
 
                 @media screen and (min-width: 780px) {
                     display: block;
@@ -127,6 +135,33 @@ body.view-module {
         }
     }
 }
+
+body.translation-module {
+    header {
+        h1 {
+            span {
+                color: $gray-550;
+                font-size: $font-size-sssm;
+            }
+        }
+    }
+
+    .form-column.original {
+        opacity: .8;
+    }
+
+    .form-header {
+        width: 100%;
+        margin-bottom: $gutter * 2;
+        border-bottom: 1px solid $gray-500;
+        padding-bottom: $gutter;
+    }
+
+    // TODO: refactor this css
+    .module-form form .form-column:first-of-type { width: 50% !important; }
+    .module-form form .form-column:last-of-type { width: 50% !important }
+}
+
 
 .fieldset .tab {
     display: flex;
