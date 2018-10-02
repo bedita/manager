@@ -46,6 +46,7 @@ class TranslationsController extends ModulesController
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
+        $this->ProjectConfiguration->read();
 
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
@@ -89,6 +90,7 @@ class TranslationsController extends ModulesController
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
+        $this->ProjectConfiguration->read();
 
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
