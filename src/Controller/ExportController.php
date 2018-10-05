@@ -67,6 +67,9 @@ class ExportController extends AppController
             return;
         }
         $fields = ['id'] + array_keys($response['data']['0']['attributes']);
+        if (($k = array_search('extra', $fields)) !== false) {
+            unset($fields[$k]);
+        }
         $data = [];
         foreach ($response['data'] as $key => $val) {
             $row = [];
@@ -86,7 +89,21 @@ class ExportController extends AppController
                     }
                 }
             }
+            foreach ($val['attributes']['extra'] as $extrafield => $extraval) {
+                if (is_array($extraval)) {
+                    $row[sprintf('extra__%s', $extrafield)] = json_encode($extraval);
+                } else {
+                    $row[sprintf('extra__%s', $extrafield)] = $extraval;
+                }
+            }
+
             $data[] = $row;
+        }
+        // update fields to put extra fields columns after others object fields
+        if (!empty($response['data']['0']['attributes']['extra'])) {
+            foreach ($response['data']['0']['attributes']['extra'] as $extrafield => $extraval) {
+                $fields[] = sprintf('extra__%s', $extrafield);
+            }
         }
         $csv = '';
         try {
