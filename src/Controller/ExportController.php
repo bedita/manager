@@ -91,9 +91,9 @@ class ExportController extends AppController
             }
             foreach ($val['attributes']['extra'] as $extrafield => $extraval) {
                 if (is_array($extraval)) {
-                    $row[sprintf('extra-%s', $extrafield)] = json_encode($extraval);
+                    $row[sprintf('extra__%s', $extrafield)] = json_encode($extraval);
                 } else {
-                    $row[sprintf('extra-%s', $extrafield)] = $extraval;
+                    $row[sprintf('extra__%s', $extrafield)] = $extraval;
                 }
             }
 
@@ -102,7 +102,7 @@ class ExportController extends AppController
         // update fields to put extra fields columns after others object fields
         if (!empty($response['data']['0']['attributes']['extra'])) {
             foreach ($response['data']['0']['attributes']['extra'] as $extrafield => $extraval) {
-                $fields[] = sprintf('extra-%s', $extrafield);
+                $fields[] = sprintf('extra__%s', $extrafield);
             }
         }
         $csv = '';
