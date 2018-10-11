@@ -106,6 +106,15 @@
                         <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
                     {{ Form.end()|raw }}
                     {% endif %}
+
+                    {# export all #}
+                    {{ Form.create(null, {'id': 'form-export-all', 'url': {'_name': 'export:export-all', 'object_type': objectType}})|raw }}
+                        {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                        {{ Form.button(__('Export All'), {
+                            'class': 'submit',
+                            'onclick': 'this.classList.add(\'is-loading-spinner\')',
+                        }) | raw }}
+                    {{ Form.end()|raw }}
                 </nav>
             </div>
         {% endif %}

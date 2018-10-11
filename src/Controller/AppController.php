@@ -16,6 +16,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Network\Exception\BadRequestException;
 
 /**
  * Base Application Controller.
@@ -154,6 +155,43 @@ class AppController extends Controller
             }
 
             $data['api'] = $api;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Check request data by options.
+     *
+     *  - $options['allowedMethods']: check allowed method(s)
+     *  - $options['requiredParameters']: check required parameter(s)
+     *
+     * @param array $options The options for request check(s)
+     * @return array The request data for required parameters, if any
+     * @throws Cake\Network\Exception\BadRequestException on empty request or empty data by parameter
+     */
+    protected function checkRequest(array $options = []) : array
+    {
+        // check request
+        if (empty($this->request)) {
+            throw new BadRequestException('Empty request');
+        }
+
+        // check allowed methods
+        if (!empty($options['allowedMethods'])) {
+            $this->request->allowMethod($options['allowedMethods']);
+        }
+
+        // check request required parameters, if any
+        $data = [];
+        if (!empty($options['requiredParameters'])) {
+            foreach ($options['requiredParameters'] as $param) {
+                $val = $this->request->getData($param);
+                if (empty($val)) {
+                    throw new BadRequestException(sprintf('Empty %s', $param));
+                }
+                $data[$param] = $val;
+            }
         }
 
         return $data;
