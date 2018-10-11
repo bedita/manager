@@ -97,13 +97,22 @@ class ExportController extends AppController
     {
         $fields = $data = [];
         if (empty($ids)) { // empty ids? then get all (multi api calls)
+            // read export limit from config, default 10000
+            $limit = Configure::read('Export.limit', 10000);
             $pageCount = 1;
+            $total = 0;
             $query = ['page_size' => 100];
             for ($i = 0; $i < $pageCount; $i++) {
-                $query['page'] = $i + 1;
-                $response = $this->apiClient->getObjects($objectType, $query);
-                $pageCount = $response['meta']['pagination']['page_count'];
-                $fields = $this->fillDataFromResponse($data, $response);
+                if ($total < $limit) {
+                    $query['page'] = $i + 1;
+                    if ($total + 100 > $limit) {
+                        $query['page_size'] = $limit - $total;
+                    }
+                    $response = $this->apiClient->getObjects($objectType, $query);
+                    $pageCount = $response['meta']['pagination']['page_count'];
+                    $total += $response['meta']['pagination']['page_items'];
+                    $fields = $this->fillDataFromResponse($data, $response);
+                }
             }
         } else { // get data per ids
             $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
