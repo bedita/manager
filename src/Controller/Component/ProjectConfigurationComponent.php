@@ -79,7 +79,7 @@ class ProjectConfigurationComponent extends Component
      */
     protected function fetchConfig() : array
     {
-        $response = ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
+        $response = (array)ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
 
         $config = Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.content');
         array_walk(
