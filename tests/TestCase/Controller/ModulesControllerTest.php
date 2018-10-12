@@ -79,6 +79,13 @@ class ModulesControllerTest extends TestCase
     public $client;
 
     /**
+     * Uname for test object
+     *
+     * @var string
+     */
+    protected $uname = 'modules-controller-test-document';
+
+    /**
      * Test request config
      *
      * @var array
@@ -765,7 +772,7 @@ class ModulesControllerTest extends TestCase
      */
     private function getTestObject()
     {
-        $response = $this->client->getObjects('documents', ['filter' => ['uname' => 'modules-controller-test-document']]);
+        $response = $this->client->getObjects('documents', ['filter' => ['uname' => $this->uname]]);
 
         if (!empty($response['data'][0])) {
             return $response['data'][0];
@@ -783,7 +790,7 @@ class ModulesControllerTest extends TestCase
     {
         $o = $this->getTestObject();
         if ($o == null) {
-            $response = $this->client->save('documents', ['title' => 'modules controller test document', 'uname' => 'modules-controller-test-document']);
+            $response = $this->client->save('documents', ['title' => 'modules controller test document', 'uname' => $this->uname]);
             $o = $response['data'];
         }
 
