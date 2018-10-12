@@ -101,9 +101,11 @@
                     {% if not currentModule.hints.multiple_types %}
                     {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
                         {{ Form.unlockField('ids') }}
-                        <input type="hidden" name="ids" v-bind:value="selectedRows">
+                        <input type="hidden" name="ids" v-model="selectedRows">
                         {{ Form.hidden('objectType', {'value': objectType})|raw }}
                         <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
+                        {# export all #}
+                        <button @click.prevent="exportAll">{{ __('Export All') }}</button>
                     {{ Form.end()|raw }}
                     {% endif %}
                 </nav>
