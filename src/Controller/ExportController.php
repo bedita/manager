@@ -44,26 +44,6 @@ class ExportController extends AppController
     }
 
     /**
-     * Export all data (per object type) in csv format
-     *
-     * @return void
-     */
-    public function exportAll() : void
-    {
-        // check request (allowed methods and required parameters)
-        $data = $this->checkRequest([
-            'allowedMethods' => ['post'],
-            'requiredParameters' => ['objectType'],
-        ]);
-
-        // load csv data for all objects by object type
-        $rows = $this->csvRows($data['objectType']);
-
-        // save data to csv and output it to browser
-        $this->csv($rows, $data['objectType']);
-    }
-
-    /**
      * Export data in csv format
      *
      * @return void
@@ -73,11 +53,12 @@ class ExportController extends AppController
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
             'allowedMethods' => ['post'],
-            'requiredParameters' => ['objectType', 'ids'],
+            'requiredParameters' => ['objectType'],
         ]);
+        $ids = $this->request->getData('ids');
 
         // load csv data for objects by object type and ids
-        $rows = $this->csvRows($data['objectType'], $data['ids']);
+        $rows = $this->csvRows($data['objectType'], $ids);
 
         // save data to csv and output it to browser
         $this->csv($rows, $data['objectType']);

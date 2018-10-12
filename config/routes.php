@@ -229,11 +229,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'export:export']
     );
     $routes->connect(
-        '/:object_type/exportall',
-        ['controller' => 'Export', 'action' => 'exportAll'],
-        ['_name' => 'export:export-all']
-    );
-    $routes->connect(
         '/:object_type/changeStatus',
         ['controller' => 'Modules', 'action' => 'changeStatus'],
         ['_name' => 'modules:changeStatus']
