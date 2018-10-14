@@ -70,7 +70,7 @@ class ModulesComponent extends Component
         $project = $this->getProject();
 
         $currentModuleName = $this->getConfig('currentModuleName');
-        if (isset($currentModuleName)) {
+        if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
 
