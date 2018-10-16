@@ -15,7 +15,7 @@ class ImportResult extends Result
      *
      * @var string
      */
-    protected $filename;
+    public $filename;
 
     /**
      * Constructor
@@ -29,7 +29,7 @@ class ImportResult extends Result
      * @param string|null $error the error message
      */
     public function __construct(
-        $filename,
+        $filename = null,
         $created = 0,
         $updated = 0,
         $errors = 0,
@@ -39,5 +39,16 @@ class ImportResult extends Result
     ) {
         parent::__construct($created, $updated, $errors, $info, $warn, $error);
         $this->filename = $filename;
+    }
+
+    /**
+     * Reset attributes
+     *
+     * @return void
+     */
+    public function reset()
+    {
+        $this->filename = $this->info = $this->warn = $this->error = null;
+        $this->created = $this->updated = $this->errors = 0;
     }
 }
