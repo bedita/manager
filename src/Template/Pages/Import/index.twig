@@ -77,8 +77,8 @@
         <fieldset id="import-result">
             <div class="import-message">
                 <h2>{{ result.info|default('') }}</h2>
-                <p>{{ __('Number of created objects') }}: {{ result.created|default(0) }}</p>
-                <p>{{ __('Number of updated objects') }}: {{ result.updated|default(0) }}</p>
+                <p>{{ __('Number of created resources') }}: {{ result.created|default(0) }}</p>
+                <p>{{ __('Number of updated resources') }}: {{ result.updated|default(0) }}</p>
                 <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
 
                 {% if result.warn %}
