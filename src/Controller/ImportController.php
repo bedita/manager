@@ -106,7 +106,7 @@ class ImportController extends AppController
             UPLOAD_ERR_EXTENSION => __('An extension stopped the file upload'),
         ];
 
-        return (string)Hash::get($errors, (string)$code, __('Unkown upload error'));
+        return (string)Hash::get($errors, (string)$code, __('Unknown upload error'));
     }
 
     /**
