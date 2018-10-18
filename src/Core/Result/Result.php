@@ -8,14 +8,14 @@ namespace App\Core\Result;
 class Result
 {
     /**
-     * Counter of created objects
+     * Counter of created resources
      *
      * @var int
      */
     public $created;
 
     /**
-     * Counter of updated objects
+     * Counter of updated resources
      *
      * @var int
      */

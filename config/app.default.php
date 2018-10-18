@@ -548,4 +548,13 @@ return [
     'Pagination' => [
         'sizeAvailable' => [10, 20, 50, 100]
     ],
+
+    /**
+     * Export default settings
+     *
+     * - limit => max number of exported elements on export all
+     */
+    'Export' => [
+        'limit' => 10000,
+    ],
 ];

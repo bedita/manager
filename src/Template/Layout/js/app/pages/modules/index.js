@@ -92,6 +92,18 @@ export default {
         },
 
         /**
+         * Submit bulk export form for all objects by type
+         *
+         * @return {void}
+         */
+        exportAll() {
+            this.unCheckAll();
+            this.$nextTick(() => {
+                document.getElementById('form-export').submit();
+            });
+        },
+
+        /**
          * Submit bulk change status form
          *
          * @return {void}
