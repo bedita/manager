@@ -17,6 +17,7 @@ use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -750,6 +751,41 @@ class ModulesControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+     * Test `lang` method
+     *
+     * @covers ::lang()
+     *
+     * @return void
+     */
+    public function testLang() : void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [
+                'lang' => 'en',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // do controller call
+        $lang = 'it';
+        $result = $this->controller->lang($lang);
+
+        // verify response status code and type
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+
+        // verify that lang has changed in session user obj
+        $user = $this->controller->Auth->user();
+        static::assertEquals($user['sessionLang'], $lang);
     }
 
     /**
