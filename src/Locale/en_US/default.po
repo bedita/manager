@@ -41,6 +41,9 @@ msgstr ""
 msgid "Cannot produce a thumbnail for this file"
 msgstr ""
 
+msgid "Children"
+msgstr ""
+
 msgid "Close"
 msgstr ""
 
@@ -354,6 +357,9 @@ msgid "Thumbnail is not ready"
 msgstr ""
 
 msgid "Translation(s) deleted"
+msgstr ""
+
+msgid "Translations"
 msgstr ""
 
 msgid "Trash"

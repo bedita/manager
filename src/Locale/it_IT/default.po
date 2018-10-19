@@ -41,6 +41,9 @@ msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
 msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
 
+msgid "Children"
+msgstr "Contenuti"
+
 msgid "Close"
 msgstr "Chiudi"
 
@@ -355,6 +358,9 @@ msgstr "La miniatura non è pronta"
 
 msgid "Translation(s) deleted"
 msgstr "Traduzione(i) rimossa(e)"
+
+msgid "Translations"
+msgstr "Traduzioni"
 
 msgid "Trash"
 msgstr "Cestino"
