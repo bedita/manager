@@ -27,9 +27,10 @@ export default {
      */
     data() {
         return {
-            // propertyTypes: [],
+            deletedPropertyTypes: [],
             savedPropertyTypes: [],
             newPropertyTypes: [],
+            removePropertyTypes: [],
         };
     },
 
@@ -46,7 +47,21 @@ export default {
 
         removeRow(element) {
             const index = this.newPropertyTypes.indexOf(element);
-            this.newPropertyTypes.splice(index, 1);
+            if (index !== -1) {
+                this.newPropertyTypes.splice(index, 1);
+            }
+        },
+
+        removePropertyType(id) {
+            this.removePropertyTypes.push(id);
+        },
+
+        undoRemovePropertyType(id) {
+            const index = this.removePropertyTypes.indexOf(id);
+
+            if (index !== -1) {
+                this.removePropertyTypes.splice(index, 1);
+            }
         },
 
         save() {
@@ -60,7 +75,8 @@ export default {
 
             let payload = {
                 _csrfToken: this.csrfToken,
-                addProperties: [...this.newPropertyTypes],
+                addPropertyTypes: [...this.newPropertyTypes],
+                removePropertyTypes: [...this.removePropertyTypes],
             }
 
             const options = {
@@ -75,12 +91,40 @@ export default {
             fetch(postUrl, options)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.newPropertyTypes = [];
-                    const props = json.map( (prop) => prop.data);
+                    const saved = json['saved'] || [];
+                    const removed = json['removed'] || [];
+
+                    const props = saved.filter(prop => prop).map(prop => {
+                        const obj = prop.data;
+                        if (obj.attributes && obj.attributes.params) {
+                            obj.attributes.params = JSON.stringify(obj.attributes.params);
+                        }
+                        return obj;
+                    });
                     this.savedPropertyTypes.push(...props);
+
+                    // remove prop
+                    this.deletedPropertyTypes.push(...removed);
+
+                    // reset
+                    this.newPropertyTypes = [];
+                    this.removePropertyTypes = [];
+
                 }).catch((err) => {
                     console.log(err);
                 });
-        }
+        },
+
+                /**
+        * helper function: check if array relations has element with id -> id
+        *
+        * @param {Array} relations
+        * @param {Number} id
+        *
+        * @return {Boolean} true if id is in Array relations
+        */
+        containsId(relations, id) {
+            return relations.filter((relId) => relId === id).length;
+        },
     }
 };

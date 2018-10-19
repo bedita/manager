@@ -34,6 +34,23 @@ body.view-model {
                 display: flex;
                 // width: 100%;
 
+                &.delete-property-type {
+                    opacity: 0.5;
+
+                    .remove-action {
+                        display: none;
+                    }
+
+                    .undo-remove-action {
+                        display: block;
+                    }
+
+                }
+
+                .undo-remove-action {
+                    display: none;
+                }
+
                 div {
                     padding: $gutter/4 $gutter/2;
                     // display: table-cell;

@@ -152,27 +152,28 @@ class ModelController extends AppController
                 $header = ['Accept' => 'application/json'];
                 extract($payload);
 
-                if (isset($addProperties)) {
-                    foreach ($addProperties as $addProperty) {
-                        if  (isset($addProperty['params'])) {
-                            $params = json_decode($addProperty['params'], true);
-                            $addProperty['params'] = $params;
+                if (isset($addPropertyTypes)) {
+                    foreach ($addPropertyTypes as $addPropertyType) {
+                        if  (isset($addPropertyType['params'])) {
+                            $params = json_decode($addPropertyType['params'], true);
+                            $addPropertyType['params'] = $params;
                         }
 
                         $body = [
                             'data' => [
                                 'type' => $this->resourceType,
-                                'attributes' => $addProperty,
+                                'attributes' => $addPropertyType,
                             ],
                         ];
 
-                        $response[] = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body), $header);
+                        $response['saved'][] = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body), $header);
                     }
                 }
 
-                if (isset($removeProperties)) {
-                    foreach ($removeProperties as $removeProperty) {
-                        $response[] = $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removeProperty->id), null, $header);
+                if (isset($removePropertyTypes)) {
+                    foreach ($removePropertyTypes as $removePropertyTypeId) {
+                        $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null, $header);
+                        $response['removed'][] = $removePropertyTypeId;
                     }
                 }
 

@@ -31,9 +31,11 @@
             {# list resources : rows #}
             {% for resource in resources %}
                 <div
+                    v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
                     href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
                     title="{{ resource.attributes.name }}"
-                    class="index-entry">
+                    class="index-entry"
+                    :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
 {#
                         <div class="{{ prop }}-cell" @click="selectRow">
                             {{ Form.unlockField('oneItem') }}
@@ -52,7 +54,9 @@
                                 {% set propVal = 'N' %}
                             {% endif %}
 
-                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ propVal }}</div>
+                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                {{ propVal }}
+                            </div>
                         {% endfor %}
 
                         {# TODO: uncomment `delete` action once controller part is available #}
@@ -61,23 +65,37 @@
                             {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
                         {% endif %}
                         </div> #}
-                        <div class="action-cell"><button class="center-icon icon-trash inverted" @click="removeProperty({{resource.id}})"></button></div>
+                        {% if resourceType == 'property_types' %}
+                            <div class="action-cell">
+                                <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType({{resource.id}})"></button>
+                                <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType({{resource.id}})"></button>
+                            </div>
+                        {% endif %}
+
                 </div>
             {% else %}
                 {{ __('No items found') }}
             {% endfor %}
 
-            <div class="index-entry" v-for="propertyType in savedPropertyTypes">
+            <div v-for="propertyType in savedPropertyTypes"
+                v-if="!containsId(deletedPropertyTypes, propertyType.id)"
+                class="index-entry"
+                :class="containsId(removePropertyTypes, propertyType.id) && 'delete-property-type'">
+
                 <div class="first-cell">
                     <: propertyType.id :>
                 </div>
                 <div class="primary"><input type="text" name="" placeholder="name" v-model="propertyType.attributes.name" pattern="^\S+$" /></div>
                 <div class="secondary"><textarea name="params" placeholder="params..." v-model="propertyType.attributes.params"></textarea></div>
-                <div><button class="center-icon icon-trash inverted" @click="removeProperty(propertyType.id)"></button></div>
+                <div class="action-cell">
+                    <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType(propertyType.id)"></button>
+                    <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType(propertyType.id)"></button>
+                </div>
             </div>
 
+            <div v-for="propertyType in newPropertyTypes"
+                class="index-entry new-row">
 
-            <div class="index-entry new-row" v-for="propertyType in newPropertyTypes">
                 <div class="first-cell">
                     <button type="button" @click="removeRow(propertyType)">-</button>
                 </div>
@@ -86,17 +104,20 @@
                 <div class="action-cell"></div>
             </div>
 
-            <div class="index-entry add-row">
-                <div>
-                    <button type="button" @click="addRow()">+</button>
-                </div>
-            </div>
+            {% if resourceType == 'property_types' %}
 
-            <div class="index-entry" v-if="newPropertyTypes.length">
-                <div>
-                    <button @click="save">Save</button>
+                <div class="index-entry add-row">
+                    <div>
+                        <button type="button" @click="addRow()">+</button>
+                    </div>
                 </div>
-            </div>
+
+                <div class="index-entry">
+                    <div v-if="newPropertyTypes.length || removePropertyTypes.length">
+                        <button @click="save">Save</button>
+                    </div>
+                </div>
+            {% endif %}
 
         </div>
         {# end list-objects #}
