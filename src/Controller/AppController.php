@@ -16,7 +16,10 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\I18n\I18n;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Utility\Hash;
+use Locale;
 
 /**
  * Base Application Controller.
@@ -102,6 +105,7 @@ class AppController extends Controller
 
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
+            // set tokens
             $tokens = $this->apiClient->getTokens();
             if ($tokens && $user['tokens'] !== $tokens) {
                 // Update tokens in session.
@@ -113,6 +117,8 @@ class AppController extends Controller
         }
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
+
+        $this->setupLocale();
     }
 
     /**
@@ -195,5 +201,29 @@ class AppController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Setup current locale
+     *
+     * @return void
+     */
+    protected function setupLocale() : void
+    {
+        // detect user session lang; if none, use default from config 'I18n.default'
+        $user = $this->Auth->user();
+        $sessionLang = $user['sessionLang'];
+        if (empty($sessionLang) || !Configure::read(sprintf('I18n.languages.%s', $sessionLang))) {
+            $sessionLang = Configure::read('I18n.default');
+        }
+        Configure::write('I18n.lang', $sessionLang);
+
+        // if detected locale matches language code let's use it, if not use a primary lang locale
+        $locale = Locale::acceptFromHttp($this->request->getHeaderLine('Accept-Language'));
+        if ($sessionLang !== Configure::read(sprintf('I18n.locales.%s', $locale))) {
+            $locales = array_flip((array)Configure::read('I18n.locales'));
+            $locale = Hash::get($locales, $sessionLang);
+        }
+        I18n::setLocale($locale);
     }
 }

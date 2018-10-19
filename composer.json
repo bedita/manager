@@ -23,6 +23,7 @@
     "require": {
         "php": ">=7.1",
         "bedita/web-tools": "dev-master",
+        "bedita/i18n": "^1.0",
         "cakephp/cakephp": "3.5.*",
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",

@@ -18,6 +18,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -50,6 +51,9 @@ Router::defaultRouteClass(DashedRoute::class);
 Plugin::routes();
 
 Router::scope('/', function (RouteBuilder $routes) {
+
+    $locales = array_keys(Configure::read('I18n.languages'));
+    $lang = implode('|', $locales);
 
     // Login.
     $routes->connect(
@@ -143,6 +147,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/view/:id',
         ['controller' => 'Modules', 'action' => 'uname'],
         ['pass' => ['id'], '_name' => 'modules:uname']
+    );
+    // switch lang
+    $routes->connect(
+        '/lang/:lang',
+        ['controller' => 'Modules', 'action' => 'lang'],
+        ['pass' => ['lang'], '_name' => 'modules:lang']
     );
 
     // Modules.

@@ -5,8 +5,15 @@
     {#{% element 'tree' %}#}
     {% element 'Menu/colophon' %}
 
+
     {% if user %}
     <ul class="menu-links">
+        {# Localization link(s) #}
+        {% for code, name in I18n.getLanguages() if code != I18n.getLang() %}
+            <li>
+                {{ Html.link(name, {'_name': 'modules:lang', 'lang': code})|raw }}
+            </li>
+        {% endfor %}
         <li>› {{ Html.link(__('log out'), {'_name': 'logout'})|raw }}</li>
     </ul>
     {% endif %}
