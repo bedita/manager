@@ -557,4 +557,26 @@ return [
     'Export' => [
         'limit' => 10000,
     ],
+
+    /**
+     * I18n setup for frontend.
+     *
+     *  - 'I18n.locales': array of supported locales and language code used as `prefix` like `/en`
+     *  - 'I18n.default':  default language code
+     *  - 'I18n.languages': array of supported language codes with their names
+     *  - 'I18n.lang':  language code in use (written by the application)
+     */
+    'I18n' => [
+        'locales' => [
+            'en_US' => 'en',
+            'it_IT' => 'it',
+            // etc.
+        ],
+        'default' => 'en',
+        'languages' => [
+            'en' => 'English',
+            'it' => 'Italiano',
+            // etc.
+        ],
+    ],
 ];
