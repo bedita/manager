@@ -57,6 +57,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Description"
+msgstr ""
+
+msgid "Documents"
+msgstr ""
+
 msgid "Draft"
 msgstr ""
 
@@ -84,6 +90,9 @@ msgstr ""
 msgid "Error "
 msgstr ""
 
+msgid "Events"
+msgstr ""
+
 msgid "Exit"
 msgstr ""
 
@@ -108,6 +117,9 @@ msgstr ""
 msgid "File type"
 msgstr ""
 
+msgid "Files"
+msgstr ""
+
 msgid "Folders"
 msgstr ""
 
@@ -115,6 +127,9 @@ msgid "If you confirm, this data will be gone forever"
 msgstr ""
 
 msgid "Image not acceptable for thumb"
+msgstr ""
+
+msgid "Images"
 msgstr ""
 
 msgid "Import"
@@ -133,6 +148,9 @@ msgid "Info"
 msgstr ""
 
 msgid "Language"
+msgstr ""
+
+msgid "Locations"
 msgstr ""
 
 msgid "Log out"
@@ -174,6 +192,9 @@ msgstr ""
 msgid "New relations (save to keep)"
 msgstr ""
 
+msgid "News"
+msgstr ""
+
 msgid "No items found"
 msgstr ""
 
@@ -201,6 +222,9 @@ msgstr ""
 msgid "Object types"
 msgstr ""
 
+msgid "Objects"
+msgstr ""
+
 msgid "Object(s) deleted"
 msgstr ""
 
@@ -219,6 +243,9 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
+msgid "Other"
+msgstr ""
+
 msgid "Page size"
 msgstr ""
 
@@ -231,7 +258,16 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
+msgid "Profiles"
+msgstr ""
+
 msgid "Property types"
+msgstr ""
+
+msgid "Publish Start"
+msgstr ""
+
+msgid "Publish End"
 msgstr ""
 
 msgid "Related to"
@@ -294,6 +330,9 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Success"
 msgstr ""
 
@@ -324,6 +363,9 @@ msgstr ""
 msgid "Trashcan"
 msgstr ""
 
+msgid "Uname"
+msgstr ""
+
 msgid "Unknown upload error"
 msgstr ""
 
@@ -345,10 +387,22 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
+msgid "Username or password is incorrect"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Videos"
+msgstr ""
+
 msgid "View original"
 msgstr ""
 
 msgid "View trashed "
+msgstr ""
+
+msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "Warning"
@@ -384,6 +438,9 @@ msgstr ""
 msgid "log out"
 msgstr ""
 
+msgid "modified"
+msgstr ""
+
 msgid "move to"
 msgstr ""
 
@@ -412,6 +469,9 @@ msgid "remove"
 msgstr ""
 
 msgid "status"
+msgstr ""
+
+msgid "title"
 msgstr ""
 
 msgid "translation of"

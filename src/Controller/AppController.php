@@ -212,9 +212,9 @@ class AppController extends Controller
     {
         // detect user session lang; if none, use default from config 'I18n.default'
         $user = $this->Auth->user();
-        $sessionLang = $user['sessionLang'];
-        if (empty($sessionLang) || !Configure::read(sprintf('I18n.languages.%s', $sessionLang))) {
-            $sessionLang = Configure::read('I18n.default');
+        $sessionLang = Configure::read('I18n.default');
+        if (!empty($user['sessionLang']) && Configure::read(sprintf('I18n.languages.%s', $user['sessionLang']))) {
+            $sessionLang = $user['sessionLang'];
         }
         Configure::write('I18n.lang', $sessionLang);
 

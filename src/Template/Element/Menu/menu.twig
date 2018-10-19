@@ -4,18 +4,18 @@
     {% for name, module in modules if name != 'trash' %}
         <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(
-                name|humanize|slice(0, 2),
+                __(name|humanize)|slice(0, 2),
                 {'_name': 'modules:list', 'object_type': name, 'plugin': null},
-                {'tooltip': name|humanize})|raw }}
+                {'tooltip': __(name|humanize)})|raw }}
         </li>
     {% endfor %}
 
     {# Plugin modules #}
     {% for k, plugin in config('PluginModules') %}
         <li class="{{ plugin.class.menu }}">
-            {{ Html.link(plugin.title|humanize|slice(0, 2),
+            {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
                 plugin.route,
-                {'tooltip': plugin.title|humanize})|raw }}
+                {'tooltip': __(plugin.title|humanize)})|raw }}
         </li>
     {% endfor %}
 

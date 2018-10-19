@@ -59,6 +59,12 @@ msgstr "Importazione dati"
 msgid "Delete"
 msgstr "Elimina"
 
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Documents"
+msgstr "Documenti"
+
 msgid "Draft"
 msgstr "Bozza"
 
@@ -86,6 +92,9 @@ msgstr "Errore"
 msgid "Error "
 msgstr "Errore "
 
+msgid "Events"
+msgstr "Eventi"
+
 msgid "Exit"
 msgstr "Esci"
 
@@ -110,6 +119,9 @@ msgstr "File caricato solo parzialmente"
 msgid "File type"
 msgstr "Tipo di file"
 
+msgid "Files"
+msgstr "File"
+
 msgid "Folders"
 msgstr "Cartelle"
 
@@ -118,6 +130,9 @@ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
+
+msgid "Images"
+msgstr "Immagini"
 
 msgid "Import"
 msgstr "Importa"
@@ -136,6 +151,9 @@ msgstr "Informazione"
 
 msgid "Language"
 msgstr "Lingua"
+
+msgid "Locations"
+msgstr "Luoghi"
 
 msgid "Log out"
 msgstr "Esci"
@@ -176,6 +194,9 @@ msgstr "Nuova voce in"
 msgid "New relations (save to keep)"
 msgstr "Nuove relazioni (salvare per mantenerle)"
 
+msgid "News"
+msgstr "Novità"
+
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
@@ -203,6 +224,9 @@ msgstr "Oggetto salvato"
 msgid "Object types"
 msgstr "Tipi di oggetto"
 
+msgid "Objects"
+msgstr "Oggetti"
+
 msgid "Object(s) deleted"
 msgstr "Oggetto(i) rimosso(i)"
 
@@ -221,6 +245,9 @@ msgstr "Apri immagine"
 msgid "Options"
 msgstr "Opzioni"
 
+msgid "Other"
+msgstr "Altro"
+
 msgid "Page size"
 msgstr "Dimensione pagina"
 
@@ -233,8 +260,17 @@ msgstr "Preferenze"
 msgid "Priority"
 msgstr "Priorità"
 
+msgid "Profiles"
+msgstr "Profili"
+
 msgid "Property types"
 msgstr "Tipi di priorità"
+
+msgid "Publish Start"
+msgstr "Data inizio pubblicazione"
+
+msgid "Publish End"
+msgstr "Data revoca pubblicazione"
 
 msgid "Related to"
 msgstr "Collegato a"
@@ -296,6 +332,9 @@ msgstr "Registrati"
 msgid "Size"
 msgstr "Dimensione"
 
+msgid "Status"
+msgstr "Stato"
+
 msgid "Success"
 msgstr "Risultato"
 
@@ -326,6 +365,9 @@ msgstr "Cestino"
 msgid "Trashcan"
 msgstr "Cestino"
 
+msgid "Uname"
+msgstr "Nome univoco"
+
 msgid "Unknown upload error"
 msgstr "Errore sconosciuto durante caricamento"
 
@@ -347,11 +389,23 @@ msgstr "Utente: {0}"
 msgid "Username"
 msgstr "Nome utente"
 
+msgid "Username or password is incorrect"
+msgstr "Nome utente o password non corretto(i)"
+
+msgid "Users"
+msgstr "Utenti"
+
+msgid "Videos"
+msgstr "Video"
+
 msgid "View original"
 msgstr "Vedi originale"
 
 msgid "View trashed "
 msgstr "Vedi nel cestino "
+
+msgid "You are not authorized to access that location."
+msgstr "Non sei autorizzato ad accedere a quest'area."
 
 msgid "Warning"
 msgstr "Avviso"
@@ -386,6 +440,9 @@ msgstr "ultima modifica"
 msgid "log out"
 msgstr "esci"
 
+msgid "modified"
+msgstr "modifica"
+
 msgid "move to"
 msgstr "sposta in"
 
@@ -415,6 +472,9 @@ msgstr "rimuovi"
 
 msgid "status"
 msgstr "stato"
+
+msgid "title"
+msgstr "titolo"
 
 msgid "translation of"
 msgstr "traduzione di"
