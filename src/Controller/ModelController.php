@@ -18,6 +18,7 @@ use Cake\Http\Response;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
+use Cake\Network\Exception\BadRequestException;
 
 /**
  * Model controller: list, add, edit, remove modeling related resources
@@ -62,6 +63,8 @@ class ModelController extends AppController
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
+
+        $this->Security->setConfig('unlockedActions', ['savePropertiesJson']);
     }
 
     /**
@@ -130,5 +133,54 @@ class ModelController extends AppController
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+    * save properties types (add )
+    *
+    * @return {void}
+    */
+    public function savePropertiesJson() : void
+    {
+        $payload = $this->request->getData();
+
+        $this->request->allowMethod(['post']);
+        $response = [];
+
+        try {
+            if (!empty($payload)) {
+                $header = ['Accept' => 'application/json'];
+                extract($payload);
+
+                if (isset($addProperties)) {
+                    foreach ($addProperties as $addProperty) {
+                        if  (isset($addProperty['params'])) {
+                            $params = json_decode($addProperty['params'], true);
+                            $addProperty['params'] = $params;
+                        }
+
+                        $body = [
+                            'data' => [
+                                'type' => $this->resourceType,
+                                'attributes' => $addProperty,
+                            ],
+                        ];
+
+                        $response[] = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body), $header);
+                    }
+                }
+
+            }
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
     }
 }

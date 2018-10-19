@@ -93,6 +93,13 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Model', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'model:view']
     );
+
+    $routes->connect(
+        '/model/:resource_type/savePropertiesJson',
+        ['controller' => 'Model', 'action' => 'savePropertiesJson'],
+        ['_name' => 'model:savePropertiesJson']
+    );
+
     $routes->connect(
         '/model/:resource_type/save',
         ['controller' => 'Model', 'action' => 'save'],
