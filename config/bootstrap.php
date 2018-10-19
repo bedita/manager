@@ -236,7 +236,7 @@ Configure::write('I18n.locales', [
     'en_US' => 'en',
     'it_IT' => 'it',
 ]);
-Configure::write('I18n.default', 'it');
+Configure::write('I18n.default', 'en');
 Configure::write('I18n.languages', [
     'en' => 'English',
     'it' => 'Italiano',
