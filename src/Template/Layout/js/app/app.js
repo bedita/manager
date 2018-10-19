@@ -12,6 +12,7 @@ import ModulesView from 'app/pages/modules/view';
 import TrashIndex from 'app/pages/trash/index';
 import TrashView from 'app/pages/trash/view';
 import ImportView from 'app/pages/import/index';
+import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
@@ -32,6 +33,7 @@ const _vueInstance = new Vue({
         TrashIndex,
         TrashView,
         ImportView,
+        ModelIndex,
         RelationsAdd,
         FilterBoxView,
         EditRelationParams,

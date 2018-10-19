@@ -136,7 +136,7 @@ class ModelController extends AppController
     }
 
     /**
-    * save properties types (add )
+    * save properties types (add)
     *
     * @return {void}
     */
@@ -167,6 +167,12 @@ class ModelController extends AppController
                         ];
 
                         $response[] = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body), $header);
+                    }
+                }
+
+                if (isset($removeProperties)) {
+                    foreach ($removeProperties as $removeProperty) {
+                        $response[] = $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removeProperty->id), null, $header);
                     }
                 }
 

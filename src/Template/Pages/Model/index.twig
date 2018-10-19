@@ -3,42 +3,44 @@
 
 {% set ids = Array.extract(resources, '{*}.id') %}
 
-{% set resourceType = _view.request.params.resource_type %}
+{# {% set resourceType = _view.request.params.resource_type %} #}
+{% set _csrfToken = _view.request.params['_csrfToken']|json_encode %}
 
-<modules-index inline-template ids='{{ ids|json_encode }}'>
+
+<model-index inline-template ids='{{ ids|json_encode }}' :csrf-token='{{ _csrfToken }}'>
     <div class="model-index">
         <div class="list-resources">
 
             {# list resources : table header #}
             {% if resources %}
             <nav class="table-header">
-                <div @click="toggleAll">
+                {# <div @click="toggleAll">
                     <input type="checkbox" :checked="allChecked">
-                </div>
+                </div> #}
 
-                <div>{{ Link.sort('id')}}</div>
+                <div class="first-cell">{{ Link.sort('id')}}</div>
 
                 {% for prop in properties %}
-                    <div>{{ Link.sort(prop) }}</div>
+                    <div class="{{ prop }}-cell">{{ Link.sort(prop) }}</div>
                 {% endfor %}
-                <div></div>
+                <div class="action-cell"></div>
 
             </nav>
             {% endif %}
 
             {# list resources : rows #}
             {% for resource in resources %}
-                <a
+                <div
                     href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
                     title="{{ resource.attributes.name }}"
-                    class="resource-status-on">
-
+                    class="index-entry">
+{#
                         <div class="{{ prop }}-cell" @click="selectRow">
                             {{ Form.unlockField('oneItem') }}
                             <input type="checkbox" name="oneItem" value="{{ resource.id }}" v-model="selectedRows">
-                        </div>
+                        </div> #}
 
-                        <div>{{ resource.id }}</div>
+                        <div class="first-cell">{{ resource.id }}</div>
 
                         {% for prop in properties %}
                             {% set propVal = resource.attributes[prop] %}
@@ -59,10 +61,42 @@
                             {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
                         {% endif %}
                         </div> #}
-                </a>
+                        <div class="action-cell"><button class="center-icon icon-trash inverted" @click="removeProperty({{resource.id}})"></button></div>
+                </div>
             {% else %}
                 {{ __('No items found') }}
             {% endfor %}
+
+            <div class="index-entry" v-for="propertyType in savedPropertyTypes">
+                <div class="first-cell">
+                    <: propertyType.id :>
+                </div>
+                <div class="primary"><input type="text" name="" placeholder="name" v-model="propertyType.attributes.name" pattern="^\S+$" /></div>
+                <div class="secondary"><textarea name="params" placeholder="params..." v-model="propertyType.attributes.params"></textarea></div>
+                <div><button class="center-icon icon-trash inverted" @click="removeProperty(propertyType.id)"></button></div>
+            </div>
+
+
+            <div class="index-entry new-row" v-for="propertyType in newPropertyTypes">
+                <div class="first-cell">
+                    <button type="button" @click="removeRow(propertyType)">-</button>
+                </div>
+                <div class="primary"><input type="text" name="" placeholder="name" v-model="propertyType.name" pattern="^\S+$" /></div>
+                <div class="secondary"><textarea name="params" placeholder="params..." v-model="propertyType.params"></textarea></div>
+                <div class="action-cell"></div>
+            </div>
+
+            <div class="index-entry add-row">
+                <div>
+                    <button type="button" @click="addRow()">+</button>
+                </div>
+            </div>
+
+            <div class="index-entry" v-if="newPropertyTypes.length">
+                <div>
+                    <button @click="save">Save</button>
+                </div>
+            </div>
 
         </div>
         {# end list-objects #}
@@ -73,4 +107,4 @@
         {% do _view.append('commands-links', Html.link(__('Property types'), {'_name': 'model:list', 'resource_type': 'property_types'})|raw) %}
 
     </div> {# end module-content #}
-</modules-index>
+</model-index>
