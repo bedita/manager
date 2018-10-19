@@ -105,7 +105,6 @@ class AppController extends Controller
 
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
-            // set tokens
             $tokens = $this->apiClient->getTokens();
             if ($tokens && $user['tokens'] !== $tokens) {
                 // Update tokens in session.
