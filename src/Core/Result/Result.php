@@ -52,20 +52,20 @@ class Result
     /**
      * Constructor
      *
-     * @param int|null $created the counter of created objects
-     * @param int|null $updated the counter of updated objects
-     * @param int|null $errors the counter of errors (not created)
-     * @param string|null $info the info message
-     * @param string|null $warn the warn message
-     * @param string|null $error the error message
+     * @param int $created the counter of created objects
+     * @param int $updated the counter of updated objects
+     * @param int $errors the counter of errors (not created)
+     * @param string $info the info message
+     * @param string $warn the warn message
+     * @param string $error the error message
      */
     public function __construct(
         $created = 0,
         $updated = 0,
         $errors = 0,
-        $info = null,
-        $warn = null,
-        $error = null
+        $info = '',
+        $warn = '',
+        $error = ''
     ) {
         $this->created = $created;
         $this->updated = $updated;
