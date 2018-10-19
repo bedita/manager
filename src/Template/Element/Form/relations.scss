@@ -81,6 +81,35 @@ nav.pagination {
     }
 }
 
+.resource.translations {
+    .related-object {
+        width: 33.3%;
+
+        article h2 {
+            font-size: 14px;
+        }
+
+        &.new-button {
+            width: 33.3%;
+
+            article {
+                position:  absolute;
+                top: $gutter/2;
+                left: $gutter/2;
+                bottom: $gutter/2;
+                right: $gutter/2;
+
+                a {
+                    margin: auto;
+                    font-size: 26px;
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
 // single related object
 .related-object {
     position: relative;

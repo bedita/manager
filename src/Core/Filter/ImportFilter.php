@@ -32,6 +32,13 @@ abstract class ImportFilter
     protected $apiClient = null;
 
     /**
+     * Filter import result
+     *
+     * @var \App\Core\Result\ImportResult
+     */
+    protected $result = null;
+
+    /**
      * Constructor
      *
      * @codeCoverageIgnore
@@ -39,6 +46,7 @@ abstract class ImportFilter
     public function __construct()
     {
         $this->apiClient = ApiClientProvider::getApiClient();
+        $this->result = new ImportResult();
     }
 
     /**
