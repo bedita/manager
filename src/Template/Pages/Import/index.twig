@@ -76,7 +76,7 @@
 
         <fieldset id="import-result">
             <div class="import-message">
-                <h2>{{ result.info|default('') }}</h2>
+                <h2>{{ result.info|default('')|nl2br|raw }}</h2>
                 <p>{{ __('Number of created resources') }}: {{ result.created|default(0) }}</p>
                 <p>{{ __('Number of updated resources') }}: {{ result.updated|default(0) }}</p>
                 <p>{{ __('Number of errors') }}: {{ result.errors|default(0) }}</p>
@@ -84,14 +84,14 @@
                 {% if result.warn %}
                 <div class="import-message import-warn">
                     <h2>{{ __('Import warn') }}</h2>
-                    <div>{{ result.warn|raw }}</div>
+                    <div>{{ result.warn|nl2br|raw }}</div>
                 </div>
                 {% endif %}
 
                 {% if result.error %}
                 <div class="import-message import-error">
                     <h2>{{ __('Import error') }}</h2>
-                    <div>{{ result.error|raw }}</div>
+                    <div>{{ result.error|nl2br|raw }}</div>
                 </div>
                 {% endif %}
             </div>
