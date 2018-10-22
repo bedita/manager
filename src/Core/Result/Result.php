@@ -92,7 +92,7 @@ class Result
     public function addMessage(string $name, string $msg)
     {
         if (property_exists($this, $name) && is_string($this->{$name})) {
-            $this->$name .= $msg . self::MSG_SEPARATOR;
+            $this->{$name} .= $msg . static::MSG_SEPARATOR;
         }
     }
 
@@ -105,7 +105,7 @@ class Result
     public function increment(string $name)
     {
         if (property_exists($this, $name) && is_int($this->{$name})) {
-            $this->$name++;
+            $this->{$name}++;
         }
     }
 }
