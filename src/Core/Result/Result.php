@@ -8,6 +8,13 @@ namespace App\Core\Result;
 class Result
 {
     /**
+     * Message separato
+     *
+     * @var string
+     */
+    const MSG_SEPARATOR = '<br/>';
+
+    /**
      * Counter of created resources
      *
      * @var int
@@ -73,5 +80,32 @@ class Result
         $this->info = $info;
         $this->warn = $warn;
         $this->error = $error;
+    }
+
+    /**
+     * Add info, error, warn or other custom message
+     *
+     * @param string $name Message type name: 'info', 'error', 'warn'
+     * @param string $msg Message string
+     * @return void
+     */
+    public function addMessage(string $name, string $msg)
+    {
+        if (property_exists($this, $name) && is_string($this->{$name})) {
+            $this->$name .= $msg . self::MSG_SEPARATOR;
+        }
+    }
+
+    /**
+     * Increment counter, like `created` or `updated`
+     *
+     * @param string $name Counter name: `created` or `updated`
+     * @return void
+     */
+    public function increment(string $name)
+    {
+        if (property_exists($this, $name) && is_int($this->{$name})) {
+            $this->$name++;
+        }
     }
 }
