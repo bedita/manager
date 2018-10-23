@@ -31,9 +31,10 @@ return [
                 ],
             ],
             'index' => [
+                'username',
                 'name',
                 'surname',
-                'username',
+                'email',
             ],
         ],
 
