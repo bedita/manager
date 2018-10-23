@@ -555,9 +555,9 @@ class ModulesController extends AppController
      * Change lang and redir to referer
      *
      * @param string $lang The lang code
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function lang($lang) : Response
+    public function lang($lang) : ?Response
     {
         $user = $this->Auth->user();
         $user['sessionLang'] = $lang;
