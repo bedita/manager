@@ -91,6 +91,7 @@ nav.pagination {
 
         &.new-button {
             width: 33.3%;
+            min-height: $gutter * 8;
 
             article {
                 position:  absolute;
