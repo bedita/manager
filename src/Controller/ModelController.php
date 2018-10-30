@@ -136,7 +136,7 @@ class ModelController extends AppController
     }
 
     /**
-    * save properties types (add)
+    * save property types (add/edit/delete)
     *
     * @return {void}
     */
@@ -149,9 +149,9 @@ class ModelController extends AppController
 
         try {
             if (!empty($payload)) {
-                $header = ['Accept' => 'application/json'];
                 extract($payload);
 
+                // save newly added property types
                 if (isset($addPropertyTypes)) {
                     foreach ($addPropertyTypes as $addPropertyType) {
                         if  (isset($addPropertyType['params'])) {
@@ -166,17 +166,35 @@ class ModelController extends AppController
                             ],
                         ];
 
-                        $response['saved'][] = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body), $header);
+                        $resp = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body));
+                        $response['saved'][] = $resp['data'];
                     }
                 }
 
+                // edit property types
+                if (isset($editPropertyTypes)) {
+                    foreach ($editPropertyTypes as $editPropertyType) {
+                        $id = (string)$editPropertyType['id'];
+                        $type = $this->resourceType;
+                        $body = [
+                            'data' => [
+                                'id' => $id,
+                                'type' => $type,
+                                'attributes' => $editPropertyType['attributes'],
+                            ],
+                        ];
+                        $resp = $this->apiClient->patch(sprintf('/model/%s/%s', $type, $id), json_encode($body));
+                        $response['edited'][] = $resp['data'];;
+                    }
+                }
+
+                // remove property types
                 if (isset($removePropertyTypes)) {
                     foreach ($removePropertyTypes as $removePropertyTypeId) {
-                        $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null, $header);
+                        $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null);
                         $response['removed'][] = $removePropertyTypeId;
                     }
                 }
-
             }
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
