@@ -27,6 +27,7 @@ export default {
      */
     data() {
         return {
+            propertyTypes: [],
             deletedPropertyTypes: [],
             savedPropertyTypes: [],
             newPropertyTypes: [],

@@ -55,8 +55,17 @@
                             {% endif %}
 
                             <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                                {{ propVal }}
+                                {% if resourceType == 'property_types' and prop == 'name' %}
+                                    <input type="text" placeholder="name" value="{{ propVal|raw }}" />
+                                {% elseif resourceType == 'property_types' and prop == 'params' %}
+                                    <textarea placeholder="params..." v-autosize="propertyTypes[{{ loop.index }}]['attributes']['params']">{{ propVal }}</textarea>
+
+                                    {# <input type="text" placeholder="params..." value="{{ propVal|json_encode }}" /> #}
+                                {% else %}
+                                    {{ propVal }}
+                                {% endif %}
                             </div>
+
                         {% endfor %}
 
                         {# TODO: uncomment `delete` action once controller part is available #}
