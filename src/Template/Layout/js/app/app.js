@@ -21,7 +21,6 @@ import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
-import { VueAutosize } from 'vue-autosize';
 
 import sleep from 'sleep-promise';
 
@@ -89,7 +88,6 @@ const _vueInstance = new Vue({
         Vue.use(datepicker);
         Vue.use(richeditor);
         Vue.use(VueHotkey);
-        Vue.use(VueAutosize)
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
