@@ -7,16 +7,13 @@
 {% set _csrfToken = _view.request.params['_csrfToken']|json_encode %}
 
 
-<model-index inline-template ids='{{ ids|json_encode }}' :csrf-token='{{ _csrfToken }}'>
+<model-index inline-template ids='{{ ids|json_encode }}' resources='{{ resources|json_encode }}' :csrf-token='{{ _csrfToken }}'>
     <div class="model-index">
         <div class="list-resources">
 
             {# list resources : table header #}
             {% if resources %}
             <nav class="table-header">
-                {# <div @click="toggleAll">
-                    <input type="checkbox" :checked="allChecked">
-                </div> #}
 
                 <div class="first-cell">{{ Link.sort('id')}}</div>
 
@@ -36,13 +33,12 @@
                     title="{{ resource.attributes.name }}"
                     class="index-entry"
                     :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
-{#
-                        <div class="{{ prop }}-cell" @click="selectRow">
-                            {{ Form.unlockField('oneItem') }}
-                            <input type="checkbox" name="oneItem" value="{{ resource.id }}" v-model="selectedRows">
-                        </div> #}
 
-                        <div class="first-cell">{{ resource.id }}</div>
+                        {% set propIndex = loop.index %}
+
+                        <div class="first-cell">{{ resource.id }}
+                            <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
+                        </div>
 
                         {% for prop in properties %}
                             {% set propVal = resource.attributes[prop] %}
@@ -56,11 +52,15 @@
 
                             <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
                                 {% if resourceType == 'property_types' and prop == 'name' %}
-                                    <input type="text" placeholder="name" value="{{ propVal|raw }}" />
+                                    <input pattern="^\S+$" type="text" placeholder="name"
+                                        @keyup="editPropName({{ resource.id }}, $event.target.value)"
+                                        value="{{ propVal|raw }}" />
                                 {% elseif resourceType == 'property_types' and prop == 'params' %}
-                                    <textarea placeholder="params..." v-autosize="propertyTypes[{{ loop.index }}]['attributes']['params']">{{ propVal }}</textarea>
-
-                                    {# <input type="text" placeholder="params..." value="{{ propVal|json_encode }}" /> #}
+                                    <autosize-textarea
+                                        placeholder="params..."
+                                        @input="editPropParams({{ resource.id }}, ...arguments)"
+                                        :value="{{ propVal|json_encode }}">
+                                    </autosize-textarea>
                                 {% else %}
                                     {{ propVal }}
                                 {% endif %}
@@ -89,13 +89,26 @@
             <div v-for="propertyType in savedPropertyTypes"
                 v-if="!containsId(deletedPropertyTypes, propertyType.id)"
                 class="index-entry"
-                :class="containsId(removePropertyTypes, propertyType.id) && 'delete-property-type'">
+                :class="containsId(removePropertyTypes, propertyType.id) && 'delete-property-type'
+                        ">
 
                 <div class="first-cell">
                     <: propertyType.id :>
+                    <i v-if="containsId(editPropertyTypes, propertyType.id)" class="icon-pencil"></i>
                 </div>
-                <div class="primary"><input type="text" name="" placeholder="name" v-model="propertyType.attributes.name" pattern="^\S+$" /></div>
-                <div class="secondary"><textarea name="params" placeholder="params..." v-model="propertyType.attributes.params"></textarea></div>
+                <div class="primary">
+                    <input type="text" name="" placeholder="name"
+                        @keyup="editPropName(propertyType.id, $event.target.value)"
+                        v-model="propertyType.attributes.name"
+                        pattern="^\S+$" />
+                </div>
+                <div class="secondary">
+                    <autosize-textarea
+                        placeholder="params..."
+                        @input="editPropParams(propertyType.id, ...arguments)"
+                        :value="propertyType.attributes.params ? JSON.stringify(propertyType.attributes.params, null, 4) : ''">
+                    </autosize-textarea>
+                </div>
                 <div class="action-cell">
                     <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType(propertyType.id)"></button>
                     <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType(propertyType.id)"></button>
@@ -109,7 +122,9 @@
                     <button type="button" @click="removeRow(propertyType)">-</button>
                 </div>
                 <div class="primary"><input type="text" name="" placeholder="name" v-model="propertyType.name" pattern="^\S+$" /></div>
-                <div class="secondary"><textarea name="params" placeholder="params..." v-model="propertyType.params"></textarea></div>
+                <div class="secondary">
+                    <autosize-textarea placeholder="params..." @input="propertyType.params = $event" :value="propertyType.params"></autosize-textarea>
+                </div>
                 <div class="action-cell"></div>
             </div>
 
@@ -122,7 +137,7 @@
                 </div>
 
                 <div class="index-entry">
-                    <div v-if="newPropertyTypes.length || removePropertyTypes.length">
+                    <div v-if="newPropertyTypes.length || removePropertyTypes.length || editPropertyTypes.length">
                         <button @click="save">Save</button>
                     </div>
                 </div>

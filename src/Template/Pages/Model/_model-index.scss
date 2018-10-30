@@ -32,10 +32,25 @@ body.view-model {
 
             div.index-entry {
                 display: flex;
-                // width: 100%;
+
+                .first-cell {
+                    button {
+                        min-width: $gutter * 2;
+                    }
+                }
+
+                &.editing-property-type {
+                    border-bottom: 1px dashed $gray-200;
+                }
 
                 &.delete-property-type {
                     opacity: 0.5;
+
+                    input, textarea {
+                        user-select: none;
+                        pointer-events:none;
+                        cursor: default;
+                    }
 
                     .remove-action {
                         display: none;
@@ -53,11 +68,14 @@ body.view-model {
 
                 div {
                     padding: $gutter/4 $gutter/2;
-                    // display: table-cell;
                     vertical-align: middle;
 
                     &.first-cell, &.action-cell {
-                        flex: 0 0 50px;
+                        flex: 0 0 65px;
+
+                        i {
+                            margin-left: $gutter * .5;
+                        }
                     }
 
                     &.primary, &.name-cell, &.inverse_name-cell {
@@ -71,7 +89,7 @@ body.view-model {
 
                 &.new-row div {
                     &.primary, &.secondary, &.name-cell, &.inverse_name-cell, &.params-cell, &.enabled-cell, &.is_abstract-cell {
-                        padding: $gutter/4 0;
+                        padding: $gutter * 0.25 $gutter * 0.5;
                     }
                 }
 
@@ -86,9 +104,9 @@ body.view-model {
                 }
 
                 textarea {
-                    height: $gutter * 2;
+                    min-height: $gutter * 2;
                     width: 100%;
-                    resize: none;
+                    // resize: none;
                 }
             }
 
@@ -99,7 +117,7 @@ body.view-model {
                     border-bottom: 1px solid $gray-700;
 
                     .first-cell, .action-cell {
-                        flex: 0 0 50px;
+                        flex: 0 0 65px;
                     }
 
                     a.sort {
