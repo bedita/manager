@@ -1,23 +1,28 @@
 /**
  * Templates that uses this component (directly or indirectly)
  *  Template/Pages/Model/index.twig
- *  - Element/Toolbar/filter.twig
- *
  *
  * <model-index> component used for ModulesPage -> Index
  *
+ * @extends ModulesIndex
  */
 
-import ModulesIndex from "app/pages/modules/index";
+import ModulesIndex from 'app/pages/modules/index';
+import AutosizeTextarea from 'app/components/autosize-textarea';
 
 export default {
     extends: ModulesIndex,
 
+    components: {
+        AutosizeTextarea,
+    },
+
     props: {
+        resources: {},  // loaded resources from template
         csrfToken: {
             type: String,
             required: true,
-        }
+        }   // csfrToken used for api call
     },
 
     /**
@@ -27,18 +32,80 @@ export default {
      */
     data() {
         return {
-            propertyTypes: [],
-            deletedPropertyTypes: [],
-            savedPropertyTypes: [],
-            newPropertyTypes: [],
-            removePropertyTypes: [],
+            propertyTypes: [],  // loaded property_type objects
+            deletedPropertyTypes: [],   // deleted property_type objects to be hidden
+            savedPropertyTypes: [], // saved property_type objects to show
+            newPropertyTypes: [],   // stage property_type objects TO ADD
+            removePropertyTypes: [],    // stage property_type objects to REMOVE
+            editPropertyTypes: [],  // stage property_type objects to EDIT
         };
+    },
+
+    mounted() {
+        // parse resource list received from template
+        this.propertyTypes = JSON.parse(this.resources);
     },
 
     /**
      * component methods
      */
     methods: {
+        /**
+         * edit property type params
+         *
+         * @param {Number} id resource id
+         * @param {String} value params value
+         *
+         * @returns {void}
+         */
+        editPropParams(id, value) {
+            let params = null;
+            try {
+                if (value !== "") {
+                    params = JSON.parse(value);
+                    if (!Object.keys(params).length) {
+                        params = null;
+                    }
+                }
+            } catch (error) {
+                console.info('[editPropParams] params JSON parse failed - skipping this one...');
+                return;
+            }
+
+            const editedType = {
+                id,
+                attributes: {
+                    params: params,
+                },
+            }
+
+            this.editPropertyType(editedType);
+        },
+
+        /**
+        * edit property type name
+        *
+        * @param {Number} id resource id
+        * @param {String} value name value
+        *
+        * @returns {void}
+        */
+        editPropName(id, value) {
+            const editedType = {
+                id,
+                attributes: {
+                    name: value,
+                },
+            }
+
+            this.editPropertyType(editedType);
+        },
+
+        /**
+         * add new empty object in newPropertyTypes array
+         *
+         * @returns {void}
+         */
         addRow() {
             this.newPropertyTypes.push({
                 name: "",
@@ -46,6 +113,11 @@ export default {
             });
         },
 
+        /**
+        * remove specific element from newPropertyTypes array
+        *
+        * @returns {void}
+        */
         removeRow(element) {
             const index = this.newPropertyTypes.indexOf(element);
             if (index !== -1) {
@@ -53,10 +125,21 @@ export default {
             }
         },
 
+        /**
+        * add specific element with {id} to removePropertyTypes array
+        *
+        * @param {Number} id id
+        *
+        * @returns {void}
+        */
         removePropertyType(id) {
             this.removePropertyTypes.push(id);
         },
 
+        /**
+         *
+         * @param {*} id
+         */
         undoRemovePropertyType(id) {
             const index = this.removePropertyTypes.indexOf(id);
 
@@ -65,6 +148,9 @@ export default {
             }
         },
 
+        /**
+         *
+         */
         save() {
             let baseUrl = window.location.href;
 
@@ -78,6 +164,7 @@ export default {
                 _csrfToken: this.csrfToken,
                 addPropertyTypes: [...this.newPropertyTypes],
                 removePropertyTypes: [...this.removePropertyTypes],
+                editPropertyTypes: [...this.editPropertyTypes],
             }
 
             const options = {
@@ -94,29 +181,93 @@ export default {
                 .then((json) => {
                     const saved = json['saved'] || [];
                     const removed = json['removed'] || [];
+                    const edited = json['edited'] || [];
 
-                    const props = saved.filter(prop => prop).map(prop => {
-                        const obj = prop.data;
-                        if (obj.attributes && obj.attributes.params) {
-                            obj.attributes.params = JSON.stringify(obj.attributes.params);
-                        }
-                        return obj;
-                    });
-                    this.savedPropertyTypes.push(...props);
+                    // store saved property types
+                    this.savedPropertyTypes.push(...saved);
 
-                    // remove prop
+                    // store removed property types
                     this.deletedPropertyTypes.push(...removed);
+
+                    edited.forEach((entry) => {
+                        this.propertyTypes = this.propertyTypes.map((propertyType) => {
+                            if (propertyType.id === entry.id) {
+                                return entry;
+                            }
+                            return propertyType;
+                        });
+
+                        this.savedPropertyTypes = this.savedPropertyTypes.map((propertyType) => {
+                            if (propertyType.id === entry.id) {
+                                return entry;
+                            }
+                            return propertyType;
+                        });
+                    });
+
+                    this.$children.forEach((component) => {
+                        try {
+                            JSON.parse(component.text);
+                        } catch (error) {
+                            component.text = '';
+                        }
+                    });
 
                     // reset
                     this.newPropertyTypes = [];
                     this.removePropertyTypes = [];
-
+                    this.editPropertyTypes = [];
                 }).catch((err) => {
                     console.log(err);
                 });
         },
 
-                /**
+        /**
+         * setup edited element
+         *
+         * @param {Object} type edited propertyType element
+         *
+         * @returns {void}
+         */
+        editPropertyType(type) {
+            // concat propertyTypes and savePropertyTypes
+            let allPropertyTypes = [ ...this.propertyTypes, ...this.savedPropertyTypes];
+
+            // find old value for current element
+            const [original] = allPropertyTypes.filter((propertyType) => propertyType.id == type.id);
+
+            // check if element already edited
+            const exists = this.editPropertyTypes.filter((propertyType) => propertyType.id === type.id).length;
+            if (exists) {
+                // ..modify edited element
+                this.editPropertyTypes = this.editPropertyTypes.map((propertyType) => {
+                    if (propertyType.id === type.id) {
+                        return {
+                            id: type.id,
+                            attributes: {...propertyType.attributes, ...type.attributes}
+                        };
+                    };
+                    return propertyType;
+                });
+            } else {
+                // add edited element
+                this.editPropertyTypes.push(type);
+            }
+
+            // prune edited element that are equal to original value
+            this.editPropertyTypes = this.editPropertyTypes.filter((propertyType) => {
+                const equals = Object.keys(propertyType.attributes).filter(
+                    (attributeName) => {
+                        // very simple equivalency check
+                        return JSON.stringify(propertyType.attributes[attributeName]) === JSON.stringify(original.attributes[attributeName]);
+                    }
+                ).length === Object.keys(propertyType.attributes).length;
+
+                return !equals;
+            });
+        },
+
+        /**
         * helper function: check if array relations has element with id -> id
         *
         * @param {Array} relations
@@ -124,8 +275,13 @@ export default {
         *
         * @return {Boolean} true if id is in Array relations
         */
-        containsId(relations, id) {
-            return relations.filter((relId) => relId === id).length;
+        containsId(array, id) {
+            return array.filter((element) => {
+                if (typeof element === 'object' && 'id' in element) {
+                    return element.id === id;
+                }
+                return element === id
+            }).length;
         },
     }
 };
