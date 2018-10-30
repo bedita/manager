@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2018-10-17 06:24:32 \n"
+"POT-Creation-Date: 2018-10-30 14:24:02 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -209,10 +209,16 @@ msgstr ""
 msgid "Number of created objects"
 msgstr ""
 
+msgid "Number of created resources"
+msgstr ""
+
 msgid "Number of errors"
 msgstr ""
 
 msgid "Number of updated objects"
+msgstr ""
+
+msgid "Number of updated resources"
 msgstr ""
 
 msgid "Object"
@@ -227,13 +233,13 @@ msgstr ""
 msgid "Object types"
 msgstr ""
 
-msgid "Objects"
-msgstr ""
-
 msgid "Object(s) deleted"
 msgstr ""
 
 msgid "Object(s) restored"
+msgstr ""
+
+msgid "Objects"
 msgstr ""
 
 msgid "Off"
@@ -269,10 +275,10 @@ msgstr ""
 msgid "Property types"
 msgstr ""
 
-msgid "Publish Start"
+msgid "Publish End"
 msgstr ""
 
-msgid "Publish End"
+msgid "Publish Start"
 msgstr ""
 
 msgid "Related to"
@@ -410,10 +416,10 @@ msgstr ""
 msgid "View trashed "
 msgstr ""
 
-msgid "You are not authorized to access that location."
+msgid "Warning"
 msgstr ""
 
-msgid "Warning"
+msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "add objects"

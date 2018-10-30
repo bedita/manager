@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2018-10-17 06:24:32 \n"
+"POT-Creation-Date: 2018-10-30 14:24:02 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -209,11 +209,17 @@ msgstr "Nessuna opzione per questo tipo di file"
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
 
+msgid "Number of created resources"
+msgstr "Numero di risorse create"
+
 msgid "Number of errors"
 msgstr "Numero di errori"
 
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
+
+msgid "Number of updated resources"
+msgstr "Numero di risorse aggiornate"
 
 msgid "Object"
 msgstr "Oggetto"
@@ -227,14 +233,14 @@ msgstr "Oggetto salvato"
 msgid "Object types"
 msgstr "Tipi di oggetto"
 
-msgid "Objects"
-msgstr "Oggetti"
-
 msgid "Object(s) deleted"
 msgstr "Oggetto(i) rimosso(i)"
 
 msgid "Object(s) restored"
 msgstr "Oggetto(i) ripristinato(i)"
+
+msgid "Objects"
+msgstr "Oggetti"
 
 msgid "Off"
 msgstr "Inattivo"
@@ -269,11 +275,11 @@ msgstr "Profili"
 msgid "Property types"
 msgstr "Tipi di priorità"
 
-msgid "Publish Start"
-msgstr "Data inizio pubblicazione"
-
 msgid "Publish End"
 msgstr "Data revoca pubblicazione"
+
+msgid "Publish Start"
+msgstr "Data inizio pubblicazione"
 
 msgid "Related to"
 msgstr "Collegato a"
@@ -410,11 +416,11 @@ msgstr "Vedi originale"
 msgid "View trashed "
 msgstr "Vedi nel cestino "
 
-msgid "You are not authorized to access that location."
-msgstr "Non sei autorizzato ad accedere a quest'area."
-
 msgid "Warning"
 msgstr "Avviso"
+
+msgid "You are not authorized to access that location."
+msgstr "Non sei autorizzato ad accedere a quest'area."
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
