@@ -27,61 +27,92 @@
 
             {# list resources : rows #}
             {% for resource in resources %}
-                <div
-                    v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
-                    href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
-                    title="{{ resource.attributes.name }}"
-                    class="index-entry"
-                    :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
+                {% if resource.type == 'property_types' %}
+                    <div
+                        v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
+                        href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
+                        title="{{ resource.attributes.name }}"
+                        class="index-entry"
+                        :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
 
-                        {% set propIndex = loop.index %}
+                            {% set propIndex = loop.index0 %}
 
-                        <div class="first-cell">{{ resource.id }}
-                            <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
-                        </div>
+                            <div class="first-cell">{{ resource.id }}
+                                <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
+                            </div>
 
-                        {% for prop in properties %}
-                            {% set propVal = resource.attributes[prop] %}
-                            {% if propVal is iterable %}
-                                {% set propVal = propVal|json_encode(constant('JSON_PRETTY_PRINT')) %}
-                            {% elseif  propVal is same as(true) %}
-                                {% set propVal = 'Y' %}
-                            {% elseif  propVal is same as(false) %}
-                                {% set propVal = 'N' %}
-                            {% endif %}
-
-                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                                {% if resourceType == 'property_types' and prop == 'name' %}
-                                    <input pattern="^\S+$" type="text" placeholder="name"
-                                        @keyup="editPropName({{ resource.id }}, $event.target.value)"
-                                        value="{{ propVal|raw }}" />
-                                {% elseif resourceType == 'property_types' and prop == 'params' %}
-                                    <autosize-textarea
-                                        placeholder="params..."
-                                        @input="editPropParams({{ resource.id }}, ...arguments)"
-                                        :value="{{ propVal|json_encode }}">
-                                    </autosize-textarea>
-                                {% else %}
-                                    {{ propVal }}
+                            {% for prop in properties %}
+                                {% set propVal = resource.attributes[prop] %}
+                                {% if propVal is iterable %}
+                                    {% set propVal = propVal|json_encode(constant('JSON_PRETTY_PRINT')) %}
+                                {% elseif  propVal is same as(true) %}
+                                    {% set propVal = 'Y' %}
+                                {% elseif  propVal is same as(false) %}
+                                    {% set propVal = 'N' %}
                                 {% endif %}
+
+                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                    {% if resourceType == 'property_types' and prop == 'name' %}
+                                        <input pattern="^\S+$" type="text" placeholder="name"
+                                            @keyup="editPropName({{ resource.id }}, $event.target.value)"
+                                            value="{{ propVal|raw }}" />
+                                    {% elseif resourceType == 'property_types' and prop == 'params' %}
+                                        <autosize-textarea
+                                            placeholder="params..."
+                                            @input="editPropParams({{ resource.id }}, ...arguments)"
+                                            {# :reset-value="formatParams(propertyTypes[{{ propIndex }}])" #}
+                                            :value="propertyTypes[{{ propIndex }}] ? formatParams(propertyTypes[{{ propIndex }}]) : {{ propVal|json_encode }}">
+                                        </autosize-textarea>
+                                    {% else %}
+                                        {{ propVal }}
+                                    {% endif %}
+                                </div>
+
+                            {% endfor %}
+
+                            {% if resourceType == 'property_types' %}
+                                <div class="action-cell">
+                                    <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType({{resource.id}})"></button>
+                                    <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType({{resource.id}})"></button>
+                                </div>
+                            {% endif %}
+                    </div>
+
+                {% else %}
+                    <a
+                        href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
+                        title="{{ resource.attributes.name }}"
+                        class="index-entry">
+
+                            <div class="first-cell" @click="selectRow">
+                                {{ Form.unlockField('oneItem') }}
+                                <input type="checkbox" name="oneItem" value="{{ resource.id }}" v-model="selectedRows">
+                                {{ resource.id }}
                             </div>
 
-                        {% endfor %}
+                            {% for prop in properties %}
+                                {% set propVal = resource.attributes[prop] %}
+                                {% if propVal is iterable %}
+                                    {% set propVal = propVal|json_encode(constant('JSON_PRETTY_PRINT')) %}
+                                {% elseif  propVal is same as(true) %}
+                                    {% set propVal = 'Y' %}
+                                {% elseif  propVal is same as(false) %}
+                                    {% set propVal = 'N' %}
+                                {% endif %}
 
-                        {# TODO: uncomment `delete` action once controller part is available #}
-                        {# <div class="buttons">
-                        {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
-                        {% endif %}
-                        </div> #}
-                        {% if resourceType == 'property_types' %}
-                            <div class="action-cell">
-                                <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType({{resource.id}})"></button>
-                                <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType({{resource.id}})"></button>
-                            </div>
-                        {% endif %}
+                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ propVal }}</div>
+                            {% endfor %}
 
-                </div>
+                            <div class="action-cell"></div>
+
+                            {# TODO: uncomment `delete` action once controller part is available #}
+                            {# <div class="buttons">
+                            {% if in_array('DELETE', currentModule.hints.allow) %}
+                                {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
+                            {% endif %}
+                            </div> #}
+                    </a>
+                {% endif %}
             {% else %}
                 {{ __('No items found') }}
             {% endfor %}
@@ -99,14 +130,14 @@
                 <div class="primary">
                     <input type="text" name="" placeholder="name"
                         @keyup="editPropName(propertyType.id, $event.target.value)"
-                        v-model="propertyType.attributes.name"
+                        v-model.lazy="propertyType.attributes.name"
                         pattern="^\S+$" />
                 </div>
                 <div class="secondary">
                     <autosize-textarea
                         placeholder="params..."
                         @input="editPropParams(propertyType.id, ...arguments)"
-                        :value="propertyType.attributes.params ? JSON.stringify(propertyType.attributes.params, null, 4) : ''">
+                        :value="formatParams(propertyType)">
                     </autosize-textarea>
                 </div>
                 <div class="action-cell">
@@ -137,7 +168,7 @@
                 </div>
 
                 <div class="index-entry">
-                    <div v-if="newPropertyTypes.length || removePropertyTypes.length || editPropertyTypes.length">
+                    <div v-if="formIsModified">
                         <button @click="save">Save</button>
                     </div>
                 </div>
