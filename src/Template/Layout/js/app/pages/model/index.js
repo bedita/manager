@@ -22,7 +22,7 @@ export default {
         csrfToken: {
             type: String,
             required: true,
-        }   // csfrToken used for api call
+        },   // csfrToken used for api call
     },
 
     /**
@@ -44,6 +44,30 @@ export default {
     mounted() {
         // parse resource list received from template
         this.propertyTypes = JSON.parse(this.resources);
+    },
+
+    computed: {
+        /**
+         * check if page has been modified, if so emits a change event
+         *
+         * @emits Event#change thrown when page has been modified
+         *
+         * @returns
+         */
+        formIsModified() {
+            const isChanged = !!(this.newPropertyTypes.length || this.removePropertyTypes.length || this.editPropertyTypes.length);
+
+            if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    detail: {
+                        id: this.$vnode.tag,
+                        isChanged,
+                    }
+                }));
+            }
+            return isChanged;
+        }
     },
 
     /**
@@ -128,7 +152,7 @@ export default {
         /**
         * add specific element with {id} to removePropertyTypes array
         *
-        * @param {Number} id id
+        * @param {Number} id id of object to remove
         *
         * @returns {void}
         */
@@ -137,8 +161,9 @@ export default {
         },
 
         /**
+         * unstage element from removePropertyTypes array
          *
-         * @param {*} id
+         * @param {Number} id id to revert
          */
         undoRemovePropertyType(id) {
             const index = this.removePropertyTypes.indexOf(id);
@@ -149,9 +174,20 @@ export default {
         },
 
         /**
+         * save resources (add/edit/delete) using controller's method savePropertiesJson
          *
+         * @param {Event} event click event
+         *
+         * @returns {void}
          */
-        save() {
+        save(event) {
+            if (this.removePropertyTypes.length) {
+                if (!confirm(`Do you really want to trash these property types? ${this.removePropertyTypes.join(', ')}`)) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+
             let baseUrl = window.location.href;
 
             let headers = new Headers({
@@ -190,6 +226,7 @@ export default {
                     this.deletedPropertyTypes.push(...removed);
 
                     edited.forEach((entry) => {
+                        // update propertyTypes list
                         this.propertyTypes = this.propertyTypes.map((propertyType) => {
                             if (propertyType.id === entry.id) {
                                 return entry;
@@ -198,6 +235,7 @@ export default {
                         });
 
                         this.savedPropertyTypes = this.savedPropertyTypes.map((propertyType) => {
+                            // update savedPropertyTypes list
                             if (propertyType.id === entry.id) {
                                 return entry;
                             }
@@ -205,11 +243,13 @@ export default {
                         });
                     });
 
+                    // clean up wrong jsons an restore original value
                     this.$children.forEach((component) => {
                         try {
                             JSON.parse(component.text);
                         } catch (error) {
-                            component.text = '';
+                            // if new value is not valid, restore the previous one
+                            component.text = component.originalValue;
                         }
                     });
 
@@ -268,10 +308,30 @@ export default {
         },
 
         /**
+        * helper function: correctly format property params
+        *
+        * @param {Array} object array of property_types
+        *
+        * @return {void}
+        */
+        formatParams(object) {
+            let formatted = '';
+
+            if (object && object.attributes && object.attributes.params) {
+                try {
+                    formatted = JSON.stringify(object.attributes.params, null, 4);
+                } catch (error) {
+                    formatted = error.message;
+                }
+            }
+            return formatted;
+        },
+
+        /**
         * helper function: check if array relations has element with id -> id
         *
-        * @param {Array} relations
-        * @param {Number} id
+        * @param {Array} relations array of relations
+        * @param {Number} id id to compare
         *
         * @return {Boolean} true if id is in Array relations
         */

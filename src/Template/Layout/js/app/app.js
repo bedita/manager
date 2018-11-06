@@ -52,6 +52,7 @@ const _vueInstance = new Vue({
             panelData: null,
             addRelation: {},
             editingRelationParams: null,
+            dataChanged: false,
 
             urlFilterQuery: {
                 q: '',
@@ -95,6 +96,7 @@ const _vueInstance = new Vue({
 
     created() {
         this.vueLoaded = true;
+        this.dataChanged = new Map();
 
         // load url params when component initialized
         this.loadUrlParams();
@@ -122,9 +124,7 @@ const _vueInstance = new Vue({
 
     mounted: function () {
         this.$nextTick(function () {
-            if(BEDITA.template == 'view') {
-                this.alertBeforePageUnload();
-            }
+            this.alertBeforePageUnload(BEDITA.template);
         })
     },
 
@@ -376,25 +376,110 @@ const _vueInstance = new Vue({
          *
          * @returns {void}
          */
-        alertBeforePageUnload() {
-            var forms = [...document.querySelectorAll('form')];
-            forms.forEach((form) => {
-                form.addEventListener('change', (ev) => {
-                    form.changed = true;
-                });
-                form.addEventListener('submit', (ev) => {
+        alertBeforePageUnload(view) {
+            /*
+
+            */
+            this.$el.addEventListener('focusin', (ev) => {
+                const element = ev.target;
+                if (typeof element.dataset.originalValue === 'undefined') {
+                    if (element.nodeName === 'INPUT') {
+                        // storing original value for the element
+                        if (element.type === 'radio') {
+                            const name = element.name;
+                            const group = document.querySelectorAll(`input[name=${name}]`);
+                            const checked = document.querySelector(`input[name=${name}]:checked`);
+                            group.forEach(el => el.dataset.originalValue = checked.value);
+                        } else if (element.type === 'checkbox') {
+                            const name = element.name;
+                            const checked = document.querySelectorAll(`input[name=${name}]:checked`);
+                            element.dataset.originalValue = JSON.stringify(checked);
+                        } else {
+                            element.dataset.originalValue = element.value;
+                        }
+                    } else if (element.nodeName === 'TEXTAREA') {
+                        // storing original value for the element
+                        element.dataset.originalValue = element.value;
+                    }
+                }
+
+            }, true);
+
+            /*
+
+            */
+            this.$el.addEventListener('change', (ev) => {
+                const element = ev.target;
+                const action = element && element.form && element.form.action;
+                if (action && action.endsWith('/login')) {
+                    return true;
+                }
+
+                const sender = ev.detail;
+                if (typeof sender !== 'undefined' && sender.id) {
+                    this.dataChanged.set(sender.id, { changed: sender.isChanged });
+                } else {
+                    // support for normal change Events trying to figure out a unique id
+                    const form = element.form;
+                    if (!form) {
+                        // exclude input outside forms
+                        return true;
+                    }
+
+                    const name = element.name;
+                    const formId = element.form.getAttribute('id');
+                    const elementId = element.id;
+                    const originalValue = element.dataset.originalValue;
+                    let value = element.value;
+                    let id = `${formId}#${elementId}`;
+
+                    if (element.type === 'radio' || element.type === 'checkbox') {
+                        if (element.type === 'checkbox') {
+                            const checked = document.querySelectorAll(`input[name=${name}]:checked`);
+                            value = JSON.stringify(checked);
+                        }
+                        id = `${formId}#${name}`;
+                    }
+
+                    if (!id || id === '') {
+                        // if I can't make an id out of don't bother
+                        return true;
+                    }
+
+                    this.dataChanged.set(id, { changed: value !== originalValue });
+                }
+            });
+
+            /*
+
+            */
+            this.$el.addEventListener('submit', (ev) => {
+                const form = ev.target;
+                if (form) {
                     if (form.action.endsWith('/delete')) {
                         if (!confirm("Do you really want to trash the object?")) {
+                            _vueInstance.dataChanged.clear();
                             ev.preventDefault();
                             return;
                         }
+                    } else {
+                        _vueInstance.dataChanged.clear();
                     }
-                    form.submitting = true;
-                });
+                }
             });
 
-            window.onbeforeunload = function() {
-                if (forms.some((f) => f.changed) && !forms.some((f) => f.submitting)) {
+            /*
+
+            */
+            window.onbeforeunload = function (ev) {
+                let isDataChanged = false;
+                for (const [key, value] of _vueInstance.dataChanged) {
+                    if (value.changed) {
+                        isDataChanged = true;
+                        break;
+                    }
+                }
+                if (isDataChanged) {
                     return "There are unsaved changes, are you sure you want to leave page?";
                 }
             }

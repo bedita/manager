@@ -1,13 +1,14 @@
 import autosize from "autosize";
 
 export default {
-    props: ["value"],
+    props: ["value", "reset-value"],
 
     template: `<textarea @input="handleChange" :value="text"></textarea>`,
 
     data() {
         return {
             text: '',
+            originalValue: '',
         };
     },
 
@@ -17,12 +18,22 @@ export default {
             this.$nextTick(() => {
                 autosize(this.$el);
             });
+        },
+
+        value() {
+            this.originalValue = this.value;
         }
     },
 
     mounted() {
         // setup initial value
+        this.originalValue = this.value;
         this.text = this.value;
+
+        // setup autosize
+        this.$nextTick(() => {
+            autosize(this.$el);
+        });
     },
 
     methods: {
