@@ -378,7 +378,7 @@ const _vueInstance = new Vue({
          */
         alertBeforePageUnload(view) {
             /*
-
+                Listen for focusin: "normal" HTML element need to store original value in order to make a diff with new values
             */
             this.$el.addEventListener('focusin', (ev) => {
                 const element = ev.target;
@@ -406,7 +406,7 @@ const _vueInstance = new Vue({
             }, true);
 
             /*
-
+                Listen for change: Handles change events and checks if form/page has been modified
             */
             this.$el.addEventListener('change', (ev) => {
                 const element = ev.target;
@@ -451,7 +451,7 @@ const _vueInstance = new Vue({
             });
 
             /*
-
+                Listen for submit: if action is /delete it shows warning prompt
             */
             this.$el.addEventListener('submit', (ev) => {
                 const form = ev.target;
