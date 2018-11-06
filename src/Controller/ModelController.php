@@ -18,7 +18,6 @@ use Cake\Http\Response;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
-use Cake\Network\Exception\BadRequestException;
 
 /**
  * Model controller: list, add, edit, remove modeling related resources
@@ -136,11 +135,11 @@ class ModelController extends AppController
     }
 
     /**
-    * save property types (add/edit/delete)
-    *
-    * @return {void}
-    */
-    public function savePropertiesJson() : void
+     * save property types (add/edit/delete)
+     *
+     * @return {void}
+     */
+    public function savePropertiesJson()
     {
         $payload = $this->request->getData();
 
@@ -154,7 +153,7 @@ class ModelController extends AppController
                 // save newly added property types
                 if (isset($addPropertyTypes)) {
                     foreach ($addPropertyTypes as $addPropertyType) {
-                        if  (isset($addPropertyType['params'])) {
+                        if (isset($addPropertyType['params'])) {
                             $params = json_decode($addPropertyType['params'], true);
                             $addPropertyType['params'] = $params;
                         }
@@ -184,7 +183,7 @@ class ModelController extends AppController
                             ],
                         ];
                         $resp = $this->apiClient->patch(sprintf('/model/%s/%s', $type, $id), json_encode($body));
-                        $response['edited'][] = $resp['data'];;
+                        $response['edited'][] = $resp['data'];
                     }
                 }
 
