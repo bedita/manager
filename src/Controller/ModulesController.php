@@ -112,6 +112,12 @@ class ModulesController extends AppController
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
 
+        // base/custom filters for filter view
+        $this->set('filter', $this->Properties->filterList($this->objectType));
+
+        // objectTypes schema
+        $this->set('schema', $this->Schema->getSchema($this->objectType));
+
         return null;
     }
 

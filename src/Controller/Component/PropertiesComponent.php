@@ -55,6 +55,16 @@ class PropertiesComponent extends Component
         // don't include: 'id', 'status', and 'modified' => always listed
         'index' => [
             'title',
+        ],
+
+        'filter' => [
+            'status',
+            'lang',
+        ],
+
+        'bulk' => [
+            'status',
+            'lang',
         ]
     ];
 
@@ -65,8 +75,20 @@ class PropertiesComponent extends Component
     {
         Configure::load('properties');
         $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
-        $this->setConfig('Properties', $propConfig);
 
+        $defaultFilter = [
+            'filter' => $this->defaultGroups['filter'],
+        ];
+
+        foreach ($propConfig as $objectType => &$conf) {
+            if (empty($conf['filter'])) {
+                $conf['filter'] = [];
+            }
+            $conf['filter'] = array_merge($this->defaultGroups['filter'], $conf['filter']);
+        }
+        unset($conf);
+
+        $this->setConfig('Properties', $propConfig);
         parent::initialize($config);
     }
 
@@ -117,15 +139,26 @@ class PropertiesComponent extends Component
     }
 
     /**
-     * List properties to display in `index` view
-     *
-     * @param string $type Object type name
-     * @return array
-     */
+    * List properties to display in `index` view
+    *
+    * @param string $type Object type name
+    * @return array
+    */
     public function indexList(string $type): array
     {
         $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
 
         return array_diff($list, ['id', 'status', 'modified']);
+    }
+
+    /**
+    * List of filter to display in `filter` view
+    *
+    * @param string $type Object type name
+    * @return array
+    */
+    public function filterList(string $type): array
+    {
+        return $this->getConfig(sprintf('Properties.%s.filter', $type), $this->defaultGroups['filter']);
     }
 }

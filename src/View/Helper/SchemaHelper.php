@@ -180,28 +180,28 @@ class SchemaHelper extends Helper
         if ($type === 'json') {
             return [
                 'type' => 'textarea',
-                'v-jsoneditor' => '',
+                'v-jsoneditor' => 'true',
                 'class' => 'json',
                 'value' => json_encode($value),
             ];
         } elseif ($type === 'textarea') {
             return [
                 'type' => 'textarea',
-                'v-richeditor' => '',
+                'v-richeditor' => 'true',
                 'ckconfig' => 'configNormal',
                 'value' => $value,
             ];
         } elseif ($type === 'date-time') {
             return [
                 'type' => 'text',
-                'v-datepicker' => '',
+                'v-datepicker' => 'true',
                 'time' => 'true',
                 'value' => $value,
             ];
         } elseif ($type === 'date') {
             return [
                 'type' => 'text',
-                'v-datepicker' => '',
+                'v-datepicker' => 'true',
                 'time' => 'false',
                 'value' => $value,
             ];
