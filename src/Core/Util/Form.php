@@ -17,22 +17,22 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
-class Form {
-
+class Form
+{
     /**
      * Schema property types
      */
-    public const schemaPropertyTypes = ['string', 'number', 'integer', 'boolean', 'array', 'object'];
+    public const SCHEMA_PROPERTY_TYPES = ['string', 'number', 'integer', 'boolean', 'array', 'object'];
 
     /**
      * Custom controls
      */
-    public const customControls = ['lang', 'status', 'old_password', 'password', 'confirm-password', 'title'];
+    public const CUSTOM_CONTROLS = ['lang', 'status', 'old_password', 'password', 'confirm-password', 'title'];
 
     /**
      * Control types
      */
-    public const controlTypes = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum'];
+    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum'];
 
     /**
      * Get control by schema, control type, and value
@@ -44,7 +44,7 @@ class Form {
      */
     public static function control(array $schema, string $type, $value) : array
     {
-        if (!in_array($type, Form::controlTypes)) {
+        if (!in_array($type, Form::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
         $method = sprintf('%sControl', $type);
@@ -158,7 +158,7 @@ class Form {
 
         return [
             'type' => 'checkbox',
-            'checked' => (boolean)$value,
+            'checked' => (bool)$value,
         ];
     }
 
@@ -222,7 +222,7 @@ class Form {
                 return Form::controlTypeFromSchema($subSchema);
             }
         }
-        if (empty($schema['type']) || !in_array($schema['type'], Form::schemaPropertyTypes)) {
+        if (empty($schema['type']) || !in_array($schema['type'], Form::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
         $method = sprintf('typeFrom%s', lcfirst($schema['type']));
@@ -238,7 +238,7 @@ class Form {
      */
     public static function customControlOptions($name) : array
     {
-        if (!in_array($name, Form::customControls)) {
+        if (!in_array($name, Form::CUSTOM_CONTROLS)) {
             return [];
         }
         $method = sprintf('%sOptions', $name);
@@ -390,7 +390,7 @@ class Form {
     /**
      * Return the type for number: 'number'
      *
-     * @param array $schema
+     * @param array $schema Object schema array.
      * @return string
      */
     private static function typeFromNumber(array $schema) : string
@@ -401,7 +401,7 @@ class Form {
     /**
      * Return the type for integer: 'number'
      *
-     * @param array $schema
+     * @param array $schema Object schema array.
      * @return string
      */
     private static function typeFromInteger(array $schema) : string
@@ -412,7 +412,7 @@ class Form {
     /**
      * Return the type for boolean: 'checkbox'
      *
-     * @param array $schema
+     * @param array $schema Object schema array.
      * @return string
      */
     private static function typeFromBoolean(array $schema) : string
@@ -423,7 +423,7 @@ class Form {
     /**
      * Return the type for array: 'checkbox'
      *
-     * @param array $schema
+     * @param array $schema Object schema array.
      * @return string
      */
     private static function typeFromArray(array $schema) : string
@@ -434,7 +434,7 @@ class Form {
     /**
      * Return the type for object: 'json'
      *
-     * @param array $schema
+     * @param array $schema Object schema array.
      * @return string
      */
     private static function typeFromObject(array $schema) : string
