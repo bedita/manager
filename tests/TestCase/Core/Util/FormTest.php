@@ -154,8 +154,6 @@ class FormTest extends TestCase
         static::assertSame($expected, $actual);
     }
 
-
-
     /**
      * Data provider for `testCustomControlOptions` test case.
      * Custom control types (@see Form::customControls):
@@ -251,7 +249,6 @@ class FormTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
-
 
     /**
      * Data provider for `testControl` test case.
