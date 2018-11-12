@@ -377,11 +377,8 @@ class Form {
      */
     private static function typeFromString(array $schema) : string
     {
-        if (!empty($schema['format']) && ($schema['format'] === 'date-time')) {
-            return 'date-time';
-        }
-        if (!empty($schema['format']) && $schema['format'] === 'date') {
-            return 'date';
+        if (!empty($schema['format']) && in_array($schema['format'], ['date', 'date-time'])) {
+            return $schema['format'];
         }
         if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
             return 'textarea';
