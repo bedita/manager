@@ -222,10 +222,7 @@ class Form {
                 return Form::controlTypeFromSchema($subSchema);
             }
         }
-        if (empty($schema['type'])) {
-            return 'text';
-        }
-        if (!in_array($schema['type'], Form::schemaPropertyTypes)) {
+        if (empty($schema['type']) || !in_array($schema['type'], Form::schemaPropertyTypes)) {
             return 'text';
         }
         $method = sprintf('typeFrom%s', lcfirst($schema['type']));
