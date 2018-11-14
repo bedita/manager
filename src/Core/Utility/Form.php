@@ -11,7 +11,7 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Core\Util;
+namespace App\Core\Utility;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -47,21 +47,22 @@ class Form
         if (!in_array($type, Form::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
-        $method = sprintf('%sControl', $type);
-        $method = str_replace('-', '', $method);
+        $methodName = sprintf('%sControl', Inflector::variable(str_replace('-', '_', $type)));
+        $method = ['App\Core\Utility\Form', $methodName];
+        if (!is_callable($method)) {
+            throw new \InvalidArgumentException('Method is not callable');
+        }
 
-        return Form::{$method}($schema, $type, $value);
+        return call_user_func_array($method, [$value, $schema]);
     }
 
     /**
      * Control for json data
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
      * @return array
      */
-    private static function jsonControl(array $schema, string $type, $value) : array
+    private static function jsonControl($value) : array
     {
         return [
             'type' => 'textarea',
@@ -74,12 +75,10 @@ class Form
     /**
      * Control for textarea
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
      * @return array
      */
-    private static function textareaControl(array $schema, string $type, $value) : array
+    private static function textareaControl($value) : array
     {
         return [
             'type' => 'textarea',
@@ -92,12 +91,10 @@ class Form
     /**
      * Control for datetime
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
      * @return array
      */
-    private static function datetimeControl(array $schema, string $type, $value) : array
+    private static function datetimeControl($value) : array
     {
         return [
             'type' => 'text',
@@ -110,12 +107,10 @@ class Form
     /**
      * Control for date
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
      * @return array
      */
-    private static function dateControl(array $schema, string $type, $value) : array
+    private static function dateControl($value) : array
     {
         return [
             'type' => 'text',
@@ -128,32 +123,36 @@ class Form
     /**
      * Control for checkbox
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
+     * @param array $schema Object schema array.
      * @return array
      */
-    private static function checkboxControl(array $schema, string $type, $value) : array
+    private static function checkboxControl($value, array $schema) : array
     {
-        if (!empty($schema['oneOf'])) {
-            $options = [];
-            foreach ($schema['oneOf'] as $one) {
-                if (!empty($one['type']) && ($one['type'] === 'array')) {
-                    $options = array_map(
-                        function ($value) {
-                            return ['value' => $value, 'text' => Inflector::humanize($value)];
-                        },
-                        (array)Hash::extract($one, 'items.enum')
-                    );
-                }
+        if (empty($schema['oneOf'])) {
+            return [
+                'type' => 'checkbox',
+                'checked' => (bool)$value,
+            ];
+        }
+
+        $options = [];
+        foreach ($schema['oneOf'] as $one) {
+            if (!empty($one['type']) && ($one['type'] === 'array')) {
+                $options = array_map(
+                    function ($value) {
+                        return ['value' => $value, 'text' => Inflector::humanize($value)];
+                    },
+                    (array)Hash::extract($one, 'items.enum')
+                );
             }
-            if (!empty($options)) {
-                return [
-                    'type' => 'select',
-                    'options' => $options,
-                    'multiple' => 'checkbox',
-                ];
-            }
+        }
+        if (!empty($options)) {
+            return [
+                'type' => 'select',
+                'options' => $options,
+                'multiple' => 'checkbox',
+            ];
         }
 
         return [
@@ -165,12 +164,11 @@ class Form
     /**
      * Control for enum
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
      * @param mixed|null $value Property value.
+     * @param array $schema Object schema array.
      * @return array
      */
-    private static function enumControl(array $schema, string $type, $value) : array
+    private static function enumControl($value, array $schema) : array
     {
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $one) {
@@ -225,9 +223,13 @@ class Form
         if (empty($schema['type']) || !in_array($schema['type'], Form::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
-        $method = sprintf('typeFrom%s', lcfirst($schema['type']));
+        $methodName = sprintf('typeFrom%s', ucfirst($schema['type']));
+        $method = ['App\Core\Utility\Form', $methodName];
+        if (!is_callable($method)) {
+            throw new \InvalidArgumentException('Method is not callable');
+        }
 
-        return Form::{$method}($schema);
+        return call_user_func_array($method, [$schema]);
     }
 
     /**
@@ -241,11 +243,13 @@ class Form
         if (!in_array($name, Form::CUSTOM_CONTROLS)) {
             return [];
         }
-        $method = sprintf('%sOptions', $name);
-        $method = str_replace('-', '', $method);
-        $method = str_replace('_', '', $method);
+        $methodName = sprintf('%sOptions', Inflector::variable(str_replace('-', '_', $name)));
+        $method = ['App\Core\Utility\Form', $methodName];
+        if (!is_callable($method)) {
+            throw new \InvalidArgumentException('Method is not callable');
+        }
 
-        return Form::{$method}();
+        return call_user_func_array($method, []);
     }
 
     /**

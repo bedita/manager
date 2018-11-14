@@ -11,17 +11,17 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Core\Util;
+namespace App\Test\TestCase\Core\Utility;
 
-use App\Core\Util\Form;
+use App\Core\Utility\Form;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
- * {@see \App\Core\Util\Form} Test Case
+ * {@see \App\Core\Utility\Form} Test Case
  *
- * @coversDefaultClass \App\Core\Util\Form
+ * @coversDefaultClass \App\Core\Utility\Form
  */
 class FormTest extends TestCase
 {

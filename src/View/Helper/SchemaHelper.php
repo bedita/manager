@@ -13,7 +13,7 @@
 
 namespace App\View\Helper;
 
-use App\Core\Util\Form;
+use App\Core\Utility\Form;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -35,7 +35,7 @@ class SchemaHelper extends Helper
     public function controlOptions($name, $value, $schema) : array
     {
         $options = Form::customControlOptions($name);
-        if ($options) {
+        if (!empty($options)) {
             $options['value'] = $value;
 
             return $options;
