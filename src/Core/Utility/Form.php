@@ -48,9 +48,9 @@ class Form
             return compact('type', 'value');
         }
         $methodName = sprintf('%sControl', Inflector::variable(str_replace('-', '_', $type)));
-        $method = ['App\Core\Utility\Form', $methodName];
+        $method = [Form::class, $methodName];
         if (!is_callable($method)) {
-            throw new \InvalidArgumentException('Method is not callable');
+            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
         }
 
         return call_user_func_array($method, [$value, $schema]);
@@ -224,9 +224,9 @@ class Form
             return 'text';
         }
         $methodName = sprintf('typeFrom%s', ucfirst($schema['type']));
-        $method = ['App\Core\Utility\Form', $methodName];
+        $method = [Form::class, $methodName];
         if (!is_callable($method)) {
-            throw new \InvalidArgumentException('Method is not callable');
+            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
         }
 
         return call_user_func_array($method, [$schema]);
@@ -244,9 +244,9 @@ class Form
             return [];
         }
         $methodName = sprintf('%sOptions', Inflector::variable(str_replace('-', '_', $name)));
-        $method = ['App\Core\Utility\Form', $methodName];
+        $method = [Form::class, $methodName];
         if (!is_callable($method)) {
-            throw new \InvalidArgumentException('Method is not callable');
+            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
         }
 
         return call_user_func_array($method, []);
