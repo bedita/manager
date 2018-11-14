@@ -47,11 +47,7 @@ class Form
         if (!in_array($type, Form::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
-        $methodName = sprintf('%sControl', Inflector::variable(str_replace('-', '_', $type)));
-        $method = [Form::class, $methodName];
-        if (!is_callable($method)) {
-            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
-        }
+        $method = Form::getMethod(sprintf('%sControl', $type));
 
         return call_user_func_array($method, [$value, $schema]);
     }
@@ -223,11 +219,7 @@ class Form
         if (empty($schema['type']) || !in_array($schema['type'], Form::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
-        $methodName = sprintf('typeFrom%s', ucfirst($schema['type']));
-        $method = [Form::class, $methodName];
-        if (!is_callable($method)) {
-            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
-        }
+        $method = Form::getMethod(sprintf('typeFrom%s', ucfirst($schema['type'])));
 
         return call_user_func_array($method, [$schema]);
     }
@@ -243,11 +235,7 @@ class Form
         if (!in_array($name, Form::CUSTOM_CONTROLS)) {
             return [];
         }
-        $methodName = sprintf('%sOptions', Inflector::variable(str_replace('-', '_', $name)));
-        $method = [Form::class, $methodName];
-        if (!is_callable($method)) {
-            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
-        }
+        $method = Form::getMethod(sprintf('%sOptions', $name));
 
         return call_user_func_array($method, []);
     }
@@ -444,5 +432,23 @@ class Form
     protected static function typeFromObject(array $schema) : string
     {
         return 'json';
+    }
+
+    /**
+     * Return method [Form::class, $methodName], if it's callable.
+     * Otherwise, throw \InvalidArgumentException
+     *
+     * @param string $name The method name
+     * @return array
+     */
+    public static function getMethod(string $name) : array
+    {
+        $methodName = Inflector::variable(str_replace('-', '_', $name));
+        $method = [Form::class, $methodName];
+        if (!is_callable($method)) {
+            throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
+        }
+
+        return $method;
     }
 }

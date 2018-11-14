@@ -423,4 +423,57 @@ class FormTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Data provider for `testGetMethod` test case.
+     *
+     * @return array
+     */
+    public function getMethodProvider() : array
+    {
+        return [
+            'name with chars to remove' => [
+                'old_passwordOptions',
+                [Form::class, 'oldPasswordOptions'],
+            ],
+            'name with chars to remove' => [
+                'confirm_passwordOptions',
+                [Form::class, 'confirmPasswordOptions'],
+            ],
+        ];
+    }
+
+
+    /**
+     * Test `getMethod` method
+     *
+     * @param string $methodName The method name
+     * @param array $expected The expected method array
+     * @return void
+     *
+     * @dataProvider getMethodProvider()
+     * @covers ::getMethod
+     */
+    public function testGetMethod(string $methodName, array $expected) : void
+    {
+        $actual = Form::getMethod($methodName);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `getMethod` method exception 'not callable'
+     *
+     * @return void
+     *
+     * @covers ::getMethod
+     */
+    public function testGetMethodNotCallable() : void
+    {
+        $methodName = 'dummy';
+        $expected = new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
+        static::expectException(get_class($expected));
+        static::expectExceptionMessage($expected->getMessage());
+        Form::getMethod($methodName);
+    }
 }
