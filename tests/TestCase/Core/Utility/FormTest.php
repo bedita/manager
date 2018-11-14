@@ -443,7 +443,6 @@ class FormTest extends TestCase
         ];
     }
 
-
     /**
      * Test `getMethod` method
      *
