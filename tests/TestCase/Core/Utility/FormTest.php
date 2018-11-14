@@ -406,6 +406,7 @@ class FormTest extends TestCase
      * @param string $type Control type.
      * @param string|null $value Property value.
      * @param array $expected The expected control.
+     * @return void
      *
      * @dataProvider controlProvider()
      * @covers ::control
