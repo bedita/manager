@@ -55,7 +55,7 @@ class LoginControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController(array $requestConfig): void
+    protected function setupController(array $requestConfig) : void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -70,7 +70,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLogin()
+    public function testLogin() : void
     {
         $this->setupController([
             'post' => [
@@ -91,7 +91,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginTimezone()
+    public function testLoginTimezone() : void
     {
         $this->setupController([
             'post' => [
@@ -116,7 +116,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginFailed()
+    public function testLoginFailed() : void
     {
         $this->setupController([
             'post' => [
@@ -136,7 +136,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginForm()
+    public function testLoginForm() : void
     {
         $this->setupController([
             'environment' => [
@@ -155,7 +155,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLogout()
+    public function testLogout() : void
     {
         $this->setupController([
             'environment' => [
@@ -166,5 +166,35 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->logout();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/login', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `handleFlashMessages` method
+     *
+     * @covers ::handleFlashMessages()
+     *
+     * @return void
+     */
+    public function testHandleFlashMessages() : void
+    {
+        // setup controller
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+
+        // case 1: remove message
+        $this->Login->request->session()->write('Flash', 'something');
+        $this->Login->handleFlashMessages([]);
+        $message = $this->Login->request->session()->read('Flash');;
+        static::assertEmpty($message);
+
+
+        // case 2: do not remove message
+        $this->Login->request->session()->write('Flash', 'something');
+        $this->Login->handleFlashMessages(['redirect' => 'dummy']);
+        $message = $this->Login->request->session()->read('Flash');;
+        static::assertEquals('something', $message);
     }
 }

@@ -101,6 +101,7 @@ class LoginController extends AppController
      * Handle flash messages for login page.
      * If login from a redirect, show messages; otherwise clear flash messages.
      *
+     * @param array $query The query param
      * @return void
      */
     public function handleFlashMessages(array $query) : void
