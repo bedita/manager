@@ -190,7 +190,6 @@ class LoginControllerTest extends TestCase
         $message = $this->Login->request->session()->read('Flash');;
         static::assertEmpty($message);
 
-
         // case 2: do not remove message
         $this->Login->request->session()->write('Flash', 'something');
         $this->Login->handleFlashMessages(['redirect' => 'dummy']);
