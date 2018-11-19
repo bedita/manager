@@ -148,7 +148,9 @@ class ModelController extends AppController
 
         try {
             if (!empty($payload)) {
-                extract($payload);
+                $addPropertyTypes = $payload['addPropertyTypes'];
+                $editPropertyTypes = $payload['editPropertyTypes'];
+                $removePropertyTypes = $payload['removePropertyTypes'];
 
                 // save newly added property types
                 if (isset($addPropertyTypes)) {
