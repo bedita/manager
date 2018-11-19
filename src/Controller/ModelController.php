@@ -45,10 +45,12 @@ class ModelController extends AppController
         $this->loadComponent('Properties');
 
         $this->resourceType = $this->request->getParam('resource_type', 'object_types');
-        $this->Schema->setConfig([
-            'type' => $this->resourceType,
-            'internalSchema' => true,
-        ]);
+        $this->Schema->setConfig(
+            [
+                'type' => $this->resourceType,
+                'internalSchema' => true,
+            ]
+        );
     }
 
     /**
@@ -109,6 +111,7 @@ class ModelController extends AppController
      * View single resource.
      *
      * @param string|int $id Resource ID.
+     *
      * @return \Cake\Http\Response|null
      */
     public function view($id) : ?Response
