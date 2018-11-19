@@ -73,8 +73,10 @@ class AppController extends Controller
         parent::beforeFilter($event);
 
         $tokens = $this->Auth->user('tokens');
-        if ($tokens) {
+        if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
+        } else if (!in_array($this->request->url, ['login'])) {
+            $this->redirect('/login');
         }
         $this->setupOutputTimezone();
     }
