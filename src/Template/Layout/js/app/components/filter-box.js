@@ -1,7 +1,7 @@
 /**
  * Filter Box View component
  *
- * allows to filter a list of objects with a text field and a pagination toolbar
+ * allows to filter a list of objects with a text field, properties and a pagination toolbar
  *
  * <filter-box-view> component
  *
@@ -13,28 +13,40 @@
  * @prop {Boolean} showFilterButtons
  * @prop {Object} initFilter
  * @prop {Object} relationTypes relation types available for relation (left/right)
+ * @prop {Array} filterList custom filters to show
  * @prop {Object} pagination
  * @prop {String} configPaginateSizes
  */
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
+import InputDynamicAttributes from 'app/components/input-dynamic-attributes';
+import merge from 'deepmerge';
 
 export default {
-    template:
-    `
+    components: {
+        InputDynamicAttributes,
+    },
+
+    template:`
+    <form :name="objectsLabel" submit="applyFilter">
         <nav class="pagination has-text-size-smallest">
 
             <div class="count-items" v-if="pagination.count">
                 <span><: pagination.count :> <: objectsLabel :></span>
             </div>
 
+
             <div class="filter-search">
                 <span class="search-query">
-                    <input type="text" :placeholder="placeholder" v-model="filter" @keyup.enter.prevent.stop="applyFilter()"/>
+                    <input type="text"
+                        :placeholder="placeholder"
+                        v-model="queryFilter.q"
+                        @keyup.prevent.stop="onQueryStringChange"
+                        @keyup.enter.prevent.stop="applyFilter"/>
                 </span>
 
                 <span v-if="rightTypes.length > 1" class="search-types">
-                    <select v-model="filterType">
+                    <select v-model="queryFilter.filter.type">
                         <option value="" label="All Types"></option>
                         <option v-for="type in rightTypes"><: type :> </option>
                     </select>
@@ -85,7 +97,41 @@ export default {
                 </div>
 
             </div>
+
+            <div class="filter-list">
+                <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
+
+                    <label :for="filter.name"><: filter.name :></label>
+                    <input type="hidden" :name="filter.name" :value="filter.value">
+
+                    <div v-if="filter.type === 'radio'">
+                        <label v-for="option in filter.options" :for="[filter.name, option.value].join('-')">
+                            <: option.text :>
+                            <input v-model="queryFilter.filter[filter.name]" :id="[filter.name, option.value].join('-')" :type="filter.type" :name="filter.name" :value="option.value" />
+                        </label>
+                    </div>
+
+                    <div v-else-if="filter.type === 'text' && filter.date">
+                        <span>
+                            <label>From:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                        <span>
+                            <label>To:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                    </div>
+
+                    <div v-else>
+                        <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
+                    </div>
+                </div>
+            </div>
+
         </nav>
+    </form>
     `,
 
     props: {
@@ -127,6 +173,9 @@ export default {
         relationTypes: {
             type: Object,
         },
+        filterList: {
+            type: Array,
+        },
         pagination: {
             type: Object,
             default: () => DEFAULT_PAGINATION,
@@ -139,13 +188,16 @@ export default {
 
     data() {
         return {
-            filter: '', // Text string filter
-            filterType: '', // Object type filter
-            queryFilter: DEFAULT_FILTER, // QueryFilter Object
+            queryFilter: {}, // QueryFilter Object
             timer: null,
-
             pageSize: this.pagination.page_size, // pageSize value for pagination page size
         }
+    },
+
+    created() {
+        // merge default filters with initFilter
+        let customFilters = this.loadCustomFilters();
+        this.queryFilter = merge.all([ DEFAULT_FILTER, this.queryFilter, customFilters, this.initFilter ]);
     },
 
     computed: {
@@ -169,22 +221,19 @@ export default {
          */
         isFullPaginationLayout() {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
-        }
+        },
     },
 
     watch: {
         /**
-         * watch initFilter and assign it to queryFilter, filter, filterType
+         * watch initFilter and assign it to queryFilter
          *
          * @param {Object} value filter object
          *
          * @returns {void}
          */
         initFilter(value) {
-            Object.assign(this.queryFilter, this.queryFilter, value);
-
-            this.filter = value.q;
-            this.filterType = value.filter.type;
+            this.queryFilter = merge(this.queryFilter, value);
         },
 
         /**
@@ -198,25 +247,20 @@ export default {
          */
         pageSize(value) {
             this.$emit('filter-update-page-size', this.pageSize);
-
         },
+    },
 
+    methods: {
         /**
-         * watcher for text filter
-         * if value is more than 3 chars, emits a filter-objects event with queryFilter as params
-         *
-         * @param {String} value The filter string
-         *
-         * @emits Event#filter-objects
-         *
-         * @return {void}
-         */
-        filter(value) {
-            this.filter = value;
-            this.queryFilter.q = this.filter;
+        * trigger filter-objects event when query string has 3 or more carachter
+        *
+        * @emits Event#filter-objects
+        */
+        onQueryStringChange() {
+            let queryString = this.queryFilter.q || '';
 
             clearTimeout(this.timer);
-            if (value.length >= 3 || value.length == 0) {
+            if (queryString.length >= 3 || queryString.length == 0) {
                 this.timer = setTimeout(() => {
                     this.$emit('filter-objects', this.queryFilter);
                 }, 300);
@@ -224,49 +268,19 @@ export default {
         },
 
         /**
-         * watcher for object type filter
-         * emits a filter-objects event with queryFilter as params
+         * load custom filters property names
          *
-         * @param {String} value The filter object type
-         *
-         * @emits Event#filter-objects
-         *
-         * @return {void}
+         * @returns {Object} filters' name
          */
-        filterType(value) {
-            this.filterType = value;
-            this.queryFilter.filter.type = this.filterType;
+        loadCustomFilters() {
+            let filter = {};
+            if (this.filterList) {
+                this.filterList.forEach(f => filter[f.name] = (f.date ? {} : '' ) );
+            }
 
-            clearTimeout(this.timer);
-            this.$emit('filter-objects', this.queryFilter);
+            return { filter: filter };
         },
 
-        /**
-         * watch initFilter and set filter accordingly
-         */
-        initFilter: {
-            deep: true,
-            immediate: true,
-            handler: function(value) {
-                this.filter = value && value.q || '';
-            }
-        }
-    },
-
-    mounted() {
-        // merge default filters with initFilter
-        Object.assign(this.queryFilter, this.queryFilter,this.initFilter);
-
-        /**
-         * init filter from queryFilter
-         */
-        if (this.queryFilter !== undefined) {
-            this.filter = this.queryFilter.q || '';
-            this.filterType = this.queryFilter.filter.type || '';
-        }
-    },
-
-    methods: {
         /**
          * apply filters
          *

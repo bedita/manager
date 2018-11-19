@@ -4,4 +4,13 @@
             color: #DDD;
         }
     }
+
+    .filter-list {
+        order: 4;
+        width: 100%;
+
+        .filter-container {
+            padding: $gutter * .5;
+        }
+    }
 }

@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.1.9",
+        "deepmerge": "^2.2.1",
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",
         "moment": "^2.22.2",

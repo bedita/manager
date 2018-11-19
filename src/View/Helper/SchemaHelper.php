@@ -195,6 +195,7 @@ class SchemaHelper extends Helper
             return [
                 'type' => 'text',
                 'v-datepicker' => 'true',
+                'date' => 'true',
                 'time' => 'true',
                 'value' => $value,
             ];
@@ -202,6 +203,7 @@ class SchemaHelper extends Helper
             return [
                 'type' => 'text',
                 'v-datepicker' => 'true',
+                'date' => 'true',
                 'time' => 'false',
                 'value' => $value,
             ];
