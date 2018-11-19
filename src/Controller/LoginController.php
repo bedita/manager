@@ -108,7 +108,7 @@ class LoginController extends AppController
     {
         if (!isset($query['redirect'])) {
             // Remove flash messages
-            $this->request->session()->delete('Flash');
+            $this->request->getSession()->delete('Flash');
         }
     }
 }
