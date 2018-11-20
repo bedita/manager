@@ -448,6 +448,9 @@ class ModulesComponentTest extends TestCase
      */
     public function uploadProvider() : array
     {
+        $file = getcwd() . '/tests/files/test.png';
+        $type = filetype($file);
+
         return [
             'no file' => [
                 [
