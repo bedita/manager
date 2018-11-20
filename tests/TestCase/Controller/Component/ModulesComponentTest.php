@@ -450,7 +450,7 @@ class ModulesComponentTest extends TestCase
     {
         $name = 'test.png';
         $file = getcwd() . sprintf('/tests/files/%s', $name);
-        $type = filetype($file);
+        $type = mime_content_type($file);
 
         return [
             'no file' => [

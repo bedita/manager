@@ -226,7 +226,7 @@ class ModulesComponent extends Component
         // upload file
         $filename = $requestData['file']['name'];
         $filepath = $requestData['file']['tmp_name'];
-        $headers = ['Content-type' => $requestData['file']['type']];
+        $headers = ['Content-Type' => $requestData['file']['type']];
         $response = $apiClient->upload($filename, $filepath, $headers);
 
         // create media from stream
