@@ -570,7 +570,7 @@ class ModulesComponentTest extends TestCase
         $this->setupApi();
 
         // do component call
-        $this->Modules->upload($this->client, $requestData);
+        $this->Modules->upload($requestData);
 
         // if upload ok, verify ID is not null
         if ($uploaded) {

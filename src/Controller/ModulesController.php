@@ -263,7 +263,7 @@ class ModulesController extends AppController
             }
 
             // upload file (if available)
-            $this->Modules->upload($this->apiClient, $requestData);
+            $this->Modules->upload($requestData);
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);

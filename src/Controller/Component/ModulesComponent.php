@@ -203,11 +203,10 @@ class ModulesComponent extends Component
     /**
      * Upload a file and store it in a media stream
      *
-     * @param BEditaClient $apiClient The api client to perform upload
      * @param array $requestData The request data from form
      * @return void
      */
-    public function upload(BEditaClient $apiClient, array &$requestData) : void
+    public function upload(array &$requestData) : void
     {
         if (empty($requestData['file'])) {
             return;
@@ -227,6 +226,7 @@ class ModulesComponent extends Component
         $filename = $requestData['file']['name'];
         $filepath = $requestData['file']['tmp_name'];
         $headers = ['Content-Type' => $requestData['file']['type']];
+        $apiClient = ApiClientProvider::getApiClient();
         $response = $apiClient->upload($filename, $filepath, $headers);
 
         // create media from stream
