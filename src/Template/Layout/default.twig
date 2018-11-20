@@ -39,7 +39,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
     <main
-        v-show="vueLoaded"
+        v-cloak
         class="layout"
         :class="panelIsOpen? 'panel-is-open' : ''"
 
