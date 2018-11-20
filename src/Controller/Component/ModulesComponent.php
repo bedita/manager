@@ -205,6 +205,7 @@ class ModulesComponent extends Component
      *
      * @param BEditaClient $apiClient The api client to perform upload
      * @param array $requestData The request data from form
+     * @return void
      */
     public function upload(BEditaClient $apiClient, array &$requestData) : void
     {
@@ -213,21 +214,17 @@ class ModulesComponent extends Component
         }
 
         // verify request data
-        if (empty($requestData['file']['name']) || !is_string($requestData['file']['name'])) {
-            throw new \RuntimeException('Invalid form data: file.name');
-        }
-        $filename = $requestData['file']['name'];
-        if (empty($requestData['file']['tmp_name']) || !is_string($requestData['file']['tmp_name'])) {
-            throw new \RuntimeException('Invalid form data: file.tmp_name');
+        foreach (['name', 'tmp_name', 'type'] as $field) {
+            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
+                throw new \RuntimeException(sprintf('Invalid form data: file.%s', $field));
+            }
         }
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new \RuntimeException('Invalid form data: model-type');
         }
-        if (empty($requestData['file']['type']) || !is_string($requestData['file']['type'])) {
-            throw new \RuntimeException('Invalid form data: type');
-        }
 
         // upload file
+        $filename = $requestData['file']['name'];
         $filepath = $requestData['file']['tmp_name'];
         $headers = ['Content-type' => $requestData['file']['type']];
         $response = $apiClient->upload($filename, $filepath, $headers);

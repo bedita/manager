@@ -487,11 +487,33 @@ class ModulesComponentTest extends TestCase
                 new \RuntimeException('Invalid form data: file.tmp_name'),
                 false,
             ],
+            'file.type empty' => [
+                [
+                    'file' => [
+                        'name' => 'test.png',
+                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: file.type'),
+                false,
+            ],
+            'file.type not a string' => [
+                [
+                    'file' => [
+                        'name' => 'test.png',
+                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                        'type' => 12345,
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: file.type'),
+                false,
+            ],
             'model-type empty' => [
                 [
                     'file' => [
                         'name' => 'test.png',
                         'tmp_name' => getcwd() . '/tests/files/test.png',
+                        'type' => 'image/png',
                     ],
                 ],
                 new \RuntimeException('Invalid form data: model-type'),
@@ -502,33 +524,11 @@ class ModulesComponentTest extends TestCase
                     'file' => [
                         'name' => 'test.png',
                         'tmp_name' => getcwd() . '/tests/files/test.png',
+                        'type' => 'image/png',
                     ],
                     'model-type' => 12345,
                 ],
                 new \RuntimeException('Invalid form data: model-type'),
-                false,
-            ],
-            'type empty' => [
-                [
-                    'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                    ],
-                    'model-type' => 'images',
-                ],
-                new \RuntimeException('Invalid form data: type'),
-                false,
-            ],
-            'type not a string' => [
-                [
-                    'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                        'type' => 12345,
-                    ],
-                    'model-type' => 'images',
-                ],
-                new \RuntimeException('Invalid form data: type'),
                 false,
             ],
             'upload ok' => [
