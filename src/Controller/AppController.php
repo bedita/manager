@@ -75,7 +75,7 @@ class AppController extends Controller
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
-        } else if (!in_array($this->request->url, ['login'])) {
+        } elseif (!in_array($this->request->url, ['login'])) {
             $this->redirect('/login');
         }
         $this->setupOutputTimezone();
