@@ -55,135 +55,6 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testControlTypeFromSchema` test case.
-     *
-     * @return array
-     */
-    public function controlTypeFromSchemaProvider() : array
-    {
-        return [
-            'string' => [
-                'text',
-                [
-                    'type' => 'string',
-                ],
-            ],
-            'html' => [
-                'textarea',
-                [
-                    'type' => 'string',
-                    'contentMediaType' => 'text/html',
-                ],
-            ],
-            'date-time' => [
-                'date-time',
-                [
-                    'type' => 'string',
-                    'format' => 'date-time',
-                ],
-            ],
-            'date' => [
-                'date',
-                [
-                    'type' => 'string',
-                    'format' => 'date',
-                ],
-            ],
-            'number' => [
-                'number',
-                [
-                    'type' => 'integer',
-                ],
-            ],
-            'checkbox' => [
-                'checkbox',
-                [
-                    'type' => 'boolean',
-                ],
-            ],
-            'one of' => [
-                'checkbox',
-                [
-                    'type' => 'string',
-                    'oneOf' => [
-                        [
-                            'type' => 'null',
-                        ],
-                        [
-                            'type' => 'boolean',
-                        ],
-                    ],
-                ],
-            ],
-            'not an array' => [
-                'text',
-                false,
-            ],
-            'no type' => [
-                'text',
-                [
-                    'const' => 13,
-                ],
-            ],
-            'json' => [
-                'json',
-                [
-                    'type' => 'object',
-                ],
-            ],
-            'unknown' => [
-                'text',
-                [
-                    'type' => 'unknown',
-                ],
-            ],
-            'enum' => [
-                'enum',
-                [
-                    'type' => 'string',
-                    'enum' => ['a', 'b', 'c'],
-                ],
-            ],
-            'array' => [
-                'checkbox',
-                [
-                    'type' => 'array',
-                    'oneOf' => [
-                        [
-                            'type' => 'null',
-                        ],
-                        [
-                            'type' => 'array',
-                            'uniqueItems' => true,
-                            'items' => [
-                                'type' => 'string',
-                                'enum' => ['a', 'b', 'c', 'd'],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `controlTypeFromSchema()` method.
-     *
-     * @param string $expected Expected result.
-     * @param array|bool $schema Schema.
-     * @return void
-     *
-     * @dataProvider controlTypeFromSchemaProvider()
-     * @covers ::controlTypeFromSchema()
-     */
-    public function testControlTypeFromSchema(string $expected, $schema) : void
-    {
-        $actual = $this->Schema->controlTypeFromSchema($schema);
-
-        static::assertSame($expected, $actual);
-    }
-
-    /**
      * Data provider for `testControlOptions` test case.
      *
      * @return array
@@ -454,14 +325,13 @@ class SchemaHelperTest extends TestCase
      * @param array $expected Expected result.
      * @param array $schema The JSON schema
      * @param string $name The field name.
-     * @param string $value The field value.
+     * @param string|null $value The field value.
      * @return void
      *
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
-     * @covers ::customControlOptions()
      */
-    public function testControlOptions(array $expected, array $schema, $name, $value) : void
+    public function testControlOptions(array $expected, array $schema, string $name, ?string $value) : void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
@@ -472,6 +342,8 @@ class SchemaHelperTest extends TestCase
      * Test `lang` property
      *
      * @return void
+     *
+     * @covers ::controlOptions()
      */
     public function testLang()
     {
@@ -502,6 +374,65 @@ class SchemaHelperTest extends TestCase
             ],
             'value' => null,
         ];
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testTranslatableFields` test case.
+     *
+     * @return array
+     */
+    public function translatableFieldsProvider() : array
+    {
+        return [
+            'empty properties' => [
+                [],
+                [],
+            ],
+            'properties' => [
+                [
+                    'dummy' => [
+                        'oneOf' => [
+                            [
+                                'type' => 'null',
+                            ],
+                            [
+                                'type' => 'string',
+                                'contentMediaType' => 'text/html',
+                            ],
+                        ],
+                    ],
+                    'description' => [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html',
+                    ],
+                    'title' => [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html',
+                    ],
+                ],
+                [
+                    'title',
+                    'description',
+                    'dummy',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `translatableFields` method
+     *
+     * @param array $properties The properties
+     * @param array $expected Expected result
+     * @return void
+     *
+     * @dataProvider translatableFieldsProvider()
+     * @covers ::translatableFields()
+     */
+    public function testTranslatableFields(array $properties, array $expected)
+    {
+        $actual = $this->Schema->translatableFields($properties);
         static::assertSame($expected, $actual);
     }
 }
