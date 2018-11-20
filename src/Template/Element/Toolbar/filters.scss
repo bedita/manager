@@ -6,11 +6,16 @@
     }
 
     .filter-list {
-        order: 4;
+        order: 3;
+        display: flex;
         width: 100%;
 
         .filter-container {
             padding: $gutter * .5;
         }
+    }
+
+    .pages-buttons {
+        display: flex;
     }
 }

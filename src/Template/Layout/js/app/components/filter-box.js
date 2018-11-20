@@ -56,6 +56,42 @@ export default {
                 <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()"><: resetFilterLabel :></button>
             </div>
 
+            <div class="filter-list">
+                <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
+
+                    <label :for="filter.name"><: filter.name :></label>
+                    <input type="hidden" :name="filter.name" :value="filter.value">
+
+                    <div v-if="filter.type === 'select' || filter.type === 'radio'">
+                        <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
+                            <option value="">
+                                All
+                            </option>
+                            <option v-for="option in filter.options" :name="option.name" :value="option.value">
+                                <: option.text :>
+                            </option>
+                        </select>
+                    </div>
+
+                    <div v-else-if="filter.type === 'text' && filter.date">
+                        <span>
+                            <label>From:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                        <span>
+                            <label>To:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                    </div>
+
+                    <div v-else>
+                        <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
+                    </div>
+                </div>
+            </div>
+
             <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
                 <span><: pageSizesLabel :>:</span>
                 <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
@@ -96,38 +132,6 @@ export default {
                     <button v-if="pagination.page < pagination.page_count" class="has-text-size-smallest" @click.prevent="changePage(pagination.page_count)"><: pagination.page_count :></button>
                 </div>
 
-            </div>
-
-            <div class="filter-list">
-                <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
-
-                    <label :for="filter.name"><: filter.name :></label>
-                    <input type="hidden" :name="filter.name" :value="filter.value">
-
-                    <div v-if="filter.type === 'radio'">
-                        <label v-for="option in filter.options" :for="[filter.name, option.value].join('-')">
-                            <: option.text :>
-                            <input v-model="queryFilter.filter[filter.name]" :id="[filter.name, option.value].join('-')" :type="filter.type" :name="filter.name" :value="option.value" />
-                        </label>
-                    </div>
-
-                    <div v-else-if="filter.type === 'text' && filter.date">
-                        <span>
-                            <label>From:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
-                        <span>
-                            <label>To:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
-                    </div>
-
-                    <div v-else>
-                        <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
-                    </div>
-                </div>
             </div>
 
         </nav>

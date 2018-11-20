@@ -101,6 +101,8 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
+        $this->ProjectConfiguration->read();
+
         $this->set('objects', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
