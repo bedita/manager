@@ -13,6 +13,7 @@
 
 namespace App\Controller\Component;
 
+use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -197,5 +198,59 @@ class ModulesComponent extends Component
         }
 
         return $types;
+    }
+
+    /**
+     * Upload a file and store it in a media stream
+     *
+     * @param BEditaClient $apiClient The api client to perform upload
+     * @param array $requestData The request data from form
+     */
+    public function upload(BEditaClient $apiClient, array &$requestData) : void
+    {
+        if (empty($requestData['file'])) {
+            return;
+        }
+
+        // verify request data
+        if (empty($requestData['file']['name']) || !is_string($requestData['file']['name'])) {
+            throw new \RuntimeException('Invalid form data: file.name');
+        }
+        $filename = $requestData['file']['name'];
+        if (empty($requestData['file']['tmp_name']) || !is_string($requestData['file']['tmp_name'])) {
+            throw new \RuntimeException('Invalid form data: file.tmp_name');
+        }
+        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
+            throw new \RuntimeException('Invalid form data: model-type');
+        }
+        if (empty($requestData['file']['type']) || !is_string($requestData['file']['type'])) {
+            throw new \RuntimeException('Invalid form data: type');
+        }
+
+        // upload file
+        $filepath = $requestData['file']['tmp_name'];
+        $headers = ['Content-type' => $requestData['file']['type']];
+        $response = $apiClient->upload($filename, $filepath, $headers);
+
+        // create media from stream
+        $streamId = $response['data']['id'];
+        $type = $requestData['model-type'];
+        $title = $filename;
+        $objectHasStatus = !empty($requestData['status']);
+        $status = $objectHasStatus ? $requestData['status'] : 'draft';
+        $attributes = compact('status', 'title');
+        $data = compact('type', 'attributes');
+        $body = compact('data');
+        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+
+        // set media id in request data
+        if (empty($requestData['id'])) {
+            $requestData['id'] = $response['data']['id'];
+        }
+
+        // set media status in request data
+        if (!$objectHasStatus) {
+            $requestData['status'] = $response['data']['attributes']['status'];
+        }
     }
 }
