@@ -448,7 +448,8 @@ class ModulesComponentTest extends TestCase
      */
     public function uploadProvider() : array
     {
-        $file = getcwd() . '/tests/files/test.png';
+        $name = 'test.png';
+        $file = getcwd() . sprintf('/tests/files/%s', $name);
         $type = filetype($file);
 
         return [
@@ -493,8 +494,8 @@ class ModulesComponentTest extends TestCase
             'file.type empty' => [
                 [
                     'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                        'name' => $name,
+                        'tmp_name' => $file,
                     ],
                 ],
                 new \RuntimeException('Invalid form data: file.type'),
@@ -503,8 +504,8 @@ class ModulesComponentTest extends TestCase
             'file.type not a string' => [
                 [
                     'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                        'name' => $name,
+                        'tmp_name' => $file,
                         'type' => 12345,
                     ],
                 ],
@@ -514,9 +515,9 @@ class ModulesComponentTest extends TestCase
             'model-type empty' => [
                 [
                     'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                        'type' => 'image/png',
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
                     ],
                 ],
                 new \RuntimeException('Invalid form data: model-type'),
@@ -525,9 +526,9 @@ class ModulesComponentTest extends TestCase
             'model-type not a string' => [
                 [
                     'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                        'type' => 'image/png',
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
                     ],
                     'model-type' => 12345,
                 ],
@@ -537,9 +538,9 @@ class ModulesComponentTest extends TestCase
             'upload ok' => [
                 [
                     'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                        'type' => 'image/png',
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
                     ],
                     'model-type' => 'images',
                 ],
