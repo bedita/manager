@@ -61,11 +61,6 @@ class PropertiesComponent extends Component
             'status',
             'lang',
         ],
-
-        'bulk' => [
-            'status',
-            'lang',
-        ]
     ];
 
     /**
