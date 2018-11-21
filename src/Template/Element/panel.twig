@@ -117,7 +117,7 @@
                         <article class="box has-text-gray-100 has-text-size-smaller"
                                 v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
                                     alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
-                                @click.prevent.stop="toggle(related, $event)">
+                                @click="toggle(related, $event)">
 
                             <header>
                                 <h1><: related.attributes.title || related.attributes.name :></h1>
@@ -135,7 +135,7 @@
                             </div>
 
                             <footer>
-                                <a>{{ __('open') }}</a>
+                                <a @click.stop='' :href="buildViewUrl(related.type, related.id)" target="_blank">{{ __('open') }}</a>
                             </footer>
                         </article>
                     </div>
