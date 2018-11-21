@@ -332,7 +332,6 @@ class ModulesController extends AppController
     public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
         } catch (BEditaClientException $error) {
@@ -460,9 +459,10 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available link from response
+                    $response = $this->apiClient->get($path, $this->request->getQueryParams());// ['page_size' => 1]); // page_size 1: we need just the available
                     $available = $response['links']['available'];
             }
+
             $response = $this->apiClient->get($available, $this->request->getQueryParams());
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
@@ -473,8 +473,54 @@ class ModulesController extends AppController
             return;
         }
 
+        $this->getThumbsUrls($response);
+
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+
+    /**
+    * Retrieve thumbnails URL of related objects in `meta.url` if present.
+    *
+    * @param array $response Related objects response.
+    * @return void
+    */
+    protected function getThumbsUrls(array &$response) : void
+    {
+        if (empty($response['data'])) {
+            return;
+        }
+
+        // extract ids of objects
+        $ids = Hash::combine($response, 'data.{n}.id', 'data.{n}.id');
+
+        if (!count($ids)) {
+            return;
+        }
+
+        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400';
+
+        try {
+            $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
+
+        foreach ($response['data'] as &$object) {
+            // extract url of the matching objectid's thumb
+            $thumbnail = Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
+            if (count($thumbnail)) {
+                $object['meta']['url'] = $thumbnail[0];
+            }
+        }
     }
 
     /**
