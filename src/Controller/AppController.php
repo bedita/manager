@@ -17,6 +17,7 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Routing\Router;
 
 /**
  * Base Application Controller.
@@ -76,7 +77,12 @@ class AppController extends Controller
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
         } elseif (!in_array($this->request->url, ['login'])) {
-            $this->redirect('/login');
+            $route = ['_name' => 'login'];
+            $redirect = Router::reverse($this->request);
+            if ($redirect !== '/') {
+                $route += compact('redirect');
+            }
+            $this->redirect($route);
         }
         $this->setupOutputTimezone();
     }
