@@ -233,8 +233,7 @@ class ModulesComponent extends Component
         $streamId = $response['data']['id'];
         $type = $requestData['model-type'];
         $title = $filename;
-        $objectHasStatus = !empty($requestData['status']);
-        $status = $objectHasStatus ? $requestData['status'] : 'draft';
+        $status = !empty($requestData['status']) ? $requestData['status'] : 'draft';
         $attributes = compact('status', 'title');
         $data = compact('type', 'attributes');
         $body = compact('data');
@@ -245,9 +244,11 @@ class ModulesComponent extends Component
             $requestData['id'] = $response['data']['id'];
         }
 
-        // set media status in request data
-        if (!$objectHasStatus) {
-            $requestData['status'] = $response['data']['attributes']['status'];
+        // status and title in main object: if empty, set values from the media
+        foreach (['status', 'title'] as $field) {
+            if (empty($requestData[$field])) {
+                $requestData[$field] = $response['data']['attributes'][$field];
+            }
         }
     }
 }
