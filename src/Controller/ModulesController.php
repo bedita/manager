@@ -479,13 +479,12 @@ class ModulesController extends AppController
         $this->set('_serialize', array_keys($response));
     }
 
-
     /**
-    * Retrieve thumbnails URL of related objects in `meta.url` if present.
-    *
-    * @param array $response Related objects response.
-    * @return void
-    */
+     * Retrieve thumbnails URL of related objects in `meta.url` if present.
+     *
+     * @param array $response Related objects response.
+     * @return void
+     */
     protected function getThumbsUrls(array &$response) : void
     {
         if (empty($response['data'])) {
