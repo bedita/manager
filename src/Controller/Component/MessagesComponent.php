@@ -45,5 +45,4 @@ class MessagesComponent extends Component
             }
         }
     }
-
 }
