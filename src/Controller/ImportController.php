@@ -30,10 +30,11 @@ class ImportController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'import:index']);
+
+        return parent::beforeRender($event);
     }
 
     /**
