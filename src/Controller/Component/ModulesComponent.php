@@ -232,9 +232,11 @@ class ModulesComponent extends Component
         // create media from stream
         $streamId = $response['data']['id'];
         $type = $requestData['model-type'];
-        $title = $filename;
-        $status = !empty($requestData['status']) ? $requestData['status'] : 'draft';
-        $attributes = compact('status', 'title');
+        // save only `title` (filename if not set) and `status` in new media object
+        $attributes = array_filter([
+            'title' => !empty($requestData['title']) ? $requestData['title'] : $filename,
+            'status' => Hash::get($requestData, 'status'),
+        ]);
         $data = compact('type', 'attributes');
         $body = compact('data');
         $response = $apiClient->createMediaFromStream($streamId, $type, $body);
@@ -243,12 +245,6 @@ class ModulesComponent extends Component
         if (empty($requestData['id'])) {
             $requestData['id'] = $response['data']['id'];
         }
-
-        // status and title in main object: if empty, set values from the media
-        foreach (['status', 'title'] as $field) {
-            if (empty($requestData[$field])) {
-                $requestData[$field] = $response['data']['attributes'][$field];
-            }
-        }
+        unset($requestData['title'], $requestData['status'], $requestData['file']);
     }
 }
