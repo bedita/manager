@@ -41,10 +41,8 @@ class TrashController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $actions = [
             'restore', 'delete',
         ];
@@ -56,6 +54,8 @@ class TrashController extends AppController
             // for security component
             $this->Security->setConfig('unlockedActions', $actions);
         }
+
+        return parent::beforeFilter($event);
     }
 
     /**
@@ -63,10 +63,11 @@ class TrashController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'trash:list']);
+
+        return parent::beforeRender($event);
     }
 
     /**

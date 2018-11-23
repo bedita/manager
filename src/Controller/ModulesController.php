@@ -54,21 +54,19 @@ class ModulesController extends AppController
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         $this->set('objectType', $this->objectType);
+
+        return parent::beforeRender($event);
     }
 
     /**
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $actions = [
             'delete', 'changeStatus',
         ];
@@ -80,6 +78,8 @@ class ModulesController extends AppController
             // for security component
             $this->Security->setConfig('unlockedActions', $actions);
         }
+
+        return parent::beforeFilter($event);
     }
 
     /**
