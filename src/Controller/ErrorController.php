@@ -39,19 +39,19 @@ class ErrorController extends AppController
      * beforeFilter callback.
      *
      * @param \Cake\Event\Event $event Event.
-     * @return \Cake\Http\Response|null|void
+     * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
     public function beforeFilter(Event $event) : ?Response
     {
-        return parent::beforeFilter($event);
+        return null;
     }
 
     /**
      * beforeRender callback.
      *
      * @param \Cake\Event\Event $event Event.
-     * @return \Cake\Http\Response|null|void
+     * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
     public function beforeRender(Event $event) : ?Response
@@ -59,7 +59,7 @@ class ErrorController extends AppController
         $this->viewBuilder()->setClassName('App\View\AppView');
         $this->viewBuilder()->setTemplatePath('Pages/Error');
 
-        return parent::beforeRender($event);
+        return null;
     }
 
     /**
