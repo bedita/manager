@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2018 ChannelWeb Srl, Chialab Srl
@@ -19,6 +20,7 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Aura\Intl\Exception;
 
 /**
  * Sample controller wrapper, to add useful methods for test
@@ -120,7 +122,7 @@ class ModulesControllerTest extends TestCase
      * @param array|null $requestConfig
      * @return void
      */
-    protected function setupController(?array $requestConfig = []): void
+    protected function setupController(? array $requestConfig = []) : void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -607,6 +609,107 @@ class ModulesControllerTest extends TestCase
         $this->assertExpectedViewVars(['_serialize']);
     }
 
+
+    /**
+    * Data provider for `testGetThumbsUrls` test case.
+    *
+    * @return array
+    */
+    public function getThumbsUrlsProvider() : Array
+    {
+        return [
+            // test with empty object
+            'emptyResponse' => [
+                [],
+                [],
+            ],
+            // test with objct without ids
+            'responseWithoutIds' => [
+                ['data' => []],
+                ['data' => []],
+            ],
+            // correct result
+            'correctResponseMock' => [
+                [   // expected
+                    'data' => [
+                        [
+                            'id' => '43',
+                            'meta' =>
+                                [
+                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
+                            ],
+                        ],
+                        [
+                            'id' => '45',
+                            'meta' =>
+                                [
+                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
+                            ],
+                        ],
+                    ],
+                ],
+                [   // data
+                    'data' => [
+                        [
+                            'id' => '43',
+                            'meta' =>[],
+                        ],
+                        [
+                            'id' => '45',
+                            'meta' =>[],
+                        ],
+                    ],
+                ],
+                [   // mock response for api
+                    'meta' => [
+                        'thumbnails' => [
+                            [
+                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
+                                'id' => 43,
+                            ],
+
+                            [
+                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
+                                'id' => 45,
+                            ],
+                        ],
+                    ],
+                ],
+
+            ],
+        ];
+    }
+
+    /**
+     * Test `getThumbsUrls` method
+     *
+     * @dataProvider getThumbsUrlsProvider()
+     * @covers ::getThumbsUrls()
+     *
+     * @return void
+     */
+    public function testGetThumbsUrls($expected, $data, $mockResponse = null) : void
+    {
+        $this->setupController();
+
+        if (!empty($mockResponse)) {
+            $expectedException = new BEditaClientException('error');
+
+            $apiClient = $this->getMockBuilder(BEditaClient::class)
+                ->setConstructorArgs(['https://api.example.org'])
+                ->getMock();
+
+            $apiClient->method('get')
+                ->with('/media/thumbs?ids=43,45&options[w]=400')
+                ->willReturn($mockResponse);
+
+            $this->controller->apiClient = $apiClient;
+        }
+
+        $this->controller->getThumbsUrls($data);
+        static::assertEquals($expected, $data);
+    }
+
     /**
      * Data provider for `testUpload` test case.
      *
@@ -790,7 +893,10 @@ class ModulesControllerTest extends TestCase
     {
         $o = $this->getTestObject();
         if ($o == null) {
-            $response = $this->client->save('documents', ['title' => 'modules controller test document', 'uname' => $this->uname]);
+            $response = $this->client->save('documents', [
+                'title' => 'modules controller test document',
+                'uname' => $this->uname
+            ]);
             $o = $response['data'];
         }
 
