@@ -474,7 +474,7 @@ class ModulesController extends AppController
                 '_serialize' => ['error'],
             ]);
 
-            return ;
+            return;
         }
 
         $this->set((array)$response);

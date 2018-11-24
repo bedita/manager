@@ -15,12 +15,12 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModulesController;
+use Aura\Intl\Exception;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Aura\Intl\Exception;
 
 /**
  * Sample controller wrapper, to add useful methods for test
@@ -609,12 +609,11 @@ class ModulesControllerTest extends TestCase
         $this->assertExpectedViewVars(['_serialize']);
     }
 
-
     /**
-    * Data provider for `testGetThumbsUrls` test case.
-    *
-    * @return array
-    */
+     * Data provider for `testGetThumbsUrls` test case.
+     *
+     * @return array
+     */
     public function getThumbsUrlsProvider() : Array
     {
         return [
@@ -630,44 +629,43 @@ class ModulesControllerTest extends TestCase
             ],
             // correct result
             'correctResponseMock' => [
-                [   // expected
+                [ // expected
                     'data' => [
                         [
                             'id' => '43',
                             'meta' =>
                                 [
-                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
-                            ],
+                                    'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
+                                ],
                         ],
                         [
                             'id' => '45',
                             'meta' =>
                                 [
-                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
-                            ],
+                                    'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
+                                ],
                         ],
                     ],
                 ],
-                [   // data
+                [ // data
                     'data' => [
                         [
                             'id' => '43',
-                            'meta' =>[],
+                            'meta' => [],
                         ],
                         [
                             'id' => '45',
-                            'meta' =>[],
+                            'meta' => [],
                         ],
                     ],
                 ],
-                [   // mock response for api
+                [ // mock response for api
                     'meta' => [
                         'thumbnails' => [
                             [
                                 'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
                                 'id' => 43,
                             ],
-
                             [
                                 'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
                                 'id' => 45,
@@ -675,7 +673,6 @@ class ModulesControllerTest extends TestCase
                         ],
                     ],
                 ],
-
             ],
         ];
     }
