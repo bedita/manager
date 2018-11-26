@@ -87,7 +87,7 @@ class AppController extends Controller
         }
         $this->setupOutputTimezone();
 
-        return parent::beforeFilter($event);
+        return null;
     }
 
     /**
@@ -123,7 +123,7 @@ class AppController extends Controller
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
 
-        return parent::beforeRender($event);
+        return null;
     }
 
     /**
