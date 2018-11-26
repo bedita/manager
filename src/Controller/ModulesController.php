@@ -332,7 +332,6 @@ class ModulesController extends AppController
     public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
         } catch (BEditaClientException $error) {
@@ -460,21 +459,59 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available link from response
+                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available
                     $available = $response['links']['available'];
             }
-            $response = $this->apiClient->get($available, $this->request->getQueryParams());
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
 
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $response = $this->apiClient->get($available, $this->request->getQueryParams());
+
+            $this->getThumbsUrls($response);
+        } catch (BEditaClientException $ex) {
+            $this->log($ex, LogLevel::ERROR);
+
+            $this->set([
+                'error' => $ex->getMessage(),
+                '_serialize' => ['error'],
+            ]);
 
             return;
         }
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Retrieve thumbnails URL of related objects in `meta.url` if present.
+     *
+     * @param array $response Related objects response.
+     * @return void
+     */
+    public function getThumbsUrls(array &$response) : void
+    {
+        if (empty($response['data'])) {
+            return;
+        }
+
+        // extract ids of objects
+        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
+        if (empty($ids)) {
+            return;
+        }
+
+        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
+
+        $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
+
+        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
+
+        foreach ($response['data'] as &$object) {
+            // extract url of the matching objectid's thumb
+            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
+            if (count($thumbnail)) {
+                $object['meta']['url'] = $thumbnail[0];
+            }
+        }
     }
 
     /**
