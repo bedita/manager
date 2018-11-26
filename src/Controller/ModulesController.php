@@ -494,7 +494,7 @@ class ModulesController extends AppController
         }
 
         // extract ids of objects
-        $ids = Hash::extract($response, 'data.{n}.id');
+        $ids = (array)Hash::extract($response, 'data.{n}.id');
         if (empty($ids)) {
             return;
         }
@@ -507,7 +507,7 @@ class ModulesController extends AppController
 
         foreach ($response['data'] as &$object) {
             // extract url of the matching objectid's thumb
-            $thumbnail = Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
+            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
             if (count($thumbnail)) {
                 $object['meta']['url'] = $thumbnail[0];
             }

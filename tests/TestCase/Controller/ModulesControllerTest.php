@@ -635,14 +635,14 @@ class ModulesControllerTest extends TestCase
                             'id' => '43',
                             'meta' =>
                                 [
-                                    'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
+                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
                                 ],
                         ],
                         [
                             'id' => '45',
                             'meta' =>
                                 [
-                                    'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
+                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
                                 ],
                         ],
                     ],
@@ -663,11 +663,11 @@ class ModulesControllerTest extends TestCase
                     'meta' => [
                         'thumbnails' => [
                             [
-                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/472f9968-b02e-4253-b65f-0bb95f02b89c-test.png/728b91672d309feb717f12aede127da99b1e47b9.png',
+                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
                                 'id' => 43,
                             ],
                             [
-                                'url' => 'https://s3-eu-west-1.amazonaws.com/be4-media-test/test-thumbs/63f800a6-afd2-49f3-8d47-3cf60c3691a0-diego-gratta-975x0-f109766113b4af5bdad0b1747ee3ff79.jpg/728b91672d309feb717f12aede127da99b1e47b9.JPG',
+                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
                                 'id' => 45,
                             ],
                         ],
