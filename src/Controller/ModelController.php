@@ -54,27 +54,26 @@ class ModelController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $roles = $this->Auth->user('roles');
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
 
         $this->Security->setConfig('unlockedActions', ['savePropertiesJson']);
+        return parent::beforeFilter($event);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         $this->set('resourceType', $this->resourceType);
         $this->set('moduleLink', ['_name' => 'model:list', 'resource_type' => 'object_types']);
+
+        return parent::beforeRender($event);
     }
 
     /**

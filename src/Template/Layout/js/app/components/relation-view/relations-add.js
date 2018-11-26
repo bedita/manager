@@ -134,7 +134,7 @@ export default {
             if (page === 1 || page === this.pagination.page_count) { // show first and last page link
                 return true;
             }
-            if ( (page >= this.pagination.page-1) && page <= this.pagination.page+1) { // show previous and next page link
+            if ((page >= this.pagination.page - 1) && page <= this.pagination.page + 1) { // show previous and next page link
                 return true;
             }
 
@@ -150,7 +150,7 @@ export default {
          */
         toggle(object, evt) {
             let position = this.selectedObjects.indexOf(object);
-            if(position != -1) {
+            if (position != -1) {
                 this.selectedObjects.splice(position, 1);
             } else {
                 this.selectedObjects.push(object);
@@ -184,13 +184,25 @@ export default {
          *
          * @return {Promise} The response from server with new data
          */
-        async toPage(page ,filter) {
+        async toPage(page, filter) {
             this.objects = [];
             this.loading = true;
-            let response =  await PaginatedContentMixin.methods.toPage.call(this, page, filter);
+            let response = await PaginatedContentMixin.methods.toPage.call(this, page, filter);
             this.loading = false;
 
             return response;
+        },
+
+        /**
+        * helper function: build open view url
+        *
+        * @param {String} objectType
+        * @param {Number} objectId
+        *
+        * @return {String} url
+        */
+        buildViewUrl(objectType, objectId) {
+            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
     }
 }

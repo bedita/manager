@@ -1032,12 +1032,7 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-autosize-input@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/autosize-input/-/autosize-input-0.4.0.tgz#a5cdb43110e31f6a1d9fb695ccb747495af0bb5e"
-  integrity sha1-pc20MRDjH2odn7aVzLdHSVrwu14=
-
-autosize@^4.0.0, autosize@^4.0.2:
+autosize@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.2.tgz#073cfd07c8bf45da4b9fd153437f5bafbba1e4c9"
   integrity sha512-jnSyH2d+qdfPGpWlcuhGiHmqBJ6g3X+8T+iRwFrHPLVcdoGJE/x6Qicm6aDHfTsbgZKxyV8UU/YB2p4cjKDRRA==
@@ -8434,19 +8429,6 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
-
-vue-autosize-textarea@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/vue-autosize-textarea/-/vue-autosize-textarea-0.0.1.tgz#a5e5e148cfbad9f477a23cbc679cca6251931145"
-  integrity sha1-peXhSM+62fR3ojy8Z5zKYlGTEUU=
-
-vue-autosize@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/vue-autosize/-/vue-autosize-1.0.2.tgz#d4159848a7c0f839d49dea45412ce472cdd3a48a"
-  integrity sha1-1BWYSKfA+DnUnepFQSzkcs3TpIo=
-  dependencies:
-    autosize "^4.0.0"
-    autosize-input "^0.4.0"
 
 vue-hot-reload-api@^2.2.0:
   version "2.3.0"
