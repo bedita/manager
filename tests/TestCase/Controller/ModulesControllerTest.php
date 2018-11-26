@@ -633,6 +633,7 @@ class ModulesControllerTest extends TestCase
                     'data' => [
                         [
                             'id' => '43',
+                            'type' => 'images',
                             'meta' =>
                                 [
                                     'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
@@ -640,6 +641,7 @@ class ModulesControllerTest extends TestCase
                         ],
                         [
                             'id' => '45',
+                            'type' => 'images',
                             'meta' =>
                                 [
                                     'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
@@ -651,10 +653,12 @@ class ModulesControllerTest extends TestCase
                     'data' => [
                         [
                             'id' => '43',
+                            'type' => 'images',
                             'meta' => [],
                         ],
                         [
                             'id' => '45',
+                            'type' => 'images',
                             'meta' => [],
                         ],
                     ],
@@ -693,7 +697,7 @@ class ModulesControllerTest extends TestCase
             $expectedException = new BEditaClientException('error');
 
             $apiClient = $this->getMockBuilder(BEditaClient::class)
-                ->setConstructorArgs(['https://api.example.org'])
+                ->setConstructorArgs(['https://media.example.com'])
                 ->getMock();
 
             $apiClient->method('get')
