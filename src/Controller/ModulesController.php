@@ -54,21 +54,19 @@ class ModulesController extends AppController
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         $this->set('objectType', $this->objectType);
+
+        return parent::beforeRender($event);
     }
 
     /**
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $actions = [
             'delete', 'changeStatus',
         ];
@@ -80,6 +78,8 @@ class ModulesController extends AppController
             // for security component
             $this->Security->setConfig('unlockedActions', $actions);
         }
+
+        return parent::beforeFilter($event);
     }
 
     /**
@@ -459,21 +459,23 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, $this->request->getQueryParams());// ['page_size' => 1]); // page_size 1: we need just the available
+                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available
                     $available = $response['links']['available'];
             }
 
             $response = $this->apiClient->get($available, $this->request->getQueryParams());
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
 
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->getThumbsUrls($response);
+        } catch (BEditaClientException $ex) {
+            $this->log($ex, LogLevel::ERROR);
+
+            $this->set([
+                'error' => $ex->getMessage(),
+                '_serialize' => ['error'],
+            ]);
 
             return;
         }
-
-        $this->getThumbsUrls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -485,37 +487,27 @@ class ModulesController extends AppController
      * @param array $response Related objects response.
      * @return void
      */
-    protected function getThumbsUrls(array &$response) : void
+    public function getThumbsUrls(array &$response) : void
     {
         if (empty($response['data'])) {
             return;
         }
 
         // extract ids of objects
-        $ids = Hash::combine($response, 'data.{n}.id', 'data.{n}.id');
-
-        if (!count($ids)) {
+        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
+        if (empty($ids)) {
             return;
         }
 
-        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400';
+        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
 
-        try {
-            $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
-
-            return;
-        }
+        $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
 
         $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
 
         foreach ($response['data'] as &$object) {
             // extract url of the matching objectid's thumb
-            $thumbnail = Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
+            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
             if (count($thumbnail)) {
                 $object['meta']['url'] = $thumbnail[0];
             }
