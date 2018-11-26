@@ -78,7 +78,8 @@ class AppController extends Controller
         } elseif (!in_array($this->request->url, ['login'])) {
             $route = ['_name' => 'login'];
             $redirect = Router::reverse($this->request);
-            if ($redirect !== '/') {
+            $redirect = $this->request->getUri()->getPath();
+            if ($redirect !== $this->request->getAttribute('webroot')) {
                 $route += compact('redirect');
             }
             $this->Flash->error(__('You are not logged or your session has expired, please provide login credentials'));
