@@ -25,7 +25,6 @@ use Cake\Routing\Router;
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
- * @property \App\Controller\Component\MessagesComponent $Messages
  */
 class AppController extends Controller
 {
@@ -66,7 +65,6 @@ class AppController extends Controller
             'currentModuleName' => $this->name,
         ]);
         $this->loadComponent('Schema');
-        $this->loadComponent('Messages');
     }
 
     /**
@@ -83,7 +81,9 @@ class AppController extends Controller
             if ($redirect !== '/') {
                 $route += compact('redirect');
             }
-            $this->redirect($route);
+            $this->Flash->error(__('You are not logged or your session has expired, please provide login credentials'));
+
+            return $this->redirect($route);
         }
         $this->setupOutputTimezone();
         $this->Messages->customize();
