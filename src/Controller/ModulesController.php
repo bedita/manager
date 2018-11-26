@@ -499,7 +499,7 @@ class ModulesController extends AppController
             return;
         }
 
-        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400';
+        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
 
         $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
 
