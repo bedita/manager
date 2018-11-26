@@ -494,7 +494,7 @@ class ModulesController extends AppController
         }
 
         // extract ids of objects
-        $ids = (array)Hash::extract($response, 'data.{n}.id');
+        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
         if (empty($ids)) {
             return;
         }
