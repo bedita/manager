@@ -25,12 +25,12 @@
                 values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
 
             <div class="form-column">
-                {% element 'Form/core_properties' %}
-
                 {# Upload available only for new media objects #}
                 {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
                     {% element 'Form/upload' %}
                 {% endif %}
+
+                {% element 'Form/core_properties' %}
 
                 {% element 'Form/custom_left' %}
 
