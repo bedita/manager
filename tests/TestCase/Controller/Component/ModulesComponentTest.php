@@ -39,6 +39,13 @@ class ModulesComponentTest extends TestCase
     public $Modules;
 
     /**
+     * Test api client
+     *
+     * @var BEdita\SDK\BEditaClient
+     */
+    public $client;
+
+    /**
      * {@inheritDoc}
      */
     public function setUp() : void
@@ -432,5 +439,158 @@ class ModulesComponentTest extends TestCase
         } else {
             static::assertArrayNotHasKey('currentModule', $viewVars);
         }
+    }
+
+    /**
+     * Data provider for `testUpload` test case.
+     *
+     * @return array
+     */
+    public function uploadProvider() : array
+    {
+        $name = 'test.png';
+        $file = getcwd() . sprintf('/tests/files/%s', $name);
+        $type = mime_content_type($file);
+
+        return [
+            'no file' => [
+                [
+                    'file' => [],
+                ],
+                null,
+                false,
+            ],
+            'file.name empty' => [
+                [
+                    'file' => ['a'],
+                ],
+                new \RuntimeException('Invalid form data: file.name'),
+                false,
+            ],
+            'file.name not a string' => [
+                [
+                    'file' => ['name' => 12345],
+                ],
+                new \RuntimeException('Invalid form data: file.name'),
+                false,
+            ],
+            'file.tmp_name (filepath) empty' => [
+                [
+                    'file' => ['name' => 'dummy.txt'],
+                ],
+                new \RuntimeException('Invalid form data: file.tmp_name'),
+                false,
+            ],
+            'file.tmp_name (filepath) not a string' => [
+                [
+                    'file' => [
+                        'name' => 'dummy.txt',
+                        'tmp_name' => 12345,
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: file.tmp_name'),
+                false,
+            ],
+            'file.type empty' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: file.type'),
+                false,
+            ],
+            'file.type not a string' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => 12345,
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: file.type'),
+                false,
+            ],
+            'model-type empty' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
+                    ],
+                ],
+                new \RuntimeException('Invalid form data: model-type'),
+                false,
+            ],
+            'model-type not a string' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
+                    ],
+                    'model-type' => 12345,
+                ],
+                new \RuntimeException('Invalid form data: model-type'),
+                false,
+            ],
+            'upload ok' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
+                    ],
+                    'model-type' => 'images',
+                ],
+                null,
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `upload` method
+     *
+     * @covers ::upload()
+     * @dataProvider uploadProvider()
+     * @return void
+     */
+    public function testUpload(array $requestData, $expectedException, bool $uploaded) : void
+    {
+        // if upload failed, verify exception
+        if ($expectedException != null) {
+            $this->expectException(get_class($expectedException));
+            $this->expectExceptionCode($expectedException->getCode());
+            $this->expectExceptionMessage($expectedException->getMessage());
+        }
+
+        // get api client (+auth)
+        $this->setupApi();
+
+        // do component call
+        $this->Modules->upload($requestData);
+
+        // if upload ok, verify ID is not null
+        if ($uploaded) {
+            static::assertArrayHasKey('id', $requestData);
+        } else {
+            static::assertFalse(isset($requestData['id']));
+        }
+    }
+
+    /**
+     * Setup api client and auth
+     *
+     * @return void
+     */
+    private function setupApi() : void
+    {
+        $this->client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $this->client->authenticate($adminUser, $adminPassword);
+        $this->client->setupTokens($response['meta']);
     }
 }
