@@ -262,6 +262,10 @@ class ModulesController extends AppController
                 }
             }
 
+            // upload file (if available)
+            $this->Modules->upload($requestData);
+
+            // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
@@ -512,53 +516,6 @@ class ModulesController extends AppController
                 $object['meta']['url'] = $thumbnail[0];
             }
         }
-    }
-
-    /**
-     * Upload a file and store it in a media stream
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function upload()
-    {
-        try {
-            // upload file
-            if (empty($this->request->getData('file.name')) || !is_string($this->request->getData('file.name'))) {
-                throw new \RuntimeException('Invalid form data: file.name');
-            }
-            $filename = $this->request->getData('file.name');
-            if (empty($this->request->getData('file.tmp_name')) || !is_string($this->request->getData('file.tmp_name'))) {
-                throw new \RuntimeException('Invalid form data: file.tmp_name');
-            }
-            $filepath = $this->request->getData('file.tmp_name');
-            $headers = ['Content-type' => $this->request->getData('file.type')];
-            $response = $this->apiClient->upload($filename, $filepath, $headers);
-            // create media from stream
-            $streamId = $response['data']['id'];
-            if (empty($this->request->getData('model-type')) || !is_string($this->request->getData('model-type'))) {
-                throw new \RuntimeException('Invalid form data: model-type');
-            }
-            $type = $this->request->getData('model-type');
-            $title = $filename;
-            $attributes = compact('title');
-            $data = compact('type', 'attributes');
-            $body = compact('data');
-            $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-            return $this->redirect([
-                '_name' => 'modules:create',
-                'object_type' => $this->objectType,
-            ]);
-        }
-
-        return $this->redirect([
-            '_name' => 'modules:view',
-            'object_type' => $this->objectType,
-            'id' => $response['data']['id'],
-        ]);
     }
 
     /**
