@@ -77,7 +77,6 @@ class AppController extends Controller
             $this->apiClient->setupTokens($tokens);
         } elseif (!in_array($this->request->url, ['login'])) {
             $route = ['_name' => 'login'];
-            $redirect = Router::reverse($this->request);
             $redirect = $this->request->getUri()->getPath();
             if ($redirect !== $this->request->getAttribute('webroot')) {
                 $route += compact('redirect');
