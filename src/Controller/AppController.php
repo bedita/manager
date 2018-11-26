@@ -16,6 +16,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Routing\Router;
 
@@ -71,10 +72,8 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
@@ -88,6 +87,8 @@ class AppController extends Controller
         }
         $this->setupOutputTimezone();
         $this->Messages->customize();
+
+        return parent::beforeFilter($event);
     }
 
     /**
@@ -107,10 +108,8 @@ class AppController extends Controller
      *
      * Update session tokens if updated/refreshed by client
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
             $tokens = $this->apiClient->getTokens();
@@ -124,6 +123,8 @@ class AppController extends Controller
         }
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
+
+        return parent::beforeRender($event);
     }
 
     /**
