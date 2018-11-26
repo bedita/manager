@@ -32,6 +32,9 @@ class LoginController extends AppController
         $this->request->allowMethod(['get', 'post']);
 
         if (!$this->request->is('post')) {
+            // Handle flash messages
+            $this->handleFlashMessages($this->request->getQueryParams());
+
             // Display login form.
             return null;
         }
@@ -92,5 +95,20 @@ class LoginController extends AppController
         $this->request->allowMethod(['get']);
 
         return $this->redirect($this->Auth->logout());
+    }
+
+    /**
+     * Handle flash messages for login page.
+     * If login from a redirect, show messages; otherwise clear flash messages.
+     *
+     * @param array $query The query param
+     * @return void
+     */
+    public function handleFlashMessages(array $query) : void
+    {
+        if (!isset($query['redirect'])) {
+            // Remove flash messages
+            $this->request->getSession()->delete('Flash');
+        }
     }
 }
