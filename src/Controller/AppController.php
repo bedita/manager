@@ -25,6 +25,7 @@ use Cake\Routing\Router;
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
+ * @property \App\Controller\Component\MessagesComponent $Messages
  */
 class AppController extends Controller
 {
@@ -65,6 +66,7 @@ class AppController extends Controller
             'currentModuleName' => $this->name,
         ]);
         $this->loadComponent('Schema');
+        $this->loadComponent('Messages');
     }
 
     /**
@@ -86,7 +88,6 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
-        $this->Messages->customize();
 
         return parent::beforeFilter($event);
     }
