@@ -14,8 +14,12 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModelController;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Network\Exception\BadRequestException;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -47,6 +51,20 @@ class ModelControllerTest extends TestCase
     ];
 
     /**
+     * Setup api client and auth
+     *
+     * @return void
+     */
+    private function setupApi() : void
+    {
+        $this->client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $this->client->authenticate($adminUser, $adminPassword);
+        $this->client->setupTokens($response['meta']);
+    }
+
+    /**
      * Setup controller to test with request config
      *
      * @param array $requestConfig
@@ -57,6 +75,7 @@ class ModelControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->ModelController = new ModelController($request);
+        $this->setupApi();
     }
 
     /**
@@ -126,5 +145,51 @@ class ModelControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Data provider for `testSavePropertiesJson` test case.
+     *
+     * @return array
+     */
+    public function savePropertiesJsonProvider() : Array
+    {
+        return [
+            // test with empty object
+            'emptyRequest' => [
+                new BadRequestException('empty request'),
+                [],
+            ],
+        ];
+    }
+
+    /**
+     * Test `savePropertiesJson` method
+     *
+     * @dataProvider savePropertiesJsonProvider()
+     * @covers ::savePropertiesJson()
+     *
+     * @return void
+     */
+    public function testSavePropertiesJson($expectedResponse, $post)
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => $post,
+        ];
+
+        $this->setupController($config);
+
+        if ($expectedResponse instanceof \Exception) {
+            $this->expectException(get_class($expectedResponse));
+            $this->expectExceptionCode($expectedResponse->getCode());
+            $this->expectExceptionMessage($expectedResponse->getMessage());
+        }
+
+        $this->ModelController->savePropertiesJson();
+
+        static::assertEquals($expectedResponse, $post);
     }
 }
