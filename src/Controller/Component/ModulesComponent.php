@@ -263,8 +263,8 @@ class ModulesComponent extends Component
 
     /**
      * Associate a strem to a media using API
-     * If $mediaId is null, create media from stream.
-     * If $mediaId is not null, replace properly related stream.
+     * If $requestData['id'] is null, create media from stream.
+     * If $requestData['id'] is not null, replace properly related stream.
      *
      * @param string $streamId The stream ID
      * @param array $requestData The request data
