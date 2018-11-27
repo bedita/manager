@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2018 ChannelWeb Srl, Chialab Srl
@@ -14,6 +15,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModulesController;
+use Aura\Intl\Exception;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -121,7 +123,7 @@ class ModulesControllerTest extends TestCase
      * @param array|null $requestConfig
      * @return void
      */
-    protected function setupController(?array $requestConfig = []): void
+    protected function setupController(? array $requestConfig = []) : void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -609,111 +611,105 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Data provider for `testUpload` test case.
+     * Data provider for `testGetThumbsUrls` test case.
      *
      * @return array
      */
-    public function uploadProvider() : array
+    public function getThumbsUrlsProvider() : Array
     {
         return [
-            'file.name empty' => [
-                [], // params
-                '/documents/create', // redir
-                new \RuntimeException('Invalid form data: file.name'), // exception
+            // test with empty object
+            'emptyResponse' => [
+                [],
+                [],
             ],
-            'file.name not a string' => [
-                [
-                    'file' => ['name' => 12345],
-                ],
-                '/documents/create',
-                new \RuntimeException('Invalid form data: file.name'),
+            // test with objct without ids
+            'responseWithoutIds' => [
+                ['data' => []],
+                ['data' => []],
             ],
-            'file.tmp_name (filepath) empty' => [
-                [
-                    'file' => ['name' => 'dummy.txt'],
-                ],
-                '/documents/create',
-                new \RuntimeException('Invalid form data: file.tmp_name'),
-            ],
-            'file.tmp_name (filepath) not a string' => [
-                [
-                    'file' => [
-                        'name' => 'dummy.txt',
-                        'tmp_name' => 12345,
+            // correct result
+            'correctResponseMock' => [
+                [ // expected
+                    'data' => [
+                        [
+                            'id' => '43',
+                            'type' => 'images',
+                            'meta' =>
+                                [
+                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
+                                ],
+                        ],
+                        [
+                            'id' => '45',
+                            'type' => 'images',
+                            'meta' =>
+                                [
+                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
+                                ],
+                        ],
                     ],
                 ],
-                '/documents/create',
-                new \RuntimeException('Invalid form data: file.tmp_name'),
-            ],
-            'model-type empty' => [
-                [
-                    'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                [ // data
+                    'data' => [
+                        [
+                            'id' => '43',
+                            'type' => 'images',
+                            'meta' => [],
+                        ],
+                        [
+                            'id' => '45',
+                            'type' => 'images',
+                            'meta' => [],
+                        ],
                     ],
                 ],
-                '/documents/create',
-                new \RuntimeException('Invalid form data: model-type'),
-            ],
-            'model-type not a string' => [
-                [
-                    'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
+                [ // mock response for api
+                    'meta' => [
+                        'thumbnails' => [
+                            [
+                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
+                                'id' => 43,
+                            ],
+                            [
+                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
+                                'id' => 45,
+                            ],
+                        ],
                     ],
-                    'model-type' => '12345',
                 ],
-                '/documents/create',
-                new \RuntimeException('Invalid form data: model-type'),
-            ],
-            'upload ok' => [
-                [
-                    'file' => [
-                        'name' => 'test.png',
-                        'tmp_name' => getcwd() . '/tests/files/test.png',
-                    ],
-                    'model-type' => 'documents',
-                ],
-                '/documents/create',
-                null,
             ],
         ];
     }
 
     /**
-     * Test `upload` method
+     * Test `getThumbsUrls` method
      *
-     * @param array $params The form params
-     * @param string $redir The redir url
-     * @param \Exception|null The exception expected on upload test
+     * @dataProvider getThumbsUrlsProvider()
+     * @covers ::getThumbsUrls()
      *
-     * @covers ::upload()
-     * @dataProvider uploadProvider()
      * @return void
      */
-    public function testUpload(array $params, string $redir, $exception) : void
+    public function testGetThumbsUrls($expected, $data, $mockResponse = null) : void
     {
-        // Setup controller for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => $params,
-            'params' => ['object_type' => 'documents'],
-        ]);
+        $this->setupController();
 
-        try {
-            // do controller call
-            $result = $this->controller->upload();
+        if (!empty($mockResponse)) {
+            $expectedException = new BEditaClientException('error');
 
-            // verify response status code and type
-            $header = $result->header();
-            static::assertEquals(302, $result->statusCode());
-            static::assertEquals('text/html', $result->type());
-            static::assertEquals($redir, $header['Location']);
-        } catch (\Exception $e) {
-            static::assertEquals($exception->getMessage(), $e->getMessage());
+            $apiClient = $this->getMockBuilder(BEditaClient::class)
+                ->setConstructorArgs(['https://media.example.com'])
+                ->getMock();
+
+            $apiClient->method('get')
+                ->with('/media/thumbs?ids=43,45&options[w]=400')
+                ->willReturn($mockResponse);
+
+            $this->controller->apiClient = $apiClient;
         }
+
+        $this->controller->getThumbsUrls($data);
+        static::assertEquals($expected, $data);
     }
 
     /**
@@ -826,7 +822,10 @@ class ModulesControllerTest extends TestCase
     {
         $o = $this->getTestObject();
         if ($o == null) {
-            $response = $this->client->save('documents', ['title' => 'modules controller test document', 'uname' => $this->uname]);
+            $response = $this->client->save('documents', [
+                'title' => 'modules controller test document',
+                'uname' => $this->uname
+            ]);
             $o = $response['data'];
         }
 

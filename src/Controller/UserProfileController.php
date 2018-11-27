@@ -41,10 +41,11 @@ class UserProfileController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'user_profile:view']);
+
+        return parent::beforeRender($event);
     }
 
     /**

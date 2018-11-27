@@ -16,10 +16,9 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\I18n\I18n;
+use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
-use Cake\Utility\Hash;
-use Locale;
+use Cake\Routing\Router;
 
 /**
  * Base Application Controller.
@@ -45,7 +44,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
-        $this->loadComponent('Flash');
+        $this->loadComponent('Flash', ['clear' => true]);
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
 
@@ -71,15 +70,24 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $tokens = $this->Auth->user('tokens');
-        if ($tokens) {
+        if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
+        } elseif (!in_array($this->request->url, ['login'])) {
+            $route = ['_name' => 'login'];
+            $redirect = $this->request->getUri()->getPath();
+            if ($redirect !== $this->request->getAttribute('webroot')) {
+                $route += compact('redirect');
+            }
+            $this->Flash->error(__('You are not logged or your session has expired, please provide login credentials'));
+
+            return $this->redirect($route);
         }
         $this->setupOutputTimezone();
+
+        return null;
     }
 
     /**
@@ -99,10 +107,8 @@ class AppController extends Controller
      *
      * Update session tokens if updated/refreshed by client
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
             $tokens = $this->apiClient->getTokens();
@@ -116,8 +122,9 @@ class AppController extends Controller
         }
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
-
         $this->setupLocale();
+
+        return null;
     }
 
     /**

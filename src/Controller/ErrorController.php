@@ -15,6 +15,7 @@
 namespace App\Controller;
 
 use Cake\Event\Event;
+use Cake\Http\Response;
 
 /**
  * Error Handling Controller
@@ -38,26 +39,27 @@ class ErrorController extends AppController
      * beforeFilter callback.
      *
      * @param \Cake\Event\Event $event Event.
-     * @return \Cake\Http\Response|null|void
+     * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
+        return null;
     }
 
     /**
      * beforeRender callback.
      *
      * @param \Cake\Event\Event $event Event.
-     * @return \Cake\Http\Response|null|void
+     * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         $this->viewBuilder()->setClassName('App\View\AppView');
         $this->viewBuilder()->setTemplatePath('Pages/Error');
+
+        return null;
     }
 
     /**

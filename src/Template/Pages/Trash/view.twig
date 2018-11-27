@@ -22,9 +22,7 @@
 
                 {# media #}
                 {% if objectType in ['images', 'files', 'audio', 'videos'] %}
-                    {% if object.id is empty %}
-                        {% element 'Form/upload' %}
-                    {% else %}
+                    {% if object.id is not empty %}
                         {% element 'Form/included' %}
                     {% endif %}
                 {% endif %}
