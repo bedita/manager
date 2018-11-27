@@ -15,6 +15,7 @@ namespace App\Controller;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -62,6 +63,7 @@ class ModelController extends AppController
         }
 
         $this->Security->setConfig('unlockedActions', ['savePropertiesJson']);
+
         return parent::beforeFilter($event);
     }
 
@@ -146,61 +148,65 @@ class ModelController extends AppController
         $response = [];
 
         try {
-            if (!empty($payload)) {
-                $addPropertyTypes = $payload['addPropertyTypes'];
-                $editPropertyTypes = $payload['editPropertyTypes'];
-                $removePropertyTypes = $payload['removePropertyTypes'];
+            if (empty($payload)) {
+                throw new BadRequestException('empty request');
+            }
 
-                // save newly added property types
-                if (isset($addPropertyTypes)) {
-                    foreach ($addPropertyTypes as $addPropertyType) {
-                        if (isset($addPropertyType['params'])) {
-                            $params = json_decode($addPropertyType['params'], true);
-                            $addPropertyType['params'] = $params;
-                        }
+            $addPropertyTypes = $payload['addPropertyTypes'];
+            $editPropertyTypes = $payload['editPropertyTypes'];
+            $removePropertyTypes = $payload['removePropertyTypes'];
 
-                        $body = [
-                            'data' => [
-                                'type' => $this->resourceType,
-                                'attributes' => $addPropertyType,
-                            ],
-                        ];
-
-                        $resp = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body));
-                        $response['saved'][] = $resp['data'];
+            // save newly added property types
+            if (isset($addPropertyTypes)) {
+                foreach ($addPropertyTypes as $addPropertyType) {
+                    if (isset($addPropertyType['params'])) {
+                        $params = json_decode($addPropertyType['params'], true);
+                        $addPropertyType['params'] = $params;
                     }
+
+                    $body = [
+                        'data' => [
+                            'type' => $this->resourceType,
+                            'attributes' => $addPropertyType,
+                        ],
+                    ];
+
+                    $resp = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body));
+                    $response['saved'][] = $resp['data'];
                 }
+            }
 
-                // edit property types
-                if (isset($editPropertyTypes)) {
-                    foreach ($editPropertyTypes as $editPropertyType) {
-                        $id = (string)$editPropertyType['id'];
-                        $type = $this->resourceType;
-                        $body = [
-                            'data' => [
-                                'id' => $id,
-                                'type' => $type,
-                                'attributes' => $editPropertyType['attributes'],
-                            ],
-                        ];
-                        $resp = $this->apiClient->patch(sprintf('/model/%s/%s', $type, $id), json_encode($body));
-                        $response['edited'][] = $resp['data'];
-                    }
+            // edit property types
+            if (isset($editPropertyTypes)) {
+                foreach ($editPropertyTypes as $editPropertyType) {
+                    $id = (string)$editPropertyType['id'];
+                    $type = $this->resourceType;
+                    $body = [
+                        'data' => [
+                            'id' => $id,
+                            'type' => $type,
+                            'attributes' => $editPropertyType['attributes'],
+                        ],
+                    ];
+                    $resp = $this->apiClient->patch(sprintf('/model/%s/%s', $type, $id), json_encode($body));
+                    $response['edited'][] = $resp['data'];
                 }
+            }
 
-                // remove property types
-                if (isset($removePropertyTypes)) {
-                    foreach ($removePropertyTypes as $removePropertyTypeId) {
-                        $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null);
-                        $response['removed'][] = $removePropertyTypeId;
-                    }
+            // remove property types
+            if (isset($removePropertyTypes)) {
+                foreach ($removePropertyTypes as $removePropertyTypeId) {
+                    $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null);
+                    $response['removed'][] = $removePropertyTypeId;
                 }
             }
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->set([
+                'error' => $error->getMessage(),
+                '_serialize' => ['error'],
+            ]);
 
             return;
         }
