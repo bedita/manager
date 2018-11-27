@@ -124,7 +124,7 @@
                                 <span class="has-text-size-smaller prop-id"><: related.id :></span>
                             </header>
 
-                            <div class="thumbnail">
+                            <div v-if="related.meta.url" class="thumbnail">
                                 <figure>
                                     <img :src="related.meta.url" />
                                 </figure>
