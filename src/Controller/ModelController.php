@@ -152,12 +152,10 @@ class ModelController extends AppController
                 throw new BadRequestException('empty request');
             }
 
-            $addPropertyTypes = $payload['addPropertyTypes'];
-            $editPropertyTypes = $payload['editPropertyTypes'];
-            $removePropertyTypes = $payload['removePropertyTypes'];
-
             // save newly added property types
-            if (isset($addPropertyTypes)) {
+            if (!empty($payload['addPropertyTypes'])) {
+                $addPropertyTypes = $payload['addPropertyTypes'];
+                // dd($addPropertyTypes);
                 foreach ($addPropertyTypes as $addPropertyType) {
                     if (isset($addPropertyType['params'])) {
                         $params = json_decode($addPropertyType['params'], true);
@@ -172,12 +170,15 @@ class ModelController extends AppController
                     ];
 
                     $resp = $this->apiClient->post(sprintf('/model/%s', $this->resourceType), json_encode($body));
+                    unset($resp['data']['relationships']);
+
                     $response['saved'][] = $resp['data'];
                 }
             }
 
             // edit property types
-            if (isset($editPropertyTypes)) {
+            if (!empty($payload['editPropertyTypes'])) {
+                $editPropertyTypes = $payload['editPropertyTypes'];
                 foreach ($editPropertyTypes as $editPropertyType) {
                     $id = (string)$editPropertyType['id'];
                     $type = $this->resourceType;
@@ -189,12 +190,15 @@ class ModelController extends AppController
                         ],
                     ];
                     $resp = $this->apiClient->patch(sprintf('/model/%s/%s', $type, $id), json_encode($body));
+                    unset($resp['data']['relationships']);
+
                     $response['edited'][] = $resp['data'];
                 }
             }
 
             // remove property types
-            if (isset($removePropertyTypes)) {
+            if (!empty($payload['removePropertyTypes'])) {
+                $removePropertyTypes = $payload['removePropertyTypes'];
                 foreach ($removePropertyTypes as $removePropertyTypeId) {
                     $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $removePropertyTypeId), null);
                     $response['removed'][] = $removePropertyTypeId;

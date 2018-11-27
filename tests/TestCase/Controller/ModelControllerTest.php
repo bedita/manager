@@ -159,6 +159,70 @@ class ModelControllerTest extends TestCase
             'emptyRequest' => [
                 new BadRequestException('empty request'),
                 [],
+                ''
+            ],
+            'addPropertyTypesRequest' => [
+                [
+                    [
+                        // 'id' => '12',
+                        'type' => 'property_types',
+                        'attributes' => [
+                                'name' => 'giovanni',
+                                'params' => [
+                                        'type' => 'string'
+                                ]
+                        ],
+                    ]
+                ],
+                [
+                    'addPropertyTypes' => [
+                        [
+                            'name' => 'giovanni',
+                            'params' => json_encode([
+                                'type' => 'string',
+                            ]),
+                        ]
+                    ],
+                ],
+                'saved'
+            ],
+            'editPropertyTypesRequest' => [
+                [
+                    [
+                        'id' => '12',
+                        'type' => 'property_types',
+                        'attributes' => [
+                                'name' => 'enrico',
+                                'params' => [
+                                        'type' => 'object'
+                                ],
+                                'type' => 'property_types', // temporary solution to avoid a bug
+                        ],
+                    ]
+                ],
+                [
+                    'editPropertyTypes' => [
+                        [
+                            'id' => '12',
+                            'attributes' => [
+                                'name' => 'enrico',
+                                'params' => [
+                                    'type' => 'object',
+                                ],
+                            ]
+                        ]
+                    ],
+                ],
+                'edited'
+            ],
+            'removePropertyTypesRequest' => [
+                [ '12' ],
+                [
+                    'removePropertyTypes' => [
+                        '12'
+                    ],
+                ],
+                'removed',
             ],
         ];
     }
@@ -171,7 +235,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSavePropertiesJson($expectedResponse, $post)
+    public function testSavePropertiesJson($expectedResponse, $post, $action)
     {
         $config = [
             'environment' => [
@@ -181,6 +245,7 @@ class ModelControllerTest extends TestCase
         ];
 
         $this->setupController($config);
+        $this->ModelController->resourceType = 'property_types';
 
         if ($expectedResponse instanceof \Exception) {
             $this->expectException(get_class($expectedResponse));
@@ -190,6 +255,14 @@ class ModelControllerTest extends TestCase
 
         $this->ModelController->savePropertiesJson();
 
-        static::assertEquals($expectedResponse, $post);
+        $actualResponse = $this->ModelController->viewVars[$action];
+
+        if ($action == 'saved') {
+            foreach($actualResponse as &$element) {
+                unset($element['id']);
+            }
+        }
+
+        static::assertEquals($expectedResponse, $actualResponse);
     }
 }
