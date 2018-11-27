@@ -12,7 +12,7 @@ const dateTimePickerOptions = {
     enableTime: true,
     altInput: true,
     dateFormat: 'Z', // ISO8601 for db
-    altFormat: 'D/M/Y HH:MM', // moment format / visible
+    altFormat: 'D/M/Y HH:mm', // moment format / visible
     animate: false,
     time_24hr: true,
 };

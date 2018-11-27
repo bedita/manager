@@ -11,16 +11,11 @@
 
     <div class="module-form">
 
-        {# Upload available only for new media objects #}
-        {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
-            {% element 'Form/upload' %}
-        {% endif %}
-
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'type': 'file',
             'url': {'_name': 'modules:save', 'object_type': objectType},
             'id': 'form-main',
         })|raw }}
-
 
             {# Init `_jsonKeys` data #}
             {{ write_config('_jsonKeys', []) }}
@@ -30,6 +25,11 @@
                 values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
 
             <div class="form-column">
+                {# Upload available only for new media objects #}
+                {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
+                    {% element 'Form/upload' %}
+                {% endif %}
+
                 {% element 'Form/core_properties' %}
 
                 {% element 'Form/custom_left' %}

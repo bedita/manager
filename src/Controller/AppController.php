@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Routing\Router;
 
 /**
  * Base Application Controller.
@@ -43,7 +44,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
-        $this->loadComponent('Flash');
+        $this->loadComponent('Flash', ['clear' => true]);
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
 
@@ -72,12 +73,21 @@ class AppController extends Controller
     public function beforeFilter(Event $event) : ?Response
     {
         $tokens = $this->Auth->user('tokens');
-        if ($tokens) {
+        if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
+        } elseif (!in_array($this->request->url, ['login'])) {
+            $route = ['_name' => 'login'];
+            $redirect = $this->request->getUri()->getPath();
+            if ($redirect !== $this->request->getAttribute('webroot')) {
+                $route += compact('redirect');
+            }
+            $this->Flash->error(__('You are not logged or your session has expired, please provide login credentials'));
+
+            return $this->redirect($route);
         }
         $this->setupOutputTimezone();
 
-        return parent::beforeFilter($event);
+        return null;
     }
 
     /**
@@ -113,7 +123,7 @@ class AppController extends Controller
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
 
-        return parent::beforeRender($event);
+        return null;
     }
 
     /**
