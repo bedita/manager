@@ -258,7 +258,7 @@ class ModelControllerTest extends TestCase
         $actualResponse = $this->ModelController->viewVars[$action];
 
         if ($action == 'saved') {
-            foreach($actualResponse as &$element) {
+            foreach ($actualResponse as &$element) {
                 unset($element['id']);
             }
         }
