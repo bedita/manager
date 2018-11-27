@@ -451,6 +451,7 @@ class ModulesComponentTest extends TestCase
         $name = 'test.png';
         $file = getcwd() . sprintf('/tests/files/%s', $name);
         $type = mime_content_type($file);
+        $error = UPLOAD_ERR_OK;
 
         return [
             'no file' => [
@@ -462,21 +463,21 @@ class ModulesComponentTest extends TestCase
             ],
             'file.name empty' => [
                 [
-                    'file' => ['a'],
+                    'file' => ['a'] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.name'),
                 false,
             ],
             'file.name not a string' => [
                 [
-                    'file' => ['name' => 12345],
+                    'file' => ['name' => 12345] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.name'),
                 false,
             ],
             'file.tmp_name (filepath) empty' => [
                 [
-                    'file' => ['name' => 'dummy.txt'],
+                    'file' => ['name' => 'dummy.txt'] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.tmp_name'),
                 false,
@@ -486,7 +487,7 @@ class ModulesComponentTest extends TestCase
                     'file' => [
                         'name' => 'dummy.txt',
                         'tmp_name' => 12345,
-                    ],
+                    ] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.tmp_name'),
                 false,
@@ -496,7 +497,7 @@ class ModulesComponentTest extends TestCase
                     'file' => [
                         'name' => $name,
                         'tmp_name' => $file,
-                    ],
+                    ] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.type'),
                 false,
@@ -507,7 +508,7 @@ class ModulesComponentTest extends TestCase
                         'name' => $name,
                         'tmp_name' => $file,
                         'type' => 12345,
-                    ],
+                    ] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: file.type'),
                 false,
@@ -518,7 +519,7 @@ class ModulesComponentTest extends TestCase
                         'name' => $name,
                         'tmp_name' => $file,
                         'type' => $type,
-                    ],
+                    ] + compact('error'),
                 ],
                 new \RuntimeException('Invalid form data: model-type'),
                 false,
@@ -529,7 +530,7 @@ class ModulesComponentTest extends TestCase
                         'name' => $name,
                         'tmp_name' => $file,
                         'type' => $type,
-                    ],
+                    ] + compact('error'),
                     'model-type' => 12345,
                 ],
                 new \RuntimeException('Invalid form data: model-type'),
@@ -541,7 +542,7 @@ class ModulesComponentTest extends TestCase
                         'name' => $name,
                         'tmp_name' => $file,
                         'type' => $type,
-                    ],
+                    ] + compact('error'),
                     'model-type' => 'images',
                 ],
                 null,
