@@ -33,7 +33,7 @@ class UploadExceptionTest extends TestCase
         return [
             'UPLOAD_ERR_INI_SIZE' => [
                 UPLOAD_ERR_INI_SIZE,
-                __('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+                __('The uploaded file exceeds current max size of {0}', ini_get('upload_max_filesize')),
             ],
             'UPLOAD_ERR_FORM_SIZE' => [
                 UPLOAD_ERR_FORM_SIZE,
