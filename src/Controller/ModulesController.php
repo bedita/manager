@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
@@ -267,7 +268,7 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-        } catch (BEditaClientException $e) {
+        } catch (BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
