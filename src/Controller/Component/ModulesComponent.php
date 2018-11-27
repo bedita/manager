@@ -262,7 +262,7 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Associate a strem to a media using API
+     * Associate a stream to a media using API
      * If $requestData['id'] is null, create media from stream.
      * If $requestData['id'] is not null, replace properly related stream.
      *
