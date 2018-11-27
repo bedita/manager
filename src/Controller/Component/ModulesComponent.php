@@ -222,6 +222,9 @@ class ModulesComponent extends Component
             throw new \RuntimeException('Invalid form data: model-type');
         }
 
+        // has another stream? drop it
+        $this->removeStream($requestData);
+
         // upload file
         $filename = $requestData['file']['name'];
         $filepath = $requestData['file']['tmp_name'];
@@ -229,22 +232,68 @@ class ModulesComponent extends Component
         $apiClient = ApiClientProvider::getApiClient();
         $response = $apiClient->upload($filename, $filepath, $headers);
 
-        // create media from stream
+        // assoc stream to media
         $streamId = $response['data']['id'];
-        $type = $requestData['model-type'];
-        // save only `title` (filename if not set) and `status` in new media object
-        $attributes = array_filter([
-            'title' => !empty($requestData['title']) ? $requestData['title'] : $filename,
-            'status' => Hash::get($requestData, 'status'),
-        ]);
-        $data = compact('type', 'attributes');
-        $body = compact('data');
-        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+        $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
 
-        // set media id in request data
-        if (empty($requestData['id'])) {
-            $requestData['id'] = $response['data']['id'];
-        }
+        // unset some data from request
         unset($requestData['title'], $requestData['status'], $requestData['file']);
+    }
+
+    /**
+     * Remove a stream from a media, if any
+     *
+     * @param array $requestData The request data from form
+     * @return void
+     */
+    public function removeStream(array $requestData) : void
+    {
+        if (empty($requestData['id'])) {
+            return;
+        }
+
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = $apiClient->get(sprintf('/%s/%s/streams', $requestData['model-type'], $requestData['id']));
+        if (empty($response['data'])) { // no streams for media
+            return;
+        }
+        $streamId = Hash::get($response, 'data.0.id');
+        $apiClient->deleteObject($streamId, 'streams');
+    }
+
+    /**
+     * Associate a strem to a media using API
+     * If $mediaId is null, create media from stream.
+     * If $mediaId is not null, replace properly related stream.
+     *
+     * @param string $streamId The stream ID
+     * @param array $requestData The request data
+     * @param string $defaultTitle The default title for media
+     * @return string The media ID
+     */
+    public function assocStreamToMedia(string $streamId, array $requestData, string $defaultTitle) : string
+    {
+        $apiClient = ApiClientProvider::getApiClient();
+        $type = $requestData['model-type'];
+        if (empty($requestData['id'])) {
+            // create media from stream
+            // save only `title` (filename if not set) and `status` in new media object
+            $attributes = array_filter([
+                'title' => !empty($requestData['title']) ? $requestData['title'] : $defaultTitle,
+                'status' => Hash::get($requestData, 'status'),
+            ]);
+            $data = compact('type', 'attributes');
+            $body = compact('data');
+            $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+
+            return $response['data']['id'];
+        }
+
+        // assoc existing media to stream
+        $id = $requestData['id'];
+        $data = compact('id', 'type');
+        $apiClient->replaceRelated($streamId, 'streams', 'object', $data);
+
+        return $id;
     }
 }

@@ -553,9 +553,15 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `upload` method
      *
-     * @covers ::upload()
-     * @dataProvider uploadProvider()
+     * @param array $requestData The request data
+     * @param Expection|null $expectedException The exception expected
+     * @param boolean $uploaded The upload result
      * @return void
+     *
+     * @covers ::upload()
+     * @covers ::removeStream()
+     * @covers ::assocStreamToMedia()
+     * @dataProvider uploadProvider()
      */
     public function testUpload(array $requestData, $expectedException, bool $uploaded) : void
     {
@@ -574,6 +580,22 @@ class ModulesComponentTest extends TestCase
 
         // if upload ok, verify ID is not null
         if ($uploaded) {
+            static::assertArrayHasKey('id', $requestData);
+
+            // test upload of another file to change stream
+            $name = 'test2.png';
+            $file = getcwd() . sprintf('/tests/files/%s', $name);
+            $type = mime_content_type($file);
+            $requestData = [
+                'file' => [
+                    'name' => $name,
+                    'tmp_name' => $file,
+                    'type' => $type,
+                ],
+                'model-type' => 'images',
+                'id' => $requestData['id'],
+            ];
+            $this->Modules->upload($requestData);
             static::assertArrayHasKey('id', $requestData);
         } else {
             static::assertFalse(isset($requestData['id']));

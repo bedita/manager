@@ -84,8 +84,17 @@
         {% endfor %}
         {% endif %}
 
+        <h3>{{ __('Change Stream') }}</h3>
+        <div class="tab-container">
+            {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
+            {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
+        </div>
+
     </div>
 
 </section>
 </property-view>
 {% endif %}
+
+
+
