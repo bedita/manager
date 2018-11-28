@@ -303,28 +303,37 @@ class AppControllerTest extends TestCase
         return [
             'badRequest' => [
                 new BadRequestException('Empty request'),
-                null,
                 [],
                 null,
             ],
             'methodNotAllowed' => [
                 new MethodNotAllowedException(),
-                new ServerRequest(),
-                ['allowedMethods' => 'GET'],
+                ['allowedMethods' => 'POST'],
                 [
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
                 ],
             ],
-            'requiredParameters' => [
+            'requiredParametersEmpty' => [
                 new BadRequestException('Empty password'),
-                new ServerRequest(),
                 ['requiredParameters' => ['password']],
                 [
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
+                ],
+            ],
+            'requiredParametersSet' => [
+                ['password' => 'bibo'],
+                ['requiredParameters' => ['password']],
+                [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'POST',
+                    ],
+                    'post' => [
+                        'password' => 'bibo',
+                    ]
                 ],
             ]
         ];
@@ -338,17 +347,21 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testCheckRequest($expected, $request, $params, $config) : void
+    public function testCheckRequest($expected, $params, $config) : void
     {
         $this->setupController($config);
 
-        $this->App->request = $request;
+        if ($config == null) {
+            $this->App->request = $config;
+        }
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
         }
 
         $results = $this->invokeMethod($this->App, 'checkRequest', [$params]);
+
+        static::assertEquals($expected, $results);
     }
 
     /**
