@@ -19,6 +19,7 @@ use Cake\Http\ServerRequest;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
+use Composer\Script\Event;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -37,18 +38,80 @@ class AppControllerTest extends TestCase
     public $App;
 
     /**
-     * Test api client
+     * test init function
      *
-     * @var BEdita\SDK\BEditaClient
+     * @covers ::initialize()
+     *
+     * @return void
      */
-    public $client;
+    public function testInitialize() : void
+    {
+        $this->setupController();
+
+        static::assertNotEmpty($this->App->{'RequestHandler'});
+        static::assertNotEmpty($this->App->{'Flash'});
+        static::assertNotEmpty($this->App->{'Security'});
+        static::assertNotEmpty($this->App->{'Csrf'});
+        static::assertNotEmpty($this->App->{'Auth'});
+        static::assertNotEmpty($this->App->{'Modules'});
+        static::assertNotEmpty($this->App->{'Schema'});
+    }
 
     /**
-     * Uname for test object
+     * test 'beforeFilter' not logged error
      *
-     * @var string
+     * @covers ::beforeFilter()
+     *
+     * @return void
      */
-    protected $uname = 'app-controller-test-document';
+    public function testBeforeFilterLoginError() : void
+    {
+        $this->setupController($config);
+
+        $event = $this->App->dispatchEvent('Controller.initialize');
+        $this->App->beforeFilter($event);
+        $flash = $this->App->request->getSession()->read('Flash');
+
+        $expected = __('You are not logged or your session has expired, please provide login credentials');
+        $message = $flash['flash'][0]['message'];
+
+        static::assertEquals($expected, $message);
+    }
+
+    /**
+     * test 'beforeFilter' correct apiClient token setup
+     *
+     * @covers ::beforeFilter()
+     *
+     * @return void
+     */
+    public function testBeforeFilterCorrectTokens() : void
+    {
+        $expectedtokens = [];
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+            ],
+        ];
+        $this->setupController($config);
+
+        $user = $this->App->Auth->identify();
+        $this->App->Auth->setUser($user);
+        $expectedtokens = $this->App->Auth->user('tokens');
+
+        $event = $this->App->dispatchEvent('Controller.initialize');
+        $this->App->beforeFilter($event);
+
+        $apiClient = $this->accessProperty($this->App, 'apiClient');
+        $apiClientTokens = $this->accessProperty($apiClient, 'tokens');
+
+        static::assertEquals($expectedtokens, $apiClientTokens);
+    }
 
     /**
      * Setup controller to test with request config
@@ -239,5 +302,14 @@ class AppControllerTest extends TestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
+    }
+
+    public function accessProperty(&$object, $propertyName)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+
+        return $property->getValue($object);
     }
 }
