@@ -593,6 +593,7 @@ class ModulesComponentTest extends TestCase
                     'name' => $name,
                     'tmp_name' => $file,
                     'type' => $type,
+                    'error' => UPLOAD_ERR_OK,
                 ],
                 'model-type' => 'images',
                 'id' => $requestData['id'],
