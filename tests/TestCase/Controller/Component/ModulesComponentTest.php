@@ -20,6 +20,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -465,21 +466,21 @@ class ModulesComponentTest extends TestCase
                 [
                     'file' => ['a'] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.name'),
+                new InternalErrorException('Invalid form data: file.name'),
                 false,
             ],
             'file.name not a string' => [
                 [
                     'file' => ['name' => 12345] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.name'),
+                new InternalErrorException('Invalid form data: file.name'),
                 false,
             ],
             'file.tmp_name (filepath) empty' => [
                 [
                     'file' => ['name' => 'dummy.txt'] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.tmp_name'),
+                new InternalErrorException('Invalid form data: file.tmp_name'),
                 false,
             ],
             'file.tmp_name (filepath) not a string' => [
@@ -489,7 +490,7 @@ class ModulesComponentTest extends TestCase
                         'tmp_name' => 12345,
                     ] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.tmp_name'),
+                new InternalErrorException('Invalid form data: file.tmp_name'),
                 false,
             ],
             'file.type empty' => [
@@ -499,7 +500,7 @@ class ModulesComponentTest extends TestCase
                         'tmp_name' => $file,
                     ] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.type'),
+                new InternalErrorException('Invalid form data: file.type'),
                 false,
             ],
             'file.type not a string' => [
@@ -510,7 +511,7 @@ class ModulesComponentTest extends TestCase
                         'type' => 12345,
                     ] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: file.type'),
+                new InternalErrorException('Invalid form data: file.type'),
                 false,
             ],
             'model-type empty' => [
@@ -521,7 +522,7 @@ class ModulesComponentTest extends TestCase
                         'type' => $type,
                     ] + compact('error'),
                 ],
-                new \RuntimeException('Invalid form data: model-type'),
+                new InternalErrorException('Invalid form data: model-type'),
                 false,
             ],
             'model-type not a string' => [
@@ -533,7 +534,7 @@ class ModulesComponentTest extends TestCase
                     ] + compact('error'),
                     'model-type' => 12345,
                 ],
-                new \RuntimeException('Invalid form data: model-type'),
+                new InternalErrorException('Invalid form data: model-type'),
                 false,
             ],
             'upload ok' => [

@@ -20,6 +20,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -258,12 +259,12 @@ class ModulesComponent extends Component
         // verify presence and value of 'name', 'tmp_name', 'type'
         foreach (['name', 'tmp_name', 'type'] as $field) {
             if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new \RuntimeException(sprintf('Invalid form data: file.%s', $field));
+                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
             }
         }
         // verify 'model-type'
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
-            throw new \RuntimeException('Invalid form data: model-type');
+            throw new InternalErrorException('Invalid form data: model-type');
         }
     }
 }
