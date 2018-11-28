@@ -272,7 +272,7 @@ class FormTest extends TestCase
                 $value,
                 [
                     'type' => 'textarea',
-                    'v-jsoneditor' => '',
+                    'v-jsoneditor' => 'true',
                     'class' => 'json',
                     'value' => json_encode($value),
                 ],
@@ -283,7 +283,7 @@ class FormTest extends TestCase
                 $value,
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => '',
+                    'v-richeditor' => 'true',
                     'ckconfig' => 'configNormal',
                     'value' => $value,
                 ],
@@ -294,7 +294,7 @@ class FormTest extends TestCase
                 '2018-01-31 08:45:00',
                 [
                     'type' => 'text',
-                    'v-datepicker' => '',
+                    'v-datepicker' => 'true',
                     'time' => 'true',
                     'value' => '2018-01-31 08:45:00',
                 ],
@@ -305,7 +305,7 @@ class FormTest extends TestCase
                 '2018-01-31',
                 [
                     'type' => 'text',
-                    'v-datepicker' => '',
+                    'v-datepicker' => 'true',
                     'time' => 'false',
                     'value' => '2018-01-31',
                 ],

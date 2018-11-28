@@ -75,12 +75,12 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
-    * Test `filterList()` method.
-    *
-    * @return void
-    *
-    * @covers ::filterList()
-    */
+     * Test `filterList()` method.
+     *
+     * @return void
+     *
+     * @covers ::filterList()
+     */
     public function testFilterList(): void
     {
         $filter = ['modified'];
