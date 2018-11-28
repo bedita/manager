@@ -1,16 +1,6 @@
 <section class="fieldset order-1">
-    <h1>{{ __('Upload') }}</h1>
-
-    {{ Form.create(null, {
-        'id': 'form-upload',
-        'type': 'file',
-        'url': {'_name': 'modules:upload', 'object_type': object.type},
-    })|raw }}
+    <div class="tab-container">
+        {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
-        {{ Form.control('file', { 'type': 'file' }) | raw }}
-        {{ Form.button(__('Upload'), {
-            'class': 'submit',
-            'onclick': 'this.classList.add(\'is-loading-spinner\')',
-        }) | raw }}
-    {{ Form.end()|raw }}
+    </div>
 </section>

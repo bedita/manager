@@ -12,9 +12,11 @@
  */
 namespace App\Controller;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -54,21 +56,19 @@ class ModulesController extends AppController
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : void
+    public function beforeRender(Event $event) : ?Response
     {
-        parent::beforeRender($event);
-
         $this->set('objectType', $this->objectType);
+
+        return parent::beforeRender($event);
     }
 
     /**
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : void
+    public function beforeFilter(Event $event) : ?Response
     {
-        parent::beforeFilter($event);
-
         $actions = [
             'delete', 'changeStatus',
         ];
@@ -80,6 +80,8 @@ class ModulesController extends AppController
             // for security component
             $this->Security->setConfig('unlockedActions', $actions);
         }
+
+        return parent::beforeFilter($event);
     }
 
     /**
@@ -270,8 +272,12 @@ class ModulesController extends AppController
                 }
             }
 
+            // upload file (if available)
+            $this->Modules->upload($requestData);
+
+            // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-        } catch (BEditaClientException $e) {
+        } catch (InternalErrorException | BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
@@ -340,7 +346,6 @@ class ModulesController extends AppController
     public function relatedJson($id, string $relation) : void
     {
         $this->request->allowMethod(['get']);
-
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
         } catch (BEditaClientException $error) {
@@ -468,15 +473,20 @@ class ModulesController extends AppController
                     $available = '/folders';
                     break;
                 default:
-                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available link from response
+                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available
                     $available = $response['links']['available'];
             }
-            $response = $this->apiClient->get($available, $this->request->getQueryParams());
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
 
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $response = $this->apiClient->get($available, $this->request->getQueryParams());
+
+            $this->getThumbsUrls($response);
+        } catch (BEditaClientException $ex) {
+            $this->log($ex, LogLevel::ERROR);
+
+            $this->set([
+                'error' => $ex->getMessage(),
+                '_serialize' => ['error'],
+            ]);
 
             return;
         }
@@ -486,50 +496,36 @@ class ModulesController extends AppController
     }
 
     /**
-     * Upload a file and store it in a media stream
+     * Retrieve thumbnails URL of related objects in `meta.url` if present.
      *
-     * @return \Cake\Http\Response|null
+     * @param array $response Related objects response.
+     * @return void
      */
-    public function upload()
+    public function getThumbsUrls(array &$response) : void
     {
-        try {
-            // upload file
-            if (empty($this->request->getData('file.name')) || !is_string($this->request->getData('file.name'))) {
-                throw new \RuntimeException('Invalid form data: file.name');
-            }
-            $filename = $this->request->getData('file.name');
-            if (empty($this->request->getData('file.tmp_name')) || !is_string($this->request->getData('file.tmp_name'))) {
-                throw new \RuntimeException('Invalid form data: file.tmp_name');
-            }
-            $filepath = $this->request->getData('file.tmp_name');
-            $headers = ['Content-type' => $this->request->getData('file.type')];
-            $response = $this->apiClient->upload($filename, $filepath, $headers);
-            // create media from stream
-            $streamId = $response['data']['id'];
-            if (empty($this->request->getData('model-type')) || !is_string($this->request->getData('model-type'))) {
-                throw new \RuntimeException('Invalid form data: model-type');
-            }
-            $type = $this->request->getData('model-type');
-            $title = $filename;
-            $attributes = compact('title');
-            $data = compact('type', 'attributes');
-            $body = compact('data');
-            $response = $this->apiClient->createMediaFromStream($streamId, $type, $body);
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
-
-            return $this->redirect([
-                '_name' => 'modules:create',
-                'object_type' => $this->objectType,
-            ]);
+        if (empty($response['data'])) {
+            return;
         }
 
-        return $this->redirect([
-            '_name' => 'modules:view',
-            'object_type' => $this->objectType,
-            'id' => $response['data']['id'],
-        ]);
+        // extract ids of objects
+        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
+        if (empty($ids)) {
+            return;
+        }
+
+        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
+
+        $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
+
+        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
+
+        foreach ($response['data'] as &$object) {
+            // extract url of the matching objectid's thumb
+            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
+            if (count($thumbnail)) {
+                $object['meta']['url'] = $thumbnail[0];
+            }
+        }
     }
 
     /**

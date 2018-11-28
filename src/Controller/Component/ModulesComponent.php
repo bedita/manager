@@ -13,11 +13,14 @@
 
 namespace App\Controller\Component;
 
+use App\Core\Exception\UploadException;
+use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -197,5 +200,71 @@ class ModulesComponent extends Component
         }
 
         return $types;
+    }
+
+    /**
+     * Upload a file and store it in a media stream
+     *
+     * @param array $requestData The request data from form
+     * @return void
+     */
+    public function upload(array &$requestData) : void
+    {
+        if (empty($requestData['file'])) {
+            return;
+        }
+
+        // verify upload form data
+        $this->checkRequestForUpload($requestData);
+
+        // upload file
+        $filename = $requestData['file']['name'];
+        $filepath = $requestData['file']['tmp_name'];
+        $headers = ['Content-Type' => $requestData['file']['type']];
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = $apiClient->upload($filename, $filepath, $headers);
+
+        // create media from stream
+        $streamId = $response['data']['id'];
+        $type = $requestData['model-type'];
+        // save only `title` (filename if not set) and `status` in new media object
+        $attributes = array_filter([
+            'title' => !empty($requestData['title']) ? $requestData['title'] : $filename,
+            'status' => Hash::get($requestData, 'status'),
+        ]);
+        $data = compact('type', 'attributes');
+        $body = compact('data');
+        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+
+        // set media id in request data
+        if (empty($requestData['id'])) {
+            $requestData['id'] = $response['data']['id'];
+        }
+        unset($requestData['title'], $requestData['status'], $requestData['file']);
+    }
+
+    /**
+     * Check request data for upload
+     *
+     * @param array $requestData The request data
+     * @return void
+     */
+    public function checkRequestForUpload(array $requestData) : void
+    {
+        // if upload error, throw exception
+        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $requestData['file']['error']);
+        }
+
+        // verify presence and value of 'name', 'tmp_name', 'type'
+        foreach (['name', 'tmp_name', 'type'] as $field) {
+            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
+                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
+            }
+        }
+        // verify 'model-type'
+        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
+            throw new InternalErrorException('Invalid form data: model-type');
+        }
     }
 }
