@@ -21,6 +21,21 @@ use Cake\Core\Exception\Exception;
 class UploadException extends Exception
 {
     /**
+     * Array to map upload error codes with proper message string
+     *
+     * @var array
+     */
+    protected $messagesMap = [
+        UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds current max size of {0}',
+        UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+        UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
+        UPLOAD_ERR_NO_FILE => 'No file was uploaded',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
+        UPLOAD_ERR_EXTENSION => 'File upload stopped by extension',
+    ];
+
+    /**
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
@@ -39,33 +54,10 @@ class UploadException extends Exception
      */
     private function codeToMessage(int $code) :string
     {
-        switch ($code) {
-            case UPLOAD_ERR_INI_SIZE:
-                $message = __('The uploaded file exceeds current max size of {0}', ini_get('upload_max_filesize'));
-                break;
-            case UPLOAD_ERR_FORM_SIZE:
-                $message = __('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form');
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                $message = __('The uploaded file was only partially uploaded');
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                $message = __('No file was uploaded');
-                break;
-            case UPLOAD_ERR_NO_TMP_DIR:
-                $message = __('Missing a temporary folder');
-                break;
-            case UPLOAD_ERR_CANT_WRITE:
-                $message = __('Failed to write file to disk');
-                break;
-            case UPLOAD_ERR_EXTENSION:
-                $message = __('File upload stopped by extension');
-                break;
-            default:
-                $message = __('Unknown upload error');
-                break;
+        if (in_array($code, array_keys($this->messagesMap))) {
+            return __($this->messagesMap[$code], ini_get('upload_max_filesize'));
         }
 
-        return $message;
+        return __('Unknown upload error');
     }
 }
