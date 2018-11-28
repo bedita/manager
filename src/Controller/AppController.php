@@ -146,7 +146,7 @@ class AppController extends Controller
         if (!empty($data['_jsonKeys'])) {
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
-                $data[$key] = json_decode($data[$key]);
+                $data[$key] = json_decode($data[$key], true);
             }
             unset($data['_jsonKeys']);
         }
