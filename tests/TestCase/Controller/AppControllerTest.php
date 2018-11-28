@@ -18,6 +18,8 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\Network\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Cake\Network\Exception\BadRequestException;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -161,6 +163,64 @@ class AppControllerTest extends TestCase
         $results = $this->invokeMethod($this->App, 'prepareRequest', [$objectType]);
 
         static::assertEquals($expected, $results);
+    }
+
+    /**
+    * Data provider for `testCheckRequest` test case.
+    *
+    * @return array
+    */
+    public function checkRequestProvider() : array
+    {
+        return [
+            'badRequest' => [
+                new BadRequestException('Empty request'),
+                null,
+                [],
+                null,
+            ],
+            'methodNotAllowed' => [
+                new MethodNotAllowedException(),
+                new ServerRequest(),
+                ['allowedMethods' => 'GET'],
+                [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                ],
+            ],
+            'requiredParameters' => [
+                new BadRequestException('Empty password'),
+                new ServerRequest(),
+                ['requiredParameters' => ['password']],
+                [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Test `checkRequest` method
+     *
+     * @covers ::checkRequest()
+     * @dataProvider checkRequestProvider()
+     *
+     * @return void
+     */
+    public function testCheckRequest($expected, $request, $params, $config) : void
+    {
+        $this->setupController($config);
+
+        $this->App->request = $request;
+
+        if ($expected instanceof \Exception) {
+            $this->expectException(get_class($expected));
+        }
+
+        $results = $this->invokeMethod($this->App, 'checkRequest', [$params]);
     }
 
     /**
