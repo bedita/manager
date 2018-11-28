@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
@@ -191,6 +192,41 @@ class AppControllerTest extends TestCase
 
         static::assertArrayHasKey('user', $this->App->viewVars);
         static::assertEquals($user, $this->App->viewVars['user']);
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @covers ::beforeRender()
+     *
+     * @return void
+     */
+    public function testBeforeRenderUpdateTokens() : void
+    {
+        $user = $this->setupControllerAndLogin();
+
+        // fake updated token
+        $updatedToken = [
+            'jwt' => 'oldToken',
+            'renew' => 'this is a new token',
+        ];
+
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+
+            // mocked getTokens method returns fake tokens
+        $apiClient->method('getTokens')
+            ->willReturn($updatedToken);
+
+        $this->App->apiClient = $apiClient;
+
+        $event = $this->App->dispatchEvent('Controller.beforeRender');
+        $this->App->beforeRender($event);
+
+        // asser user objects has been updated
+        static::assertArrayHasKey('user', $this->App->viewVars);
+        static::assertEquals($updatedToken, $this->App->viewVars['user']['tokens']);
     }
 
     /**
