@@ -54,7 +54,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Setup controller to test with request config
+     * Setup controller and manually login user
      *
      * @param array $requestConfig
      * @return void
@@ -152,7 +152,7 @@ class AppControllerTest extends TestCase
      */
     public function testSetupOutputTimezone() : void
     {
-        $user = $this->setupController();
+        $this->setupController();
         $expected = 'GMT';
 
         // mock for AuthComponent
@@ -172,6 +172,25 @@ class AppControllerTest extends TestCase
         $configTimezone = Configure::read('I18n.timezone');
 
         static::assertEquals($expected, $configTimezone);
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @covers ::beforeRender()
+     * dataProvider prepareRequestProvider()
+     *
+     * @return void
+     */
+    public function testBeforeRender() : void
+    {
+        $user = $this->setupControllerAndLogin();
+
+        $event = $this->App->dispatchEvent('Controller.beforeRender');
+        $this->App->beforeRender($event);
+
+        static::assertArrayHasKey('user', $this->App->viewVars);
+        static::assertEquals($user, $this->App->viewVars['user']);
     }
 
     /**
@@ -350,6 +369,14 @@ class AppControllerTest extends TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
+    /**
+     * Access protected/private property of a class.
+     *
+     * @param object &$object    Instantiated object that we will run method on.
+     * @param string $propertyName Property name to access
+     *
+     * @return mixed Method return.
+     */
     public function accessProperty(&$object, $propertyName)
     {
         $reflection = new \ReflectionClass(get_class($object));
