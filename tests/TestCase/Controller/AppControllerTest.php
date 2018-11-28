@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\MethodNotAllowedException;
@@ -36,6 +37,46 @@ class AppControllerTest extends TestCase
      * @var \App\Controller\AppController
      */
     public $App;
+
+    /**
+     * Setup controller to test with request config
+     *
+     * @param array $requestConfig
+     * @return void
+     */
+    protected function setupController($config = null) : void
+    {
+        $request = null;
+        if ($config != null) {
+            $request = new ServerRequest($config);
+        }
+        $this->App = new AppController($request);
+    }
+
+    /**
+     * Setup controller to test with request config
+     *
+     * @param array $requestConfig
+     * @return void
+     */
+    protected function setupControllerAndLogin()
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+            ],
+        ];
+        $this->setupController($config);
+
+        $user = $this->App->Auth->identify();
+        $this->App->Auth->setUser($user);
+
+        return $user;
+    }
 
     /**
      * test init function
@@ -66,7 +107,7 @@ class AppControllerTest extends TestCase
      */
     public function testBeforeFilterLoginError() : void
     {
-        $this->setupController($config);
+        $this->setupController();
 
         $event = $this->App->dispatchEvent('Controller.initialize');
         $this->App->beforeFilter($event);
@@ -89,19 +130,8 @@ class AppControllerTest extends TestCase
     {
         $expectedtokens = [];
 
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'username' => env('BEDITA_ADMIN_USR'),
-                'password' => env('BEDITA_ADMIN_PWD'),
-            ],
-        ];
-        $this->setupController($config);
+        $this->setupControllerAndLogin();
 
-        $user = $this->App->Auth->identify();
-        $this->App->Auth->setUser($user);
         $expectedtokens = $this->App->Auth->user('tokens');
 
         $event = $this->App->dispatchEvent('Controller.initialize');
@@ -114,18 +144,34 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Setup controller to test with request config
+     * test SetupOutputTimezone
      *
-     * @param array $requestConfig
+     * @covers ::setupOutputTimezone
+     *
      * @return void
      */
-    protected function setupController($config = null) : void
+    public function testSetupOutputTimezone() : void
     {
-        $request = null;
-        if ($config != null) {
-            $request = new ServerRequest($config);
-        }
-        $this->App = new AppController($request);
+        $user = $this->setupController();
+        $expected = 'GMT';
+
+        // mock for AuthComponent
+        $mockedAuthComponent = $this->getMockBuilder('AuthComponent')
+                    ->setMethods(['user'])
+                    ->getMock();
+
+        // moch for user method
+        $mockedAuthComponent->method('user')
+            ->with('timezone')
+            ->willReturn($expected);
+
+        $this->App->Auth = $mockedAuthComponent;
+
+        $this->invokeMethod($this->App, 'setupOutputTimezone');
+
+        $configTimezone = Configure::read('I18n.timezone');
+
+        static::assertEquals($expected, $configTimezone);
     }
 
     /**
