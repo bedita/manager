@@ -16,10 +16,10 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\AppController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
+use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Cake\Network\Exception\BadRequestException;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -166,10 +166,10 @@ class AppControllerTest extends TestCase
     }
 
     /**
-    * Data provider for `testCheckRequest` test case.
-    *
-    * @return array
-    */
+     * Data provider for `testCheckRequest` test case.
+     *
+     * @return array
+     */
     public function checkRequestProvider() : array
     {
         return [
