@@ -13,12 +13,14 @@
 
 namespace App\Controller\Component;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -212,15 +214,8 @@ class ModulesComponent extends Component
             return;
         }
 
-        // verify request data
-        foreach (['name', 'tmp_name', 'type'] as $field) {
-            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new \RuntimeException(sprintf('Invalid form data: file.%s', $field));
-            }
-        }
-        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
-            throw new \RuntimeException('Invalid form data: model-type');
-        }
+        // verify upload form data
+        $this->checkRequestForUpload($requestData);
 
         // upload file
         $filename = $requestData['file']['name'];
@@ -246,5 +241,30 @@ class ModulesComponent extends Component
             $requestData['id'] = $response['data']['id'];
         }
         unset($requestData['title'], $requestData['status'], $requestData['file']);
+    }
+
+    /**
+     * Check request data for upload
+     *
+     * @param array $requestData The request data
+     * @return void
+     */
+    public function checkRequestForUpload(array $requestData) : void
+    {
+        // if upload error, throw exception
+        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $requestData['file']['error']);
+        }
+
+        // verify presence and value of 'name', 'tmp_name', 'type'
+        foreach (['name', 'tmp_name', 'type'] as $field) {
+            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
+                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
+            }
+        }
+        // verify 'model-type'
+        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
+            throw new InternalErrorException('Invalid form data: model-type');
+        }
     }
 }
