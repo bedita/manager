@@ -37,12 +37,12 @@ class AppControllerTest extends TestCase
      *
      * @var \App\Controller\AppController
      */
-    public $App;
+    protected $AppController;
 
     /**
      * Setup controller to test with request config
      *
-     * @param array $requestConfig
+     * @param array $config configuration for controller setup
      * @return void
      */
     protected function setupController($config = null) : void
@@ -51,16 +51,15 @@ class AppControllerTest extends TestCase
         if ($config != null) {
             $request = new ServerRequest($config);
         }
-        $this->App = new AppController($request);
+        $this->AppController = new AppController($request);
     }
 
     /**
      * Setup controller and manually login user
      *
-     * @param array $requestConfig
-     * @return void
+     * @return array|null
      */
-    protected function setupControllerAndLogin()
+    protected function setupControllerAndLogin() : ?array
     {
         $config = [
             'environment' => [
@@ -73,8 +72,8 @@ class AppControllerTest extends TestCase
         ];
         $this->setupController($config);
 
-        $user = $this->App->Auth->identify();
-        $this->App->Auth->setUser($user);
+        $user = $this->AppController->Auth->identify();
+        $this->AppController->Auth->setUser($user);
 
         return $user;
     }
@@ -90,13 +89,13 @@ class AppControllerTest extends TestCase
     {
         $this->setupController();
 
-        static::assertNotEmpty($this->App->{'RequestHandler'});
-        static::assertNotEmpty($this->App->{'Flash'});
-        static::assertNotEmpty($this->App->{'Security'});
-        static::assertNotEmpty($this->App->{'Csrf'});
-        static::assertNotEmpty($this->App->{'Auth'});
-        static::assertNotEmpty($this->App->{'Modules'});
-        static::assertNotEmpty($this->App->{'Schema'});
+        static::assertNotEmpty($this->AppController->{'RequestHandler'});
+        static::assertNotEmpty($this->AppController->{'Flash'});
+        static::assertNotEmpty($this->AppController->{'Security'});
+        static::assertNotEmpty($this->AppController->{'Csrf'});
+        static::assertNotEmpty($this->AppController->{'Auth'});
+        static::assertNotEmpty($this->AppController->{'Modules'});
+        static::assertNotEmpty($this->AppController->{'Schema'});
     }
 
     /**
@@ -110,9 +109,9 @@ class AppControllerTest extends TestCase
     {
         $this->setupController();
 
-        $event = $this->App->dispatchEvent('Controller.initialize');
-        $this->App->beforeFilter($event);
-        $flash = $this->App->request->getSession()->read('Flash');
+        $event = $this->AppController->dispatchEvent('Controller.initialize');
+        $this->AppController->beforeFilter($event);
+        $flash = $this->AppController->request->getSession()->read('Flash');
 
         $expected = __('You are not logged or your session has expired, please provide login credentials');
         $message = $flash['flash'][0]['message'];
@@ -133,12 +132,12 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        $expectedtokens = $this->App->Auth->user('tokens');
+        $expectedtokens = $this->AppController->Auth->user('tokens');
 
-        $event = $this->App->dispatchEvent('Controller.initialize');
-        $this->App->beforeFilter($event);
+        $event = $this->AppController->dispatchEvent('Controller.initialize');
+        $this->AppController->beforeFilter($event);
 
-        $apiClient = $this->accessProperty($this->App, 'apiClient');
+        $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $this->accessProperty($apiClient, 'tokens');
 
         static::assertEquals($expectedtokens, $apiClientTokens);
@@ -166,9 +165,9 @@ class AppControllerTest extends TestCase
             ->with('timezone')
             ->willReturn($expected);
 
-        $this->App->Auth = $mockedAuthComponent;
+        $this->AppController->Auth = $mockedAuthComponent;
 
-        $this->invokeMethod($this->App, 'setupOutputTimezone');
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
 
         $configTimezone = Configure::read('I18n.timezone');
 
@@ -187,11 +186,11 @@ class AppControllerTest extends TestCase
     {
         $user = $this->setupControllerAndLogin();
 
-        $event = $this->App->dispatchEvent('Controller.beforeRender');
-        $this->App->beforeRender($event);
+        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->beforeRender($event);
 
-        static::assertArrayHasKey('user', $this->App->viewVars);
-        static::assertEquals($user, $this->App->viewVars['user']);
+        static::assertArrayHasKey('user', $this->AppController->viewVars);
+        static::assertEquals($user, $this->AppController->viewVars['user']);
     }
 
     /**
@@ -219,14 +218,14 @@ class AppControllerTest extends TestCase
         $apiClient->method('getTokens')
             ->willReturn($updatedToken);
 
-        $this->App->apiClient = $apiClient;
+        $this->AppController->apiClient = $apiClient;
 
-        $event = $this->App->dispatchEvent('Controller.beforeRender');
-        $this->App->beforeRender($event);
+        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->beforeRender($event);
 
         // asser user objects has been updated
-        static::assertArrayHasKey('user', $this->App->viewVars);
-        static::assertEquals($updatedToken, $this->App->viewVars['user']['tokens']);
+        static::assertArrayHasKey('user', $this->AppController->viewVars);
+        static::assertEquals($updatedToken, $this->AppController->viewVars['user']['tokens']);
     }
 
     /**
@@ -324,7 +323,7 @@ class AppControllerTest extends TestCase
 
         $this->setupController($config);
 
-        $results = $this->invokeMethod($this->App, 'prepareRequest', [$objectType]);
+        $results = $this->invokeMethod($this->AppController, 'prepareRequest', [$objectType]);
 
         static::assertEquals($expected, $results);
     }
@@ -388,14 +387,14 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
 
         if ($config == null) {
-            $this->App->request = $config;
+            $this->AppController->request = $config;
         }
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
         }
 
-        $results = $this->invokeMethod($this->App, 'checkRequest', [$params]);
+        $results = $this->invokeMethod($this->AppController, 'checkRequest', [$params]);
 
         static::assertEquals($expected, $results);
     }
@@ -403,7 +402,7 @@ class AppControllerTest extends TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object &$object    Instantiated object that we will run method on.
+     * @param object &$object Instantiated object that we will run method on.
      * @param string $methodName Method name to call
      * @param array  $parameters Array of parameters to pass into method.
      *
