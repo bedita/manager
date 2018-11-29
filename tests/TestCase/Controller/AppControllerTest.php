@@ -79,7 +79,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test init function
+     * test `initialize` function
      *
      * @covers ::initialize()
      *
@@ -99,7 +99,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test 'beforeFilter' not logged error
+     * test `beforeFilter` not logged error
      *
      * @covers ::beforeFilter()
      *
@@ -120,7 +120,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test 'beforeFilter' correct apiClient token setup
+     * test 'beforeFilter' for correct apiClient token setup
      *
      * @covers ::beforeFilter()
      *
@@ -144,7 +144,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test SetupOutputTimezone
+     * test `setupOutputTimezone`
      *
      * @covers ::setupOutputTimezone
      *
@@ -178,7 +178,6 @@ class AppControllerTest extends TestCase
      * Test `beforeRender` method
      *
      * @covers ::beforeRender()
-     * dataProvider prepareRequestProvider()
      *
      * @return void
      */
@@ -223,7 +222,7 @@ class AppControllerTest extends TestCase
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
         $this->AppController->beforeRender($event);
 
-        // asser user objects has been updated
+        // assert user objects has been updated
         static::assertArrayHasKey('user', $this->AppController->viewVars);
         static::assertEquals($updatedToken, $this->AppController->viewVars['user']['tokens']);
     }
@@ -304,6 +303,10 @@ class AppControllerTest extends TestCase
     /**
      * Test `prepareRequest` method
      *
+     * @param string $objectType The object type
+     * @param array $expected The expected request data
+     * @param array $data The payload data
+     *
      * @covers ::prepareRequest()
      * @dataProvider prepareRequestProvider()
      *
@@ -323,9 +326,9 @@ class AppControllerTest extends TestCase
 
         $this->setupController($config);
 
-        $results = $this->invokeMethod($this->AppController, 'prepareRequest', [$objectType]);
+        $actual = $this->invokeMethod($this->AppController, 'prepareRequest', [$objectType]);
 
-        static::assertEquals($expected, $results);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -394,9 +397,9 @@ class AppControllerTest extends TestCase
             $this->expectException(get_class($expected));
         }
 
-        $results = $this->invokeMethod($this->AppController, 'checkRequest', [$params]);
+        $actual = $this->invokeMethod($this->AppController, 'checkRequest', [$params]);
 
-        static::assertEquals($expected, $results);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -420,7 +423,7 @@ class AppControllerTest extends TestCase
     /**
      * Access protected/private property of a class.
      *
-     * @param object &$object    Instantiated object that we will run method on.
+     * @param object &$object Instantiated object that we will run method on.
      * @param string $propertyName Property name to access
      *
      * @return mixed Method return.
