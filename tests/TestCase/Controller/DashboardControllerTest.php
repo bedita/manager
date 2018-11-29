@@ -93,6 +93,9 @@ class DashboardControllerTest extends TestCase
     /**
      * Test `index` method
      *
+     * @param MethodNotAllowedException|null $expected The expected exception or null
+     * @param string $method The request method, can be 'GET', 'PATCH', 'POST', 'DELETE'
+     *
      * @covers ::index()
      * @dataProvider indexProvider()
      *

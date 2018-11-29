@@ -15,14 +15,11 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClient;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
-use Composer\Script\Event;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -157,8 +154,8 @@ class AppControllerTest extends TestCase
 
         // mock for AuthComponent
         $mockedAuthComponent = $this->getMockBuilder('AuthComponent')
-                    ->setMethods(['user'])
-                    ->getMock();
+            ->setMethods(['user'])
+            ->getMock();
 
         // moch for user method
         $mockedAuthComponent->method('user')
@@ -175,7 +172,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Test `beforeRender` method
+     * Test `beforeRender` method for correct user object in Controller viewVars
      *
      * @covers ::beforeRender()
      *
@@ -193,7 +190,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Test `beforeRender` method
+     * Test `beforeRender` method, when updating tokens in session
      *
      * @covers ::beforeRender()
      *
