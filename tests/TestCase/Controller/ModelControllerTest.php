@@ -148,11 +148,11 @@ class ModelControllerTest extends TestCase
     }
 
     /**
-     * Data provider for `testSavePropertiesJson` test case.
+     * Data provider for `testSavePropertyTypesJson` test case.
      *
      * @return array
      */
-    public function savePropertiesJsonProvider() : Array
+    public function savePropertyTypesJsonProvider() : Array
     {
         return [
             // test with empty object
@@ -228,14 +228,14 @@ class ModelControllerTest extends TestCase
     }
 
     /**
-     * Test `savePropertiesJson` method
+     * Test `savePropertiyTypesJson` method
      *
-     * @dataProvider savePropertiesJsonProvider()
-     * @covers ::savePropertiesJson()
+     * @dataProvider savePropertyTypesJsonProvider()
+     * @covers ::savePropertiyTypesJson()
      *
      * @return void
      */
-    public function testSavePropertiesJson($expectedResponse, $post, $action)
+    public function testSavePropertyTypesJson($expectedResponse, $post, $action)
     {
         $config = [
             'environment' => [
@@ -253,7 +253,7 @@ class ModelControllerTest extends TestCase
             $this->expectExceptionMessage($expectedResponse->getMessage());
         }
 
-        $this->ModelController->savePropertiesJson();
+        $this->ModelController->savePropertyTypesJson();
 
         $actualResponse = $this->ModelController->viewVars[$action];
 
