@@ -228,10 +228,10 @@ class ModelControllerTest extends TestCase
     }
 
     /**
-     * Test `savePropertiyTypesJson` method
+     * Test `savePropertyTypesJson` method
      *
      * @dataProvider savePropertyTypesJsonProvider()
-     * @covers ::savePropertiyTypesJson()
+     * @covers ::savePropertyTypesJson()
      *
      * @return void
      */
