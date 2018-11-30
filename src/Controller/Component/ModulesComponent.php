@@ -13,12 +13,14 @@
 
 namespace App\Controller\Component;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -212,15 +214,11 @@ class ModulesComponent extends Component
             return;
         }
 
-        // verify request data
-        foreach (['name', 'tmp_name', 'type'] as $field) {
-            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new \RuntimeException(sprintf('Invalid form data: file.%s', $field));
-            }
-        }
-        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
-            throw new \RuntimeException('Invalid form data: model-type');
-        }
+        // verify upload form data
+        $this->checkRequestForUpload($requestData);
+
+        // has another stream? drop it
+        $this->removeStream($requestData);
 
         // upload file
         $filename = $requestData['file']['name'];
@@ -229,22 +227,93 @@ class ModulesComponent extends Component
         $apiClient = ApiClientProvider::getApiClient();
         $response = $apiClient->upload($filename, $filepath, $headers);
 
-        // create media from stream
+        // assoc stream to media
         $streamId = $response['data']['id'];
-        $type = $requestData['model-type'];
-        // save only `title` (filename if not set) and `status` in new media object
-        $attributes = array_filter([
-            'title' => !empty($requestData['title']) ? $requestData['title'] : $filename,
-            'status' => Hash::get($requestData, 'status'),
-        ]);
-        $data = compact('type', 'attributes');
-        $body = compact('data');
-        $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+        $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
 
-        // set media id in request data
-        if (empty($requestData['id'])) {
-            $requestData['id'] = $response['data']['id'];
-        }
+        // unset some data from request
         unset($requestData['title'], $requestData['status'], $requestData['file']);
+    }
+
+    /**
+     * Remove a stream from a media, if any
+     *
+     * @param array $requestData The request data from form
+     * @return void
+     */
+    public function removeStream(array $requestData) : void
+    {
+        if (empty($requestData['id'])) {
+            return;
+        }
+
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = $apiClient->get(sprintf('/%s/%s/streams', $requestData['model-type'], $requestData['id']));
+        if (empty($response['data'])) { // no streams for media
+            return;
+        }
+        $streamId = Hash::get($response, 'data.0.id');
+        $apiClient->deleteObject($streamId, 'streams');
+    }
+
+    /**
+     * Associate a stream to a media using API
+     * If $requestData['id'] is null, create media from stream.
+     * If $requestData['id'] is not null, replace properly related stream.
+     *
+     * @param string $streamId The stream ID
+     * @param array $requestData The request data
+     * @param string $defaultTitle The default title for media
+     * @return string The media ID
+     */
+    public function assocStreamToMedia(string $streamId, array $requestData, string $defaultTitle) : string
+    {
+        $apiClient = ApiClientProvider::getApiClient();
+        $type = $requestData['model-type'];
+        if (empty($requestData['id'])) {
+            // create media from stream
+            // save only `title` (filename if not set) and `status` in new media object
+            $attributes = array_filter([
+                'title' => !empty($requestData['title']) ? $requestData['title'] : $defaultTitle,
+                'status' => Hash::get($requestData, 'status'),
+            ]);
+            $data = compact('type', 'attributes');
+            $body = compact('data');
+            $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+
+            return $response['data']['id'];
+        }
+
+        // assoc existing media to stream
+        $id = $requestData['id'];
+        $data = compact('id', 'type');
+        $apiClient->replaceRelated($streamId, 'streams', 'object', $data);
+
+        return $id;
+    }
+
+    /**
+     * Check request data for upload
+     *
+     * @param array $requestData The request data
+     * @return void
+     */
+    public function checkRequestForUpload(array $requestData) : void
+    {
+        // if upload error, throw exception
+        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $requestData['file']['error']);
+        }
+
+        // verify presence and value of 'name', 'tmp_name', 'type'
+        foreach (['name', 'tmp_name', 'type'] as $field) {
+            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
+                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
+            }
+        }
+        // verify 'model-type'
+        if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
+            throw new InternalErrorException('Invalid form data: model-type');
+        }
     }
 }
