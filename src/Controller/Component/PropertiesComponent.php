@@ -59,7 +59,6 @@ class PropertiesComponent extends Component
 
         'filter' => [
             'status',
-            'lang',
         ],
     ];
 
@@ -71,10 +70,7 @@ class PropertiesComponent extends Component
         Configure::load('properties');
         $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
 
-        $defaultFilter = [
-            'filter' => $this->defaultGroups['filter'],
-        ];
-
+        // setting default prop from defaultGroups object
         foreach ($propConfig as $objectType => &$conf) {
             if (empty($conf['filter'])) {
                 $conf['filter'] = [];

@@ -350,12 +350,11 @@ const _vueInstance = new Vue({
                                     const filter = query[filterKey];
                                     Object.keys(filter).forEach((modifier) => {
                                         if (filter[modifier] !== '') {
-                                            // cerca modificatori
+                                            // look up for param modifier (i.e dates)
                                             fields.push(`filter[${filterKey}][${modifier}]=${filter[modifier]}`);
                                         }
                                     });
                                 } else if (query[filterKey] !== '') {
-                                    // cerca modificatori
                                     fields.push(`filter[${filterKey}]=${query[filterKey]}`);
                                 }
                             });
