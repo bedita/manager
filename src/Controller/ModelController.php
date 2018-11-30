@@ -140,7 +140,7 @@ class ModelController extends AppController
      *
      * @return {void}
      */
-    public function savePropertiesJson()
+    public function savePropertyTypesJson() : void
     {
         $payload = $this->request->getData();
 
@@ -216,6 +216,6 @@ class ModelController extends AppController
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->set('_serialize', true);
     }
 }

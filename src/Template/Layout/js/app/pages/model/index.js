@@ -210,7 +210,7 @@ export default {
                 body: JSON.stringify( payload ),
             };
 
-            const postUrl = `${baseUrl}/savePropertiesJson`;
+            const postUrl = `${baseUrl}/savePropertyTypesJson`;
 
             fetch(postUrl, options)
                 .then((res) => res.json())
