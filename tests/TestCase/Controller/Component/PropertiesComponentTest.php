@@ -87,9 +87,8 @@ class PropertiesComponentTest extends TestCase
         Configure::write('Properties.documents.filter', $filter);
 
         $this->createComponent();
-        $defaultFilter = $this->Properties->defaultGroups['filter'];
 
-        $expectedFilter = array_merge($defaultFilter, $filter);
+        $expectedFilter = $filter;
 
         $filterList = $this->Properties->filterList('documents');
         static::assertEquals($expectedFilter, $filterList);

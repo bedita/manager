@@ -24,10 +24,10 @@ import merge from 'deepmerge';
 
 export default {
     components: {
-        InputDynamicAttributes,
+        InputDynamicAttributes
     },
 
-    template:`
+    template: `
     <form :name="objectsLabel" submit="applyFilter">
         <nav class="pagination has-text-size-smallest">
 
@@ -58,11 +58,11 @@ export default {
 
             <div class="filter-list">
                 <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
-
-                    <label :for="filter.name"><: filter.name :></label>
                     <input type="hidden" :name="filter.name" :value="filter.value">
 
-                    <div v-if="filter.type === 'select' || filter.type === 'radio'">
+                    <span class="filter-name" :title="filterLabel(filter.name)"><: filter.name :></span>
+
+                    <span v-if="filter.type === 'select' || filter.type === 'radio'">
                         <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
                             <option value="">
                                 All
@@ -71,9 +71,9 @@ export default {
                                 <: option.text :>
                             </option>
                         </select>
-                    </div>
+                    </span>
 
-                    <div v-else-if="filter.type === 'text' && filter.date">
+                    <span v-else-if="filter.date">
                         <span>
                             <label>From:
                                 <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
@@ -84,11 +84,11 @@ export default {
                                 <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
                             </label>
                         </span>
-                    </div>
+                    </span>
 
-                    <div v-else>
+                    <span v-else>
                         <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
-                    </div>
+                    </span>
                 </div>
             </div>
 
@@ -141,67 +141,72 @@ export default {
     props: {
         applyFilterLabel: {
             type: String,
-            default: 'Apply'
+            default: "Apply"
         },
         resetFilterLabel: {
             type: String,
-            default: 'Reset',
+            default: "Reset"
         },
         objectsLabel: {
             type: String,
-            default: 'Objects',
+            default: "Objects"
         },
         pageSizesLabel: {
             type: String,
-            default: 'Size',
+            default: "Size"
         },
         placeholder: {
             type: String,
-            default: 'Search',
+            default: "Search"
         },
         showFilterButtons: {
             type: Boolean,
-            default: true,
+            default: true
         },
         initFilter: {
             type: Object,
             default: () => {
                 return {
-                    q: '',
+                    q: "",
                     filter: {
-                        type: '',
+                        type: ""
                     }
-                }
-            },
+                };
+            }
         },
         relationTypes: {
-            type: Object,
+            type: Object
         },
         filterList: {
-            type: Array,
+            type: Array
         },
         pagination: {
             type: Object,
-            default: () => DEFAULT_PAGINATION,
+            default: () => DEFAULT_PAGINATION
         },
         configPaginateSizes: {
             type: String,
-            default: '[10]',
-        },
+            default: "[10]"
+        }
     },
 
     data() {
         return {
             queryFilter: {}, // QueryFilter Object
             timer: null,
-            pageSize: this.pagination.page_size, // pageSize value for pagination page size
-        }
+            pageSize: this.pagination.page_size // pageSize value for pagination page size
+        };
     },
 
     created() {
         // merge default filters with initFilter
         let customFilters = this.loadCustomFilters();
-        this.queryFilter = merge.all([ DEFAULT_FILTER, this.queryFilter, customFilters, this.initFilter ]);
+        this.queryFilter = merge.all([
+            DEFAULT_FILTER,
+            this.queryFilter,
+            customFilters,
+            this.initFilter
+        ]);
     },
 
     computed: {
@@ -215,7 +220,7 @@ export default {
          * @returns {Array} array of object types
          */
         rightTypes() {
-            return this.relationTypes && this.relationTypes.right || [];
+            return (this.relationTypes && this.relationTypes.right) || [];
         },
 
         /**
@@ -224,7 +229,10 @@ export default {
          * @return {void}
          */
         isFullPaginationLayout() {
-            return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
+            return (
+                this.pagination.page_count > 1 &&
+                this.pagination.page_count <= 7
+            );
         },
     },
 
@@ -250,23 +258,23 @@ export default {
          * @returns {void}
          */
         pageSize(value) {
-            this.$emit('filter-update-page-size', this.pageSize);
-        },
+            this.$emit("filter-update-page-size", this.pageSize);
+        }
     },
 
     methods: {
         /**
-        * trigger filter-objects event when query string has 3 or more carachter
-        *
-        * @emits Event#filter-objects
-        */
+         * trigger filter-objects event when query string has 3 or more carachter
+         *
+         * @emits Event#filter-objects
+         */
         onQueryStringChange() {
-            let queryString = this.queryFilter.q || '';
+            let queryString = this.queryFilter.q || "";
 
             clearTimeout(this.timer);
             if (queryString.length >= 3 || queryString.length == 0) {
                 this.timer = setTimeout(() => {
-                    this.$emit('filter-objects', this.queryFilter);
+                    this.$emit("filter-objects", this.queryFilter);
                 }, 300);
             }
         },
@@ -279,7 +287,9 @@ export default {
         loadCustomFilters() {
             let filter = {};
             if (this.filterList) {
-                this.filterList.forEach(f => filter[f.name] = (f.date ? {} : '' ) );
+                this.filterList.forEach(
+                    f => (filter[f.name] = f.date ? {} : "")
+                );
             }
 
             return { filter: filter };
@@ -291,7 +301,7 @@ export default {
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
-            this.$emit('filter-objects-submit', this.queryFilter);
+            this.$emit("filter-objects-submit", this.queryFilter);
         },
 
         /**
@@ -300,7 +310,11 @@ export default {
          * @emits Event#filter-reset
          */
         resetFilter() {
-            this.$emit('filter-reset');
+            this.$emit("filter-reset");
+        },
+
+        filterLabel(filterName) {
+            return `filter name ${filterName}`;
         },
 
         /**
@@ -311,7 +325,7 @@ export default {
          * @emits Event#filter-update-current-page
          */
         changePage(index) {
-            this.$emit('filter-update-current-page', index);
+            this.$emit("filter-update-current-page", index);
         }
     }
-}
+};

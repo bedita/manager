@@ -8,10 +8,14 @@
     .filter-list {
         order: 3;
         display: flex;
-        width: 100%;
 
         .filter-container {
             padding: $gutter * .5;
+
+            .filter-name {
+                border-bottom: 1px solid $gray-600;
+                margin: 0 $gutter * 0.5;
+            }
         }
     }
 

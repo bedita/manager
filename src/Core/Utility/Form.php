@@ -95,6 +95,7 @@ class Form
         return [
             'type' => 'text',
             'v-datepicker' => 'true',
+            'date' => 'true',
             'time' => 'true',
             'value' => $value,
         ];
@@ -111,6 +112,7 @@ class Form
         return [
             'type' => 'text',
             'v-datepicker' => 'true',
+            'date' => 'true',
             'time' => 'false',
             'value' => $value,
         ];

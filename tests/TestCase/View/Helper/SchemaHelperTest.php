@@ -200,6 +200,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'text',
                     'v-datepicker' => 'true',
+                    'date' => 'true',
                     'time' => 'true',
                     'value' => 'test',
                 ],

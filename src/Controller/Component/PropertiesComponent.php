@@ -68,18 +68,7 @@ class PropertiesComponent extends Component
     public function initialize(array $config)
     {
         Configure::load('properties');
-        $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
-
-        // setting default prop from defaultGroups object
-        foreach ($propConfig as $objectType => &$conf) {
-            if (empty($conf['filter'])) {
-                $conf['filter'] = [];
-            }
-            $conf['filter'] = array_merge($this->defaultGroups['filter'], $conf['filter']);
-        }
-        unset($conf);
-
-        $this->setConfig('Properties', $propConfig);
+        $this->setConfig('Properties', array_merge(Configure::read('DefaultProperties'), Configure::read('Properties')));
         parent::initialize($config);
     }
 

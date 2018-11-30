@@ -295,6 +295,7 @@ class FormTest extends TestCase
                 [
                     'type' => 'text',
                     'v-datepicker' => 'true',
+                    'date' => 'true',
                     'time' => 'true',
                     'value' => '2018-01-31 08:45:00',
                 ],
@@ -306,6 +307,7 @@ class FormTest extends TestCase
                 [
                     'type' => 'text',
                     'v-datepicker' => 'true',
+                    'date' => 'true',
                     'time' => 'false',
                     'value' => '2018-01-31',
                 ],
