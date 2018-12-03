@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -549,6 +550,32 @@ class ModulesComponentTest extends TestCase
                 null,
                 true,
             ],
+            'generic upload error' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
+                        'error' => !UPLOAD_ERR_OK,
+                    ],
+                    'model-type' => 'images',
+                ],
+                new UploadException(null, !UPLOAD_ERR_OK),
+                true,
+            ],
+            'save with empty file' => [
+                [
+                    'file' => [
+                        'name' => $name,
+                        'tmp_name' => $file,
+                        'type' => $type,
+                        'error' => UPLOAD_ERR_NO_FILE,
+                    ],
+                    'model-type' => 'images',
+                ],
+                null,
+                true,
+            ],
         ];
     }
 
@@ -563,6 +590,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::upload()
      * @covers ::removeStream()
      * @covers ::assocStreamToMedia()
+     * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()
      */
     public function testUpload(array $requestData, $expectedException, bool $uploaded) : void
