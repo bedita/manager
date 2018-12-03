@@ -300,6 +300,11 @@ class ModulesComponent extends Component
      */
     public function checkRequestForUpload(array $requestData) : void
     {
+        // check if change file is empty
+        if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
+            return;
+        }
+
         // if upload error, throw exception
         if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
             throw new UploadException(null, $requestData['file']['error']);
