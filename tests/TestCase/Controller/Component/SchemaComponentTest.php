@@ -74,7 +74,7 @@ class SchemaComponentTest extends TestCase
                 ],
                 null,
                 [
-                    'type' => 'you-are-not-my-type',
+                    'type' => 'objects',
                 ],
             ],
             'client exception' => [
@@ -102,6 +102,7 @@ class SchemaComponentTest extends TestCase
      * @dataProvider getSchemaProvider()
      * @covers ::fetchSchema()
      * @covers ::getSchema()
+     * @covers ::loadWithRevision()
      */
     public function testGetSchema($expected, $schema, ?string $type, array $config = []) : void
     {
