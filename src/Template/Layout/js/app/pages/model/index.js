@@ -188,7 +188,8 @@ export default {
                 }
             }
 
-            let baseUrl = window.location.href;
+            let fullUrl = window.location.href;
+            let baseUrl = fullUrl.replace(window.location.search, '');
 
             let headers = new Headers({
                 'Content-Type': 'application/json',

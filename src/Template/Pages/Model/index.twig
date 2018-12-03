@@ -120,8 +120,7 @@
             <div v-for="propertyType in savedPropertyTypes"
                 v-if="!containsId(deletedPropertyTypes, propertyType.id)"
                 class="index-entry"
-                :class="containsId(removePropertyTypes, propertyType.id) && 'delete-property-type'
-                        ">
+                :class="containsId(removePropertyTypes, propertyType.id) && 'delete-property-type'">
 
                 <div class="first-cell">
                     <: propertyType.id :>

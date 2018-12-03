@@ -95,9 +95,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     $routes->connect(
-        '/model/:resource_type/savePropertiesJson',
-        ['controller' => 'Model', 'action' => 'savePropertiesJson'],
-        ['_name' => 'model:savePropertiesJson']
+        '/model/:resource_type/savePropertyTypesJson',
+        ['controller' => 'Model', 'action' => 'savePropertyTypesJson'],
+        ['_name' => 'model:savePropertyTypesJson']
     );
 
     $routes->connect(

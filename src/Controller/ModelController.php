@@ -62,7 +62,7 @@ class ModelController extends AppController
             throw new UnauthorizedException(__('Module access not authorized'));
         }
 
-        $this->Security->setConfig('unlockedActions', ['savePropertiesJson']);
+        $this->Security->setConfig('unlockedActions', ['savePropertyTypesJson']);
 
         return parent::beforeFilter($event);
     }
@@ -138,7 +138,7 @@ class ModelController extends AppController
     /**
      * save property types (add/edit/delete)
      *
-     * @return {void}
+     * @return void
      */
     public function savePropertyTypesJson() : void
     {
