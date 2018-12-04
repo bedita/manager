@@ -215,21 +215,21 @@ class ModulesComponent extends Component
         }
 
         // verify upload form data
-        $this->checkRequestForUpload($requestData);
+        if ($this->checkRequestForUpload($requestData)) {
+            // has another stream? drop it
+            $this->removeStream($requestData);
 
-        // has another stream? drop it
-        $this->removeStream($requestData);
+            // upload file
+            $filename = $requestData['file']['name'];
+            $filepath = $requestData['file']['tmp_name'];
+            $headers = ['Content-Type' => $requestData['file']['type']];
+            $apiClient = ApiClientProvider::getApiClient();
+            $response = $apiClient->upload($filename, $filepath, $headers);
 
-        // upload file
-        $filename = $requestData['file']['name'];
-        $filepath = $requestData['file']['tmp_name'];
-        $headers = ['Content-Type' => $requestData['file']['type']];
-        $apiClient = ApiClientProvider::getApiClient();
-        $response = $apiClient->upload($filename, $filepath, $headers);
-
-        // assoc stream to media
-        $streamId = $response['data']['id'];
-        $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+            // assoc stream to media
+            $streamId = $response['data']['id'];
+            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+        }
 
         // unset some data from request
         unset($requestData['title'], $requestData['status'], $requestData['file']);
@@ -293,16 +293,17 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Check request data for upload
+     * Check request data for upload and return true if upload is boht possible and needed
+     *
      *
      * @param array $requestData The request data
-     * @return void
+     * @return bool true if upload is possible and needed
      */
-    public function checkRequestForUpload(array $requestData) : void
+    public function checkRequestForUpload(array $requestData) : bool
     {
         // check if change file is empty
         if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
-            return;
+            return false;
         }
 
         // if upload error, throw exception
@@ -320,5 +321,7 @@ class ModulesComponent extends Component
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new InternalErrorException('Invalid form data: model-type');
         }
+
+        return true;
     }
 }
