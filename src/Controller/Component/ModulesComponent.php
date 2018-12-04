@@ -215,24 +215,22 @@ class ModulesComponent extends Component
         }
 
         // verify upload form data
-        $this->checkRequestForUpload($requestData);
+        if ($this->checkRequestForUpload($requestData)) {
+            // has another stream? drop it
+            $this->removeStream($requestData);
 
-        // has another stream? drop it
-        $this->removeStream($requestData);
+            // upload file
+            $filename = $requestData['file']['name'];
+            $filepath = $requestData['file']['tmp_name'];
+            $headers = ['Content-Type' => $requestData['file']['type']];
+            $apiClient = ApiClientProvider::getApiClient();
+            $response = $apiClient->upload($filename, $filepath, $headers);
 
-        // upload file
-        $filename = $requestData['file']['name'];
-        $filepath = $requestData['file']['tmp_name'];
-        $headers = ['Content-Type' => $requestData['file']['type']];
-        $apiClient = ApiClientProvider::getApiClient();
-        $response = $apiClient->upload($filename, $filepath, $headers);
-
-        // assoc stream to media
-        $streamId = $response['data']['id'];
-        $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
-
-        // unset some data from request
-        unset($requestData['title'], $requestData['status'], $requestData['file']);
+            // assoc stream to media
+            $streamId = $response['data']['id'];
+            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+        }
+        unset($requestData['file']);
     }
 
     /**
@@ -266,7 +264,7 @@ class ModulesComponent extends Component
      * @param string $defaultTitle The default title for media
      * @return string The media ID
      */
-    public function assocStreamToMedia(string $streamId, array $requestData, string $defaultTitle) : string
+    public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle) : string
     {
         $apiClient = ApiClientProvider::getApiClient();
         $type = $requestData['model-type'];
@@ -280,6 +278,8 @@ class ModulesComponent extends Component
             $data = compact('type', 'attributes');
             $body = compact('data');
             $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+            // `title` and `status` saved here, remove from next save
+            unset($requestData['title'], $requestData['status']);
 
             return $response['data']['id'];
         }
@@ -293,13 +293,19 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Check request data for upload
+     * Check request data for upload and return true if upload is boht possible and needed
+     *
      *
      * @param array $requestData The request data
-     * @return void
+     * @return bool true if upload is possible and needed
      */
-    public function checkRequestForUpload(array $requestData) : void
+    public function checkRequestForUpload(array $requestData) : bool
     {
+        // check if change file is empty
+        if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
+            return false;
+        }
+
         // if upload error, throw exception
         if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
             throw new UploadException(null, $requestData['file']['error']);
@@ -315,5 +321,7 @@ class ModulesComponent extends Component
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new InternalErrorException('Invalid form data: model-type');
         }
+
+        return true;
     }
 }
