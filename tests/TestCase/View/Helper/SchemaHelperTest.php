@@ -136,7 +136,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
-                    'v-jsoneditor' => '',
+                    'v-jsoneditor' => 'true',
                     'class' => 'json',
                     'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
                 ],
@@ -166,7 +166,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => '',
+                    'v-richeditor' => 'true',
                     'ckconfig' => 'configNormal',
                     'type' => 'textarea',
                     'value' => 'test',
@@ -183,7 +183,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => '',
+                    'v-richeditor' => 'true',
                     'ckconfig' => 'configNormal',
                     'value' => 'test',
                 ],
@@ -199,7 +199,8 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'text',
-                    'v-datepicker' => '',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
                     'time' => 'true',
                     'value' => 'test',
                 ],

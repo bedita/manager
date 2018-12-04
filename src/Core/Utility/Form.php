@@ -62,7 +62,7 @@ class Form
     {
         return [
             'type' => 'textarea',
-            'v-jsoneditor' => '',
+            'v-jsoneditor' => 'true',
             'class' => 'json',
             'value' => json_encode($value),
         ];
@@ -78,7 +78,7 @@ class Form
     {
         return [
             'type' => 'textarea',
-            'v-richeditor' => '',
+            'v-richeditor' => 'true',
             'ckconfig' => 'configNormal',
             'value' => $value,
         ];
@@ -94,7 +94,8 @@ class Form
     {
         return [
             'type' => 'text',
-            'v-datepicker' => '',
+            'v-datepicker' => 'true',
+            'date' => 'true',
             'time' => 'true',
             'value' => $value,
         ];
@@ -110,7 +111,8 @@ class Form
     {
         return [
             'type' => 'text',
-            'v-datepicker' => '',
+            'v-datepicker' => 'true',
+            'date' => 'true',
             'time' => 'false',
             'value' => $value,
         ];

@@ -1,7 +1,7 @@
 /**
  * Filter Box View component
  *
- * allows to filter a list of objects with a text field and a pagination toolbar
+ * allows to filter a list of objects with a text field, properties and a pagination toolbar
  *
  * <filter-box-view> component
  *
@@ -13,28 +13,40 @@
  * @prop {Boolean} showFilterButtons
  * @prop {Object} initFilter
  * @prop {Object} relationTypes relation types available for relation (left/right)
+ * @prop {Array} filterList custom filters to show
  * @prop {Object} pagination
  * @prop {String} configPaginateSizes
  */
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
+import InputDynamicAttributes from 'app/components/input-dynamic-attributes';
+import merge from 'deepmerge';
 
 export default {
-    template:
-    `
+    components: {
+        InputDynamicAttributes
+    },
+
+    template: `
+    <form :name="objectsLabel" submit="applyFilter">
         <nav class="pagination has-text-size-smallest">
 
             <div class="count-items" v-if="pagination.count">
                 <span><: pagination.count :> <: objectsLabel :></span>
             </div>
 
+
             <div class="filter-search">
                 <span class="search-query">
-                    <input type="text" :placeholder="placeholder" v-model="filter" @keyup.enter.prevent.stop="applyFilter()"/>
+                    <input type="text"
+                        :placeholder="placeholder"
+                        v-model="queryFilter.q"
+                        @keyup.prevent.stop="onQueryStringChange"
+                        @keyup.enter.prevent.stop="applyFilter"/>
                 </span>
 
                 <span v-if="rightTypes.length > 1" class="search-types">
-                    <select v-model="filterType">
+                    <select v-model="queryFilter.filter.type">
                         <option value="" label="All Types"></option>
                         <option v-for="type in rightTypes"><: type :> </option>
                     </select>
@@ -42,6 +54,42 @@ export default {
 
                 <button v-show="showFilterButtons" name="applysearch" @click.prevent="applyFilter()"><: applyFilterLabel :></button>
                 <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()"><: resetFilterLabel :></button>
+            </div>
+
+            <div class="filter-list">
+                <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
+                    <input type="hidden" :name="filter.name" :value="filter.value">
+
+                    <span class="filter-name" :title="filterLabel(filter.name)"><: filter.name :></span>
+
+                    <span v-if="filter.type === 'select' || filter.type === 'radio'">
+                        <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
+                            <option value="">
+                                All
+                            </option>
+                            <option v-for="option in filter.options" :name="option.name" :value="option.value">
+                                <: option.text :>
+                            </option>
+                        </select>
+                    </span>
+
+                    <span v-else-if="filter.date">
+                        <span>
+                            <label>From:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                        <span>
+                            <label>To:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                    </span>
+
+                    <span v-else>
+                        <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
+                    </span>
+                </div>
             </div>
 
             <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
@@ -85,67 +133,80 @@ export default {
                 </div>
 
             </div>
+
         </nav>
+    </form>
     `,
 
     props: {
         applyFilterLabel: {
             type: String,
-            default: 'Apply'
+            default: "Apply"
         },
         resetFilterLabel: {
             type: String,
-            default: 'Reset',
+            default: "Reset"
         },
         objectsLabel: {
             type: String,
-            default: 'Objects',
+            default: "Objects"
         },
         pageSizesLabel: {
             type: String,
-            default: 'Size',
+            default: "Size"
         },
         placeholder: {
             type: String,
-            default: 'Search',
+            default: "Search"
         },
         showFilterButtons: {
             type: Boolean,
-            default: true,
+            default: true
         },
         initFilter: {
             type: Object,
             default: () => {
                 return {
-                    q: '',
+                    q: "",
                     filter: {
-                        type: '',
+                        type: ""
                     }
-                }
-            },
+                };
+            }
         },
         relationTypes: {
-            type: Object,
+            type: Object
+        },
+        filterList: {
+            type: Array
         },
         pagination: {
             type: Object,
-            default: () => DEFAULT_PAGINATION,
+            default: () => DEFAULT_PAGINATION
         },
         configPaginateSizes: {
             type: String,
-            default: '[10]',
-        },
+            default: "[10]"
+        }
     },
 
     data() {
         return {
-            filter: '', // Text string filter
-            filterType: '', // Object type filter
-            queryFilter: DEFAULT_FILTER, // QueryFilter Object
+            queryFilter: {}, // QueryFilter Object
             timer: null,
+            pageSize: this.pagination.page_size // pageSize value for pagination page size
+        };
+    },
 
-            pageSize: this.pagination.page_size, // pageSize value for pagination page size
-        }
+    created() {
+        // merge default filters with initFilter
+        let customFilters = this.loadCustomFilters();
+        this.queryFilter = merge.all([
+            DEFAULT_FILTER,
+            this.queryFilter,
+            customFilters,
+            this.initFilter
+        ]);
     },
 
     computed: {
@@ -159,7 +220,7 @@ export default {
          * @returns {Array} array of object types
          */
         rightTypes() {
-            return this.relationTypes && this.relationTypes.right || [];
+            return (this.relationTypes && this.relationTypes.right) || [];
         },
 
         /**
@@ -168,23 +229,23 @@ export default {
          * @return {void}
          */
         isFullPaginationLayout() {
-            return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
-        }
+            return (
+                this.pagination.page_count > 1 &&
+                this.pagination.page_count <= 7
+            );
+        },
     },
 
     watch: {
         /**
-         * watch initFilter and assign it to queryFilter, filter, filterType
+         * watch initFilter and assign it to queryFilter
          *
          * @param {Object} value filter object
          *
          * @returns {void}
          */
         initFilter(value) {
-            Object.assign(this.queryFilter, this.queryFilter, value);
-
-            this.filter = value.q;
-            this.filterType = value.filter.type;
+            this.queryFilter = merge(this.queryFilter, value);
         },
 
         /**
@@ -197,83 +258,50 @@ export default {
          * @returns {void}
          */
         pageSize(value) {
-            this.$emit('filter-update-page-size', this.pageSize);
+            this.$emit("filter-update-page-size", this.pageSize);
+        }
+    },
 
-        },
-
+    methods: {
         /**
-         * watcher for text filter
-         * if value is more than 3 chars, emits a filter-objects event with queryFilter as params
-         *
-         * @param {String} value The filter string
+         * trigger filter-objects event when query string has 3 or more carachter
          *
          * @emits Event#filter-objects
-         *
-         * @return {void}
          */
-        filter(value) {
-            this.filter = value;
-            this.queryFilter.q = this.filter;
+        onQueryStringChange() {
+            let queryString = this.queryFilter.q || "";
 
             clearTimeout(this.timer);
-            if (value.length >= 3 || value.length == 0) {
+            if (queryString.length >= 3 || queryString.length == 0) {
                 this.timer = setTimeout(() => {
-                    this.$emit('filter-objects', this.queryFilter);
+                    this.$emit("filter-objects", this.queryFilter);
                 }, 300);
             }
         },
 
         /**
-         * watcher for object type filter
-         * emits a filter-objects event with queryFilter as params
+         * load custom filters property names
          *
-         * @param {String} value The filter object type
-         *
-         * @emits Event#filter-objects
-         *
-         * @return {void}
+         * @returns {Object} filters' name
          */
-        filterType(value) {
-            this.filterType = value;
-            this.queryFilter.filter.type = this.filterType;
+        loadCustomFilters() {
+            let filter = {};
+            if (this.filterList) {
+                this.filterList.forEach(
+                    f => (filter[f.name] = f.date ? {} : "")
+                );
+            }
 
-            clearTimeout(this.timer);
-            this.$emit('filter-objects', this.queryFilter);
+            return { filter: filter };
         },
 
-        /**
-         * watch initFilter and set filter accordingly
-         */
-        initFilter: {
-            deep: true,
-            immediate: true,
-            handler: function(value) {
-                this.filter = value && value.q || '';
-            }
-        }
-    },
-
-    mounted() {
-        // merge default filters with initFilter
-        Object.assign(this.queryFilter, this.queryFilter,this.initFilter);
-
-        /**
-         * init filter from queryFilter
-         */
-        if (this.queryFilter !== undefined) {
-            this.filter = this.queryFilter.q || '';
-            this.filterType = this.queryFilter.filter.type || '';
-        }
-    },
-
-    methods: {
         /**
          * apply filters
          *
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
-            this.$emit('filter-objects-submit', this.queryFilter);
+            this.$emit("filter-objects-submit", this.queryFilter);
         },
 
         /**
@@ -282,7 +310,11 @@ export default {
          * @emits Event#filter-reset
          */
         resetFilter() {
-            this.$emit('filter-reset');
+            this.$emit("filter-reset");
+        },
+
+        filterLabel(filterName) {
+            return `filter name ${filterName}`;
         },
 
         /**
@@ -293,7 +325,7 @@ export default {
          * @emits Event#filter-update-current-page
          */
         changePage(index) {
-            this.$emit('filter-update-current-page', index);
+            this.$emit("filter-update-current-page", index);
         }
     }
-}
+};
