@@ -230,9 +230,7 @@ class ModulesComponent extends Component
             $streamId = $response['data']['id'];
             $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
         }
-
-        // unset some data from request
-        unset($requestData['title'], $requestData['status'], $requestData['file']);
+        unset($requestData['file']);
     }
 
     /**
@@ -266,7 +264,7 @@ class ModulesComponent extends Component
      * @param string $defaultTitle The default title for media
      * @return string The media ID
      */
-    public function assocStreamToMedia(string $streamId, array $requestData, string $defaultTitle) : string
+    public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle) : string
     {
         $apiClient = ApiClientProvider::getApiClient();
         $type = $requestData['model-type'];
@@ -280,6 +278,8 @@ class ModulesComponent extends Component
             $data = compact('type', 'attributes');
             $body = compact('data');
             $response = $apiClient->createMediaFromStream($streamId, $type, $body);
+            // `title` and `status` saved here, remove from next save
+            unset($requestData['title'], $requestData['status']);
 
             return $response['data']['id'];
         }
