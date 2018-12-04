@@ -16,6 +16,7 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\ModelController;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Network\Exception\UnauthorizedException;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -52,11 +53,81 @@ class ModelControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController(array $requestConfig = []): void
+    protected function setupController(array $requestConfig = []) : void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->ModelController = new ModelController($request);
+    }
+
+    /**
+     * Data provider for `testBeforeFilter` test case.
+     *
+     * @return array
+     *
+     */
+    public function beforeFilterProvider() : array
+    {
+        return [
+            'not authorized' => [
+                false,
+                [
+                    'username' => 'dummy',
+                    'password' => 'dummy',
+                    'roles' => [ 'useless' ],
+                ],
+                new UnauthorizedException(__('Module access not authorized')),
+            ],
+            'authorized' => [
+                true,
+                [
+                    'username' => 'bedita',
+                    'password' => 'bedita',
+                    'roles' => [ 'admin' ],
+                ],
+                null,
+            ]
+        ];
+    }
+
+    /**
+     * Test `beforeFilter` method
+     *
+     * @covers ::beforeFilter()
+     * @dataProvider beforeFilterProvider()
+     *
+     * @return void
+     */
+    public function testBeforeFilter($expected, $data, $exception) : void
+    {
+        $this->setupController();
+
+        $this->ModelController->Auth->setUser($data);
+
+        if (!empty($exception)) {
+            $this->expectException(get_class($exception));
+        }
+
+        $event = $this->ModelController->dispatchEvent('Controller.beforeFilter');
+        $this->ModelController->beforeFilter($event);
+
+        static::assertTrue($expected);
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @covers ::beforeRender()
+     *
+     * @return void
+     */
+    public function testBeforeRender() : void
+    {
+        $this->setupController();
+        $this->ModelController->dispatchEvent('Controller.beforeRender');
+
+        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
+        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
     }
 
     /**
@@ -65,7 +136,6 @@ class ModelControllerTest extends TestCase
      * @covers ::index()
      * @covers ::initialize()
      * @covers ::beforeFilter()
-     * @covers ::beforeRender()
      *
      * @return void
      */
