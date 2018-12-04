@@ -25,7 +25,7 @@ export default {
             inserted (element) {
                 const content = element.value;
                 try {
-                    const json = JSON.parse(content) || {};
+                    const json = content !== "" && JSON.parse(content) || {};
 
                     if (json) {
                         element.style.display = "none";

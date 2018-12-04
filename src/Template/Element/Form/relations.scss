@@ -298,11 +298,11 @@ nav.pagination {
     height: 100%;
 
     // layout
-    > nav, >header.tab, >footer {
+    nav, header.tab, footer {
         flex-shrink: 0;
     }
 
-    > nav {
+    nav {
         padding: $gutter $gutter 0;
         margin: 0;
     }

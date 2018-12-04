@@ -103,6 +103,8 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
+        $this->ProjectConfiguration->read();
+
         $this->set('objects', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
@@ -113,6 +115,12 @@ class ModulesController extends AppController
         }
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
+
+        // base/custom filters for filter view
+        $this->set('filter', $this->Properties->filterList($this->objectType));
+
+        // objectTypes schema
+        $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         return null;
     }
