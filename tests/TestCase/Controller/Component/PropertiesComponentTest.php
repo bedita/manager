@@ -75,6 +75,26 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `filterList()` method.
+     *
+     * @return void
+     *
+     * @covers ::filterList()
+     */
+    public function testFilterList(): void
+    {
+        $filter = ['modified'];
+        Configure::write('Properties.documents.filter', $filter);
+
+        $this->createComponent();
+
+        $expectedFilter = $filter;
+
+        $filterList = $this->Properties->filterList('documents');
+        static::assertEquals($expectedFilter, $filterList);
+    }
+
+    /**
      * Data provider for `testViewGroups` test case.
      *
      * @return array

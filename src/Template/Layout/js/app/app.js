@@ -16,6 +16,7 @@ import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
+import merge from 'deepmerge';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -141,8 +142,6 @@ const _vueInstance = new Vue({
         onFilterObjects(filter) {
             this.urlFilterQuery = filter;
             this.page = '';
-            this.page = '';
-            this.page = '';
 
             this.applyFilters(this.urlFilterQuery);
         },
@@ -248,10 +247,10 @@ const _vueInstance = new Vue({
         },
 
         /**
-         * extract params from page url
-         *
-         * @returns {void}
-         */
+        * extract params from page url
+        *
+        * @returns {void}
+        */
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
@@ -265,14 +264,36 @@ const _vueInstance = new Vue({
                     this.urlFilterQuery.q = matches[0];
                 }
 
-                // search for filter['filter_name']='filter_value' both after ? and & tokens
-                const filterExp = /[?&]filter\[(.*?)\]=([^&#]*)/g;
-                matches = filterExp.exec(urlParams);
-                if (matches && matches.length === 3) {
-                    const filterKey = matches[1];
-                    const filterValue = matches[2]
-                    this.urlFilterQuery.filter[filterKey] = filterValue;
+                // search for filter['filter_name']['modifier']='filter_value' both after ? and & tokens
+                const filterExp = /[?&]filter(\[.*?\])=([^&#]*)/g; // extract properties group and value
+                const keysExp = /\[(.*?)\]/g; // extract single property from the properties group
+
+                let filter = {};
+                while (matches = filterExp.exec(urlParams)) {
+                    if (matches && matches.length === 3) {
+                        const filterGroup = matches[1]; // keys group (ex. [status], [modified][lte])
+                        const filterValue = matches[2]; // param value
+
+                        let paramKeys = []
+                        let keysMatches = [];
+
+                        // extract keys from keys group and put it in paramKeys
+                        while (keysMatches = keysExp.exec(filterGroup)) {
+                            paramKeys.push(keysMatches[1]);
+                        }
+
+                        // create object with keys (many sublevels): first invert array of keys, then wrap around each key a
+                        // new object with new { key: previousObject } creating the right hierarchy
+                        const obj = paramKeys.reverse().reduce((accumulator, keyName) => {
+                            let param = {}
+                            param[keyName] = accumulator;
+                            return param;
+                        }, filterValue);
+
+                        filter = merge(filter, obj);
+                    }
                 }
+                this.urlFilterQuery.filter = filter;
 
                 // search for page_size='some string' both after ? and & tokens
                 const pageSizeExp = /[?&]page_size=([^&#]*)/g;
@@ -300,41 +321,53 @@ const _vueInstance = new Vue({
             }
         },
 
+
         /**
          * build coherent url based on these params:
-         * - q= query string
-         * - page_size
+         * - q=_string_
+         * - filter[_name_]=_value_
+         * - page_size=_value_
          *
          * @param {Object} params
          * @returns {String} url
          */
         buildUrlParams(params) {
             let url = `${window.location.origin}${window.location.pathname}`;
-            let first = true;
-            let queryId = '?';
+            const queryId = '?';
             const separator = '&';
+            const paramsKeys = Object.keys(params);
 
-            Object.keys(params).forEach((key) =>  {
-                if (params[key] && params[key] !== '') {
-                    const query = params[key];
-                    let entry = `${key}=${query}`;
+            if (paramsKeys && paramsKeys.length) {
+                let fields = [];
 
-                    // parse filter property
-                    if (key === 'filter') {
-                        let filter = '';
-                        Object.keys(query).forEach((filterKey) => {
-                            if (query[filterKey] !== '') {
-                                filter += `filter[${filterKey}]=${query[filterKey]}`;
-                            }
-                        });
+                paramsKeys.forEach((key) =>  {
+                    if (params[key] && params[key] !== '') {
+                        const query = params[key];
 
-                        entry = filter;
+                        // parse filter property
+                        if (key === 'filter') {
+                            let filter = '';
+                            Object.keys(query).forEach((filterKey) => {
+                                if (typeof query[filterKey] === 'object') {
+                                    const filter = query[filterKey];
+                                    Object.keys(filter).forEach((modifier) => {
+                                        if (filter[modifier] !== '') {
+                                            // look up for param modifier (i.e dates)
+                                            fields.push(`filter[${filterKey}][${modifier}]=${filter[modifier]}`);
+                                        }
+                                    });
+                                } else if (query[filterKey] !== '') {
+                                    fields.push(`filter[${filterKey}]=${query[filterKey]}`);
+                                }
+                            });
+                        } else {
+                            fields.push(`${key}=${query}`);
+                        }
                     }
-
-                    url += `${first ? queryId : separator}${entry}`;
-                    first = false;
-                }
-            });
+                });
+                url += fields.length ? queryId : '';
+                url += fields.join(separator);
+            }
 
             return url;
         },
@@ -348,6 +381,7 @@ const _vueInstance = new Vue({
             this.page = '';
             this.pageSize = '';
             let filter = {
+                filter: {},
                 q: '',
             }
             this.applyFilters(filter);

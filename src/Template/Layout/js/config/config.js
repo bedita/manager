@@ -53,11 +53,14 @@ export const CkeditorConfig = {
 
     configNormal: {
         toolbar: [
-            { name: 'document', groups: [ 'mode' ], items: [ 'Source'] },
-            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
-            { name: 'links', items: [ 'Link', 'Unlink'] },
-            { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+            { name: 'basicstyles', groups: ['basicstyles', 'cleanup'], items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+            { name: 'paragraph', groups: ['list', 'blocks', 'align'], items: ['NumberedList', 'BulletedList'] },
+            { name: 'styles', items: ['Format'] },
+            { name: 'links', items: ['Link', 'Unlink'] },
+            { name: 'clipboard', groups: ['clipboard', 'undo'], items: ['PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+            { name: 'document', groups: ['mode'], items: ['Source'] },
         ],
+        format_tags: 'p;h2',
         allowedContent: true,
         language: BEDITA.currLang2,
         entities:false,

@@ -112,6 +112,7 @@ class ModelController extends AppController
      * View single resource.
      *
      * @param string|int $id Resource ID.
+     *
      * @return \Cake\Http\Response|null
      */
     public function view($id) : ?Response
