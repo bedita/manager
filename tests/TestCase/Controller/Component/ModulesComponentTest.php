@@ -659,19 +659,6 @@ class ModulesComponentTest extends TestCase
                 new UploadException(null, !UPLOAD_ERR_OK),
                 true,
             ],
-            'save with empty file' => [
-                [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                        'error' => UPLOAD_ERR_NO_FILE,
-                    ],
-                    'model-type' => 'images',
-                ],
-                null,
-                false,
-            ],
         ];
     }
 
