@@ -445,7 +445,7 @@ const _vueInstance = new Vue({
             this.$el.addEventListener('change', (ev) => {
                 const element = ev.target;
                 const action = element && element.form && element.form.action;
-                if (action && action.endsWith('/login')) {
+                if (action && (action.endsWith('/login') || action.endsWith('/noaction')) ) {
                     return true;
                 }
 
