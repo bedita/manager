@@ -32,12 +32,22 @@ export default {
                         let container = document.createElement('div');
                         container.className = 'jsoneditor-container';
                         element.parentElement.insertBefore(container, element);
+                        element.dataset.originalValue = element.value;
                         let editorOptions = Object.assign(options, {
                             onChange: function () {
                                 try {
                                     const json = element.jsonEditor.get();
                                     element.value = JSON.stringify(json);
                                     console.info('valid json :)');
+
+                                    let isChanged = element.value !== element.dataset.originalValue;
+                                    element.dispatchEvent(new CustomEvent('change', {
+                                        bubbles: true,
+                                        detail: {
+                                            id: element.id,
+                                            isChanged,
+                                        }
+                                    }));
                                 } catch(e) {
                                     console.warn('still not valid json');
                                 }

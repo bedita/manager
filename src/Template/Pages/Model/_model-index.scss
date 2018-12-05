@@ -24,15 +24,104 @@ body.view-model {
     .model-index {
 
         .list-resources {
-            display: table;
-            border-collapse: collapse;
-            min-width: 100%;
+            .add-row {
+                button {
+                    border-radius: 5%;
+                }
+            }
+
+            .index-entry {
+                display: flex;
+
+                .first-cell {
+                    button {
+                        min-width: $gutter * 2;
+                    }
+                }
+
+                &.editing-property-type {
+                    border-bottom: 1px dashed $gray-200;
+                }
+
+                &.delete-property-type {
+                    opacity: 0.5;
+
+                    input, textarea {
+                        user-select: none;
+                        pointer-events:none;
+                        cursor: default;
+                    }
+
+                    .remove-action {
+                        display: none;
+                    }
+
+                    .undo-remove-action {
+                        display: block;
+                    }
+
+                }
+
+                .undo-remove-action {
+                    display: none;
+                }
+
+                div {
+                    padding: $gutter/4 $gutter/2;
+                    vertical-align: middle;
+
+                    &.first-cell, &.action-cell {
+                        flex: 0 0 65px;
+
+                        i {
+                            margin-left: $gutter * .5;
+                        }
+                        input {
+                            margin-right: $gutter * .5;
+                        }
+                    }
+
+                    &.primary, &.name-cell, &.inverse_name-cell {
+                        flex: 1;
+                    }
+
+                    &.secondary, &.params-cell, &.enabled-cell, &.is_abstract-cell {
+                        flex: 2;
+                    }
+                }
+
+                &.new-row div {
+                    &.primary, &.secondary, &.name-cell, &.inverse_name-cell, &.params-cell, &.enabled-cell, &.is_abstract-cell {
+                        padding: $gutter * 0.25 $gutter * 0.5;
+                    }
+                }
+
+                input, textarea {
+                    background: transparent;
+                    color: $gray-100;
+                    border: 1px solid transparent;
+
+                    &:hover, &:focus {
+                        border: 1px solid $gray-100;
+                    }
+                }
+
+                textarea {
+                    min-height: $gutter * 2;
+                    width: 100%;
+                    // resize: none;
+                }
+            }
 
             > nav {
-                display: table-row;
+                display: flex;
 
                 &.table-header {
                     border-bottom: 1px solid $gray-700;
+
+                    .first-cell, .action-cell {
+                        flex: 0 0 65px;
+                    }
 
                     a.sort {
                         display: flex;
@@ -57,19 +146,32 @@ body.view-model {
             }
 
             > a {
-                display: table-row;
+                display: inline-flex;
+                width: 100%;
 
                 &:hover {
                     background-color: $gray-700;
+
+                    .inverted {
+                        background-color: $gray-700;
+                    }
                 }
             }
 
-            > nav, > a {
+            > nav, > .resource-status-on {
                 div {
-                    display: table-cell;
+                    display: flex;
                     padding: $gutter * .5;
                     white-space: nowrap;
                     vertical-align: middle;
+
+                    &.primary, &.name-cell, &.inverse_name-cell {
+                        flex: 1;
+                    }
+
+                    &.secondary, &.params-cell, &.enabled-cell, &.is_abstract-cell {
+                        flex: 2;
+                    }
 
                     &.title-cell {
                         max-width: 310px;
