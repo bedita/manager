@@ -7,13 +7,9 @@
  */
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
-import StaggeredList from 'app/components/staggered-list';
 
 export default {
     mixins: [ PaginatedContentMixin ],
-    components: {
-        StaggeredList,
-    },
 
     // props used by parent
     props: {

@@ -55,7 +55,11 @@ class PropertiesComponent extends Component
         // don't include: 'id', 'status', and 'modified' => always listed
         'index' => [
             'title',
-        ]
+        ],
+
+        'filter' => [
+            'status',
+        ],
     ];
 
     /**
@@ -66,7 +70,6 @@ class PropertiesComponent extends Component
         Configure::load('properties');
         $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
         $this->setConfig('Properties', $propConfig);
-
         parent::initialize($config);
     }
 
@@ -86,8 +89,9 @@ class PropertiesComponent extends Component
      * Properties not present in $object will not be set in any group unless they're listed
      * under `_keep` in the above configuration.
      *
-     * @param array $object Object data to view
-     * @param string $type Object type
+     * @param array  $object Object data to view
+     * @param string $type   Object type
+     *
      * @return array
      */
     public function viewGroups(array $object, string $type): array
@@ -120,6 +124,7 @@ class PropertiesComponent extends Component
      * List properties to display in `index` view
      *
      * @param string $type Object type name
+     *
      * @return array
      */
     public function indexList(string $type): array
@@ -127,5 +132,17 @@ class PropertiesComponent extends Component
         $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
 
         return array_diff($list, ['id', 'status', 'modified']);
+    }
+
+    /**
+     * List of filter to display in `filter` view
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function filterList(string $type): array
+    {
+        return $this->getConfig(sprintf('Properties.%s.filter', $type), $this->defaultGroups['filter']);
     }
 }

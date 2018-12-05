@@ -4,4 +4,22 @@
             color: #DDD;
         }
     }
+
+    .filter-list {
+        order: 3;
+        display: flex;
+
+        .filter-container {
+            padding: $gutter * .5;
+
+            .filter-name {
+                border-bottom: 1px solid $gray-600;
+                margin: 0 $gutter * 0.5;
+            }
+        }
+    }
+
+    .pages-buttons {
+        display: flex;
+    }
 }

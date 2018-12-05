@@ -12,10 +12,12 @@
  */
 namespace App\Controller;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -102,6 +104,8 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
+        $this->ProjectConfiguration->read();
+
         $this->set('objects', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
@@ -112,6 +116,12 @@ class ModulesController extends AppController
         }
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
+
+        // base/custom filters for filter view
+        $this->set('filter', $this->Properties->filterList($this->objectType));
+
+        // objectTypes schema
+        $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         return null;
     }
@@ -268,7 +278,7 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-        } catch (BEditaClientException $e) {
+        } catch (InternalErrorException | BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e, ['params' => $e->getAttributes()]);
