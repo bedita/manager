@@ -58,6 +58,8 @@ export default {
 
                 try {
                     let datePicker = flatpickr(element, options);
+                    element.dataset.originalValue = element.value;
+                    // element._flatpickr = datePicker;
 
                     let clearButton = document.createElement('span');
                     clearButton.classList.add('clear-button');

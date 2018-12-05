@@ -66,6 +66,15 @@ export default {
                 }
             }
 
+            const isChanged = !!relationsToAdd.length;
+            this.$el.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: {
+                    id: this.$vnode.tag,
+                    isChanged,
+                }
+            }));
+
             this.relationsData = this.relationFormatterHelper(relationsToAdd);
 
             // handles relations to be removes
