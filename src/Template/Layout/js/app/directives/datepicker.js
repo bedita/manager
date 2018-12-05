@@ -62,7 +62,9 @@ export default {
                     let clearButton = document.createElement('span');
                     clearButton.classList.add('clear-button');
                     clearButton.innerHTML = '&times;';
-                    clearButton.addEventListener('click', () => {
+                    clearButton.addEventListener('click', (ev) => {
+                        ev.preventDefault()
+                        ev.stopPropagation();
                         datePicker.clear();
                     });
 

@@ -166,16 +166,21 @@ form fieldset {
     }
 }
 
-
 // Date Picker
+
+input.flatpickr-input.form-control {
+    min-width: 8rem;
+}
+
 .clear-button {
     display: inline-flex;
     z-index: 10;
     color: $gray-800;
-    font-size: 1.25em;
-    margin-left: -25px;
-    width: 21px;
-    height: 21px;
+    font-size: 24px;
+    margin-left: -30px;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
     justify-content: center;
     align-items: center;
     cursor: pointer;
