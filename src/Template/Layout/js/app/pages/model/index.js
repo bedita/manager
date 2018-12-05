@@ -63,7 +63,7 @@ export default {
                     detail: {
                         id: this.$vnode.tag,
                         isChanged,
-                    }
+                    },
                 }));
             }
             return isChanged;

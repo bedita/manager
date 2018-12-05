@@ -15,6 +15,7 @@
         {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
             'url': {'_name': 'model:save', 'resource_type': resourceType},
             'id': 'form-main',
+            'check-changes': 'true',
         })|raw }}
 
             {# Inside form-column there are form elements, they may have a cssOrder property that reorders
