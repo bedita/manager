@@ -107,7 +107,7 @@ class AppControllerTest extends TestCase
         $this->setupController();
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
-        $this->AppController->beforeFilter($event);
+
         $flash = $this->AppController->request->getSession()->read('Flash');
 
         $expected = __('You are not logged or your session has expired, please provide login credentials');
@@ -132,7 +132,6 @@ class AppControllerTest extends TestCase
         $expectedtokens = $this->AppController->Auth->user('tokens');
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
-        $this->AppController->beforeFilter($event);
 
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $this->accessProperty($apiClient, 'tokens');
@@ -183,7 +182,6 @@ class AppControllerTest extends TestCase
         $user = $this->setupControllerAndLogin();
 
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
-        $this->AppController->beforeRender($event);
 
         static::assertArrayHasKey('user', $this->AppController->viewVars);
         static::assertEquals($user, $this->AppController->viewVars['user']);
@@ -217,7 +215,6 @@ class AppControllerTest extends TestCase
         $this->AppController->apiClient = $apiClient;
 
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
-        $this->AppController->beforeRender($event);
 
         // assert user objects has been updated
         static::assertArrayHasKey('user', $this->AppController->viewVars);

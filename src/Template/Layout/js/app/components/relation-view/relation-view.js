@@ -272,9 +272,15 @@ export default {
          */
         prepareRelationsToRemove(relations) {
             this.removedRelationsData = JSON.stringify(this.formatObjects(relations));
-            if (relations.length) {
-                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
-            }
+
+            const isChanged = !!relations.length;
+            this.$el.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: {
+                    id: this.$vnode.tag,
+                    isChanged,
+                }
+            }));
         },
 
         /**
@@ -400,7 +406,15 @@ export default {
             let difference = relations.filter(rel => !this.containsId(this.removedRelated, rel.id));
 
             this.addedRelationsData = JSON.stringify(this.formatObjects(difference));
-            this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+
+            const isChanged = !!difference.length;
+            this.$el.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: {
+                    id: this.$vnode.tag,
+                    isChanged,
+                }
+            }));
         },
 
         /**
