@@ -60,6 +60,9 @@ class PropertiesComponent extends Component
         'filter' => [
             'status',
         ],
+        'bulk' => [
+            'status',
+        ],
     ];
 
     /**
@@ -144,5 +147,17 @@ class PropertiesComponent extends Component
     public function filterList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.filter', $type), $this->defaultGroups['filter']);
+    }
+
+    /**
+     * List of filter to display in `filter` view
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function bulkList(string $type) : array
+    {
+        return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
     }
 }
