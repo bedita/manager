@@ -119,6 +119,9 @@ class ModulesController extends AppController
         // base/custom filters for filter view
         $this->set('filter', $this->Properties->filterList($this->objectType));
 
+        // base/custom filters for filter view
+        $this->set('bulkActions', $this->Properties->bulkList($this->objectType));
+
         // objectTypes schema
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
@@ -529,28 +532,35 @@ class ModulesController extends AppController
     }
 
     /**
-     * Bulk change status for objects
+     * Bulk change actions for objects
      *
      * @return \Cake\Http\Response|null
      */
-    public function changeStatus() : ?Response
+    public function bulkActions() : ? Response
     {
+        $requestData = $this->request->getData();
         $this->request->allowMethod(['post']);
-        if (!empty($this->request->getData('ids') && is_string($this->request->getData('ids')))) {
-            $ids = $this->request->getData('ids');
-            $status = $this->request->getData('status');
+
+        if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
+            $ids = $requestData['ids'];
+
+            // extract valid attributes to change
+            $attributes = array_filter(
+                $requestData['attributes'],
+                function ($value) {
+                    return ($value !== null && $value !== '');
+                }
+            );
+
             if (!empty($ids)) { // export selected (filter by id)
                 $ids = explode(',', $ids);
                 foreach ($ids as $id) {
-                    $data = [
-                        'id' => $id,
-                        'status' => $status,
-                    ];
+                    $data = array_merge($attributes, ['id' => $id]);
                     $this->apiClient->save($this->objectType, $data);
                 }
             }
         }
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
     }
 }

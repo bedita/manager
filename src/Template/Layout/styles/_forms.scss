@@ -150,6 +150,13 @@ form fieldset {
             }
         }
     }
+
+    &[disabled] {
+        input {
+            color: #495057;
+            background-color: #adb5bd;
+        }
+    }
 }
 
 

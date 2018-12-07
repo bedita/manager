@@ -28,7 +28,6 @@ export default {
         return {
             allIds: [],
             selectedRows: [],
-            status: '',
         };
     },
 
@@ -76,6 +75,17 @@ export default {
         },
 
         /**
+        * Submit bulk actions form
+        *
+        * @return {void}
+        */
+        bulkActions() {
+            if (this.selectedRows.length < 1) {
+                return;
+            }
+        },
+
+        /**
          * Submit bulk export form
          *
          * @return {void}
@@ -96,21 +106,6 @@ export default {
             this.unCheckAll();
             this.$nextTick(() => {
                 document.getElementById('form-export').submit();
-            });
-        },
-
-        /**
-         * Submit bulk change status form
-         *
-         * @return {void}
-         */
-        setStatus(status, evt) {
-            if (this.selectedRows.length < 1) {
-                return;
-            }
-            this.status = status;
-            this.$nextTick( () => {
-                document.getElementById('form-status').submit();
             });
         },
 
