@@ -466,6 +466,25 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
+    public function testUpdateMediaUrlsWithEmptyData() : void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = [];
+        $this->controller->updateMediaUrls($response);
+
+        static::assertEquals([], $response);
+    }
+
+    /**
+     * Test `updateMediaUrls` method
+     *
+     * @covers ::updateMediaUrls()
+     *
+     * @return void
+     */
     public function testUpdateMediaUrls() : void
     {
         // Setup controller for test
@@ -627,6 +646,15 @@ class ModulesControllerTest extends TestCase
                 ['data' => []],
                 ['data' => []],
             ],
+            // test with objct without ids
+            'responseWithoutIds' => [
+                ['data' => [
+                    'ids' => [],
+                ]],
+                ['data' => [
+                    'ids' => [],
+                ]],
+            ],
             // correct result
             'correctResponseMock' => [
                 [ // expected
@@ -714,11 +742,11 @@ class ModulesControllerTest extends TestCase
     /**
      * Test `changeStatus` method
      *
-     * @covers ::changeStatus()
+     * @covers ::bulkActions()
      *
      * @return void
      */
-    public function testChangeStatus() : void
+    public function testBulkActions() : void
     {
         // Setup controller for test
         $this->setupController([]);
@@ -732,8 +760,10 @@ class ModulesControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'id' => $o['id'],
-                'status' => $o['attributes']['status'],
+                'ids' => $o['id'],
+                'attributes' => [
+                    'status' => $o['attributes']['status'],
+                ],
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -741,7 +771,7 @@ class ModulesControllerTest extends TestCase
         ]);
 
         // do controller call
-        $result = $this->controller->changeStatus();
+        $result = $this->controller->bulkActions();
 
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
