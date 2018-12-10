@@ -74,7 +74,7 @@ class SchemaComponentTest extends TestCase
                 ],
                 null,
                 [
-                    'type' => 'you-are-not-my-type',
+                    'type' => 'objects',
                 ],
             ],
             'client exception' => [
