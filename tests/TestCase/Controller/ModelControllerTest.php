@@ -21,6 +21,7 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Network\Exception\BadRequestException;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\ModelController} Test Case
@@ -196,7 +197,6 @@ class ModelControllerTest extends TestCase
                                 'params' => [
                                         'type' => 'object'
                                 ],
-                                'type' => 'property_types', // temporary solution to avoid a bug
                         ],
                     ]
                 ],
@@ -255,7 +255,7 @@ class ModelControllerTest extends TestCase
 
         $this->ModelController->savePropertyTypesJson();
 
-        $actualResponse = $this->ModelController->viewVars[$action];
+        $actualResponse = Hash::get($this->ModelController->viewVars, $action, []);
 
         if ($action == 'saved') {
             foreach ($actualResponse as &$element) {
