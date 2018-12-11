@@ -52,9 +52,6 @@ Plugin::routes();
 
 Router::scope('/', function (RouteBuilder $routes) {
 
-    $locales = array_keys(Configure::read('I18n.languages'));
-    $lang = implode('|', $locales);
-
     // Login.
     $routes->connect(
         '/login',
