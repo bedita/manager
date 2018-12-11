@@ -554,19 +554,4 @@ class ModulesController extends AppController
 
         return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
     }
-
-    /**
-     * Change lang and redir to referer
-     *
-     * @param string $lang The lang code
-     * @return \Cake\Http\Response|null
-     */
-    public function lang($lang) : ?Response
-    {
-        $user = $this->Auth->user();
-        $user['sessionLang'] = $lang;
-        $this->Auth->setUser($user);
-
-        return $this->redirect($this->referer());
-    }
 }
