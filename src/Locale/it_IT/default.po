@@ -1,0 +1,501 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BEdita 4 \n"
+"POT-Creation-Date: 2018-10-30 14:24:02 \n"
+"PO-Revision-Date:  \n"
+"Last-Translator:  \n"
+"Language-Team: BEdita I18N & I10N Team \n"
+"Language:  \n"
+"MIME-Version: 1.0 \n"
+"Content-Type: text/plain; charset=UTF-8 \n"
+"Content-Transfer-Encoding: 8bit \n"
+"Plural-Forms: nplurals=2; plural=(n != 1); \n"
+
+msgid "&"
+msgstr ""
+
+msgid "Actions on selected items"
+msgstr "Azioni sugli oggetti selezionati"
+
+msgid "Add objects to"
+msgstr "Aggiungi oggetti a"
+
+msgid "Advanced"
+msgstr "Avanzate"
+
+msgid "An extension stopped the file upload"
+msgstr "Un'estensione ha fermato il caricamento del file"
+
+msgid "Apply"
+msgstr "Applica"
+
+msgid "BEdita Web site"
+msgstr "Sito BEdita"
+
+msgid "BEdita {0}"
+msgstr ""
+
+msgid "Cannot create abstract objects or objects without schema"
+msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr "Impossibile produrre una miniatura per questo file"
+
+msgid "Children"
+msgstr "Contenuti"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "Create new"
+msgstr "Crea nuovo"
+
+msgid "Current password"
+msgstr "Password corrente"
+
+msgid "Dashboard"
+msgstr "Cruscotto"
+
+msgid "Data Import"
+msgstr "Importazione dati"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Documents"
+msgstr "Documenti"
+
+msgid "Draft"
+msgstr ""
+
+msgid "Edit Params"
+msgstr "Modifica Parametri"
+
+msgid "Edit parameters of"
+msgstr "Modifica parametri di"
+
+msgid "Empty"
+msgstr "Vuoto"
+
+msgid "Empty request data"
+msgstr "Nessuno dato in request"
+
+msgid "Empty translation \"id\""
+msgstr "Identificatore traduzione vuoto (\"id\")"
+
+msgid "Empty translation \"object_id\""
+msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
+
+msgid "Error"
+msgstr "Errore"
+
+msgid "Error "
+msgstr "Errore "
+
+msgid "Events"
+msgstr "Eventi"
+
+msgid "Exit"
+msgstr "Esci"
+
+msgid "Export"
+msgstr "Esporta"
+
+msgid "Export All"
+msgstr "Esporta Tutti"
+
+msgid "Failed to write file to disk"
+msgstr "Scrittura file su disco fallita"
+
+msgid "File is too big, form MAX_FILE_SIZE exceeded"
+msgstr "File troppo grande, dimensione massima form superata (MAX_FILE_SIZE)"
+
+msgid "File is too big, max allowed size is {0}"
+msgstr "File troppo grande, dimensione massima consentita {0}"
+
+msgid "File only partially uploaded"
+msgstr "File caricato solo parzialmente"
+
+msgid "File type"
+msgstr "Tipo di file"
+
+msgid "Files"
+msgstr "File"
+
+msgid "Folders"
+msgstr "Cartelle"
+
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+msgid "Image not acceptable for thumb"
+msgstr "Immagine non valida per miniatura"
+
+msgid "Images"
+msgstr "Immagini"
+
+msgid "Import"
+msgstr "Importa"
+
+msgid "Import error"
+msgstr "Errore in importazione"
+
+msgid "Import filter not selected"
+msgstr "Filtro di importazione non selezionato"
+
+msgid "Import warn"
+msgstr "Avviso in importazione"
+
+msgid "Info"
+msgstr "Informazione"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Locations"
+msgstr "Luoghi"
+
+msgid "Log out"
+msgstr "Esci"
+
+msgid "Login"
+msgstr "Accedi"
+
+msgid "Media"
+msgstr ""
+
+msgid "Message"
+msgstr "Messaggio"
+
+msgid "Metadata"
+msgstr "Metadati"
+
+msgid "Missing import file"
+msgstr "File di importazione mancante"
+
+msgid "Missing thumb url"
+msgstr "Url miniatura mancante"
+
+msgid "Model"
+msgstr "Modello"
+
+msgid "Module access not authorized"
+msgstr "Accesso al modulo non autorizzato"
+
+msgid "Move item to trash?"
+msgstr "Spostare elemento nel cestino?"
+
+msgid "Move to trash"
+msgstr "Sposta nel cestino"
+
+msgid "New entry in"
+msgstr "Nuova voce in"
+
+msgid "New relations (save to keep)"
+msgstr "Nuove relazioni (salvare per mantenerle)"
+
+msgid "News"
+msgstr "Novità"
+
+msgid "No items found"
+msgstr "Nessun elemento trovato"
+
+msgid "No options for this file type"
+msgstr "Nessuna opzione per questo tipo di file"
+
+msgid "Number of created objects"
+msgstr "Numero di oggetti creati"
+
+msgid "Number of created resources"
+msgstr "Numero di risorse create"
+
+msgid "Number of errors"
+msgstr "Numero di errori"
+
+msgid "Number of updated objects"
+msgstr "Numero di oggetti aggiornati"
+
+msgid "Number of updated resources"
+msgstr "Numero di risorse aggiornate"
+
+msgid "Object"
+msgstr "Oggetto"
+
+msgid "Object deleted from trash"
+msgstr "Oggetto rimosso dal cestino"
+
+msgid "Object saved"
+msgstr "Oggetto salvato"
+
+msgid "Object types"
+msgstr "Tipi di oggetto"
+
+msgid "Object(s) deleted"
+msgstr "Oggetto(i) rimosso(i)"
+
+msgid "Object(s) restored"
+msgstr "Oggetto(i) ripristinato(i)"
+
+msgid "Objects"
+msgstr "Oggetti"
+
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Open image"
+msgstr "Apri immagine"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Other"
+msgstr "Altro"
+
+msgid "Page size"
+msgstr "Dimensione pagina"
+
+msgid "Password"
+msgstr ""
+
+msgid "Preferences"
+msgstr "Preferenze"
+
+msgid "Priority"
+msgstr "Priorità"
+
+msgid "Profiles"
+msgstr "Profili"
+
+msgid "Property types"
+msgstr "Tipi di priorità"
+
+msgid "Publish End"
+msgstr "Data revoca pubblicazione"
+
+msgid "Publish Start"
+msgstr "Data inizio pubblicazione"
+
+msgid "Related to"
+msgstr "Collegato a"
+
+msgid "Relations"
+msgstr "Relazioni"
+
+msgid "Remove"
+msgstr "Rimuovi"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Resource \"%s\" not available. Error: %s"
+msgstr "Risorsa \"%s\" non disponibile. Error: %s"
+
+msgid "Resource \"%s\" not found"
+msgstr "Risorsa \"%s\" non trovata"
+
+msgid "Restore"
+msgstr "Ripristina"
+
+msgid "Result"
+msgstr "Risultato"
+
+msgid "Retype password"
+msgstr "Ridigita password"
+
+msgid "Save"
+msgstr "Salva"
+
+msgid "Save "
+msgstr "Salva "
+
+msgid "Search in BEdita"
+msgstr "Cerca in BEdita"
+
+msgid "Set draft"
+msgstr "Imposta a 'draft'"
+
+msgid "Set off"
+msgstr "Imposta ad 'off'"
+
+msgid "Set on"
+msgstr "Imposta ad 'on'"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Show details"
+msgstr "Mostra dettagli"
+
+msgid "Show more"
+msgstr "Mostra di più"
+
+msgid "Sign in"
+msgstr "Accedi"
+
+msgid "Size"
+msgstr "Dimensione"
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Success"
+msgstr "Risultato"
+
+msgid "Temporary folder missing"
+msgstr "Cartella temporanea mancante"
+
+msgid "The thumbnail is not available"
+msgstr "La miniatura non è disponibile"
+
+msgid "Thumb not available"
+msgstr "Miniatura non disponibile"
+
+msgid "Thumb not ready: coming soon"
+msgstr "Miniatura non pronta: in lavorazione"
+
+msgid "Thumbnail is not ready"
+msgstr "La miniatura non è pronta"
+
+msgid "Translation(s) deleted"
+msgstr "Traduzione(i) rimossa(e)"
+
+msgid "Translations"
+msgstr "Traduzioni"
+
+msgid "Trash"
+msgstr "Cestino"
+
+msgid "Trash can"
+msgstr "Cestino"
+
+msgid "Trashcan"
+msgstr "Cestino"
+
+msgid "Uname"
+msgstr "Nome univoco"
+
+msgid "Unknown upload error"
+msgstr "Errore sconosciuto durante caricamento"
+
+msgid "Untitled"
+msgstr "Senza titolo"
+
+msgid "Upload"
+msgstr "Caricare"
+
+msgid "User Profile"
+msgstr "Profilo Utente"
+
+msgid "User profile saved"
+msgstr "Profilo utente salvato"
+
+msgid "User: {0}"
+msgstr "Utente: {0}"
+
+msgid "Username"
+msgstr "Nome utente"
+
+msgid "Username or password is incorrect"
+msgstr "Nome utente o password non corretto(i)"
+
+msgid "Users"
+msgstr "Utenti"
+
+msgid "Videos"
+msgstr "Video"
+
+msgid "View original"
+msgstr "Vedi originale"
+
+msgid "View trashed "
+msgstr "Vedi nel cestino "
+
+msgid "Warning"
+msgstr "Avviso"
+
+msgid "You are not authorized to access that location."
+msgstr "Non sei autorizzato ad accedere a quest'area."
+
+msgid "add objects"
+msgstr "aggiungi oggetti"
+
+msgid "add to"
+msgstr "aggiungi a"
+
+msgid "cancel"
+msgstr "annulla"
+
+msgid "click to remove"
+msgstr "clicca per rimuovere"
+
+msgid "close"
+msgstr "chiudi"
+
+msgid "confirm password"
+msgstr "conferma password"
+
+msgid "current password"
+msgstr "password corrente"
+
+msgid "id"
+msgstr ""
+
+msgid "last modified"
+msgstr "ultima modifica"
+
+msgid "log out"
+msgstr "esci"
+
+msgid "modified"
+msgstr "modifica"
+
+msgid "move to"
+msgstr "sposta in"
+
+msgid "new password"
+msgstr "nuova password"
+
+msgid "objects"
+msgstr "oggetti"
+
+msgid "of"
+msgstr "di"
+
+msgid "open"
+msgstr "apri"
+
+msgid "original"
+msgstr "originale"
+
+msgid "position"
+msgstr "posizione"
+
+msgid "reload"
+msgstr "ricarica"
+
+msgid "remove"
+msgstr "rimuovi"
+
+msgid "status"
+msgstr "stato"
+
+msgid "title"
+msgstr "titolo"
+
+msgid "translation of"
+msgstr "traduzione di"
+
+msgid "type"
+msgstr "tipo"
+
+msgid "undo remove"
+msgstr "annulla rimozione"
+
+msgid "www.bedita.com"
+msgstr ""

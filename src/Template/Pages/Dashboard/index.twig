@@ -7,13 +7,13 @@
         {% for name, module in modules %}
             {% if name != 'trash' %}
                 <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
-                    {{ Html.link(name|humanize, {'_name': 'modules:list', 'object_type': name}, {'title': name|humanize})|raw }}
+                    {{ Html.link(__(name|humanize), {'_name': 'modules:list', 'object_type': name}, {'title': __(name|humanize)})|raw }}
                 </li>
             {% endif %}
         {% endfor %}
         {% for k, plugin in config('PluginModules') %}
             <li class="{{ plugin.class.dashboard }}">
-                {{ Html.link(plugin.title|humanize, plugin.route, {'title': plugin.title|humanize})|raw }}
+                {{ Html.link(__(plugin.title|humanize), plugin.route, {'title': __(plugin.title|humanize)})|raw }}
             </li>
         {% endfor %}
         </ul>

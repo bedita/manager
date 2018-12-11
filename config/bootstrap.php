@@ -67,7 +67,19 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
  */
 try {
     Configure::config('default', new PhpConfig());
-    Configure::load('app', 'default', false);
+    // I18n default config (can be overwritten in app.php)
+    Configure::write('I18n', [
+        'default' => 'en',
+        'locales' => ['en_US' => 'en'],
+        'languages' => ['en' => 'English'],
+        'timezone' => 'UTC',
+        'cookie' => [
+            'name' => 'BEditaWebI18n',
+            'create' => true,
+        ],
+        'switchLangUrl' => '/lang',
+    ]);
+    Configure::load('app', 'default');
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
@@ -101,11 +113,6 @@ date_default_timezone_set('UTC');
  * Configure the mbstring extension to use the correct encoding.
  */
 mb_internal_encoding(Configure::read('App.encoding'));
-
-/**
- * Set default output timezone, can be overridden by user session timezone
- */
-Configure::write('I18n.timezone', 'UTC');
 
 /*
  * Set the default locale. This controls how dates, number and currency is
