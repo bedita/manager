@@ -17,11 +17,8 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
-use Cake\I18n\I18n;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Routing\Router;
-use Cake\Utility\Hash;
-use Locale;
 
 /**
  * Base Application Controller.
