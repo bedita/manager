@@ -125,7 +125,6 @@ class AppController extends Controller
         }
 
         $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
-        $this->setupLocale();
 
         return null;
     }
@@ -210,44 +209,5 @@ class AppController extends Controller
         }
 
         return $data;
-    }
-
-    /**
-     * Setup current locale
-     *
-     * @return void
-     */
-    protected function setupLocale() : void
-    {
-        // detect user session lang; if none, use default from config 'I18n.default'
-        $user = $this->Auth->user();
-        $sessionLang = Configure::read('I18n.default');
-        if (!empty($user['sessionLang']) && Configure::read(sprintf('I18n.languages.%s', $user['sessionLang']))) {
-            $sessionLang = $user['sessionLang'];
-        }
-        Configure::write('I18n.lang', $sessionLang);
-
-        // if detected locale matches language code let's use it, if not use a primary lang locale
-        $locale = Locale::acceptFromHttp($this->request->getHeaderLine('Accept-Language'));
-        if ($sessionLang !== Configure::read(sprintf('I18n.locales.%s', $locale))) {
-            $locales = array_flip((array)Configure::read('I18n.locales'));
-            $locale = Hash::get($locales, $sessionLang);
-        }
-        I18n::setLocale($locale);
-    }
-
-    /**
-     * Change lang and redir to referer
-     *
-     * @param string $lang The lang code
-     * @return \Cake\Http\Response|null
-     */
-    public function lang($lang) : ?Response
-    {
-        $user = $this->Auth->user();
-        $user['sessionLang'] = $lang;
-        $this->Auth->setUser($user);
-
-        return $this->redirect($this->referer());
     }
 }

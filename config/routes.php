@@ -152,12 +152,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'uname'],
         ['pass' => ['id'], '_name' => 'modules:uname']
     );
-    // switch lang
-    $routes->connect(
-        '/lang/:lang',
-        ['controller' => 'Modules', 'action' => 'lang'],
-        ['pass' => ['lang'], '_name' => 'modules:lang']
-    );
 
     // Modules.
     $routes->connect(

@@ -581,5 +581,10 @@ return [
     //         // etc.
     //     ],
     //     'timezone' => 'UTC',
+    //     'cookie' => [
+    //         'name' => 'BEditaWebI18n',
+    //         'create' => true,
+    //     ],
+    //     'switchLangUrl' => '/lang',
     // ],
 ];

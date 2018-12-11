@@ -73,8 +73,13 @@ try {
         'locales' => ['en_US' => 'en'],
         'languages' => ['en' => 'English'],
         'timezone' => 'UTC',
+        'cookie' => [
+            'name' => 'BEditaWebI18n',
+            'create' => true,
+        ],
+        'switchLangUrl' => '/lang',
     ]);
-    Configure::load('app', 'default', false);
+    Configure::load('app', 'default');
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
