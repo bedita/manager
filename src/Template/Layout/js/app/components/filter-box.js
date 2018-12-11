@@ -74,7 +74,7 @@ export default {
                     </span>
 
                     <span v-else-if="filter.type === 'checkbox'">
-                        <label>Both</label>
+                        <label>Any</label>
                         <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
                         <label>Yes</label>
                         <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
