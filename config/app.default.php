@@ -557,4 +557,37 @@ return [
     'Export' => [
         'limit' => 10000,
     ],
+
+    /**
+     * I18n setup for frontend.
+     *
+     *  - 'I18n.locales': array of supported locales and language code used as `prefix` like `/en`
+     *  - 'I18n.default': default language code
+     *  - 'I18n.languages': array of supported language codes with their names
+     *  - 'I18n.lang': language code in use (written by the application)
+     *  - 'I18n.timezone': timezone code to use (i.e. 'UTC')
+     *  - 'I18n.cookie': array representing cookie config used by middleware
+     *  - 'I18n.switchLangUrl': url used by middleware to switch lang
+     *
+     * Uncomment the following 'I18n' array to activate multilanguage support
+     */
+    // 'I18n' => [
+    //     'locales' => [
+    //         'en_US' => 'en',
+    //         'it_IT' => 'it',
+    //         // etc.
+    //     ],
+    //     'default' => 'en',
+    //     'languages' => [
+    //         'en' => 'English',
+    //         'it' => 'Italiano',
+    //         // etc.
+    //     ],
+    //     'timezone' => 'UTC',
+    //     'cookie' => [
+    //         'name' => 'BEditaWebI18n',
+    //         'create' => true,
+    //     ],
+    //     'switchLangUrl' => '/lang',
+    // ],
 ];

@@ -13,7 +13,7 @@
 
             <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                 <h2>
-                    {{ resourceName|humanize|lower }}
+                    {{ __(resourceName|humanize)|lower }}
                     <span class="tag is-smallest is-black space-around-half"
                         :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                     </span>

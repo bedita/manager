@@ -12,7 +12,7 @@
 
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
 
-            {{ Form.control(key, options)|raw }}
+            {{ Form.control(__(key), options)|raw }}
 
             {% if options.class == 'json' %}
                 {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
