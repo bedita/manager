@@ -562,9 +562,12 @@ return [
      * I18n setup for frontend.
      *
      *  - 'I18n.locales': array of supported locales and language code used as `prefix` like `/en`
-     *  - 'I18n.default':  default language code
+     *  - 'I18n.default': default language code
      *  - 'I18n.languages': array of supported language codes with their names
-     *  - 'I18n.lang':  language code in use (written by the application)
+     *  - 'I18n.lang': language code in use (written by the application)
+     *  - 'I18n.timezone': timezone code to use (i.e. 'UTC')
+     *  - 'I18n.cookie': array representing cookie config used by middleware
+     *  - 'I18n.switchLangUrl': url used by middleware to switch lang
      *
      * Uncomment the following 'I18n' array to activate multilanguage support
      */
