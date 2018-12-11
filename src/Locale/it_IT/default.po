@@ -69,7 +69,7 @@ msgid "Documents"
 msgstr "Documenti"
 
 msgid "Draft"
-msgstr "Bozza"
+msgstr ""
 
 msgid "Edit Params"
 msgstr "Modifica Parametri"
@@ -243,10 +243,10 @@ msgid "Objects"
 msgstr "Oggetti"
 
 msgid "Off"
-msgstr "Inattivo"
+msgstr ""
 
 msgid "On"
-msgstr "Attivo"
+msgstr ""
 
 msgid "Open image"
 msgstr "Apri immagine"
@@ -318,13 +318,13 @@ msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
 msgid "Set draft"
-msgstr "Imposta come bozza"
+msgstr "Imposta a 'draft'"
 
 msgid "Set off"
-msgstr "Imposta come inattivo"
+msgstr "Imposta ad 'off'"
 
 msgid "Set on"
-msgstr "Imposta come attivo"
+msgstr "Imposta ad 'on'"
 
 msgid "Settings"
 msgstr "Impostazioni"
