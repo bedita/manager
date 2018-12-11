@@ -580,5 +580,6 @@ return [
     //         'it' => 'Italiano',
     //         // etc.
     //     ],
+    //     'timezone' => 'UTC',
     // ],
 ];

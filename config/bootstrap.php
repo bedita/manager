@@ -67,6 +67,13 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
  */
 try {
     Configure::config('default', new PhpConfig());
+    // I18n default config (can be overwritten in app.php)
+    Configure::write('I18n', [
+        'default' => 'en',
+        'locales' => ['en_US' => 'en'],
+        'languages' => ['en' => 'English'],
+        'timezone' => 'UTC',
+    ]);
     Configure::load('app', 'default', false);
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
@@ -223,13 +230,3 @@ Plugin::load('BEdita/WebTools', ['bootstrap' => true]);
  * Load other custom / 3rd party plugins via configuration key 'Plugins'.
  */
 Plugin::loadFromConfig();
-
-/**
- * I18n setup
- */
-if (empty(Configure::read('I18n.default'))) {
-    Configure::write('I18n.default', 'en');
-}
-if (empty(Configure::read('I18n.languages'))) {
-    Configure::write('I18n.languages', [ 'en' => 'English' ]);
-}
