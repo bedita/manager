@@ -11,6 +11,8 @@
 
         .filter-container {
             padding: $gutter * .5;
+            display: flex;
+            align-items: center;
 
             .filter-name {
                 border-bottom: 1px solid $gray-600;
