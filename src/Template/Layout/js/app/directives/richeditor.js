@@ -22,10 +22,16 @@ export default {
                 }
 
                 let editor = CKEDITOR.replace(element, loadedConfig);
+                element.dataset.originalValue = element.value;
                 editor.on('change', () => {
                     element.value = editor.getData();
-                    element.dispatchEvent(new Event('change', {
+                    let isChanged = element.value !== element.dataset.originalValue;
+                    element.dispatchEvent(new CustomEvent('change', {
                         bubbles: true,
+                        detail: {
+                            id: element.id,
+                            isChanged,
+                        }
                     }));
                 });
             },

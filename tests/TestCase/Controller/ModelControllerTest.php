@@ -14,10 +14,15 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModelController;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\ModelController} Test Case
@@ -48,6 +53,20 @@ class ModelControllerTest extends TestCase
     ];
 
     /**
+     * Setup api client and auth
+     *
+     * @return void
+     */
+    private function setupApi() : void
+    {
+        $this->client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $this->client->authenticate($adminUser, $adminPassword);
+        $this->client->setupTokens($response['meta']);
+    }
+
+    /**
      * Setup controller to test with request config
      *
      * @param array $requestConfig
@@ -58,6 +77,7 @@ class ModelControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->ModelController = new ModelController($request);
+        $this->setupApi();
     }
 
     /**
@@ -196,5 +216,123 @@ class ModelControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Data provider for `testSavePropertyTypesJson` test case.
+     *
+     * @return array
+     */
+    public function savePropertyTypesJsonProvider() : Array
+    {
+        return [
+            // test with empty object
+            'emptyRequest' => [
+                new BadRequestException('empty request'),
+                [],
+                ''
+            ],
+            'addPropertyTypesRequest' => [
+                [
+                    [
+                        // 'id' => '12',
+                        'type' => 'property_types',
+                        'attributes' => [
+                                'name' => 'giovanni',
+                                'params' => [
+                                        'type' => 'string'
+                                ]
+                        ],
+                    ]
+                ],
+                [
+                    'addPropertyTypes' => [
+                        [
+                            'name' => 'giovanni',
+                            'params' => json_encode([
+                                'type' => 'string',
+                            ]),
+                        ]
+                    ],
+                ],
+                'saved'
+            ],
+            'editPropertyTypesRequest' => [
+                [
+                    [
+                        'id' => '12',
+                        'type' => 'property_types',
+                        'attributes' => [
+                                'name' => 'enrico',
+                                'params' => [
+                                        'type' => 'object'
+                                ],
+                        ],
+                    ]
+                ],
+                [
+                    'editPropertyTypes' => [
+                        [
+                            'id' => '12',
+                            'attributes' => [
+                                'name' => 'enrico',
+                                'params' => [
+                                    'type' => 'object',
+                                ],
+                            ]
+                        ]
+                    ],
+                ],
+                'edited'
+            ],
+            'removePropertyTypesRequest' => [
+                [ '12' ],
+                [
+                    'removePropertyTypes' => [
+                        '12'
+                    ],
+                ],
+                'removed',
+            ],
+        ];
+    }
+
+    /**
+     * Test `savePropertyTypesJson` method
+     *
+     * @dataProvider savePropertyTypesJsonProvider()
+     * @covers ::savePropertyTypesJson()
+     *
+     * @return void
+     */
+    public function testSavePropertyTypesJson($expectedResponse, $post, $action)
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => $post,
+        ];
+
+        $this->setupController($config);
+        $this->ModelController->resourceType = 'property_types';
+
+        if ($expectedResponse instanceof \Exception) {
+            $this->expectException(get_class($expectedResponse));
+            $this->expectExceptionCode($expectedResponse->getCode());
+            $this->expectExceptionMessage($expectedResponse->getMessage());
+        }
+
+        $this->ModelController->savePropertyTypesJson();
+
+        $actualResponse = Hash::get($this->ModelController->viewVars, $action, []);
+
+        if ($action == 'saved') {
+            foreach ($actualResponse as &$element) {
+                unset($element['id']);
+            }
+        }
+
+        static::assertEquals($expectedResponse, $actualResponse);
     }
 }

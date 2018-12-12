@@ -28,7 +28,7 @@ export default {
     },
 
     template: `
-    <form :name="objectsLabel" submit="applyFilter">
+    <form :name="objectsLabel" submit="applyFilter" action="noaction">
         <nav class="pagination has-text-size-smallest">
 
             <div class="count-items" v-if="pagination.count">
@@ -73,18 +73,27 @@ export default {
                         </select>
                     </span>
 
-                    <span v-else-if="filter.date">
-                        <span>
-                            <label>From:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
-                        <span>
-                            <label>To:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
+                    <span v-else-if="filter.type === 'checkbox'">
+                        <label>Any</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
+                        <label>Yes</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
+                        <label>No</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
                     </span>
+
+                    <template v-else-if="filter.date">
+                        <span class="datepicker-container">
+                            <label>From:
+                            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                        <span class="datepicker-container">
+                            <label>To:
+                            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                            </label>
+                        </span>
+                    </template>
 
                     <span v-else>
                         <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
@@ -233,7 +242,7 @@ export default {
                 this.pagination.page_count > 1 &&
                 this.pagination.page_count <= 7
             );
-        },
+        }
     },
 
     watch: {

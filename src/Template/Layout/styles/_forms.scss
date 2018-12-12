@@ -1,5 +1,15 @@
 /* buttons, and inputs are defined in mixins.scss */
 
+.inverted {
+    background: $gray-900;
+    color: $white;
+
+    &:hover {
+        background: $white !important;
+        color: $gray-900 !important;
+    }
+}
+
 #{$text-inputs} {
     padding: 0 .5em;
     min-width: 5rem;
@@ -163,19 +173,108 @@ form fieldset {
         button {
             min-width: unset;
         }
+
+        div.jsoneditor,
+        div.jsoneditor-menu {
+            border-color: #4b4b4b;
+        }
+        div.jsoneditor-menu {
+            background-color: #4b4b4b;
+        }
+        div.jsoneditor-tree,
+        div.jsoneditor textarea.jsoneditor-text {
+            background-color: #666666;
+            color: #ffffff;
+        }
+        div.jsoneditor-field,
+        div.jsoneditor-value {
+            color: #ffffff;
+        }
+        table.jsoneditor-search div.jsoneditor-frame {
+            background: #808080;
+        }
+
+        tr.jsoneditor-highlight,
+        tr.jsoneditor-selected {
+            background-color: #808080;
+        }
+
+        div.jsoneditor-field[contenteditable="true"]:focus,
+        div.jsoneditor-field[contenteditable="true"]:hover,
+        div.jsoneditor-value[contenteditable="true"]:focus,
+        div.jsoneditor-value[contenteditable="true"]:hover,
+        div.jsoneditor-field.jsoneditor-highlight,
+        div.jsoneditor-value.jsoneditor-highlight {
+            background-color: #808080;
+            border-color: #808080;
+        }
+
+        div.jsoneditor-field.highlight-active,
+        div.jsoneditor-field.highlight-active:focus,
+        div.jsoneditor-field.highlight-active:hover,
+        div.jsoneditor-value.highlight-active,
+        div.jsoneditor-value.highlight-active:focus,
+        div.jsoneditor-value.highlight-active:hover {
+            background-color: #b1b1b1;
+            border-color: #b1b1b1;
+        }
+
+        div.jsoneditor-tree button:focus {
+            background-color: #868686;
+        }
+
+        /* coloring of JSON in tree mode */
+        div.jsoneditor-readonly {
+            color: #acacac;
+        }
+        div.jsoneditor td.jsoneditor-separator {
+            color: #acacac;
+        }
+        div.jsoneditor-value.jsoneditor-string {
+            color: #00ff88;
+        }
+        div.jsoneditor-value.jsoneditor-object,
+        div.jsoneditor-value.jsoneditor-array {
+            color: #bababa;
+        }
+        div.jsoneditor-value.jsoneditor-number {
+            color: #ff4040;
+        }
+        div.jsoneditor-value.jsoneditor-boolean {
+            color: #ff8048;
+        }
+        div.jsoneditor-value.jsoneditor-null {
+            color: #49a7fc;
+        }
+        div.jsoneditor-value.jsoneditor-invalid {
+            color: white;
+        }
+
+        button.jsoneditor-selected {
+            background-color: #49a7fc;
+
+            &:hover {
+                background-color: #49a7fc;
+            }
+        }
     }
 }
 
-
 // Date Picker
+
+input.flatpickr-input.form-control {
+    min-width: 8rem;
+}
+
 .clear-button {
     display: inline-flex;
     z-index: 10;
     color: $gray-800;
-    font-size: 1.25em;
-    margin-left: -25px;
-    width: 21px;
-    height: 21px;
+    font-size: 24px;
+    margin-left: -30px;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
     justify-content: center;
     align-items: center;
     cursor: pointer;
