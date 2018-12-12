@@ -184,7 +184,9 @@ class AppControllerTest extends TestCase
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
 
         static::assertArrayHasKey('user', $this->AppController->viewVars);
-        static::assertEquals($user, $this->AppController->viewVars['user']);
+        static::assertArrayHasKey('tokens', $this->AppController->viewVars['user']);
+        static::assertArrayHasKey('jwt', $this->AppController->viewVars['user']['tokens']);
+        static::assertArrayHasKey('renew', $this->AppController->viewVars['user']['tokens']);
     }
 
     /**
