@@ -12,7 +12,7 @@ export default {
 
     props: {
         value: {
-            type: String,
+            type: [String, Boolean],
         },
         attrs: {
             type: Object,
@@ -27,35 +27,39 @@ export default {
      * @returns {VNode} input element
      */
     render(createElement) {
-        const directivesName = Object.keys(this.attrs).filter(attr => attr.startsWith('v-'));
+        const attrs = this.attrs;
+        const directivesName = Object.keys(attrs).filter(attr => attr.startsWith('v-'));
 
         // remove 'v-' text from vue directives
-        let directives = directivesName.map((name) => {
+        const directives = directivesName.map((name) => {
             const directiveName = name.split('v-').pop();
             return {
                 name: directiveName,
             }
         });
 
+        let domProps = { value: this.value };
+        let on = { input: e => { this.$emit("update:value", e.target.value); } };
+
+        // if checkbox is to be rendered a different mapping is needed
+        if (attrs.type === 'checkbox') {
+            domProps = { checked: this.value === 'true' };
+            on = { input: e => { this.$emit("update:value", e.target.checked); } };
+        }
+
         // always force date format without time
-        delete this.attrs.time;
+        delete attrs.time;
 
         // create and return input element
         return createElement('input', {
             // Custom directives
-            directives: directives,
+            directives,
             // Normal HTML attributes
-            attrs: this.attrs,
+            attrs,
             // DOM properties
-            domProps: {
-                value: this.value,
-            },
+            domProps,
             // Event handlers are nested under `on`
-            on: {
-                input: e => {
-                    this.$emit('update:value', e.target.value);
-                },
-            },
+            on,
         });
     },
 };

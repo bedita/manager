@@ -73,6 +73,15 @@ export default {
                         </select>
                     </span>
 
+                    <span v-else-if="filter.type === 'checkbox'">
+                        <label>Any</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
+                        <label>Yes</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
+                        <label>No</label>
+                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
+                    </span>
+
                     <template v-else-if="filter.date">
                         <span class="datepicker-container">
                             <label>From:
@@ -85,7 +94,6 @@ export default {
                             </label>
                         </span>
                     </template>
-
 
                     <span v-else>
                         <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
