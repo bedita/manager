@@ -586,7 +586,7 @@ class ModulesController extends AppController
      */
     public function getSchemaForIndex($objectType) : array
     {
-        $schema = $this->Schema->getSchema($objectType);
+        $schema = (array)$this->Schema->getSchema($objectType);
 
         // if prop is an enum then prepend an empty string for select element
         if (!empty($schema['properties'])) {
