@@ -123,7 +123,7 @@ class ModulesController extends AppController
         $this->set('bulkActions', $this->Properties->bulkList($this->objectType));
 
         // objectTypes schema
-        $this->set('schema', $this->Schema->getSchema($this->objectType));
+        $this->set('schema', $this->getSchemaForIndex($this->objectType));
 
         return null;
     }
@@ -575,5 +575,28 @@ class ModulesController extends AppController
         }
 
         return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
+    }
+
+    /**
+     * get object properties and format them for index
+     *
+     * @param string $objectType objecte type name
+     *
+     * @return array $schema
+     */
+    public function getSchemaForIndex($objectType) : array
+    {
+        $schema = $this->Schema->getSchema($objectType);
+
+        // if prop is an enum then prepend an empty string for select element
+        if (!empty($schema['properties'])) {
+            foreach ($schema['properties'] as &$property) {
+                if (isset($property['enum'])) {
+                    array_unshift($property['enum'], '');
+                }
+            }
+        }
+
+        return $schema;
     }
 }

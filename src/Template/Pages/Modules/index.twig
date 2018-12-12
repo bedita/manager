@@ -83,7 +83,7 @@
                         'url': {'_name': 'modules:bulkActions', 'object_type': objectType, '?': _view.request.getQuery()},
                     })|raw }}
 
-                        <fieldset :disabled="!selectedRows.length">
+                        <section class="fieldset" :disabled="!selectedRows.length">
                             <input type="submit" @click="bulkActions" value="{{ __('Set selected') }}">
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
                             {{ Form.unlockField('ids') }}
@@ -115,7 +115,7 @@
                                 {% endif %}
                             {% endfor %}
 
-                        </fieldset>
+                        </section>
                     {{ Form.end()|raw }}
 
                     {# trash #}
