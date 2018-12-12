@@ -150,7 +150,7 @@ class PropertiesComponent extends Component
     }
 
     /**
-     * List of filter to display in `filter` view
+     * List of bulk actions to display in `index` view
      *
      * @param string $type Object type name
      *

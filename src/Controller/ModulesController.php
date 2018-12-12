@@ -119,7 +119,7 @@ class ModulesController extends AppController
         // base/custom filters for filter view
         $this->set('filter', $this->Properties->filterList($this->objectType));
 
-        // base/custom filters for filter view
+        // base/custom bulk actions for index view
         $this->set('bulkActions', $this->Properties->bulkList($this->objectType));
 
         // objectTypes schema
@@ -536,13 +536,14 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function bulkActions() : ? Response
+    public function bulkActions() : ?Response
     {
         $requestData = $this->request->getData();
         $this->request->allowMethod(['post']);
 
         if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
             $ids = $requestData['ids'];
+            $errors = [];
 
             // extract valid attributes to change
             $attributes = array_filter(
@@ -552,12 +553,24 @@ class ModulesController extends AppController
                 }
             );
 
-            if (!empty($ids)) { // export selected (filter by id)
-                $ids = explode(',', $ids);
-                foreach ($ids as $id) {
-                    $data = array_merge($attributes, ['id' => $id]);
+            // export selected (filter by id)
+            $ids = explode(',', $ids);
+            foreach ($ids as $id) {
+                $data = array_merge($attributes, ['id' => $id]);
+                try {
                     $this->apiClient->save($this->objectType, $data);
+                } catch (BEditaClientException $e) {
+                    $errors[] = [
+                        'id' => $id,
+                        'message' => $e->getAttributes()
+                    ];
                 }
+            }
+
+            // if errors occured on any single save show error message
+            if (!empty($errors)) {
+                $this->log($errors, LogLevel::ERROR);
+                $this->Flash->error(__('Bulk Action failed on: '), ['params' => $errors]);
             }
         }
 
