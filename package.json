@@ -30,6 +30,7 @@
         "jsoneditor": "^5.15.0",
         "moment": "^2.22.2",
         "sleep-promise": "^6.0.0",
+        "ttag": "^1.5.1",
         "v-hotkey": "^0.2.3",
         "vue": "^2.5.16"
     },
@@ -51,6 +52,7 @@
         "sass-loader": "^7.0.1",
         "style-loader": "^0.21.0",
         "svg-url-loader": "^2.3.2",
+        "ttag-cli": "^1.5.1",
         "vue-loader": "^14.0.0",
         "vue-template-compiler": "^2.5.16",
         "webpack": "4.19.0",

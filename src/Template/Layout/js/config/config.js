@@ -1,6 +1,7 @@
 // Vue configs...
 
 import Vue from 'vue';
+import Locale from 'app/locales';
 
 // Polyfill
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
@@ -25,6 +26,8 @@ for (let property in VueOptions) {
         Vue.options[property] = VueOptions[property];
     }
 }
+
+Locale(BEDITA.locale);
 
 // CKeditor configs...
 
