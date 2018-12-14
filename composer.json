@@ -74,13 +74,8 @@
         "update-locales": [
             "node_modules/ttag-cli/bin/ttag extract --o src/Locale/en_US/default-js.po --l en src/Template/Layout/js/app",
             "node_modules/ttag-cli/bin/ttag extract --o src/Locale/it_IT/default-js.po --l it src/Template/Layout/js/app",
-<<<<<<< HEAD
-            "node_modules/ttag-cli/bin/ttag merge src/Locale/en_US/default.po src/Locale/en_US/default-js.po > tmp/temp.po && mv tmp/temp.po src/Locale/en_US/default.po",
-            "node_modules/ttag-cli/bin/ttag merge src/Locale/it_IT/default.po src/Locale/it_IT/default-js.po > tmp/temp.po && mv tmp/temp.po src/Locale/it_IT/default.po",
-=======
-            "msgmerge src/Locale/en_US/default.po src/Locale/en_US/default-js.po > src/Locale/en_US/default.po",
-            "msgmerge src/Locale/it_IT/default.po src/Locale/it_IT/default-js.po > src/Locale/it_IT/default.po",
->>>>>>> 2310fe4dd12009add5c58b7a8be062ad70ac4ec4
+            "msgcat --use-first src/Locale/en_US/default.po src/Locale/en_US/default-js.po -o src/Locale/en_US/default.po",
+            "msgcat --use-first src/Locale/it_IT/default.po src/Locale/it_IT/default-js.po -o src/Locale/it_IT/default.po",
             "node_modules/ttag-cli/bin/ttag po2json src/Locale/en_US/default.po > src/Template/Layout/js/app/locales/en_US.json",
             "node_modules/ttag-cli/bin/ttag po2json src/Locale/it_IT/default.po > src/Template/Layout/js/app/locales/it_IT.json"
         ]
