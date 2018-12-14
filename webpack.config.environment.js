@@ -53,6 +53,7 @@ const BUNDLE = {
     appPath: 'app',
     appName: 'app.js',
     templateRoot: 'src/Template',                   // source .scss/ .twig
+    localeDir: 'src/Locale',
     beditaPluginsRoot: 'plugins',
 
     // destination
@@ -78,6 +79,7 @@ const bundler = {
 const entries = readDirs(BUNDLE.jsRoot);
 
 let SRC_TEMPLATE_ALIAS = {
+    Locale: path.resolve(__dirname, BUNDLE.localeDir),
     Template: path.resolve(__dirname, BUNDLE.templateRoot),
 };
 

@@ -20,7 +20,8 @@
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development",
         "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
-        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
+        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production",
+        "ttag": "./node_modules/ttag-cli/bin/ttag po2json src/Locale/en_US/default.po > src/Template/Layout/js/app/locales/en_US.json; ./node_modules/ttag-cli/bin/ttag po2json src/Locale/it_IT/default.po > src/Template/Layout/js/app/locales/it_IT.json"
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.1.9",
@@ -46,8 +47,10 @@
         "compression-webpack-plugin": "^1.1.11",
         "css-loader": "^0.28.11",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "json-loader": "^0.5.7",
         "node-sass": "^4.9.0",
         "optimize-css-assets-webpack-plugin": "^4.0.1",
+        "po-gettext-loader": "^0.1.1",
         "raw-loader": "^0.5.1",
         "sass-loader": "^7.0.1",
         "style-loader": "^0.21.0",

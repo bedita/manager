@@ -15,7 +15,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/loader');
-
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
 
@@ -156,7 +155,7 @@ module.exports = {
         // aliases for import
         alias: SRC_TEMPLATE_ALIAS,
 
-        extensions: ['.js', '.vue', '.json', '.scss', '.css'],
+        extensions: ['.js', '.vue', '.json', '.scss', '.css', 'po'],
     },
 
     module: {
@@ -186,6 +185,16 @@ module.exports = {
                         }]
                     ]
                 }
+            },
+            {
+                test: /\.po$/,
+                include: [
+                    path.resolve(__dirname, BUNDLE.localeDir),
+                ],
+                use: [
+                    { loader: 'json-loader' },
+                    { loader: 'po-gettext-loader' },
+                ]
             },
             {
                 test: /\.scss$/,
