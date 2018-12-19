@@ -81,80 +81,117 @@
             </div>
         </edit-relation-params>
 
+        {% set _csrfToken = _view.request.params['_csrfToken']|json_encode %}
         {# add relation component #}
         <relations-add inline-template v-if="addRelation.name"
             config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
 
             :relation-name="addRelation.name"
             :already-in-view="addRelation.alreadyInView"
-            :relation-types="addRelation.relationTypes">
+            :relation-types="addRelation.relationTypes"
+            :csrf-token={{ _csrfToken }}>
 
             <div class="relations-add">
-                <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-                    <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
-                    <a href="#" @click.prevent="closePanel()">{{ __('close') }}</a>
-                </header>
+                <section v-show="isMedia">
+                    <header class="tab unselectable open"
+                        :class="!objects || loading ? 'is-loading-spinner' : ''"
+                        :disabled="saving"
+                        @click="showCreateObjectForm = !showCreateObjectForm">
 
-                {# FilterBoxView #}
-                <filter-box-view
-                    :config-paginate-sizes="configPaginateSizes"
-                    :pagination.sync="pagination"
-                    :show-filter-buttons=false
-                    :relation-types="relationTypes"
+                        <h2><span v-show="relationName">{{ __('create new') }} <: relationName | humanize :></span> &nbsp;</h2>
+                        <a href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
+                    </header>
+                    <transition appear name="fade">
+                        <div class="create-new-object" v-if="showCreateObjectForm">
+                            <form name="create-object" :disabled="saving" @submit.prevent="createObject">
+                                <div class="dropzone">
 
-                    page-sizes-label={{ __('Page size') }}
-                    objects-label={{ __('objects') }}
+                                    {{ Form.control('file', {
+                                        'type': 'file',
+                                        'label': false,
+                                        'class': 'drop-file',
+                                        '@change': 'processFile',
+                                        ':accept': 'acceptedMimeTypes'
+                                    }) | raw }}
+                                </div>
 
-                    @filter-update-current-page="onUpdateCurrentPage"
-                    @filter-update-page-size="onUpdatePageSize"
-                    @filter-objects="onFilterObjects">
-                </filter-box-view>
+                                {{ Form.control('title', {
+                                    'type': 'text',
+                                    ':placeholder': 'titlePlaceholder',
+                                }) | raw }}
 
-                {# objects #}
-                <div class="related-objects-list columns">
-                    <div class="related-object column is-3"
-                        v-for="related in objects">
-                        <article class="box has-text-gray-100 has-text-size-smaller"
-                                v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
-                                    alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
-                                @click="toggle(related, $event)">
+                                <button :disabled="this.file === null" type="submit">{{ __('create') }}</button>
+                            <form>
+                        </div>
+                    </transition>
+                </section>
+                <main>
+                    <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
+                        <h2><span v-show="relationName">{{ __('add to') }} <: relationName | humanize :></span> &nbsp;</h2>
+                        <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
+                    </header>
 
-                            <header>
-                                <h1><: related.attributes.title || related.attributes.name :></h1>
-                                <span class="has-text-size-smaller prop-id"><: related.id :></span>
-                            </header>
+                    {# FilterBoxView #}
+                    <filter-box-view
+                        :config-paginate-sizes="configPaginateSizes"
+                        :pagination.sync="pagination"
+                        :show-filter-buttons=false
+                        :relation-types="relationTypes"
 
-                            <div v-if="related.meta.url" class="thumbnail">
-                                <figure>
-                                    <img :src="related.meta.url" />
-                                </figure>
-                            </div>
+                        page-sizes-label={{ __('Page size') }}
+                        objects-label={{ __('objects') }}
 
-                            <div>
-                                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            </div>
+                        @filter-update-current-page="onUpdateCurrentPage"
+                        @filter-update-page-size="onUpdatePageSize"
+                        @filter-objects="onFilterObjects">
+                    </filter-box-view>
 
-                            <footer>
-                                <a @click.stop='' :href="buildViewUrl(related.type, related.id)" target="_blank">{{ __('open') }}</a>
-                            </footer>
-                        </article>
+                    {# objects #}
+                    <div class="related-objects-list columns">
+                        <div class="related-object column is-3"
+                            v-for="related in objects">
+                            <article class="box has-text-gray-100 has-text-size-smaller"
+                                    v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
+                                        alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
+                                    @click="toggle(related, $event)">
+
+                                <header>
+                                    <h1><: related.attributes.title || related.attributes.name :></h1>
+                                    <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                                </header>
+
+                                <div v-if="related.meta.url" class="thumbnail">
+                                    <figure>
+                                        <img :src="related.meta.url" />
+                                    </figure>
+                                </div>
+
+                                <div>
+                                    <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                                </div>
+
+                                <footer>
+                                    <a @click.stop='' :href="buildViewUrl(related.type, related.id)" target="_blank">{{ __('open') }}</a>
+                                </footer>
+                            </article>
+                        </div>
+
+                        {# empty element: keep for flex layout #}
+                        <div class="column"></div>
                     </div>
 
-                    {# empty element: keep for flex layout #}
-                    <div class="column"></div>
-                </div>
-
-                <footer>
-                    <p>
-                        <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
-                            @click.prevent="returnDataFromPanel({
-                                action: 'add-relation',
-                                relationName: relationName,
-                                objects: selectedObjects,
-                            })">{{ __('Add objects to') }} <: relationName | humanize :></button>
-                    </p>
-                    <span class="tag" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
-                </footer>
+                    <footer>
+                        <p>
+                            <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
+                                @click.prevent="returnDataFromPanel({
+                                    action: 'add-relation',
+                                    relationName: relationName,
+                                    objects: selectedObjects,
+                                })">{{ __('Add objects to') }} <: relationName | humanize :></button>
+                        </p>
+                        <span class="tag" v-show="selectedObjects.length" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
+                    </footer>
+                </main>
 
             </div>
         </relations-add inline-template>
