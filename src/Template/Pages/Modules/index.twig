@@ -78,15 +78,44 @@
                     <p>{{ __('Actions on selected items') }}</p>
                 </header>
                 <nav>
-                    {# status #}
-                    {{ Form.create(null, {'id': 'form-status', 'url': {'_name': 'modules:changeStatus', 'object_type': objectType}})|raw }}
-                        {{ Form.unlockField('ids') }}
-                        <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {{ Form.unlockField('status') }}
-                        <input type="hidden" name="status" v-bind:value="status">
-                        <button @click.prevent="setStatus('on')" :disabled="!selectedRows.length">{{ __('Set on') }}</button>
-                        <button @click.prevent="setStatus('draft')" :disabled="!selectedRows.length">{{ __('Set draft') }}</button>
-                        <button @click.prevent="setStatus('off')" :disabled="!selectedRows.length">{{ __('Set off') }}</button>
+                    {{ Form.create(null, {
+                        'id': 'bulk-actions',
+                        'url': {'_name': 'modules:bulkActions', 'object_type': objectType, '?': _view.request.getQuery()},
+                    })|raw }}
+
+                        <section class="fieldset" :disabled="!selectedRows.length">
+                            <input type="submit" @click="bulkActions" value="{{ __('Set selected') }}">
+                            <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            {{ Form.unlockField('ids') }}
+
+                            {% for key in bulkActions %}
+                                {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
+                                {% set options = options|merge({ 'name': 'attributes[' ~ key ~ ']' }) %}
+
+                                {% if options.type == 'checkbox' %}
+                                    {# custom radio input for type checkbox #}
+                                    {% set radio =  {
+                                        "type":"radio",
+                                        "options":
+                                            [
+                                                { "value": 1, "text": "Yes" },
+                                                { "value": 0, "text": "No" }
+                                            ],
+                                        "name": "attributes[" ~ key ~ "]"
+                                    } %}
+                                    {{ Form.control(key, radio)|raw }}
+
+                                {% else %}
+                                    {{ Form.control(key, options)|raw }}
+                                {% endif %}
+
+
+                                {% if options.class == 'json' %}
+                                    {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
+                                {% endif %}
+                            {% endfor %}
+
+                        </section>
                     {{ Form.end()|raw }}
 
                     {# trash #}

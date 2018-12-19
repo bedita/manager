@@ -138,15 +138,24 @@ label {
 
 
 form .fieldset,
-form fieldset {
-    padding: 0;
-    textarea, input {
-        &.error {
-            background-color: red;
+form {
+    section.fieldset {
+        padding: 0;
+        textarea, input {
+            &.error {
+                background-color: red;
 
-            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: white;
-                opacity: 1; /* Firefox */
+                &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: white;
+                    opacity: 1; /* Firefox */
+                }
+            }
+        }
+
+        &[disabled] {
+            input, select {
+                color: #495057;
+                background-color: #adb5bd;
             }
         }
     }

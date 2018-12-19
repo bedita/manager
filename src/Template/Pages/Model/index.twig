@@ -26,11 +26,12 @@
             {% endif %}
 
             {# list resources : rows #}
+
+            <form id="property-types" check-changes="true">
             {% for resource in resources %}
                 {% if resource.type == 'property_types' %}
                     <div
                         v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
-                        href="{{ Url.build({'_name': 'model:view', 'resource_type': resource.type, 'id': resource.id}) }}"
                         title="{{ resource.attributes.name }}"
                         class="index-entry"
                         :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
@@ -72,8 +73,8 @@
 
                             {% if resourceType == 'property_types' %}
                                 <div class="action-cell">
-                                    <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType({{resource.id}})"></button>
-                                    <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType({{resource.id}})"></button>
+                                    <button class="center-icon icon-trash inverted remove-action" @click.prevent="removePropertyType({{resource.id}})"></button>
+                                    <button class="center-icon icon-ccw inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})"></button>
                                 </div>
                             {% endif %}
                     </div>
@@ -172,6 +173,8 @@
                     </div>
                 </div>
             {% endif %}
+
+            </form>
 
         </div>
         {# end list-objects #}
