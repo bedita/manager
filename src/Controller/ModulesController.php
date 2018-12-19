@@ -305,7 +305,7 @@ class ModulesController extends AppController
     /**
      * Create new object from ajax request.
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function saveJson() : void
     {
