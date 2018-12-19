@@ -221,6 +221,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:save']
     );
     $routes->connect(
+        '/:object_type/saveJson',
+        ['controller' => 'Modules', 'action' => 'saveJson'],
+        ['_name' => 'modules:saveJson']
+    );
+    $routes->connect(
         '/:object_type/delete',
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
