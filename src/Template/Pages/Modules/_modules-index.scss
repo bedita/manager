@@ -138,6 +138,47 @@ body.view-module {
                         margin-right: 0;
                         margin-left: auto;
                     }
+
+                    &#bulk-actions {
+                        flex-grow: 1;
+                    }
+
+                    fieldset[disabled] {
+                        .clear-button {
+                            display: none;
+                        }
+
+                        label {
+                            opacity: .3;
+                        }
+
+                        .input.textarea {
+                            border-color: #adb5bd !important;
+                            span, div {
+                                color: #495057 !important;
+                                background-color: #adb5bd !important;
+                                border-color: #adb5bd !important;
+                                pointer-events: none;
+                            }
+
+                            div.cke_inner {
+                                background-color: #768494 !important;
+
+                                div.cke_contents {
+                                    opacity: 0.4;
+                                }
+                            }
+                        }
+                    }
+
+
+                    .input {
+                        margin: $gutter * .5;
+
+                        label {
+                            margin-right: $gutter * .5;
+                        }
+                    }
                 }
             }
         }
