@@ -45,10 +45,11 @@ class PropertiesComponent extends Component
                 'extra',
             ],
             // remaining attributes
+            // items listed here only used for ordering, not listed if present in other groups
             'other' => [
                 'body',
                 'lang',
-                // other properties
+                // remaining attributes
             ],
         ],
         // index properties list
@@ -118,6 +119,7 @@ class PropertiesComponent extends Component
             $used = array_merge($used, $list);
         }
         // add remaining properties to 'other' group
+        $properties['other'] = array_diff_key($properties['other'], array_flip($used));
         $properties['other'] += array_diff_key($attributes, array_flip($used));
 
         return $properties;
