@@ -60,10 +60,10 @@ class ModulesControllerSample extends ModulesController
     }
 
     /**
-    * Create new object from ajax request.
-    *
-    * @return void
-    */
+     * Create new object from ajax request.
+     *
+     * @return void
+     */
     public function saveJson() : void
     {
         parent::saveJson();
@@ -410,12 +410,12 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-    * Test `saveJson` method
-    *
-    * @covers ::saveJson()
-    *
-    * @return void
-    */
+     * Test `saveJson` method
+     *
+     * @covers ::saveJson()
+     *
+     * @return void
+     */
     public function testSaveJson() : void
     {
         // Setup controller for test
@@ -442,7 +442,6 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->response;
         static::assertEquals(200, $result->statusCode());
         static::assertEquals('text/html', $result->type());
-
     }
 
     /**
