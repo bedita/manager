@@ -58,6 +58,16 @@ class ModulesControllerSample extends ModulesController
     {
         parent::updateMediaUrls($response);
     }
+
+    /**
+    * Create new object from ajax request.
+    *
+    * @return void
+    */
+    public function saveJson() : void
+    {
+        parent::saveJson();
+    }
 }
 
 /**
@@ -397,6 +407,42 @@ class ModulesControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+    * Test `saveJson` method
+    *
+    * @covers ::saveJson()
+    *
+    * @return void
+    */
+    public function testSaveJson() : void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'title' => 'bibo',
+            ],
+            'params' => [
+                'object_type' => 'images',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $this->controller->saveJson();
+
+        // verify response status code and type
+        $result = $this->controller->response;
+        static::assertEquals(200, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+
     }
 
     /**
