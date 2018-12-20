@@ -45,10 +45,11 @@ class PropertiesComponent extends Component
                 'extra',
             ],
             // remaining attributes
+            // items listed here only used for ordering, not listed if present in other groups
             'other' => [
                 'body',
                 'lang',
-                // other properties
+                // remaining attributes
             ],
         ],
         // index properties list
@@ -58,6 +59,9 @@ class PropertiesComponent extends Component
         ],
 
         'filter' => [
+            'status',
+        ],
+        'bulk' => [
             'status',
         ],
     ];
@@ -115,6 +119,7 @@ class PropertiesComponent extends Component
             $used = array_merge($used, $list);
         }
         // add remaining properties to 'other' group
+        $properties['other'] = array_diff_key($properties['other'], array_flip($used));
         $properties['other'] += array_diff_key($attributes, array_flip($used));
 
         return $properties;
@@ -144,5 +149,17 @@ class PropertiesComponent extends Component
     public function filterList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.filter', $type), $this->defaultGroups['filter']);
+    }
+
+    /**
+     * List of bulk actions to display in `index` view
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function bulkList(string $type) : array
+    {
+        return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
     }
 }

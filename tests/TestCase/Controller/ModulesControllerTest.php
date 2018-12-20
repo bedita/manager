@@ -14,6 +14,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
 use Aura\Intl\Exception;
 use BEdita\SDK\BEditaClient;
@@ -646,6 +647,15 @@ class ModulesControllerTest extends TestCase
                 ['data' => []],
                 ['data' => []],
             ],
+            // test with objct without ids
+            'responseWithoutIds' => [
+                ['data' => [
+                    'ids' => [],
+                ]],
+                ['data' => [
+                    'ids' => [],
+                ]],
+            ],
             // correct result
             'correctResponseMock' => [
                 [ // expected
@@ -731,16 +741,16 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `changeStatus` method
+     * Test `bulkActions` method
      *
-     * @covers ::changeStatus()
+     * @covers ::bulkActions()
      *
      * @return void
      */
-    public function testChangeStatus() : void
+    public function testBulkActions() : void
     {
         // Setup controller for test
-        $this->setupController([]);
+        $this->setupController();
 
         // get object for test
         $o = $this->getTestObject();
@@ -751,8 +761,10 @@ class ModulesControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'id' => $o['id'],
-                'status' => $o['attributes']['status'],
+                'ids' => $o['id'],
+                'attributes' => [
+                    'status' => $o['attributes']['status'],
+                ],
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -760,11 +772,123 @@ class ModulesControllerTest extends TestCase
         ]);
 
         // do controller call
-        $result = $this->controller->changeStatus();
+        $result = $this->controller->bulkActions();
 
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
         static::assertEquals('text/html', $result->type());
+    }
+
+    /**
+     * Test `bulkActions` method with errors
+     *
+     * @covers ::bulkActions()
+     *
+     * @return void
+     */
+    public function testBulkActionsWithErrors() : void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $o = $this->getTestObject();
+
+        // Setup again for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => $o['id'],
+                'attributes' => [
+                    'status' => $o['attributes']['status'],
+                ],
+            ],
+            'params' => [
+                'object_type' => $o['type'],
+            ],
+        ]);
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.org'])
+            ->getMock();
+
+        $requestBody = [
+            'id' => $o['id'],
+            'status' => $o['attributes']['status'],
+        ];
+
+        $exception = new BEditaClientException([
+            'id' => $o['id'],
+            'message' => 'Not Found',
+        ], 404);
+
+        $apiClient->method('save')
+            ->with($o['type'], $requestBody)
+            ->willThrowException($exception);
+
+        $this->controller->apiClient = $apiClient;
+
+        // do controller call
+        $result = $this->controller->bulkActions();
+
+        $flash = $this->controller->request->session()->read('Flash.flash');
+        $message = $flash[0]['message'];
+        $expected = 'Bulk Action failed on: ';
+        // verify response status code and type
+
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+        static::assertEquals($expected, $message);
+    }
+
+    /**
+     * Test `getSchemaForIndex` method with errors
+     *
+     * @covers ::getSchemaForIndex()
+     *
+     * @return void
+     */
+    public function testGetSchemaForIndex() : void
+    {
+        $type = 'documents';
+        $mockResponse = [
+            'properties' => [
+                'enum_prop' => [
+                    'type' => 'string',
+                    'enum' => [
+                        'enum1',
+                        'enum2',
+                        'enum3',
+                    ],
+                ]
+            ]
+        ];
+        $expected = [
+            'properties' => [
+                'enum_prop' => [
+                    'type' => 'string',
+                    'enum' => [
+                        '',
+                        'enum1',
+                        'enum2',
+                        'enum3',
+                    ],
+                ]
+            ]
+        ];
+
+        $this->setupController();
+        $this->controller->Schema = $this->createMock(SchemaComponent::class);
+        $this->controller->Schema->method('getSchema')
+            ->with($type)
+            ->willReturn($mockResponse);
+
+        $actual = $this->controller->getSchemaForIndex($type);
+
+        static::assertEquals($expected, $actual);
     }
 
     /**

@@ -199,17 +199,17 @@ const _vueInstance = new Vue({
 
             // return data from RelationsAdd view component
             if (data.action === 'add-relation') {
-                this.$refs["moduleView"]
+                this.$refs['moduleView']
                     .$refs[data.relationName]
-                    .$refs["relation"].appendRelations(data.objects);
+                    .$refs['relation'].appendRelations(data.objects);
             }
 
             // return data from EditRelationParams view component
             if (data.action === 'edit-params') {
                 const relationName = data.item.name;
-                this.$refs["moduleView"]
+                this.$refs['moduleView']
                     .$refs[relationName]
-                    .$refs["relation"].updateRelationParams(data.item);
+                    .$refs['relation'].updateRelationParams(data.item);
             }
         },
 
@@ -416,24 +416,32 @@ const _vueInstance = new Vue({
             */
             this.$el.addEventListener('focusin', (ev) => {
                 const element = ev.target;
-                if (typeof element.dataset.originalValue === 'undefined') {
-                    if (element.nodeName === 'INPUT') {
-                        // storing original value for the element
-                        if (element.type === 'radio') {
-                            const name = element.name;
-                            const group = document.querySelectorAll(`input[name=${name}]`);
-                            const checked = document.querySelector(`input[name=${name}]:checked`);
-                            group.forEach(el => el.dataset.originalValue = checked.value);
-                        } else if (element.type === 'checkbox') {
-                            const name = element.name;
-                            const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                            element.dataset.originalValue = JSON.stringify(checked);
-                        } else {
+                const form = element && element.form;
+
+                // forms need to have attribute check-changes set to true to enable changes check
+                const checkChanges = form && form.getAttribute('check-changes') === 'true';
+                if (checkChanges) {
+                    if (typeof element.dataset.originalValue === 'undefined') {
+                        if (element.nodeName === 'INPUT') {
+                            // storing original value for the element
+                            if (element.type === 'radio') {
+                                const name = element.name;
+                                const group = document.querySelectorAll(`input[name=${name}]`);
+                                const checked = document.querySelector(`input[name=${name}]:checked`);
+                                group.forEach(el => el.dataset.originalValue = checked.value);
+                            } else if (element.type === 'checkbox') {
+                                const name = element.name;
+                                if (name) {
+                                    const checked = document.querySelectorAll(`input[name=${name}]:checked`);
+                                    element.dataset.originalValue = JSON.stringify(checked);
+                                }
+                            } else {
+                                element.dataset.originalValue = element.value;
+                            }
+                        } else if (element.nodeName === 'TEXTAREA') {
+                            // storing original value for the element
                             element.dataset.originalValue = element.value;
                         }
-                    } else if (element.nodeName === 'TEXTAREA') {
-                        // storing original value for the element
-                        element.dataset.originalValue = element.value;
                     }
                 }
 
@@ -444,43 +452,41 @@ const _vueInstance = new Vue({
             */
             this.$el.addEventListener('change', (ev) => {
                 const element = ev.target;
-                const action = element && element.form && element.form.action;
-                if (action && (action.endsWith('/login') || action.endsWith('/noaction')) ) {
-                    return true;
-                }
+                const form = element && element.form;
 
                 const sender = ev.detail;
                 if (typeof sender !== 'undefined' && sender.id) {
-                    this.dataChanged.set(sender.id, { changed: sender.isChanged });
+                    this.dataChanged.set(sender.id, {
+                        changed: sender.isChanged
+                    });
                 } else {
                     // support for normal change Events trying to figure out a unique id
-                    const form = element.form;
-                    if (!form) {
-                        // exclude input outside forms
-                        return true;
-                    }
+                    const checkChanges = form && form.getAttribute('check-changes') === 'true';
+                    if (checkChanges) {
+                        const name = element.name;
+                        const formId = element.form.getAttribute('id');
+                        const elementId = element.id;
+                        const originalValue = element.dataset.originalValue;
+                        let value = element.value;
+                        let id = `${formId}#${elementId}`;
 
-                    const name = element.name;
-                    const formId = element.form.getAttribute('id');
-                    const elementId = element.id;
-                    const originalValue = element.dataset.originalValue;
-                    let value = element.value;
-                    let id = `${formId}#${elementId}`;
-
-                    if (element.type === 'radio' || element.type === 'checkbox') {
-                        if (element.type === 'checkbox') {
-                            const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                            value = JSON.stringify(checked);
+                        if (element.type === 'radio' || element.type === 'checkbox') {
+                            if (element.type === 'checkbox') {
+                                const checked = document.querySelectorAll(`input[name=${name}]:checked`);
+                                value = JSON.stringify(checked);
+                            }
+                            id = `${formId}#${name}`;
                         }
-                        id = `${formId}#${name}`;
-                    }
 
-                    if (!id || id === '') {
-                        // if I can't make an id out of don't bother
-                        return true;
-                    }
+                        if (!id || id === '') {
+                            // if I can't make an id out of don't bother
+                            return true;
+                        }
 
-                    this.dataChanged.set(id, { changed: value !== originalValue });
+                        this.dataChanged.set(id, {
+                            changed: value !== originalValue
+                        });
+                    }
                 }
             });
 
@@ -491,7 +497,7 @@ const _vueInstance = new Vue({
                 const form = ev.target;
                 if (form) {
                     if (form.action.endsWith('/delete')) {
-                        if (!confirm("Do you really want to trash the object?")) {
+                        if (!confirm('Do you really want to trash the object?')) {
                             _vueInstance.dataChanged.clear();
                             ev.preventDefault();
                             return;
@@ -514,7 +520,7 @@ const _vueInstance = new Vue({
                     }
                 }
                 if (isDataChanged) {
-                    return "There are unsaved changes, are you sure you want to leave page?";
+                    return 'There are unsaved changes, are you sure you want to leave page?';
                 }
             }
         },

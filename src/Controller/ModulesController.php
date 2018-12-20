@@ -119,8 +119,11 @@ class ModulesController extends AppController
         // base/custom filters for filter view
         $this->set('filter', $this->Properties->filterList($this->objectType));
 
+        // base/custom bulk actions for index view
+        $this->set('bulkActions', $this->Properties->bulkList($this->objectType));
+
         // objectTypes schema
-        $this->set('schema', $this->Schema->getSchema($this->objectType));
+        $this->set('schema', $this->getSchemaForIndex($this->objectType));
 
         return null;
     }
@@ -529,28 +532,71 @@ class ModulesController extends AppController
     }
 
     /**
-     * Bulk change status for objects
+     * Bulk change actions for objects
      *
      * @return \Cake\Http\Response|null
      */
-    public function changeStatus() : ?Response
+    public function bulkActions() : ?Response
     {
+        $requestData = $this->request->getData();
         $this->request->allowMethod(['post']);
-        if (!empty($this->request->getData('ids') && is_string($this->request->getData('ids')))) {
-            $ids = $this->request->getData('ids');
-            $status = $this->request->getData('status');
-            if (!empty($ids)) { // export selected (filter by id)
-                $ids = explode(',', $ids);
-                foreach ($ids as $id) {
-                    $data = [
-                        'id' => $id,
-                        'status' => $status,
-                    ];
+
+        if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
+            $ids = $requestData['ids'];
+            $errors = [];
+
+            // extract valid attributes to change
+            $attributes = array_filter(
+                $requestData['attributes'],
+                function ($value) {
+                    return ($value !== null && $value !== '');
+                }
+            );
+
+            // export selected (filter by id)
+            $ids = explode(',', $ids);
+            foreach ($ids as $id) {
+                $data = array_merge($attributes, ['id' => $id]);
+                try {
                     $this->apiClient->save($this->objectType, $data);
+                } catch (BEditaClientException $e) {
+                    $errors[] = [
+                        'id' => $id,
+                        'message' => $e->getAttributes()
+                    ];
+                }
+            }
+
+            // if errors occured on any single save show error message
+            if (!empty($errors)) {
+                $this->log($errors, LogLevel::ERROR);
+                $this->Flash->error(__('Bulk Action failed on: '), ['params' => $errors]);
+            }
+        }
+
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
+    }
+
+    /**
+     * get object properties and format them for index
+     *
+     * @param string $objectType objecte type name
+     *
+     * @return array $schema
+     */
+    public function getSchemaForIndex($objectType) : array
+    {
+        $schema = (array)$this->Schema->getSchema($objectType);
+
+        // if prop is an enum then prepend an empty string for select element
+        if (!empty($schema['properties'])) {
+            foreach ($schema['properties'] as &$property) {
+                if (isset($property['enum'])) {
+                    array_unshift($property['enum'], '');
                 }
             }
         }
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        return $schema;
     }
 }
