@@ -267,6 +267,36 @@ class PropertiesComponentTest extends TestCase
                     ],
                 ]
             ],
+            'other body' => [
+                [
+                    'core' => [
+                        'title' => 'Example',
+                        'body' => 'some text',
+                        'lang' => 'en'
+                    ],
+                    'publish' => [
+                    ],
+                    'advanced' => [
+                    ],
+                    'other' => [
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'title' => 'Example',
+                        'body' => 'some text',
+                        'lang' => 'en'
+                    ],
+                ],
+                'foos',
+                [
+                    'core' => [
+                        'title',
+                        'body',
+                        'lang',
+                    ],
+                ]
+            ],
         ];
     }
 
@@ -292,7 +322,12 @@ class PropertiesComponentTest extends TestCase
         $this->createComponent();
 
         $result = $this->Properties->viewGroups($object, $type);
+        ksort($expected);
+        ksort($result);
 
-        static::assertSame(sort($expected), sort($result));
+        static::assertEquals($expected, $result);
+        foreach ($expected as $k => $v) {
+            static::assertEquals($v, $result[$k]);
+        }
     }
 }
