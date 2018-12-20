@@ -230,10 +230,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Export', 'action' => 'export'],
         ['_name' => 'export:export']
     );
+
     $routes->connect(
-        '/:object_type/changeStatus',
-        ['controller' => 'Modules', 'action' => 'changeStatus'],
-        ['_name' => 'modules:changeStatus']
+        '/:object_type/bulkActions',
+        ['controller' => 'Modules', 'action' => 'bulkActions'],
+        ['_name' => 'modules:bulkActions']
     );
 
     $routes->fallbacks(DashedRoute::class);

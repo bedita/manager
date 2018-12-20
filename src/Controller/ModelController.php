@@ -152,6 +152,9 @@ class ModelController extends AppController
             if (empty($payload)) {
                 throw new BadRequestException('empty request');
             }
+            $response['saved'] = [];
+            $response['edited'] = [];
+            $response['removed'] = [];
 
             // save newly added property types
             if (!empty($payload['addPropertyTypes'])) {
