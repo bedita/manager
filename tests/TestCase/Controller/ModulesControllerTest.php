@@ -543,7 +543,7 @@ class ModulesControllerTest extends TestCase
         $response = [];
         $this->controller->updateMediaUrls($response);
 
-        static::assertEquals([], $response);
+        static::assertEmpty($response);
     }
 
     /**

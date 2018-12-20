@@ -179,7 +179,10 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `isAbstract()` method.
      *
-     * @dataProvider isAbstractProvider();
+     * @param boolean $expected expected results from test
+     * @param string $data setup data for test, object type
+     *
+     * @dataProvider isAbstractProvider()
      * @covers ::isAbstract()
      *
      * @return void
@@ -235,7 +238,10 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `objectTypes()` method.
      *
-     * @dataProvider objectTypesProvider();
+     * @param array $expected expected results from test
+     * @param boolean|null $data setup data for test
+     *
+     * @dataProvider objectTypesProvider()
      * @covers ::objectTypes()
      *
      * @return void
@@ -502,7 +508,7 @@ class ModulesComponentTest extends TestCase
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
-    public function testBeforeRender($userId, $modules, ? string $currentModule, array $project, array $meta, array $order = [], ? string $currentModuleName = null) : void
+    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
     {
         Configure::write('Modules.order', $order);
 
@@ -732,9 +738,6 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `removeStream` method
      *
-     * @param array $requestData The request data
-     * @param Expection|null $expectedException The exception expected
-     * @param boolean $uploaded The upload result
      * @return void
      *
      * @covers ::removeStream()

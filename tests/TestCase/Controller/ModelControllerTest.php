@@ -84,7 +84,6 @@ class ModelControllerTest extends TestCase
      * Data provider for `testBeforeFilter` test case.
      *
      * @return array
-     *
      */
     public function beforeFilterProvider() : array
     {
@@ -112,6 +111,10 @@ class ModelControllerTest extends TestCase
 
     /**
      * Test `beforeFilter` method
+     *
+     * @param array $expected expected results from test
+     * @param boolean|null $data setup data for test
+     * @param \Exception|null $expection expected exception from test
      *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
@@ -300,18 +303,22 @@ class ModelControllerTest extends TestCase
     /**
      * Test `savePropertyTypesJson` method
      *
+     * @param array|\Exception $expectedResponse expected results from test
+     * @param boolean|null $data setup data for test
+     * @param string $action tested action
+     *
      * @dataProvider savePropertyTypesJsonProvider()
      * @covers ::savePropertyTypesJson()
      *
      * @return void
      */
-    public function testSavePropertyTypesJson($expectedResponse, $post, $action)
+    public function testSavePropertyTypesJson($expectedResponse, $data, $action)
     {
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => $post,
+            'post' => $data,
         ];
 
         $this->setupController($config);
