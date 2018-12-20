@@ -64,6 +64,16 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
+    public function getApiClient() : BEditaClient
+    {
+        return $this->apiClient;
+    }
+
+    /**
+     * Create new object from ajax request.
+     *
+     * @return void
+     */
     public function saveJson() : void
     {
         parent::saveJson();
@@ -410,13 +420,53 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     *
+     * Data provider for `testSaveJson` test case.
+     *
+     */
+    public function saveJsonProvider()
+    {
+        return [
+            'save' => [
+                [
+                    'code' => 200,
+                    'message' => 'OK'
+                ],
+                [
+                    'params' => [
+                        'object_type' => 'images'
+                    ],
+                    'body' => [
+                        'title' => 'bibo',
+                    ]
+                ],
+            ],
+            'exception' => [
+                [
+                    'code' => 404,
+                    'message' => 'Not Found',
+                ],
+                [
+                    'params' => [
+                        'object_type' => 'drago',
+                    ],
+                    'body' => [
+                        'title' => 'bibo',
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Test `saveJson` method
      *
+     * @dataProvider saveJsonProvider()
      * @covers ::saveJson()
      *
      * @return void
      */
-    public function testSaveJson() : void
+    public function testSaveJson($expected, $data) : void
     {
         // Setup controller for test
         $this->setupController();
@@ -425,13 +475,10 @@ class ModulesControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                'title' => 'bibo',
-            ],
-            'params' => [
-                'object_type' => 'images',
-            ],
+            'post' => $data['body'],
+            'params' => $data['params'],
         ];
+
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
 
@@ -439,9 +486,9 @@ class ModulesControllerTest extends TestCase
         $this->controller->saveJson();
 
         // verify response status code and type
-        $result = $this->controller->response;
-        static::assertEquals(200, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        $result = $this->controller->getApiClient();
+        static::assertEquals($expected['code'], $result->getStatusCode());
+        static::assertEquals($expected['message'], $result->getStatusMessage());
     }
 
     /**
