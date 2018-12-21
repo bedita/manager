@@ -70,7 +70,7 @@ class ModulesController extends AppController
     public function beforeFilter(Event $event) : ?Response
     {
         $actions = [
-            'delete', 'changeStatus',
+            'delete', 'changeStatus', 'saveJson',
         ];
 
         if (in_array($this->request->params['action'], $actions)) {
@@ -300,6 +300,40 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
             'id' => Hash::get($response, 'data.id'),
         ]);
+    }
+
+    /**
+     * Create new object from ajax request.
+     *
+     * @return void
+     */
+    public function saveJson() : void
+    {
+        $this->request->allowMethod(['post']);
+        $requestData = $this->prepareRequest($this->objectType);
+
+        try {
+            // upload file (if available)
+            $this->Modules->upload($requestData);
+
+            // save data
+            $response = $this->apiClient->save($this->objectType, $requestData);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+        if ($response['data']) {
+            $response['data'] = [ $response['data'] ];
+        }
+
+        $this->getThumbsUrls($response);
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
     }
 
     /**

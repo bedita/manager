@@ -17,7 +17,7 @@ import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
 
 export default {
-    inject: ['returnDataFromPanel', 'closePanel'],      // injected methods provided by Main App
+    inject: ['returnDataFromPanel', 'closePanel'], // injected methods provided by Main App
 
     mixins: [ PaginatedContentMixin ],
 
@@ -41,16 +41,47 @@ export default {
             type: String,
             default: '[]',
         },
+        csrfToken: {
+            type: String,
+            required: true,
+        } // csfrToken used for api call
     },
+
     data() {
         return {
             method: 'relationshipsJson',
             endpoint: '',
-            selectedObjects: [],
-
-            activeFilter: {},
             loading: false,
+            selectedObjects: [],
+            activeFilter: {},
+
+            // create object form data
+            saving: false,
+            showCreateObjectForm: false,
+            file: null,
+            objectType: '',
+            titlePlaceholder: 'title',
         };
+    },
+
+    computed: {
+        /**
+         * return accepted mimetypes
+         *
+         * @return {String} mimetypes
+         */
+        acceptedMimeTypes() {
+            return 'audio/*,video/*,image/*,.pdf';
+        },
+
+        /**
+         * is a media object
+         *
+         * @return {Boolean}
+         */
+        isMedia() {
+            return this.relationTypes && this.relationTypes.right.indexOf('media') !== -1;
+        }
     },
 
     watch: {
@@ -122,19 +153,133 @@ export default {
         },
 
         /**
+         * create new object
+         *
+         * @param {HTMLElement} target form (Destructuring target from Event Object)
+         *
+         * @return {void}
+         */
+        async createObject({ target }) {
+            if (!target) {
+                // form element might be tempered
+                return;
+            }
+
+            this.saving = true;
+            this.loading = true;
+
+            const formData = new FormData(target);
+
+            // use file name if title is not provided
+            if (formData.get('title') === '') {
+                formData.set('title', this.titlePlaceholder);
+            }
+
+            formData.append('model-type', this.objectType);
+
+            // save object
+            const baseUrl = window.location.origin;
+            const postUrl = `${baseUrl}/${this.objectType}/saveJson`;
+
+            const options = {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                    'X-CSRF-Token': this.csrfToken,
+                },
+                body: formData,
+            };
+
+            try {
+                const response = await fetch(postUrl, options);
+                const responseJson = await response.json();
+
+                let createdObjects = (Array.isArray(responseJson.data) ? responseJson.data : [responseJson.data]) || [];
+
+                // add newly added object to list / selected
+                this.objects = createdObjects.concat(this.objects);
+                this.selectedObjects = createdObjects.concat(this.selectedObjects);
+                this.resetForm(target);
+            } catch (error) {
+                // need a modal to better handling of errors
+                if (error.code === 20) {
+                    throw error;
+                } else {
+                    alert('Error while uploading/creating new object. Retry');
+                    console.error(error);
+                }
+                this.resetForm(target, true);
+            } finally {
+                this.saving = false;
+                this.loading = false;
+            }
+        },
+
+        /**
+         * clear form
+         *
+         * @param {HTMLElement} form create new object form
+         * @param {Boolean} showForm keep showing form (default = false)
+         *
+         * @return {void}
+         */
+        resetForm(form, showForm = false) {
+            form.reset();
+            this.titlePlaceholder = 'title';
+            this.showCreateObjectForm = showForm;
+        },
+
+        /**
+         * set file, object type and placeholder
+         *
+         * @param {HTMLElement} target input file element
+         *
+         * @return {Boolean} file process success
+         */
+        processFile({ target }) {
+            this.file = target.files[0];
+            if (!this.file) {
+                return false;
+            }
+
+            this.objectType = this.getObjectType(this.file);
+            this.titlePlaceholder = this.file && this.file.name;
+
+            return true;
+        },
+
+        /**
+         * get BEobject type from file's mimetype
+         *
+         * @param {File} file
+         *
+         * @return {String} object type
+         */
+        getObjectType(file) {
+            const type = file.type && file.type.split('/')[0];
+            const hasPlural = /audio/g.test(type) ? '' : 's';
+            return `${type}${hasPlural}`;
+        },
+
+        /**
          * Return true if specified pagination page link must be shown
          *
          * @param {Number} page The pagination page number
+         *
          * @return {boolean} True if show page link
          */
         paginationPageLinkVisible(page) {
-            if (this.pagination.page_count <= 7) { // show till 7 links
+            if (this.pagination.page_count <= 7) {
+                // show till 7 links
                 return true;
             }
-            if (page === 1 || page === this.pagination.page_count) { // show first and last page link
+            if (page === 1 || page === this.pagination.page_count) {
+                // show first and last page link
                 return true;
             }
-            if ((page >= this.pagination.page - 1) && page <= this.pagination.page + 1) { // show previous and next page link
+            if (page >= this.pagination.page - 1 && page <= this.pagination.page + 1) {
+                // show previous and next page link
                 return true;
             }
 
@@ -194,15 +339,15 @@ export default {
         },
 
         /**
-        * helper function: build open view url
-        *
-        * @param {String} objectType
-        * @param {Number} objectId
-        *
-        * @return {String} url
-        */
+         * helper function: build open view url
+         *
+         * @param {String} objectType
+         * @param {Number} objectId
+         *
+         * @return {String} url
+         */
         buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
+            return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
         },
-    }
-}
+    },
+};
