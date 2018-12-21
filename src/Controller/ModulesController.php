@@ -319,7 +319,6 @@ class ModulesController extends AppController
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
         } catch (BEditaClientException $error) {
-            // Error! Back to object view or index.
             $this->log($error, LogLevel::ERROR);
 
             $this->set(compact('error'));
