@@ -620,6 +620,25 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `updateMediaUrls` method
+     *
+     * @covers ::updateMediaUrls()
+     *
+     * @return void
+     */
+    public function testUpdateMediaUrlsWithEmptyData() : void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = [];
+        $this->controller->updateMediaUrls($response);
+
+        static::assertEmpty($response);
+    }
+
+    /**
      * Test `relationData` method
      *
      * @covers ::relationData()

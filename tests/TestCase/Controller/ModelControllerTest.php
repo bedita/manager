@@ -20,6 +20,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Network\Exception\UnauthorizedException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -71,7 +72,7 @@ class ModelControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController(array $requestConfig = []): void
+    protected function setupController(array $requestConfig = []) : void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -80,12 +81,84 @@ class ModelControllerTest extends TestCase
     }
 
     /**
+     * Data provider for `testBeforeFilter` test case.
+     *
+     * @return array
+     */
+    public function beforeFilterProvider() : array
+    {
+        return [
+            'not authorized' => [
+                false,
+                [
+                    'username' => 'dummy',
+                    'password' => 'dummy',
+                    'roles' => [ 'useless' ],
+                ],
+                new UnauthorizedException(__('Module access not authorized')),
+            ],
+            'authorized' => [
+                true,
+                [
+                    'username' => 'bedita',
+                    'password' => 'bedita',
+                    'roles' => [ 'admin' ],
+                ],
+                null,
+            ]
+        ];
+    }
+
+    /**
+     * Test `beforeFilter` method
+     *
+     * @param array $expected expected results from test
+     * @param boolean|null $data setup data for test
+     * @param \Exception|null $expection expected exception from test
+     *
+     * @covers ::beforeFilter()
+     * @dataProvider beforeFilterProvider()
+     *
+     * @return void
+     */
+    public function testBeforeFilter($expected, $data, $exception) : void
+    {
+        $this->setupController();
+
+        $this->ModelController->Auth->setUser($data);
+
+        if (!empty($exception)) {
+            $this->expectException(get_class($exception));
+        }
+
+        $event = $this->ModelController->dispatchEvent('Controller.beforeFilter');
+        $this->ModelController->beforeFilter($event);
+
+        static::assertTrue($expected);
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @covers ::beforeRender()
+     *
+     * @return void
+     */
+    public function testBeforeRender() : void
+    {
+        $this->setupController();
+        $this->ModelController->dispatchEvent('Controller.beforeRender');
+
+        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
+        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
+    }
+
+    /**
      * Test `index` method
      *
      * @covers ::index()
      * @covers ::initialize()
      * @covers ::beforeFilter()
-     * @covers ::beforeRender()
      *
      * @return void
      */
@@ -230,18 +303,22 @@ class ModelControllerTest extends TestCase
     /**
      * Test `savePropertyTypesJson` method
      *
+     * @param array|\Exception $expectedResponse expected results from test
+     * @param boolean|null $data setup data for test
+     * @param string $action tested action
+     *
      * @dataProvider savePropertyTypesJsonProvider()
      * @covers ::savePropertyTypesJson()
      *
      * @return void
      */
-    public function testSavePropertyTypesJson($expectedResponse, $post, $action)
+    public function testSavePropertyTypesJson($expectedResponse, $data, $action)
     {
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => $post,
+            'post' => $data,
         ];
 
         $this->setupController($config);
