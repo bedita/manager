@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2018 ChannelWeb Srl, Chialab Srl
@@ -152,6 +153,107 @@ class ModulesComponentTest extends TestCase
         ApiClientProvider::setApiClient($apiClient);
 
         $actual = $this->Modules->getProject();
+
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testIsAbstract` test case.
+     *
+     * @return array
+     */
+    public function isAbstractProvider() : array
+    {
+        return [
+            'isAbstractTrue' => [
+                true,
+                'objects',
+            ],
+            'isAbstractFalse' => [
+                false,
+                'documents',
+            ],
+        ];
+    }
+
+    /**
+     * Test `isAbstract()` method.
+     *
+     * @param boolean $expected expected results from test
+     * @param string $data setup data for test, object type
+     *
+     * @dataProvider isAbstractProvider()
+     * @covers ::isAbstract()
+     *
+     * @return void
+     */
+    public function testIsAbstract($expected, $data) : void
+    {
+        $userId = 1;
+        $this->Auth->setUser(['id' => $userId]);
+        $this->Modules->getController()->dispatchEvent('Controller.startup');
+        $actual = $this->Modules->isAbstract($data);
+
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testObjectTypes` test case.
+     *
+     * @return array
+     */
+    public function objectTypesProvider() : array
+    {
+        return [
+            'empty' => [
+                [],
+                null,
+            ],
+            'abstractList' => [
+                [
+                    'objects',
+                    'media',
+                ],
+                true,
+            ],
+            'concreteList' => [
+                [
+                    'folders',
+                    'documents',
+                    'events',
+                    'news',
+                    'locations',
+                    'images',
+                    'videos',
+                    'audio',
+                    'files',
+                    'users',
+                    'profiles',
+                ],
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Test `objectTypes()` method.
+     *
+     * @param array $expected expected results from test
+     * @param boolean|null $data setup data for test
+     *
+     * @dataProvider objectTypesProvider()
+     * @covers ::objectTypes()
+     *
+     * @return void
+     */
+    public function testObjectTypes($expected, $data) : void
+    {
+        $userId = 1;
+        $this->Auth->setUser(['id' => $userId]);
+        if (!empty($expected)) {
+            $this->Modules->getController()->dispatchEvent('Controller.startup');
+        }
+        $actual = $this->Modules->objectTypes($data);
 
         static::assertEquals($expected, $actual);
     }
@@ -631,6 +733,33 @@ class ModulesComponentTest extends TestCase
         } else {
             static::assertFalse(isset($requestData['id']));
         }
+    }
+
+    /**
+     * Test `removeStream` method
+     *
+     * @return void
+     *
+     * @covers ::removeStream()
+     */
+    public function testRemoveStreamWhenThereIsNoStream()
+    {
+        $mockId = '99';
+        $requestData = [
+            'id' => $mockId,
+            'model-type' => 'images',
+        ];
+
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+
+        $apiClient->method('get')
+            ->with(sprintf('/images/%s/streams', $mockId))
+            ->willReturn([]);
+
+        ApiClientProvider::setApiClient($apiClient);
+        $this->assertNull($this->Modules->removeStream($requestData));
     }
 
     /**
