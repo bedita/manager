@@ -307,13 +307,54 @@ nav.pagination {
         margin: 0;
     }
 
-    > header.tab {
-        margin-right: $gutter;
+    form[disabled] {
+        opacity: 0.7;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    header[disabled], a[disabled], a[disabled]:hover {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    main {
+        height: 100%;
+        overflow: auto;
+    }
+
+    main, section {
+        & > header.tab {
+            margin-right: $gutter;
+            margin-left: $gutter;
+            margin-top: $gutter;
+            margin-bottom: 0;
+            cursor: auto;
+        }
+    }
+
+    .open h2 {
+        cursor: pointer;
+    }
+
+    .create-new-object {
         margin-left: $gutter;
         margin-top: $gutter;
-        margin-bottom: 0;
-        cursor: auto;
+        padding-right: $gutter * .5;
+
+        form > * {
+            margin: $gutter * .5;
+
+            input[name=title] {
+                width: 50%;
+            }
+
+            label {
+                margin-right: $gutter * .5;
+            }
+        }
     }
+
     .related-objects-list {
         flex-grow: 1;
         overflow: auto;
@@ -323,10 +364,19 @@ nav.pagination {
         padding-right: $gutter * .5;
     }
 
-    > footer {
-        display: flex;
-        justify-content: space-between;
-        padding: $gutter;
+    main, section {
+        & > footer {
+            display: flex;
+            justify-content: space-between;
+            padding: $gutter;
+        }
+    }
+
+    .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
     }
 
     // ui specs
