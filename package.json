@@ -21,7 +21,7 @@
         "develop": "webpack --mode development",
         "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
         "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production",
-        "ttag": "./node_modules/ttag-cli/bin/ttag po2json src/Locale/en_US/default.po > src/Template/Layout/js/app/locales/en_US.json; ./node_modules/ttag-cli/bin/ttag po2json src/Locale/it_IT/default.po > src/Template/Layout/js/app/locales/it_IT.json"
+        "ttag": "./ttag,sh"
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.1.9",
