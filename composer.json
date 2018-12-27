@@ -70,9 +70,6 @@
         "update-dev": [
             "@composer update",
             "@cs-setup"
-        ],
-        "update-locales": [
-            "./i18n.sh"
         ]
     },
     "prefer-stable": true,

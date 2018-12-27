@@ -20,8 +20,7 @@
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development",
         "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
-        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production",
-        "ttag": "./ttag,sh"
+        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.1.9",
