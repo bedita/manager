@@ -502,4 +502,4 @@ msgstr ""
 
 #: src/Template/Layout/js/app/components/filter-box.js:52
 msgid "All Types"
-msgstr ""
+msgstr "Tutti i tipi"
