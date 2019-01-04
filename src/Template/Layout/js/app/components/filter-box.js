@@ -22,6 +22,8 @@ import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content
 import InputDynamicAttributes from 'app/components/input-dynamic-attributes';
 import merge from 'deepmerge';
 
+import { t } from 'ttag';
+
 export default {
     components: {
         InputDynamicAttributes
@@ -47,7 +49,7 @@ export default {
 
                 <span v-if="rightTypes.length > 1" class="search-types">
                     <select v-model="queryFilter.filter.type">
-                        <option value="" label="All Types"></option>
+                        <option value="" label="${t`All Types`}"></option>
                         <option v-for="type in rightTypes"><: type :> </option>
                     </select>
                 </span>

@@ -499,3 +499,7 @@ msgstr "annulla rimozione"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:52
+msgid "All Types"
+msgstr "Tutti i tipi"
