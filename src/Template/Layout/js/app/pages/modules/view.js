@@ -12,7 +12,6 @@ import RelationView from 'app/components/relation-view/relation-view';
 export default {
     components: {
         PropertyView,
-        RelationView,
     },
 
     /**
@@ -42,5 +41,3 @@ export default {
         }
     }
 }
-
-
