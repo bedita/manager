@@ -5,10 +5,7 @@
  *
  * <filter-box-view> component
  *
- * @prop {String} applyFilterLabel
- * @prop {String} resetFilterLabel
  * @prop {String} objectsLabel
- * @prop {String} pageSizesLabel
  * @prop {String} placeholder
  * @prop {Boolean} showFilterButtons
  * @prop {Object} initFilter
@@ -34,9 +31,8 @@ export default {
         <nav class="pagination has-text-size-smallest">
 
             <div class="count-items" v-if="pagination.count">
-                <span><: pagination.count :> <: objectsLabel :></span>
+                <span><: pagination.count :> <: t(objectsLabel) :></span>
             </div>
-
 
             <div class="filter-search">
                 <span class="search-query">
@@ -46,53 +42,55 @@ export default {
                         @keyup.prevent.stop="onQueryStringChange"
                         @keyup.enter.prevent.stop="applyFilter"/>
                 </span>
-
                 <span v-if="rightTypes.length > 1" class="search-types">
                     <select v-model="queryFilter.filter.type">
                         <option value="" label="${t`All Types`}"></option>
-                        <option v-for="type in rightTypes"><: type :> </option>
+                        <option v-for="type in rightTypes"><: t(type) :></option>
                     </select>
                 </span>
 
-                <button v-show="showFilterButtons" name="applysearch" @click.prevent="applyFilter()"><: applyFilterLabel :></button>
-                <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()"><: resetFilterLabel :></button>
+                <button v-show="showFilterButtons" name="applysearch" @click.prevent="applyFilter()">
+                    ${t`Apply`}
+                </button>
+                <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()">
+                    ${t`Reset`}
+                </button>
             </div>
 
             <div class="filter-list">
                 <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
                     <input type="hidden" :name="filter.name" :value="filter.value">
-
-                    <span class="filter-name" :title="filterLabel(filter.name)"><: filter.name :></span>
+                    <span class="filter-name"><: t(filter.name) :></span>
 
                     <span v-if="filter.type === 'select' || filter.type === 'radio'">
                         <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
                             <option value="">
-                                All
+                                ${t`All`}
                             </option>
                             <option v-for="option in filter.options" :name="option.name" :value="option.value">
-                                <: option.text :>
+                                <: t(option.text) :>
                             </option>
                         </select>
                     </span>
 
                     <span v-else-if="filter.type === 'checkbox'">
-                        <label>Any</label>
+                        <label>${t`Any`}</label>
                         <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
-                        <label>Yes</label>
+                        <label>${t`Yes`}</label>
                         <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
-                        <label>No</label>
+                        <label>${t`No`}</label>
                         <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
                     </span>
 
                     <template v-else-if="filter.date">
                         <span class="datepicker-container">
-                            <label>From:
-                            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                            <label>${t`From`}:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
                             </label>
                         </span>
                         <span class="datepicker-container">
-                            <label>To:
-                            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                            <label>${t`To`}:
+                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
                             </label>
                         </span>
                     </template>
@@ -104,7 +102,7 @@ export default {
             </div>
 
             <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
-                <span><: pageSizesLabel :>:</span>
+                <span>${t`Size`}:</span>
                 <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
                     <option v-for="size in paginateSizes"><: size :></option>
                 </select>
@@ -150,21 +148,9 @@ export default {
     `,
 
     props: {
-        applyFilterLabel: {
-            type: String,
-            default: "Apply"
-        },
-        resetFilterLabel: {
-            type: String,
-            default: "Reset"
-        },
         objectsLabel: {
             type: String,
             default: "Objects"
-        },
-        pageSizesLabel: {
-            type: String,
-            default: "Size"
         },
         placeholder: {
             type: String,
@@ -322,10 +308,6 @@ export default {
          */
         resetFilter() {
             this.$emit("filter-reset");
-        },
-
-        filterLabel(filterName) {
-            return `filter name ${filterName}`;
         },
 
         /**
