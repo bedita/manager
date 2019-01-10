@@ -3,8 +3,6 @@
 {% set ids = Array.extract(objects, '{*}.id') %}
 
 {% set q = _view.request.query|serialize|escape %}
-{% set msg = __('If you confirm, this data will be gone forever') %}
-{% set confirm = "return confirm('" ~ msg ~ "')" %}
 
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div>
@@ -86,7 +84,7 @@
 
             {# Append "Empty" button in commands menu. #}
             {% do _view.append('commands',
-                Form.postButton(__('Empty'), {'_name': 'trash:empty'}, {'data': {'query': q}, 'onclick': confirm})|raw
+                Form.postButton(__('Empty'), {'_name': 'trash:empty'}, {'data': {'query': q}})|raw
             )%}
         </div>
     </div>
