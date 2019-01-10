@@ -59,8 +59,7 @@
 
                         <div class="buttons">
                         {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {% set confirm = 'if (!confirm(\'' ~ __('Move item to trash?') ~ '\')) { return false; }' %}
-                            {{ Form.postButton(__('Trash'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}, 'onclick': confirm})|raw}}
+                            {{ Form.postButton(__('Trash'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw}}
                         {% endif %}
                         </div>
                 </a>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2018-10-30 14:24:02 \n"
+"POT-Creation-Date: 2019-01-10 09:54:43 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -35,10 +35,16 @@ msgstr ""
 msgid "BEdita {0}"
 msgstr ""
 
+msgid "Bulk Action failed on: "
+msgstr ""
+
 msgid "Cannot create abstract objects or objects without schema"
 msgstr ""
 
 msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "Change File"
 msgstr ""
 
 msgid "Children"
@@ -128,9 +134,6 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
-msgid "If you confirm, this data will be gone forever"
-msgstr ""
-
 msgid "Image not acceptable for thumb"
 msgstr ""
 
@@ -183,9 +186,6 @@ msgid "Model"
 msgstr ""
 
 msgid "Module access not authorized"
-msgstr ""
-
-msgid "Move item to trash?"
 msgstr ""
 
 msgid "Move to trash"
@@ -317,13 +317,7 @@ msgstr ""
 msgid "Search in BEdita"
 msgstr ""
 
-msgid "Set draft"
-msgstr ""
-
-msgid "Set off"
-msgstr ""
-
-msgid "Set on"
+msgid "Set selected"
 msgstr ""
 
 msgid "Settings"
@@ -422,6 +416,11 @@ msgstr ""
 msgid "You are not authorized to access that location."
 msgstr ""
 
+msgid ""
+"You are not logged or your session has expired, please provide login "
+"credentials"
+msgstr ""
+
 msgid "add objects"
 msgstr ""
 
@@ -438,6 +437,12 @@ msgid "close"
 msgstr ""
 
 msgid "confirm password"
+msgstr ""
+
+msgid "create"
+msgstr ""
+
+msgid "create new"
 msgstr ""
 
 msgid "current password"
@@ -498,6 +503,14 @@ msgid "undo remove"
 msgstr ""
 
 msgid "www.bedita.com"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:503
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:505
+msgid "Do you really want to trash the object?"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/filter-box.js:52

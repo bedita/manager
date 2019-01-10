@@ -25,6 +25,7 @@ import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
 import sleep from 'sleep-promise';
+import { t } from 'ttag';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -497,14 +498,16 @@ const _vueInstance = new Vue({
             this.$el.addEventListener('submit', (ev) => {
                 const form = ev.target;
                 if (form) {
-                    if (form.action.endsWith('/delete')) {
-                        if (!confirm('Do you really want to trash the object?')) {
-                            _vueInstance.dataChanged.clear();
-                            ev.preventDefault();
-                            return;
-                        }
-                    } else {
-                        _vueInstance.dataChanged.clear();
+                    let msg = '';
+                    if (form.action.endsWith('/trash/delete')) {
+                        msg = t`If you confirm, this data will be gone forever`;
+                    } else if (form.action.endsWith('/delete')) {
+                        msg = t`Do you really want to trash the object?`;
+                    }
+                    _vueInstance.dataChanged.clear();
+                    if (msg && !confirm(msg)) {
+                        ev.preventDefault();
+                        return;
                     }
                 }
             });
