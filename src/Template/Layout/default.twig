@@ -83,7 +83,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     </main>
 
     {% if Layout.messages() %}
-        {% element 'Messages/messages' %}
+        <section id="flash-message-container">
+            {% element 'Messages/messages' %}
+        </section>
     {% endif %}
 
     {{ Html.script('manifest.bundle')|raw }}

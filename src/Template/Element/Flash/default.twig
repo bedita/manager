@@ -1,6 +1,7 @@
 {% set level = level|default('info') %}
 
-<div class="message on {{ level }} {{ params.class|default('') }}">
+<flash-message :timeout=5 inline-template>
+<div class="message {{ level }} {{ params.class|default('') }}" :class="visibilityClass">
     <h2>
         {% if level == 'error' %}
             {{ __('Error') }}
@@ -32,17 +33,10 @@
             <pre><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
         {% endif %}
 
-        <script>
-            function closeMessage(el) {
-                el.parentNode.classList.remove('on');
-                setTimeout(() => {
-                    el.parentNode.parentNode.removeChild(el.parentNode);
-                }, 300);
-            }
-        </script>
-        <a href="javascript:void(0)" class="btn-close" onclick="closeMessage(this);">
+        <a class="btn-close" @click="closeMessage()">
             {{ __('Close') }}
         </a>
 
     {% endif %}
 </div>
+</flash-message>

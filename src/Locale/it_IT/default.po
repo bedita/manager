@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-01-08 15:40:19 \n"
+"POT-Creation-Date: 2019-01-10 09:54:43 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -36,7 +36,7 @@ msgid "BEdita {0}"
 msgstr ""
 
 msgid "Bulk Action failed on: "
-msgstr ""
+msgstr "Operazione massiva non riuscita:"
 
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
@@ -45,7 +45,7 @@ msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
 
 msgid "Change File"
-msgstr ""
+msgstr "Cambia File"
 
 msgid "Children"
 msgstr "Contenuti"
@@ -134,9 +134,6 @@ msgstr "File"
 msgid "Folders"
 msgstr "Cartelle"
 
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
-
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
@@ -190,9 +187,6 @@ msgstr "Modello"
 
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
-
-msgid "Move item to trash?"
-msgstr "Spostare elemento nel cestino?"
 
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
@@ -324,7 +318,7 @@ msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
 msgid "Set selected"
-msgstr ""
+msgstr "Applica selezione"
 
 msgid "Settings"
 msgstr "Impostazioni"
@@ -425,7 +419,7 @@ msgstr "Non sei autorizzato ad accedere a quest'area."
 msgid ""
 "You are not logged or your session has expired, please provide login "
 "credentials"
-msgstr ""
+msgstr "Non sei autenticato o la sessione è scaduta, prova di nuovo il login"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
@@ -446,10 +440,10 @@ msgid "confirm password"
 msgstr "conferma password"
 
 msgid "create"
-msgstr ""
+msgstr "crea"
 
 msgid "create new"
-msgstr ""
+msgstr "crea nuovo"
 
 msgid "current password"
 msgstr "password corrente"
@@ -510,6 +504,14 @@ msgstr "annulla rimozione"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#: src/Template/Layout/js/app/app.js:503
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#: src/Template/Layout/js/app/app.js:505
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #: src/Template/Layout/js/app/components/filter-box.js:47
 msgid "All Types"
