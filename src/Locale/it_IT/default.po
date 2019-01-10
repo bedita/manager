@@ -527,7 +527,7 @@ msgstr "Qualsiasi"
 
 #: src/Template/Layout/js/app/components/filter-box.js:79
 msgid "Yes"
-msgstr "Si"
+msgstr "Sì"
 
 #: src/Template/Layout/js/app/components/filter-box.js:81
 msgid "No"
@@ -540,12 +540,3 @@ msgstr "Da"
 #: src/Template/Layout/js/app/components/filter-box.js:92
 msgid "To"
 msgstr "A"
-
-#~ msgid "Set draft"
-#~ msgstr "Imposta a 'draft'"
-
-#~ msgid "Set off"
-#~ msgstr "Imposta ad 'off'"
-
-#~ msgid "Set on"
-#~ msgstr "Imposta ad 'on'"
