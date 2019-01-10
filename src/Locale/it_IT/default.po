@@ -318,7 +318,7 @@ msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
 msgid "Set selected"
-msgstr "Applica selezione"
+msgstr "Applica a selezione"
 
 msgid "Settings"
 msgstr "Impostazioni"
@@ -458,7 +458,7 @@ msgid "log out"
 msgstr "esci"
 
 msgid "modified"
-msgstr "modifica"
+msgstr "modificato"
 
 msgid "move to"
 msgstr "sposta in"
@@ -516,3 +516,27 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 #: src/Template/Layout/js/app/components/filter-box.js:52
 msgid "All Types"
 msgstr "Tutti i tipi"
+
+#: src/Template/Layout/js/app/components/filter-box.js:68
+msgid "All"
+msgstr "Tutti"
+
+#: src/Template/Layout/js/app/components/filter-box.js:77
+msgid "Any"
+msgstr "Qualsiasi"
+
+#: src/Template/Layout/js/app/components/filter-box.js:79
+msgid "Yes"
+msgstr "Sì"
+
+#: src/Template/Layout/js/app/components/filter-box.js:81
+msgid "No"
+msgstr "No"
+
+#: src/Template/Layout/js/app/components/filter-box.js:87
+msgid "From"
+msgstr "Da"
+
+#: src/Template/Layout/js/app/components/filter-box.js:92
+msgid "To"
+msgstr "A"

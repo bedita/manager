@@ -2,6 +2,7 @@
 
 import Vue from 'vue';
 import Locale from 'app/locales';
+import { t } from 'ttag';
 
 // Polyfill
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
@@ -28,6 +29,25 @@ for (let property in VueOptions) {
 }
 
 Locale(BEDITA.locale);
+
+
+// Global mixins
+
+Vue.mixin({
+    methods: {
+        /**
+         * ttag helper method for string literal template
+         *
+         * @param {string} value string to translate
+         *
+         * @return {string} translated value
+          */
+        t: (value) => {
+            // call ttag t method
+            return t([value]);
+        },
+    }
+});
 
 // CKeditor configs...
 

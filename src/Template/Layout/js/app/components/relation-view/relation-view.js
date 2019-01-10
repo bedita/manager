@@ -70,8 +70,8 @@ export default {
     computed: {
         // array of ids of objects in view
         alreadyInView() {
-            var a = this.addedRelations.map(o => o.id);
-            var b = this.objects.map(o => o.id);
+            let a = this.addedRelations.map(o => o.id);
+            let b = this.objects.map(o => o.id);
             return a.concat(b);
         },
     },
@@ -154,7 +154,7 @@ export default {
          */
         async loadOnMounted() {
             if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
 
                 await sleep(t);
                 if (this.relationSchema === null) {
@@ -177,9 +177,8 @@ export default {
          */
         async loadRelatedObjects(filter = {}, force = false) {
             this.loading = true;
-            let response = this.getPaginatedObjects(true, filter);
 
-            response
+            return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
@@ -192,8 +191,6 @@ export default {
                         console.error(error);s
                     }
                 });
-
-            return response;
         },
 
         /**
@@ -446,9 +443,8 @@ export default {
          */
         toPage(page, filter) {
             this.loading = true;
-            let response = PaginatedContentMixin.methods.toPage.call(this, page, filter);
 
-            response
+            PaginatedContentMixin.methods.toPage.call(this, page, filter)
                 .then((objs) => {
                     this.loading = false;
                     return objs;

@@ -516,3 +516,27 @@ msgstr ""
 #: src/Template/Layout/js/app/components/filter-box.js:52
 msgid "All Types"
 msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:68
+msgid "All"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:77
+msgid "Any"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:79
+msgid "Yes"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:81
+msgid "No"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:87
+msgid "From"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:92
+msgid "To"
+msgstr ""

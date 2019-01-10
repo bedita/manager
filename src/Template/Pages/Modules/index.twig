@@ -50,10 +50,10 @@
                         <div>{{ object.id }}</div>
 
                         {% if currentModule.hints.multiple_types %}
-                            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ object.type }}</span></div>
+                            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
                         {% endif %}
 
-                        <div>{{ object.attributes.status }}</div>
+                        <div>{{ __(object.attributes.status) }}</div>
 
                         <div>{{ Time.format(object.meta.modified) }}</div>
 
