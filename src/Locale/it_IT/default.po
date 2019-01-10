@@ -318,7 +318,7 @@ msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
 msgid "Set selected"
-msgstr "Applica selezione"
+msgstr "Applica a selezione"
 
 msgid "Settings"
 msgstr "Impostazioni"
