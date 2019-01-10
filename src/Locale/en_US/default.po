@@ -513,7 +513,11 @@ msgstr ""
 msgid "Do you really want to trash the object?"
 msgstr ""
 
+<<<<<<< HEAD
 #: src/Template/Layout/js/app/components/filter-box.js:47
+=======
+#: src/Template/Layout/js/app/components/filter-box.js:52
+>>>>>>> master
 msgid "All Types"
 msgstr ""
 
