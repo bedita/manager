@@ -513,11 +513,7 @@ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-<<<<<<< HEAD
-#: src/Template/Layout/js/app/components/filter-box.js:47
-=======
 #: src/Template/Layout/js/app/components/filter-box.js:52
->>>>>>> master
 msgid "All Types"
 msgstr "Tutti i tipi"
 
