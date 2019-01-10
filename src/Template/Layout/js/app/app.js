@@ -16,6 +16,7 @@ import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
+import 'app/components/flash-message';
 import merge from 'deepmerge';
 
 import datepicker from 'app/directives/datepicker';
