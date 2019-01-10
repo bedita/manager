@@ -16,7 +16,9 @@ const FlashMessage = {
     },
 
     mounted() {
-        // setup initial value
+        if (this.$el.classList.contains('error')) {
+            return;
+        }
         this.visibilityClass = 'on';
         setTimeout(() => {
             this.$nextTick(() => {
@@ -27,9 +29,6 @@ const FlashMessage = {
 
     methods: {
         closeMessage() {
-            if (this.$el.classList.contains('error')) {
-                return;
-            }
             if (this.visibilityClass === 'on') {
                 this.$el.parentNode.removeChild(this.$el);
                 this.visibilityClass = '';
