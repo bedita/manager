@@ -231,12 +231,7 @@ class TrashController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $query = [];
-        $q = $this->listQuery();
-        if (!empty($q['filter'])) {
-            $query['filter'] = $q['filter'];
-        }
-
+        $query = array_filter(array_intersect_key($this->listQuery(), ['filter' => '']));
         // cycle over trash results
         $response = $this->apiClient->getObjects('trash', $query);
         $counter = 0;
