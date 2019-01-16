@@ -257,8 +257,12 @@ export default {
          * @return {String} object type
          */
         getObjectType(file) {
-            const type = file.type && file.type.split('/')[0];
+            let type = file.type && file.type.split('/')[0];
             const hasPlural = /audio/g.test(type) ? '' : 's';
+
+            if (type.indexOf('application') !== -1 || type.indexOf('text') !== -1) {
+                type = 'file';
+            }
             return `${type}${hasPlural}`;
         },
 
