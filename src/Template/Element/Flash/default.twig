@@ -1,6 +1,6 @@
 {% set level = level|default('info') %}
 
-<flash-message :timeout=5 inline-template>
+<flash-message :timeout=2 inline-template>
 <div class="message {{ level }} {{ params.class|default('') }}" :class="visibilityClass">
     <h2>
         {% if level == 'error' %}
