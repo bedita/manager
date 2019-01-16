@@ -15,6 +15,7 @@ namespace App\Controller;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -154,25 +155,16 @@ class TrashController extends AppController
                 // Error! Back to object view.
                 $this->log($e, LogLevel::ERROR);
                 $this->Flash->error($e, ['params' => $e->getAttributes()]);
-                if (!empty($this->request->getData('id'))) {
-                    return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+
+                if (!empty($this->request->getData('ids'))) {
+                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
 
                 return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
             }
         }
 
-        $this->Flash->success(__('Object(s) restored'));
-
-        $query = $this->request->getData('query');
-        if (!empty($query)) {
-            $query = htmlspecialchars_decode($query);
-            $query = unserialize($query);
-
-            return $this->redirect(['_name' => 'trash:list'] + $query);
-        }
-
-        return $this->redirect(['_name' => 'trash:list']);
+        return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
     }
 
     /**
@@ -200,8 +192,8 @@ class TrashController extends AppController
                 $this->log($e, LogLevel::ERROR);
                 $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
-                if (!empty($this->request->getData('id'))) {
-                    return $this->redirect(['_name' => 'trash:view', 'id' => $this->request->getData('id')]);
+                if (!empty($this->request->getData('ids'))) {
+                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
 
                 return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
@@ -210,15 +202,23 @@ class TrashController extends AppController
 
         $this->Flash->success(__('Object deleted from trash'));
 
+        return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
+    }
+
+    /**
+     * Return query filter array from request to be used in redirects
+     *
+     * @return array
+     */
+    protected function listQuery() : array
+    {
         $query = $this->request->getData('query');
-        if (!empty($query)) {
-            $query = htmlspecialchars_decode($query);
-            $query = unserialize($query);
-
-            return $this->redirect(['_name' => 'trash:list'] + $query);
+        if (empty($query)) {
+            return [];
         }
+        $query = htmlspecialchars_decode($query);
 
-        return $this->redirect(['_name' => 'trash:list']);
+        return (array)unserialize($query);
     }
 
     /**
@@ -231,20 +231,11 @@ class TrashController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $query = [];
-        $q = $this->request->getData('query');
-        if (!empty($q)) {
-            $q = htmlspecialchars_decode($q);
-            $q = unserialize($q);
-            if (!empty($q['filter'])) {
-                $query['filter'] = $q['filter'];
-            }
-        }
-
+        $query = array_filter(array_intersect_key($this->listQuery(), ['filter' => '']));
         // cycle over trash results
         $response = $this->apiClient->getObjects('trash', $query);
         $counter = 0;
-        while (!empty($response['meta']['pagination']['count']) && $response['meta']['pagination']['count'] > 0) {
+        while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
             foreach ($response['data'] as $index => $data) {
                 try {
                     $this->apiClient->remove($data['id'], $query);
@@ -254,17 +245,13 @@ class TrashController extends AppController
                     $this->log($e, LogLevel::ERROR);
                     $this->Flash->error($e, ['params' => $e->getAttributes()]);
 
-                    return $this->redirect(['_name' => 'trash:index'] + $query);
+                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
             }
             $response = $this->apiClient->getObjects('trash', $query);
         }
         $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
 
-        if (!empty($query)) {
-            return $this->redirect(['_name' => 'trash:list'] + $query);
-        }
-
-        return $this->redirect(['_name' => 'trash:list']);
+        return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
     }
 }
