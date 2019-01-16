@@ -32,16 +32,6 @@ export BEDITA_API="{bedita-4-url}"
 export BEDITA_API_KEY="{bedita4-api-key}"
 ```
 
-You are then ready to use the webapp by simply run builtin webserver like this
-
-```bash
-bin/cake server
-```
-
-And then point your browser to `http://localhost:8765/`
-
-Or you can configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
-
 ## Docker
 
 ### Pull official image
@@ -81,6 +71,30 @@ Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch 
 ### Run dev with webpack
 
 ## Development
+
+With this command you will launch a cake server and a webpack proxy server all with one command
+
+```bash
+yarn start
+```
+
+## Custom Dev Environment
+
+If you feel you want to customize ports, vhosts or you have your own php server then you can use these commands
+
+### Cake side App
+
+If you don't have a php enabled web server (apache...) you can use cake builtin server
+
+```bash
+bin/cake server
+```
+
+And then point your browser to `http://localhost:8765/`
+
+Or you can configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
+
+### Vue side App
 
 ```bash
 yarn run develop --proxy localhost:1234

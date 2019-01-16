@@ -16,6 +16,7 @@
     },
     "homepage": "https://github.com/bedita/web#README",
     "scripts": {
+        "start": "(bin/cake server -H 0.0.0.0 -p 4545 & yarn develop --proxy 0.0.0.0:4545)",
         "build": "webpack --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development",

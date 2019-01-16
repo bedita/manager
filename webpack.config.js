@@ -75,6 +75,9 @@ if (devMode || forceReport) {
 if (devMode) {
     webpackPlugins.push(
         new BrowserSyncPlugin({
+            index: '',
+            host: ENVIRONMENT.host,
+            port: ENVIRONMENT.port,
             proxy: {
                 target: process.argv.host || ENVIRONMENT.proxy,
                 proxyReq: [
@@ -83,14 +86,12 @@ if (devMode) {
                         proxyReq.setHeader('Access-Control-Allow-Headers', 'content-type, origin, x-api-key, x-requested-with, authorization');
                         proxyReq.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, PATCH, DELETE, OPTIONS');
                     }
-                ]
+                ],
             },
             cors: true,
             notify: true,
             open: false,
             reloadOnRestart: true,
-            host: ENVIRONMENT.host,
-            port: ENVIRONMENT.port,
         })
     );
 
