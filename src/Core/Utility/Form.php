@@ -42,7 +42,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    public static function control(array $schema, string $type, $value) : array
+    public static function control(array $schema = [], string $type, $value) : array
     {
         if (!in_array($type, Form::CONTROL_TYPES)) {
             return compact('type', 'value');
