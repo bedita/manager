@@ -49,10 +49,10 @@
                         <div>{{ Time.format(object.meta.modified) }}</div>
                         <div>
                         {% if in_array('PATCH', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id, 'query': q}})|raw }}
+                            {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'ids': object.id, 'query': q}})|raw }}
                         {% endif %}
                         {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id, 'query': q}, 'onclick': confirm})|raw }}
+                            {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'ids': object.id, 'query': q}, 'onclick': confirm})|raw }}
                         {% endif %}
                         </div>
                     </a>
