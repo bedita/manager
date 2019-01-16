@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -21,25 +21,6 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
-class TrashControllerSample extends TrashController
-{
-    /**
-     * {@inheritDoc}
-     */
-    public function render($view = null, $layout = null)
-    {
-        // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function redirect($url, $status = 302) : Response
-    {
-        return new Response();
-    }
-}
-
 /**
  * {@see \App\Controller\TrashController} Test Case
  *
@@ -50,7 +31,7 @@ class TrashControllerTest extends TestCase
     /**
      * Test controller
      *
-     * @var App\Test\TestCase\Controller\TrashControllerSample
+     * @var App\Controller\TrashController
      */
     public $Trash;
 
@@ -102,10 +83,12 @@ class TrashControllerTest extends TestCase
     /**
      * Setup controller for test and create an object for test.
      *
-     * @param bool $auth Set authorized api client on test controller if true
+     * @param bool $auth Set authorized api client on test controller if true (default true)
+     * @param bool $query Set filter query in POST data (default true)
+     * @param bool $multiple Invoke multiple delete with `ids` (default false)
      * @return int The object ID
      */
-    public function setupControllerAndData($auth = true, $query = true) : int
+    public function setupControllerAndData($auth = true, $query = true, $multiple = false) : int
     {
         // setup and auth
         $this->setupApi();
@@ -120,17 +103,18 @@ class TrashControllerTest extends TestCase
         } else {
             $query = [];
         }
+        $idParam = $multiple ? ['ids' => [$id]] : ['id' => $id];
+
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                'id' => $id,
+            'post' => $idParam + [
                 'query' => $query,
             ],
         ];
         $request = new ServerRequest($config);
-        $this->Trash = new TrashControllerSample($request);
+        $this->Trash = new TrashController($request);
         if (!$auth) {
             $this->client->setupTokens(['jwt' => '']);
         }
@@ -175,6 +159,41 @@ class TrashControllerTest extends TestCase
         static::expectException(get_class($expected));
         static::expectExceptionCode($expected->getCode());
         $response = $this->client->getObject($id);
+    }
+
+    /**
+     * Test `restore` method with multiple items
+     *
+     * @covers ::restore()
+     *
+     * @return void
+     */
+    public function testRestoreMulti() : void
+    {
+        $id = $this->setupControllerAndData(true, false, true);
+        $this->Trash->restore();
+        $response = $this->client->getObject($id);
+        static::assertEquals(200, $this->client->getStatusCode());
+        static::assertEquals($id, $response['data']['id']);
+    }
+
+    /**
+     * Test `restore` method failure with multiple items
+     *
+     * @covers ::restore()
+     *
+     * @return void
+     */
+    public function testRestoreMultiFailure() : void
+    {
+        $id = $this->setupControllerAndData(true, false, true);
+        $this->client->remove($id);
+        $response = $this->Trash->restore();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/trash', $response->getHeaderLine('Location'));
+
+        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $message);
     }
 
     /**
@@ -224,9 +243,47 @@ class TrashControllerTest extends TestCase
     }
 
     /**
+     * Test `restore` method with multiple items
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteMulti() : void
+    {
+        $id = $this->setupControllerAndData(true, false, true);
+        $this->Trash->delete();
+
+        $expected = new BEditaClientException('Not Found', 404);
+        static::expectException(get_class($expected));
+        static::expectExceptionCode($expected->getCode());
+        $this->client->get(sprintf('/trash/%d', $id));
+    }
+
+    /**
+     * Test `delete` method failure with multiple items
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteMultiFailure() : void
+    {
+        $id = $this->setupControllerAndData(true, false, true);
+        $this->client->remove($id);
+        $response = $this->Trash->delete();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/trash', $response->getHeaderLine('Location'));
+
+        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $message);
+    }
+
+    /**
      * Test `empty` method
      *
      * @covers ::empty()
+     * @covers ::listQuery()
      *
      * @return void
      */
@@ -239,6 +296,23 @@ class TrashControllerTest extends TestCase
         static::assertEquals('OK', $this->client->getStatusMessage());
         static::assertNotEmpty($response);
         static::assertArrayHasKey('data', $response);
+        static::assertEmpty($response['data']);
+    }
+
+    /**
+     * Test `empty` method with query filter
+     *
+     * @covers ::empty()
+     * @covers ::listQuery()
+     *
+     * @return void
+     */
+    public function testEmptyFilter() : void
+    {
+        $this->setupControllerAndData(true, true);
+        $this->Trash->empty();
+        $response = $this->client->get('/trash');
+        static::assertEquals(200, $this->client->getStatusCode());
         static::assertEmpty($response['data']);
     }
 
