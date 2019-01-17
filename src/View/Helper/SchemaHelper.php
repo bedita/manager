@@ -32,7 +32,7 @@ class SchemaHelper extends Helper
      * @param array $schema Object schema array.
      * @return array
      */
-    public function controlOptions($name, $value, $schema) : array
+    public function controlOptions(string $name, $value, $schema = []) : array
     {
         $options = Form::customControlOptions($name);
         if (!empty($options)) {
@@ -40,9 +40,9 @@ class SchemaHelper extends Helper
 
             return $options;
         }
-        $type = Form::controlTypeFromSchema($schema);
+        $type = Form::controlTypeFromSchema((array)$schema);
 
-        return Form::control($schema, $type, $value);
+        return Form::control((array)$schema, $type, $value);
     }
 
     /**

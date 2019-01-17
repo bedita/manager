@@ -126,6 +126,25 @@ return [
                 'description' => '',
                 'readOnly' => true,
             ],
+            'label' => [
+                'type' => 'string',
+                '$id' => '/properties/label',
+                'title' => 'Label',
+                'description' => 'Relation label',
+            ],
+            'inverse_name' => [
+                'type' => 'string',
+                '$id' => '/properties/inverse_name',
+                'title' => 'Inverse name',
+                'description' => 'Relation unique inverse name',
+                'maxLength' => 32
+            ],
+            'inverse_label' => [
+                'type' => 'string',
+                '$id' => '/properties/inverse_label',
+                'title' => 'Inverse Label',
+                'description' => 'Relation inverse label',
+            ],
             'name' => [
                 'type' => 'string',
                 '$id' => '/properties/name',
