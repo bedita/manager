@@ -65,15 +65,9 @@ export default {
     },
 
     computed: {
-        /**
-         * return accepted mimetypes
-         *
-         * @return {String} mimetypes
-         */
-        acceptedMimeTypes() {
-            return 'audio/*,video/*,image/*,.pdf';
+        knownTypes() {
+            return ['audio', 'video', 'image'];
         },
-
         /**
          * is a media object
          *
@@ -257,8 +251,12 @@ export default {
          * @return {String} object type
          */
         getObjectType(file) {
-            const type = file.type && file.type.split('/')[0];
+            let type = file.type && file.type.split('/')[0];
             const hasPlural = /audio/g.test(type) ? '' : 's';
+
+            if (this.knownTypes.indexOf(type) === -1) {
+                type = 'file';
+            }
             return `${type}${hasPlural}`;
         },
 
