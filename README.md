@@ -71,7 +71,7 @@ Run a Docker image setting API base url and API KEY like this:
 ```bash
 
 docker run -p 8080:80 \
-     --env BEDITA_API={bedita-api-url} --env BEDITA_API_KEY={bedita-api-key} \
+    --env BEDITA_API={bedita-api-url} --env BEDITA_API_KEY={bedita-api-key} \
     bedita/web:latest
 
 ```
@@ -82,11 +82,34 @@ Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch 
 
 ## Development
 
-```bash
-yarn run develop --proxy localhost:1234
+### Using .env
+
+It's easy to configure .env to match your web server and proxy requirement. Simply copy the .default.env and configure it.
+(default proxy: localhost:8080, default server: localhost:3000)
+
+```env
+# Be4 Entry Point
+
+HOST=localhost
+PORT=3000
+
+# Proxy server
+
+PROXY_HOST=local-be4-web
+PROXY_PORT=8080
 ```
 
-proxy: local webserver (default: localhost:8080)
+To start develop run
+
+```bash
+yarn develop
+```
+
+### Using command parameters
+
+```bash
+yarn run develop --proxy localhost:8888 --server localhost:9000
+```
 
 ## Build
 
