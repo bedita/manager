@@ -10,6 +10,7 @@ import PropertyView from 'app/components/property-view/property-view';
 import RelationView from 'app/components/relation-view/relation-view';
 
 export default {
+
     components: {
         PropertyView,
     },
@@ -38,6 +39,6 @@ export default {
     methods: {
         toggleTabs() {
             return this.tabsOpen = !this.tabsOpen;
-        }
+        },
     }
 }

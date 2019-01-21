@@ -114,6 +114,7 @@ nav.pagination {
 // single related object
 .related-object {
     position: relative;
+    min-width: 230px;
 
     article {
         display: flex;
@@ -125,12 +126,13 @@ nav.pagination {
             opacity: .4;
         }
 
-
         header {
             display: flex;
             justify-content: space-between;
             margin-bottom: $gutter;
+
             h1 {
+                padding: 0 4px;
                 margin: 0;
                 padding-right: $gutter;
                 word-break: break-word;
@@ -170,7 +172,7 @@ nav.pagination {
                     background-color: $gray-900;
                     position: relative;
                     width: 100%;
-                    padding-bottom: 56%; // 16 / 9
+                    padding-bottom: 63%; // 16 / 9 56%
                     overflow: hidden;
                     img {
                         position: absolute;
@@ -193,10 +195,29 @@ nav.pagination {
         footer {
             position: relative;
             display: flex;
-            justify-content: flex-end;
-            margin-top: $gutter * 1.5;
-            a { opacity: .5; line-height: 1rem; cursor: pointer; }
-            a:hover { opacity: 1; }
+            justify-content: space-between;
+            margin-top: $gutter * 0.5;
+
+            a {
+                background-color: transparent;
+                color: $gray-100;
+                line-height: 1rem;
+                cursor: pointer;
+            }
+
+            button {
+                background-color: transparent;
+                color: $gray-100;
+            }
+
+            a:last-child {
+                margin-left: auto;
+            }
+
+            button + a:last-child {
+                margin-left: 0;
+            }
+            a:hover, button:hover { background-color: $gray-100; color: $black; }
         }
     }
 
@@ -280,6 +301,10 @@ nav.pagination {
     .params-list {
         flex-grow: 1;
 
+        > div {
+            margin-bottom: $gutter * .5;
+        }
+
         input, select {
             width: 100%;
         }
@@ -292,7 +317,7 @@ nav.pagination {
     }
 }
 
-.relations-add,{
+.relations-add {
     display: flex;
     flex-direction: column;
     height: 100%;

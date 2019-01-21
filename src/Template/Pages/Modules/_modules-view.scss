@@ -3,6 +3,20 @@ body.view-module, body.translation-module {
     .modules-view {
         padding-left: $gutter * .5;
         >header {
+            display: inline-flex;
+
+            a {
+                margin-left: $gutter;
+            }
+
+            button {
+                margin-left: $gutter * .5;
+            }
+
+            h1 {
+                margin-bottom: $gutter * .5;
+            }
+
             h1:empty {
                 &:before {
                     content: attr(untitled-label);
@@ -51,9 +65,12 @@ body.view-module, body.translation-module {
                 order: 0;
             }
 
+            section.resources {
+                width: 100%;
+            }
 
             // section content
-            section.fieldset {
+            section.fieldset, section.resources {
                 .tab-container {
                     margin-bottom: $gutter * 1.5;
                 }
