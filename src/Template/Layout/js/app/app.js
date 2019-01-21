@@ -17,15 +17,18 @@ import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
 import 'app/components/flash-message';
-import merge from 'deepmerge';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
+import downloadHelper from 'app/helpers/download';
+
+import merge from 'deepmerge';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
+import view from './pages/modules/view';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -92,6 +95,9 @@ const _vueInstance = new Vue({
         Vue.use(datepicker);
         Vue.use(richeditor);
         Vue.use(VueHotkey);
+
+        // Register helpers
+        Vue.use(downloadHelper);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();

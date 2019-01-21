@@ -9,7 +9,7 @@
         {% for obj in included %}
             {% if obj.type == 'streams' %}
                 <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
-                <button class="icon-download" @click="downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button>
+                <button class="icon-download" @click="$helpers.downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button>
             {% endif %}
         {% endfor %}
     </header>
@@ -48,7 +48,7 @@
             </div>
 
             <div class="form-column">
-                {% element 'Form/publish_properties' {'cssOrder': '1'} %}
+                {% element 'Form/publish_properties' {'cssOrder': '0'} %}
 
                 {% element 'Form/resources' {'cssOrder': '2'} %}
 

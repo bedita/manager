@@ -114,7 +114,7 @@ nav.pagination {
 // single related object
 .related-object {
     position: relative;
-    min-width: 240px;
+    min-width: 230px;
 
     article {
         display: flex;
@@ -194,23 +194,28 @@ nav.pagination {
 
         footer {
             position: relative;
-            display: inline-flex;
+            display: flex;
             justify-content: space-between;
             margin-top: $gutter * 0.5;
+
             a {
                 background-color: transparent;
                 color: $gray-100;
                 line-height: 1rem;
                 cursor: pointer;
-                // margin-left: auto;
+            }
+
+            button {
+                background-color: transparent;
+                color: $gray-100;
             }
 
             a:last-child {
                 margin-left: auto;
             }
-            button {
-                background-color: transparent;
-                color: $gray-100;
+
+            button + a:last-child {
+                margin-left: 0;
             }
             a:hover, button:hover { background-color: $gray-100; color: $black; }
         }

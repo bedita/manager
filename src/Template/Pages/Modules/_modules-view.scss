@@ -65,9 +65,12 @@ body.view-module, body.translation-module {
                 order: 0;
             }
 
+            section.resources {
+                width: 100%;
+            }
 
             // section content
-            section.fieldset {
+            section.fieldset, section.resources {
                 .tab-container {
                     margin-bottom: $gutter * 1.5;
                 }

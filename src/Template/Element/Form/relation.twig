@@ -79,10 +79,10 @@
                             })">{{ __('Edit Params') }}</button>
 
                         <footer>
-                            <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('View') }}</a>
-                            <button v-if="related.meta.url" class="is-small icon-download" @click="downloadResource(related.meta.url)">{{ __('Download') }}</button>
-                            <a class="button is-small icon-trash" @click.prevent="relationToggle(related)"
-                                v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'">
+                            <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view') }}</a>
+                            <button v-if="related.meta.url" class="is-small icon-download" @click.prevent.stop="$helpers.downloadResource(related.meta.url)">{{ __('download') }}</button>
+                            <a class="button is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-trash'"
+                                v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
                             </a>
                         </footer>
 
