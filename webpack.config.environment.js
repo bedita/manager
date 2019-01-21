@@ -7,7 +7,7 @@ const DEFAULT_PORT = '3000';
 // node dependencies
 const path = require('path');
 const chalk = require('chalk');
-const dotenv = require('dotenv').config({path: __dirname + '/.env'});
+const dotenv = require('dotenv').config({path: __dirname + '/config/.env'});
 
 const { readdirSync, statSync } = require('fs')
 const { join } = require('path')
