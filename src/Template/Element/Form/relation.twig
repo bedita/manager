@@ -42,9 +42,12 @@
                         </header>
 
                         <div class="thumbnail" v-if="related.meta && related.meta.url">
-                            <figure>
+                            <figure v-if="related.type === 'images'">
                                 <img :src="related.meta.url" />
                             </figure>
+                            <div class="cover" v-else>
+                                <span class="icon-cover icon-file-pdf"></span>
+                            </div>
                         </div>
 
                         <div>
