@@ -297,6 +297,30 @@ class PropertiesComponentTest extends TestCase
                     ],
                 ]
             ],
+            'other defaults' => [
+                [
+                    'core' => [
+                        'title' => 'Example',
+                    ],
+                    'publish' => [
+                    ],
+                    'advanced' => [
+                    ],
+                    'other' => [
+                        'body' => 'some text',
+                        'lang' => 'en'
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'title' => 'Example',
+                        'body' => 'some text',
+                        'lang' => 'en'
+                    ],
+                ],
+                'foos'
+            ],
+
         ];
     }
 

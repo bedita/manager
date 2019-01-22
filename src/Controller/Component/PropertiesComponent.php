@@ -116,7 +116,9 @@ class PropertiesComponent extends Component
                 }
             }
             $properties[$group] = $p;
-            $used = array_merge($used, $list);
+            if ($group !== 'other') {
+                $used = array_merge($used, $list);
+            }
         }
         // add remaining properties to 'other' group
         $properties['other'] = array_diff_key($properties['other'], array_flip($used));
