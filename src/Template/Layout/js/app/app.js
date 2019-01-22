@@ -23,7 +23,7 @@ import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import VueHotkey from 'v-hotkey';
 
-import downloadHelper from 'app/helpers/download';
+import viewHelper from 'app/helpers/view';
 
 import merge from 'deepmerge';
 import sleep from 'sleep-promise';
@@ -97,7 +97,7 @@ const _vueInstance = new Vue({
         Vue.use(VueHotkey);
 
         // Register helpers
-        Vue.use(downloadHelper);
+        Vue.use(viewHelper);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
