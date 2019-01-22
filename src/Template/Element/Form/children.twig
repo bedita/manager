@@ -32,11 +32,7 @@
                             v-bind:class="related.type">
 
                         <header>
-<<<<<<< Updated upstream
-                            <h1><a :href="buildViewUrl(related.type, related.id)" target="_blank"><: related.attributes.title || related.attributes.name :></a></h1>
-=======
                             <h1><a :href="$helpers.buildViewUrl(related.id)" target="_blank"><: related.attributes.title || related.attributes.name :></a></h1>
->>>>>>> Stashed changes
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
@@ -59,11 +55,7 @@
                         </div>
 
                         <footer>
-<<<<<<< Updated upstream
-                            <a class="icon-edit icon-only-icon has-text-size-larger" :href="buildViewUrl(related.type, related.id)" target="_blank"></a>
-=======
                             <a class="icon-edit icon-only-icon has-text-size-larger" :href="$helpers.buildViewUrl(related.id)" target="_blank"></a>
->>>>>>> Stashed changes
                         </footer>
 
                     </article>
