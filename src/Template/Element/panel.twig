@@ -170,7 +170,7 @@
                                 </div>
 
                                 <footer>
-                                    <a @click.stop='' :href="buildViewUrl(related.type, related.id)" target="_blank">{{ __('open') }}</a>
+                                    <a :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('open') }}</a>
                                 </footer>
                             </article>
                         </div>

@@ -36,15 +36,18 @@
                             v-bind:class="related.type">
 
                         <header>
-                            <a class="icon-edit icon-only-icon has-text-size-larger" :href="buildViewUrl(related.type, related.id)" target="_blank"></a>
-                            <h1><a :href="buildViewUrl(related.type, related.id)" target="_blank"><: related.attributes.title || related.attributes.name :></a></h1>
+                            <a class="icon-edit icon-only-icon has-text-size-larger" :href="$helpers.buildViewUrl(related.id)" target="_blank"></a>
+                            <h1><a :href="$helpers.buildViewUrl(related.id)" target="_blank"><: related.attributes.title || related.attributes.name :></a></h1>
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
                         <div class="thumbnail" v-if="related.meta && related.meta.url">
-                            <figure>
+                            <figure v-if="related.type === 'images'">
                                 <img :src="related.meta.url" />
                             </figure>
+                            {# <div class="cover" v-else>
+                                <span class="icon-cover icon-file-pdf"></span>
+                            </div> #}
                         </div>
 
                         <div>
@@ -79,8 +82,8 @@
                             })">{{ __('Edit Params') }}</button>
 
                         <footer>
-                            <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view') }}</a>
-                            <button v-if="related.meta.url" class="is-small icon-download" @click.prevent.stop="$helpers.downloadResource(related.meta.url)">{{ __('download') }}</button>
+                            <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view file') }}</a>
+                            {# <button v-if="related.meta.url" class="is-small icon-download" @click.prevent.stop="$helpers.downloadResource(related.meta.url)">{{ __('download') }}</button> #}
                             <a class="button is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-trash'"
                                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
                             </a>
