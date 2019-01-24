@@ -39,7 +39,7 @@
                                     {% set options = options|merge({'readonly': 'true'}) %}
                                 {% endif %}
 
-                                {{ Form.control(__(key), options)|raw }}
+                                {{ Form.control(key, options)|raw }}
                             {% endfor %}
                         </div>
                     </section>
