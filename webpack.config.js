@@ -76,7 +76,7 @@ if (devMode) {
     webpackPlugins.push(
         new BrowserSyncPlugin({
             proxy: {
-                target: process.argv.host || ENVIRONMENT.proxy,
+                target: ENVIRONMENT.proxy,
                 proxyReq: [
                     (proxyReq) => {
                         proxyReq.setHeader('Access-Control-Allow-Origin', '*');
