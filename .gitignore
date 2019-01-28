@@ -59,4 +59,3 @@ yarn-error.log
 *.css.map
 *.bundle.js.map
 bundle-report.*.html
-.env
