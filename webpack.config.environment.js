@@ -43,14 +43,14 @@ if (index !== -1) {
     }
 }
 if (!proxy) {
-    if ('PROXY_HOST' in process.env) {
-        proxy_host = process.env.PROXY_HOST;
-    } else if ('PROXY_HOST' in dotenv.parsed) {
-        proxy_host = dotenv.parsed.PROXY_HOST;
-    } else if ('PROXY_PORT' in process.env) {
-        proxy_port = process.env.PROXY_PORT;
-    } else if ('PROXY_PORT' in dotenv.parsed) {
-        proxy_port = dotenv.parsed.PROXY_PORT;
+    if ('WEBPACK_PROXY_HOST' in process.env) {
+        proxy_host = process.env.WEBPACK_PROXY_HOST;
+    } else if ('WEBPACK_PROXY_HOST' in dotenv.parsed) {
+        proxy_host = dotenv.parsed.WEBPACK_PROXY_HOST;
+    } else if ('WEBPACK_PROXY_PORT' in process.env) {
+        proxy_port = process.env.WEBPACK_PROXY_PORT;
+    } else if ('WEBPACK_PROXY_PORT' in dotenv.parsed) {
+        proxy_port = dotenv.parsed.WEBPACK_PROXY_PORT;
     }
     proxy = `${proxy_host}:${proxy_port}`;
 }
@@ -66,14 +66,14 @@ if (index !== -1) {
         server_host = server.length > 0 ? server[0] : DEFAULT_HOST;
         server_port = server.length > 1 ? server[1] : DEFAULT_PORT;
     }
-} else if ('HOST' in process.env) {
-    server_host = process.env.HOST;
-} else if ('HOST' in dotenv.parsed) {
-    server_host = dotenv.parsed.HOST;
-} else if ('PORT' in process.env) {
-    server_port = process.env.PORT;
-} else if ('PORT' in dotenv.parsed) {
-    server_port = dotenv.parsed.PORT;
+} else if ('WEBPACK_SERVER_HOST' in process.env) {
+    server_host = process.env.WEBPACK_SERVER_HOST;
+} else if ('WEBPACK_SERVER_HOST' in dotenv.parsed) {
+    server_host = dotenv.parsed.WEBPACK_SERVER_HOST;
+} else if ('WEBPACK_SERVER_PORT' in process.env) {
+    server_port = process.env.WEBPACK_SERVER_PORT;
+} else if ('WEBPACK_SERVER_PORT' in dotenv.parsed) {
+    server_port = dotenv.parsed.WEBPACK_SERVER_PORT;
 }
 
 // Show Bundle Report

@@ -90,13 +90,13 @@ It's easy to configure .env to match your web server and proxy requirement. Simp
 ```env
 # Be4 Entry Point
 
-HOST=localhost
-PORT=3000
+WEBPACK_SERVER_HOST=localhost
+WEBPACK_SERVER_PORT=3000
 
 # Proxy server
 
-PROXY_HOST=local-be4-web
-PROXY_PORT=8080
+WEBPACK_PROXY_HOST=local-be4-web
+WEBPACK_PROXY_PORT=8080
 ```
 
 To start develop run
