@@ -67,8 +67,8 @@ export default {
                             <option value="">
                                 ${t`All`}
                             </option>
-                            <option v-for="option in filter.options" :name="option.name" :value="option.value">
-                                <: t(option.text) :>
+                            <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
+                                <: option.text :>
                             </option>
                         </select>
                     </span>
