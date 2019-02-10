@@ -37,7 +37,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% element 'json_meta_config' %}
 </head>
 
-<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
+<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}"
+    {% if config('AlertMessage.text') %}alert-message="{{ config('AlertMessage.text') }}" alert-color="{{ config('AlertMessage.color')}}"{% endif %}>
     <main
         v-cloak
         class="layout"

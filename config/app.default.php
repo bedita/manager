@@ -590,4 +590,16 @@ return [
     //     ],
     //     'switchLangUrl' => '/lang',
     // ],
+
+    /**
+     * Display an alert messege in a top bar.
+     * Useful to announce mainteinance or to environment
+     *
+     * - text => text message to display
+     * - color => background color to use
+     */
+    // 'AlertMessage' => [
+    //     'text' => 'Test Message',
+    //     'color' => 'darkblue',
+    // ],
 ];
