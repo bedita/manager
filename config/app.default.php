@@ -592,7 +592,7 @@ return [
     // ],
 
     /**
-     * Display an alert messege in a top bar.
+     * Display an alert message in a top bar.
      * Useful to announce mainteinance or to specify a non-production environment
      *
      * - text => text message to display
