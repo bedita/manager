@@ -27,7 +27,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
-    {% element 'modules_colors' %}
+    {% element 'custom_colors' %}
 
     {# Temporarily fetching libraries' build from cdn #}
     <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
@@ -37,7 +37,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% element 'json_meta_config' %}
 </head>
 
-<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}">
+<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}"
+    {% if config('AlertMessage.text') %}alert-message="{{ config('AlertMessage.text') }}"{% endif %}>
     <main
         v-cloak
         class="layout"

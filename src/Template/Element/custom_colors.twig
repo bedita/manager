@@ -1,5 +1,6 @@
 <style type="text/css">
 
+    {# set modules colors #}
     {% for name, color in config('Modules.colors') %}
 
         .has-background-module-{{ name }} {
@@ -15,5 +16,12 @@
         }
 
     {% endfor %}
+
+    {# override alert message color if in config #}
+    {% if config('AlertMessage.color') %}
+        body[alert-message]:after {
+            background-color: {{ config('AlertMessage.color') }};
+        }
+    {% endif %}
 
 </style>
