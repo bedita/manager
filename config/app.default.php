@@ -593,13 +593,13 @@ return [
 
     /**
      * Display an alert messege in a top bar.
-     * Useful to announce mainteinance or to environment
+     * Useful to announce mainteinance or to specify a non-production environment
      *
      * - text => text message to display
      * - color => background color to use
      */
     // 'AlertMessage' => [
     //     'text' => 'Test Message',
-    //     'color' => 'darkblue',
+    //     'color' => '#498fde',
     // ],
 ];
