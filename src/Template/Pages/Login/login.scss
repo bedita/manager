@@ -1,6 +1,5 @@
 // override default layout
 body.view-login {
-
     height: 100vh;
     background-color: $white;
     background-image: linear-gradient(to bottom right, $gray-500 0%, $white 100%);
@@ -12,9 +11,6 @@ body.view-login {
         justify-content: center;
         align-items: center;
         height: 100%;
-        .messagesDiv {
-            display: block;
-        }
         .left-menu {
             display: none;
         }
@@ -104,37 +100,6 @@ body.view-login {
                         height: 0;
                         visibility: hidden;
                         overflow: hidden;
-                    }
-                }
-            }
-
-            #messagesDiv {
-                display: block;
-                top: auto;
-                width: 180px;
-                height: auto;
-                bottom: 100%;
-                background: none;
-                margin-bottom: 1px;
-                @media screen and (max-width: 780px) {
-                    width: 100%;
-                }
-
-                .message {
-                    margin: 0;
-                    width: 100%;
-                    min-height: auto;
-                    border: none;
-                    border-radius: 0;
-                    background-color: #900;
-                    color: #fff;
-                    clip-path: none;
-                    h2 { display: none; }
-                    a { display: none; }
-                    display: none;
-
-                    &:last-of-type {
-                        display: block;
                     }
                 }
             }
