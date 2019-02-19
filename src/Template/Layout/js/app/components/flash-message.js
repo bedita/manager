@@ -1,6 +1,12 @@
-import Vue from 'vue';
+/**
+ * Templates that uses this component (directly or indirectly):
+ *  Template/Element/Flash/default.twig
+ *
+ * <flash-message> component
+ *
+ */
 
-const FlashMessage = {
+export default {
     props: {
         timeout: {
             type: Number,
@@ -16,15 +22,15 @@ const FlashMessage = {
     },
 
     mounted() {
-        if (this.$el.classList.contains('error')) {
-            return;
-        }
-        this.visibilityClass = 'on';
-        setTimeout(() => {
-            this.$nextTick(() => {
-                this.closeMessage();
-            });
-        }, this.timeout * 1000);
+        // if (this.$el.classList.contains('error')) {
+        //     return;
+        // }
+        // this.visibilityClass = 'on';
+        // setTimeout(() => {
+        //     this.$nextTick(() => {
+        //         this.closeMessage();
+        //     });
+        // }, this.timeout * 1000);
     },
 
     methods: {
@@ -34,13 +40,5 @@ const FlashMessage = {
                 this.visibilityClass = '';
             }
         },
-    }
-};
-
-const message = new Vue({
-    el: '#flash-message-container',
-
-    components: {
-        FlashMessage,
-    }
-});
+    },
+}

@@ -16,7 +16,7 @@ import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
-import 'app/components/flash-message';
+import FlashMessage from 'app/components/flash-message';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -34,6 +34,7 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
+        FlashMessage,
         ModulesIndex,
         ModulesView,
         TrashIndex,
