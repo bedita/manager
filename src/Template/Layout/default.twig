@@ -81,12 +81,15 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {# component add relations with its own container #}
         {# {% element 'Form/relation_add' {'relationName': relationName} %} #}
         {% element 'panel' %}
+
+        {# flash messages #}
+        {% if Layout.messages() %}
+            {{ Flash.render()|raw }}
+        </section>
+    {% endif %}
     </main>
 
     {% if Layout.messages() %}
-        <section id="flash-message-container">
-            {% element 'Messages/messages' %}
-        </section>
     {% endif %}
 
     {{ Html.script('manifest.bundle')|raw }}

@@ -1,4 +1,4 @@
-#messagesDiv {
+#flashMessagesContainer {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -8,12 +8,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     &:empty {
         display: none;
     }
 
     .message {
         display: flex;
+        display: none;
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: $gutter;
@@ -26,16 +28,9 @@
         border-style: solid;
         border-color: transparent;
         border-radius: 1rem;
-        opacity: 0;
-        visibility: hidden;
-        clip-path: polygon(0 0, 100% 0, 20% 100%, 0 100%);
-        transition: .3s all;
 
         &.on {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            display: flex;
         }
 
         &.details {
@@ -44,10 +39,6 @@
             pre {
                 display: initial;
             }
-        }
-
-        h1, h2, p {
-            margin: 0;
         }
 
         h2 {

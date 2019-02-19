@@ -2,7 +2,7 @@
 {% do _view.assign('bodyViewClass', 'view-login') %}
 
 <div class="login-form">
-    {% element 'Messages/messages' %}
+    {{ Flash.render()|raw }}
 
     {{ Form.create(null, {
         'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
