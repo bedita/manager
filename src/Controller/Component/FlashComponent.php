@@ -38,11 +38,8 @@ class FlashComponent extends CakeFlashComponent
                 // our error code may be different
                 'code' => '',
                 'detail' => '',
-                'trace' => '',
+                'trace' => Configure::read('debug') ? $error->getTraceAsString() : '',
             ];
-            if (Configure::read('debug')) {
-                $options['params']['trace'] = $error->getTraceAsString();
-            }
 
             if ($error instanceof BEditaClientException) {
                 $options['params'] = array_merge($options['params'], $error->getAttributes());
