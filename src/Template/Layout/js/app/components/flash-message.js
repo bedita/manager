@@ -10,35 +10,43 @@ export default {
     props: {
         timeout: {
             type: Number,
-            default: 10,
+            default: 4,
+        },
+        isBlocking: {
+            type: Boolean,
+            default: false,
+        },
+        waitPanelAnimation: {
+            type: Number,
+            default: 0.5,
         },
     },
 
     data() {
         return {
-            visibilityClass: 'on',
-            showDetails: false,
+            isVisible: true,
+            isDumpVisible: false,
         };
     },
 
     mounted() {
-        // if (this.$el.classList.contains('error')) {
-        //     return;
-        // }
-        // this.visibilityClass = 'on';
-        // setTimeout(() => {
-        //     this.$nextTick(() => {
-        //         this.closeMessage();
-        //     });
-        // }, this.timeout * 1000);
+        this.$nextTick(() => {
+            console.log(this.isBlocking);
+            if (!this.isBlocking) {
+                console.log(this.isBlocking);
+                setTimeout(() => {
+                    this.hide();
+                }, this.timeout * 1000);
+            }
+        });
     },
 
     methods: {
-        closeMessage() {
-            if (this.visibilityClass === 'on') {
-                this.$el.parentNode.removeChild(this.$el);
-                this.visibilityClass = '';
-            }
+        hide() {
+            this.isVisible = !this.isVisible;
+            setTimeout(() => {
+                this.$refs.flashMessagesContainer.remove();
+            }, this.waitPanelAnimation * 1000);
         },
     },
 }

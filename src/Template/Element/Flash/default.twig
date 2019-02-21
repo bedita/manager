@@ -1,44 +1,48 @@
 {% set level = level|default('info') %}
 
-<flash-message :timeout=2 inline-template>
-<div id="flashMessagesContainer">
-    <div class="message {{ level }} {{ params.class|default('') }}" :class="visibilityClass">
-        <h2 >
+<flash-message inline-template {% if level == 'error' %} :is-blocking="true" {% endif %}>
+<div id="flashMessagesContainer" ref="flashMessagesContainer" :class="isVisible? 'on' : ''">
+
+    {% if level == 'error' and _view.name != 'Login' %}
+        <div class="background-mask" v-show="isVisible" v-on:click.self="hide"></div>
+    {% endif %}
+
+    <div class="message {{ level }} {{ params.class|default('') }}">
+        <button class="close-button" @click="hide"></button>
+
+        <h2>
             {% if level == 'error' %}
-                {{ __('Error') }}
+                <i class="icon-attention-circled"></i> {{ message }}
             {% elseif level == 'info' %}
-                {{ __('Info') }}
+                <i class="icon-info-1"></i> {{ __('Success') }}
             {% elseif level == 'success' %}
-                {{ __('Success') }}
+                <i class="icon-ok-circled-1"></i> {{ __('Success') }}
             {% elseif level == 'warning' %}
-                {{ __('Warning') }}
+                <i class="icon-dot-circled"></i> {{ __('Warning') }}
             {% else %}
-                {{ __('Message') }}
+                <i class="icon-info-1"></i> {{ message }}
             {% endif %}
         </h2>
 
-        <p>
-            {% if params.escape|default(true) != false %}
-                {{ message }}
+        {% if _view.name != 'Login' and level == 'error' %}
+            {% if params and config('debug') %}
+                <a v-on:click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('code') }}: {{ params.code }} <i class="icon-down-dir"></i></a>
+                <div class="dump" v-show="isDumpVisible">
+                    <code>
+                    {% for key, value in params %}
+                        {% if value is not iterable %}
+                            {{ key }}: {{ value|nl2br|raw }}<br>
+                        {% else %}
+                            {{ key }}: {{ dump(value) }}<br>
+                        {% endif %}
+                    {% endfor %}
+                    </code>
+                </div>
             {% else %}
-                {{ message|raw }}
+                <p>{{ __('code') }}: {{ params.code }}</p>
             {% endif %}
-        </p>
-
-        {% if _view.name != 'Login' %}
-
-            {% if params %}
-                <a href="javascript:void(0)" onclick="this.nextElementSibling.removeAttribute('hidden');this.parentNode.classList.add('details');this.setAttribute('hidden', true);">
-                    {{ __('Show details') }}
-                </a>
-                <pre><code>{{ params|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
-            {% endif %}
-
-            <a class="btn-close" @click="closeMessage()">
-                {{ __('Close') }}
-            </a>
-
         {% endif %}
     </div>
+
 </div>
 </flash-message>

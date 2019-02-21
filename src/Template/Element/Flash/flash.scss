@@ -1,104 +1,124 @@
 #flashMessagesContainer {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0, 0, .65);
-    font-size: 12px;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    &:empty {
-        display: none;
+    .message, .background-mask {
+        position: fixed;
+        left: 0;
+        width: 100%;
+    }
+
+    .background-mask {
+        top: 0;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background-color .25s;
+        cursor: pointer;
     }
 
     .message {
+        bottom: 0;
+        max-height: 50%;
         display: flex;
-        display: none;
         flex-direction: column;
         align-items: flex-start;
-        margin-bottom: $gutter;
-        padding: $gutter / 2;
-        width: $gutter * 25;
-        min-height: $gutter * 11;
+        padding: $gutter * .75 $gutter;
+        border-top: .5rem solid transparent;
         background-color: $gray-100;
         color: $gray-900;
-        border-width: .5rem;
-        border-style: solid;
-        border-color: transparent;
-        border-radius: 1rem;
+        font-size: $font-size-sm;
 
-        &.on {
-            display: flex;
+        transition: transform .25s;
+        // when parent has not class 'on'
+        transform: translateY(100%);
+
+        >* {
+            flex: 1 0 auto;
+            &:not(:last-child) { margin-top: $gutter * .25; }
         }
 
-        &.details {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            width: 580px;
-            pre {
-                display: initial;
+        // colors
+        &.success   { border-color: $success; }
+        &.info      { border-color: $info; }
+        &.error     { border-color: $error; }
+        &.warning   { border-color: $warning; }
+        &.success   [class^="icon-"] { color: $success; }
+        &.info      [class^="icon-"] { color: $info; }
+        &.error     [class^="icon-"] { color: $error; }
+        &.warning   [class^="icon-"] { color: $warning; }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding-right: $gutter * 1.5;
+            font-size: $font-size-llg;
+            [class^="icon-"] { margin-top: 2px; }
+        }
+
+        a { cursor: pointer; }
+        .dump {
+            margin-top: $gutter * .75;
+            padding: $gutter * .75;
+            width: 100%;
+            flex: 1;
+            overflow: auto;
+            background-color: $gray-200;
+            code {
+                font-family: monospace;
+                font-size: $font-size-sm;
             }
         }
 
-        h2 {
-            font-size: 1.25em;
-        }
-
-        pre {
-            display: none;
-            width: 100%;
-            overflow: auto;
-        }
-
-        a.btn-close {
-            margin: auto 0 0;
-            border-top: 1px solid $gray-500;
-            padding: 2px 0 0 0;
-        }
-
-        &.success {
-            border-color: $gray-100;
-        }
-        &.info {
-            border-color: rgb(38, 84, 170);
-        }
-        &.error {
-            border-color: rgb(187, 26, 26);
-        }
-        &.warning {
-            border-color: rgb(202, 126, 26);
+        .close-button {
+            position: absolute;
+            top: $gutter * .5;
+            right: $gutter;
         }
     }
+
+    &.on {
+        .background-mask {
+            background-color: rgba(0, 0, 0, .65);
+        }
+        .message {
+            transform: translateY(0);
+        }
+    }
+
 }
+
+
 
 // login
 body.view-login {
-    #messagesDiv {
-        display: block;
-        top: auto;
+    #flashMessagesContainer {
+        position: absolute;
+        bottom: 100%; left: 0;
         width: 180px;
         height: auto;
-        bottom: 100%;
-        background: none;
         margin-bottom: 1px;
         @media screen and (max-width: 780px) {
             width: 100%;
         }
 
         .message {
+            position: static;
             margin: 0;
+            padding: $gutter * .25 $gutter * .5;
             width: 100%;
             min-height: auto;
             border: none;
-            border-radius: 0;
-            background-color: #900;
+            background-color: $error;
             color: #fff;
-            clip-path: none;
-            h2 { display: none; }
-            a { display: none; }
-            display: none;
 
+            h2 {
+                margin: 0; padding: 0;
+                font-size: $font-size-sm;
+            }
+            [class^="icon-"] { display: none; }
+            .close-button  { display: none; }
+
+            // no multiple messages
+            display: none;
             &:last-of-type {
                 display: block;
             }
