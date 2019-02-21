@@ -33,7 +33,8 @@
                         {% if value is not iterable %}
                             {{ key }}: {{ value|nl2br|raw }}<br>
                         {% else %}
-                            {{ key }}: {{ dump(value) }}<br>
+                            {{ key }}:<br>
+                            {{ value|json_encode(constant('JSON_PRETTY_PRINT')) }}<br>
                         {% endif %}
                     {% endfor %}
                     </code>
