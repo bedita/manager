@@ -110,7 +110,7 @@ class AppControllerTest extends TestCase
 
         $flash = $this->AppController->request->getSession()->read('Flash');
 
-        $expected = __('You are not logged or your session has expired, please provide login credentials');
+        $expected = __('Login required');
         $message = $flash['flash'][0]['message'];
 
         static::assertEquals($expected, $message);

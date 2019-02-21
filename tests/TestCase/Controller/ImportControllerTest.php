@@ -17,9 +17,9 @@ use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use Cake\Http\ServerRequest;
+use Cake\Network\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
-use RuntimeException;
 
 class ImportControllerSample extends ImportController
 {
@@ -56,7 +56,7 @@ class ImportFilterSampleError extends ImportFilter
      */
     public function import($filename, $filepath, ?array $options = []) : ImportResult
     {
-        throw new RuntimeException('An expected exception');
+        throw new InternalErrorException('An expected exception');
     }
 }
 
@@ -146,7 +146,7 @@ class ImportControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         $flash = $this->Import->request->session()->read('Flash.flash');
         static::assertEquals('Import filter not selected', Hash::get($flash, '0.message'));
-        static::assertEquals(400, Hash::get($flash, '0.params.code'));
+        static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
 
     /**
@@ -166,7 +166,7 @@ class ImportControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         $flash = $this->Import->request->session()->read('Flash.flash');
         static::assertEquals('Missing import file', Hash::get($flash, '0.message'));
-        static::assertEquals(400, Hash::get($flash, '0.params.code'));
+        static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
 
     /**
@@ -183,6 +183,6 @@ class ImportControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         $flash = $this->Import->request->session()->read('Flash.flash');
         static::assertEquals('An expected exception', Hash::get($flash, '0.message'));
-        static::assertEquals(500, Hash::get($flash, '0.params.code'));
+        static::assertEquals(500, Hash::get($flash, '0.params.status'));
     }
 }

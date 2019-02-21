@@ -2,7 +2,7 @@
 {% do _view.assign('bodyViewClass', 'view-login') %}
 
 <div class="login-form">
-    {% element 'Messages/messages' %}
+    {{ Flash.render()|raw }}
 
     {{ Form.create(null, {
         'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
@@ -23,23 +23,6 @@
         'label': false,
     })|raw }}
     <label>{{ __('Password') }}</label>
-
-    <script>
-        Date.prototype.stdTimezoneOffset = function() {
-            var jan = new Date(this.getFullYear(), 0, 1);
-            var jul = new Date(this.getFullYear(), 6, 1);
-            return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-        }
-
-        Date.prototype.dst = function() {
-            return this.getTimezoneOffset() < this.stdTimezoneOffset();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var tz = (-60) * (new Date().getTimezoneOffset()) + ' ' + (new Date().dst() ? '1' : '0');
-            document.getElementById('timezone-offset').value = tz;
-        });
-    </script>
 
     {{ Form.control('timezone_offset', {
         'label': false,

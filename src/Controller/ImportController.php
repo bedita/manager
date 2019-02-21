@@ -74,11 +74,11 @@ class ImportController extends AppController
             );
             $this->set(compact('result'));
         } catch (CakeException $e) {
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'import:index']);
         } catch (Exception $e) {
-            $this->Flash->error($e, ['params' => ['code' => 500]]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'import:index']);
         }

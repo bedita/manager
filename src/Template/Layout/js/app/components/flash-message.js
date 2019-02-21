@@ -1,46 +1,50 @@
-import Vue from 'vue';
+/**
+ * Templates that uses this component (directly or indirectly):
+ *  Template/Element/Flash/flash.twig
+ *
+ * <flash-message> component
+ *
+ */
 
-const FlashMessage = {
+export default {
     props: {
         timeout: {
             type: Number,
-            default: 10,
+            default: 4,
+        },
+        isBlocking: {
+            type: Boolean,
+            default: false,
+        },
+        waitPanelAnimation: {
+            type: Number,
+            default: 0.5,
         },
     },
 
     data() {
         return {
-            visibilityClass: 'on',
-            showDetails: false,
+            isVisible: true,
+            isDumpVisible: false,
         };
     },
 
     mounted() {
-        if (this.$el.classList.contains('error')) {
-            return;
-        }
-        this.visibilityClass = 'on';
-        setTimeout(() => {
-            this.$nextTick(() => {
-                this.closeMessage();
-            });
-        }, this.timeout * 1000);
+        this.$nextTick(() => {
+            if (!this.isBlocking) {
+                setTimeout(() => {
+                    this.hide();
+                }, this.timeout * 1000);
+            }
+        });
     },
 
     methods: {
-        closeMessage() {
-            if (this.visibilityClass === 'on') {
-                this.$el.parentNode.removeChild(this.$el);
-                this.visibilityClass = '';
-            }
+        hide() {
+            this.isVisible = !this.isVisible;
+            setTimeout(() => {
+                this.$refs.flashMessagesContainer.remove();
+            }, this.waitPanelAnimation * 1000);
         },
-    }
-};
-
-const message = new Vue({
-    el: '#flash-message-container',
-
-    components: {
-        FlashMessage,
-    }
-});
+    },
+}

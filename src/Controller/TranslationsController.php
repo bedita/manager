@@ -42,7 +42,7 @@ class TranslationsController extends ModulesController
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
@@ -86,7 +86,7 @@ class TranslationsController extends ModulesController
         } catch (\Exception $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
@@ -120,7 +120,7 @@ class TranslationsController extends ModulesController
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             if ($this->request->getData('id')) {
                 return $this->redirect([
@@ -177,7 +177,7 @@ class TranslationsController extends ModulesController
             $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
         } catch (BEditaException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             // redir to main object view
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);

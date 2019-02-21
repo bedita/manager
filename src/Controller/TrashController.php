@@ -86,7 +86,7 @@ class TrashController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
         }
@@ -117,7 +117,7 @@ class TrashController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'trash:list']);
         }
@@ -154,7 +154,7 @@ class TrashController extends AppController
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
                 $this->log($e, LogLevel::ERROR);
-                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                 if (!empty($this->request->getData('ids'))) {
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
@@ -190,7 +190,7 @@ class TrashController extends AppController
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
                 $this->log($e, LogLevel::ERROR);
-                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                 if (!empty($this->request->getData('ids'))) {
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
@@ -243,7 +243,7 @@ class TrashController extends AppController
                 } catch (BEditaClientException $e) {
                     // Error! Back to trash index.
                     $this->log($e, LogLevel::ERROR);
-                    $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                    $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }

@@ -98,7 +98,7 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
         }
@@ -169,7 +169,7 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error(__('Error retrieving the requested content'), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
@@ -283,7 +283,7 @@ class ModulesController extends AppController
         } catch (InternalErrorException | BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
@@ -357,7 +357,7 @@ class ModulesController extends AppController
                 $this->apiClient->deleteObject($id, $this->objectType);
             } catch (BEditaClientException $e) {
                 $this->log($e, LogLevel::ERROR);
-                $this->Flash->error($e, ['params' => $e->getAttributes()]);
+                $this->Flash->error($e->getMessage(), ['params' => $e]);
                 if (!empty($this->request->getData('id'))) {
                     return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
                 }

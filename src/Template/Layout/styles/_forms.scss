@@ -37,6 +37,7 @@ button, a.button {
 
     position: relative;
     height: $gutter * 2;
+    flex-shrink: 0;
     box-shadow: none;
     padding-bottom: calc(.375em - 1px);
     padding-left: .75em;
@@ -51,7 +52,7 @@ button, a.button {
     font-family: $font-family-sans-serif;
     font-size: $font-size-sm;
     font-weight: $font-weight-light;
-    line-height: 1.5;
+    line-height: 1;
 
     cursor: pointer;
 

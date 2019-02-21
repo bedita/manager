@@ -61,7 +61,7 @@ class UserProfileController extends AppController
             $response = $this->apiClient->get('/auth/user');
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         $revision = Hash::get($response, 'meta.schema.users.revision', null);
@@ -85,7 +85,7 @@ class UserProfileController extends AppController
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return $this->redirect(['_name' => 'user_profile:view']);
