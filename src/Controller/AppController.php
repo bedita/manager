@@ -81,7 +81,7 @@ class AppController extends Controller
             if ($redirect !== $this->request->getAttribute('webroot')) {
                 $route += compact('redirect');
             }
-            $this->Flash->error(__('You are not logged or your session has expired, please provide login credentials'));
+            $this->Flash->error(__('Login required'));
 
             return $this->redirect($route);
         }

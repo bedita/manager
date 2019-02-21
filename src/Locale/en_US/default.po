@@ -395,7 +395,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-msgid "Username or password is incorrect"
+msgid "Username and/or password do not match"
 msgstr ""
 
 msgid "Users"
@@ -416,9 +416,7 @@ msgstr ""
 msgid "You are not authorized to access that location."
 msgstr ""
 
-msgid ""
-"You are not logged or your session has expired, please provide login "
-"credentials"
+msgid "Login required"
 msgstr ""
 
 msgid "add objects"

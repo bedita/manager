@@ -395,8 +395,8 @@ msgstr "Utente: {0}"
 msgid "Username"
 msgstr "Nome utente"
 
-msgid "Username or password is incorrect"
-msgstr "Nome utente o password non corretto(i)"
+msgid "Username and/or password do not match"
+msgstr "Il nome utente e/o la password non corrispondono"
 
 msgid "Users"
 msgstr "Utenti"
@@ -416,10 +416,8 @@ msgstr "Avviso"
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
-msgid ""
-"You are not logged or your session has expired, please provide login "
-"credentials"
-msgstr "Non sei autenticato o la sessione è scaduta, prova di nuovo il login"
+msgid "Login required"
+msgstr "È richiesto il login"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
