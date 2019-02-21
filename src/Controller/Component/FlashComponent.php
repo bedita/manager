@@ -15,6 +15,7 @@ namespace App\Controller\Component;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Controller\Component\FlashComponent as CakeFlashComponent;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -31,13 +32,20 @@ class FlashComponent extends CakeFlashComponent
         $error = Hash::get($options, 'params');
         if ($error && ($error instanceof \Exception)) {
             $options['params'] = [
-                'message' => $error->getMessage(),
-                'code' => $error->getCode(),
-                'trace' => $error->getTraceAsString(),
+                'title' => $error->getMessage(),
+                // exception error code is HTTP status as default
+                'status' => $error->getCode(),
+                // our error code may be different
+                'code' => '',
+                'detail' => '',
+                'trace' => '',
             ];
+            if (Configure::read('debug')) {
+                $options['params']['trace'] = $error->getTraceAsString();
+            }
 
             if ($error instanceof BEditaClientException) {
-                $options['params']['attributes'] = $error->getAttributes();
+                $options['params'] = array_merge($options['params'], $error->getAttributes());
             }
         }
 

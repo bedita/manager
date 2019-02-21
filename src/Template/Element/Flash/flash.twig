@@ -30,11 +30,11 @@
         </h2>
 
         {% if _view.name != 'Login' and level == 'error' %}
-            {% if params and config('debug') %}
-                <a v-on:click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('code') }}: {{ params.code }} <i class="icon-down-dir"></i></a>
+            {% if params and in_array('admin', user.roles) %}
+                <a v-on:click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('error code') }}: {{ params.status }} {{ params.code }}<i class="icon-down-dir"></i></a>
                 <div class="dump" v-show="isDumpVisible">
                     <code>
-                    {% for key, value in params %}
+                    {% for key, value in params if value %}
                         {% if value is not iterable %}
                             {{ key }}: {{ value|nl2br|raw }}<br>
                         {% else %}
@@ -45,7 +45,7 @@
                     </code>
                 </div>
             {% else %}
-                <p>{{ __('code') }}: {{ params.code }}</p>
+                <p>{{ __('error code') }}: {{ params.status }} {{ params.code }}</p>
             {% endif %}
         {% endif %}
     </div>
