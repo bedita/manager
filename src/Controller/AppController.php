@@ -44,7 +44,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
-        $this->loadComponent('Flash', ['clear' => true]);
+        $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
 

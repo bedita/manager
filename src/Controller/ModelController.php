@@ -94,7 +94,7 @@ class ModelController extends AppController
             );
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
         }
@@ -123,7 +123,7 @@ class ModelController extends AppController
             $response = $this->apiClient->get(sprintf('/model/%s/%s', $this->resourceType, $id));
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e, ['params' => $e->getAttributes()]);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'model:list', 'resource_type' => $this->resourceType]);
         }
