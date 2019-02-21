@@ -113,9 +113,8 @@ body.view-login {
             h2 {
                 margin: 0; padding: 0;
                 font-size: $font-size-sm;
+                line-height: $line-height-base;
             }
-            [class^="icon-"] { display: none; }
-            .close-button  { display: none; }
 
             // no multiple messages
             display: none;

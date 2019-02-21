@@ -95,7 +95,6 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
-            // $this->Flash->success(__('Object(s) deleted'));
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);

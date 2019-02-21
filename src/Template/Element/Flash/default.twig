@@ -8,20 +8,25 @@
     {% endif %}
 
     <div class="message {{ level }} {{ params.class|default('') }}">
-        <button class="close-button" @click="hide"></button>
+        {% if _view.name != 'Login' %}
+            <button class="close-button" @click="hide"></button>
+        {% endif %}
 
         <h2>
-            {% if level == 'error' %}
-                <i class="icon-attention-circled"></i> {{ message }}
-            {% elseif level == 'info' %}
-                <i class="icon-info-1"></i> {{ __('Success') }}
-            {% elseif level == 'success' %}
-                <i class="icon-ok-circled-1"></i> {{ __('Success') }}
-            {% elseif level == 'warning' %}
-                <i class="icon-dot-circled"></i> {{ __('Warning') }}
-            {% else %}
-                <i class="icon-info-1"></i> {{ message }}
+            {% if _view.name != 'Login' %}
+                {% if level == 'error' %}
+                    <i class="icon-attention-circled"></i>
+                {% elseif level == 'info' %}
+                    <i class="icon-info-1"></i>
+                {% elseif level == 'success' %}
+                    <i class="icon-ok-circled-1"></i>
+                {% elseif level == 'warning' %}
+                    <i class="icon-dot-circled"></i>
+                {% else %}
+                    <i class="icon-info-1"></i>
+                {% endif %}
             {% endif %}
+            {{ message }}
         </h2>
 
         {% if _view.name != 'Login' and level == 'error' %}
