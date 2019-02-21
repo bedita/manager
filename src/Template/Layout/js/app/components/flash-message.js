@@ -31,9 +31,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            console.log(this.isBlocking);
             if (!this.isBlocking) {
-                console.log(this.isBlocking);
                 setTimeout(() => {
                     this.hide();
                 }, this.timeout * 1000);
