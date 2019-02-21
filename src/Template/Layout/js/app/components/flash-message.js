@@ -1,6 +1,6 @@
 /**
  * Templates that uses this component (directly or indirectly):
- *  Template/Element/Flash/default.twig
+ *  Template/Element/Flash/flashfault.twig
  *
  * <flash-message> component
  *
