@@ -170,6 +170,7 @@ class ModulesController extends AppController
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error(__('Error retrieving the requested content'), ['params' => $e]);
+
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         $this->ProjectConfiguration->read();
