@@ -17,6 +17,7 @@ import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
 import FlashMessage from 'app/components/flash-message';
+import { PanelView, PanelEvents } from 'app/components/panel-view';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -44,6 +45,7 @@ const _vueInstance = new Vue({
         RelationsAdd,
         FilterBoxView,
         EditRelationParams,
+        PanelView,
     },
 
     data() {
@@ -54,11 +56,6 @@ const _vueInstance = new Vue({
             pageSize: '',
             page: '',
             sort: '',
-            panelIsOpen: false,
-            panelAction: null,
-            panelData: null,
-            addRelation: {},
-            editingRelationParams: null,
             dataChanged: false,
 
             urlFilterQuery: {
@@ -74,14 +71,12 @@ const _vueInstance = new Vue({
     },
 
     /**
-     * properties or methods available for injection into its descendants
-     * (inject: ['property'])
-     */
+    * properties or methods available for injection into its descendants
+    * (inject: ['property'])
+    */
     provide() {
         return {
-            requestPanel: (...args) => this.requestPanel(...args),
-            closePanel: (...args) => this.closePanel(...args),
-            returnDataFromPanel: (...args) => this.returnDataFromPanel(...args),
+            getCSFRToken: (...args) => BEDITA.csrfToken,
         }
     },
 
@@ -110,18 +105,18 @@ const _vueInstance = new Vue({
 
         // load url params when component initialized
         this.loadUrlParams();
+
+        let cl = document.querySelector('html').classList;
+        PanelEvents.listen('panel:opened', null, () => {
+            cl.add('is-clipped');
+        });
+
+        PanelEvents.listen('panel:closed', null, () => {
+            cl.remove('is-clipped');
+        });
     },
 
     watch: {
-        panelIsOpen(value) {
-            var cl = document.querySelector('html').classList;
-            if (value) {
-                cl.add('is-clipped');
-            } else {
-                cl.remove('is-clipped');
-            }
-        },
-
         /**
          * watch pageSize variable and update pagination.page_size accordingly
          *
@@ -194,65 +189,6 @@ const _vueInstance = new Vue({
             //     event.preventDefault();
             //     event.stopPropagation();
             // }
-        },
-
-        /**
-         * return data from panel
-         *
-         * @param {Object} data
-         *
-         * @return {void}
-         */
-        returnDataFromPanel(data) {
-            this.closePanel();
-
-            // return data from RelationsAdd view component
-            if (data.action === 'add-relation') {
-                this.$refs['moduleView']
-                    .$refs[data.relationName]
-                    .$refs['relation'].appendRelations(data.objects);
-            }
-
-            // return data from EditRelationParams view component
-            if (data.action === 'edit-params') {
-                const relationName = data.item.name;
-                this.$refs['moduleView']
-                    .$refs[relationName]
-                    .$refs['relation'].updateRelationParams(data.item);
-            }
-        },
-
-        /**
-         * close panel and clear data
-         *
-         * @return {void}
-         */
-        closePanel() {
-            this.panelIsOpen = false;
-            this.addRelation = {
-                name: '',
-                alreadyInView: [],
-            };
-
-            this.editingRelationParams = null;
-        },
-
-        /**
-         * request panel and pass data
-         *
-         * @param {Object} data
-         */
-        requestPanel(request) {
-            this.panelIsOpen = true;
-            this.panelAction = request.action;
-            this.panelData = request.data;
-
-            // open panel for relations add
-            if(request.relation && request.relation.name) {
-                this.addRelation = request.relation;
-            } else if (request.editRelationParams && request.editRelationParams.name) {
-                this.editingRelationParams = request.editRelationParams;
-            }
         },
 
         /**

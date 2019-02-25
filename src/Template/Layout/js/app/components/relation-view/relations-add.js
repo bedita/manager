@@ -13,13 +13,110 @@
 
 import FilterBoxView from 'app/components/filter-box';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { PanelEvents } from 'app/components/panel-view';
 import decamelize from 'decamelize';
 import sleep from 'sleep-promise';
 
 export default {
-    inject: ['returnDataFromPanel', 'closePanel'], // injected methods provided by Main App
+    template: /*template*/
+    `<div class="relations-add">
+            <section v-show="isMedia">
+                <header class="tab unselectable open"
+                    :class="!objects || loading ? 'is-loading-spinner' : ''"
+                    :disabled="saving"
+                    @click="showCreateObjectForm = !showCreateObjectForm">
 
-    mixins: [ PaginatedContentMixin ],
+                    <h2><span v-show="relationName"><: t('create new'):> <: relationName | humanize :></span> &nbsp;</h2>
+                    <a href="#" :disabled="saving" @click.prevent="closePanel()"><: t('close') :></a>
+                </header>
+                <transition appear name="fade">
+                    <div class="create-new-object" v-if="showCreateObjectForm">
+                        <form name="create-object" :disabled="saving" @submit.prevent="createObject">
+                            <div class="dropzone">
+                                <div class="input file">
+                                    <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
+                                </div>
+                            </div>
+                            <div class="input text">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
+                            </div>
+
+                            <button :disabled="this.file === null" type="submit"><: t('create') :></button>
+
+                        </form>
+                    </div>
+                </transition>
+            </section>
+            <section class="main-section">
+                <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
+                    <h2><span v-show="relationName"><: t('add to') :> <: relationName | humanize :></span> &nbsp;</h2>
+                    <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()"><: t('close') :></a>
+                </header>
+
+                <filter-box-view
+                    :config-paginate-sizes="configPaginateSizes"
+                    :pagination.sync="pagination"
+                    :show-filter-buttons=false
+                    :relation-types="relationTypes"
+
+                    :page-sizes-label="t('Page size')"
+                    :objects-label="t('objects')"
+
+                    @filter-update-current-page="onUpdateCurrentPage"
+                    @filter-update-page-size="onUpdatePageSize"
+                    @filter-objects="onFilterObjects">
+                </filter-box-view>
+
+                <div class="related-objects-list columns">
+                    <div class="related-object column is-3"
+                        v-for="related in objects">
+                        <article class="box has-text-gray-100 has-text-size-smaller"
+                                v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
+                                    alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
+                                @click="toggle(related, $event)">
+
+                            <header>
+                                <h1><: related.attributes.title || related.attributes.name :></h1>
+                                <span class="has-text-size-smaller prop-id"><: related.id :></span>
+                            </header>
+
+                            <div v-if="related.meta.url" class="thumbnail">
+                                <figure>
+                                    <img :src="related.meta.url" />
+                                </figure>
+                            </div>
+
+                            <div>
+                                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                            </div>
+
+                            <footer>
+                                <a :href="$helpers.buildViewUrl(related.id)" target="_blank"><: t('open') :></a>
+                            </footer>
+                        </article>
+                    </div>
+
+                    <!-- empty element: keep for flex layout #} --->
+                    <div class="column"></div>
+                </div>
+
+                <footer>
+                    <p>
+                        <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
+                            @click.prevent="addRelationsToObject({
+                                relationName: relationName,
+                                objects: selectedObjects,
+                            })"><: t('Add objects to') :> <: relationName | humanize :></button>
+                    </p>
+                    <span class="tag" v-show="selectedObjects.length" v-bind:class="selectedObjects.length? 'has-background-info' : ''"><: selectedObjects.length :></span>
+                </footer>
+            </section>
+    </div>`,
+
+    mixins: [PaginatedContentMixin],
+
+    inject: ['getCSFRToken'],
 
     components: {
         FilterBoxView,
@@ -41,10 +138,6 @@ export default {
             type: String,
             default: '[]',
         },
-        csrfToken: {
-            type: String,
-            required: true,
-        } // csfrToken used for api call
     },
 
     data() {
@@ -68,6 +161,7 @@ export default {
         knownTypes() {
             return ['audio', 'video', 'image'];
         },
+
         /**
          * is a media object
          *
@@ -147,6 +241,24 @@ export default {
         },
 
         /**
+         * send selected objects to relation view
+         *
+         * @return {void}
+         */
+        addRelationsToObject() {
+            PanelEvents.sendBack('relations-add:save', this.selectedObjects);
+        },
+
+        /**
+         * close panel
+         *
+         * @return {void}
+         */
+        closePanel() {
+            PanelEvents.closePanel();
+        },
+
+        /**
          * create new object
          *
          * @param {HTMLElement} target form (Destructuring target from Event Object)
@@ -180,7 +292,7 @@ export default {
                 credentials: 'same-origin',
                 headers: {
                     'accept': 'application/json',
-                    'X-CSRF-Token': this.csrfToken,
+                    'X-CSRF-Token': this.getCSFRToken(),
                 },
                 body: formData,
             };

@@ -69,16 +69,16 @@
                             </ul>
                         </div>
 
-                        <button v-if="$root.panelIsOpen" class="icon-coffee"
+                        <button v-if="isPanelOpen(related.id)" class="icon-coffee"
                                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
                         <button v-else
                             class="icon-edit"
-                            @click.prevent.stop="requestPanel({
-                                editRelationParams: {
-                                    name: relationName,
+                                :disabled="isPanelOpen()"
+                                @click.prevent.stop="editRelationParams({
+                                    object: {{ object|json_encode }},
                                     related: related,
+                                    relationName: relationName,
                                     schema: relationSchema,
-                                },
                             })">{{ __('Edit Params') }}</button>
 
                         <footer>
@@ -156,16 +156,16 @@
 
 
         <div>
-            <button v-if="$root.panelIsOpen" class="icon-coffee"
+            <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
             <button v-else
                 class="icon-hdd"
-                @click.prevent.stop="requestPanel({
-                    relation: {
-                        name: relationName,
-                        alreadyInView: alreadyInView,
-                        relationTypes: relationTypes,
-                    },
+                :disabled="isPanelOpen()"
+                @click.prevent.stop="addRelatedObjects({
+                    object: {{object|json_encode}},
+                    relationName: relationName,
+                    alreadyInView: alreadyInView,
+                    relationTypes: relationTypes,
                 })">{{ __('add objects') }}</button>
 
             <button @click.prevent.stop="reloadObjects()">{{ __('reload') }}</button>
