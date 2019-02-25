@@ -107,6 +107,21 @@ export const PanelEvents = new Vue({
     }
 });
 
+/**
+ *
+ * @listens panel:request request panel with data
+ * @listens panel:send send message through panel bus
+ * @listens panel:save save event
+ * @listens panel:open open panel (just visibility)
+ * @listens panel:hide hide panel (keep rendered component alive)
+ * @listens panel:close close panle and flush data
+ *
+ * @emits panel:requested the panel has been requested
+ * @emits panel:saved a save event happened
+ * @emits panel:opened an open event happened
+ * @emits panel:hidden an hide event happened
+ * @emits panel:closed a close event happened
+ */
 export const PanelView = {
     template: /*template*/`
         <aside class="main-panel" :class="open ? 'on' : ''">
@@ -220,7 +235,7 @@ export const PanelView = {
             this.open = true;
             this.stack.push(request);
 
-            PanelEvents.send('panel:opened', null, request);
+            PanelEvents.send('panel:requested', null, request);
         });
 
         PanelEvents.listen('panel:send', null, (request) => {
@@ -230,16 +245,18 @@ export const PanelView = {
         });
 
         PanelEvents.listen('panel:save', null, (data) => {
-            this.pop();
             PanelEvents.sendBack('panel:saved', this.from, data);
+            this.pop();
         });
 
-        PanelEvents.listen('panel:open', null, () => {
+        PanelEvents.listen('panel:open', null, (request) => {
             this.open = true;
+            PanelEvents.send('panel:opened', null, request);
         });
 
-        PanelEvents.listen('panel:hide', null, () => {
+        PanelEvents.listen('panel:hide', null, (request) => {
             this.open = false;
+            PanelEvents.send('panel:hidden', null, request);
         });
 
         PanelEvents.listen('panel:close', null, () => {

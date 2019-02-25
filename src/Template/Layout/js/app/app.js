@@ -107,7 +107,7 @@ const _vueInstance = new Vue({
         this.loadUrlParams();
 
         let cl = document.querySelector('html').classList;
-        PanelEvents.listen('panel:opened', null, () => {
+        PanelEvents.listen('panel:requested', null, () => {
             cl.add('is-clipped');
         });
 
