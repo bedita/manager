@@ -4,17 +4,15 @@
 <div class="dashboard">
     <section>
         <ul class="dashboard-items">
-        {% for name, module in modules %}
-            {% if name != 'trash' and name != 'objects' and name != 'users' and name != 'folders' %}
-                <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
-                    {% if module.hints.multiple_types %}
-                        {% set title = 'All ' ~ __(name|humanize|lower) %}
-                    {% else %}
-                        {% set title = __(name|humanize) %}
-                    {% endif %}
-                    {{ Html.link(__(title), {'_name': 'modules:list', 'object_type': name}, {'title': __(title)})|raw }}
-                </li>
-            {% endif %}
+        {% for name, module in modules if !in_array(name, ['trash', 'objects', 'users', 'folders']) %}
+            <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
+                {% if module.hints.multiple_types %}
+                    {% set title = 'All ' ~ __(name|humanize|lower) %}
+                {% else %}
+                    {% set title = __(name|humanize) %}
+                {% endif %}
+                {{ Html.link(__(title), {'_name': 'modules:list', 'object_type': name}, {'title': __(title)})|raw }}
+            </li>
         {% endfor %}
         {% for k, plugin in config('PluginModules') %}
             <li class="{{ plugin.class.dashboard }}">
@@ -29,9 +27,11 @@
             <li class="has-background-module-objects icon-th-large-1">
                 {{ Html.link(__('All objects'), {'_name': 'modules:list', 'object_type': 'objects'}, {'title': __('All objects')})|raw }}
             </li>
+            {% if modules.folders %}
             <li class="has-background-module-folders icon-folder">
                 {{ Html.link(__('Folders'), {'_name': 'modules:list', 'object_type': 'folders'}, {'title': __('Folders')})|raw }}
             </li>
+            {% endif %}
             <li class="has-background-module-users icon-group">
                 {{ Html.link(__('System users'), {'_name': 'modules:list', 'object_type': 'users'}, {'title': __('System users')})|raw }}
             </li>
