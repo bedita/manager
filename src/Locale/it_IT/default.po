@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-01-10 09:54:43 \n"
+"POT-Creation-Date: 2019-02-26 15:53:46 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -22,6 +22,12 @@ msgstr "Aggiungi oggetti a"
 
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "All media"
+msgstr "Tutti i media"
+
+msgid "All objects"
+msgstr "Tutti gli oggetti"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
@@ -50,9 +56,6 @@ msgstr "Cambia File"
 msgid "Children"
 msgstr "Contenuti"
 
-msgid "Close"
-msgstr "Chiudi"
-
 msgid "Create new"
 msgstr "Crea nuovo"
 
@@ -73,6 +76,9 @@ msgstr "Descrizione"
 
 msgid "Documents"
 msgstr "Documenti"
+
+msgid "Download"
+msgstr ""
 
 msgid "Draft"
 msgstr ""
@@ -95,11 +101,11 @@ msgstr "Identificatore traduzione vuoto (\"id\")"
 msgid "Empty translation \"object_id\""
 msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
 
-msgid "Error"
-msgstr "Errore"
-
 msgid "Error "
 msgstr "Errore "
+
+msgid "Error retrieving the requested content"
+msgstr "Errore nel caricamento del contenuto richiesto"
 
 msgid "Events"
 msgstr "Eventi"
@@ -141,7 +147,7 @@ msgid "Images"
 msgstr "Immagini"
 
 msgid "Import"
-msgstr "Importa"
+msgstr "Importa da file"
 
 msgid "Import error"
 msgstr "Errore in importazione"
@@ -152,8 +158,8 @@ msgstr "Filtro di importazione non selezionato"
 msgid "Import warn"
 msgstr "Avviso in importazione"
 
-msgid "Info"
-msgstr "Informazione"
+msgid "Invalid username or password"
+msgstr "Nome utente o password non validi"
 
 msgid "Language"
 msgstr "Lingua"
@@ -167,11 +173,11 @@ msgstr "Esci"
 msgid "Login"
 msgstr "Accedi"
 
+msgid "Login required"
+msgstr "È richiesto il login"
+
 msgid "Media"
 msgstr ""
-
-msgid "Message"
-msgstr "Messaggio"
 
 msgid "Metadata"
 msgstr "Metadati"
@@ -236,9 +242,6 @@ msgstr "Tipi di oggetto"
 msgid "Object(s) deleted"
 msgstr "Oggetto(i) rimosso(i)"
 
-msgid "Object(s) restored"
-msgstr "Oggetto(i) ripristinato(i)"
-
 msgid "Objects"
 msgstr "Oggetti"
 
@@ -263,8 +266,8 @@ msgstr "Dimensione pagina"
 msgid "Password"
 msgstr ""
 
-msgid "Preferences"
-msgstr "Preferenze"
+msgid "Preferences and Tools"
+msgstr "Preferenze e Strumenti"
 
 msgid "Priority"
 msgstr "Priorità"
@@ -323,9 +326,6 @@ msgstr "Applica a selezione"
 msgid "Settings"
 msgstr "Impostazioni"
 
-msgid "Show details"
-msgstr "Mostra dettagli"
-
 msgid "Show more"
 msgstr "Mostra di più"
 
@@ -338,8 +338,8 @@ msgstr "Dimensione"
 msgid "Status"
 msgstr "Stato"
 
-msgid "Success"
-msgstr "Risultato"
+msgid "System users"
+msgstr "Utenti di sistema"
 
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
@@ -395,14 +395,14 @@ msgstr "Utente: {0}"
 msgid "Username"
 msgstr "Nome utente"
 
-msgid "Username and/or password do not match"
-msgstr "Il nome utente e/o la password non corrispondono"
-
 msgid "Users"
 msgstr "Utenti"
 
 msgid "Videos"
 msgstr "Video"
+
+msgid "View"
+msgstr "Visualizza"
 
 msgid "View original"
 msgstr "Vedi originale"
@@ -410,14 +410,8 @@ msgstr "Vedi originale"
 msgid "View trashed "
 msgstr "Vedi nel cestino "
 
-msgid "Warning"
-msgstr "Avviso"
-
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
-
-msgid "Login required"
-msgstr "È richiesto il login"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
@@ -434,6 +428,9 @@ msgstr "clicca per rimuovere"
 msgid "close"
 msgstr "chiudi"
 
+msgid "code"
+msgstr "codice"
+
 msgid "confirm password"
 msgstr "conferma password"
 
@@ -445,6 +442,9 @@ msgstr "crea nuovo"
 
 msgid "current password"
 msgstr "password corrente"
+
+msgid "download"
+msgstr ""
 
 msgid "id"
 msgstr ""
@@ -497,44 +497,71 @@ msgstr "traduzione di"
 msgid "type"
 msgstr "tipo"
 
+msgid "undo"
+msgstr ""
+
 msgid "undo remove"
 msgstr "annulla rimozione"
+
+msgid "view file"
+msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:503
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+#~ msgid "Close"
+#~ msgstr "Chiudi"
 
-#: src/Template/Layout/js/app/app.js:505
-msgid "Do you really want to trash the object?"
-msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+#~ msgid "Error"
+#~ msgstr "Errore"
 
-#: src/Template/Layout/js/app/components/filter-box.js:52
-msgid "All Types"
-msgstr "Tutti i tipi"
+#~ msgid "Info"
+#~ msgstr "Informazione"
 
-#: src/Template/Layout/js/app/components/filter-box.js:68
-msgid "All"
-msgstr "Tutti"
+#~ msgid "Message"
+#~ msgstr "Messaggio"
 
-#: src/Template/Layout/js/app/components/filter-box.js:77
-msgid "Any"
-msgstr "Qualsiasi"
+#~ msgid "Object(s) restored"
+#~ msgstr "Oggetto(i) ripristinato(i)"
 
-#: src/Template/Layout/js/app/components/filter-box.js:79
-msgid "Yes"
-msgstr "Sì"
+#~ msgid "Preferences"
+#~ msgstr "Preferenze"
 
-#: src/Template/Layout/js/app/components/filter-box.js:81
-msgid "No"
-msgstr "No"
+#~ msgid "Show details"
+#~ msgstr "Mostra dettagli"
 
-#: src/Template/Layout/js/app/components/filter-box.js:87
-msgid "From"
-msgstr "Da"
+#~ msgid "Success"
+#~ msgstr "Risultato"
 
-#: src/Template/Layout/js/app/components/filter-box.js:92
-msgid "To"
-msgstr "A"
+#~ msgid "Username and/or password do not match"
+#~ msgstr "Il nome utente e/o la password non corrispondono"
+
+#~ msgid "Warning"
+#~ msgstr "Avviso"
+
+#~ msgid "If you confirm, this data will be gone forever"
+#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#~ msgid "Do you really want to trash the object?"
+#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+
+#~ msgid "All Types"
+#~ msgstr "Tutti i tipi"
+
+#~ msgid "All"
+#~ msgstr "Tutti"
+
+#~ msgid "Any"
+#~ msgstr "Qualsiasi"
+
+#~ msgid "Yes"
+#~ msgstr "Sì"
+
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgid "From"
+#~ msgstr "Da"
+
+#~ msgid "To"
+#~ msgstr "A"
