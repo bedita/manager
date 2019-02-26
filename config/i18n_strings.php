@@ -22,9 +22,10 @@
 //  __('Status');
 //  __('Translations');
 //  __('Uname');
-//  __('Username or password is incorrect');
+//  __('Invalid username or password');
 //  __('Users');
 //  __('Videos');
 //  __('You are not authorized to access that location.');
 //  __('modified');
 //  __('title');
+//  __('All media');
