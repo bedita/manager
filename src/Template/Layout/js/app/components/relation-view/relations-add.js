@@ -29,24 +29,22 @@ export default {
                     <h2><span v-show="relationName"><: t('create new'):> <: relationName | humanize :></span> &nbsp;</h2>
                     <a href="#" :disabled="saving" @click.prevent="closePanel()"><: t('close') :></a>
                 </header>
-                <transition appear name="fade">
-                    <div class="create-new-object" v-if="showCreateObjectForm">
-                        <form name="create-object" :disabled="saving" @submit.prevent="createObject">
-                            <div class="dropzone">
-                                <div class="input file">
-                                    <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
-                                </div>
+                <div class="create-new-object" v-if="showCreateObjectForm">
+                    <form name="create-object" :disabled="saving" @submit.prevent="createObject">
+                        <div class="dropzone">
+                            <div class="input file">
+                                <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
                             </div>
-                            <div class="input text">
-                                <label for="title">Title</label>
-                                <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
-                            </div>
+                        </div>
+                        <div class="input text">
+                            <label for="title">Title</label>
+                            <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
+                        </div>
 
-                            <button :disabled="this.file === null" type="submit"><: t('create') :></button>
+                        <button :disabled="this.file === null" type="submit"><: t('create') :></button>
 
-                        </form>
-                    </div>
-                </transition>
+                    </form>
+                </div>
             </section>
             <section class="main-section">
                 <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
