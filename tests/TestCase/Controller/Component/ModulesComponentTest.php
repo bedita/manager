@@ -254,7 +254,8 @@ class ModulesComponentTest extends TestCase
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
         $actual = $this->Modules->objectTypes($data);
-
+        sort($actual);
+        sort($expected);
         static::assertEquals($expected, $actual);
     }
 
