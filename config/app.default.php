@@ -427,9 +427,9 @@ return [
         ],
 
         'colors' => [
-            'objects' => '#000',
-            'folders' => '#4e4841',
-            'documents' => '#d95700',
+            'objects' => '#230637',
+            'folders' => '#072440',
+            'documents' => '#cc4700',
             'media' => '#b3001b',
             'images' => '#d5002b',
             'videos' => '#d5002b',
@@ -438,9 +438,9 @@ return [
             'events' => '#09c',
             'locations' => '#641',
             'news' => '#036',
-            'users' => '#38374f',
+            'users' => '#223526',
             'profiles' => '#093',
-            'trash' => 'hsla(11, 23%, 18%, 1)',
+            'trash' => '#1c1c1c',
         ],
     ],
 
