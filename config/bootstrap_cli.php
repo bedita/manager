@@ -36,3 +36,5 @@ try {
 }
 
 Plugin::load('Migrations');
+
+Plugin::load('BEdita/I18n');
