@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-01-10 09:54:43 \n"
+"POT-Creation-Date: 2019-02-26 09:04:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -15,9 +15,6 @@ msgid "&"
 msgstr ""
 
 msgid "Actions on selected items"
-msgstr ""
-
-msgid "Add objects to"
 msgstr ""
 
 msgid "Advanced"
@@ -50,9 +47,6 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
-msgid "Close"
-msgstr ""
-
 msgid "Create new"
 msgstr ""
 
@@ -74,13 +68,13 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
+msgid "Download"
+msgstr ""
+
 msgid "Draft"
 msgstr ""
 
 msgid "Edit Params"
-msgstr ""
-
-msgid "Edit parameters of"
 msgstr ""
 
 msgid "Empty"
@@ -95,10 +89,10 @@ msgstr ""
 msgid "Empty translation \"object_id\""
 msgstr ""
 
-msgid "Error"
+msgid "Error "
 msgstr ""
 
-msgid "Error "
+msgid "Error retrieving the requested content"
 msgstr ""
 
 msgid "Events"
@@ -152,9 +146,6 @@ msgstr ""
 msgid "Import warn"
 msgstr ""
 
-msgid "Info"
-msgstr ""
-
 msgid "Language"
 msgstr ""
 
@@ -167,10 +158,10 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-msgid "Media"
+msgid "Login required"
 msgstr ""
 
-msgid "Message"
+msgid "Media"
 msgstr ""
 
 msgid "Metadata"
@@ -221,9 +212,6 @@ msgstr ""
 msgid "Number of updated resources"
 msgstr ""
 
-msgid "Object"
-msgstr ""
-
 msgid "Object deleted from trash"
 msgstr ""
 
@@ -234,9 +222,6 @@ msgid "Object types"
 msgstr ""
 
 msgid "Object(s) deleted"
-msgstr ""
-
-msgid "Object(s) restored"
 msgstr ""
 
 msgid "Objects"
@@ -281,9 +266,6 @@ msgstr ""
 msgid "Publish Start"
 msgstr ""
 
-msgid "Related to"
-msgstr ""
-
 msgid "Relations"
 msgstr ""
 
@@ -311,9 +293,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save "
-msgstr ""
-
 msgid "Search in BEdita"
 msgstr ""
 
@@ -321,9 +300,6 @@ msgid "Set selected"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
-
-msgid "Show details"
 msgstr ""
 
 msgid "Show more"
@@ -336,9 +312,6 @@ msgid "Size"
 msgstr ""
 
 msgid "Status"
-msgstr ""
-
-msgid "Success"
 msgstr ""
 
 msgid "Temporary folder missing"
@@ -395,7 +368,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-msgid "Username and/or password do not match"
+msgid "Username or password is incorrect"
 msgstr ""
 
 msgid "Users"
@@ -404,25 +377,19 @@ msgstr ""
 msgid "Videos"
 msgstr ""
 
+msgid "View"
+msgstr ""
+
 msgid "View original"
 msgstr ""
 
 msgid "View trashed "
 msgstr ""
 
-msgid "Warning"
-msgstr ""
-
 msgid "You are not authorized to access that location."
 msgstr ""
 
-msgid "Login required"
-msgstr ""
-
 msgid "add objects"
-msgstr ""
-
-msgid "add to"
 msgstr ""
 
 msgid "cancel"
@@ -431,19 +398,16 @@ msgstr ""
 msgid "click to remove"
 msgstr ""
 
-msgid "close"
+msgid "code"
 msgstr ""
 
 msgid "confirm password"
 msgstr ""
 
-msgid "create"
-msgstr ""
-
-msgid "create new"
-msgstr ""
-
 msgid "current password"
+msgstr ""
+
+msgid "download"
 msgstr ""
 
 msgid "id"
@@ -470,9 +434,6 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-msgid "open"
-msgstr ""
-
 msgid "original"
 msgstr ""
 
@@ -497,21 +458,27 @@ msgstr ""
 msgid "type"
 msgstr ""
 
+msgid "undo"
+msgstr ""
+
 msgid "undo remove"
+msgstr ""
+
+msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:503
+#: src/Template/Layout/js/app/app.js:446
 msgid "If you confirm, this data will be gone forever"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:505
+#: src/Template/Layout/js/app/app.js:448
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:52
+#: src/Template/Layout/js/app/components/filter-box.js:47
 msgid "All Types"
 msgstr ""
 

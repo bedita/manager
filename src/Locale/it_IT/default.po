@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-01-10 09:54:43 \n"
+"POT-Creation-Date: 2019-02-26 09:04:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -16,9 +16,6 @@ msgstr ""
 
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
-
-msgid "Add objects to"
-msgstr "Aggiungi oggetti a"
 
 msgid "Advanced"
 msgstr "Avanzate"
@@ -50,9 +47,6 @@ msgstr "Cambia File"
 msgid "Children"
 msgstr "Contenuti"
 
-msgid "Close"
-msgstr "Chiudi"
-
 msgid "Create new"
 msgstr "Crea nuovo"
 
@@ -74,14 +68,14 @@ msgstr "Descrizione"
 msgid "Documents"
 msgstr "Documenti"
 
+msgid "Download"
+msgstr "Download"
+
 msgid "Draft"
 msgstr ""
 
 msgid "Edit Params"
 msgstr "Modifica Parametri"
-
-msgid "Edit parameters of"
-msgstr "Modifica parametri di"
 
 msgid "Empty"
 msgstr "Vuoto"
@@ -95,11 +89,11 @@ msgstr "Identificatore traduzione vuoto (\"id\")"
 msgid "Empty translation \"object_id\""
 msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
 
-msgid "Error"
-msgstr "Errore"
-
 msgid "Error "
 msgstr "Errore "
+
+msgid "Error retrieving the requested content"
+msgstr "Errore durante lo scaricamento del contenuto richiesto"
 
 msgid "Events"
 msgstr "Eventi"
@@ -152,9 +146,6 @@ msgstr "Filtro di importazione non selezionato"
 msgid "Import warn"
 msgstr "Avviso in importazione"
 
-msgid "Info"
-msgstr "Informazione"
-
 msgid "Language"
 msgstr "Lingua"
 
@@ -167,11 +158,11 @@ msgstr "Esci"
 msgid "Login"
 msgstr "Accedi"
 
+msgid "Login required"
+msgstr "È richiesto il login"
+
 msgid "Media"
 msgstr ""
-
-msgid "Message"
-msgstr "Messaggio"
 
 msgid "Metadata"
 msgstr "Metadati"
@@ -221,9 +212,6 @@ msgstr "Numero di oggetti aggiornati"
 msgid "Number of updated resources"
 msgstr "Numero di risorse aggiornate"
 
-msgid "Object"
-msgstr "Oggetto"
-
 msgid "Object deleted from trash"
 msgstr "Oggetto rimosso dal cestino"
 
@@ -235,9 +223,6 @@ msgstr "Tipi di oggetto"
 
 msgid "Object(s) deleted"
 msgstr "Oggetto(i) rimosso(i)"
-
-msgid "Object(s) restored"
-msgstr "Oggetto(i) ripristinato(i)"
 
 msgid "Objects"
 msgstr "Oggetti"
@@ -281,9 +266,6 @@ msgstr "Data revoca pubblicazione"
 msgid "Publish Start"
 msgstr "Data inizio pubblicazione"
 
-msgid "Related to"
-msgstr "Collegato a"
-
 msgid "Relations"
 msgstr "Relazioni"
 
@@ -311,9 +293,6 @@ msgstr "Ridigita password"
 msgid "Save"
 msgstr "Salva"
 
-msgid "Save "
-msgstr "Salva "
-
 msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
@@ -322,9 +301,6 @@ msgstr "Applica a selezione"
 
 msgid "Settings"
 msgstr "Impostazioni"
-
-msgid "Show details"
-msgstr "Mostra dettagli"
 
 msgid "Show more"
 msgstr "Mostra di più"
@@ -337,9 +313,6 @@ msgstr "Dimensione"
 
 msgid "Status"
 msgstr "Stato"
-
-msgid "Success"
-msgstr "Risultato"
 
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
@@ -395,8 +368,8 @@ msgstr "Utente: {0}"
 msgid "Username"
 msgstr "Nome utente"
 
-msgid "Username and/or password do not match"
-msgstr "Il nome utente e/o la password non corrispondono"
+msgid "Username or password is incorrect"
+msgstr ""
 
 msgid "Users"
 msgstr "Utenti"
@@ -404,26 +377,20 @@ msgstr "Utenti"
 msgid "Videos"
 msgstr "Video"
 
+msgid "View"
+msgstr "Mostra"
+
 msgid "View original"
-msgstr "Vedi originale"
+msgstr "Mostra originale"
 
-msgid "View trashed "
-msgstr "Vedi nel cestino "
-
-msgid "Warning"
-msgstr "Avviso"
+msgid "View trashed"
+msgstr "Mostra cestino"
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
-msgid "Login required"
-msgstr "È richiesto il login"
-
 msgid "add objects"
 msgstr "aggiungi oggetti"
-
-msgid "add to"
-msgstr "aggiungi a"
 
 msgid "cancel"
 msgstr "annulla"
@@ -431,20 +398,17 @@ msgstr "annulla"
 msgid "click to remove"
 msgstr "clicca per rimuovere"
 
-msgid "close"
-msgstr "chiudi"
+msgid "code"
+msgstr "codice"
 
 msgid "confirm password"
 msgstr "conferma password"
 
-msgid "create"
-msgstr "crea"
-
-msgid "create new"
-msgstr "crea nuovo"
-
 msgid "current password"
 msgstr "password corrente"
+
+msgid "download"
+msgstr ""
 
 msgid "id"
 msgstr ""
@@ -470,9 +434,6 @@ msgstr "oggetti"
 msgid "of"
 msgstr "di"
 
-msgid "open"
-msgstr "apri"
-
 msgid "original"
 msgstr "originale"
 
@@ -488,6 +449,9 @@ msgstr "rimuovi"
 msgid "status"
 msgstr "stato"
 
+msgid "Title"
+msgid "Titolo"
+
 msgid "title"
 msgstr "titolo"
 
@@ -497,21 +461,27 @@ msgstr "traduzione di"
 msgid "type"
 msgstr "tipo"
 
+msgid "undo"
+msgstr "annulla"
+
 msgid "undo remove"
 msgstr "annulla rimozione"
+
+msgid "view file"
+msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:503
+#: src/Template/Layout/js/app/app.js:446
 msgid "If you confirm, this data will be gone forever"
 msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
-#: src/Template/Layout/js/app/app.js:505
+#: src/Template/Layout/js/app/app.js:448
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/components/filter-box.js:52
+#: src/Template/Layout/js/app/components/filter-box.js:47
 msgid "All Types"
 msgstr "Tutti i tipi"
 
@@ -538,3 +508,60 @@ msgstr "Da"
 #: src/Template/Layout/js/app/components/filter-box.js:92
 msgid "To"
 msgstr "A"
+
+#~ msgid "Add objects to"
+#~ msgstr "Aggiungi oggetti a"
+
+#~ msgid "Close"
+#~ msgstr "Chiudi"
+
+#~ msgid "Edit parameters of"
+#~ msgstr "Modifica parametri di"
+
+#~ msgid "Error"
+#~ msgstr "Errore"
+
+#~ msgid "Info"
+#~ msgstr "Informazione"
+
+#~ msgid "Message"
+#~ msgstr "Messaggio"
+
+#~ msgid "Object"
+#~ msgstr "Oggetto"
+
+#~ msgid "Object(s) restored"
+#~ msgstr "Oggetto(i) ripristinato(i)"
+
+#~ msgid "Related to"
+#~ msgstr "Collegato a"
+
+#~ msgid "Save"
+#~ msgstr "Salva"
+
+#~ msgid "Show details"
+#~ msgstr "Mostra dettagli"
+
+#~ msgid "Success"
+#~ msgstr "Risultato"
+
+#~ msgid "Username and/or password do not match"
+#~ msgstr "Il nome utente e/o la password non corrispondono"
+
+#~ msgid "Warning"
+#~ msgstr "Avviso"
+
+#~ msgid "add to"
+#~ msgstr "aggiungi a"
+
+#~ msgid "close"
+#~ msgstr "chiudi"
+
+#~ msgid "create"
+#~ msgstr "crea"
+
+#~ msgid "create new"
+#~ msgstr "crea nuovo"
+
+#~ msgid "open"
+#~ msgstr "apri"
