@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 15:53:46 \n"
+"POT-Creation-Date: 2019-02-27 09:26:00 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -80,9 +80,6 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-msgid "Draft"
-msgstr ""
-
 msgid "Edit Params"
 msgstr ""
 
@@ -137,6 +134,9 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
+msgid "ID"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr ""
 
@@ -171,6 +171,9 @@ msgid "Login"
 msgstr ""
 
 msgid "Login required"
+msgstr ""
+
+msgid "Look up by id or unique name"
 msgstr ""
 
 msgid "Media"
@@ -269,6 +272,9 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
 msgstr ""
 
@@ -356,6 +362,9 @@ msgstr ""
 msgid "Trash can"
 msgstr ""
 
+msgid "Trash-verb"
+msgstr ""
+
 msgid "Trashcan"
 msgstr ""
 
@@ -413,16 +422,10 @@ msgstr ""
 msgid "code"
 msgstr ""
 
-msgid "code"
-msgstr ""
-
 msgid "confirm password"
 msgstr ""
 
 msgid "current password"
-msgstr ""
-
-msgid "download"
 msgstr ""
 
 msgid "download"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 15:53:46 \n"
+"POT-Creation-Date: 2019-02-27 09:26:00 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -134,6 +134,9 @@ msgstr "File"
 msgid "Folders"
 msgstr "Cartelle"
 
+msgid "ID"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
@@ -152,6 +155,9 @@ msgstr "Filtro di importazione non selezionato"
 msgid "Import warn"
 msgstr "Avviso in importazione"
 
+msgid "Invalid username or password"
+msgstr ""
+
 msgid "Language"
 msgstr "Lingua"
 
@@ -166,6 +172,9 @@ msgstr "Accedi"
 
 msgid "Login required"
 msgstr "È richiesto il login"
+
+msgid "Look up by id or unique name"
+msgstr ""
 
 msgid "Media"
 msgstr ""
@@ -263,6 +272,9 @@ msgstr "Priorità"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
 msgstr "Tipi di priorità"
 
@@ -320,6 +332,9 @@ msgstr "Dimensione"
 msgid "Status"
 msgstr "Stato"
 
+msgid "System users"
+msgstr ""
+
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
@@ -346,6 +361,9 @@ msgstr "Cestino"
 
 msgid "Trash can"
 msgstr "Cestino"
+
+msgid "Trash-verb"
+msgstr ""
 
 msgid "Trashcan"
 msgstr "Cestino"
@@ -386,8 +404,8 @@ msgstr "Visualizza"
 msgid "View original"
 msgstr "Vedi originale"
 
-msgid "View original"
-msgstr "Mostra originale"
+msgid "View trashed "
+msgstr ""
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
@@ -400,9 +418,6 @@ msgstr "annulla"
 
 msgid "click to remove"
 msgstr "clicca per rimuovere"
-
-msgid "code"
-msgstr "codice"
 
 msgid "code"
 msgstr "codice"
@@ -454,9 +469,6 @@ msgstr "rimuovi"
 
 msgid "status"
 msgstr "stato"
-
-msgid "Title"
-msgid "Titolo"
 
 msgid "title"
 msgstr "titolo"
