@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 15:53:46 \n"
+"POT-Creation-Date: 2019-02-27 10:01:44 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -68,6 +68,9 @@ msgstr ""
 msgid "Data Import"
 msgstr ""
 
+msgid "Data modeling"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -110,9 +113,6 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-msgid "Exit"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -138,6 +138,9 @@ msgid "Files"
 msgstr ""
 
 msgid "Folders"
+msgstr ""
+
+msgid "ID"
 msgstr ""
 
 msgid "Image not acceptable for thumb"
@@ -176,6 +179,9 @@ msgstr ""
 msgid "Login required"
 msgstr ""
 
+msgid "Look up by id or unique name"
+msgstr ""
+
 msgid "Media"
 msgstr ""
 
@@ -186,9 +192,6 @@ msgid "Missing import file"
 msgstr ""
 
 msgid "Missing thumb url"
-msgstr ""
-
-msgid "Model"
 msgstr ""
 
 msgid "Module access not authorized"
@@ -368,6 +371,9 @@ msgstr ""
 msgid "Trash can"
 msgstr ""
 
+msgid "Trash-verb"
+msgstr ""
+
 msgid "Trashcan"
 msgstr ""
 
@@ -387,9 +393,6 @@ msgid "User Profile"
 msgstr ""
 
 msgid "User profile saved"
-msgstr ""
-
-msgid "User: {0}"
 msgstr ""
 
 msgid "Username"
@@ -450,9 +453,6 @@ msgid "id"
 msgstr ""
 
 msgid "last modified"
-msgstr ""
-
-msgid "log out"
 msgstr ""
 
 msgid "modified"

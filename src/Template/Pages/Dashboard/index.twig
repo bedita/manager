@@ -57,7 +57,7 @@
             {% endif %}
             {% if in_array('admin', user.roles) %}
             <li class="has-background-black icon-database">
-                {{ Html.link(__('Model'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
+                {{ Html.link(__('Data modeling'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
             </li>
             {% endif %}
             <li class="has-background-black icon-user">
