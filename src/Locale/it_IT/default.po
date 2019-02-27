@@ -17,9 +17,6 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
 
-msgid "Add objects to"
-msgstr "Aggiungi oggetti a"
-
 msgid "Advanced"
 msgstr "Avanzate"
 
@@ -88,9 +85,6 @@ msgstr ""
 
 msgid "Edit Params"
 msgstr "Modifica Parametri"
-
-msgid "Edit parameters of"
-msgstr "Modifica parametri di"
 
 msgid "Empty"
 msgstr "Vuoto"
@@ -162,7 +156,7 @@ msgid "Import warn"
 msgstr "Avviso in importazione"
 
 msgid "Invalid username or password"
-msgstr "Nome utente o password non validi"
+msgstr ""
 
 msgid "Language"
 msgstr "Lingua"
@@ -230,9 +224,6 @@ msgstr "Numero di oggetti aggiornati"
 msgid "Number of updated resources"
 msgstr "Numero di risorse aggiornate"
 
-msgid "Object"
-msgstr "Oggetto"
-
 msgid "Object deleted from trash"
 msgstr "Oggetto rimosso dal cestino"
 
@@ -278,6 +269,9 @@ msgstr "Priorità"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
 msgstr "Tipi di priorità"
 
@@ -286,9 +280,6 @@ msgstr "Data revoca pubblicazione"
 
 msgid "Publish Start"
 msgstr "Data inizio pubblicazione"
-
-msgid "Related to"
-msgstr "Collegato a"
 
 msgid "Relations"
 msgstr "Relazioni"
@@ -317,9 +308,6 @@ msgstr "Ridigita password"
 msgid "Save"
 msgstr "Salva"
 
-msgid "Save "
-msgstr "Salva "
-
 msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
 
@@ -342,7 +330,7 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "System users"
-msgstr "Utenti di sistema"
+msgstr ""
 
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
@@ -411,7 +399,7 @@ msgid "View original"
 msgstr "Vedi originale"
 
 msgid "View trashed "
-msgstr "Vedi nel cestino "
+msgstr ""
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
@@ -419,29 +407,17 @@ msgstr "Non sei autorizzato ad accedere a quest'area."
 msgid "add objects"
 msgstr "aggiungi oggetti"
 
-msgid "add to"
-msgstr "aggiungi a"
-
 msgid "cancel"
 msgstr "annulla"
 
 msgid "click to remove"
 msgstr "clicca per rimuovere"
 
-msgid "close"
-msgstr "chiudi"
-
 msgid "code"
 msgstr "codice"
 
 msgid "confirm password"
 msgstr "conferma password"
-
-msgid "create"
-msgstr "crea"
-
-msgid "create new"
-msgstr "crea nuovo"
 
 msgid "current password"
 msgstr "password corrente"
@@ -469,9 +445,6 @@ msgstr "oggetti"
 
 msgid "of"
 msgstr "di"
-
-msgid "open"
-msgstr "apri"
 
 msgid "original"
 msgstr "originale"

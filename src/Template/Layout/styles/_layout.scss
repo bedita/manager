@@ -1,8 +1,8 @@
 main.layout {
     display: grid;
     grid-template-areas: "main-sidebar  secondary-sidebar  content-header"
-                         "main-sidebar  secondary-sidebar  content"
-                         "main-sidebar  footer  footer";
+                        "main-sidebar  secondary-sidebar  content"
+                        "main-sidebar  footer  footer";
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 1fr auto;
     padding: $gutter;
@@ -60,6 +60,10 @@ main.layout {
             box-shadow: 0 0 32px black;
         }
     }
+    .main-panel.on {
+        transform: translateX(0);
+        box-shadow: 0 0 32px black;
+    }
 }
 
 // side panel
@@ -78,9 +82,15 @@ main.layout {
     transition: .3s transform;
     overflow: hidden;
     will-change: transform;
+
     .main-panel-body {
+        height: 100%;
         flex: 1 1 0;
-        overflow: hidden;
+        // overflow: hidden;
+    }
+
+    .panel-slot-container {
+        height: 100%;
     }
 }
 

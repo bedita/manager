@@ -17,9 +17,6 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr ""
 
-msgid "Add objects to"
-msgstr ""
-
 msgid "Advanced"
 msgstr ""
 
@@ -87,9 +84,6 @@ msgid "Draft"
 msgstr ""
 
 msgid "Edit Params"
-msgstr ""
-
-msgid "Edit parameters of"
 msgstr ""
 
 msgid "Empty"
@@ -230,9 +224,6 @@ msgstr ""
 msgid "Number of updated resources"
 msgstr ""
 
-msgid "Object"
-msgstr ""
-
 msgid "Object deleted from trash"
 msgstr ""
 
@@ -278,6 +269,9 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
 msgstr ""
 
@@ -285,9 +279,6 @@ msgid "Publish End"
 msgstr ""
 
 msgid "Publish Start"
-msgstr ""
-
-msgid "Related to"
 msgstr ""
 
 msgid "Relations"
@@ -315,9 +306,6 @@ msgid "Retype password"
 msgstr ""
 
 msgid "Save"
-msgstr ""
-
-msgid "Save "
 msgstr ""
 
 msgid "Search in BEdita"
@@ -419,28 +407,16 @@ msgstr ""
 msgid "add objects"
 msgstr ""
 
-msgid "add to"
-msgstr ""
-
 msgid "cancel"
 msgstr ""
 
 msgid "click to remove"
 msgstr ""
 
-msgid "close"
-msgstr ""
-
 msgid "code"
 msgstr ""
 
 msgid "confirm password"
-msgstr ""
-
-msgid "create"
-msgstr ""
-
-msgid "create new"
 msgstr ""
 
 msgid "current password"
@@ -468,9 +444,6 @@ msgid "objects"
 msgstr ""
 
 msgid "of"
-msgstr ""
-
-msgid "open"
 msgstr ""
 
 msgid "original"

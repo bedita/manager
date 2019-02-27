@@ -364,12 +364,12 @@ nav.pagination {
         cursor: default;
     }
 
-    main {
+    .main-section {
         height: 100%;
         overflow: auto;
     }
 
-    main, section {
+    .main-section , section {
         & > header.tab {
             margin-right: $gutter;
             margin-left: $gutter;

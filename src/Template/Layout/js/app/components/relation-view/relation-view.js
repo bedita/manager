@@ -6,8 +6,10 @@
  *
  * <relation-view> component used for ModulesPage -> View
  *
- * @prop {String} relationName name of the relation used by the PaginatiedContentMixin
- * @prop {Boolean} loadOnStart load content on component init
+ * @property {String} relationName name of the relation used by the PaginatiedContentMixin
+ * @property {Boolean} loadOnStart load content on component init
+ * @property {Boolean} multipleChoice set view for multiple choice
+ * @property {String} configPaginateSizes set pagination
  *
  */
 
@@ -20,10 +22,9 @@ import flatpickr from 'flatpickr/dist/flatpickr.min';
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
+import { PanelEvents } from 'app/components/panel-view';
 
 export default {
-    // injected methods provided by Main App
-    inject: ['requestPanel', 'closePanel'],
     mixins: [ PaginatedContentMixin, RelationSchemaMixin ],
 
     components: {
@@ -55,6 +56,7 @@ export default {
             loading: false,
             count: 0,                                   // count number of related objects, on change triggers an event
 
+            requesterId: null, // panel requerster id
             removedRelated: [],                         // staged removed related objects
             addedRelations: [],                         // staged added objects to be saved
             modifiedRelations: [],                      // staged modified relation params
@@ -86,12 +88,24 @@ export default {
     },
 
     /**
-     * load content after component is mounted
-     *
-     * @return {void}
-     */
+    * load content after component is mounted
+    *
+    * @return {void}
+    */
     mounted() {
         this.loadOnMounted();
+
+        // set up panel events
+        PanelEvents.listen('edit-params:save', this, this.editParamsSave);
+        PanelEvents.listen('relations-add:save', this, this.appendRelations);
+        PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
+    },
+
+    beforeDestroy() {
+        // destroy up panel events
+        PanelEvents.stop('edit-params:save', this, this.editParamsSave);
+        PanelEvents.stop('relations-add:save', this, this.appendRelations);
+        PanelEvents.stop('panel:closed', null, this.resetPanelRequester);
     },
 
     watch: {
@@ -145,6 +159,126 @@ export default {
          */
         onUpdateCurrentPage(page) {
             this.toPage(page, this.activeFilter);
+        },
+
+        /**
+         * edit single relation params
+         *
+         * @param {Object} object
+         *
+         * @returns {void}
+         */
+        editParamsSave(object) {
+            this.updateRelationParams(object);
+            this.closePanel();
+        },
+
+        /**
+         *
+         *
+         * @param {Number} id
+         *
+         * @returns {Boolean} true if panel's open
+         */
+        isPanelOpen(id = null) {
+            if (id === null) {
+                return !!this.requesterId;
+            }
+            return this.requesterId === id;
+        },
+
+        /**
+        * extract relation with modified params and set it to staging
+        *
+        * @param {Object} data
+        *
+        * @returns {void}
+        */
+        updateRelationParams(related) {
+            // id of edited related object
+            const id = related.id;
+
+            // extract related object from view
+            const rel = this.objects.filter((object) => {
+                if (object.id === id) {
+                    return object;
+                }
+            }).pop();
+
+            this.modifyRelation(rel);
+        },
+
+        /**
+        * Event 'added-relations' callback
+        * retrieve last added relations from relationships-view
+        *
+        * @param {Array} relations list of related objects to add
+        *
+        * @return {void}
+        */
+        appendRelations(relations) {
+            if (!this.addedRelations.length) {
+                this.addedRelations = relations;
+            } else {
+                let existingIds = this.addedRelations.map(a => a.id);
+                for (let i = 0; i < relations.length; i++) {
+                    if (existingIds.indexOf(relations[i].id) < 0) {
+                        this.addedRelations.push(relations[i]);
+                    }
+                }
+            }
+            this.prepareRelationsToSave();
+            this.closePanel();
+        },
+
+        /**
+         * request panel for edit relation params
+         * data object has to match edit-relation-params component property
+         *
+         * @param {Object} data
+         */
+        editRelationParams(data) {
+            this.requesterId = data.related.id;
+            PanelEvents.requestPanel({
+                action: 'edit-relation-params',
+                from: this,
+                data,
+            });
+        },
+
+        /**
+         * reset panel requester id
+         *
+         * @returns {void}
+         */
+        resetPanelRequester() {
+            this.requesterId = null;
+        },
+
+        /**
+         * request panel for add related objects
+         * data object has to match relations-add component property
+         *
+         * @param {Object} data request data
+         *
+         * @returns {void}
+         */
+        addRelatedObjects(data) {
+            this.requesterId = data.object.id;
+            PanelEvents.requestPanel({
+                action: 'relations-add',
+                from: this,
+                data,
+            });
+        },
+
+        /**
+         * close panel calling PanelEvent.closePanel
+         *
+         * @returns {void}
+         */
+        closePanel() {
+            PanelEvents.closePanel();
         },
 
         /**
@@ -347,49 +481,6 @@ export default {
                 return;
             }
             this.modifiedRelations = this.modifiedRelations.filter((rel) => rel.id !== id);
-            this.prepareRelationsToSave();
-        },
-
-        /**
-         * extract relation with modified params and set it to staging
-         *
-         * @param {Object} data
-         *
-         * @returns {void}
-         */
-        updateRelationParams(data) {
-            // id of edited related object
-            const id = data.related.id;
-
-            // extract related object from view
-            const rel = this.objects.filter((object) => {
-                if (object.id === id) {
-                    return object;
-                }
-            }).pop();
-
-            this.modifyRelation(rel);
-        },
-
-        /**
-         * Event 'added-relations' callback
-         * retrieve last added relations from relationships-view
-         *
-         * @param {Array} relations list of related objects to add
-         *
-         * @return {void}
-         */
-        appendRelations(relations) {
-            if (!this.addedRelations.length) {
-                this.addedRelations = relations;
-            } else {
-                let existingIds = this.addedRelations.map(a => a.id);
-                for (let i = 0; i < relations.length; i++) {
-                    if (existingIds.indexOf(relations[i].id) < 0) {
-                        this.addedRelations.push(relations[i]);
-                    }
-                }
-            }
             this.prepareRelationsToSave();
         },
 
