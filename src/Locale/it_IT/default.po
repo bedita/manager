@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 15:53:46 \n"
+"POT-Creation-Date: 2019-02-27 10:01:44 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -68,6 +68,9 @@ msgstr "Cruscotto"
 msgid "Data Import"
 msgstr "Importazione dati"
 
+msgid "Data modeling"
+msgstr "Modellazione"
+
 msgid "Delete"
 msgstr "Elimina"
 
@@ -110,9 +113,6 @@ msgstr "Errore nel caricamento del contenuto richiesto"
 msgid "Events"
 msgstr "Eventi"
 
-msgid "Exit"
-msgstr "Esci"
-
 msgid "Export"
 msgstr "Esporta"
 
@@ -139,6 +139,9 @@ msgstr "File"
 
 msgid "Folders"
 msgstr "Cartelle"
+
+msgid "ID"
+msgstr ""
 
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
@@ -176,6 +179,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Look up by id or unique name"
+msgstr "Cerca per ID o nome univoco"
+
 msgid "Media"
 msgstr ""
 
@@ -187,9 +193,6 @@ msgstr "File di importazione mancante"
 
 msgid "Missing thumb url"
 msgstr "Url miniatura mancante"
-
-msgid "Model"
-msgstr "Modello"
 
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
@@ -368,6 +371,9 @@ msgstr "Cestino"
 msgid "Trash can"
 msgstr "Cestino"
 
+msgid "Trash-verb"
+msgstr "Cestina"
+
 msgid "Trashcan"
 msgstr "Cestino"
 
@@ -388,9 +394,6 @@ msgstr "Profilo Utente"
 
 msgid "User profile saved"
 msgstr "Profilo utente salvato"
-
-msgid "User: {0}"
-msgstr "Utente: {0}"
 
 msgid "Username"
 msgstr "Nome utente"
@@ -452,9 +455,6 @@ msgstr ""
 msgid "last modified"
 msgstr "ultima modifica"
 
-msgid "log out"
-msgstr "esci"
-
 msgid "modified"
 msgstr "modificato"
 
@@ -508,6 +508,18 @@ msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#~ msgid "Exit"
+#~ msgstr "Esci"
+
+#~ msgid "Model"
+#~ msgstr "Modello"
+
+#~ msgid "User: {0}"
+#~ msgstr "Utente: {0}"
+
+#~ msgid "log out"
+#~ msgstr "esci"
 
 #~ msgid "Close"
 #~ msgstr "Chiudi"
