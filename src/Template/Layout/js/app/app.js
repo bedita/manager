@@ -16,6 +16,7 @@ import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
+import MainMenu from 'app/components/menu';
 import FlashMessage from 'app/components/flash-message';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 
@@ -35,7 +36,6 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        FlashMessage,
         ModulesIndex,
         ModulesView,
         TrashIndex,
@@ -46,6 +46,8 @@ const _vueInstance = new Vue({
         FilterBoxView,
         EditRelationParams,
         PanelView,
+        MainMenu,
+        FlashMessage,
     },
 
     data() {

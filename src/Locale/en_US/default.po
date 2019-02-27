@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 09:04:48 \n"
+"POT-Creation-Date: 2019-02-26 15:53:46 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -18,6 +18,12 @@ msgid "Actions on selected items"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "All media"
+msgstr ""
+
+msgid "All objects"
 msgstr ""
 
 msgid "An extension stopped the file upload"
@@ -69,6 +75,9 @@ msgid "Documents"
 msgstr ""
 
 msgid "Download"
+msgstr ""
+
+msgid "Draft"
 msgstr ""
 
 msgid "Draft"
@@ -144,6 +153,9 @@ msgid "Import filter not selected"
 msgstr ""
 
 msgid "Import warn"
+msgstr ""
+
+msgid "Invalid username or password"
 msgstr ""
 
 msgid "Language"
@@ -248,7 +260,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-msgid "Preferences"
+msgid "Preferences and Tools"
 msgstr ""
 
 msgid "Priority"
@@ -314,6 +326,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "System users"
+msgstr ""
+
 msgid "Temporary folder missing"
 msgstr ""
 
@@ -368,9 +383,6 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-msgid "Username or password is incorrect"
-msgstr ""
-
 msgid "Users"
 msgstr ""
 
@@ -401,10 +413,16 @@ msgstr ""
 msgid "code"
 msgstr ""
 
+msgid "code"
+msgstr ""
+
 msgid "confirm password"
 msgstr ""
 
 msgid "current password"
+msgstr ""
+
+msgid "download"
 msgstr ""
 
 msgid "download"
@@ -468,40 +486,4 @@ msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:446
-msgid "If you confirm, this data will be gone forever"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:448
-msgid "Do you really want to trash the object?"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:47
-msgid "All Types"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:68
-msgid "All"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:77
-msgid "Any"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:79
-msgid "Yes"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:81
-msgid "No"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:87
-msgid "From"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:92
-msgid "To"
 msgstr ""
