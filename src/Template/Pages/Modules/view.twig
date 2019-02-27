@@ -56,7 +56,7 @@
                     {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
-                {% if _view.request.params.action != 'create' %}
+                {% if modules.folders and _view.request.params.action != 'create' %}
                     {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
