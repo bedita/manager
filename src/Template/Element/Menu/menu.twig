@@ -1,5 +1,5 @@
 <main-menu inline-template>
-<ul role="menu">
+<ul role="menu" :class="popUpAction? 'popup-on' : ''">
 
     {# Core object modules #}
     {% for name, module in modules if name != 'trash' %}
@@ -37,17 +37,27 @@
 
     <li class="has-background-transparent spacer">&nbsp;</li>
 
-    {# look up by id #}
-    <li class="has-background-black has-tooltip-align-right" :class="isLookUpByIdPopupVisibile? 'popup-on' : ''">
-        {{ Html.link(__('ID'), '', {
-            'tooltip': __('Look up by id or unique name'),
+    {# search #}
+    <li class="has-background-black icon-search center-icon has-tooltip-align-right">
+        {{ Html.link(__(''), '', {
+            'tooltip': __('Search'),
             'class': 'square',
-            'v-on:click.prevent': 'isLookUpByIdPopupVisibile = !isLookUpByIdPopupVisibile',
+            'v-on:click.prevent': "togglePopup('search')",
         })|raw }}
-        <div class="popup">
-            <input type="text" v-model="id" v-on:keyup="captureEnter">
-            <button :disabled="!id" v-on:click="go">Go</button>
-        </div>
     </li>
+
+    {# look up by id #}
+    <li class="has-background-black icon-tag center-icon has-tooltip-align-right">
+        {{ Html.link(__(''), '', {
+            'tooltip': __('Direct access by id or unique name'),
+            'class': 'square',
+            'v-on:click.prevent': "togglePopup('go')",
+        })|raw }}
+    </li>
+
+    <div class="popup">
+        <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
+        <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
+    </div>
 </ul>
 </main-menu>

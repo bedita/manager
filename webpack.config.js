@@ -86,7 +86,7 @@ if (devMode) {
                 ]
             },
             cors: true,
-            notify: true,
+            notify: false,
             open: false,
             reloadOnRestart: true,
             host: ENVIRONMENT.host,

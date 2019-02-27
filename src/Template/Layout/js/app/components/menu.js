@@ -9,22 +9,45 @@
 export default {
     data() {
         return {
-            isLookUpByIdPopupVisibile: false,
-            id: '',
+            popUpAction: '',
+            searchString: '',
         };
     },
     methods: {
-        captureEnter(e) {
-            if (!this.id) {
-                return;
-            }
-            if (e.keyCode === 13) {
-                this.go();
+        togglePopup(action) {
+            if (action == this.popUpAction) {
+                this.popUpAction = '';
+            } else {
+                this.popUpAction = action;
+                this.$nextTick(() => {
+                    this.$refs.searchInput.focus();
+                });
             }
         },
+
+        captureKeys(e) {
+            let key = e.which || e.keyCode || 0;
+            switch (key) {
+                case 13:
+                    this.go();
+                    break;
+                case 27:
+                    this.popUpAction = '';
+                    break;
+            }
+        },
+
         go() {
-            let url = BEDITA.base + "/view/" + this.id;
-            window.location.href = url;
+            let urlPath = '';
+            if (this.popUpAction == 'search') {
+                urlPath += "/objects?q=";
+            } else if (this.popUpAction == 'go') {
+                urlPath += "/view/";
+            }
+
+            if (this.searchString && urlPath) {
+                window.location.href = BEDITA.base + urlPath + this.searchString;
+            }
         },
     },
 }
