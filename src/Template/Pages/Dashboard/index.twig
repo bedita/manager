@@ -4,7 +4,7 @@
 <div class="dashboard">
     <section>
         <ul class="dashboard-items">
-        {% for name, module in modules if !in_array(name, ['trash', 'objects', 'users', 'folders']) %}
+        {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders']) %}
             <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
                 {% if module.hints.multiple_types %}
                     {% set title = 'All ' ~ __(name|humanize|lower) %}
