@@ -409,7 +409,7 @@ const _vueInstance = new Vue({
                 } else {
                     // support for normal change Events trying to figure out a unique id
                     const checkChanges = form && form.getAttribute('check-changes') === 'true';
-                    if (checkChanges) {
+                    if (checkChanges && element.name) {
                         const name = element.name;
                         const formId = element.form.getAttribute('id');
                         const elementId = element.id;
