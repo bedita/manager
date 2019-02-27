@@ -170,7 +170,7 @@ msgstr ""
 msgid "Login required"
 msgstr ""
 
-msgid "Look up by id or unique name"
+msgid "Direct access by id or unique name"
 msgstr ""
 
 msgid "Media"

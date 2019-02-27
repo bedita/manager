@@ -173,8 +173,8 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
-msgid "Look up by id or unique name"
-msgstr "Cerca per ID o nome univoco"
+msgid "Direct access by id or unique name"
+msgstr "Link diretto per ID o nome univoco"
 
 msgid "Media"
 msgstr ""
