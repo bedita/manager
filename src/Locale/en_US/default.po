@@ -360,7 +360,7 @@ msgid "Trash can"
 msgstr ""
 
 msgid "Trash-verb"
-msgstr ""
+msgstr "Trash"
 
 msgid "Trashcan"
 msgstr ""
