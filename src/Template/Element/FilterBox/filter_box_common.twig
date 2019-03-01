@@ -1,0 +1,66 @@
+<div class="flters-container">
+    {# dinamic filter object types #}
+    <div class="filter-container search-types" v-if="rightTypes.length > 1">
+        <select v-model="queryFilter.filter.type" class="{{ selectBaseClasses }}">
+            <option value="" label="{{ __('All Types') }}"></option>
+            <option v-for="type in rightTypes"><: t(type) :></option>
+        </select>
+    </div>
+
+    <div class="filter-container filter-search input">
+        <input type="text"
+            :placeholder="placeholder"
+            v-model="queryFilter.q"
+            @keyup.prevent.stop="onQueryStringChange"
+            @keyup.enter.prevent.stop="applyFilter"/>
+    </div>
+
+    {# dinamic filters #}
+    <div v-for="filter in filterList" class="filter-container" :class="[filter.name, filter.type]">
+        <input type="hidden" :name="filter.name" :value="filter.value">
+        <span class="filter-name"><: t(filter.name) :></span>
+
+        <span v-if="filter.type === 'select' || filter.type === 'radio'">
+            <select v-model="queryFilter.filter[filter.name]" :id="filter.name" class="{{ selectBaseClasses }}">
+                <option value="">
+                    {{ __('All') }}
+                </option>
+                <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
+                    <: option.text :>
+                </option>
+            </select>
+        </span>
+
+        <span v-else-if="filter.type === 'checkbox'">
+            <label>{{ __('Any') }}</label>
+            <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
+            <label>{{ __('Yes') }}</label>
+            <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
+            <label>{{ __('No') }}</label>
+            <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
+        </span>
+
+        <template v-else-if="filter.date">
+            <span class="datepicker-container">
+                <label>{{ __('From') }}:
+                    <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+                </label>
+            </span>
+            <span class="datepicker-container">
+                <label>{{ __('To') }}:
+                    <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+                </label>
+            </span>
+        </template>
+
+        <span v-else>
+            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
+        </span>
+    </div>
+
+    <div class="filter-buttons">
+        <button v-show="showFilterButtons" @click.prevent="applyFilter()">{{ __('Apply') }}</button>
+        <button v-show="showFilterButtons" @click.prevent="resetFilter()">{{ __('Reset') }}</button>
+    </div>
+</div>
+

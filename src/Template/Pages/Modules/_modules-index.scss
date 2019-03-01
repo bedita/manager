@@ -2,23 +2,8 @@ body.view-module {
 
     // index
     .module-header {
-        height: 86px;
+        min-height: 86px;
         margin-left: $gutter * .5;
-
-        .module-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            @media screen and (max-width: 960px) {
-                height: 100%;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: flex-start;
-                >* {
-                    margin-bottom: $gutter;
-                }
-            }
-        }
     }
 
     .module-index {
