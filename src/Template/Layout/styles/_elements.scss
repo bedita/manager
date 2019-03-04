@@ -105,6 +105,9 @@
         flex: none;
         width: 25%;
     }
+    &.is-narrow {
+        flex: none;
+    }
 
     &.is-one-third-1024 {
         @media screen and (min-width: 769px) {
@@ -165,12 +168,10 @@
 // pagination
 nav.pagination {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     > div {
-        margin: 0 $gutter *.5;
-        &:first-child { margin-left: 0; }
-        &:last-child  { margin-right: 0; }
+        margin-left: $gutter *.5;
+        &:first-child { margin-left: auto; }
 
         &.pagination-buttons {
             display: flex;

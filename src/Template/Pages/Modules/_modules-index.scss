@@ -2,8 +2,9 @@ body.view-module {
 
     // index
     .module-header {
-        min-height: 86px;
+        min-height: 78px;
         margin-left: $gutter * .5;
+        margin-bottom: $gutter;
     }
 
     .module-index {

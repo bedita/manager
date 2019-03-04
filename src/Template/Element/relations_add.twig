@@ -1,6 +1,6 @@
 <div class="relations-add">
     <section v-show="isMedia">
-        <header class="tab unselectable padded open"
+        <header class="tab unselectable open"
             :class="!objects || loading ? 'is-loading-spinner' : ''"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
@@ -9,7 +9,7 @@
             <a href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
         </header>
 
-        <div class="create-new-object padded" v-if="showCreateObjectForm">
+        <div class="create-new-object" v-if="showCreateObjectForm">
             <form name="create-object" :disabled="saving" @submit.prevent="createObject">
                 <div class="dropzone">
                     <div class="input file">
@@ -27,13 +27,13 @@
         </div>
     </section>
 
-    <section>
-        <header class="tab unselectable padded" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
+    <section class="shrinks">
+        <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
             <h2><span v-show="relationName">{{ __('add to') }}<: relationName | humanize :></span> &nbsp;</h2>
             <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
         </header>
 
-        <div class="padded">
+        <div>
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                 :pagination.sync="pagination"
@@ -51,10 +51,9 @@
             </filter-box-view>
         </div>
 
-        <div class="padded">
-            <div class="related-objects-list columns">
-                <div class="related-object column is-3"
-                    v-for="related in objects">
+        <div class="related-objects-list shrinks">
+            <div class="columns">
+                <div class="related-object column is-3" v-for="related in objects">
                     <article class="box has-text-gray-100 has-text-size-smaller"
                             v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
                                 alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
@@ -80,10 +79,10 @@
                         </footer>
                     </article>
                 </div>
-            </div>
 
-            {# empty element: keep for flex layout #}
-            <div class="column"></div>
+                {# empty element: keep for flex layout #}
+                <div class="column"></div>
+            </div>
         </div>
 
         <footer>

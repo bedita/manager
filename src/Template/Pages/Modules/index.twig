@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% element 'Modules/header' %}
+{% element 'Modules/index_header' %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
 <modules-index inline-template ids='{{ ids|json_encode }}'>

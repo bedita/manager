@@ -1,5 +1,6 @@
 nav.pagination {
-    justify-content: flex-end;
+    // TODO: forse non necessario
+    // justify-content: flex-end;
 
     .filter-search {
         display: flex;
@@ -23,12 +24,13 @@ nav.pagination {
 
 
 .related-objects-list {
-    margin-bottom: 16px;
 
-    .column:empty { padding: 0; }
-    &.isLoading {
-        opacity: .2;
-        pointer-events: none;
+    .columns {
+        .column:empty { padding: 0; }
+        &.isLoading {
+            opacity: .2;
+            pointer-events: none;
+        }
     }
 
     & ~ .related-objects-list {
@@ -241,36 +243,6 @@ nav.pagination {
     }
 }
 
-.create-related-object {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    // layout
-    > nav, >header.tab, >footer {
-        flex-shrink: 0;
-    }
-
-    > nav {
-        padding: $gutter $gutter 0;
-        margin: 0;
-    }
-
-    > header.tab {
-        margin-right: $gutter;
-        margin-left: $gutter;
-        margin-top: $gutter;
-        margin-bottom: 0;
-        cursor: auto;
-    }
-
-    > footer {
-        display: flex;
-        justify-content: space-between;
-        padding: $gutter;
-    }
-}
-
 
 // in panel
 %relation-panel-common {
@@ -280,23 +252,49 @@ nav.pagination {
 
     // layout
     > * {
-        flex-shrink: 0;
-        margin-top: $gutter * .5;
-        margin-bottom: $gutter * .5;
-        &:first-child { margin-top: 0; }
-        &:last-child  { margin-bottom: 0; }
+        display: flex;
+        flex-direction: column;
+        margin-top: $gutter;
+        flex: none;
+        > * {
+            margin-left: $gutter;
+            margin-right: $gutter;
+            flex: none;
+        }
+    }
+    .shrinks {
+        flex-shrink: 1 !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+
+    footer {
+        display: flex;
+        justify-content: space-between;
+        margin: $gutter;
     }
 
     header.tab {
         cursor: auto;
     }
 
-    footer {
-        display: flex;
-        justify-content: space-between;
-        padding: $gutter;
+    form[disabled] {
+        opacity: 0.7;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    header[disabled], a[disabled], a[disabled]:hover {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .open h2 {
+        cursor: pointer;
     }
 }
+
 
 .edit-relation {
     @extend %relation-panel-common;
@@ -330,52 +328,15 @@ nav.pagination {
 .relations-add {
     @extend %relation-panel-common;
 
-    form[disabled] {
-        opacity: 0.7;
-        pointer-events: none;
-        cursor: default;
-    }
-
-    header[disabled], a[disabled], a[disabled]:hover {
-        pointer-events: none;
-        cursor: default;
-    }
-
-    .padded {
-        margin-right: $gutter;
-        margin-left: $gutter;
-    }
-
-    .open h2 {
-        cursor: pointer;
-    }
-
     .create-new-object {
-        padding-right: $gutter * .5;
-
         form > * {
-            margin: $gutter * .5;
+            margin-bottom: $gutter;
 
             input[name=title] {
-                width: 50%;
-            }
-
-            label {
-                margin-right: $gutter * .5;
+                max-width: 50%;
+                margin-left: $gutter * .5;
             }
         }
-    }
-
-    .related-objects-list {
-        flex-grow: 1;
-        overflow: auto;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
-    }
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
     }
 
     // ui specs
