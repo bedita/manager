@@ -100,5 +100,23 @@
     </section>
     {% endif %}
 
+    {% if jobs %}
+    <section>
+
+        <div class="result">
+            <h2>{{ __('Jobs') }}</h2>
+        </div>
+
+        <fieldset id="import-result">
+            {% for job in jobs %}
+                <div class="import-message">
+                    <p>{{ __('Job details') }}: {{ job|json_encode()|raw }}</p>
+                </div>
+            {% endfor %}
+        </fieldset>
+
+    </section>
+    {% endif %}
+
 </div>
 </import-view>
