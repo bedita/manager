@@ -52,7 +52,8 @@ export default {
             type: Object
         },
         filterList: {
-            type: Array
+            type: Array,
+            default: () => [],
         },
         pagination: {
             type: Object,
@@ -66,21 +67,32 @@ export default {
 
     data() {
         return {
-            queryFilter: {}, // QueryFilter Object
+            queryFilter: {},
             timer: null,
-            pageSize: this.pagination.page_size // pageSize value for pagination page size
+            pageSize: this.pagination.page_size, // pageSize value for pagination page size
+            dynamicFilters: {},
+            statusFilter: {},
         };
     },
 
     created() {
         // merge default filters with initFilter
-        let customFilters = this.loadCustomFilters();
+        let mergeFilters = this.formatFilters();
         this.queryFilter = merge.all([
             DEFAULT_FILTER,
             this.queryFilter,
-            customFilters,
+            mergeFilters,
             this.initFilter
         ]);
+
+        this.dynamicFilters = this.filterList.filter(f => {
+            if(f.name == 'status') {
+                this.statusFilter = f;
+                return false;
+            } else {
+                return true;
+            }
+        });
     },
 
     computed: {
@@ -158,13 +170,11 @@ export default {
          *
          * @returns {Object} filters' name
          */
-        loadCustomFilters() {
+        formatFilters() {
             let filter = {};
-            if (this.filterList) {
-                this.filterList.forEach(
-                    f => (filter[f.name] = f.date ? {} : "")
-                );
-            }
+            this.filterList.forEach (
+                f => (filter[f.name] = f.date ? {} : "")
+            );
 
             return { filter: filter };
         },
