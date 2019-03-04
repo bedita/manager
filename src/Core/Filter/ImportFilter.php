@@ -104,7 +104,7 @@ abstract class ImportFilter
         $body = [
             'data' => [
                 'type' => 'async_jobs',
-                'attributes' =>  [
+                'attributes' => [
                     'service' => static::getServiceName(),
                     'payload' => [
                         'streamId' => Hash::get($result, 'data.id'),
