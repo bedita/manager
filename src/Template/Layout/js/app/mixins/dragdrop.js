@@ -4,6 +4,20 @@
  * enables drag/drop events on main element $el
  *
  * TO-DO advanced drag-drop feature... sortable...
+ *
+ * - define drop target with dynamic prop droppable (this.$el as default);
+ * - define draggable elements with draggable prop
+ * - define acceptable drop element with :accepted-drop as array
+ *
+ * @requires ObservableMixin
+ *
+ * @prop {Array} acceptedDrop
+ *
+ * @emits dragstart
+ * @emits dragover
+ * @emits dragover-once
+ * @emits dragleave
+ * @emits drop
  */
 
 import { ObservableMixin } from 'app/mixins/observable';
