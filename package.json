@@ -25,6 +25,7 @@
     "dependencies": {
         "abortcontroller-polyfill": "^1.1.9",
         "autosize": "^4.0.2",
+        "axios": "^0.18.0",
         "deepmerge": "^2.2.1",
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",
