@@ -6,14 +6,26 @@
  * TO-DO advanced drag-drop feature... sortable...
  */
 
+import { ObservableMixin } from 'app/mixins/observable';
+
 export const DragdropMixin = {
+    mixins: [ ObservableMixin ],
+
+    props: {
+        acceptedDrop: {
+            type: Array,
+            default: () => [],
+        }
+    },
+
     data() {
         return {
+            attrs: ['droppable', 'accepted-drop'], // observed attributes
             from: {},
             draggedElement: null,
             overElement: null,
             dropElement: null,
-            acceptedDrop: [],
+            acceptedDropArray: [],
             draggableElements: [],
             dragOverFirst: true,
             antiGlitchTimer: null,
@@ -21,31 +33,8 @@ export const DragdropMixin = {
     },
 
     mounted() {
-        // search for a specific drop target
-        let dropElementInView = this.$el.querySelector('[droppable]');
-        if (dropElementInView) {
-            this.dropElement = dropElementInView;
-            let accepted = dropElementInView.getAttribute('accepted-drop');
-            if (accepted) {
-                this.acceptedDrop = accepted.split(',');
-            }
-        } else {
-            // if not defined default to main element
-            this.dropElement = this.$el;
-        }
-
-        // check if at least 1 draggable is defined in component view
-        let draggables = this.$el.querySelectorAll('[draggable]');
-        if (draggables.length) {
-            // if so set up dragstart event
-            this.draggableElements = draggables;
-            this.$el.addEventListener('dragstart', this.onDragstart, false);
-        }
-
-        // setup Drop events
-        this.dropElement.addEventListener('drop', this.onDrop, false);
-        this.dropElement.addEventListener('dragover', this.onDragover, false);
-        this.dropElement.addEventListener('dragleave', this.onDragleave, false);
+        this.initDroppableElements();
+        this.initDraggableElements();
     },
 
     destroyed() {
@@ -59,6 +48,69 @@ export const DragdropMixin = {
     },
 
     methods: {
+        /**
+         * ovveride of ObservableMixin onAttributeChanges
+         *
+         * @param {Array} mutationsList
+         * @param {Function} observer
+         *
+         * @return {void}
+         */
+        onAttributeChanges(mutationsList, observer) {
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'attributes') {
+                    if ( mutation.attributeName === 'droppable') {
+                        this.dropElement = mutation.target;
+                    } else if (mutation.attributeName === 'accepted-drop') {
+                        let accepted = mutation.target.getAttribute('accepted-drop');
+                        if (accepted) {
+                            this.acceptedDropArray = accepted.split(',');
+                        }
+                    }
+                }
+            }
+        },
+
+        /**
+         *  init drop events for droppable element
+         *
+         *  @return {void}
+         */
+        initDroppableElements() {
+            // default droppable element
+            this.dropElement = this.$el;
+
+            // search for a specific drop target
+            let dropElementInView = this.$el.querySelector('[droppable]');
+            if (dropElementInView) {
+                this.dropElement = dropElementInView;
+                let accepted = dropElementInView.getAttribute('accepted-drop');
+                if (accepted) {
+                    this.acceptedDrop = accepted.split(',');
+                }
+            }
+
+            // setup Drop events
+            this.dropElement.addEventListener('drop', this.onDrop, false);
+            this.dropElement.addEventListener('dragover', this.onDragover, false);
+            this.dropElement.addEventListener('dragleave', this.onDragleave, false);
+        },
+
+        /**
+         * init drag event on draggable elements
+         *
+         *  @return {void}
+         */
+        initDraggableElements() {
+            // check if at least 1 draggable is defined in component view
+            let draggables = this.$el.querySelectorAll('[draggable]');
+            if (draggables.length) {
+                // if so set up dragstart event
+                this.draggableElements = draggables;
+                this.$el.addEventListener('dragstart', this.onDragstart, false);
+            }
+        },
+
         /**
          * set dragdrop info data in Event property dragdrop.
          * ev.dragdrop = {
