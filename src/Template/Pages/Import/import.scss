@@ -27,31 +27,32 @@
         border-collapse: collapse;
         min-width: 100%;
 
-        > nav {
+        .table-row {
             display: table-row;
-
             &.table-header {
                 border-bottom: 1px solid $gray-700;
             }
-        }
 
-        > nav {
-            div {
+            > div {
                 display: table-cell;
                 padding: $gutter * .5;
                 white-space: nowrap;
                 vertical-align: middle;
             }
-        }
 
-        .table-row {
-            display: table-row;
+            &.completed {
+            }
 
-            div {
-                display: table-cell;
-                padding: $gutter * .5;
-                white-space: nowrap;
-                vertical-align: middle;
+            &.failed {
+                color: $danger;
+            }
+
+            &.locked, &.pending {
+                color: $pending;
+            }
+
+            &.planned {
+                color: $info;
             }
         }
     }

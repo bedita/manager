@@ -112,17 +112,17 @@
                 </header>
                 <div class="tab-container">
                     <div class="list-jobs">
-                        <div class="table-header">
+                        <div class="table-header table-row">
                             <div>Job ID</div>
                             <div>{{ __('file name') }}</div>
                             <div>{{ __('service name') }}</div>
                             <div>{{ __('scheduled from') }}</div>
                             <div>{{ __('completed on') }}</div>
                             <div>{{ __('status') }}</div>
-                        </nav>
+                        </div>
 
-                        <template v-for="job in jobs">
-                            <div class="table-row">
+                        <template v-for="job in currentJobs">
+                            <div class="table-row" :class="job.meta.status">
                                 <div><: job.id :></div>
                                 <div><: job.attributes.payload.filename :></div>
                                 <div><: job.attributes.service :></div>

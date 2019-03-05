@@ -57,6 +57,20 @@ class ImportController extends AppController
     }
 
     /**
+     * Get jobs rendering as json.
+     *
+     * @return void
+     */
+    public function jobs() : void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->request->allowMethod('get');
+        $this->loadFilters();
+        $this->loadAsyncJobs();
+        $this->set('_serialize', ['jobs']);
+    }
+
+    /**
      * Import data by filter/file.
      *
      * @return \Cake\Http\Response|null the Response.
