@@ -280,3 +280,115 @@ a.close-button {
         transform: rotate(359deg)
     }
 }
+
+// create-new-object
+
+.upload-files {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    section {
+        flex-grow: 1;
+    }
+
+    .upload-info {
+        // display: flex;
+        flex-direction: column;
+        padding: $gutter;
+        border: 1px solid rgba(220,220,220,0.1);
+        border-radius: $gutter * 0.25;
+        margin: $gutter * 0.5;
+
+        .name {
+            padding: 0 0 $gutter *.5 0;
+        }
+
+        .error {
+            margin: $gutter * .5;
+        }
+
+        button.is-loading-spinner {
+            &:after {
+                border-color: #fff;
+                border-right-color: transparent;
+                border-top-color: transparent;
+            }
+        }
+
+        button {
+            background-color: black;
+            color: white;
+            float: right;
+            margin-right: $gutter * 0.25;
+            height: 24px;
+            width: 24px;
+            margin-bottom: $gutter * .5;
+
+            &:before {
+                margin: 0;
+            }
+
+            &.success {
+                color: #1bff94;
+                cursor: default;
+            }
+
+            &.abort {
+                &:hover {
+                    color: #ff1b39;
+                    background-color: white;
+                }
+            }
+
+            &.retry {
+                &:hover {
+                    color: white;
+                    background-color: $gray-800;
+                }
+            }
+        }
+
+        .progress-bar {
+            display: flex;
+            min-height: 20px;
+            width: 100%;
+            border-radius: 20px;
+            background: rgba(50,50,50, 0.8);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+
+            .progress-bar-status {
+                display: block;
+                height: 14px;
+                margin: 3px;
+                border-radius: 20px;
+            }
+            .progress-bar-status.in-progress {
+                background-color: rgba(100,200,255,0.7);
+                min-width: 14px;
+            }
+
+            .progress-bar-status.done {
+                background-color: #1bff94;
+            }
+
+            .progress-bar-status.error {
+                background-color: #ff1b39;
+            }
+
+            .progress-bar-status.cancelled {
+                background-color: #4e420c;
+            }
+
+            @keyframes pulse {
+                0% { opacity: 1 }
+                25% { opacity: 0.8 }
+                50% { opacity: 0.6 }
+                75% { opacity: 0.4 }
+                100% { opacity: 0.2 }
+            }
+        }
+    }
+}
+
+
