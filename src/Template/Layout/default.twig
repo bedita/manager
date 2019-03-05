@@ -18,19 +18,18 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
 
+    {# Temporarily fetching libraries' build from cdn #}
+    <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
+
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
 
     {{ Html.css(['vendors'])|raw }}
     {{ Html.css(['style'])|raw }}
-
-    <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
-
     {% element 'custom_colors' %}
 
-    {# Temporarily fetching libraries' build from cdn #}
-    <script src="https://cdn.ckeditor.com/4.9.0/full-all/ckeditor.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -64,7 +63,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
         {% if Layout.layoutContent() %}
             <div class="layout-content">
-                {% element 'Modules/header' %}
                 {{ _view.fetch('content')|raw }}
             </div>
         {% endif %}
@@ -122,4 +120,3 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 </body>
 </html>
-

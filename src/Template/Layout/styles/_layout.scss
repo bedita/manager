@@ -35,6 +35,8 @@ main.layout {
     > .layout-content {
         grid-area: content;
         transition: .3s transform;
+        overflow-x: hidden;
+        .view-login & { overflow-x: initial; }
     }
 
     > .layout-footer {
