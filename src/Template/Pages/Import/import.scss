@@ -1,6 +1,10 @@
 #data-import {
     .fieldset {
         margin-bottom: $gutter * 1.5;
+
+        .tab {
+            cursor: auto;
+        }
     }
 
     .tab-container {
@@ -15,5 +19,39 @@
     button.submit {
         padding-left:  3 * $gutter;
         padding-right: 3 * $gutter;
+    }
+
+    .list-jobs {
+        display: table;
+        border-collapse: collapse;
+        min-width: 100%;
+
+        > nav {
+            display: table-row;
+
+            &.table-header {
+                border-bottom: 1px solid $gray-700;
+            }
+        }
+
+        > nav {
+            div {
+                display: table-cell;
+                padding: $gutter * .5;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+        }
+
+        .table-row {
+            display: table-row;
+
+            div {
+                display: table-cell;
+                padding: $gutter * .5;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+        }
     }
 }

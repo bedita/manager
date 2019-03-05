@@ -101,21 +101,43 @@
     {% endif %}
 
     {% if jobs %}
-    <section>
 
-        <div class="result">
-            <h2>{{ __('Jobs') }}</h2>
+    <div class="columns">
+        <div class="column">
+            <section class="fieldset">
+                <header class="tab">
+                    <h2>{{ __('Jobs') }}</h2>
+                </header>
+                <div class="tab-container">
+                    <div class="list-jobs">
+                        <nav class="table-header">
+                            <div>Job ID</div>
+                            <div>{{ __('file name') }}</div>
+                            <div>{{ __('service name') }}</div>
+                            <div>{{ __('scheduled from') }}</div>
+                            <div>{{ __('completed on') }}</div>
+                            <div>{{ __('status') }}</div>
+                        </nav>
+
+                        <import-jobs :jobs='{{ jobs|json_encode()|raw }}' inline-template>
+                            <div>
+                                <div class="table-row" v-for="job in jobs">
+                                    <div><: job.id :></div>
+                                    <div><: job.attributes.payload.filename :></div>
+                                    <div><: job.attributes.service :></div>
+                                    <div><: job.attributes.scheduled_from :></div>
+                                    <div><: job.meta.completed :></div>
+                                    <div><: job.meta.status :></div>
+                                </div>
+                            </div>
+                        </import-jobs>
+
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <fieldset id="import-result">
-            {% for job in jobs %}
-                <div class="import-message">
-                    <p>{{ __('Job details') }}: {{ job|json_encode()|raw }}</p>
-                </div>
-            {% endfor %}
-        </fieldset>
-
-    </section>
+    </div>
     {% endif %}
 
 </div>

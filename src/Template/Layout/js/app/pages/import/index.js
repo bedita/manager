@@ -5,8 +5,13 @@
  * <modules-view> component used for ModulesPage -> View
  *
  */
+import ImportJobs from 'app/components/import-jobs';
 
 export default {
+    components: {
+        ImportJobs,
+    },
+
     data() {
         return {
             fileName: '',
