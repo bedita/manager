@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 09:04:48 \n"
+"POT-Creation-Date: 2019-02-27 10:01:44 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -18,6 +18,12 @@ msgid "Actions on selected items"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "All media"
+msgstr ""
+
+msgid "All objects"
 msgstr ""
 
 msgid "An extension stopped the file upload"
@@ -59,6 +65,9 @@ msgstr ""
 msgid "Data Import"
 msgstr ""
 
+msgid "Data modeling"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -98,9 +107,6 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-msgid "Exit"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -128,6 +134,9 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
+msgid "ID"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr ""
 
@@ -146,6 +155,9 @@ msgstr ""
 msgid "Import warn"
 msgstr ""
 
+msgid "Invalid username or password"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -161,6 +173,9 @@ msgstr ""
 msgid "Login required"
 msgstr ""
 
+msgid "Direct access by id or unique name"
+msgstr ""
+
 msgid "Media"
 msgstr ""
 
@@ -171,9 +186,6 @@ msgid "Missing import file"
 msgstr ""
 
 msgid "Missing thumb url"
-msgstr ""
-
-msgid "Model"
 msgstr ""
 
 msgid "Module access not authorized"
@@ -248,13 +260,16 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-msgid "Preferences"
+msgid "Preferences and Tools"
 msgstr ""
 
 msgid "Priority"
 msgstr ""
 
 msgid "Profiles"
+msgstr ""
+
+msgid "Properties"
 msgstr ""
 
 msgid "Property types"
@@ -314,6 +329,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "System users"
+msgstr ""
+
 msgid "Temporary folder missing"
 msgstr ""
 
@@ -341,6 +359,9 @@ msgstr ""
 msgid "Trash can"
 msgstr ""
 
+msgid "Trash-verb"
+msgstr "Trash"
+
 msgid "Trashcan"
 msgstr ""
 
@@ -362,13 +383,7 @@ msgstr ""
 msgid "User profile saved"
 msgstr ""
 
-msgid "User: {0}"
-msgstr ""
-
 msgid "Username"
-msgstr ""
-
-msgid "Username or password is incorrect"
 msgstr ""
 
 msgid "Users"
@@ -414,9 +429,6 @@ msgid "id"
 msgstr ""
 
 msgid "last modified"
-msgstr ""
-
-msgid "log out"
 msgstr ""
 
 msgid "modified"
@@ -468,40 +480,4 @@ msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:446
-msgid "If you confirm, this data will be gone forever"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:448
-msgid "Do you really want to trash the object?"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:47
-msgid "All Types"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:68
-msgid "All"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:77
-msgid "Any"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:79
-msgid "Yes"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:81
-msgid "No"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:87
-msgid "From"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/filter-box.js:92
-msgid "To"
 msgstr ""

@@ -7,7 +7,6 @@
  */
 
 import PropertyView from 'app/components/property-view/property-view';
-import RelationView from 'app/components/relation-view/relation-view';
 
 export default {
 
@@ -26,19 +25,16 @@ export default {
         };
     },
 
-    computed: {
-        keyEvents() {
-            return {
-                'esc': {
-                    keyup: this.toggleTabs,
-                },
-            }
-        }
+    mounted() {
+        window.addEventListener('keydown', this.toggleTabs);
     },
 
     methods: {
-        toggleTabs() {
-            return this.tabsOpen = !this.tabsOpen;
+        toggleTabs(e) {
+            let key = e.which || e.keyCode || 0;
+            if(key === 27) {
+                return this.tabsOpen = !this.tabsOpen;
+            }
         },
     }
 }

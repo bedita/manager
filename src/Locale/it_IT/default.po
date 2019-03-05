@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-26 09:04:48 \n"
+"POT-Creation-Date: 2019-02-27 10:01:44 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -19,6 +19,12 @@ msgstr "Azioni sugli oggetti selezionati"
 
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "All media"
+msgstr "Tutti i media"
+
+msgid "All objects"
+msgstr "Tutti gli oggetti"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
@@ -59,6 +65,9 @@ msgstr "Cruscotto"
 msgid "Data Import"
 msgstr "Importazione dati"
 
+msgid "Data modeling"
+msgstr "Modellazione"
+
 msgid "Delete"
 msgstr "Elimina"
 
@@ -69,7 +78,7 @@ msgid "Documents"
 msgstr "Documenti"
 
 msgid "Download"
-msgstr "Download"
+msgstr ""
 
 msgid "Draft"
 msgstr ""
@@ -93,13 +102,10 @@ msgid "Error "
 msgstr "Errore "
 
 msgid "Error retrieving the requested content"
-msgstr "Errore durante lo scaricamento del contenuto richiesto"
+msgstr "Errore nel caricamento del contenuto richiesto"
 
 msgid "Events"
 msgstr "Eventi"
-
-msgid "Exit"
-msgstr "Esci"
 
 msgid "Export"
 msgstr "Esporta"
@@ -128,6 +134,9 @@ msgstr "File"
 msgid "Folders"
 msgstr "Cartelle"
 
+msgid "ID"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
@@ -135,7 +144,7 @@ msgid "Images"
 msgstr "Immagini"
 
 msgid "Import"
-msgstr "Importa"
+msgstr "Importa da file"
 
 msgid "Import error"
 msgstr "Errore in importazione"
@@ -145,6 +154,9 @@ msgstr "Filtro di importazione non selezionato"
 
 msgid "Import warn"
 msgstr "Avviso in importazione"
+
+msgid "Invalid username or password"
+msgstr ""
 
 msgid "Language"
 msgstr "Lingua"
@@ -161,6 +173,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Direct access by id or unique name"
+msgstr "Link diretto per ID o nome univoco"
+
 msgid "Media"
 msgstr ""
 
@@ -172,9 +187,6 @@ msgstr "File di importazione mancante"
 
 msgid "Missing thumb url"
 msgstr "Url miniatura mancante"
-
-msgid "Model"
-msgstr "Modello"
 
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
@@ -248,14 +260,17 @@ msgstr "Dimensione pagina"
 msgid "Password"
 msgstr ""
 
-msgid "Preferences"
-msgstr "Preferenze"
+msgid "Preferences and Tools"
+msgstr "Preferenze e Strumenti"
 
 msgid "Priority"
 msgstr "Priorità"
 
 msgid "Profiles"
 msgstr "Profili"
+
+msgid "Properties"
+msgstr ""
 
 msgid "Property types"
 msgstr "Tipi di priorità"
@@ -314,6 +329,9 @@ msgstr "Dimensione"
 msgid "Status"
 msgstr "Stato"
 
+msgid "System users"
+msgstr ""
+
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
@@ -341,6 +359,9 @@ msgstr "Cestino"
 msgid "Trash can"
 msgstr "Cestino"
 
+msgid "Trash-verb"
+msgstr "Cestina"
+
 msgid "Trashcan"
 msgstr "Cestino"
 
@@ -362,14 +383,8 @@ msgstr "Profilo Utente"
 msgid "User profile saved"
 msgstr "Profilo utente salvato"
 
-msgid "User: {0}"
-msgstr "Utente: {0}"
-
 msgid "Username"
 msgstr "Nome utente"
-
-msgid "Username or password is incorrect"
-msgstr ""
 
 msgid "Users"
 msgstr "Utenti"
@@ -378,13 +393,13 @@ msgid "Videos"
 msgstr "Video"
 
 msgid "View"
-msgstr "Mostra"
+msgstr "Visualizza"
 
 msgid "View original"
-msgstr "Mostra originale"
+msgstr "Vedi originale"
 
-msgid "View trashed"
-msgstr "Mostra cestino"
+msgid "View trashed "
+msgstr ""
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
@@ -416,9 +431,6 @@ msgstr ""
 msgid "last modified"
 msgstr "ultima modifica"
 
-msgid "log out"
-msgstr "esci"
-
 msgid "modified"
 msgstr "modificato"
 
@@ -449,9 +461,6 @@ msgstr "rimuovi"
 msgid "status"
 msgstr "stato"
 
-msgid "Title"
-msgid "Titolo"
-
 msgid "title"
 msgstr "titolo"
 
@@ -462,7 +471,7 @@ msgid "type"
 msgstr "tipo"
 
 msgid "undo"
-msgstr "annulla"
+msgstr ""
 
 msgid "undo remove"
 msgstr "annulla rimozione"
@@ -473,50 +482,20 @@ msgstr "mostra file"
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:446
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+#~ msgid "Exit"
+#~ msgstr "Esci"
 
-#: src/Template/Layout/js/app/app.js:448
-msgid "Do you really want to trash the object?"
-msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+#~ msgid "Model"
+#~ msgstr "Modello"
 
-#: src/Template/Layout/js/app/components/filter-box.js:47
-msgid "All Types"
-msgstr "Tutti i tipi"
+#~ msgid "User: {0}"
+#~ msgstr "Utente: {0}"
 
-#: src/Template/Layout/js/app/components/filter-box.js:68
-msgid "All"
-msgstr "Tutti"
-
-#: src/Template/Layout/js/app/components/filter-box.js:77
-msgid "Any"
-msgstr "Qualsiasi"
-
-#: src/Template/Layout/js/app/components/filter-box.js:79
-msgid "Yes"
-msgstr "Sì"
-
-#: src/Template/Layout/js/app/components/filter-box.js:81
-msgid "No"
-msgstr "No"
-
-#: src/Template/Layout/js/app/components/filter-box.js:87
-msgid "From"
-msgstr "Da"
-
-#: src/Template/Layout/js/app/components/filter-box.js:92
-msgid "To"
-msgstr "A"
-
-#~ msgid "Add objects to"
-#~ msgstr "Aggiungi oggetti a"
+#~ msgid "log out"
+#~ msgstr "esci"
 
 #~ msgid "Close"
 #~ msgstr "Chiudi"
-
-#~ msgid "Edit parameters of"
-#~ msgstr "Modifica parametri di"
 
 #~ msgid "Error"
 #~ msgstr "Errore"
@@ -527,17 +506,11 @@ msgstr "A"
 #~ msgid "Message"
 #~ msgstr "Messaggio"
 
-#~ msgid "Object"
-#~ msgstr "Oggetto"
-
 #~ msgid "Object(s) restored"
 #~ msgstr "Oggetto(i) ripristinato(i)"
 
-#~ msgid "Related to"
-#~ msgstr "Collegato a"
-
-#~ msgid "Save"
-#~ msgstr "Salva"
+#~ msgid "Preferences"
+#~ msgstr "Preferenze"
 
 #~ msgid "Show details"
 #~ msgstr "Mostra dettagli"
@@ -551,17 +524,29 @@ msgstr "A"
 #~ msgid "Warning"
 #~ msgstr "Avviso"
 
-#~ msgid "add to"
-#~ msgstr "aggiungi a"
+#~ msgid "If you confirm, this data will be gone forever"
+#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
-#~ msgid "close"
-#~ msgstr "chiudi"
+#~ msgid "Do you really want to trash the object?"
+#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#~ msgid "create"
-#~ msgstr "crea"
+#~ msgid "All Types"
+#~ msgstr "Tutti i tipi"
 
-#~ msgid "create new"
-#~ msgstr "crea nuovo"
+#~ msgid "All"
+#~ msgstr "Tutti"
 
-#~ msgid "open"
-#~ msgstr "apri"
+#~ msgid "Any"
+#~ msgstr "Qualsiasi"
+
+#~ msgid "Yes"
+#~ msgstr "Sì"
+
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgid "From"
+#~ msgstr "Da"
+
+#~ msgid "To"
+#~ msgstr "A"

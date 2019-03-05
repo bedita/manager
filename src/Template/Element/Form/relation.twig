@@ -15,15 +15,19 @@
             <filter-box-view
                 :config-paginate-sizes="configPaginateSizes"
                 :pagination.sync="pagination"
-                :show-filter-buttons=false
+                :show-filter-buttons="false"
                 :relation-types="relationTypes"
                 :init-filter="activeFilter"
 
-                objects-label={{ __('objects') }}
+                objects-label="{{ __('objects') }}"
 
                 @filter-update-current-page="onUpdateCurrentPage"
                 @filter-update-page-size="onUpdatePageSize"
-                @filter-objects="onFilterObjects">
+                @filter-objects="onFilterObjects"
+                inline-template>
+
+                    {% element 'FilterBox/filter_box' %}
+
             </filter-box-view>
 
             {# related objects #}

@@ -1,13 +1,10 @@
-
 nav.pagination {
-    justify-content: flex-start;
+    // TODO: forse non necessario
+    // justify-content: flex-end;
 
     .filter-search {
-        flex: 1;
-        order: 1;
-        margin: 0;
-
         display: flex;
+        margin: 0;
 
         .search-query {
             flex: 1;
@@ -22,17 +19,6 @@ nav.pagination {
         &.hide {
             display: none;
         }
-    }
-
-    .count-items {
-        order: 2;
-    }
-
-    .page-size {
-        order: 3;
-    }
-    .pagination-buttons {
-        order: 4;
     }
 }
 
@@ -66,10 +52,13 @@ nav.pagination {
 }
 
 .related-objects-list {
-    .column:empty { padding: 0; }
-    &.isLoading {
-        opacity: .2;
-        pointer-events: none;
+
+    .columns {
+        .column:empty { padding: 0; }
+        &.isLoading {
+            opacity: .2;
+            pointer-events: none;
+        }
     }
 
     & ~ .related-objects-list {
@@ -282,59 +271,65 @@ nav.pagination {
     }
 }
 
-.create-related-object {
+
+// in panel
+%relation-panel-common {
     display: flex;
     flex-direction: column;
     height: 100%;
 
     // layout
-    > nav, >header.tab, >footer {
-        flex-shrink: 0;
-    }
-
-    > nav {
-        padding: $gutter $gutter 0;
-        margin: 0;
-    }
-
-    > header.tab {
-        margin-right: $gutter;
-        margin-left: $gutter;
+    > * {
+        display: flex;
+        flex-direction: column;
         margin-top: $gutter;
-        margin-bottom: 0;
+        flex: none;
+        > * {
+            margin-left: $gutter;
+            margin-right: $gutter;
+            flex: none;
+        }
+    }
+    .shrinks {
+        flex-shrink: 1 !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+
+    footer {
+        display: flex;
+        justify-content: space-between;
+        margin: $gutter;
+    }
+
+    header.tab {
         cursor: auto;
     }
 
-    > footer {
-        display: flex;
-        justify-content: space-between;
-        padding: $gutter;
+    form[disabled] {
+        opacity: 0.7;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    header[disabled], a[disabled], a[disabled]:hover {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .open h2 {
+        cursor: pointer;
     }
 }
 
-// in panel
 
 .edit-relation {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    // layout
-    > nav, >header.tab, >footer {
-        flex-shrink: 0;
-    }
+    @extend %relation-panel-common;
 
     > nav {
         padding: $gutter $gutter 0;
         margin: 0;
-    }
-
-    > header.tab {
-        margin-right: $gutter;
-        margin-left: $gutter;
-        margin-top: $gutter;
-        margin-bottom: 0;
-        cursor: auto;
     }
 
     .object-attributes, .params-list {
@@ -356,99 +351,20 @@ nav.pagination {
             width: 100%;
         }
     }
-
-    > footer {
-        display: flex;
-        justify-content: space-between;
-        padding: $gutter;
-    }
 }
 
 .relations-add {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    // layout
-    nav, header.tab, footer {
-        flex-shrink: 0;
-    }
-
-    nav {
-        padding: $gutter $gutter 0;
-        margin: 0;
-    }
-
-    form[disabled] {
-        opacity: 0.7;
-        pointer-events: none;
-        cursor: default;
-    }
-
-    header[disabled], a[disabled], a[disabled]:hover {
-        pointer-events: none;
-        cursor: default;
-    }
-
-    .main-section {
-        height: 100%;
-        overflow: auto;
-    }
-
-    .main-section , section {
-        & > header.tab {
-            margin-right: $gutter;
-            margin-left: $gutter;
-            margin-top: $gutter;
-            margin-bottom: 0;
-            cursor: auto;
-        }
-    }
-
-    .open h2 {
-        cursor: pointer;
-    }
+    @extend %relation-panel-common;
 
     .create-new-object {
-        margin-left: $gutter;
-        margin-top: $gutter;
-        padding-right: $gutter * .5;
-
         form > * {
-            margin: $gutter * .5;
+            margin-bottom: $gutter;
 
             input[name=title] {
-                width: 50%;
-            }
-
-            label {
-                margin-right: $gutter * .5;
+                max-width: 50%;
+                margin-left: $gutter * .5;
             }
         }
-    }
-
-    .related-objects-list {
-        flex-grow: 1;
-        overflow: auto;
-        margin-right: 0;
-        margin-left: $gutter * .5;
-        margin-top: $gutter;
-        padding-right: $gutter * .5;
-    }
-
-    main, section {
-        & > footer {
-            display: flex;
-            justify-content: space-between;
-            padding: $gutter;
-        }
-    }
-
-    .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
-    }
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
     }
 
     // ui specs
@@ -481,4 +397,3 @@ nav.pagination {
         }
     }
 }
-

@@ -41,7 +41,7 @@ class LoginController extends AppController
 
         // Attempted login.
         $user = null;
-        $reason = 'Username and/or password do not match';
+        $reason = 'Invalid username or password';
         try {
             $user = $this->Auth->identify();
         } catch (BEditaClientException $e) {

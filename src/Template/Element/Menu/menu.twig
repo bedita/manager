@@ -1,12 +1,13 @@
-<ul role="menu">
+<main-menu inline-template>
+<ul role="menu" :class="popUpAction? 'popup-on' : ''">
 
     {# Core object modules #}
     {% for name, module in modules if name != 'trash' %}
         <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(
                 __(name|humanize)|slice(0, 2),
-                {'_name': 'modules:list', 'object_type': name, 'plugin': null},
-                {'tooltip': __(name|humanize)})|raw }}
+                { '_name': 'modules:list', 'object_type': name, 'plugin': null },
+                { 'tooltip': __(name|humanize), 'class': 'square' })|raw }}
         </li>
     {% endfor %}
 
@@ -15,39 +16,48 @@
         <li class="{{ plugin.class.menu }}">
             {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
                 plugin.route,
-                {'tooltip': __(plugin.title|humanize)})|raw }}
+                {'tooltip': __(plugin.title|humanize), 'class': 'square'})|raw }}
         </li>
     {% endfor %}
 
+    {# trash #}
     {% if currentModule.name != "trash" %}
         {% if currentModule.hints.multiple_types %}
             {% set elementClass = "space-around-half has-background-module-" ~ currentModule.name %}
         {% else %}
             {% set elementClass = "has-text-module-" ~ currentModule.name %}
         {% endif %}
-        <li class="has-background-transparent {{ elementClass }} icon-trash-2 center-icon">
+        <li class="has-background-transparent {{ elementClass }} icon-trash-2 center-icon has-tooltip-align-right">
         {{ Html.link(__(''),
             {'_name': 'trash:list', 'filter': {'type': objectType}},
-            {'tooltip': __('View trashed ') ~ currentModule.name|humanize}
+            {'tooltip': __('View trashed ') ~ currentModule.name|humanize, 'class': 'square'}
         )|raw }}
     </li>
     {% endif %}
 
-    <li class="has-background-transparent separator">&nbsp;</li>
-    <li class="has-background-black icon-wrench center-icon">&nbsp;</li>
-    <li class="has-background-black icon-user center-icon">
-        {{ Html.link(__(''), {'_name': 'user_profile:view'}, {'title': __('User Profile')})|raw }}
+    <li class="has-background-transparent spacer">&nbsp;</li>
+
+    {# search #}
+    <li class="has-background-black icon-search center-icon has-tooltip-align-right">
+        {{ Html.link(__(''), '', {
+            'tooltip': __('Search'),
+            'class': 'square',
+            'v-on:click.prevent': "togglePopup('search')",
+        })|raw }}
     </li>
 
-    {# Localization link(s) #}
-    {% for code, name in I18n.getLanguages() if code != I18n.getLang() %}
-    <li>
-        {{ Html.link(code, I18n.changeUrlLang(code, config('I18n.switchLangUrl')), { 'title': name })|raw }}
+    {# look up by id #}
+    <li class="has-background-black icon-tag center-icon has-tooltip-align-right">
+        {{ Html.link(__(''), '', {
+            'tooltip': __('Direct access by id or unique name'),
+            'class': 'square',
+            'v-on:click.prevent': "togglePopup('go')",
+        })|raw }}
     </li>
-    {% endfor %}
 
-    {# logout #}
-    <li class="has-background-black has-text-danger icon-logout center-icon">
-        {{ Html.link(__(''), {'_name': 'logout'}, {'title': 'log out'})|raw }}
-    </li>
+    <div class="popup">
+        <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
+        <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
+    </div>
 </ul>
+</main-menu>

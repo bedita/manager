@@ -43,6 +43,7 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
+$gray-950: #1c1c1c !default;
 $black:    #000 !default;
 
 $grays: () !default;
@@ -64,6 +65,16 @@ $light-danger: hsl(348, 87%, 12%);
 $success:      hsl(175, 60%, 47%);
 $warning:      rgb(202, 126, 26);
 $error:        rgb(187, 26, 26);
+
+
+/*
+** MEDIA BREAKPOINTS
+*/
+// $phone: 768px;
+// $phablet: 768px;
+$tablet: 768px;
+// $desktop: ;
+// $widescreen: ;
 
 
 /*

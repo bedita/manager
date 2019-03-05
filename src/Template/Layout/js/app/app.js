@@ -16,6 +16,7 @@ import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
+import MainMenu from 'app/components/menu';
 import FlashMessage from 'app/components/flash-message';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 import UploadFilesView from 'app/components/upload-files-view';
@@ -23,20 +24,16 @@ import UploadFilesView from 'app/components/upload-files-view';
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
-import VueHotkey from 'v-hotkey';
 
 import viewHelper from 'app/helpers/view';
 
 import merge from 'deepmerge';
-import sleep from 'sleep-promise';
 import { t } from 'ttag';
-import view from './pages/modules/view';
 
 const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        FlashMessage,
         ModulesIndex,
         ModulesView,
         TrashIndex,
@@ -48,6 +45,8 @@ const _vueInstance = new Vue({
         EditRelationParams,
         PanelView,
         UploadFilesView,
+        MainMenu,
+        FlashMessage,
     },
 
     data() {
@@ -92,7 +91,6 @@ const _vueInstance = new Vue({
         Vue.use(jsoneditor);
         Vue.use(datepicker);
         Vue.use(richeditor);
-        Vue.use(VueHotkey);
 
         // Register helpers
         Vue.use(viewHelper);
@@ -409,7 +407,7 @@ const _vueInstance = new Vue({
                 } else {
                     // support for normal change Events trying to figure out a unique id
                     const checkChanges = form && form.getAttribute('check-changes') === 'true';
-                    if (checkChanges) {
+                    if (checkChanges && element.name) {
                         const name = element.name;
                         const formId = element.form.getAttribute('id');
                         const elementId = element.id;
