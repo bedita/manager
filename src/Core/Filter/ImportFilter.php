@@ -108,6 +108,7 @@ abstract class ImportFilter
                     'service' => static::getServiceName(),
                     'payload' => [
                         'streamId' => Hash::get($result, 'data.id'),
+                        'filename' => $filename,
                     ],
                 ],
             ],
