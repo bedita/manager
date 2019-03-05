@@ -1,6 +1,8 @@
 {% do _view.assign('title', __('Data Import')) %}
 
-<import-view inline-template ref="moduleView">
+<import-view
+    :jobs='{{ jobs|json_encode()|raw }}'
+    ref="moduleView" inline-template>
 <div id="data-import">
 
     <h1>{{ __('Data Import') }}</h1>
@@ -100,9 +102,9 @@
     </section>
     {% endif %}
 
-    {% if jobs %}
 
-    <div class="columns">
+    {# jobs #}
+    <div class="columns" v-if="jobs.length != -1">
         <div class="column">
             <section class="fieldset">
                 <header class="tab">
@@ -110,7 +112,7 @@
                 </header>
                 <div class="tab-container">
                     <div class="list-jobs">
-                        <nav class="table-header">
+                        <div class="table-header">
                             <div>Job ID</div>
                             <div>{{ __('file name') }}</div>
                             <div>{{ __('service name') }}</div>
@@ -119,26 +121,22 @@
                             <div>{{ __('status') }}</div>
                         </nav>
 
-                        <import-jobs :jobs='{{ jobs|json_encode()|raw }}' inline-template>
-                            <div>
-                                <div class="table-row" v-for="job in jobs">
-                                    <div><: job.id :></div>
-                                    <div><: job.attributes.payload.filename :></div>
-                                    <div><: job.attributes.service :></div>
-                                    <div><: job.attributes.scheduled_from :></div>
-                                    <div><: job.meta.completed :></div>
-                                    <div><: job.meta.status :></div>
-                                </div>
+                        <template v-for="job in jobs">
+                            <div class="table-row">
+                                <div><: job.id :></div>
+                                <div><: job.attributes.payload.filename :></div>
+                                <div><: job.attributes.service :></div>
+                                <div><: job.attributes.scheduled_from :></div>
+                                <div><: job.meta.completed :></div>
+                                <div><: job.meta.status :></div>
                             </div>
-                        </import-jobs>
-
+                        </template>
                     </div>
                 </div>
             </section>
         </div>
 
     </div>
-    {% endif %}
 
 </div>
 </import-view>
