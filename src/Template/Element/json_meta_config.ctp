@@ -16,7 +16,8 @@
         'template': '<?= $this->template ?>',
         'relations': {},
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
-        'locale': locale
+        'locale': locale,
+        'csrfToken': <?= json_encode($this->request->params['_csrfToken']) ?>,
     };
 
     if (BEDITA.plugins) {
