@@ -28,6 +28,7 @@ export default {
                 v-for="(info, index) in Array.from(uploadProgressInfo.values())">
 
                 <span class="name"><: info.file.name :></span>
+
                 <button v-show="!info.error && !info.cancelled && !info.done"
                     class="abort icon-cancel"
                     :class="{'is-loading-spinner': info.pending }"
