@@ -11,18 +11,17 @@
  */
 
 import { PanelEvents } from 'app/components/panel-view';
-import { DragdropMixin } from 'app/mixins/dragdrop';
 import { FetchMixin } from 'app/mixins/fetch';
 import { t } from 'ttag';
 
 export default {
-    mixins: [ DragdropMixin, FetchMixin ],
+    mixins: [ FetchMixin ],
 
     inject: ['getCSFRToken'],
 
     template: /*template*/`
     <div class="upload-files">
-        <section>
+        <section class="upload-list">
             <div class="upload-info"
                 :key="index"
                 v-for="(info, index) in Array.from(uploadProgressInfo.values())">

@@ -6,8 +6,9 @@
     flex-direction: column;
     height: 100%;
 
-    section {
+    .upload-list {
         flex-grow: 1;
+        overflow-y: auto;
     }
 
     footer {
