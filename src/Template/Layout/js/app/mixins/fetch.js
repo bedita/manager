@@ -2,6 +2,8 @@
  * Fetch mixin used to comunicate with cake controller's method
  *
  * TO-DO: handle token timeout
+ *
+ * @requires BEDITA global object
  */
 
 import axios from 'axios';
