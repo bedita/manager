@@ -46,8 +46,11 @@ export default {
             </div>
         </section>
         <footer v-show="actionRequired">
-            <button class="has-background-info has-text-white"
-                @click.prevent="tryUpload(getFailedUploads())"><: t('Retry ') :>
+            <button v-show="showAddSuccesfulUploadsButton" class="has-background-info has-text-white add-uploads-action"
+                @click.prevent="addSuccesfulUploads()"><: t('Add Uploaded') :>
+            </button>
+            <button class="has-background-info has-text-white retry-action"
+                @click.prevent="tryUpload(getFailedUploads())"><: t('Retry All') :>
             </button>
             <button class="has-background-info has-text-white"
                 @click.prevent="closePanel()"><: t('Close ') :>
@@ -80,6 +83,7 @@ export default {
             uploadProgressInfo: new Map(), // real-time upload status
             axiosCancelTokens: new Map(), // Map of all axios cancel token
             actionRequired: false, // true when upload was manually cancelled or terminated with errors
+            showAddSuccesfulUploadsButton: false,
         }
     },
 
@@ -92,6 +96,16 @@ export default {
 
     destroyed() {
         this.uploadProgressInfo.clear();
+    },
+
+    watch: {
+        createdObjects: {
+            handler(val) {
+                this.showAddSuccesfulUploadsButton = !!val.length && !this.isUploadInProgress();
+            },
+            deep: true,
+            immediate: true,
+        }
     },
 
     methods: {
@@ -169,6 +183,15 @@ export default {
         },
 
         /**
+         * add succesful file uploads, discard failed uploads
+         *
+         * @return {void}
+         */
+        addSuccesfulUploads() {
+            PanelEvents.sendBack('upload-files:save', this.createdObjects)
+        },
+
+        /**
          * start parallel files upload
          *
          * @param {FileList} files
@@ -181,8 +204,12 @@ export default {
             try {
                 await this.startFilesUpload(files);
 
-                // gite the user the time to see the feedback
-                setTimeout(() => PanelEvents.sendBack('upload-files:save', this.createdObjects), 500);
+                if (!this.getFailedUploads().length) {
+                    // give the user the time to see the feedback
+                    setTimeout(() => PanelEvents.sendBack('upload-files:save', this.createdObjects), 500);
+                } else {
+                    this.actionRequired = true;
+                }
             } catch (err) {
                 this.actionRequired = true;
             }
@@ -270,6 +297,16 @@ export default {
         },
 
         /**
+        * get file list of failed uploads
+        *
+        * @return {Array} failed files
+        */
+        isUploadInProgress() {
+            const isInProgress = (acc, element) => acc = acc || element.pending || !(element.done || element.cancelled || element.error);
+            return [...this.uploadProgressInfo.values()].reduce(isInProgress, false);
+        },
+
+        /**
          * create new object from file
          *
          * @param {File} file
@@ -302,7 +339,7 @@ export default {
             // config object for axios request
             const config = {
                 onUploadProgress: handleUploadProgress,
-                onUploadCancelled: () => this.setProgressInfo(file, -1, 'Upload Cancelled'),
+                onUploadCancelled: () => this.setProgressInfo(file, -1, true, false, false, 'Upload Cancelled'),
                 onUploadError: () => this.setProgressInfo(file, 100, false, true, 'Error from server'),
                 onUploadSuccess: () => this.setProgressInfo(file, 100, false, false, true),
                 cancelToken: source.token

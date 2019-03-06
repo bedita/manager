@@ -10,6 +10,18 @@
         flex-grow: 1;
     }
 
+    footer {
+        justify-content: flex-end;
+
+        .add-uploads-action {
+            margin-right: auto;
+        }
+
+        .retry-action {
+            margin: 0 $gutter * .5;
+        }
+    }
+
     .upload-info {
         // display: flex;
         flex-direction: column;
