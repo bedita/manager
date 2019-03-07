@@ -86,9 +86,6 @@ msgstr ""
 msgid "Edit Params"
 msgstr "Modifica Parametri"
 
-msgid "Empty"
-msgstr "Vuoto"
-
 msgid "Empty request data"
 msgstr "Nessuno dato in request"
 
@@ -97,6 +94,9 @@ msgstr "Identificatore traduzione vuoto (\"id\")"
 
 msgid "Empty translation \"object_id\""
 msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
+
+msgid "Empty-verb"
+msgstr "Svuota"
 
 msgid "Error "
 msgstr "Errore "

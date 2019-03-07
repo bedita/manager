@@ -86,9 +86,6 @@ msgstr ""
 msgid "Edit Params"
 msgstr ""
 
-msgid "Empty"
-msgstr ""
-
 msgid "Empty request data"
 msgstr ""
 
@@ -97,6 +94,9 @@ msgstr ""
 
 msgid "Empty translation \"object_id\""
 msgstr ""
+
+msgid "Empty-verb"
+msgstr "Empty"
 
 msgid "Error "
 msgstr ""
