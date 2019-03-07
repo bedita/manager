@@ -142,8 +142,10 @@ class ModulesController extends AppController
             'parent' => $this->objectType,
             'enabled' => true,
         ];
+        $sort = 'name';
+
         try {
-            $descendants = $this->apiClient->get('/model/object_types', compact('filter') + ['fields' => 'name']);
+            $descendants = $this->apiClient->get('/model/object_types', compact('filter', 'sort') + ['fields' => 'name']);
         } catch (BEditaClientException $e) {
             // Error! Return empty list.
             $this->log($e, LogLevel::ERROR);
