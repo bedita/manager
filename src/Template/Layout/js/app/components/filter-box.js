@@ -197,7 +197,6 @@ export default {
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
-            console.log(1, this.queryFilter);
             this.$emit("filter-objects-submit", this.queryFilter);
         },
 
