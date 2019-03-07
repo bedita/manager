@@ -81,6 +81,63 @@
             margin-bottom: 2px;
         }
 
+        .types {
+            display: flex;
+            flex-direction: column;
+            margin-top: -1px;
+
+            label {
+                cursor: pointer;
+                &:not(:last-child) { margin-bottom: 1px; }
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    height: $gutter * 2;
+                    padding: 0 $gutter * .5;
+                    background-color: $gray-950;
+                    color: $gray-550;
+                    font-weight: 100;
+                    letter-spacing: .5px;
+                    font-size: 11px;
+                    text-transform: capitalize;
+                    .bullet {
+                        content: '';
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        margin-right: 8px;
+                        opacity: .2;
+                        background-color: $white;
+                    }
+                }
+                &:first-child {
+                    margin-bottom: 8px;
+                    span {
+                        justify-content: center;
+                    }
+                    input[type=checkbox]:not(:checked) ~ span {
+                        background-color: $gray-950 !important;
+                    }
+                }
+
+                input[type=checkbox] {
+                    display: block;
+                    visibility: hidden;
+                    width: 0;
+                    height: 0;
+                    margin: 0;
+                }
+
+                input[type=checkbox]:checked ~ span {
+                    color: $white;
+                    background-color: $black;
+                    .bullet {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
     }
 
     > .commands-footer {

@@ -45,4 +45,26 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Pages/Model/model-view';
 
 // vue
-[v-cloak] > * { visibility: hidden; }
+[v-cloak] {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    > * {
+        display: none !important;
+    }
+
+    &:before {
+        animation: spinAround .75s infinite linear;
+        border: 2px solid #dbdbdb;
+        border-radius: 290486px;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        content: "";
+        display: block;
+        height: $gutter * 2;
+        width: $gutter * 2;
+    }
+}

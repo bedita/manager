@@ -51,6 +51,10 @@ export default {
         relationTypes: {
             type: Object
         },
+        selectedTypes: {
+            type: Array,
+            deafut: () => [],
+        },
         filterList: {
             type: Array,
             default: () => [],
@@ -145,6 +149,10 @@ export default {
          */
         pageSize(value) {
             this.$emit("filter-update-page-size", this.pageSize);
+        },
+
+        selectedTypes(value) {
+            this.queryFilter.filter.type = value;
         }
     },
 
@@ -163,6 +171,10 @@ export default {
                     this.$emit("filter-objects", this.queryFilter);
                 }, 300);
             }
+        },
+
+        onOtherFiltersChange() {
+            this.$emit("filter-objects", this.queryFilter);
         },
 
         /**
@@ -185,6 +197,7 @@ export default {
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
+            console.log(1, this.queryFilter);
             this.$emit("filter-objects-submit", this.queryFilter);
         },
 
@@ -204,7 +217,7 @@ export default {
          *
          * @emits Event#filter-update-current-page
          */
-        changePage(index) {
+        onChangePage(index) {
             this.$emit("filter-update-current-page", index);
         }
     }

@@ -21,6 +21,7 @@
         .filter-label:first-letter { text-transform: uppercase; }
 
         label {
+            cursor: pointer;
             display: inline-block;
             &:not(:last-child) { margin-right: $gutter; }
         }
