@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-27 10:01:44 \n"
+"POT-Creation-Date: 2019-03-07 11:39:32 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -17,8 +17,17 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
 
+msgid "Add objects to"
+msgstr "Aggiungi oggetti a"
+
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "All"
+msgstr "Tutti"
+
+msgid "All Types"
+msgstr "Tutti i tipi"
 
 msgid "All media"
 msgstr "Tutti i media"
@@ -29,8 +38,8 @@ msgstr "Tutti gli oggetti"
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
 
-msgid "Apply"
-msgstr "Applica"
+msgid "Any"
+msgstr "Qualsiasi"
 
 msgid "BEdita Web site"
 msgstr "Sito BEdita"
@@ -73,6 +82,9 @@ msgstr "Elimina"
 
 msgid "Description"
 msgstr "Descrizione"
+
+msgid "Direct access by id or unique name"
+msgstr "Link diretto per ID o nome univoco"
 
 msgid "Documents"
 msgstr "Documenti"
@@ -134,8 +146,8 @@ msgstr "File"
 msgid "Folders"
 msgstr "Cartelle"
 
-msgid "ID"
-msgstr ""
+msgid "From"
+msgstr "Da"
 
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
@@ -173,9 +185,6 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
-msgid "Direct access by id or unique name"
-msgstr "Link diretto per ID o nome univoco"
-
 msgid "Media"
 msgstr ""
 
@@ -202,6 +211,9 @@ msgstr "Nuove relazioni (salvare per mantenerle)"
 
 msgid "News"
 msgstr "Novità"
+
+msgid "No"
+msgstr "No"
 
 msgid "No items found"
 msgstr "Nessun elemento trovato"
@@ -254,9 +266,6 @@ msgstr "Opzioni"
 msgid "Other"
 msgstr "Altro"
 
-msgid "Page size"
-msgstr "Dimensione pagina"
-
 msgid "Password"
 msgstr ""
 
@@ -268,9 +277,6 @@ msgstr "Priorità"
 
 msgid "Profiles"
 msgstr "Profili"
-
-msgid "Properties"
-msgstr ""
 
 msgid "Property types"
 msgstr "Tipi di priorità"
@@ -287,8 +293,8 @@ msgstr "Relazioni"
 msgid "Remove"
 msgstr "Rimuovi"
 
-msgid "Reset"
-msgstr ""
+msgid "Reset filters"
+msgstr "Reset filtri"
 
 msgid "Resource \"%s\" not available. Error: %s"
 msgstr "Risorsa \"%s\" non disponibile. Error: %s"
@@ -307,6 +313,9 @@ msgstr "Ridigita password"
 
 msgid "Save"
 msgstr "Salva"
+
+msgid "Search"
+msgstr "Cerca"
 
 msgid "Search in BEdita"
 msgstr "Cerca in BEdita"
@@ -346,6 +355,9 @@ msgstr "Miniatura non pronta: in lavorazione"
 
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
+
+msgid "To"
+msgstr "A"
 
 msgid "Translation(s) deleted"
 msgstr "Traduzione(i) rimossa(e)"
@@ -401,11 +413,17 @@ msgstr "Vedi originale"
 msgid "View trashed "
 msgstr ""
 
+msgid "Yes"
+msgstr "Sì"
+
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
+
+msgid "add to"
+msgstr ""
 
 msgid "cancel"
 msgstr "annulla"
@@ -413,11 +431,20 @@ msgstr "annulla"
 msgid "click to remove"
 msgstr "clicca per rimuovere"
 
+msgid "close"
+msgstr "chiudi"
+
 msgid "code"
 msgstr "codice"
 
 msgid "confirm password"
 msgstr "conferma password"
+
+msgid "create"
+msgstr "crea"
+
+msgid "create new"
+msgstr "crea nuovo"
 
 msgid "current password"
 msgstr "password corrente"
@@ -445,6 +472,9 @@ msgstr "oggetti"
 
 msgid "of"
 msgstr "di"
+
+msgid "open"
+msgstr ""
 
 msgid "original"
 msgstr "originale"
@@ -481,6 +511,15 @@ msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#~ msgid "Apply"
+#~ msgstr "Applica"
+
+#~ msgid "Empty"
+#~ msgstr "Vuoto"
+
+#~ msgid "Page size"
+#~ msgstr "Dimensione pagina"
 
 #~ msgid "Exit"
 #~ msgstr "Esci"
@@ -529,24 +568,3 @@ msgstr ""
 
 #~ msgid "Do you really want to trash the object?"
 #~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
-
-#~ msgid "All Types"
-#~ msgstr "Tutti i tipi"
-
-#~ msgid "All"
-#~ msgstr "Tutti"
-
-#~ msgid "Any"
-#~ msgstr "Qualsiasi"
-
-#~ msgid "Yes"
-#~ msgstr "Sì"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#~ msgid "From"
-#~ msgstr "Da"
-
-#~ msgid "To"
-#~ msgstr "A"

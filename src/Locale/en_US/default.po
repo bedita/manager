@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-02-27 10:01:44 \n"
+"POT-Creation-Date: 2019-03-07 11:39:32 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -17,7 +17,16 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr ""
 
+msgid "Add objects to"
+msgstr ""
+
 msgid "Advanced"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All Types"
 msgstr ""
 
 msgid "All media"
@@ -29,7 +38,7 @@ msgstr ""
 msgid "An extension stopped the file upload"
 msgstr ""
 
-msgid "Apply"
+msgid "Any"
 msgstr ""
 
 msgid "BEdita Web site"
@@ -72,6 +81,9 @@ msgid "Delete"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid "Direct access by id or unique name"
 msgstr ""
 
 msgid "Documents"
@@ -134,7 +146,7 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
-msgid "ID"
+msgid "From"
 msgstr ""
 
 msgid "Image not acceptable for thumb"
@@ -173,9 +185,6 @@ msgstr ""
 msgid "Login required"
 msgstr ""
 
-msgid "Direct access by id or unique name"
-msgstr ""
-
 msgid "Media"
 msgstr ""
 
@@ -201,6 +210,9 @@ msgid "New relations (save to keep)"
 msgstr ""
 
 msgid "News"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "No items found"
@@ -254,9 +266,6 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-msgid "Page size"
-msgstr ""
-
 msgid "Password"
 msgstr ""
 
@@ -267,9 +276,6 @@ msgid "Priority"
 msgstr ""
 
 msgid "Profiles"
-msgstr ""
-
-msgid "Properties"
 msgstr ""
 
 msgid "Property types"
@@ -287,7 +293,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-msgid "Reset"
+msgid "Reset filters"
 msgstr ""
 
 msgid "Resource \"%s\" not available. Error: %s"
@@ -306,6 +312,9 @@ msgid "Retype password"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Search in BEdita"
@@ -345,6 +354,9 @@ msgid "Thumb not ready: coming soon"
 msgstr ""
 
 msgid "Thumbnail is not ready"
+msgstr ""
+
+msgid "To"
 msgstr ""
 
 msgid "Translation(s) deleted"
@@ -401,10 +413,16 @@ msgstr ""
 msgid "View trashed "
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "add objects"
+msgstr ""
+
+msgid "add to"
 msgstr ""
 
 msgid "cancel"
@@ -413,10 +431,19 @@ msgstr ""
 msgid "click to remove"
 msgstr ""
 
+msgid "close"
+msgstr ""
+
 msgid "code"
 msgstr ""
 
 msgid "confirm password"
+msgstr ""
+
+msgid "create"
+msgstr ""
+
+msgid "create new"
 msgstr ""
 
 msgid "current password"
@@ -444,6 +471,9 @@ msgid "objects"
 msgstr ""
 
 msgid "of"
+msgstr ""
+
+msgid "open"
 msgstr ""
 
 msgid "original"
