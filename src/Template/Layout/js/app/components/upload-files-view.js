@@ -11,17 +11,18 @@
  */
 
 import { PanelEvents } from 'app/components/panel-view';
+import { DragdropMixin } from 'app/mixins/dragdrop';
 import { FetchMixin } from 'app/mixins/fetch';
 import { t } from 'ttag';
 
 export default {
-    mixins: [ FetchMixin ],
+    mixins: [ DragdropMixin, FetchMixin ],
 
     inject: ['getCSFRToken'],
 
     template: /*template*/`
     <div class="upload-files">
-        <section class="upload-list">
+        <section class="upload-list" droppable>
             <div class="upload-info"
                 :key="index"
                 v-for="(info, index) in Array.from(uploadProgressInfo.values())">
@@ -87,6 +88,14 @@ export default {
     },
 
     mounted() {
+        this.$on('drop-files', (ev) => {
+            let files = ev.dragdrop.data;
+            if (files) {
+                // on drop-file event add files to upload queue
+                this.tryUpload(this.setupProgress(this.filterAcceptedFiles(files)));
+            }
+        });
+
         // filter file list according to acceptedFiles
         // setup upload progress info list
         // start upload
@@ -104,7 +113,14 @@ export default {
             },
             deep: true,
             immediate: true,
-        }
+        },
+
+        files: {
+            handler(files) {
+                this.tryUpload(this.setupProgress(this.filterAcceptedFiles(files)));
+            },
+            deep: true,
+        },
     },
 
     methods: {
@@ -174,11 +190,14 @@ export default {
          * @return {FileList} unfiltered files
          */
         setupProgress(files) {
+            let added = [];
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                this.setProgressInfo(file, 0);
+                if (this.addProgressInfo(file)) {
+                    added.push(file);
+                }
             }
-            return files;
+            return added;
         },
 
         /**
@@ -204,14 +223,44 @@ export default {
                 await this.startFilesUpload(files);
 
                 if (!this.getFailedUploads().length) {
-                    // give the user the time to see the feedback
-                    setTimeout(() => PanelEvents.sendBack('upload-files:save', this.createdObjects), 500);
+                    if (this.areAllUploadFulfilled()) {
+                        // give the user the time to see the feedback
+                        setTimeout(() => PanelEvents.sendBack('upload-files:save', this.createdObjects), 500);
+                    }
                 } else {
+
                     this.actionRequired = true;
                 }
             } catch (err) {
                 this.actionRequired = true;
             }
+        },
+
+        /**
+         * initial setup upload info
+         *
+         * @param {File} file file
+         *
+         * @return {void}
+         */
+        addProgressInfo(file) {
+            const uploadId = `${file.lastModified}${file.size}`;
+            if (this.uploadProgressInfo.has(uploadId)) {
+                return false;
+            }
+
+            this.uploadProgressInfo.set(uploadId, {
+                file,
+                progress: 0,
+                cancelled: false,
+                pending: false,
+                done: false,
+                error: false,
+                errorMsg: '',
+            });
+
+            this.$forceUpdate();
+            return true;
         },
 
         /**
@@ -296,6 +345,16 @@ export default {
         },
 
         /**
+         * check if all uploads are succesful
+         *
+         * @return {Boolean} true if all uploads were succesful
+         */
+        areAllUploadFulfilled() {
+            const allDone = (acc, element) => acc = acc && element.done;
+            return [...this.uploadProgressInfo.values()].reduce(allDone, true);
+        },
+
+        /**
         * get file list of failed uploads
         *
         * @return {Array} failed files
@@ -339,7 +398,7 @@ export default {
             const config = {
                 onUploadProgress: handleUploadProgress,
                 onUploadCancelled: () => this.setProgressInfo(file, -1, true, false, false, 'Upload Cancelled'),
-                onUploadError: () => this.setProgressInfo(file, 100, false, true, 'Error from server'),
+                onUploadError: (err) => this.setProgressInfo(file, 100, false, true, false, `Error from server: ${err.message ? err.message : ''}`),
                 onUploadSuccess: () => this.setProgressInfo(file, 100, false, false, true),
                 cancelToken: source.token
             }
@@ -412,7 +471,7 @@ export default {
                         callbacks.onUploadCancelled();
                         return Promise.reject(error);
                     }
-                    callbacks.onUploadError();
+                    callbacks.onUploadError(error);
                     return Promise.reject(error);
                 });
         },

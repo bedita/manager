@@ -117,6 +117,7 @@ export default {
                     let files = ev.dragdrop.data;
                     if (files) {
                         // on drop-file event request panelView with action upload-files
+                        this.disableDrop();
                         PanelEvents.requestPanel({
                             action: 'upload-files',
                             from: this,
@@ -258,6 +259,7 @@ export default {
             }
             this.prepareRelationsToSave();
             this.closePanel();
+            this.enableDrop();
         },
 
         /**

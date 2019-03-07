@@ -26,29 +26,6 @@ nav.pagination {
     .relation-view-actions {
         margin-top: $gutter;
     }
-
-
-    // .dragover {
-    //     position: relative;
-    //     min-height: 8 * $gutter;
-
-    //     &:after {
-    //         position: absolute;
-    //         top: $gutter * 0.25;
-    //         left: 0;
-    //         display: flex;
-    //         align-items: center;
-    //         justify-content: center;
-    //         margin: 0px $gutter * .25;
-    //         content: "Drop Here";
-    //         border-radius: $gutter * 0.25;
-    //         background: $black;
-    //         opacity: 0.7;
-    //         font-size: 2em;
-    //         height: calc(100% - #{$gutter * .5});
-    //         width: calc(100% - #{$gutter * .75});
-    //     }
-    // }
 }
 
 .related-objects-list {
