@@ -56,7 +56,6 @@ class DummyImportFilter extends ImportFilter
     {
         return parent::createAsyncJob($filename, $filepath, $options);
     }
-
 }
 
 /**
@@ -137,14 +136,14 @@ class ImportFilterTest extends TestCase
      * @param \App\Core\Filter\ImportFilter $importFilter The import filter
      * @param string $filename The file name
      * @param string $filepath The file path
-     * @param array|null $options The async job options
+     * @param array $options The async job options
      * @param \LogicException|\App\Core\Result\ImportResult $expected The result expected
      * @return void
      *
      * @dataProvider createAsyncJobProvider
      * @covers ::createAsyncJob()
      */
-    public function testCreateAsyncJob($importFilter, $filename, $filepath, ?array $options = [], $expected)
+    public function testCreateAsyncJob($importFilter, $filename, $filepath, $options, $expected)
     {
         if ($expected instanceof \LogicException) {
             $this->expectException(get_class($expected));
