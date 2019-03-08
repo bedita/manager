@@ -40,6 +40,7 @@
             margin-bottom: 8px;
             div {
                 justify-content: center;
+                text-align: center;
             }
             input[type=checkbox]:not(:checked) ~ div {
                 background-color: $gray-950 !important;
