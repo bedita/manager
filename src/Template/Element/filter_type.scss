@@ -10,7 +10,7 @@
         div {
             display: flex;
             align-items: center;
-            height: $gutter * 2;
+            min-height: $gutter * 2;
             padding: 0 $gutter * .5;
             background-color: $gray-950;
             color: $gray-550;
