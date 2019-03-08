@@ -3,19 +3,20 @@
     @updatequerytypes="onUpdateQueryTypes($event)"
     inline-template>
 
-    <div class="filter-container types">
+    <div class="filter-container filter-type">
         <label>
             <input type="checkbox" :checked="!selectedTypes.length" v-on:click.prevent.stop="togglaAll">
-            <span class="has-background-module-{{ currentModule.name }}">
-                {{ __('All Types') }}
-            </span>
+            <div class="has-background-module-{{ currentModule.name }}">
+                <span>{{ __('All Types') }}</span>
+            </div>
         </label>
         {% for type in types.right %}
         <label>
             <input type="checkbox" value="{{ type }}" id="{{ type }}" v-model="selectedTypes">
-            <span>
-                <i class="bullet has-background-module-{{ type }}"></i>{{ __(type) }}
-            </span>
+            <div>
+                <i class="bullet has-background-module-{{ type }}"></i>
+                <span>{{ __(type) }}alsdjalksdjlaksdjlkdasj</span>
+            </div>
         </label>
         {% endfor %}
     </div>
