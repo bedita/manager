@@ -13,12 +13,15 @@
                 :pagination.sync="pagination"
                 :show-filter-buttons=false
 
-                page-sizes-label={{ __('Page size') }}
-                objects-label={{ __('objects') }}
+                objects-label="{{ __('objects') }}"
 
                 @filter-update-current-page="onUpdateCurrentPage"
                 @filter-update-page-size="onUpdatePageSize"
-                @filter-objects="onFilterObjects">
+                @filter-objects="onFilterObjects"
+                inline-template>
+
+                    {% element 'FilterBox/filter_box' %}
+
             </filter-box-view>
 
             {# related objects #}

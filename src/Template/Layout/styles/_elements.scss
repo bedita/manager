@@ -75,6 +75,12 @@
     margin-left: -($gutter * .5);
     margin-right: -($gutter * .5);
     margin-top: -($gutter * .5);
+    &-responsive-tablet {
+        display: block;
+        @media screen and (min-width: $tablet) {
+            display: flex;
+        }
+    }
 }
 
 .column {
@@ -98,6 +104,10 @@
     &.is-4 {
         flex: none;
         width: 25%;
+    }
+    &.is-narrow {
+        flex: none;
+        max-width: 100%;
     }
 
     &.is-one-third-1024 {
@@ -158,26 +168,31 @@
 
 // pagination
 nav.pagination {
-    margin: 0 0 $gutter;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     > div {
-        margin: 0 $gutter *.5;
-        &:last-child {
-            margin-right: 0;
+        margin-left: $gutter *.5;
+        &:first-child { margin-left: auto; }
+
+        &.pagination-buttons {
             display: flex;
+            > div { display: flex; }
+
             button {
-                margin-left: $gutter * .5;
                 min-width: 2.5em;
                 border-radius: 4px;
-                &:first-of-type {
-                    margin-left: $gutter * 1.5;
-                }
+                margin-left: $gutter * .5;
+                &:first-of-type { margin-left: 0; }
 
                 &.current-page {
-                    pointer-events: none
+                    pointer-events: none;
                 }
+            }
+
+            .pages-delimiter {
+                margin-left: $gutter * .5;
+                font-size: 2rem;
+                line-height: 1;
             }
         }
     }

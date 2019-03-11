@@ -1,0 +1,48 @@
+.filters-container {
+    .filter-container, .filter-buttons {
+        margin-top: $gutter;
+    }
+
+    .filter-container {
+        &:first-child { margin-top: 0; }
+        &.filter-search {
+            display: flex;
+            input[type="text"] { max-width: $gutter * 7; }
+        }
+        // TODO: non mi piace, da rivedere il componente input date picker
+        &.date {
+            > span {
+                display: flex;
+                input { margin: 0; width: 100%; }
+            }
+        }
+
+        .filter-status-select { margin-left: $gutter * .5; }
+        .filter-label:first-letter { text-transform: uppercase; }
+
+        label {
+            cursor: pointer;
+            display: inline-block;
+            &:not(:last-child) { margin-right: $gutter; }
+        }
+    }
+
+    .filter-buttons {
+        display: flex;
+        > *:not(:last-child) { margin-right: $gutter * .5; }
+    }
+}
+
+
+.filters-container.basic-filters-only {
+    display: flex;
+    .filter-container {
+        margin-top: 0;
+        margin-right: $gutter * .5;
+        .filter-label { display: none; }
+    }
+    .filter-buttons {
+        margin-top: 0;
+        margin-left: $gutter * .5;
+    }
+}

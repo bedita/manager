@@ -135,6 +135,10 @@ label {
     > input {
         margin-right: $gutter * .5;
     }
+    > input[type="radio"],
+    > input[type="checkbox"] {
+        margin-right: $gutter * .25;
+    }
 }
 
 
@@ -271,27 +275,24 @@ form {
 }
 
 // Date Picker
-
-input.flatpickr-input.form-control {
-    min-width: 8rem;
-}
-
-.clear-button {
-    display: inline-flex;
-    z-index: 10;
-    color: $gray-800;
-    font-size: 24px;
-    margin-left: -30px;
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    &:hover {
-        background-color: $gray-800;
-        border-radius: 100%;
-        color: $white;
+    input.flatpickr-input.form-control {
+        min-width: 8rem;
     }
-}
+
+    .clear-button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 18px;
+        height: 18px;
+        margin-left: -24px;
+        z-index: 10;
+        color: $gray-500;
+        font-size: 24px;
+        vertical-align: middle;
+        cursor: pointer;
+
+        &:hover {
+            color: $gray-900;
+        }
+    }
