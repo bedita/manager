@@ -15,80 +15,82 @@ import { t } from 'ttag';
 export default {
     template: /*template*/
     `<div v-if="relationName" class="edit-relation">
-        <header class="tab unselectable">
-            <h2><span><: t('Edit parameters of') :>: <: relationName | humanize :></span> &nbsp;</h2>
-            <a href="#" @click.prevent="closeParamsView()"><: t('close') :></a>
-        </header>
+        <section>
+            <header class="tab unselectable">
+                <h2><span><: t('Edit parameters of') :>: <: relationName | humanize :></span> &nbsp;</h2>
+                <a href="#" @click.prevent="closeParamsView()"><: t('close') :></a>
+            </header>
 
-        <div class="object-attributes">
-            <h2><: t('Object') :>: <: object.attributes.title :></h2>
-            <div>
-                <span class="tag" :class="objectColorClass"><: object.type :></span>
-                <span class="tag"><: object.attributes.status :></span>
+            <div class="object-attributes">
+                <h2><: t('Object') :>: <: object.attributes.title :></h2>
+                <div>
+                    <span class="tag" :class="objectColorClass"><: object.type :></span>
+                    <span class="tag"><: object.attributes.status :></span>
+                </div>
+
+                <h2><: t('Related to') :>: <: relatedName :></h2>
+                <div>
+                    <span class="tag" :class="relatedColorClass"><: related.type :></span>
+                    <span class="tag"><: relatedStatus :></span>
+                </div>
             </div>
 
-            <h2><: t('Related to') :>: <: relatedName :></h2>
-            <div>
-                <span class="tag" :class="relatedColorClass"><: related.type :></span>
-                <span class="tag"><: relatedStatus :></span>
-            </div>
-        </div>
+            <form ref="paramsForm" class="params-list" @change="checkParams()" @keyup="checkParams()">
+                <div>
+                    <label><: t('Priority') :></label>
+                    <input type="number" step="1" v-model.number="priority" />
+                </div>
 
-        <form ref="paramsForm" class="params-list" @change="checkParams()" @keyup="checkParams()">
-            <div>
-                <label><: t('Priority') :></label>
-                <input type="number" step="1" v-model.number="priority" />
-            </div>
+                <div v-for="(param, key) in schema">
+                    <label :title="key"><: param.description || key :>
 
-            <div v-for="(param, key) in schema">
-                <label :title="key"><: param.description || key :>
-
-                    <!-- Boolean -> switch button true/false --->
-                    <div v-if="param.type == 'boolean'">
-                        <label class="switch">
-                            <input type="checkbox" v-model="editingParams[key] ">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-
-                    <div v-if="param.type == 'string'">
-                        <!-- String, format: date-time -> datepicker --->
-                        <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
-
-                        <!-- String Enum -> select/option --->
-                        <div v-else-if="param.enum !== undefined">
-                            <select v-model="editingParams[key]">
-                                <option v-for="item in param.enum" :value="item"><: item :></option>
-                            </select>
+                        <!-- Boolean -> switch button true/false --->
+                        <div v-if="param.type == 'boolean'">
+                            <label class="switch">
+                                <input type="checkbox" v-model="editingParams[key] ">
+                                <span class="slider round"></span>
+                            </label>
                         </div>
-                        <!-- String -> input text --->
-                        <input v-else type="text" v-model="editingParams[key]">
-                    </div>
 
-                    <!-- Number -> input number --->
-                    <div v-if="param.type == 'number'">
-                        <label>
-                            <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
-                        </label>
-                    </div>
+                        <div v-if="param.type == 'string'">
+                            <!-- String, format: date-time -> datepicker --->
+                            <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
 
-                    <!-- Integer -> input integer --->
-                    <div v-if="param.type == 'integer'">
-                        <label>
-                            <input type="number" :name="key" v-model.number="editingParams[key]">
-                        </label>
-                    </div>
-                </label>
-            </div>
-        </form>
+                            <!-- String Enum -> select/option --->
+                            <div v-else-if="param.enum !== undefined">
+                                <select v-model="editingParams[key]">
+                                    <option v-for="item in param.enum" :value="item"><: item :></option>
+                                </select>
+                            </div>
+                            <!-- String -> input text --->
+                            <input v-else type="text" v-model="editingParams[key]">
+                        </div>
 
-        <footer>
-            <p>
-                <button v-show="isModified"
-                    class="has-background-info has-text-white"
-                    @click.prevent="saveParams()"><: t('Save ') :></button>
-            </p>
-        </footer>
+                        <!-- Number -> input number --->
+                        <div v-if="param.type == 'number'">
+                            <label>
+                                <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
+                            </label>
+                        </div>
+
+                        <!-- Integer -> input integer --->
+                        <div v-if="param.type == 'integer'">
+                            <label>
+                                <input type="number" :name="key" v-model.number="editingParams[key]">
+                            </label>
+                        </div>
+                    </label>
+                </div>
+            </form>
+
+            <footer>
+                <p>
+                    <button v-show="isModified"
+                        class="has-background-info has-text-white"
+                        @click.prevent="saveParams()"><: t('Save ') :></button>
+                </p>
+            </footer>
+        </section>
     </div>`,
 
     props: {

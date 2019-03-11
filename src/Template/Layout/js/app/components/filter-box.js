@@ -19,133 +19,10 @@ import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content
 import InputDynamicAttributes from 'app/components/input-dynamic-attributes';
 import merge from 'deepmerge';
 
-import { t } from 'ttag';
-
 export default {
     components: {
         InputDynamicAttributes
     },
-
-    template: `
-    <form :name="objectsLabel" submit="applyFilter" action="noaction">
-        <nav class="pagination has-text-size-smallest">
-
-            <div class="count-items" v-if="pagination.count">
-                <span><: pagination.count :> <: t(objectsLabel) :></span>
-            </div>
-
-            <div class="filter-search">
-                <span class="search-query">
-                    <input type="text"
-                        :placeholder="placeholder"
-                        v-model="queryFilter.q"
-                        @keyup.prevent.stop="onQueryStringChange"
-                        @keyup.enter.prevent.stop="applyFilter"/>
-                </span>
-                <span v-if="rightTypes.length > 1" class="search-types">
-                    <select v-model="queryFilter.filter.type">
-                        <option value="" label="${t`All Types`}"></option>
-                        <option v-for="type in rightTypes"><: t(type) :></option>
-                    </select>
-                </span>
-
-                <button v-show="showFilterButtons" name="applysearch" @click.prevent="applyFilter()">
-                    ${t`Apply`}
-                </button>
-                <button v-show="showFilterButtons" name="resetsearch" @click.prevent="resetFilter()">
-                    ${t`Reset`}
-                </button>
-            </div>
-
-            <div class="filter-list">
-                <div v-for="filter in filterList" class="filter-container input" :class="[filter.name, filter.type]">
-                    <input type="hidden" :name="filter.name" :value="filter.value">
-                    <span class="filter-name"><: t(filter.name) :></span>
-
-                    <span v-if="filter.type === 'select' || filter.type === 'radio'">
-                        <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
-                            <option value="">
-                                ${t`All`}
-                            </option>
-                            <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
-                                <: option.text :>
-                            </option>
-                        </select>
-                    </span>
-
-                    <span v-else-if="filter.type === 'checkbox'">
-                        <label>${t`Any`}</label>
-                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
-                        <label>${t`Yes`}</label>
-                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
-                        <label>${t`No`}</label>
-                        <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
-                    </span>
-
-                    <template v-else-if="filter.date">
-                        <span class="datepicker-container">
-                            <label>${t`From`}:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
-                        <span class="datepicker-container">
-                            <label>${t`To`}:
-                                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
-                            </label>
-                        </span>
-                    </template>
-
-                    <span v-else>
-                        <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
-                    </span>
-                </div>
-            </div>
-
-            <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
-                <span>${t`Size`}:</span>
-                <select class="page-size-selector has-background-gray-700 has-border-gray-700 has-text-gray-200 has-text-size-smallest has-font-weight-light" v-model="pageSize">
-                    <option v-for="size in paginateSizes"><: size :></option>
-                </select>
-            </div>
-
-            <div class="pagination-buttons" :class="pagination.count <= pagination.page_size && 'hide'">
-                <div class="pages-buttons full-layout" v-if="isFullPaginationLayout">
-                    <button
-                        v-for="i in pagination.page_count" :key="i"
-                        v-bind:class="pagination.page == i? '' : 'is-dark'"
-                        v-bind:style="pagination.page == i? 'pointer-events: none' : ''"
-                        class="has-text-size-smallest" @click.prevent="changePage(i)"><: i :>
-                    </button>
-                </div>
-
-                <div class="pages-buttons full-layout" v-if="!isFullPaginationLayout">
-                    <!-- first page --->
-                    <button v-if="pagination.page > 1" class="has-text-size-smallest" @click.prevent="changePage(1)"><: 1 :></button>
-
-                    <!-- delimiter --->
-                    <span v-if="pagination.page > 3" class="pages-delimiter">...</span>
-
-                    <!-- prev page --->
-                    <button v-if="pagination.page > 2" class="has-text-size-smallest" @click.prevent="changePage(pagination.page - 1)"><: pagination.page - 1:></button>
-
-                    <!-- current page --->
-                    <button class="is-dark current-page has-text-size-smallest" @click.prevent="changePage(pagination.page)"><: pagination.page :></button>
-
-                    <!-- next page --->
-                    <button v-if="pagination.page < pagination.page_count-1" class="has-text-size-smallest" @click.prevent="changePage(pagination.page + 1)"><: pagination.page + 1:></button>
-
-                    <!-- delimiter --->
-                    <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter">...</span>
-
-                    <!-- last page --->
-                    <button v-if="pagination.page < pagination.page_count" class="has-text-size-smallest" @click.prevent="changePage(pagination.page_count)"><: pagination.page_count :></button>
-                </div>
-
-            </div>
-
-        </nav>
-    </form>
-    `,
 
     props: {
         objectsLabel: {
@@ -174,8 +51,13 @@ export default {
         relationTypes: {
             type: Object
         },
+        selectedTypes: {
+            type: Array,
+            deafut: () => [],
+        },
         filterList: {
-            type: Array
+            type: Array,
+            default: () => [],
         },
         pagination: {
             type: Object,
@@ -189,21 +71,32 @@ export default {
 
     data() {
         return {
-            queryFilter: {}, // QueryFilter Object
+            queryFilter: {},
             timer: null,
-            pageSize: this.pagination.page_size // pageSize value for pagination page size
+            pageSize: this.pagination.page_size, // pageSize value for pagination page size
+            dynamicFilters: {},
+            statusFilter: {},
         };
     },
 
     created() {
         // merge default filters with initFilter
-        let customFilters = this.loadCustomFilters();
+        let mergeFilters = this.formatFilters();
         this.queryFilter = merge.all([
             DEFAULT_FILTER,
             this.queryFilter,
-            customFilters,
+            mergeFilters,
             this.initFilter
         ]);
+
+        this.dynamicFilters = this.filterList.filter(f => {
+            if(f.name == 'status') {
+                this.statusFilter = f;
+                return false;
+            } else {
+                return true;
+            }
+        });
     },
 
     computed: {
@@ -256,6 +149,10 @@ export default {
          */
         pageSize(value) {
             this.$emit("filter-update-page-size", this.pageSize);
+        },
+
+        selectedTypes(value) {
+            this.queryFilter.filter.type = value;
         }
     },
 
@@ -276,18 +173,20 @@ export default {
             }
         },
 
+        onOtherFiltersChange() {
+            this.$emit("filter-objects", this.queryFilter);
+        },
+
         /**
          * load custom filters property names
          *
          * @returns {Object} filters' name
          */
-        loadCustomFilters() {
+        formatFilters() {
             let filter = {};
-            if (this.filterList) {
-                this.filterList.forEach(
-                    f => (filter[f.name] = f.date ? {} : "")
-                );
-            }
+            this.filterList.forEach (
+                f => (filter[f.name] = f.date ? {} : "")
+            );
 
             return { filter: filter };
         },
@@ -317,7 +216,7 @@ export default {
          *
          * @emits Event#filter-update-current-page
          */
-        changePage(index) {
+        onChangePage(index) {
             this.$emit("filter-update-current-page", index);
         }
     }

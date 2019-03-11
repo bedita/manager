@@ -14,6 +14,7 @@ import TrashView from 'app/pages/trash/view';
 import ImportView from 'app/pages/import/index';
 import ModelIndex from 'app/pages/model/index';
 import FilterBoxView from 'app/components/filter-box';
+import FilterTypeView from 'app/components/filter-type';
 import RelationsAdd from 'app/components/relation-view/relations-add';
 import EditRelationParams from 'app/components/edit-relation-params';
 import MainMenu from 'app/components/menu';
@@ -41,6 +42,7 @@ const _vueInstance = new Vue({
         ModelIndex,
         RelationsAdd,
         FilterBoxView,
+        FilterTypeView,
         EditRelationParams,
         PanelView,
         MainMenu,
@@ -57,15 +59,16 @@ const _vueInstance = new Vue({
             sort: '',
             dataChanged: false,
 
+            // filters
             urlFilterQuery: {
                 q: '',
                 filter: {},
             },
-
             pagination: {
                 page: '',
                 page_size: '',
-            }
+            },
+            selectedTypes: []
         }
     },
 
@@ -171,6 +174,13 @@ const _vueInstance = new Vue({
         onUpdateCurrentPage(page) {
             this.page = page;
             this.applyFilters(this.urlFilterQuery);
+        },
+
+        /**
+         * listen to FilterTypeView event filter-type-page
+         */
+        onUpdateQueryTypes(types) {
+            this.selectedTypes = types;
         },
 
         /**
