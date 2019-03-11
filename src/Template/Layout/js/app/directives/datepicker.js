@@ -4,7 +4,8 @@
  */
 
 import flatpickr from 'flatpickr/dist/flatpickr.min';
-import moment from 'moment';
+import moment from 'moment/min/moment.min';
+
 import 'flatpickr/dist/flatpickr.min.css';
 
 

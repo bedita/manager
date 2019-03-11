@@ -110,6 +110,13 @@ const BUNDLE = {
     bundleFileName: '[name].bundle.js'              // [name] == entry name [app, vendors]
 }
 
+// define locales available to webpack check config/app.php
+// TO-DO dynamic
+const availableLocales = [
+    'en',
+    'it',
+]
+
 // util
 const bundler = {
     printMessage(message, separator) {
@@ -148,5 +155,6 @@ global.devMode = devMode;
 global.forceReport = forceReport;
 global.ENVIRONMENT = ENVIRONMENT;
 global.BUNDLE = BUNDLE;
+global.availableLocales = availableLocales;
 global.bundler = bundler;
 global.SRC_TEMPLATE_ALIAS = SRC_TEMPLATE_ALIAS;

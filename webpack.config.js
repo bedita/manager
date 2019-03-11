@@ -12,6 +12,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/loader');
@@ -58,6 +59,10 @@ let webpackPlugins = [
 
     extractVendorsCSS,
     extractSass,
+
+    new MomentLocalesPlugin({
+        localesToKeep: availableLocales,
+    }),
 ];
 
 // Development or report bundle Plugin
@@ -121,11 +126,9 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve(__dirname, BUNDLE.webroot),              // webpack needs and absolute path
-        filename: `${BUNDLE.jsDir}/${BUNDLE.bundleFileName}`,
-        chunkFilename: `${BUNDLE.jsDir}/${BUNDLE.bundleFileName}`,
+        path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
+        filename: `${BUNDLE.jsDir}/[name].chunk.js`,
 
-        // this is a way to put sourcemaps under the corect tree in the source inspector
         devtoolModuleFilenameTemplate: info => {
             if (info.identifier.indexOf('webpack') === -1 && info.identifier.indexOf('.scss') === -1) {
                 return `sourcemap/${info.resourcePath}`;
@@ -137,7 +140,7 @@ module.exports = {
     // extract vendors import and put them in separate file
     optimization: {
         runtimeChunk: {
-            name: "manifest"
+            name: "manifest",
         },
         splitChunks: {
             cacheGroups: {
@@ -145,8 +148,8 @@ module.exports = {
                     test: /[\\/]node_modules[\\/]/,
                     name: "vendors",
                     priority: -20,
-                    chunks: "all"
-                }
+                    chunks: "all",
+                },
             }
         }
     },
