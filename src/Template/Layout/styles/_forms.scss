@@ -135,7 +135,8 @@ label {
     > input {
         margin-right: $gutter * .5;
     }
-    > input[type="radio"] {
+    > input[type="radio"],
+    > input[type="checkbox"] {
         margin-right: $gutter * .25;
     }
 }
