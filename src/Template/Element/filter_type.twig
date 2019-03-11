@@ -1,0 +1,24 @@
+<filter-type-view
+    :types='{{ types.right|json_encode|raw }}'
+    @updatequerytypes="onUpdateQueryTypes($event)"
+    inline-template>
+
+    <div class="filter-container filter-type">
+        <label>
+            <input type="checkbox" :checked="!selectedTypes.length" v-on:click.prevent.stop="togglaAll">
+            <div class="has-background-module-{{ currentModule.name }}">
+                <span>{{ __('All Types') }}</span>
+            </div>
+        </label>
+        {% for type in types.right %}
+        <label>
+            <input type="checkbox" value="{{ type }}" id="{{ type }}" v-model="selectedTypes">
+            <div>
+                <i class="bullet has-background-module-{{ type }}"></i>
+                <span>{{ __(type) }}</span>
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+
+</filter-type-view>

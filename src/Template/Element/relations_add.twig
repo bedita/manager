@@ -22,7 +22,6 @@
                 </div>
 
                 <button :disabled="this.file === null" type="submit">{{ __('create') }}</button>
-
             </form>
         </div>
     </section>
@@ -38,7 +37,7 @@
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                 :pagination.sync="pagination"
                 :show-filter-buttons="false"
-                :relation-types="{{ types|json_encode|raw }}"
+                :relation-types="relationTypes"
                 objects-label="{{ __('objects') }}"
 
                 @filter-update-current-page="onUpdateCurrentPage"
