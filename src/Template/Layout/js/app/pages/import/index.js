@@ -6,19 +6,64 @@
  *
  */
 
-export default {
+ export default {
+    props: {
+        jobs: {
+            type: Array,
+            default: () => [],
+        },
+        timeout: {
+            type: Number,
+            default: 5000,
+        }
+    },
+
     data() {
         return {
             fileName: '',
+            currentJobs: () => [],
         };
     },
 
-    computed: {
+    created() {
+        this.currentJobs = this.jobs;
+    },
+
+    mounted() {
+        setInterval(() => {
+            this.updateJobs();
+        }, this.timeout);
     },
 
     methods: {
         onFileChanged(e) {
             this.fileName = e.target.files[0].name;
+        },
+
+        /**
+         * Update jobs.
+         */
+        updateJobs() {
+            let requestUrl = `${BEDITA.base}/import/jobs`;
+
+            const options =  {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+
+            return fetch(requestUrl, options)
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.jobs) {
+                        this.currentJobs = json.jobs;
+                        return this.currentJobs;
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
     }
 }
