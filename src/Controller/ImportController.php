@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception as CakeException;
 use Cake\Event\Event;
@@ -25,6 +26,13 @@ use Exception;
  */
 class ImportController extends AppController
 {
+    /**
+     * List of asyn service names to lookup
+     *
+     * @var array
+     */
+    protected $services = [];
+
     /**
      * {@inheritDoc}
      *
@@ -46,6 +54,20 @@ class ImportController extends AppController
     public function index() : void
     {
         $this->loadFilters();
+    }
+
+    /**
+     * Get jobs rendering as json.
+     *
+     * @return void
+     */
+    public function jobs() : void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->request->allowMethod('get');
+        $this->loadFilters();
+        $this->loadAsyncJobs();
+        $this->set('_serialize', ['jobs']);
     }
 
     /**
@@ -123,7 +145,49 @@ class ImportController extends AppController
             $value = $filter['class'];
             $text = $filter['label'];
             $filters[] = compact('value', 'text');
+            $this->updateServiceList($value);
         }
         $this->set('filters', $filters);
+        $this->set('services', $this->services);
+        $this->loadAsyncJobs();
+    }
+
+    /**
+     * Update services list to lookup
+     *
+     * @param string $filterClass Filter class
+     * @return void
+     */
+    protected function updateServiceList($filterClass)
+    {
+        $service = call_user_func([$filterClass, 'getServiceName']);
+        if (!empty($service) && !in_array($service, $this->services)) {
+            $this->services[] = $service;
+        }
+    }
+
+    /**
+     * Load async jobs services to lookup
+     *
+     * @return void
+     */
+    protected function loadAsyncJobs()
+    {
+        if (empty($this->services)) {
+            return;
+        }
+        $query = [
+            'sort' => '-created',
+            'filter' => ['service' => implode(',', $this->services)],
+        ];
+        try {
+            $response = $this->apiClient->get('/admin/async_jobs', $query);
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $response = [];
+        }
+
+        $this->set('jobs', (array)Hash::get($response, 'data'));
     }
 }
