@@ -11,21 +11,28 @@
  * @property {Boolean} multipleChoice set view for multiple choice
  * @property {String} configPaginateSizes set pagination
  *
+ * @requires
+ *
  */
 
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 import RolesListView from 'app/components/relation-view/roles-list-view';
 import FilterBoxView from 'app/components/filter-box';
 import TreeView from 'app/components/tree-view/tree-view';
-import sleep from 'sleep-promise';
-import flatpickr from 'flatpickr/dist/flatpickr.min';
-
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 import { PanelEvents } from 'app/components/panel-view';
+import { DragdropMixin } from 'app/mixins/dragdrop';
+
+import sleep from 'sleep-promise';
+import flatpickr from 'flatpickr/dist/flatpickr.min';
 
 export default {
-    mixins: [ PaginatedContentMixin, RelationSchemaMixin ],
+    mixins: [
+        PaginatedContentMixin,
+        RelationSchemaMixin,
+        DragdropMixin,
+    ],
 
     components: {
         RelationshipsView,
@@ -92,19 +99,40 @@ export default {
     *
     * @return {void}
     */
-    mounted() {
-        this.loadOnMounted();
-
+    async mounted() {
         // set up panel events
         PanelEvents.listen('edit-params:save', this, this.editParamsSave);
         PanelEvents.listen('relations-add:save', this, this.appendRelations);
+        PanelEvents.listen('upload-files:save', this, this.appendRelations);
         PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
+
+        await this.loadOnMounted();
+
+        // check if relation is related to media objects
+        if (this.relationTypes && this.relationTypes.right) {
+            // if true setup drop event that handles file upload
+
+            if (this.isRelationWithMedia) {
+                this.$on('drop-files', (ev) => {
+                    let files = ev.dragdrop.data;
+                    if (files) {
+                        // on drop-file event request panelView with action upload-files
+                        PanelEvents.requestPanel({
+                            action: 'upload-files',
+                            from: this,
+                            data: { files },
+                        });
+                    }
+                });
+            }
+        }
     },
 
     beforeDestroy() {
         // destroy up panel events
         PanelEvents.stop('edit-params:save', this, this.editParamsSave);
         PanelEvents.stop('relations-add:save', this, this.appendRelations);
+        PanelEvents.stop('upload-files:save', this, this.appendRelations);
         PanelEvents.stop('panel:closed', null, this.resetPanelRequester);
     },
 
@@ -124,6 +152,7 @@ export default {
     },
 
     methods: {
+
         // Events Listeners
 
         /**
@@ -297,6 +326,7 @@ export default {
 
                 await this.loadRelatedObjects();
             }
+            return Promise.resolve();
         },
 
         /**

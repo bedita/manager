@@ -7,12 +7,15 @@
  *
  */
 
+import { ACCEPTABLE_MEDIA } from 'config/config';
+
 export const RelationSchemaMixin = {
     data() {
         return {
             relationData: null,
             relationSchema: null,
             relationTypes: null,
+            isRelationWithMedia: false,
         }
     },
 
@@ -51,6 +54,8 @@ export const RelationSchemaMixin = {
                                 left: json.data.left,
                                 right: json.data.right,
                             }
+
+                            this.isRelationWithMedia = this.checkForMediaTypes(this.relationTypes.right);
                             return this.relationData;
                         }
                     })
@@ -61,6 +66,16 @@ export const RelationSchemaMixin = {
                 console.error('[RelationSchemaMixin] relationName not defined - can\'t load relation schema');
                 return Promise.reject();
             }
+        },
+
+        /**
+         * check if passed array contains media types
+         *
+         * @param {Array} relatedTypes
+         */
+        checkForMediaTypes(relatedTypes) {
+            const mediaChecker = (acc, entry) => acc = acc || ACCEPTABLE_MEDIA.indexOf(entry) !== -1;
+            return relatedTypes && relatedTypes.reduce(mediaChecker, false) || false;
         },
 
         /**

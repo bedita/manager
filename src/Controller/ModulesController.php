@@ -311,6 +311,7 @@ class ModulesController extends AppController
      */
     public function saveJson() : void
     {
+        $this->viewBuilder()->className('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
 

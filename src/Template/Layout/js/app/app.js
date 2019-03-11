@@ -20,6 +20,7 @@ import EditRelationParams from 'app/components/edit-relation-params';
 import MainMenu from 'app/components/menu';
 import FlashMessage from 'app/components/flash-message';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
+import UploadFilesView from 'app/components/upload-files-view';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -45,6 +46,7 @@ const _vueInstance = new Vue({
         FilterTypeView,
         EditRelationParams,
         PanelView,
+        UploadFilesView,
         MainMenu,
         FlashMessage,
     },
