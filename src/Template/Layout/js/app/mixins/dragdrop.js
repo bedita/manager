@@ -43,6 +43,7 @@ export const DragdropMixin = {
             draggableElements: [],
             dragOverFirst: true,
             antiGlitchTimer: null,
+            _dropEnabled: false,
         }
     },
 
@@ -73,7 +74,8 @@ export const DragdropMixin = {
         onAttributeChanges(mutationsList, observer) {
             for(var mutation of mutationsList) {
                 if (mutation.type == 'attributes') {
-                    if ( mutation.attributeName === 'droppable') {
+                    if (mutation.attributeName === 'droppable') {
+                        this.enableDrop();
                         this.dropElement = mutation.target;
                     } else if (mutation.attributeName === 'accepted-drop') {
                         let accepted = mutation.target.getAttribute('accepted-drop');
@@ -97,6 +99,7 @@ export const DragdropMixin = {
             // search for a specific drop target
             let dropElementInView = this.$el.querySelector('[droppable]');
             if (dropElementInView) {
+                this.enableDrop();
                 this.dropElement = dropElementInView;
                 let accepted = dropElementInView.getAttribute('accepted-drop');
                 if (accepted) {
@@ -105,9 +108,9 @@ export const DragdropMixin = {
             }
 
             // setup Drop events
-            this.dropElement.addEventListener('drop', this.onDrop, false);
-            this.dropElement.addEventListener('dragover', this.onDragover, false);
-            this.dropElement.addEventListener('dragleave', this.onDragleave, false);
+            this.dropElement.addEventListener('drop', this.onDrop, true);
+            this.dropElement.addEventListener('dragover', this.onDragover, true);
+            this.dropElement.addEventListener('dragleave', this.onDragleave, true);
         },
 
         /**
@@ -121,7 +124,7 @@ export const DragdropMixin = {
             if (draggables.length) {
                 // if so set up dragstart event
                 this.draggableElements = draggables;
-                this.$el.addEventListener('dragstart', this.onDragstart, false);
+                this.$el.addEventListener('dragstart', this.onDragstart, true);
             }
         },
 
@@ -180,6 +183,10 @@ export const DragdropMixin = {
         onDragover(ev) {
             ev.preventDefault();
             ev.stopPropagation();
+
+            if (!this._dropEnabled) {
+                return;
+            }
 
             // check if draggable is accepted for drop target (if no rules are defined all draggable are accepted)
             if (this.acceptedDrop.length ) {
@@ -252,6 +259,11 @@ export const DragdropMixin = {
         onDrop(ev) {
             ev.preventDefault();
             ev.stopPropagation();
+
+            if (!this._dropEnabled) {
+                return;
+            }
+
             this.setDragdropData(ev);
 
             // still emit dragleave and remove class
@@ -295,6 +307,14 @@ export const DragdropMixin = {
 
             // mouse outside element
             return false;
+        },
+
+        disableDrop() {
+            this._dropEnabled = false;
+        },
+
+        enableDrop() {
+            this._dropEnabled = true;
         },
     }
 }
