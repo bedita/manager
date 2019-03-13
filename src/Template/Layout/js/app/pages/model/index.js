@@ -7,7 +7,6 @@
  * @extends ModulesIndex
  */
 
-// import AutosizeTextarea from 'app/components/autosize-textarea';
 import ModulesIndex from 'app/pages/modules/index';
 
 export default {
