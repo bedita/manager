@@ -51,7 +51,7 @@ let webpackPlugins = [
     }),
 
     new MomentLocalesPlugin({
-        localesToKeep: availableLocales,
+        localesToKeep: locales.locales,
     }),
 ];
 
@@ -129,6 +129,8 @@ module.exports = {
 
     // extract vendors import and put them in separate file
     optimization: {
+        moduleIds: 'named',
+        chunkIds: 'named',
         minimize: true,
         usedExports: true, // treeshaking
         sideEffects: true, // check sideEffects flag in libraries

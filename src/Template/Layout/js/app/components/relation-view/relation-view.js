@@ -18,7 +18,7 @@ import RolesListView from 'app/components/relation-view/roles-list-view';
 import FilterBoxView from 'app/components/filter-box';
 import TreeView from 'app/components/tree-view/tree-view';
 import sleep from 'sleep-promise';
-import flatpickr from 'flatpickr/dist/flatpickr.min';
+import flatpickr from 'flatpickr';
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';

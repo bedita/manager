@@ -110,13 +110,6 @@ const BUNDLE = {
     bundleFileName: '[name].bundle.js'              // [name] == entry name [app, vendors]
 }
 
-// define locales available to webpack check config/app.php
-// TO-DO dynamic
-const availableLocales = [
-    'en',
-    'it',
-]
-
 // util
 const bundler = {
     printMessage(message, separator) {
@@ -149,12 +142,14 @@ if (devMode) {
     SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
 }
 
+const locales = require(__dirname + '/' + BUNDLE.jsRoot + '/config/locales.js');
+
 global.readDirs = readDirs;
 global.path = path;
 global.devMode = devMode;
 global.forceReport = forceReport;
 global.ENVIRONMENT = ENVIRONMENT;
 global.BUNDLE = BUNDLE;
-global.availableLocales = availableLocales;
+global.locales = locales;
 global.bundler = bundler;
 global.SRC_TEMPLATE_ALIAS = SRC_TEMPLATE_ALIAS;
