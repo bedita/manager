@@ -13,13 +13,10 @@
  *
  */
 
-import RelationView from 'app/components/relation-view/relation-view';
-import ChildrenView from 'app/components/children-view/children-view';
-
 export default {
     components: {
-        RelationView,
-        ChildrenView,
+        RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
+        ChildrenView: () => import(/* webpackChunkName: "children-view" */'app/components/children-view/children-view'),
     },
 
     props: {

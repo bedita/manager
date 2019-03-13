@@ -13,10 +13,6 @@
  *
  */
 
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import RolesListView from 'app/components/relation-view/roles-list-view';
-import FilterBoxView from 'app/components/filter-box';
-import TreeView from 'app/components/tree-view/tree-view';
 import sleep from 'sleep-promise';
 import flatpickr from 'flatpickr';
 
@@ -28,10 +24,10 @@ export default {
     mixins: [ PaginatedContentMixin, RelationSchemaMixin ],
 
     components: {
-        RelationshipsView,
-        RolesListView,
-        FilterBoxView,
-        TreeView,
+        RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
+        RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
     },
 
     props: {

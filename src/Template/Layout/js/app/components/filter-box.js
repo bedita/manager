@@ -16,12 +16,11 @@
  */
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
-import InputDynamicAttributes from 'app/components/input-dynamic-attributes';
 import merge from 'deepmerge';
 
 export default {
     components: {
-        InputDynamicAttributes
+        InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
     },
 
     props: {

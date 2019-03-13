@@ -11,13 +11,17 @@
  */
 
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import TreeList from 'app/components/tree-view/tree-list/tree-list';
+// const RelationshipsView = () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view');
+
+// extends: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
+
+
 import sleep from 'sleep-promise';
 
 export default {
     extends: RelationshipsView,
     components: {
-        TreeList
+        TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
     },
 
     props: {

@@ -118,6 +118,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
         filename: `${BUNDLE.jsDir}/[name].bundle.js`,
+        publicPath: '/',
 
         devtoolModuleFilenameTemplate: info => {
             if (info.identifier.indexOf('webpack') === -1 && info.identifier.indexOf('.scss') === -1) {

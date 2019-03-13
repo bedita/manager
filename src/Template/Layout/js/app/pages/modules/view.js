@@ -6,12 +6,9 @@
  *
  */
 
-import PropertyView from 'app/components/property-view/property-view';
-
 export default {
-
     components: {
-        PropertyView,
+        PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
     },
 
     /**
