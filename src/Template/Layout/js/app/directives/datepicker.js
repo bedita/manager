@@ -3,11 +3,10 @@
  *
  */
 
-import flatpickr from 'flatpickr/dist/flatpickr.min';
-import moment from 'moment/min/moment.min';
-
 import 'flatpickr/dist/flatpickr.min.css';
 
+import flatpickr from 'flatpickr/dist/flatpickr';
+import moment from 'moment/min/moment.min';
 
 const dateTimePickerOptions = {
     enableTime: true,
@@ -58,7 +57,7 @@ export default {
                 }
 
                 try {
-                    let datePicker = flatpickr(element, options);
+                    let datePicker = flatpickr(element);
                     element.dataset.originalValue = element.value;
                     // element._flatpickr = datePicker;
 

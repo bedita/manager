@@ -26,7 +26,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.css(['be-icons-codes'])|raw }}
 
     {{ Html.css(['vendors'])|raw }}
-    {{ Html.css(['style'])|raw }}
+    {{ Html.css(['app'])|raw }}
     {% element 'custom_colors' %}
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
@@ -111,8 +111,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     </script>
     {% endif %}
 
+
     {{ Html.script('manifest.bundle')|raw }}
     {{ Html.script('vendors.bundle')|raw }}
+    {{ Link.jsBundle()|raw }}
 
     {{ Link.pluginsJsBundle()|raw }}
 

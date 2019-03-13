@@ -14,6 +14,7 @@ namespace App\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 
@@ -176,5 +177,23 @@ class LinkHelper extends Helper
                 echo $this->Html->script(sprintf('%s.%s.plugin.js', $plugin, $plugin));
             }
         }
+    }
+
+    /**
+    * Include JS splitted vendors.
+    *
+    * @return void
+    */
+    public function jsBundle()
+    {
+        $jsPath = WWW_ROOT . 'js' . DS . 'vendors' . DS;
+        if (file_exists($jsPath)) {
+            $dir = new Folder($jsPath);
+            $files = $dir->find('.*\.js');
+            foreach ($files as $file) {
+                echo $this->Html->script(sprintf('vendors%s%s', DS, $file));
+            }
+        }
+        return;
     }
 }

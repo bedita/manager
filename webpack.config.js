@@ -13,24 +13,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/loader');
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
-
-// Create multiple instances of ExtractTextPlugin for Vendors and src/.scss
-const extractVendorsCSS = new ExtractTextPlugin({
-        filename: `${BUNDLE.cssDir}/${BUNDLE.cssVendors}`,
-        allChunks: true,
-        // disable: devMode,
-    });
-const extractSass = new ExtractTextPlugin({
-        filename: `${BUNDLE.cssDir}/${BUNDLE.cssStyle}`,
-        allChunks: true,
-        // disable: devMode,
-    });
-
 
 let message = ' Production Bundle';
 let separator = '-------------------';
@@ -57,8 +45,10 @@ let webpackPlugins = [
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
     }),
 
-    extractVendorsCSS,
-    extractSass,
+    new MiniCssExtractPlugin({
+        filename: `${BUNDLE.cssDir}/[name].css`,
+        chunkFilename: `${BUNDLE.cssDir}/[name].css`,
+    }),
 
     new MomentLocalesPlugin({
         localesToKeep: availableLocales,
@@ -127,7 +117,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
-        filename: `${BUNDLE.jsDir}/[name].chunk.js`,
+        filename: `${BUNDLE.jsDir}/[name].bundle.js`,
 
         devtoolModuleFilenameTemplate: info => {
             if (info.identifier.indexOf('webpack') === -1 && info.identifier.indexOf('.scss') === -1) {
@@ -139,16 +129,31 @@ module.exports = {
 
     // extract vendors import and put them in separate file
     optimization: {
+        minimize: true,
+        usedExports: true, // treeshaking
+        sideEffects: true, // check sideEffects flag in libraries
         runtimeChunk: {
-            name: "manifest",
+            name: 'manifest',
         },
         splitChunks: {
+            maxAsyncRequests: 5,
+            maxInitialRequests: 5,
             cacheGroups: {
-                vendor: {
+                vendors: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: "vendors",
                     priority: -20,
-                    chunks: "all",
+                    chunks: 'all',
+                    enforce: true,
+                    name(module) {
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        return `vendors/${packageName.replace('@', '')}`;
+                    },
+                },
+                css: {
+                    test: /\.(css)$/,
+                    name: 'vendors',
+                    chunks: 'all',
+                    minChunks: 1,
                 },
             }
         }
@@ -157,7 +162,6 @@ module.exports = {
     resolve: {
         // aliases for import
         alias: SRC_TEMPLATE_ALIAS,
-
         extensions: ['.js', '.vue', '.json', '.scss', '.css', 'po'],
     },
 
@@ -181,12 +185,10 @@ module.exports = {
                         ['@babel/preset-env', {
                             modules: false,
                             browsers: ['> 99%'],
-                            // browsers: ['last 1 version'],
-                            useBuiltIns: "usage",
+                            useBuiltIns: 'usage',
                             // debug: true,
-                            plugins: ["dynamic-import-node"]
                         }]
-                    ]
+                    ],
                 }
             },
             {
@@ -205,48 +207,42 @@ module.exports = {
                     path.resolve(__dirname, BUNDLE.templateRoot),
                 ],
 
-                use: extractSass.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                minimize: !devMode,
-                                sourceMap: devMode,
-                            }
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: devMode
-                            }
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: devMode,
                         }
-                    ]
-                }),
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, 'node_modules'),
                 ],
-                use: extractVendorsCSS.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                minimize: !devMode,
-                                sourceMap: devMode,
-                            }
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: devMode
-                            }
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: devMode,
                         }
-                    ]
-                }),
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode
+                        }
+                    }
+                ],
             },
             {
                 test: /\.(woff|eot|gif)$/,
