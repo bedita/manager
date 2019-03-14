@@ -25,7 +25,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
 
-    {{ Html.css(['vendors'])|raw }}
+    {# {{ Html.css(['vendors'])|raw }} #}
     {{ Html.css(['app'])|raw }}
     {% element 'custom_colors' %}
 
@@ -113,7 +113,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 
     {{ Html.script('manifest.bundle')|raw }}
-    {{ Html.script('vendors.bundle')|raw }}
+    {# {{ Html.script('vendors.bundle')|raw }} #}
     {{ Link.jsBundle()|raw }}
 
     {{ Link.pluginsJsBundle()|raw }}

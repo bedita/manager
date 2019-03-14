@@ -1,7 +1,9 @@
 import 'flatpickr/dist/flatpickr.min.css';
 
-// fix import for locales
+import flatpickr from 'flatpickr';
+import moment from 'moment';
 
+// fixed import for locales
 import { Italian } from 'flatpickr/dist/l10n/it.js';
 import { French } from 'flatpickr/dist/l10n/fr.js';
 import { German } from 'flatpickr/dist/l10n/de.js';
@@ -53,19 +55,6 @@ export default {
     },
 
     async mounted() {
-        /** dynamic lib import */
-        let flatpickr;
-        let moment;
-
-        try {
-            flatpickr = await import(/* webpackChunkName: "flatpickr" */'flatpickr');
-            flatpickr = flatpickr.default;
-            moment = await import(/* webpackChunkName: "moment" */'moment');
-            moment = moment.default;
-        } catch (err) {
-            console.error(err);
-        }
-
         // set locale
         if (LOCALE !== 'en') {
             moment.locale(LOCALE);
