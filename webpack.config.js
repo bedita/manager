@@ -144,11 +144,22 @@ module.exports = {
             cacheGroups: {
                 vendors: {
                     test: /[\\/]node_modules[\\/]/,
-                    priority: -20,
-                    chunks: 'all',
+                    priority: 1,
+                    chunks: 'async',
                     enforce: true,
                     name(module) {
                         const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        return `vendors/async/${packageName.replace('@', '')}`;
+                    },
+                },
+                default: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: 'initial',
+                    name: 'vendors',
+                    enforce: true,
+                    name(module) {
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        // console.log(module.context);
                         return `vendors/${packageName.replace('@', '')}`;
                     },
                 },
@@ -191,6 +202,9 @@ module.exports = {
                             useBuiltIns: 'usage',
                             // debug: true,
                         }]
+                    ],
+                    plugins: [
+                        '@babel/plugin-syntax-dynamic-import',
                     ],
                 }
             },
