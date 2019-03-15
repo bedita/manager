@@ -18,12 +18,11 @@ import viewHelper from 'app/helpers/view';
 import merge from 'deepmerge';
 import { t } from 'ttag';
 
-// const { PanelView } = () => import(/* webpackChunkName: "panel-view" */'app/components/panel-view');
-
 const _vueInstance = new Vue({
     el: 'main',
 
     components: {
+        PanelView,
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
@@ -33,8 +32,6 @@ const _vueInstance = new Vue({
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        PanelView,
-        // PanelView: () => { const { PanelView } = import(/* webpackChunkName: "panel-view" */'app/components/panel-view'); return PanelView},
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
     },
