@@ -8,7 +8,7 @@ export default {
     install(Vue) {
         Vue.directive('jsoneditor', {
             /**
-             * create jsoneditor instance when element is inserted
+             * dynamic load json-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */
