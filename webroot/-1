@@ -1,0 +1,444 @@
+Log opened at 2019-03-18 10:40:34
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="214"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:35
+
+Log opened at 2019-03-18 10:40:35
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="218"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:35
+
+Log opened at 2019-03-18 10:40:38
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4137"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:38
+
+Log opened at 2019-03-18 10:40:38
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4276"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:39
+
+Log opened at 2019-03-18 10:40:47
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4135"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:48
+
+Log opened at 2019-03-18 10:40:50
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="214"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:51
+
+Log opened at 2019-03-18 10:40:52
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4276"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:40:52
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4136"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:40:52
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="214"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:40:53
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4122"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:40:53
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="216"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:40:53
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4135"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:53
+
+Log opened at 2019-03-18 10:40:53
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4137"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:53
+
+Log opened at 2019-03-18 10:40:53
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4132"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:54
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:54
+
+Log opened at 2019-03-18 10:40:54
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="218"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:55
+
+Log opened at 2019-03-18 10:40:55
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4138"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:56
+
+Log opened at 2019-03-18 10:40:56
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4276"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:57
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:57
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:58
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:58
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:40:59
+
+Log opened at 2019-03-18 10:41:17
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4137"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:18
+
+Log opened at 2019-03-18 10:41:36
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="218"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:37
+
+Log opened at 2019-03-18 10:41:47
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4122"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:49
+
+Log opened at 2019-03-18 10:41:49
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4135"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:50
+
+Log opened at 2019-03-18 10:41:54
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4132"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:55
+
+Log opened at 2019-03-18 10:41:55
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="6359"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:41:56
+
+Log opened at 2019-03-18 10:41:58
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4138"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:00
+
+Log opened at 2019-03-18 10:42:01
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4135"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:02
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="218"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4132"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="6359"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4137"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4138"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4276"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:03
+
+Log opened at 2019-03-18 10:42:03
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4122"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:04
+
+Log opened at 2019-03-18 10:42:04
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="216"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:04
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:05
+
+Log opened at 2019-03-18 10:42:05
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="214"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:05
+
+Log opened at 2019-03-18 10:42:05
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4135"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:05
+
+Log opened at 2019-03-18 10:42:05
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="218"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:06
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:06
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:06
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:07
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:07
+
+Log opened at 2019-03-18 10:42:24
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+I: Remote address found, connecting to 127.0.0.1:9000.
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/webroot/index.php" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="4122"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:42:25
+
