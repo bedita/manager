@@ -108,7 +108,7 @@ if (devMode) {
                 discardComments: { removeAll: true },
                 reduceIdents: false, // unexpected behavior with animations
             },
-            canPrint: true
+            canPrint: false
         })
     );
 }
