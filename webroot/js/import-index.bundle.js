@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["import-index"],{"./src/Template/Layout/js/app/pages/import/index.js":function(e,a,t){"use strict";t.r(a),a.default={data:()=>({fileName:""}),computed:{},methods:{onFileChanged(e){this.fileName=e.target.files[0].name}}}}}]);

@@ -117,6 +117,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Import', 'action' => 'file'],
         ['_name' => 'import:file']
     );
+    $routes->connect(
+        '/import/jobs',
+        ['controller' => 'Import', 'action' => 'jobs'],
+        ['_name' => 'import:jobs']
+    );
 
     // Trash.
     $routes->connect(

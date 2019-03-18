@@ -17,7 +17,7 @@ export const DEFAULT_PAGINATION = {
 export const DEFAULT_FILTER = {
     q: '',
     filter: {
-        type: '',
+        type: [],
     }
 }
 

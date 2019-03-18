@@ -5,8 +5,7 @@
 
     <div class="commands-module squared">
         {{ Layout.moduleLink()|raw }}
-
-        {% if _view.request.getQuery('filter.type') != 'objects' %}
+        {% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
             {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
         {% endif %}
         <div class="{{ elementClass }}"></div>
@@ -14,6 +13,9 @@
 
     <div class="commands-buttons">
         {{ _view.fetch('commands')|raw }}
+        {% if currentModule.hints.multiple_types and types.right is iterable %}
+            {% element 'filter_type' %}
+        {% endif %}
     </div>
 
     <div class="commands-links">

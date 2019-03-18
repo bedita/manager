@@ -8,6 +8,7 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
+import UploadFilesView from 'app/components/upload-files-view';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -46,15 +47,16 @@ const _vueInstance = new Vue({
             sort: '',
             dataChanged: false,
 
+            // filters
             urlFilterQuery: {
                 q: '',
                 filter: {},
             },
-
             pagination: {
                 page: '',
                 page_size: '',
-            }
+            },
+            selectedTypes: []
         }
     },
 
@@ -160,6 +162,13 @@ const _vueInstance = new Vue({
         onUpdateCurrentPage(page) {
             this.page = page;
             this.applyFilters(this.urlFilterQuery);
+        },
+
+        /**
+         * listen to FilterTypeView event filter-type-page
+         */
+        onUpdateQueryTypes(types) {
+            this.selectedTypes = types;
         },
 
         /**

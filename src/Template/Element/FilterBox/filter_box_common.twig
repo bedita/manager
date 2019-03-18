@@ -3,9 +3,11 @@
 <div class="filters-container" :class="filterList.length > 1? '' : 'basic-filters-only'">
     {# dynamic filter object types #}
     <div class="filter-container search-types" v-if="rightTypes.length > 1">
-        <select v-model="queryFilter.filter.type" class="{{ selectBaseClasses }}">
-            <option value="" label="{{ __('All Types') }}"></option>
-            <option v-for="type in rightTypes"><: t(type) :></option>
+        <select class="{{ selectBaseClasses }}"
+            v-model="queryFilter.filter.type"
+            @change="onOtherFiltersChange">
+                <option value="" label="{{ __('All Types') }}"></option>
+                <option v-for="type in rightTypes"><: t(type) :></option>
         </select>
     </div>
 
@@ -16,14 +18,16 @@
             v-model="queryFilter.q"
             @keyup.prevent.stop="onQueryStringChange"
             @keyup.enter.prevent.stop="applyFilter"/>
+    </div>
 
-        {# status if available #}
-        <select v-model="queryFilter.filter['status']" id="status" class="filter-status-select {{ selectBaseClasses }}" v-if="Object.keys(statusFilter).length !== 0">
-            <option value="">{{ __('All') }}</option>
-            <option v-for="option in statusFilter.options" v-if="option.text" :name="option.name" :value="option.value">
-                <: option.text :>
-            </option>
-        </select>
+    {# status if available #}
+    <div class="filter-container radio" v-if="Object.keys(statusFilter).length !== 0">
+        <label>
+            <input type="radio" :name="statusFilter.name" value="" v-model="queryFilter.filter['status']">{{ __('All') }}
+        </label>
+        <label v-for="s in statusFilter.options">
+            <input type="radio" :name="statusFilter.name" :value="s.value" v-model="queryFilter.filter['status']"><: s.text :>
+        </label>
     </div>
 
     {# other dynamic filters #}
