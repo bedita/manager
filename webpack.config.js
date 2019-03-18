@@ -104,7 +104,10 @@ if (devMode) {
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /.css$/g,
             cssProcessor: require('cssnano'),
-            cssProcessorOptions: { discardComments: { removeAll: true } },
+            cssProcessorOptions: {
+                discardComments: { removeAll: true },
+                reduceIdents: false, // unexpected behavior with animations
+            },
             canPrint: true
         })
     );
@@ -219,7 +222,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.scss$/,
+                test: /\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, BUNDLE.templateRoot),
                 ],
