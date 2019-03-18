@@ -180,7 +180,7 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Include JS splitted vendors.
+     * Include statically imported JS splitted vendors.
      *
      * @return void
      */

@@ -1,0 +1,65 @@
+Log opened at 2019-03-18 10:15:37
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+W: Remote address not found, connecting to configured address/port: localhost:9000. :-|
+W: Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (19).
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///usr/local/Cellar/composer/1.8.0/bin/composer" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="5245" idekey="vallo"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:15:38
+
+Log opened at 2019-03-18 10:15:50
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+W: Remote address not found, connecting to configured address/port: localhost:9000. :-|
+W: Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (19).
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///usr/local/Cellar/composer/1.8.0/bin/composer" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="5272" idekey="vallo"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:15:50
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+W: Remote address not found, connecting to configured address/port: localhost:9000. :-|
+W: Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (19).
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/vendor/squizlabs/php_codesniffer/bin/phpcs" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="5277" idekey="vallo"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:16:02
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:16:02
+
+Log opened at 2019-03-18 10:16:24
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+W: Remote address not found, connecting to configured address/port: localhost:9000. :-|
+W: Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (19).
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///usr/local/Cellar/composer/1.8.0/bin/composer" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="5307" idekey="vallo"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+Log opened at 2019-03-18 10:16:24
+I: Checking remote connect back address.
+I: Checking header 'HTTP_X_FORWARDED_FOR'.
+I: Checking header 'REMOTE_ADDR'.
+W: Remote address not found, connecting to configured address/port: localhost:9000. :-|
+W: Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (19).
+I: Connected to client. :-)
+-> <init xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" fileuri="file:///Users/vallo/www/projects/be4-web/vendor/squizlabs/php_codesniffer/bin/phpcs" language="PHP" xdebug:language_version="7.2.13" protocol_version="1.0" appid="5312" idekey="vallo"><engine version="2.6.1"><![CDATA[Xdebug]]></engine><author><![CDATA[Derick Rethans]]></author><url><![CDATA[http://xdebug.org]]></url><copyright><![CDATA[Copyright (c) 2002-2018 by Derick Rethans]]></copyright></init>
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:16:36
+
+-> <response xmlns="urn:debugger_protocol_v1" xmlns:xdebug="http://xdebug.org/dbgp/xdebug" status="stopping" reason="ok"></response>
+
+Log closed at 2019-03-18 10:16:36
+
