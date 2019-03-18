@@ -15,23 +15,13 @@
  *
  */
 
-<<<<<<< HEAD
 import sleep from 'sleep-promise';
 import flatpickr from 'flatpickr';
 
-=======
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import RolesListView from 'app/components/relation-view/roles-list-view';
-import FilterBoxView from 'app/components/filter-box';
-import TreeView from 'app/components/tree-view/tree-view';
->>>>>>> master
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
-
-import sleep from 'sleep-promise';
-import flatpickr from 'flatpickr/dist/flatpickr.min';
 
 export default {
     mixins: [
