@@ -293,5 +293,8 @@ module.exports = {
         entrypoints: false,
         modules: false,
         warnings: devMode,
+        children: false,
+        assets: true,
+        excludeAssets: /(.map)/,
     },
 }
