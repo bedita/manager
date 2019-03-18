@@ -180,10 +180,10 @@ class LinkHelper extends Helper
     }
 
     /**
-    * Include JS splitted vendors.
-    *
-    * @return void
-    */
+     * Include JS splitted vendors.
+     *
+     * @return void
+     */
     public function jsBundle()
     {
         $jsPath = WWW_ROOT . 'js' . DS . 'vendors' . DS;
@@ -194,6 +194,7 @@ class LinkHelper extends Helper
                 echo $this->Html->script(sprintf('vendors%s%s', DS, $file));
             }
         }
+
         return;
     }
 }
