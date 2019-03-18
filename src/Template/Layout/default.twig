@@ -22,6 +22,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
 
+    {# vendors.css it's only generated when vendors css are imported statically, uncomment if you do so #}
     {# {{ Html.css(['vendors'])|raw }} #}
     {{ Html.css(['app'])|raw }}
     {% element 'custom_colors' %}
@@ -110,6 +111,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 
     {{ Html.script('manifest.bundle')|raw }}
+
+    {# vendors.bundle it's only generated when vendors are imported statically, uncomment if you do so #}
     {# {{ Html.script('vendors.bundle')|raw }} #}
     {{ Link.jsBundle()|raw }}
 
