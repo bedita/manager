@@ -103,14 +103,4 @@ export default {
             console.error(err);
         }
     },
-
-    // methods: {
-    //     /**
-    //     *
-    //     * @emits Event#input textarea value
-    //     *
-    //     * @param {Event} event event object
-    //     */
-
-    // }
 };
