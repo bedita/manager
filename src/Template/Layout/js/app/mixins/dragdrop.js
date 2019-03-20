@@ -7,8 +7,9 @@
  *
  * - define drop target with dynamic prop droppable (this.$el as default);
  * - define draggable elements with draggable prop
- * - define acceptable drop element with :accepted-drop as array of
+ * - define accepted-drop element with :accepted-drop as array of
  *   DOM selectors (. for classes, # for ids, <element> for dom elements)
+ *   to allow drop of files add .from-files selector
  *
  * @requires ObservableMixin
  *
@@ -105,21 +106,23 @@ export const DragdropMixin = {
             // default droppable element
             this.dropElement = this.$el;
 
-            // search for a specific drop target
-            let dropElementInView = this.$el.querySelector('[droppable]');
-            if (dropElementInView) {
-                this.enableDrop();
-                this.dropElement = dropElementInView;
-                let accepted = dropElementInView.getAttribute('accepted-drop');
-                if (accepted) {
-                    this.acceptedDropArray = accepted.split(',');
+            if (this.dropElement) {
+                // search for a specific drop target
+                let dropElementInView = this.$el.querySelector('[droppable]');
+                if (dropElementInView) {
+                    this.enableDrop();
+                    this.dropElement = dropElementInView;
+                    let accepted = dropElementInView.getAttribute('accepted-drop');
+                    if (accepted) {
+                        this.acceptedDropArray = accepted.split(',');
+                    }
                 }
-            }
 
-            // setup Drop events
-            this.dropElement.addEventListener('drop', this.onDrop, true);
-            this.dropElement.addEventListener('dragover', this.onDragover, true);
-            this.dropElement.addEventListener('dragleave', this.onDragleave, true);
+                // setup Drop events
+                this.dropElement.addEventListener('drop', this.onDrop, true);
+                this.dropElement.addEventListener('dragover', this.onDragover, true);
+                this.dropElement.addEventListener('dragleave', this.onDragleave, true);
+            }
         },
 
         /**
@@ -211,12 +214,6 @@ export const DragdropMixin = {
             if (!this.isAcceptedDrag()) {
                 return;
             }
-            // if (this.acceptedDropArray.length && draggedElement) {
-            //     const isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
-            //     if (!isValid) {
-            //         return;
-            //     }
-            // }
 
             window.clearTimeout(this.antiGlitchTimer);
             this.overElement = ev.target;
@@ -340,8 +337,13 @@ export const DragdropMixin = {
             return false;
         },
 
+        /**
+         * check if dragged element is accepted from drop target
+         *
+         * @returns {Boolean}
+         */
         isAcceptedDrag() {
-            // default allow for from-files selector
+            // default: allow for .from-files selector
             let isValid = this.acceptedDropArray.indexOf('.from-files') !== -1;
             if (this.acceptedDropArray.length && draggedElement) {
                 isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
@@ -349,10 +351,20 @@ export const DragdropMixin = {
             return isValid;
         },
 
+        /**
+         * disable drop
+         *
+         * @returns {void}
+         */
         disableDrop() {
             this._dropEnabled = false;
         },
 
+        /**
+         * enable drop
+         *
+         * @returns {void}
+         */
         enableDrop() {
             this._dropEnabled = true;
         },
