@@ -88,8 +88,8 @@ export default {
     },
 
     mounted() {
-        this.$on('drop-files', (ev) => {
-            let files = ev.dragdrop.data;
+        this.$on('drop-files', (ev, files) => {
+            // let files = ev.dragdrop.data;
             if (files) {
                 // on drop-file event add files to upload queue
                 this.tryUpload(this.setupProgress(this.filterAcceptedFiles(files)));

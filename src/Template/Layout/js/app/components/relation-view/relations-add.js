@@ -14,10 +14,11 @@
 import FilterBoxView from 'app/components/filter-box';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
+import { DragdropMixin } from 'app/mixins/dragdrop';
 import sleep from 'sleep-promise';
 
 export default {
-    mixins: [PaginatedContentMixin],
+    mixins: [ PaginatedContentMixin, DragdropMixin ],
 
     inject: ['getCSFRToken'],
 
@@ -49,6 +50,7 @@ export default {
             endpoint: '',
             loading: false,
             selectedObjects: [],
+            addedObjects: [],
             activeFilter: {},
 
             // create object form data
@@ -72,7 +74,19 @@ export default {
          */
         isMedia() {
             return this.relationTypes && this.relationTypes.right.indexOf('media') !== -1;
+        },
+
+        unselectableObjects() {
+            return this.alreadyInView.concat(this.addedObjects);
         }
+    },
+
+    mounted() {
+        PanelEvents.listen('relations-add:update-already-in-view', this, this.updateAlreadyInView);
+    },
+
+    destroyed() {
+        PanelEvents.stop('relations-add:update-already-in-view', this, this.updateAlreadyInView);
     },
 
     watch: {
@@ -223,6 +237,11 @@ export default {
                 this.saving = false;
                 this.loading = false;
             }
+        },
+
+        updateAlreadyInView(object) {
+            console.log('logghe')
+            this.addedObjects.push(object);
         },
 
         /**
