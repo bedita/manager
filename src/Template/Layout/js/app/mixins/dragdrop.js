@@ -7,7 +7,8 @@
  *
  * - define drop target with dynamic prop droppable (this.$el as default);
  * - define draggable elements with draggable prop
- * - define acceptable drop element with :accepted-drop as array of DOM selectors (. for classes, # for ids, <element> for dom elements)
+ * - define acceptable drop element with :accepted-drop as array of
+ *   DOM selectors (. for classes, # for ids, <element> for dom elements)
  *
  * @requires ObservableMixin
  *
@@ -40,7 +41,6 @@ export const DragdropMixin = {
         return {
             attrs: ['droppable', 'accepted-drop'], // observed attributes
             from: {},
-            // draggedElement: null,
             overElement: null,
             dropElement: null,
             acceptedDropArray: [],
