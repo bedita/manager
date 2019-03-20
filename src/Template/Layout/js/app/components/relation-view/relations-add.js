@@ -79,11 +79,13 @@ export default {
 
     mounted() {
         // when object is staged for saving in relation view updates the list of alreadyInView
-        PanelEvents.listen('relations-view:update-already-in-view', null, this.updateAlreadyInView);
+        PanelEvents.listen('relations-view:add-already-in-view', null, this.addToAlreadyInView);
+        PanelEvents.listen('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
     },
 
     destroyed() {
-        PanelEvents.stop('relations-view:update-already-in-view', null, this.updateAlreadyInView);
+        PanelEvents.stop('relations-view:update-already-in-view', null, this.addToAlreadyInView);
+        PanelEvents.stop('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
     },
 
     watch: {
@@ -255,8 +257,17 @@ export default {
          *
          * @returns {void}
          */
-        updateAlreadyInView(object) {
+        addToAlreadyInView(object) {
             this.addedObjects.push(object);
+        },
+
+        /**
+         * remove object from addedObjects list
+         *
+         * @returns {void}
+         */
+        removeFromAlreadyInView(object) {
+            this.addedObjects = this.addedObjects.filter((added) => added.id !== object.id);
         },
 
         /**

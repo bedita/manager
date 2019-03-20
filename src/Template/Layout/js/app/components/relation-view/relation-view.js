@@ -125,16 +125,17 @@ export default {
                         });
                     }
                 });
-
-                this.$on('drop', (ev, transfer) => {
-                    let object = transfer.data;
-                    if (object) {
-                        this.appendRelations([object]);
-                        PanelEvents.send('relations-view:update-already-in-view', null, object );
-                    }
-                });
             }
         }
+
+        // enable related objects drop
+        this.$on('drop', (ev, transfer) => {
+            let object = transfer.data;
+            if (object) {
+                this.appendRelations([object]);
+                PanelEvents.send('relations-view:add-already-in-view', null, object );
+            }
+        });
     },
 
     beforeDestroy() {
@@ -492,6 +493,9 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
+
+
             this.prepareRelationsToSave();
         },
 
