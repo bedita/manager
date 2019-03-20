@@ -31,7 +31,12 @@
             </filter-box-view>
 
             {# related objects #}
-            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''" :droppable="isRelationWithMedia" :accepted-drop="['.from-related-add']">
+            <div class="related-objects-list columns"
+                :class="loading? 'isLoading' : ''"
+                {# :droppable="isRelationWithMedia" #}
+                droppable
+                :accepted-drop="[`.from-relation-${relationName}`, isRelationWithMedia && '.from-files']">
+
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="(related, index) in objects"
                     :key="related.id"

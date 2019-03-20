@@ -7,7 +7,7 @@
  *
  * - define drop target with dynamic prop droppable (this.$el as default);
  * - define draggable elements with draggable prop
- * - define acceptable drop element with :accepted-drop as array
+ * - define acceptable drop element with :accepted-drop as array of DOM selectors (. for classes, # for ids, <element> for dom elements)
  *
  * @requires ObservableMixin
  *
@@ -207,12 +207,16 @@ export const DragdropMixin = {
 
             // check if draggable is accepted for drop target (if no rules are defined all draggable are accepted)
             let draggedElement = dragdropPayload.dragged;
-            if (this.acceptedDropArray.length && draggedElement) {
-                const isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
-                if (!isValid) {
-                    return;
-                }
+
+            if (!this.isAcceptedDrag()) {
+                return;
             }
+            // if (this.acceptedDropArray.length && draggedElement) {
+            //     const isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
+            //     if (!isValid) {
+            //         return;
+            //     }
+            // }
 
             window.clearTimeout(this.antiGlitchTimer);
             this.overElement = ev.target;
@@ -284,7 +288,7 @@ export const DragdropMixin = {
             ev.preventDefault();
             ev.stopPropagation();
 
-            if (!this._dropEnabled) {
+            if (!this._dropEnabled || !this.isAcceptedDrag()) {
                 return;
             }
 
@@ -334,6 +338,15 @@ export const DragdropMixin = {
 
             // mouse outside element
             return false;
+        },
+
+        isAcceptedDrag() {
+            // default allow for from-files selector
+            let isValid = this.acceptedDropArray.indexOf('.from-files') !== -1;
+            if (this.acceptedDropArray.length && draggedElement) {
+                isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
+            }
+            return isValid;
         },
 
         disableDrop() {

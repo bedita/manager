@@ -53,11 +53,11 @@
         <div class="related-objects-list shrinks">
             <div class="columns">
                 <div class="related-object column is-3" v-for="related in objects">
-                    <article class="from-related-add box has-text-gray-100 has-text-size-smaller"
-                            v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
-                                isUnselectableObject(related.id) ? 'unselectable':'']"
-                            @click="toggle(related, $event)"
-                            draggable :drag-data="JSON.stringify(related)">
+                    <article class="box has-text-gray-100 has-text-size-smaller"
+                        :class="elementClasses(related)"
+                        @click="toggle(related, $event)"
+                        draggable
+                        :drag-data="JSON.stringify(related)">
 
                         <header>
                             <h1><: related.attributes.title || related.attributes.name :></h1>
