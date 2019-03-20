@@ -9,7 +9,7 @@
  * - define draggable elements with draggable prop
  * - define accepted-drop element with :accepted-drop as array of
  *   DOM selectors (. for classes, # for ids, <element> for dom elements)
- *   to allow drop of files add .from-files selector
+ *   to allow drop of files add from-files selector, or any for everything
  *
  * @requires ObservableMixin
  *
@@ -343,8 +343,11 @@ export const DragdropMixin = {
          * @returns {Boolean}
          */
         isAcceptedDrag() {
-            // default: allow for .from-files selector
-            let isValid = this.acceptedDropArray.indexOf('.from-files') !== -1;
+            // default: allow for any selector
+            if (this.acceptedDropArray.indexOf('any') !== -1) {
+                return true;
+            }
+            let isValid = this.acceptedDropArray.indexOf('from-files') !== -1;
             if (this.acceptedDropArray.length && draggedElement) {
                 isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
             }
