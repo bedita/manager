@@ -114,7 +114,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/import/file',
-        ['controller' => 'Import', 'action' => 'file'],
+        ['controller' => 'Import', 'action' => 'file', 'method' => 'POST'],
         ['_name' => 'import:file']
     );
     $routes->connect(
