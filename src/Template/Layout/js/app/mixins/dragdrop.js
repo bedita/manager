@@ -297,7 +297,9 @@ export const DragdropMixin = {
             let files = ev.target.files || ev.dataTransfer.files;
 
             if (files.length) {
-                this.$emit('drop-files', ev, files);
+                // add files to payload
+                dragdropPayload.files = files;
+                this.$emit('drop-files', ev, dragdropPayload);
             } else {
                 this.$emit('drop', ev, dragdropPayload);
             }

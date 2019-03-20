@@ -113,8 +113,8 @@ export default {
             // if true setup drop event that handles file upload
 
             if (this.isRelationWithMedia) {
-                this.$on('drop-files', (ev, files) => {
-                    // let files = ev.dragdrop.data;
+                this.$on('drop-files', (ev, transfer) => {
+                    let files = transfer.files;
                     if (files) {
                         // on drop-file event request panelView with action upload-files
                         this.disableDrop();
@@ -130,7 +130,7 @@ export default {
                     let object = transfer.data;
                     if (object) {
                         this.appendRelations([object]);
-                        PanelEvents.sendBack('relations-add:update-already-in-view', object );
+                        PanelEvents.send('relations-view:update-already-in-view', null, object );
                     }
                 });
             }

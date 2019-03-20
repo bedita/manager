@@ -75,18 +75,15 @@ export default {
         isMedia() {
             return this.relationTypes && this.relationTypes.right.indexOf('media') !== -1;
         },
-
-        unselectableObjects() {
-            return this.alreadyInView.concat(this.addedObjects);
-        }
     },
 
     mounted() {
-        PanelEvents.listen('relations-add:update-already-in-view', this, this.updateAlreadyInView);
+        // when object is staged for saving in relation view updates the list of alreadyInView
+        PanelEvents.listen('relations-view:update-already-in-view', null, this.updateAlreadyInView);
     },
 
     destroyed() {
-        PanelEvents.stop('relations-add:update-already-in-view', this, this.updateAlreadyInView);
+        PanelEvents.stop('relations-view:update-already-in-view', null, this.updateAlreadyInView);
     },
 
     watch: {
@@ -239,8 +236,26 @@ export default {
             }
         },
 
+        /**
+         * check if object is not selectable
+         *
+         * @param {Number} id
+         *
+         * @returns {Boolean}
+         */
+        isUnselectableObject(id) {
+            const addedIds = this.addedObjects.map(obj => obj.id);
+            return this.alreadyInView.concat(addedIds).indexOf(id) !== -1;
+        },
+
+        /**
+         * update objects already added
+         *
+         * @param {Object} object
+         *
+         * @returns {void}
+         */
         updateAlreadyInView(object) {
-            console.log('logghe')
             this.addedObjects.push(object);
         },
 

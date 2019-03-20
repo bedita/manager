@@ -55,7 +55,7 @@
                 <div class="related-object column is-3" v-for="related in objects">
                     <article class="from-related-add box has-text-gray-100 has-text-size-smaller"
                             v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
-                            unselectableObjects.indexOf(related.id) != -1? 'unselectable':'']"
+                                isUnselectableObject(related.id) ? 'unselectable':'']"
                             @click="toggle(related, $event)"
                             draggable :drag-data="JSON.stringify(related)">
 
@@ -66,7 +66,7 @@
 
                         <div v-if="related.meta.url" class="thumbnail">
                             <figure>
-                                <img :src="related.meta.url" />
+                                <img :src="related.meta.url" draggable="false"/>
                             </figure>
                         </div>
 
