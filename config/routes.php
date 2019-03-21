@@ -114,7 +114,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/import/file',
-        ['controller' => 'Import', 'action' => 'file', 'method' => 'POST'],
+        ['controller' => 'Import', 'action' => 'file', '_method' => 'POST'],
         ['_name' => 'import:file']
     );
     $routes->connect(
@@ -126,7 +126,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Trash.
     $routes->connect(
         '/trash',
-        ['controller' => 'Trash', 'action' => 'index', 'method' => 'GET'],
+        ['controller' => 'Trash', 'action' => 'index', '_method' => 'GET'],
         ['_name' => 'trash:list']
     );
     $routes->connect(
