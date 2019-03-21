@@ -129,7 +129,7 @@
                             <div :class="job.meta.status"><: job.meta.completed :></div>
                             <div :class="job.meta.status"><: job.meta.status :></div>
                             <div :class="job.meta.status">
-                                <a href="javascript: void(0);" :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'" v-on:click="togglePayload(job.id)"></a>
+                                <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'" v-on:click.prevent="togglePayload(job.id)"></a>
                             </div>
 
                             <div class="job-payload" v-show="showPayloadId == job.id"><pre><: job.attributes.payload :></pre></div>
