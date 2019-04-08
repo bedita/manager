@@ -119,6 +119,7 @@ class ExportController extends AppController
         }
         $extrafields = [];
         $extraFieldsFilled = false;
+        $metaFieldsFilled = false;
 
         $fields = $this->getFields($response['data']);
         if (($k = array_search('extra', $fields)) !== false) {
@@ -155,6 +156,19 @@ class ExportController extends AppController
                     }
                 }
                 $extraFieldsFilled = true;
+            }
+            if (!empty($val['meta'])) {
+                foreach ($val['meta'] as $metaAttribute => $metaval) {
+                    if (is_array($metaval)) {
+                        $row[$metaAttribute] = json_encode($metaval);
+                    } else {
+                        $row[$metaAttribute] = $metaval;
+                    }
+                    if (!$metaFieldsFilled) {
+                        $extrafields[] = $metaAttribute;
+                    }
+                }
+                $metaFieldsFilled = true;
             }
 
             $data[] = $row;
