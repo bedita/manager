@@ -187,6 +187,7 @@ class ExportController extends AppController
      * Get fields array using data first element attributes
      *
      * @param array $response The response from which extract fields
+     * @param string $key The key
      * @return array
      */
     private function getFields($response, $key = 'attributes') : array
