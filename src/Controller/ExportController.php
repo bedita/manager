@@ -129,7 +129,7 @@ class ExportController extends AppController
             // fill row fields
             $this->fillRowFields($row, $val, $fields);
 
-            // fill row data for meta and extra
+            // fill row data for meta
             $this->fillRowFields($row, $val, $metaFields);
 
             $data[] = $row;
