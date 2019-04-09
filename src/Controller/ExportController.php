@@ -251,11 +251,9 @@ class ExportController extends AppController
      */
     private function fillRowPerParam(&$row, $data, $fields, $param)
     {
-        $prefix = ($param === 'extra') ? 'extra__' : '';
         foreach ($fields as $field) {
             $val = Hash::get($data, sprintf('%s.%s', $param, $field));
-            $attribute = sprintf('%s%s', $prefix, $field);
-            $row[$attribute] = $this->getValue($val);
+            $row[$field] = $this->getValue($val);
         }
     }
 
