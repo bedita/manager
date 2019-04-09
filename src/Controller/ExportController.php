@@ -201,8 +201,8 @@ class ExportController extends AppController
      * Fill row data per fields
      *
      * @param array $row The row to be filled with data
-     * @param array $fields The fields
      * @param mixed $data The data
+     * @param array $fields The fields
      * @return void
      */
     private function fillRowFields(&$row, $data, $fields)
