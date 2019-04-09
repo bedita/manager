@@ -76,7 +76,7 @@ class ExportController extends AppController
      */
     private function csvRows(string $objectType, string $ids = '') : array
     {
-        $fields = $data = [];
+        $data = [];
         if (empty($ids)) { // empty ids? then get all (multi api calls)
             // read export limit from config, default 10000
             $limit = Configure::read('Export.limit', 10000);
@@ -117,64 +117,25 @@ class ExportController extends AppController
         if (empty($response['data'])) {
             return [];
         }
-        $extrafields = [];
-        $extraFieldsFilled = false;
-        $metaFieldsFilled = false;
 
-        $fields = $this->getFields($response['data']);
-        if (($k = array_search('extra', $fields)) !== false) {
-            unset($fields[$k]);
-        }
+        // get fields for response 'attributes' and 'meta'
+        $fields = [ 'id' ] + $this->getFields($response);
+        $metaFields = $this->getFields($response, 'meta');
+
+        // fill row data from response data
         foreach ($response['data'] as $key => $val) {
             $row = [];
-            foreach ($fields as $field) {
-                $row[$field] = '';
-                if (isset($val[$field])) {
-                    if (is_array($val[$field])) {
-                        $row[$field] = json_encode($val[$field]);
-                    } else {
-                        $row[$field] = $val[$field];
-                    }
-                } elseif (isset($val['attributes'][$field])) {
-                    if (is_array($val['attributes'][$field])) {
-                        $row[$field] = json_encode($val['attributes'][$field]);
-                    } else {
-                        $row[$field] = $val['attributes'][$field];
-                    }
-                }
-            }
-            if (!empty($val['attributes']['extra'])) {
-                foreach ($val['attributes']['extra'] as $extrafield => $extraval) {
-                    $extraAttribute = sprintf('extra__%s', $extrafield);
-                    if (is_array($extraval)) {
-                        $row[$extraAttribute] = json_encode($extraval);
-                    } else {
-                        $row[$extraAttribute] = $extraval;
-                    }
-                    if (!$extraFieldsFilled) {
-                        $extrafields[] = $extraAttribute;
-                    }
-                }
-                $extraFieldsFilled = true;
-            }
-            if (!empty($val['meta'])) {
-                foreach ($val['meta'] as $metaAttribute => $metaval) {
-                    if (is_array($metaval)) {
-                        $row[$metaAttribute] = json_encode($metaval);
-                    } else {
-                        $row[$metaAttribute] = $metaval;
-                    }
-                    if (!$metaFieldsFilled) {
-                        $extrafields[] = $metaAttribute;
-                    }
-                }
-                $metaFieldsFilled = true;
-            }
+
+            // fill row fields
+            $this->fillRowFields($row, $val, $fields);
+
+            // fill row data for meta
+            $this->fillRowFields($row, $val, $metaFields);
 
             $data[] = $row;
         }
-        foreach ($extrafields as $ef) {
-            array_push($fields, $ef);
+        foreach ($metaFields as $f) {
+            $fields[$f] = $f;
         }
 
         return $fields;
@@ -225,15 +186,53 @@ class ExportController extends AppController
     /**
      * Get fields array using data first element attributes
      *
-     * @param array $data The data from which extract fields
+     * @param array $response The response from which extract fields
+     * @param string $key The key
      * @return array
      */
-    private function getFields(array $data = []) : array
+    private function getFields($response, $key = 'attributes') : array
     {
-        if (empty($data['0']['attributes'])) {
-            return [];
+        $data = (array)Hash::get($response, sprintf('data.0.%s', $key), []);
+
+        return array_keys($data);
+    }
+
+    /**
+     * Fill row data per fields
+     *
+     * @param array $row The row to be filled with data
+     * @param mixed $data The data
+     * @param array $fields The fields
+     * @return void
+     */
+    private function fillRowFields(&$row, $data, $fields)
+    {
+        foreach ($fields as $field) {
+            $row[$field] = '';
+            if (isset($data[$field])) {
+                $row[$field] = $this->getValue($data[$field]);
+            } elseif (isset($data['attributes'][$field])) {
+                $row[$field] = $this->getValue($data['attributes'][$field]);
+            } elseif (isset($data['meta'][$field])) {
+                $row[$field] = $this->getValue($data['meta'][$field]);
+            }
+        }
+    }
+
+    /**
+     * Get value from $value.
+     * If is an array, return json representation.
+     * Return value otherwise
+     *
+     * @param mixed $value The value
+     * @return mixed
+     */
+    private function getValue($value)
+    {
+        if (is_array($value)) {
+            return json_encode($value);
         }
 
-        return array_keys($data['0']['attributes']);
+        return $value;
     }
 }
