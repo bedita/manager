@@ -77,7 +77,6 @@ class ExportController extends AppController
     private function csvRows(string $objectType, string $ids = '') : array
     {
         $data = [];
-        $fields = [ 'id' ];
         if (empty($ids)) { // empty ids? then get all (multi api calls)
             // read export limit from config, default 10000
             $limit = Configure::read('Export.limit', 10000);
@@ -93,12 +92,12 @@ class ExportController extends AppController
                     $response = $this->apiClient->getObjects($objectType, $query);
                     $pageCount = $response['meta']['pagination']['page_count'];
                     $total += $response['meta']['pagination']['page_items'];
-                    $fields = $this->fillDataFromResponse($data, $fields, $response);
+                    $fields = $this->fillDataFromResponse($data, $response);
                 }
             }
         } else { // get data per ids
             $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
-            $fields = $this->fillDataFromResponse($data, $fields, $response);
+            $fields = $this->fillDataFromResponse($data, $response);
         }
         array_unshift($data, $fields);
 
@@ -110,19 +109,18 @@ class ExportController extends AppController
      * Return the fields representing each data item.
      *
      * @param array $data The array of data
-     * @param array $fields The array of fields (from previous response, if any)
      * @param array $response The response to use as source for data
      * @return array The fields representing each data item
      */
-    private function fillDataFromResponse(array &$data, array $fields, array $response) : array
+    private function fillDataFromResponse(array &$data, array $response) : array
     {
         if (empty($response['data'])) {
             return [];
         }
 
-        // get fields for object (attributes), extra and meta
-        $fields = $fields + $this->getFields($response);
-        $metaFields = $this->metaFields($response);
+        // get fields for response 'attributes' and 'meta'
+        $fields = [ 'id' ] + $this->getFields($response);
+        $metaFields = $this->getFields($response, 'meta');
 
         // fill row data from response data
         foreach ($response['data'] as $key => $val) {
@@ -132,7 +130,7 @@ class ExportController extends AppController
             $this->fillRowFields($row, $val, $fields);
 
             // fill row data for meta and extra
-            $this->fillRowPerParam($row, $val, $metaFields, 'meta');
+            $this->fillRowFields($row, $val, $metaFields);
 
             $data[] = $row;
         }
@@ -191,34 +189,11 @@ class ExportController extends AppController
      * @param array $response The response from which extract fields
      * @return array
      */
-    private function getFields($response) : array
+    private function getFields($response, $key = 'attributes') : array
     {
-        $data = Hash::get($response, 'data.0.attributes');
-        if (empty($data)) {
-            return [];
-        }
+        $data = (array)Hash::get($response, sprintf('data.0.%s', $key), []);
 
         return array_keys($data);
-    }
-
-    /**
-     * Get meta fields parsing all the response data
-     * Meta fields will be all the possible fields found in meta
-     *
-     * @param array $response The response
-     * @return array
-     */
-    private function metaFields($response) : array
-    {
-        $fields = [];
-        foreach ($response['data'] as $key => $val) {
-            $meta = Hash::get($val, 'meta');
-            if (!empty($meta)) {
-                $fields = $fields + array_keys($meta);
-            }
-        }
-
-        return $fields;
     }
 
     /**
@@ -237,23 +212,9 @@ class ExportController extends AppController
                 $row[$field] = $this->getValue($data[$field]);
             } elseif (isset($data['attributes'][$field])) {
                 $row[$field] = $this->getValue($data['attributes'][$field]);
+            } elseif (isset($data['meta'][$field])) {
+                $row[$field] = $this->getValue($data['meta'][$field]);
             }
-        }
-    }
-
-    /**
-     * Fill row from object $param array
-     *
-     * @param array $row The row to be filled with data
-     * @param mixed $data The data
-     * @param array $fields The fields
-     * @return void
-     */
-    private function fillRowPerParam(&$row, $data, $fields, $param)
-    {
-        foreach ($fields as $field) {
-            $val = Hash::get($data, sprintf('%s.%s', $param, $field));
-            $row[$field] = $this->getValue($val);
         }
     }
 
