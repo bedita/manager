@@ -187,14 +187,14 @@ class LinkHelper extends Helper
     public function jsBundle()
     {
         $jsPath = WWW_ROOT . 'js' . DS . 'vendors' . DS;
-        if (file_exists($jsPath)) {
-            $dir = new Folder($jsPath);
-            $files = $dir->find('.*\.js');
-            foreach ($files as $file) {
-                echo $this->Html->script(sprintf('vendors%s%s', DS, $file));
-            }
+        if (!file_exists($jsPath)) {
+            return;
         }
 
-        return;
+        $dir = new Folder($jsPath);
+        $files = $dir->find('.*\.js');
+        foreach ($files as $file) {
+            echo $this->Html->script(sprintf('vendors%s%s', DS, $file));
+        }
     }
 }
