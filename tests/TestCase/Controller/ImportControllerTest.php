@@ -126,8 +126,8 @@ class ImportControllerTest extends TestCase
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
 
         $response = $this->Import->file();
-        static::assertNull($response);
-        $result = $this->Import->viewVars['result'];
+        static::assertEquals(302, $response->getStatusCode());
+        $result = $this->Import->request->session()->read('Import.result');
         $expected = new ImportResult($this->filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
         static::assertEquals($result, $expected);
     }

@@ -22,6 +22,7 @@
         return {
             fileName: '',
             currentJobs: () => [],
+            showPayloadId: null,
         };
     },
 
@@ -64,6 +65,20 @@
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        /**
+         * Toggle job payload to show
+         * @param {int} jobId The job id
+         */
+        togglePayload(jobId) {
+            if (this.showPayloadId == jobId) {
+                this.showPayloadId = null;
+
+                return;
+            }
+
+            this.showPayloadId = jobId;
         }
     }
 }

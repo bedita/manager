@@ -53,6 +53,8 @@ class ImportController extends AppController
      */
     public function index() : void
     {
+        $result = $this->request->getSession()->consume('Import.result');
+        $this->set(compact('result'));
         $this->loadFilters();
     }
 
@@ -94,20 +96,12 @@ class ImportController extends AppController
                 $this->request->getData('file.name'),
                 $this->request->getData('file.tmp_name')
             );
-            $this->set(compact('result'));
-        } catch (CakeException $e) {
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect(['_name' => 'import:index']);
+            $this->request->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect(['_name' => 'import:index']);
         }
-        $this->loadFilters();
-        $this->render('index');
 
-        return null;
+        return $this->redirect(['_name' => 'import:index']);
     }
 
     /**

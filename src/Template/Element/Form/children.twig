@@ -136,11 +136,11 @@
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
             <button v-else
                 class="icon-hdd"
-                @click.prevent.stop="requestPanel({
-                    relation: {
-                        name: relationName,
-                        alreadyInView: alreadyInView,
-                    },
+                @click.prevent.stop="addRelatedObjects({
+                    object: {{object|json_encode}},
+                    relationName: relationName,
+                    alreadyInView: alreadyInView,
+                    relationTypes: relationTypes,
                 })">{{ __('add objects') }}</button>
 
             <button @click.prevent.stop="loadRelatedObjects()">{{ __('reload') }}</button>
