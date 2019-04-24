@@ -8,7 +8,6 @@
 <section class="relations">
 
     {% for relationName in objectRelations if relationName != 'roles' and relationName != 'translations' %}
-    {# {{relationsSchema[relationName]}} #}
 
         <div class="relation">
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
