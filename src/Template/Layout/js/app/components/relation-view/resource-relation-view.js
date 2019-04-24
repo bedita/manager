@@ -8,9 +8,7 @@
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
  * @property {Boolean} loadOnStart load content on component init
- * @property {Boolean} multipleChoice set view for multiple choice
- * @property {String} configPaginateSizes set pagination
- *
+
  * @requires
  *
  */
