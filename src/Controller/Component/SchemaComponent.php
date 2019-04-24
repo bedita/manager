@@ -22,6 +22,8 @@ use Psr\Log\LogLevel;
 
 /**
  * Handles JSON Schema of objects and resources.
+ *
+ * @property \Cake\Controller\Component\FlashComponent $Flash
  */
 class SchemaComponent extends Component
 {
