@@ -185,8 +185,9 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        $excluded = ['parent', 'parents', 'streams'];
-        $this->set('relations', array_diff(array_keys($object['relationships']), $excluded));
+        $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
+        $this->set(compact('relationsSchema'));
+        $this->set('relations', array_keys($relationsSchema));
 
         return null;
     }
