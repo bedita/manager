@@ -198,7 +198,7 @@ class ModulesController extends AppController
         $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
 
         $this->set(compact('relationsSchema', 'resourceRelations'));
-        $this->set('relations', array_keys($relationsSchema));
+        $this->set('objectRelations', array_keys($relationsSchema));
 
         return null;
     }

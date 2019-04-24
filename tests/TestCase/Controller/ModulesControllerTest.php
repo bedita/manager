@@ -285,7 +285,7 @@ class ModulesControllerTest extends TestCase
         static::assertEquals('text/html', $this->controller->response->type());
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'relations']);
+        $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'objectRelations']);
     }
 
     /**
