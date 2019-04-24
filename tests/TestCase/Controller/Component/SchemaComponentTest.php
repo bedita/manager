@@ -5,6 +5,7 @@ use App\Controller\Component\SchemaComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\TestSuite\TestCase;
 
@@ -151,5 +152,101 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->getSchema();
         static::assertNotEmpty($result);
         static::assertNotEmpty($result['properties']);
+    }
+
+    /**
+     * Test load relations schema.
+     *
+     * @return void
+     * @covers ::getRelationsSchema()
+     * @covers ::fetchRelationData()
+     */
+    public function testRelationsSchema()
+    {
+        $relations = [
+            'data' => [
+                [
+                    'id' => '24',
+                    'type' => 'relations',
+                    'attributes' => [
+                        'name' => 'poster',
+                        'inverse_name' => 'poster_of',
+                    ],
+                    'relationships' => [
+                        'left_object_types' => [
+                            'data' => [
+                                [
+                                    'id' => '3',
+                                    'type' => 'object_types'
+                                ]
+                            ],
+                        ],
+                        'right_object_types' => [
+                            'data' => [
+                                [
+                                    'id' => '9',
+                                    'type' => 'object_types'
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            'included' => [
+                [
+                    'id' => '3',
+                    'type' => 'object_types',
+                    'attributes' => [
+                        'name' => 'users',
+                    ],
+                ],
+                [
+                    'id' => '9',
+                    'type' => 'object_types',
+                    'attributes' => [
+                        'name' => 'images',
+                    ],
+                ],
+            ]
+        ];
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+                ->willReturn($relations);
+
+        ApiClientProvider::setApiClient($apiClient);
+        $result = $this->Schema->getRelationsSchema();
+        static::assertNotEmpty($result);
+        static::assertEquals(2, count($result));
+        static::assertArrayHasKey('poster', $result);
+        static::assertArrayHasKey('poster_of', $result);
+    }
+
+    /**
+     * Test load internal schema from configuration.
+     *
+     * @return void
+     * @covers ::getRelationsSchema()
+     * @covers ::fetchRelationData()
+     */
+    public function testFailRelationsSchema()
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+                ->willThrowException(new BEditaClientException('Client Exception'));
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->getRelationsSchema();
+        static::assertEmpty($result);
+
+        $message = $this->Schema->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('Client Exception', $message);
     }
 }
