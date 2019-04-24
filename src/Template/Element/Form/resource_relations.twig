@@ -1,0 +1,37 @@
+{#
+    load-on-start, loading events timing:
+    1000ms    - first relation
+    gap 200ms - till last relation
+#}
+
+{% for resourceName in resourceRelations %}
+    {% set wait = 500 + (loop.index * 200) %}
+
+    <property-view inline-template :tab-open-at-start=true ref={{ resourceName }}>
+        <section class="resources fieldset order-{{ cssOrder }}">
+            <header class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
+                <h2>
+                    {{ __(resourceName|humanize)|lower }}
+                    <span class="tag is-smallest is-black space-around-half"
+                        :class="!totalObjects? 'empty' : ''"><: totalObjects :>
+                    </span>
+                </h2>
+            </header>
+
+            <div v-show="false" class="tab-container">
+                <resource-relation-view inline-template
+                    :load-on-start={{ wait }}
+                    relation-name={{ resourceName }}
+                    ref="relation"
+
+                    @loading="onToggleLoading"
+                    @count="onCount">
+
+                    <div class="resource-relation-view"></div>
+                </resource-relation-view>
+            </div>
+        </section>
+    </property-view>
+
+{% endfor %}
+

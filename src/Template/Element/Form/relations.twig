@@ -8,6 +8,7 @@
 <section class="relations">
 
     {% for relationName in relations if relationName != 'roles' and relationName != 'translations' %}
+    {# {{relationsSchema[relationName]}} #}
 
         <div class="relation">
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
@@ -30,7 +31,7 @@
                     {% else %}
                         <div v-show="isOpen" class="tab-container">
                             {% set wait = 500 + (loop.index * 200) %}
-                            {% element 'Form/relation' {'relationName': relationName, 'loadOnStart': wait } %}
+                            {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName], 'loadOnStart': wait } %}
                         </div>
                     {% endif %}
 

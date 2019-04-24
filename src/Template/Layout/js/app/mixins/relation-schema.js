@@ -12,11 +12,14 @@ import { ACCEPTABLE_MEDIA } from 'config/config';
 export const RelationSchemaMixin = {
     data() {
         return {
-            relationData: null,
             relationSchema: null,
             relationTypes: null,
             isRelationWithMedia: false,
         }
+    },
+
+    mounted() {
+        this.parseRelationData();
     },
 
     methods: {
@@ -26,46 +29,19 @@ export const RelationSchemaMixin = {
          * @returns {Promise} promise with schema
          *
          */
-        getRelationData() {
-            let baseUrl = window.location.href;
-
-            if (this.relationName) {
-                // AppController endpoint for ajax request
-                let requestUrl = `${baseUrl}/relationData/${this.relationName}`;
-
-                const options =  {
-                    credentials: 'same-origin',
-                    headers: {
-                        'accept': 'application/json',
-                    }
-                };
-
-                if (this.relationData) {
-                    return Promise.resolve(this.relationData);
-                }
-
-                return fetch(requestUrl, options)
-                    .then((response) => response.json())
-                    .then((json) => {
-                        if (json.data && json.data.attributes) {
-                            this.relationData = json.data.attributes;
-                            this.relationSchema = this.getRelationSchema();
-                            this.relationTypes = {
-                                left: json.data.left,
-                                right: json.data.right,
-                            }
-
-                            this.isRelationWithMedia = this.checkForMediaTypes(this.relationTypes.right);
-                            return this.relationData;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                console.error('[RelationSchemaMixin] relationName not defined - can\'t load relation schema');
-                return Promise.reject();
+        parseRelationData() {
+            if (!this.relationData) {
+                return [];
             }
+
+            this.relationSchema = this.getRelationSchema();
+            this.relationTypes = {
+                left: this.relationData.left,
+                right: this.relationData.right,
+            }
+
+            this.isRelationWithMedia = this.checkForMediaTypes(this.relationTypes.right);
+            return this.relationData;
         },
 
         /**
@@ -96,7 +72,7 @@ export const RelationSchemaMixin = {
          */
         getRelationSchema() {
             if (this.relationSchema === null) {
-                this.relationSchema = this.relationData !== null && this.relationData.params && this.relationData.params.properties;
+                this.relationSchema = this.relationData !== null && this.relationData.attributes.params && this.relationData.attributes.params.properties;
             }
             return this.relationSchema;
         },
