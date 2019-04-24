@@ -639,28 +639,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `relationData` method
-     *
-     * @covers ::relationData()
-     *
-     * @return void
-     */
-    public function testRelationData() : void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object ID for test
-        $id = $this->getTestId();
-
-        // do controller call
-        $this->controller->relationData($id, 'translations');
-
-        // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize']);
-    }
-
-    /**
      * Data provider for `testRelationshipsJson` test case.
      *
      * @return array
