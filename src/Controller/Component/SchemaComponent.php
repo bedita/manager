@@ -25,6 +25,10 @@ use Psr\Log\LogLevel;
  */
 class SchemaComponent extends Component
 {
+    /**
+     * {@inheritDoc}
+     */
+    public $components = ['Flash'];
 
     /**
      * Cache config name for type schemas.
@@ -139,7 +143,6 @@ class SchemaComponent extends Component
      */
     public function getRelationsSchema()
     {
-        $schema = [];
         try {
             $schema = (array)Cache::remember(
                 'relations',
@@ -151,6 +154,8 @@ class SchemaComponent extends Component
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
             $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $schema = [];
         }
 
         return $schema;
@@ -171,7 +176,7 @@ class SchemaComponent extends Component
 
         $relations = [];
         // retrieve relation right and left object types
-        $typeNames = Hash::combine($response, 'included.{n}.id', 'included.{n}.attributes.name');
+        $typeNames = Hash::combine((array)$response, 'included.{n}.id', 'included.{n}.attributes.name');
 
         foreach ($response['data'] as $res) {
             $leftTypes = (array)Hash::extract($res, 'relationships.left_object_types.data.{n}.id');
