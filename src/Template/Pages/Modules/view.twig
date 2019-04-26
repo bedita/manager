@@ -47,10 +47,12 @@
                 {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
             </div>
 
-            <div class="form-column">
+            <div class="form-column ordered-column">
                 {% element 'Form/publish_properties' {'cssOrder': '0'} %}
 
-                {% element 'Form/resources' {'cssOrder': '2'} %}
+                {% element 'Form/resource_relations' {'cssOrder': '5'} %}
+
+                {% element 'Form/resources/translations' {'resourceName': 'translations', 'cssOrder': '2' } %}
 
                 {% if 'roles' in relations %}
                     {% element 'Form/roles' {'cssOrder': '3'} %}

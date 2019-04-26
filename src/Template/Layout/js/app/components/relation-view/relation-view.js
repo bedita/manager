@@ -42,6 +42,10 @@ export default {
             type: String,
             required: true,
         },
+        relationData: {
+            type: Object,
+            required: false,
+        },
         loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
@@ -318,10 +322,6 @@ export default {
                 const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
 
                 await sleep(t);
-                if (this.relationSchema === null) {
-                    await this.getRelationData();
-                }
-
                 await this.loadRelatedObjects();
             }
             return Promise.resolve();

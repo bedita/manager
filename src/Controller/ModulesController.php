@@ -28,6 +28,13 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    protected const FIXED_RELATIONSHIPS = [
+        'parents',
+        'translations',
+        'streams',
+        'roles',
+    ];
+
     /**
      * Object type currently used
      *
@@ -185,8 +192,13 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        $excluded = ['parent', 'parents', 'streams'];
-        $this->set('relations', array_diff(array_keys($object['relationships']), $excluded));
+        // relatinos between objects
+        $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
+        // relations between objects and resources
+        $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+
+        $this->set(compact('relationsSchema', 'resourceRelations'));
+        $this->set('objectRelations', array_keys($relationsSchema));
 
         return null;
     }
@@ -426,41 +438,6 @@ class ModulesController extends AppController
                 }
             }
         }
-    }
-
-    /**
-     * Relation schema request callig api `GET /model/relations/:relation`
-     * Json response
-     *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
-     * @return void
-     */
-    public function relationData($id, string $relation) : void
-    {
-        $this->request->allowMethod(['get']);
-
-        try {
-            $response = $this->apiClient->relationData($relation);
-
-            // retrieve relation right and left object types
-            $leftTypes = (array)Hash::extract($response, 'data.relationships.left_object_types.data.{n}.id');
-            $rightTypes = (array)Hash::extract($response, 'data.relationships.right_object_types.data.{n}.id');
-            $typeNames = Hash::combine($response, 'included.{n}.id', 'included.{n}.attributes.name');
-
-            $response['data']['left'] = array_values(array_intersect_key($typeNames, array_flip($leftTypes)));
-            $response['data']['right'] = array_values(array_intersect_key($typeNames, array_flip($rightTypes)));
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
-
-            return;
-        }
-
-        $this->set((array)$response);
-        $this->set('_serialize', true);
     }
 
     /**
