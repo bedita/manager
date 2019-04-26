@@ -285,7 +285,7 @@ class ModulesControllerTest extends TestCase
         static::assertEquals('text/html', $this->controller->response->type());
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'relations']);
+        $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'objectRelations']);
     }
 
     /**
@@ -636,28 +636,6 @@ class ModulesControllerTest extends TestCase
         $this->controller->updateMediaUrls($response);
 
         static::assertEmpty($response);
-    }
-
-    /**
-     * Test `relationData` method
-     *
-     * @covers ::relationData()
-     *
-     * @return void
-     */
-    public function testRelationData() : void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object ID for test
-        $id = $this->getTestId();
-
-        // do controller call
-        $this->controller->relationData($id, 'translations');
-
-        // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize']);
     }
 
     /**

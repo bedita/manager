@@ -14,11 +14,13 @@
  */
 
 import RelationView from 'app/components/relation-view/relation-view';
+import ResourceRelationView from 'app/components/relation-view/resource-relation-view';
 import ChildrenView from 'app/components/children-view/children-view';
 
 export default {
     components: {
         RelationView,
+        ResourceRelationView,
         ChildrenView,
     },
 
