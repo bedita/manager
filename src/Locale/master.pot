@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-03-07 11:39:32 \n"
+"POT-Creation-Date: 2019-04-26 15:06:54 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -165,6 +165,12 @@ msgid "Import warn"
 msgstr ""
 
 msgid "Invalid username or password"
+msgstr ""
+
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr ""
+
+msgid "Jobs"
 msgstr ""
 
 msgid "Language"
@@ -434,6 +440,9 @@ msgstr ""
 msgid "code"
 msgstr ""
 
+msgid "completed on"
+msgstr ""
+
 msgid "confirm password"
 msgstr ""
 
@@ -447,6 +456,9 @@ msgid "current password"
 msgstr ""
 
 msgid "download"
+msgstr ""
+
+msgid "file name"
 msgstr ""
 
 msgid "id"
@@ -485,6 +497,12 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
+msgid "scheduled from"
+msgstr ""
+
+msgid "service name"
+msgstr ""
+
 msgid "status"
 msgstr ""
 
@@ -507,4 +525,16 @@ msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:456
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:458
+msgid "Do you really want to trash the object?"
+msgstr ""
+
+#: src/Template/Layout/js/app/directives/richeditor.js:21
+msgid "Please enter the image url"
 msgstr ""

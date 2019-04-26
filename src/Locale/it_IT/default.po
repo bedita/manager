@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-03-07 11:39:32 \n"
+"POT-Creation-Date: 2019-04-26 15:06:54 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -168,6 +168,12 @@ msgid "Import warn"
 msgstr "Avviso in importazione"
 
 msgid "Invalid username or password"
+msgstr ""
+
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr ""
+
+msgid "Jobs"
 msgstr ""
 
 msgid "Language"
@@ -423,7 +429,7 @@ msgid "add objects"
 msgstr "aggiungi oggetti"
 
 msgid "add to"
-msgstr ""
+msgstr "aggiungi a"
 
 msgid "cancel"
 msgstr "annulla"
@@ -436,6 +442,9 @@ msgstr "chiudi"
 
 msgid "code"
 msgstr "codice"
+
+msgid "completed on"
+msgstr ""
 
 msgid "confirm password"
 msgstr "conferma password"
@@ -451,6 +460,9 @@ msgstr "password corrente"
 
 msgid "download"
 msgstr ""
+
+msgid "file name"
+msgstr "nome file"
 
 msgid "id"
 msgstr ""
@@ -474,7 +486,7 @@ msgid "of"
 msgstr "di"
 
 msgid "open"
-msgstr ""
+msgstr "aperto"
 
 msgid "original"
 msgstr "originale"
@@ -487,6 +499,12 @@ msgstr "ricarica"
 
 msgid "remove"
 msgstr "rimuovi"
+
+msgid "scheduled from"
+msgstr "pianificato dal"
+
+msgid "service name"
+msgstr "nome servizio"
 
 msgid "status"
 msgstr "stato"
@@ -511,6 +529,18 @@ msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#: src/Template/Layout/js/app/app.js:456
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#: src/Template/Layout/js/app/app.js:458
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+
+#: src/Template/Layout/js/app/directives/richeditor.js:21
+msgid "Please enter the image url"
+msgstr "Inserisci l'url dell'immagine"
 
 #~ msgid "Apply"
 #~ msgstr "Applica"
@@ -562,9 +592,3 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Avviso"
-
-#~ msgid "If you confirm, this data will be gone forever"
-#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
-
-#~ msgid "Do you really want to trash the object?"
-#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
