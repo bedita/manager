@@ -5,6 +5,33 @@
  */
 
 import { CkeditorConfig } from 'config/config';
+import { t } from 'ttag';
+
+/**
+ * add custom plugin to ckeditor that creates a command and a button for the toolbar
+ */
+CKEDITOR.plugins.add('addImageTagPlugin',
+{
+    init: function(editor)
+    {
+        editor.addCommand('addImgTag',
+        {
+            exec: function (edt) {
+                let imgUrl = prompt(t`Please enter the image url`);
+                if (imgUrl) {
+                    edt.insertHtml(`<img src=${imgUrl}>`);
+                }
+            }
+        });
+
+        editor.ui.addButton('AddImageTag', {
+            label: 'Click me',
+            command: 'addImgTag',
+            toolbar: 'insert',
+            icon: 'Image'
+        });
+    }
+});
 
 export default {
     install(Vue) {
@@ -21,7 +48,12 @@ export default {
                     loadedConfig = CkeditorConfig[configKey];
                 }
 
+                // load custom plugin and add button to toolbar
+                loadedConfig.extraPlugins = 'addImageTagPlugin';
+                loadedConfig.toolbar.push({ name: 'insert', groups: 'insert', items: ['AddImageTag'] });
+
                 let editor = CKEDITOR.replace(element, loadedConfig);
+
                 element.dataset.originalValue = element.value;
                 editor.on('change', () => {
                     element.value = editor.getData();

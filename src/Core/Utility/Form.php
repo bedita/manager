@@ -79,7 +79,7 @@ class Form
         return [
             'type' => 'textarea',
             'v-richeditor' => 'true',
-            'ckconfig' => 'configNormal',
+            'ckconfig' => 'configDefault',
             'value' => $value,
         ];
     }
