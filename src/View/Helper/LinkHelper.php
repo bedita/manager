@@ -216,7 +216,8 @@ class LinkHelper extends Helper
 
      * @return array files found
      */
-    protected function findFiles(array $filter, string $type) {
+    protected function findFiles(array $filter, string $type)
+    {
         $files = [];
         $filesPath = WWW_ROOT . $type;
         if (!file_exists($filesPath)) {
@@ -229,7 +230,7 @@ class LinkHelper extends Helper
         if (!empty($filter)) {
             foreach ($filter as $filterName) {
                 foreach ($filesFound as $fileName) {
-                    if (strpos($fileName, $filterName) !== FALSE) {
+                    if (strpos($fileName, $filterName) !== false) {
                         $files[] = sprintf('%s', $fileName);
                     }
                 }
