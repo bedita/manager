@@ -182,19 +182,64 @@ class LinkHelper extends Helper
     /**
      * Include statically imported JS splitted vendors.
      *
+     * @param array $filter list of file name filters
      * @return void
      */
-    public function jsBundle()
+    public function jsBundle(array $filter = [])
     {
-        $jsPath = WWW_ROOT . 'js' . DS . 'vendors' . DS;
-        if (!file_exists($jsPath)) {
+        $jsFiles = $this->findFiles($filter, 'js');
+        foreach ($jsFiles as $jsFile) {
+            echo $this->Html->script(sprintf('%s', $jsFile));
+        }
+    }
+
+    /**
+     * Include statically imported CSS splitted vendors.
+     *
+     * @param array $filter list of file name filters
+     * @return void
+     */
+    public function cssBundle(array $filter = [])
+    {
+        $cssFiles = $this->findFiles($filter, 'css');
+        foreach ($cssFiles as $cssFile) {
+            echo $this->Html->css(sprintf('%s', $cssFile));
+        }
+    }
+
+    /**
+     * find files under webroot directory specifing a ordered list of filters and the file type
+     * to search for
+     *
+     * @param array $filter list of file name filters
+     * @param string $type file type (js/css)
+
+     * @return array files found
+     */
+    protected function findFiles(array $filter, string $type) {
+        $files = [];
+        $filesPath = WWW_ROOT . $type;
+        if (!file_exists($filesPath)) {
             return;
         }
 
-        $dir = new Folder($jsPath);
-        $files = $dir->find('.*\.js');
-        foreach ($files as $file) {
-            echo $this->Html->script(sprintf('vendors%s%s', DS, $file));
+        $dir = new Folder($filesPath);
+
+        $filesFound = $dir->find('.*\.' . $type);
+        if (!empty($filter)) {
+            foreach ($filter as $filterName) {
+                foreach ($filesFound as $fileName) {
+                    if (strpos($fileName, $filterName) !== FALSE) {
+                        $files[] = sprintf('%s', $fileName);
+                    }
+                }
+            }
+        } else {
+            foreach ($filesFound as $fileName) {
+                $files[] = sprintf('%s', $fileName);
+            }
         }
+
+        return $files;
     }
 }

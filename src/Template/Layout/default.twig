@@ -23,8 +23,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ Html.css(['be-icons-codes'])|raw }}
 
     {# vendors.css it's only generated when vendors css are imported statically, uncomment if you do so #}
-    {# {{ Html.css(['vendors'])|raw }} #}
-    {{ Html.css(['app'])|raw }}
+    {# {{ Html.css(['app.b59441'])|raw }} #}
+    {{ Link.cssBundle([ 'app', 'vendors' ])|raw }}
+
     {% element 'custom_colors' %}
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
@@ -108,15 +109,16 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% endif %}
 
 
-    {{ Html.script('manifest.bundle')|raw }}
+    {# {{ Html.script('manifest.bundle')|raw }} #}
 
     {# vendors.bundle it's only generated when vendors are imported statically, uncomment if you do so #}
     {# {{ Html.script('vendors.bundle')|raw }} #}
-    {{ Link.jsBundle()|raw }}
+
+    {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
 
     {{ Link.pluginsJsBundle()|raw }}
 
-    {{ Html.script('app.bundle')|raw }}
+    {# {{ Html.script('app.bundle')|raw }} #}
 
 </body>
 </html>

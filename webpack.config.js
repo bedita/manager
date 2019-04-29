@@ -47,8 +47,10 @@ let webpackPlugins = [
 
     new MiniCssExtractPlugin({
         filename: `${BUNDLE.cssDir}/[name].css`,
-        chunkFilename: `${BUNDLE.cssDir}/[name].css`,
+        chunkFilename: `${BUNDLE.cssDir}/[name]${ !devMode ? '.[chunkhash:6]' : ''}.css`,
     }),
+
+    new webpack.optimize.MinChunkSizePlugin({minChunkSize: 15000}),
 
     new MomentLocalesPlugin({
         localesToKeep: locales.locales,
@@ -113,6 +115,19 @@ if (devMode) {
     );
 }
 
+var splitComponents = devMode ? {} : {
+    test: /[\\/]src[\\/]/,
+    chunks: 'async',
+    // minSize: 10000,
+    // name: '[name]',
+    // name(module, chunks, cacheGroupKey) {
+    //     const packageName = module.context.match(/[\\/]src[\\/](.*?)([\\/]|$)/)[1];
+    //     console.log(' #### ',  chunks, cacheGroupKey);
+    //     return `${cacheGroupKey}`;
+    //     // return `${packageName.replace('@', '')}`;
+    // },
+};
+
 module.exports = {
     entry: {
         app: [appEntry],
@@ -120,7 +135,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
-        filename: `${BUNDLE.jsDir}/[name].bundle.js`,
+        filename: `${BUNDLE.jsDir}/[name].bundle${ !devMode ? '.[chunkhash:6]' : ''}.js`,
         publicPath: '/',
 
         devtoolModuleFilenameTemplate: info => {
@@ -133,8 +148,9 @@ module.exports = {
 
     // extract vendors import and put them in separate file
     optimization: {
-        moduleIds: 'named',
-        chunkIds: 'named',
+        namedChunks: true,
+        // moduleIds: 'named',
+        // chunkIds: 'named',
         minimize: true,
         usedExports: true, // treeshaking
         sideEffects: true, // check sideEffects flag in libraries
@@ -145,7 +161,16 @@ module.exports = {
             maxAsyncRequests: 5,
             maxInitialRequests: 5,
             cacheGroups: {
+                css: {
+                    test: /\.(css)$/,
+                    name: 'vendors',
+                    chunks: 'all',
+                    minChunks: 1,
+                },
                 vendors: {
+                    /**
+                     * split dynamically imported vendors and put them in async directior
+                     */
                     test: /[\\/]node_modules[\\/]/,
                     priority: 1,
                     chunks: 'async',
@@ -160,17 +185,11 @@ module.exports = {
                     chunks: 'initial',
                     name: 'vendors',
                     enforce: true,
-                    name(module) {
-                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-                        // console.log(module.context);
-                        return `vendors/${packageName.replace('@', '')}`;
-                    },
-                },
-                css: {
-                    test: /\.(css)$/,
-                    name: 'vendors',
-                    chunks: 'all',
-                    minChunks: 1,
+                    // Split static vendors in multiple files (usefull when using HTTP/2)
+                    // name(module) {
+                    //     const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                    //     return `vendors/${packageName.replace('@', '')}`;
+                    // },
                 },
             }
         }
