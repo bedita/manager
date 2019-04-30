@@ -115,19 +115,6 @@ if (devMode) {
     );
 }
 
-var splitComponents = devMode ? {} : {
-    test: /[\\/]src[\\/]/,
-    chunks: 'async',
-    // minSize: 10000,
-    // name: '[name]',
-    // name(module, chunks, cacheGroupKey) {
-    //     const packageName = module.context.match(/[\\/]src[\\/](.*?)([\\/]|$)/)[1];
-    //     console.log(' #### ',  chunks, cacheGroupKey);
-    //     return `${cacheGroupKey}`;
-    //     // return `${packageName.replace('@', '')}`;
-    // },
-};
-
 module.exports = {
     entry: {
         app: [appEntry],
@@ -149,8 +136,6 @@ module.exports = {
     // extract vendors import and put them in separate file
     optimization: {
         namedChunks: true,
-        // moduleIds: 'named',
-        // chunkIds: 'named',
         minimize: true,
         usedExports: true, // treeshaking
         sideEffects: true, // check sideEffects flag in libraries
