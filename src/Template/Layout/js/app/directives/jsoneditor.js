@@ -4,61 +4,26 @@
  *
  */
 
-import JSONEditor from 'jsoneditor/dist/jsoneditor-minimalist';
-import 'jsoneditor/dist/jsoneditor.min.css';
-
-const options = {
-    mode: 'code',
-    modes: ['tree', 'code'],
-    history: true,
-    search: true,
-};
-
 export default {
     install(Vue) {
         Vue.directive('jsoneditor', {
             /**
-             * create jsoneditor instance when element is inserted
+             * dynamic load json-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */
-            inserted (element) {
-                const content = element.value;
-                try {
-                    const json = content !== "" && JSON.parse(content) || {};
-
-                    if (json) {
-                        element.style.display = "none";
-                        let container = document.createElement('div');
-                        container.className = 'jsoneditor-container';
-                        element.parentElement.insertBefore(container, element);
-                        element.dataset.originalValue = element.value;
-                        let editorOptions = Object.assign(options, {
-                            onChange: function () {
-                                try {
-                                    const json = element.jsonEditor.get();
-                                    element.value = JSON.stringify(json);
-                                    console.info('valid json :)');
-
-                                    let isChanged = element.value !== element.dataset.originalValue;
-                                    element.dispatchEvent(new CustomEvent('change', {
-                                        bubbles: true,
-                                        detail: {
-                                            id: element.id,
-                                            isChanged,
-                                        }
-                                    }));
-                                } catch(e) {
-                                    console.warn('still not valid json');
-                                }
-                            },
+            inserted (el) {
+                import(/* webpackChunkName: "json-editor-input" */'app/components/json-editor-input')
+                    .then(module => module.default)
+                    .then((component) => {
+                        const Constructor = Vue.extend(component);
+                        const vm = new Constructor({
+                            propsData: {
+                                el,
+                            }
                         });
-                        element.jsonEditor = new JSONEditor(container, editorOptions);
-                        element.jsonEditor.set(json);
-                    }
-                } catch (err) {
-                    console.error(err);
-                }
+                        vm.$mount();
+                    });
             },
         })
     }

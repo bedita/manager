@@ -142,11 +142,14 @@ if (devMode) {
     SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
 }
 
+const locales = require(__dirname + '/' + BUNDLE.jsRoot + '/config/locales.js');
+
 global.readDirs = readDirs;
 global.path = path;
 global.devMode = devMode;
 global.forceReport = forceReport;
 global.ENVIRONMENT = ENVIRONMENT;
 global.BUNDLE = BUNDLE;
+global.locales = locales;
 global.bundler = bundler;
 global.SRC_TEMPLATE_ALIAS = SRC_TEMPLATE_ALIAS;

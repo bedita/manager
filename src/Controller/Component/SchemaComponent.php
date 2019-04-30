@@ -17,13 +17,20 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
  * Handles JSON Schema of objects and resources.
+ *
+ * @property \Cake\Controller\Component\FlashComponent $Flash
  */
 class SchemaComponent extends Component
 {
+    /**
+     * {@inheritDoc}
+     */
+    public $components = ['Flash'];
 
     /**
      * Cache config name for type schemas.
@@ -129,5 +136,60 @@ class SchemaComponent extends Component
         $properties = (array)Configure::read(sprintf('SchemaProperties.%s', $type), []);
 
         return compact('properties');
+    }
+
+    /**
+     * Read relations schema from API using internal cache.
+     *
+     * @return array Relations schema.
+     */
+    public function getRelationsSchema()
+    {
+        try {
+            $schema = (array)Cache::remember(
+                'relations',
+                function () {
+                    return $this->fetchRelationData();
+                },
+                self::CACHE_CONFIG
+            );
+        } catch (BEditaClientException $e) {
+            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $schema = [];
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Fetch relations schema via API.
+     *
+     * @return array Relations schema.
+     */
+    protected function fetchRelationData()
+    {
+        $query = [
+            'include' => 'left_object_types,right_object_types',
+            'page_size' => 100,
+        ];
+        $response = ApiClientProvider::getApiClient()->get('/model/relations', $query);
+
+        $relations = [];
+        // retrieve relation right and left object types
+        $typeNames = Hash::combine((array)$response, 'included.{n}.id', 'included.{n}.attributes.name');
+
+        foreach ($response['data'] as $res) {
+            $leftTypes = (array)Hash::extract($res, 'relationships.left_object_types.data.{n}.id');
+            $rightTypes = (array)Hash::extract($res, 'relationships.right_object_types.data.{n}.id');
+            $res['left'] = array_values(array_intersect_key($typeNames, array_flip($leftTypes)));
+            $res['right'] = array_values(array_intersect_key($typeNames, array_flip($rightTypes)));
+            unset($res['relationships'], $res['links']);
+            $relations[$res['attributes']['name']] = $res;
+            $relations[$res['attributes']['inverse_name']] = $res;
+        }
+
+        return $relations;
     }
 }

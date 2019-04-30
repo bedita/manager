@@ -11,7 +11,6 @@
  *
  */
 
-import FilterBoxView from 'app/components/filter-box';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
@@ -23,7 +22,7 @@ export default {
     inject: ['getCSFRToken'],
 
     components: {
-        FilterBoxView,
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
     },
 
     props: {
