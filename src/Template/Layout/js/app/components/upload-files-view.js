@@ -22,7 +22,7 @@ export default {
 
     template: /*template*/`
     <div class="upload-files">
-        <section class="upload-list" droppable accepted-drop=".from-files">
+        <section class="upload-list" droppable accepted-drop="from-files">
             <div class="upload-info"
                 :key="index"
                 v-for="(info, index) in Array.from(uploadProgressInfo.values())">
