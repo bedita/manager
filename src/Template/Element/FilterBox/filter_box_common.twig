@@ -1,7 +1,7 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 
 <div class="filters-container" :class="filterList.length > 1? '' : 'basic-filters-only'">
-    {# dinamic filter object types #}
+    {# dynamic filter object types #}
     <div class="filter-container search-types" v-if="rightTypes.length > 1">
         <select class="{{ selectBaseClasses }}"
             v-model="queryFilter.filter.type"

@@ -13,15 +13,11 @@
  *
  */
 
-import RelationView from 'app/components/relation-view/relation-view';
-import ResourceRelationView from 'app/components/relation-view/resource-relation-view';
-import ChildrenView from 'app/components/children-view/children-view';
-
 export default {
     components: {
-        RelationView,
-        ResourceRelationView,
-        ChildrenView,
+        RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
+        ResourceRelationView: () => import(/* webpackChunkName: "resource-relation-view" */'app/components/relation-view/resource-relation-view'),
+        ChildrenView: () => import(/* webpackChunkName: "children-view" */'app/components/children-view/children-view'),
     },
 
     props: {

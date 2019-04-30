@@ -40,6 +40,10 @@ module.exports = {
         extensions: ['.js', '.vue', '.json', '.scss', '.css'],
     },
 
+    optimization: {
+        minimize: true,
+    }
+
     module: {
         rules: [
             {

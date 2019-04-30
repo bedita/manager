@@ -7,20 +7,7 @@ import 'Template/Layout/style.scss';
 
 import { BELoader } from 'libs/bedita';
 
-import ModulesIndex from 'app/pages/modules/index';
-import ModulesView from 'app/pages/modules/view';
-import TrashIndex from 'app/pages/trash/index';
-import TrashView from 'app/pages/trash/view';
-import ImportView from 'app/pages/import/index';
-import ModelIndex from 'app/pages/model/index';
-import FilterBoxView from 'app/components/filter-box';
-import FilterTypeView from 'app/components/filter-type';
-import RelationsAdd from 'app/components/relation-view/relations-add';
-import EditRelationParams from 'app/components/edit-relation-params';
-import MainMenu from 'app/components/menu';
-import FlashMessage from 'app/components/flash-message';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import UploadFilesView from 'app/components/upload-files-view';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -35,20 +22,20 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        ModulesIndex,
-        ModulesView,
-        TrashIndex,
-        TrashView,
-        ImportView,
-        ModelIndex,
-        RelationsAdd,
-        FilterBoxView,
-        FilterTypeView,
-        EditRelationParams,
         PanelView,
-        UploadFilesView,
-        MainMenu,
-        FlashMessage,
+        ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
+        ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
+        TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
+        ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
+        ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
+        EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
+        MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
+        FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
+        UploadFilesView: () => import(/* webpackChunkName: "upload-files-view" */'app/components/upload-files-view'),
     },
 
     data() {
