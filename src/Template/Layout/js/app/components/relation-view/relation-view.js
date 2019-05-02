@@ -380,10 +380,7 @@ export default {
 
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removeRelation(related);
-                console.log('remove', related.id)
             } else {
-                console.log('restore', related.id)
-
                 this.restoreRemovedRelation(related);
             }
         },
