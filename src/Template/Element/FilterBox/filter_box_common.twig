@@ -17,7 +17,7 @@
             :placeholder="placeholder"
             v-model="queryFilter.q"
             @keyup.prevent.stop="onQueryStringChange"
-            @keyup.enter.prevent.stop="applyFilter"/>
+            @keyup.enter.prevent.stop="applyFilter" />
     </div>
 
     {# status if available #}
@@ -70,7 +70,7 @@
             </label>
         </span>
 
-        <span v-if="!filter.date && filter.type === 'text'">
+        <span v-if="!filter.date && (filter.type === 'text' || filter.type === 'number')">
             <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
         </span>
     </div>

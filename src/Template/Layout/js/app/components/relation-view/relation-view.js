@@ -396,6 +396,7 @@ export default {
                 console.error('[relationToggle] needs first param (related) as {object} with property id set');
                 return;
             }
+
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removeRelation(related);
             } else {
@@ -430,7 +431,7 @@ export default {
          * @returns {void}
          */
         restoreRemovedRelation(related) {
-            let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
+            let index = this.removedRelated.findIndex((rel) => rel.id === related.id);
             this.removedRelated.splice(index, 1);
             this.prepareRelationsToRemove(this.removedRelated);
 

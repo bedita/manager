@@ -409,35 +409,10 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->updateMediaUrls($response);
+        $this->getThumbsUrls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
-    }
-
-    /**
-     * Provide stream media URL of related objects in `meta.url` if present.
-     *
-     * @param array $response Related objects response.
-     * @return void
-     */
-    protected function updateMediaUrls(array &$response) : void
-    {
-        if (empty($response['data'])) {
-            return;
-        }
-        $included = Hash::combine($response, 'included.{n}.id', 'included.{n}');
-        foreach ($response['data'] as &$item) {
-            $thumbnail = Hash::get($item, 'attributes.provider_thumbnail');
-            if ($thumbnail) {
-                $item['meta']['url'] = $thumbnail;
-            } else {
-                $streamId = Hash::get($item, 'relationships.streams.data.0.id');
-                if ($streamId) {
-                    $item['meta']['url'] = Hash::get($included, sprintf('%s.meta.url', $streamId));
-                }
-            }
-        }
     }
 
     /**
@@ -537,10 +512,16 @@ class ModulesController extends AppController
         $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
 
         foreach ($response['data'] as &$object) {
+            $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
+            if ($thumbnail) {
+                $object['meta']['thumb_url'] = $thumbnail;
+                continue; // if provider_thumbnail is found there's no need to extract it from thumbsResponse
+            }
+
             // extract url of the matching objectid's thumb
             $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
             if (count($thumbnail)) {
-                $object['meta']['url'] = $thumbnail[0];
+                $object['meta']['thumb_url'] = $thumbnail[0];
             }
         }
     }
