@@ -553,92 +553,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `updateMediaUrls` method
-     *
-     * @covers ::updateMediaUrls()
-     *
-     * @return void
-     */
-    public function testUpdateMediaUrls() : void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // do controller call
-        $response = [
-            'data' => [
-                [
-                    'id' => 99911,
-                    'type' => 'images',
-                    'attributes' => [
-                        'provider_thumbnail' => 'https://thumb/99911',
-                    ],
-                ],
-                [
-                    'id' => 99922,
-                    'type' => 'images',
-                    'relationships' => [
-                        'streams' => [
-                            'data' => [
-                                [
-                                    'id' => '99922999999999',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'included' => [
-                '9991' => [
-                    'id' => '9991',
-                    'type' => 'documents',
-                    'attributes' => [
-                        'title' => 'first doc',
-                    ],
-                ],
-                '9992' => [
-                    'id' => '9992',
-                    'type' => 'documents',
-                    'attributes' => [
-                        'title' => 'second doc',
-                    ],
-                ],
-                '99922999999999' => [
-                    'id' => '99922999999999',
-                    'type' => 'streams',
-                    'meta' => [
-                        'url' => 'https://thumb/99922',
-                    ]
-                ],
-            ],
-        ];
-        $this->controller->updateMediaUrls($response);
-        foreach ($response['data'] as $item) {
-            static::assertNotEmpty($item['meta']['url']);
-            static::assertEquals(sprintf('https://thumb/%s', $item['id']), $item['meta']['url']);
-        }
-    }
-
-    /**
-     * Test `updateMediaUrls` method
-     *
-     * @covers ::updateMediaUrls()
-     *
-     * @return void
-     */
-    public function testUpdateMediaUrlsWithEmptyData() : void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // do controller call
-        $response = [];
-        $this->controller->updateMediaUrls($response);
-
-        static::assertEmpty($response);
-    }
-
-    /**
      * Data provider for `testRelationshipsJson` test case.
      *
      * @return array
@@ -735,7 +649,7 @@ class ModulesControllerTest extends TestCase
                             'type' => 'images',
                             'meta' =>
                                 [
-                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
+                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
                                 ],
                         ],
                         [
@@ -743,7 +657,7 @@ class ModulesControllerTest extends TestCase
                             'type' => 'images',
                             'meta' =>
                                 [
-                                    'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
+                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
                                 ],
                         ],
                     ],

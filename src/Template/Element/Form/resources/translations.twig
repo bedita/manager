@@ -70,12 +70,6 @@
                                                 <span class="has-text-size-smaller prop-id"><: related.id :></span>
                                             </header>
 
-                                            <div class="thumbnail" v-if="related.meta && related.meta.url">
-                                                <figure>
-                                                    <img :src="related.meta.url" />
-                                                </figure>
-                                            </div>
-
                                             <div>
                                                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.attributes.lang :></span>
                                                 <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>

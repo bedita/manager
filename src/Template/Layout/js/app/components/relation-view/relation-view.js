@@ -377,6 +377,7 @@ export default {
                 console.error('[relationToggle] needs first param (related) as {object} with property id set');
                 return;
             }
+
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removeRelation(related);
             } else {
