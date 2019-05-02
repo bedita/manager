@@ -411,7 +411,7 @@ export default {
          * @returns {void}
          */
         restoreRemovedRelation(related) {
-            let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
+            let index = this.removedRelated.findIndex((rel) => rel.id === related.id);
             this.removedRelated.splice(index, 1);
             this.prepareRelationsToRemove(this.removedRelated);
 
