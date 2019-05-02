@@ -318,3 +318,10 @@ a.close-button {
         width: calc(100% - #{$gutter * .75});
     }
 }
+
+.sorting {
+    background: $black;
+    opacity: 0.4;
+    border-radius: $gutter * 0.25;
+
+}
