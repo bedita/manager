@@ -54,7 +54,8 @@
 
                 {% element 'Form/resources/translations' {'resourceName': 'translations', 'cssOrder': '2' } %}
 
-                {% if 'roles' in relations %}
+                {# if `roles` in relationships (`users` only) display custom roles element #}
+                {% if object.relationships.roles %}
                     {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
