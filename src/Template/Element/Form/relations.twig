@@ -7,7 +7,7 @@
 {% if objectRelations %}
 <section class="relations">
 
-    {% for relationName in objectRelations if relationName != 'roles' and relationName != 'translations' %}
+    {% for relationName in objectRelations %}
 
         <div class="relation">
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
