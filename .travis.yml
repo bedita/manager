@@ -19,7 +19,7 @@ before_install:
   - docker run --name api -d -p 127.0.0.1:8080:80 --env BEDITA_API_KEY=${BEDITA_API_KEY} --env BEDITA_ADMIN_USR=${BEDITA_ADMIN_USR} --env BEDITA_ADMIN_PWD=${BEDITA_ADMIN_PWD} bedita/bedita:4-cactus
   - sleep 10
   - docker ps -a
-  - docker exec api ls -la webroot/_files
+  - docker exec api ls -la . webroot webroot/_files
 
 install:
   # Install Composer dependencies.
