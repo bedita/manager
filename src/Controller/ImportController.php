@@ -168,6 +168,8 @@ class ImportController extends AppController
     protected function loadAsyncJobs()
     {
         if (empty($this->services)) {
+            $this->set('jobs', []);
+
             return;
         }
         $query = [

@@ -2,6 +2,7 @@
 
 <import-view
     :jobs="{{ jobs|json_encode() }}"
+    :services="{{ services|json_encode() }}"
     ref="moduleView" inline-template>
 <div id="data-import">
 
@@ -102,7 +103,7 @@
     </section>
     {% endif %}
 
-
+    {% if services %}
     {# jobs #}
     <div class="columns" v-if="jobs.length != -1">
         <div class="column">
@@ -140,6 +141,8 @@
         </div>
 
     </div>
+    {% endif %}
+
 
 </div>
 </import-view>

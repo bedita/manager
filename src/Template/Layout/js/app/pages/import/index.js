@@ -12,6 +12,10 @@
             type: Array,
             default: () => [],
         },
+        services: {
+            type: Array,
+            default: () => [],
+        },
         timeout: {
             type: Number,
             default: 5000,
@@ -31,9 +35,11 @@
     },
 
     mounted() {
-        setInterval(() => {
-            this.updateJobs();
-        }, this.timeout);
+        if (this.services.length) {
+            setInterval(() => {
+                this.updateJobs();
+            }, this.timeout);
+        }
     },
 
     methods: {
