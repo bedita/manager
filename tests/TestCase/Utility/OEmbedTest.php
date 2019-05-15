@@ -49,9 +49,9 @@ class OEmbedTest extends TestCase
             ],
             'found incomplete' => [
                 [
-                    'provider_url' => 'https://vimeo.com/something',
+                    'provider_url' => 'https://www.vimeo.com/something',
                 ],
-                'https://vimeo.com/something',
+                'https://www.vimeo.com/something',
                 [],
             ],
             'found' => [
