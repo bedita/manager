@@ -204,6 +204,18 @@ class ModulesComponent extends Component
     }
 
     /**
+     * Read oEmbed metadata
+     *
+     * @param string $url Remote URL
+     * @return array|null
+     * @codeCoverageIgnore
+     */
+    protected function oEmbedMeta(string $url) : ?array
+    {
+        return (new OEmbed())->readMetadata($url);
+    }
+
+    /**
      * Upload a file and store it in a media stream
      * Or create a remote media trying to get some metadata via oEmbed
      *
@@ -213,7 +225,7 @@ class ModulesComponent extends Component
     public function upload(array &$requestData) : void
     {
         if (!empty($requestData['remote_url'])) {
-            $data = OEmbed::readMetadata($requestData['remote_url']);
+            $data = $this->oEmbedMeta($requestData['remote_url']);
             $requestData = array_filter($requestData) + $data;
 
             return;

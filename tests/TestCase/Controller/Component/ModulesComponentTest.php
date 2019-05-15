@@ -26,6 +26,21 @@ use Cake\Network\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
+class MyModulesComponent extends ModulesComponent
+{
+    /**
+     * Mock oEmbed meta
+     *
+     * @var array
+     */
+    public $meta = [];
+
+    protected function oEmbedMeta(string $url) : ?array
+    {
+        return $this->meta;
+    }
+}
+
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
  *
@@ -679,6 +694,17 @@ class ModulesComponentTest extends TestCase
                 null,
                 false,
             ],
+            'upload remote url' => [
+                [
+                    'remote_url' => 'https://www.youtube.com/watch?v=fE50xrnJnR8',
+                    'model-type' => 'videos',
+                ],
+                null,
+                [
+                    'provider' => 'YouTube',
+                    'provider_uid' => 'v=fE50xrnJnR8',
+                ],
+            ],
         ];
     }
 
@@ -687,7 +713,7 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $requestData The request data
      * @param Expection|null $expectedException The exception expected
-     * @param boolean $uploaded The upload result
+     * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
      *
      * @covers ::upload()
@@ -696,7 +722,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()
      */
-    public function testUpload(array $requestData, $expectedException, bool $uploaded) : void
+    public function testUpload(array $requestData, $expectedException, $uploaded) : void
     {
         // if upload failed, verify exception
         if ($expectedException != null) {
@@ -708,8 +734,22 @@ class ModulesComponentTest extends TestCase
         // get api client (+auth)
         $this->setupApi();
 
-        // do component call
-        $this->Modules->upload($requestData);
+        if (empty($requestData['remote_url'])) {
+            // do component call
+            $this->Modules->upload($requestData);
+        } else {
+            // mock for ModulesComponent
+            $controller = new Controller();
+            $registry = $controller->components();
+            $myModules = new MyModulesComponent($registry);
+            $myModules->meta = $uploaded;
+
+            $myModules->upload($requestData);
+            $result = array_intersect_key($requestData, (array)$uploaded);
+            static::assertEquals($uploaded, $result);
+
+            return;
+        }
 
         // if upload ok, verify ID is not null
         if ($uploaded) {
