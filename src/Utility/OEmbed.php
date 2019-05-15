@@ -29,11 +29,11 @@ class OEmbed
      * @param string $url Media remote URL
      * @return array Media metadata, empty array if no data is found
      */
-    public static function readMetadata($url) : array
+    public function readMetadata($url) : array
     {
         $parsed = parse_url($url);
         $host = Hash::get($parsed, 'host', '');
-        $oemBedurl = static::findProvider($host);
+        $oemBedurl = $this->findProvider($host);
         if (empty($oemBedurl)) {
             return ['provider_url' => $url];
         }
@@ -43,7 +43,7 @@ class OEmbed
         // custom UID if not found via oEmbed => query or path
         $providerUID = Hash::get($parsed, 'query', Hash::get($parsed, 'path'));
 
-        $meta = (new Client())->get($oemBedurl)->json;
+        $meta = $this->fetchJson($oemBedurl);
         if (empty($meta)) {
             return ['provider_url' => $url];
         }
@@ -60,18 +60,32 @@ class OEmbed
     }
 
     /**
-     * Find oEmbed provider URL for a given hostname
+     * Fetch oEmbed JSON response from oEmbed provider URL
+     *
+     * @param string $oemBedurl oEmbed URL
+     * @return array|null JSON decoded response
+     * @codeCoverageIgnore
      */
-    protected static function findProvider(string $host) : ?string
+    protected function fetchJson(string $oemBedurl) : ?array
+    {
+        return (new Client())->get($oemBedurl)->json;
+    }
+
+    /**
+     * Find oEmbed provider URL for a given hostname
+     *
+     * @param string $host Host name
+     * @return string|null OEmbed provider or null if no match
+     */
+    protected function findProvider(string $host) : ?string
     {
         Configure::load('oembed');
         // exact match
-        $oemBedurl = Configure::read(sprintf('OEmbed.providers.%s', $host));
-        if (!empty($oemBedurl)) {
-            return $oemBedurl;
+        $providers = Configure::read('OEmbed.providers');
+        if (!empty($providers[$host])) {
+            return $providers[$host];
         }
         // wildcard match
-        $providers = Configure::read('OEmbed.providers');
         foreach ($providers as $h => $url) {
             if (fnmatch($h, $host)) {
                 return $url;
