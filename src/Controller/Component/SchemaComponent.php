@@ -189,7 +189,8 @@ class SchemaComponent extends Component
             $relations[$res['attributes']['name']] = $res;
             $relations[$res['attributes']['inverse_name']] = $res;
         }
+        Configure::load('relations');
 
-        return $relations;
+        return $relations + Configure::read('DefaultRelations');
     }
 }

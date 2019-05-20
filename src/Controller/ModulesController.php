@@ -29,6 +29,8 @@ use Psr\Log\LogLevel;
 class ModulesController extends AppController
 {
     protected const FIXED_RELATIONSHIPS = [
+        'parent',
+        'children',
         'parents',
         'translations',
         'streams',
