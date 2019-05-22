@@ -40,11 +40,12 @@
                             'placeholder': __('Remote URL') ~ ieLabel }) | raw }}
                     </div>
 
-                    {# FIXME: this gives a tampered field security error in POST #}
-                    {# {{ Form.control('create-behavior', {
+                    {{ Form.control('upload_behavior', {
                         'type': 'hidden',
-                        'v-bind:value': 'activeIndex == 0? `upload` : `embed`'
-                    }) | raw }} #}
+                        'v-bind:value': 'activeIndex == 0? `file` : `embed`'
+                    }) | raw }}
+                    {{ Form.unlockField('upload_behavior')}}
+
                 </div>
 
             </div>

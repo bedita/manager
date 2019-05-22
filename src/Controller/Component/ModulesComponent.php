@@ -224,13 +224,13 @@ class ModulesComponent extends Component
      */
     public function upload(array &$requestData) : void
     {
-        if (!empty($requestData['remote_url'])) {
+        if ($requestData['upload_behavior'] === 'embed' && !empty($requestData['remote_url'])) {
             $data = $this->oEmbedMeta($requestData['remote_url']);
             $requestData = array_filter($requestData) + $data;
 
             return;
         }
-        if (empty($requestData['file'])) {
+        if ($requestData['upload_behavior'] !== 'file' || empty($requestData['file'])) {
             return;
         }
 
