@@ -1,11 +1,49 @@
 <section class="fieldset order-1">
-    <div class="tab-container">
-        {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
-        {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
+    <div class="create-media-box">
+
+        <horizontal-tab-view
+            :labels="['{{ __('Upload local file') }}', '{{ __('Embed online content') }}']"
+            inline-template>
+            <div v-cloak>
+                <div class="h-tabs">
+                    <ul>
+                        <li v-for="(label, i) in labels"
+                            :class="i == activeIndex? 'is-active' : ''"
+                            v-on:click="activeIndex = i"
+                            ><a v-html="label"></a></li>
+                    </ul>
+                </div>
+
+                <div class="h-tabs-contents">
+                    <div class="h-tab" v-show="activeIndex == 0">
+                        {% element 'Form/form_file_upoad' %}
+                        {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
+                    </div>
+
+                    {% if object.type == 'videos' %}
+                        {% set ieLabel = ' i.e. https://www.youtube.com/watch?v=JXkN3nJyWEA' %}
+                    {% elseif object.type == 'images' %}
+                        {% set ieLabel = ' i.e. https://flickr' %}
+                    {% endif %}
+
+                    <div class="h-tab" v-show="activeIndex == 1">
+                        {{ Form.text('remote_url', {
+                            'type': 'text',
+                            'autocomplete': 'off',
+                            'autocorrect': 'off',
+                            'autocapitalize': 'off',
+                            'spellcheck': 'false',
+                            'placeholder': __('Remote URL') ~ ieLabel }) | raw }}
+                    </div>
+
+                    {{ Form.control('create-behavior', {
+                        'type': 'hidden',
+                        'v-bind:value': 'activeIndex == 0? `upload` : `embed`',
+                    }) | raw }}
+                </div>
+            </div>
+        </horizontal-tab-view>
+
     </div>
 </section>
-<section class="fieldset order-1">
-    <div class="tab-container">
-        {{ Form.control('remote_url', { 'type': 'text', 'label': __('Remote URL') }) | raw }}
-    </div>
-</section>
+{# https://www.youtube.com/watch?v=AuEv942wOZs #}

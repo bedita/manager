@@ -1,0 +1,16 @@
+<form-file-upload inline-template>
+    <div class="file has-name">
+        <label class="file-label">
+            {{ Form.file('file', {
+                'class': 'file-input',
+                'v-on:change': 'onFileChanged',
+            }) | raw }}
+            <span class="file-cta icon-upload file-label">Choose a file</span>
+            <span class="file-name" v-cloak>
+                <span v-bind:title="fileName" data-empty-label="{{ __('empty') }}"><: fileName :></span>
+            </span>
+
+            <a class="file-reset-button" v-on:click.prevent.stop="resetFile" v-show="fileName"></a>
+        </label>
+    </div>
+</form-file-upload>
