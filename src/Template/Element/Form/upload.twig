@@ -1,10 +1,20 @@
 <section class="fieldset order-1">
     <div class="create-media-box">
 
+        {% set activeTab = 0 %}
+        {% if object.type == 'videos' %}
+            {% set ieLabel = ' i.e. https://www.youtube.com/watch?v=JXkN3nJyWEA' %}
+            {% set activeTab = 1 %}
+        {% elseif object.type == 'images' %}
+            {% set ieLabel = ' i.e. https://flickr' %}
+        {% endif %}
+
         <horizontal-tab-view
             :labels="['{{ __('Upload local file') }}', '{{ __('Embed online content') }}']"
+            :default-active={{ activeTab }}
             inline-template>
             <div v-cloak>
+
                 <div class="h-tabs">
                     <ul>
                         <li v-for="(label, i) in labels"
@@ -19,12 +29,6 @@
                         {% element 'Form/form_file_upoad' %}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
-
-                    {% if object.type == 'videos' %}
-                        {% set ieLabel = ' i.e. https://www.youtube.com/watch?v=JXkN3nJyWEA' %}
-                    {% elseif object.type == 'images' %}
-                        {% set ieLabel = ' i.e. https://flickr' %}
-                    {% endif %}
 
                     <div class="h-tab" v-show="activeIndex == 1">
                         {{ Form.text('remote_url', {
@@ -41,6 +45,7 @@
                         'v-bind:value': 'activeIndex == 0? `upload` : `embed`',
                     }) | raw }}
                 </div>
+
             </div>
         </horizontal-tab-view>
 
