@@ -63,12 +63,14 @@ class OEmbed
      * Fetch oEmbed JSON response from oEmbed provider URL
      *
      * @param string $oemBedurl oEmbed URL
-     * @return array|null JSON decoded response
+     * @return array JSON decoded response or empty array on failure
      * @codeCoverageIgnore
      */
-    protected function fetchJson(string $oemBedurl) : ?array
+    protected function fetchJson(string $oemBedurl) : array
     {
-        return (new Client())->get($oemBedurl)->json;
+        $json = (new Client())->get($oemBedurl)->json;
+
+        return empty($json) ? [] : $json;
     }
 
     /**
@@ -81,7 +83,7 @@ class OEmbed
     {
         Configure::load('oembed');
         // exact match
-        $providers = Configure::read('OEmbed.providers');
+        $providers = (array)Configure::read('OEmbed.providers');
         if (!empty($providers[$host])) {
             return $providers[$host];
         }
