@@ -56,7 +56,9 @@
                     <span class="file-cta icon-upload">
                         <span class="file-label">Choose a file</span>
                     </span>
-                    <span class="file-name" v-cloak><span v-bind:title="fileName"><: fileName :></span></span>
+                    <span class="file-name" v-cloak>
+                        <span data-empty-label="{{ __('empty') }}" v-bind:title="fileName"><: fileName :></span>
+                    </span>
                 </label>
             </div>
         </section>

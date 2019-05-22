@@ -14,6 +14,7 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\OEmbed;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -203,14 +204,36 @@ class ModulesComponent extends Component
     }
 
     /**
+     * Read oEmbed metadata
+     *
+     * @param string $url Remote URL
+     * @return array|null
+     * @codeCoverageIgnore
+     */
+    protected function oEmbedMeta(string $url) : ?array
+    {
+        return (new OEmbed())->readMetadata($url);
+    }
+
+    /**
      * Upload a file and store it in a media stream
+     * Or create a remote media trying to get some metadata via oEmbed
      *
      * @param array $requestData The request data from form
      * @return void
      */
     public function upload(array &$requestData) : void
     {
-        if (empty($requestData['file'])) {
+        if (empty($requestData['upload_behavior'])) {
+            return;
+        }
+        if ($requestData['upload_behavior'] === 'embed' && !empty($requestData['remote_url'])) {
+            $data = $this->oEmbedMeta($requestData['remote_url']);
+            $requestData = array_filter($requestData) + $data;
+
+            return;
+        }
+        if ($requestData['upload_behavior'] !== 'file' || empty($requestData['file'])) {
             return;
         }
 
@@ -230,7 +253,7 @@ class ModulesComponent extends Component
             $streamId = $response['data']['id'];
             $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
         }
-        unset($requestData['file']);
+        unset($requestData['file'], $requestData['remote_url']);
     }
 
     /**
