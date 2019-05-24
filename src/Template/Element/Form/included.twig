@@ -19,9 +19,11 @@
         {# Display included streams#}
         {% if included %}
 
+        {% set hasFile = false %}
         {# cycle over included elements, show only streams #}
         {% for o in included %}
             {% if o.type == 'streams' %}
+            {% set hasFile = true %}
             {% set stream = o %}
 
             {# the stream #}
@@ -84,11 +86,13 @@
         {% endfor %}
         {% endif %}
 
+        {% if hasFile %}
         <h3>{{ __('Change File') }}</h3>
         <div class="tab-container">
             {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
             {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
         </div>
+        {% endif %}
 
     </div>
 
