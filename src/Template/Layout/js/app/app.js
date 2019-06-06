@@ -127,6 +127,22 @@ const _vueInstance = new Vue({
         // Events Listeners
 
         /**
+         * Clone object
+         * Prompt for title change
+         *
+         * @param {Event} e The event
+         * @return {void}
+         */
+        clone(e) {
+            const title = document.getElementById('title').value;
+            const cloneTitle = prompt(title, title + ' -copy');
+            if (cloneTitle) {
+                document.querySelector('input[name=title]').value = cloneTitle;
+                document.querySelector('input[name=title]').closest('form').submit();
+            }
+        },
+
+        /**
          * listen to FilterBoxView event filter-objects
          *
          * @param {Object} filter

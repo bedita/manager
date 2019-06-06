@@ -79,7 +79,7 @@ class ModulesController extends AppController
     public function beforeFilter(Event $event) : ?Response
     {
         $actions = [
-            'delete', 'changeStatus', 'saveJson',
+            'delete', 'changeStatus', 'saveJson', 'clone'
         ];
 
         if (in_array($this->request->params['action'], $actions)) {
@@ -351,6 +351,31 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Clone single resource.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function clone() : ?Response
+    {
+        $this->request->allowMethod(['post']);
+        try {
+            $response = $this->apiClient->getObject($this->request->getData('id'), $this->objectType);
+            $data = $response['data']['attributes'];
+            unset($data['uname']);
+            $data['title'] = $this->request->getData('title');
+            $response = $this->apiClient->save($this->objectType, $data);
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+        }
+        $this->Flash->success(__('Object cloned'));
+
+        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $response['data']['id']]);
     }
 
     /**
