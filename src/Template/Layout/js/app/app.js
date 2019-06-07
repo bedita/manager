@@ -137,8 +137,10 @@ const _vueInstance = new Vue({
             const title = document.getElementById('title').value;
             const cloneTitle = prompt(title, title + ' -copy');
             if (cloneTitle) {
-                document.querySelector('input[name=title]').value = cloneTitle;
-                document.querySelector('input[name=title]').closest('form').submit();
+                const query = `?title=${cloneTitle}`;
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                window.location.replace(`${origin}${path}${query}`);
             }
         },
 

@@ -356,11 +356,11 @@ class ModulesController extends AppController
     /**
      * Clone single resource.
      *
+     * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone() : ?Response
+    public function clone($id) : ?Response
     {
-        $this->request->allowMethod(['post']);
         $this->viewBuilder()->setTemplate('view');
 
         $schema = $this->Schema->getSchema();
@@ -370,15 +370,16 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $response = $this->apiClient->getObject($this->request->getData('id'), $this->objectType);
+            $response = $this->apiClient->getObject($id, $this->objectType);
             $attributes = $response['data']['attributes'];
             $attributes['uname'] = '';
-            $attributes['title'] = $this->request->getData('title');
+            unset($attributes['relationships']);
+            $attributes['title'] = $this->request->getQuery('title');
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
         $object = [
             'type' => $this->objectType,
@@ -386,8 +387,6 @@ class ModulesController extends AppController
         ];
         $this->set(compact('object', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
-        // pass _csrfToken to request.params, otherwise view page won't load
-        $this->request->params['_csrfToken'] = $this->request->data['_csrfToken'];
 
         return null;
     }

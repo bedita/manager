@@ -61,7 +61,7 @@
                     {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
-                {% if modules.folders and _view.request.params.action != 'create' %}
+                {% if modules.folders and _view.request.params.action != 'create' and _view.request.params.action != 'clone' %}
                     {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
@@ -85,10 +85,10 @@
         {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
         {% if object.id %}
         {# Append "Clone" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Form.postButton(
+        {% do _view.append('commands', Html.link(
             __('Clone'),
-            {'_name': 'modules:clone', 'object_type': objectType},
-            {'data': { 'id': object.id, 'title': object.attributes.title }, '@click.prevent': 'clone'}
+            {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
+            {'@click.prevent': 'clone'}
         )) %}
         {% endif %}
 
