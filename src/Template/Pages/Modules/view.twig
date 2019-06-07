@@ -83,12 +83,14 @@
 
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
         {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+        {% if object.id %}
         {# Append "Clone" to commands in commands menu. Must stay here, before the form end. #}
         {% do _view.append('commands', Form.postButton(
             __('Clone'),
             {'_name': 'modules:clone', 'object_type': objectType},
             {'data': { 'id': object.id, 'title': object.attributes.title }, '@click.prevent': 'clone'}
         )) %}
+        {% endif %}
 
         {# Append "Delete" to commands in commands menu. #}
         {% do _view.append('commands', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}

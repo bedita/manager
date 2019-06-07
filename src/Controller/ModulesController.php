@@ -361,21 +361,35 @@ class ModulesController extends AppController
     public function clone() : ?Response
     {
         $this->request->allowMethod(['post']);
+        $this->viewBuilder()->setTemplate('view');
+
+        $schema = $this->Schema->getSchema();
+        if (!is_array($schema)) {
+            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
         try {
             $response = $this->apiClient->getObject($this->request->getData('id'), $this->objectType);
-            $data = $response['data']['attributes'];
-            unset($data['uname']);
-            $data['title'] = $this->request->getData('title');
-            $response = $this->apiClient->save($this->objectType, $data);
+            $attributes = $response['data']['attributes'];
+            $attributes['uname'] = '';
+            $attributes['title'] = $this->request->getData('title');
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
         }
-        $this->Flash->success(__('Object cloned'));
+        $object = [
+            'type' => $this->objectType,
+            'attributes' => $attributes,
+        ];
+        $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        // pass _csrfToken to request.params, otherwise view page won't load
+        $this->request->params['_csrfToken'] = $this->request->data['_csrfToken'];
 
-        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $response['data']['id']]);
+        return null;
     }
 
     /**
