@@ -355,6 +355,34 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `create` method
+     *
+     * @covers ::create()
+     *
+     * @return void
+     */
+    public function testCreate302() : void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'objects',
+            ],
+        ]);
+
+        // do controller call
+        $result = $this->controller->create();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
+
+    /**
      * Test `clone` method
      *
      * @covers ::clone()
@@ -382,14 +410,16 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `create` method
+     * Test `clone` method
      *
-     * @covers ::create()
+     * @covers ::clone()
      *
      * @return void
      */
-    public function testCreate302() : void
+    public function testClone302() : void
     {
+        // test 1 clone abstract type
+
         // Setup controller for test
         $this->setupController([
             'environment' => [
@@ -401,8 +431,21 @@ class ModulesControllerTest extends TestCase
             ],
         ]);
 
+        // get object ID for test
+        $id = $this->getTestId();
+
         // do controller call
-        $result = $this->controller->create();
+        $result = $this->controller->clone($id);
+
+        // verify response status code and type
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+
+        // test 2 clone object by ID that doesn't exist
+        $id = 999999999999;
+
+        // do controller call
+        $result = $this->controller->clone($id);
 
         // verify response status code and type
         static::assertEquals(302, $result->statusCode());
