@@ -79,7 +79,7 @@ class ModulesController extends AppController
     public function beforeFilter(Event $event) : ?Response
     {
         $actions = [
-            'delete', 'changeStatus', 'saveJson',
+            'delete', 'changeStatus', 'saveJson'
         ];
 
         if (in_array($this->request->params['action'], $actions)) {
@@ -351,6 +351,44 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Clone single object.
+     *
+     * @param string|int $id Object ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function clone($id) : ?Response
+    {
+        $this->viewBuilder()->setTemplate('view');
+
+        $schema = $this->Schema->getSchema();
+        if (!is_array($schema)) {
+            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+        try {
+            $response = $this->apiClient->getObject($id, $this->objectType);
+            $attributes = $response['data']['attributes'];
+            $attributes['uname'] = '';
+            unset($attributes['relationships']);
+            $attributes['title'] = $this->request->getQuery('title');
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
+        }
+        $object = [
+            'type' => $this->objectType,
+            'attributes' => $attributes,
+        ];
+        $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+
+        return null;
     }
 
     /**

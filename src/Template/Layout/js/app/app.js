@@ -127,6 +127,25 @@ const _vueInstance = new Vue({
         // Events Listeners
 
         /**
+         * Clone object
+         * Prompt for title change
+         *
+         * @param {Event} e The event
+         * @return {void}
+         */
+        clone(e) {
+            const title = document.getElementById('title').value;
+            const msg = t`Please insert a new title on "${title}" clone`;
+            const cloneTitle = prompt(msg, title + ' -copy');
+            if (cloneTitle) {
+                const query = `?title=${cloneTitle}`;
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                window.location.replace(`${origin}${path}${query}`);
+            }
+        },
+
+        /**
          * listen to FilterBoxView event filter-objects
          *
          * @param {Object} filter

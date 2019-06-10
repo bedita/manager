@@ -383,6 +383,76 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `clone` method
+     *
+     * @covers ::clone()
+     *
+     * @return void
+     */
+    public function testClone() : void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $result = $this->controller->clone($id);
+
+        // verify response status code and type
+        static::assertNull($result);
+        static::assertEquals(200, $this->controller->response->statusCode());
+        static::assertEquals('text/html', $this->controller->response->type());
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['object', 'schema', 'properties']);
+    }
+
+    /**
+     * Test `clone` method
+     *
+     * @covers ::clone()
+     *
+     * @return void
+     */
+    public function testClone302() : void
+    {
+        // test 1 clone abstract type
+
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'objects',
+            ],
+        ]);
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $result = $this->controller->clone($id);
+
+        // verify response status code and type
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+
+        // test 2 clone object by ID that doesn't exist
+        $id = 999999999999;
+
+        // do controller call
+        $result = $this->controller->clone($id);
+
+        // verify response status code and type
+        static::assertEquals(302, $result->statusCode());
+        static::assertEquals('text/html', $result->type());
+    }
+
+    /**
      * Test `save` method
      *
      * @covers ::save()
