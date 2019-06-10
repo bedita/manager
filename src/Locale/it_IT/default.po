@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-03-07 11:39:32 \n"
+"POT-Creation-Date: 2019-06-10 09:36:41 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -62,6 +62,9 @@ msgstr "Cambia File"
 msgid "Children"
 msgstr "Contenuti"
 
+msgid "Clone"
+msgstr "Clona"
+
 msgid "Create new"
 msgstr "Crea nuovo"
 
@@ -97,6 +100,9 @@ msgstr ""
 
 msgid "Edit Params"
 msgstr "Modifica Parametri"
+
+msgid "Embed online content"
+msgstr "Incorpora contenuti online"
 
 msgid "Empty request data"
 msgstr "Nessuno dato in request"
@@ -170,6 +176,12 @@ msgstr "Avviso in importazione"
 msgid "Invalid username or password"
 msgstr ""
 
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
+
+msgid "Jobs"
+msgstr "Processi"
+
 msgid "Language"
 msgstr "Lingua"
 
@@ -205,6 +217,9 @@ msgstr "Sposta nel cestino"
 
 msgid "New entry in"
 msgstr "Nuova voce in"
+
+msgid "New object in"
+msgstr "Nuovo oggetto in"
 
 msgid "New relations (save to keep)"
 msgstr "Nuove relazioni (salvare per mantenerle)"
@@ -289,6 +304,9 @@ msgstr "Data inizio pubblicazione"
 
 msgid "Relations"
 msgstr "Relazioni"
+
+msgid "Remote URL"
+msgstr "Indirizzo remoto"
 
 msgid "Remove"
 msgstr "Rimuovi"
@@ -389,6 +407,9 @@ msgstr "Senza titolo"
 msgid "Upload"
 msgstr "Caricare"
 
+msgid "Upload local file"
+msgstr "Carica file locale"
+
 msgid "User Profile"
 msgstr "Profilo Utente"
 
@@ -437,6 +458,9 @@ msgstr "chiudi"
 msgid "code"
 msgstr "codice"
 
+msgid "completed on"
+msgstr "completato il"
+
 msgid "confirm password"
 msgstr "conferma password"
 
@@ -451,6 +475,12 @@ msgstr "password corrente"
 
 msgid "download"
 msgstr ""
+
+msgid "empty"
+msgstr "vuoto"
+
+msgid "file name"
+msgstr "nome del file"
 
 msgid "id"
 msgstr ""
@@ -488,6 +518,12 @@ msgstr "ricarica"
 msgid "remove"
 msgstr "rimuovi"
 
+msgid "scheduled from"
+msgstr "programmato da"
+
+msgid "service name"
+msgstr "nome del servizio"
+
 msgid "status"
 msgstr "stato"
 
@@ -511,6 +547,18 @@ msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
+
+#: src/Template/Layout/js/app/app.js:138
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+
+#: src/Template/Layout/js/app/app.js:462
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#: src/Template/Layout/js/app/app.js:464
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #~ msgid "Apply"
 #~ msgstr "Applica"
@@ -562,9 +610,3 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Avviso"
-
-#~ msgid "If you confirm, this data will be gone forever"
-#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
-
-#~ msgid "Do you really want to trash the object?"
-#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
