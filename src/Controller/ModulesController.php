@@ -79,7 +79,7 @@ class ModulesController extends AppController
     public function beforeFilter(Event $event) : ?Response
     {
         $actions = [
-            'delete', 'changeStatus', 'saveJson', 'clone'
+            'delete', 'changeStatus', 'saveJson'
         ];
 
         if (in_array($this->request->params['action'], $actions)) {
@@ -354,9 +354,9 @@ class ModulesController extends AppController
     }
 
     /**
-     * Clone single resource.
+     * Clone single object.
      *
-     * @param string|int $id Resource ID.
+     * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
     public function clone($id) : ?Response

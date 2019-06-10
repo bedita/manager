@@ -135,7 +135,7 @@ const _vueInstance = new Vue({
          */
         clone(e) {
             const title = document.getElementById('title').value;
-            const cloneTitle = prompt(title, title + ' -copy');
+            const cloneTitle = prompt(`Please insert a new title on "${title}" clone`, title + ' -copy');
             if (cloneTitle) {
                 const query = `?title=${cloneTitle}`;
                 const origin = window.location.origin;
