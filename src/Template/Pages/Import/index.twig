@@ -19,7 +19,11 @@
                         <h2>{{ __('File type') }}</h2>
                     </header>
                     <div class="tab-container">
-                        {{ Form.radio('filter', filters)|raw }}
+                        {% set allFilters = {} %}
+                        {% for index, datum in filters %}
+                            {% set allFilters = allFilters|merge({ (index): datum|merge({'@click': 'currentFilterId = ' ~ index}) }) %}
+                        {% endfor %}
+                        {{ Form.radio('filter', allFilters)|raw }}
                     </div>
                 </section>
             </div>
@@ -30,14 +34,30 @@
                         <h2>{{ __('Options') }}</h2>
                     </header>
                     <div class="tab-container">
-                        {% for f in filters %}
-                            <div id="{{ f.name }}">
-                                {% for k,v in f.options %}
-                                <div>{{ k }}:{{ v }}</div>
+                        {% for index, datum in filters %}
+                            <div id="filter-{{ datum.value|lower }}-options" v-show="currentFilterId == {{ index }}">
+                            {% if datum.options %}
+                                {% for optionName,optionData in datum.options %}
+                                <div>
+                                    <label>{{ optionData.label }}</label>
+                                    {% if optionData.dataType == 'boolean' %}
+                                        <input id="{{ optionName }}" name="data[{{ optionName }}]" type="checkbox" value="{{ optionName }}" {% if optionData.defaultValue %}checked="checked"{% endif %} />
+                                    {% elseif optionData.dataType == 'text' %}
+                                        <input id="{{ optionName }}" name="data[{{ optionName }}]" type="text" {% if optionData.defaultValue %}value="{{ optionData.defaultValue }}"{% endif %} />
+                                    {% elseif optionData.dataType == 'options' %}
+                                        <select id="{{ optionName }}" name="data[{{ optionName }}]">
+                                        {% for optionValue,optionLabel in optionData.values %}
+                                            <option value="{{ optionValue }}" {% if optionData.defaultValue and optionData.defaultValue == optionValue %}selected="selected"{% endif %}>{{ optionLabel }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                </div>
                                 {% endfor %}
+                            {% else %}
+                                <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
+                            {% endif %}
                             </div>
                         {% endfor %}
-                        <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
                     </div>
                 </section>
             </div>

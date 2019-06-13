@@ -135,10 +135,11 @@ class ImportController extends AppController
     {
         $filters = [];
         $importFilters = Configure::read('Filters.import', []);
-        foreach ($importFilters as $filter) {
+        foreach ($importFilters as $index => $filter) {
             $value = $filter['class'];
             $text = $filter['label'];
-            $filters[] = compact('value', 'text');
+            $options = $filter['options'];
+            $filters[] = compact('value', 'text', 'options');
             $this->updateServiceList($value);
         }
         $this->set('filters', $filters);
