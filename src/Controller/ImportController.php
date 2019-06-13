@@ -94,7 +94,8 @@ class ImportController extends AppController
 
             $result = $importFilter->import(
                 $this->request->getData('file.name'),
-                $this->request->getData('file.tmp_name')
+                $this->request->getData('file.tmp_name'),
+                $this->request->getData('filter_options')
             );
             $this->request->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {

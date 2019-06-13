@@ -41,15 +41,33 @@
                                 <div>
                                     <label>{{ optionData.label }}</label>
                                     {% if optionData.dataType == 'boolean' %}
-                                        <input id="{{ optionName }}" name="data[{{ optionName }}]" type="checkbox" value="{{ optionName }}" {% if optionData.defaultValue %}checked="checked"{% endif %} />
+                                        {{ Form.control(optionName, {
+                                            'type': 'checkbox',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'checked': optionData.defaultValue|default(false)
+                                        })|raw }}
                                     {% elseif optionData.dataType == 'text' %}
-                                        <input id="{{ optionName }}" name="data[{{ optionName }}]" type="text" {% if optionData.defaultValue %}value="{{ optionData.defaultValue }}"{% endif %} />
+                                        {{ Form.control(optionName, {
+                                            'type': 'text',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'value': optionData.defaultValue|default('')
+                                        })|raw }}
                                     {% elseif optionData.dataType == 'options' %}
-                                        <select id="{{ optionName }}" name="data[{{ optionName }}]">
+                                        {% set oo = {} %}
+                                        {% set index = 0 %}
                                         {% for optionValue,optionLabel in optionData.values %}
-                                            <option value="{{ optionValue }}" {% if optionData.defaultValue and optionData.defaultValue == optionValue %}selected="selected"{% endif %}>{{ optionLabel }}</option>
+                                            {% set oo = oo|merge({ (index): {
+                                                'text': optionLabel,
+                                                'value': optionValue,
+                                            }}) %}
+                                            {% set index = index + 1 %}
                                         {% endfor %}
-                                        </select>
+                                        {{ Form.control(optionName, {
+                                            'type': 'select',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'options': oo,
+                                            'value': optionData.defaultValue|default(null)
+                                        })|raw }}
                                     {% endif %}
                                 </div>
                                 {% endfor %}
