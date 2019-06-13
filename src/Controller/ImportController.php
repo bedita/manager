@@ -136,7 +136,7 @@ class ImportController extends AppController
     {
         $filters = [];
         $importFilters = Configure::read('Filters.import', []);
-        foreach ($importFilters as $index => $filter) {
+        foreach ($importFilters as $filter) {
             $value = $filter['class'];
             $text = $filter['label'];
             $options = $filter['options'];
