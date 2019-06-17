@@ -27,6 +27,7 @@
             fileName: '',
             currentJobs: () => [],
             showPayloadId: null,
+            currentFilterId: null,
         };
     },
 
