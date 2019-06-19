@@ -44,7 +44,8 @@
                                         {{ Form.control(optionName, {
                                             'type': 'checkbox',
                                             'name': 'filter_options[' ~ optionName ~ ']',
-                                            'checked': optionData.defaultValue|default(false)
+                                            'checked': optionData.defaultValue|default(false),
+                                            'label': '',
                                         })|raw }}
                                     {% elseif optionData.dataType == 'text' %}
                                         {{ Form.control(optionName, {
