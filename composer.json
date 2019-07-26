@@ -24,8 +24,6 @@
         "php": ">=7.1",
         "bedita/web-tools": "^1.0",
         "bedita/i18n": "^1.4",
-        "cakephp/cakephp": "3.5.*",
-        "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
@@ -84,7 +82,7 @@
                 "plugins/*/composer.json"
             ],
             "recurse": true,
-            "replace": false,
+            "replace": true,
             "merge-dev": true,
             "merge-extra": false,
             "merge-extra-deep": false,
