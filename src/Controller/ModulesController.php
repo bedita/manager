@@ -16,7 +16,7 @@ use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Response;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -325,7 +325,7 @@ class ModulesController extends AppController
      */
     public function saveJson() : void
     {
-        $this->viewBuilder()->className('Json'); // force json response
+        $this->viewBuilder()->getClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
 

@@ -17,7 +17,7 @@ use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use Cake\Http\ServerRequest;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -127,7 +127,7 @@ class ImportControllerTest extends TestCase
 
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $result = $this->Import->request->session()->read('Import.result');
+        $result = $this->Import->request->getSession()->read('Import.result');
         $expected = new ImportResult($this->filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
         static::assertEquals($result, $expected);
     }
@@ -144,7 +144,7 @@ class ImportControllerTest extends TestCase
         $this->setupController();
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->request->session()->read('Flash.flash');
+        $flash = $this->Import->request->getSession()->read('Flash.flash');
         static::assertEquals('Import filter not selected', Hash::get($flash, '0.message'));
         static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
@@ -164,7 +164,7 @@ class ImportControllerTest extends TestCase
 
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->request->session()->read('Flash.flash');
+        $flash = $this->Import->request->getSession()->read('Flash.flash');
         static::assertEquals('Missing import file', Hash::get($flash, '0.message'));
         static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
@@ -181,7 +181,7 @@ class ImportControllerTest extends TestCase
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSampleError');
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->request->session()->read('Flash.flash');
+        $flash = $this->Import->request->getSession()->read('Flash.flash');
         static::assertEquals('An expected exception', Hash::get($flash, '0.message'));
         static::assertEquals(500, Hash::get($flash, '0.params.status'));
     }

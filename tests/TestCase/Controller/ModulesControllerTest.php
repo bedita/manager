@@ -188,8 +188,8 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['objects', 'meta', 'links', 'types', 'properties']);
@@ -212,8 +212,8 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertEmpty($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
     }
 
     /**
@@ -236,7 +236,7 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNotEmpty($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
     }
 
     /**
@@ -259,7 +259,7 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertEmpty($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
     }
     /**
      * Test `view` method
@@ -281,8 +281,8 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'objectRelations']);
@@ -307,10 +307,10 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->uname($id);
 
         // verify response status code and type
-        $header = $result->header();
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
-        static::assertEquals(sprintf('/%s/view/%s', $this->controller->getObjectType(), $id), $header['Location']);
+        $locationHeader = $result->getHeaderLine('Location');
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+        static::assertEquals(sprintf('/%s/view/%s', $this->controller->getObjectType(), $id), $locationHeader);
     }
 
     /**
@@ -330,9 +330,9 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->uname('just-a-wrong-uname');
 
         // verify response status code and type
-        $header = $result->header();
-        static::assertEquals(302, $result->statusCode()); // redir to referer
-        static::assertEquals('/', $header['Location']);
+        $locationHeader = $result->getHeaderLine('Location');
+        static::assertEquals(302, $result->getStatusCode()); // redir to referer
+        static::assertEquals('/', $locationHeader);
     }
 
     /**
@@ -378,8 +378,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->create();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -402,8 +402,8 @@ class ModulesControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['object', 'schema', 'properties']);
@@ -438,8 +438,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->clone($id);
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
 
         // test 2 clone object by ID that doesn't exist
         $id = 999999999999;
@@ -448,8 +448,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->clone($id);
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -485,8 +485,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->save();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -593,8 +593,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->delete();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
 
         // restore test object
         $this->restoreTestObject($o['id'], 'documents');
@@ -829,8 +829,8 @@ class ModulesControllerTest extends TestCase
         $result = $this->controller->bulkActions();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -888,13 +888,13 @@ class ModulesControllerTest extends TestCase
         // do controller call
         $result = $this->controller->bulkActions();
 
-        $flash = $this->controller->request->session()->read('Flash.flash');
+        $flash = $this->controller->request->getSession()->read('Flash.flash');
         $message = $flash[0]['message'];
         $expected = 'Bulk Action failed on: ';
         // verify response status code and type
 
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
         static::assertEquals($expected, $message);
     }
 

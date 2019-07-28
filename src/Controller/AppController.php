@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -17,7 +17,7 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Routing\Router;
 
 /**
@@ -43,7 +43,7 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
@@ -75,7 +75,7 @@ class AppController extends Controller
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
-        } elseif (!in_array($this->request->url, ['login'])) {
+        } elseif (!in_array($this->request->getPath(), ['login'])) {
             $route = ['_name' => 'login'];
             $redirect = $this->request->getUri()->getPath();
             if ($redirect !== $this->request->getAttribute('webroot')) {
@@ -179,7 +179,7 @@ class AppController extends Controller
      *
      * @param array $options The options for request check(s)
      * @return array The request data for required parameters, if any
-     * @throws Cake\Network\Exception\BadRequestException on empty request or empty data by parameter
+     * @throws Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
      */
     protected function checkRequest(array $options = []) : array
     {

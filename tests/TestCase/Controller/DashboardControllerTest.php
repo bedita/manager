@@ -15,7 +15,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\DashboardController;
 use Cake\Http\ServerRequest;
-use Cake\Network\Exception\MethodNotAllowedException;
+use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
 
 /**

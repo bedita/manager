@@ -12,14 +12,14 @@
  */
 namespace App;
 
-use BEdita\I18n\Middleware\I18nMiddleware;
-use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
+use BEdita\WebTools\BaseApplication;
+use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
+use Cake\Core\Exception\MissingPluginException;
+use Cake\Error\Middleware\ErrorHandlerMiddleware;
 /**
  * Application class.
  */
@@ -28,15 +28,67 @@ class Application extends BaseApplication
     /**
      * {@inheritDoc}
      */
+    public function bootstrap()
+    {
+        parent::bootstrap();
+        $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
+        $this->loadFromConfig();
+    }
+
+    /**
+     * @return void
+     */
+    protected function bootstrapCli()
+    {
+        parent::bootstrapCli();
+        try {
+            $this->addPlugin('Bake');
+        } catch (MissingPluginException $e) {
+            // Do not halt if the plugin is missing
+        }
+        $this->addPlugin('Migrations');
+        $this->addPlugin('BEdita/I18n');
+    }
+
+    /**
+     * Load plugins from 'Plugins' configuration
+     *
+     * @return void
+     */
+    public function loadFromConfig() : void
+    {
+        $plugins = Configure::read('Plugins');
+        if ($plugins) {
+            $_defaults = [
+                'debugOnly' => false,
+                'autoload' => false,
+                'bootstrap' => false,
+                'routes' => false,
+                'ignoreMissing' => false
+            ];
+            foreach ($plugins as $plugin => $options) {
+                $options = array_merge($_defaults, $options);
+                if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
+                    $this->addPlugin($plugin, $options);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function middleware($middlewareQueue) : MiddlewareQueue
     {
         $middlewareQueue
-            // Catch any exceptions in the lower layers,
+                    // Catch any exceptions in the lower layers,
             // and make an error page/response
-            ->add(ErrorHandlerMiddleware::class)
+            ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
 
             // Handle plugin/theme assets like CakePHP normally does.
-            ->add(AssetMiddleware::class)
+            ->add(new AssetMiddleware([
+                'cacheTime' => Configure::read('Asset.cacheTime')
+            ]))
 
             // Add I18n middleware.
             ->add(new I18nMiddleware([
