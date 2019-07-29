@@ -14,10 +14,9 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
-use Cake\Http\Response;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
-use Cake\Utility\Hash;
+use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**

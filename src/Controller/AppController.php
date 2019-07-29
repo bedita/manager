@@ -16,9 +16,8 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Http\Response;
 use Cake\Http\Exception\BadRequestException;
-use Cake\Routing\Router;
+use Cake\Http\Response;
 
 /**
  * Base Application Controller.

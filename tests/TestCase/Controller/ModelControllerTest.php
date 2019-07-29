@@ -14,13 +14,11 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ModelController;
-use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 

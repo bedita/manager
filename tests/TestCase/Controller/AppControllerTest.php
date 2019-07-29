@@ -16,9 +16,9 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClient;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequest;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
