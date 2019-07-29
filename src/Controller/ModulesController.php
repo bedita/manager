@@ -59,6 +59,8 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
+
+        $this->Security->setConfig('unlockedActions', ['delete', 'changeStatus', 'saveJson']);
     }
 
     /**
@@ -70,27 +72,6 @@ class ModulesController extends AppController
         $this->set('objectType', $this->objectType);
 
         return parent::beforeRender($event);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @codeCoverageIgnore
-     */
-    public function beforeFilter(Event $event) : ?Response
-    {
-        $actions = [
-            'delete', 'changeStatus', 'saveJson'
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
     }
 
     /**

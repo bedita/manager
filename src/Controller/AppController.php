@@ -46,7 +46,6 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
-        $this->loadComponent('Csrf');
 
         $options = ['Log' => (array)Configure::read('API.log', [])];
         $this->apiClient = ApiClientProvider::getApiClient($options);

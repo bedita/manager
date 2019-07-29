@@ -50,6 +50,8 @@ class ModelController extends AppController
             'type' => $this->resourceType,
             'internalSchema' => true,
         ]);
+
+        $this->Security->setConfig('unlockedActions', ['savePropertyTypesJson']);
     }
 
     /**
@@ -61,8 +63,6 @@ class ModelController extends AppController
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
-
-        $this->Security->setConfig('unlockedActions', ['savePropertyTypesJson']);
 
         return parent::beforeFilter($event);
     }

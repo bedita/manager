@@ -13,9 +13,6 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Http\Response;
-use Cake\Http\Exception\BadRequestException;
 use Cake\Utility\Hash;
 
 /**
@@ -25,22 +22,12 @@ class ExportController extends AppController
 {
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : ?Response
+    public function initialize() : void
     {
-        $actions = [
-            'export',
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
+        parent::initialize();
+        $this->Security->setConfig('unlockedActions', [ 'export' ]);
     }
 
     /**

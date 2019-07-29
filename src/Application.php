@@ -12,14 +12,16 @@
  */
 namespace App;
 
-use Cake\Core\Configure;
-use Cake\Http\MiddlewareQueue;
-use BEdita\WebTools\BaseApplication;
 use BEdita\I18n\Middleware\I18nMiddleware;
-use Cake\Routing\Middleware\AssetMiddleware;
-use Cake\Routing\Middleware\RoutingMiddleware;
+use BEdita\WebTools\BaseApplication;
+use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Http\MiddlewareQueue;
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Routing\Middleware\AssetMiddleware;
+use Cake\Routing\Middleware\RoutingMiddleware;
+
 /**
  * Application class.
  */
@@ -96,8 +98,32 @@ class Application extends BaseApplication
             ]))
 
             // Add routing middleware.
-            ->add(new RoutingMiddleware($this));
+            ->add(new RoutingMiddleware($this))
+
+            // Csrf Middleware
+            ->add($this->csrfMiddleware());
 
         return $middlewareQueue;
+    }
+
+    /**
+     * Get internal Csrf Middleware
+     *
+     * @return CsrfProtectionMiddleware
+     */
+    protected function csrfMiddleware() : CsrfProtectionMiddleware
+    {
+        // Csrf Middleware
+        $csrf = new CsrfProtectionMiddleware();
+            // Token check will be skipped when callback returns `true`.
+        $csrf->whitelistCallback(function ($request) {
+            $actions = (array)Configure::read(sprintf('CrsfExceptions.%s', $request->getParam('controller')));
+            // Skip token check for API URLs.
+            if (in_array($request->getParam('action'), $actions)) {
+                return true;
+            }
+        });
+
+        return $csrf;
     }
 }

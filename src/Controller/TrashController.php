@@ -37,26 +37,7 @@ class TrashController extends AppController
         $this->loadComponent('Properties');
 
         $this->Modules->setConfig('currentModuleName', 'trash');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeFilter(Event $event) : ?Response
-    {
-        $actions = [
-            'restore', 'delete',
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
+        $this->Security->setConfig('unlockedActions', ['delete', 'restore']);
     }
 
     /**

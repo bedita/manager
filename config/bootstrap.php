@@ -209,3 +209,15 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+/**
+ * CSRF whitelist
+ *
+ * Array having `controller` as key and actions array as value.
+ */
+Configure::write('CrsfExceptions', [
+    'Models' => ['savePropertyTypesJson'],
+    'Modules' => ['delete', 'changeStatus', 'saveJson'],
+    'Export' => ['export'],
+    'Trash' => ['delete', 'restore'],
+]);
