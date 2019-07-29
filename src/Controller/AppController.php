@@ -75,7 +75,7 @@ class AppController extends Controller
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
-        } elseif (!in_array($this->request->getPath(), ['login'])) {
+        } elseif (!in_array($this->request->getPath(), ['/login'])) {
             $route = ['_name' => 'login'];
             $redirect = $this->request->getUri()->getPath();
             if ($redirect !== $this->request->getAttribute('webroot')) {
