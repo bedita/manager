@@ -46,7 +46,6 @@ class Application extends BaseApplication
         } catch (MissingPluginException $e) {
             // Do not halt if the plugin is missing
         }
-        $this->addPlugin('Migrations');
         $this->addPlugin('BEdita/I18n');
     }
 
