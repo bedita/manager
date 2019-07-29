@@ -22,16 +22,14 @@
     ],
     "require": {
         "php": ">=7.1",
-        "bedita/web-tools": "^1.0",
-        "bedita/i18n": "^1.4",
-        "cakephp/plugin-installer": "^1.0",
+        "bedita/web-tools": "^1.1",
+        "bedita/i18n": "^1.5",
+        "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
         "wikimedia/composer-merge-plugin": "^1.4"
     },
     "require-dev": {
-        "cakephp/cakephp-codesniffer": "^3.0.3",
-        "cakephp/debug_kit": "^3.2",
         "psy/psysh": "@stable",
         "phpunit/phpunit": "^6.0"
     },
