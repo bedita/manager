@@ -29,19 +29,18 @@ require __DIR__ . '/paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-use Cake\Log\Log;
 use Cake\Cache\Cache;
-use Cake\Mailer\Email;
-use Cake\Database\Type;
+use Cake\Console\ConsoleErrorHandler;
 use Cake\Core\Configure;
-use Cake\Utility\Security;
-use Cake\Utility\Inflector;
+use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Database\Type;
+use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorHandler;
 use Cake\Http\ServerRequest;
+use Cake\Log\Log;
+use Cake\Mailer\Email;
 use Cake\Mailer\TransportFactory;
-use Cake\Console\ConsoleErrorHandler;
-use Cake\Datasource\ConnectionManager;
-use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Utility\Security;
 
 /**
  * Uncomment block of code below if you want to use `.env` file during development.
