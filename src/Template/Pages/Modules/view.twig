@@ -61,7 +61,7 @@
                     {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
-                {% if modules.folders and _view.request.params.action != 'create' and _view.request.params.action != 'clone' %}
+                {% if modules.folders and _view.getRequest().getParam('action') != 'create' and _view.getRequest().getParam('action') != 'clone' %}
                     {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
