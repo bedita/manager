@@ -76,7 +76,7 @@ class ExportController extends AppController
                     if ($total + 100 > $limit) {
                         $query['page_size'] = $limit - $total;
                     }
-                    $response = $this->apiClient->getObjects($objectType, $query);
+                    $response = (array)$this->apiClient->getObjects($objectType, $query);
                     $pageCount = $response['meta']['pagination']['page_count'];
                     $total += $response['meta']['pagination']['page_items'];
                     $fields = $this->fillDataFromResponse($data, $response);

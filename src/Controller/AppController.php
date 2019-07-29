@@ -133,7 +133,7 @@ class AppController extends Controller
     protected function prepareRequest($type) : array
     {
         // prepare json fields before saving
-        $data = $this->request->getData();
+        $data = (array)$this->request->getData();
 
         // when saving users, if password is empty, unset it
         if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
