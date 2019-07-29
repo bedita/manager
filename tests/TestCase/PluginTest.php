@@ -28,7 +28,7 @@ class PluginTest extends TestCase
      *
      * @return void
      *
-     * @covers ::loadFromConfig()
+     * @covers ::loadedAppPlugins()
      */
     public function testLoadedAppPlugins()
     {
