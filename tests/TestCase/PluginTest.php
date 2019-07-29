@@ -23,39 +23,6 @@ use Cake\TestSuite\TestCase;
  */
 class PluginTest extends TestCase
 {
-
-    /**
-     * Test load from config method
-     *
-     * @return void
-     *
-     * @covers ::loadFromConfig()
-     */
-    // public function testLoadConfig()
-    // {
-    //     $debug = Configure::read('debug');
-    //     $pluginsConfig = [
-    //         'DebugKit' => ['debugOnly' => true],
-    //         'Migrations' => ['debugOnly' => false],
-    //     ];
-    //     Plugin::unload('DebugKit');
-    //     Plugin::unload('Migrations');
-    //     Configure::write('debug', 1);
-    //     Configure::write('Plugins', $pluginsConfig);
-    //     Plugin::loadFromConfig();
-    //     $this->assertTrue(Plugin::loaded('DebugKit'));
-    //     $this->assertTrue(Plugin::loaded('Migrations'));
-
-    //     Plugin::unload('DebugKit');
-    //     Plugin::unload('Migrations');
-    //     Configure::write('debug', 0);
-    //     Plugin::loadFromConfig();
-    //     $this->assertFalse(Plugin::loaded('DebugKit'));
-    //     $this->assertTrue(Plugin::loaded('Migrations'));
-
-    //     Configure::write('debug', $debug);
-    // }
-
     /**
      * Test loaded app plugins
      *
