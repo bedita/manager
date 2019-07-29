@@ -89,7 +89,6 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
         static::assertNotEmpty($this->AppController->{'Security'});
-        static::assertNotEmpty($this->AppController->{'Csrf'});
         static::assertNotEmpty($this->AppController->{'Auth'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
