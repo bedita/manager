@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -15,7 +15,6 @@ namespace App;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
-use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -77,7 +76,7 @@ class Application extends BaseApplication
     public function middleware($middlewareQueue) : MiddlewareQueue
     {
         $middlewareQueue
-                    // Catch any exceptions in the lower layers,
+            // Catch any exceptions in the lower layers,
             // and make an error page/response
             ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
 
@@ -110,7 +109,7 @@ class Application extends BaseApplication
     {
         // Csrf Middleware
         $csrf = new CsrfProtectionMiddleware();
-            // Token check will be skipped when callback returns `true`.
+        // Token check will be skipped when callback returns `true`.
         $csrf->whitelistCallback(function ($request) {
             $actions = (array)Configure::read(sprintf('CrsfExceptions.%s', $request->getParam('controller')));
             // Skip token check for API URLs.
