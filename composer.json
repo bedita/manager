@@ -30,6 +30,8 @@
         "wikimedia/composer-merge-plugin": "^1.4"
     },
     "require-dev": {
+        "cakephp/bake": "^1.11",
+        "cakephp/debug_kit": "^3.19.0",
         "cakephp/cakephp-codesniffer": "^3.1",
         "psy/psysh": "@stable",
         "phpunit/phpunit": "^6.0"
@@ -59,8 +61,8 @@
             "vendor/bin/phpcs --config-set default_standard CakePHP",
             "vendor/bin/phpcs --config-set colors 1"
         ],
-        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
-        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
+        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
+        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
         "test": "vendor/bin/phpunit --colors=always",
         "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage",
         "update-dev": [
