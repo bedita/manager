@@ -286,7 +286,7 @@ class LayoutHelperTest extends TestCase
         $data = ['name' => $name];
         $view = new View($request, $response, $events, $data);
         foreach ($viewVars as $key => $value) {
-            $view->viewBuilder()->setVar($key, $value);
+            $view->set($key, $value);
         }
         $layout = new LayoutHelper($view);
         $result = $layout->moduleLink();

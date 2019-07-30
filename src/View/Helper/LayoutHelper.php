@@ -98,7 +98,7 @@ class LayoutHelper extends Helper
      */
     public function moduleLink() : string
     {
-        $currentModule = $this->_View->viewBuilder()->getVar('currentModule');
+        $currentModule = (array)Hash::get($this->_View->viewVars, 'currentModule');
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $name = $currentModule['name'];
 
@@ -112,7 +112,7 @@ class LayoutHelper extends Helper
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
             Inflector::humanize($this->_View->getName()),
-            (array)$this->_View->viewBuilder()->getVar('moduleLink'),
+            (array)Hash::get($this->_View->viewVars, 'moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
     }
