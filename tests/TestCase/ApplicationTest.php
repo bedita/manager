@@ -14,9 +14,10 @@ namespace App\Test\TestCase;
 
 use App\Application;
 use BEdita\I18n\Middleware\I18nMiddleware;
+use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
@@ -51,5 +52,38 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(I18nMiddleware::class, $middleware->get(2));
         static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(3));
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(4));
+    }
+
+    /**
+     * Test load from config method
+     *
+     * @return void
+     *
+     * @covers ::loadFromConfig()
+     */
+    public function testLoadConfig()
+    {
+        $app = new Application(CONFIG);
+        $app->bootstrap();
+
+        $debug = Configure::read('debug');
+        $pluginsConfig = [
+            'DebugKit' => ['debugOnly' => true],
+            'Bake' => ['debugOnly' => false],
+        ];
+        $app->getPlugins()->remove('DebugKit');
+        $app->getPlugins()->remove('Bake');
+        Configure::write('debug', 1);
+        Configure::write('Plugins', $pluginsConfig);
+        $app->loadFromConfig();
+        $this->assertTrue($app->getPlugins()->has('DebugKit'));
+        $this->assertTrue($app->getPlugins()->has('Bake'));
+        $app->getPlugins()->remove('DebugKit');
+        $app->getPlugins()->remove('Bake');
+        Configure::write('debug', 0);
+        $app->loadFromConfig();
+        $this->assertFalse($app->getPlugins()->has('DebugKit'));
+        $this->assertTrue($app->getPlugins()->has('Bake'));
+        Configure::write('debug', $debug);
     }
 }
