@@ -43,11 +43,6 @@ class Application extends BaseApplication
     protected function bootstrapCli()
     {
         parent::bootstrapCli();
-        try {
-            $this->addPlugin('Bake');
-        } catch (MissingPluginException $e) {
-            // Do not halt if the plugin is missing
-        }
         $this->addPlugin('BEdita/I18n');
     }
 
