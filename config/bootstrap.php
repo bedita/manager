@@ -216,7 +216,5 @@ Type::build('timestamp')
  */
 Configure::write('CrsfExceptions', [
     'Models' => ['savePropertyTypesJson'],
-    'Modules' => ['delete', 'changeStatus', 'saveJson'],
-    'Export' => ['export'],
-    'Trash' => ['delete', 'restore'],
+    'Modules' => ['saveJson'],
 ]);

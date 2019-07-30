@@ -60,7 +60,7 @@ class ModulesController extends AppController
             $this->Schema->setConfig('type', $this->objectType);
         }
 
-        $this->Security->setConfig('unlockedActions', ['delete', 'changeStatus', 'saveJson']);
+        $this->Security->setConfig('unlockedActions', ['saveJson']);
     }
 
     /**

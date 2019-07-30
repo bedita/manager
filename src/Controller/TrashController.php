@@ -37,7 +37,6 @@ class TrashController extends AppController
         $this->loadComponent('Properties');
 
         $this->Modules->setConfig('currentModuleName', 'trash');
-        $this->Security->setConfig('unlockedActions', ['delete', 'restore']);
     }
 
     /**

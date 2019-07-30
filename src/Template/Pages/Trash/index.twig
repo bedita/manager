@@ -71,12 +71,14 @@
                     {% if (objects) and in_array('PATCH', currentModule.hints.allow) %}
                         {{ Form.create(null, {'id': 'form-restore', 'url': {'_name': 'trash:restore', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            {{ Form.unlockField('ids') }}
                             <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                         {{ Form.end()|raw }}
                     {% endif %}
                     {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
                         {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            {{ Form.unlockField('ids') }}
                             <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
                         {{ Form.end()|raw }}
                     {% endif %}

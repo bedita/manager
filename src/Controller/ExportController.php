@@ -21,16 +21,6 @@ use Cake\Utility\Hash;
 class ExportController extends AppController
 {
     /**
-     * {@inheritDoc}
-     * @codeCoverageIgnore
-     */
-    public function initialize() : void
-    {
-        parent::initialize();
-        $this->Security->setConfig('unlockedActions', [ 'export' ]);
-    }
-
-    /**
      * Export data in csv format
      *
      * @return void
