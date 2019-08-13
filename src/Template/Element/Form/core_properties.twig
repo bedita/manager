@@ -11,5 +11,10 @@
         {% endfor %}
 
         {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+
+        {% if object.attributes or resource.attributes %}
+        {% set attributes = (object.attributes) ? object.attributes : resource.attributes %}
+        {{ Form.hidden('actualAttributes', {'value': attributes|json_encode})|raw }}
+        {% endif %}
     </div>
 </section>

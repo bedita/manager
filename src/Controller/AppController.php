@@ -168,7 +168,37 @@ class AppController extends Controller
             $data['api'] = $api;
         }
 
+        // prepare attributes: only modified attributes
+        if (!empty($data['actualAttributes'])){
+            $attributes = json_decode($data['actualAttributes'], true);
+            foreach ($attributes as $key => $value) {
+                // remove unchanged attributes from $data
+                if (isset($data[$key]) && !$this->hasChanged($value, $data[$key])) {
+                    unset($data[$key]);
+                }
+            }
+            unset($data['actualAttributes']);
+        }
+
         return $data;
+    }
+
+    /**
+     * Return true if $value1 equals $value2 or both are empty (null|'')
+     *
+     * @param string|array $value1 The first value | field value in model data (db)
+     * @param string|array $value2 The second value | field value from form
+     * @return boolean
+     */
+    private function hasChanged($value1, $value2) {
+        if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
+            return $value1 !== boolval($value2);
+        }
+        if (empty($value1) && empty($value2)) { // i.e. null / ""
+            return false;
+        }
+
+        return $value1 !== $value2;
     }
 
     /**
