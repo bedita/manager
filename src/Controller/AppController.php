@@ -188,9 +188,10 @@ class AppController extends Controller
      *
      * @param string|array $value1 The first value | field value in model data (db)
      * @param string|array $value2 The second value | field value from form
-     * @return boolean
+     * @return bool
      */
-    private function hasChanged($value1, $value2) {
+    private function hasChanged($value1, $value2)
+    {
         if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
         }
