@@ -169,7 +169,7 @@ class AppController extends Controller
         }
 
         // prepare attributes: only modified attributes
-        if (!empty($data['actualAttributes'])){
+        if (!empty($data['actualAttributes'])) {
             $attributes = json_decode($data['actualAttributes'], true);
             foreach ($attributes as $key => $value) {
                 // remove unchanged attributes from $data
