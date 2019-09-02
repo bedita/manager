@@ -102,6 +102,7 @@ class AppController extends Controller
             Configure::write('I18n.timezone', $timezone);
         }
     }
+
     /**
      * {@inheritDoc}
      *
