@@ -173,7 +173,7 @@ class AppController extends Controller
             $attributes = json_decode($data['actualAttributes'], true);
             foreach ($attributes as $key => $value) {
                 // remove unchanged attributes from $data
-                if (isset($data[$key]) && !$this->hasChanged($value, $data[$key])) {
+                if (isset($data[$key]) && !$this->hasFieldChanged($value, $data[$key])) {
                     unset($data[$key]);
                 }
             }
@@ -190,13 +190,13 @@ class AppController extends Controller
      * @param string|array $value2 The second value | field value from form
      * @return bool
      */
-    private function hasChanged($value1, $value2)
+    protected function hasFieldChanged($value1, $value2)
     {
+        if (($value1 === null || $value1 === '') && ($value2 === null || $value2 === '')) {
+            return false;
+        }
         if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
-        }
-        if (empty($value1) && empty($value2)) { // i.e. null / ""
-            return false;
         }
 
         return $value1 !== $value2;
