@@ -18,7 +18,7 @@ const LOCALES_AVAILABLE = {
     es: Spanish,
     cat: Catalan,
     pt: Portuguese,
-}
+};
 
 // date / time format (moment)
 const DATE_FORMAT = 'D/M/Y';
@@ -73,7 +73,7 @@ export default {
         options.formatDate = (dateObj, format) => {
             // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
             if (format === 'Z') {
-                return moment(dateObj).toISOString();
+                return moment(dateObj).format(); // ISO 8601, no fractional seconds
             }
             // or else timezone infos will be added to date string
             let now = new Date();
