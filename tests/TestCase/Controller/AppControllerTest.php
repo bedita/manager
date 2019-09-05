@@ -342,6 +342,8 @@ class AppControllerTest extends TestCase
             'empty and null | unchanged' => [ '', null, false ],
             'bool and int | changed' => [ true, 0, true ],
             'bool and int | unchanged' => [ true, 1, false ],
+            'bool and string | changed' => [ true, '0', true ],
+            'bool and string | unchanged' => [ true, '1', false ],
             'string and string | changed' => [ 'one', 'two', true ],
             'string and string | unchanged' => [ 'three', 'three', false ],
             'object and object | changed' => [ ['four'], ['five'], true ],
