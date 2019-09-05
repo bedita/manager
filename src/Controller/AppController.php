@@ -186,8 +186,8 @@ class AppController extends Controller
     /**
      * Return true if $value1 equals $value2 or both are empty (null|'')
      *
-     * @param string|array $value1 The first value | field value in model data (db)
-     * @param string|array $value2 The second value | field value from form
+     * @param mixed $value1 The first value | field value in model data (db)
+     * @param mixed $value2 The second value | field value from form
      * @return bool
      */
     protected function hasFieldChanged($value1, $value2)
