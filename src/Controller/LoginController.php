@@ -29,7 +29,8 @@ class LoginController extends AppController
      */
     public function login() : ?Response
     {
-        $this->request->allowMethod(['get', 'post']);
+        // Add `head` to avoid errors on http `HEAD /` calls since they are redirected to `HEAD /login`
+        $this->request->allowMethod(['get', 'head', 'post']);
 
         if (!$this->request->is('post')) {
             // Handle flash messages
