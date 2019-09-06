@@ -261,6 +261,7 @@ class ModulesControllerTest extends TestCase
         static::assertEmpty($result);
         static::assertEquals(200, $this->controller->response->getStatusCode());
     }
+
     /**
      * Test `view` method
      *
