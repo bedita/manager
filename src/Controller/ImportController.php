@@ -14,10 +14,9 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception as CakeException;
 use Cake\Event\Event;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
 use Cake\Utility\Hash;
 use Exception;
 

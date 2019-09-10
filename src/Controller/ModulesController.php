@@ -15,8 +15,8 @@ namespace App\Controller;
 use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
-use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -59,6 +59,8 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
+
+        $this->Security->setConfig('unlockedActions', ['saveJson']);
     }
 
     /**
@@ -70,27 +72,6 @@ class ModulesController extends AppController
         $this->set('objectType', $this->objectType);
 
         return parent::beforeRender($event);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @codeCoverageIgnore
-     */
-    public function beforeFilter(Event $event) : ?Response
-    {
-        $actions = [
-            'delete', 'changeStatus', 'saveJson'
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
     }
 
     /**
@@ -325,7 +306,7 @@ class ModulesController extends AppController
      */
     public function saveJson() : void
     {
-        $this->viewBuilder()->className('Json'); // force json response
+        $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
 

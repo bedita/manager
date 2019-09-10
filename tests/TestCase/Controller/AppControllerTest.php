@@ -16,9 +16,9 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClient;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
-use Cake\Network\Exception\BadRequestException;
-use Cake\Network\Exception\MethodNotAllowedException;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -89,7 +89,6 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
         static::assertNotEmpty($this->AppController->{'Security'});
-        static::assertNotEmpty($this->AppController->{'Csrf'});
         static::assertNotEmpty($this->AppController->{'Auth'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
