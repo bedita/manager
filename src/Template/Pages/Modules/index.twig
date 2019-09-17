@@ -45,7 +45,7 @@
                         <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                         {% for prop in properties %}
-                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ object.attributes[prop] }}</div>
+                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ Schema.format(object.attributes[prop], schema.properties[prop]) }}</div>
                         {% endfor %}
 
                         <div>{{ object.id }}</div>
