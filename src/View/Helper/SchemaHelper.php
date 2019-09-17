@@ -20,6 +20,8 @@ use Cake\View\Helper;
 
 /**
  * Schema helper
+ *
+ * @property \Cake\View\Helper\TimeHelper $Time
  */
 class SchemaHelper extends Helper
 {
@@ -81,7 +83,7 @@ class SchemaHelper extends Helper
      */
     protected function formatBoolean($value) : string
     {
-        $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        $res = (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
         return $res ? __('Yes') : __('No');
     }
@@ -94,7 +96,7 @@ class SchemaHelper extends Helper
      */
     protected function formatDate($value) : string
     {
-        return $this->Time->format($value);
+        return (string)$this->Time->format($value);
     }
 
     /**
@@ -105,7 +107,7 @@ class SchemaHelper extends Helper
      */
     protected function formatDateTime($value) : string
     {
-        return $this->Time->format($value);
+        return (string)$this->Time->format($value);
     }
 
     /**
@@ -126,9 +128,6 @@ class SchemaHelper extends Helper
      */
     public static function typeFromSchema(array $schema) : string
     {
-        if (!is_array($schema)) {
-            return 'text';
-        }
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $subSchema) {
                 if (!empty($subSchema['type']) && $subSchema['type'] === 'null') {
