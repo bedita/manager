@@ -83,9 +83,9 @@ class SchemaHelper extends Helper
      */
     protected function formatBoolean($value) : string
     {
-        $res = (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
-        return $res ? __('Yes') : __('No');
+        return (string)($res ? __('Yes') : __('No'));
     }
 
     /**
@@ -111,17 +111,17 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Infer control type from property schema
+     * Infer type from property schema in JSON-SCHEMA format
      * Possible return values:
      *
-     *   'text'
+     *   'string'
+     *   'number'
+     *   'integer'
+     *   'boolean'
+     *   'array'
+     *   'object'
      *   'date-time'
      *   'date'
-     *   'textarea'
-     *   'enum'
-     *   'number'
-     *   'object'
-     *   'json'
      *
      * @param mixed $schema The property schema
      * @return string
@@ -138,7 +138,7 @@ class SchemaHelper extends Helper
             }
         }
         if (empty($schema['type']) || !in_array($schema['type'], Form::SCHEMA_PROPERTY_TYPES)) {
-            return 'text';
+            return 'string';
         }
         $format = Hash::get($schema, 'format');
         if ($schema['type'] === 'string' && in_array($format, ['date', 'date-time'])) {
