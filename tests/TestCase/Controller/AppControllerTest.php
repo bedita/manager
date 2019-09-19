@@ -251,6 +251,18 @@ class AppControllerTest extends TestCase
                     'jsonKey2' => '{"gin":"vodka","fritz":"kola"}',
                 ]
             ],
+            'actual attrs' => [ // test '_actualAttributes'
+                'documents', // object_type
+                [ // expected
+                    'description' => 'dido',
+                ],
+                [ // data provided
+                    'title' => 'bibo',
+                    'description' => 'dido',
+                    '_actualAttributes' => '{"title":"bibo","description":""}',
+                ]
+            ],
+
             'users' => [ // test: removing password from data
                 'users', // object_type
                 [ 'name' => 'giova' ], // expected
@@ -264,12 +276,7 @@ class AppControllerTest extends TestCase
                 'documents', // object_type
                 [
                     'id' => '1',
-                    'relations' => [
-                        'attach' => [
-                            'addRelated' => '[{ "id": "44", "type": "images"}]'
-                        ]
-                    ],
-                    'api' => [ // expected new property in data
+                    '_api' => [ // expected new property in data
                         [
                             'method' => 'addRelated',
                             'id' => '1',
