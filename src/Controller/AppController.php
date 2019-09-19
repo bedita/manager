@@ -163,20 +163,20 @@ class AppController extends Controller
                     }
                 }
             }
-
-            $data['api'] = $api;
+            $data['_api'] = $api;
         }
+        unset($data['relations']);
 
         // prepare attributes: only modified attributes
-        if (!empty($data['actualAttributes'])) {
-            $attributes = json_decode($data['actualAttributes'], true);
+        if (!empty($data['_actualAttributes'])) {
+            $attributes = json_decode($data['_actualAttributes'], true);
             foreach ($attributes as $key => $value) {
                 // remove unchanged attributes from $data
                 if (isset($data[$key]) && !$this->hasFieldChanged($value, $data[$key])) {
                     unset($data[$key]);
                 }
             }
-            unset($data['actualAttributes']);
+            unset($data['_actualAttributes']);
         }
 
         return $data;
