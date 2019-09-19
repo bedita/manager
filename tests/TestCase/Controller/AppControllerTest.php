@@ -327,6 +327,51 @@ class AppControllerTest extends TestCase
     }
 
     /**
+     * Data provider for `hasFieldChanged` test case.
+     *
+     * @return array
+     */
+    public function hasFieldChangedProvider() : array
+    {
+        $d1 = new \DateTime('2019-01-01T15:03:01.012345Z');
+        $d2 = new \DateTime('2019-01-01T16:03:01.012345Z');
+
+        return [
+            'null and empty | unchanged' => [ null, '', false ],
+            'empty and null | unchanged' => [ '', null, false ],
+            'bool and int | changed' => [ true, 0, true ],
+            'bool and int | unchanged' => [ true, 1, false ],
+            'bool and string | changed' => [ true, '0', true ],
+            'bool and string | unchanged' => [ true, '1', false ],
+            'string and string | changed' => [ 'one', 'two', true ],
+            'string and string | unchanged' => [ 'three', 'three', false ],
+            'object and object | changed' => [ ['four'], ['five'], true ],
+            'object and object | unchanged' => [ ['six'], ['six'], false ],
+            'date and date | changed' => [ $d1, $d2, true ],
+            'date and date | unchanged' => [ $d1, $d1, false ],
+        ];
+    }
+
+    /**
+     * Test `hasFieldChanged` method
+     *
+     * @param mixed $val1 The first value
+     * @param mixed $val2 The second value
+     * @param bool $expected The expected result from function hasFieldChanged
+     *
+     * @covers ::hasFieldChanged()
+     * @dataProvider hasFieldChangedProvider()
+     *
+     * @return void
+     */
+    public function testHasFieldChanged($val1, $val2, $expected) : void
+    {
+        $this->setupController();
+        $actual = $this->invokeMethod($this->AppController, 'hasFieldChanged', [$val1, $val2]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testCheckRequest` test case.
      *
      * @return array
