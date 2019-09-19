@@ -14,7 +14,7 @@
 
         {% if object.attributes or resource.attributes %}
         {% set attributes = (object.attributes) ? object.attributes : resource.attributes %}
-        {{ Form.hidden('actualAttributes', {'value': attributes|json_encode})|raw }}
+        {{ Form.hidden('_actualAttributes', {'value': attributes|json_encode})|raw }}
         {% endif %}
     </div>
 </section>
