@@ -21,7 +21,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -72,13 +72,16 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
+        $this->getController()->set(compact('modules', 'project'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
 
-        $this->getController()->set(compact('currentModule', 'modules', 'project'));
+        if (!empty($currentModule)) {
+            $this->getController()->set(compact('currentModule'));
+        }
     }
 
     /**

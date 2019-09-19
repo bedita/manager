@@ -458,7 +458,7 @@ const _vueInstance = new Vue({
                 const form = ev.target;
                 if (form) {
                     let msg = '';
-                    if (form.action.endsWith('/trash/delete')) {
+                    if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
                         msg = t`If you confirm, this data will be gone forever`;
                     } else if (form.action.endsWith('/delete')) {
                         msg = t`Do you really want to trash the object?`;

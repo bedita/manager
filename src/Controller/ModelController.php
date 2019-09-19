@@ -14,10 +14,9 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
+use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
-use Cake\Network\Exception\UnauthorizedException;
-use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -50,6 +49,8 @@ class ModelController extends AppController
             'type' => $this->resourceType,
             'internalSchema' => true,
         ]);
+
+        $this->Security->setConfig('unlockedActions', ['savePropertyTypesJson']);
     }
 
     /**
@@ -61,8 +62,6 @@ class ModelController extends AppController
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
-
-        $this->Security->setConfig('unlockedActions', ['savePropertyTypesJson']);
 
         return parent::beforeFilter($event);
     }

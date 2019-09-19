@@ -22,7 +22,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 

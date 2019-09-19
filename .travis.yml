@@ -16,8 +16,8 @@ env:
 before_install:
   # Use GitHub OAuth token with Composer to increase API limits.
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi
-  - docker pull bedita/bedita:4-cactus
-  - docker inspect bedita/bedita:4-cactus
+  - docker pull ${BEDITA_DOCKER_IMG}
+  - docker inspect ${BEDITA_DOCKER_IMG}
   - docker run --name api -d -p 127.0.0.1:8080:80 --env BEDITA_API_KEY=${BEDITA_API_KEY} --env BEDITA_ADMIN_USR=${BEDITA_ADMIN_USR} --env BEDITA_ADMIN_PWD=${BEDITA_ADMIN_PWD} ${BEDITA_DOCKER_IMG}
   - sleep 10
   - docker ps -a
@@ -41,6 +41,7 @@ jobs:
   include:
     - php: 7.1
     - php: 7.2
+    - php: 7.3
     - php: 7.2
       env: "RUN=phpcs"
       before_install: skip

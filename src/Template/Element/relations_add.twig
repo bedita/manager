@@ -28,7 +28,7 @@
 
     <section class="shrinks">
         <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName">{{ __('add to') }}<: relationName | humanize :></span> &nbsp;</h2>
+            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
             <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
         </header>
 
