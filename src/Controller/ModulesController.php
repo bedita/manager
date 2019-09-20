@@ -263,14 +263,15 @@ class ModulesController extends AppController
         $requestData = $this->prepareRequest($this->objectType);
 
         try {
-            if (!empty($requestData['api'])) {
-                foreach ($requestData['api'] as $api) {
+            if (!empty($requestData['_api'])) {
+                foreach ($requestData['_api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
             }
+            unset($requestData['_api']);
 
             // upload file (if available)
             $this->Modules->upload($requestData);
