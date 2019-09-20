@@ -70,7 +70,12 @@ export default {
          * @return {Boolean}
          */
         isMedia() {
-            return this.relationTypes && this.relationTypes.right.indexOf('media') !== -1;
+            const right = this.relationTypes.right || [];
+            // actual types should be read from API
+            const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
+            const intersection = right.filter(x => mediaTypes.includes(x));
+
+            return (intersection.length > 0);
         }
     },
 
