@@ -70,10 +70,10 @@ export default {
          * @return {Boolean}
          */
         isMedia() {
-            let right = this.relationTypes.right || [];
+            const right = this.relationTypes.right || [];
             // actual types should be read from API
-            let mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
-            let intersection = right.filter(x => mediaTypes.includes(x));
+            const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
+            const intersection = right.filter(x => mediaTypes.includes(x));
 
             return (intersection.length > 0);
         }
