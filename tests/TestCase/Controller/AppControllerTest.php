@@ -551,6 +551,13 @@ class AppControllerTest extends TestCase
      * @covers ::applySessionFilter()
      * @dataProvider applySessionFilterProvider()
      *
+     * @param array $requestConfig
+     * @param string $sessionKey
+     * @param mixed|null $sessionValue
+     * @param mixed|null $expectedSessionValue
+     * @param string|null $expectedHttpStatusCode
+     * @param string|null $expectedResultType
+     *
      * @return void
      */
     public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType) : void
