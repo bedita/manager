@@ -115,7 +115,8 @@ class ModulesController extends AppController
         // objectTypes schema
         $this->set('schema', $this->getSchemaForIndex($this->objectType));
 
-        return null;
+        // handle filter and query parameters using session
+        return $this->applySessionFilter();
     }
 
     /**

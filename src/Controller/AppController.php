@@ -237,4 +237,42 @@ class AppController extends Controller
 
         return $data;
     }
+
+    /**
+     * Apply session filter (if any): if found, redirect properly.
+     * Session key: '{$currentModuleName}.filter'
+     * Scenarios:
+     *
+     * Query parameter 'reset=1': remove session key and redirect
+     * Query parameters found: write them on session with proper key ({currentModuleName}.filter)
+     * Session data for session key: build uri from session data and redirect to new uri.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    protected function applySessionFilter()
+    {
+        $session = $this->request->getSession();
+        $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
+
+        // if reset request, delete session data by key and redirect to proper uri
+        if ($this->request->getQuery('reset') === '1') {
+            $session->delete($sessionKey);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery(''));
+        }
+
+        // write request query parameters (if any) in session
+        if (!empty($this->request->getQueryParams())) {
+            $session->write($sessionKey, $this->request->getQueryParams());
+
+            return null;
+        }
+
+        // read request query parameters from session and redirect to proper page
+        if ($session->check($sessionKey)) {
+            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery($query));
+        }
+    }
 }
