@@ -41,6 +41,9 @@
 
                 {% element 'Form/core_properties' %}
 
+                {# calendar using `date_ranges` #}
+                {% element 'Form/calendar' {'cssOrder': '1'} %}
+
                 {% element 'Form/custom_left' %}
 
                 {# media streams & other resources included #}
@@ -51,8 +54,6 @@
 
             <div class="form-column ordered-column">
                 {% element 'Form/publish_properties' {'cssOrder': '0'} %}
-
-                {% element 'Form/calendar' {'cssOrder': '2'} %}
 
                 {% element 'Form/resource_relations' {'cssOrder': '5'} %}
 
