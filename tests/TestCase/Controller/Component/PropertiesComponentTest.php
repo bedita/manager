@@ -315,7 +315,8 @@ class PropertiesComponentTest extends TestCase
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
+                        'date_ranges' => [],
                     ],
                 ],
                 'foos'
