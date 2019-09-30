@@ -27,7 +27,16 @@ class Form
     /**
      * Custom controls
      */
-    public const CUSTOM_CONTROLS = ['lang', 'status', 'old_password', 'password', 'confirm-password', 'title'];
+    public const CUSTOM_CONTROLS = [
+        'confirm-password',
+        'end_date',
+        'lang',
+        'old_password',
+        'password',
+        'start_date',
+        'status',
+        'title',
+    ];
 
     /**
      * Control types
@@ -262,6 +271,26 @@ class Form
         }
 
         return ['type' => 'select'] + compact('options');
+    }
+
+    /**
+     * Options for `start_date`
+     *
+     * @return array
+     */
+    protected static function startDateOptions() : array
+    {
+        return static::datetimeControl(null);
+    }
+
+    /**
+     * Options for `end_date`
+     *
+     * @return array
+     */
+    protected static function endDateOptions() : array
+    {
+        return static::datetimeControl(null);
     }
 
     /**
