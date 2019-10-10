@@ -222,7 +222,7 @@ module.exports = {
                 ],
                 use: [
                     { loader: 'json-loader' },
-                    { loader: 'po-gettext-loader' },
+                    { loader: 'po-loader' },
                 ]
             },
             {
