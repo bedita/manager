@@ -222,7 +222,7 @@ module.exports = {
                 ],
                 use: [
                     { loader: 'json-loader' },
-                    { loader: 'po-loader' },
+                    { loader: './webpack-gettext-loader' },
                 ]
             },
             {
