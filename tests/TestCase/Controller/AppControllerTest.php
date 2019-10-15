@@ -47,6 +47,9 @@ class AppControllerTest extends TestCase
         $request = null;
         if ($config != null) {
             $request = new ServerRequest($config);
+            if (!empty($config['?'])) {
+                $request = $request->withQueryParams($config['?']);
+            }
         }
         $this->AppController = new AppController($request);
     }
@@ -482,5 +485,105 @@ class AppControllerTest extends TestCase
         $property->setAccessible(true);
 
         return $property->getValue($object);
+    }
+
+    /**
+     * Data provider for `applySessionFilter` test case.
+     *
+     * @return array
+     */
+    public function applySessionFilterProvider() : array
+    {
+        return [
+            'reset' => [ // expected remove of session filter and redirect
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => ['reset' => '1'],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                'anything', // session value
+                null, // expected session value
+                '302', // expected http status code
+                '\Cake\Http\Response', // result type
+            ],
+            'query parameters' => [ // expected write session filter and return null
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => ['any' => 'thing'],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                ['any' => 'thing'], // expected session value
+                null, // expected http status code
+                null, // result type
+            ],
+            'data from session' => [ // expected read session filter and redirect
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                ['any' => 'thing'], // session value
+                ['any' => 'thing'], // expected session value
+                '302', // expected http status code
+                '\Cake\Http\Response', // result type
+            ],
+        ];
+    }
+
+    /**
+     * Test `applySessionFilter` method
+     *
+     * @covers ::applySessionFilter()
+     * @dataProvider applySessionFilterProvider()
+     *
+     * @param array $requestConfig
+     * @param string $sessionKey
+     * @param mixed|null $sessionValue
+     * @param mixed|null $expectedSessionValue
+     * @param string|null $expectedHttpStatusCode
+     * @param string|null $expectedResultType
+     *
+     * @return void
+     */
+    public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType) : void
+    {
+        // Setup controller for test
+        $this->setupController($requestConfig);
+
+        // get session and write data on it
+        $session = $this->AppController->request->getSession();
+        $session->write($sessionKey, $sessionValue);
+
+        // do controller call
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('applySessionFilter');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->AppController, []);
+
+        // verify session data and http status code
+        static::assertEquals($session->read($sessionKey), $expectedSessionValue);
+        if ($result == null) {
+            static::assertNull($expectedResultType);
+        } else {
+            static::assertTrue($result instanceof $expectedResultType);
+        }
+        if ($expectedResultType === '\Cake\Http\Response') {
+            static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);
+        }
     }
 }
