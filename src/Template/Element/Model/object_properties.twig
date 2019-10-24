@@ -1,0 +1,22 @@
+<property-view inline-template :tab-open="tabsOpen">
+<section class="fieldset order-{{ order|default('0') }}" id="meta" :class="isOpen? '' : 'closed'">
+
+    <header @click.prevent="toggleVisibility()" class="tab unselectable">
+        <h2>{{ __('Properties') }}</h2>
+    </header>
+
+    <div v-show="isOpen" class="tab-container">
+        <table>
+            <tbody>
+                {% for key, val in object_properties %}
+                <tr>
+                    <th>{{ key }}:</th>
+                    <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+</property-view>

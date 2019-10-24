@@ -11,7 +11,7 @@ env:
     - BEDITA_API=http://127.0.0.1:8080
     - BEDITA_ADMIN_USR=admin
     - BEDITA_ADMIN_PWD=admin
-    - BEDITA_DOCKER_IMG=bedita/bedita:4.0.0-RC2
+    - BEDITA_DOCKER_IMG=bedita/bedita:4.0.0
 
 before_install:
   # Use GitHub OAuth token with Composer to increase API limits.
