@@ -56,7 +56,7 @@ export default {
             file: null,
             url: null,
             objectType: '',
-            titlePlaceholder: 'title',
+            titlePlaceholder: '',
 
             // handle tabs
             activeIndex: 0,
@@ -301,14 +301,14 @@ export default {
 
         /**
          * Verify if right relation types are fine for url embed.
-         * Now only allowed type is 'video' (and 'media')
+         * Now only allowed type is 'videos' (and 'media')
          *
          * @return {Boolean}
          */
         isEmbeddable() {
             const right = this.relationTypes.right || [];
 
-            return right.includes('video') || right.includes('media');
+            return right.includes('videos') || right.includes('media');
         },
 
         /**
