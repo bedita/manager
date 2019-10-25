@@ -12,7 +12,7 @@
 
         {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
 
-        {% if object.attributes or resource.attributes %}
+        {% if (object.attributes or resource.attributes) and (_view.getRequest().getParam('action') != 'clone') %}
         {% set attributes = (object.attributes) ? object.attributes : resource.attributes %}
         {{ Form.hidden('_actualAttributes', {'value': attributes|json_encode})|raw }}
         {% endif %}
