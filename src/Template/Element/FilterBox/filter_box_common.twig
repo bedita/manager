@@ -86,6 +86,7 @@
 </div>
 
 {% if filterActive %}
-    {% set containerClass = 'filters-container filters-container-active' %}
-    <div>({{ __('Data is filtered') }})</div>
+    <p class="is-expanded tag" style="margin-top: 1rem;">
+        {{ __('Data is filtered') }}
+    </p>
 {% endif %}
