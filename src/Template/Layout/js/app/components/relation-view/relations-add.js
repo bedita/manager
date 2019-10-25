@@ -74,6 +74,10 @@ export default {
          * @return {Boolean}
          */
         isMedia() {
+            // predefined relations like `children` don't have relationTyps
+            if (!this.relationTypes) {
+                return true;
+            }
             const right = this.relationTypes.right || [];
             // actual types should be read from API
             const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
@@ -306,6 +310,10 @@ export default {
          * @return {Boolean}
          */
         isEmbeddable() {
+            // predefined relations like `children` don't have relationTyps
+            if (!this.relationTypes) {
+                return true;
+            }
             const right = this.relationTypes.right || [];
 
             return right.includes('videos') || right.includes('media');
