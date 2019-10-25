@@ -1,6 +1,6 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 {% set containerClass = 'filters-container' %}
-{% set filterActive = _view.request.params['?']|length > 0 %}
+{% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
 {% if filterActive %}
     {% set containerClass = 'filters-container filters-container-active' %}
 {% endif %}

@@ -81,7 +81,14 @@ class ModulesController extends AppController
      */
     public function index() : ?Response
     {
+
         $this->request->allowMethod(['get']);
+
+        // handle filter and query parameters using session
+        $result = $this->applySessionFilter();
+        if ($result != null) {
+            return $result;
+        }
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
@@ -115,8 +122,7 @@ class ModulesController extends AppController
         // objectTypes schema
         $this->set('schema', $this->getSchemaForIndex($this->objectType));
 
-        // handle filter and query parameters using session
-        return $this->applySessionFilter();
+        return null;
     }
 
     /**

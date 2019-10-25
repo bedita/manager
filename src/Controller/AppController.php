@@ -249,7 +249,7 @@ class AppController extends Controller
      *
      * @return \Cake\Http\Response|null
      */
-    protected function applySessionFilter()
+    protected function applySessionFilter() : ?Response
     {
         $session = $this->request->getSession();
         $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
@@ -274,5 +274,7 @@ class AppController extends Controller
 
             return $this->redirect((string)$this->request->getUri()->withQuery($query));
         }
+
+        return null;
     }
 }
