@@ -81,7 +81,6 @@ class ModulesController extends AppController
      */
     public function index() : ?Response
     {
-
         $this->request->allowMethod(['get']);
 
         // handle filter and query parameters using session
