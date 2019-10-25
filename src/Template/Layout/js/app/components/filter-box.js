@@ -52,7 +52,7 @@ export default {
         },
         selectedTypes: {
             type: Array,
-            deafut: () => [],
+            default: () => [],
         },
         filterList: {
             type: Array,

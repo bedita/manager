@@ -83,6 +83,12 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['get']);
 
+        // handle filter and query parameters using session
+        $result = $this->applySessionFilter();
+        if ($result != null) {
+            return $result;
+        }
+
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {

@@ -120,7 +120,7 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
-        })
+        });
     },
 
     methods: {
@@ -215,7 +215,7 @@ const _vueInstance = new Vue({
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                const urlParams = window.location.search;
+                const urlParams = decodeURI(window.location.search);
 
                 // search for q='some string' both after ? and & tokens
                 const queryStringExp = /[?&]q=([^&#]*)/g;
@@ -339,13 +339,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         resetFilters() {
-            this.page = '';
-            this.pageSize = '';
-            let filter = {
-                filter: {},
-                q: '',
-            }
-            this.applyFilters(filter);
+            window.location.replace(this.buildUrlParams({ reset: 1 }));
         },
 
         /**
