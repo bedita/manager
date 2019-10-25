@@ -310,7 +310,7 @@ export default {
          * @return {Boolean}
          */
         isEmbeddable() {
-            // predefined relations like `children` don't have relationTyps
+            // predefined relations like `children` don't have relationTypes
             if (!this.relationTypes) {
                 return true;
             }
