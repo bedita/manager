@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * Base Application Controller.
@@ -276,5 +277,46 @@ class AppController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Retrieve previous and next content IDs (by module filter, if any active) starting from $id
+     *
+     * @param int $id The content ID
+     * @return array
+     */
+    protected function prevNext($id) : array
+    {
+        $response = $this->apiClient->getObjects($this->objectType, $this->getSessionFilter());
+        $found = false;
+        $i = 0;
+        $prevId = $nextId = null;
+        $total = count(Hash::get($response, 'data'));
+        while (!$found) {
+            $prevId = ($i > 0) ? Hash::get($response, sprintf('data.%d.id', $i - 1)) : null;
+            $nextId = ($i + 1 < $total) ? Hash::get($response, sprintf('data.%d.id', $i + 1)) : null;
+            if (Hash::get($response, sprintf('data.%d.id', $i)) === $id) {
+                $found = true;
+            }
+            $i++;
+        }
+
+        return [
+            'prev' => $prevId,
+            'next' => $nextId,
+        ];
+    }
+
+    /**
+     * Get session filter, if any
+     *
+     * @return string|array|null
+     */
+    protected function getSessionFilter()
+    {
+        $session = $this->request->getSession();
+        $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
+
+        return $session->read($sessionKey);
     }
 }

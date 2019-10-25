@@ -93,6 +93,18 @@
             {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
             {'@click.prevent': 'clone'}
         )) %}
+        {% if prev %}
+        {% do _view.append('commands', Html.link(
+            __('Prev'),
+            {'_name': 'modules:view', 'object_type': objectType, 'id': prev}
+        )) %}
+        {% endif %}
+        {% if next %}
+        {% do _view.append('commands', Html.link(
+            __('Next'),
+            {'_name': 'modules:view', 'object_type': objectType, 'id': next}
+        )) %}
+        {% endif %}
         {% endif %}
 
         {# Append "Delete" to commands in commands menu. #}

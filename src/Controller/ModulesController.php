@@ -189,6 +189,11 @@ class ModulesController extends AppController
         $this->set(compact('relationsSchema', 'resourceRelations'));
         $this->set('objectRelations', array_keys($relationsSchema));
 
+        // set prev and next, if any
+        $links = $this->prevNext($id);
+        $this->set('prev', $links['prev']);
+        $this->set('next', $links['next']);
+
         return null;
     }
 
