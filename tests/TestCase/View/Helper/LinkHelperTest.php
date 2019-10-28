@@ -18,7 +18,7 @@ use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
- * {@see \App\View\LinkHelper\LinkHelper} Test Case
+ * {@see \App\View\Helper\LinkHelper} Test Case
  *
  * @coversDefaultClass \App\View\Helper\LinkHelper
  */
