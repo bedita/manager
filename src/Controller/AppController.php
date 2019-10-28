@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
-use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
 /**
