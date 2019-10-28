@@ -100,7 +100,6 @@
 
         {# Append "Prev" and "Next" to commands in commands menu. #}
         {% if object.id and objectNav %}
-            {% do _view.append('commands', '<div>&nbsp;</div>') %}
             {% do _view.append('commands', Link.objectNav(objectNav)) %}
         {% endif %}
     </div>
