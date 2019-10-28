@@ -696,4 +696,76 @@ class AppControllerTest extends TestCase
         static::assertEquals($session->read('objectNav'), $expectedObjectNav);
         static::assertEquals($session->read('objectTypeNav'), $expectedObjectTypeNav);
     }
+
+    /**
+     * Data provider for `testGetObjectNav` test case.
+     *
+     * @return array
+     */
+    public function getObjectNavProvider() : array
+    {
+        return [
+            'empty' => [
+                'animals', // $moduleName
+                [], // $objects
+            ],
+            'animals' => [
+                'animals', // $moduleName
+                [
+                    ['id' => 1001, 'object_type' => 'cat'],
+                    ['id' => 1002, 'object_type' => 'dog'],
+                    ['id' => 1003, 'object_type' => 'snake'],
+                ], // $objects
+            ],
+            'snakes' => [
+                'snakes', // $moduleName
+                [
+                    ['id' => 5003, 'object_type' => 'snake'],
+                    ['id' => 5004, 'object_type' => 'snake'],
+                    ['id' => 5005, 'object_type' => 'snake'],
+                ], // $objects
+            ],
+        ];
+    }
+
+    /**
+     * Test `getObjectNav`
+     *
+     * @param string $moduleName The module name for the test
+     * @param array $objects The objects to filter to set object nav
+     *
+     * @covers ::getObjectNav()
+     * @dataProvider getObjectNavProvider()
+     *
+     * @return void
+     */
+    public function testGetObjectNav(string $moduleName, array $objects) : void
+    {
+        // Setup controller for test
+        $this->setupController();
+        $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
+
+        // set objectNav data
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setObjectNav');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->AppController, [ $objects ]);
+
+        // get session data
+        $session = $this->AppController->request->getSession();
+        $objectNav = $session->read('objectNav');
+
+        foreach ($objects as $object) {
+            // do controller call
+            $method = $reflectionClass->getMethod('getObjectNav');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->AppController, [ $object['id'] ]);
+
+            // verify objectNav data for id
+            static::assertEquals($objectNav[$moduleName][$object['id']], $result);
+        }
+
+        // verify objectTypeNav
+        static::assertEquals($session->read('objectTypeNav'), $moduleName);
+    }
 }
