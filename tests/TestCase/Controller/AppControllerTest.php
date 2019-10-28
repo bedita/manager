@@ -598,9 +598,9 @@ class AppControllerTest extends TestCase
             'animals' => [
                 'animals', // $moduleName
                 [
-                    ['id' => 1001, 'object_type' => 'cat'],
-                    ['id' => 1002, 'object_type' => 'dog'],
-                    ['id' => 1003, 'object_type' => 'snake'],
+                    ['id' => 1001, 'object_type' => 'cats'],
+                    ['id' => 1002, 'object_type' => 'dogs'],
+                    ['id' => 1003, 'object_type' => 'snakes'],
                 ], // $objects
                 [
                     'animals' => [
@@ -609,21 +609,21 @@ class AppControllerTest extends TestCase
                             'next' => 1002,
                             'index' => 1,
                             'total' => 3,
-                            'object_type' => 'cat',
+                            'object_type' => 'cats',
                         ],
                         1002 => [
                             'prev' => 1001,
                             'next' => 1003,
                             'index' => 2,
                             'total' => 3,
-                            'object_type' => 'dog',
+                            'object_type' => 'dogs',
                         ],
                         1003 => [
                             'prev' => 1002,
                             'next' => null,
                             'index' => 3,
                             'total' => 3,
-                            'object_type' => 'snake',
+                            'object_type' => 'snakes',
                         ],
                     ],
                 ], // $expectedObjectNav
@@ -632,9 +632,9 @@ class AppControllerTest extends TestCase
             'snakes' => [
                 'snakes', // $moduleName
                 [
-                    ['id' => 5003, 'object_type' => 'snake'],
-                    ['id' => 5004, 'object_type' => 'snake'],
-                    ['id' => 5005, 'object_type' => 'snake'],
+                    ['id' => 5003, 'object_type' => 'snakes'],
+                    ['id' => 5004, 'object_type' => 'snakes'],
+                    ['id' => 5005, 'object_type' => 'snakes'],
                 ], // $objects
                 [
                     'snakes' => [
@@ -643,21 +643,21 @@ class AppControllerTest extends TestCase
                             'next' => 5004,
                             'index' => 1,
                             'total' => 3,
-                            'object_type' => 'snake',
+                            'object_type' => 'snakes',
                         ],
                         5004 => [
                             'prev' => 5003,
                             'next' => 5005,
                             'index' => 2,
                             'total' => 3,
-                            'object_type' => 'snake',
+                            'object_type' => 'snakes',
                         ],
                         5005 => [
                             'prev' => 5004,
                             'next' => null,
                             'index' => 3,
                             'total' => 3,
-                            'object_type' => 'snake',
+                            'object_type' => 'snakes',
                         ],
                     ],
                 ], // $expectedObjectNav
@@ -712,17 +712,17 @@ class AppControllerTest extends TestCase
             'animals' => [
                 'animals', // $moduleName
                 [
-                    ['id' => 1001, 'object_type' => 'cat'],
-                    ['id' => 1002, 'object_type' => 'dog'],
-                    ['id' => 1003, 'object_type' => 'snake'],
+                    ['id' => 1001, 'object_type' => 'cats'],
+                    ['id' => 1002, 'object_type' => 'dogs'],
+                    ['id' => 1003, 'object_type' => 'snakes'],
                 ], // $objects
             ],
             'snakes' => [
                 'snakes', // $moduleName
                 [
-                    ['id' => 5003, 'object_type' => 'snake'],
-                    ['id' => 5004, 'object_type' => 'snake'],
-                    ['id' => 5005, 'object_type' => 'snake'],
+                    ['id' => 5003, 'object_type' => 'snakes'],
+                    ['id' => 5004, 'object_type' => 'snakes'],
+                    ['id' => 5005, 'object_type' => 'snakes'],
                 ], // $objects
             ],
         ];
