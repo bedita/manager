@@ -314,7 +314,7 @@ class AppController extends Controller
     {
         // get objectNav from session
         $session = $this->request->getSession();
-        $objectNav = $session->read('objectNav');
+        $objectNav = (array)$session->read('objectNav');
         if (empty($objectNav)) {
             return [];
         }
@@ -323,6 +323,6 @@ class AppController extends Controller
         $session = $this->request->getSession();
         $objectType = $session->read('objectTypeNav');
 
-        return Hash::get($objectNav, sprintf('%s.%d', $objectType, $id), []);
+        return (array)Hash::get($objectNav, sprintf('%s.%d', $objectType, $id), []);
     }
 }
