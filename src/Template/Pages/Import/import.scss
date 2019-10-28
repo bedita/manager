@@ -23,21 +23,24 @@
     }
 
     .list-jobs {
-        display: table;
-        border-collapse: collapse;
         min-width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50px;
 
-        .table-row {
-            display: table-row;
-            &.table-header {
-                border-bottom: 1px solid $gray-700;
-            }
+        .table-header {
+            border-bottom: 1px solid $gray-700;
+        }
 
-            > div {
-                display: table-cell;
-                padding: $gutter * .5;
-                white-space: nowrap;
-                vertical-align: middle;
+        > div {
+            padding: $gutter * .5;
+            white-space: nowrap;
+
+            &.job-payload {
+                grid-column: span 7;
+                background: #999;
+                color: #000;
+                font-size: 12px;
+                font-family: monospace;
             }
 
             &.completed {
@@ -55,5 +58,7 @@
                 color: $info;
             }
         }
+
     }
 }
+

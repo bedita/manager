@@ -22,19 +22,17 @@
     ],
     "require": {
         "php": ">=7.1",
-        "bedita/web-tools": "^1.0",
-        "bedita/i18n": "^1.4",
-        "cakephp/cakephp": "3.5.*",
-        "cakephp/migrations": "^1.0",
-        "cakephp/plugin-installer": "^1.0",
+        "bedita/web-tools": "^1.1",
+        "bedita/i18n": "^1.5",
+        "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
         "wikimedia/composer-merge-plugin": "^1.4"
     },
     "require-dev": {
-        "cakephp/bake": "^1.1",
-        "cakephp/cakephp-codesniffer": "^3.0.3",
-        "cakephp/debug_kit": "^3.2",
+        "cakephp/bake": "^1.11",
+        "cakephp/debug_kit": "^3.19.0",
+        "cakephp/cakephp-codesniffer": "^3.1",
         "psy/psysh": "@stable",
         "phpunit/phpunit": "^6.0"
     },
@@ -63,8 +61,8 @@
             "vendor/bin/phpcs --config-set default_standard CakePHP",
             "vendor/bin/phpcs --config-set colors 1"
         ],
-        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
-        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
+        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
+        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
         "test": "vendor/bin/phpunit --colors=always",
         "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage",
         "update-dev": [
@@ -84,7 +82,7 @@
                 "plugins/*/composer.json"
             ],
             "recurse": true,
-            "replace": false,
+            "replace": true,
             "merge-dev": true,
             "merge-extra": false,
             "merge-extra-deep": false,

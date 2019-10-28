@@ -45,7 +45,7 @@
                         <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                         {% for prop in properties %}
-                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ object.attributes[prop] }}</div>
+                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ Schema.format(object.attributes[prop], schema.properties[prop]) }}</div>
                         {% endfor %}
 
                         <div>{{ object.id }}</div>
@@ -122,6 +122,7 @@
                     {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
                         {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            {{ Form.unlockField('ids') }}
                             <button @click.prevent="trash" :disabled="!selectedRows.length">{{ __('Move to trash') }}</button>
                         {{ Form.end()|raw }}
                     {% endif %}
@@ -129,8 +130,8 @@
                     {# export #}
                     {% if not currentModule.hints.multiple_types %}
                     {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-                        {{ Form.unlockField('ids') }}
                         <input type="hidden" name="ids" v-model="selectedRows">
+                        {{ Form.unlockField('ids') }}
                         {{ Form.hidden('objectType', {'value': objectType})|raw }}
                         <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
                         {# export all #}

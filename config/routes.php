@@ -18,7 +18,6 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-use Cake\Core\Plugin;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
@@ -42,12 +41,6 @@ use Cake\Routing\Route\DashedRoute;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
-
-/**
- * Load all plugin routes. See the Plugin documentation on
- * how to customize the loading of plugin routes.
- */
-Plugin::routes();
 
 Router::scope('/', function (RouteBuilder $routes) {
 
@@ -114,7 +107,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/import/file',
-        ['controller' => 'Import', 'action' => 'file'],
+        ['controller' => 'Import', 'action' => 'file', '_method' => 'POST'],
         ['_name' => 'import:file']
     );
     $routes->connect(
@@ -126,7 +119,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Trash.
     $routes->connect(
         '/trash',
-        ['controller' => 'Trash', 'action' => 'index', 'method' => 'GET'],
+        ['controller' => 'Trash', 'action' => 'index', '_method' => 'GET'],
         ['_name' => 'trash:list']
     );
     $routes->connect(
@@ -231,6 +224,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:saveJson']
     );
     $routes->connect(
+        '/:object_type/clone/:id',
+        ['controller' => 'Modules', 'action' => 'clone'],
+        ['pass' => ['id'], '_name' => 'modules:clone']
+    );
+    $routes->connect(
         '/:object_type/delete',
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
@@ -246,6 +244,4 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'bulkActions'],
         ['_name' => 'modules:bulkActions']
     );
-
-    $routes->fallbacks(DashedRoute::class);
 });

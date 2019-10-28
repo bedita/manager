@@ -11,7 +11,6 @@
  *
  */
 
-import FilterBoxView from 'app/components/filter-box';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import sleep from 'sleep-promise';
@@ -22,7 +21,7 @@ export default {
     inject: ['getCSFRToken'],
 
     components: {
-        FilterBoxView,
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
     },
 
     props: {
@@ -55,8 +54,12 @@ export default {
             saving: false,
             showCreateObjectForm: false,
             file: null,
+            url: null,
             objectType: '',
-            titlePlaceholder: 'title',
+            titlePlaceholder: '',
+
+            // handle tabs
+            activeIndex: 0,
         };
     },
 
@@ -71,7 +74,16 @@ export default {
          * @return {Boolean}
          */
         isMedia() {
-            return this.relationTypes && this.relationTypes.right.indexOf('media') !== -1;
+            // predefined relations like `children` don't have relationTyps
+            if (!this.relationTypes) {
+                return true;
+            }
+            const right = this.relationTypes.right || [];
+            // actual types should be read from API
+            const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
+            const intersection = right.filter(x => mediaTypes.includes(x));
+
+            return (intersection.length > 0);
         }
     },
 
@@ -259,6 +271,22 @@ export default {
         },
 
         /**
+         * set object type for url upload
+         *
+         * @param {Event} event The event
+         *
+         * @return {void}
+         */
+        processUrl(event) {
+            if (event.target.value.length > 0) {
+                this.url = event.target.value;
+            } else {
+                this.url = null;
+            }
+            this.objectType = 'videos';
+        },
+
+        /**
          * get BEobject type from file's mimetype
          *
          * @param {File} file
@@ -273,6 +301,36 @@ export default {
                 type = 'file';
             }
             return `${type}${hasPlural}`;
+        },
+
+        /**
+         * Verify if right relation types are fine for url embed.
+         * Now only allowed type is 'videos' (and 'media')
+         *
+         * @return {Boolean}
+         */
+        isEmbeddable() {
+            // predefined relations like `children` don't have relationTypes
+            if (!this.relationTypes) {
+                return true;
+            }
+            const right = this.relationTypes.right || [];
+
+            return right.includes('videos') || right.includes('media');
+        },
+
+        /**
+         * Content tab class by index of tab clicked
+         *
+         * @param {Number} index The tab index
+         * @return {string}
+         */
+        getContentTabClass(index) {
+            if (this.activeIndex == index) {
+                return 'is-active';
+            }
+
+            return '';
         },
 
         /**

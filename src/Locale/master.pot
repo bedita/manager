@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-03-07 11:39:32 \n"
+"POT-Creation-Date: 2019-06-10 09:36:48 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -59,6 +59,9 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
+msgid "Clone"
+msgstr ""
+
 msgid "Create new"
 msgstr ""
 
@@ -93,6 +96,9 @@ msgid "Draft"
 msgstr ""
 
 msgid "Edit Params"
+msgstr ""
+
+msgid "Embed online content"
 msgstr ""
 
 msgid "Empty request data"
@@ -167,6 +173,12 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -201,6 +213,9 @@ msgid "Move to trash"
 msgstr ""
 
 msgid "New entry in"
+msgstr ""
+
+msgid "New object in"
 msgstr ""
 
 msgid "New relations (save to keep)"
@@ -285,6 +300,9 @@ msgid "Publish Start"
 msgstr ""
 
 msgid "Relations"
+msgstr ""
+
+msgid "Remote URL"
 msgstr ""
 
 msgid "Remove"
@@ -386,6 +404,9 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
+msgid "Upload local file"
+msgstr ""
+
 msgid "User Profile"
 msgstr ""
 
@@ -434,6 +455,9 @@ msgstr ""
 msgid "code"
 msgstr ""
 
+msgid "completed on"
+msgstr ""
+
 msgid "confirm password"
 msgstr ""
 
@@ -447,6 +471,12 @@ msgid "current password"
 msgstr ""
 
 msgid "download"
+msgstr ""
+
+msgid "empty"
+msgstr ""
+
+msgid "file name"
 msgstr ""
 
 msgid "id"
@@ -485,6 +515,12 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
+msgid "scheduled from"
+msgstr ""
+
+msgid "service name"
+msgstr ""
+
 msgid "status"
 msgstr ""
 
@@ -507,4 +543,16 @@ msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:138
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:462
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:464
+msgid "Do you really want to trash the object?"
 msgstr ""

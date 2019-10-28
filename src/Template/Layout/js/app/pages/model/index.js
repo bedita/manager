@@ -8,13 +8,12 @@
  */
 
 import ModulesIndex from 'app/pages/modules/index';
-import AutosizeTextarea from 'app/components/autosize-textarea';
 
 export default {
     extends: ModulesIndex,
 
     components: {
-        AutosizeTextarea,
+        AutosizeTextarea: () => import(/* webpackChunkName: "autosize-textarea" */'app/components/autosize-textarea'),
     },
 
     props: {

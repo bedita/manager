@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,9 +16,8 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
-use Cake\Routing\Router;
 
 /**
  * Base Application Controller.
@@ -43,10 +42,9 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
-        $this->loadComponent('Csrf');
 
         $options = ['Log' => (array)Configure::read('API.log', [])];
         $this->apiClient = ApiClientProvider::getApiClient($options);
@@ -75,7 +73,7 @@ class AppController extends Controller
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
-        } elseif (!in_array($this->request->url, ['login'])) {
+        } elseif (!in_array($this->request->getPath(), ['/login'])) {
             $route = ['_name' => 'login'];
             $redirect = $this->request->getUri()->getPath();
             if ($redirect !== $this->request->getAttribute('webroot')) {
@@ -102,6 +100,7 @@ class AppController extends Controller
             Configure::write('I18n.timezone', $timezone);
         }
     }
+
     /**
      * {@inheritDoc}
      *
@@ -135,7 +134,7 @@ class AppController extends Controller
     protected function prepareRequest($type) : array
     {
         // prepare json fields before saving
-        $data = $this->request->getData();
+        $data = (array)$this->request->getData();
 
         // when saving users, if password is empty, unset it
         if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
@@ -164,11 +163,42 @@ class AppController extends Controller
                     }
                 }
             }
+            $data['_api'] = $api;
+        }
+        unset($data['relations']);
 
-            $data['api'] = $api;
+        // prepare attributes: only modified attributes
+        if (!empty($data['_actualAttributes'])) {
+            $attributes = json_decode($data['_actualAttributes'], true);
+            foreach ($attributes as $key => $value) {
+                // remove unchanged attributes from $data
+                if (isset($data[$key]) && !$this->hasFieldChanged($value, $data[$key])) {
+                    unset($data[$key]);
+                }
+            }
+            unset($data['_actualAttributes']);
         }
 
         return $data;
+    }
+
+    /**
+     * Return true if $value1 equals $value2 or both are empty (null|'')
+     *
+     * @param mixed $value1 The first value | field value in model data (db)
+     * @param mixed $value2 The second value | field value from form
+     * @return bool
+     */
+    protected function hasFieldChanged($value1, $value2)
+    {
+        if (($value1 === null || $value1 === '') && ($value2 === null || $value2 === '')) {
+            return false;
+        }
+        if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
+            return $value1 !== boolval($value2);
+        }
+
+        return $value1 !== $value2;
     }
 
     /**
@@ -179,7 +209,7 @@ class AppController extends Controller
      *
      * @param array $options The options for request check(s)
      * @return array The request data for required parameters, if any
-     * @throws Cake\Network\Exception\BadRequestException on empty request or empty data by parameter
+     * @throws Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
      */
     protected function checkRequest(array $options = []) : array
     {
@@ -206,5 +236,45 @@ class AppController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Apply session filter (if any): if found, redirect properly.
+     * Session key: '{$currentModuleName}.filter'
+     * Scenarios:
+     *
+     * Query parameter 'reset=1': remove session key and redirect
+     * Query parameters found: write them on session with proper key ({currentModuleName}.filter)
+     * Session data for session key: build uri from session data and redirect to new uri.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    protected function applySessionFilter() : ?Response
+    {
+        $session = $this->request->getSession();
+        $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
+
+        // if reset request, delete session data by key and redirect to proper uri
+        if ($this->request->getQuery('reset') === '1') {
+            $session->delete($sessionKey);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery(''));
+        }
+
+        // write request query parameters (if any) in session
+        if (!empty($this->request->getQueryParams())) {
+            $session->write($sessionKey, $this->request->getQueryParams());
+
+            return null;
+        }
+
+        // read request query parameters from session and redirect to proper page
+        if ($session->check($sessionKey)) {
+            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery($query));
+        }
+
+        return null;
     }
 }

@@ -1,3 +1,12 @@
+<?php
+    $csrfToken = null;
+    if (!empty($this->request->getParam('_csrfToken'))) {
+        $csrfToken = json_encode($this->request->getParam('_csrfToken'));
+    } elseif (!empty($this->request->getData('_csrfToken'))) {
+        $csrfToken = json_encode($this->request->getData('_csrfToken'));
+    }
+?>
+
 <meta name="BEDITA.currLang" content="eng" />
 <meta name="BEDITA.currLang2" content="en" />
 <meta name="BEdita.base" content="<?= \Cake\Routing\Router::fullBaseUrl() ?>" />
@@ -16,7 +25,8 @@
         'template': '<?= $this->template ?>',
         'relations': {},
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
-        'locale': locale
+        'locale': locale,
+        'csrfToken': '<?= $csrfToken ?>'
     };
 
     if (BEDITA.plugins) {

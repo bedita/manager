@@ -4,6 +4,7 @@ body.view-module, body.translation-module {
         padding-left: $gutter * .5;
         >header {
             display: inline-flex;
+            min-height: 4.5 * $gutter;
 
             a {
                 margin-left: $gutter;
@@ -89,6 +90,14 @@ body.view-module, body.translation-module {
                         background: linear-gradient(to right, $gray-800, $gray-900);
                     }
                 }
+
+                .create-media-box {
+                    padding: $gutter * .5 $gutter $gutter * 1.25;
+                    margin-bottom: $gutter * 1.5;
+                    background-color: $gray-800;
+                    border-radius: 4px;
+                }
+
 
                 #{$text-inputs}, textarea {
                     width: 100%;

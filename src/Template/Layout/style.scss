@@ -32,6 +32,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Element/Menu/side-menu';
 @import '../Element/Menu/menu';
 @import '../Element/FilterBox/filter_box';
+@import '../Element/panel';
 @import '../Element/filter_type';
 
 // Pages
@@ -68,4 +69,18 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         height: $gutter * 2;
         width: $gutter * 2;
     }
+}
+
+.cake-error {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    padding: 1rem;
+    margin: .5rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #000;
+    font-size: 12px;
+    a { color: #62b9f3; }
 }

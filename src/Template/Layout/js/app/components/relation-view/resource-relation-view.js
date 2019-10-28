@@ -1,0 +1,118 @@
+/**
+ *  Templates that uses this component (directly or indirectly):
+ *  Template/Elements/relations.twig
+ *  Template/Elements/trees.twig
+ *  Template/Elements/roles.twig
+ *
+ * <relation-view> component used for ModulesPage -> View
+ *
+ * @property {String} relationName name of the relation used by the PaginatiedContentMixin
+ * @property {Boolean} loadOnStart load content on component init
+
+ * @requires
+ *
+ */
+
+import { PaginatedContentMixin } from 'app/mixins/paginated-content';
+import sleep from 'sleep-promise';
+
+export default {
+    mixins: [
+        PaginatedContentMixin,
+    ],
+
+    props: {
+        relationName: {
+            type: String,
+            required: true,
+        },
+        loadOnStart: [Boolean, Number],
+    },
+
+    data() {
+        return {
+            method: 'relatedJson',                      // define AppController method to be used
+            loading: false,
+            count: 0,                                   // count number of related objects, on change triggers an event
+        }
+    },
+
+    /**
+     * setup correct endpoint for PaginatedContentMixin.getPaginatedObjects()
+     *
+     * @return {void}
+     */
+    created() {
+        this.endpoint = `${this.method}/${this.relationName}`;
+    },
+
+    /**
+    * load content after component is mounted
+    *
+    * @return {void}
+    */
+    async mounted() {
+        await this.loadOnMounted();
+    },
+
+    watch: {
+        /**
+         * Loading event emit
+         *
+         * @param {String} value The value associated to loading
+         *
+         * @emits Event#loading
+         *
+         * @return {void}
+         */
+        loading(value) {
+            this.$emit('loading', value);
+        },
+    },
+
+    methods: {
+        /**
+         * load content if flag set to true
+         *
+         * @return {void}
+         */
+        async loadOnMounted() {
+            if (this.loadOnStart) {
+                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+
+                await sleep(t);
+                await this.loadRelatedObjects();
+            }
+            return Promise.resolve();
+        },
+
+        /**
+         * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
+         *
+         * @emits Event#count count objects event
+         *
+         * @param {Object} filter object containing filters
+         * @param {Boolean} force force recount of related objects
+         *
+         * @return {Array} objs objects retrieved
+         */
+        async loadRelatedObjects(filter = {}, force = false) {
+            this.loading = true;
+
+            return this.getPaginatedObjects(true, filter)
+                .then((objs) => {
+                    this.$emit('count', this.pagination.count);
+                    this.loading = false;
+                    return objs;
+                })
+                .catch((error) => {
+                    // code 20 is user aborted fetch which is ok
+                    if (error.code !== 20) {
+                        this.loading = false;
+                        console.error(error);
+                    }
+                });
+        },
+    }
+
+}

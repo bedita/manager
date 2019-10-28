@@ -218,6 +218,26 @@ class FormTest extends TestCase
                     'type' => 'text',
                 ],
             ],
+            'start_date' => [
+                'start_date',
+                [
+                    'type' => 'text',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
+                    'time' => 'true',
+                    'value' => null,
+                ],
+            ],
+            'end_date' => [
+                'end_date',
+                [
+                    'type' => 'text',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
+                    'time' => 'true',
+                    'value' => null,
+                ],
+            ],
         ];
     }
 
@@ -231,6 +251,8 @@ class FormTest extends TestCase
      * @dataProvider customControlOptionsProvider()
      * @covers ::customControlOptions()
      * @covers ::langOptions
+     * @covers ::startDateOptions()
+     * @covers ::endDateOptions()
      * @covers ::statusOptions
      * @covers ::oldpasswordOptions
      * @covers ::passwordOptions

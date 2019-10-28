@@ -4,9 +4,6 @@ import Vue from 'vue';
 import Locale from 'app/locales';
 import { t } from 'ttag';
 
-// Polyfill
-import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
-
 export const VueConfig = {
     devtools: true,
 }
@@ -14,6 +11,9 @@ export const VueConfig = {
 export const VueOptions = {
     delimiters: ['<:', ':>'],
 }
+
+// Polyfill
+import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 
 // merge vue options and configs
 for (let property in VueConfig) {
@@ -30,6 +30,10 @@ for (let property in VueOptions) {
 
 Locale(BEDITA.locale);
 
+// General Configs
+
+// TO-DO to be a dynamic array
+export const ACCEPTABLE_MEDIA = ['media', 'image', 'video', 'audio', 'files'];
 
 // Global mixins
 

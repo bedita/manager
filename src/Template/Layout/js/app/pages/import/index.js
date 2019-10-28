@@ -12,6 +12,10 @@
             type: Array,
             default: () => [],
         },
+        services: {
+            type: Array,
+            default: () => [],
+        },
         timeout: {
             type: Number,
             default: 5000,
@@ -22,6 +26,8 @@
         return {
             fileName: '',
             currentJobs: () => [],
+            showPayloadId: null,
+            currentFilterId: null,
         };
     },
 
@@ -30,9 +36,11 @@
     },
 
     mounted() {
-        setInterval(() => {
-            this.updateJobs();
-        }, this.timeout);
+        if (this.services.length) {
+            setInterval(() => {
+                this.updateJobs();
+            }, this.timeout);
+        }
     },
 
     methods: {
@@ -64,6 +72,20 @@
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        /**
+         * Toggle job payload to show
+         * @param {int} jobId The job id
+         */
+        togglePayload(jobId) {
+            if (this.showPayloadId == jobId) {
+                this.showPayloadId = null;
+
+                return;
+            }
+
+            this.showPayloadId = jobId;
         }
     }
 }

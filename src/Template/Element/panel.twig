@@ -4,5 +4,6 @@
         <relations-add v-if="props.action === 'relations-add'" v-bind="props.data" inline-template>
             {% element 'relations_add' %}
         </relations-add>
+        <upload-files-view v-if="props.action === 'upload-files'" v-bind="props.data" />
     </div>
 </panel-view>

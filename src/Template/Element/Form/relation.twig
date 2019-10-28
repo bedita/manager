@@ -1,7 +1,10 @@
+
 <relation-view inline-template
     :load-on-start={{ loadOnStart }}
 
     relation-name={{ relationName }}
+    :relation-data='{{ relationSchema|json_encode|raw }}'
+
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
 
@@ -31,7 +34,7 @@
             </filter-box-view>
 
             {# related objects #}
-            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
+            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''" :droppable="isRelationWithMedia" >
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="(related, index) in objects"
                     :key="related.id"
@@ -45,9 +48,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta && related.meta.url">
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
                             <figure v-if="related.type === 'images'">
-                                <img :src="related.meta.url" />
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                             {# <div class="cover" v-else>
                                 <span class="icon-cover icon-file-pdf"></span>
@@ -103,7 +106,7 @@
 
             {# staged objects to be added #}
             <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
-            <div class="related-objects-list columns" v-if="addedRelations.length">
+            <div class="related-objects-list staged-objects columns" v-if="addedRelations.length">
                 <div class="related-object column"
                     v-for="related in addedRelations"
                     :key="related.id"
@@ -116,9 +119,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail">
-                            <figure>
-                                <img :src="related.meta.url" />
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
+                            <figure v-if="related.type === 'images'">
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                         </div>
 
@@ -158,8 +161,7 @@
             {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
         </div>
 
-
-        <div>
+        <div class="relation-view-actions">
             <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
             <button v-else

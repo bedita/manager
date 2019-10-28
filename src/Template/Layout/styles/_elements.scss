@@ -68,6 +68,7 @@
     overflow: hidden;
 }
 
+
 // flex columns
 .columns {
     display: flex;
@@ -163,7 +164,6 @@
         }
     }
 }
-
 
 
 // pagination
@@ -293,5 +293,91 @@ a.close-button {
 
     to {
         transform: rotate(359deg)
+    }
+}
+
+
+// tabs
+.h-tabs {
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom-color: $gray-700;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+    }
+
+    li {
+        cursor: pointer;
+        a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            vertical-align: top;
+            margin-bottom: -1px;
+            padding: .5em 1em;
+            border-bottom-color: $gray-700;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            color: $gray-500;
+        }
+
+        &.is-active a {
+            border-bottom-color: $gray-100;
+            color: $gray-100;
+        }
+    }
+}
+
+
+.h-tabs ~ .h-tabs-contents {
+    margin-top: $gutter * 1.5;
+}
+
+
+.hr {
+    background-color: $gray-700;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 1.5rem 0;
+}
+
+
+// TODO: controllare questo dragover
+.dragover {
+    position: relative;
+    min-height: 8 * $gutter;
+
+    &:after {
+        position: absolute;
+        top: $gutter * 0.25;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0px $gutter * .25;
+        content: "Drop Here";
+        border-radius: $gutter * 0.25;
+        background: $black;
+        opacity: 0.7;
+        font-size: 2em;
+        height: calc(100% - #{$gutter * .5});
+        width: calc(100% - #{$gutter * .75});
     }
 }
