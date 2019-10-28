@@ -249,7 +249,7 @@ class LinkHelper extends Helper
                 $prev,
                 [
                     '_name' => 'modules:view',
-                    'object_type' => $data['objectType'],
+                    'object_type' => $data['object_type'],
                     'id' => $data['prev'],
                     'title' => __('prev'),
                 ]
@@ -260,7 +260,7 @@ class LinkHelper extends Helper
                 $next,
                 [
                     '_name' => 'modules:view',
-                    'object_type' => $data['objectType'],
+                    'object_type' => $data['object_type'],
                     'id' => $data['next'],
                     'title' => __('next'),
                 ]

@@ -586,4 +586,114 @@ class AppControllerTest extends TestCase
             static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);
         }
     }
+
+    /**
+     * Data provider for `testSetObjectNav` test case.
+     *
+     * @return array
+     */
+    public function setObjectNavProvider() : array
+    {
+        return [
+            'animals' => [
+                'animals', // $moduleName
+                [
+                    ['id' => 1001, 'object_type' => 'cat'],
+                    ['id' => 1002, 'object_type' => 'dog'],
+                    ['id' => 1003, 'object_type' => 'snake'],
+                ], // $objects
+                [
+                    'animals' => [
+                        1001 => [
+                            'prev' => null,
+                            'next' => 1002,
+                            'index' => 1,
+                            'total' => 3,
+                            'object_type' => 'cat',
+                        ],
+                        1002 => [
+                            'prev' => 1001,
+                            'next' => 1003,
+                            'index' => 2,
+                            'total' => 3,
+                            'object_type' => 'dog',
+                        ],
+                        1003 => [
+                            'prev' => 1002,
+                            'next' => null,
+                            'index' => 3,
+                            'total' => 3,
+                            'object_type' => 'snake',
+                        ],
+                    ],
+                ], // $expectedObjectNav
+                'animals', // expectedObjectTypeNav
+            ],
+            'snakes' => [
+                'snakes', // $moduleName
+                [
+                    ['id' => 5003, 'object_type' => 'snake'],
+                    ['id' => 5004, 'object_type' => 'snake'],
+                    ['id' => 5005, 'object_type' => 'snake'],
+                ], // $objects
+                [
+                    'snakes' => [
+                        5003 => [
+                            'prev' => null,
+                            'next' => 5004,
+                            'index' => 1,
+                            'total' => 3,
+                            'object_type' => 'snake',
+                        ],
+                        5004 => [
+                            'prev' => 5003,
+                            'next' => 5005,
+                            'index' => 2,
+                            'total' => 3,
+                            'object_type' => 'snake',
+                        ],
+                        5005 => [
+                            'prev' => 5004,
+                            'next' => null,
+                            'index' => 3,
+                            'total' => 3,
+                            'object_type' => 'snake',
+                        ],
+                    ],
+                ], // $expectedObjectNav
+                'snakes', // expectedObjectTypeNav
+            ],
+        ];
+    }
+
+    /**
+     * Test `setObjectNav`
+     *
+     * @param string $moduleName The module name for the test
+     * @param array $objects The objects to filter to set object nav
+     * @param array $expectedObjectNav The object nav array expected
+     * @param string $expectedObjectTypeNav The object type string type expected
+     *
+     * @covers ::setObjectNav()
+     * @dataProvider setObjectNavProvider()
+     *
+     * @return void
+     */
+    public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectTypeNav) : void
+    {
+        // Setup controller for test
+        $this->setupController();
+        $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
+
+        // do controller call
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setObjectNav');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->AppController, [ $objects ]);
+
+        // verify session data
+        $session = $this->AppController->request->getSession();
+        static::assertEquals($session->read('objectNav'), $expectedObjectNav);
+        static::assertEquals($session->read('objectTypeNav'), $expectedObjectTypeNav);
+    }
 }

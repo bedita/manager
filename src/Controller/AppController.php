@@ -296,6 +296,7 @@ class AppController extends Controller
                 'next' => ($i + 1 < $total) ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
                 'index' => $i + 1,
                 'total' => $total,
+                'object_type' => Hash::get($objects, sprintf('%d.object_type', $i)),
             ];
         }
         $session = $this->request->getSession();
