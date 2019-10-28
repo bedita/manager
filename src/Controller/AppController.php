@@ -323,25 +323,7 @@ class AppController extends Controller
         // get objectTypeNav from session or from object type from referer
         $session = $this->request->getSession();
         $objectType = $session->read('objectTypeNav');
-        if (empty($objectType)) {
-            $objectType = $this->objectTypeFromReferer();
-        }
 
         return Hash::get($objectNav, sprintf('%s.%d', $objectType, $id), []);
-    }
-
-    /**
-     * Return object type from referer, if any
-     *
-     * @return string|null
-     */
-    protected function objectTypeFromReferer() : ?string
-    {
-        $refererData = Router::parse($this->referer('/', true));
-        if (empty($refererData)) {
-            return null;
-        }
-
-        return (string)Hash::get($refererData, 'object_type', null);
     }
 }
