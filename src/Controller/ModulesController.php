@@ -194,7 +194,7 @@ class ModulesController extends AppController
         $this->set('objectRelations', array_keys($relationsSchema));
 
         // set objectNav
-        $objectNav = $this->getObjectNav($id);
+        $objectNav = $this->getObjectNav((string)$id);
         $this->set('objectNav', $objectNav);
 
         return null;

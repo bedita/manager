@@ -759,7 +759,7 @@ class AppControllerTest extends TestCase
             // do controller call
             $method = $reflectionClass->getMethod('getObjectNav');
             $method->setAccessible(true);
-            $result = $method->invokeArgs($this->AppController, [ $object['id'] ]);
+            $result = $method->invokeArgs($this->AppController, [ (string)$object['id'] ]);
 
             // verify objectNav data for id
             static::assertEquals($objectNav[$moduleName][$object['id']], $result);

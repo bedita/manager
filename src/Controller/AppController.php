@@ -307,7 +307,7 @@ class AppController extends Controller
     /**
      * Get objectNav for ID and current module name
      *
-     * @param int $id The object ID
+     * @param string $id The object ID
      * @return array
      */
     protected function getObjectNav($id) : array
@@ -323,6 +323,6 @@ class AppController extends Controller
         $session = $this->request->getSession();
         $objectType = $session->read('objectTypeNav');
 
-        return (array)Hash::get($objectNav, sprintf('%s.%d', $objectType, $id), []);
+        return (array)Hash::get($objectNav, sprintf('%s.%s', $objectType, $id), []);
     }
 }
