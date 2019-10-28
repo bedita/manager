@@ -321,7 +321,7 @@ class AppController extends Controller
 
         // get objectTypeNav from session or from object type from referer
         $session = $this->request->getSession();
-        $objectType = $session->read('objectTypeNav');
+        $objectType = (string)$session->read('objectTypeNav');
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectType, $id), []);
     }
