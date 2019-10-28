@@ -233,4 +233,41 @@ class LinkHelper extends Helper
 
         return $files;
     }
+
+    /**
+     * Build object nav
+     *
+     * @param array $data Object nav data
+     * @return string
+     */
+    public function objectNav($data) : string
+    {
+        $prev = '‹';
+        $next = '›';
+        if (!empty($data['prev'])) {
+            $prev = $this->Html->link(
+                $prev,
+                [
+                    '_name' => 'modules:view',
+                    'object_type' => $data['objectType'],
+                    'id' => $data['prev'],
+                    'title' => __('prev'),
+                ]
+            );
+        }
+        if (!empty($data['next'])) {
+            $next = $this->Html->link(
+                $next,
+                [
+                    '_name' => 'modules:view',
+                    'object_type' => $data['objectType'],
+                    'id' => $data['next'],
+                    'title' => __('next'),
+                ]
+            );
+        }
+        $counts = sprintf('<div>%d / %d</div>', $data['index'], $data['total']);
+
+        return sprintf('<div class="listobjnav">%s%s%s</div>', $prev, $next, $counts);
+    }
 }

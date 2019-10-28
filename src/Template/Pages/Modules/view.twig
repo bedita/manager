@@ -99,22 +99,10 @@
         {% do _view.append('commands', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
 
         {# Append "Prev" and "Next" to commands in commands menu. #}
-        {% if object.id %}
+        {% if object.id and objectNav %}
             {% do _view.append('commands', '<div>&nbsp;</div>') %}
-            {% if prev %}
-            {% do _view.append('commands', Html.link(
-                __('Prev'),
-                {'_name': 'modules:view', 'object_type': objectType, 'id': prev}
-            )) %}
-            {% endif %}
-            {% if next %}
-            {% do _view.append('commands', Html.link(
-                __('Next'),
-                {'_name': 'modules:view', 'object_type': objectType, 'id': next}
-            )) %}
-            {% endif %}
+            {% do _view.append('commands', Link.objectNav(objectNav)) %}
         {% endif %}
-
     </div>
 
 </div>

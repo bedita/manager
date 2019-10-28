@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
 /**
@@ -280,43 +281,65 @@ class AppController extends Controller
     }
 
     /**
-     * Retrieve previous and next content IDs (by module filter, if any active) starting from $id
+     * Set objectNav array
      *
-     * @param int $id The content ID
-     * @return array
+     * @param array $objects The objects to parse to set prev and next data
+     * @return void
      */
-    protected function prevNext($id) : array
+    protected function setObjectNav($objects) : void
     {
-        $response = $this->apiClient->getObjects($this->objectType, $this->getSessionFilter());
-        $found = false;
-        $i = 0;
-        $prevId = $nextId = null;
-        $total = count(Hash::get($response, 'data'));
-        while (!$found) {
-            $prevId = ($i > 0) ? Hash::get($response, sprintf('data.%d.id', $i - 1)) : null;
-            $nextId = ($i + 1 < $total) ? Hash::get($response, sprintf('data.%d.id', $i + 1)) : null;
-            if (Hash::get($response, sprintf('data.%d.id', $i)) === $id) {
-                $found = true;
-            }
-            $i++;
+        $moduleName = $this->Modules->getConfig('currentModuleName');
+        $total = count(array_keys($objects));
+        foreach ($objects as $i => $object) {
+            $objectNav[$moduleName][$object['id']] = [
+                'prev' => ($i > 0) ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
+                'next' => ($i + 1 < $total) ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
+                'index' => $i + 1,
+                'total' => $total,
+            ];
         }
-
-        return [
-            'prev' => $prevId,
-            'next' => $nextId,
-        ];
+        $session = $this->request->getSession();
+        $session->write('objectNav', $objectNav);
+        $session->write('objectTypeNav', $moduleName);
     }
 
     /**
-     * Get session filter, if any
+     * Get objectNav for ID and current module name
      *
-     * @return string|array|null
+     * @param int $id The object ID
+     * @return array
      */
-    protected function getSessionFilter()
+    protected function getObjectNav($id) : array
     {
+        // get objectNav from session
         $session = $this->request->getSession();
-        $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
+        $objectNav = $session->read('objectNav');
+        if (empty($objectNav)) {
+            return [];
+        }
 
-        return $session->read($sessionKey);
+        // get objectTypeNav from session or from object type from referer
+        $session = $this->request->getSession();
+        $objectType = $session->read('objectTypeNav');
+        if (empty($objectType)) {
+            $objectType = $this->objectTypeFromReferer();
+        }
+
+        return Hash::get($objectNav, sprintf('%s.%d', $objectType, $id), []);
+    }
+
+    /**
+     * Return object type from referer, if any
+     *
+     * @return string|null
+     */
+    protected function objectTypeFromReferer() : ?string
+    {
+        $refererData = Router::parse($this->referer('/', true));
+        if (empty($refererData)) {
+            return null;
+        }
+
+        return (string)Hash::get($refererData, 'object_type', null);
     }
 }
