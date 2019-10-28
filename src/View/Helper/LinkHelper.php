@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -244,12 +245,13 @@ class LinkHelper extends Helper
     {
         $prev = '‹';
         $next = '›';
+        $objectType = Hash::get($data, 'object_type', null);
         if (!empty($data['prev'])) {
             $prev = $this->Html->link(
                 $prev,
                 [
                     '_name' => 'modules:view',
-                    'object_type' => $data['object_type'],
+                    'object_type' => $objectType,
                     'id' => $data['prev'],
                     'title' => __('prev'),
                 ]
@@ -260,13 +262,15 @@ class LinkHelper extends Helper
                 $next,
                 [
                     '_name' => 'modules:view',
-                    'object_type' => $data['object_type'],
+                    'object_type' => $objectType,
                     'id' => $data['next'],
                     'title' => __('next'),
                 ]
             );
         }
-        $counts = sprintf('<div>%d / %d</div>', $data['index'], $data['total']);
+        $index = Hash::get($data, 'index', 0);
+        $total = Hash::get($data, 'total', 0);
+        $counts = sprintf('<div>%d / %d</div>', $index, $total);
 
         return sprintf('<div class="listobjnav">%s%s%s</div>', $prev, $next, $counts);
     }
