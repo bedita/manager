@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,9 +18,9 @@ use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
- * {@see \App\Viinklper\LinkHelper} Test Case
+ * {@see \App\View\LinkHelper\LinkHelper} Test Case
  *
- * @coversDefaulinks \App\View\Helper\LinkHelper
+ * @coversDefaultClass \App\View\Helper\LinkHelper
  */
 class LinkHelperTest extends TestCase
 {
