@@ -16,7 +16,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // vue dependencies
-const VueLoaderPlugin = require('vue-loader/lib/loader');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // config
 const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
 
@@ -116,6 +116,10 @@ if (devMode) {
 }
 
 module.exports = {
+    plugins: [
+        new VueLoaderPlugin()
+    ],
+
     entry: {
         app: [appEntry],
     },
