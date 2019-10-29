@@ -46,3 +46,8 @@
         margin-left: $gutter * .5;
     }
 }
+
+.filters-container-active {
+    padding-left: .5rem;
+    border-left: 4px solid red;
+}

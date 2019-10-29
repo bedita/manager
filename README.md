@@ -1,16 +1,14 @@
-# BEdita4 backend webapp
+# BEdita4 Backend Admin WebApp
 
 [![Build Status](https://travis-ci.org/bedita/web.svg)](https://travis-ci.org/bedita/web)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/web/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/web/)
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/web/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
-Backend webapp for BE4 API.
-
-UI/UX similar to BEdita3, but may change in the near future.
+Official Backend Admin WebApp for BEdita4 API.
 
 ## Prerequisites
 
-* PHP 7.1 or 7.2
+* PHP >= 7.1
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 
 ## Install
@@ -78,9 +76,9 @@ docker run -p 8080:80 \
 
 Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch a local built image.
 
-### Run dev with webpack
-
 ## Development
+
+### Run dev with webpack
 
 ### Using .env
 
@@ -125,14 +123,33 @@ yarn run bundle-report
 
 Host passed via `--host` option points to your local instance, builtin webserver is used in this example.
 
-### Run tests
+## Run unit tests
 
-To setup tests locally simply copy tests/.env.default to tests/.env and set env vars accordingly
+To setup tests locally simply copy `tests/.env.default` to `tests/.env` and set env vars accordingly.
 To launch tests:
 
 ```bash
 vendors/bin/phpunit [test folder or file, default '/tests']
 ```
+
+To run those tests you may want to use a Docker image as BEdita4 API endpoint.
+For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.0.0-RC2```
+
+Then you may run the image with
+
+```bash
+docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0-RC2
+```
+
+You can then set env vars accordingly like this
+
+```env
+export BEDITA_API="http://localhost:8090"
+export BEDITA_ADMIN_USR="bedita"
+export BEDITA_ADMIN_PWD="bedita"
+```
+
+and you're ready to go
 
 ## Licensing
 

@@ -1,0 +1,26 @@
+{# Calendar: use date_ranges if set in object attributes#}
+
+{% if object.attributes.date_ranges is defined %}
+
+<property-view inline-template :tab-open="tabsOpen">
+<section class="fieldset order-{{ cssOrder }}" id="date_ranges" :class="isOpen? '' : 'closed'">
+
+    <header @click.prevent="toggleVisibility()" class="tab unselectable">
+        <h2>{{ __('Calendar') }}</h2>
+    </header>
+
+   <div v-show="isOpen" class="tab-container">
+
+        {% set startDate = object.attributes.date_ranges.0.start_date|default('') %}
+        {% set options = Schema.controlOptions('start_date', startDate) %}
+        {{ Form.control('date_ranges.0.start_date', options)|raw }}
+
+        {% set endDate = object.attributes.date_ranges.0.end_date|default('') %}
+        {% set options = Schema.controlOptions('end_date', endDate) %}
+        {{ Form.control('date_ranges.0.end_date', options)|raw }}
+
+    </div>
+</section>
+</property-view>
+
+{% endif %}

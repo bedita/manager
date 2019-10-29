@@ -120,11 +120,30 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
-        })
+        });
     },
 
     methods: {
         // Events Listeners
+
+        /**
+         * Clone object
+         * Prompt for title change
+         *
+         * @param {Event} e The event
+         * @return {void}
+         */
+        clone(e) {
+            const title = document.getElementById('title').value;
+            const msg = t`Please insert a new title on "${title}" clone`;
+            const cloneTitle = prompt(msg, title + ' -copy');
+            if (cloneTitle) {
+                const query = `?title=${cloneTitle}`;
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                window.location.replace(`${origin}${path}${query}`);
+            }
+        },
 
         /**
          * listen to FilterBoxView event filter-objects
@@ -196,7 +215,7 @@ const _vueInstance = new Vue({
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                const urlParams = window.location.search;
+                const urlParams = decodeURI(window.location.search);
 
                 // search for q='some string' both after ? and & tokens
                 const queryStringExp = /[?&]q=([^&#]*)/g;
@@ -320,13 +339,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         resetFilters() {
-            this.page = '';
-            this.pageSize = '';
-            let filter = {
-                filter: {},
-                q: '',
-            }
-            this.applyFilters(filter);
+            window.location.replace(this.buildUrlParams({ reset: 1 }));
         },
 
         /**
@@ -439,7 +452,7 @@ const _vueInstance = new Vue({
                 const form = ev.target;
                 if (form) {
                     let msg = '';
-                    if (form.action.endsWith('/trash/delete')) {
+                    if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
                         msg = t`If you confirm, this data will be gone forever`;
                     } else if (form.action.endsWith('/delete')) {
                         msg = t`Do you really want to trash the object?`;

@@ -18,13 +18,8 @@
                 {% for key, val in meta %}
                     <tr>
                         <th>{{ key }}:</th>
-                        {% if key in ['created', 'modified', 'published', 'last_login', 'verified'] %}
-                            <td>{{ Time.format(val) }}</td>
-                        {% else %}
-                            <td>{% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}</td>
-                        {% endif %}
+                        <td>{{ Schema.format(val, schema.properties[key]) }}</td>
                     </tr>
-
                 {% endfor %}
             </tbody>
         </table>

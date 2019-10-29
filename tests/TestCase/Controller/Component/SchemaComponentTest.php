@@ -220,9 +220,11 @@ class SchemaComponentTest extends TestCase
         ApiClientProvider::setApiClient($apiClient);
         $result = $this->Schema->getRelationsSchema();
         static::assertNotEmpty($result);
-        static::assertEquals(2, count($result));
+        // count is 3 because `children` relation is automatically added
+        static::assertEquals(3, count($result));
         static::assertArrayHasKey('poster', $result);
         static::assertArrayHasKey('poster_of', $result);
+        static::assertArrayHasKey('children', $result);
     }
 
     /**

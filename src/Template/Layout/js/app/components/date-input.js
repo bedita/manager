@@ -65,7 +65,7 @@ export default {
         let options = Object.assign({}, FLATPICKR_OPTIONS);
 
         if (this.attrs.time) {
-            options.enableTime = this.time;
+            options.enableTime = true;
             options.altFormat = TIME_FORMAT;
         }
 

@@ -14,10 +14,9 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception as CakeException;
 use Cake\Event\Event;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
 use Cake\Utility\Hash;
 use Exception;
 
@@ -94,7 +93,8 @@ class ImportController extends AppController
 
             $result = $importFilter->import(
                 $this->request->getData('file.name'),
-                $this->request->getData('file.tmp_name')
+                $this->request->getData('file.tmp_name'),
+                $this->request->getData('filter_options')
             );
             $this->request->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {
@@ -138,7 +138,8 @@ class ImportController extends AppController
         foreach ($importFilters as $filter) {
             $value = $filter['class'];
             $text = $filter['label'];
-            $filters[] = compact('value', 'text');
+            $options = $filter['options'];
+            $filters[] = compact('value', 'text', 'options');
             $this->updateServiceList($value);
         }
         $this->set('filters', $filters);
@@ -168,6 +169,8 @@ class ImportController extends AppController
     protected function loadAsyncJobs()
     {
         if (empty($this->services)) {
+            $this->set('jobs', []);
+
             return;
         }
         $query = [
