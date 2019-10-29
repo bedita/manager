@@ -306,7 +306,7 @@ class FormTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => 'true',
-                    'ckconfig' => 'configNormal',
+                    'ckconfig' => 'configDefault',
                     'value' => $value,
                 ],
             ],
