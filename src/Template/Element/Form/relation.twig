@@ -36,7 +36,6 @@
             {# related objects #}
             <div class="related-objects-list columns"
                 :class="loading? 'isLoading' : ''"
-                {# :droppable="isRelationWithMedia" #}
                 droppable
                 sortable
                 :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
