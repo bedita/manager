@@ -7,7 +7,9 @@
  *
  * - define drop target with dynamic prop droppable (this.$el as default);
  * - define draggable elements with draggable prop
- * - define acceptable drop element with :accepted-drop as array
+ * - define accepted-drop element with :accepted-drop as array of
+ *   DOM selectors (. for classes, # for ids, <element> for dom elements)
+ *   to allow drop of files add from-files selector, or any for everything
  *
  * @requires ObservableMixin
  *
@@ -21,6 +23,10 @@
  */
 
 import { ObservableMixin } from 'app/mixins/observable';
+
+let dragdropPayload = {};
+let draggedData = {};
+let draggedElement = null;
 
 export const DragdropMixin = {
     mixins: [ ObservableMixin ],
@@ -36,7 +42,6 @@ export const DragdropMixin = {
         return {
             attrs: ['droppable', 'accepted-drop'], // observed attributes
             from: {},
-            draggedElement: null,
             overElement: null,
             dropElement: null,
             acceptedDropArray: [],
@@ -48,6 +53,11 @@ export const DragdropMixin = {
     },
 
     mounted() {
+        this.initDroppableElements();
+        this.initDraggableElements();
+    },
+
+    updated() {
         this.initDroppableElements();
         this.initDraggableElements();
     },
@@ -96,21 +106,23 @@ export const DragdropMixin = {
             // default droppable element
             this.dropElement = this.$el;
 
-            // search for a specific drop target
-            let dropElementInView = this.$el.querySelector('[droppable]');
-            if (dropElementInView) {
-                this.enableDrop();
-                this.dropElement = dropElementInView;
-                let accepted = dropElementInView.getAttribute('accepted-drop');
-                if (accepted) {
-                    this.acceptedDrop = accepted.split(',');
+            if (this.dropElement) {
+                // search for a specific drop target
+                let dropElementInView = this.$el.querySelector('[droppable]');
+                if (dropElementInView) {
+                    this.enableDrop();
+                    this.dropElement = dropElementInView;
+                    let accepted = dropElementInView.getAttribute('accepted-drop');
+                    if (accepted) {
+                        this.acceptedDropArray = accepted.split(',');
+                    }
                 }
-            }
 
-            // setup Drop events
-            this.dropElement.addEventListener('drop', this.onDrop, true);
-            this.dropElement.addEventListener('dragover', this.onDragover, true);
-            this.dropElement.addEventListener('dragleave', this.onDragleave, true);
+                // setup Drop events
+                this.dropElement.addEventListener('drop', this.onDrop, true);
+                this.dropElement.addEventListener('dragover', this.onDragover, true);
+                this.dropElement.addEventListener('dragleave', this.onDragleave, true);
+            }
         },
 
         /**
@@ -125,6 +137,7 @@ export const DragdropMixin = {
                 // if so set up dragstart event
                 this.draggableElements = draggables;
                 this.$el.addEventListener('dragstart', this.onDragstart, true);
+                this.$el.addEventListener('dragend', this.onDragend, true);
             }
         },
 
@@ -142,12 +155,12 @@ export const DragdropMixin = {
          *
          * @return {void}
          */
-        setDragdropData(ev, data = null) {
-            ev.dragdrop = {
-                dragged: this.draggedElement,
+        setDragdropData() {
+            dragdropPayload = {
+                dragged: draggedElement,
                 over: this.overElement,
                 drop: this.dropElement,
-                data,
+                data: draggedData,
             }
         },
 
@@ -162,9 +175,16 @@ export const DragdropMixin = {
          * @return {void}
          */
         onDragstart(ev) {
-            this.draggedElement = ev.target;
-            this.setDragdropData(ev);
-            this.$emit('dragstart', ev);
+            draggedElement = ev.target;
+            let dragData = draggedElement.getAttribute('drag-data');
+
+            try {
+                draggedData = JSON.parse(dragData);
+            } catch (e) {
+                console.error('failed parsing drag data');
+            }
+            this.setDragdropData();
+            this.$emit('dragstart', ev, draggedData);
         },
 
 
@@ -189,11 +209,10 @@ export const DragdropMixin = {
             }
 
             // check if draggable is accepted for drop target (if no rules are defined all draggable are accepted)
-            if (this.acceptedDrop.length ) {
-                const isValid = this.acceptedDrop.reduce((status, query) => status = status || this.draggedElement.matches(query), false);
-                if (!isValid) {
-                    return;
-                }
+            let draggedElement = dragdropPayload.dragged;
+
+            if (!this.isAcceptedDrag()) {
+                return;
             }
 
             window.clearTimeout(this.antiGlitchTimer);
@@ -241,6 +260,12 @@ export const DragdropMixin = {
             }, 25);
         },
 
+        onDragend(ev) {
+            dragdropPayload = {};
+            draggedData = {};
+            draggedElement = null;
+        },
+
         /**
          * drop event callback
          * remove dragover class from drop target
@@ -260,7 +285,7 @@ export const DragdropMixin = {
             ev.preventDefault();
             ev.stopPropagation();
 
-            if (!this._dropEnabled) {
+            if (!this._dropEnabled || !this.isAcceptedDrag()) {
                 return;
             }
 
@@ -273,11 +298,14 @@ export const DragdropMixin = {
             let files = ev.target.files || ev.dataTransfer.files;
 
             if (files.length) {
-                this.setDragdropData(ev, files);
-                this.$emit('drop-files', ev);
+                // add files to payload
+                dragdropPayload.files = files;
+                this.$emit('drop-files', ev, dragdropPayload);
             } else {
-                this.$emit('drop', ev);
+                this.$emit('drop', ev, dragdropPayload);
             }
+
+            draggedElement = null;
         },
 
         /**
@@ -309,10 +337,37 @@ export const DragdropMixin = {
             return false;
         },
 
+        /**
+         * check if dragged element is accepted from drop target
+         *
+         * @returns {Boolean}
+         */
+        isAcceptedDrag() {
+            // default: allow for any selector
+            if (this.acceptedDropArray.indexOf('any') !== -1) {
+                return true;
+            }
+            let isValid = this.acceptedDropArray.indexOf('from-files') !== -1;
+            if (this.acceptedDropArray.length && draggedElement) {
+                isValid = this.acceptedDropArray.reduce((status, query) => status = status || draggedElement.matches(query), false);
+            }
+            return isValid;
+        },
+
+        /**
+         * disable drop
+         *
+         * @returns {void}
+         */
         disableDrop() {
             this._dropEnabled = false;
         },
 
+        /**
+         * enable drop
+         *
+         * @returns {void}
+         */
         enableDrop() {
             this._dropEnabled = true;
         },

@@ -102,8 +102,8 @@ export default {
     async mounted() {
         // set up panel events
         PanelEvents.listen('edit-params:save', this, this.editParamsSave);
-        PanelEvents.listen('relations-add:save', this, this.appendRelations);
-        PanelEvents.listen('upload-files:save', this, this.appendRelations);
+        PanelEvents.listen('relations-add:save', this, this.appendRelationsFromPanel);
+        PanelEvents.listen('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
 
         await this.loadOnMounted();
@@ -113,8 +113,8 @@ export default {
             // if true setup drop event that handles file upload
 
             if (this.isRelationWithMedia) {
-                this.$on('drop-files', (ev) => {
-                    let files = ev.dragdrop.data;
+                this.$on('drop-files', (ev, transfer) => {
+                    let files = transfer.files;
                     if (files) {
                         // on drop-file event request panelView with action upload-files
                         this.disableDrop();
@@ -127,13 +127,22 @@ export default {
                 });
             }
         }
+
+        // enable related objects drop
+        this.$on('drop', (ev, transfer) => {
+            let object = transfer.data;
+            if (object) {
+                this.appendRelations([object]);
+                PanelEvents.send('relations-view:add-already-in-view', null, object );
+            }
+        });
     },
 
     beforeDestroy() {
         // destroy up panel events
         PanelEvents.stop('edit-params:save', this, this.editParamsSave);
-        PanelEvents.stop('relations-add:save', this, this.appendRelations);
-        PanelEvents.stop('upload-files:save', this, this.appendRelations);
+        PanelEvents.stop('relations-add:save', this, this.appendRelationsFromPanel);
+        PanelEvents.stop('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.stop('panel:closed', null, this.resetPanelRequester);
     },
 
@@ -153,7 +162,6 @@ export default {
     },
 
     methods: {
-
         // Events Listeners
 
         /**
@@ -258,6 +266,17 @@ export default {
                 }
             }
             this.prepareRelationsToSave();
+        },
+
+        /**
+         * add relations from panel and close it.
+         *
+         * @param {Array} relations
+         *
+         * @returns {void}
+         */
+        appendRelationsFromPanel(relations) {
+            this.appendRelations(relations);
             this.closePanel();
             this.enableDrop();
         },
@@ -471,6 +490,9 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
+
+
             this.prepareRelationsToSave();
         },
 
