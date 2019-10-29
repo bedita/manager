@@ -627,7 +627,7 @@ class AppControllerTest extends TestCase
                         ],
                     ],
                 ], // $expectedObjectNav
-                'animals', // expectedObjectTypeNav
+                'animals', // expectedObjectNavModule
             ],
             'snakes' => [
                 'snakes', // $moduleName
@@ -661,7 +661,7 @@ class AppControllerTest extends TestCase
                         ],
                     ],
                 ], // $expectedObjectNav
-                'snakes', // expectedObjectTypeNav
+                'snakes', // expectedObjectNavModule
             ],
         ];
     }
@@ -672,14 +672,14 @@ class AppControllerTest extends TestCase
      * @param string $moduleName The module name for the test
      * @param array $objects The objects to filter to set object nav
      * @param array $expectedObjectNav The object nav array expected
-     * @param string $expectedObjectTypeNav The object type string type expected
+     * @param string $expectedObjectNavModule The object type string type expected
      *
      * @covers ::setObjectNav()
      * @dataProvider setObjectNavProvider()
      *
      * @return void
      */
-    public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectTypeNav) : void
+    public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule) : void
     {
         // Setup controller for test
         $this->setupController();
@@ -694,7 +694,7 @@ class AppControllerTest extends TestCase
         // verify session data
         $session = $this->AppController->request->getSession();
         static::assertEquals($session->read('objectNav'), $expectedObjectNav);
-        static::assertEquals($session->read('objectTypeNav'), $expectedObjectTypeNav);
+        static::assertEquals($session->read('objectNavModule'), $expectedObjectNavModule);
     }
 
     /**
@@ -765,7 +765,7 @@ class AppControllerTest extends TestCase
             static::assertEquals($objectNav[$moduleName][$object['id']], $result);
         }
 
-        // verify objectTypeNav
-        static::assertEquals($session->read('objectTypeNav'), $moduleName);
+        // verify objectNavModule
+        static::assertEquals($session->read('objectNavModule'), $moduleName);
     }
 }

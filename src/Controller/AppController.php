@@ -280,7 +280,15 @@ class AppController extends Controller
     }
 
     /**
-     * Set objectNav array
+     * Set objectNav array and objectNavModule.
+     * Objects can be in different modules:
+     *
+     *  - a document is in "documents" and "objects" index
+     *  - an image is in "images" and "media" index
+     *  - etc.
+     *
+     * The session variable objectNavModule stores the last module index visited;
+     * this is used then in controller view, to obtain the proper object nav (@see \App\Controller\AppController::getObjectNav)
      *
      * @param array $objects The objects to parse to set prev and next data
      * @return void
@@ -301,7 +309,7 @@ class AppController extends Controller
         }
         $session = $this->request->getSession();
         $session->write('objectNav', $objectNav);
-        $session->write('objectTypeNav', $moduleName);
+        $session->write('objectNavModule', $moduleName);
     }
 
     /**
@@ -319,9 +327,9 @@ class AppController extends Controller
             return [];
         }
 
-        // get objectTypeNav from session or from object type from referer
+        // get objectNavModule from session
         $session = $this->request->getSession();
-        $objectType = (string)$session->read('objectTypeNav');
+        $objectType = (string)$session->read('objectNavModule');
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectType, $id), []);
     }
