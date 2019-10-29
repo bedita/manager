@@ -101,7 +101,8 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $this->set('objects', (array)$response['data']);
+        $objects = (array)$response['data'];
+        $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
@@ -120,6 +121,9 @@ class ModulesController extends AppController
 
         // objectTypes schema
         $this->set('schema', $this->getSchemaForIndex($this->objectType));
+
+        // set prevNext for views navigations
+        $this->setObjectNav($objects);
 
         return null;
     }
@@ -188,6 +192,10 @@ class ModulesController extends AppController
 
         $this->set(compact('relationsSchema', 'resourceRelations'));
         $this->set('objectRelations', array_keys($relationsSchema));
+
+        // set objectNav
+        $objectNav = $this->getObjectNav((string)$id);
+        $this->set('objectNav', $objectNav);
 
         return null;
     }

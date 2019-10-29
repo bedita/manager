@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * Base Application Controller.
@@ -276,5 +277,59 @@ class AppController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Set objectNav array and objectNavModule.
+     * Objects can be in different modules:
+     *
+     *  - a document is in "documents" and "objects" index
+     *  - an image is in "images" and "media" index
+     *  - etc.
+     *
+     * The session variable objectNavModule stores the last module index visited;
+     * this is used then in controller view, to obtain the proper object nav (@see \App\Controller\AppController::getObjectNav)
+     *
+     * @param array $objects The objects to parse to set prev and next data
+     * @return void
+     */
+    protected function setObjectNav($objects) : void
+    {
+        $moduleName = $this->Modules->getConfig('currentModuleName');
+        $total = count(array_keys($objects));
+        $objectNav = [];
+        foreach ($objects as $i => $object) {
+            $objectNav[$moduleName][$object['id']] = [
+                'prev' => ($i > 0) ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
+                'next' => ($i + 1 < $total) ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
+                'index' => $i + 1,
+                'total' => $total,
+                'object_type' => Hash::get($objects, sprintf('%d.object_type', $i)),
+            ];
+        }
+        $session = $this->request->getSession();
+        $session->write('objectNav', $objectNav);
+        $session->write('objectNavModule', $moduleName);
+    }
+
+    /**
+     * Get objectNav for ID and current module name
+     *
+     * @param string $id The object ID
+     * @return array
+     */
+    protected function getObjectNav($id) : array
+    {
+        // get objectNav from session
+        $session = $this->request->getSession();
+        $objectNav = (array)$session->read('objectNav');
+        if (empty($objectNav)) {
+            return [];
+        }
+
+        // get objectNav by session objectNavModule
+        $objectNavModule = (string)$session->read('objectNavModule');
+
+        return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
     }
 }
