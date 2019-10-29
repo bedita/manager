@@ -98,7 +98,7 @@
 
                         <div v-if="related.meta.thumb_url" class="thumbnail">
                             <figure v-if="related.type === 'images'">
-                                <img :src="related.meta.thumb_url" />
+                                <img :src="related.meta.thumb_url" draggable="false"/>
                             </figure>
                         </div>
 
