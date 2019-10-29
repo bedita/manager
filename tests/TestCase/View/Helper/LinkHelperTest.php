@@ -42,7 +42,7 @@ class LinkHelperTest extends TestCase
                     'index' => 1,
                     'total' => 10,
                 ], // $data
-                '<div class="listobjnav">‹<a href="/view/2?title=next">›</a><div>1 / 10</div></div>', // $expected
+                '<div class="listobjnav">‹<a href="/view/2">›</a><div>1 / 10</div></div>', // $expected
             ],
             'only prev' => [
                 [
@@ -50,7 +50,7 @@ class LinkHelperTest extends TestCase
                     'index' => 10,
                     'total' => 10,
                 ], // $data
-                '<div class="listobjnav"><a href="/view/9?title=prev">‹</a>›<div>10 / 10</div></div>', // $expected
+                '<div class="listobjnav"><a href="/view/9">‹</a>›<div>10 / 10</div></div>', // $expected
             ],
             'full' => [
                 [
@@ -59,7 +59,7 @@ class LinkHelperTest extends TestCase
                     'index' => 5,
                     'total' => 10,
                 ], // $data
-                '<div class="listobjnav"><a href="/view/4?title=prev">‹</a><a href="/view/6?title=next">›</a><div>5 / 10</div></div>', // $expected
+                '<div class="listobjnav"><a href="/view/4">‹</a><a href="/view/6">›</a><div>5 / 10</div></div>', // $expected
             ],
         ];
     }

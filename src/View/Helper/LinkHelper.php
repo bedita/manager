@@ -253,7 +253,6 @@ class LinkHelper extends Helper
                     '_name' => 'modules:view',
                     'object_type' => $objectType,
                     'id' => $data['prev'],
-                    'title' => __('prev'),
                 ]
             );
         }
@@ -264,7 +263,6 @@ class LinkHelper extends Helper
                     '_name' => 'modules:view',
                     'object_type' => $objectType,
                     'id' => $data['next'],
-                    'title' => __('next'),
                 ]
             );
         }
