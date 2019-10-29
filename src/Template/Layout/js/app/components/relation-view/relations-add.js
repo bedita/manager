@@ -13,10 +13,11 @@
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
+import { DragdropMixin } from 'app/mixins/dragdrop';
 import sleep from 'sleep-promise';
 
 export default {
-    mixins: [PaginatedContentMixin],
+    mixins: [ PaginatedContentMixin, DragdropMixin ],
 
     inject: ['getCSFRToken'],
 
@@ -48,6 +49,7 @@ export default {
             endpoint: '',
             loading: false,
             selectedObjects: [],
+            addedObjects: [],
             activeFilter: {},
 
             // create object form data
@@ -84,7 +86,18 @@ export default {
             const intersection = right.filter(x => mediaTypes.includes(x));
 
             return (intersection.length > 0);
-        }
+        },
+    },
+
+    mounted() {
+        // when object is staged for saving in relation view updates the list of alreadyInView
+        PanelEvents.listen('relations-view:add-already-in-view', null, this.addToAlreadyInView);
+        PanelEvents.listen('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
+    },
+
+    destroyed() {
+        PanelEvents.stop('relations-view:update-already-in-view', null, this.addToAlreadyInView);
+        PanelEvents.stop('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
     },
 
     watch: {
@@ -235,6 +248,48 @@ export default {
                 this.saving = false;
                 this.loading = false;
             }
+        },
+
+        /**
+         * check if object is not selectable
+         *
+         * @param {Number} id
+         *
+         * @returns {Boolean}
+         */
+        isUnselectableObject(id) {
+            const addedIds = this.addedObjects.map(obj => obj.id);
+            return this.alreadyInView.concat(addedIds).indexOf(id) !== -1;
+        },
+
+        /**
+         * update objects already added
+         *
+         * @param {Object} object
+         *
+         * @returns {void}
+         */
+        addToAlreadyInView(object) {
+            this.addedObjects.push(object);
+        },
+
+        /**
+         * remove object from addedObjects list
+         *
+         * @returns {void}
+         */
+        removeFromAlreadyInView(object) {
+            this.addedObjects = this.addedObjects.filter((added) => added.id !== object.id);
+        },
+
+        elementClasses(related) {
+            return [
+                `from-relation-${this.relationName}`,
+                {
+                    selected: this.selectedObjects.indexOf(related) != -1,
+                    unselectable: this.isUnselectableObject(related.id),
+                }
+            ]
         },
 
         /**

@@ -81,6 +81,27 @@
             margin-bottom: 2px;
         }
 
+        .listobjnav  {
+            text-align:center;
+            color:#DDD;
+            font-size:4em;
+        }
+
+        .listobjnav  a {
+            background-color: transparent;
+            color:yellowgreen;
+            display: inline-flex;
+        }
+
+        .listobjnav  a:Hover {
+            color:green;
+        }
+
+        .listobjnav > div {
+            color:#DDD;
+            font-size:11px;
+            text-align:center;
+        }
     }
 
     > .commands-footer {

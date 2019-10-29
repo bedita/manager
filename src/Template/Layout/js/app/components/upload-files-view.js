@@ -22,7 +22,7 @@ export default {
 
     template: /*template*/`
     <div class="upload-files">
-        <section class="upload-list" droppable>
+        <section class="upload-list" droppable accepted-drop="from-files">
             <div class="upload-info"
                 :key="index"
                 v-for="(info, index) in Array.from(uploadProgressInfo.values())">
@@ -88,8 +88,8 @@ export default {
     },
 
     mounted() {
-        this.$on('drop-files', (ev) => {
-            let files = ev.dragdrop.data;
+        this.$on('drop-files', (ev, transfer) => {
+            let files = transfer.files;
             if (files) {
                 // on drop-file event add files to upload queue
                 this.tryUpload(this.setupProgress(this.filterAcceptedFiles(files)));
