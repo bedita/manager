@@ -329,8 +329,8 @@ class AppController extends Controller
 
         // get objectNavModule from session
         $session = $this->request->getSession();
-        $objectType = (string)$session->read('objectNavModule');
+        $objectNavModule = (string)$session->read('objectNavModule');
 
-        return (array)Hash::get($objectNav, sprintf('%s.%s', $objectType, $id), []);
+        return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
     }
 }
