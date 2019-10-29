@@ -15,8 +15,8 @@ namespace App\Controller;
 use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
-use Cake\Network\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -28,6 +28,15 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    protected const FIXED_RELATIONSHIPS = [
+        'parent',
+        'children',
+        'parents',
+        'translations',
+        'streams',
+        'roles',
+    ];
+
     /**
      * Object type currently used
      *
@@ -50,6 +59,8 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
+
+        $this->Security->setConfig('unlockedActions', ['saveJson']);
     }
 
     /**
@@ -64,27 +75,6 @@ class ModulesController extends AppController
     }
 
     /**
-     * {@inheritDoc}
-     * @codeCoverageIgnore
-     */
-    public function beforeFilter(Event $event) : ?Response
-    {
-        $actions = [
-            'delete', 'changeStatus', 'saveJson',
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
-    }
-
-    /**
      * Display resources list.
      *
      * @return \Cake\Http\Response|null
@@ -92,6 +82,12 @@ class ModulesController extends AppController
     public function index() : ?Response
     {
         $this->request->allowMethod(['get']);
+
+        // handle filter and query parameters using session
+        $result = $this->applySessionFilter();
+        if ($result != null) {
+            return $result;
+        }
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
@@ -105,7 +101,8 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $this->set('objects', (array)$response['data']);
+        $objects = (array)$response['data'];
+        $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
@@ -124,6 +121,9 @@ class ModulesController extends AppController
 
         // objectTypes schema
         $this->set('schema', $this->getSchemaForIndex($this->objectType));
+
+        // set prevNext for views navigations
+        $this->setObjectNav($objects);
 
         return null;
     }
@@ -185,8 +185,17 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        $excluded = ['parent', 'parents', 'streams'];
-        $this->set('relations', array_diff(array_keys($object['relationships']), $excluded));
+        // relatinos between objects
+        $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
+        // relations between objects and resources
+        $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+
+        $this->set(compact('relationsSchema', 'resourceRelations'));
+        $this->set('objectRelations', array_keys($relationsSchema));
+
+        // set objectNav
+        $objectNav = $this->getObjectNav((string)$id);
+        $this->set('objectNav', $objectNav);
 
         return null;
     }
@@ -268,14 +277,15 @@ class ModulesController extends AppController
         $requestData = $this->prepareRequest($this->objectType);
 
         try {
-            if (!empty($requestData['api'])) {
-                foreach ($requestData['api'] as $api) {
+            if (!empty($requestData['_api'])) {
+                foreach ($requestData['_api'] as $api) {
                     extract($api); // method, id, type, relation, relatedIds
                     if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                         $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
                     }
                 }
             }
+            unset($requestData['_api']);
 
             // upload file (if available)
             $this->Modules->upload($requestData);
@@ -311,7 +321,7 @@ class ModulesController extends AppController
      */
     public function saveJson() : void
     {
-        $this->viewBuilder()->className('Json'); // force json response
+        $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
 
@@ -337,6 +347,44 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Clone single object.
+     *
+     * @param string|int $id Object ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function clone($id) : ?Response
+    {
+        $this->viewBuilder()->setTemplate('view');
+
+        $schema = $this->Schema->getSchema();
+        if (!is_array($schema)) {
+            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+        try {
+            $response = $this->apiClient->getObject($id, $this->objectType);
+            $attributes = $response['data']['attributes'];
+            $attributes['uname'] = '';
+            unset($attributes['relationships']);
+            $attributes['title'] = $this->request->getQuery('title');
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
+        }
+        $object = [
+            'type' => $this->objectType,
+            'attributes' => $attributes,
+        ];
+        $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+
+        return null;
     }
 
     /**
@@ -397,70 +445,10 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->updateMediaUrls($response);
+        $this->getThumbsUrls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
-    }
-
-    /**
-     * Provide stream media URL of related objects in `meta.url` if present.
-     *
-     * @param array $response Related objects response.
-     * @return void
-     */
-    protected function updateMediaUrls(array &$response) : void
-    {
-        if (empty($response['data'])) {
-            return;
-        }
-        $included = Hash::combine($response, 'included.{n}.id', 'included.{n}');
-        foreach ($response['data'] as &$item) {
-            $thumbnail = Hash::get($item, 'attributes.provider_thumbnail');
-            if ($thumbnail) {
-                $item['meta']['url'] = $thumbnail;
-            } else {
-                $streamId = Hash::get($item, 'relationships.streams.data.0.id');
-                if ($streamId) {
-                    $item['meta']['url'] = Hash::get($included, sprintf('%s.meta.url', $streamId));
-                }
-            }
-        }
-    }
-
-    /**
-     * Relation schema request callig api `GET /model/relations/:relation`
-     * Json response
-     *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
-     * @return void
-     */
-    public function relationData($id, string $relation) : void
-    {
-        $this->request->allowMethod(['get']);
-
-        try {
-            $response = $this->apiClient->relationData($relation);
-
-            // retrieve relation right and left object types
-            $leftTypes = (array)Hash::extract($response, 'data.relationships.left_object_types.data.{n}.id');
-            $rightTypes = (array)Hash::extract($response, 'data.relationships.right_object_types.data.{n}.id');
-            $typeNames = Hash::combine($response, 'included.{n}.id', 'included.{n}.attributes.name');
-
-            $response['data']['left'] = array_values(array_intersect_key($typeNames, array_flip($leftTypes)));
-            $response['data']['right'] = array_values(array_intersect_key($typeNames, array_flip($rightTypes)));
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
-
-            return;
-        }
-
-        $this->set((array)$response);
-        $this->set('_serialize', true);
     }
 
     /**
@@ -560,10 +548,16 @@ class ModulesController extends AppController
         $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
 
         foreach ($response['data'] as &$object) {
+            $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
+            if ($thumbnail) {
+                $object['meta']['thumb_url'] = $thumbnail;
+                continue; // if provider_thumbnail is found there's no need to extract it from thumbsResponse
+            }
+
             // extract url of the matching objectid's thumb
             $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
             if (count($thumbnail)) {
-                $object['meta']['url'] = $thumbnail[0];
+                $object['meta']['thumb_url'] = $thumbnail[0];
             }
         }
     }

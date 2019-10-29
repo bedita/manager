@@ -62,6 +62,9 @@ msgstr "Cambia File"
 msgid "Children"
 msgstr "Contenuti"
 
+msgid "Clone"
+msgstr "Clona"
+
 msgid "Create new"
 msgstr "Crea nuovo"
 
@@ -97,6 +100,9 @@ msgstr ""
 
 msgid "Edit Params"
 msgstr "Modifica Parametri"
+
+msgid "Embed online content"
+msgstr "Incorpora contenuti online"
 
 msgid "Empty request data"
 msgstr "Nessuno dato in request"
@@ -171,10 +177,10 @@ msgid "Invalid username or password"
 msgstr ""
 
 msgid "Job {0} to import file \"{1}\" scheduled."
-msgstr ""
+msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
 
 msgid "Jobs"
-msgstr ""
+msgstr "Processi"
 
 msgid "Language"
 msgstr "Lingua"
@@ -211,6 +217,9 @@ msgstr "Sposta nel cestino"
 
 msgid "New entry in"
 msgstr "Nuova voce in"
+
+msgid "New object in"
+msgstr "Nuovo oggetto in"
 
 msgid "New relations (save to keep)"
 msgstr "Nuove relazioni (salvare per mantenerle)"
@@ -295,6 +304,9 @@ msgstr "Data inizio pubblicazione"
 
 msgid "Relations"
 msgstr "Relazioni"
+
+msgid "Remote URL"
+msgstr "Indirizzo remoto"
 
 msgid "Remove"
 msgstr "Rimuovi"
@@ -395,6 +407,9 @@ msgstr "Senza titolo"
 msgid "Upload"
 msgstr "Caricare"
 
+msgid "Upload local file"
+msgstr "Carica file locale"
+
 msgid "User Profile"
 msgstr "Profilo Utente"
 
@@ -444,7 +459,7 @@ msgid "code"
 msgstr "codice"
 
 msgid "completed on"
-msgstr ""
+msgstr "completato il"
 
 msgid "confirm password"
 msgstr "conferma password"
@@ -461,8 +476,11 @@ msgstr "password corrente"
 msgid "download"
 msgstr ""
 
+msgid "empty"
+msgstr "vuoto"
+
 msgid "file name"
-msgstr "nome file"
+msgstr "nome del file"
 
 msgid "id"
 msgstr ""
@@ -501,10 +519,10 @@ msgid "remove"
 msgstr "rimuovi"
 
 msgid "scheduled from"
-msgstr "pianificato dal"
+msgstr "programmato da"
 
 msgid "service name"
-msgstr "nome servizio"
+msgstr "nome del servizio"
 
 msgid "status"
 msgstr "stato"
@@ -541,6 +559,18 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 #: src/Template/Layout/js/app/directives/richeditor.js:21
 msgid "Please enter the image url"
 msgstr "Inserisci l'url dell'immagine"
+
+#: src/Template/Layout/js/app/app.js:138
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+
+#: src/Template/Layout/js/app/app.js:462
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#: src/Template/Layout/js/app/app.js:464
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #~ msgid "Apply"
 #~ msgstr "Applica"

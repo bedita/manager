@@ -59,3 +59,8 @@ yarn-error.log
 *.css.map
 *.bundle.js.map
 bundle-report.*.html
+
+# bundle directories
+/webroot/bundle-report
+/webroot/css
+/webroot/js

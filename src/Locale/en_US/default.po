@@ -62,6 +62,9 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
+msgid "Clone"
+msgstr ""
+
 msgid "Create new"
 msgstr ""
 
@@ -96,6 +99,9 @@ msgid "Draft"
 msgstr ""
 
 msgid "Edit Params"
+msgstr ""
+
+msgid "Embed online content"
 msgstr ""
 
 msgid "Empty request data"
@@ -212,6 +218,9 @@ msgstr ""
 msgid "New entry in"
 msgstr ""
 
+msgid "New object in"
+msgstr ""
+
 msgid "New relations (save to keep)"
 msgstr ""
 
@@ -294,6 +303,9 @@ msgid "Publish Start"
 msgstr ""
 
 msgid "Relations"
+msgstr ""
+
+msgid "Remote URL"
 msgstr ""
 
 msgid "Remove"
@@ -395,6 +407,9 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
+msgid "Upload local file"
+msgstr ""
+
 msgid "User Profile"
 msgstr ""
 
@@ -459,6 +474,9 @@ msgid "current password"
 msgstr ""
 
 msgid "download"
+msgstr ""
+
+msgid "empty"
 msgstr ""
 
 msgid "file name"
@@ -540,4 +558,14 @@ msgstr ""
 
 #: src/Template/Layout/js/app/directives/richeditor.js:21
 msgid "Please enter the image url"
+#: src/Template/Layout/js/app/app.js:138
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:462
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:464
+msgid "Do you really want to trash the object?"
 msgstr ""

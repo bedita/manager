@@ -7,20 +7,7 @@ import 'Template/Layout/style.scss';
 
 import { BELoader } from 'libs/bedita';
 
-import ModulesIndex from 'app/pages/modules/index';
-import ModulesView from 'app/pages/modules/view';
-import TrashIndex from 'app/pages/trash/index';
-import TrashView from 'app/pages/trash/view';
-import ImportView from 'app/pages/import/index';
-import ModelIndex from 'app/pages/model/index';
-import FilterBoxView from 'app/components/filter-box';
-import FilterTypeView from 'app/components/filter-type';
-import RelationsAdd from 'app/components/relation-view/relations-add';
-import EditRelationParams from 'app/components/edit-relation-params';
-import MainMenu from 'app/components/menu';
-import FlashMessage from 'app/components/flash-message';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import UploadFilesView from 'app/components/upload-files-view';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -35,20 +22,20 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        ModulesIndex,
-        ModulesView,
-        TrashIndex,
-        TrashView,
-        ImportView,
-        ModelIndex,
-        RelationsAdd,
-        FilterBoxView,
-        FilterTypeView,
-        EditRelationParams,
         PanelView,
-        UploadFilesView,
-        MainMenu,
-        FlashMessage,
+        ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
+        ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
+        TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
+        ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
+        ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
+        EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
+        MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
+        FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
+        UploadFilesView: () => import(/* webpackChunkName: "upload-files-view" */'app/components/upload-files-view'),
     },
 
     data() {
@@ -133,11 +120,30 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
-        })
+        });
     },
 
     methods: {
         // Events Listeners
+
+        /**
+         * Clone object
+         * Prompt for title change
+         *
+         * @param {Event} e The event
+         * @return {void}
+         */
+        clone(e) {
+            const title = document.getElementById('title').value;
+            const msg = t`Please insert a new title on "${title}" clone`;
+            const cloneTitle = prompt(msg, title + ' -copy');
+            if (cloneTitle) {
+                const query = `?title=${cloneTitle}`;
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                window.location.replace(`${origin}${path}${query}`);
+            }
+        },
 
         /**
          * listen to FilterBoxView event filter-objects
@@ -209,7 +215,7 @@ const _vueInstance = new Vue({
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                const urlParams = window.location.search;
+                const urlParams = decodeURI(window.location.search);
 
                 // search for q='some string' both after ? and & tokens
                 const queryStringExp = /[?&]q=([^&#]*)/g;
@@ -333,13 +339,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         resetFilters() {
-            this.page = '';
-            this.pageSize = '';
-            let filter = {
-                filter: {},
-                q: '',
-            }
-            this.applyFilters(filter);
+            window.location.replace(this.buildUrlParams({ reset: 1 }));
         },
 
         /**
@@ -452,7 +452,7 @@ const _vueInstance = new Vue({
                 const form = ev.target;
                 if (form) {
                     let msg = '';
-                    if (form.action.endsWith('/trash/delete')) {
+                    if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
                         msg = t`If you confirm, this data will be gone forever`;
                     } else if (form.action.endsWith('/delete')) {
                         msg = t`Do you really want to trash the object?`;

@@ -85,6 +85,25 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `login` with HTTP HEAD method
+     *
+     * @coversNothing
+     *
+     * @return void
+     */
+    public function testHeadLogin() : void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'HEAD',
+            ],
+        ]);
+
+        $response = $this->Login->login();
+        static::assertNull($response);
+    }
+
+    /**
      * Test `userTimezone` method
      *
      * @covers ::userTimezone()

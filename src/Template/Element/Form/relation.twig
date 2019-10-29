@@ -1,7 +1,10 @@
+
 <relation-view inline-template
     :load-on-start={{ loadOnStart }}
 
     relation-name={{ relationName }}
+    :relation-data='{{ relationSchema|json_encode|raw }}'
+
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
 
@@ -31,13 +34,20 @@
             </filter-box-view>
 
             {# related objects #}
-            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''" :droppable="isRelationWithMedia" >
+            <div class="related-objects-list columns"
+                :class="loading? 'isLoading' : ''"
+                droppable
+                sortable
+                :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
+
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="(related, index) in objects"
                     :key="related.id"
-                    :class="containsId(removedRelated, related.id)? 'removed' : ''">
+                    :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                    draggable
+                    :drag-data="JSON.stringify(related)">
                     <article class="box has-background-black has-text-gray-100 has-text-size-smaller"
-                            v-bind:class="related.type">
+                        v-bind:class="related.type">
 
                         <header>
                             <a class="icon-edit icon-only-icon has-text-size-larger" :href="$helpers.buildViewUrl(related.id)" target="_blank"></a>
@@ -45,9 +55,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta && related.meta.url">
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
                             <figure v-if="related.type === 'images'">
-                                <img :src="related.meta.url" />
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                             {# <div class="cover" v-else>
                                 <span class="icon-cover icon-file-pdf"></span>
@@ -116,9 +126,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail">
-                            <figure>
-                                <img :src="related.meta.url" />
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
+                            <figure v-if="related.type === 'images'">
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                         </div>
 

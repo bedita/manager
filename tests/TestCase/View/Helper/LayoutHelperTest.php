@@ -285,7 +285,9 @@ class LayoutHelperTest extends TestCase
         $request = $response = $events = null;
         $data = ['name' => $name];
         $view = new View($request, $response, $events, $data);
-        $view->viewVars += $viewVars;
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
         $layout = new LayoutHelper($view);
         $result = $layout->moduleLink();
         static::assertSame($expected, $result);

@@ -11,24 +11,56 @@
 
         <div class="create-new-object" v-if="showCreateObjectForm">
             <form name="create-object" :disabled="saving" @submit.prevent="createObject">
-                <div class="dropzone">
-                    <div class="input file">
-                        <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
+                {{ Form.control('upload_behavior', {
+                    'type': 'hidden',
+                    'v-bind:value': 'activeIndex == 1? `embed` : `file`'
+                }) | raw }}
+                {{ Form.unlockField('upload_behavior')}}
+                <div class="h-tabs">
+                    <ul>
+                        <li :class="getContentTabClass(0)"
+                            v-on:click="activeIndex = 0"><a>{{ __('Upload local file') }}</a></li>
+                        <li v-if="isEmbeddable()" :class="getContentTabClass(1)"
+                            v-on:click="activeIndex = 1"><a>{{ __('Embed online content') }}</a></li>
+                    </ul>
+                </div>
+                <div class="h-tabs-contents">
+                    <div class="h-tab" v-if="activeIndex == 0">
+                        <div class="dropzone">
+                            <div class="input file">
+                                <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-tab" v-if="activeIndex == 1">
+                        <div class="input text">
+                            <label for="remote_url">{{ __('Video') }}</label>
+                            {{ Form.text('remote_url', {
+                                'id': 'remote_url',
+                                'type': 'text',
+                                'autocomplete': 'off',
+                                'autocorrect': 'off',
+                                'autocapitalize': 'off',
+                                'spellcheck': 'false',
+                                '@keyup': 'processUrl',
+                                'placeholder': __('Remote URL') }) | raw }}
+                        </div>
                     </div>
                 </div>
+
                 <div class="input text">
-                    <label for="title">Title</label>
+                    <label for="title">{{ __('Title') }}</label>
                     <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
                 </div>
 
-                <button :disabled="this.file === null" type="submit">{{ __('create') }}</button>
+                <button :disabled="this.file === null && this.url === null" type="submit">{{ __('create') }}</button>
             </form>
         </div>
     </section>
 
     <section class="shrinks">
         <header class="tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName">{{ __('add to') }}<: relationName | humanize :></span> &nbsp;</h2>
+            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
             <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
         </header>
 
@@ -54,18 +86,19 @@
             <div class="columns">
                 <div class="related-object column is-3" v-for="related in objects">
                     <article class="box has-text-gray-100 has-text-size-smaller"
-                            v-bind:class="[selectedObjects.indexOf(related) != -1? 'selected' : '',
-                                alreadyInView.indexOf(related.id) != -1? 'unselectable':'']"
-                            @click="toggle(related, $event)">
+                        :class="elementClasses(related)"
+                        @click="toggle(related, $event)"
+                        draggable
+                        :drag-data="JSON.stringify(related)">
 
                         <header>
                             <h1><: related.attributes.title || related.attributes.name :></h1>
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div v-if="related.meta.url" class="thumbnail">
-                            <figure>
-                                <img :src="related.meta.url" />
+                        <div v-if="related.meta.thumb_url" class="thumbnail">
+                            <figure v-if="related.type === 'images'">
+                                <img :src="related.meta.thumb_url" draggable="false"/>
                             </figure>
                         </div>
 

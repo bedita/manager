@@ -2,6 +2,7 @@
 
 <import-view
     :jobs="{{ jobs|json_encode() }}"
+    :services="{{ services|json_encode() }}"
     ref="moduleView" inline-template>
 <div id="data-import">
 
@@ -18,7 +19,11 @@
                         <h2>{{ __('File type') }}</h2>
                     </header>
                     <div class="tab-container">
-                        {{ Form.radio('filter', filters)|raw }}
+                        {% set allFilters = {} %}
+                        {% for index, datum in filters %}
+                            {% set allFilters = allFilters|merge({ (index): datum|merge({'@click': 'currentFilterId = ' ~ index}) }) %}
+                        {% endfor %}
+                        {{ Form.radio('filter', allFilters)|raw }}
                     </div>
                 </section>
             </div>
@@ -29,14 +34,49 @@
                         <h2>{{ __('Options') }}</h2>
                     </header>
                     <div class="tab-container">
-                        {% for f in filters %}
-                            <div id="{{ f.name }}">
-                                {% for k,v in f.options %}
-                                <div>{{ k }}:{{ v }}</div>
+                        {% for index, datum in filters %}
+                            <div id="filter-{{ datum.value|lower }}-options" v-show="currentFilterId == {{ index }}">
+                            {% if datum.options %}
+                                {% for optionName,optionData in datum.options %}
+                                <div>
+                                    <label>{{ optionData.label }}</label>
+                                    {% if optionData.dataType == 'boolean' %}
+                                        {{ Form.control(optionName, {
+                                            'type': 'checkbox',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'checked': optionData.defaultValue|default(false),
+                                            'label': '',
+                                        })|raw }}
+                                    {% elseif optionData.dataType == 'text' %}
+                                        {{ Form.control(optionName, {
+                                            'type': 'text',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'value': optionData.defaultValue|default('')
+                                        })|raw }}
+                                    {% elseif optionData.dataType == 'options' %}
+                                        {% set oo = {} %}
+                                        {% set index = 0 %}
+                                        {% for optionValue,optionLabel in optionData.values %}
+                                            {% set oo = oo|merge({ (index): {
+                                                'text': optionLabel,
+                                                'value': optionValue,
+                                            }}) %}
+                                            {% set index = index + 1 %}
+                                        {% endfor %}
+                                        {{ Form.control(optionName, {
+                                            'type': 'select',
+                                            'name': 'filter_options[' ~ optionName ~ ']',
+                                            'options': oo,
+                                            'value': optionData.defaultValue|default(null)
+                                        })|raw }}
+                                    {% endif %}
+                                </div>
                                 {% endfor %}
+                            {% else %}
+                                <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
+                            {% endif %}
                             </div>
                         {% endfor %}
-                        <span class="has-text-gray-600">{{ __('No options for this file type') }}</span>
                     </div>
                 </section>
             </div>
@@ -55,7 +95,9 @@
                     <span class="file-cta icon-upload">
                         <span class="file-label">Choose a file</span>
                     </span>
-                    <span class="file-name" v-cloak><span v-bind:title="fileName"><: fileName :></span></span>
+                    <span class="file-name" v-cloak>
+                        <span data-empty-label="{{ __('empty') }}" v-bind:title="fileName"><: fileName :></span>
+                    </span>
                 </label>
             </div>
         </section>
@@ -102,7 +144,7 @@
     </section>
     {% endif %}
 
-
+    {% if services %}
     {# jobs #}
     <div class="columns" v-if="jobs.length != -1">
         <div class="column">
@@ -140,6 +182,8 @@
         </div>
 
     </div>
+    {% endif %}
+
 
 </div>
 </import-view>

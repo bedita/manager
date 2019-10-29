@@ -38,7 +38,7 @@ class LayoutHelper extends Helper
      */
     public function primarySidebar() : bool
     {
-        return in_array($this->_View->name, ['Dashboard']);
+        return in_array($this->_View->getName(), ['Dashboard']);
     }
 
     /**
@@ -48,7 +48,7 @@ class LayoutHelper extends Helper
      */
     public function secondarySidebar() : bool
     {
-        return !in_array($this->_View->name, ['Dashboard', 'Login']);
+        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
 
     /**
@@ -58,7 +58,7 @@ class LayoutHelper extends Helper
      */
     public function layoutHeader() : bool
     {
-        return !in_array($this->_View->name, ['Dashboard', 'Login']);
+        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
 
     /**
@@ -78,7 +78,7 @@ class LayoutHelper extends Helper
      */
     public function layoutFooter() : bool
     {
-        return !in_array($this->_View->name, ['Dashboard', 'Login']);
+        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
 
     /**
@@ -88,7 +88,7 @@ class LayoutHelper extends Helper
      */
     public function messages() : bool
     {
-        return $this->_View->name != 'Login';
+        return $this->_View->getName() != 'Login';
     }
 
     /**
@@ -98,8 +98,9 @@ class LayoutHelper extends Helper
      */
     public function moduleLink() : string
     {
-        if (!empty($this->_View->viewVars['currentModule']['name'])) {
-            $name = $this->_View->viewVars['currentModule']['name'];
+        $currentModule = (array)$this->getView()->get('currentModule');
+        if (!empty($currentModule) && !empty($currentModule['name'])) {
+            $name = $currentModule['name'];
 
             return $this->Html->link(
                 Inflector::humanize($name),
@@ -110,8 +111,8 @@ class LayoutHelper extends Helper
 
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
-            Inflector::humanize($this->_View->name),
-            (array)Hash::get($this->_View->viewVars, 'moduleLink', []),
+            Inflector::humanize($this->getView()->getName()),
+            (array)$this->getView()->get('moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
     }
@@ -123,7 +124,7 @@ class LayoutHelper extends Helper
      */
     protected function commandLinkClass() : string
     {
-        $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->name));
+        $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->getName()));
         if ($pluginClass) {
             return $pluginClass;
         }
@@ -134,6 +135,6 @@ class LayoutHelper extends Helper
             'Model' => 'has-background-black icon-database',
         ];
 
-        return (string)Hash::get($moduleClasses, $this->_View->name, 'commands-menu__module');
+        return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
     }
 }

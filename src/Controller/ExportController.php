@@ -13,9 +13,6 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Http\Response;
-use Cake\Network\Exception\BadRequestException;
 use Cake\Utility\Hash;
 
 /**
@@ -23,26 +20,6 @@ use Cake\Utility\Hash;
  */
 class ExportController extends AppController
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function beforeFilter(Event $event) : ?Response
-    {
-        $actions = [
-            'export',
-        ];
-
-        if (in_array($this->request->params['action'], $actions)) {
-            // for csrf
-            $this->getEventManager()->off($this->Csrf);
-
-            // for security component
-            $this->Security->setConfig('unlockedActions', $actions);
-        }
-
-        return parent::beforeFilter($event);
-    }
-
     /**
      * Export data in csv format
      *
@@ -89,7 +66,7 @@ class ExportController extends AppController
                     if ($total + 100 > $limit) {
                         $query['page_size'] = $limit - $total;
                     }
-                    $response = $this->apiClient->getObjects($objectType, $query);
+                    $response = (array)$this->apiClient->getObjects($objectType, $query);
                     $pageCount = $response['meta']['pagination']['page_count'];
                     $total += $response['meta']['pagination']['page_items'];
                     $fields = $this->fillDataFromResponse($data, $response);

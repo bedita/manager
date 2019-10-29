@@ -1,7 +1,11 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
-
-<div class="filters-container" :class="filterList.length > 1? '' : 'basic-filters-only'">
-    {# dinamic filter object types #}
+{% set containerClass = 'filters-container' %}
+{% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
+{% if filterActive %}
+    {% set containerClass = 'filters-container filters-container-active' %}
+{% endif %}
+<div class="{{ containerClass }}" :class="filterList.length > 1? '' : 'basic-filters-only'">
+    {# dynamic filter object types #}
     <div class="filter-container search-types" v-if="rightTypes.length > 1">
         <select class="{{ selectBaseClasses }}"
             v-model="queryFilter.filter.type"
@@ -17,7 +21,7 @@
             :placeholder="placeholder"
             v-model="queryFilter.q"
             @keyup.prevent.stop="onQueryStringChange"
-            @keyup.enter.prevent.stop="applyFilter"/>
+            @keyup.enter.prevent.stop="applyFilter" />
     </div>
 
     {# status if available #}
@@ -70,7 +74,7 @@
             </label>
         </span>
 
-        <span v-if="!filter.date && filter.type === 'text'">
+        <span v-if="!filter.date && (filter.type === 'text' || filter.type === 'number')">
             <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
         </span>
     </div>
@@ -81,3 +85,8 @@
     </div>
 </div>
 
+{% if filterActive %}
+    <p class="is-expanded tag" style="margin-top: 1rem;">
+        {{ __('Data is filtered') }}
+    </p>
+{% endif %}

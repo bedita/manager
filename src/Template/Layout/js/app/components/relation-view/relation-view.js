@@ -15,17 +15,13 @@
  *
  */
 
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import RolesListView from 'app/components/relation-view/roles-list-view';
-import FilterBoxView from 'app/components/filter-box';
-import TreeView from 'app/components/tree-view/tree-view';
+import sleep from 'sleep-promise';
+import flatpickr from 'flatpickr';
+
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
-
-import sleep from 'sleep-promise';
-import flatpickr from 'flatpickr/dist/flatpickr.min';
 
 export default {
     mixins: [
@@ -35,16 +31,20 @@ export default {
     ],
 
     components: {
-        RelationshipsView,
-        RolesListView,
-        FilterBoxView,
-        TreeView,
+        RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
+        RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
+        FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
     },
 
     props: {
         relationName: {
             type: String,
             required: true,
+        },
+        relationData: {
+            type: Object,
+            required: false,
         },
         loadOnStart: [Boolean, Number],
         multipleChoice: {
@@ -102,8 +102,8 @@ export default {
     async mounted() {
         // set up panel events
         PanelEvents.listen('edit-params:save', this, this.editParamsSave);
-        PanelEvents.listen('relations-add:save', this, this.appendRelations);
-        PanelEvents.listen('upload-files:save', this, this.appendRelations);
+        PanelEvents.listen('relations-add:save', this, this.appendRelationsFromPanel);
+        PanelEvents.listen('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
 
         await this.loadOnMounted();
@@ -113,8 +113,8 @@ export default {
             // if true setup drop event that handles file upload
 
             if (this.isRelationWithMedia) {
-                this.$on('drop-files', (ev) => {
-                    let files = ev.dragdrop.data;
+                this.$on('drop-files', (ev, transfer) => {
+                    let files = transfer.files;
                     if (files) {
                         // on drop-file event request panelView with action upload-files
                         this.disableDrop();
@@ -127,13 +127,35 @@ export default {
                 });
             }
         }
+
+        // enable related objects drop
+        this.$on('drop', (ev, transfer) => {
+            let object = transfer.data;
+            if (object) {
+                this.appendRelations([object]);
+                PanelEvents.send('relations-view:add-already-in-view', null, object );
+            }
+        });
+
+        // enable related objects drop
+        this.$on('sort-end', (transfer) => {
+            const list = Array.from(transfer.drop.children);
+            const element = transfer.dragged;
+            const newIndex = list.indexOf(element)
+            const object = transfer.data;
+
+            object.meta.relation.priority = newIndex + 1;
+            this.updatePriorities(object, newIndex);
+
+            this.modifyRelation(object);
+        });
     },
 
     beforeDestroy() {
         // destroy up panel events
         PanelEvents.stop('edit-params:save', this, this.editParamsSave);
-        PanelEvents.stop('relations-add:save', this, this.appendRelations);
-        PanelEvents.stop('upload-files:save', this, this.appendRelations);
+        PanelEvents.stop('relations-add:save', this, this.appendRelationsFromPanel);
+        PanelEvents.stop('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.stop('panel:closed', null, this.resetPanelRequester);
     },
 
@@ -153,7 +175,6 @@ export default {
     },
 
     methods: {
-
         // Events Listeners
 
         /**
@@ -217,6 +238,18 @@ export default {
             return this.requesterId === id;
         },
 
+        updatePriorities(movedObject, newIndex) {
+            const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+
+            this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
+
+            this.objects = this.objects.map((object, index) => {
+                object.meta.relation.priority = index + 1;
+                this.modifyRelation(object);
+                return object;
+            });
+        },
+
         /**
         * extract relation with modified params and set it to staging
         *
@@ -258,6 +291,17 @@ export default {
                 }
             }
             this.prepareRelationsToSave();
+        },
+
+        /**
+         * add relations from panel and close it.
+         *
+         * @param {Array} relations
+         *
+         * @returns {void}
+         */
+        appendRelationsFromPanel(relations) {
+            this.appendRelations(relations);
             this.closePanel();
             this.enableDrop();
         },
@@ -322,10 +366,6 @@ export default {
                 const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
 
                 await sleep(t);
-                if (this.relationSchema === null) {
-                    await this.getRelationData();
-                }
-
                 await this.loadRelatedObjects();
             }
             return Promise.resolve();
@@ -381,6 +421,7 @@ export default {
                 console.error('[relationToggle] needs first param (related) as {object} with property id set');
                 return;
             }
+
             if (!this.containsId(this.removedRelated, related.id)) {
                 this.removeRelation(related);
             } else {
@@ -415,7 +456,7 @@ export default {
          * @returns {void}
          */
         restoreRemovedRelation(related) {
-            let index = this.removedRelated.findIndex((rel) => rel.id !== related.id);
+            let index = this.removedRelated.findIndex((rel) => rel.id === related.id);
             this.removedRelated.splice(index, 1);
             this.prepareRelationsToRemove(this.removedRelated);
 
@@ -474,6 +515,9 @@ export default {
                 return;
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
+            PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
+
+
             this.prepareRelationsToSave();
         },
 

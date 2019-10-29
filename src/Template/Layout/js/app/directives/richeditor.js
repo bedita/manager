@@ -37,7 +37,7 @@ export default {
     install(Vue) {
         Vue.directive('richeditor', {
             /**
-             * When the bound element is inserted into the init CKeditor
+             * dynamic load richtext-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */

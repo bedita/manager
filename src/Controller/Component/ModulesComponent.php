@@ -14,13 +14,14 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\OEmbed;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -71,13 +72,16 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
+        $this->getController()->set(compact('modules', 'project'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
 
-        $this->getController()->set(compact('currentModule', 'modules', 'project'));
+        if (!empty($currentModule)) {
+            $this->getController()->set(compact('currentModule'));
+        }
     }
 
     /**
@@ -203,13 +207,34 @@ class ModulesComponent extends Component
     }
 
     /**
+     * Read oEmbed metadata
+     *
+     * @param string $url Remote URL
+     * @return array|null
+     * @codeCoverageIgnore
+     */
+    protected function oEmbedMeta(string $url) : ?array
+    {
+        return (new OEmbed())->readMetadata($url);
+    }
+
+    /**
      * Upload a file and store it in a media stream
+     * Or create a remote media trying to get some metadata via oEmbed
      *
      * @param array $requestData The request data from form
      * @return void
      */
     public function upload(array &$requestData) : void
     {
+        $uploadBehavior = Hash::get($requestData, 'upload_behavior', 'file');
+
+        if ($uploadBehavior === 'embed' && !empty($requestData['remote_url'])) {
+            $data = $this->oEmbedMeta($requestData['remote_url']);
+            $requestData = array_filter($requestData) + $data;
+
+            return;
+        }
         if (empty($requestData['file'])) {
             return;
         }
@@ -230,7 +255,7 @@ class ModulesComponent extends Component
             $streamId = $response['data']['id'];
             $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
         }
-        unset($requestData['file']);
+        unset($requestData['file'], $requestData['remote_url']);
     }
 
     /**

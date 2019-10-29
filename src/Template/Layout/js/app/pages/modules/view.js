@@ -6,12 +6,10 @@
  *
  */
 
-import PropertyView from 'app/components/property-view/property-view';
-
 export default {
-
     components: {
-        PropertyView,
+        PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
+        HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
     },
 
     /**
