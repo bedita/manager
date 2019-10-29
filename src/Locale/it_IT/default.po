@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-04-26 15:06:54 \n"
+"POT-Creation-Date: 2019-06-10 09:36:41 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -444,7 +444,7 @@ msgid "add objects"
 msgstr "aggiungi oggetti"
 
 msgid "add to"
-msgstr "aggiungi a"
+msgstr ""
 
 msgid "cancel"
 msgstr "annulla"
@@ -504,7 +504,7 @@ msgid "of"
 msgstr "di"
 
 msgid "open"
-msgstr "aperto"
+msgstr ""
 
 msgid "original"
 msgstr "originale"
@@ -547,18 +547,6 @@ msgstr "mostra file"
 
 msgid "www.bedita.com"
 msgstr ""
-
-#: src/Template/Layout/js/app/app.js:456
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
-
-#: src/Template/Layout/js/app/app.js:458
-msgid "Do you really want to trash the object?"
-msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
-
-#: src/Template/Layout/js/app/directives/richeditor.js:21
-msgid "Please enter the image url"
-msgstr "Inserisci l'url dell'immagine"
 
 #: src/Template/Layout/js/app/app.js:138
 msgid "Please insert a new title on \"${ title }\" clone"
