@@ -22,9 +22,24 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+
+class MyModulesComponent extends ModulesComponent
+{
+    /**
+     * Mock oEmbed meta
+     *
+     * @var array
+     */
+    public $meta = [];
+
+    protected function oEmbedMeta(string $url) : ?array
+    {
+        return $this->meta;
+    }
+}
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
@@ -562,6 +577,7 @@ class ModulesComponentTest extends TestCase
             'no file' => [
                 [
                     'file' => [],
+                    'upload_behavior' => 'file',
                 ],
                 null,
                 false,
@@ -569,6 +585,7 @@ class ModulesComponentTest extends TestCase
             'file.name empty' => [
                 [
                     'file' => ['a'] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.name'),
                 false,
@@ -576,6 +593,7 @@ class ModulesComponentTest extends TestCase
             'file.name not a string' => [
                 [
                     'file' => ['name' => 12345] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.name'),
                 false,
@@ -583,6 +601,7 @@ class ModulesComponentTest extends TestCase
             'file.tmp_name (filepath) empty' => [
                 [
                     'file' => ['name' => 'dummy.txt'] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.tmp_name'),
                 false,
@@ -593,6 +612,7 @@ class ModulesComponentTest extends TestCase
                         'name' => 'dummy.txt',
                         'tmp_name' => 12345,
                     ] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.tmp_name'),
                 false,
@@ -603,6 +623,7 @@ class ModulesComponentTest extends TestCase
                         'name' => $name,
                         'tmp_name' => $file,
                     ] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.type'),
                 false,
@@ -614,6 +635,7 @@ class ModulesComponentTest extends TestCase
                         'tmp_name' => $file,
                         'type' => 12345,
                     ] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: file.type'),
                 false,
@@ -625,6 +647,7 @@ class ModulesComponentTest extends TestCase
                         'tmp_name' => $file,
                         'type' => $type,
                     ] + compact('error'),
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
                 false,
@@ -637,6 +660,7 @@ class ModulesComponentTest extends TestCase
                         'type' => $type,
                     ] + compact('error'),
                     'model-type' => 12345,
+                    'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
                 false,
@@ -649,6 +673,7 @@ class ModulesComponentTest extends TestCase
                         'type' => $type,
                     ] + compact('error'),
                     'model-type' => 'images',
+                    'upload_behavior' => 'file',
                 ],
                 null,
                 true,
@@ -661,6 +686,7 @@ class ModulesComponentTest extends TestCase
                         'type' => $type,
                         'error' => !UPLOAD_ERR_OK,
                     ],
+                    'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
                 new UploadException(null, !UPLOAD_ERR_OK),
@@ -674,10 +700,23 @@ class ModulesComponentTest extends TestCase
                         'type' => $type,
                         'error' => UPLOAD_ERR_NO_FILE,
                     ],
+                    'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
                 null,
                 false,
+            ],
+            'upload remote url' => [
+                [
+                    'remote_url' => 'https://www.youtube.com/watch?v=fE50xrnJnR8',
+                    'model-type' => 'videos',
+                    'upload_behavior' => 'embed',
+                ],
+                null,
+                [
+                    'provider' => 'YouTube',
+                    'provider_uid' => 'v=fE50xrnJnR8',
+                ],
             ],
         ];
     }
@@ -687,7 +726,7 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $requestData The request data
      * @param Expection|null $expectedException The exception expected
-     * @param boolean $uploaded The upload result
+     * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
      *
      * @covers ::upload()
@@ -696,7 +735,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()
      */
-    public function testUpload(array $requestData, $expectedException, bool $uploaded) : void
+    public function testUpload(array $requestData, $expectedException, $uploaded) : void
     {
         // if upload failed, verify exception
         if ($expectedException != null) {
@@ -708,8 +747,22 @@ class ModulesComponentTest extends TestCase
         // get api client (+auth)
         $this->setupApi();
 
-        // do component call
-        $this->Modules->upload($requestData);
+        if ($requestData['upload_behavior'] === 'file') {
+            // do component call
+            $this->Modules->upload($requestData);
+        } else {
+            // mock for ModulesComponent
+            $controller = new Controller();
+            $registry = $controller->components();
+            $myModules = new MyModulesComponent($registry);
+            $myModules->meta = $uploaded;
+
+            $myModules->upload($requestData);
+            $result = array_intersect_key($requestData, (array)$uploaded);
+            static::assertEquals($uploaded, $result);
+
+            return;
+        }
 
         // if upload ok, verify ID is not null
         if ($uploaded) {
@@ -728,6 +781,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 'model-type' => 'images',
                 'id' => $requestData['id'],
+                'upload_behavior' => 'file',
             ];
             $this->Modules->upload($requestData);
             static::assertArrayHasKey('id', $requestData);

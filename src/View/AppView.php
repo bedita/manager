@@ -42,11 +42,11 @@ class AppView extends TwigView
         $this->loadHelper('Array');
         $this->loadHelper('Html');
         $this->loadHelper('Link');
+        $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
         $this->loadHelper('Schema');
         $this->loadHelper('Text');
         $this->loadHelper('BEdita/WebTools.Thumb');
         $this->loadHelper('Url');
-        $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
         $this->loadHelper('BEdita/I18n.I18n');
     }
 

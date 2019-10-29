@@ -3,17 +3,19 @@
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
 
-    {% if object.id %}
     <header>
-        <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
-        {% for obj in included %}
-            {% if obj.type == 'streams' %}
-                <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
-                {# <button class="icon-download" @click="$helpers.downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button> #}
-            {% endif %}
-        {% endfor %}
+        {% if object.id %}
+            <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+            {% for obj in included %}
+                {% if obj.type == 'streams' %}
+                    <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
+                    {# <button class="icon-download" @click="$helpers.downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button> #}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
+        {% endif %}
     </header>
-    {% endif %}
 
     <div class="module-form">
 
@@ -39,6 +41,9 @@
 
                 {% element 'Form/core_properties' %}
 
+                {# calendar using `date_ranges` #}
+                {% element 'Form/calendar' {'cssOrder': '1'} %}
+
                 {% element 'Form/custom_left' %}
 
                 {# media streams & other resources included #}
@@ -54,11 +59,12 @@
 
                 {% element 'Form/resources/translations' {'resourceName': 'translations', 'cssOrder': '2' } %}
 
-                {% if 'roles' in relations %}
+                {# if `roles` in relationships (`users` only) display custom roles element #}
+                {% if object.relationships.roles %}
                     {% element 'Form/roles' {'cssOrder': '3'} %}
                 {% endif %}
 
-                {% if modules.folders and _view.request.params.action != 'create' %}
+                {% if modules.folders and _view.getRequest().getParam('action') != 'create' and _view.getRequest().getParam('action') != 'clone' %}
                     {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
                 {% endif %}
 
@@ -80,8 +86,22 @@
 
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
         {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+        {% if object.id %}
+        {# Append "Clone" to commands in commands menu. Must stay here, before the form end. #}
+        {% do _view.append('commands', Html.link(
+            __('Clone'),
+            {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
+            {'@click.prevent': 'clone'}
+        )) %}
+        {% endif %}
+
         {# Append "Delete" to commands in commands menu. #}
         {% do _view.append('commands', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
+
+        {# Append "Prev" and "Next" to commands in commands menu. #}
+        {% if object.id and objectNav %}
+            {% do _view.append('commands', Link.objectNav(objectNav)) %}
+        {% endif %}
     </div>
 
 </div>

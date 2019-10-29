@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -434,6 +434,85 @@ class SchemaHelperTest extends TestCase
     public function testTranslatableFields(array $properties, array $expected)
     {
         $actual = $this->Schema->translatableFields($properties);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testFormat` test case.
+     *
+     * @return array
+     */
+    public function formatProvider() : array
+    {
+        return [
+            'dumy' => [
+                'dummy',
+                'dummy',
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
+                    ],
+                ],
+            ],
+            'bool' => [
+                'Yes',
+                true,
+                [
+                    'type' => 'boolean',
+                ],
+            ],
+            'date' => [
+                '9/8/19, 12:00 AM',
+                '2019-09-08',
+                [
+                    'type' => 'string',
+                    'format' => 'date',
+                ],
+            ],
+            'date time' => [
+                '9/8/19, 4:35 PM',
+                '2019-09-08T16:35:15+00',
+                [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+            ],
+            'json' => [
+                '{"a":1,"b":2}',
+                [
+                    'a' => 1,
+                    'b' => 2,
+                ],
+                [
+                    'type' => 'object',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `format` method
+     *
+     * @param array $properties The properties
+     * @param array $expected Expected result
+     * @return void
+     *
+     * @dataProvider formatProvider()
+     * @covers ::format()
+     * @covers ::formatBoolean()
+     * @covers ::formatDate()
+     * @covers ::formatDateTime()
+     * @covers ::typeFromSchema()
+     */
+    public function testFormat($expected, $value, array $schema)
+    {
+        $actual = $this->Schema->format($value, $schema);
         static::assertSame($expected, $actual);
     }
 }

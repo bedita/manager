@@ -50,7 +50,7 @@ trait ReadCSVTrait
      * @param array $options CSV options overriding defaults
      * @return void
      */
-    public function readCSVFile(string $filepath, array $options = [])
+    public function readCSVFile(string $filepath, ?array $options = []) : void
     {
         $options = array_merge($this->csvOptions, $options);
         $this->csvKeys = $this->csvData = [];

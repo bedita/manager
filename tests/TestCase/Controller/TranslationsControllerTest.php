@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -111,8 +111,8 @@ class TranslationsControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
@@ -139,8 +139,8 @@ class TranslationsControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->statusCode());
-        static::assertEquals('text/html', $this->controller->response->type());
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
@@ -183,8 +183,8 @@ class TranslationsControllerTest extends TestCase
         $result = $this->controller->save();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -222,8 +222,8 @@ class TranslationsControllerTest extends TestCase
         $result = $this->controller->delete();
 
         // verify response status code and type
-        static::assertEquals(302, $result->statusCode());
-        static::assertEquals('text/html', $result->type());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
 
         // restore test object
         $this->restoreTestObject($objectId, 'documents');

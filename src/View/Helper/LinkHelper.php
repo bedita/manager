@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -65,7 +66,7 @@ class LinkHelper extends Helper
      * @param string $apiUrl Api url
      * @return void
      */
-    public function fromAPI($apiUrl)
+    public function fromAPI($apiUrl) : void
     {
         echo str_replace($this->apiBaseUrl, $this->webBaseUrl, $apiUrl);
     }
@@ -76,10 +77,10 @@ class LinkHelper extends Helper
      * @param string $field the Field.
      * @return void
      */
-    public function sort($field)
+    public function sort($field) : void
     {
         $class = '';
-        $query = $this->request->query;
+        $query = $this->getView()->getRequest()->getQuery();
         $sortValue = $field; // <= ascendant order
         if (!empty($query) && in_array('sort', array_keys($query))) {
             if ($query['sort'] === $field) { // it was ascendant sort
@@ -99,7 +100,7 @@ class LinkHelper extends Helper
      * @param int $page destination page.
      * @return void
      */
-    public function page($page)
+    public function page($page) : void
     {
         echo $this->replaceParamUrl('page', $page);
     }
@@ -110,7 +111,7 @@ class LinkHelper extends Helper
      * @param int $pageSize new page size.
      * @return void
      */
-    public function pageSize($pageSize)
+    public function pageSize($pageSize) : void
     {
         echo $this->replaceParamUrl('page_size', $pageSize);
     }
@@ -121,29 +122,18 @@ class LinkHelper extends Helper
      * @param array $options options for query
      * @return string url
      */
-    public function here($options = [])
+    public function here($options = []) : string
     {
-        $query = $this->request->query;
+        $query = $this->getView()->getRequest()->getQuery();
         if (empty($query) || !empty($options['no-query'])) {
-            return $this->webBaseUrl . $this->request->here;
+            return $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here');
         }
 
         if (isset($options['exclude'])) {
             unset($query[$options['exclude']]);
         }
 
-        return $this->webBaseUrl . $this->request->here . '?' . http_build_query($query);
-    }
-
-    /**
-     * Utility to get query param by name
-     *
-     * @param string|null $name the query parameter.
-     * @return string|null
-     */
-    public function query($name = null)
-    {
-        return $this->request->getQuery($name);
+        return $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here') . '?' . http_build_query($query);
     }
 
     /**
@@ -153,12 +143,13 @@ class LinkHelper extends Helper
      * @param string|int $value the Value to set for parameter.
      * @return string url
      */
-    private function replaceParamUrl($parameter, $value)
+    private function replaceParamUrl($parameter, $value) : string
     {
-        $query = $this->request->query;
+        $query = $this->getView()->getRequest()->getQuery();
         $query[$parameter] = $value;
+        $here = $this->getView()->getRequest()->getAttribute('here');
 
-        return $this->webBaseUrl . $this->request->here . '?' . http_build_query($query);
+        return $this->webBaseUrl . $here . '?' . http_build_query($query);
     }
 
     /**
@@ -168,7 +159,7 @@ class LinkHelper extends Helper
      *
      * @return void
      */
-    public function pluginsJsBundle()
+    public function pluginsJsBundle() : void
     {
         $plugins = Configure::read('Plugins', []);
         foreach ($plugins as $plugin => $v) {
@@ -185,7 +176,7 @@ class LinkHelper extends Helper
      * @param array $filter list of file name filters
      * @return void
      */
-    public function jsBundle(array $filter = [])
+    public function jsBundle(array $filter = []) : void
     {
         $jsFiles = $this->findFiles($filter, 'js');
         foreach ($jsFiles as $jsFile) {
@@ -199,7 +190,7 @@ class LinkHelper extends Helper
      * @param array $filter list of file name filters
      * @return void
      */
-    public function cssBundle(array $filter = [])
+    public function cssBundle(array $filter = []) : void
     {
         $cssFiles = $this->findFiles($filter, 'css');
         foreach ($cssFiles as $cssFile) {
@@ -216,12 +207,12 @@ class LinkHelper extends Helper
 
      * @return array files found
      */
-    protected function findFiles(array $filter, string $type)
+    protected function findFiles(array $filter, string $type) : array
     {
         $files = [];
         $filesPath = WWW_ROOT . $type;
         if (!file_exists($filesPath)) {
-            return;
+            return [];
         }
 
         $dir = new Folder($filesPath);
@@ -242,5 +233,43 @@ class LinkHelper extends Helper
         }
 
         return $files;
+    }
+
+    /**
+     * Build object nav
+     *
+     * @param array $data Object nav data
+     * @return string
+     */
+    public function objectNav($data) : string
+    {
+        $prev = '‹';
+        $next = '›';
+        $objectType = Hash::get($data, 'object_type', null);
+        if (!empty($data['prev'])) {
+            $prev = $this->Html->link(
+                $prev,
+                [
+                    '_name' => 'modules:view',
+                    'object_type' => $objectType,
+                    'id' => $data['prev'],
+                ]
+            );
+        }
+        if (!empty($data['next'])) {
+            $next = $this->Html->link(
+                $next,
+                [
+                    '_name' => 'modules:view',
+                    'object_type' => $objectType,
+                    'id' => $data['next'],
+                ]
+            );
+        }
+        $index = Hash::get($data, 'index', 0);
+        $total = Hash::get($data, 'total', 0);
+        $counts = sprintf('<div>%d / %d</div>', $index, $total);
+
+        return sprintf('<div class="listobjnav">%s%s%s</div>', $prev, $next, $counts);
     }
 }
