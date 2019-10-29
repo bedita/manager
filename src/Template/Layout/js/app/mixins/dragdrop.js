@@ -49,17 +49,23 @@ export const DragdropMixin = {
             dragOverFirst: true,
             antiGlitchTimer: null,
             _dropEnabled: false,
+            _sortEnabled: false,
+            sortableContainer: null,
+            sortableElements: [],
         }
     },
 
     mounted() {
         this.initDroppableElements();
         this.initDraggableElements();
+        this.initSortableContainer();
     },
 
     updated() {
         this.initDroppableElements();
         this.initDraggableElements();
+        this.initSortableContainer();
+
     },
 
     destroyed() {
@@ -92,6 +98,8 @@ export const DragdropMixin = {
                         if (accepted) {
                             this.acceptedDropArray = accepted.split(',');
                         }
+                    } else if (mutation.attributeName === 'sortable') {
+                        this.enableSort();
                     }
                 }
             }
@@ -138,6 +146,23 @@ export const DragdropMixin = {
                 this.draggableElements = draggables;
                 this.$el.addEventListener('dragstart', this.onDragstart, true);
                 this.$el.addEventListener('dragend', this.onDragend, true);
+            }
+        },
+
+        /**
+         * init drag event on draggable elements
+         *
+         *  @return {void}
+         */
+        initSortableContainer() {
+            // check if at least 1 draggable is defined in component view
+
+            let sortable = this.$el.querySelector('[sortable]');
+            if (sortable) {
+                this.enableSort();
+                // if so set up dragstart event
+                this.sortableContainer = sortable;
+                this.sortableElements = Array.from(sortable.querySelectorAll('[draggable]'));
             }
         },
 
@@ -211,6 +236,11 @@ export const DragdropMixin = {
             // check if draggable is accepted for drop target (if no rules are defined all draggable are accepted)
             let draggedElement = dragdropPayload.dragged;
 
+            if (this._sortEnabled) {
+                draggedElement.classList.add('sorting');
+                this.sortElement(draggedElement, ev);
+            }
+
             if (!this.isAcceptedDrag()) {
                 return;
             }
@@ -254,7 +284,7 @@ export const DragdropMixin = {
                 this.dropElement.classList.remove('dragover');
 
                 // check mouse location
-                if (!this.isOverChild(ev)) {
+                if (!this.isOverChild(this.dropElement, ev)) {
                     this.$emit('dragleave');
                 }
             }, 25);
@@ -284,6 +314,11 @@ export const DragdropMixin = {
         onDrop(ev) {
             ev.preventDefault();
             ev.stopPropagation();
+
+            if (this._sortEnabled) {
+                draggedElement.classList.remove('sorting');
+                this.$emit('sort-end', dragdropPayload);
+            }
 
             if (!this._dropEnabled || !this.isAcceptedDrag()) {
                 return;
@@ -315,16 +350,15 @@ export const DragdropMixin = {
          *
          * @return {Boolean} true if mouse entered a child element
          */
-        isOverChild(event) {
-            if (!this.dropElement) {
+        isOverChild(container, event) {
+            if (!container) {
                 return false;
             }
-            let rect = this.dropElement.getBoundingClientRect();
+            let rect = container.getBoundingClientRect();
 
             // mouse outside browser
             const actualInnerWidth = document.body.clientWidth;
             const actualInnerHeight = document.body.clientHeight;
-            // console.log('event', event.clientX, event.clientY, actualInnerWidth, actualInnerHeight)
             if (event.clientX <= 0 || event.clientY <= 0 || event.clientX > actualInnerWidth || event.clientY > actualInnerHeight) {
                 return false;
             }
@@ -354,6 +388,47 @@ export const DragdropMixin = {
             return isValid;
         },
 
+        sortElement(draggedElement, ev) {
+            let overElement = this.sortableElements.filter(child => this.isOverChild(child, ev));
+            if (overElement.length) {
+                overElement = overElement[0];
+            }
+
+            const findPrev = (el, target) => {
+                if (!el) {
+                    return null;
+                }
+                const sibling = el.previousSibling;
+                if (sibling == target) {
+                    return sibling;
+                }
+                return findPrev(sibling, target);
+            }
+
+            const findNext = (el, target) => {
+                if (!el) {
+                    return null;
+                }
+                const sibling = el.nextSibling;
+                if (sibling == target) {
+                    return sibling;
+                }
+                return findNext(sibling, target);
+            }
+
+            let prev = findPrev(draggedElement, overElement);
+            if (prev) {
+                this.sortableContainer.insertBefore(draggedElement, prev);
+                this.$emit('sort', dragdropPayload);
+            } else {
+                let next = findNext(draggedElement, overElement);
+                if (next) {
+                    this.sortableContainer.insertBefore(draggedElement, next.nextSibling);
+                    this.$emit('sort', dragdropPayload);
+                }
+            }
+        },
+
         /**
          * disable drop
          *
@@ -371,5 +446,9 @@ export const DragdropMixin = {
         enableDrop() {
             this._dropEnabled = true;
         },
+
+        enableSort() {
+            this._sortEnabled = true;
+        }
     }
 }

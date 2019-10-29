@@ -136,6 +136,19 @@ export default {
                 PanelEvents.send('relations-view:add-already-in-view', null, object );
             }
         });
+
+        // enable related objects drop
+        this.$on('sort-end', (transfer) => {
+            const list = Array.from(transfer.drop.children);
+            const element = transfer.dragged;
+            const newIndex = list.indexOf(element)
+            const object = transfer.data;
+
+            object.meta.relation.priority = newIndex + 1;
+            this.updatePriorities(object, newIndex);
+
+            this.modifyRelation(object);
+        });
     },
 
     beforeDestroy() {
@@ -223,6 +236,18 @@ export default {
                 return !!this.requesterId;
             }
             return this.requesterId === id;
+        },
+
+        updatePriorities(movedObject, newIndex) {
+            const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+
+            this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
+
+            this.objects = this.objects.map((object, index) => {
+                object.meta.relation.priority = index + 1;
+                this.modifyRelation(object);
+                return object;
+            });
         },
 
         /**
