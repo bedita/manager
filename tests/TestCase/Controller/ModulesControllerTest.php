@@ -196,6 +196,33 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `index` method with query string error
+     * Session filter data must be empty
+     *
+     * @covers ::index()
+     *
+     * @return void
+     */
+    public function testQueryErrorSession() : void
+    {
+        // Setup controller for test with query string error
+        $this->setupController([
+            'query' => ['sort' => 'bad_attribute'],
+        ]);
+
+        // do controller call
+        $result = $this->controller->index();
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+
+        // verify session filter is empty
+        $filter = $this->controller->request->getSession()->read('documents.filter');
+        static::assertNull($filter);
+    }
+
+    /**
      * Test `descendants` method on concrete type
      *
      * @covers ::descendants()
