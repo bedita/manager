@@ -92,9 +92,11 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
-            // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
+            // remove session filter to avoid error repetition
+            $session = $this->request->getSession();
+            $session->delete(sprintf('%s.filter', $this->Modules->getConfig('currentModuleName')));
 
             return $this->redirect(['_name' => 'dashboard']);
         }
