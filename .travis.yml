@@ -1,9 +1,15 @@
+dist: bionic
 sudo: required
 
 services:
   - docker
 
 language: php
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 env:
   global:
@@ -51,8 +57,8 @@ jobs:
     - name: "Yarn build"
       language: node_js
       node_js: 10
-      before_install: skip
+      before_install: cp config/.env.default config/.env
       install:
-        - yarn install
+        - yarn
       script:
         - yarn run build
