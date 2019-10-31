@@ -207,6 +207,8 @@ const _vueInstance = new Vue({
             // }
         },
 
+        error
+
         /**
         * extract params from page url
         *
