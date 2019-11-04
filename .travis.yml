@@ -60,7 +60,7 @@ jobs:
     - name: "Yarn build"
       language: node_js
       node_js: 10
-      before_install: cp config/.env.default config/.env
+      before_install: skip
       install:
         - yarn
       script:
