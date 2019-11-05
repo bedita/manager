@@ -39,9 +39,14 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta.thumb_url">
-                            <figure>
+                        <div class="thumbnail" v-if="related.type === 'images'" >
+                            <figure v-if="related.meta && related.meta.thumb_url">
                                 <img :src="related.meta.thumb_url" />
+                            </figure>
+                        </div>
+                        <div class="thumbnail" v-if="related.type === 'videos'" >
+                            <figure v-if="related.attributes && related.attributes.provider_extra && related.attributes.provider_extra.thumbnail_url">
+                                <img :src="related.attributes.provider_extra.thumbnail_url" />
                             </figure>
                         </div>
 
@@ -88,9 +93,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail">
-                            <figure>
-                                <img />
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
+                            <figure v-if="related.type === 'images' || related.type === 'videos'">
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                         </div>
 

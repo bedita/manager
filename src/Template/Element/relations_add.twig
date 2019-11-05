@@ -97,7 +97,7 @@
                         </header>
 
                         <div v-if="related.meta.thumb_url" class="thumbnail">
-                            <figure v-if="related.type === 'images'">
+                            <figure v-if="related.type === 'images' || related.type === 'videos'">
                                 <img :src="related.meta.thumb_url" draggable="false"/>
                             </figure>
                         </div>
