@@ -96,9 +96,9 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div v-if="related.meta.thumb_url" class="thumbnail">
-                            <figure v-if="related.type === 'images' || related.type === 'videos'">
-                                <img :src="related.meta.thumb_url" draggable="false"/>
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
+                            <figure>
+                                <img :src="related.meta.thumb_url" />
                             </figure>
                         </div>
 
