@@ -20,6 +20,15 @@ VOLUME /var/www/webroot/files
 RUN if [ ! "$DEBUG" = "true" ]; then export COMPOSER_ARGS='--no-dev'; fi \
     && composer install $COMPOSER_ARGS --optimize-autoloader --no-interaction --quiet
 
+# Install yarn (from node 12)
+FROM node:12
+RUN npm install -g yarn
+
+# Launch yarn
+WORKDIR /var/www/html
+ADD package.json yarn.lock /var/www/html/
+RUN yarn && yarn build
+
 ENV LOG_DEBUG_URL="console:///?stream=php://stdout" \
     LOG_ERROR_URL="console:///?stream=php://stderr"
 
