@@ -1,4 +1,4 @@
-# BEdita4 Backend Admin WebApp
+# BEdita4 Manager
 
 [![Build Status](https://travis-ci.org/bedita/web.svg)](https://travis-ci.org/bedita/web)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/web/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/web/)
@@ -10,6 +10,8 @@ Official Backend Admin WebApp for BEdita4 API.
 
 * PHP >= 7.1
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
+* Node 10 or 12
+* Yarn >= 1.15
 
 ## Install
 
@@ -21,13 +23,19 @@ composer install
 
 If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``.
 
-1. Copy `config/.env.default` to `config/.env` and configure BEdita 4 API base URL and API KEY like:
+2. Copy `config/.env.default` to `config/.env` and configure BEdita 4 API base URL and API KEY like:
 
 ```bash
 # set BEDITA4 base URL
 export BEDITA_API="{bedita-4-url}"
 # set BEDITA4 API KEY (optional)
 export BEDITA_API_KEY="{bedita4-api-key}"
+```
+
+3. Build JS/CSS bundles
+
+```bash
+yarn && yarn build
 ```
 
 You are then ready to use the webapp by simply run builtin webserver like this
