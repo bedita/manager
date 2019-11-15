@@ -801,17 +801,4 @@ class AppControllerTest extends TestCase
         static::assertEquals($expected, $actual);
         static::assertNull($this->AppController->request->getSession()->read('failedSaveData'));
     }
-
-    /**
-     * Test `getDataFromFailedSave`
-     *
-     * @covers ::getDataFromFailedSave()
-     *
-     * @return void
-     */
-    public function testGetDataFromFailedSave()
-    {
-
-    }
-
 }
