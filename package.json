@@ -1,20 +1,19 @@
 {
-    "name": "be4-web",
-    "version": "0.1.0",
-    "description": "BEdita 4 WebManager (BE3-alike)",
+    "name": "be4-manager",
+    "version": "1.0.0",
+    "description": "BEdita4 Manager",
     "keywords": [
         "BEdita",
         "CMS",
-        "Be-web",
-        "BEdita3"
+        "Manager"
     ],
     "main": "app.js",
     "author": "Channelweb & Chialab",
     "license": "LGPL-3.0",
     "bugs": {
-        "url": "https://github.com/bedita/web/issues"
+        "url": "https://github.com/bedita/manager/issues"
     },
-    "homepage": "https://github.com/bedita/web#README",
+    "homepage": "https://github.com/bedita/manager#README",
     "scripts": {
         "build": "webpack --mode production",
         "bundle-report": "webpack --mode production --report",

@@ -1,8 +1,8 @@
 # BEdita4 Manager
 
-[![Build Status](https://travis-ci.org/bedita/web.svg)](https://travis-ci.org/bedita/web)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/web/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/web/)
-<!-- [![Code Coverage](https://codecov.io/gh/bedita/web/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
+[![Build Status](https://travis-ci.org/bedita/manager.svg)](https://travis-ci.org/bedita/manager)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
+<!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
 Official Backend Admin WebApp for BEdita4 API.
 
@@ -55,7 +55,7 @@ Or you can configure your preferred web server like Nginx/Apache and point to `w
 Get latest offical image build from Docker Hub
 
 ```bash
-docker pull bedita/web
+docker pull bedita/manager
 ```
 
 ### Build image
@@ -64,11 +64,11 @@ If you want to build an image from local sources you can do it like this from ro
 
 ```bash
 
-docker build -t be4web-local .
+docker build -t manager-local .
 
 ```
 
-You may of course choose whatever name you like for the generated image instead of `be4web-local`.
+You may of course choose whatever name you like for the generated image instead of `manager-local`.
 
 ### Run
 
@@ -78,11 +78,11 @@ Run a Docker image setting API base url and API KEY like this:
 
 docker run -p 8080:80 \
     --env BEDITA_API={bedita-api-url} --env BEDITA_API_KEY={bedita-api-key} \
-    bedita/web:latest
+    bedita/manager:latest
 
 ```
 
-Replace `bedita/web:latest` with `be4web-local` (or other chosen name) to lanch a local built image.
+Replace `bedita/manager:latest` with `manager-local` (or other chosen name) to lanch a local built image.
 
 ## Development
 
