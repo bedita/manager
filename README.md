@@ -15,7 +15,7 @@ Official Backend Admin WebApp for BEdita4 API.
 
 ## Install
 
-1. Create project via composer
+* Create project via `composer`
 
 ```bash
 composer create-project bedita/manager
