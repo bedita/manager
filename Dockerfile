@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.1
+ARG PHP_VERSION=7.2
 FROM chialab/php:${PHP_VERSION}-apache
 
 # Install Wait-for-it and configure PHP
@@ -10,15 +10,20 @@ RUN curl -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for
 COPY . /var/www/html
 
 # Set APP_NAME to avoid .env load
-ENV APP_NAME BE4-Web
+ENV APP_NAME BE4-MANAGER
 ARG DEBUG
 ENV DEBUG ${DEBUG:-false}
 
 # Install libraries
 WORKDIR /var/www/html
-VOLUME /var/www/webroot/files
+RUN chown -R www-data:www-data /var/www/html
+USER www-data:www-data
+
 RUN if [ ! "$DEBUG" = "true" ]; then export COMPOSER_ARGS='--no-dev'; fi \
     && composer install $COMPOSER_ARGS --optimize-autoloader --no-interaction --quiet
+
+# Restore user `root` to install node & yarn and to make sure we can bind to address 0.0.0.0:80
+USER root:root
 
 # Install node and yarn
 ENV NODE_VERSION=12.6.0

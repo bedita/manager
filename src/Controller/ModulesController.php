@@ -306,7 +306,7 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
 
-        // annoying message removed, restore with https://github.com/bedita/web/issues/71
+        // annoying message removed, restore with https://github.com/bedita/manager/issues/71
         // $this->Flash->success(__('Object saved'));
 
         return $this->redirect([
