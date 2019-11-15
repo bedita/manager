@@ -15,15 +15,15 @@ Official Backend Admin WebApp for BEdita4 API.
 
 ## Install
 
-1. Clone repo & run composer
+* Create project via `composer`
 
 ```bash
-composer install
+composer create-project bedita/manager
 ```
 
-If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``.
+If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``. Run same command if you do a `git clone` on this repo.
 
-2. Copy `config/.env.default` to `config/.env` and configure BEdita 4 API base URL and API KEY like:
+* Configure BEdita 4 API base URL and API KEY in `config/.env` like:
 
 ```bash
 # set BEDITA4 base URL
@@ -32,7 +32,7 @@ export BEDITA_API="{bedita-4-url}"
 export BEDITA_API_KEY="{bedita4-api-key}"
 ```
 
-3. Build JS/CSS bundles
+* Build JS/CSS bundles
 
 ```bash
 yarn && yarn build
@@ -44,9 +44,9 @@ You are then ready to use the webapp by simply run builtin webserver like this
 bin/cake server
 ```
 
-And then point your browser to `http://localhost:8765/`
+And then point your browser to `http://localhost:8765/` to give it a try.
 
-Or you can configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
+We recommend to configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
 
 ## Docker
 
