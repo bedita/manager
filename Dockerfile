@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.1
+ARG PHP_VERSION=7.2
 FROM chialab/php:${PHP_VERSION}-apache
 
 # Install Wait-for-it and configure PHP
@@ -10,7 +10,7 @@ RUN curl -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for
 COPY . /var/www/html
 
 # Set APP_NAME to avoid .env load
-ENV APP_NAME BE4-Web
+ENV APP_NAME BE4-MANAGER
 ARG DEBUG
 ENV DEBUG ${DEBUG:-false}
 
