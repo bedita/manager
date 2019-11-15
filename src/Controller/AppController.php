@@ -192,14 +192,17 @@ class AppController extends Controller
      */
     protected function hasFieldChanged($value1, $value2)
     {
-        if (($value1 === null || $value1 === '') && ($value2 === null || $value2 === '')) {
+        if (($value1 === $value2) || (($value1 === null || $value1 === '') && ($value2 === null || $value2 === ''))) {
             return false;
         }
         if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
         }
+        if (is_string($value1) && is_string($value2) && strtotime($value1) && strtotime($value2)) {
+            return strtotime($value1) !== strtotime($value2);
+        }
 
-        return $value1 !== $value2;
+        return true;
     }
 
     /**
