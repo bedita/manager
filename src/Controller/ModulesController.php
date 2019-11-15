@@ -183,6 +183,13 @@ class ModulesController extends AppController
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
         $object = $response['data'];
+
+        // if previous post save failed, recover data from session.
+        $dataFromSession = $this->getDataFromFailedSave();
+        if (!empty($dataFromSession)) {
+            $object = array_merge($object, $dataFromSession);
+        }
+
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
@@ -298,6 +305,9 @@ class ModulesController extends AppController
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            // set session data to recover form
+            $this->setDataFromFailedSave($requestData);
 
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);

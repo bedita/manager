@@ -768,4 +768,50 @@ class AppControllerTest extends TestCase
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
     }
+
+    /**
+     * Test `setDataFromFailedSave` and `getDataFromFailedSave`
+     *
+     * @covers ::setDataFromFailedSave()
+     * @covers ::getDataFromFailedSave()
+     *
+     * @return void
+     */
+    public function testDataFromFailedSave()
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // data and expected
+        $data = [ 'id' => 999, 'name' => 'gustavo' ];
+        $expected = [ 'attributes' => [ 'name' => 'gustavo' ] ];
+
+        // call method 'setDataFromFailedSave'
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setDataFromFailedSave');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->AppController, [ (array)$data ]);
+
+        // call method 'getDataFromFailedSave'
+        $method = $reflectionClass->getMethod('getDataFromFailedSave');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, []);
+
+        // verify data
+        static::assertEquals($expected, $actual);
+        static::assertNull($this->AppController->request->getSession()->read('failedSaveData'));
+    }
+
+    /**
+     * Test `getDataFromFailedSave`
+     *
+     * @covers ::getDataFromFailedSave()
+     *
+     * @return void
+     */
+    public function testGetDataFromFailedSave()
+    {
+
+    }
+
 }

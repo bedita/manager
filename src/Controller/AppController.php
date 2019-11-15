@@ -332,4 +332,35 @@ class AppController extends Controller
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
     }
+
+    /**
+     * Set session data for key 'failedSaveData'.
+     *
+     * @param array $data The data to store into 'failedSaveData'.
+     * @return void
+     */
+    protected function setDataFromFailedSave($data)
+    {
+        $session = $this->request->getSession();
+        $session->write('failedSaveData', $data);
+    }
+
+    /**
+     * Get data from session by key 'failedSaveData'.
+     * If any, return it and delete session key 'failedSaveData'.
+     *
+     * @return array
+     */
+    protected function getDataFromFailedSave() : array
+    {
+        $session = $this->request->getSession();
+        $data = (array)$session->read('failedSaveData');
+        if (empty($data)) {
+            return [];
+        }
+        $session->delete('failedSaveData');
+        unset($data['id']);
+
+        return [ 'attributes' => $data ];
+    }
 }
