@@ -39,7 +39,7 @@ body.view-dashboard {
             font-size: $font-size-base;
             background-color: $gray-700;
 
-            padding: .25rem .375rem calc(#{$dashboard-items-ratio} - .25rem);
+            padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);
             @media (min-width: 667px) { padding: .675rem .75rem calc(#{$dashboard-items-ratio} - .675rem); }
 
             &:after {
