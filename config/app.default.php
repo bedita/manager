@@ -430,7 +430,7 @@ return [
             'objects' => '#230637',
             'folders' => '#072440',
             'documents' => '#cc4700',
-            'media' => '#b3001b',
+            'media' => '#a80019',
             'images' => '#d5002b',
             'videos' => '#d5002b',
             'audio' => '#d5002b',

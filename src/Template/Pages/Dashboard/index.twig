@@ -2,72 +2,76 @@
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
 <div class="dashboard">
-    <section>
-        <ul class="dashboard-items">
+    <section class="dashboard-section">
+        <div class="dashboard-items">
         {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders']) %}
-            <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
-                {% if module.hints.multiple_types %}
-                    {% set title = 'All ' ~ __(name|humanize|lower) %}
-                {% else %}
-                    {% set title = __(name|humanize) %}
-                {% endif %}
-                {{ Html.link(__(title), {'_name': 'modules:list', 'object_type': name}, {'title': __(title)})|raw }}
-            </li>
+            {% set title = __(name|humanize) %}
+            {% set class = 'dashboard-item has-background-module-' ~ name %}
+            {% if module.hints.multiple_types %}
+                {% set title = 'All ' ~ title|lower %}
+                {% set class = class ~ ' icon-th-large-1' %}
+            {% endif %}
+
+            {{ Html.link(__(title),
+                { '_name': 'modules:list', 'object_type': name },
+                { 'title': __(title), 'class': class } )|raw }}
         {% endfor %}
+
         {% for k, plugin in config('PluginModules') %}
-            <li class="{{ plugin.class.dashboard }}">
-                {{ Html.link(__(plugin.title|humanize), plugin.route, {'title': __(plugin.title|humanize)})|raw }}
-            </li>
+            {{ Html.link(__(plugin.title|humanize),
+                plugin.route,
+                { 'title': __(plugin.title|humanize) } )|raw }}
         {% endfor %}
-        </ul>
+        </div>
     </section>
 
-    <section>
-        <ul class="dashboard-items dashboard-utility">
-            <li class="has-background-module-objects icon-th-large-1">
-                {{ Html.link(__('All objects'), {'_name': 'modules:list', 'object_type': 'objects'}, {'title': __('All objects')})|raw }}
-            </li>
+    <section class="dashboard-section">
+        <div class="dashboard-items dashboard-utility">
+            {{ Html.link(__('All objects'),
+                { '_name': 'modules:list', 'object_type': 'objects' },
+                { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
+
             {% if modules.folders %}
-            <li class="has-background-module-folders icon-folder">
-                {{ Html.link(__('Folders'), {'_name': 'modules:list', 'object_type': 'folders'}, {'title': __('Folders')})|raw }}
-            </li>
+            {{ Html.link(__('Folders'),
+                { '_name': 'modules:list', 'object_type': 'folders' },
+                { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
             {% endif %}
-            <li class="has-background-module-users icon-group">
-                {{ Html.link(__('System users'), {'_name': 'modules:list', 'object_type': 'users'}, {'title': __('System users')})|raw }}
-            </li>
-            <li class="has-background-module-trash icon-trash-2">
-                {{ Html.link(__('Trash can'), {'_name': 'trash:list'}, {'title': __('Trash')})|raw }}
-            </li>
-        </ul>
+
+            {{ Html.link(__('System users'),
+                {'_name': 'modules:list', 'object_type': 'users'},
+                {'title': __('System users'), 'class': 'dashboard-item has-background-module-users icon-group' } )|raw }}
+
+            {{ Html.link(__('Trash can'),
+                { '_name': 'trash:list' },
+                { 'title': __('Trash'), 'class': 'dashboard-item has-background-module-trash icon-trash-2' } )|raw }}
+        </div>
     </section>
 
     {% if user %}
-    <section>
+    <section class="dashboard-section">
         <header class="has-text-gray-550">
             <h2>{{ __('Preferences and Tools') }}</h2>
         </header>
-        <ul class="dashboard-items dashboard-utility">
-            {# <li class="has-background-black icon-wrench">
-                <a>{{ __('Settings') }}</a>
-            </li> #}
+
+        <div class="dashboard-items dashboard-utility">
             {% if config('Filters.import') %}
-            <li class="has-background-black icon-download-alt">
-                {{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}
-            </li>
+                {{ Html.link(__('Import'),
+                    { '_name': 'import:index' },
+                    { 'title': __('Import'), 'class': 'dashboard-item has-background-black icon-download-alt' } )|raw }}
             {% endif %}
+
             {% if in_array('admin', user.roles) %}
-            <li class="has-background-black icon-database">
-                {{ Html.link(__('Data modeling'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw }}
-            </li>
+                {{ Html.link(__('Data modeling'),
+                    { '_name': 'model:list', 'resource_type': 'object_types' },
+                    { 'title': __('Data modeling'), 'class': 'dashboard-item has-background-black icon-database' } )|raw }}
             {% endif %}
-            <li class="has-background-black icon-user">
-                <a>{{ __('User Profile') }}</a>
-                {{ Html.link(__(''), {'_name': 'user_profile:view'}, {'title': __('User Profile')})|raw }}
-            </li>
-            <li class="has-background-black has-text-danger icon-logout logout-button">
-                {{ Html.link(__('Log out'), {'_name': 'logout'})|raw }}
-            </li>
-        </ul>
+
+            {{ Html.link(__('User Profile'),
+                { '_name': 'user_profile:view' },
+                { 'title': __('User Profile'), 'class': 'dashboard-item has-background-black icon-user' } )|raw }}
+
+            <a href="#" class="dashboard-item has-background-black icon-wrench" disabled>{{ __('Settings') }}</a>
+        </div>
     </section>
     {% endif %}
 </div>

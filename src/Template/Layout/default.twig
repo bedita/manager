@@ -28,7 +28,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {% element 'custom_colors' %}
 
-    <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i|IBM+Plex+Serif&display=swap&subset=latin-ext" rel="stylesheet prefetch" crossorigin>
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
@@ -42,17 +42,15 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         class="layout"
         @click="pageClick($event)">
 
-        {% if Layout.primarySidebar() %}
-            <aside class="layout-sidebar-primary">
+        <aside class="layout-sidebar-primary">
+            {% if Layout.primarySidebar() %}
                 {% element 'Menu/side-menu' %}
-            </aside>
-        {% endif %}
+            {% endif %}
 
-        {% if Layout.secondarySidebar() %}
-            <aside class="layout-sidebar-secondary">
+            {% if Layout.secondarySidebar() %}
                 {% element 'Menu/commands' %}
-            </aside>
-        {% endif %}
+            {% endif %}
+        </aside>
 
         {% if Layout.layoutHeader() %}
             <header class="layout-header">
@@ -66,12 +64,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
             </div>
         {% endif %}
 
-        {% if Layout.layoutFooter() %}
-            <div class="layout-footer">
-                {{ project.name }}<br>
-                {% element 'Menu/colophon' %}
-            </div>
-        {% endif %}
+        <div class="layout-footer">
+            {% element 'Menu/colophon' %}
+        </div>
 
         {# component add relations with its own container #}
         {# {% element 'Form/relation_add' {'relationName': relationName} %} #}

@@ -1,25 +1,42 @@
 main.layout {
-    display: grid;
-    grid-template-areas: "main-sidebar  secondary-sidebar  content-header"
-                        "main-sidebar  secondary-sidebar  content"
-                        "main-sidebar  footer  footer";
-    grid-template-columns: auto auto 1fr;
-    grid-template-rows: auto 1fr auto;
-    padding: $gutter;
+    width: 100%;
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100); // iOS adjust with script and fallback
+    padding: 0 $gutter;
+    margin: 0 auto;
+
+    @media (min-width: 568px) {
+        display: grid;
+        grid-template-areas: "sidebar  content-header"
+                             "sidebar  content-body"
+                             "footer        footer";
+
+                             grid-template-rows: auto 1fr auto;
+        grid-template-columns: 1fr 11fr;
+        grid-template-columns: calc(33.33% - 10.63px) auto;
+        @media (min-width: 768px) and (max-width: 991px) { grid-template-columns: calc(25% - 12px) auto }
+        @media (min-width: 992px) and (max-width: 1199px) { grid-template-columns: calc(20% - 12.8px) auto }
+        @media (min-width: 1200px) and (max-width: 1365px) { grid-template-columns: calc(16.66% - 13.25px) auto }
+        @media (min-width: 1366px) and (max-width: 1919px) { grid-template-columns: calc(14.285% - 13.7px) auto }
+        @media (min-width: 1920px) { grid-template-columns: calc(10% - 14.4px) auto }
+
+        .view-module & {
+            grid-template-columns: 90px auto;
+            grid-template-rows: 102px auto;
+        }
+
+        column-gap: $gutter;
+        row-gap: 0;
+
+        > .layout-footer {
+            display: none;
+        }
+    }
 
 
     > .layout-sidebar-primary {
-        grid-area: main-sidebar;
-        margin-right: 2px;
-    }
-
-    > .layout-sidebar-secondary {
-        grid-area: secondary-sidebar;
-
-        > * {
-            transition: .3s transform;
-        }
+        grid-area: sidebar;
+        padding: $gutter 0;
     }
 
     > .layout-header {
@@ -29,25 +46,27 @@ main.layout {
         flex-direction: column;
         justify-content: space-between;
         height: 110px;
-        transition: .3s transform;
     }
 
     > .layout-content {
-        grid-area: content;
-        transition: .3s transform;
+        grid-area: content-body;
+        padding: $gutter 0;
         overflow-x: hidden;
         .view-login & { overflow-x: initial; }
     }
 
     > .layout-footer {
         grid-area: footer;
-
-        margin-top: $gutter * 4;
-        border-top: 1px solid #495057;
-        padding: $gutter * .5 0 0;
-        margin-left: 90px + $gutter;
+        padding: $gutter 0;
     }
 
+
+
+    // panel stuff
+    > .layout-header,
+    > .layout-content {
+        transition: .3s transform;
+    }
     &.panel-is-open {
         > .layout-header, > .layout-content {
             transform: translateX(-114px);
@@ -67,6 +86,7 @@ main.layout {
         box-shadow: 0 0 32px black;
     }
 }
+
 
 // side panel
 .main-panel {

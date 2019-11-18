@@ -72,16 +72,6 @@ class LayoutHelper extends Helper
     }
 
     /**
-     * Layout footer visibility
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutFooter() : bool
-    {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
-    }
-
-    /**
      * Messages visibility
      *
      * @return bool True if visible for view

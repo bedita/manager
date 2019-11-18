@@ -3,8 +3,8 @@
 */
 
 // family
-$font-family-sans-serif:      'Mukta', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-family-serif:           Georgia, 'Times New Roman', Times, serif;
+$font-family-sans-serif:      'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-serif:           'IBM Plex Serif', Georgia, 'Times New Roman', Times, serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 
@@ -25,6 +25,7 @@ $font-weight-base:            $font-weight-normal !default;
 
 // line
 $line-height-base:            1.5 !default;
+$line-height-sm:              1.25 !default;
 
 
 /*
@@ -83,7 +84,7 @@ $tablet: 768px;
 */
 
 $gutter: 16px;
-
+$dashboard-items-ratio: 68.2%;
 
 /*
 ** Animations & transitions

@@ -3,7 +3,7 @@
         position: relative;
         display: flex;
         list-style: none;
-        margin: 0 0 $gutter * 3 $gutter * .5;
+        margin: $gutter 0 0 0;
         padding: 0;
 
         .popup {
