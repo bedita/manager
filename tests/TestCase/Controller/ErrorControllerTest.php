@@ -36,7 +36,7 @@ class ErrorControllerTest extends TestCase
      *
      * @return void
      */
-    protected function setupController() : void
+    protected function setupController(): void
     {
         $this->ErrorController = new ErrorController();
     }
@@ -48,7 +48,7 @@ class ErrorControllerTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize() : void
+    public function testInitialize(): void
     {
         $this->setupController();
 

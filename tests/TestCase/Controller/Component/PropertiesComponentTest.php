@@ -37,7 +37,7 @@ class PropertiesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Properties);
 
@@ -99,7 +99,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @return array
      */
-    public function viewGroupsProvider() : array
+    public function viewGroupsProvider(): array
     {
         return [
             'minimal' => [
@@ -338,7 +338,7 @@ class PropertiesComponentTest extends TestCase
      * @covers ::viewGroups()
      * @covers ::initialize()
      */
-    public function testViewGroups($expected, $object, string $type, array $config = []) : void
+    public function testViewGroups($expected, $object, string $type, array $config = []): void
     {
         if (!empty($config)) {
             Configure::write(sprintf('Properties.%s.view', $type), $config);

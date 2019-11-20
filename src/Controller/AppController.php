@@ -39,7 +39,7 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -69,7 +69,7 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : ?Response
+    public function beforeFilter(Event $event): ?Response
     {
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
@@ -107,7 +107,7 @@ class AppController extends Controller
      *
      * Update session tokens if updated/refreshed by client
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
@@ -132,7 +132,7 @@ class AppController extends Controller
      * @param string $type Object type
      * @return array request data
      */
-    protected function prepareRequest($type) : array
+    protected function prepareRequest($type): array
     {
         // prepare json fields before saving
         $data = (array)$this->request->getData();
@@ -212,7 +212,7 @@ class AppController extends Controller
      * @return array The request data for required parameters, if any
      * @throws Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
      */
-    protected function checkRequest(array $options = []) : array
+    protected function checkRequest(array $options = []): array
     {
         // check request
         if (empty($this->request)) {
@@ -250,7 +250,7 @@ class AppController extends Controller
      *
      * @return \Cake\Http\Response|null
      */
-    protected function applySessionFilter() : ?Response
+    protected function applySessionFilter(): ?Response
     {
         $session = $this->request->getSession();
         $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
@@ -293,7 +293,7 @@ class AppController extends Controller
      * @param array $objects The objects to parse to set prev and next data
      * @return void
      */
-    protected function setObjectNav($objects) : void
+    protected function setObjectNav($objects): void
     {
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
@@ -318,7 +318,7 @@ class AppController extends Controller
      * @param string $id The object ID
      * @return array
      */
-    protected function getObjectNav($id) : array
+    protected function getObjectNav($id): array
     {
         // get objectNav from session
         $session = $this->request->getSession();

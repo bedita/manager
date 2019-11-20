@@ -55,7 +55,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -70,7 +70,7 @@ class ModelControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController(array $requestConfig = []) : void
+    protected function setupController(array $requestConfig = []): void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -83,7 +83,7 @@ class ModelControllerTest extends TestCase
      *
      * @return array
      */
-    public function beforeFilterProvider() : array
+    public function beforeFilterProvider(): array
     {
         return [
             'not authorized' => [
@@ -119,7 +119,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeFilter($expected, $data, $exception) : void
+    public function testBeforeFilter($expected, $data, $exception): void
     {
         $this->setupController();
 
@@ -142,7 +142,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeRender() : void
+    public function testBeforeRender(): void
     {
         $this->setupController();
         $this->ModelController->dispatchEvent('Controller.beforeRender');
@@ -160,7 +160,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testIndex() : void
+    public function testIndex(): void
     {
         $this->setupController();
         $this->ModelController->index();
@@ -177,7 +177,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testIndexFail() : void
+    public function testIndexFail(): void
     {
         $this->setupController([
             'params' => [
@@ -195,7 +195,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testView() : void
+    public function testView(): void
     {
         $this->setupController();
         $this->ModelController->view(1);
@@ -212,7 +212,7 @@ class ModelControllerTest extends TestCase
      *
      * @return void
      */
-    public function testViewFail() : void
+    public function testViewFail(): void
     {
         $this->setupController();
         $result = $this->ModelController->view(0);
@@ -224,7 +224,7 @@ class ModelControllerTest extends TestCase
      *
      * @return array
      */
-    public function savePropertyTypesJsonProvider() : Array
+    public function savePropertyTypesJsonProvider(): array
     {
         return [
             // test with empty object

@@ -48,7 +48,7 @@ class UserProfileControllerTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -63,7 +63,7 @@ class UserProfileControllerTest extends TestCase
      * @param string $filter The filter class full path.
      * @return void
      */
-    public function setupController(string $filter = null) : void
+    public function setupController(string $filter = null): void
     {
         $this->setupApi();
         $config = [
@@ -83,7 +83,7 @@ class UserProfileControllerTest extends TestCase
      *
      * @return void
      */
-    public function testView() : void
+    public function testView(): void
     {
         $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
         $this->UserProfileController->view();

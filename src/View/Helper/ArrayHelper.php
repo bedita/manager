@@ -28,7 +28,7 @@ class ArrayHelper extends Helper
      * @param array $arr The array.
      * @return array combined array.
      */
-    public function combine(array $arr) : array
+    public function combine(array $arr): array
     {
         return array_combine(array_values($arr), array_values($arr));
     }
@@ -40,7 +40,7 @@ class ArrayHelper extends Helper
      * @param array $keys The keys to remove.
      * @return array The array without keys.
      */
-    public function removeKeys(array $arr, array $keys) : array
+    public function removeKeys(array $arr, array $keys): array
     {
         return array_diff_key($arr, array_flip($keys));
     }
@@ -52,7 +52,7 @@ class ArrayHelper extends Helper
      * @param array $keys The ordered keys to maintain.
      * @return array The array with only selected keys.
      */
-    public function onlyKeys(array $arr, array $keys) : array
+    public function onlyKeys(array $arr, array $keys): array
     {
         $res = [];
         foreach ($keys as $k) {
@@ -80,7 +80,7 @@ class ArrayHelper extends Helper
      * @param string $path The path expression
      * @return array The result array
      */
-    public function extract($data, $path) : array
+    public function extract($data, $path): array
     {
         return Hash::extract($data, $path);
     }

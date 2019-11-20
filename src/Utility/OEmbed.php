@@ -29,7 +29,7 @@ class OEmbed
      * @param string $url Media remote URL
      * @return array Media metadata, empty array if no data is found
      */
-    public function readMetadata($url) : array
+    public function readMetadata($url): array
     {
         $parsed = parse_url($url);
         $host = Hash::get($parsed, 'host', '');
@@ -66,7 +66,7 @@ class OEmbed
      * @return array JSON decoded response or empty array on failure
      * @codeCoverageIgnore
      */
-    protected function fetchJson(string $oemBedurl) : array
+    protected function fetchJson(string $oemBedurl): array
     {
         $json = (new Client())->get($oemBedurl)->json;
 
@@ -79,7 +79,7 @@ class OEmbed
      * @param string $host Host name
      * @return string|null OEmbed provider or null if no match
      */
-    protected function findProvider(string $host) : ?string
+    protected function findProvider(string $host): ?string
     {
         Configure::load('oembed');
         // exact match

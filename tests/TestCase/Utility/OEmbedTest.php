@@ -24,7 +24,7 @@ class MyOEmbed extends OEmbed
      */
     public $json = [];
 
-    protected function fetchJson(string $oembedUrl) : array
+    protected function fetchJson(string $oembedUrl): array
     {
         return $this->json;
     }

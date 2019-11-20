@@ -65,7 +65,7 @@ abstract class ImportFilter
      * @return string|null
      * @codeCoverageIgnore
      */
-    public static function getServiceName() : ?string
+    public static function getServiceName(): ?string
     {
         return static::$serviceName;
     }
@@ -79,7 +79,7 @@ abstract class ImportFilter
      * @param array $options The import options
      * @return \App\Core\Result\ImportResult The result
      */
-    abstract public function import($filename, $filepath, ?array $options = []) : ImportResult;
+    abstract public function import($filename, $filepath, ?array $options = []): ImportResult;
 
     /**
      * Upload file used to import data and create async job linking to it.
@@ -90,7 +90,7 @@ abstract class ImportFilter
      * @return \App\Core\Result\ImportResult
      * @throws \LogicException When method is called but missing the async job service name.
      */
-    protected function createAsyncJob($filename, $filepath, ?array $options = []) : ImportResult
+    protected function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
     {
         if (empty(static::getServiceName())) {
             throw new \LogicException('Cannot create async job without service name defined.');
