@@ -32,7 +32,7 @@ class TranslationsController extends ModulesController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function add($id) : ?Response
+    public function add($id): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -63,7 +63,7 @@ class TranslationsController extends ModulesController
      * @param string $lang The lang code.
      * @return \Cake\Http\Response|null
      */
-    public function edit($id, $lang) : ?Response
+    public function edit($id, $lang): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -105,7 +105,7 @@ class TranslationsController extends ModulesController
      *
      * @return \Cake\Http\Response|null
      */
-    public function save() : ?Response
+    public function save(): ?Response
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
@@ -157,7 +157,7 @@ class TranslationsController extends ModulesController
      *
      * @return \Cake\Http\Response
      */
-    public function delete() : Response
+    public function delete(): Response
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->request->getData();

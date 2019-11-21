@@ -37,7 +37,7 @@ class ProjectConfigurationComponent extends Component
      *
      * @return array Project configuration in `key => value` format.
      */
-    public function read() : array
+    public function read(): array
     {
         $config = Configure::read('Project');
         if (!empty($config)) {
@@ -67,7 +67,7 @@ class ProjectConfigurationComponent extends Component
      *
      * @return string
      */
-    protected function cacheKey() : string
+    protected function cacheKey(): string
     {
         return md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
     }
@@ -77,7 +77,7 @@ class ProjectConfigurationComponent extends Component
      *
      * @return array Configuration array with a config key => data structure.
      */
-    protected function fetchConfig() : array
+    protected function fetchConfig(): array
     {
         $response = (array)ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
 

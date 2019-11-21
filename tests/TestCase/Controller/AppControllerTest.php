@@ -42,7 +42,7 @@ class AppControllerTest extends TestCase
      * @param array $config configuration for controller setup
      * @return void
      */
-    protected function setupController($config = null) : void
+    protected function setupController($config = null): void
     {
         $request = null;
         if ($config != null) {
@@ -59,7 +59,7 @@ class AppControllerTest extends TestCase
      *
      * @return array|null
      */
-    protected function setupControllerAndLogin() : ?array
+    protected function setupControllerAndLogin(): ?array
     {
         $config = [
             'environment' => [
@@ -85,7 +85,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize() : void
+    public function testInitialize(): void
     {
         $this->setupController();
 
@@ -104,7 +104,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeFilterLoginError() : void
+    public function testBeforeFilterLoginError(): void
     {
         $this->setupController();
 
@@ -125,7 +125,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeFilterCorrectTokens() : void
+    public function testBeforeFilterCorrectTokens(): void
     {
         $expectedtokens = [];
 
@@ -148,7 +148,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSetupOutputTimezone() : void
+    public function testSetupOutputTimezone(): void
     {
         $this->setupController();
         $expected = 'GMT';
@@ -179,7 +179,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeRender() : void
+    public function testBeforeRender(): void
     {
         $user = $this->setupControllerAndLogin();
 
@@ -198,7 +198,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBeforeRenderUpdateTokens() : void
+    public function testBeforeRenderUpdateTokens(): void
     {
         $user = $this->setupControllerAndLogin();
 
@@ -230,7 +230,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function prepareRequestProvider() : array
+    public function prepareRequestProvider(): array
     {
         return [
             'documents' => [ // test _jsonKeys json_decode
@@ -317,7 +317,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testPrepareRequest($objectType, $expected, $data) : void
+    public function testPrepareRequest($objectType, $expected, $data): void
     {
         $config = [
             'environment' => [
@@ -341,7 +341,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function hasFieldChangedProvider() : array
+    public function hasFieldChangedProvider(): array
     {
         $d1 = new \DateTime('2019-01-01T15:03:01.012345Z');
         $d2 = new \DateTime('2019-01-01T16:03:01.012345Z');
@@ -374,7 +374,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testHasFieldChanged($val1, $val2, $expected) : void
+    public function testHasFieldChanged($val1, $val2, $expected): void
     {
         $this->setupController();
         $actual = $this->invokeMethod($this->AppController, 'hasFieldChanged', [$val1, $val2]);
@@ -386,7 +386,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function checkRequestProvider() : array
+    public function checkRequestProvider(): array
     {
         return [
             'badRequest' => [
@@ -435,7 +435,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testCheckRequest($expected, $params, $config) : void
+    public function testCheckRequest($expected, $params, $config): void
     {
         $this->setupController($config);
 
@@ -492,7 +492,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function applySessionFilterProvider() : array
+    public function applySessionFilterProvider(): array
     {
         return [
             'reset' => [ // expected remove of session filter and redirect
@@ -560,7 +560,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType) : void
+    public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType): void
     {
         // Setup controller for test
         $this->setupController($requestConfig);
@@ -592,7 +592,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function setObjectNavProvider() : array
+    public function setObjectNavProvider(): array
     {
         return [
             'animals' => [
@@ -679,7 +679,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule) : void
+    public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule): void
     {
         // Setup controller for test
         $this->setupController();
@@ -702,7 +702,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function getObjectNavProvider() : array
+    public function getObjectNavProvider(): array
     {
         return [
             'empty' => [
@@ -739,7 +739,7 @@ class AppControllerTest extends TestCase
      *
      * @return void
      */
-    public function testGetObjectNav(string $moduleName, array $objects) : void
+    public function testGetObjectNav(string $moduleName, array $objects): void
     {
         // Setup controller for test
         $this->setupController();

@@ -35,7 +35,7 @@ class ArrayHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ class ArrayHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Array);
 
@@ -58,7 +58,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getCombineSchemaProvider() : array
+    public function getCombineSchemaProvider(): array
     {
         $arr = [10, 20, 50, 100];
 
@@ -96,7 +96,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getRemoveKeysSchemaProvider() : array
+    public function getRemoveKeysSchemaProvider(): array
     {
         return [
             'basic data' => [
@@ -142,7 +142,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function onlyKeysProvider() : array
+    public function onlyKeysProvider(): array
     {
         return [
             'basic' => [

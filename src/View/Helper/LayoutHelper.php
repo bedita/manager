@@ -36,7 +36,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function primarySidebar() : bool
+    public function primarySidebar(): bool
     {
         return in_array($this->_View->getName(), ['Dashboard']);
     }
@@ -46,7 +46,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function secondarySidebar() : bool
+    public function secondarySidebar(): bool
     {
         return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
@@ -56,7 +56,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function layoutHeader() : bool
+    public function layoutHeader(): bool
     {
         return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
@@ -66,7 +66,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function layoutContent() : bool
+    public function layoutContent(): bool
     {
         return true;
     }
@@ -76,7 +76,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function layoutFooter() : bool
+    public function layoutFooter(): bool
     {
         return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
     }
@@ -86,7 +86,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function messages() : bool
+    public function messages(): bool
     {
         return $this->_View->getName() != 'Login';
     }
@@ -96,7 +96,7 @@ class LayoutHelper extends Helper
      *
      * @return string The link
      */
-    public function moduleLink() : string
+    public function moduleLink(): string
     {
         $currentModule = (array)$this->getView()->get('currentModule');
         if (!empty($currentModule) && !empty($currentModule['name'])) {
@@ -122,7 +122,7 @@ class LayoutHelper extends Helper
      *
      * @return string
      */
-    protected function commandLinkClass() : string
+    protected function commandLinkClass(): string
     {
         $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->getName()));
         if ($pluginClass) {

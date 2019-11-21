@@ -33,7 +33,7 @@ class ModulesControllerSample extends ModulesController
      *
      * @return string
      */
-    public function getObjectType() : string
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -43,7 +43,7 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function descendants() : array
+    public function descendants(): array
     {
         return parent::descendants();
     }
@@ -54,7 +54,7 @@ class ModulesControllerSample extends ModulesController
      * @param array $response The response
      * @return void
      */
-    public function updateMediaUrls(array &$response) : void
+    public function updateMediaUrls(array &$response): void
     {
         parent::updateMediaUrls($response);
     }
@@ -64,7 +64,7 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function getApiClient() : BEditaClient
+    public function getApiClient(): BEditaClient
     {
         return $this->apiClient;
     }
@@ -74,7 +74,7 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function saveJson() : void
+    public function saveJson(): void
     {
         parent::saveJson();
     }
@@ -128,7 +128,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -143,7 +143,7 @@ class ModulesControllerTest extends TestCase
      * @param array|null $requestConfig
      * @return void
      */
-    protected function setupController(? array $requestConfig = []) : void
+    protected function setupController(?array $requestConfig = []): void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -162,7 +162,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize() : void
+    public function testInitialize(): void
     {
         // Setup controller for test
         $this->setupController(); // it already calls initialize, internally
@@ -178,7 +178,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testIndex() : void
+    public function testIndex(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -203,7 +203,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testQueryErrorSession() : void
+    public function testQueryErrorSession(): void
     {
         // Setup controller for test with query string error
         $this->setupController([
@@ -229,7 +229,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testEmptyDescendants() : void
+    public function testEmptyDescendants(): void
     {
         // Setup controller for test / on documents
         $this->setupController();
@@ -250,7 +250,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDescendants() : void
+    public function testDescendants(): void
     {
         // Setup controller with `objects` as type
         $this->setupController([
@@ -273,7 +273,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testWrongDescendants() : void
+    public function testWrongDescendants(): void
     {
         // Setup controller with `objects` as type
         $this->setupController([
@@ -296,7 +296,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testView() : void
+    public function testView(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -323,7 +323,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testUname() : void
+    public function testUname(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -348,7 +348,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testUname404() : void
+    public function testUname404(): void
     {
         // Setup controller for test
         $exception = new BEditaClientException('Not Found', 404);
@@ -370,7 +370,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testCreate() : void
+    public function testCreate(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -389,7 +389,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testCreate302() : void
+    public function testCreate302(): void
     {
         // Setup controller for test
         $this->setupController([
@@ -417,7 +417,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testClone() : void
+    public function testClone(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -444,7 +444,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testClone302() : void
+    public function testClone302(): void
     {
         // test 1 clone abstract type
 
@@ -487,7 +487,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSave() : void
+    public function testSave(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -564,7 +564,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSaveJson($expected, $data) : void
+    public function testSaveJson($expected, $data): void
     {
         // Setup controller for test
         $this->setupController();
@@ -596,7 +596,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDelete() : void
+    public function testDelete(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -635,7 +635,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testRelatedJson() : void
+    public function testRelatedJson(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -655,7 +655,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return array
      */
-    public function relationshipsJsonProvider() : array
+    public function relationshipsJsonProvider(): array
     {
         return [
             'children' => [
@@ -688,7 +688,7 @@ class ModulesControllerTest extends TestCase
      * @dataProvider relationshipsJsonProvider()
      * @return void
      */
-    public function testRelationshipsJson(string $relation, string $objectType) : void
+    public function testRelationshipsJson(string $relation, string $objectType): void
     {
         // Setup controller for test
         $this->setupController([
@@ -716,7 +716,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return array
      */
-    public function getThumbsUrlsProvider() : Array
+    public function getThumbsUrlsProvider(): array
     {
         return [
             // test with empty object
@@ -800,7 +800,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testGetThumbsUrls($expected, $data, $mockResponse = null) : void
+    public function testGetThumbsUrls($expected, $data, $mockResponse = null): void
     {
         $this->setupController();
 
@@ -829,7 +829,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBulkActions() : void
+    public function testBulkActions(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -868,7 +868,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testBulkActionsWithErrors() : void
+    public function testBulkActionsWithErrors(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -933,7 +933,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testGetSchemaForIndex() : void
+    public function testGetSchemaForIndex(): void
     {
         $type = 'documents';
         $mockResponse = [
