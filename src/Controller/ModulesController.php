@@ -296,8 +296,6 @@ class ModulesController extends AppController
             // upload file (if available)
             $this->Modules->upload($requestData);
 
-            throw new BEditaClientException('DEBUG');
-
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
         } catch (InternalErrorException | BEditaClientException | UploadException $e) {
