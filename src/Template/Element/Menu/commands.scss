@@ -1,8 +1,10 @@
 .commands-menu {
-    position: fixed;
-    top: $gutter;
+    @media (min-width: 568px) {
+        position: fixed;
+        top: $gutter;
+        margin-right: $gutter;
+    }
     width: 90px;
-    margin-right: $gutter;
     display: flex;
     flex-direction: column;
 
