@@ -363,7 +363,7 @@ class ModulesComponent extends Component
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
-        $session = $this->request->getSession();
+        $session = $this->getController()->request->getSession();
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
     }
@@ -383,7 +383,7 @@ class ModulesComponent extends Component
         }
 
         // check session data for object id => use `failedSave.{type}.{id}` as key
-        $session = $this->request->getSession();
+        $session = $this->getController()->request->getSession();
         $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
         $data = $session->read($key);
         if (empty($data)) {
@@ -397,7 +397,7 @@ class ModulesComponent extends Component
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
         if (strtotime($timestamp) < strtotime("-5 minutes")) {
             //  => merge with $object['attributes']
-            $object['attributes'] = array_merge($object['attributes'], $data);
+            $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
 
         // remove session data
