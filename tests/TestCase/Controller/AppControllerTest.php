@@ -768,32 +768,4 @@ class AppControllerTest extends TestCase
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
     }
-
-    /**
-     * Test `setDataFromFailedSave`.
-     *
-     * @covers ::setDataFromFailedSave()
-     *
-     * @return void
-     */
-    public function testSetDataFromFailedSave(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // data and expected
-        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
-        $type = 'documents';
-
-        // call method 'setDataFromFailedSave'
-        $reflectionClass = new \ReflectionClass($this->AppController);
-        $method = $reflectionClass->getMethod('setDataFromFailedSave');
-        $method->setAccessible(true);
-        $method->invokeArgs($this->AppController, [ $type, $expected ]);
-
-        // verify data
-        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->AppController->request->getSession()->read($key);
-        static::assertEquals($expected, $actual);
-    }
 }

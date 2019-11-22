@@ -351,6 +351,24 @@ class ModulesComponent extends Component
     }
 
     /**
+     * Set session data for `failedSave.{type}.{id}` and `failedSave.{type}.{id}__timestamp`.
+     *
+     * @param string $type The object type.
+     * @param array $data The data to store into session.
+     * @return void
+     */
+    protected function setDataFromFailedSave($type, $data): void
+    {
+        if (empty($data) || empty($data['id']) || empty($type)) {
+            return;
+        }
+        $key = sprintf('failedSave.%s.%s', $type, $data['id']);
+        $session = $this->request->getSession();
+        $session->write($key, $data);
+        $session->write(sprintf('%s__timestamp', $key), time());
+    }
+
+    /**
      * Update object, when failed save occurred.
      * Check session data by `failedSave.{type}.{id}` key and `failedSave.{type}.{id}__timestamp`.
      * If data is set and timestamp is not older than 5 minutes.

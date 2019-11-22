@@ -304,7 +304,7 @@ class ModulesController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             // set session data to recover form
-            $this->setDataFromFailedSave($this->objectType, $requestData);
+            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
 
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);

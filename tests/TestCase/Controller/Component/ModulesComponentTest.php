@@ -832,6 +832,31 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
+     * Test `setDataFromFailedSave`.
+     *
+     * @covers ::setDataFromFailedSave()
+     *
+     * @return void
+     */
+    public function testSetDataFromFailedSave(): void
+    {
+        // data and expected
+        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
+        $type = 'documents';
+
+        // call method 'setDataFromFailedSave'
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('setDataFromFailedSave');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->Modules, [ $type, $expected ]);
+
+        // verify data
+        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
+        $actual = $this->Modules->request->getSession()->read($key);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `updateFromFailedSave` method.
      *
      * @return void
