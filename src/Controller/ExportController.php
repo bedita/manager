@@ -25,7 +25,7 @@ class ExportController extends AppController
      *
      * @return void
      */
-    public function export() : void
+    public function export(): void
     {
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
@@ -51,7 +51,7 @@ class ExportController extends AppController
      * @param string $ids Object IDs comma separated string
      * @return array
      */
-    private function csvRows(string $objectType, string $ids = '') : array
+    private function csvRows(string $objectType, string $ids = ''): array
     {
         $data = [];
         if (empty($ids)) { // empty ids? then get all (multi api calls)
@@ -89,7 +89,7 @@ class ExportController extends AppController
      * @param array $response The response to use as source for data
      * @return array The fields representing each data item
      */
-    private function fillDataFromResponse(array &$data, array $response) : array
+    private function fillDataFromResponse(array &$data, array $response): array
     {
         if (empty($response['data'])) {
             return [];
@@ -125,7 +125,7 @@ class ExportController extends AppController
      * @param string $objectType The object type
      * @return void
      */
-    private function csv(array $rows, string $objectType) : void
+    private function csv(array $rows, string $objectType): void
     {
         // create csv string data
         $fields = array_shift($rows);
@@ -167,7 +167,7 @@ class ExportController extends AppController
      * @param string $key The key
      * @return array
      */
-    private function getFields($response, $key = 'attributes') : array
+    private function getFields($response, $key = 'attributes'): array
     {
         $data = (array)Hash::get($response, sprintf('data.0.%s', $key), []);
 

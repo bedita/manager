@@ -27,7 +27,7 @@ class ProjectConfigurationComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class ProjectConfigurationComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->ProjectConfiguration);
 
@@ -54,7 +54,7 @@ class ProjectConfigurationComponentTest extends TestCase
      *
      * @return array
      */
-    public function readProvider() : array
+    public function readProvider(): array
     {
         return [
             'simple conf' => [
@@ -84,7 +84,7 @@ class ProjectConfigurationComponentTest extends TestCase
      * @covers ::cacheKey()
      * @covers ::fetchConfig()
      */
-    public function testRead($expected, $config) : void
+    public function testRead($expected, $config): void
     {
         Configure::write('Project', null);
         // Setup mock API client.
@@ -109,7 +109,7 @@ class ProjectConfigurationComponentTest extends TestCase
      * @covers ::read()
      * @return void
      */
-    public function testReadFromConf() : void
+    public function testReadFromConf(): void
     {
         $data = ['Conf' => true];
         Configure::write('Project', $data);
@@ -123,7 +123,7 @@ class ProjectConfigurationComponentTest extends TestCase
      * @covers ::read()
      * @return void
      */
-    public function testReadError() : void
+    public function testReadError(): void
     {
         Configure::write('Project', null);
         Cache::clear(false, ProjectConfigurationComponent::CACHE_CONFIG);

@@ -38,7 +38,7 @@ class ModelController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -56,7 +56,7 @@ class ModelController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event) : ?Response
+    public function beforeFilter(Event $event): ?Response
     {
         $roles = $this->Auth->user('roles');
         if (empty($roles) || !in_array('admin', $roles)) {
@@ -69,7 +69,7 @@ class ModelController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->set('resourceType', $this->resourceType);
         $this->set('moduleLink', ['_name' => 'model:list', 'resource_type' => 'object_types']);
@@ -82,7 +82,7 @@ class ModelController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index() : ?Response
+    public function index(): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -114,7 +114,7 @@ class ModelController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function view($id) : ?Response
+    public function view($id): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -140,7 +140,7 @@ class ModelController extends AppController
      *
      * @return void
      */
-    public function savePropertyTypesJson() : void
+    public function savePropertyTypesJson(): void
     {
         $payload = $this->request->getData();
 

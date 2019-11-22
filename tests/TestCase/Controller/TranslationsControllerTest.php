@@ -67,7 +67,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -98,7 +98,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testAdd() : void
+    public function testAdd(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -125,7 +125,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testEdit() : void
+    public function testEdit(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -153,7 +153,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testSave() : void
+    public function testSave(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -194,7 +194,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDelete() : void
+    public function testDelete(): void
     {
         // Setup controller for test
         $this->setupController();

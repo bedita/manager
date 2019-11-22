@@ -29,7 +29,7 @@ class UserProfileController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -41,7 +41,7 @@ class UserProfileController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'user_profile:view']);
 
@@ -53,7 +53,7 @@ class UserProfileController extends AppController
      *
      * @return void
      */
-    public function view() : void
+    public function view(): void
     {
         $this->request->allowMethod(['get']);
 
@@ -77,7 +77,7 @@ class UserProfileController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function save() : ?Response
+    public function save(): ?Response
     {
         $data = $this->request->getData();
         try {

@@ -29,7 +29,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function objectNavProvider() : array
+    public function objectNavProvider(): array
     {
         return [
             'empty' => [
@@ -70,7 +70,7 @@ class LinkHelperTest extends TestCase
      * @dataProvider objectNavProvider()
      * @covers ::objectNav()
      */
-    public function testObjectNav($data, $expected) : void
+    public function testObjectNav($data, $expected): void
     {
         $request = $response = $events = null;
         $layout = new LinkHelper(new View($request, $response, $events, $data));

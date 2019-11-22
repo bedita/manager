@@ -28,7 +28,7 @@ class UploadExceptionTest extends TestCase
      *
      * @return array
      */
-    public function codeToMessageProvider() : array
+    public function codeToMessageProvider(): array
     {
         return [
             'UPLOAD_ERR_INI_SIZE' => [
@@ -74,7 +74,7 @@ class UploadExceptionTest extends TestCase
      * @dataProvider codeToMessageProvider()
      * @covers ::codeToMessage()
      */
-    public function testCodeToMessage($code, $message) : void
+    public function testCodeToMessage($code, $message): void
     {
         $e = new UploadException('', $code);
         static::assertEquals($message, $e->getMessage());

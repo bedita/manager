@@ -30,7 +30,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function controlTypeFromSchemaProvider() : array
+    public function controlTypeFromSchemaProvider(): array
     {
         return [
             'string' => [
@@ -147,7 +147,7 @@ class FormTest extends TestCase
      * @dataProvider controlTypeFromSchemaProvider()
      * @covers ::controlTypeFromSchema()
      */
-    public function testControlTypeFromSchema(string $expected, $schema) : void
+    public function testControlTypeFromSchema(string $expected, $schema): void
     {
         $actual = Form::controlTypeFromSchema($schema);
 
@@ -162,7 +162,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function customControlOptionsProvider() : array
+    public function customControlOptionsProvider(): array
     {
         return [
             'not custom' => [
@@ -265,7 +265,7 @@ class FormTest extends TestCase
      * @covers ::typeFromArray
      * @covers ::typeFromObject
      */
-    public function testCustomControlOptions(string $name, array $expected) : void
+    public function testCustomControlOptions(string $name, array $expected): void
     {
         $actual = Form::customControlOptions($name);
 
@@ -277,7 +277,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider() : array
+    public function controlProvider(): array
     {
         $value = 'something';
 
@@ -441,7 +441,7 @@ class FormTest extends TestCase
      * @covers ::checkboxControl
      * @covers ::enumControl
      */
-    public function testControl(array $schema, string $type, ?string $value, array $expected) : void
+    public function testControl(array $schema, string $type, ?string $value, array $expected): void
     {
         $actual = Form::control($schema, $type, $value);
 
@@ -453,7 +453,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodProvider() : array
+    public function getMethodProvider(): array
     {
         return [
             'name with chars to remove' => [
@@ -477,7 +477,7 @@ class FormTest extends TestCase
      * @dataProvider getMethodProvider()
      * @covers ::getMethod
      */
-    public function testGetMethod(string $methodName, array $expected) : void
+    public function testGetMethod(string $methodName, array $expected): void
     {
         $actual = Form::getMethod($methodName);
 
@@ -491,7 +491,7 @@ class FormTest extends TestCase
      *
      * @covers ::getMethod
      */
-    public function testGetMethodNotCallable() : void
+    public function testGetMethodNotCallable(): void
     {
         $methodName = 'dummy';
         $expected = new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));

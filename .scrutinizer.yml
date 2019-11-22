@@ -5,3 +5,11 @@ filter:
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
+
+# new PHP Analysis
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run

@@ -66,7 +66,7 @@ class LinkHelper extends Helper
      * @param string $apiUrl Api url
      * @return void
      */
-    public function fromAPI($apiUrl) : void
+    public function fromAPI($apiUrl): void
     {
         echo str_replace($this->apiBaseUrl, $this->webBaseUrl, $apiUrl);
     }
@@ -77,7 +77,7 @@ class LinkHelper extends Helper
      * @param string $field the Field.
      * @return void
      */
-    public function sort($field) : void
+    public function sort($field): void
     {
         $class = '';
         $query = $this->getView()->getRequest()->getQuery();
@@ -100,7 +100,7 @@ class LinkHelper extends Helper
      * @param int $page destination page.
      * @return void
      */
-    public function page($page) : void
+    public function page($page): void
     {
         echo $this->replaceParamUrl('page', $page);
     }
@@ -111,7 +111,7 @@ class LinkHelper extends Helper
      * @param int $pageSize new page size.
      * @return void
      */
-    public function pageSize($pageSize) : void
+    public function pageSize($pageSize): void
     {
         echo $this->replaceParamUrl('page_size', $pageSize);
     }
@@ -122,7 +122,7 @@ class LinkHelper extends Helper
      * @param array $options options for query
      * @return string url
      */
-    public function here($options = []) : string
+    public function here($options = []): string
     {
         $query = $this->getView()->getRequest()->getQuery();
         if (empty($query) || !empty($options['no-query'])) {
@@ -143,7 +143,7 @@ class LinkHelper extends Helper
      * @param string|int $value the Value to set for parameter.
      * @return string url
      */
-    private function replaceParamUrl($parameter, $value) : string
+    private function replaceParamUrl($parameter, $value): string
     {
         $query = $this->getView()->getRequest()->getQuery();
         $query[$parameter] = $value;
@@ -159,7 +159,7 @@ class LinkHelper extends Helper
      *
      * @return void
      */
-    public function pluginsJsBundle() : void
+    public function pluginsJsBundle(): void
     {
         $plugins = Configure::read('Plugins', []);
         foreach ($plugins as $plugin => $v) {
@@ -176,7 +176,7 @@ class LinkHelper extends Helper
      * @param array $filter list of file name filters
      * @return void
      */
-    public function jsBundle(array $filter = []) : void
+    public function jsBundle(array $filter = []): void
     {
         $jsFiles = $this->findFiles($filter, 'js');
         foreach ($jsFiles as $jsFile) {
@@ -190,7 +190,7 @@ class LinkHelper extends Helper
      * @param array $filter list of file name filters
      * @return void
      */
-    public function cssBundle(array $filter = []) : void
+    public function cssBundle(array $filter = []): void
     {
         $cssFiles = $this->findFiles($filter, 'css');
         foreach ($cssFiles as $cssFile) {
@@ -207,7 +207,7 @@ class LinkHelper extends Helper
 
      * @return array files found
      */
-    protected function findFiles(array $filter, string $type) : array
+    protected function findFiles(array $filter, string $type): array
     {
         $files = [];
         $filesPath = WWW_ROOT . $type;
@@ -241,7 +241,7 @@ class LinkHelper extends Helper
      * @param array $data Object nav data
      * @return string
      */
-    public function objectNav($data) : string
+    public function objectNav($data): string
     {
         $prev = '‹';
         $next = '›';
