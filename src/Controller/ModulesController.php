@@ -185,10 +185,7 @@ class ModulesController extends AppController
         $object = $response['data'];
 
         // if previous post save failed, recover data from session.
-        $dataFromSession = $this->getDataFromFailedSave();
-        if (!empty($dataFromSession)) {
-            $object = array_merge($object, $dataFromSession);
-        }
+        $this->Modules->updateFromFailedSave($object);
 
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
@@ -299,6 +296,8 @@ class ModulesController extends AppController
             // upload file (if available)
             $this->Modules->upload($requestData);
 
+            throw new BEditaClientException('DEBUG');
+
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
         } catch (InternalErrorException | BEditaClientException | UploadException $e) {
@@ -307,7 +306,7 @@ class ModulesController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             // set session data to recover form
-            $this->setDataFromFailedSave($requestData);
+            $this->setDataFromFailedSave($this->objectType, $requestData);
 
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);

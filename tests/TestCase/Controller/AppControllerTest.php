@@ -770,35 +770,30 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Test `setDataFromFailedSave` and `getDataFromFailedSave`
+     * Test `setDataFromFailedSave`.
      *
      * @covers ::setDataFromFailedSave()
-     * @covers ::getDataFromFailedSave()
      *
      * @return void
      */
-    public function testDataFromFailedSave()
+    public function testSetDataFromFailedSave(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // data and expected
-        $data = [ 'id' => 999, 'name' => 'gustavo' ];
-        $expected = [ 'attributes' => [ 'name' => 'gustavo' ] ];
+        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
+        $type = 'documents';
 
         // call method 'setDataFromFailedSave'
         $reflectionClass = new \ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setDataFromFailedSave');
         $method->setAccessible(true);
-        $result = $method->invokeArgs($this->AppController, [ (array)$data ]);
-
-        // call method 'getDataFromFailedSave'
-        $method = $reflectionClass->getMethod('getDataFromFailedSave');
-        $method->setAccessible(true);
-        $actual = $method->invokeArgs($this->AppController, []);
+        $method->invokeArgs($this->AppController, [ $type, $expected ]);
 
         // verify data
+        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
+        $actual = $this->AppController->request->getSession()->read($key);
         static::assertEquals($expected, $actual);
-        static::assertNull($this->AppController->request->getSession()->read('failedSaveData'));
     }
 }

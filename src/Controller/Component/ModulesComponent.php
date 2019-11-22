@@ -349,4 +349,41 @@ class ModulesComponent extends Component
 
         return true;
     }
+
+    /**
+     * Update object, when failed save occurred.
+     * Check session data by `failedSave.{type}.{id}` key and `failedSave.{type}.{id}__timestamp`.
+     * If data is set and timestamp is not older than 5 minutes.
+     *
+     * @param array $object The object.
+     * @return void
+     */
+    public function updateFromFailedSave(array &$object): void
+    {
+        if (empty($object) || empty($object['id']) || empty($object['type'])) {
+            return;
+        }
+
+        // check session data for object id => use `failedSave.{type}.{id}` as key
+        $session = $this->request->getSession();
+        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $data = $session->read($key);
+        if (empty($data)) {
+            return;
+        }
+
+        // read timestamp session key
+        $timestampKey = sprintf('%s__timestamp', $key);
+        $timestamp = $session->read($timestampKey);
+
+        // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
+        if (strtotime($timestamp) < strtotime("-5 minutes")) {
+            //  => merge with $object['attributes']
+            $object['attributes'] = array_merge($object['attributes'], $data);
+        }
+
+        // remove session data
+        $session->delete($key);
+        $session->delete($timestampKey);
+    }
 }

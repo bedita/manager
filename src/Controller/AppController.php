@@ -334,33 +334,20 @@ class AppController extends Controller
     }
 
     /**
-     * Set session data for key 'failedSaveData'.
+     * Set session data for `failedSave.{type}.{id}` and `failedSave.{type}.{id}__timestamp`.
      *
-     * @param array $data The data to store into 'failedSaveData'.
+     * @param string $type The object type.
+     * @param array $data The data to store into session.
      * @return void
      */
-    protected function setDataFromFailedSave($data)
+    protected function setDataFromFailedSave($type, $data): void
     {
-        $session = $this->request->getSession();
-        $session->write('failedSaveData', $data);
-    }
-
-    /**
-     * Get data from session by key 'failedSaveData'.
-     * If any, return it and delete session key 'failedSaveData'.
-     *
-     * @return array
-     */
-    protected function getDataFromFailedSave() : array
-    {
-        $session = $this->request->getSession();
-        $data = (array)$session->read('failedSaveData');
-        if (empty($data)) {
-            return [];
+        if (empty($data) || empty($data['id']) || empty($type)) {
+            return;
         }
-        $session->delete('failedSaveData');
-        unset($data['id']);
-
-        return [ 'attributes' => $data ];
+        $key = sprintf('failedSave.%s.%s', $type, $data['id']);
+        $session = $this->request->getSession();
+        $session->write($key, $data);
+        $session->write(sprintf('%s__timestamp', $key), time());
     }
 }

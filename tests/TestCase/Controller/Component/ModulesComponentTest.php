@@ -830,4 +830,34 @@ class ModulesComponentTest extends TestCase
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
     }
+
+    /**
+     * Test `updateFromFailedSave` method.
+     *
+     * @return void
+     *
+     * @covers ::updateFromFailedSave()
+     */
+    public function testUpdateFromFailedSave(): void
+    {
+        // write to session data, to simulate recover from session.
+        $object = [
+            'id' => 999,
+            'type' => 'documents',
+            'attributes' => [
+                'name' => 'john doe',
+            ],
+        ];
+        $recover = [ 'name' => 'gustavo' ];
+        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $session = $this->Modules->request->getSession();
+        $session->write($key, $recover);
+        $session->write(sprintf('%s__timestamp', $key), time());
+
+        // verify data
+        $this->Modules->updateFromFailedSave($object);
+        $expected = $object;
+        $expected['attributes'] = array_merge($object['attributes'], $recover);
+        static::assertEquals($expected, $object);
+    }
 }
