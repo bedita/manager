@@ -830,4 +830,59 @@ class ModulesComponentTest extends TestCase
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
     }
+
+    /**
+     * Test `setDataFromFailedSave`.
+     *
+     * @covers ::setDataFromFailedSave()
+     *
+     * @return void
+     */
+    public function testSetDataFromFailedSave(): void
+    {
+        // data and expected
+        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
+        $type = 'documents';
+
+        // call method 'setDataFromFailedSave'
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('setDataFromFailedSave');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->Modules, [ $type, $expected ]);
+
+        // verify data
+        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
+        $actual = $this->Modules->request->getSession()->read($key);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `updateFromFailedSave` method.
+     *
+     * @return void
+     *
+     * @covers ::updateFromFailedSave()
+     */
+    public function testUpdateFromFailedSave(): void
+    {
+        // write to session data, to simulate recover from session.
+        $object = [
+            'id' => 999,
+            'type' => 'documents',
+            'attributes' => [
+                'name' => 'john doe',
+            ],
+        ];
+        $recover = [ 'name' => 'gustavo' ];
+        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $session = $this->Modules->request->getSession();
+        $session->write($key, $recover);
+        $session->write(sprintf('%s__timestamp', $key), time());
+
+        // verify data
+        $this->Modules->updateFromFailedSave($object);
+        $expected = $object;
+        $expected['attributes'] = array_merge($object['attributes'], $recover);
+        static::assertEquals($expected, $object);
+    }
 }
