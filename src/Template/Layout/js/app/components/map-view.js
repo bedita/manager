@@ -18,10 +18,7 @@ import Compare from 'mapbox-gl-compare';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
-    template: `<div class="map-container">
-        <div id='before' class='map'></div>
-        <div id='after' class='map'></div>
-    </div>`,
+    template: `<div class="map-container"></div>`,
 
     props: {
         lng: {
@@ -47,7 +44,9 @@ export default {
     },
 
     async mounted() {
-        this.renderMapboxCompareMap();
+        this.$nextTick(() => {
+            this.renderMapboxCompareMap();
+        });
 
         // alternative simple map with no comparison
         // var map = new mapboxgl.Map({
@@ -67,40 +66,50 @@ export default {
             const popup = new mapbox.Popup()
                 .setHTML(this.popupHtml);
 
+            const before = document.createElement("div");
+            before.classList.add('compare-map');
+            const after = before.cloneNode(false);
+            const over = before.cloneNode(false);
+
+            this.$el.appendChild(before);
+            this.$el.appendChild(after);
+            this.$el.appendChild(over);
+
             const beforeMap = new mapbox.Map({
-                container: 'before',
+                container: before,
                 style: 'mapbox://styles/mapbox/satellite-v9',
                 center: center,
                 zoom: 13,
             });
 
             const afterMap = new mapbox.Map({
-                container: 'after',
+                container: after,
                 style: 'mapbox://styles/mapbox/streets-v9',
                 center: center,
                 zoom: 13,
             });
 
-            const map = new Compare(beforeMap, afterMap, this.$el, {
-                // Set this to enable comparing two maps by mouse movement:
-                // mousemove: true
-            }).setSlider(180);
-
+            // controls
             afterMap.addControl(new mapbox.NavigationControl());
 
-            const afterMarker = new mapbox.Marker()
-                .setLngLat(point)
-                .addTo(afterMap);
+            // compare slider
+            new Compare(beforeMap, afterMap, this.$el).setSlider(180);
 
-            const beforeMarker = new mapbox.Marker({
+            // over map with empty tiles for markers and popup
+            const overMap = new mapbox.Map({
+                container: over,
+                center: center,
+                zoom: 13,
+            });
+
+            const marker = new mapbox.Marker({
                     color: '#d22551',
                 })
                 .setLngLat(point)
-                .addTo(beforeMap);
+                .addTo(overMap);
 
             if (this.popupHtml) {
-                afterMarker.setPopup(popup);
-                beforeMarker.setPopup(popup);
+                marker.setPopup(popup);
             }
         }
     }
