@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-06-10 09:36:41 \n"
+"POT-Creation-Date: 2019-11-25 15:19:08 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -197,6 +197,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Map"
+msgstr "Mappa"
+
 msgid "Media"
 msgstr ""
 
@@ -283,6 +286,9 @@ msgstr "Altro"
 
 msgid "Password"
 msgstr ""
+
+msgid "Please provide a Mapbox access token in app configuration"
+msgstr "Per visualizzare la mappa è necessario inserire un token di accesso a Mapbox in configurazione"
 
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
