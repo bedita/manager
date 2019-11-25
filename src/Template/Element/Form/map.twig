@@ -1,0 +1,44 @@
+{% if object.attributes.coords %}
+    {% set coords = object.attributes.coords|replace({
+        'POINT(': '',
+        ')': '',
+    })|split(' ') %}
+
+    {% if coords[0] and coords[1] %}
+        <property-view inline-template
+            :tab-open="tabsOpen"
+            :is-default-open="!!'{{ config('Maps.mapbox.token') }}'" :tab-open-at-start="!!'{{ config('Maps.mapbox.token') }}'">
+
+            <section class="fieldset order-1" id="map" :class="isOpen? '' : 'closed'">
+
+                <header @click.prevent="toggleVisibility()" class="tab unselectable">
+                    <h2>{{ __('Map') }}</h2>
+                </header>
+
+                <div v-show="isOpen" class="tab-container">
+                    {% if not config('Maps.mapbox.token') %}
+
+                        <p>{{ __('Please provide a Mapbox access token in app configuration') }}.</p>
+
+                    {% else %}
+
+                        {% set popup = object.attributes.address | default(object.attributes.locality) %}
+                        {% if not popup %}
+                            {% set popup = object.attributes.title %}
+                        {% endif %}
+
+                        <map-view
+                            lng="{{ coords[0] }}"
+                            lat="{{ coords[1] }}"
+                            popup-html="{{ popup }}"
+                            map-token="{{ config('Maps.mapbox.token') }}" />
+
+                    {% endif %}
+                </div>
+
+            </section>
+
+        </property-view>
+    {% endif %}
+
+{% endif %}
