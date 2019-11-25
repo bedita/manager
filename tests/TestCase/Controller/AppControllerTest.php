@@ -265,7 +265,18 @@ class AppControllerTest extends TestCase
                     '_actualAttributes' => '{"title":"bibo","description":""}',
                 ]
             ],
-
+            'fields null value' => [ // fields with value null, not changed and changed
+                'documents', // object_type
+                [ // expected
+                    'title' => null, // null, changed
+                    // 'description' => null, not changed
+                ],
+                [ // data provided
+                    'title' => null,
+                    'description' => null,
+                    '_actualAttributes' => '{"title":"bibo","description":null}',
+                ]
+            ],
             'users' => [ // test: removing password from data
                 'users', // object_type
                 [ 'name' => 'giova' ], // expected
