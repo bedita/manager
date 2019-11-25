@@ -30,15 +30,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
-    {# {{ Html.css(['vendors/mapbox.css'], {
-        'rel': 'preload',
-        'as': 'style',
-        'onload': "this.rel='stylesheet'"
-    })|raw }} #}
-    {# <link rel="preload" href="/css/vendors/mapbox.css" as="style" onload="this.rel='stylesheet'">
-    <!-- for browsers without JavaScript enabled -->
-    <noscript><link rel="stylesheet" href="/css/vendors/mapbox.css"></noscript> #}
-
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
     {% element 'json_meta_config' %}
