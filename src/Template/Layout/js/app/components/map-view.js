@@ -8,7 +8,7 @@
  *
  * @prop {String} lat
  * @prop {String} lng
- * @prop {String} popup (HTML content)
+ * @prop {String} popupHtml
  * @prop {String} mapToken (mapBox accessToken)
  *
  */
@@ -71,9 +71,7 @@ export default {
             const after = before.cloneNode(false);
             const over = before.cloneNode(false);
 
-            this.$el.appendChild(before);
-            this.$el.appendChild(after);
-            this.$el.appendChild(over);
+            this.$el.append(before, after, over);
 
             const beforeMap = new mapbox.Map({
                 container: before,
