@@ -24,6 +24,35 @@ export default {
     },
 
     methods: {
+        /**
+         * exectutes on sort objects in relation panel
+         *
+         * @param {Object}
+         *
+         * @returns {void}
+         */
+        onSort(transfer) {
+            const list = Array.from(transfer.drop.children);
+            const element = transfer.dragged;
+            const newIndex = list.indexOf(element)
+            const object = transfer.data;
+
+            object.meta.relation.position = newIndex + 1;
+            this.updatePositions(object, newIndex);
+        },
+
+        updatePositions(movedObject, newIndex) {
+            const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+
+            // moves the object in the objects array from the old index to the new index
+            this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
+
+            this.objects = this.objects.map((object, index) => {
+                object.meta.relation.position = index + 1;
+                this.modifyRelation(object);
+                return object;
+            });
+        },
 
         /**
          * update relation position and stage for saving
@@ -32,7 +61,7 @@ export default {
          *
          * @returns {void}
          */
-        updatePosition(related) {
+        onInputPosition(related) {
             const oldPosition = related.meta.relation.position;
             const newPosition = this.positions[related.id] !== '' ? this.positions[related.id] : undefined;
             if (newPosition !== oldPosition) {
