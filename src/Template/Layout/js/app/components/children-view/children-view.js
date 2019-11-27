@@ -37,7 +37,6 @@ export default {
             const newIndex = list.indexOf(element)
             const object = transfer.data;
 
-            object.meta.relation.position = newIndex + 1;
             this.updatePositions(object, newIndex);
         },
 
@@ -49,6 +48,7 @@ export default {
 
             this.objects = this.objects.map((object, index) => {
                 object.meta.relation.position = index + 1;
+                object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
                 this.modifyRelation(object);
                 return object;
             });
