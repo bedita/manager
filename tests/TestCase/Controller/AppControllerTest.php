@@ -142,6 +142,47 @@ class AppControllerTest extends TestCase
     }
 
     /**
+     * Data provider for `testLoginRedirectRoute` test case.
+     *
+     * @return array
+     */
+    public function loginRedirectRouteProvider(): array
+    {
+        return [
+            'request is not a get' => [
+                ['environment' => ['REQUEST_METHOD' => 'POST']], // config
+                ['_name' => 'login'], // expected
+            ],
+            'webroot' => [
+                ['environment' => ['REQUEST_METHOD' => 'GET'], 'webroot' => '/'], // config
+                ['_name' => 'login'], // expected
+            ],
+            'redirect to /' => [
+                ['environment' => ['REQUEST_METHOD' => 'GET'], 'params' => ['object_type' => 'documents']], // config
+                ['_name' => 'login', 'redirect' => '/'], // expected
+            ],
+        ];
+    }
+
+    /**
+     * test 'loginRedirectRoute'.
+     *
+     * @covers ::loginRedirectRoute()
+     * @dataProvider loginRedirectRouteProvider()
+     *
+     * @return void
+     */
+    public function testLoginRedirectRoute($config, $expected): void
+    {
+        $this->setupController($config);
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('loginRedirectRoute');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, []);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * test `setupOutputTimezone`
      *
      * @covers ::setupOutputTimezone
