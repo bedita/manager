@@ -602,4 +602,13 @@ return [
     //     'text' => 'Test Message',
     //     'color' => '#498fde',
     // ],
+
+    /**
+     * Maps providers and access tokens
+     */
+    // 'Maps' => [
+    //     'mapbox' => [
+    //         'token' => '###',
+    //     ],
+    // ],
 ];
