@@ -93,7 +93,7 @@ class AppController extends Controller
      *
      * @return array
      */
-    protected function loginRedirectRoute() :array
+    protected function loginRedirectRoute(): array
     {
         $route = ['_name' => 'login'];
 
