@@ -138,17 +138,7 @@ export default {
         });
 
         // enable related objects drop
-        this.$on('sort-end', (transfer) => {
-            const list = Array.from(transfer.drop.children);
-            const element = transfer.dragged;
-            const newIndex = list.indexOf(element)
-            const object = transfer.data;
-
-            object.meta.relation.priority = newIndex + 1;
-            this.updatePriorities(object, newIndex);
-
-            this.modifyRelation(object);
-        });
+        this.$on('sort-end', this.onSort);
     },
 
     beforeDestroy() {
@@ -241,6 +231,7 @@ export default {
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
 
+            // moves the object in the objects array from the old index to the new index
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
             this.objects = this.objects.map((object, index) => {
@@ -345,6 +336,23 @@ export default {
                 from: this,
                 data,
             });
+        },
+
+        /**
+         * exectutes on sort objects in relation panel
+         *
+         * @param {Object}
+         *
+         * @returns {void}
+         */
+        onSort(transfer) {
+            const list = Array.from(transfer.drop.children);
+            const element = transfer.dragged;
+            const newIndex = list.indexOf(element)
+            const object = transfer.data;
+
+            object.meta.relation.priority = newIndex + 1;
+            this.updatePriorities(object, newIndex);
         },
 
         /**
