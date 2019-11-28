@@ -88,7 +88,7 @@ class AppController extends Controller
     /**
      * Return route array for login redirect.
      * When request is not a get, return route without redirect.
-     * When request uri path has attribute webroot, return route without redirect.
+     * When request uri path equals request attribute webroot (the app 'webroot'), return route without redirect.
      * Return route with redirect, otherwise.
      *
      * @return array
@@ -102,7 +102,7 @@ class AppController extends Controller
             return $route;
         }
 
-        // if redirect is webroot, return route without redirect.
+        // if redirect is app webroot, return route without redirect.
         $redirect = $this->request->getUri()->getPath();
         if ($redirect === $this->request->getAttribute('webroot')) {
             return $route;

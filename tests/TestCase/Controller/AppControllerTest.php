@@ -153,7 +153,7 @@ class AppControllerTest extends TestCase
                 ['environment' => ['REQUEST_METHOD' => 'POST']], // config
                 ['_name' => 'login'], // expected
             ],
-            'webroot' => [
+            'request app webroot' => [
                 ['environment' => ['REQUEST_METHOD' => 'GET'], 'webroot' => '/'], // config
                 ['_name' => 'login'], // expected
             ],
