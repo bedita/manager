@@ -152,6 +152,18 @@ class PropertyTypesControllerTest extends TestCase
                 ],
                 'removed',
             ],
+            'request error' => [
+                [
+                  'error' => '[404] Not Found',
+                ],
+                [
+                    'removePropertyTypes' => [
+                        '12345'
+                    ],
+                ],
+                'removed',
+            ],
+
         ];
     }
 
@@ -187,12 +199,16 @@ class PropertyTypesControllerTest extends TestCase
 
         $this->ModelController->save();
 
-        $actualResponse = Hash::get($this->ModelController->viewVars, $action, []);
+        $actualResponse = (array)Hash::get($this->ModelController->viewVars, $action);
 
         if ($action == 'saved') {
             foreach ($actualResponse as &$element) {
                 unset($element['id']);
             }
+        }
+        if (is_array($expectedResponse) && !empty($expectedResponse['error'])) {
+            $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
+            $expectedResponse = $expectedResponse['error'];
         }
 
         static::assertEquals($expectedResponse, $actualResponse);
