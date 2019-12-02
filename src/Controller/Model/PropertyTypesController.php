@@ -12,7 +12,9 @@
  */
 namespace App\Controller\Model;
 
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\BadRequestException;
+use Psr\Log\LogLevel;
 
 /**
  * Property Types Model Controller: list, add, edit, remove property types
