@@ -12,6 +12,8 @@
  */
 namespace App\Controller\Model;
 
+use Cake\Http\Exception\BadRequestException;
+
 /**
  * Property Types Model Controller: list, add, edit, remove property types
  *

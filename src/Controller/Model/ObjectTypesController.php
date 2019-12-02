@@ -14,6 +14,7 @@ namespace App\Controller\Model;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -38,8 +39,8 @@ class ObjectTypesController extends ModelBaseController
         parent::view($id);
 
         // retrieve additional data
-        $resource = $this->viewVars['resource'];
-        $filter = ['object_type' => $resource['attributes']['name']];
+        $resource = (array)Hash::get($this->viewVars, 'resource');
+        $filter = ['object_type' => Hash::get($resource, 'attributes.name', 'undefined')];
         try {
             $response = $this->apiClient->get(
                 '/model/properties/',

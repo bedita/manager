@@ -13,9 +13,11 @@
 namespace App\Controller\Model;
 
 use App\Controller\AppController;
+use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
+use Psr\Log\LogLevel;
 
 /**
  * Model base controller class
