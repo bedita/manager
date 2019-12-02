@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -11,28 +11,47 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Model;
 
-use App\Controller\ModelController;
+use App\Controller\Model\ModelBaseController;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Hash;
+
+class ModelController extends ModelBaseController
+{
+    /**
+     * Resource type currently used
+     *
+     * @var string
+     */
+    protected $resourceType = 'object_types';
+
+    /**
+     * Set resource type
+     *
+     * @param string $type Resource type
+     * @return void
+     */
+    public function setResourceType(string $type): void
+    {
+        $this->resourceType = $type;
+    }
+}
 
 /**
- * {@see \App\Controller\ModelController} Test Case
+ * {@see \App\Controller\ModelBaseController} Test Case
  *
- * @coversDefaultClass \App\Controller\ModelController
+ * @coversDefaultClass \App\Controller\ModelBaseController
  */
-class ModelControllerTest extends TestCase
+class ModelBaseControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Controller\ModelController
+     * @var \App\Test\TestCase\Controller\ModelController
      */
     public $ModelController;
 
@@ -179,11 +198,8 @@ class ModelControllerTest extends TestCase
      */
     public function testIndexFail(): void
     {
-        $this->setupController([
-            'params' => [
-                'resource_type' => 'documents',
-            ]
-        ]);
+        $this->setupController();
+        $this->ModelController->setResourceType('elements');
         $result = $this->ModelController->index();
         static::assertTrue(($result instanceof Response));
     }
@@ -217,127 +233,5 @@ class ModelControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
-    }
-
-    /**
-     * Data provider for `testSavePropertyTypesJson` test case.
-     *
-     * @return array
-     */
-    public function savePropertyTypesJsonProvider(): array
-    {
-        return [
-            // test with empty object
-            'emptyRequest' => [
-                new BadRequestException('empty request'),
-                [],
-                ''
-            ],
-            'addPropertyTypesRequest' => [
-                [
-                    [
-                        // 'id' => '12',
-                        'type' => 'property_types',
-                        'attributes' => [
-                                'name' => 'giovanni',
-                                'params' => [
-                                        'type' => 'string'
-                                ]
-                        ],
-                    ]
-                ],
-                [
-                    'addPropertyTypes' => [
-                        [
-                            'name' => 'giovanni',
-                            'params' => json_encode([
-                                'type' => 'string',
-                            ]),
-                        ]
-                    ],
-                ],
-                'saved'
-            ],
-            'editPropertyTypesRequest' => [
-                [
-                    [
-                        'id' => '12',
-                        'type' => 'property_types',
-                        'attributes' => [
-                                'name' => 'enrico',
-                                'params' => [
-                                        'type' => 'object'
-                                ],
-                        ],
-                    ]
-                ],
-                [
-                    'editPropertyTypes' => [
-                        [
-                            'id' => '12',
-                            'attributes' => [
-                                'name' => 'enrico',
-                                'params' => [
-                                    'type' => 'object',
-                                ],
-                            ]
-                        ]
-                    ],
-                ],
-                'edited'
-            ],
-            'removePropertyTypesRequest' => [
-                [ '12' ],
-                [
-                    'removePropertyTypes' => [
-                        '12'
-                    ],
-                ],
-                'removed',
-            ],
-        ];
-    }
-
-    /**
-     * Test `savePropertyTypesJson` method
-     *
-     * @param array|\Exception $expectedResponse expected results from test
-     * @param boolean|null $data setup data for test
-     * @param string $action tested action
-     *
-     * @dataProvider savePropertyTypesJsonProvider()
-     * @covers ::savePropertyTypesJson()
-     *
-     * @return void
-     */
-    public function testSavePropertyTypesJson($expectedResponse, $data, $action)
-    {
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => $data,
-        ];
-
-        $this->setupController($config);
-        $this->ModelController->resourceType = 'property_types';
-
-        if ($expectedResponse instanceof \Exception) {
-            $this->expectException(get_class($expectedResponse));
-            $this->expectExceptionCode($expectedResponse->getCode());
-            $this->expectExceptionMessage($expectedResponse->getMessage());
-        }
-
-        $this->ModelController->savePropertyTypesJson();
-
-        $actualResponse = Hash::get($this->ModelController->viewVars, $action, []);
-
-        if ($action == 'saved') {
-            foreach ($actualResponse as &$element) {
-                unset($element['id']);
-            }
-        }
-
-        static::assertEquals($expectedResponse, $actualResponse);
     }
 }
