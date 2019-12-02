@@ -57,5 +57,4 @@ class ObjectTypesController extends ModelBaseController
 
         return null;
     }
-
 }

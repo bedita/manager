@@ -82,6 +82,12 @@ class PropertyTypesController extends ModelBaseController
         $this->set('_serialize', true);
     }
 
+    /**
+     * Add property types
+     *
+     * @param array $addPropertyTypes Property types
+     * @return array
+     */
     protected function addPropertyTypes(array $addPropertyTypes): array
     {
         $result = [];
@@ -107,6 +113,12 @@ class PropertyTypesController extends ModelBaseController
         return $result;
     }
 
+    /**
+     * Edit property types
+     *
+     * @param array $editPropertyTypes Property types
+     * @return array
+     */
     protected function editPropertyTypes(array $editPropertyTypes): array
     {
         $result = [];
@@ -129,6 +141,12 @@ class PropertyTypesController extends ModelBaseController
         return $result;
     }
 
+    /**
+     * Remove property types
+     *
+     * @param array $removePropertyTypes Property types
+     * @return array
+     */
     protected function removePropertyTypes(array $removePropertyTypes): array
     {
         $result = [];
