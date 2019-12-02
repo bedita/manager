@@ -31,6 +31,8 @@ class PropertyTypesController extends ModelBaseController
 
     /**
      * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function initialize(): void
     {

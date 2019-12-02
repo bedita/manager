@@ -176,7 +176,9 @@ class PropertyTypesControllerTest extends TestCase
      *
      * @dataProvider saveProvider()
      * @covers ::save()
-     *
+     * @covers ::addPropertyTypes()
+     * @covers ::editPropertyTypes()
+     * @covers ::removePropertyTypes()
      * @return void
      */
     public function testSave($expectedResponse, $data, $action)
