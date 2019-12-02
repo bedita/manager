@@ -21,6 +21,7 @@
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
+use Cake\Utility\Inflector;
 
 /**
  * The default class to use for all routes
@@ -76,28 +77,28 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     // Model.
-    $routes->connect(
-        '/model/:resource_type',
-        ['controller' => 'Model', 'action' => 'index'],
-        ['_name' => 'model:list']
-    );
-    $routes->connect(
-        '/model/:resource_type/view/:id',
-        ['controller' => 'Model', 'action' => 'view'],
-        ['pass' => ['id'], '_name' => 'model:view']
-    );
+    Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
-    $routes->connect(
-        '/model/:resource_type/savePropertyTypesJson',
-        ['controller' => 'Model', 'action' => 'savePropertyTypesJson'],
-        ['_name' => 'model:savePropertyTypesJson']
-    );
-
-    $routes->connect(
-        '/model/:resource_type/save',
-        ['controller' => 'Model', 'action' => 'save'],
-        ['_name' => 'model:save']
-    );
+        foreach (['object_types', 'property_types', 'relations'] as $controller) {
+            // Routes connected here are prefixed with '/model'
+            $name = Inflector::camelize($controller);
+            $routes->connect(
+                "/$controller",
+                ['controller' => $name, 'action' => 'index'],
+                ['_name' => 'list:' . $controller]
+            );
+            $routes->connect(
+                "/$controller/:id",
+                ['controller' => $name, 'action' => 'view'],
+                ['_name' => 'view:' . $controller, 'pass' => ['id']]
+            );
+            $routes->connect(
+                "/$controller/save",
+                ['controller' => $name, 'action' => 'save'],
+                ['_name' => 'save:' . $controller, 'pass' => ['id']]
+            );
+        }
+    });
 
     // Import.
     $routes->connect(

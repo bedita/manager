@@ -1,0 +1,46 @@
+{% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
+{% do _view.assign('bodyViewClass', 'view-model') %}
+
+<modules-view inline-template ref="moduleView">
+<div class="model-view">
+
+    {% if resource.id %}
+    <header>
+        <h1 untitled-label="{{ __('Untitled') }}">{{ resource.attributes.name }}</h1>
+    </header>
+    {% endif %}
+
+    <div class="model-form">
+
+        {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
+            'url': {'_name': 'model:save:object_types'},
+            'id': 'form-main',
+            'check-changes': 'true',
+        })|raw }}
+
+            {# Inside form-column there are form elements, they may have a cssOrder property that reorders
+                the elements in single column view, in small viewports. cssOrder may assume the string
+                values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
+
+            <div class="form-column">
+                {% element 'Form/core_properties' %}
+            </div>
+
+            <div class="form-column">
+                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+            </div>
+
+        {{ Form.end()|raw }}
+
+        {# TODO: uncomment `save` and `delete` actions once controller part is available #}
+        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
+        {# {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
+    </div>
+
+    {# commands links to append in left side bar (commands menu) #}
+    {% do _view.append('commands-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'})|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Relations'), {'_name': 'model:list:relations'})|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'})|raw) %}
+
+</div>
+</modules-view>

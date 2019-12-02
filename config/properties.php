@@ -113,6 +113,7 @@ return [
                     'associations',
                     'hidden',
                     'enabled',
+                    'core_type',
                     'table',
                     'parent_name'
                 ],
@@ -121,6 +122,7 @@ return [
                 'name',
                 'enabled',
                 'is_abstract',
+                'core_type',
             ],
         ],
 

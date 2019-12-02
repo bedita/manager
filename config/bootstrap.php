@@ -219,6 +219,6 @@ Type::build('timestamp')
  * Array having `controller` as key and actions array as value.
  */
 Configure::write('CrsfExceptions', [
-    'Models' => ['savePropertyTypesJson'],
+    'PropertyTypes' => ['save'],
     'Modules' => ['saveJson'],
 ]);

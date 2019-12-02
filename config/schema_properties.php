@@ -58,6 +58,13 @@ return [
                 'description' => '',
                 'default' => true,
             ],
+            'core_type' => [
+                'type' => 'boolean',
+                '$id' => '/properties/core_type',
+                'title' => 'Core type',
+                'description' => '',
+                'default' => true,
+            ],
             'associations' => [
                 'oneOf' => [
                     [
