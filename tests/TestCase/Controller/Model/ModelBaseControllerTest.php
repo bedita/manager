@@ -42,9 +42,9 @@ class ModelController extends ModelBaseController
 }
 
 /**
- * {@see \App\Controller\ModelBaseController} Test Case
+ * {@see \App\Controller\Model\ModelBaseController} Test Case
  *
- * @coversDefaultClass \App\Controller\ModelBaseController
+ * @coversDefaultClass \App\Controller\Model\ModelBaseController
  */
 class ModelBaseControllerTest extends TestCase
 {
