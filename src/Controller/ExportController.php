@@ -96,7 +96,8 @@ class ExportController extends AppController
         }
 
         // get fields for response 'attributes' and 'meta'
-        $fields = [ 'id' ] + $this->getFields($response);
+        $fields = $this->getFields($response);
+        array_unshift($fields, 'id');
         $metaFields = $this->getFields($response, 'meta');
 
         // fill row data from response data
