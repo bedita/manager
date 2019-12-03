@@ -132,7 +132,7 @@ class LayoutHelper extends Helper
         $moduleClasses = [
             'UserProfile' => 'has-background-black icon-user',
             'Import' => 'has-background-black icon-download-alt',
-            'Model' => 'has-background-black icon-database',
+            'ObjectTypes' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

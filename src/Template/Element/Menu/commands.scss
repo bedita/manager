@@ -104,6 +104,13 @@
         }
     }
 
+    > .commands-links {
+        margin-top: $gutter;
+        > a:not(:first-child) {
+            margin-top: $gutter * .5;
+        }
+    }
+
     > .commands-footer {
         flex-grow: 1;
     }

@@ -1,8 +1,8 @@
 {% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
-{% do _view.assign('bodyViewClass', 'view-model') %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
 
 <modules-view inline-template ref="moduleView">
-<div class="model-view">
+<div class="modules-view">
 
     {% if resource.id %}
     <header>
@@ -10,7 +10,7 @@
     </header>
     {% endif %}
 
-    <div class="model-form">
+    <div class="module-form">
 
         {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
             'url': {'_name': 'model:save:object_types'},
