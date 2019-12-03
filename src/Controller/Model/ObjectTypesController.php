@@ -43,7 +43,7 @@ class ObjectTypesController extends ModelBaseController
         $filter = ['object_type' => Hash::get($resource, 'attributes.name', 'undefined')];
         try {
             $response = $this->apiClient->get(
-                '/model/properties/',
+                '/model/properties',
                 compact('filter') + ['page_size' => 100]
             );
         } catch (BEditaClientException $e) {
@@ -53,7 +53,7 @@ class ObjectTypesController extends ModelBaseController
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
         }
 
-        $this->set('type_properties', (array)$response['data']);
+        $this->set('objectTypeProperties', (array)$response['data']);
 
         return null;
     }
