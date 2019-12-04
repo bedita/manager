@@ -45,13 +45,14 @@ button, a.button {
     padding-top: calc(.375em - 1px);
 
     border-radius: 2px;
-    border: 1px solid transparent;
+    border: 1px solid $gray-400;
 
-    background-color: $gray-100;
-    color: $black;
+    background-color: transparent;
+    color: $gray-400;
     font-family: $font-family-sans-serif;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-light;
+    font-size: $font-size-sssm;
+    font-weight: $font-weight-normal;
+    text-transform: uppercase;
     line-height: 1;
 
     cursor: pointer;
@@ -102,7 +103,7 @@ button, a.button {
         pointer-events: none;
         &:after {
             position: absolute;
-            border-color: $gray-900;
+            border-color: $gray-400;
             border-right-color: transparent;
             border-top-color: transparent;
         }
