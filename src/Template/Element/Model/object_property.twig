@@ -6,7 +6,7 @@
     {% set tagClass = 'tag is-dark' %}
 {% elseif type == 'inherited' %}
     {% set boxClass = 'box has-background-gray-800 has-text-white' %}
-    {% set tagClass = 'tag is-dark' %}
+    {% set tagClass = 'tag has-background-module-' ~ prop.attributes.object_type_name %}
 {% endif %}
 
 
@@ -26,13 +26,16 @@
                 <p>{{ prop.attributes.description|capitalize }}</p>
             {% endif %}
         </div>
-        <div class="column is-narrow">
-            <div class="buttons-container">
-                {% if type != 'core' %}
-                    <button class="button is-expanded">Delete</button>
-                {% endif %}
-                <button class="button is-expanded">Hide</button>
+
+        {% if not (prop.attributes.name in noButtonsFor) %}
+            <div class="column is-narrow">
+                <div class="buttons-container">
+                    {% if type == 'custom' %}
+                        <button class="button is-expanded">Delete</button>
+                    {% endif %}
+                    <button class="button is-expanded">Hide</button>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </div>

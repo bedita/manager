@@ -84,7 +84,11 @@
         <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.inherited %}
-                {% element 'Model/object_property' { 'prop': prop, 'type': 'inherited' }  %}
+                {% element 'Model/object_property' {
+                    'prop': prop,
+                    'type': 'inherited',
+                    'noButtonsFor': ['id', 'status', 'uname'],
+                }  %}
             {% else %}
                 <p>No inherited properties</p>
             {% endfor %}
@@ -94,7 +98,7 @@
     <section class="properties">
         <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
         <div class="properties-container">
-            {% for prop in objectTypeProperties.inherited %}
+            {% for prop in objectTypeProperties.custom %}
                 {% element 'Model/object_property' { 'prop': prop, 'type': 'custom' }  %}
             {% else %}
                 <p>No custom properties</p>
