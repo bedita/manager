@@ -40,7 +40,8 @@ class ObjectTypesController extends ModelBaseController
 
         // retrieve additional data
         $resource = (array)Hash::get($this->viewVars, 'resource');
-        $filter = ['object_type' => Hash::get($resource, 'attributes.name', 'undefined')];
+        $name = Hash::get($resource, 'attributes.name', 'undefined');
+        $filter = ['object_type' => $name];
         try {
             $response = $this->apiClient->get(
                 '/model/properties',
@@ -53,8 +54,34 @@ class ObjectTypesController extends ModelBaseController
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
         }
 
-        $this->set('objectTypeProperties', (array)$response['data']);
+        $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
+        $this->set(compact('objectTypeProperties'));
 
         return null;
+    }
+
+    /**
+     * Separate properties between `core` and `custom`
+     *
+     * @param array $data Property array
+     * @return array
+     */
+    protected function prepareProperties(array $data, string $name): array
+    {
+        $inherited = $core = $custom = [];
+        foreach ($data as $prop) {
+            if (!is_numeric($prop['id'])) {
+                $type = $prop['attributes']['object_type_name'];
+                if ($type == $name) {
+                    $core[] = $prop;
+                } else {
+                    $inherited[] = $prop;
+                }
+            } else {
+                $custom[] = $prop;
+            }
+        }
+
+        return compact('inherited', 'core', 'custom');
     }
 }
