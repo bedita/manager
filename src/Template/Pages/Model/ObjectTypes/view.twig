@@ -70,18 +70,34 @@
     </div>
 
     <section class="properties">
-        <header class="unselectable"><h2>{{ __('Properties') }}</h2></header>
+        <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
         <div class="properties-container">
-            {% for prop in objectTypeProperties %}
-                <div class="box">
-                    Name: {{ prop.attributes.name }}<br>
-                    Label: {{ prop.attributes.label | default('-') }}<br>
-                    Description: {{ prop.attributes.description }}<br>
-                    Type: {{ prop.attributes.property_type_name }}<br>
-                    Is core: {% if prop.id matches '/^\\d+$/' and prop.meta.created %} Yes {% else %} No {% endif %}
-                </div>
+            {% for prop in objectTypeProperties.core %}
+                {% element 'Model/object_property' { 'prop': prop, 'type': 'core' }  %}
             {% else %}
-                <p>No object type properties</p>
+                <p>No Core properties</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="properties">
+        <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
+        <div class="properties-container">
+            {% for prop in objectTypeProperties.inherited %}
+                {% element 'Model/object_property' { 'prop': prop, 'type': 'inherited' }  %}
+            {% else %}
+                <p>No inherited properties</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="properties">
+        <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
+        <div class="properties-container">
+            {% for prop in objectTypeProperties.inherited %}
+                {% element 'Model/object_property' { 'prop': prop, 'type': 'custom' }  %}
+            {% else %}
+                <p>No custom properties</p>
             {% endfor %}
         </div>
     </section>

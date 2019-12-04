@@ -1,0 +1,38 @@
+{% set boxClass = 'box has-background-black has-text-white' %}
+{% set tagClass = 'tag' %}
+
+{% if type == 'custom' %}
+    {% set boxClass = 'box has-background-info has-text-white' %}
+    {% set tagClass = 'tag is-dark' %}
+{% elseif type == 'inherited' %}
+    {% set boxClass = 'box has-background-gray-800 has-text-white' %}
+    {% set tagClass = 'tag is-dark' %}
+{% endif %}
+
+
+<div class="{{ boxClass }}">
+    <div class="columns">
+        <div class="column">
+            <span class="{{ tagClass }}">{{ prop.attributes.name }}</span>
+            <p>Label: {{ prop.attributes.label | default('-') }}</p>
+            <p>Type: {{ prop.attributes.property_type_name }}</p>
+
+            {% if type == 'inherited' %}
+                <p>Inherited from: {{ prop.attributes.object_type_name }}</p>
+            {% endif %}
+
+            {% if prop.attributes.description %}
+                <p>&nbsp;</p>
+                <p>{{ prop.attributes.description|capitalize }}</p>
+            {% endif %}
+        </div>
+        <div class="column is-narrow">
+            <div class="buttons-container">
+                {% if type != 'core' %}
+                    <button class="button is-expanded">Delete</button>
+                {% endif %}
+                <button class="button is-expanded">Hide</button>
+            </div>
+        </div>
+    </div>
+</div>

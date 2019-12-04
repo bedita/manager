@@ -12,12 +12,24 @@ body.view-model {
     }
 
     .properties {
-        margin-top: $gutter * 2;
+        margin-top: $gutter * 3;
 
         &-container {
             display: grid;
             grid-gap: $gutter;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(1, 1fr);
+            @media screen and (min-width: 768px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (min-width: 1024px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            button { margin-bottom: $gutter * .5; }
         }
     }
 }
