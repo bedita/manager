@@ -61,9 +61,10 @@ class ObjectTypesController extends ModelBaseController
     }
 
     /**
-     * Separate properties between `core` and `custom`
+     * Separate properties between `inherited`, `core`  and `custom`
      *
      * @param array $data Property array
+     * @param string $name Object type name
      * @return array
      */
     protected function prepareProperties(array $data, string $name): array
