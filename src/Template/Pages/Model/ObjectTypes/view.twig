@@ -69,6 +69,23 @@
         {# {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
     </div>
 
+
+    <section class="relations">
+        <header class="unselectable"><h2>{{ __('Relations') }}</h2></header>
+        <div class="relations-container">
+        {% if resource.meta.relations %}
+            <div class="relations-group">
+            {% for relation in resource.meta.relations %}
+                <a class="tag is-black" href="{{ Url.build({'_name': 'model:view:relations', 'id': relation}) }}">{{ relation }}</a>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Relations</p>
+        {% endif %}
+        </div>
+    </section>
+
+
     <section class="properties">
         <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
         <div class="properties-container">
@@ -79,6 +96,7 @@
             {% endfor %}
         </div>
     </section>
+
 
     <section class="properties">
         <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
@@ -94,6 +112,7 @@
             {% endfor %}
         </div>
     </section>
+
 
     <section class="properties">
         <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>

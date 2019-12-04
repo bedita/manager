@@ -11,9 +11,22 @@ body.view-model {
         }
     }
 
-    .properties {
+    .modules-view section {
         margin-top: $gutter * 3;
+    }
 
+
+    .relations {
+        &-container {
+            .relations-group {
+                display: grid;
+                grid-gap: 2px;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr) );
+            }
+        }
+    }
+
+    .properties {
         &-container {
             display: grid;
             grid-gap: $gutter;
