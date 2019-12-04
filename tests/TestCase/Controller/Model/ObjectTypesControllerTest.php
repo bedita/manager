@@ -79,7 +79,7 @@ class ObjectTypesControllerTest extends TestCase
      * Test `view` method
      *
      * @covers ::view()
-     *
+     * @covers ::prepareProperties
      * @return void
      */
     public function testView(): void
@@ -90,6 +90,11 @@ class ObjectTypesControllerTest extends TestCase
         foreach ($vars as $var) {
             static::assertNotEmpty($this->ModelController->viewVars[$var]);
         }
+        $objectTypeProperties = $this->ModelController->viewVars['objectTypeProperties'];
+        static::assertNotEmpty($objectTypeProperties);
+        static::assertArrayHasKey('inherited', $objectTypeProperties);
+        static::assertArrayHasKey('core', $objectTypeProperties);
+        static::assertArrayHasKey('custom', $objectTypeProperties);
     }
 
     /**
