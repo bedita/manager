@@ -47,11 +47,14 @@ if (!proxy) {
         proxy_host = process.env.WEBPACK_PROXY_HOST;
     } else if (dotenv.parsed && 'WEBPACK_PROXY_HOST' in dotenv.parsed) {
         proxy_host = dotenv.parsed.WEBPACK_PROXY_HOST;
-    } else if ('WEBPACK_PROXY_PORT' in process.env) {
+    }
+
+    if ('WEBPACK_PROXY_PORT' in process.env) {
         proxy_port = process.env.WEBPACK_PROXY_PORT;
     } else if (dotenv.parsed && 'WEBPACK_PROXY_PORT' in dotenv.parsed) {
         proxy_port = dotenv.parsed.WEBPACK_PROXY_PORT;
     }
+
     proxy = `${proxy_host}:${proxy_port}`;
 }
 
