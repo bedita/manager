@@ -102,7 +102,7 @@ class ExportControllerTest extends TestCase
     {
         $testdata = [];
 
-        // mock exit.
+        // mock ExportController exit and outputCsv functions.
         $this->Mock = $this->getMockBuilder(ExportController::class)
             ->setConstructorArgs([new ServerRequest([
                 'environment' => ['REQUEST_METHOD' => 'POST'],
