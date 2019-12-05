@@ -24,7 +24,7 @@ class ExportController extends AppController
     /**
      * Export data in csv format
      *
-     * @return Cake\Http\Response
+     * @return \Cake\Http\Response
      */
     public function export(): Response
     {
@@ -125,7 +125,7 @@ class ExportController extends AppController
      *
      * @param array $rows The rows data
      * @param string $objectType The object type
-     * @return Cake\Http\Response
+     * @return \Cake\Http\Response
      */
     private function csv(array $rows, string $objectType): Response
     {
@@ -140,7 +140,7 @@ class ExportController extends AppController
      *
      * @param string $filename The file name.
      * @param string $csv The csv string data.
-     * @return Cake\Http\Response
+     * @return \Cake\Http\Response
      */
     protected function outputCsv($filename, $csv): Response
     {
