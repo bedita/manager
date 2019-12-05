@@ -9,20 +9,16 @@ main.layout {
         display: grid;
         grid-template-areas: "sidebar  content-header"
                              "sidebar  content-body"
-                             "footer        footer";
+                             "footer   footer";
 
-                             grid-template-rows: auto 1fr auto;
-        grid-template-columns: 1fr 11fr;
+        grid-template-rows: auto 1fr auto;
         grid-template-columns: calc(33.33% - 10.63px) auto;
-        @media (min-width: 768px) and (max-width: 991px) { grid-template-columns: calc(25% - 12px) auto }
-        @media (min-width: 992px) and (max-width: 1199px) { grid-template-columns: calc(20% - 12.8px) auto }
-        @media (min-width: 1200px) and (max-width: 1365px) { grid-template-columns: calc(16.66% - 13.25px) auto }
-        @media (min-width: 1366px) and (max-width: 1919px) { grid-template-columns: calc(14.285% - 13.7px) auto }
-        @media (min-width: 1920px) { grid-template-columns: calc(10% - 14.4px) auto }
+        @media (min-width: 768px) {
+            grid-template-columns: $dashboard-item-width auto;
+        }
 
         .view-module & {
-            grid-template-columns: 90px auto;
-            grid-template-rows: 102px auto;
+            grid-template-rows: 126px auto;
         }
 
         column-gap: $gutter;
@@ -41,18 +37,11 @@ main.layout {
 
     > .layout-header {
         grid-area: content-header;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 110px;
     }
 
     > .layout-content {
         grid-area: content-body;
         padding: $gutter 0;
-        overflow-x: hidden;
-        .view-login & { overflow-x: initial; }
     }
 
     > .layout-footer {

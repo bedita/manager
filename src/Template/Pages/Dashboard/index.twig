@@ -8,13 +8,12 @@
             {% set title = __(name|humanize) %}
             {% set class = 'dashboard-item has-background-module-' ~ name %}
             {% if module.hints.multiple_types %}
-                {% set title = 'All ' ~ title|lower %}
                 {% set class = class ~ ' icon-th-large-1' %}
             {% endif %}
 
-            {{ Html.link(__(title),
-                { '_name': 'modules:list', 'object_type': name },
-                { 'title': __(title), 'class': class } )|raw }}
+            <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name })|raw }}" class="{{ class }}">
+                <span>{{ title }}</span>
+            </a>
         {% endfor %}
 
         {% for k, plugin in config('PluginModules') %}
@@ -27,15 +26,15 @@
 
     <section class="dashboard-section">
         <div class="dashboard-items dashboard-utility">
-            {{ Html.link(__('All objects'),
-                { '_name': 'modules:list', 'object_type': 'objects' },
-                { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
-
             {% if modules.folders %}
             {{ Html.link(__('Folders'),
                 { '_name': 'modules:list', 'object_type': 'folders' },
                 { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
             {% endif %}
+
+            {{ Html.link(__('All objects'),
+                { '_name': 'modules:list', 'object_type': 'objects' },
+                { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
 
             {{ Html.link(__('System users'),
                 {'_name': 'modules:list', 'object_type': 'users'},
