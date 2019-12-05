@@ -12,8 +12,8 @@
  */
 namespace App\Controller;
 
-use Cake\Http\Response;
 use Cake\Core\Configure;
+use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
