@@ -50,7 +50,7 @@ class Application extends BaseApplication
      *
      * @return void
      */
-    public function loadFromConfig() : void
+    public function loadFromConfig(): void
     {
         $plugins = Configure::read('Plugins');
         if ($plugins) {
@@ -73,7 +73,7 @@ class Application extends BaseApplication
     /**
      * {@inheritDoc}
      */
-    public function middleware($middlewareQueue) : MiddlewareQueue
+    public function middleware($middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
             // Catch any exceptions in the lower layers,
@@ -105,7 +105,7 @@ class Application extends BaseApplication
      *
      * @return CsrfProtectionMiddleware
      */
-    protected function csrfMiddleware() : CsrfProtectionMiddleware
+    protected function csrfMiddleware(): CsrfProtectionMiddleware
     {
         // Csrf Middleware
         $csrf = new CsrfProtectionMiddleware();

@@ -1,4 +1,4 @@
-# BEdita4 Manager
+# BEdita Manager
 
 [![Build Status](https://travis-ci.org/bedita/manager.svg)](https://travis-ci.org/bedita/manager)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
@@ -8,10 +8,10 @@ Official Backend Admin WebApp for BEdita4 API.
 
 ## Prerequisites
 
-* PHP >= 7.1
+* [PHP](https://www.php.net/) >= 7.1
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-* Node 10 or 12
-* Yarn >= 1.15
+* [Node](https://nodejs.org) 10 or 12
+* [Yarn](https://yarnpkg.com) >= 1.15
 
 ## Install
 
@@ -23,6 +23,12 @@ composer create-project bedita/manager
 
 If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``. Run same command if you do a `git clone` on this repo.
 
+* Build JS/CSS bundles with `yarn`
+
+```bash
+yarn && yarn build
+```
+
 * Configure BEdita 4 API base URL and API KEY in `config/.env` like:
 
 ```bash
@@ -30,12 +36,6 @@ If you are using a **.zip** or **.tar.gz** release file you just need to unpack 
 export BEDITA_API="{bedita-4-url}"
 # set BEDITA4 API KEY (optional)
 export BEDITA_API_KEY="{bedita4-api-key}"
-```
-
-* Build JS/CSS bundles
-
-```bash
-yarn && yarn build
 ```
 
 You are then ready to use the webapp by simply run builtin webserver like this
@@ -84,28 +84,24 @@ docker run -p 8080:80 \
 
 Replace `bedita/manager:latest` with `manager-local` (or other chosen name) to lanch a local built image.
 
-## Development
-
-### Run dev with webpack
+## JS Development with webpack
 
 ### Using .env
 
-It's easy to configure .env to match your web server and proxy requirement. Simply copy the .default.env and configure it.
+It's easy to configure `config/.env` to match your web server and proxy requirements, see below.
 (default proxy: localhost:8080, default server: localhost:3000)
 
 ```env
-# Be4 Entry Point
-
+# BE Manager Entry Point
 WEBPACK_SERVER_HOST=localhost
 WEBPACK_SERVER_PORT=3000
 
 # Proxy server
-
 WEBPACK_PROXY_HOST=local-be4-web
 WEBPACK_PROXY_PORT=8080
 ```
 
-To start develop run
+To start develop mode run
 
 ```bash
 yarn develop
@@ -117,19 +113,11 @@ yarn develop
 yarn run develop --proxy localhost:8888 --server localhost:9000
 ```
 
-## Build
-
-```bash
-yarn run build
-```
-
-## Bundle Report
+### Production build with Bundle Report
 
 ```bash
 yarn run bundle-report
 ```
-
-Host passed via `--host` option points to your local instance, builtin webserver is used in this example.
 
 ## Run unit tests
 
@@ -141,12 +129,12 @@ vendors/bin/phpunit [test folder or file, default '/tests']
 ```
 
 To run those tests you may want to use a Docker image as BEdita4 API endpoint.
-For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.0.0-RC2```
+For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.0.0```
 
 Then you may run the image with
 
 ```bash
-docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0-RC2
+docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0
 ```
 
 You can then set env vars accordingly like this

@@ -132,6 +132,8 @@ nav.pagination {
                 font-weight: $font-weight-light;
                 line-height: $font-size-lg;
                 min-height: $font-size-lg * 2;
+                pointer-events: none;
+
                 &:empty {
                     content: 'untitled';
                     opacity: .5;

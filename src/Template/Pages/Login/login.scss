@@ -11,9 +11,6 @@ body.view-login {
         justify-content: center;
         align-items: center;
         height: 100%;
-        .left-menu {
-            display: none;
-        }
 
         .login-form {
             position: relative;
@@ -55,10 +52,11 @@ body.view-login {
                     width: 100%;
 
                     &[type='submit'] {
-                        &:focus {
-                            background-color: $gray-400;
-                        }
+                        color: $gray-900;
+                        border-color: $gray-900;
+                        &:focus,
                         &:hover {
+                            color: $white;
                             background-color: $gray-900;
                         }
                     }

@@ -172,7 +172,7 @@ class PropertiesComponent extends Component
      *
      * @return array
      */
-    public function bulkList(string $type) : array
+    public function bulkList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
     }

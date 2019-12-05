@@ -47,7 +47,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -61,7 +61,7 @@ class TrashControllerTest extends TestCase
      *
      * @return int The object ID.
      */
-    private function createTrashObject() : int
+    private function createTrashObject(): int
     {
         $type = 'documents';
         $body = [
@@ -88,7 +88,7 @@ class TrashControllerTest extends TestCase
      * @param bool $multiple Invoke multiple delete with `ids` (default false)
      * @return int The object ID
      */
-    public function setupControllerAndData($auth = true, $query = true, $multiple = false) : int
+    public function setupControllerAndData($auth = true, $query = true, $multiple = false): int
     {
         // setup and auth
         $this->setupApi();
@@ -129,7 +129,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testRestore() : void
+    public function testRestore(): void
     {
         $id = $this->setupControllerAndData();
         $this->Trash->restore();
@@ -151,7 +151,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testRestoreUnauthorized() : void
+    public function testRestoreUnauthorized(): void
     {
         $id = $this->setupControllerAndData(false);
         $this->Trash->restore();
@@ -168,7 +168,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testRestoreMulti() : void
+    public function testRestoreMulti(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->Trash->restore();
@@ -184,7 +184,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testRestoreMultiFailure() : void
+    public function testRestoreMultiFailure(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->client->remove($id);
@@ -203,7 +203,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDelete() : void
+    public function testDelete(): void
     {
         $id = $this->setupControllerAndData();
         $this->Trash->delete();
@@ -230,7 +230,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteUnauthorized() : void
+    public function testDeleteUnauthorized(): void
     {
         $this->setupControllerAndData(false);
         $this->Trash->delete();
@@ -249,7 +249,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteMulti() : void
+    public function testDeleteMulti(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->Trash->delete();
@@ -267,7 +267,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteMultiFailure() : void
+    public function testDeleteMultiFailure(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->client->remove($id);
@@ -287,7 +287,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testEmpty() : void
+    public function testEmpty(): void
     {
         $this->setupControllerAndData(true, false);
         $this->Trash->empty();
@@ -307,7 +307,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testEmptyFilter() : void
+    public function testEmptyFilter(): void
     {
         $this->setupControllerAndData(true, true);
         $this->Trash->empty();
@@ -323,7 +323,7 @@ class TrashControllerTest extends TestCase
      *
      * @return void
      */
-    public function testEmptyUnauthorized() : void
+    public function testEmptyUnauthorized(): void
     {
         $this->setupControllerAndData(false);
         $this->Trash->empty();

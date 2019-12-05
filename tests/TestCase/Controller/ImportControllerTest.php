@@ -40,7 +40,7 @@ class ImportFilterSample extends ImportFilter
     /**
      * @inheritDoc
      */
-    public function import($filename, $filepath, ?array $options = []) : ImportResult
+    public function import($filename, $filepath, ?array $options = []): ImportResult
     {
         return new ImportResult($filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
     }
@@ -54,7 +54,7 @@ class ImportFilterSampleError extends ImportFilter
     /**
      * @inheritDoc
      */
-    public function import($filename, $filepath, ?array $options = []) : ImportResult
+    public function import($filename, $filepath, ?array $options = []): ImportResult
     {
         throw new InternalErrorException('An expected exception');
     }
@@ -94,7 +94,7 @@ class ImportControllerTest extends TestCase
      * @param string $filter The filter class full path.
      * @return void
      */
-    public function setupController(string $filter = null) : void
+    public function setupController(string $filter = null): void
     {
         $config = [
             'environment' => [
@@ -121,7 +121,7 @@ class ImportControllerTest extends TestCase
      *
      * @return void
      */
-    public function testFile() : void
+    public function testFile(): void
     {
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
 
@@ -139,7 +139,7 @@ class ImportControllerTest extends TestCase
      *
      * @return void
      */
-    public function testFileBadRequestFilter() : void
+    public function testFileBadRequestFilter(): void
     {
         $this->setupController();
         $response = $this->Import->file();
@@ -157,7 +157,7 @@ class ImportControllerTest extends TestCase
      *
      * @return void
      */
-    public function testFileBadRequestFile() : void
+    public function testFileBadRequestFile(): void
     {
         $this->fileError = 4;
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
@@ -176,7 +176,7 @@ class ImportControllerTest extends TestCase
      *
      * @return void
      */
-    public function testFileError() : void
+    public function testFileError(): void
     {
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSampleError');
         $response = $this->Import->file();

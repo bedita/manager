@@ -1,8 +1,4 @@
 <div class="commands-menu">
-    <div class="project">
-        {{ Html.link(__(''), {'_name': 'dashboard'}, {'title': __('Dashboard')})|raw }}
-    </div>
-
     <div class="commands-module squared">
         {{ Layout.moduleLink()|raw }}
         {% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
@@ -26,4 +22,3 @@
         {{ _view.fetch('commands-footer')|raw }}
     </div>
 </div>
-<div></div>

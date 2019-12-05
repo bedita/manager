@@ -1,8 +1,15 @@
 <div class="sidebar">
-
-    <div class="sidebar-bedita-logo">{# css logo #}</div>
+    {% if Layout.isDashboard() %}
+        <div class="sidebar-bedita-logo">{# css logo #}</div>
+    {% endif %}
 
     <div class="sidebar-project-title">{{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}</div>
+
+    {% if not Layout.isLogin() and not Layout.isDashboard() %}
+        <div class="sidebar-commands">
+            {% element 'Menu/commands' %}
+        </div>
+    {% endif %}
 
     <div class="sidebar-body">
         <div class="has-text-gray-500">

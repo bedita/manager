@@ -39,7 +39,7 @@ class ApplicationTest extends TestCase
      * @covers ::bootstrap
      * @covers ::bootstrapcli
      */
-    public function testMiddleware() : void
+    public function testMiddleware(): void
     {
         $app = new Application(CONFIG);
         $app->bootstrap();

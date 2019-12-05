@@ -37,7 +37,7 @@ class ImportController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'import:index']);
 
@@ -50,7 +50,7 @@ class ImportController extends AppController
      * @return void
      * @codeCoverageIgnore
      */
-    public function index() : void
+    public function index(): void
     {
         $result = $this->request->getSession()->consume('Import.result');
         $this->set(compact('result'));
@@ -62,7 +62,7 @@ class ImportController extends AppController
      *
      * @return void
      */
-    public function jobs() : void
+    public function jobs(): void
     {
         $this->viewBuilder()->setClassName('Json');
         $this->request->allowMethod('get');
@@ -76,7 +76,7 @@ class ImportController extends AppController
      *
      * @return \Cake\Http\Response|null the Response.
      */
-    public function file() : ?Response
+    public function file(): ?Response
     {
         try {
             $filter = $this->request->getData('filter');

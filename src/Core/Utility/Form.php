@@ -51,7 +51,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    public static function control(array $schema, string $type, $value) : array
+    public static function control(array $schema, string $type, $value): array
     {
         if (!in_array($type, Form::CONTROL_TYPES)) {
             return compact('type', 'value');
@@ -67,7 +67,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function jsonControl($value) : array
+    protected static function jsonControl($value): array
     {
         return [
             'type' => 'textarea',
@@ -83,7 +83,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function textareaControl($value) : array
+    protected static function textareaControl($value): array
     {
         return [
             'type' => 'textarea',
@@ -99,7 +99,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function datetimeControl($value) : array
+    protected static function datetimeControl($value): array
     {
         return [
             'type' => 'text',
@@ -116,7 +116,7 @@ class Form
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function dateControl($value) : array
+    protected static function dateControl($value): array
     {
         return [
             'type' => 'text',
@@ -134,7 +134,7 @@ class Form
      * @param array $schema Object schema array.
      * @return array
      */
-    protected static function checkboxControl($value, array $schema) : array
+    protected static function checkboxControl($value, array $schema): array
     {
         if (empty($schema['oneOf'])) {
             return [
@@ -175,7 +175,7 @@ class Form
      * @param array $schema Object schema array.
      * @return array
      */
-    protected static function enumControl($value, array $schema) : array
+    protected static function enumControl($value, array $schema): array
     {
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $one) {
@@ -213,7 +213,7 @@ class Form
      * @param mixed $schema The property schema
      * @return string
      */
-    public static function controlTypeFromSchema($schema) : string
+    public static function controlTypeFromSchema($schema): string
     {
         if (!is_array($schema)) {
             return 'text';
@@ -241,7 +241,7 @@ class Form
      * @param string $name The field name.
      * @return array
      */
-    public static function customControlOptions($name) : array
+    public static function customControlOptions($name): array
     {
         if (!in_array($name, Form::CUSTOM_CONTROLS)) {
             return [];
@@ -257,7 +257,7 @@ class Form
      *
      * @return array
      */
-    protected static function langOptions() : array
+    protected static function langOptions(): array
     {
         $languages = Configure::read('Project.I18n.languages');
         if (empty($languages)) {
@@ -278,7 +278,7 @@ class Form
      *
      * @return array
      */
-    protected static function startDateOptions() : array
+    protected static function startDateOptions(): array
     {
         return static::datetimeControl(null);
     }
@@ -288,7 +288,7 @@ class Form
      *
      * @return array
      */
-    protected static function endDateOptions() : array
+    protected static function endDateOptions(): array
     {
         return static::datetimeControl(null);
     }
@@ -302,7 +302,7 @@ class Form
      *
      * @return array
      */
-    protected static function statusOptions() : array
+    protected static function statusOptions(): array
     {
         return [
             'type' => 'radio',
@@ -322,7 +322,7 @@ class Form
      *
      * @return array
      */
-    protected static function oldpasswordOptions() : array
+    protected static function oldpasswordOptions(): array
     {
         return [
             'class' => 'password',
@@ -339,7 +339,7 @@ class Form
      *
      * @return array
      */
-    protected static function passwordOptions() : array
+    protected static function passwordOptions(): array
     {
         return [
             'class' => 'password',
@@ -354,7 +354,7 @@ class Form
      *
      * @return array
      */
-    protected static function confirmpasswordOptions() : array
+    protected static function confirmpasswordOptions(): array
     {
         return [
             'label' => __('Retype password'),
@@ -373,7 +373,7 @@ class Form
      *
      * @return array
      */
-    protected static function titleOptions() : array
+    protected static function titleOptions(): array
     {
         return [
             'class' => 'title',
@@ -395,7 +395,7 @@ class Form
      * @param array $schema The property schema
      * @return string
      */
-    protected static function typeFromString(array $schema) : string
+    protected static function typeFromString(array $schema): string
     {
         if (!empty($schema['format']) && in_array($schema['format'], ['date', 'date-time'])) {
             return $schema['format'];
@@ -416,7 +416,7 @@ class Form
      * @param array $schema Object schema array.
      * @return string
      */
-    protected static function typeFromNumber(array $schema) : string
+    protected static function typeFromNumber(array $schema): string
     {
         return 'number';
     }
@@ -427,7 +427,7 @@ class Form
      * @param array $schema Object schema array.
      * @return string
      */
-    protected static function typeFromInteger(array $schema) : string
+    protected static function typeFromInteger(array $schema): string
     {
         return 'number';
     }
@@ -438,7 +438,7 @@ class Form
      * @param array $schema Object schema array.
      * @return string
      */
-    protected static function typeFromBoolean(array $schema) : string
+    protected static function typeFromBoolean(array $schema): string
     {
         return 'checkbox';
     }
@@ -449,7 +449,7 @@ class Form
      * @param array $schema Object schema array.
      * @return string
      */
-    protected static function typeFromArray(array $schema) : string
+    protected static function typeFromArray(array $schema): string
     {
         return 'checkbox';
     }
@@ -460,7 +460,7 @@ class Form
      * @param array $schema Object schema array.
      * @return string
      */
-    protected static function typeFromObject(array $schema) : string
+    protected static function typeFromObject(array $schema): string
     {
         return 'json';
     }
@@ -472,7 +472,7 @@ class Form
      * @param string $name The method name
      * @return array
      */
-    public static function getMethod(string $name) : array
+    public static function getMethod(string $name): array
     {
         $methodName = Inflector::variable(str_replace('-', '_', $name));
         $method = [Form::class, $methodName];

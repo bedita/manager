@@ -42,35 +42,31 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         class="layout"
         @click="pageClick($event)">
 
-        <aside class="layout-sidebar-primary">
-            {% if Layout.primarySidebar() %}
-                {% element 'Menu/side-menu' %}
-            {% endif %}
-
-            {% if Layout.secondarySidebar() %}
-                {% element 'Menu/commands' %}
-            {% endif %}
+        {% if not Layout.isLogin() %}
+        <aside class="layout-sidebar">
+            {% element 'Menu/sidebar' %}
         </aside>
+        {% endif %}
 
-        {% if Layout.layoutHeader() %}
+        {% if not Layout.isLogin() and not Layout.isDashboard() %}
             <header class="layout-header">
                 {% element 'Menu/menu' %}
             </header>
         {% endif %}
 
-        {% if Layout.layoutContent() %}
-            <div class="layout-content">
-                {{ _view.fetch('content')|raw }}
-            </div>
-        {% endif %}
+        <div class="layout-content">
+            {{ _view.fetch('content')|raw }}
+        </div>
 
+        {% if not Layout.isLogin() %}
         <div class="layout-footer">
             {% element 'Menu/colophon' %}
         </div>
+        {% endif %}
 
-        {# component add relations with its own container #}
-        {# {% element 'Form/relation_add' {'relationName': relationName} %} #}
-        {% element 'panel' %}
+        {% if not Layout.isLogin() and not Layout.isDashboard() %}
+            {% element 'panel' %}
+        {% endif %}
 
         {# flash messages #}
         {% if Layout.messages() %}

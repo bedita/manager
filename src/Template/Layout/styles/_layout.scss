@@ -7,10 +7,10 @@ main.layout {
 
     @media (min-width: 568px) {
         display: grid;
-        grid-template-areas: "sidebar  content-header"
-                             "sidebar  content-body"
-                             "footer   footer";
-
+        grid-gap: 0 $gutter;
+        grid-template-areas: "sidebar content-header"
+                             "sidebar content-body"
+                             "sidebar footer";
         grid-template-rows: auto 1fr auto;
         grid-template-columns: calc(33.33% - 10.63px) auto;
         @media (min-width: 768px) {
@@ -21,16 +21,12 @@ main.layout {
             grid-template-rows: 126px auto;
         }
 
-        column-gap: $gutter;
-        row-gap: 0;
-
         > .layout-footer {
             display: none;
         }
     }
 
-
-    > .layout-sidebar-primary {
+    > .layout-sidebar {
         grid-area: sidebar;
         padding: $gutter 0;
     }

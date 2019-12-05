@@ -32,43 +32,23 @@ class LayoutHelper extends Helper
     public $helpers = ['Html'];
 
     /**
-     * Primary sidebar visibility
+     * Is Dashboard
      *
      * @return bool True if visible for view
      */
-    public function primarySidebar() : bool
+    public function isDashboard(): bool
     {
         return in_array($this->_View->getName(), ['Dashboard']);
     }
 
     /**
-     * Secondary sidebar visibility
+     * Is Login
      *
      * @return bool True if visible for view
      */
-    public function secondarySidebar() : bool
+    public function isLogin(): bool
     {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
-    }
-
-    /**
-     * Menu header visibility
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutHeader() : bool
-    {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
-    }
-
-    /**
-     * Layout content visibility. Always visible (for now)
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutContent() : bool
-    {
-        return true;
+        return in_array($this->_View->getName(), ['Login']);
     }
 
     /**
@@ -76,7 +56,7 @@ class LayoutHelper extends Helper
      *
      * @return bool True if visible for view
      */
-    public function messages() : bool
+    public function messages(): bool
     {
         return $this->_View->getName() != 'Login';
     }
@@ -86,7 +66,7 @@ class LayoutHelper extends Helper
      *
      * @return string The link
      */
-    public function moduleLink() : string
+    public function moduleLink(): string
     {
         $currentModule = (array)$this->getView()->get('currentModule');
         if (!empty($currentModule) && !empty($currentModule['name'])) {
@@ -112,7 +92,7 @@ class LayoutHelper extends Helper
      *
      * @return string
      */
-    protected function commandLinkClass() : string
+    protected function commandLinkClass(): string
     {
         $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->getName()));
         if ($pluginClass) {

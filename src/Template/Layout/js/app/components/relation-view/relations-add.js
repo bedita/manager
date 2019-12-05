@@ -259,6 +259,7 @@ export default {
          */
         isUnselectableObject(id) {
             const addedIds = this.addedObjects.map(obj => obj.id);
+            this.$attrs && this.$attrs.object && addedIds.push(this.$attrs.object.id);
             return this.alreadyInView.concat(addedIds).indexOf(id) !== -1;
         },
 

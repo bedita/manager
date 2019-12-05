@@ -30,7 +30,7 @@ class TrashController extends AppController
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -44,7 +44,7 @@ class TrashController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'trash:list']);
 
@@ -57,7 +57,7 @@ class TrashController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function index() : ?Response
+    public function index(): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -88,7 +88,7 @@ class TrashController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function view($id) : ?Response
+    public function view($id): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -116,7 +116,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function restore() : ?Response
+    public function restore(): ?Response
     {
         $this->request->allowMethod(['post']);
         $ids = [];
@@ -152,7 +152,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function delete() : ?Response
+    public function delete(): ?Response
     {
         $this->request->allowMethod(['post']);
         $ids = [];
@@ -190,7 +190,7 @@ class TrashController extends AppController
      *
      * @return array
      */
-    protected function listQuery() : array
+    protected function listQuery(): array
     {
         $query = $this->request->getData('query');
         if (empty($query)) {
@@ -207,7 +207,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function empty() : ?Response
+    public function empty(): ?Response
     {
         $this->request->allowMethod(['post']);
 
