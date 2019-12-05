@@ -128,9 +128,43 @@ class ExportController extends AppController
      */
     private function csv(array $rows, string $objectType): void
     {
-        // create csv string data
-        $fields = array_shift($rows);
+        $result = $this->processCsv($rows, $objectType);
+        extract($result); // => $filename, $csv
+        $this->outputCsv($filename, $csv);
+    }
+
+    /**
+     * Output csv file.
+     *
+     * @param string $filename The file name.
+     * @param string $csv The csv string data.
+     * @return void
+     */
+    protected function outputCsv($filename, $csv): void
+    {
+        header("Content-type: text/csv;charset=UTF-8");
+        header("Content-Disposition: attachment; filename=" . $filename . ".csv");
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header("Pragma: no-cache");
+        print $csv;
+        $this->exit();
+    }
+
+    /**
+     * Process data (string) per rows/objects.
+     * Create a temporary csv file.
+     * Return filename and csv string in an array.
+     *
+     * @param array $rows The rows data.
+     * @param string $objectType The object type.
+     * @return array
+     */
+    private function processCsv(array $rows, string $objectType): array
+    {
         $csv = '';
+        $fields = array_shift($rows);
         try {
             $filename = sprintf('%s_%s', $objectType, date('Ymd-His'));
             $tmpfilename = tempnam('/tmp', $filename);
@@ -150,15 +184,7 @@ class ExportController extends AppController
         }
         unlink($tmpfilename);
 
-        // Output csv file
-        header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=" . $filename . ".csv");
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header("Pragma: no-cache");
-        print $csv;
-        exit;
+        return compact('csv', 'filename');
     }
 
     /**
