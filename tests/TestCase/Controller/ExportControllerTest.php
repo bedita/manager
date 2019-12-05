@@ -35,6 +35,13 @@ class ExportControllerTest extends TestCase
     public $Export;
 
     /**
+     * The api client (not mocked).
+     *
+     * @var BEditaClient
+     */
+    protected $apiClient = null;
+
+    /**
      * Test data.
      *
      * @var array
@@ -80,6 +87,15 @@ class ExportControllerTest extends TestCase
                 ],
             ])
         );
+        $this->apiClient = ApiClientProvider::getApiClient();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown()
+    {
+        ApiClientProvider::setApiClient($this->apiClient);
     }
 
     /**
