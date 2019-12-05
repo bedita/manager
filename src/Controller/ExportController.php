@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use Cake\Http\Response;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
@@ -23,9 +24,9 @@ class ExportController extends AppController
     /**
      * Export data in csv format
      *
-     * @return void
+     * @return Cake\Http\Response
      */
-    public function export(): void
+    public function export(): Response
     {
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
@@ -38,7 +39,7 @@ class ExportController extends AppController
         $rows = $this->csvRows($data['objectType'], $ids);
 
         // save data to csv and output it to browser
-        $this->csv($rows, $data['objectType']);
+        return $this->csv($rows, $data['objectType']);
     }
 
     /**
@@ -124,13 +125,14 @@ class ExportController extends AppController
      *
      * @param array $rows The rows data
      * @param string $objectType The object type
-     * @return void
+     * @return Cake\Http\Response
      */
-    private function csv(array $rows, string $objectType): void
+    private function csv(array $rows, string $objectType): Response
     {
         $result = $this->processCsv($rows, $objectType);
         extract($result); // => $filename, $csv
-        $this->outputCsv($filename, $csv);
+
+        return $this->outputCsv($filename, $csv);
     }
 
     /**
@@ -138,18 +140,14 @@ class ExportController extends AppController
      *
      * @param string $filename The file name.
      * @param string $csv The csv string data.
-     * @return void
+     * @return Cake\Http\Response
      */
-    protected function outputCsv($filename, $csv): void
+    protected function outputCsv($filename, $csv): Response
     {
-        header("Content-type: text/csv;charset=UTF-8");
-        header("Content-Disposition: attachment; filename=" . $filename . ".csv");
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header("Pragma: no-cache");
-        print $csv;
-        $this->exit();
+        $response = $this->response->withStringBody($csv);
+        $response = $response->withType('text/csv');
+
+        return $response->withDownload(sprintf('%s.csv', $filename));
     }
 
     /**

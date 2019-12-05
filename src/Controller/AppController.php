@@ -357,16 +357,4 @@ class AppController extends Controller
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
     }
-
-    /**
-     * Exit wrapper.
-     * Useful to better handle mocks in tests.
-     *
-     * @return void
-     * @codeCoverageIgnore
-     */
-    protected function exit(): void
-    {
-        exit;
-    }
 }

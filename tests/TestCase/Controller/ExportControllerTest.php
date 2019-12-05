@@ -100,29 +100,13 @@ class ExportControllerTest extends TestCase
      */
     public function testExport(): void
     {
-        $testdata = [];
-
-        // mock ExportController exit and outputCsv functions.
-        $this->Mock = $this->getMockBuilder(ExportController::class)
-            ->setConstructorArgs([new ServerRequest([
+        $this->Export = new ExportController(
+            new ServerRequest([
                 'environment' => ['REQUEST_METHOD' => 'POST'],
                 'params' => ['objectType' => 'users'],
                 'post' => ['ids' => '888,999', 'objectType' => 'users'],
-            ])])
-            ->setMethods(['exit', 'outputCsv'])
-            ->getMock();
-        $this->Mock->expects($this->any())
-            ->method('exit')
-            ->willReturn(true);
-        $this->Mock->expects($this->any())
-            ->method('outputCsv')
-            ->will($this->returnCallback(
-                function ($param) use (&$testdata) {
-                    $args = func_get_args();
-                    $testdata['filename'] = $args[0];
-                    $testdata['csv'] = $args[1];
-                }
-            ));
+            ])
+        );
 
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -142,20 +126,19 @@ class ExportControllerTest extends TestCase
                 ],
             ]);
         ApiClientProvider::setApiClient($apiClient);
-        $this->Mock->apiClient = $apiClient;
+        $this->Export->apiClient = $apiClient;
 
-        // call export.
+        // expected csv.
         $fields = 'id,name,skills,category';
         $row1 = '999,gustavo,"[""smart"",""rich"",""beautiful""]",developer';
         $row2 = '888,"john doe","[""humble"",""poor"",""ugly""]",poet';
         $expected = sprintf('%s%s%s%s%s%s', $fields, "\n", $row1, "\n", $row2, "\n");
-        $this->Mock->export();
 
-        // verify data.
-        $filename = Hash::get($testdata, 'filename');
-        $csv = Hash::get($testdata, 'csv');
-        static::assertNotEmpty($filename);
-        static::assertEquals($expected, $csv);
+        // call export.
+        $response = $this->Export->export();
+        $content = $response->getBody()->__toString();
+        static::assertInstanceOf('Cake\Http\Response', $response);
+        static::assertEquals($expected, $content);
     }
 
     /**
@@ -332,7 +315,6 @@ class ExportControllerTest extends TestCase
                     ],
                     'objectType' => 'documents',
                 ], // input
-                sprintf('id,name,category,skills%s999,gustavo,developer,"[""smart"",""rich"",""beautiful""]"%s888,"john doe",poet,"[""humble"",""poor"",""ugly""]"%s', "\n", "\n", "\n"), // expected
             ],
         ];
     }
@@ -344,30 +326,17 @@ class ExportControllerTest extends TestCase
      * @dataProvider csvProvider()
      *
      * @param string|array $input The input for the function.
-     * @param string|array $expected The expected value.
      *
      * @return void
-     * @runInSeparateProcess
      */
-    public function testCsv($input, $expected): void
+    public function testCsv($input): void
     {
-        // the expected csv.
-        $this->expectOutputString($expected);
-
-        // mock exit.
-        $this->Mock = $this->getMockBuilder(ExportController::class)
-            ->setMethods(['exit'])
-            ->getMock();
-        $this->Mock->expects($this->any())
-            ->method('exit')
-            ->willReturn(true);
-
-        // test csv
-        $reflectionClass = new \ReflectionClass($this->Mock);
+        $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('csv');
         $method->setAccessible(true);
         extract($input); // => $rows, $objectType
-        $method->invokeArgs($this->Mock, [ $rows, $objectType ]);
+        $response = $method->invokeArgs($this->Export, [ $rows, $objectType ]);
+        static::assertInstanceOf('Cake\Http\Response', $response);
     }
 
     /**
@@ -376,35 +345,14 @@ class ExportControllerTest extends TestCase
      * @covers ::outputCsv()
      *
      * @return void
-     * @runInSeparateProcess
      */
     public function testOutputCsv(): void
     {
-        // mock exit.
-        $this->Mock = $this->getMockBuilder(ExportController::class)
-            ->setMethods(['exit'])
-            ->getMock();
-        $this->Mock->expects($this->any())
-            ->method('exit')
-            ->willReturn(true);
-
-        // test outputCsv
-        $reflectionClass = new \ReflectionClass($this->Mock);
+        $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('outputCsv');
         $method->setAccessible(true);
-        $filename = 'test';
-        $csv = '';
-        $this->expectOutputString($csv);
-        $method->invokeArgs($this->Mock, [ $filename, $csv ]);
-
-        // check headers
-        $headers = xdebug_get_headers();
-        static::assertContains("Content-type: text/csv;charset=UTF-8", $headers);
-        static::assertContains("Content-Disposition: attachment; filename=" . $filename . ".csv", $headers);
-        static::assertContains('Content-Transfer-Encoding: binary', $headers);
-        static::assertContains('Expires: 0', $headers);
-        static::assertContains('Cache-Control: must-revalidate, post-check=0, pre-check=0', $headers);
-        static::assertContains("Pragma: no-cache", $headers);
+        $response = $method->invokeArgs($this->Export, [ 'test', '' ]);
+        static::assertInstanceOf('Cake\Http\Response', $response);
     }
 
     /**
