@@ -143,11 +143,15 @@ class ExportControllerTest extends TestCase
             ]);
         ApiClientProvider::setApiClient($apiClient);
         $this->Mock->apiClient = $apiClient;
+
+        // call export.
         $fields = 'id,name,skills,category';
         $row1 = '999,gustavo,"[""smart"",""rich"",""beautiful""]",developer';
         $row2 = '888,"john doe","[""humble"",""poor"",""ugly""]",poet';
         $expected = sprintf('%s%s%s%s%s%s', $fields, "\n", $row1, "\n", $row2, "\n");
         $this->Mock->export();
+
+        // verify data.
         $filename = Hash::get($testdata, 'filename');
         $csv = Hash::get($testdata, 'csv');
         static::assertNotEmpty($filename);
