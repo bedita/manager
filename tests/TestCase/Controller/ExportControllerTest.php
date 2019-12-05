@@ -19,7 +19,6 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use PHPUnit\Framework\MockObject;
 
 /**
  * {@see \App\Controller\ExportController} Test Case
@@ -34,13 +33,6 @@ class ExportControllerTest extends TestCase
      * @var \App\Controller\ExportController
      */
     public $Export;
-
-    /**
-     * Export controller mock.
-     *
-     * @var \PHPUnit\Framework\MockObject
-     */
-    public $Mock;
 
     /**
      * Test data.
