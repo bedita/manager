@@ -19,7 +19,6 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Hash;
 use PHPUnit\Framework\MockObject;
 
 /**
