@@ -163,22 +163,18 @@ class ExportController extends AppController
     {
         $csv = '';
         $fields = array_shift($rows);
-        try {
-            $filename = sprintf('%s_%s', $objectType, date('Ymd-His'));
-            $tmpfilename = tempnam('/tmp', $filename);
-            if ($tmpfilename) {
-                $fp = fopen($tmpfilename, 'w+');
-                if (!empty($fp)) {
-                    fputcsv($fp, $fields);
-                    foreach ($rows as $row) {
-                        fputcsv($fp, $row);
-                    }
-                    $csv = file_get_contents($tmpfilename);
-                    fclose($fp);
+        $filename = sprintf('%s_%s', $objectType, date('Ymd-His'));
+        $tmpfilename = tempnam('/tmp', $filename);
+        if ($tmpfilename) {
+            $fp = fopen($tmpfilename, 'w+');
+            if (!empty($fp)) {
+                fputcsv($fp, $fields);
+                foreach ($rows as $row) {
+                    fputcsv($fp, $row);
                 }
+                $csv = file_get_contents($tmpfilename);
+                fclose($fp);
             }
-        } catch (\Exception $e) {
-            $this->log('Error during export', 'error');
         }
         unlink($tmpfilename);
 
