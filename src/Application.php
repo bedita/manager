@@ -111,7 +111,7 @@ class Application extends BaseApplication
         $csrf = new CsrfProtectionMiddleware();
         // Token check will be skipped when callback returns `true`.
         $csrf->whitelistCallback(function ($request) {
-            $actions = (array)Configure::read(sprintf('CrsfExceptions.%s', $request->getParam('controller')));
+            $actions = (array)Configure::read(sprintf('CsrfExceptions.%s', $request->getParam('controller')));
             // Skip token check for API URLs.
             if (in_array($request->getParam('action'), $actions)) {
                 return true;
