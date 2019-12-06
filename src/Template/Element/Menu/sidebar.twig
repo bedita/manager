@@ -12,23 +12,22 @@
     {% endif %}
 
     <div class="sidebar-body">
-        <div class="has-text-gray-500">
-            <p>{% if user.attributes.title %}
+        <div>
+            <a href="{{ Url.build({ '_name': 'user_profile:view' }) }}">{% if user.attributes.title %}
                 {{ user.attributes.title }}
             {% else %}
                 {{ user.attributes.name }} {{ user.attributes.surname }}
-            {% endif %}</p>
-            <p>{{ __('Username') }}: {{ user.attributes.username }}</p>
+            {% endif %}</a>
         </div>
 
         <div>
             {% for code, name in I18n.getLanguages() if code != I18n.getLang() %}
-                <p>{{ Html.link(name, I18n.changeUrlLang(code, config('I18n.switchLangUrl')))|raw }}</p>
+                <p><a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}" class="icon-language">{{ name }}</a>
             {% endfor %}
         </div>
 
         <div>
-            <p><a href="{{ Url.build({'_name': 'logout'})|raw }}" class="icon-logout">{{ __('Log out') }}</a></p>
+            <p><a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout">{{ __('Log out') }}</a></p>
         </div>
     </div>
 

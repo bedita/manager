@@ -18,7 +18,7 @@ main.layout {
         }
 
         .view-module & {
-            grid-template-rows: 126px auto;
+            grid-template-rows: ($dashboard-item-height + $gutter) auto;
         }
 
         > .layout-footer {
@@ -28,7 +28,6 @@ main.layout {
 
     > .layout-sidebar {
         grid-area: sidebar;
-        padding: $gutter 0;
     }
 
     > .layout-header {
