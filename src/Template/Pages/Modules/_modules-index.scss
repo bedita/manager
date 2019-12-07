@@ -1,56 +1,49 @@
 body.view-module {
 
-    // index
     .module-header {
-        min-height: 78px;
-        margin-left: $gutter * .5;
+        min-height: $dashboard-item-height - ($gutter * 3);
         margin-bottom: $gutter;
     }
 
     .module-index {
-
         .list-objects {
             display: table;
             border-collapse: collapse;
             min-width: 100%;
 
-            > nav {
-                display: table-row;
+            > nav.table-header {
+                line-height: 1;
+                border-bottom: 1px solid $gray-700;
 
-                &.table-header {
-                    border-bottom: 1px solid $gray-700;
+                a.sort {
+                    display: flex;
+                    align-items: center;
 
-                    a.sort {
-                        display: flex;
-                        align-items: center;
+                    &:after {
+                        content: "›";
+                        margin-left: 10px;
+                        display: inline-block;
+                        font-size: 1.5em;
+                        line-height: 21px;
+                    }
 
-                        &:after {
-                            content: "›";
-                            margin-left: 10px;
-                            display: inline-block;
-                            font-size: 1.5em;
-                            line-height: 21px;
-                        }
-
-                        &.up:after {
-                            transform: rotate(-90deg);
-                        }
-                        &.down:after {
-                            transform: rotate(90deg);
-                        }
+                    &.up:after {
+                        transform: rotate(-90deg);
+                    }
+                    &.down:after {
+                        transform: rotate(90deg);
                     }
                 }
             }
 
-            > a {
-                display: table-row;
-
-                &:hover {
-                    background-color: $gray-700;
-                }
+            > a:hover {
+                background-color: $gray-700;
             }
 
-            > nav, > a {
+            > nav.table-header, > a {
+                min-height: $gutter * 2;
+                display: table-row;
+
                 div {
                     display: table-cell;
                     padding: $gutter * .5;

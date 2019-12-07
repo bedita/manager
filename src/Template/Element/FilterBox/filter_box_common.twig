@@ -4,6 +4,7 @@
 {% if filterActive %}
     {% set containerClass = 'filters-container filters-container-active' %}
 {% endif %}
+
 <div class="{{ containerClass }}" :class="filterList.length > 1? '' : 'basic-filters-only'">
     {# dynamic filter object types #}
     <div class="filter-container search-types" v-if="rightTypes.length > 1">

@@ -11,13 +11,15 @@
         <div class="module-index">
             <div class="list-objects">
                 {% if objects %}
-                <nav class="table-header">
-                    <div>
-                        <input type="checkbox" @click="toggleAll" :checked="allChecked">
+                <nav class="table-header has-border-module-{{ currentModule.name }}">
+                    <div @click="toggleAll">
+                        <input type="checkbox" :checked="allChecked">
                     </div>
+
                     {% for prop in properties %}
                         <div>{{ Link.sort(prop) }}</div>
                     {% endfor %}
+
                     <div>{{ Link.sort('id')}}</div>
                     {% if currentModule.hints.multiple_types %}
                         <div>{{ __('type') }}</div>

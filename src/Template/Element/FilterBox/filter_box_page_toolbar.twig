@@ -1,8 +1,8 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 
 <nav class="pagination has-text-size-smallest">
-    <div class="count-items" v-if="pagination.count">
-        <span><: pagination.count :> <: t(objectsLabel) :></span>
+    <div class="count-items " v-if="pagination.count">
+        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: t(objectsLabel) :></span>
     </div>
 
     <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">

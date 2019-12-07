@@ -171,8 +171,13 @@ nav.pagination {
     display: flex;
     align-items: center;
     > div {
-        margin-left: $gutter *.5;
-        &:first-child { margin-left: auto; }
+        &:not(:last-child) {
+            margin-right: $gutter *.5;
+        }
+
+        &.page-size {
+            select { margin-left : $gutter * .5; }
+        }
 
         &.pagination-buttons {
             display: flex;
