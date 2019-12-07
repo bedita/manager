@@ -2,6 +2,10 @@
     display: flex;
     flex-direction: column;
 
+    > *:not(:last-child) {
+        margin-bottom: $gutter;
+    }
+
     button, input[type=submit] {
         width: 100%;
     }
@@ -10,38 +14,19 @@
         display: block;
     }
 
-    > .commands-module {
+    > .commands-module-box {
         position: relative;
         width: 100%;
-        height: 86px;
-        margin-bottom: 2px;
 
-        > a {
-            display: block;
+        a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: $dashboard-item-height;
+
             background-color: $gray-600;
             color: white;
-            padding: 0 6px;
-            margin-bottom: 2px;
-            line-height: 20px;
-        }
-
-        &.squared {
-            a {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-                padding: 1px 6px;
-            }
-        }
-
-        >div {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: $gutter * .5;
         }
     }
 
@@ -87,20 +72,6 @@
     > .commands-footer {
         flex-grow: 1;
     }
-
-    // .trashcan {
-    //     display: flex;
-    //     justify-content: center;
-    //     align-items: center;
-    //     height: 80px;
-    //     margin-top: $gutter;
-    //     background-color: transparent;
-    //     color: $gray-200;
-    //     font-size: 2rem;
-    //     &:before {
-    //         margin: 0;
-    //     }
-    // }
 }
 
 .commands-menu ~ div {

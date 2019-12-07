@@ -10,7 +10,7 @@
     padding: 16px 0;
     width: $dashboard-item-width;
 
-    >* {
+    > *:not(:last-child) {
         margin-bottom: $gutter;
     }
 

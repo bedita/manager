@@ -1,10 +1,6 @@
 <div class="commands-menu">
-    <div class="commands-module squared">
+    <div class="commands-module-box">
         {{ Layout.moduleLink()|raw }}
-        {% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
-            {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
-        {% endif %}
-        <div class="{{ elementClass }}"></div>
     </div>
 
     <div class="commands-buttons">
