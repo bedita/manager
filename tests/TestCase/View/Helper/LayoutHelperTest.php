@@ -91,47 +91,6 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testLayoutHeader` test case.
-     *
-     * @return array
-     */
-    public function layoutHeaderProvider(): array
-    {
-        return [
-            'dashboard' => [
-                'Dashboard',
-                false,
-            ],
-            'login' => [
-                'Login',
-                false,
-            ],
-            'objects' => [
-                'Objects',
-                true,
-            ],
-        ];
-    }
-
-    /**
-     * Test layoutHeader
-     *
-     * @param string $name The view name
-     * @param bool $expected The expected result
-     *
-     * @dataProvider layoutHeaderProvider()
-     * @covers ::layoutHeader()
-     */
-    public function testLayoutHeader($name, $expected): void
-    {
-        $request = $response = $events = null;
-        $data = ['name' => $name];
-        $layout = new LayoutHelper(new View($request, $response, $events, $data));
-        $result = $layout->layoutHeader();
-        static::assertSame($result, $expected);
-    }
-
-    /**
      * Data provider for `testMessages` test case.
      *
      * @return array
