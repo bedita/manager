@@ -67,7 +67,7 @@ class OEmbedTest extends TestCase
                         'provider_name' => 'YouTube',
                         'thumbnail_url' => 'https://i.ytimg.com/vi/_qSYCXHNvJo/hqdefault.jpg',
                         'provider_url' => 'https://www.youtube.com/',
-                    ]
+                    ],
                 ],
                 'https://www.youtube.com/watch?v=_qSYCXHNvJo',
                 [

@@ -79,7 +79,7 @@ class ResultTest extends TestCase
             'message' => [
                 '',
                 'info',
-            ]
+            ],
         ];
     }
 

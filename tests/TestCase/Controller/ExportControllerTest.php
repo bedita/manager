@@ -264,7 +264,7 @@ class ExportControllerTest extends TestCase
                         'data' => [
                             0 => $this->testdata['input']['gustavo'],
                             1 => $this->testdata['input']['johndoe'],
-                        ]
+                        ],
                     ],
                 ], // input
                 [
@@ -419,7 +419,7 @@ class ExportControllerTest extends TestCase
                     'response' => [
                         'data' => [
                             0 => $this->testdata['input']['gustavo'],
-                        ]
+                        ],
                     ],
                 ], // input
                 [
@@ -437,7 +437,7 @@ class ExportControllerTest extends TestCase
                                     'category' => 'developer',
                                 ],
                             ],
-                        ]
+                        ],
                     ],
                     'key' => 'user',
                 ], // input

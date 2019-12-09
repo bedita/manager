@@ -293,7 +293,7 @@ class AppControllerTest extends TestCase
                     '_jsonKeys' => 'jsonKey1,jsonKey2',
                     'jsonKey1' => '{"a":1,"b":2,"c":3}',
                     'jsonKey2' => '{"gin":"vodka","fritz":"kola"}',
-                ]
+                ],
             ],
             'actual attrs' => [ // test '_actualAttributes'
                 'documents', // object_type
@@ -304,7 +304,7 @@ class AppControllerTest extends TestCase
                     'title' => 'bibo',
                     'description' => 'dido',
                     '_actualAttributes' => '{"title":"bibo","description":""}',
-                ]
+                ],
             ],
             'fields null value' => [ // fields with value null, not changed and changed
                 'documents', // object_type
@@ -316,7 +316,7 @@ class AppControllerTest extends TestCase
                     'title' => null,
                     'description' => null,
                     '_actualAttributes' => '{"title":"bibo","description":null}',
-                ]
+                ],
             ],
             'users' => [ // test: removing password from data
                 'users', // object_type
@@ -325,7 +325,7 @@ class AppControllerTest extends TestCase
                     'name' => 'giova',
                     'password' => '',
                     'confirm-password' => '',
-                ]
+                ],
             ],
             'relations' => [
                 'documents', // object_type
@@ -340,20 +340,20 @@ class AppControllerTest extends TestCase
                                 [
                                     'id' => '44',
                                     'type' => 'images',
-                                ]
-                            ]
-                        ]
-                    ]
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 [ // data provided
                     'id' => '1', // fake document id
                     'relations' => [
                         'attach' => [
-                            'addRelated' => '[{ "id": "44", "type": "images"}]' // fake attached image
-                        ]
-                    ]
-                ]
-            ]
+                            'addRelated' => '[{ "id": "44", "type": "images"}]', // fake attached image
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -473,9 +473,9 @@ class AppControllerTest extends TestCase
                     ],
                     'post' => [
                         'password' => 'bibo',
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 

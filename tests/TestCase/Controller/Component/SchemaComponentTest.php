@@ -177,20 +177,20 @@ class SchemaComponentTest extends TestCase
                             'data' => [
                                 [
                                     'id' => '3',
-                                    'type' => 'object_types'
-                                ]
+                                    'type' => 'object_types',
+                                ],
                             ],
                         ],
                         'right_object_types' => [
                             'data' => [
                                 [
                                     'id' => '9',
-                                    'type' => 'object_types'
+                                    'type' => 'object_types',
                                 ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             'included' => [
                 [
@@ -207,7 +207,7 @@ class SchemaComponentTest extends TestCase
                         'name' => 'images',
                     ],
                 ],
-            ]
+            ],
         ];
 
         // Setup mock API client.
