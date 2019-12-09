@@ -19,7 +19,7 @@ return [
             'view' => [
                 '_keep' => [
                     'password',
-                    'confirm-password'
+                    'confirm-password',
                 ],
                 'core' => [
                     'username',
@@ -54,7 +54,7 @@ return [
                 '_keep' => [
                     'old_password',
                     'password',
-                    'confirm-password'
+                    'confirm-password',
                 ],
                 // intentionally left blank (no title displayed)
                 ' ' => [
@@ -114,7 +114,7 @@ return [
                     'hidden',
                     'enabled',
                     'table',
-                    'parent_name'
+                    'parent_name',
                 ],
             ],
             'index' => [

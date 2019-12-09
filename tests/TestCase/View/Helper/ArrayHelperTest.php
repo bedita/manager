@@ -104,7 +104,7 @@ class ArrayHelperTest extends TestCase
                     'title' => 'string',
                     'description' => 'string',
                     'uname' => 'string',
-                    'status' => 'string'
+                    'status' => 'string',
                 ], // expected
                 [
                     'title' => 'string',
@@ -114,9 +114,9 @@ class ArrayHelperTest extends TestCase
                     'extra' => 'object',
                 ], // data
                 [
-                    'extra'
+                    'extra',
                 ], // keys to remove
-            ]
+            ],
         ];
     }
 
@@ -159,9 +159,9 @@ class ArrayHelperTest extends TestCase
                 ], // data
                 [
                     'extra',
-                    'description'
+                    'description',
                 ], // keys to keep
-            ]
+            ],
         ];
     }
 

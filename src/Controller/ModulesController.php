@@ -602,7 +602,7 @@ class ModulesController extends AppController
                 } catch (BEditaClientException $e) {
                     $errors[] = [
                         'id' => $id,
-                        'message' => $e->getAttributes()
+                        'message' => $e->getAttributes(),
                     ];
                 }
             }
