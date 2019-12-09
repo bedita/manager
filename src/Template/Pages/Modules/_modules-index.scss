@@ -6,49 +6,79 @@ body.view-module {
     }
 
     .module-index {
+
         .list-objects {
             display: table;
             border-collapse: collapse;
             min-width: 100%;
 
-            > nav.table-header {
-                line-height: 1;
-                border-bottom: 1px solid $gray-700;
+            // table header and table rows
+            .table-header, .table-row {
+                display: table-row;
 
-                a.sort {
-                    display: flex;
-                    align-items: center;
+                > div {
+                    display: table-cell;
+                    height: $gutter * 2;
+                    white-space: nowrap;
+                    vertical-align: middle;
 
-                    &:after {
-                        content: "›";
-                        margin-left: 10px;
-                        display: inline-block;
-                        font-size: 1.5em;
-                        line-height: 21px;
+                    padding-left: $gutter * .5;
+                    padding-right: $gutter * .5;
+                    &:empty:not(.title-cell) {
+                        padding-left: 0; padding-right: 0;
                     }
 
-                    &.up:after {
-                        transform: rotate(-90deg);
-                    }
-                    &.down:after {
-                        transform: rotate(90deg);
+                    &.select-cell {
+                        width: 1px;
+                        padding-left: 0;
                     }
                 }
             }
 
-            > a:hover {
-                background-color: $gray-700;
+            // table header
+            > .table-header {
+                > div {
+                    border-bottom: 1px solid $gray-700;
+                    border-bottom-color: inherit;
+                    line-height: 1;
+
+                    a {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
+                    }
+
+                    &.sort {
+                        a {
+                            border-bottom: 3px solid;
+                            border-bottom-color: inherit;
+                            padding-top: 3px;
+                        }
+
+                        a:after {
+                            content: "";
+                            width: 11px;
+                            height: 11px;
+                            border-right: solid 2px;
+                            border-top: 2px solid;
+                        }
+
+                        &.up a:after { transform: rotate(-45deg) translateY(8px) translateX(4px); }
+                        &.down a:after { transform: rotate(135deg) translateY(-4px) translateX(-9px); }
+                    }
+                }
+
             }
 
-            > nav.table-header, > a {
-                min-height: $gutter * 2;
-                display: table-row;
+            // table rows
+            .table-row {
+                &:hover {
+                    background-color: $gray-700;
+                }
 
                 div {
-                    display: table-cell;
-                    padding: $gutter * .5;
-                    white-space: nowrap;
-                    vertical-align: middle;
+                    padding-top: $gutter * .5;
+                    padding-bottom: $gutter * .5;
 
                     &.title-cell {
                         max-width: 310px;

@@ -1,0 +1,23 @@
+<nav class="table-header has-border-module-{{ currentModule.name }}">
+    <div class="select-cell" @click="toggleAll">
+        <input type="checkbox" :checked="allChecked">
+    </div>
+
+    <div></div> {# thumb column #}
+
+    {% for prop in properties %}
+        <div class="{{ Link.sortClass(prop) }}">{{ Link.sort(prop) }}</div>
+    {% endfor %}
+
+    <div class="{{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
+
+    {% if currentModule.hints.multiple_types %}
+        <div>{{ __('type') }}</div>
+    {% endif %}
+
+    <div>{{ __('status') }}</div>
+
+    <div class="{{ Link.sortClass('modified') }}">{{ Link.sort('modified')}}</div>
+
+    <div></div>
+</nav>

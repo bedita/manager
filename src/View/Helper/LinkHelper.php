@@ -79,19 +79,37 @@ class LinkHelper extends Helper
      */
     public function sort($field): void
     {
+        $query = $this->getView()->getRequest()->getQuery();
+        $sortValue = $field; // <= ascendant order
+        if (!empty($query) && in_array('sort', array_keys($query))) {
+            if ($query['sort'] === $field) { // it was ascendant sort
+                $sortValue = '-' . $field; // <= descendant order
+            }
+        }
+        $url = $this->replaceParamUrl('sort', $sortValue);
+        echo '<a href="' . $url . '">' . __($field) . '</a>';
+    }
+
+    /**
+     * Sort by field direction and link
+     *
+     * @param string $field the Field.
+     * @return string
+     */
+    public function sortClass($field): string
+    {
         $class = '';
         $query = $this->getView()->getRequest()->getQuery();
         $sortValue = $field; // <= ascendant order
         if (!empty($query) && in_array('sort', array_keys($query))) {
             if ($query['sort'] === $field) { // it was ascendant sort
                 $class = 'sort down';
-                $sortValue = '-' . $field; // <= descendant order
             } elseif ($query['sort'] === ('-' . $field)) { // it was descendant sort
                 $class = 'sort up';
             }
         }
-        $url = $this->replaceParamUrl('sort', $sortValue);
-        echo '<a href="' . $url . '" class="' . $class . '">' . __($field) . '</a>';
+
+        return $class;
     }
 
     /**
