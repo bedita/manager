@@ -109,10 +109,6 @@ class ModulesController extends AppController
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
 
-        if (!empty($this->request->getQueryParams()['autocomplete'])) {
-            $this->render('autocomplete');
-        }
-
         $this->set('properties', $this->Properties->indexList($this->objectType));
 
         // base/custom filters for filter view
