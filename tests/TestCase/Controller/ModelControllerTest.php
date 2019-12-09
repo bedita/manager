@@ -47,7 +47,7 @@ class ModelControllerTest extends TestCase
         ],
         'params' => [
             'resource_type' => 'object_types',
-        ]
+        ],
     ];
 
     /**
@@ -103,7 +103,7 @@ class ModelControllerTest extends TestCase
                     'roles' => [ 'admin' ],
                 ],
                 null,
-            ]
+            ],
         ];
     }
 
@@ -182,7 +182,7 @@ class ModelControllerTest extends TestCase
         $this->setupController([
             'params' => [
                 'resource_type' => 'documents',
-            ]
+            ],
         ]);
         $result = $this->ModelController->index();
         static::assertTrue(($result instanceof Response));
@@ -231,7 +231,7 @@ class ModelControllerTest extends TestCase
             'emptyRequest' => [
                 new BadRequestException('empty request'),
                 [],
-                ''
+                '',
             ],
             'addPropertyTypesRequest' => [
                 [
@@ -241,10 +241,10 @@ class ModelControllerTest extends TestCase
                         'attributes' => [
                                 'name' => 'giovanni',
                                 'params' => [
-                                        'type' => 'string'
-                                ]
+                                        'type' => 'string',
+                                ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'addPropertyTypes' => [
@@ -253,10 +253,10 @@ class ModelControllerTest extends TestCase
                             'params' => json_encode([
                                 'type' => 'string',
                             ]),
-                        ]
+                        ],
                     ],
                 ],
-                'saved'
+                'saved',
             ],
             'editPropertyTypesRequest' => [
                 [
@@ -266,10 +266,10 @@ class ModelControllerTest extends TestCase
                         'attributes' => [
                                 'name' => 'enrico',
                                 'params' => [
-                                        'type' => 'object'
+                                        'type' => 'object',
                                 ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'editPropertyTypes' => [
@@ -280,17 +280,17 @@ class ModelControllerTest extends TestCase
                                 'params' => [
                                     'type' => 'object',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
-                'edited'
+                'edited',
             ],
             'removePropertyTypesRequest' => [
                 [ '12' ],
                 [
                     'removePropertyTypes' => [
-                        '12'
+                        '12',
                     ],
                 ],
                 'removed',

@@ -94,7 +94,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'status',
-                'on'
+                'on',
             ],
             'password' => [
                 // expected result
@@ -110,7 +110,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'password',
-                ''
+                '',
             ],
             'confirm-password' => [
                 // expected result
@@ -130,7 +130,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'confirm-password',
-                ''
+                '',
             ],
             'json' => [
                 // expected result
