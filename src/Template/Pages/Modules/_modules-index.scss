@@ -21,7 +21,7 @@ body.view-module {
                     height: $gutter * 2;
                     white-space: nowrap;
                     vertical-align: bottom;
-                    border-bottom: 1px solid $gray-600;
+                    border-bottom: 1px solid $gray-550;
 
                     height: $gutter * 3.25;
                     padding: $gutter * .375 $gutter;
@@ -74,6 +74,10 @@ body.view-module {
 
             // table rows
             .table-row {
+                &.object-status-off, &.object-status-draft {
+                    color: $gray-550;
+                }
+
                 &:hover {
                     background-color: $gray-700;
                 }
