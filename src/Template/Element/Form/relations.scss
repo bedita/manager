@@ -377,3 +377,10 @@ nav.pagination {
         }
     }
 }
+
+// TODO: review
+.relations-add, .relation-view {
+    .filter-box {
+        margin-bottom: $gutter;
+    }
+}
