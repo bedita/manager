@@ -3,7 +3,6 @@ main.layout {
     min-height: 100vh;
     min-height: calc(var(--vh, 1vh) * 100); // iOS adjust with script and fallback
     padding: 0 $gutter;
-    margin: 0 auto;
 
     @media (min-width: 568px) {
         display: grid;
@@ -21,32 +20,28 @@ main.layout {
             grid-template-rows: ($dashboard-item-height + $gutter) auto;
         }
 
-        > .layout-footer {
-            display: none;
-        }
+        > .layout-footer { display: none; }
     }
 
-    > .layout-sidebar {
-        grid-area: sidebar;
-    }
-
-    > .layout-header {
-        grid-area: content-header;
-    }
-
+    > .layout-sidebar { grid-area: sidebar; }
+    > .layout-header { grid-area: content-header; }
     > .layout-content {
         grid-area: content-body;
         padding: $gutter 0;
     }
-
     > .layout-footer {
         grid-area: footer;
         padding: $gutter 0;
     }
 
+    > .layout-sidebar, > .layout-header, > .layout-footer { max-width: 100%; overflow-x: hidden; }
+    > .layout-content { max-width: 100%; overflow-x: auto; }
+}
 
 
-    // panel stuff
+
+// panel stuff
+main.layout {
     > .layout-header,
     > .layout-content {
         transition: .3s transform;
