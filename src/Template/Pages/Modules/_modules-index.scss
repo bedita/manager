@@ -30,7 +30,6 @@ body.view-module {
                     }
 
                     &.select-cell {
-                        width: 1px;
                         padding-left: 0;
                     }
                 }
@@ -79,8 +78,13 @@ body.view-module {
                     background-color: $gray-700;
                 }
 
+                // table cells
                 > div {
                     height: $gutter * 3.25;
+
+                    &.narrow {
+                        width: 1px;
+                    }
 
                     &.title-cell {
                         max-width: 310px;
@@ -93,7 +97,6 @@ body.view-module {
                     }
 
                     &.thumb-cell {
-                        width: 1px;
                         line-height: 1;
 
                         img {
@@ -111,7 +114,6 @@ body.view-module {
                     }
 
                     &.buttons-cell {
-                        width: 1px;
                         padding-right: 0;
                         padding-bottom: 2px;
 

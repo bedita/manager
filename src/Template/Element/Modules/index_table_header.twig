@@ -1,5 +1,5 @@
 <nav class="table-header has-border-module-{{ currentModule.name }}">
-    <div class="select-cell" @click="toggleAll">
+    <div class="select-cell narrow" @click="toggleAll">
         <input type="checkbox" :checked="allChecked">
     </div>
 
@@ -9,13 +9,13 @@
         <div class="{{ Link.sortClass(prop) }}">{{ Link.sort(prop) }}</div>
     {% endfor %}
 
-    <div class="{{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
+    <div class="narrow {{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
 
     {% if currentModule.hints.multiple_types %}
         <div>{{ __('type') }}</div>
     {% endif %}
 
-    <div>{{ __('status') }}</div>
+    <div class="narrow">{{ __('status') }}</div>
 
     <div class="{{ Link.sortClass('modified') }}">{{ Link.sort('modified')}}</div>
 
