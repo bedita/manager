@@ -84,8 +84,7 @@ body.view-module {
 
                     &.title-cell {
                         max-width: 310px;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
+                        white-space: initial;
                         &:empty:before {
                             content: attr(untitled-label);
                             color: $gray-550;
