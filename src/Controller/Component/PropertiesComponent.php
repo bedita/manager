@@ -72,7 +72,7 @@ class PropertiesComponent extends Component
      * @var array
      */
     protected $excluded = [
-        'date_ranges'
+        'date_ranges',
     ];
 
     /**
