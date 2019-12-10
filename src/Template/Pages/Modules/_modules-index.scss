@@ -107,6 +107,10 @@ body.view-module {
                         }
                     }
 
+                    &.type-cell {
+                        padding-bottom: 3px;
+                    }
+
                     &.buttons-cell {
                         width: 1px;
                         padding-right: 0;
