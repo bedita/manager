@@ -42,11 +42,13 @@ body.view-module {
                     padding: $gutter * .5 $gutter;
                     line-height: 1;
                     border-bottom-color: inherit;
+                    &:first-letter { text-transform: uppercase; }
 
                     a {
                         display: flex;
                         align-items: flex-end;
                         height: 100%;
+                        text-transform: capitalize;
                     }
 
                     &.sort {

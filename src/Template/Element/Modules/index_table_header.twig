@@ -9,8 +9,6 @@
         <div class="{{ Link.sortClass(prop) }}">{{ Link.sort(prop) }}</div>
     {% endfor %}
 
-    <div class="narrow {{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
-
     {% if currentModule.hints.multiple_types %}
         <div>{{ __('type') }}</div>
     {% endif %}
@@ -18,6 +16,8 @@
     <div class="narrow">{{ __('status') }}</div>
 
     <div class="{{ Link.sortClass('modified') }}">{{ Link.sort('modified')}}</div>
+
+    <div class="narrow {{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
 
     <div></div>
 </nav>
