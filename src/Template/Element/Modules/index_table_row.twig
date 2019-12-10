@@ -5,7 +5,6 @@
 
 
 <a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"
-    title="{{ object.attributes.title }}"
     class="table-row object-status-{{ object.attributes.status }}">
 
         <div class="select-cell" @click="selectRow">
@@ -33,18 +32,25 @@
 
         <div>{{ Time.format(object.meta.modified) }}</div>
 
-        <div class="buttons">
-        {% if isTrash and in_array('PATCH', currentModule.hints.allow) %}
-            {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'ids': object.id, 'query': q}})|raw }}
-        {% endif %}
+        <div class="buttons-cell">
+        {% if isTrash %}
 
-        {% if in_array('DELETE', currentModule.hints.allow) %}
-            {% if not isTrash %}
-                {{ Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw}}
-            {% else %}
-                {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'ids': object.id, 'query': q}, 'onclick': confirm})|raw }}
+            {% if in_array('PATCH', currentModule.hints.allow) %}
+                {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'ids': object.id, 'query': q}})|raw }}
             {% endif %}
+
+            {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'ids': object.id, 'query': q}, 'onclick': confirm})|raw }}
+
+        {% else %}
+
+            <button
+                title="{{ __('Edit') }} {{ object.attributes.title }}"
+                class="button">{{ __('Edit') }}</button>
+
+            {% if in_array('DELETE', currentModule.hints.allow) %}
+                {{ Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw}}
+            {% endif %}
+
         {% endif %}
         </div>
-
 </a>

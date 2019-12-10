@@ -1,7 +1,7 @@
 body.view-module {
 
     .module-header {
-        min-height: $dashboard-item-height - ($gutter * 3);
+        min-height: $dashboard-item-height - ($gutter * 3.25) - $gutter; // minus table header and margin
         margin-bottom: $gutter;
     }
 
@@ -20,12 +20,13 @@ body.view-module {
                     display: table-cell;
                     height: $gutter * 2;
                     white-space: nowrap;
-                    vertical-align: middle;
+                    vertical-align: bottom;
+                    border-bottom: 1px solid $gray-600;
 
-                    padding-left: $gutter * .5;
-                    padding-right: $gutter * .5;
+                    height: $gutter * 3.25;
+                    padding: $gutter * .375 $gutter;
                     &:empty:not(.title-cell) {
-                        padding-left: 0; padding-right: 0;
+                        width: 0; padding-left: 0; padding-right: 0; overflow: hidden;
                     }
 
                     &.select-cell {
@@ -36,23 +37,26 @@ body.view-module {
             }
 
             // table header
-            > .table-header {
+            .table-header {
                 > div {
-                    border-bottom: 1px solid $gray-700;
-                    border-bottom-color: inherit;
+                    height: $gutter * 3.25;
+                    padding: $gutter * .5 $gutter;
                     line-height: 1;
+                    border-bottom-color: inherit;
 
                     a {
                         display: flex;
-                        align-items: center;
+                        align-items: flex-end;
                         height: 100%;
                     }
 
                     &.sort {
+                        padding-bottom: 0;
+
                         a {
-                            border-bottom: 3px solid;
+                            border-bottom: 2px solid;
                             border-bottom-color: inherit;
-                            padding-top: 3px;
+                            padding-bottom: 6px;
                         }
 
                         a:after {
@@ -67,7 +71,6 @@ body.view-module {
                         &.down a:after { transform: rotate(135deg) translateY(-4px) translateX(-9px); }
                     }
                 }
-
             }
 
             // table rows
@@ -76,9 +79,8 @@ body.view-module {
                     background-color: $gray-700;
                 }
 
-                div {
-                    padding-top: $gutter * .5;
-                    padding-bottom: $gutter * .5;
+                > div {
+                    height: $gutter * 3.25;
 
                     &.title-cell {
                         max-width: 310px;
@@ -86,49 +88,46 @@ body.view-module {
                         overflow: hidden;
                         &:empty:before {
                             content: attr(untitled-label);
-                            color: $gray-600;
+                            color: $gray-550;
                             font-style: italic;
                         }
                     }
 
                     &.thumb-cell {
-                        max-width: $gutter * 2.5;
-                        height: $gutter * 2;
-                        padding: 0;
-                        overflow: hidden;
+                        width: 1px;
                         line-height: 1;
+
                         img {
                             padding: 1px;
                             display: inline-block;
-                            max-height: 100%;
-                            max-width: 100%;
+                            max-height: $gutter * 2;
+                            max-width: $gutter * 2.5;
                             vertical-align: middle;
                             background-color: $gray-200;
                         }
-                        .icon {
-                            display: inline-block;
-                            width: 100%;
-                            font-size: 18px;
-                            padding: 6px;
-                        }
                     }
 
-                    &:last-child {
-                        text-align: right;
-                        > form {
-                            display: inline-block;
+                    &.buttons-cell {
+                        width: 1px;
+                        padding-right: 0;
+                        padding-bottom: 2px;
+
+                        form {
+                            display: inline-flex;
+                            justify-content: flex-end;
+                        }
+
+                        button, #{$button-inputs} {
+                            border: none;
                         }
                     }
                 }
             }
-
-            button {
-                line-height: initial;
-            }
         }
 
+
         .bulk-actions {
-            border-top: 1px solid $gray-700;
+            margin-top: $gutter * 2;
 
             header {
                 margin: $gutter 0 $gutter * .5;
