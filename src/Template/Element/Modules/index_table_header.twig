@@ -1,6 +1,6 @@
 <nav class="table-header has-border-module-{{ currentModule.name }}">
     <div class="select-cell narrow" @click="toggleAll">
-        <input type="checkbox" :checked="allChecked">
+        <input type="checkbox" ref="checkAllCB">
     </div>
 
     <div></div> {# thumb column #}
