@@ -12,6 +12,10 @@ body.view-login {
         align-items: center;
         height: 100%;
 
+        .layout-content {
+            overflow: initial;
+        }
+
         .login-form {
             position: relative;
             display: grid;
