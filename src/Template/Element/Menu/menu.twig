@@ -20,21 +20,6 @@
         </li>
     {% endfor %}
 
-    {# trash #}
-    {% if currentModule.name != "trash" %}
-        {% if currentModule.hints.multiple_types %}
-            {% set elementClass = "space-around-half has-background-module-" ~ currentModule.name %}
-        {% else %}
-            {% set elementClass = "has-text-module-" ~ currentModule.name %}
-        {% endif %}
-        <li class="has-background-transparent {{ elementClass }} icon-trash-2 center-icon has-tooltip-align-right">
-        {{ Html.link(__(''),
-            {'_name': 'trash:list', 'filter': {'type': objectType}},
-            {'tooltip': __('View trashed ') ~ currentModule.name|humanize, 'class': 'square'}
-        )|raw }}
-    </li>
-    {% endif %}
-
     <li class="has-background-transparent spacer">&nbsp;</li>
 
     {# search #}
