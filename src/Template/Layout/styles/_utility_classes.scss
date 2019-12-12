@@ -12,46 +12,21 @@
 
 .nowrap { white-space: nowrap; flex-wrap: nowrap; }
 
-.center-icon {
-    position: relative;
-    &:before {
-        position: absolute;
-        width: 100% !important;
-        text-align: center !important;
-        top: 50%;
-        left: 0;
-        margin-top: -.5em;
-    }
-}
-
-.icon-only-icon {
-    &:before {
-        margin-right: 0 !important;
-    }
-}
-
-.space-around {
-    margin-left: $gutter;
-    margin-right: $gutter;
-}
-.space-around-half {
-    margin-left: $gutter * .5;
-    margin-right: $gutter * .5;
-}
-
 
 // typography
-.has-text-size-base     { font-size: $font-size-base; }
-.has-text-size-large    { font-size: $font-size-lg; }
-.has-text-size-larger   { font-size: $font-size-llg; }
-.has-text-size-largest  { font-size: $font-size-lllg; }
-.has-text-size-small    { font-size: $font-size-sm; }
-.has-text-size-smaller  { font-size: $font-size-ssm; }
-.has-text-size-smallest { font-size: $font-size-sssm; }
-.has-text-size-smallest { font-size: $font-size-sssm; }
-.has-font-weight-light  { font-weight: $font-weight-light; }
-.has-font-weight-normal { font-weight: $font-weight-normal; }
-.has-font-weight-bold   { font-weight: $font-weight-bold; }
+.has-text-size-base         { font-size: $font-size-base; }
+.has-text-size-large        { font-size: $font-size-lg; }
+.has-text-size-larger       { font-size: $font-size-llg; }
+.has-text-size-largest      { font-size: $font-size-lllg; }
+.has-text-size-small        { font-size: $font-size-sm; }
+.has-text-size-smaller      { font-size: $font-size-ssm; }
+.has-text-size-smallest     { font-size: $font-size-sssm; }
+.has-text-size-smallest     { font-size: $font-size-sssm; }
+.has-font-weight-light      { font-weight: $font-weight-light; }
+.has-font-weight-normal     { font-weight: $font-weight-normal; }
+.has-font-weight-bold       { font-weight: $font-weight-bold; }
+.has-text-transform-upper   { text-transform: uppercase; }
+.has-text-transform-lower   { text-transform: lowercase; }
 
 
 
@@ -106,6 +81,32 @@
 .has-border-info        { border-color: $info !important; }
 
 
+// spacing
+.mx-1     { margin-left: $gutter;      margin-right: $gutter; }
+.mx-2     { margin-left: $gutter * 2;  margin-right: $gutter * 2; }
+.mx-05    { margin-left: $gutter * .5; margin-right: $gutter * .5; }
+.mx-auto  { margin-left: auto;         margin-right: auto; }
+
+
+// icons TODO: move with icon definition
+.center-icon {
+    position: relative;
+    &:before {
+        position: absolute;
+        width: 100% !important;
+        text-align: center !important;
+        top: 50%;
+        left: 0;
+        margin-top: -.5em;
+    }
+}
+
+.icon-only-icon {
+    &:before {
+        margin-right: 0 !important;
+    }
+}
+
 
 // orders
 .ordered-column   { display: flex !important; flex-direction: column }
@@ -119,4 +120,3 @@
 .order-7          { order: 7 !important; }
 .order-8          { order: 8 !important; }
 .order-bottom     { order: 100 !important; }
-
