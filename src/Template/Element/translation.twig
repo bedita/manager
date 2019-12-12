@@ -74,11 +74,11 @@
         {{ Form.end()|raw }}
 
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-translate'})) %}
+        {% do _view.append('commands-buttons', Form.submit(__('Save'), {'form': 'form-translate'})) %}
 
         {% if translation.id %}
             {# Append "Remove" to commands in commands menu. #}
-            {% do _view.append('commands',
+            {% do _view.append('commands-buttons',
                 Form.postButton(__('Remove'),
                 {'_name': 'translations:delete', 'object_type': objectType},
                 {'data': [{'id': translation.id, 'object_id': object.id, 'lang': translation.attributes.lang}]})) %}
