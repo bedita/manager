@@ -4,7 +4,7 @@
     </div>
 
     <div class="commands-buttons">
-        {{ _view.fetch('commands')|raw }}
+        {{ _view.fetch('commands-buttons')|raw }}
         {% if currentModule.hints.multiple_types and types.right is iterable %}
             {% element 'filter_type' %}
         {% endif %}
