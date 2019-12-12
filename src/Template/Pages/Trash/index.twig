@@ -46,7 +46,7 @@
             {% endif %}
 
             {# Append "Empty" button in commands menu. #}
-            {% do _view.append('commands-buttons',
+            {% do _view.append('module-buttons',
                 Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {'data': {'query': q}})|raw
             )%}
         </div>

@@ -3,21 +3,40 @@
         <div class="sidebar-bedita-logo">{# css logo #}</div>
     {% endif %}
 
+
     <div class="sidebar-project-title">{{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}</div>
 
+
+    {# module specific #}
     {% if not Layout.isLogin() and not Layout.isDashboard() %}
-        <div class="sidebar-commands">
-            {% element 'Menu/commands' %}
+        <div class="sidebar-module-commands">
+            <div class="module-box">
+                {{ Layout.moduleLink()|raw }}
+            </div>
+
+            <div class="module-buttons">
+                {{ _view.fetch('module-buttons')|raw }}
+                {% if currentModule.hints.multiple_types and types.right is iterable %}
+                    {% element 'filter_type' %}
+                {% endif %}
+            </div>
+
+            <div class="commands-links">
+                {{ _view.fetch('commands-links')|raw }}
+            </div>
         </div>
     {% endif %}
 
+
     <div class="sidebar-body">
         <div>
-            <a href="{{ Url.build({ '_name': 'user_profile:view' }) }}">{% if user.attributes.title %}
-                {{ user.attributes.title }}
-            {% else %}
-                {{ user.attributes.name }} {{ user.attributes.surname }}
-            {% endif %}</a>
+            <a href="{{ Url.build({ '_name': 'user_profile:view' }) }}">
+                {%- if user.attributes.title %}
+                    {{ user.attributes.title }}
+                {% else %}
+                    {{ user.attributes.name }} {{ user.attributes.surname }}
+                {% endif -%}
+            </a>
         </div>
 
         <div>
@@ -37,6 +56,7 @@
             <p><a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout">{{ __('Log out') }}</a></p>
         </div>
     </div>
+
 
     <div class="sidebar-footer">
         {% element 'Menu/colophon' %}

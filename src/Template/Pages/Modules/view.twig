@@ -88,10 +88,10 @@
         {{ Form.end()|raw }}
 
         {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands-buttons', Form.submit(__('Save'), {'form': 'form-main'})) %}
+        {% do _view.append('module-buttons', Form.submit(__('Save'), {'form': 'form-main'})) %}
         {% if object.id %}
         {# Append "Clone" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands-buttons', Html.link(
+        {% do _view.append('module-buttons', Html.link(
             __('Clone'),
             {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
             {'@click.prevent': 'clone'}
@@ -99,11 +99,11 @@
         {% endif %}
 
         {# Append "Delete" to commands in commands menu. #}
-        {% do _view.append('commands-buttons', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
+        {% do _view.append('module-buttons', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
 
         {# Append "Prev" and "Next" to commands in commands menu. #}
         {% if object.id and objectNav %}
-            {% do _view.append('commands-buttons', Link.objectNav(objectNav)) %}
+            {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
         {% endif %}
     </div>
 
