@@ -61,7 +61,7 @@
 
             {% if in_array('admin', user.roles) %}
                 {{ Html.link(__('Data modeling'),
-                    { '_name': 'model:list', 'resource_type': 'object_types' },
+                    { '_name': 'model:list:object_types' },
                     { 'title': __('Data modeling'), 'class': 'dashboard-item has-background-black icon-database' } )|raw }}
             {% endif %}
 

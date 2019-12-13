@@ -1,132 +1,48 @@
 body.view-model {
+    .module-form form section.fieldset {
+        input[disabled] {
+            background-color: $gray-700;
+            color: $gray-100;
+        }
 
-    .model-view {
-        padding-left: $gutter * .5;
-        >header {
-            h1:empty {
-                &:before {
-                    content: attr(untitled-label);
-                    color: $gray-600;
-                    font-style: italic;
-                }
+        .link-to-parent {
+            display: block;
+            margin-top: -.75 * $gutter;
+        }
+    }
+
+    .modules-view section {
+        margin-top: $gutter * 3;
+    }
+
+
+    .relations {
+        &-container {
+            .relations-group {
+                display: grid;
+                grid-gap: 2px;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr) );
             }
         }
     }
 
-    // view
-    .model-form {
-        width: 100%;
-        margin-top: $gutter;
+    .properties {
+        &-container {
+            display: grid;
+            grid-gap: $gutter;
+            grid-template-columns: repeat(1, 1fr);
+            @media screen and (min-width: 768px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (min-width: 1024px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
 
-        form {
-            // layout
+        .buttons-container {
             display: flex;
-            flex-wrap: wrap;
-
-            .form-column {
-                display: contents;
-                width: 100%;
-
-                @media screen and (min-width: 780px) {
-                    display: block;
-                    &:first-of-type { width: 67%; padding-right: $gutter; }
-                    &:last-of-type { width: 33%; }
-                }
-                @media screen and (min-width: 1024px) {
-                    &:first-of-type { width: 55%; padding-right: 2 * $gutter; }
-                    &:last-of-type { width: 45%; }
-                }
-            }
-
-            section.fieldset {
-                width: 100%;
-                order: 0;
-            }
-
-
-            // section content
-            section.fieldset {
-                > div,
-                .tab-container >div {
-                    margin: $gutter 0;
-                    &:first-child {
-                        margin-top: 0;
-                    }
-                }
-
-                .tab-container {
-                    margin-bottom: $gutter * 3;
-                }
-
-                &.closed {
-                    .tab {
-                        color: $gray-600;
-                        background: linear-gradient(to right, $gray-800, $gray-900);
-                    }
-                }
-
-                #{$text-inputs}, textarea {
-                    width: 100%;
-                    background-color: $gray-200;
-                }
-
-                label {
-                    flex: 1 0 100%;
-                    margin-right: 16px;
-                }
-
-                div.input.status {
-                    display: flex;
-                    flex-wrap: wrap;
-                    label:not(:first-child) {
-                        flex: 0 0 auto;
-                        margin-right: $gutter;
-                        cursor: pointer;
-                    }
-                }
-
-
-                .embedded-container {
-                    position: relative;
-                    padding-bottom: 56.25%; // default 16/9
-                    padding-top: 30px;
-                    height: 0;
-                    overflow: hidden;
-                    iframe, object, embed {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.fieldset .tab {
-    display: flex;
-    align-items: center;
-    margin-bottom: $gutter;
-    padding: .25rem .5rem;
-    background-color: $gray-800;
-    color: $gray-500;
-    border-radius: 3px;
-    cursor: pointer;
-
-    &.is-loading-spinner {
-        button {
-            display: none;
-        }
-    }
-
-    h2 {
-        flex-grow: 1;
-        margin: 0; padding: 0;
-        font-size: 1.25rem;
-        &:first-letter {
-            text-transform: capitalize;
+            flex-direction: column;
+            button { margin-bottom: $gutter * .5; }
         }
     }
 }
