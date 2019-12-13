@@ -46,14 +46,16 @@ main.layout {
     > .layout-content {
         transition: .3s transform;
     }
-    &.panel-is-open {
-        > .layout-header, > .layout-content {
-            transform: translateX(-114px);
+    > .layout-sidebar .sidebar {
+        transition: .3s opacity;
+    }
+    .panel-is-open & {
+        > .layout-header,
+        > .layout-content {
+            transform: translateX(-$dashboard-item-width);
         }
-        > .layout-sidebar-secondary {
-            > * {
-                transform: translateX(-114px);
-            }
+        > .layout-sidebar {
+            opacity: .1;
         }
         .main-panel.on {
             transform: translateX(0);
