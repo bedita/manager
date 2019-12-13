@@ -53,7 +53,7 @@
         display: flex;
         flex-direction: column;
 
-        > *:not(:empty):not(:last-child) { margin-bottom: $gutter; }
+        > *:not(:empty) { margin-bottom: $gutter; }
 
         .module-box {
             position: relative;
@@ -71,7 +71,7 @@
             }
         }
 
-        .module-buttons {
+        .module-buttons, .module-links {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
