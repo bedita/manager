@@ -5,7 +5,7 @@
 #}
 
 {% for resourceName in resourceRelations %}
-    {% set wait = 500 + (loop.index * 200) %}
+    {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
 
     <property-view inline-template :tab-open-at-start=true ref={{ resourceName }}>
         <section class="resources fieldset order-{{ cssOrder }} closed">

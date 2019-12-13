@@ -22,14 +22,13 @@
                         </h2>
                     </header>
 
+                    {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
                     {% if relationName == 'children' %}
                         <div v-show="isOpen" class="tab-container">
-                            {% set wait = 500 + (loop.index * 200) %}
                             {% element 'Form/children' {'relationName': relationName, 'loadOnStart': wait } %}
                         </div>
                     {% else %}
                         <div v-show="isOpen" class="tab-container">
-                            {% set wait = 500 + (loop.index * 200) %}
                             {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName], 'loadOnStart': wait } %}
                         </div>
                     {% endif %}
