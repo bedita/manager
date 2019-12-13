@@ -81,8 +81,8 @@
     </div>
 
     <div class="filter-buttons">
-        <button v-show="showFilterButtons" @click.prevent="applyFilter()">{{ __('Search') }}</button>
-        <button v-show="showFilterButtons" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
+        <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="applyFilter()">{{ __('Search') }}</button>
+        <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
     </div>
 </div>
 

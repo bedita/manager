@@ -3,6 +3,7 @@
     {% set routeName = 'trash:view' %}
 {% endif %}
 
+{% set buttonClasses = 'button button-text is-width-auto' %}
 
 <a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"
     class="table-row object-status-{{ object.attributes.status }}">
@@ -36,19 +37,41 @@
         {% if isTrash %}
 
             {% if in_array('PATCH', currentModule.hints.allow) %}
-                {{ Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'ids': object.id, 'query': q}})|raw }}
+                {{ Form.postButton(__('Restore'),
+                    {'_name': 'trash:restore'},
+                    {
+                        'data': {'ids': object.id, 'query': q},
+                        'title': __('Restore') ~ ' ' ~ object.attributes.title,
+                        'class': buttonClasses,
+                    }
+                )|raw }}
             {% endif %}
 
-            {{ Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'ids': object.id, 'query': q}, 'onclick': confirm})|raw }}
+            {{ Form.postButton(__('Delete'),
+                {'_name': 'trash:delete'},
+                {
+                    'data': {'ids': object.id, 'query': q},
+                    'class': buttonClasses,
+                    'title': __('Permanently delete') ~ ' ' ~ object.attributes.title,
+                    'onclick': confirm,
+                }
+            )|raw }}
 
         {% else %}
 
             <button
                 title="{{ __('Edit') }} {{ object.attributes.title }}"
-                class="button">{{ __('Edit') }}</button>
+                class="{{ buttonClasses }}">{{ __('Edit') }}</button>
 
             {% if in_array('DELETE', currentModule.hints.allow) %}
-                {{ Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw}}
+                {{ Form.postButton(__('Trash-verb'),
+                    {'_name': 'modules:delete', 'object_type': object.type},
+                    {
+                        'data': {'id': object.id},
+                        'title': __('Move to trash') ~ ' ' ~ object.attributes.title,
+                        'class': buttonClasses,
+                    }
+                )|raw}}
             {% endif %}
 
         {% endif %}

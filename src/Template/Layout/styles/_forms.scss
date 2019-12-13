@@ -1,5 +1,4 @@
 /* buttons, and inputs are defined in mixins.scss */
-
 .inverted {
     background: $gray-900;
     color: $white;
@@ -26,100 +25,6 @@
     }
 }
 
-#{$button-inputs},
-button, a.button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: top;
-
-    position: relative;
-    height: $gutter * 2;
-    flex-shrink: 0;
-    box-shadow: none;
-    padding-bottom: calc(.375em - 1px);
-    padding-left: .75em;
-    padding-right: .75em;
-    padding-top: calc(.375em - 1px);
-
-    border-radius: 2px;
-    border: 1px solid $gray-400;
-
-    background-color: transparent;
-    color: $gray-400;
-    font-family: $font-family-sans-serif;
-    font-size: $font-size-sssm;
-    font-weight: $font-weight-normal;
-    text-transform: uppercase;
-    line-height: 1;
-
-    cursor: pointer;
-
-    user-select: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-
-    &.bordered {
-        border: 1px solid $gray-600;
-    }
-
-    &:disabled {
-        color: $gray-700 !important;
-        background-color: $gray-500 !important;
-        pointer-events: none;
-    }
-    // &[class^="icon-"] {
-    //     min-width: auto;
-    //     height: auto;
-    //     padding: 0;
-    // }
-
-    &:focus {
-        outline: none;
-        background-color: $gray-300;
-    }
-
-    &.is-dark {
-        background-color: $gray-700;
-        color: $gray-300;
-    }
-
-    &.is-small {
-        height: $gutter * 1.5;
-        padding-left: .5em;
-        padding-right: .5em;
-        font-size: $font-size-sssm;
-    }
-
-    &.is-larger {
-        padding-left: 3em;
-        padding-right: 3em;
-    }
-
-    &.is-loading-spinner {
-        color: transparent!important;
-        pointer-events: none;
-        &:after {
-            position: absolute;
-            border-color: $gray-400;
-            border-right-color: transparent;
-            border-top-color: transparent;
-        }
-    }
-}
-
-#{$button-inputs-hover},
-button:hover,
-a.button:hover {
-    background-color: $gray-600;
-    color: #FFF;
-    outline: 0;
-    cursor: pointer;
-}
-
-
 textarea {
     padding: .25em .5em;
     min-width: 5rem;
@@ -141,7 +46,6 @@ label {
         margin-right: $gutter * .25;
     }
 }
-
 
 form .fieldset,
 form {

@@ -33,7 +33,10 @@
         {# commands to append in side bar (commands menu) #}
         {% if in_array('POST', currentModule.hints.allow) %}
             {% do _view.append('module-buttons',
-                Html.link(__('Create new'), {'_name': 'modules:create', 'object_type': objectType})|raw
+                Html.link(__('Create new'),
+                    {'_name': 'modules:create', 'object_type': objectType},
+                    {'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name}
+                )|raw
             ) %}
         {% endif %}
 

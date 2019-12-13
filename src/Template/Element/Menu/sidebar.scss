@@ -71,7 +71,14 @@
             }
         }
 
-        // TODO: facacare
+        .module-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            > *:not(:last-child) { margin-bottom: $gutter; }
+        }
+
+        // TODO: facacare, muovere in commands-link
         .listobjnav  {
             text-align:center;
             color:#DDD;

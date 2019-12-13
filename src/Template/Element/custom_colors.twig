@@ -1,27 +1,17 @@
 <style type="text/css">
 
     {# set modules colors #}
-    {% for name, color in config('Modules.colors') %}
-
-        .has-background-module-{{ name }} {
-            background-color: {{ color }} !important;
-        }
-
-        .has-border-module-{{ name }} {
-            border-color:  {{ color }} !important;
-        }
-
-        .has-text-module-{{ name }} {
-            color:  {{ color }} !important;
-        }
-
-    {% endfor %}
+    {%- for name, color in config('Modules.colors') -%}
+        .has-background-module-{{ name }} { background-color: {{ color }} !important; }
+        .has-border-module-{{ name }} { border-color: {{ color }} !important; }
+        .has-text-module-{{ name }} { color: {{ color }} !important; }
+        .button-primary-hover-module-{{ name }}:hover { background-color: {{ color }}; border-color: {{ color }}; color: #fff; }
+        .button-outlined-hover-module-{{ name }}:hover { background-color: transparent !important; border-color: {{ color }}; }
+    {%- endfor -%}
 
     {# override alert message color if in config #}
-    {% if config('AlertMessage.color') %}
-        body[alert-message]:after {
-            background-color: {{ config('AlertMessage.color') }};
-        }
-    {% endif %}
+    {%- if config('AlertMessage.color') -%}
+        body[alert-message]:after { background-color: {{ config('AlertMessage.color') }}; }
+    {%- endif -%}
 
 </style>

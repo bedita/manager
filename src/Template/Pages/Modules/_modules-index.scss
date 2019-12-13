@@ -127,10 +127,6 @@ body.view-module {
                             display: inline-flex;
                             justify-content: flex-end;
                         }
-
-                        button, #{$button-inputs} {
-                            border: none;
-                        }
                     }
                 }
             }

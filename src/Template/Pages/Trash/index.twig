@@ -47,7 +47,10 @@
 
             {# Append "Empty" button in commands menu. #}
             {% do _view.append('module-buttons',
-                Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {'data': {'query': q}})|raw
+                Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
+                    'data': {'query': q},
+                    'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                })|raw
             )%}
         </div>
     </div>

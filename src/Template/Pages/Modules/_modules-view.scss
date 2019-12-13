@@ -4,7 +4,7 @@ body.view-module, body.translation-module {
         padding-left: $gutter * .5;
         >header {
             display: inline-flex;
-            min-height: 4.5 * $gutter;
+            min-height: 3 * $gutter;
 
             a {
                 margin-left: $gutter;

@@ -67,17 +67,24 @@
         {# The ID of the resource translated #}
         {{ Form.hidden('object_id', {'value': object.id})|raw }}
 
+        {# The translation ID #}
         {% if translation.id %}
-            {# The translation ID #}
             {{ Form.hidden('id', {'value': translation.id})|raw }}
         {% endif %}
+
         {{ Form.end()|raw }}
 
-        {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('module-buttons', Form.submit(__('Save'), {'form': 'form-translate'})) %}
+
+        {# Append "Save" to sidebar #}
+        {% do _view.append('module-buttons', Form.button( __('Save'),
+            {
+                'form': 'form-main',
+                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+            })
+        ) %}
 
         {% if translation.id %}
-            {# Append "Remove" to commands in commands menu. #}
+            {# Append "Remove" to sidebar #}
             {% do _view.append('module-buttons',
                 Form.postButton(__('Remove'),
                 {'_name': 'translations:delete', 'object_type': objectType},
