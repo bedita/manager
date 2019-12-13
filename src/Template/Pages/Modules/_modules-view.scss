@@ -1,7 +1,8 @@
 body.view-module, body.translation-module {
 
     .modules-view {
-        padding-left: $gutter * .5;
+        overflow-x: hidden;
+
         >header {
             display: inline-flex;
             min-height: 3 * $gutter;
@@ -12,10 +13,6 @@ body.view-module, body.translation-module {
 
             button {
                 margin-left: $gutter * .5;
-            }
-
-            h1 {
-                margin-bottom: $gutter * .5;
             }
 
             h1:empty {
@@ -30,7 +27,6 @@ body.view-module, body.translation-module {
 
     // view
     .module-form {
-        width: 100%;
         margin-top: $gutter;
 
         form {
