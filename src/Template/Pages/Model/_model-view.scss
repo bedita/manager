@@ -11,7 +11,7 @@ body.view-model {
         }
     }
 
-    .modules-view section {
+    .modules-view section:not(:first-child) {
         margin-top: $gutter * 3;
     }
 
