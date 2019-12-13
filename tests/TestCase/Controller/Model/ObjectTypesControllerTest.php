@@ -44,7 +44,7 @@ class ObjectTypesControllerTest extends TestCase
         ],
         'params' => [
             'resource_type' => 'object_types',
-        ]
+        ],
     ];
 
     /**

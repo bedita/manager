@@ -45,7 +45,7 @@ class PropertyTypesControllerTest extends TestCase
         ],
         'params' => [
             'resource_type' => 'property_types',
-        ]
+        ],
     ];
 
     /**
@@ -88,7 +88,7 @@ class PropertyTypesControllerTest extends TestCase
             'emptyRequest' => [
                 new BadRequestException('empty request'),
                 [],
-                ''
+                '',
             ],
             'addPropertyTypesRequest' => [
                 [
@@ -98,10 +98,10 @@ class PropertyTypesControllerTest extends TestCase
                         'attributes' => [
                                 'name' => 'giovanni',
                                 'params' => [
-                                        'type' => 'string'
-                                ]
+                                        'type' => 'string',
+                                ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'addPropertyTypes' => [
@@ -110,10 +110,10 @@ class PropertyTypesControllerTest extends TestCase
                             'params' => json_encode([
                                 'type' => 'string',
                             ]),
-                        ]
+                        ],
                     ],
                 ],
-                'saved'
+                'saved',
             ],
             'editPropertyTypesRequest' => [
                 [
@@ -123,10 +123,10 @@ class PropertyTypesControllerTest extends TestCase
                         'attributes' => [
                                 'name' => 'enrico',
                                 'params' => [
-                                        'type' => 'object'
+                                        'type' => 'object',
                                 ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'editPropertyTypes' => [
@@ -137,17 +137,17 @@ class PropertyTypesControllerTest extends TestCase
                                 'params' => [
                                     'type' => 'object',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
-                'edited'
+                'edited',
             ],
             'removePropertyTypesRequest' => [
                 [ '12' ],
                 [
                     'removePropertyTypes' => [
-                        '12'
+                        '12',
                     ],
                 ],
                 'removed',
@@ -158,7 +158,7 @@ class PropertyTypesControllerTest extends TestCase
                 ],
                 [
                     'removePropertyTypes' => [
-                        '12345'
+                        '12345',
                     ],
                 ],
                 'removed',
