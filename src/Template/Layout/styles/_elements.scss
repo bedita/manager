@@ -172,7 +172,7 @@ nav.pagination {
     align-items: center;
     > div {
         &:not(:last-child) {
-            margin-right: $gutter *.5;
+            margin-right: $gutter;
         }
 
         &.page-size {
@@ -195,9 +195,11 @@ nav.pagination {
             }
 
             .pages-delimiter {
+                &:after {
+                    content: '…';
+                }
                 margin-left: $gutter * .5;
-                font-size: 2rem;
-                line-height: 1;
+                font-size: $font-size-llg;
             }
         }
     }

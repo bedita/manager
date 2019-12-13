@@ -21,21 +21,22 @@
             </button>
         </div>
 
+        {% set pageButton = 'has-text-size-smallest button is-width-auto button-outlined button-outlined-hover-module-' ~ currentModule.name %}
         <div v-if="!isFullPaginationLayout">
             {# first page #}
-            <button v-if="pagination.page > 1" class="has-text-size-smallest" @click.prevent="onChangePage(1)"><: 1 :></button>
+            <button v-if="pagination.page > 1" class="{{ pageButton }}" @click.prevent="onChangePage(1)"><: 1 :></button>
             {# delimiter #}
-            <span v-if="pagination.page > 3" class="pages-delimiter">...</span>
+            <span v-if="pagination.page > 3" class="pages-delimiter"></span>
             {# prev page #}
-            <button v-if="pagination.page > 2" class="has-text-size-smallest" @click.prevent="onChangePage(pagination.page - 1)"><: pagination.page - 1:></button>
+            <button v-if="pagination.page > 2" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page - 1)"><: pagination.page - 1:></button>
             {# current page #}
             <button class="is-dark current-page has-text-size-smallest" @click.prevent="onChangePage(pagination.page)"><: pagination.page :></button>
             {# next page #}
-            <button v-if="pagination.page < pagination.page_count-1" class="has-text-size-smallest" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
+            <button v-if="pagination.page < pagination.page_count-1" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
             {# delimiter #}
-            <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter">...</span>
+            <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter"></span>
             {# last page #}
-            <button v-if="pagination.page < pagination.page_count" class="has-text-size-smallest" @click.prevent="onChangePage(pagination.page_count)"><: pagination.page_count :></button>
+            <button v-if="pagination.page < pagination.page_count" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page_count)"><: pagination.page_count :></button>
         </div>
     </div>
 </nav>
