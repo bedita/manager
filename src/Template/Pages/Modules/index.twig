@@ -2,6 +2,7 @@
 {% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
     {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
 {% endif %}
+
 {% element 'Modules/index_header' %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}

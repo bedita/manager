@@ -1,28 +1,17 @@
 body.view-model {
 
-    // index
-    .model-header {
-        height: 86px;
-        margin-left: $gutter * .5;
+    // true
+    .module-index {
+        .list-objects {
+            margin: 0 0 $gutter * 8;
 
-        .model-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            @media screen and (max-width: 960px) {
-                height: 100%;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: flex-start;
-                >* {
-                    margin-bottom: $gutter;
-                }
+            .table-row div.name-cell {
+                padding-bottom: 3px;
             }
         }
     }
 
     .model-index {
-
         .list-resources {
             .add-row {
                 button {
