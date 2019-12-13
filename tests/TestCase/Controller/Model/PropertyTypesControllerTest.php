@@ -11,28 +11,26 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Model;
 
-use App\Controller\ModelController;
+use App\Controller\Model\PropertyTypesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
-use Cake\Http\Exception\UnauthorizedException;
-use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
 /**
- * {@see \App\Controller\ModelController} Test Case
+ * {@see \App\Controller\Model\PropertyTypesController} Test Case
  *
- * @coversDefaultClass \App\Controller\ModelController
+ * @coversDefaultClass \App\Controller\Model\PropertyTypesController
  */
-class ModelControllerTest extends TestCase
+class PropertyTypesControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Controller\ModelController
+     * @var \App\Controller\Model\PropertyTypesController
      */
     public $ModelController;
 
@@ -46,7 +44,7 @@ class ModelControllerTest extends TestCase
             'REQUEST_METHOD' => 'GET',
         ],
         'params' => [
-            'resource_type' => 'object_types',
+            'resource_type' => 'property_types',
         ],
     ];
 
@@ -74,157 +72,16 @@ class ModelControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->ModelController = new ModelController($request);
+        $this->ModelController = new PropertyTypesController($request);
         $this->setupApi();
     }
 
     /**
-     * Data provider for `testBeforeFilter` test case.
+     * Data provider for `testSave` test case.
      *
      * @return array
      */
-    public function beforeFilterProvider(): array
-    {
-        return [
-            'not authorized' => [
-                false,
-                [
-                    'username' => 'dummy',
-                    'password' => 'dummy',
-                    'roles' => [ 'useless' ],
-                ],
-                new UnauthorizedException(__('Module access not authorized')),
-            ],
-            'authorized' => [
-                true,
-                [
-                    'username' => 'bedita',
-                    'password' => 'bedita',
-                    'roles' => [ 'admin' ],
-                ],
-                null,
-            ],
-        ];
-    }
-
-    /**
-     * Test `beforeFilter` method
-     *
-     * @param array $expected expected results from test
-     * @param boolean|null $data setup data for test
-     * @param \Exception|null $expection expected exception from test
-     *
-     * @covers ::beforeFilter()
-     * @dataProvider beforeFilterProvider()
-     *
-     * @return void
-     */
-    public function testBeforeFilter($expected, $data, $exception): void
-    {
-        $this->setupController();
-
-        $this->ModelController->Auth->setUser($data);
-
-        if (!empty($exception)) {
-            $this->expectException(get_class($exception));
-        }
-
-        $event = $this->ModelController->dispatchEvent('Controller.beforeFilter');
-        $this->ModelController->beforeFilter($event);
-
-        static::assertTrue($expected);
-    }
-
-    /**
-     * Test `beforeRender` method
-     *
-     * @covers ::beforeRender()
-     *
-     * @return void
-     */
-    public function testBeforeRender(): void
-    {
-        $this->setupController();
-        $this->ModelController->dispatchEvent('Controller.beforeRender');
-
-        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
-        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
-    }
-
-    /**
-     * Test `index` method
-     *
-     * @covers ::index()
-     * @covers ::initialize()
-     * @covers ::beforeFilter()
-     *
-     * @return void
-     */
-    public function testIndex(): void
-    {
-        $this->setupController();
-        $this->ModelController->index();
-        $vars = ['resources', 'meta', 'links', 'properties'];
-        foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
-        }
-    }
-
-    /**
-     * Test `index` failure method
-     *
-     * @covers ::index()
-     *
-     * @return void
-     */
-    public function testIndexFail(): void
-    {
-        $this->setupController([
-            'params' => [
-                'resource_type' => 'documents',
-            ],
-        ]);
-        $result = $this->ModelController->index();
-        static::assertTrue(($result instanceof Response));
-    }
-
-    /**
-     * Test `view` method
-     *
-     * @covers ::view()
-     *
-     * @return void
-     */
-    public function testView(): void
-    {
-        $this->setupController();
-        $this->ModelController->view(1);
-        $vars = ['resource', 'schema', 'properties'];
-        foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
-        }
-    }
-
-    /**
-     * Test `view` failure method
-     *
-     * @covers ::view()
-     *
-     * @return void
-     */
-    public function testViewFail(): void
-    {
-        $this->setupController();
-        $result = $this->ModelController->view(0);
-        static::assertTrue(($result instanceof Response));
-    }
-
-    /**
-     * Data provider for `testSavePropertyTypesJson` test case.
-     *
-     * @return array
-     */
-    public function savePropertyTypesJsonProvider(): array
+    public function saveProvider(): array
     {
         return [
             // test with empty object
@@ -295,22 +152,36 @@ class ModelControllerTest extends TestCase
                 ],
                 'removed',
             ],
+            'request error' => [
+                [
+                  'error' => '[404] Not Found',
+                ],
+                [
+                    'removePropertyTypes' => [
+                        '12345',
+                    ],
+                ],
+                'removed',
+            ],
+
         ];
     }
 
     /**
-     * Test `savePropertyTypesJson` method
+     * Test `save` method
      *
      * @param array|\Exception $expectedResponse expected results from test
      * @param boolean|null $data setup data for test
      * @param string $action tested action
      *
-     * @dataProvider savePropertyTypesJsonProvider()
-     * @covers ::savePropertyTypesJson()
-     *
+     * @dataProvider saveProvider()
+     * @covers ::save()
+     * @covers ::addPropertyTypes()
+     * @covers ::editPropertyTypes()
+     * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSavePropertyTypesJson($expectedResponse, $data, $action)
+    public function testSave($expectedResponse, $data, $action)
     {
         $config = [
             'environment' => [
@@ -328,14 +199,18 @@ class ModelControllerTest extends TestCase
             $this->expectExceptionMessage($expectedResponse->getMessage());
         }
 
-        $this->ModelController->savePropertyTypesJson();
+        $this->ModelController->save();
 
-        $actualResponse = Hash::get($this->ModelController->viewVars, $action, []);
+        $actualResponse = (array)Hash::get($this->ModelController->viewVars, $action);
 
         if ($action == 'saved') {
             foreach ($actualResponse as &$element) {
                 unset($element['id']);
             }
+        }
+        if (is_array($expectedResponse) && !empty($expectedResponse['error'])) {
+            $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
+            $expectedResponse = $expectedResponse['error'];
         }
 
         static::assertEquals($expectedResponse, $actualResponse);

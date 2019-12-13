@@ -1,0 +1,134 @@
+{% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+<modules-view inline-template ref="moduleView">
+<div class="modules-view">
+
+    {% if resource.id %}
+    <header>
+        <h1 untitled-label="{{ __('Untitled') }}">{{ resource.attributes.name }}</h1>
+    </header>
+    {% endif %}
+
+    <div class="module-form">
+
+        {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
+            'url': {'_name': 'model:save:object_types'},
+            'id': 'form-main',
+            'check-changes': 'true',
+        })|raw }}
+
+            <div class="form-column">
+                <section class="fieldset order-0">
+                    <div class="tab-container">
+                        {% for key, value in properties.core %}
+                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                            {% if options.class != 'json' %}
+                                {% if resource.meta.core_type %}
+                                    {% if key in ['name', 'singular', 'table', 'parent_name'] %}
+                                        {% set options = options|merge({
+                                            'readonly' : true,
+                                            'disabled' : true,
+                                        }) %}
+                                     {% endif %}
+                                {% endif %}
+
+                                {{ Form.control(key, options)|raw }}
+
+                                {% if key == 'parent_name' %}
+                                    <a href="{{ Url.build({'_name': 'model:view:object_types', 'id': value}) }}" class="link-to-parent">› {{ __('view parent') }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+                    </div>
+                </section>
+            </div>
+
+            <div class="form-column">
+                <section class="fieldset order-3">
+                    <div class="tab-container">
+                        {% for key, value in properties.core %}
+                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                            {% if options.class == 'json' %}
+                                {{ Form.control(key, options)|raw }}
+                                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </section>
+
+                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+            </div>
+
+        {{ Form.end()|raw }}
+
+        {# TODO: uncomment `save` and `delete` actions once controller part is available #}
+        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
+        {# {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
+    </div>
+
+
+    <section class="relations">
+        <header class="unselectable"><h2>{{ __('Relations') }}</h2></header>
+        <div class="relations-container">
+        {% if resource.meta.relations %}
+            <div class="relations-group">
+            {% for relation in resource.meta.relations %}
+                <a class="tag is-black" href="{{ Url.build({'_name': 'model:view:relations', 'id': relation}) }}">{{ relation }}</a>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Relations</p>
+        {% endif %}
+        </div>
+    </section>
+
+
+    <section class="properties">
+        <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
+        <div class="properties-container">
+            {% for prop in objectTypeProperties.core %}
+                {% element 'Model/object_property' { 'prop': prop, 'type': 'core' }  %}
+            {% else %}
+                <p>No Core properties</p>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <section class="properties">
+        <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
+        <div class="properties-container">
+            {% for prop in objectTypeProperties.inherited %}
+                {% element 'Model/object_property' {
+                    'prop': prop,
+                    'type': 'inherited',
+                    'noButtonsFor': ['id', 'status', 'uname'],
+                }  %}
+            {% else %}
+                <p>No inherited properties</p>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <section class="properties">
+        <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
+        <div class="properties-container">
+            {% for prop in objectTypeProperties.custom %}
+                {% element 'Model/object_property' { 'prop': prop, 'type': 'custom' }  %}
+            {% else %}
+                <p>No custom properties</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# commands links to append in left side bar (commands menu) #}
+    {% do _view.append('commands-links', Html.link(__('Objects'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Properties'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
+
+</div>
+</modules-view>

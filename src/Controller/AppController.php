@@ -143,7 +143,7 @@ class AppController extends Controller
             $this->set(compact('user'));
         }
 
-        $this->viewBuilder()->setTemplatePath('Pages/' . $this->name);
+        $this->viewBuilder()->setTemplatePath('Pages/' . $this->_viewPath());
 
         return null;
     }

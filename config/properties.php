@@ -108,11 +108,11 @@ return [
                 'core' => [
                     'name',
                     'singular',
-                    'is_abstract',
                     'description',
-                    'associations',
-                    'hidden',
                     'enabled',
+                    'is_abstract',
+                    'hidden',
+                    'associations',
                     'table',
                     'parent_name',
                 ],
@@ -121,6 +121,7 @@ return [
                 'name',
                 'enabled',
                 'is_abstract',
+                'core_type',
             ],
         ],
 

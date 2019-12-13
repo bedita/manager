@@ -187,9 +187,6 @@ export default {
                 }
             }
 
-            let fullUrl = window.location.href;
-            let baseUrl = fullUrl.replace(window.location.search, '');
-
             let headers = new Headers({
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -210,7 +207,7 @@ export default {
                 body: JSON.stringify( payload ),
             };
 
-            const postUrl = `${baseUrl}/savePropertyTypesJson`;
+            const postUrl = `${BEDITA.base}/model/property_types/save`;
 
             fetch(postUrl, options)
                 .then((res) => res.json())
