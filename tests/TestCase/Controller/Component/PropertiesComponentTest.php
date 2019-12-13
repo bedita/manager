@@ -155,7 +155,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'something',
                     ],
-                ]
+                ],
             ],
             'other' => [
                 [
@@ -192,7 +192,7 @@ class PropertiesComponentTest extends TestCase
                     'advanced' => [
                         'json_field',
                     ],
-                ]
+                ],
             ],
             'new order' => [
                 [
@@ -227,7 +227,7 @@ class PropertiesComponentTest extends TestCase
                         'uname',
                         'status',
                     ],
-                ]
+                ],
             ],
             'custom groups' => [
                 [
@@ -265,14 +265,14 @@ class PropertiesComponentTest extends TestCase
                     'custom' => [
                         'model',
                     ],
-                ]
+                ],
             ],
             'other body' => [
                 [
                     'core' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                     'publish' => [
                     ],
@@ -285,7 +285,7 @@ class PropertiesComponentTest extends TestCase
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                 ],
                 'foos',
@@ -295,7 +295,7 @@ class PropertiesComponentTest extends TestCase
                         'body',
                         'lang',
                     ],
-                ]
+                ],
             ],
             'other defaults' => [
                 [
@@ -308,7 +308,7 @@ class PropertiesComponentTest extends TestCase
                     ],
                     'other' => [
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                 ],
                 [
@@ -319,7 +319,7 @@ class PropertiesComponentTest extends TestCase
                         'date_ranges' => [],
                     ],
                 ],
-                'foos'
+                'foos',
             ],
 
         ];

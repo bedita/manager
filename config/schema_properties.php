@@ -21,28 +21,28 @@ return [
                 '$id' => '/properties/name',
                 'title' => 'Name',
                 'description' => 'model unique name',
-                'maxLength' => 32
+                'maxLength' => 32,
             ],
             'singular' => [
                 'type' => 'string',
                 '$id' => '/properties/singular',
                 'title' => 'Singular name',
                 'description' => 'Model unique singular name',
-                'maxLength' => 32
+                'maxLength' => 32,
             ],
             'description' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html'
+                        'contentMediaType' => 'text/html',
                     ],
                 ],
                 '$id' => '/properties/description',
                 'title' => 'Description',
-                'description' => 'object type description'
+                'description' => 'object type description',
             ],
             'is_abstract' => [
                 'type' => 'boolean',
@@ -68,7 +68,7 @@ return [
             'associations' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'object',
@@ -76,12 +76,12 @@ return [
                 ],
                 '$id' => '/properties/associations',
                 'title' => 'Associations',
-                'description' => 'Object type entity associations'
+                'description' => 'Object type entity associations',
             ],
             'hidden' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'object',
@@ -89,7 +89,7 @@ return [
                 ],
                 '$id' => '/properties/hidden',
                 'title' => 'Hidden',
-                'description' => 'Object type entity associations'
+                'description' => 'Object type entity associations',
             ],
         ],
 
@@ -107,12 +107,12 @@ return [
                 '$id' => '/properties/name',
                 'title' => 'Name',
                 'description' => 'property unique name',
-                'maxLength' => 32
+                'maxLength' => 32,
             ],
             'params' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'object',
@@ -120,7 +120,7 @@ return [
                 ],
                 '$id' => '/properties/hidden',
                 'title' => 'Params',
-                'description' => 'Property params, JSON Schema format'
+                'description' => 'Property params, JSON Schema format',
             ],
         ],
 
@@ -144,7 +144,7 @@ return [
                 '$id' => '/properties/inverse_name',
                 'title' => 'Inverse name',
                 'description' => 'Relation unique inverse name',
-                'maxLength' => 32
+                'maxLength' => 32,
             ],
             'inverse_label' => [
                 'type' => 'string',
@@ -157,26 +157,26 @@ return [
                 '$id' => '/properties/name',
                 'title' => 'Name',
                 'description' => 'Relation unique name',
-                'maxLength' => 32
+                'maxLength' => 32,
             ],
             'description' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html'
+                        'contentMediaType' => 'text/html',
                     ],
                 ],
                 '$id' => '/properties/description',
                 'title' => 'Description',
-                'description' => 'Relation description'
+                'description' => 'Relation description',
             ],
             'params' => [
                 'oneOf' => [
                     [
-                        'type' => 'null'
+                        'type' => 'null',
                     ],
                     [
                         'type' => 'object',
@@ -184,7 +184,7 @@ return [
                 ],
                 '$id' => '/properties/hidden',
                 'title' => 'Params',
-                'description' => 'Property params, JSON Schema format'
+                'description' => 'Property params, JSON Schema format',
             ],
         ],
     ],

@@ -75,11 +75,7 @@ class AppController extends Controller
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
         } elseif (!in_array($this->request->getPath(), ['/login'])) {
-            $route = ['_name' => 'login'];
-            $redirect = $this->request->getUri()->getPath();
-            if ($redirect !== $this->request->getAttribute('webroot')) {
-                $route += compact('redirect');
-            }
+            $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
             return $this->redirect($route);
@@ -87,6 +83,32 @@ class AppController extends Controller
         $this->setupOutputTimezone();
 
         return null;
+    }
+
+    /**
+     * Return route array for login redirect.
+     * When request is not a get, return route without redirect.
+     * When request uri path equals request attribute webroot (the app 'webroot'), return route without redirect.
+     * Return route with redirect, otherwise.
+     *
+     * @return array
+     */
+    protected function loginRedirectRoute(): array
+    {
+        $route = ['_name' => 'login'];
+
+        // if request is not a get, return route without redirect.
+        if (!$this->request->is('get')) {
+            return $route;
+        }
+
+        // if redirect is app webroot, return route without redirect.
+        $redirect = $this->request->getUri()->getPath();
+        if ($redirect === $this->request->getAttribute('webroot')) {
+            return $route;
+        }
+
+        return $route + compact('redirect');
     }
 
     /**

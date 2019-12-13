@@ -66,7 +66,7 @@ class ModelBaseControllerTest extends TestCase
         ],
         'params' => [
             'resource_type' => 'object_types',
-        ]
+        ],
     ];
 
     /**
@@ -122,7 +122,7 @@ class ModelBaseControllerTest extends TestCase
                     'roles' => [ 'admin' ],
                 ],
                 null,
-            ]
+            ],
         ];
     }
 

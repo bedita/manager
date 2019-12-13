@@ -209,7 +209,7 @@ class TranslationsControllerTest extends TestCase
                 [
                     'id' => $this->getTestTranslationId($objectId, 'documents', 'it'),
                     'object_id' => $objectId,
-                ]
+                ],
             ],
             'params' => [
                 'object_type' => 'documents',

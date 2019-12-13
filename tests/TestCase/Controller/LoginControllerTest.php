@@ -76,7 +76,7 @@ class LoginControllerTest extends TestCase
             'post' => [
                 'username' => env('BEDITA_ADMIN_USR'),
                 'password' => env('BEDITA_ADMIN_PWD'),
-            ]
+            ],
         ]);
 
         $response = $this->Login->login();
@@ -116,8 +116,8 @@ class LoginControllerTest extends TestCase
             'post' => [
                 'username' => env('BEDITA_ADMIN_USR'),
                 'password' => env('BEDITA_ADMIN_PWD'),
-                'timezone_offset' => '7200 0'
-            ]
+                'timezone_offset' => '7200 0',
+            ],
         ]);
 
         $response = $this->Login->login();
@@ -141,7 +141,7 @@ class LoginControllerTest extends TestCase
             'post' => [
                 'username' => 'wronguser',
                 'password' => 'wrongpwd',
-            ]
+            ],
         ]);
 
         $response = $this->Login->login();

@@ -249,21 +249,21 @@ class LayoutHelperTest extends TestCase
                 '<a href="/user_profile" class="has-background-black icon-user">UserProfile</a>',
                 'UserProfile',
                 [
-                    'moduleLink' => ['_name' => 'user_profile:view']
+                    'moduleLink' => ['_name' => 'user_profile:view'],
                 ],
             ],
             'import' => [
                 '<a href="/import" class="has-background-black icon-download-alt">Import</a>',
                 'Import',
                 [
-                    'moduleLink' => ['_name' => 'import:index']
+                    'moduleLink' => ['_name' => 'import:index'],
                 ],
             ],
             'objects' => [
                 '<a href="/objects" class="has-background-module-objects">Objects</a>',
                 'Module',
                 [
-                    'currentModule' => ['name' => 'objects']
+                    'currentModule' => ['name' => 'objects'],
                 ],
             ],
         ];

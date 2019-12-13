@@ -528,15 +528,15 @@ class ModulesControllerTest extends TestCase
             'save' => [
                 [
                     'code' => 200,
-                    'message' => 'OK'
+                    'message' => 'OK',
                 ],
                 [
                     'params' => [
-                        'object_type' => 'images'
+                        'object_type' => 'images',
                     ],
                     'body' => [
                         'title' => 'bibo',
-                    ]
+                    ],
                 ],
             ],
             'exception' => [
@@ -550,9 +550,9 @@ class ModulesControllerTest extends TestCase
                     ],
                     'body' => [
                         'title' => 'bibo',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -945,8 +945,8 @@ class ModulesControllerTest extends TestCase
                         'enum2',
                         'enum3',
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $expected = [
             'properties' => [
@@ -958,8 +958,8 @@ class ModulesControllerTest extends TestCase
                         'enum2',
                         'enum3',
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->setupController();
@@ -1013,7 +1013,7 @@ class ModulesControllerTest extends TestCase
         if ($o == null) {
             $response = $this->client->save('documents', [
                 'title' => 'modules controller test document',
-                'uname' => $this->uname
+                'uname' => $this->uname,
             ]);
             $o = $response['data'];
         }

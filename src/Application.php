@@ -59,7 +59,7 @@ class Application extends BaseApplication
                 'autoload' => false,
                 'bootstrap' => false,
                 'routes' => false,
-                'ignoreMissing' => false
+                'ignoreMissing' => false,
             ];
             foreach ($plugins as $plugin => $options) {
                 $options = array_merge($_defaults, $options);
@@ -82,7 +82,7 @@ class Application extends BaseApplication
 
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
-                'cacheTime' => Configure::read('Asset.cacheTime')
+                'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
             // Add I18n middleware.
@@ -111,7 +111,7 @@ class Application extends BaseApplication
         $csrf = new CsrfProtectionMiddleware();
         // Token check will be skipped when callback returns `true`.
         $csrf->whitelistCallback(function ($request) {
-            $actions = (array)Configure::read(sprintf('CrsfExceptions.%s', $request->getParam('controller')));
+            $actions = (array)Configure::read(sprintf('CsrfExceptions.%s', $request->getParam('controller')));
             // Skip token check for API URLs.
             if (in_array($request->getParam('action'), $actions)) {
                 return true;

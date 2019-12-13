@@ -142,6 +142,47 @@ class AppControllerTest extends TestCase
     }
 
     /**
+     * Data provider for `testLoginRedirectRoute` test case.
+     *
+     * @return array
+     */
+    public function loginRedirectRouteProvider(): array
+    {
+        return [
+            'request is not a get' => [
+                ['environment' => ['REQUEST_METHOD' => 'POST']], // config
+                ['_name' => 'login'], // expected
+            ],
+            'request app webroot' => [
+                ['environment' => ['REQUEST_METHOD' => 'GET'], 'webroot' => '/'], // config
+                ['_name' => 'login'], // expected
+            ],
+            'redirect to /' => [
+                ['environment' => ['REQUEST_METHOD' => 'GET'], 'params' => ['object_type' => 'documents']], // config
+                ['_name' => 'login', 'redirect' => '/'], // expected
+            ],
+        ];
+    }
+
+    /**
+     * test 'loginRedirectRoute'.
+     *
+     * @covers ::loginRedirectRoute()
+     * @dataProvider loginRedirectRouteProvider()
+     *
+     * @return void
+     */
+    public function testLoginRedirectRoute($config, $expected): void
+    {
+        $this->setupController($config);
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('loginRedirectRoute');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, []);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * test `setupOutputTimezone`
      *
      * @covers ::setupOutputTimezone
@@ -252,7 +293,7 @@ class AppControllerTest extends TestCase
                     '_jsonKeys' => 'jsonKey1,jsonKey2',
                     'jsonKey1' => '{"a":1,"b":2,"c":3}',
                     'jsonKey2' => '{"gin":"vodka","fritz":"kola"}',
-                ]
+                ],
             ],
             'actual attrs' => [ // test '_actualAttributes'
                 'documents', // object_type
@@ -263,7 +304,7 @@ class AppControllerTest extends TestCase
                     'title' => 'bibo',
                     'description' => 'dido',
                     '_actualAttributes' => '{"title":"bibo","description":""}',
-                ]
+                ],
             ],
             'fields null value' => [ // fields with value null, not changed and changed
                 'documents', // object_type
@@ -275,7 +316,7 @@ class AppControllerTest extends TestCase
                     'title' => null,
                     'description' => null,
                     '_actualAttributes' => '{"title":"bibo","description":null}',
-                ]
+                ],
             ],
             'users' => [ // test: removing password from data
                 'users', // object_type
@@ -284,7 +325,7 @@ class AppControllerTest extends TestCase
                     'name' => 'giova',
                     'password' => '',
                     'confirm-password' => '',
-                ]
+                ],
             ],
             'relations' => [
                 'documents', // object_type
@@ -299,20 +340,20 @@ class AppControllerTest extends TestCase
                                 [
                                     'id' => '44',
                                     'type' => 'images',
-                                ]
-                            ]
-                        ]
-                    ]
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 [ // data provided
                     'id' => '1', // fake document id
                     'relations' => [
                         'attach' => [
-                            'addRelated' => '[{ "id": "44", "type": "images"}]' // fake attached image
-                        ]
-                    ]
-                ]
-            ]
+                            'addRelated' => '[{ "id": "44", "type": "images"}]', // fake attached image
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -432,9 +473,9 @@ class AppControllerTest extends TestCase
                     ],
                     'post' => [
                         'password' => 'bibo',
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
