@@ -3,8 +3,6 @@ body.view-model {
     // true
     .module-index {
         .list-objects {
-            margin: 0 0 $gutter * 8;
-
             .table-row div.name-cell .tag {
                 transform: translateY(4px);
             }

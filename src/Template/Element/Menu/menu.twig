@@ -1,7 +1,57 @@
 <main-menu inline-template>
+    <div class="menu-bar">
+
+        <nav role="menu">
+            {# Core object modules #}
+            {% for name, module in modules if name != 'trash' %}
+                {% set label = __(name|humanize) %}
+                {% set shortLabel = label[0:3] %}
+                {% if label|length > 8 %}
+                    {% set label = label[0:3] %}
+                {% endif %}
+
+                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) }}"
+                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
+                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
+                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                    <span class="menu-item-label">{{ label }}</span>
+                    <span class="menu-item-short-label">{{ shortLabel }}</span>
+                </a>
+            {% endfor %}
+
+            {# Plugin modules #}
+            {% for k, plugin in config('PluginModules') %}
+                {% set label = __(plugin.title|humanize) %}
+                {% if label|length > 7 %}
+                    {% set label = label[0:3] %}
+                {% endif %}
+
+                <a href="{{ Url.build(plugin.route) }}"
+                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
+                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
+                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                    <span class="menu-item-label">{{ label }}</span>
+                </a>
+            {% endfor %}
+        </nav>
+
+        <nav role="search">
+            <button class="icon icon-search icon-only-icon" v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">search</span></button>
+            <div class="popup" v-show="this.popUpAction">
+                <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
+            </div>
+        </nav>
+
+    </div>
+</main-menu>
+
+
+
+{#
+
 <ul role="menu" :class="popUpAction? 'popup-on' : ''">
 
-    {# Core object modules #}
     {% for name, module in modules if name != 'trash' %}
         <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
             {{ Html.link(
@@ -11,7 +61,7 @@
         </li>
     {% endfor %}
 
-    {# Plugin modules #}
+
     {% for k, plugin in config('PluginModules') %}
         <li class="{{ plugin.class.menu }}">
             {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
@@ -22,7 +72,7 @@
 
     <li class="has-background-transparent spacer">&nbsp;</li>
 
-    {# search #}
+
     <li class="has-background-black icon-search center-icon has-tooltip-align-right">
         {{ Html.link(__(''), '', {
             'tooltip': __('Search'),
@@ -31,7 +81,7 @@
         })|raw }}
     </li>
 
-    {# look up by id #}
+
     <li class="has-background-black icon-tag center-icon has-tooltip-align-right">
         {{ Html.link(__(''), '', {
             'tooltip': __('Direct access by id or unique name'),
@@ -44,5 +94,7 @@
         <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
         <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
     </div>
+
 </ul>
-</main-menu>
+
+ #}

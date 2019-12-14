@@ -27,7 +27,7 @@ main.layout {
     > .layout-header { grid-area: content-header; }
     > .layout-content {
         grid-area: content-body;
-        padding: $gutter 0;
+        padding: $gutter 0 $gutter * 6;
     }
     > .layout-footer {
         grid-area: footer;
