@@ -5,8 +5,8 @@ body.view-model {
         .list-objects {
             margin: 0 0 $gutter * 8;
 
-            .table-row div.name-cell {
-                padding-bottom: 3px;
+            .table-row div.name-cell .tag {
+                transform: translateY(4px);
             }
         }
     }
