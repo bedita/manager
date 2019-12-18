@@ -844,11 +844,7 @@ class ModulesComponentTest extends TestCase
         $expected = [ 'id' => 999, 'name' => 'gustavo' ];
         $type = 'documents';
 
-        // call method 'setDataFromFailedSave'
-        $reflectionClass = new \ReflectionClass($this->Modules);
-        $method = $reflectionClass->getMethod('setDataFromFailedSave');
-        $method->setAccessible(true);
-        $method->invokeArgs($this->Modules, [ $type, $expected ]);
+        $this->Modules->setDataFromFailedSave($type, $expected);
 
         // verify data
         $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
