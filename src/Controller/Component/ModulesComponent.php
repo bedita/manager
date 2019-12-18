@@ -357,7 +357,7 @@ class ModulesComponent extends Component
      * @param array $data The data to store into session.
      * @return void
      */
-    protected function setDataFromFailedSave($type, $data): void
+    public function setDataFromFailedSave($type, $data): void
     {
         if (empty($data) || empty($data['id']) || empty($type)) {
             return;
