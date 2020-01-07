@@ -27,7 +27,7 @@ class LoginController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function login() : ?Response
+    public function login(): ?Response
     {
         // Add `head` to avoid errors on http `HEAD /` calls since they are redirected to `HEAD /login`
         $this->request->allowMethod(['get', 'head', 'post']);
@@ -72,7 +72,7 @@ class LoginController extends AppController
      *
      * @return string User timezone
      */
-    protected function userTimezone() : string
+    protected function userTimezone(): string
     {
         // 'timezone_offset' must contain UTC offset in seconds
         // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
@@ -91,7 +91,7 @@ class LoginController extends AppController
      *
      * @return \Cake\Http\Response
      */
-    public function logout() : Response
+    public function logout(): Response
     {
         $this->request->allowMethod(['get']);
 
@@ -105,7 +105,7 @@ class LoginController extends AppController
      * @param array $query The query param
      * @return void
      */
-    public function handleFlashMessages(array $query) : void
+    public function handleFlashMessages(array $query): void
     {
         if (!isset($query['redirect'])) {
             // Remove flash messages

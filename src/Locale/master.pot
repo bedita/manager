@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-06-10 09:36:48 \n"
+"POT-Creation-Date: 2019-11-28 14:49:48 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -47,6 +47,9 @@ msgstr ""
 msgid "Bulk Action failed on: "
 msgstr ""
 
+msgid "Calendar"
+msgstr ""
+
 msgid "Cannot create abstract objects or objects without schema"
 msgstr ""
 
@@ -72,6 +75,9 @@ msgid "Dashboard"
 msgstr ""
 
 msgid "Data Import"
+msgstr ""
+
+msgid "Data is filtered"
 msgstr ""
 
 msgid "Data modeling"
@@ -194,6 +200,9 @@ msgstr ""
 msgid "Login required"
 msgstr ""
 
+msgid "Map"
+msgstr ""
+
 msgid "Media"
 msgstr ""
 
@@ -279,6 +288,9 @@ msgid "Other"
 msgstr ""
 
 msgid "Password"
+msgstr ""
+
+msgid "Please provide a Mapbox access token in app configuration"
 msgstr ""
 
 msgid "Preferences and Tools"
@@ -371,6 +383,9 @@ msgstr ""
 msgid "Thumbnail is not ready"
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
 msgid "To"
 msgstr ""
 
@@ -417,6 +432,9 @@ msgid "Username"
 msgstr ""
 
 msgid "Users"
+msgstr ""
+
+msgid "Video"
 msgstr ""
 
 msgid "Videos"
@@ -543,16 +561,4 @@ msgid "view file"
 msgstr ""
 
 msgid "www.bedita.com"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:138
-msgid "Please insert a new title on \"${ title }\" clone"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:462
-msgid "If you confirm, this data will be gone forever"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:464
-msgid "Do you really want to trash the object?"
 msgstr ""

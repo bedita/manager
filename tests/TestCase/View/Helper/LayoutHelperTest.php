@@ -29,7 +29,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function primarySidebarProvider() : array
+    public function primarySidebarProvider(): array
     {
         return [
             'dashboard' => [
@@ -52,7 +52,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider primarySidebarProvider()
      * @covers ::primarySidebar()
      */
-    public function testPrimarySidebar($name, $expected) : void
+    public function testPrimarySidebar($name, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -66,7 +66,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function secondarySidebarProvider() : array
+    public function secondarySidebarProvider(): array
     {
         return [
             'import' => [
@@ -97,7 +97,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider secondarySidebarProvider()
      * @covers ::secondarySidebar()
      */
-    public function testSecondarySidebar($name, $currentModule, $expected) : void
+    public function testSecondarySidebar($name, $currentModule, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -113,7 +113,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function layoutHeaderProvider() : array
+    public function layoutHeaderProvider(): array
     {
         return [
             'dashboard' => [
@@ -140,7 +140,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider layoutHeaderProvider()
      * @covers ::layoutHeader()
      */
-    public function testLayoutHeader($name, $expected) : void
+    public function testLayoutHeader($name, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -154,7 +154,7 @@ class LayoutHelperTest extends TestCase
      *
      * @covers ::layoutContent()
      */
-    public function testLayoutContent() : void
+    public function testLayoutContent(): void
     {
         $layout = new LayoutHelper(new View());
         static::assertSame($layout->layoutContent(), true);
@@ -165,7 +165,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function layoutFooterProvider() : array
+    public function layoutFooterProvider(): array
     {
         return [
             'login' => [
@@ -192,7 +192,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider layoutFooterProvider()
      * @covers ::layoutFooter()
      */
-    public function testLayoutFooter($name, $expected) : void
+    public function testLayoutFooter($name, $expected): void
     {
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View(null, null, null, $data));
@@ -205,7 +205,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function messagesProvider() : array
+    public function messagesProvider(): array
     {
         return [
             'login' => [
@@ -228,7 +228,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider messagesProvider()
      * @covers ::messages()
      */
-    public function testMessages($name, $expected) : void
+    public function testMessages($name, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -242,28 +242,28 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleLinkProvider() : array
+    public function moduleLinkProvider(): array
     {
         return [
             'user profile' => [
                 '<a href="/user_profile" class="has-background-black icon-user">UserProfile</a>',
                 'UserProfile',
                 [
-                    'moduleLink' => ['_name' => 'user_profile:view']
+                    'moduleLink' => ['_name' => 'user_profile:view'],
                 ],
             ],
             'import' => [
                 '<a href="/import" class="has-background-black icon-download-alt">Import</a>',
                 'Import',
                 [
-                    'moduleLink' => ['_name' => 'import:index']
+                    'moduleLink' => ['_name' => 'import:index'],
                 ],
             ],
             'objects' => [
                 '<a href="/objects" class="has-background-module-objects">Objects</a>',
                 'Module',
                 [
-                    'currentModule' => ['name' => 'objects']
+                    'currentModule' => ['name' => 'objects'],
                 ],
             ],
         ];
@@ -280,7 +280,7 @@ class LayoutHelperTest extends TestCase
      * @covers ::moduleLink()
      * @covers ::commandLinkClass()
      */
-    public function testModuleLink($expected, $name, array $viewVars = []) : void
+    public function testModuleLink($expected, $name, array $viewVars = []): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];

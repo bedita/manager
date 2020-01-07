@@ -47,7 +47,7 @@ class ModulesController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -67,7 +67,7 @@ class ModulesController extends AppController
      * {@inheritDoc}
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->set('objectType', $this->objectType);
 
@@ -79,7 +79,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index() : ?Response
+    public function index(): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -92,9 +92,11 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
-            // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
+            // remove session filter to avoid error repetition
+            $session = $this->request->getSession();
+            $session->delete(sprintf('%s.filter', $this->Modules->getConfig('currentModuleName')));
 
             return $this->redirect(['_name' => 'dashboard']);
         }
@@ -106,10 +108,6 @@ class ModulesController extends AppController
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
-
-        if (!empty($this->request->getQueryParams()['autocomplete'])) {
-            $this->render('autocomplete');
-        }
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
 
@@ -133,7 +131,7 @@ class ModulesController extends AppController
      *
      * @return array
      */
-    protected function descendants() : array
+    protected function descendants(): array
     {
         if (!$this->Modules->isAbstract($this->objectType)) {
             return [];
@@ -162,7 +160,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id) : ?Response
+    public function view($id): ?Response
     {
         $this->request->allowMethod(['get']);
 
@@ -181,6 +179,10 @@ class ModulesController extends AppController
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
         $object = $response['data'];
+
+        // if previous post save failed, recover data from session.
+        $this->Modules->updateFromFailedSave($object);
+
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
@@ -207,7 +209,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function uname($id) : ?Response
+    public function uname($id): ?Response
     {
         try {
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
@@ -233,7 +235,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function create() : ?Response
+    public function create(): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
 
@@ -271,7 +273,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function save() : ?Response
+    public function save(): ?Response
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
@@ -297,6 +299,9 @@ class ModulesController extends AppController
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
+            // set session data to recover form
+            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
+
             if ($this->request->getData('id')) {
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
             }
@@ -304,7 +309,7 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
 
-        // annoying message removed, restore with https://github.com/bedita/web/issues/71
+        // annoying message removed, restore with https://github.com/bedita/manager/issues/71
         // $this->Flash->success(__('Object saved'));
 
         return $this->redirect([
@@ -319,7 +324,7 @@ class ModulesController extends AppController
      *
      * @return void
      */
-    public function saveJson() : void
+    public function saveJson(): void
     {
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
@@ -355,7 +360,7 @@ class ModulesController extends AppController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone($id) : ?Response
+    public function clone($id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
 
@@ -392,7 +397,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function delete() : ?Response
+    public function delete(): ?Response
     {
         $this->request->allowMethod(['post']);
         $ids = [];
@@ -431,7 +436,7 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function relatedJson($id, string $relation) : void
+    public function relatedJson($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
         try {
@@ -459,7 +464,7 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resourcesJson($id, string $type) : void
+    public function resourcesJson($id, string $type): void
     {
         $this->request->allowMethod(['get']);
 
@@ -486,7 +491,7 @@ class ModulesController extends AppController
      * @param string $relation the relating name.
      * @return void
      */
-    public function relationshipsJson($id, string $relation) : void
+    public function relationshipsJson($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
         $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
@@ -529,7 +534,7 @@ class ModulesController extends AppController
      * @param array $response Related objects response.
      * @return void
      */
-    public function getThumbsUrls(array &$response) : void
+    public function getThumbsUrls(array &$response): void
     {
         if (empty($response['data'])) {
             return;
@@ -567,7 +572,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function bulkActions() : ?Response
+    public function bulkActions(): ?Response
     {
         $requestData = $this->request->getData();
         $this->request->allowMethod(['post']);
@@ -593,7 +598,7 @@ class ModulesController extends AppController
                 } catch (BEditaClientException $e) {
                     $errors[] = [
                         'id' => $id,
-                        'message' => $e->getAttributes()
+                        'message' => $e->getAttributes(),
                     ];
                 }
             }
@@ -615,7 +620,7 @@ class ModulesController extends AppController
      *
      * @return array $schema
      */
-    public function getSchemaForIndex($objectType) : array
+    public function getSchemaForIndex($objectType): array
     {
         $schema = (array)$this->Schema->getSchema($objectType);
 

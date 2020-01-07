@@ -37,7 +37,7 @@ class PropertiesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Properties);
 
@@ -99,7 +99,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @return array
      */
-    public function viewGroupsProvider() : array
+    public function viewGroupsProvider(): array
     {
         return [
             'minimal' => [
@@ -155,7 +155,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'something',
                     ],
-                ]
+                ],
             ],
             'other' => [
                 [
@@ -192,7 +192,7 @@ class PropertiesComponentTest extends TestCase
                     'advanced' => [
                         'json_field',
                     ],
-                ]
+                ],
             ],
             'new order' => [
                 [
@@ -227,7 +227,7 @@ class PropertiesComponentTest extends TestCase
                         'uname',
                         'status',
                     ],
-                ]
+                ],
             ],
             'custom groups' => [
                 [
@@ -265,14 +265,14 @@ class PropertiesComponentTest extends TestCase
                     'custom' => [
                         'model',
                     ],
-                ]
+                ],
             ],
             'other body' => [
                 [
                     'core' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                     'publish' => [
                     ],
@@ -285,7 +285,7 @@ class PropertiesComponentTest extends TestCase
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                 ],
                 'foos',
@@ -295,7 +295,7 @@ class PropertiesComponentTest extends TestCase
                         'body',
                         'lang',
                     ],
-                ]
+                ],
             ],
             'other defaults' => [
                 [
@@ -308,7 +308,7 @@ class PropertiesComponentTest extends TestCase
                     ],
                     'other' => [
                         'body' => 'some text',
-                        'lang' => 'en'
+                        'lang' => 'en',
                     ],
                 ],
                 [
@@ -319,7 +319,7 @@ class PropertiesComponentTest extends TestCase
                         'date_ranges' => [],
                     ],
                 ],
-                'foos'
+                'foos',
             ],
 
         ];
@@ -338,7 +338,7 @@ class PropertiesComponentTest extends TestCase
      * @covers ::viewGroups()
      * @covers ::initialize()
      */
-    public function testViewGroups($expected, $object, string $type, array $config = []) : void
+    public function testViewGroups($expected, $object, string $type, array $config = []): void
     {
         if (!empty($config)) {
             Configure::write(sprintf('Properties.%s.view', $type), $config);

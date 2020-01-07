@@ -38,7 +38,7 @@ class DummyImportFilter extends ImportFilter
      * @param array $options The import options
      * @return App\Core\Result\ImportResult The result
      */
-    public function import($filename, $filepath, ?array $options = []) : ImportResult
+    public function import($filename, $filepath, ?array $options = []): ImportResult
     {
         return $this->createAsyncJob($filename, $filepath, $options);
     }
@@ -52,7 +52,7 @@ class DummyImportFilter extends ImportFilter
      * @return \App\Core\Result\ImportResult
      * @throws \LogicException When method is called but missing the async job service name.
      */
-    public function createAsyncJob($filename, $filepath, ?array $options = []) : ImportResult
+    public function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
     {
         return parent::createAsyncJob($filename, $filepath, $options);
     }

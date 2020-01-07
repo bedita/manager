@@ -35,7 +35,7 @@ class MyModulesComponent extends ModulesComponent
      */
     public $meta = [];
 
-    protected function oEmbedMeta(string $url) : ?array
+    protected function oEmbedMeta(string $url): ?array
     {
         return $this->meta;
     }
@@ -66,7 +66,7 @@ class ModulesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -80,7 +80,7 @@ class ModulesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Modules);
 
@@ -144,7 +144,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::getMeta()
      * @covers ::getProject()
      */
-    public function testGetProject($expected, $meta) : void
+    public function testGetProject($expected, $meta): void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -177,7 +177,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function isAbstractProvider() : array
+    public function isAbstractProvider(): array
     {
         return [
             'isAbstractTrue' => [
@@ -202,7 +202,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      */
-    public function testIsAbstract($expected, $data) : void
+    public function testIsAbstract($expected, $data): void
     {
         $userId = 1;
         $this->Auth->setUser(['id' => $userId]);
@@ -217,7 +217,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function objectTypesProvider() : array
+    public function objectTypesProvider(): array
     {
         return [
             'empty' => [
@@ -261,7 +261,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      */
-    public function testObjectTypes($expected, $data) : void
+    public function testObjectTypes($expected, $data): void
     {
         $userId = 1;
         $this->Auth->setUser(['id' => $userId]);
@@ -279,7 +279,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getModulesProvider() : array
+    public function getModulesProvider(): array
     {
         return [
             'ok' => [
@@ -385,7 +385,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::getMeta()
      * @covers ::getModules()
      */
-    public function testGetModules($expected, $meta, array $order = [], array $plugins = []) : void
+    public function testGetModules($expected, $meta, array $order = [], array $plugins = []): void
     {
         Configure::write('Modules.order', $order);
         Configure::write('Modules.plugins', $plugins);
@@ -421,7 +421,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function startupProvider() : array
+    public function startupProvider(): array
     {
         return [
             'without current module' => [
@@ -524,7 +524,7 @@ class ModulesComponentTest extends TestCase
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
-    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null) : void
+    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null): void
     {
         Configure::write('Modules.order', $order);
 
@@ -566,7 +566,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function uploadProvider() : array
+    public function uploadProvider(): array
     {
         $name = 'test.png';
         $file = getcwd() . sprintf('/tests/files/%s', $name);
@@ -735,7 +735,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()
      */
-    public function testUpload(array $requestData, $expectedException, $uploaded) : void
+    public function testUpload(array $requestData, $expectedException, $uploaded): void
     {
         // if upload failed, verify exception
         if ($expectedException != null) {
@@ -822,12 +822,63 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      */
-    private function setupApi() : void
+    private function setupApi(): void
     {
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Test `setDataFromFailedSave`.
+     *
+     * @covers ::setDataFromFailedSave()
+     *
+     * @return void
+     */
+    public function testSetDataFromFailedSave(): void
+    {
+        // data and expected
+        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
+        $type = 'documents';
+
+        $this->Modules->setDataFromFailedSave($type, $expected);
+
+        // verify data
+        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
+        $actual = $this->Modules->request->getSession()->read($key);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `updateFromFailedSave` method.
+     *
+     * @return void
+     *
+     * @covers ::updateFromFailedSave()
+     */
+    public function testUpdateFromFailedSave(): void
+    {
+        // write to session data, to simulate recover from session.
+        $object = [
+            'id' => 999,
+            'type' => 'documents',
+            'attributes' => [
+                'name' => 'john doe',
+            ],
+        ];
+        $recover = [ 'name' => 'gustavo' ];
+        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $session = $this->Modules->request->getSession();
+        $session->write($key, $recover);
+        $session->write(sprintf('%s__timestamp', $key), time());
+
+        // verify data
+        $this->Modules->updateFromFailedSave($object);
+        $expected = $object;
+        $expected['attributes'] = array_merge($object['attributes'], $recover);
+        static::assertEquals($expected, $object);
     }
 }

@@ -40,7 +40,7 @@ class AjaxView extends AppView
      *
      * @codeCoverageIgnore
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 

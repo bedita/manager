@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-06-10 09:36:41 \n"
+"POT-Creation-Date: 2019-11-28 14:49:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -50,6 +50,9 @@ msgstr ""
 msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
 
+msgid "Calendar"
+msgstr "Calendario"
+
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
 
@@ -76,6 +79,9 @@ msgstr "Cruscotto"
 
 msgid "Data Import"
 msgstr "Importazione dati"
+
+msgid "Data is filtered"
+msgstr "Filtri attivi"
 
 msgid "Data modeling"
 msgstr "Modellazione"
@@ -197,6 +203,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Map"
+msgstr "Mappa"
+
 msgid "Media"
 msgstr ""
 
@@ -283,6 +292,11 @@ msgstr "Altro"
 
 msgid "Password"
 msgstr ""
+
+msgid "Please provide a Mapbox access token in app configuration"
+msgstr ""
+"Per visualizzare la mappa è necessario inserire un token di accesso a Mapbox "
+"in configurazione"
 
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
@@ -374,6 +388,9 @@ msgstr "Miniatura non pronta: in lavorazione"
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
 
+msgid "Title"
+msgstr "Titolo"
+
 msgid "To"
 msgstr "A"
 
@@ -421,6 +438,9 @@ msgstr "Nome utente"
 
 msgid "Users"
 msgstr "Utenti"
+
+msgid "Video"
+msgstr ""
 
 msgid "Videos"
 msgstr "Video"
@@ -548,17 +568,14 @@ msgstr "mostra file"
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:138
-msgid "Please insert a new title on \"${ title }\" clone"
-msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+#~ msgid "Please insert a new title on \"${ title }\" clone"
+#~ msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#: src/Template/Layout/js/app/app.js:462
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+#~ msgid "If you confirm, this data will be gone forever"
+#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
-#: src/Template/Layout/js/app/app.js:464
-msgid "Do you really want to trash the object?"
-msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+#~ msgid "Do you really want to trash the object?"
+#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #~ msgid "Apply"
 #~ msgstr "Applica"

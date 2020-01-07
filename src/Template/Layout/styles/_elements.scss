@@ -47,7 +47,7 @@
         &:not(:first-child) {
             border-bottom-left-radius: 0;
             border-top-left-radius: 0;
-            margin-right: $gutter * .25;
+            margin-left: $gutter * .25;
         }
         &:not(:last-child) {
             border-bottom-right-radius: 0;

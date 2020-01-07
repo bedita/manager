@@ -1,8 +1,8 @@
 {% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
-{% do _view.assign('bodyViewClass', 'view-model') %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
 
 <modules-view inline-template ref="moduleView">
-<div class="model-view">
+<div class="modules-view">
 
     {% if resource.id %}
     <header>
@@ -10,10 +10,10 @@
     </header>
     {% endif %}
 
-    <div class="model-form">
+    <div class="module-form">
 
         {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
-            'url': {'_name': 'model:save', 'resource_type': resourceType},
+            'url': {'_name': 'model:save:object_types'},
             'id': 'form-main',
             'check-changes': 'true',
         })|raw }}
@@ -38,9 +38,9 @@
     </div>
 
     {# commands links to append in left side bar (commands menu) #}
-    {% do _view.append('commands-links', Html.link(__('Object types'), {'_name': 'model:list', 'resource_type': 'object_types'})|raw) %}
-    {% do _view.append('commands-links', Html.link(__('Relations'), {'_name': 'model:list', 'resource_type': 'relations'})|raw) %}
-    {% do _view.append('commands-links', Html.link(__('Property types'), {'_name': 'model:list', 'resource_type': 'property_types'})|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'})|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Relations'), {'_name': 'model:list:relations'})|raw) %}
+    {% do _view.append('commands-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'})|raw) %}
 
 </div>
 </modules-view>

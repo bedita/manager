@@ -40,12 +40,14 @@
                 sortable
                 :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
 
+                {# related object #}
                 <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
                     v-for="(related, index) in objects"
                     :key="related.id"
                     :class="containsId(removedRelated, related.id)? 'removed' : ''"
                     draggable
                     :drag-data="JSON.stringify(related)">
+
                     <article class="box has-background-black has-text-gray-100 has-text-size-smaller"
                         v-bind:class="related.type">
 
@@ -55,13 +57,10 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
-                            <figure v-if="related.type === 'images'">
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
+                            <figure>
                                 <img :src="related.meta.thumb_url" />
                             </figure>
-                            {# <div class="cover" v-else>
-                                <span class="icon-cover icon-file-pdf"></span>
-                            </div> #}
                         </div>
 
                         <div>
@@ -102,8 +101,8 @@
                                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
                             </a>
                         </footer>
-
                     </article>
+
                 </div>
 
                 {# empty element: keep for flex layout #}
@@ -126,8 +125,8 @@
                             <span class="has-text-size-smaller prop-id"><: related.id :></span>
                         </header>
 
-                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url">
-                            <figure v-if="related.type === 'images'">
+                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
+                            <figure>
                                 <img :src="related.meta.thumb_url" />
                             </figure>
                         </div>

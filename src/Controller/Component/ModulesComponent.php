@@ -58,7 +58,7 @@ class ModulesComponent extends Component
      *
      * @return void
      */
-    public function startup() : void
+    public function startup(): void
     {
         if (empty($this->Auth->user('id'))) {
             $this->getController()->set(['modules' => [], 'project' => []]);
@@ -89,7 +89,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    protected function getMeta() : array
+    protected function getMeta(): array
     {
         try {
             $home = Cache::remember(
@@ -116,7 +116,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    public function getModules() : array
+    public function getModules(): array
     {
         $modulesOrder = Configure::read('Modules.order');
 
@@ -160,7 +160,7 @@ class ModulesComponent extends Component
      *
      * @return array
      */
-    public function getProject() : array
+    public function getProject(): array
     {
         $meta = $this->getMeta();
         $project = [
@@ -179,7 +179,7 @@ class ModulesComponent extends Component
      * @param string $name Name of object type.
      * @return bool True if abstract, false if concrete
      */
-    public function isAbstract(string $name) : bool
+    public function isAbstract(string $name): bool
     {
         return (bool)Hash::get($this->modules, sprintf('%s.hints.multiple_types', $name), false);
     }
@@ -191,7 +191,7 @@ class ModulesComponent extends Component
      * @param bool|null $abstract Only abstract or concrete types.
      * @return array Type names list
      */
-    public function objectTypes(?bool $abstract = null) : array
+    public function objectTypes(?bool $abstract = null): array
     {
         $types = [];
         foreach ($this->modules as $name => $data) {
@@ -213,7 +213,7 @@ class ModulesComponent extends Component
      * @return array|null
      * @codeCoverageIgnore
      */
-    protected function oEmbedMeta(string $url) : ?array
+    protected function oEmbedMeta(string $url): ?array
     {
         return (new OEmbed())->readMetadata($url);
     }
@@ -225,7 +225,7 @@ class ModulesComponent extends Component
      * @param array $requestData The request data from form
      * @return void
      */
-    public function upload(array &$requestData) : void
+    public function upload(array &$requestData): void
     {
         $uploadBehavior = Hash::get($requestData, 'upload_behavior', 'file');
 
@@ -264,7 +264,7 @@ class ModulesComponent extends Component
      * @param array $requestData The request data from form
      * @return void
      */
-    public function removeStream(array $requestData) : void
+    public function removeStream(array $requestData): void
     {
         if (empty($requestData['id'])) {
             return;
@@ -289,7 +289,7 @@ class ModulesComponent extends Component
      * @param string $defaultTitle The default title for media
      * @return string The media ID
      */
-    public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle) : string
+    public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle): string
     {
         $apiClient = ApiClientProvider::getApiClient();
         $type = $requestData['model-type'];
@@ -324,7 +324,7 @@ class ModulesComponent extends Component
      * @param array $requestData The request data
      * @return bool true if upload is possible and needed
      */
-    public function checkRequestForUpload(array $requestData) : bool
+    public function checkRequestForUpload(array $requestData): bool
     {
         // check if change file is empty
         if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
@@ -348,5 +348,60 @@ class ModulesComponent extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Set session data for `failedSave.{type}.{id}` and `failedSave.{type}.{id}__timestamp`.
+     *
+     * @param string $type The object type.
+     * @param array $data The data to store into session.
+     * @return void
+     */
+    public function setDataFromFailedSave($type, $data): void
+    {
+        if (empty($data) || empty($data['id']) || empty($type)) {
+            return;
+        }
+        $key = sprintf('failedSave.%s.%s', $type, $data['id']);
+        $session = $this->getController()->request->getSession();
+        $session->write($key, $data);
+        $session->write(sprintf('%s__timestamp', $key), time());
+    }
+
+    /**
+     * Update object, when failed save occurred.
+     * Check session data by `failedSave.{type}.{id}` key and `failedSave.{type}.{id}__timestamp`.
+     * If data is set and timestamp is not older than 5 minutes.
+     *
+     * @param array $object The object.
+     * @return void
+     */
+    public function updateFromFailedSave(array &$object): void
+    {
+        if (empty($object) || empty($object['id']) || empty($object['type'])) {
+            return;
+        }
+
+        // check session data for object id => use `failedSave.{type}.{id}` as key
+        $session = $this->getController()->request->getSession();
+        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $data = $session->read($key);
+        if (empty($data)) {
+            return;
+        }
+
+        // read timestamp session key
+        $timestampKey = sprintf('%s__timestamp', $key);
+        $timestamp = $session->read($timestampKey);
+
+        // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
+        if (strtotime($timestamp) < strtotime("-5 minutes")) {
+            //  => merge with $object['attributes']
+            $object['attributes'] = array_merge($object['attributes'], (array)$data);
+        }
+
+        // remove session data
+        $session->delete($key);
+        $session->delete($timestampKey);
     }
 }

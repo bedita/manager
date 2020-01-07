@@ -55,7 +55,7 @@ class LoginControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController(array $requestConfig) : void
+    protected function setupController(array $requestConfig): void
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
@@ -70,13 +70,13 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLogin() : void
+    public function testLogin(): void
     {
         $this->setupController([
             'post' => [
                 'username' => env('BEDITA_ADMIN_USR'),
                 'password' => env('BEDITA_ADMIN_PWD'),
-            ]
+            ],
         ]);
 
         $response = $this->Login->login();
@@ -91,7 +91,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testHeadLogin() : void
+    public function testHeadLogin(): void
     {
         $this->setupController([
             'environment' => [
@@ -110,14 +110,14 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginTimezone() : void
+    public function testLoginTimezone(): void
     {
         $this->setupController([
             'post' => [
                 'username' => env('BEDITA_ADMIN_USR'),
                 'password' => env('BEDITA_ADMIN_PWD'),
-                'timezone_offset' => '7200 0'
-            ]
+                'timezone_offset' => '7200 0',
+            ],
         ]);
 
         $response = $this->Login->login();
@@ -135,13 +135,13 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginFailed() : void
+    public function testLoginFailed(): void
     {
         $this->setupController([
             'post' => [
                 'username' => 'wronguser',
                 'password' => 'wrongpwd',
-            ]
+            ],
         ]);
 
         $response = $this->Login->login();
@@ -155,7 +155,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLoginForm() : void
+    public function testLoginForm(): void
     {
         $this->setupController([
             'environment' => [
@@ -174,7 +174,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testLogout() : void
+    public function testLogout(): void
     {
         $this->setupController([
             'environment' => [
@@ -194,7 +194,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testHandleFlashMessages() : void
+    public function testHandleFlashMessages(): void
     {
         // setup controller
         $this->setupController([

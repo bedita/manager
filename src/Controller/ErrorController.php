@@ -30,7 +30,7 @@ class ErrorController extends AppController
      * @return void
      * @codeCoverageIgnore
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
     }
@@ -42,7 +42,7 @@ class ErrorController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event) : ?Response
+    public function beforeFilter(Event $event): ?Response
     {
         return null;
     }
@@ -54,7 +54,7 @@ class ErrorController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event) : ?Response
+    public function beforeRender(Event $event): ?Response
     {
         $this->viewBuilder()->setClassName('App\View\AppView');
         $this->viewBuilder()->setTemplatePath('Pages/Error');
@@ -69,7 +69,7 @@ class ErrorController extends AppController
      * @return \Cake\Http\Response|null|void
      * @codeCoverageIgnore
      */
-    public function afterFilter(Event $event) : void
+    public function afterFilter(Event $event): void
     {
     }
 }

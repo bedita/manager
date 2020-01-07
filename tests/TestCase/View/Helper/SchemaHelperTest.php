@@ -36,7 +36,7 @@ class SchemaHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class SchemaHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Schema);
 
@@ -59,7 +59,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlOptionsSchemaProvider() : array
+    public function controlOptionsSchemaProvider(): array
     {
         return [
             'text' => [
@@ -94,7 +94,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'status',
-                'on'
+                'on',
             ],
             'password' => [
                 // expected result
@@ -110,7 +110,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'password',
-                ''
+                '',
             ],
             'confirm-password' => [
                 // expected result
@@ -130,7 +130,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'string',
                 ],
                 'confirm-password',
-                ''
+                '',
             ],
             'json' => [
                 // expected result
@@ -332,7 +332,7 @@ class SchemaHelperTest extends TestCase
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
      */
-    public function testControlOptions(array $expected, array $schema, string $name, ?string $value) : void
+    public function testControlOptions(array $expected, array $schema, string $name, ?string $value): void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
@@ -383,7 +383,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function translatableFieldsProvider() : array
+    public function translatableFieldsProvider(): array
     {
         return [
             'empty properties' => [
@@ -442,7 +442,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function formatProvider() : array
+    public function formatProvider(): array
     {
         return [
             'dumy' => [

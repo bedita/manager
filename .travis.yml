@@ -1,3 +1,4 @@
+dist: bionic
 sudo: required
 
 services:
@@ -5,13 +6,18 @@ services:
 
 language: php
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 env:
   global:
     - BEDITA_API_KEY=12345
     - BEDITA_API=http://127.0.0.1:8080
     - BEDITA_ADMIN_USR=admin
     - BEDITA_ADMIN_PWD=admin
-    - BEDITA_DOCKER_IMG=bedita/bedita:4.0.0-RC2
+    - BEDITA_DOCKER_IMG=bedita/bedita:4.0.0
 
 before_install:
   # Use GitHub OAuth token with Composer to increase API limits.
@@ -42,11 +48,21 @@ jobs:
     - php: 7.1
     - php: 7.2
     - php: 7.3
-    - php: 7.2
+    - name: "PHP code sniffer"
+      php: 7.2
       env: "RUN=phpcs"
       before_install: skip
       script: |
         vendor/bin/phpcs -n -p --extensions=php \
           --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=/Migrations/,/Seeds/ \
           ./config ./src ./tests
+      after_success: skip
+    - name: "Yarn build"
+      language: node_js
+      node_js: 10
+      before_install: skip
+      install:
+        - yarn
+      script:
+        - yarn run build
       after_success: skip

@@ -31,7 +31,7 @@ class AppViewTest extends TestCase
      * @return void
      * @covers ::initialize()
      */
-    public function testInitialize() : void
+    public function testInitialize(): void
     {
         $View = new AppView();
         $extensions = $View->getTwig()->getExtensions();
@@ -45,7 +45,7 @@ class AppViewTest extends TestCase
      * @return void
      * @covers ::_getElementFileName()
      */
-    public function testCustomElement() : void
+    public function testCustomElement(): void
     {
         $View = new AppView();
         $View->viewVars['currentModule'] = ['name' => 'cats'];

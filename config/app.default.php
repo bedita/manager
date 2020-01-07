@@ -546,7 +546,7 @@ return [
      * - sizeAvailable => available page size on modules view index
      */
     'Pagination' => [
-        'sizeAvailable' => [10, 20, 50, 100]
+        'sizeAvailable' => [10, 20, 50, 100],
     ],
 
     /**
@@ -601,5 +601,14 @@ return [
     // 'AlertMessage' => [
     //     'text' => 'Test Message',
     //     'color' => '#498fde',
+    // ],
+
+    /**
+     * Maps providers and access tokens
+     */
+    // 'Maps' => [
+    //     'mapbox' => [
+    //         'token' => '###',
+    //     ],
     // ],
 ];

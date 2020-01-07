@@ -39,7 +39,7 @@ class DashboardControllerTest extends TestCase
      * @param array $requestConfig
      * @return void
      */
-    protected function setupController($config = null) : void
+    protected function setupController($config = null): void
     {
         $request = null;
         if ($config != null) {
@@ -55,7 +55,7 @@ class DashboardControllerTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize() : void
+    public function testInitialize(): void
     {
         $this->setupController();
         $forceHome = $this->Dashboard->Modules->getConfig('clearHomeCache');
@@ -68,7 +68,7 @@ class DashboardControllerTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider() : array
+    public function indexProvider(): array
     {
         return [
             'post' => [
@@ -101,7 +101,7 @@ class DashboardControllerTest extends TestCase
      *
      * @return void
      */
-    public function testIndex($expected, $method) : void
+    public function testIndex($expected, $method): void
     {
         $requestConfig = [
             'environment' => [

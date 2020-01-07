@@ -35,7 +35,7 @@ class ArrayHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ class ArrayHelperTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Array);
 
@@ -58,7 +58,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getCombineSchemaProvider() : array
+    public function getCombineSchemaProvider(): array
     {
         $arr = [10, 20, 50, 100];
 
@@ -96,7 +96,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getRemoveKeysSchemaProvider() : array
+    public function getRemoveKeysSchemaProvider(): array
     {
         return [
             'basic data' => [
@@ -104,7 +104,7 @@ class ArrayHelperTest extends TestCase
                     'title' => 'string',
                     'description' => 'string',
                     'uname' => 'string',
-                    'status' => 'string'
+                    'status' => 'string',
                 ], // expected
                 [
                     'title' => 'string',
@@ -114,9 +114,9 @@ class ArrayHelperTest extends TestCase
                     'extra' => 'object',
                 ], // data
                 [
-                    'extra'
+                    'extra',
                 ], // keys to remove
-            ]
+            ],
         ];
     }
 
@@ -142,7 +142,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function onlyKeysProvider() : array
+    public function onlyKeysProvider(): array
     {
         return [
             'basic' => [
@@ -159,9 +159,9 @@ class ArrayHelperTest extends TestCase
                 ], // data
                 [
                     'extra',
-                    'description'
+                    'description',
                 ], // keys to keep
-            ]
+            ],
         ];
     }
 

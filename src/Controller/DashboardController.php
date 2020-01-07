@@ -20,7 +20,7 @@ class DashboardController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -33,7 +33,7 @@ class DashboardController extends AppController
      *
      * @return void
      */
-    public function index() : void
+    public function index(): void
     {
         $this->request->allowMethod(['get']);
     }

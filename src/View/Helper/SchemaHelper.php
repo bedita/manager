@@ -40,7 +40,7 @@ class SchemaHelper extends Helper
      * @param array $schema Object schema array.
      * @return array
      */
-    public function controlOptions(string $name, $value, $schema = []) : array
+    public function controlOptions(string $name, $value, $schema = []): array
     {
         $options = Form::customControlOptions($name);
         if (!empty($options)) {
@@ -60,7 +60,7 @@ class SchemaHelper extends Helper
      * @param array $schema Property schema array.
      * @return string
      */
-    public function format($value, $schema = []) : string
+    public function format($value, $schema = []): string
     {
         $type = static::typeFromSchema((array)$schema);
         $type = Inflector::variable(str_replace('-', '_', $type));
@@ -81,7 +81,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatBoolean($value) : string
+    protected function formatBoolean($value): string
     {
         $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
@@ -94,7 +94,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatDate($value) : string
+    protected function formatDate($value): string
     {
         return (string)$this->Time->format($value);
     }
@@ -105,7 +105,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatDateTime($value) : string
+    protected function formatDateTime($value): string
     {
         return (string)$this->Time->format($value);
     }
@@ -126,7 +126,7 @@ class SchemaHelper extends Helper
      * @param mixed $schema The property schema
      * @return string
      */
-    public static function typeFromSchema(array $schema) : string
+    public static function typeFromSchema(array $schema): string
     {
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $subSchema) {
@@ -154,7 +154,7 @@ class SchemaHelper extends Helper
      * @param array $properties The array of schema properties
      * @return array
      */
-    public function translatableFields(array $properties) : array
+    public function translatableFields(array $properties): array
     {
         if (empty($properties)) {
             return [];

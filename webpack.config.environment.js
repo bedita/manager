@@ -45,13 +45,16 @@ if (index !== -1) {
 if (!proxy) {
     if ('WEBPACK_PROXY_HOST' in process.env) {
         proxy_host = process.env.WEBPACK_PROXY_HOST;
-    } else if ('WEBPACK_PROXY_HOST' in dotenv.parsed) {
+    } else if (dotenv.parsed && 'WEBPACK_PROXY_HOST' in dotenv.parsed) {
         proxy_host = dotenv.parsed.WEBPACK_PROXY_HOST;
-    } else if ('WEBPACK_PROXY_PORT' in process.env) {
+    }
+
+    if ('WEBPACK_PROXY_PORT' in process.env) {
         proxy_port = process.env.WEBPACK_PROXY_PORT;
-    } else if ('WEBPACK_PROXY_PORT' in dotenv.parsed) {
+    } else if (dotenv.parsed && 'WEBPACK_PROXY_PORT' in dotenv.parsed) {
         proxy_port = dotenv.parsed.WEBPACK_PROXY_PORT;
     }
+
     proxy = `${proxy_host}:${proxy_port}`;
 }
 
@@ -68,11 +71,11 @@ if (index !== -1) {
     }
 } else if ('WEBPACK_SERVER_HOST' in process.env) {
     server_host = process.env.WEBPACK_SERVER_HOST;
-} else if ('WEBPACK_SERVER_HOST' in dotenv.parsed) {
+} else if (dotenv.parsed && 'WEBPACK_SERVER_HOST' in dotenv.parsed) {
     server_host = dotenv.parsed.WEBPACK_SERVER_HOST;
 } else if ('WEBPACK_SERVER_PORT' in process.env) {
     server_port = process.env.WEBPACK_SERVER_PORT;
-} else if ('WEBPACK_SERVER_PORT' in dotenv.parsed) {
+} else if (dotenv.parsed && 'WEBPACK_SERVER_PORT' in dotenv.parsed) {
     server_port = dotenv.parsed.WEBPACK_SERVER_PORT;
 }
 

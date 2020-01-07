@@ -27,7 +27,7 @@ class SchemaComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class SchemaComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->Schema);
 
@@ -54,7 +54,7 @@ class SchemaComponentTest extends TestCase
      *
      * @return array
      */
-    public function getSchemaProvider() : array
+    public function getSchemaProvider(): array
     {
         return [
             'type as argument' => [
@@ -105,7 +105,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getSchema()
      * @covers ::loadWithRevision()
      */
-    public function testGetSchema($expected, $schema, ?string $type, array $config = []) : void
+    public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -177,20 +177,20 @@ class SchemaComponentTest extends TestCase
                             'data' => [
                                 [
                                     'id' => '3',
-                                    'type' => 'object_types'
-                                ]
+                                    'type' => 'object_types',
+                                ],
                             ],
                         ],
                         'right_object_types' => [
                             'data' => [
                                 [
                                     'id' => '9',
-                                    'type' => 'object_types'
+                                    'type' => 'object_types',
                                 ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             'included' => [
                 [
@@ -207,7 +207,7 @@ class SchemaComponentTest extends TestCase
                         'name' => 'images',
                     ],
                 ],
-            ]
+            ],
         ];
 
         // Setup mock API client.

@@ -73,7 +73,7 @@ export default {
         options.formatDate = (dateObj, format) => {
             // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
             if (format === 'Z') {
-                return moment(dateObj).toISOString();
+                return moment(dateObj, moment.ISO_8601).format('YYYY-MM-DDTHH:mm:ssZ');
             }
             // or else timezone infos will be added to date string
             let now = new Date();

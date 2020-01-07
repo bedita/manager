@@ -1,12 +1,12 @@
 {
-    "name": "bedita/web",
-    "description": "BEdita3 like backend webapp for BE4 API",
+    "name": "bedita/manager",
+    "description": "BEdita Manager - official admin webapp for BEdita4 API",
     "homepage": "https://www.bedita.com",
     "type": "project",
     "license": "LGPL-3.0-or-later",
     "support": {
-        "source": "https://github.com/bedita/bedita",
-        "issues": "https://github.com/bedita/bedita/issues"
+        "source": "https://github.com/bedita/manager",
+        "issues": "https://github.com/bedita/manager/issues"
     },
     "authors": [
         {
@@ -32,7 +32,7 @@
     "require-dev": {
         "cakephp/bake": "^1.11",
         "cakephp/debug_kit": "^3.19.0",
-        "cakephp/cakephp-codesniffer": "^3.1",
+        "cakephp/cakephp-codesniffer": "~3.3.0",
         "psy/psysh": "@stable",
         "phpunit/phpunit": "^6.0"
     },
