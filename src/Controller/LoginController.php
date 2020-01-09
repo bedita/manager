@@ -56,13 +56,12 @@ class LoginController extends AppController
     }
 
     /**
-     * Perform login via POST.
+     * Perform login auth request via POST.
      *
      * @return \Cake\Http\Response|null
      */
     protected function authRequest(): ?Response
     {
-        $user = null;
         $reason = __('Invalid username or password');
         try {
             $user = $this->Auth->identify();
