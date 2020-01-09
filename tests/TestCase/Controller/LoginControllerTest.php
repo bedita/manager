@@ -60,9 +60,9 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test `login` method, no user timezone set
+     * Test `authRequest` method, no user timezone set
      *
-     * @covers ::login()
+     * @covers ::authRequest()
      * @covers ::userTimezone()
      * @covers ::setupCurrentProject()
      * @return void
@@ -128,7 +128,7 @@ class LoginControllerTest extends TestCase
     /**
      * Test `login` fail method
      *
-     * @covers ::login()
+     * @covers ::authRequest()
      *
      * @return void
      */

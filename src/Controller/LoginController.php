@@ -52,9 +52,18 @@ class LoginController extends AppController
             return null;
         }
 
-        // Attempted login.
+        return $this->authRequest();
+    }
+
+    /**
+     * Perform login via POST.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    protected function authRequest(): ?Response
+    {
         $user = null;
-        $reason = 'Invalid username or password';
+        $reason = __('Invalid username or password');
         try {
             $user = $this->Auth->identify();
         } catch (BEditaClientException $e) {
