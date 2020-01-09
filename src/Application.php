@@ -12,6 +12,7 @@
  */
 namespace App;
 
+use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
@@ -33,7 +34,6 @@ class Application extends BaseApplication
     {
         parent::bootstrap();
         $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
-        $this->loadFromConfig();
     }
 
     /**
@@ -47,10 +47,11 @@ class Application extends BaseApplication
 
     /**
      * Load plugins from 'Plugins' configuration
+     * This method will be invoked by `ProjectMiddleware`
      *
      * @return void
      */
-    public function loadFromConfig(): void
+    public function loadPluginsFromConfig(): void
     {
         $plugins = Configure::read('Plugins');
         if ($plugins) {
@@ -84,6 +85,10 @@ class Application extends BaseApplication
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
+
+            // Load current project configuration if `multiproject` instance
+            // Manager plugins will also be loaded here via
+            ->add(new ProjectMiddleware($this))
 
             // Add I18n middleware.
             ->add(new I18nMiddleware([

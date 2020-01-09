@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
@@ -21,6 +22,15 @@ use Psr\Log\LogLevel;
  */
 class LoginController extends AppController
 {
+    use InstanceConfigTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $_defaultConfig = [
+        // Projects configuration files lookup expression
+        'projectsSearch' => CONFIG . 'projects' . DS . '*.php',
+    ];
 
     /**
      * Display login page or perform login via API.
@@ -35,6 +45,8 @@ class LoginController extends AppController
         if (!$this->request->is('post')) {
             // Handle flash messages
             $this->handleFlashMessages($this->request->getQueryParams());
+            // Load available projects info
+            $this->loadAvailableProjects();
 
             // Display login form.
             return null;
@@ -57,6 +69,8 @@ class LoginController extends AppController
             $user['timezone'] = $this->userTimezone();
             // Successful login. Redirect.
             $this->Auth->setUser($user);
+            // Setup current project name.
+            $this->setupCurrentProject();
 
             return $this->redirect($this->Auth->redirectUrl());
         }
@@ -65,6 +79,42 @@ class LoginController extends AppController
         $this->Flash->error(__($reason));
 
         return null;
+    }
+
+    /**
+     * Look for available projects in `config/projects/` folder
+     *
+     * @return void
+     */
+    protected function loadAvailableProjects(): void
+    {
+        $projects = [];
+        $available = (array)glob((string)$this->getConfig('projectsSearch'));
+        foreach ($available as $filename) {
+            $return = include $filename;
+            if (!is_array($return) || empty($return['Project']['name'])) {
+                continue;
+            }
+            $projects[] = [
+                'value' => pathinfo($filename, PATHINFO_FILENAME),
+                'text' => $return['Project']['name'],
+            ];
+        }
+        $this->set(compact('projects'));
+    }
+
+    /**
+     * Setup current project name in session if selected from login form
+     *
+     * @return void
+     */
+    protected function setupCurrentProject(): void
+    {
+        $project = $this->request->getData('project');
+        if (empty($project)) {
+            return;
+        }
+        $this->request->getSession()->write('_project', $project);
     }
 
     /**
