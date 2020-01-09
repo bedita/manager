@@ -81,7 +81,7 @@ class PropertiesComponent extends Component
     public function initialize(array $config)
     {
         Configure::load('properties');
-        $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
+        $propConfig = array_merge(Configure::read('DefaultProperties'), (array)Configure::read('Properties'));
         $this->setConfig('Properties', $propConfig);
         parent::initialize($config);
     }

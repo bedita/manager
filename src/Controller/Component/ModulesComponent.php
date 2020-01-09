@@ -118,7 +118,7 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        $modulesOrder = Configure::read('Modules.order');
+        $modulesOrder = (array)Configure::read('Modules.order');
 
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
