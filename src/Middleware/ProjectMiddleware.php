@@ -36,7 +36,7 @@ class ProjectMiddleware
     /**
      * Projects config base path
      *
-     * @var Application
+     * @var string
      */
     protected $projectsConfigPath = CONFIG . 'projects' . DS;
 
