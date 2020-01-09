@@ -104,6 +104,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::getSchema()
      * @covers ::loadWithRevision()
+     * @covers ::cacheKey()
      */
     public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
     {
