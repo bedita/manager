@@ -114,7 +114,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# vendors.bundle it's only generated when vendors are imported statically, uncomment if you do so #}
     {# {{ Html.script('vendors.bundle')|raw }} #}
 
-    {{ Link.pluginsJsBundle()|raw }}
+    {% if _view.name != 'Login' %}
+        {{ Link.pluginsJsBundle()|raw }}
+    {% endif %}
 
     {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
 
