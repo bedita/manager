@@ -46,16 +46,17 @@ class Application extends BaseApplication
     }
 
     /**
-     * Load plugins from 'Plugins' configuration
-     * This method will be invoked by `ProjectMiddleware`
+     * Load plugins from 'Plugins' configuration.
+     * This method will be invoked by `ProjectMiddleware`.
+     * Should not be invoked in `bootstrap`, to avoid duplicate plugin bootstratp calls.
      *
      * @return void
      */
     public function loadPluginsFromConfig(): void
     {
-        $plugins = Configure::read('Plugins');
+        $plugins = Configure::read('Plugins', []);
         if ($plugins) {
-            $_defaults = [
+            $defaults = [
                 'debugOnly' => false,
                 'autoload' => false,
                 'bootstrap' => false,
@@ -63,9 +64,10 @@ class Application extends BaseApplication
                 'ignoreMissing' => false,
             ];
             foreach ($plugins as $plugin => $options) {
-                $options = array_merge($_defaults, $options);
+                $options = array_merge($defaults, $options);
                 if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
                     $this->addPlugin($plugin, $options);
+                    $this->plugins->get($plugin)->bootstrap($this);
                 }
             }
         }
@@ -87,7 +89,7 @@ class Application extends BaseApplication
             ]))
 
             // Load current project configuration if `multiproject` instance
-            // Manager plugins will also be loaded here via
+            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
             ->add(new ProjectMiddleware($this))
 
             // Add I18n middleware.
