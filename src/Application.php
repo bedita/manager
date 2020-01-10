@@ -132,11 +132,11 @@ class Application extends BaseApplication
     /**
      * Load project configuration if corresponding config file is found
      *
-     * @param string $project The project name.
+     * @param string|null $project The project name.
      * @param string $projectsPath The project configuration files base path.
      * @return void
      */
-    public static function loadProjectConfig(string $project, string $projectsPath): void
+    public static function loadProjectConfig(?string $project, string $projectsPath): void
     {
         if (empty($project)) {
             return;
