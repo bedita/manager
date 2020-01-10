@@ -234,6 +234,8 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->logout();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/login', $response->getHeaderLine('Location'));
+        static::assertNull($this->Login->request->getSession()->read('Auth'));
+        static::assertNull($this->Login->request->getSession()->read('_project'));
     }
 
     /**
