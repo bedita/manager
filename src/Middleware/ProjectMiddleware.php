@@ -13,8 +13,6 @@
 namespace App\Middleware;
 
 use App\Application;
-use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 
@@ -67,7 +65,7 @@ class ProjectMiddleware
     public function __invoke(ServerRequest $request, ResponseInterface $response, $next): ResponseInterface
     {
         $project = $this->detectProject($request);
-        $this->loadProjectConfig((string)$project);
+        Application::loadProjectConfig((string)$project, $this->projectsConfigPath);
         $this->Application->loadPluginsFromConfig();
 
         return $next($request, $response);
@@ -88,24 +86,5 @@ class ProjectMiddleware
         }
 
         return (string)$session->read('_project');
-    }
-
-    /**
-     * Load project configuration if corresponding config file is found
-     *
-     * @param string $project The project name.
-     * @return void
-     */
-    protected function loadProjectConfig(string $project): void
-    {
-        if (empty($project)) {
-            return;
-        }
-
-        $path = $this->projectsConfigPath . $project;
-        if (file_exists($path . '.php')) {
-            Configure::config('projects', new PhpConfig($this->projectsConfigPath));
-            Configure::load($project, 'projects');
-        }
     }
 }

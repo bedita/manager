@@ -15,13 +15,9 @@ namespace App\Test\Middleware;
 use App\Application;
 use App\Middleware\ProjectMiddleware;
 use Cake\Core\Configure;
-use Cake\Http\Cookie\Cookie;
-use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequestFactory;
-use Cake\I18n\I18n;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Hash;
 
 /**
  * {@see \App\Middleware\ProjectMiddleware} Test Case
@@ -94,7 +90,6 @@ class ProjectMiddlewareTest extends TestCase
      * @covers ::__construct()
      * @covers ::__invoke()
      * @covers ::detectProject()
-     * @covers ::loadProjectConfig()
      */
     public function testInvoke($expected, $data): void
     {

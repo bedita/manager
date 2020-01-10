@@ -16,6 +16,7 @@ use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -126,5 +127,24 @@ class Application extends BaseApplication
         });
 
         return $csrf;
+    }
+
+    /**
+     * Load project configuration if corresponding config file is found
+     *
+     * @param string $project The project name.
+     * @param string $projectsPath The project configuration files base path.
+     * @return void
+     */
+    public static function loadProjectConfig(string $project, string $projectsPath): void
+    {
+        if (empty($project)) {
+            return;
+        }
+
+        if (file_exists($projectsPath . $project . '.php')) {
+            Configure::config('projects', new PhpConfig($projectsPath));
+            Configure::load($project, 'projects');
+        }
     }
 }

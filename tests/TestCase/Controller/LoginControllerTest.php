@@ -179,7 +179,7 @@ class LoginControllerTest extends TestCase
             ],
         ]);
 
-        $this->Login->setConfig('projectsSearch', TESTS . 'files' . DS . 'projects' . DS . '*.php');
+        $this->Login->setConfig('projectsPath', TESTS . 'files' . DS . 'projects' . DS);
 
         $response = $this->Login->login();
         static::assertNull($response);

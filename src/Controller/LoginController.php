@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Application;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
@@ -28,8 +29,8 @@ class LoginController extends AppController
      * {@inheritDoc}
      */
     protected $_defaultConfig = [
-        // Projects configuration files lookup expression
-        'projectsSearch' => CONFIG . 'projects' . DS . '*.php',
+        // Projects configuration files base path
+        'projectsPath' => CONFIG . 'projects' . DS,
     ];
 
     /**
@@ -63,6 +64,11 @@ class LoginController extends AppController
     protected function authRequest(): ?Response
     {
         $reason = __('Invalid username or password');
+        // Load project config if `multi project` setup
+        Application::loadProjectConfig(
+            $this->request->getData('project'),
+            $this->getConfig('projectsPath')
+        );
         try {
             $user = $this->Auth->identify();
         } catch (BEditaClientException $e) {
@@ -85,6 +91,7 @@ class LoginController extends AppController
 
         // Failed login.
         $this->Flash->error(__($reason));
+        $this->loadAvailableProjects();
 
         return null;
     }
@@ -97,7 +104,8 @@ class LoginController extends AppController
     protected function loadAvailableProjects(): void
     {
         $projects = [];
-        $available = (array)glob((string)$this->getConfig('projectsSearch'));
+        $lookup = (string)$this->getConfig('projectsPath') . '*.php';
+        $available = (array)glob($lookup);
         foreach ($available as $filename) {
             $return = include $filename;
             if (!is_array($return) || empty($return['Project']['name'])) {
@@ -152,8 +160,10 @@ class LoginController extends AppController
     public function logout(): Response
     {
         $this->request->allowMethod(['get']);
+        $redirect = $this->redirect($this->Auth->logout());
+        $this->request->getSession()->destroy();
 
-        return $this->redirect($this->Auth->logout());
+        return $redirect;
     }
 
     /**

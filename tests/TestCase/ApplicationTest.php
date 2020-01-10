@@ -57,13 +57,13 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * Test load from config method
+     * Test `loadPluginsFromConfig` method
      *
      * @return void
      *
      * @covers ::loadPluginsFromConfig()
      */
-    public function testLoadConfig()
+    public function testLoadPlugins()
     {
         $app = new Application(CONFIG);
         $app->bootstrap();
@@ -87,5 +87,23 @@ class ApplicationTest extends TestCase
         $this->assertFalse($app->getPlugins()->has('DebugKit'));
         $this->assertTrue($app->getPlugins()->has('Bake'));
         Configure::write('debug', $debug);
+    }
+
+    /**
+     * Test `loadProjectConfig` method
+     *
+     * @return void
+     *
+     * @covers ::loadProjectConfig()
+     */
+    public function testLoadProjectConfig()
+    {
+        $projectsPath = TESTS . 'files' . DS . 'projects' . DS;
+        Configure::write('Project.name', null);
+        Application::loadProjectConfig('none', $projectsPath);
+        static::assertNull(Configure::read('Project.name'));
+
+        Application::loadProjectConfig('test', $projectsPath);
+        static::assertEquals('Test', Configure::read('Project.name'));
     }
 }
