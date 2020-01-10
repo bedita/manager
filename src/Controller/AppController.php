@@ -47,6 +47,7 @@ class AppController extends Controller
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
 
+        // API config may not be set in `login` for a multi-project setup
         if (Configure::check('API.apiBaseUrl')) {
             $this->apiClient = ApiClientProvider::getApiClient();
         }
