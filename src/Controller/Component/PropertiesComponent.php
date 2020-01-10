@@ -15,6 +15,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * Component to handle properties view in modules.
@@ -113,7 +114,7 @@ class PropertiesComponent extends Component
     {
         $properties = $used = [];
         $keep = $this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
-        $attributes = array_merge(array_fill_keys($keep, ''), $object['attributes']);
+        $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
         unset($defaults['_keep']);
