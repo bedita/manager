@@ -66,8 +66,8 @@ class LoginController extends AppController
         $reason = __('Invalid username or password');
         // Load project config if `multi project` setup
         Application::loadProjectConfig(
-            $this->request->getData('project'),
-            $this->getConfig('projectsPath')
+            (string)$this->request->getData('project'),
+            (string)$this->getConfig('projectsPath')
         );
         try {
             $user = $this->Auth->identify();
@@ -155,9 +155,9 @@ class LoginController extends AppController
     /**
      * Logout and redirect to login page.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function logout(): Response
+    public function logout(): ?Response
     {
         $this->request->allowMethod(['get']);
         $redirect = $this->redirect($this->Auth->logout());
