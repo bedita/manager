@@ -16,8 +16,8 @@ use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClientException;
 use BEdita\SDK\BEditaException;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\Network\Exception\NotFoundException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
