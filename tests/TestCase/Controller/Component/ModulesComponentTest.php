@@ -130,6 +130,19 @@ class ModulesComponentTest extends TestCase
                 new \RuntimeException('I am some other kind of exception', 999),
                 new \RuntimeException('I am some other kind of exception', 999),
             ],
+            'config' => [
+                [
+                    'name' => 'Gustavo',
+                    'version' => '4.1.2',
+                    'colophon' => '',
+                ],
+                [
+                    'version' => '4.1.2',
+                ],
+                [
+                    'name' => 'Gustavo',
+                ],
+            ],
         ];
     }
 
@@ -138,14 +151,16 @@ class ModulesComponentTest extends TestCase
      *
      * @param array|\Exception $expected Expected result.
      * @param array|\Exception $meta Response to `/home` endpoint.
+     * @param array $config Project config to set.
      * @return void
      *
      * @dataProvider getProjectProvider()
      * @covers ::getMeta()
      * @covers ::getProject()
      */
-    public function testGetProject($expected, $meta): void
+    public function testGetProject($expected, $meta, $config = []): void
     {
+        Configure::write('Project', $config);
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());

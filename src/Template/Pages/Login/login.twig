@@ -8,6 +8,15 @@
         'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
     })|raw }}
 
+    {% if projects %}
+    {{ Form.control('project', {
+        'type': 'select',
+        'options': projects,
+        'label': false,
+        'style': 'margin-bottom: 1rem; width: 100%;',
+    })|raw }}
+    {% endif %}
+
     {{ Form.control('username', {
         'autocomplete': 'username',
         'autocorrect': 'off',

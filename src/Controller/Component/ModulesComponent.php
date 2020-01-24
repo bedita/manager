@@ -118,7 +118,7 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        $modulesOrder = Configure::read('Modules.order');
+        $modulesOrder = (array)Configure::read('Modules.order');
 
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
@@ -163,8 +163,9 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
+        // Project name may be set via `config` and it takes precedence if set
         $project = [
-            'name' => Hash::get($meta, 'project.name', ''),
+            'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
             'colophon' => '', // TODO: populate this value.
         ];

@@ -62,11 +62,12 @@ class UserProfileController extends AppController
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $response = [];
         }
 
         $revision = Hash::get($response, 'meta.schema.users.revision', null);
         $schema = $this->Schema->getSchema('users', $revision);
-        $object = $response['data'];
+        $object = (array)Hash::get($response, 'data');
         $this->set('schema', $schema);
         $this->set('object', $object);
         $this->set('properties', $this->Properties->viewGroups($object, 'user_profile'));

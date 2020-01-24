@@ -47,8 +47,10 @@ class AppController extends Controller
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
 
-        $options = ['Log' => (array)Configure::read('API.log', [])];
-        $this->apiClient = ApiClientProvider::getApiClient($options);
+        // API config may not be set in `login` for a multi-project setup
+        if (Configure::check('API.apiBaseUrl')) {
+            $this->apiClient = ApiClientProvider::getApiClient();
+        }
 
         $this->loadComponent('Auth', [
             'authenticate' => [
