@@ -17,6 +17,7 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
@@ -91,7 +92,7 @@ class LinkHelper extends Helper
             }
         }
         $url = $this->replaceParamUrl('sort', $sortValue);
-        echo '<a href="' . $url . '" class="' . $class . '">' . __($field) . '</a>';
+        echo '<a href="' . $url . '" class="' . $class . '">' . Inflector::humanize($field) . '</a>';
     }
 
     /**
