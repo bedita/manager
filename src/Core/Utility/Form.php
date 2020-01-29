@@ -252,14 +252,14 @@ class Form
     }
 
     /**
-     * Options for lang
-     * If available, use config `Project.I18n.languages`
+     * Options for lang, using configuration loaded from API
+     * If available, use config `Project.config.I18n.languages`
      *
      * @return array
      */
     protected static function langOptions(): array
     {
-        $languages = Configure::read('Project.I18n.languages');
+        $languages = Configure::read('Project.config.I18n.languages');
         if (empty($languages)) {
             return [
                 'type' => 'text',
