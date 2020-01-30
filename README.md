@@ -4,7 +4,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
-Official Backend Admin WebApp for BEdita4 API.
+Official Backend Admin WebApp for [BEdita4 API](https://gihub.com/bedita/bedita).
 
 ## Prerequisites
 
@@ -21,9 +21,10 @@ Official Backend Admin WebApp for BEdita4 API.
 composer create-project bedita/manager
 ```
 
+This will create a new `manager` folder and install composer dependencies.
 If you are using a **.zip** or **.tar.gz** release file you just need to unpack it and then run ``composer install``. Run same command if you do a `git clone` on this repo.
 
-* Build JS/CSS bundles with `yarn`
+* Build JS/CSS bundles with `yarn` from `manager` folder
 
 ```bash
 yarn && yarn build
@@ -38,15 +39,15 @@ export BEDITA_API="{bedita-4-url}"
 export BEDITA_API_KEY="{bedita4-api-key}"
 ```
 
-You are then ready to use the webapp by simply run builtin webserver like this
+To test the webapp you can simply run builtin webserver from `manager` folder like this
 
 ```bash
 bin/cake server
 ```
 
-And then point your browser to `http://localhost:8765/` to give it a try.
+And then point your browser to `http://localhost:8765/`
 
-We recommend to configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
+For any other use than a simple test we recommend to configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
 
 ## Docker
 
