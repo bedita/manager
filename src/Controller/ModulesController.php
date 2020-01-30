@@ -264,6 +264,7 @@ class ModulesController extends AppController
 
         $this->set(compact('object', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        $this->ProjectConfiguration->read();
 
         return null;
     }
