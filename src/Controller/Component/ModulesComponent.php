@@ -358,15 +358,31 @@ class ModulesComponent extends Component
      * @param array $data The data to store into session.
      * @return void
      */
-    public function setDataFromFailedSave($type, $data): void
+    public function setDataFromFailedSave(string $type, array $data): void
     {
         if (empty($data) || empty($data['id']) || empty($type)) {
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
         $session = $this->getController()->request->getSession();
+        unset($data['id']); // remove 'id', data may be merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
+    }
+
+    /**
+     * Set current attributes from loaded $object data in `currentAttributes`.
+     * Load session failure data if available.
+     *
+     * @param array $object The object.
+     * @return void
+     */
+    public function setupAttributes(array &$object): void
+    {
+        $currentAttributes = json_encode((array)Hash::get($object, 'attributes'));
+        $this->getController()->set(compact('currentAttributes'));
+
+        $this->updateFromFailedSave($object);
     }
 
     /**
@@ -377,15 +393,15 @@ class ModulesComponent extends Component
      * @param array $object The object.
      * @return void
      */
-    public function updateFromFailedSave(array &$object): void
+    protected function updateFromFailedSave(array &$object): void
     {
-        if (empty($object) || empty($object['id']) || empty($object['type'])) {
-            return;
-        }
-
         // check session data for object id => use `failedSave.{type}.{id}` as key
         $session = $this->getController()->request->getSession();
-        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $key = sprintf(
+            'failedSave.%s.%s',
+            Hash::get($object, 'type'),
+            Hash::get($object, 'id')
+        );
         $data = $session->read($key);
         if (empty($data)) {
             return;

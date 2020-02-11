@@ -180,8 +180,8 @@ class ModulesController extends AppController
 
         $object = $response['data'];
 
-        // if previous post save failed, recover data from session.
-        $this->Modules->updateFromFailedSave($object);
+        // setup `currentAttributes` and recover failure data from session.
+        $this->Modules->setupAttributes($object);
 
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
