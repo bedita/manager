@@ -365,7 +365,7 @@ class ModulesComponent extends Component
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
         $session = $this->getController()->request->getSession();
-        unset($data['id']); // remove 'id', data may be merged with attributes
+        unset($data['id']); // remove 'id', avoid future merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
     }
