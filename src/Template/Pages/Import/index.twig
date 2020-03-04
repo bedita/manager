@@ -165,7 +165,7 @@
 
                         <template v-for="job in currentJobs">
                             <div :class="job.meta.status"><: job.id :></div>
-                            <div :class="job.meta.status"><: job.attributes.payload.filename :></div>
+                            <div :class="job.meta.status"><: job.attributes.payload && job.attributes.payload.filename :></div>
                             <div :class="job.meta.status"><: job.attributes.service :></div>
                             <div :class="job.meta.status"><: job.attributes.scheduled_from :></div>
                             <div :class="job.meta.status"><: job.meta.completed :></div>
