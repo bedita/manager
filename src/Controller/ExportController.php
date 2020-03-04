@@ -60,7 +60,7 @@ class ExportController extends AppController
             $limit = Configure::read('Export.limit', 10000);
             $pageCount = 1;
             $total = 0;
-            $query = ['page_size' => 100];
+            $query = ['page_size' => 100] + $this->filter();
             for ($i = 0; $i < $pageCount; $i++) {
                 if ($total < $limit) {
                     $query['page'] = $i + 1;
@@ -80,6 +80,30 @@ class ExportController extends AppController
         array_unshift($data, $fields);
 
         return $data;
+    }
+
+    protected function filter(): array
+    {
+        $res = [];
+        $f = (array)$this->request->getData('filter');
+        if ($f) {
+            $filter = [];
+            foreach ($f as $v) {
+                $data = (array)json_decode($v, true);
+                if ($data) {
+                    $filter += $data;
+                }
+            }
+            if ($filter) {
+                $res = compact('filter');
+            }
+        }
+        $q = (string)$this->request->getData('q');
+        if ($q) {
+            $res += compact('q');
+        }
+
+        return $res;
     }
 
     /**
