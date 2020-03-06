@@ -91,7 +91,7 @@ class ExportController extends AppController
     {
         $res = [];
         $f = (array)$this->request->getData('filter');
-        if ($f) {
+        if (!empty($f)) {
             $filter = [];
             foreach ($f as $v) {
                 $filter += (array)json_decode($v, true);
@@ -99,7 +99,7 @@ class ExportController extends AppController
             $res = compact('filter');
         }
         $q = (string)$this->request->getData('q');
-        if ($q) {
+        if (!empty($q)) {
             $res += compact('q');
         }
 
