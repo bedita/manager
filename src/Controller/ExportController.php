@@ -94,8 +94,7 @@ class ExportController extends AppController
         if ($f) {
             $filter = [];
             foreach ($f as $v) {
-                $data = (array)json_decode($v, true);
-                $filter += $data;
+                $filter += (array)json_decode($v, true);
             }
             $res = compact('filter');
         }
