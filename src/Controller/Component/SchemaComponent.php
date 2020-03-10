@@ -159,7 +159,7 @@ class SchemaComponent extends Component
         ];
         $response = ApiClientProvider::getApiClient()->get('/roles', $query);
 
-        return Hash::extract((array)$response, 'data.{n}.attributes.name');
+        return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
     }
 
     /**
