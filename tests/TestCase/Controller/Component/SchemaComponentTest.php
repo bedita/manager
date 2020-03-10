@@ -283,6 +283,8 @@ class SchemaComponentTest extends TestCase
             ->getMock();
         $apiClient->method('get')
                 ->willReturn($roles);
+        $apiClient->method('schema')
+                ->willReturn([]);
 
         ApiClientProvider::setApiClient($apiClient);
         Cache::clearAll();
