@@ -134,7 +134,32 @@ class SchemaComponent extends Component
      */
     protected function fetchSchema(string $type)
     {
-        return ApiClientProvider::getApiClient()->schema($type);
+        $schema = ApiClientProvider::getApiClient()->schema($type);
+        // add special property `roles` to `users`
+        if ($type === 'users') {
+            $schema['properties']['roles'] = [
+                'type' => 'string',
+                'enum' => $this->fetchRoles(),
+            ];
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Fetch `roles` names
+     *
+     * @return array
+     */
+    protected function fetchRoles(): array
+    {
+        $query = [
+            'fields' => 'name',
+            'page_size' => 100,
+        ];
+        $response = ApiClientProvider::getApiClient()->get('/roles', $query);
+
+        return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
     }
 
     /**

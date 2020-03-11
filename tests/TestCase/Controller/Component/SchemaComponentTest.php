@@ -252,4 +252,50 @@ class SchemaComponentTest extends TestCase
         $message = $this->Schema->request->getSession()->read('Flash.flash.0.message');
         static::assertEquals('Client Exception', $message);
     }
+
+    /**
+     * Test `fetchSchema` for `users`.
+     *
+     * @return void
+     * @covers ::fetchSchema()
+     * @covers ::fetchRoles()
+     */
+    public function testFetchRoles()
+    {
+        $roles = [
+            'data' => [
+                [
+                    'attributes' => [
+                        'name' => 'admin',
+                    ],
+                ],
+                [
+                    'attributes' => [
+                        'name' => 'manager',
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+                ->willReturn($roles);
+        $apiClient->method('schema')
+                ->willReturn([]);
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->getSchema('users');
+        static::assertNotEmpty($result);
+        static::assertNotEmpty($result['properties']['roles']);
+
+        $expected = [
+            'type' => 'string',
+            'enum' => ['admin', 'manager'],
+        ];
+        static::assertEquals($expected, $result['properties']['roles']);
+    }
 }
