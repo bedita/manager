@@ -78,6 +78,11 @@ try {
         ],
         'switchLangUrl' => '/lang',
     ]);
+    // default pagination
+    Configure::write('Pagination', [
+        'sizeAvailable' => [10, 20, 50, 100],
+    ]);
+
     Configure::load('app', 'default');
 
     Configure::config('ini', new IniConfig());
