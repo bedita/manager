@@ -146,8 +146,8 @@ class ModulesComponent extends Component
                 return -$idx;
             })
             ->toList();
-        $plugins = Configure::read('Modules.plugins');
-        if ($plugins) {
+        $plugins = (array)Configure::read('Modules.plugins');
+        if (!empty($plugins)) {
             $modules = array_merge($modules, $plugins);
         }
         $this->modules = Hash::combine($modules, '{n}.name', '{n}');

@@ -22,6 +22,13 @@ use Cake\Utility\Hash;
 class ExportController extends AppController
 {
     /**
+     * Default max number of exported items
+     *
+     * @var int
+     */
+    const DEFAULT_EXPORT_LIMIT = 10000;
+
+    /**
      * Export data in csv format
      *
      * @return \Cake\Http\Response
@@ -56,8 +63,8 @@ class ExportController extends AppController
     {
         $data = [];
         if (empty($ids)) { // empty ids? then get all (multi api calls)
-            // read export limit from config, default 10000
-            $limit = Configure::read('Export.limit', 10000);
+            // read export limit from config
+            $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
             $pageCount = 1;
             $total = 0;
             $query = ['page_size' => 100];

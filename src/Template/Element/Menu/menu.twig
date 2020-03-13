@@ -12,7 +12,7 @@
     {% endfor %}
 
     {# Plugin modules #}
-    {% for k, plugin in config('PluginModules') %}
+    {% for k, plugin in config('PluginModules', []) %}
         <li class="{{ plugin.class.menu }}">
             {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
                 plugin.route,

@@ -14,7 +14,7 @@
                 {{ Html.link(__(title), {'_name': 'modules:list', 'object_type': name}, {'title': __(title)})|raw }}
             </li>
         {% endfor %}
-        {% for k, plugin in config('PluginModules') %}
+        {% for k, plugin in config('PluginModules', []) %}
             <li class="{{ plugin.class.dashboard }}">
                 {{ Html.link(__(plugin.title|humanize), plugin.route, {'title': __(plugin.title|humanize)})|raw }}
             </li>

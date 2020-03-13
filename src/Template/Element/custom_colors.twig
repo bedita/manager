@@ -1,7 +1,7 @@
 <style type="text/css">
 
     {# set modules colors #}
-    {% for name, color in config('Modules.colors') %}
+    {% for name, color in config('Modules.colors', []) %}
 
         .has-background-module-{{ name }} {
             background-color: {{ color }} !important;
