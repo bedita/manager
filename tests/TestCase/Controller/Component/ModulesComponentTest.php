@@ -863,7 +863,8 @@ class ModulesComponentTest extends TestCase
 
         // verify data
         $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->request->getSession()->read($key);
+        $actual = $this->Modules->getController()->request->getSession()->read($key);
+        unset($expected['id']);
         static::assertEquals($expected, $actual);
     }
 
@@ -872,6 +873,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      *
+     * @covers ::setupAttributes()
      * @covers ::updateFromFailedSave()
      */
     public function testUpdateFromFailedSave(): void
@@ -885,13 +887,10 @@ class ModulesComponentTest extends TestCase
             ],
         ];
         $recover = [ 'name' => 'gustavo' ];
-        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
-        $session = $this->Modules->request->getSession();
-        $session->write($key, $recover);
-        $session->write(sprintf('%s__timestamp', $key), time());
+        $this->Modules->setDataFromFailedSave('documents', $recover + ['id' => 999]);
 
         // verify data
-        $this->Modules->updateFromFailedSave($object);
+        $this->Modules->setupAttributes($object);
         $expected = $object;
         $expected['attributes'] = array_merge($object['attributes'], $recover);
         static::assertEquals($expected, $object);
