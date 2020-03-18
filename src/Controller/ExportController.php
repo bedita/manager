@@ -52,29 +52,38 @@ class ExportController extends AppController
      * @param string $ids Object IDs comma separated string
      * @return array
      */
-    private function csvRows(string $objectType, string $ids = ''): array
+    protected function csvRows(string $objectType, string $ids = ''): array
+    {
+        if (empty($ids)) {
+            return $this->csvAll($objectType);
+        }
+
+        $data = [];
+        $response = $this->apiClient->get($objectType, ['filter' => ['id' => $ids]]);
+        $fields = $this->fillDataFromResponse($data, $response);
+        array_unshift($data, $fields);
+
+        return $data;
+    }
+
+    /**
+     * Load all CSV data for a given type usgin limit and query filters.
+     *
+     * @param string $objectType Object type
+     * @return array
+     */
+    protected function csvAll(string $objectType): array
     {
         $data = [];
-        if (empty($ids)) { // empty ids? then get all (multi api calls)
-            // read export limit from config, default 10000
-            $limit = Configure::read('Export.limit', 10000);
-            $pageCount = 1;
-            $total = 0;
-            $query = ['page_size' => 100] + $this->prepareQuery();
-            for ($i = 0; $i < $pageCount; $i++) {
-                if ($total < $limit) {
-                    $query['page'] = $i + 1;
-                    if ($total + 100 > $limit) {
-                        $query['page_size'] = $limit - $total;
-                    }
-                    $response = (array)$this->apiClient->getObjects($objectType, $query);
-                    $pageCount = $response['meta']['pagination']['page_count'];
-                    $total += $response['meta']['pagination']['page_items'];
-                    $fields = $this->fillDataFromResponse($data, $response);
-                }
-            }
-        } else { // get data per ids
-            $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
+        $limit = Configure::read('Export.limit', 10000);
+        $pageCount = $page = 1;
+        $total = 0;
+        $query = ['page_size' => 100] + $this->prepareQuery();
+        while ($total < $limit && $page <= $pageCount) {
+            $response = (array)$this->apiClient->get($objectType, $query + compact('page'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $total += (int)Hash::get($response, 'meta.pagination.page_items');
+            $page++;
             $fields = $this->fillDataFromResponse($data, $response);
         }
         array_unshift($data, $fields);
