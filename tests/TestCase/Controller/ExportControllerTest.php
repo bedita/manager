@@ -158,50 +158,70 @@ class ExportControllerTest extends TestCase
         return [
             'documents, all' => [
                 [
-                    'objectType' => 'documents',
-                ], // input
+                    ['id', 'name', 'skills', 'category' => 'category'],
+                    $this->testdata['expected']['gustavo'],
+                    $this->testdata['expected']['johndoe'],
+                ],
                 [
-                    'response' => [
-                        'data' => [
-                            0 => $this->testdata['input']['gustavo'],
-                            1 => $this->testdata['input']['johndoe'],
-                        ],
-                        'meta' => [
-                            'pagination' => [
-                                'page_items' => 2,
-                                'page_count' => 1,
-                            ],
-                        ],
-                    ],
+                    'documents',
+                ],
+                [
                     'data' => [
-                        0 => ['id', 'name', 'skills', 'category' => 'category'],
-                        1 => $this->testdata['expected']['gustavo'],
-                        2 => $this->testdata['expected']['johndoe'],
+                        $this->testdata['input']['gustavo'],
+                        $this->testdata['input']['johndoe'],
                     ],
-                ], // expected
+                    'meta' => [
+                        'pagination' => [
+                            'page_items' => 2,
+                            'page_count' => 1,
+                        ],
+                    ],
+                ],
             ],
             'documents with ids' => [
                 [
-                    'objectType' => 'documents',
-                    'ids' => '999',
-                ], // input
+                    ['id', 'name', 'skills', 'category' => 'category'],
+                    $this->testdata['expected']['gustavo'],
+                ],
                 [
-                    'response' => [
-                        'data' => [
-                            0 => $this->testdata['input']['gustavo'],
-                        ],
-                        'meta' => [
-                            'pagination' => [
-                                'page_items' => 1,
-                                'page_count' => 1,
-                            ],
-                        ],
-                    ],
+                    'documents',
+                    '999',
+                ],
+                [
                     'data' => [
-                        0 => ['id', 'name', 'skills', 'category' => 'category'],
-                        1 => $this->testdata['expected']['gustavo'],
+                        $this->testdata['input']['gustavo'],
                     ],
-                ], // expected
+                    'meta' => [
+                        'pagination' => [
+                            'page_items' => 1,
+                            'page_count' => 1,
+                        ],
+                    ],
+                ],
+            ],
+            'query' => [
+                [
+                    ['id', 'name', 'skills', 'category' => 'category'],
+                    $this->testdata['expected']['gustavo'],
+                ],
+                [
+                    'documents',
+                ],
+                [
+                    'data' => [
+                        $this->testdata['input']['gustavo'],
+                    ],
+                    'meta' => [
+                        'pagination' => [
+                            'page_items' => 1,
+                            'page_count' => 1,
+                        ],
+                    ],
+                ],
+                [
+                    'filter' => ['status' => 'on'],
+                    'q' => 'gustavo',
+                ],
             ],
         ];
     }
@@ -210,31 +230,44 @@ class ExportControllerTest extends TestCase
      * test 'csvRows'.
      *
      * @covers ::csvRows()
+     * @covers ::prepareQuery()
      * @dataProvider csvRowsProvider()
      *
-     * @param string|array $input The input for the function.
-     * @param string|array $expected The expected value.
+     * @param array $expected The expected result.
+     * @param array $arguments Method arguments.
+     * @param array $response API response.
+     * @param array $query Query string.
      *
      * @return void
      */
-    public function testCsvRows($input, $expected): void
+    public function testCsvRows(array $expected, array $arguments, array $response, array $query = []): void
     {
-        // mock api getObjects.
+        // mock api get.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        $apiClient->method('getObjects')
-            ->willReturn($expected['response']);
+        $apiClient->method('get')
+            ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
+
+        if (!empty($query)) {
+            $this->Export = new ExportController(
+                new ServerRequest($query + [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                ])
+            );
+        }
+
         $this->Export->apiClient = $apiClient;
 
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('csvRows');
         $method->setAccessible(true);
-        extract($input); // => $objectType, $ids
-        $parameters = (empty($ids)) ? [ $objectType ] : [ $objectType, $ids ];
-        $actual = $method->invokeArgs($this->Export, $parameters);
-        static::assertEquals($expected['data'], $actual);
+
+        $actual = $method->invokeArgs($this->Export, $arguments);
+        static::assertEquals($expected, $actual);
     }
 
     /**
