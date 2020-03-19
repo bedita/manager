@@ -67,7 +67,7 @@ class ExportController extends AppController
     }
 
     /**
-     * Load all CSV data for a given type usgin limit and query filters.
+     * Load all CSV data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
      * @return array
