@@ -59,7 +59,7 @@ class ExportController extends AppController
         }
 
         $data = [];
-        $response = $this->apiClient->get($objectType, ['filter' => ['id' => $ids]]);
+        $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
         $fields = $this->fillDataFromResponse($data, $response);
         array_unshift($data, $fields);
 
@@ -80,7 +80,7 @@ class ExportController extends AppController
         $total = 0;
         $query = ['page_size' => 100] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
-            $response = (array)$this->apiClient->get($objectType, $query + compact('page'));
+            $response = (array)$this->apiClient->getObjects($objectType, $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
             $page++;

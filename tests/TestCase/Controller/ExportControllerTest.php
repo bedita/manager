@@ -246,7 +246,7 @@ class ExportControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        $apiClient->method('get')
+        $apiClient->method('getObjects')
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
 
