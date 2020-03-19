@@ -230,17 +230,18 @@ class ExportControllerTest extends TestCase
      * test 'csvRows'.
      *
      * @covers ::csvRows()
+     * @covers ::csvAll
      * @covers ::prepareQuery()
      * @dataProvider csvRowsProvider()
      *
      * @param array $expected The expected result.
      * @param array $arguments Method arguments.
      * @param array $response API response.
-     * @param array $query Query string.
+     * @param array $post Post data.
      *
      * @return void
      */
-    public function testCsvRows(array $expected, array $arguments, array $response, array $query = []): void
+    public function testCsvRows(array $expected, array $arguments, array $response, array $post = []): void
     {
         // mock api get.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -250,9 +251,9 @@ class ExportControllerTest extends TestCase
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
 
-        if (!empty($query)) {
+        if (!empty($post)) {
             $this->Export = new ExportController(
-                new ServerRequest($query + [
+                new ServerRequest(compact('post') + [
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
