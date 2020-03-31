@@ -130,6 +130,19 @@ class ModulesComponentTest extends TestCase
                 new \RuntimeException('I am some other kind of exception', 999),
                 new \RuntimeException('I am some other kind of exception', 999),
             ],
+            'config' => [
+                [
+                    'name' => 'Gustavo',
+                    'version' => '4.1.2',
+                    'colophon' => '',
+                ],
+                [
+                    'version' => '4.1.2',
+                ],
+                [
+                    'name' => 'Gustavo',
+                ],
+            ],
         ];
     }
 
@@ -138,14 +151,16 @@ class ModulesComponentTest extends TestCase
      *
      * @param array|\Exception $expected Expected result.
      * @param array|\Exception $meta Response to `/home` endpoint.
+     * @param array $config Project config to set.
      * @return void
      *
      * @dataProvider getProjectProvider()
      * @covers ::getMeta()
      * @covers ::getProject()
      */
-    public function testGetProject($expected, $meta): void
+    public function testGetProject($expected, $meta, $config = []): void
     {
+        Configure::write('Project', $config);
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
@@ -844,15 +859,12 @@ class ModulesComponentTest extends TestCase
         $expected = [ 'id' => 999, 'name' => 'gustavo' ];
         $type = 'documents';
 
-        // call method 'setDataFromFailedSave'
-        $reflectionClass = new \ReflectionClass($this->Modules);
-        $method = $reflectionClass->getMethod('setDataFromFailedSave');
-        $method->setAccessible(true);
-        $method->invokeArgs($this->Modules, [ $type, $expected ]);
+        $this->Modules->setDataFromFailedSave($type, $expected);
 
         // verify data
         $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->request->getSession()->read($key);
+        $actual = $this->Modules->getController()->request->getSession()->read($key);
+        unset($expected['id']);
         static::assertEquals($expected, $actual);
     }
 
@@ -861,6 +873,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      *
+     * @covers ::setupAttributes()
      * @covers ::updateFromFailedSave()
      */
     public function testUpdateFromFailedSave(): void
@@ -874,15 +887,73 @@ class ModulesComponentTest extends TestCase
             ],
         ];
         $recover = [ 'name' => 'gustavo' ];
-        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
-        $session = $this->Modules->request->getSession();
-        $session->write($key, $recover);
-        $session->write(sprintf('%s__timestamp', $key), time());
+        $this->Modules->setDataFromFailedSave('documents', $recover + ['id' => 999]);
 
         // verify data
-        $this->Modules->updateFromFailedSave($object);
+        $this->Modules->setupAttributes($object);
         $expected = $object;
         $expected['attributes'] = array_merge($object['attributes'], $recover);
         static::assertEquals($expected, $object);
+    }
+
+    /**
+     * Data provider for `testPrepareQuery`
+     *
+     * @return void
+     */
+    public function prepareQueryProvider()
+    {
+        return [
+            'simple' => [
+                [
+                    'page_size' => 7,
+                    'q' => 'gustavo',
+                ],
+                [
+                    'page_items' => 32,
+                    'page_size' => 7,
+                    'count' => 123,
+                    'q' => 'gustavo',
+                    'filter' => [],
+                ],
+            ],
+
+            'filter 1' => [
+                [
+                    'filter' => [
+                        'type' => 'documents',
+                    ],
+                ],
+                [
+                    'filter' => [
+                        'type' => 'documents',
+                        'b' => null,
+                    ],
+                ],
+            ],
+            'filter 2' => [
+                [],
+                [
+                    'filter' => [
+                        'type' => null,
+                        'a' => '',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `prepareQuery` method.
+     *
+     * @return void
+     *
+     * @dataProvider prepareQueryProvider
+     * @covers ::prepareQuery()
+     */
+    public function testPrepareQuery(array $expected, array $query): void
+    {
+        $result = $this->Modules->prepareQuery($query);
+        static::assertEquals($expected, $result);
     }
 }

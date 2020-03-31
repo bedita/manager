@@ -48,6 +48,19 @@ class SchemaComponent extends Component
     ];
 
     /**
+     * Create multi project cache key.
+     *
+     * @param string $name Cache item name.
+     * @return string
+     */
+    protected function cacheKey(string $name): string
+    {
+        $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
+
+        return sprintf('%s_%s', $name, $apiSignature);
+    }
+
+    /**
      * Read type JSON Schema from API using internal cache.
      *
      * @param string|null $type Type to get schema for. By default, configured type is used.
@@ -56,7 +69,6 @@ class SchemaComponent extends Component
      */
     public function getSchema(string $type = null, string $revision = null)
     {
-        // TODO: handle multiple projects -> key schema may differ
         if ($type === null) {
             $type = $this->getConfig('type');
         }
@@ -72,7 +84,7 @@ class SchemaComponent extends Component
 
         try {
             $schema = Cache::remember(
-                $type,
+                $this->cacheKey($type),
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
@@ -99,7 +111,8 @@ class SchemaComponent extends Component
      */
     protected function loadWithRevision(string $type, string $revision = null)
     {
-        $schema = Cache::read($type, self::CACHE_CONFIG);
+        $key = $this->cacheKey($type);
+        $schema = Cache::read($key, self::CACHE_CONFIG);
         if ($schema === false) {
             return false;
         }
@@ -108,7 +121,7 @@ class SchemaComponent extends Component
             return $schema;
         }
         // remove from cache if revision don't match
-        Cache::delete($type, self::CACHE_CONFIG);
+        Cache::delete($key, self::CACHE_CONFIG);
 
         return false;
     }
@@ -121,7 +134,32 @@ class SchemaComponent extends Component
      */
     protected function fetchSchema(string $type)
     {
-        return ApiClientProvider::getApiClient()->schema($type);
+        $schema = ApiClientProvider::getApiClient()->schema($type);
+        // add special property `roles` to `users`
+        if ($type === 'users') {
+            $schema['properties']['roles'] = [
+                'type' => 'string',
+                'enum' => $this->fetchRoles(),
+            ];
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Fetch `roles` names
+     *
+     * @return array
+     */
+    protected function fetchRoles(): array
+    {
+        $query = [
+            'fields' => 'name',
+            'page_size' => 100,
+        ];
+        $response = ApiClientProvider::getApiClient()->get('/roles', $query);
+
+        return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
     }
 
     /**
@@ -147,7 +185,7 @@ class SchemaComponent extends Component
     {
         try {
             $schema = (array)Cache::remember(
-                'relations',
+                $this->cacheKey('relations'),
                 function () {
                     return $this->fetchRelationData();
                 },

@@ -38,7 +38,7 @@
     {# other dynamic filters #}
     <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date? 'date' : '' ]">
         <input type="hidden" :name="filter.name" :value="filter.value">
-        <div class="filter-label"><: t(filter.name) :></div>
+        <div class="filter-label"><: filter.name | humanize :></div>
 
         <span v-if="filter.type === 'select' || filter.type === 'radio'">
             <select v-model="queryFilter.filter[filter.name]" :id="filter.name" class="{{ selectBaseClasses }}">

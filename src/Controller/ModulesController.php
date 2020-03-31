@@ -180,8 +180,8 @@ class ModulesController extends AppController
 
         $object = $response['data'];
 
-        // if previous post save failed, recover data from session.
-        $this->Modules->updateFromFailedSave($object);
+        // setup `currentAttributes` and recover failure data from session.
+        $this->Modules->setupAttributes($object);
 
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $this->set(compact('object', 'included', 'schema'));
@@ -264,6 +264,7 @@ class ModulesController extends AppController
 
         $this->set(compact('object', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        $this->ProjectConfiguration->read();
 
         return null;
     }
@@ -439,8 +440,9 @@ class ModulesController extends AppController
     public function relatedJson($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
-            $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $this->request->getQueryParams());
+            $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
@@ -467,9 +469,9 @@ class ModulesController extends AppController
     public function resourcesJson($id, string $type): void
     {
         $this->request->allowMethod(['get']);
-
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
-            $response = $this->apiClient->get($type, $this->request->getQueryParams());
+            $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
@@ -510,7 +512,8 @@ class ModulesController extends AppController
                     $available = $response['links']['available'];
             }
 
-            $response = $this->apiClient->get($available, $this->request->getQueryParams());
+            $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+            $response = $this->apiClient->get($available, $query);
 
             $this->getThumbsUrls($response);
         } catch (BEditaClientException $ex) {
@@ -548,7 +551,8 @@ class ModulesController extends AppController
 
         $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
 
-        $thumbsResponse = $this->apiClient->get($thumbs, $this->request->getQueryParams());
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $thumbsResponse = $this->apiClient->get($thumbs, $query);
 
         $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
 

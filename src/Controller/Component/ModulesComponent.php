@@ -118,7 +118,7 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        $modulesOrder = Configure::read('Modules.order');
+        $modulesOrder = (array)Configure::read('Modules.order');
 
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
@@ -163,8 +163,9 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
+        // Project name may be set via `config` and it takes precedence if set
         $project = [
-            'name' => Hash::get($meta, 'project.name', ''),
+            'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
             'colophon' => '', // TODO: populate this value.
         ];
@@ -357,15 +358,31 @@ class ModulesComponent extends Component
      * @param array $data The data to store into session.
      * @return void
      */
-    protected function setDataFromFailedSave($type, $data): void
+    public function setDataFromFailedSave(string $type, array $data): void
     {
         if (empty($data) || empty($data['id']) || empty($type)) {
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
         $session = $this->getController()->request->getSession();
+        unset($data['id']); // remove 'id', avoid future merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
+    }
+
+    /**
+     * Set current attributes from loaded $object data in `currentAttributes`.
+     * Load session failure data if available.
+     *
+     * @param array $object The object.
+     * @return void
+     */
+    public function setupAttributes(array &$object): void
+    {
+        $currentAttributes = json_encode((array)Hash::get($object, 'attributes'));
+        $this->getController()->set(compact('currentAttributes'));
+
+        $this->updateFromFailedSave($object);
     }
 
     /**
@@ -376,15 +393,15 @@ class ModulesComponent extends Component
      * @param array $object The object.
      * @return void
      */
-    public function updateFromFailedSave(array &$object): void
+    protected function updateFromFailedSave(array &$object): void
     {
-        if (empty($object) || empty($object['id']) || empty($object['type'])) {
-            return;
-        }
-
         // check session data for object id => use `failedSave.{type}.{id}` as key
         $session = $this->getController()->request->getSession();
-        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $key = sprintf(
+            'failedSave.%s.%s',
+            Hash::get($object, 'type'),
+            Hash::get($object, 'id')
+        );
         $data = $session->read($key);
         if (empty($data)) {
             return;
@@ -403,5 +420,24 @@ class ModulesComponent extends Component
         // remove session data
         $session->delete($key);
         $session->delete($timestampKey);
+    }
+
+    /**
+     * Prepare query string to make BE4 API call
+     *
+     * @param array $query Input query string
+     * @return array
+     */
+    public function prepareQuery(array $query): array
+    {
+        // cleanup `filter`, remove empty keys
+        $filter = array_filter((array)Hash::get($query, 'filter'));
+        $remove = array_flip(['count', 'page_items', 'page_count', 'filter']);
+        $query = array_diff_key($query, $remove);
+        if (!empty($filter)) {
+            $query += compact('filter');
+        }
+
+        return $query;
     }
 }

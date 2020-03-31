@@ -36,6 +36,10 @@ return [
                 'surname',
                 'email',
             ],
+            'filter' => [
+                'status',
+                'roles',
+            ],
         ],
 
         // media

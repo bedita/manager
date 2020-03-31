@@ -33,13 +33,13 @@ class ProjectConfigurationComponent extends Component
     public const CACHE_CONFIG = '_project_config_';
 
     /**
-     * Read project configuration from API using cache ad write it in `Project` config key.
+     * Read project configuration from API using cache ad write it in `Project.config` config key.
      *
      * @return array Project configuration in `key => value` format.
      */
     public function read(): array
     {
-        $config = Configure::read('Project');
+        $config = Configure::read('Project.config');
         if (!empty($config)) {
             return $config;
         }
@@ -51,7 +51,7 @@ class ProjectConfigurationComponent extends Component
                 },
                 self::CACHE_CONFIG
             );
-            Configure::write('Project', $config);
+            Configure::write('Project.config', $config);
         } catch (BEditaClientException $e) {
             // Something bad happened
             $this->log($e, LogLevel::ERROR);

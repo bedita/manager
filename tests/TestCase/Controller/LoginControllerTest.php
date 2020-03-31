@@ -14,8 +14,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\LoginController;
-use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -26,7 +24,6 @@ use Cake\TestSuite\TestCase;
  */
 class LoginControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -63,11 +60,11 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test `login` method, no user timezone set
+     * Test `authRequest` method, no user timezone set
      *
-     * @covers ::login()
+     * @covers ::authRequest()
      * @covers ::userTimezone()
-     *
+     * @covers ::setupCurrentProject()
      * @return void
      */
     public function testLogin(): void
@@ -131,7 +128,7 @@ class LoginControllerTest extends TestCase
     /**
      * Test `login` fail method
      *
-     * @covers ::login()
+     * @covers ::authRequest()
      *
      * @return void
      */
@@ -168,6 +165,58 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `loadAvailableProjects` method with GET
+     *
+     * @covers ::loadAvailableProjects()
+     *
+     * @return void
+     */
+    public function testLoadAvailableProjects(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+
+        $this->Login->setConfig('projectsPath', TESTS . 'files' . DS . 'projects' . DS);
+
+        $response = $this->Login->login();
+        static::assertNull($response);
+        $viewVars = $this->Login->viewVars;
+        static::assertArrayHasKey('projects', $viewVars);
+        $expected = [
+            [
+                'value' => 'test',
+                'text' => 'Test',
+            ],
+        ];
+        static::assertEquals($expected, $viewVars['projects']);
+    }
+
+    /**
+     * Test `setupCurrentProject` method
+     *
+     * @covers ::setupCurrentProject()
+     *
+     * @return void
+     */
+    public function testSetupCurrentProject(): void
+    {
+        $this->setupController([
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+                'project' => 'test',
+            ],
+        ]);
+
+        $response = $this->Login->login();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('test', $this->Login->request->getSession()->read('_project'));
+    }
+
+    /**
      * Test `logout` method
      *
      * @covers ::logout()
@@ -185,6 +234,8 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->logout();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/login', $response->getHeaderLine('Location'));
+        static::assertNull($this->Login->request->getSession()->read('Auth'));
+        static::assertNull($this->Login->request->getSession()->read('_project'));
     }
 
     /**
