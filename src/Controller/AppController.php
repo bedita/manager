@@ -204,6 +204,11 @@ class AppController extends Controller
             unset($data['_actualAttributes']);
         }
 
+        // cleanup attributes on new objects/resources
+        if (empty($data['id'])) {
+            $data = array_filter($data);
+        }
+
         return $data;
     }
 
