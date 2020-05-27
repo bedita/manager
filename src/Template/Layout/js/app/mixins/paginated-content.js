@@ -225,7 +225,10 @@ export const PaginatedContentMixin = {
          */
         findObjectById(id) {
             let obj = this.objects.filter(o => o.id === id);
-            return obj.length && obj[0];
+            if (!obj.length) {
+                return null;
+            }
+            return obj[0];
         },
 
         /**
@@ -236,14 +239,16 @@ export const PaginatedContentMixin = {
          * @return {Promise} repsonse from server
          */
         async loadMore(qty = DEFAULT_PAGINATION.page_size) {
-            if (this.pagination.page_items < this.pagination.count) {
-                let moreObjects = await this.nextPage(false);
-                this.pagination.page_items = this.pagination.page_items + qty <= this.pagination.count ? this.pagination.page_items + qty : this.pagination.count;
-                // this.pagination.page--;
-
-                const last = this.objects.length;
-                this.objects.splice(last, 0, ...moreObjects);
+            if (this.pagination.page_items >= this.pagination.count) {
+                return null;
             }
+            let moreObjects = await this.nextPage(false);
+            this.pagination.page_items = this.pagination.page_items + qty <= this.pagination.count ? this.pagination.page_items + qty : this.pagination.count;
+            // this.pagination.page--;
+
+            const last = this.objects.length;
+            this.objects.splice(last, 0, ...moreObjects);
+            return moreObjects;
         },
 
         /**

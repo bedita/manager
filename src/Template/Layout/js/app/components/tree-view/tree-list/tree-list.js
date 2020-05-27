@@ -9,8 +9,6 @@
  * - multiple-choice tree
  *
  * @prop {Boolean} multipleChoice (default true)
- * @prop {String} captionField specify which field of the object is to be used a caption
- * @prop {String} childrenField specify which field of the object is to be used a children
  * @prop {Object} item object of this node
  * @prop {Array} relatedObjects list of already related Objects
  *
@@ -33,19 +31,18 @@ export default {
                         'node-folder': isFolder,
                     }">
 
-                    <span
-                        @click.prevent.stop="toggle"
-                        class="icon"
-                        :class="nodeIcon"
-                        ></span>
                     <input
                         type="checkbox"
                         :value="item"
                         v-model="related"
                     />
                     <label
-                        @click.prevent.stop="toggle"
                         :class="isFolder ? 'is-folder' : ''"><: caption :></label>
+                    <button
+                        v-if="isFolder && (!children || children.length !== 0)"
+                        :class="nodeClasses"
+                        @click.prevent.stop="toggle"
+                        ></button>
                 </div>
                 <div v-else class="node-element"
                     :class="{
@@ -55,12 +52,12 @@ export default {
                     }"
 
                     @click.prevent.stop="select">
-                    <span
-                        @click.prevent.stop="toggle"
-                        class="icon"
-                        :class="nodeIcon"
-                        ></span>
                     <label><: caption :></label>
+                    <button
+                        v-if="isFolder && (!children || children.length !== 0)"
+                        :class="nodeClasses"
+                        @click.prevent.stop="toggle"
+                        ></button>
                 </div>
             </div>
             <div :class="isRoot ? '' : 'node-children'" v-show="open" v-if="isFolder">
@@ -68,7 +65,7 @@ export default {
                     @add-relation="addRelation"
                     @remove-relation="removeRelation"
                     @remove-all-relations="removeAllRelations"
-                    v-for="(child, index) in item.children"
+                    v-for="(child, index) in children"
                     :key="index"
                     :item="child"
                     :multiple-choice="multipleChoice"
@@ -83,7 +80,9 @@ export default {
         return {
             stageRelated: false,
             related: false,
-            open: true,
+            open: false,
+            isLoading: false,
+            children: undefined,
         }
     },
 
@@ -91,16 +90,6 @@ export default {
         multipleChoice: {
             type: Boolean,
             default: true,
-        },
-        captionField: {
-            type: String,
-            required: false,
-            default: 'name',
-        },
-        childrenField: {
-            type: String,
-            required: false,
-            default: 'children',
         },
         item: {
             type: Object,
@@ -114,7 +103,7 @@ export default {
         objectId: {
             type: String,
             required: false,
-        }
+        },
     },
 
     computed: {
@@ -124,7 +113,7 @@ export default {
          * @return {String}
          */
         caption() {
-            return this.item[this.captionField];
+            return this.item.attributes.title || this.item.attributes.uname;
         },
 
         /**
@@ -133,8 +122,7 @@ export default {
          * @return {Boolean}
          */
         isFolder() {
-            return this.item.children &&
-                !!this.item.children.length;
+            return this.item.type === 'folders';
         },
 
         /**
@@ -163,7 +151,7 @@ export default {
          * check if current object is in item path
          */
         isCurrentObjectInPath() {
-            return this.item && this.item.object && this.item.object.meta.path.indexOf(this.objectId) !== -1;
+            return this.item && this.item.meta.path && this.item.meta.path.includes(this.objectId);
         },
 
         /**
@@ -171,12 +159,15 @@ export default {
          *
          * @return {String} css class name
          */
-        nodeIcon() {
+        nodeClasses() {
             let css = '';
+            if (this.isLoading) {
+                return 'is-loading-spinner';
+            }
             css += this.isFolder
                 ? this.open
-                    ? 'icon-down-dir'
-                    : 'icon-right-dir'
+                    ? 'icon-down-open'
+                    : 'icon-right-open'
                 : 'unicode-branch'
 
             return css;
@@ -250,11 +241,26 @@ export default {
         /**
          * toggle children visibility
          *
-         * @return {void}
+         * @return {Promise}
          */
-        toggle() {
+        async toggle() {
             if (this.isFolder) {
                 this.open = !this.open;
+            }
+            if (!this.children && !this.isLoading) {
+                this.isLoading = true;
+                const baseUrl = window.location.href;
+                const options = {
+                    credentials: 'same-origin',
+                    headers: {
+                        'accept': 'application/json',
+                    }
+                };
+                const response = await fetch(`${baseUrl}/treeJson/${this.item.id}?filter[type]=folders`, options);
+                const json = await response.json();
+                const children = this.children = this.children || [];
+                children.push(...json.data);
+                this.isLoading = false;
             }
         },
 

@@ -46,10 +46,11 @@
                         <div class="tree-view">
                             <div class="tree-entry-list" v-show="Object.keys(objects).length">
                                 <tree-list
-                                    :item="jsonTree"
+                                    v-for="(child) in objects"
+                                    :item="child"
                                     :related-objects="relatedObjects"
                                     :multiple-choice="multipleChoice"
-                                    object-id="{{ object.id }}"
+                                    object-id="{{ child.id }}"
 
                                     @add-relation="addRelation"
                                     @remove-relation="removeRelation"

@@ -459,6 +459,36 @@ class ModulesController extends AppController
     }
 
     /**
+     * Load tree data.
+     *
+     * @param string|int $id the object identifier.
+     * @param string|int $root the tree root identifier.
+     * @return void
+     */
+    public function treeJson($id, string $root = null): void
+    {
+        $this->request->allowMethod(['get']);
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        try {
+            if (empty($root)) {
+                $response = $this->apiClient->getObjects('folders', ['filter' => ['roots' => '']]);
+            } else {
+                $response = $this->apiClient->getRelated($root, 'folders', 'children', $query);
+            }
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
+
+    /**
      * Load resources of $type callig api `GET /:type/`
      * Json response
      *

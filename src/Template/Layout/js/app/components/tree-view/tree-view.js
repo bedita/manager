@@ -31,12 +31,6 @@ export default {
         },
     },
 
-    data() {
-        return {
-            jsonTree: {},   // json tree version of the objects list based on path
-        }
-    },
-
     /**
      * load content if flag set to true after component is created
      *
@@ -108,12 +102,39 @@ export default {
                 var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
                 await sleep(t);
                 await this.loadObjects();
-                this.jsonTree = {
-                    name: 'Root',
-                    root: true,
-                    object: {},
-                    children: this.createTree(),
+            }
+        },
+
+        async loadObjects() {
+            if (this.loadOnStart) {
+                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
+                await sleep(t);
+                const baseUrl = window.location.href;
+                const options =  {
+                    credentials: 'same-origin',
+                    headers: {
+                        'accept': 'application/json',
+                    }
                 };
+                let page = 1;
+                const objects = [];
+                do {
+                    const response = page !== 1 ?
+                        await fetch(`${baseUrl}/treeJson?page=${page}`, options) :
+                        await fetch(`${baseUrl}/treeJson`, options);
+                    const json = await response.json();
+                    if (json.data) {
+                        objects.push(...json.data)
+                    }
+                    if (!json.meta ||
+                        !json.meta.pagination ||
+                        json.meta.pagination.page_count === json.meta.pagination.page) {
+                        break;
+                    }
+                    page = json.meta.pagination.page + 1;
+                } while (true);
+
+                this.objects = objects;
             }
         },
 
@@ -180,57 +201,6 @@ export default {
             obj.$children.forEach(child => {
                 this._setChildrenData(child, dataName, dataValue);
             });
-        },
-
-        /**
-         * create a json Tree from a list of objects with path
-         *
-         * @return {Object} json tree
-         */
-        createTree() {
-            let jsonTree = [];
-            this.objects.forEach((obj) => {
-                let path = obj.meta.path && obj.meta.path.split('/');
-                if (path.length) {
-                    // Remove first blank element from the parts array.
-                    path.shift();
-
-                    // initialize currentLevel to root
-                    let currentLevel = jsonTree;
-
-                    path.forEach((id) => {
-                        // check to see if the path already exists.
-                        let existingPath = this.findPath(currentLevel, id);
-
-
-                        if (existingPath) {
-                            // The path to this item was already in the tree, so I set the current level to this path's children
-                            currentLevel = existingPath.children;
-                        } else {
-                            // create a new node
-                            let currentObj = obj;
-
-                            // if current object is not the same as the discovered node get it from objects array
-                            if (currentObj.id !== id) {
-                                currentObj = this.findObjectById(id);
-                            }
-
-                            let newNode = {
-                                id: id,
-                                related: this.isRelated(id),
-                                name: currentObj.attributes.title || '',
-                                object: currentObj,
-                                children: [],
-                            };
-
-                            currentLevel.push(newNode);
-                            currentLevel = newNode.children;
-                        }
-                    });
-                }
-            });
-
-            return jsonTree;
         },
 
         /**
