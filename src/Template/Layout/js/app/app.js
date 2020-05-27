@@ -381,14 +381,20 @@ const _vueInstance = new Vue({
                             // storing original value for the element
                             if (element.type === 'radio') {
                                 const name = element.name;
-                                const group = document.querySelectorAll(`input[name=${name}]`);
-                                const checked = document.querySelector(`input[name=${name}]:checked`);
-                                group.forEach(el => el.dataset.originalValue = checked.value);
+                                if (name) {
+                                    const group = document.querySelectorAll(`input[name='${name}']`);
+                                    const checked = document.querySelector(`input[name='${name}']:checked`);
+                                    if (checked) {
+                                        group.forEach(el => el.dataset.originalValue = checked.value);
+                                    }
+                                }
                             } else if (element.type === 'checkbox') {
                                 const name = element.name;
                                 if (name) {
-                                    const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                                    element.dataset.originalValue = JSON.stringify(checked);
+                                    const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                                    if (checked) {
+                                        element.dataset.originalValue = JSON.stringify(checked);
+                                    }
                                 }
                             } else {
                                 element.dataset.originalValue = element.value;
@@ -427,8 +433,10 @@ const _vueInstance = new Vue({
 
                         if (element.type === 'radio' || element.type === 'checkbox') {
                             if (element.type === 'checkbox') {
-                                const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                                value = JSON.stringify(checked);
+                                const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                                if (checked) {
+                                    value = JSON.stringify(checked);
+                                }
                             }
                             id = `${formId}#${name}`;
                         }

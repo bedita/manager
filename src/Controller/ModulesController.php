@@ -165,7 +165,11 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
+            $query = [];
+            if ($this->objectType !== 'folders') {
+                $query['include'] = 'parents';
+            }
+            $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
@@ -471,9 +475,17 @@ class ModulesController extends AppController
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
             if (empty($root)) {
-                $response = $this->apiClient->getObjects('folders', ['filter' => ['roots' => '']]);
+                if (empty($query['filter'])) {
+                    $query['filter'] = [];
+                }
+                $query['filter']['roots'] = '';
+                $response = $this->apiClient->getObjects('folders', $query);
             } else {
-                $response = $this->apiClient->getRelated($root, 'folders', 'children', $query);
+                if (empty($query['filter'])) {
+                    $query['filter'] = [];
+                }
+                $query['filter']['parent'] = $root;
+                $response = $this->apiClient->getObjects('folders', $query);
             }
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
