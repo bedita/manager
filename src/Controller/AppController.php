@@ -188,7 +188,8 @@ class AppController extends Controller
                         $relatedIds = array_map(
                             function ($id) {
                                 return json_decode($id, true);
-                            }, $ids
+                            },
+                            $ids
                         );
                     }
                     if (!empty($relatedIds)) {
