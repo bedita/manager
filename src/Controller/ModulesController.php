@@ -474,19 +474,13 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
-            if (empty($root)) {
-                if (empty($query['filter'])) {
-                    $query['filter'] = [];
-                }
-                $query['filter']['roots'] = '';
-                $response = $this->apiClient->getObjects('folders', $query);
-            } else {
-                if (empty($query['filter'])) {
-                    $query['filter'] = [];
-                }
-                $query['filter']['parent'] = $root;
-                $response = $this->apiClient->getObjects('folders', $query);
+            $key = (empty($root)) ? 'roots' : 'parent';
+            $val = (empty($root)) ? 'roots' : $root;
+            if (empty($query['filter'])) {
+                $query['filter'] = [];
             }
+            $query['filter'][$key] = $val;
+            $response = $this->apiClient->getObjects('folders', $query);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
