@@ -29,7 +29,6 @@
             inline-template
             relation-name={{ relationName }}
             :multiple-choice={{ options.multiple }}
-            :load-on-start="900"
 
             @loading="onToggleLoading">
 
@@ -39,7 +38,6 @@
                     relation-name={{ relationName }}
                     :object-id={{ object.id }}
                     :object-paths={{ paths|json_encode() }}
-                    :load-on-start="700"
                     :multiple-choice="multipleChoice">
 
                     <div class="tree-view">

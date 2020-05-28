@@ -7,22 +7,20 @@
  * @prop {String} objectId
  * @prop {Array} objectPaths
  * @prop {String} relationName
- * @prop {Boolean} loadOnStart load content on component init
  * @prop {Boolean} multipleChoice
- *
  */
-
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import sleep from 'sleep-promise';
-
 export default {
-    extends: RelationshipsView,
     components: {
         TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
     },
 
+    data() {
+        return {
+            objects: [],
+        };
+    },
+
     props: {
-        loadOnStart: [Boolean, Number],
         objectId: [String, Number],
         objectPaths: Array,
         relationName: {
@@ -36,59 +34,112 @@ export default {
     },
 
     /**
-     * load content if flag set to true after component is created
+     * Load content if flag set to true after component is created
      *
      * @return {void}
      */
     created() {
-        this.loadTree();
+        this._loading = this.loadObjects();
     },
 
     methods: {
         /**
-         * check loadOnStart prop and load content if set to true
+         * Load tree roots.
          *
-         * @return {void}
+         * @return {Promise}
          */
-        async loadTree() {
-            if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-                await sleep(t);
-                await this.loadObjects();
-            }
-        },
-
         async loadObjects() {
-            if (this.loadOnStart) {
-                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-                await sleep(t);
-                const baseUrl = window.location.href;
-                const options =  {
-                    credentials: 'same-origin',
-                    headers: {
-                        'accept': 'application/json',
-                    }
-                };
-                let page = 1;
-                const objects = [];
-                do {
-                    const response = page !== 1 ?
-                        await fetch(`${baseUrl}/treeJson?page=${page}`, options) :
-                        await fetch(`${baseUrl}/treeJson`, options);
-                    const json = await response.json();
-                    if (json.data) {
-                        objects.push(...json.data)
-                    }
-                    if (!json.meta ||
-                        !json.meta.pagination ||
-                        json.meta.pagination.page_count === json.meta.pagination.page) {
-                        break;
-                    }
-                    page = json.meta.pagination.page + 1;
-                } while (true);
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            let page = 1;
+            let objects = [];
+            do {
+                let response = page !== 1 ?
+                    await fetch(`${baseUrl}/treeJson?page=${page}`, options) :
+                    await fetch(`${baseUrl}/treeJson`, options);
+                let json = await response.json();
+                if (json.data) {
+                    objects.push(...json.data)
+                }
+                if (!json.meta ||
+                    !json.meta.pagination ||
+                    json.meta.pagination.page_count === json.meta.pagination.page) {
+                    break;
+                }
+                page = json.meta.pagination.page + 1;
+            } while (true);
 
-                this.objects = objects;
+            let children = objects
+                .map((folder) => (
+                    {
+                        id: folder.id,
+                        type: folder.type,
+                        title: folder.attributes.title || folder.attributes.uname,
+                        path: folder.meta.path,
+                    }
+                ));
+
+            if (this.objectPaths) {
+                await this.preloadPaths(children, this.objectPaths);
             }
+
+            this.objects = children;
+            return children;
         },
+
+        /**
+         * Preload folders passed as object paths.
+         *
+         * @param {Array} roots A list of root folders.
+         * @param {Array} paths A list of object paths.
+         * @return {Promise}
+         */
+        async preloadPaths(roots, paths) {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+
+            for (let i = 0; i < paths.length; i++) {
+                let path = paths[i].split('/').slice(1, -1);
+                let rootId = path.shift();
+                let currentFolder = roots.find((f) => f.id == rootId);
+
+                for (let k = 0; k < path.length; k++) {
+                    let id = path[k];
+                    let page = 1;
+                    let folderChildren = [];
+                    do {
+                        let response = await fetch(`${baseUrl}/treeJson/${currentFolder.id}?page=${page}`, options);
+                        let json = await response.json();
+                        folderChildren.push(
+                            ...json.data.map((child) => (
+                                {
+                                    id: child.id,
+                                    type: child.type,
+                                    title: child.attributes.title || child.attributes.uname,
+                                    path: child.meta.path,
+                                }
+                            ))
+                        );
+                        if (json.meta.pagination.page_count == page) {
+                            break;
+                        }
+                        page++;
+                    } while (true);
+
+                    currentFolder.children = folderChildren;
+                    currentFolder = folderChildren.find((f) => f.id == id);
+                }
+            }
+        }
     }
 }

@@ -67,6 +67,7 @@
                 &.is-loading-spinner {
                     &::after {
                         border-left-color: rgba(255, 255, 255, 0.75);
+                        margin-left: $gutter / 2;
                     }
                 }
             }
@@ -74,9 +75,13 @@
         }
 
         .node-children {
-            padding-left: $gutter;
-            margin-left: 3 * $gutter / 8;
-            border-left: solid 1px rgba(255, 255, 255, 0.25);
+            &:not(:empty) {
+                margin-top: -$gutter;
+                margin-left: 3 * $gutter / 8;
+                padding-top: $gutter;
+                padding-left: $gutter;
+                border-left: solid 1px rgba(255, 255, 255, 0.25);
+            }
         }
     }
 }

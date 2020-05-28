@@ -34,16 +34,17 @@ export default {
                         :name="'relations[' + relationName + '][replaceRelated][]'"
                         :value="itemValue"
                     />
-                <: caption :></label>
+                    <: item.title :>
+                </label>
                 <button
-                    v-if="isFolder && (!children || children.length !== 0)"
+                    v-if="isFolder && (!item.children || item.children.length !== 0)"
                     :class="nodeClasses"
                     @click.prevent.stop="toggle"
                     ></button>
             </div>
-            <div class="node-children" v-show="open" v-if="isFolder">
+            <div class="node-children" v-show="isOpen" v-if="isFolder">
                 <tree-list
-                    v-for="(child, index) in children"
+                    v-for="(child, index) in item.children"
                     :key="index"
                     :item="child"
                     :object-id="objectId"
@@ -58,9 +59,8 @@ export default {
     data() {
         return {
             related: false,
-            open: false,
+            isOpen: false,
             isLoading: false,
-            children: undefined,
         }
     },
 
@@ -83,15 +83,6 @@ export default {
     },
 
     computed: {
-        /**
-         * caption used in label
-         *
-         * @return {String}
-         */
-        caption() {
-            return this.item.attributes.title || this.item.attributes.uname;
-        },
-
         /**
          * check if current node is a folder
          *
@@ -128,7 +119,7 @@ export default {
             if (this.multipleChoice) {
                 return false;
             }
-            return this.objectPaths.some((path) => this.item.meta.path.startsWith(path));
+            return this.objectPaths.some((path) => this.item.path.startsWith(path));
         },
 
         /**
@@ -154,7 +145,7 @@ export default {
                 return 'is-loading-spinner';
             }
             css += this.isFolder
-                ? this.open
+                ? this.isOpen
                     ? 'icon-down-open'
                     : 'icon-right-open'
                 : 'unicode-branch'
@@ -163,31 +154,61 @@ export default {
         },
     },
 
+    /**
+     * Open the folder if children are provided.
+     *
+     * @return {void}
+     */
+    created() {
+        if (this.item && this.item.children) {
+            this.isOpen = true;
+        }
+    },
+
     methods: {
         /**
-         * toggle children visibility
+         * Toggle children visibility
+         * Fetch children if not provided.
          *
          * @return {Promise}
          */
         async toggle() {
-            if (this.isFolder) {
-                this.open = !this.open;
+            this.isOpen = !this.isOpen;
+            if (this.item.children || this.isLoading) {
+                return;
             }
-            if (!this.children && !this.isLoading) {
-                this.isLoading = true;
-                const baseUrl = window.location.href;
-                const options = {
-                    credentials: 'same-origin',
-                    headers: {
-                        'accept': 'application/json',
-                    }
-                };
-                const response = await fetch(`${baseUrl}/treeJson/${this.item.id}`, options);
-                const json = await response.json();
-                const children = this.children = this.children || [];
-                children.push(...json.data);
-                this.isLoading = false;
-            }
+
+            this.isLoading = true;
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            let page = 1;
+            let children = [];
+            do {
+                let response = await fetch(`${baseUrl}/treeJson/${this.item.id}?page=${page}`, options);
+                let json = await response.json();
+                children.push(
+                    ...json.data.map((child) => (
+                        {
+                            id: child.id,
+                            type: child.type,
+                            title: child.attributes.title || child.attributes.uname,
+                            path: child.meta.path,
+                        }
+                    ))
+                );
+                if (json.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+            this.item.children = children;
+            this.isFetched = true;
+            this.isLoading = false;
         },
     }
 }
