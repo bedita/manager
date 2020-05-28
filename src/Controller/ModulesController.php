@@ -475,7 +475,7 @@ class ModulesController extends AppController
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
             $key = (empty($root)) ? 'roots' : 'parent';
-            $val = (empty($root)) ? 'roots' : $root;
+            $val = (empty($root)) ? '' : $root;
             if (empty($query['filter'])) {
                 $query['filter'] = [];
             }
