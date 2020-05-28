@@ -16,9 +16,23 @@ export default {
         TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
     },
 
+    template: `<div class="tree-view">
+        <div v-if="isLoading" class="is-loading-spinner"></div>
+        <tree-list
+            v-for="(child) in objects"
+            :key="child.id"
+            :item="child"
+            :object-id="objectId"
+            :object-paths="objectPaths"
+            :relation-name="relationName"
+            :multiple-choice="multipleChoice"
+        ></tree-list>
+    </div>`,
+
     data() {
         return {
             objects: [],
+            isLoading: false,
         };
     },
 
@@ -39,7 +53,9 @@ export default {
         if (!rootsPromise) {
             rootsPromise = this.loadObjects();
         }
+        this.isLoading = true;
         this.objects = await rootsPromise;
+        this.isLoading = false;
     },
 
     methods: {
@@ -59,9 +75,7 @@ export default {
             let page = 1;
             let objects = [];
             do {
-                let response = page !== 1 ?
-                    await fetch(`${baseUrl}/treeJson?page=${page}`, options) :
-                    await fetch(`${baseUrl}/treeJson`, options);
+                let response = await fetch(`${baseUrl}/treeJson?page=${page}`, options);
                 let json = await response.json();
                 if (json.data) {
                     objects.push(...json.data)
@@ -117,7 +131,7 @@ export default {
                     let page = 1;
                     let folderChildren = [];
                     do {
-                        let response = await fetch(`${baseUrl}/treeJson/${currentFolder.id}?page=${page}`, options);
+                        let response = await fetch(`${baseUrl}/treeJson/?root=${currentFolder.id}&page=${page}`, options);
                         let json = await response.json();
                         folderChildren.push(
                             ...json.data.map((child) => (

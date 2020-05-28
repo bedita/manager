@@ -182,11 +182,15 @@ class AppController extends Controller
                 $id = $data['id'];
 
                 foreach ($relationData as $method => $ids) {
-                    $relatedIds = is_string($ids) ? json_decode($ids, true) : array_map(
-                        function ($id) {
-                            return json_decode($id, true);
-                        }, $ids
-                    );
+                    if (is_string($ids)) {
+                        $relatedIds = json_decode($ids, true);
+                    } else {
+                        $relatedIds = array_map(
+                            function ($id) {
+                                return json_decode($id, true);
+                            }, $ids
+                        );
+                    }
                     if (!empty($relatedIds)) {
                         $api[] = compact('method', 'id', 'relation', 'relatedIds');
                     }

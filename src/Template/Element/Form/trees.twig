@@ -26,25 +26,10 @@
         {% endif %}
 
         <tree-view
-            inline-template
             relation-name={{ relationName }}
             :object-id={{ object.id }}
             :object-paths='{{ paths|json_encode|raw }}'
             :multiple-choice={{ options.multiple }}>
-
-            <div class="tree-view">
-                <div class="tree-entry-list" v-show="Object.keys(objects).length">
-                    <tree-list
-                        v-for="(child) in objects"
-                        :item="child"
-                        :object-id="objectId"
-                        :object-paths="objectPaths"
-                        :relation-name="relationName"
-                        :multiple-choice="multipleChoice"
-                    ></tree-list>
-
-                </div>
-            </div>
         </tree-view>
         {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
     </div>

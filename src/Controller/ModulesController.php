@@ -466,13 +466,14 @@ class ModulesController extends AppController
      * Load tree data.
      *
      * @param string|int $id the object identifier.
-     * @param string|int $root the tree root identifier.
      * @return void
      */
-    public function treeJson($id, string $root = null): void
+    public function treeJson($id): void
     {
         $this->request->allowMethod(['get']);
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $root = Hash::get($query, 'root');
+        unset($query['root']);
         try {
             $key = (empty($root)) ? 'roots' : 'parent';
             $val = (empty($root)) ? '' : $root;

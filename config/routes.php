@@ -202,11 +202,6 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect(
         '/:object_type/view/:id/treeJson',
         ['controller' => 'Modules', 'action' => 'treeJson'],
-        ['pass' => ['id', 'root'], '_name' => 'modules:treeRootJson']
-    );
-    $routes->connect(
-        '/:object_type/view/:id/treeJson/:root',
-        ['controller' => 'Modules', 'action' => 'treeJson'],
         ['pass' => ['id', 'root'], '_name' => 'modules:treeJson']
     );
     $routes->connect(

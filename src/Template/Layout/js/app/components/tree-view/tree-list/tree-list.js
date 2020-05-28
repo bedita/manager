@@ -189,7 +189,7 @@ export default {
             let page = 1;
             let children = [];
             do {
-                let response = await fetch(`${baseUrl}/treeJson/${this.item.id}?page=${page}`, options);
+                let response = await fetch(`${baseUrl}/treeJson/?root=${this.item.id}&page=${page}`, options);
                 let json = await response.json();
                 children.push(
                     ...json.data.map((child) => (
