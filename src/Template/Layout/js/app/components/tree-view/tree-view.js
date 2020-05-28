@@ -1,3 +1,5 @@
+let rootsPromise;
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
@@ -33,13 +35,11 @@ export default {
         },
     },
 
-    /**
-     * Load content if flag set to true after component is created
-     *
-     * @return {void}
-     */
-    created() {
-        this._loading = this.loadObjects();
+    async created() {
+        if (!rootsPromise) {
+            rootsPromise = this.loadObjects();
+        }
+        this.objects = await rootsPromise;
     },
 
     methods: {
@@ -88,7 +88,6 @@ export default {
                 await this.preloadPaths(children, this.objectPaths);
             }
 
-            this.objects = children;
             return children;
         },
 

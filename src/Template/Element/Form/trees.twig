@@ -12,7 +12,7 @@
         <h2>{{ __('Folders') }}</h2>
     </header>
 
-    <div v-show="isOpen" class="tab-container">
+    <div v-if="isOpen" class="tab-container">
 
         {# TODO put it in config #}
         {% if objectType == 'folders' %}
@@ -25,38 +25,28 @@
             {% set options = { 'multiple': 'true' }%}
         {% endif %}
 
-        <relation-view
+        <tree-view
             inline-template
             relation-name={{ relationName }}
-            :multiple-choice={{ options.multiple }}
+            :object-id={{ object.id }}
+            :object-paths='{{ paths|json_encode|raw }}'
+            :multiple-choice={{ options.multiple }}>
 
-            @loading="onToggleLoading">
+            <div class="tree-view">
+                <div class="tree-entry-list" v-show="Object.keys(objects).length">
+                    <tree-list
+                        v-for="(child) in objects"
+                        :item="child"
+                        :object-id="objectId"
+                        :object-paths="objectPaths"
+                        :relation-name="relationName"
+                        :multiple-choice="multipleChoice"
+                    ></tree-list>
 
-            <div class="tree-{{ relationName }} unselectable">
-                <tree-view
-                    inline-template
-                    relation-name={{ relationName }}
-                    :object-id={{ object.id }}
-                    :object-paths={{ paths|json_encode() }}
-                    :multiple-choice="multipleChoice">
-
-                    <div class="tree-view">
-                        <div class="tree-entry-list" v-show="Object.keys(objects).length">
-                            <tree-list
-                                v-for="(child) in objects"
-                                :item="child"
-                                :object-id="objectId"
-                                :object-paths="objectPaths"
-                                :relation-name="relationName"
-                                :multiple-choice="multipleChoice"
-                            ></tree-list>
-
-                        </div>
-                    </div>
-                </tree-view>
-                {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
+                </div>
             </div>
-        </relation-view>
+        </tree-view>
+        {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
     </div>
 </section>
 </property-view>
