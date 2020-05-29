@@ -47,6 +47,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        maxSize: {
+            type: Number,
+            default: 20,
+        },
     },
 
     async created() {
@@ -65,6 +69,11 @@ export default {
          * @return {Promise}
          */
         async loadObjects() {
+            const size = await this.checkTreeSize();
+            if (size < this.maxSize) {
+                return this.loadFullTree();
+            }
+
             const baseUrl = window.location.href;
             const options = {
                 credentials: 'same-origin',
@@ -78,7 +87,7 @@ export default {
                 let response = await fetch(`${baseUrl}/treeJson?page=${page}`, options);
                 let json = await response.json();
                 if (json.data) {
-                    objects.push(...json.data)
+                    objects.push(...this.transformResponse(json.data))
                 }
                 if (!json.meta ||
                     !json.meta.pagination ||
@@ -88,21 +97,104 @@ export default {
                 page = json.meta.pagination.page + 1;
             } while (true);
 
-            let children = objects
+            if (this.objectPaths) {
+                await this.preloadPaths(objects, this.objectPaths);
+            }
+
+            return objects;
+        },
+
+        /**
+         * Return the tree size (folders count).
+         *
+         * @return {Promise<number>}
+         */
+        async checkTreeSize() {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            const response = await fetch(`${baseUrl}/treeJson?full=1&page_size=1`, options);
+            const json = await response.json();
+            if (!json.meta || !json.meta.pagination) {
+                return null;
+            }
+            return json.meta.pagination.count;
+        },
+
+        /**
+         * Load the full tree recursively.
+         *
+         * @return {Promise<Array>}
+         */
+        async loadFullTree() {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+
+            const map = new Map();
+
+            let page = 1;
+            let objects = [];
+            do {
+                let response = await fetch(`${baseUrl}/treeJson?full=1&page=${page}`, options);
+                let json = await response.json();
+                if (json.data) {
+                    this.transformResponse(json.data, true).forEach((item) => {
+                        let chunks = item.path.split('/').slice(1, -1);
+                        let parentId = chunks[chunks.length - 1];
+                        if (map.get(item.id)) {
+                            item.children.push(...map.get(item.id).children);
+                        }
+                        map.set(item.id, item);
+                        if (!parentId) {
+                            objects.push(item);
+                        } else {
+                            let parentItem = map.get(parentId) || {
+                                id: parentId,
+                                children: [],
+                            };
+                            parentItem.children.push(item);
+                            map.set(parentId, parentItem);
+                        }
+                    });
+                }
+                if (!json.meta ||
+                    !json.meta.pagination ||
+                    json.meta.pagination.page_count === json.meta.pagination.page) {
+                    break;
+                }
+                page = json.meta.pagination.page + 1;
+            } while (true);
+
+            return objects;
+        },
+
+        /**
+         * Transform response objects into tree items.
+         *
+         * @param {Array} objects The list of objects.
+         * @param {boolean} setupChildren Should setup children array.
+         * @return {Array}
+         */
+        transformResponse(objects, setupChildren = false) {
+            return objects
                 .map((folder) => (
                     {
                         id: folder.id,
                         type: folder.type,
                         title: folder.attributes.title || folder.attributes.uname,
                         path: folder.meta.path,
+                        children: setupChildren ? [] : undefined,
                     }
                 ));
-
-            if (this.objectPaths) {
-                await this.preloadPaths(children, this.objectPaths);
-            }
-
-            return children;
         },
 
         /**
@@ -133,16 +225,7 @@ export default {
                     do {
                         let response = await fetch(`${baseUrl}/treeJson/?root=${currentFolder.id}&page=${page}`, options);
                         let json = await response.json();
-                        folderChildren.push(
-                            ...json.data.map((child) => (
-                                {
-                                    id: child.id,
-                                    type: child.type,
-                                    title: child.attributes.title || child.attributes.uname,
-                                    path: child.meta.path,
-                                }
-                            ))
-                        );
+                        folderChildren.push(...this.transformResponse(json.data));
                         if (json.meta.pagination.page_count == page) {
                             break;
                         }
