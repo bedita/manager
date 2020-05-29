@@ -15,6 +15,7 @@
 
 export default {
     components: {
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
         ResourceRelationView: () => import(/* webpackChunkName: "resource-relation-view" */'app/components/relation-view/resource-relation-view'),
         ChildrenView: () => import(/* webpackChunkName: "children-view" */'app/components/children-view/children-view'),

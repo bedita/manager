@@ -165,7 +165,11 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
+            $query = [];
+            if ($this->objectType !== 'folders') {
+                $query['include'] = 'parents';
+            }
+            $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
@@ -453,6 +457,43 @@ class ModulesController extends AppController
         }
 
         $this->getThumbsUrls($response);
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Load tree data.
+     *
+     * @param string|int $id the object identifier.
+     * @return void
+     */
+    public function treeJson($id): void
+    {
+        $this->request->allowMethod(['get']);
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $root = Hash::get($query, 'root');
+        $full = Hash::get($query, 'full');
+        unset($query['full']);
+        unset($query['root']);
+        try {
+            if (empty($full)) {
+                $key = (empty($root)) ? 'roots' : 'parent';
+                $val = (empty($root)) ? '' : $root;
+                if (empty($query['filter'])) {
+                    $query['filter'] = [];
+                }
+                $query['filter'][$key] = $val;
+            }
+            $response = $this->apiClient->getObjects('folders', $query);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));

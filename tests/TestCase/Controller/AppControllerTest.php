@@ -355,6 +355,17 @@ class AppControllerTest extends TestCase
                                 ],
                             ],
                         ],
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '1',
+                            'relation' => 'children',
+                            'relatedIds' => [
+                                [
+                                    'id' => '44',
+                                    'type' => 'images',
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 [ // data provided
@@ -362,6 +373,11 @@ class AppControllerTest extends TestCase
                     'relations' => [
                         'attach' => [
                             'addRelated' => '[{ "id": "44", "type": "images"}]', // fake attached image
+                        ],
+                        'children' => [
+                            'replaceRelated' => [
+                                '{ "id": "44", "type": "images"}',
+                            ],
                         ],
                     ],
                 ],

@@ -1,275 +1,241 @@
+let rootsPromise;
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
  *
  * <tree-view> component used for ModulesPage -> View
  *
+ * @prop {String} objectId
+ * @prop {Array} objectPaths
  * @prop {String} relationName
- * @prop {Boolean} loadOnStart load content on component init
  * @prop {Boolean} multipleChoice
- *
  */
-
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import sleep from 'sleep-promise';
-
 export default {
-    extends: RelationshipsView,
     components: {
         TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
     },
 
+    template: `<div class="tree-view">
+        <div v-if="isLoading" class="is-loading-spinner"></div>
+        <tree-list
+            v-for="(child) in objects"
+            :key="child.id"
+            :item="child"
+            :object-id="objectId"
+            :object-paths="objectPaths"
+            :relation-name="relationName"
+            :multiple-choice="multipleChoice"
+        ></tree-list>
+    </div>`,
+
+    data() {
+        return {
+            objects: [],
+            isLoading: false,
+        };
+    },
+
     props: {
-        relatedObjects: {
-            type: Array,
-            default: () => [],
+        objectId: [String, Number],
+        objectPaths: Array,
+        relationName: {
+            type: String,
+            default: 'children',
         },
-        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
         },
+        maxSize: {
+            type: Number,
+            default: 20,
+        },
     },
 
-    data() {
-        return {
-            jsonTree: {},   // json tree version of the objects list based on path
+    async created() {
+        if (!rootsPromise) {
+            rootsPromise = this.loadObjects();
         }
-    },
-
-    /**
-     * load content if flag set to true after component is created
-     *
-     * @return {void}
-     */
-    created() {
-        this.loadTree();
-    },
-
-    watch: {
-        /**
-         * watch pendingRelations used as a model for view's checkboxes and separates relations in
-         * ones to be added and ones to be removed according to the already related objects Array
-         *
-         * @param {Array} pendingRels
-         */
-        pendingRelations(pendingRels) {
-            // handles relations to be added
-            let relationsToAdd = pendingRels.filter((rel) => {
-                return !this.isRelated(rel.id);
-            });
-
-            if (!this.multipleChoice) {
-                if(relationsToAdd.length) {
-                    relationsToAdd = relationsToAdd[0];
-                }
-            }
-
-            const isChanged = !!relationsToAdd.length;
-            this.$el.dispatchEvent(new CustomEvent('change', {
-                bubbles: true,
-                detail: {
-                    id: this.$vnode.tag,
-                    isChanged,
-                }
-            }));
-
-            this.relationsData = this.relationFormatterHelper(relationsToAdd);
-
-            // handles relations to be removes
-            let relationsToRemove = this.relatedObjects.filter((rel) => {
-                return !this.isPending(rel.id);
-            });
-
-            // emit event to pass data to parent
-            this.$emit('remove-relations', relationsToRemove);
-        },
-
-        /**
-         * watch objects and insert already related objects into pendingRelations
-         *
-         * @return {void}
-         */
-        objects() {
-            this.pendingRelations = this.objects.filter((rel) => {
-                return this.isRelated(rel.id);
-            });
-        },
+        this.isLoading = true;
+        this.objects = await rootsPromise;
+        this.isLoading = false;
     },
 
     methods: {
         /**
-         * check loadOnStart prop and load content if set to true
+         * Load tree roots.
          *
-         * @return {void}
+         * @return {Promise}
          */
-        async loadTree() {
-            if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-                await sleep(t);
-                await this.loadObjects();
-                this.jsonTree = {
-                    name: 'Root',
-                    root: true,
-                    object: {},
-                    children: this.createTree(),
-                };
+        async loadObjects() {
+            const size = await this.checkTreeSize();
+            if (size < this.maxSize) {
+                return this.loadFullTree();
             }
+
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            let page = 1;
+            let objects = [];
+            do {
+                let response = await fetch(`${baseUrl}/treeJson?page=${page}`, options);
+                let json = await response.json();
+                if (json.data) {
+                    objects.push(...this.transformResponse(json.data))
+                }
+                if (!json.meta ||
+                    !json.meta.pagination ||
+                    json.meta.pagination.page_count === json.meta.pagination.page) {
+                    break;
+                }
+                page = json.meta.pagination.page + 1;
+            } while (true);
+
+            if (this.objectPaths) {
+                await this.preloadPaths(objects, this.objectPaths);
+            }
+
+            return objects;
         },
 
         /**
-         * add an object from pendingrelations Array if not present
+         * Return the tree size (folders count).
          *
-         * @event add-relation triggered from sub components
-         *
-         * @param {Object} related
-         *
-         * @return {void}
+         * @return {Promise<number>}
          */
-        addRelation(related) {
-            if (!related || !related.id === undefined) {
-                console.error('[addRelation] needs first param (related) as {object} with property id set');
-                return;
+        async checkTreeSize() {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            const response = await fetch(`${baseUrl}/treeJson?full=1&page_size=1`, options);
+            const json = await response.json();
+            if (!json.meta || !json.meta.pagination) {
+                return null;
             }
-            if (!this.containsId(this.pendingRelations, related.id)) {
-                this.pendingRelations.push(related);
-            }
+            return json.meta.pagination.count;
         },
 
         /**
-         * remove an object from pendingRelations Array
+         * Load the full tree recursively.
          *
-         * @event remove-relation triggered from sub components
-         *
-         * @param {Object} related
-         *
-         * @return {void}
+         * @return {Promise<Array>}
          */
-        removeRelation(related) {
-            if (!related || !related.id) {
-                console.error('[removeRelation] needs first param (related) as {object} with property id set');
-                return;
-            }
-            this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== related.id);
-        },
+        async loadFullTree() {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
 
-        /**
-         * remove all related objects from pendingRelations Array
-         *
-         * @event remove-all-relations triggered from sub components
-         *
-         * @return {void}
-         */
-        removeAllRelations() {
-            this.pendingRelations = [];
-            this._setChildrenData(this, 'stageRelated', false);
-        },
+            const map = new Map();
 
-        /**
-         * util function to set recursively all sub-components 'dataName' var with dataValue
-         *
-         * @param {Object} obj
-         * @param {String} dataName
-         * @param {any} dataValue
-         */
-        _setChildrenData(obj, dataName, dataValue) {
-            if (obj !== undefined && dataName in obj) {
-                obj[dataName] = dataValue;
-            }
-
-            obj.$children.forEach(child => {
-                this._setChildrenData(child, dataName, dataValue);
-            });
-        },
-
-        /**
-         * create a json Tree from a list of objects with path
-         *
-         * @return {Object} json tree
-         */
-        createTree() {
-            let jsonTree = [];
-            this.objects.forEach((obj) => {
-                let path = obj.meta.path && obj.meta.path.split('/');
-                if (path.length) {
-                    // Remove first blank element from the parts array.
-                    path.shift();
-
-                    // initialize currentLevel to root
-                    let currentLevel = jsonTree;
-
-                    path.forEach((id) => {
-                        // check to see if the path already exists.
-                        let existingPath = this.findPath(currentLevel, id);
-
-
-                        if (existingPath) {
-                            // The path to this item was already in the tree, so I set the current level to this path's children
-                            currentLevel = existingPath.children;
+            let page = 1;
+            let objects = [];
+            do {
+                let response = await fetch(`${baseUrl}/treeJson?full=1&page=${page}`, options);
+                let json = await response.json();
+                if (json.data) {
+                    this.transformResponse(json.data, true).forEach((item) => {
+                        let chunks = item.path.split('/').slice(1, -1);
+                        let parentId = chunks[chunks.length - 1];
+                        if (map.get(item.id)) {
+                            item.children.push(...map.get(item.id).children);
+                        }
+                        map.set(item.id, item);
+                        if (!parentId) {
+                            objects.push(item);
                         } else {
-                            // create a new node
-                            let currentObj = obj;
-
-                            // if current object is not the same as the discovered node get it from objects array
-                            if (currentObj.id !== id) {
-                                currentObj = this.findObjectById(id);
-                            }
-
-                            let newNode = {
-                                id: id,
-                                related: this.isRelated(id),
-                                name: currentObj.attributes.title || '',
-                                object: currentObj,
+                            let parentItem = map.get(parentId) || {
+                                id: parentId,
                                 children: [],
                             };
-
-                            currentLevel.push(newNode);
-                            currentLevel = newNode.children;
+                            parentItem.children.push(item);
+                            map.set(parentId, parentItem);
                         }
                     });
                 }
-            });
+                if (!json.meta ||
+                    !json.meta.pagination ||
+                    json.meta.pagination.page_count === json.meta.pagination.page) {
+                    break;
+                }
+                page = json.meta.pagination.page + 1;
+            } while (true);
 
-            return jsonTree;
+            return objects;
         },
 
         /**
-         * check if part is already contained in the tree
+         * Transform response objects into tree items.
          *
-         * @param {Number} paths
-         * @param {Number} part
-         *
-         * @return {Object|Boolean}
+         * @param {Array} objects The list of objects.
+         * @param {boolean} setupChildren Should setup children array.
+         * @return {Array}
          */
-        findPath(paths, part) {
-            let path = paths.filter(path => path.id === part);
-            return path.length ? path[0] : false;
+        transformResponse(objects, setupChildren = false) {
+            return objects
+                .map((folder) => (
+                    {
+                        id: folder.id,
+                        type: folder.type,
+                        title: folder.attributes.title || folder.attributes.uname,
+                        path: folder.meta.path,
+                        children: setupChildren ? [] : undefined,
+                    }
+                ));
         },
 
         /**
-         * check if relatedObjects contains object with a specific id
+         * Preload folders passed as object paths.
          *
-         * @param {Number} id
-         *
-         * @return {Boolean}
+         * @param {Array} roots A list of root folders.
+         * @param {Array} paths A list of object paths.
+         * @return {Promise}
          */
-        isRelated(id) {
-            return this.relatedObjects.filter((relatedObject) => {
-                return id === relatedObject.id;
-            }).length ? true : false;
-        },
+        async preloadPaths(roots, paths) {
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
 
-        /**
-         * check if pendingRelations contains object with a specific id
-         *
-         * @param {Number} id
-         *
-         * @return {Boolean}
-         */
-        isPending(id) {
-            return this.pendingRelations.filter((pendingRelation) => {
-                return id === pendingRelation.id;
-            }).length ? true : false;
-        },
+            for (let i = 0; i < paths.length; i++) {
+                let path = paths[i].split('/').slice(1, -1);
+                let rootId = path.shift();
+                let currentFolder = roots.find((f) => f.id == rootId);
+
+                for (let k = 0; k < path.length; k++) {
+                    let id = path[k];
+                    let page = 1;
+                    let folderChildren = [];
+                    do {
+                        let response = await fetch(`${baseUrl}/treeJson/?root=${currentFolder.id}&page=${page}`, options);
+                        let json = await response.json();
+                        folderChildren.push(...this.transformResponse(json.data));
+                        if (json.meta.pagination.page_count == page) {
+                            break;
+                        }
+                        page++;
+                    } while (true);
+
+                    currentFolder.children = folderChildren;
+                    currentFolder = folderChildren.find((f) => f.id == id);
+                }
+            }
+        }
     }
 }

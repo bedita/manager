@@ -200,9 +200,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'relation'], '_name' => 'modules:resourcesJson']
     );
     $routes->connect(
-        '/:object_type/view/:id/treeJson/:relation',
+        '/:object_type/view/:id/treeJson',
         ['controller' => 'Modules', 'action' => 'treeJson'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:treeJson']
+        ['pass' => ['id'], '_name' => 'modules:treeJson']
     );
     $routes->connect(
         '/:object_type/view/:id/relationData/:relation',
