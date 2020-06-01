@@ -373,4 +373,40 @@ class AppController extends Controller
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
     }
+
+    /**
+     * Load tree data.
+     *
+     * @return void
+     */
+    public function treeJson(): void
+    {
+        $this->request->allowMethod(['get']);
+        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $root = Hash::get($query, 'root');
+        $full = Hash::get($query, 'full');
+        unset($query['full']);
+        unset($query['root']);
+        try {
+            if (empty($full)) {
+                $key = (empty($root)) ? 'roots' : 'parent';
+                $val = (empty($root)) ? '' : $root;
+                if (empty($query['filter'])) {
+                    $query['filter'] = [];
+                }
+                $query['filter'][$key] = $val;
+            }
+            $response = $this->apiClient->getObjects('folders', $query);
+        } catch (BEditaClientException $error) {
+            $this->log($error, LogLevel::ERROR);
+
+            $this->set(compact('error'));
+            $this->set('_serialize', ['error']);
+
+            return;
+        }
+
+        $this->set((array)$response);
+        $this->set('_serialize', array_keys($response));
+    }
 }

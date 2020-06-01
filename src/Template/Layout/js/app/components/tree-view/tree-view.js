@@ -74,7 +74,7 @@ export default {
                 return this.loadFullTree();
             }
 
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
@@ -84,7 +84,7 @@ export default {
             let page = 1;
             let objects = [];
             do {
-                let response = await fetch(`${baseUrl}/treeJson?page=${page}`, options);
+                let response = await fetch(`${baseUrl}treeJson?page=${page}`, options);
                 let json = await response.json();
                 if (json.data) {
                     objects.push(...this.transformResponse(json.data))
@@ -110,14 +110,14 @@ export default {
          * @return {Promise<number>}
          */
         async checkTreeSize() {
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
                     'accept': 'application/json',
                 }
             };
-            const response = await fetch(`${baseUrl}/treeJson?full=1&page_size=1`, options);
+            const response = await fetch(`${baseUrl}treeJson?full=1&page_size=1`, options);
             const json = await response.json();
             if (!json.meta || !json.meta.pagination) {
                 return null;
@@ -131,7 +131,7 @@ export default {
          * @return {Promise<Array>}
          */
         async loadFullTree() {
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
@@ -144,7 +144,7 @@ export default {
             let page = 1;
             let objects = [];
             do {
-                let response = await fetch(`${baseUrl}/treeJson?full=1&page=${page}`, options);
+                let response = await fetch(`${baseUrl}treeJson?full=1&page=${page}`, options);
                 let json = await response.json();
                 if (json.data) {
                     this.transformResponse(json.data, true).forEach((item) => {
@@ -205,7 +205,7 @@ export default {
          * @return {Promise}
          */
         async preloadPaths(roots, paths) {
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
@@ -223,7 +223,7 @@ export default {
                     let page = 1;
                     let folderChildren = [];
                     do {
-                        let response = await fetch(`${baseUrl}/treeJson/?root=${currentFolder.id}&page=${page}`, options);
+                        let response = await fetch(`${baseUrl}treeJson/?root=${currentFolder.id}&page=${page}`, options);
                         let json = await response.json();
                         folderChildren.push(...this.transformResponse(json.data));
                         if (json.meta.pagination.page_count == page) {

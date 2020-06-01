@@ -179,7 +179,7 @@ export default {
             }
 
             this.isLoading = true;
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
@@ -189,7 +189,7 @@ export default {
             let page = 1;
             let children = [];
             do {
-                let response = await fetch(`${baseUrl}/treeJson/?root=${this.item.id}&page=${page}`, options);
+                let response = await fetch(`${baseUrl}treeJson/?root=${this.item.id}&page=${page}`, options);
                 let json = await response.json();
                 children.push(
                     ...json.data.map((child) => (
