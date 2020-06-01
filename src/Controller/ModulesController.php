@@ -89,8 +89,10 @@ class ModulesController extends AppController
             return $result;
         }
 
+        $query = $this->request->getQueryParams();
+
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->request->getQueryParams());
+            $response = $this->apiClient->getObjects($this->objectType, $query);
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -108,6 +110,7 @@ class ModulesController extends AppController
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
+        $this->set('query', $query);
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
 

@@ -41,7 +41,6 @@ export default {
         objectPaths: Array,
         relationName: {
             type: String,
-            default: 'children',
         },
         multipleChoice: {
             type: Boolean,
