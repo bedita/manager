@@ -871,7 +871,7 @@ class AppControllerTest extends TestCase
         ]);
 
         // do controller call
-        $this->controller->treeJson();
+        $this->AppController->treeJson();
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize']);
