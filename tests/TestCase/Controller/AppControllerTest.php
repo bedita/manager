@@ -870,11 +870,8 @@ class AppControllerTest extends TestCase
             ],
         ]);
 
-        // get object ID for test
-        $id = $this->getTestId();
-
         // do controller call
-        $this->controller->treeJson($id);
+        $this->controller->treeJson();
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize']);
