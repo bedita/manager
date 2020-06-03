@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -398,7 +399,7 @@ class AppController extends Controller
             }
             $response = $this->apiClient->getObjects('folders', $query);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error, 'error');
 
             $this->set(compact('error'));
             $this->set('_serialize', ['error']);

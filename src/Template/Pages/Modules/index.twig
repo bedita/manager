@@ -1,6 +1,8 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
+{% set query = _view.getRequest().getQuerytParams() %}
 {% set treeView = currentModule.name == 'folders' and query is empty %}
+
 {% element 'Modules/index_header' { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView} %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}

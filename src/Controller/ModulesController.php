@@ -110,7 +110,6 @@ class ModulesController extends AppController
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->descendants()]);
-        $this->set('query', $query);
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
 

@@ -23,7 +23,7 @@ export default {
                 <label
                     class="node-label"
                     :class="relationName ? 'has-relation' : ''"
-                    v-on="{ click: relationName ? null : toggle }"
+                    v-on="{ click: relationName ? () => {} : toggle }"
                 >
                     <input
                         v-if="relationName"
