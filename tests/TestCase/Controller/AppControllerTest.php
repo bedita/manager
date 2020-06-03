@@ -852,8 +852,6 @@ class AppControllerTest extends TestCase
     /**
      * Test `treeJson` method
      *
-     * @param array $expected The expected data
-     *
      * @covers ::treeJson()
      * @return void
      */
@@ -874,6 +872,6 @@ class AppControllerTest extends TestCase
         $this->AppController->treeJson();
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize']);
+        static::assertArrayHasKey('_serialize', $this->AppController->viewVars);
     }
 }
