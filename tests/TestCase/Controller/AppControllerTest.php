@@ -848,30 +848,4 @@ class AppControllerTest extends TestCase
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
     }
-
-    /**
-     * Test `treeJson` method
-     *
-     * @covers ::treeJson()
-     * @return void
-     */
-    public function testTreeJson(): void
-    {
-        // Setup controller for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => 'folders',
-            ],
-        ]);
-
-        // do controller call
-        $this->AppController->treeJson();
-
-        // verify expected vars in view
-        static::assertArrayHasKey('_serialize', $this->AppController->viewVars);
-    }
 }

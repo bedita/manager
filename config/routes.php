@@ -79,8 +79,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Tree.
     $routes->connect(
         '/treeJson',
-        ['controller' => 'App', 'action' => 'treeJson'],
-        ['_name' => 'app:treeJson']
+        ['controller' => 'Tree', 'action' => 'treeJson'],
+        ['_name' => 'tree:treeJson']
     );
 
     // Model.
