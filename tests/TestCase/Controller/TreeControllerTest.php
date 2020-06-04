@@ -47,18 +47,6 @@ class TreeControllerTest extends TestCase
     }
 
     /**
-     * Test `initialize` method
-     *
-     * @covers ::initialize()
-     *
-     * @return void
-     */
-    public function testInitialize(): void
-    {
-        $this->setupController();
-    }
-
-    /**
      * Test `treeJson` method
      *
      * @covers ::treeJson()
