@@ -7,6 +7,11 @@
         padding: $gutter 0;
         border-bottom: solid 1px currentColor;
 
+        &[data-status='draft'],
+        &[data-status='off'] {
+            color: $gray-500;
+        }
+
         .node-element {
             display: flex;
             flex-direction: row;

@@ -189,6 +189,7 @@ export default {
                     {
                         id: folder.id,
                         type: folder.type,
+                        status: folder.attributes.status,
                         title: folder.attributes.title || folder.attributes.uname,
                         path: folder.meta.path,
                         children: setupChildren ? [] : undefined,

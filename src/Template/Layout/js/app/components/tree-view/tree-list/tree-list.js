@@ -18,7 +18,7 @@ export default {
     name: 'tree-list',
 
     template: `
-        <div class="tree-list-node">
+        <div class="tree-list-node" :data-status="item.status">
             <div class="node-element">
                 <label
                     class="node-label"
@@ -195,6 +195,7 @@ export default {
                         {
                             id: child.id,
                             type: child.type,
+                            status: child.attributes.status,
                             title: child.attributes.title || child.attributes.uname,
                             path: child.meta.path,
                         }
