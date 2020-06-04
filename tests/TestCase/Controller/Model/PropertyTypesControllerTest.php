@@ -208,9 +208,12 @@ class PropertyTypesControllerTest extends TestCase
                 unset($element['id']);
             }
         }
-        if (is_array($expectedResponse) && !empty($expectedResponse['error'])) {
-            $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
-            $expectedResponse = $expectedResponse['error'];
+        if (is_array($expectedResponse)) {
+            $actualResponse = Hash::remove($actualResponse, '{n}.meta');
+            if (!empty($expectedResponse['error'])) {
+                $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
+                $expectedResponse = $expectedResponse['error'];
+            }
         }
 
         static::assertEquals($expectedResponse, $actualResponse);

@@ -182,7 +182,16 @@ class AppController extends Controller
                 $id = $data['id'];
 
                 foreach ($relationData as $method => $ids) {
-                    $relatedIds = json_decode($ids, true);
+                    if (is_string($ids)) {
+                        $relatedIds = json_decode($ids, true);
+                    } else {
+                        $relatedIds = array_map(
+                            function ($id) {
+                                return json_decode($id, true);
+                            },
+                            $ids
+                        );
+                    }
                     if (!empty($relatedIds)) {
                         $api[] = compact('method', 'id', 'relation', 'relatedIds');
                     }
@@ -202,6 +211,11 @@ class AppController extends Controller
                 }
             }
             unset($data['_actualAttributes']);
+        }
+
+        // cleanup attributes on new objects/resources
+        if (empty($data['id'])) {
+            $data = array_filter($data);
         }
 
         return $data;

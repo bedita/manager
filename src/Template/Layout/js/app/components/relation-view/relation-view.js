@@ -34,7 +34,6 @@ export default {
         RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
         RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
     },
 
     props: {

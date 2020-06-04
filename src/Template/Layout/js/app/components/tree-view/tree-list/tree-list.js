@@ -8,162 +8,130 @@
  * - single-choice tree
  * - multiple-choice tree
  *
- * @prop {Boolean} multipleChoice (default true)
- * @prop {String} captionField specify which field of the object is to be used a caption
- * @prop {String} childrenField specify which field of the object is to be used a children
  * @prop {Object} item object of this node
- * @prop {Array} relatedObjects list of already related Objects
- *
+ * @prop {String} objectId the id of the object to insert in the tree
+ * @prop {Array} objectPaths the current paths of the object to insert in the tree
+ * @prop {String} relationName the relation to save
+ * @prop {Boolean} multipleChoice (default true)
  */
-
 export default {
     name: 'tree-list',
 
     template: `
-        <div
-            class="tree-list-node"
-            :class="treeListMode">
+        <div class="tree-list-node">
+            <div
+                class="node-element"
+                :class="{
+                    'node-folder': isFolder,
+                }">
 
-            <div v-if="!isRoot">
-                <div v-if="multipleChoice"
-                    class="node-element"
-                    :class="{
-                        'tree-related-object': isRelated,
-                        'disabled': isCurrentObjectInPath,
-                        'node-folder': isFolder,
-                    }">
-
-                    <span
-                        @click.prevent.stop="toggle"
-                        class="icon"
-                        :class="nodeIcon"
-                        ></span>
+                <label :class="isFolder ? 'is-folder' : ''">
                     <input
-                        type="checkbox"
-                        :value="item"
-                        v-model="related"
+                        v-if="relationName"
+                        :checked="isChecked"
+                        :disabled="isDisabled"
+                        :type="multipleChoice ? 'checkbox' : 'radio'"
+                        :name="'relations[' + relationName + '][replaceRelated][]'"
+                        :value="itemValue"
                     />
-                    <label
-                        @click.prevent.stop="toggle"
-                        :class="isFolder ? 'is-folder' : ''"><: caption :></label>
-                </div>
-                <div v-else class="node-element"
-                    :class="{
-                        'tree-related-object': isRelated || stageRelated,
-                        'was-related-object': isRelated && !stageRelated,
-                        'disabled': isCurrentObjectInPath
-                    }"
-
-                    @click.prevent.stop="select">
-                    <span
-                        @click.prevent.stop="toggle"
-                        class="icon"
-                        :class="nodeIcon"
-                        ></span>
-                    <label><: caption :></label>
-                </div>
+                    <: item.title :>
+                </label>
+                <button
+                    v-if="isFolder && (!item.children || item.children.length !== 0)"
+                    :class="nodeClasses"
+                    @click.prevent.stop="toggle"
+                    ></button>
             </div>
-            <div :class="isRoot ? '' : 'node-children'" v-show="open" v-if="isFolder">
+            <div class="node-children" v-show="isOpen" v-if="isFolder">
                 <tree-list
-                    @add-relation="addRelation"
-                    @remove-relation="removeRelation"
-                    @remove-all-relations="removeAllRelations"
                     v-for="(child, index) in item.children"
                     :key="index"
                     :item="child"
+                    :object-id="objectId"
+                    :object-paths="objectPaths"
+                    :relation-name="relationName"
                     :multiple-choice="multipleChoice"
-                    :related-objects="relatedObjects"
-                    :object-id=objectId>
-                </tree-list>
+                ></tree-list>
             </div>
         </div>
     `,
 
     data() {
         return {
-            stageRelated: false,
             related: false,
-            open: true,
+            isOpen: false,
+            isLoading: false,
         }
     },
 
     props: {
-        multipleChoice: {
-            type: Boolean,
-            default: true,
-        },
-        captionField: {
-            type: String,
-            required: false,
-            default: 'name',
-        },
-        childrenField: {
-            type: String,
-            required: false,
-            default: 'children',
-        },
         item: {
             type: Object,
             required: true,
             default: () => {},
         },
-        relatedObjects: {
-            type: Array,
-            default: () => [],
-        },
-        objectId: {
+        objectId: [String, Number],
+        objectPaths: Array,
+        relationName: {
             type: String,
-            required: false,
-        }
+            default: 'children',
+        },
+        multipleChoice: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     computed: {
-        /**
-         * caption used in label
-         *
-         * @return {String}
-         */
-        caption() {
-            return this.item[this.captionField];
-        },
-
         /**
          * check if current node is a folder
          *
          * @return {Boolean}
          */
         isFolder() {
-            return this.item.children &&
-                !!this.item.children.length;
+            return this.item.type === 'folders';
         },
 
         /**
-         * check if current node is a root node
+         * Check if the input should be checked.
          *
          * @return {Boolean}
          */
-        isRoot() {
-            return this.item.root || false;
-        },
-
-        /**
-         * check if current node is already related
-         *
-         * @return {Boolean}
-         */
-        isRelated() {
-            if (!this.item.id) {
+        isChecked() {
+            if (!this.objectPaths || !this.item) {
                 return false;
             }
-
-            return !!this.relatedObjects.filter(related => related.id === this.item.id).length;
+            return this.objectPaths.some((path) => path.split('/').slice(0, -1).pop() == this.item.id);
         },
 
         /**
-         * check if current object is in item path
+         * Check if the input should be disabled.
+         *
+         * @return {Boolean}
          */
-        isCurrentObjectInPath() {
-            return this.item && this.item.object && this.item.object.meta.path.indexOf(this.objectId) !== -1;
+        isDisabled() {
+            if (!this.objectPaths || !this.item) {
+                return true;
+            }
+            if (this.item.id == this.objectId) {
+                return true;
+            }
+            if (this.multipleChoice) {
+                return false;
+            }
+            return this.objectPaths.some((path) => this.item.path.startsWith(path));
+        },
+
+        /**
+         * The input value for the current item.
+         *
+         * @return {String}
+         */
+        itemValue() {
+            if (!this.item) {
+                return '';
+            }
+            return JSON.stringify({ id: this.item.id, type: this.item.type });
         },
 
         /**
@@ -171,144 +139,76 @@ export default {
          *
          * @return {String} css class name
          */
-        nodeIcon() {
+        nodeClasses() {
             let css = '';
+            if (this.isLoading) {
+                return 'is-loading-spinner';
+            }
             css += this.isFolder
-                ? this.open
-                    ? 'icon-down-dir'
-                    : 'icon-right-dir'
+                ? this.isOpen
+                    ? 'icon-down-open'
+                    : 'icon-right-open'
                 : 'unicode-branch'
 
             return css;
         },
-
-        /**
-         * compute correct css class name according to this node
-         *
-         * @return {String} css class name
-         */
-        treeListMode() {
-            let css = [];
-            if (this.isRoot) {
-                css.push('root-node');
-            }
-
-            if (!this.multipleChoice) {
-                css.push('tree-list-single-choice');
-            } else {
-                css.push('tree-list-multiple-choice');
-            }
-
-            if (this.isCurrentObject) {
-                css.push('disabled');
-            }
-
-            return css.join(' ');
-        }
     },
 
-    watch: {
-        /**
-         * watch related used as model for tree-list in multiple-choice mode, used as model for checkboxes
-         * set the stageRelated value
-         *
-         * @return {void}
-         */
-        related(value) {
-            this.stageRelated = value;
-        },
-
-        /**
-         * watch stageRelated used as model for tree-list in single-choice mode and triggers an event according to the state of t
-         * - true: add-relation
-         * - false: remove-relation
-         *
-         * @return {void}
-         */
-        stageRelated(value) {
-            if (!this.item.object) {
-                return;
-            }
-            if (value) {
-                this.$emit('add-relation', this.item.object);
-            } else {
-                this.$emit('remove-relation', this.item.object);
-            }
-        },
-
-        /**
-         * watch relatedObjects and check if is already related
-         *
-         * @return {void}
-         */
-        relatedObjects() {
-            this.related = this.isRelated;
-        },
+    /**
+     * Open the folder if children are provided.
+     *
+     * @return {void}
+     */
+    created() {
+        if (this.item && this.item.children) {
+            this.isOpen = true;
+        }
     },
 
     methods: {
         /**
-         * toggle children visibility
+         * Toggle children visibility
+         * Fetch children if not provided.
          *
-         * @return {void}
+         * @return {Promise}
          */
-        toggle() {
-            if (this.isFolder) {
-                this.open = !this.open;
-            }
-        },
-
-        /**
-         * triggers add-relation event in order to pass object to upper component
-         * tree-view handles the addition
-         *
-         * @param {Object} rel
-         *
-         * @return {void}
-         */
-        addRelation(rel) {
-            this.$emit('add-relation', rel);
-        },
-
-        /**
-         * triggers remove-relation event in order to pass object to upper component
-         * tree-view handles the removal
-         *
-         * @param {Object} rel
-         *
-         * @return {void}
-         */
-        removeRelation(rel) {
-            this.$emit('remove-relation', rel);
-        },
-
-        /**
-         * triggers remove-all-relations event in order to remove all pending relations
-         *
-         * @return {void}
-         */
-        removeAllRelations() {
-            this.$emit('remove-all-relations');
-        },
-
-        /**
-         * single-choice mode: select current tree entry for staging
-         *
-         * @return {void}
-         */
-        select() {
-            // avoid user selecting same tree item (or in path) as current object
-            if (this.isCurrentObjectInPath) {
+        async toggle() {
+            this.isOpen = !this.isOpen;
+            if (this.item.children || this.isLoading) {
                 return;
             }
-            // TO-DO handle folder removal from tree or folder as root
 
-            // let oldValue = this.stageRelated;
-            this.$emit('remove-all-relations');
-            // if (oldValue) {
-            //     this.$emit('add-relation', { id: null, type: 'folders'});
-            // }
-            this.stageRelated = !this.stageRelated;
-        }
+            this.isLoading = true;
+            const baseUrl = window.location.href;
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                }
+            };
+            let page = 1;
+            let children = [];
+            do {
+                let response = await fetch(`${baseUrl}/treeJson/?root=${this.item.id}&page=${page}`, options);
+                let json = await response.json();
+                children.push(
+                    ...json.data.map((child) => (
+                        {
+                            id: child.id,
+                            type: child.type,
+                            title: child.attributes.title || child.attributes.uname,
+                            path: child.meta.path,
+                        }
+                    ))
+                );
+                if (json.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+            this.item.children = children;
+            this.isFetched = true;
+            this.isLoading = false;
+        },
     }
 }

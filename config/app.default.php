@@ -456,7 +456,7 @@ return [
      *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
      */
-    'Properties' => [
+    // 'Properties' => [
         // 'foos' => [
         //     'view' => [
         //         '_keep' => [
@@ -479,7 +479,7 @@ return [
         //         'username',
         //     ],
         // ],
-    ],
+    // ],
 
     /**
      * Custom view elements configuration.
@@ -494,11 +494,11 @@ return [
      * ```
      * In this example: if current module is `documents` => `Form/included` element is loaded from `MyPlugin` plugin
      */
-    'Elements' => [
-        // 'documents' => [
-        //     'Form/included' => 'MyPlugin',
-        // ],
-    ],
+    // 'Elements' => [
+    //     // 'documents' => [
+    //     //     'Form/included' => 'MyPlugin',
+    //     // ],
+    // ],
 
     /**
      * Additional plugins to load with this format: 'PluginName' => load options array
@@ -510,12 +510,12 @@ return [
      * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
-    'Plugins' => [
+    // 'Plugins' => [
         // 'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
 
         // Uncomment to enable `DebugKit` - 'debug' mode is required
         //'DebugKit' => ['bootstrap' => true, 'debugOnly' => true],
-    ],
+    // ],
 
     /**
      * Plugin modules settings.
@@ -523,31 +523,30 @@ return [
      * Default empty.
      * Configuration generally written by plugins via bootstrap.
      */
-    'PluginModules' => [
-        /*
-        // plugin module example
-        // unique name
-        'My Module' => [
-            'title' => 'My Module',
-            // routing rules
-            'route' => Router::url(['_name': 'my_module:index']),
-            // css class
-            'class' => [
-                'dashboard' => 'has-background-black icon-sample',
-                'menu' => 'has-background-black',
-            ],
-        ],
-        */
-    ],
+    // 'PluginModules' => [
+
+    //     // plugin module example
+    //     // unique name
+    //     'My Module' => [
+    //         'title' => 'My Module',
+    //         // routing rules
+    //         'route' => Router::url(['_name': 'my_module:index']),
+    //         // css class
+    //         'class' => [
+    //             'dashboard' => 'has-background-black icon-sample',
+    //             'menu' => 'has-background-black',
+    //         ],
+    //     ],
+    // ],
 
     /**
      * Pagination default settings
      *
      * - sizeAvailable => available page size on modules view index
      */
-    'Pagination' => [
-        'sizeAvailable' => [10, 20, 50, 100],
-    ],
+    // 'Pagination' => [
+    //     'sizeAvailable' => [10, 20, 50, 100],
+    // ],
 
     /**
      * Delayed load defaults (used in ajax calls)
@@ -565,9 +564,9 @@ return [
      *
      * - limit => max number of exported elements on export all
      */
-    'Export' => [
-        'limit' => 10000,
-    ],
+    // 'Export' => [
+    //     'limit' => 10000,
+    // ],
 
     /**
      * I18n setup for frontend.

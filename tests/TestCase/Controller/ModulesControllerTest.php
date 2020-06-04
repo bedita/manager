@@ -712,6 +712,37 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `treeJson` method
+     *
+     * @param array $expected The expected data
+     *
+     * @covers ::treeJson()
+     * @return void
+     */
+    public function testTreeJson(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'folders',
+            ],
+        ]);
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $this->controller->treeJson($id);
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize']);
+    }
+
+    /**
      * Data provider for `testGetThumbsUrls` test case.
      *
      * @return array

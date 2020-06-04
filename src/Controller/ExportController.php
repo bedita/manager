@@ -22,6 +22,13 @@ use Cake\Utility\Hash;
 class ExportController extends AppController
 {
     /**
+     * Default max number of exported items
+     *
+     * @var int
+     */
+    const DEFAULT_EXPORT_LIMIT = 10000;
+
+    /**
      * Export data in csv format
      *
      * @return \Cake\Http\Response
@@ -75,7 +82,7 @@ class ExportController extends AppController
     protected function csvAll(string $objectType): array
     {
         $data = [];
-        $limit = Configure::read('Export.limit', 10000);
+        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
         $pageCount = $page = 1;
         $total = 0;
         $query = ['page_size' => 100] + $this->prepareQuery();
@@ -84,6 +91,7 @@ class ExportController extends AppController
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
             $page++;
+
             $fields = $this->fillDataFromResponse($data, $response);
         }
         array_unshift($data, $fields);

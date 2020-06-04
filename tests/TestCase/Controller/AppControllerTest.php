@@ -309,13 +309,25 @@ class AppControllerTest extends TestCase
             'fields null value' => [ // fields with value null, not changed and changed
                 'documents', // object_type
                 [ // expected
+                    'id' => 23,
                     'title' => null, // null, changed
                     // 'description' => null, not changed
                 ],
                 [ // data provided
+                    'id' => 23,
                     'title' => null,
                     'description' => null,
                     '_actualAttributes' => '{"title":"bibo","description":null}',
+                ],
+            ],
+            'fields null new' => [ // fields with value null on new resources
+                'documents', // object_type
+                [ // expected
+                    'description' => 'some text',
+                ],
+                [ // data provided
+                    'title' => null,
+                    'description' => 'some text',
                 ],
             ],
             'users' => [ // test: removing password from data
@@ -343,6 +355,17 @@ class AppControllerTest extends TestCase
                                 ],
                             ],
                         ],
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '1',
+                            'relation' => 'children',
+                            'relatedIds' => [
+                                [
+                                    'id' => '44',
+                                    'type' => 'images',
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 [ // data provided
@@ -350,6 +373,11 @@ class AppControllerTest extends TestCase
                     'relations' => [
                         'attach' => [
                             'addRelated' => '[{ "id": "44", "type": "images"}]', // fake attached image
+                        ],
+                        'children' => [
+                            'replaceRelated' => [
+                                '{ "id": "44", "type": "images"}',
+                            ],
                         ],
                     ],
                 ],
