@@ -6,7 +6,9 @@
     <div></div> {# thumb column #}
 
     {% for prop in properties %}
-        <div class="{{ Link.sortClass(prop) }}">{{ Link.sort(prop) }}</div>
+        <div class="{{ Link.sortClass(prop) }}">
+            {{ Link.sort(prop) }}
+        </div>
     {% endfor %}
 
     {% if currentModule.hints.multiple_types %}
@@ -15,9 +17,13 @@
 
     <div class="narrow">{{ __('status') }}</div>
 
-    <div class="{{ Link.sortClass('modified') }}">{{ Link.sort('modified')}}</div>
+    <div class="{{ Link.sortClass('modified') }}">
+        {{ Link.sort('modified')}}
+    </div>
 
-    <div class="narrow {{ Link.sortClass('id') }}">{{ Link.sort('id')}}</div>
+    <div class="narrow {{ Link.sortClass('id') }}">
+        {{ Link.sort('id')}}
+    </div>
 
     <div></div>
 </nav>

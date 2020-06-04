@@ -110,7 +110,7 @@ class LinkHelper extends Helper
             }
         }
         $url = $this->replaceParamUrl('sort', $sortValue);
-        echo '<a href="' . $url . '" class="' . $class . '">' . Inflector::humanize($field) . '</a>';
+        return $class;
     }
 
     /**
