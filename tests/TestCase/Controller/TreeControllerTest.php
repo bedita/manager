@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TreeController;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
