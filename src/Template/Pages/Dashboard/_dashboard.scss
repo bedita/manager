@@ -27,6 +27,9 @@ body.view-dashboard {
                 grid-template-columns: repeat(auto-fill, $dashboard-item-width);
             }
         }
+        .dashboard-items + .dashboard-items {
+            margin-top: $gutter;
+        }
 
         &-item {
             position: relative;

@@ -438,9 +438,9 @@ return [
             'events' => '#09c',
             'locations' => '#641',
             'news' => '#036',
-            'users' => '#223526',
+            'users' => '#000000',
             'profiles' => '#093',
-            'trash' => '#1c1c1c',
+            'trash' => '#000000',
         ],
     ],
 
