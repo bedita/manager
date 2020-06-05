@@ -79,6 +79,16 @@ body.view-dashboard {
             }
         }
 
+
+        nav[role="search"] {
+            display: flex;
+            @media (min-width: 568px) { width: 22 * $gutter + $gutter; }
+            input {
+                margin-right: $gutter * .5;
+                flex-grow: 1;
+            }
+        }
+
         // utility icons
         .dashboard-items.dashboard-utility {
             .dashboard-item {

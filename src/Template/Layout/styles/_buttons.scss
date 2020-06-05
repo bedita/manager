@@ -42,9 +42,9 @@ button, .button {
 
     // button states
     &:disabled, &.disabled {
-        color: $gray-700 !important;
-        background-color: $gray-500 !important;
-        border-color: $gray-500 !important;
+        color: $gray-800 !important;
+        background-color: $gray-600 !important;
+        border-color: $gray-600 !important;
         pointer-events: none;
     }
 
@@ -78,7 +78,7 @@ button, .button {
         pointer-events: none;
         &:after {
             position: absolute;
-            border-color: $gray-400;
+            border-color: $gray-600;
             border-right-color: transparent;
             border-top-color: transparent;
         }
