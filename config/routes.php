@@ -151,6 +151,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:uname']
     );
 
+    // API proxy
+    $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
+        $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+    });
+
     // Modules.
     $routes->connect(
         '/:object_type',

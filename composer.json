@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "bedita/web-tools": "^1.1",
+        "bedita/web-tools": "^1.4.2",
         "bedita/i18n": "^1.5",
         "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
