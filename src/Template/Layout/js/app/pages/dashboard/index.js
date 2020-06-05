@@ -36,7 +36,6 @@ export default {
 
         searchObjects() {
             if (this.searchString) {
-                console.log(this.$refs);
                 this.$refs.searchSubmit.classList.add('is-loading-spinner');
                 window.location.href = BEDITA.base + '/objects?q=' + this.searchString;
             }
