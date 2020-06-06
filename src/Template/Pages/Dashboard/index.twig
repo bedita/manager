@@ -48,6 +48,17 @@
         </section>
 
         <section class="dashboard-section">
+            <header class="has-text-gray-550">
+                <h2>{{ __('Search') }}</h2>
+            </header>
+
+            <nav role="search">
+                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
+            </nav>
+        </section>
+
+        <section class="dashboard-section">
             <div class="dashboard-items dashboard-utility">
                 {{ Html.link(__('Trash can'),
                     { '_name': 'trash:list' },
@@ -57,17 +68,6 @@
                     {'_name': 'modules:list', 'object_type': 'users'},
                     {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
             </div>
-        </section>
-
-        <section class="dashboard-section">
-            <header class="has-text-gray-550">
-                <h2>{{ __('Search') }}</h2>
-            </header>
-
-            <nav role="search">
-                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
-            </nav>
         </section>
 
         {% if user %}

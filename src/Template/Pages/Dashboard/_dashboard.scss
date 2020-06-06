@@ -35,13 +35,29 @@ body.view-dashboard {
             position: relative;
             height: 0;
             background-color: $gray-700;
-            font-size: $font-size-base;
+            font-size: $font-size-sm;
             line-height: 1;
+            letter-spacing: .5px;
 
-            span { display: inline-block; transform: translateY(0); transition: transform .3s; }
+            span {
+                display: inline-block;
+                transform: translateY(0);
+                transition: transform .3s;
+            }
 
             padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);
-            @media (min-width: 667px) { padding: .675rem .75rem calc(#{$dashboard-items-ratio} - .675rem); }
+            @media (min-width: 667px) { padding: $gutter $gutter calc(#{$dashboard-items-ratio} - #{$gutter}); }
+
+            &[class^="icon-"]:before, &[class*=" icon-"]:before {
+                position: absolute;
+                top: $gutter * .25; right: $gutter * .25;
+                @media (min-width: 667px) { top: $gutter * .5; right: $gutter * .5; }
+                margin: 0 !important;
+                opacity: .5;
+                color: inherit;
+                font-size: $font-size-sssm;
+                z-index: 10;
+            }
 
             &:after {
                 content: '';
@@ -54,28 +70,20 @@ body.view-dashboard {
                 will-change: opacity;
             }
 
+            &.has-background-black:after {
+                background-color: $gray-600;
+            }
+
             &:hover {
                 filter: brightness(1.1);
                 span { transform: translateY(4px); }
-                &:after {
-                    opacity: .5;
-                }
+                &:after { opacity: .5; }
+                &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8; }
             }
 
             &[disabled] {
                 pointer-events: none;
                 opacity: .2;
-            }
-
-            &[class^="icon-"]:before, &[class*=" icon-"]:before {
-                position: absolute;
-                top: $gutter * .25; right: $gutter * .25;
-                @media (min-width: 667px) { top: $gutter * .5; right: $gutter * .5; }
-                margin: 0 !important;
-                opacity: .75 !important;
-                color: inherit;
-                font-size: $font-size-sssm;
-                z-index: 10;
             }
         }
 
@@ -97,17 +105,7 @@ body.view-dashboard {
                     width: 100%;
                     margin-top: -1rem !important;
                     color: $white;
-                    font-size: 2rem;
-                    opacity: .2 !important;
-                }
-
-                &:after {
-                    content: none;
-                    display: none;
-                }
-
-                &:hover {
-                    &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8 !important ; }
+                    font-size: 1.75rem;
                 }
             }
         }
