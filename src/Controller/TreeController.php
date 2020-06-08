@@ -37,9 +37,6 @@ class TreeController extends AppController
             if (empty($full)) {
                 $key = (empty($root)) ? 'roots' : 'parent';
                 $val = (empty($root)) ? '' : $root;
-                if (empty($query['filter'])) {
-                    $query['filter'] = [];
-                }
                 $query['filter'][$key] = $val;
             }
             $response = $this->apiClient->getObjects('folders', $query);

@@ -67,9 +67,9 @@ class TreeControllerTest extends TestCase
         ]);
 
         // do controller call
-        $this->AppController->treeJson();
+        $this->Tree->treeJson();
 
         // verify expected vars in view
-        static::assertArrayHasKey('_serialize', $this->AppController->viewVars);
+        static::assertArrayHasKey('_serialize', $this->Tree->viewVars);
     }
 }
