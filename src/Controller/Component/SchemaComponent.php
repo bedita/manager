@@ -143,6 +143,19 @@ class SchemaComponent extends Component
             ];
         }
 
+        // add special property `categories` if available for type
+        $categories = $this->fetchCategories($type);
+        if (!empty($categories)) {
+            $schema['properties']['categories'] = [
+                'type' => 'array',
+                'uniqueItems' => true,
+                'item' => [
+                    'type' => 'string',
+                    'enum' => $categories,
+                ],
+            ];
+        }
+
         return $schema;
     }
 
@@ -158,6 +171,24 @@ class SchemaComponent extends Component
             'page_size' => 100,
         ];
         $response = ApiClientProvider::getApiClient()->get('/roles', $query);
+
+        return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
+    }
+
+    /**
+     * Fetch `categories`
+     * This should be called only for types having `"Categories"` association
+     *
+     * @param string $type Object type name
+     * @return array
+     */
+    protected function fetchCategories(string $type): array
+    {
+        $query = [
+            'page_size' => 100,
+        ];
+        $url = sprintf('/model/categories?filter[type]=%s', $type);
+        $response = ApiClientProvider::getApiClient()->get($url, $query);
 
         return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
     }
