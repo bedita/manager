@@ -3,8 +3,10 @@
         {% element 'FilterBox/filter_box_common' %}
     </div>
 
-    <div class="column">
-        {% element 'FilterBox/filter_box_page_toolbar' %}
-    </div>
+    {% if not hidePagination %}
+        <div class="column">
+            {% element 'FilterBox/filter_box_page_toolbar' %}
+        </div>
+    {% endif %}
 </div>
 

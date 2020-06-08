@@ -23,6 +23,7 @@ const _vueInstance = new Vue({
 
     components: {
         PanelView,
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
