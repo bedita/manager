@@ -10,15 +10,31 @@
     </header>
 
    <div v-show="isOpen" class="tab-container">
-
-        {% set startDate = object.attributes.date_ranges.0.start_date|default('') %}
-        {% set options = Schema.controlOptions('start_date', startDate) %}
-        {{ Form.control('date_ranges.0.start_date', options)|raw }}
-
-        {% set endDate = object.attributes.date_ranges.0.end_date|default('') %}
-        {% set options = Schema.controlOptions('end_date', endDate) %}
-        {{ Form.control('date_ranges.0.end_date', options)|raw }}
-
+        <date-ranges-view inline-template data-items={{ object.attributes.date_ranges|json_encode }}>
+            <table>
+            <thead>
+            <tr>
+                <th><label>{{ __('Start date') }}</label></th>
+                <th><label>{{ __('End date') }}</label></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(dateRange, index) in dateRanges">
+                <td>
+                    <input v-model=dateRange.start_date type="text" name="dateRanges[][start_date]" v-datepicker="true" date="true" time="true" />
+                </td>
+                <td>
+                    <input v-model=dateRange.end_date type="text" name="dateRanges[][end_date]" v-datepicker="true" date="true" time="true" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <button v-on:click="add">{{ __('Add') }}</button>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+        </date-ranges-view>
     </div>
 </section>
 </property-view>
