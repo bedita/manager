@@ -51,7 +51,13 @@
                             <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
 
                             {% for prop in properties %}
-                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">{{ Schema.format(object.attributes[prop], schema.properties[prop]) }}</div>
+                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                    {% if (prop == 'date_ranges') %}
+                                        {% element 'Form/date_ranges' { dateRanges: object.attributes[prop] } %}
+                                    {% else %}
+                                        {{ Schema.format(object.attributes[prop], schema.properties[prop]) }}
+                                    {% endif %}
+                                </div>
                             {% endfor %}
 
                             <div>{{ object.id }}</div>
