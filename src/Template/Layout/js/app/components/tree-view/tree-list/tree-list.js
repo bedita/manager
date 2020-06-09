@@ -18,14 +18,13 @@ export default {
     name: 'tree-list',
 
     template: `
-        <div class="tree-list-node">
-            <div
-                class="node-element"
-                :class="{
-                    'node-folder': isFolder,
-                }">
-
-                <label :class="isFolder ? 'is-folder' : ''">
+        <div class="tree-list-node" :data-status="item.status">
+            <div class="node-element">
+                <label
+                    class="node-label"
+                    :class="relationName ? 'has-relation' : ''"
+                    v-on="{ click: relationName ? () => {} : toggle }"
+                >
                     <input
                         v-if="relationName"
                         :checked="isChecked"
@@ -37,12 +36,13 @@ export default {
                     <: item.title :>
                 </label>
                 <button
-                    v-if="isFolder && (!item.children || item.children.length !== 0)"
+                    v-if="!item.children || item.children.length !== 0"
                     :class="nodeClasses"
-                    @click.prevent.stop="toggle"
+                    @click="toggle"
                     ></button>
+                <a :href="url" v-if="!relationName"><: t('edit') :></a>
             </div>
-            <div class="node-children" v-show="isOpen" v-if="isFolder">
+            <div class="node-children" v-show="isOpen">
                 <tree-list
                     v-for="(child, index) in item.children"
                     :key="index"
@@ -74,7 +74,6 @@ export default {
         objectPaths: Array,
         relationName: {
             type: String,
-            default: 'children',
         },
         multipleChoice: {
             type: Boolean,
@@ -84,12 +83,16 @@ export default {
 
     computed: {
         /**
-         * check if current node is a folder
+         * The folders link.
          *
-         * @return {Boolean}
-         */
-        isFolder() {
-            return this.item.type === 'folders';
+         * @return {String}
+        */
+        url() {
+            if (!this.item) {
+                return;
+            }
+            const baseUrl = new URL(BEDITA.base).pathname;
+            return `${baseUrl}folders/view/${this.item.id}`;
         },
 
         /**
@@ -140,17 +143,10 @@ export default {
          * @return {String} css class name
          */
         nodeClasses() {
-            let css = '';
             if (this.isLoading) {
                 return 'is-loading-spinner';
             }
-            css += this.isFolder
-                ? this.isOpen
-                    ? 'icon-down-open'
-                    : 'icon-right-open'
-                : 'unicode-branch'
-
-            return css;
+            return this.isOpen ? 'icon-down-open' : 'icon-right-open';
         },
     },
 
@@ -172,14 +168,17 @@ export default {
          *
          * @return {Promise}
          */
-        async toggle() {
+        async toggle(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
             this.isOpen = !this.isOpen;
             if (this.item.children || this.isLoading) {
                 return;
             }
 
             this.isLoading = true;
-            const baseUrl = window.location.href;
+            const baseUrl = new URL(BEDITA.base).pathname;
             const options = {
                 credentials: 'same-origin',
                 headers: {
@@ -189,13 +188,14 @@ export default {
             let page = 1;
             let children = [];
             do {
-                let response = await fetch(`${baseUrl}/treeJson/?root=${this.item.id}&page=${page}`, options);
+                let response = await fetch(`${baseUrl}treeJson/?root=${this.item.id}&page=${page}`, options);
                 let json = await response.json();
                 children.push(
                     ...json.data.map((child) => (
                         {
                             id: child.id,
                             type: child.type,
+                            status: child.attributes.status,
                             title: child.attributes.title || child.attributes.uname,
                             path: child.meta.path,
                         }

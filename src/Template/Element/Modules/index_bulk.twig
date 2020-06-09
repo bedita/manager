@@ -54,14 +54,26 @@
 
         {# export #}
         {% if not currentModule.hints.multiple_types %}
-        {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-            <input type="hidden" name="ids" v-model="selectedRows">
-            {{ Form.unlockField('ids') }}
-            {{ Form.hidden('objectType', {'value': objectType})|raw }}
-            <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
-            {# export all #}
-            <button @click.prevent="exportAll">{{ __('Export All') }}</button>
-        {{ Form.end()|raw }}
+            {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
+
+                <input type="hidden" name="ids" v-model="selectedRows">
+                {{ Form.unlockField('ids') }}
+                {{ Form.hidden('objectType', {'value': objectType})|raw }}
+                <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
+
+                {# Export all or filtered #}
+                {% if _view.request.getQuery('filter') %}
+                    {{ Form.hidden('filter', {'value': _view.request.getQuery('filter')|json_encode})|raw }}
+                {% endif %}
+                {{ Form.hidden('q', {'value': _view.request.getQuery('q')})|raw }}
+
+                {% set exportLabel = __('Export All') %}
+                {% if _view.request.getQuery('filter') or _view.request.getQuery('q') %}
+                    {% set exportLabel = __('Export Filtered') %}
+                {% endif %}
+                <button @click.prevent="exportAll">{{ exportLabel }}</button>
+
+            {{ Form.end()|raw }}
         {% endif %}
     </nav>
 </div>

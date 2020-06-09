@@ -23,7 +23,7 @@
         @filter-update-page-size="onUpdatePageSize"
         inline-template>
 
-            {% element 'FilterBox/filter_box' %}
+            {% element 'FilterBox/filter_box' { 'meta': meta, 'hidePagination': hidePagination } %}
 
     </filter-box-view>
 </div>

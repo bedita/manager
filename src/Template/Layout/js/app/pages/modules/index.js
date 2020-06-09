@@ -7,6 +7,10 @@
  */
 
 export default {
+    components: {
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+    },
+
     /**
      * Component properties
      *

@@ -3,32 +3,37 @@
     {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
 {% endif %}
 
-{% element 'Modules/index_header' %}
+{% set query = _view.getRequest().getQueryParams() %}
+{% set treeView = currentModule.name == 'folders' and query is empty %}
+
+{% element 'Modules/index_header' { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView} %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
-        <div class="list-objects">
 
-            {# list objects : table header #}
+        {% if treeView %}
+
+            <tree-view></tree-view>
+
+        {% else %}
+
+            <div class="list-objects">
+                {% if objects %}
+                    {% element 'Modules/index_table_header' %}
+                {% endif %}
+
+                {% for object in objects %}
+                    {% element 'Modules/index_table_row' { 'object': object } %}
+                {% else %}
+                    {{ __('No items found') }}
+                {% endfor %}
+            </div>
+
+            {# bulk actions #}
             {% if objects %}
-                {% element 'Modules/index_table_header' %}
+                {% element 'Modules/index_bulk' {} %}
             {% endif %}
-
-            {# list objects : rows #}
-            {% for object in objects %}
-                {% element 'Modules/index_table_row' { 'object': object } %}
-            {% else %}
-                {{ __('No items found') }}
-            {% endfor %}
-
-        </div> {# end list-objects #}
-
-
-        {# bulk actions #}
-        {% if objects %}
-
-            {% element 'Modules/index_bulk' {} %}
 
         {% endif %}
 

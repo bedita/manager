@@ -7,34 +7,80 @@
         padding: $gutter 0;
         border-bottom: solid 1px currentColor;
 
+        &[data-status='draft'],
+        &[data-status='off'] {
+            color: $gray-500;
+        }
+
         .node-element {
             display: flex;
             flex-direction: row;
             align-items: center;
 
-            > input {
-                margin-right: $gutter / 2;
-            }
-
-            > label.is-folder {
+            > label.node-label {
                 flex: none;
                 margin-right: $gutter;
                 color: inherit;
                 line-height: $gutter * 2;
+                cursor: pointer;
+
+                > input[type='checkbox'],
+                > input[type='radio'] {
+                    margin-top: -$gutter / 8;
+                    margin-right: $gutter / 2;
+                    vertical-align: middle;
+                }
+
+                &:not(.has-relation) {
+                    &::before {
+                        content: '';
+                        display: inline-block;
+                        width: 1em;
+                        height: 1em;
+                        margin-right: $gutter / 2;
+                        vertical-align: middle;
+                        background: var(--color-folders);
+                        border-radius: 50%;
+                    }
+                }
+            }
+
+            > a {
+                display: inline-block;
+                padding: $gutter / 2 $gutter * 1.5;
+                margin-left: $gutter;
+                vertical-align: middle;
+                text-transform: uppercase;
+                border: solid 1px currentColor;
+                border-radius: 2px;
+                opacity: 0;
+
+                &:focus {
+                    opacity: 1;
+                }
             }
 
             > button {
                 padding: 0;
-                margin: 0;
+                margin: 0 0 0 $gutter / 2;
                 color: currentColor;
                 background: transparent;
                 border: 0;
 
                 &.is-loading-spinner {
+                    width: 1.35em;
+                    height: 1em;
+
                     &::after {
+                        vertical-align: middle;
                         border-left-color: rgba(255, 255, 255, 0.75);
-                        margin-left: $gutter / 2;
                     }
+                }
+            }
+
+            &:hover {
+                > a {
+                    opacity: 1;
                 }
             }
         }
