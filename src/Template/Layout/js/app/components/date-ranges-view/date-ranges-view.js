@@ -13,7 +13,7 @@ export default {
      */
     data() {
         return {
-            dateRange: {
+            emptyDateRange: {
                 start_date: '',
                 end_date: '',
                 params: '',
@@ -27,6 +27,9 @@ export default {
      */
     mounted() {
         this.dateRanges = JSON.parse(this.$el.dataset.items);
+        if (!this.dateRanges.length) {
+            this.add();
+        }
     },
 
     /**
@@ -40,9 +43,8 @@ export default {
          * @param {Event} e The event
          * @returns {void}
          */
-        add(e) {
-            e.preventDefault();
-            this.dateRanges.push(Vue.util.extend({}, this.dateRange));
+        add() {
+            this.dateRanges.push(Vue.util.extend({}, this.emptyDateRange));
         },
 
         /**
@@ -52,8 +54,7 @@ export default {
          * @param {Event} e The event
          * @returns {void}
          */
-        remove(index, e) {
-            e.preventDefault();
+        remove(index) {
             this.dateRanges.splice(index, 1);
         },
     },

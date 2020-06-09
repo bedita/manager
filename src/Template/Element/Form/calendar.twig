@@ -35,13 +35,13 @@
                         <div>
                             <span>&nbsp;</span>
                             <div>
-                                <button @click="remove(index, $event)">{{ __('Remove') }}</button>
+                                <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">{{ __('Remove') }}</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button @click="add">{{ __('Add') }}</button>
+                <button @click.prevent="add">{{ __('Add') }}</button>
             </div>
         </date-ranges-view>
         {{ Form.unlockField('date_ranges')}}
