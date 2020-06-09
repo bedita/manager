@@ -1,3 +1,4 @@
+// main grids
 main.layout {
     width: 100%;
     min-height: 100vh;
@@ -24,15 +25,12 @@ main.layout {
     }
 
     > .layout-sidebar { grid-area: sidebar; }
-    > .layout-header { grid-area: content-header; }
-    > .layout-content {
-        grid-area: content-body;
-        padding: $gutter 0 $gutter * 6;
-    }
-    > .layout-footer {
-        grid-area: footer;
-        padding: $gutter 0;
-    }
+    > .layout-header  { grid-area: content-header; }
+    > .layout-footer  { grid-area: footer; }
+    > .layout-content { grid-area: content-body; }
+
+    > .layout-content,
+    > .layout-footer { padding: $gutter 0; }
 
     > .layout-sidebar, > .layout-header, > .layout-footer { max-width: 100%; overflow-x: hidden; }
     > .layout-content { max-width: 100%; overflow-x: auto; }
@@ -49,6 +47,7 @@ main.layout {
     > .layout-sidebar .sidebar {
         transition: .3s opacity;
     }
+
     .panel-is-open & {
         > .layout-header,
         > .layout-content {
@@ -62,43 +61,42 @@ main.layout {
             box-shadow: 0 0 32px black;
         }
     }
-    .main-panel.on {
-        transform: translateX(0);
-        box-shadow: 0 0 32px black;
-    }
-}
 
-
-// side panel
-.main-panel {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; right: 0;
-    min-width: 25 * $gutter;
-    width: 60%;
-    height: 100vh;
-    z-index: 100;
-    background-color: $black;
-    box-shadow: 0 0 0 black;
-    transform: translateX(101%);
-    transition: .3s transform;
-    overflow: hidden;
-    will-change: transform;
-
-    .main-panel-body {
-        height: 100%;
-        flex: 1 1 0;
-    }
-
-    .panel-slot-container {
-        height: 100%;
-    }
-
-    footer {
+    // side panel
+    .main-panel {
         display: flex;
-        flex-shrink: 0;
-        justify-content: space-between;
+        flex-direction: column;
+        position: fixed;
+        top: 0; right: 0;
+        min-width: 25 * $gutter;
+        width: 60%;
+        height: 100vh;
+        z-index: 100;
+        background-color: $black;
+        box-shadow: 0 0 0 black;
+        transform: translateX(101%);
+        transition: .3s transform;
+        overflow: hidden;
+        will-change: transform;
+
+        .main-panel-body {
+            height: 100%;
+            flex: 1 1 0;
+        }
+
+        .panel-slot-container {
+            height: 100%;
+        }
+
+        footer {
+            display: flex;
+            flex-shrink: 0;
+            justify-content: space-between;
+        }
+
+        &.on {
+            transform: translateX(0);
+            box-shadow: 0 0 32px black;
+        }
     }
 }
-
