@@ -7,6 +7,7 @@ import Vue from 'vue';
  * <date-ranges-view> component used for ModulesPage -> View
  */
 export default {
+
     /**
      * @inheritDoc
      */
@@ -20,24 +21,40 @@ export default {
             dateRanges: [],
         };
     },
+
     /**
      * @inheritDoc
      */
     mounted() {
         this.dateRanges = JSON.parse(this.$el.dataset.items);
     },
+
     /**
      * @inheritDoc
      */
     methods: {
+
         /**
          * Add date range to list.
          *
+         * @param {Event} e The event
          * @returns {void}
          */
         add(e) {
             e.preventDefault();
             this.dateRanges.push(Vue.util.extend({}, this.dateRange));
+        },
+
+        /**
+         * Remove date range from list.
+         *
+         * @param {Integer} index The index
+         * @param {Event} e The event
+         * @returns {void}
+         */
+        remove(index, e) {
+            e.preventDefault();
+            this.dateRanges.splice(index, 1);
         },
     },
 }

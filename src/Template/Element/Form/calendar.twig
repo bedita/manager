@@ -14,27 +14,40 @@
             <table>
             <thead>
             <tr>
-                <th><label>{{ __('Start date') }}</label></th>
-                <th><label>{{ __('End date') }}</label></th>
+                <td>#</td>
+                <td>{{ __('Start Date') }}</td>
+                <td>{{ __('End Date') }}</td>
+                <td></td>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(dateRange, index) in dateRanges">
+                <td><: index :></td>
                 <td>
-                    <input v-model=dateRange.start_date type="text" name="dateRanges[][start_date]" v-datepicker="true" date="true" time="true" />
+                    <input type="text"
+                        :name="'date_ranges[' + index + '][start_date]'"
+                        v-model="dateRange.start_date"
+                        v-datepicker="true" date="true" time="true" />
                 </td>
                 <td>
-                    <input v-model=dateRange.end_date type="text" name="dateRanges[][end_date]" v-datepicker="true" date="true" time="true" />
+                    <input type="text"
+                        :name="'date_ranges[' + index + '][end_date]'"
+                        v-model="dateRange.end_date"
+                        v-datepicker="true" date="true" time="true" />
+                </td>
+                <td>
+                    <button @click="remove(index, $event)">{{ __('Remove') }}</button>
                 </td>
             </tr>
             <tr>
-                <td colspan="3">
-                    <button v-on:click="add">{{ __('Add') }}</button>
+                <td colspan="4">
+                    <button @click="add">{{ __('Add') }}</button>
                 </td>
             </tr>
             </tbody>
             </table>
         </date-ranges-view>
+        {{ Form.unlockField('date_ranges')}}
     </div>
 </section>
 </property-view>
