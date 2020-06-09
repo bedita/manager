@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(dateRange, index) in dateRanges" :key="Math.floor(Math.random() * 50000) + 10000">
+            <tr v-for="(dateRange, index) in dateRanges">
                 <td>
                     <input type="text"
                         :name="'date_ranges[' + index + '][start_date]'"
