@@ -11,39 +11,38 @@
 
    <div v-show="isOpen" class="tab-container">
         <date-ranges-view inline-template data-items={{ object.attributes.date_ranges|json_encode }}>
-            <table>
-            <thead>
-            <tr>
-                <td>{{ __('Start Date') }}</td>
-                <td>{{ __('End Date') }}</td>
-                <td></td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(dateRange, index) in dateRanges">
-                <td>
-                    <input type="text"
-                        :name="'date_ranges[' + index + '][start_date]'"
-                        v-model="dateRange.start_date"
-                        v-datepicker="true" date="true" time="true" />
-                </td>
-                <td>
-                    <input type="text"
-                        :name="'date_ranges[' + index + '][end_date]'"
-                        v-model="dateRange.end_date"
-                        v-datepicker="true" date="true" time="true" />
-                </td>
-                <td>
-                    <button @click="remove(index, $event)">{{ __('Remove') }}</button>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <button @click="add">{{ __('Add') }}</button>
-                </td>
-            </tr>
-            </tbody>
-            </table>
+            <div>
+                <div class="date-ranges-list">
+                    <div v-for="(dateRange, index) in dateRanges" class="date-ranges-item">
+                        <div>
+                            <span>{{ __('From') }}</span>
+                            <div>
+                                <input type="text"
+                                    :name="'date_ranges[' + index + '][start_date]'"
+                                    v-model="dateRange.start_date"
+                                    v-datepicker="true" date="true" time="true" />
+                            </div>
+                        </div>
+                        <div>
+                            <span>{{ __('To') }}</span>
+                            <div>
+                                <input type="text"
+                                    :name="'date_ranges[' + index + '][end_date]'"
+                                    v-model="dateRange.end_date"
+                                    v-datepicker="true" date="true" time="true" />
+                            </div>
+                        </div>
+                        <div>
+                            <span>&nbsp;</span>
+                            <div>
+                                <button @click="remove(index, $event)">{{ __('Remove') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button @click="add">{{ __('Add') }}</button>
+            </div>
         </date-ranges-view>
         {{ Form.unlockField('date_ranges')}}
     </div>
