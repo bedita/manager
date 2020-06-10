@@ -1,0 +1,35 @@
+.index-date-ranges {
+    display: flex;
+
+    // toggle button
+    .show-toggle {
+        padding: 0 1rem;
+        font-weight: $font-weight-bold;
+        font-size: $font-size-lllg;
+        line-height: .75;
+        &:after {
+            content: '+';
+        }
+    }
+
+    // default show only first child
+    .date-range:not(:first-child) { display: none; }
+    &.show-all {
+        .date-range:not(:first-child) { display: flex; }
+        .show-toggle:after { content: '–'; }
+    }
+
+    .date-range {
+        display: flex;
+        margin-bottom: $gutter * .25;
+
+        // date elements
+        >*:first-child {
+            margin-right: $gutter;
+        }
+
+        .date {
+            font-weight: $font-weight-bold;
+        }
+    }
+}

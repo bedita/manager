@@ -1,0 +1,37 @@
+<date-ranges-list inline-template>
+    <div class="index-date-ranges" :class="showAll? 'show-all' : ''">
+        <div>
+            {% for dateRange in dateRanges %}
+                <div class="date-range">
+                    <div>
+                        {% if dateRange.end_date %} from {% else %} on {% endif %}
+                        <span class="date">{{ Time.format(dateRange.start_date) }}</span>
+                    </div>
+
+                    {% if dateRange.end_date %}
+                        <div>
+                            to <span class="date">{{ Time.format(dateRange.end_date) }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if dateRanges|length > 1 %}
+            <span class="show-toggle" @click.stop.prevent="showAll = !showAll" role="switch"></span>
+        {% endif %}
+    </div>
+    {# <ul class="index_date_ranges">
+        <li v-for="(dateRange, index) in dateRanges">
+            <label v-if="dateRange.end_date">{{ __('from') }}</label>
+            <label v-if="!(dateRange.end_date)">{{ __('on') }}</label>
+            <span><: format(dateRange.start_date) :></span>
+
+            <label v-if="dateRange.end_date">{{ __('to') }}</label>
+            <span v-if="dateRange.end_date"><: format(dateRange.start_date) :></span>
+
+            <button v-show="dateRanges.length > 1 && index == 0 && !toggle" @click.prevent="toggle = !toggle">{{ __('+') }}</button>
+            <button v-show="dateRanges.length > 1 && index == 0 && toggle" @click.prevent="toggle = !toggle">{{ __('-') }}</button>
+        </li>
+    </ul> #}
+</date-ranges-list>
