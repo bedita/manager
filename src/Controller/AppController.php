@@ -158,9 +158,29 @@ class AppController extends Controller
      */
     protected function prepareRequest($type): array
     {
-        // prepare json fields before saving
         $data = (array)$this->request->getData();
 
+        $this->specialAttributes($type, $data);
+        $this->prepareRelations($data);
+        $this->changedAttributes($data);
+
+        // cleanup attributes on new objects/resources
+        if (empty($data['id'])) {
+            $data = array_filter($data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Setup special attributes to be saved.
+     *
+     * @param string $type Object or resource type
+     * @param array $data Request data
+     * @return void
+     */
+    protected function specialAttributes(string $type, array &$data): void
+    {
         // when saving users, if password is empty, unset it
         if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);
@@ -175,12 +195,37 @@ class AppController extends Controller
             unset($data['_jsonKeys']);
         }
 
+        // remove date_ranges items having empty both start & end dates
+        if (!empty($data['date_ranges'])) {
+            $data['date_ranges'] = array_filter(
+                (array)$data['date_ranges'],
+                function ($item) {
+                    return !empty($item['start_date']) || !empty($item['end_date']);
+                }
+            );
+        }
+
+        // prepare categories
+        if (!empty($data['categories'])) {
+            $data['categories'] = array_map(function ($category) {
+                return ['name' => $category];
+            }, $data['categories']);
+        }
+    }
+
+    /**
+     * Prepare request relation data.
+     *
+     * @param array $data Request data
+     * @return void
+     */
+    protected function prepareRelations(array &$data): void
+    {
         // relations data for view/save - prepare api calls
         if (!empty($data['relations'])) {
             $api = [];
             foreach ($data['relations'] as $relation => $relationData) {
                 $id = $data['id'];
-
                 foreach ($relationData as $method => $ids) {
                     if (is_string($ids)) {
                         $relatedIds = json_decode($ids, true);
@@ -200,8 +245,17 @@ class AppController extends Controller
             $data['_api'] = $api;
         }
         unset($data['relations']);
+    }
 
-        // prepare attributes: only modified attributes
+    /**
+     * Setup changed attributes to be saved.
+     * Remove unchanged attributes from $data array.
+     *
+     * @param array $data Request data
+     * @return void
+     */
+    protected function changedAttributes(array &$data): void
+    {
         if (!empty($data['_actualAttributes'])) {
             $attributes = json_decode($data['_actualAttributes'], true);
             foreach ($attributes as $key => $value) {
@@ -212,20 +266,6 @@ class AppController extends Controller
             }
             unset($data['_actualAttributes']);
         }
-
-        // prepare categories
-        if (!empty($data['categories'])) {
-            $data['categories'] = array_map(function ($category) {
-                return ['name' => $category];
-            }, $data['categories']);
-        }
-
-        // cleanup attributes on new objects/resources
-        if (empty($data['id'])) {
-            $data = array_filter($data);
-        }
-
-        return $data;
     }
 
     /**

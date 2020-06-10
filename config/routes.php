@@ -76,6 +76,13 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'user_profile:save']
     );
 
+    // Tree.
+    $routes->connect(
+        '/treeJson',
+        ['controller' => 'Tree', 'action' => 'treeJson'],
+        ['_name' => 'tree:treeJson']
+    );
+
     // Model.
     Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
@@ -203,11 +210,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/view/:id/resourcesJson/:relation',
         ['controller' => 'Modules', 'action' => 'resourcesJson'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:resourcesJson']
-    );
-    $routes->connect(
-        '/:object_type/view/:id/treeJson',
-        ['controller' => 'Modules', 'action' => 'treeJson'],
-        ['pass' => ['id'], '_name' => 'modules:treeJson']
     );
     $routes->connect(
         '/:object_type/view/:id/relationData/:relation',

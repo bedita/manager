@@ -339,6 +339,22 @@ class AppControllerTest extends TestCase
                     'confirm-password' => '',
                 ],
             ],
+            'date ranges' => [ // test date_ranges array
+                'events', // object_type
+                [ // expected
+                    'id' => '7',
+                    'date_ranges' => [],
+                ],
+                [ // data provided
+                    'id' => '7',
+                    'date_ranges' => [
+                        [
+                            'start_date' => '',
+                            'end_date' => '',
+                        ],
+                    ],
+                ],
+            ],
             'relations' => [
                 'documents', // object_type
                 [
@@ -393,6 +409,9 @@ class AppControllerTest extends TestCase
      * @param array $data The payload data
      *
      * @covers ::prepareRequest()
+     * @covers ::specialAttributes()
+     * @covers ::prepareRelations()
+     * @covers ::changedAttributes()
      * @dataProvider prepareRequestProvider()
      *
      * @return void

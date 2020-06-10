@@ -54,7 +54,7 @@ export default {
         },
     },
 
-    async mounted() {
+    mounted() {
         // set locale
         if (LOCALE !== 'en') {
             moment.locale(LOCALE);
@@ -85,8 +85,7 @@ export default {
         }
 
         try {
-            let datePicker = flatpickr(element, options);
-            // console.log(element);
+            let datePicker = this.instance = flatpickr(element, options);
             element.dataset.originalValue = element.value;
 
             let clearButton = document.createElement('span');
@@ -102,5 +101,24 @@ export default {
         } catch (err) {
             console.error(err);
         }
+    },
+
+    destroyed() {
+        if (this.instance) {
+            this.instance.destroy();
+            delete this.instance;
+        }
+    },
+
+    methods: {
+        setDate(date) {
+            if (this.instance) {
+                if (date) {
+                    this.instance.setDate(date);
+                } else {
+                    this.instance.clear();
+                }
+            }
+        },
     },
 };

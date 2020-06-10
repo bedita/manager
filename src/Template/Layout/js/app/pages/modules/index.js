@@ -7,6 +7,11 @@
  */
 
 export default {
+    components: {
+        DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+    },
+
     /**
      * Component properties
      *

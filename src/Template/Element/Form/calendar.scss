@@ -1,0 +1,12 @@
+.date-ranges-list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $gutter;
+
+    .date-ranges-item {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: $gutter;
+        margin-bottom: $gutter * .5;
+    }
+}
