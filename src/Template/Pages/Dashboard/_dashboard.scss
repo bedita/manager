@@ -57,6 +57,8 @@ body.view-dashboard {
                 color: inherit;
                 font-size: $font-size-sssm;
                 z-index: 10;
+                filter: brightness(1);
+                transition: filter .3s;
             }
 
             &:after {
@@ -67,7 +69,6 @@ body.view-dashboard {
                 background-color: $black;
                 opacity: .2;
                 transition: opacity .3s;
-                will-change: opacity;
             }
 
             &.has-background-black:after {
@@ -75,7 +76,7 @@ body.view-dashboard {
             }
 
             &:hover {
-                filter: brightness(1.1);
+                filter: brightness(1.2);
                 span { transform: translateY(4px); }
                 &:after { opacity: .5; }
                 &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8; }

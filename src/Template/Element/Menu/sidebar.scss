@@ -17,10 +17,10 @@
         width: 100%;
         margin-bottom: $gutter;
         overflow: hidden;
-        // @media (min-width: 568px) {
-        //     height: 0;
-        //     padding-bottom: #{$dashboard-items-ratio};
-        // }
+        @media (min-width: 568px) {
+            height: 0;
+            padding-bottom: #{$dashboard-items-ratio};
+        }
     }
 
 
@@ -30,8 +30,8 @@
         background-size: auto 100%;
         background-position: 0 0;
         @media (min-width: 568px) {
-            background-position: $gutter $gutter;
-            background-size: auto calc(100% - #{$gutter * 1.5} - #{$gutter}); // + padding + height of dashboard items foot
+            background-position: left $gutter;
+            background-size: auto calc(100% - #{$gutter * 3});
         }
 
         // white logo - UNUSED
@@ -56,18 +56,16 @@
 
         > *:not(:empty) { margin-bottom: $gutter; }
 
-        .module-box {
+        .module-box a {
             position: relative;
-            width: 100%;
+            display: flex;
+            height: $dashboard-item-height;
+            background-color: $gray-600;
+            font-size: $font-size-base;
+            padding: $gutter;
+            filter: brightness(1);
+            transition: filter .3s;
 
-            a {
-                display: flex;
-                width: 100%;
-                height: $dashboard-item-height;
-                background-color: $gray-600;
-                font-size: $font-size-base;
-                padding: $gutter;
-            }
             &:after {
                 content: '';
                 position: absolute;
@@ -76,11 +74,10 @@
                 background-color: $black;
                 opacity: .2;
                 transition: opacity .3s;
-                will-change: opacity;
             }
+
             &:hover {
-                filter: brightness(1.1);
-                span { transform: translateY(4px); }
+                filter: brightness(1.2);
                 &:after { opacity: .5; }
                 &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8; }
             }
