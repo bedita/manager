@@ -182,6 +182,28 @@ class ModulesController extends AppController
         $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
+        // REMOVE THIS
+        $schema['properties']['categories'] = json_decode('{
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "geografia e viaggi",
+                            "letteratura",
+                            "sport e giochi",
+                            "cat_1"
+                        ]
+                    }
+                }
+            ]
+        }', true);
+
         $object = $response['data'];
 
         // setup `currentAttributes` and recover failure data from session.
