@@ -36,65 +36,14 @@
         </nav>
 
         <nav role="search">
-            <button class="icon icon-search icon-only-icon" v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">search</span></button>
+            <button class="icon icon-search icon-only-icon" title="{{ __('Search') }}" v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>
+            <button class="icon icon-cube icon-only-icon" title="{{ __('Direct access by id or unique name') }}" v-on:click.prevent="togglePopup('id')"><span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span></button>
+
             <div class="popup" v-show="this.popUpAction">
-                <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys" :placeholder="popUpAction">
                 <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
             </div>
         </nav>
 
     </div>
 </main-menu>
-
-
-
-{#
-
-<ul role="menu" :class="popUpAction? 'popup-on' : ''">
-
-    {% for name, module in modules if name != 'trash' %}
-        <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
-            {{ Html.link(
-                __(name|humanize)|slice(0, 2),
-                { '_name': 'modules:list', 'object_type': name, 'plugin': null },
-                { 'tooltip': __(name|humanize), 'class': 'square' })|raw }}
-        </li>
-    {% endfor %}
-
-
-    {% for k, plugin in config('PluginModules', []) %}
-        <li class="{{ plugin.class.menu }}">
-            {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
-                plugin.route,
-                {'tooltip': __(plugin.title|humanize), 'class': 'square'})|raw }}
-        </li>
-    {% endfor %}
-
-    <li class="has-background-transparent spacer">&nbsp;</li>
-
-
-    <li class="has-background-black icon-search center-icon has-tooltip-align-right">
-        {{ Html.link(__(''), '', {
-            'tooltip': __('Search'),
-            'class': 'square',
-            'v-on:click.prevent': "togglePopup('search')",
-        })|raw }}
-    </li>
-
-
-    <li class="has-background-black icon-tag center-icon has-tooltip-align-right">
-        {{ Html.link(__(''), '', {
-            'tooltip': __('Direct access by id or unique name'),
-            'class': 'square',
-            'v-on:click.prevent': "togglePopup('go')",
-        })|raw }}
-    </li>
-
-    <div class="popup">
-        <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
-        <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
-    </div>
-
-</ul>
-
- #}

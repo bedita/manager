@@ -56,6 +56,10 @@
                 color: $white;
                 font-size: 1.75rem;
             }
+            button.icon-only-icon  ~ button.icon-only-icon {
+                margin-left: $gutter * .5;
+                font-size: 1rem;
+            }
 
             .popup {
                 display: flex;
@@ -72,104 +76,3 @@
         }
     }
 }
-
-// .layout-header {
-//     nav[role="menu"] {
-//         position: relative;
-//         display: flex;
-//         list-style: none;
-//         margin: $gutter 0 0 0;
-//         padding: 0;
-
-//         .popup {
-//             display: none;
-//             position: absolute;
-//             top: 38px;
-//             right: 0;
-//             margin-top: $gutter * .5;
-//             button {
-//                 min-width: 38px;
-//                 margin-left: $gutter * .5;
-//                 font-size: $font-size-ssm;
-//             }
-//         }
-//         &.popup-on {
-//             .popup {
-//                 display: flex;
-//             }
-//             .square:hover:before {
-//                 display: none;
-//             }
-//         }
-
-
-//         > li {
-//             position: relative;
-//             width: 24px;
-//             height: 24px;
-//             margin-right: 1px;
-//             background-color: $gray-600;
-//             @media screen and (min-width: 780px) {
-//                 width: 38px;
-//                 height: 38px;
-//             }
-
-//             &.spacer {
-//                 flex-grow: 1;
-//             }
-
-//             .square {
-//                 position: relative;
-//                 display: block;
-//                 width: 100%;
-//                 height: 100%;
-//                 line-height: 1;
-//                 padding: 4px 6px;
-
-//                 @media screen and (max-width: 780px) {
-//                     @include hide-text;
-//                 }
-
-//                 &:hover:before {
-//                     position: absolute;
-//                     content: attr(tooltip);
-//                     top: 24px;
-//                     left: 0;
-//                     z-index: 1;
-//                     text-indent: initial;
-
-//                     white-space: nowrap;
-//                     font: .75rem $font-family-sans-serif;
-//                     color: $gray-200;
-
-//                     @media screen and (min-width: 780px) {
-//                         top: 42px;
-//                     }
-//                 }
-//             }
-
-//             &.current .square:after {
-//                 content: '\00a0 ';
-//                 display: block;
-//                 position: absolute;
-//                 width: 100%; height: 6px;
-//                 bottom: 0;
-//                 left: 0;
-//                 background-color: $white;
-//                 opacity: .3;
-//                 @media screen and (max-width: 780px) {
-//                     width: 6px; height: 6px;
-//                     top: 50%; margin-top: -3px;
-//                     left: 50%; margin-left: -3px;
-//                 }
-//             }
-
-//             &.has-tooltip-align-right {
-//                 .square:hover:before {
-//                     left: auto;
-//                     right: 0;
-//                 }
-//             }
-//         }
-//     }
-// }
