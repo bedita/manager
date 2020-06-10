@@ -190,7 +190,9 @@ class ModulesController extends AppController
         $this->Modules->setupAttributes($object);
 
         $included = (!empty($response['included'])) ? $response['included'] : [];
-        $this->set(compact('object', 'included', 'schema'));
+        $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
+        $streams = Hash::get($typeIncluded, 'streams');
+        $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
         // relatinos between objects
