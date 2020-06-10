@@ -147,8 +147,8 @@ class Form
         foreach ($schema['oneOf'] as $one) {
             if (!empty($one['type']) && ($one['type'] === 'array')) {
                 $options = array_map(
-                    function ($value) {
-                        return ['value' => $value, 'text' => Inflector::humanize($value)];
+                    function ($item) {
+                        return ['value' => $item, 'text' => Inflector::humanize($item)];
                     },
                     (array)Hash::extract($one, 'items.enum')
                 );
@@ -159,7 +159,7 @@ class Form
                 'type' => 'select',
                 'options' => $options,
                 'multiple' => 'checkbox',
-                'default' => (array)Hash::extract($value, '{n}.name'),
+                'value' => (array)Hash::extract($value, '{n}.name'),
             ];
         }
 
