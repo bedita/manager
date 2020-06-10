@@ -47,18 +47,10 @@
             position: relative;
             padding-top: $gutter;
 
-           button.icon-only-icon {
-                padding: 0;
-                background-color: transparent;
-                border: none;
-                width: auto;
-                min-width: initial;
-                color: $white;
+            button.icon-only-icon:first-child {
                 font-size: 1.75rem;
-            }
-            button.icon-only-icon  ~ button.icon-only-icon {
-                margin-left: $gutter * .5;
-                font-size: 1rem;
+                margin-right: $gutter * .5;
+
             }
 
             .popup {

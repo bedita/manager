@@ -83,6 +83,16 @@ button, .button {
             border-top-color: transparent;
         }
     }
+
+    &.icon-only-icon {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        width: auto;
+        min-width: initial;
+        color: $white;
+        font-size: 1rem;
+    }
 }
 
 
