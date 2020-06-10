@@ -3,9 +3,9 @@
         <div class="sidebar-bedita-logo">{# css logo #}</div>
     {% endif %}
 
-
-    <div class="sidebar-project-title">{{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}</div>
-
+    <div class="sidebar-project-title">
+{{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}
+    </div>
 
     {# module specific #}
     {% if not Layout.isLogin() and not Layout.isDashboard() %}
