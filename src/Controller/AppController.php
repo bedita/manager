@@ -213,6 +213,13 @@ class AppController extends Controller
             unset($data['_actualAttributes']);
         }
 
+        // prepare categories
+        if (!empty($data['categories'])) {
+            $data['categories'] = array_map(function ($category) {
+                return ['name' => $category];
+            }, $data['categories']);
+        }
+
         // cleanup attributes on new objects/resources
         if (empty($data['id'])) {
             $data = array_filter($data);
