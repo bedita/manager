@@ -51,7 +51,7 @@ body.view-module {
             }
 
             > nav, > a {
-                div {
+                > div {
                     display: table-cell;
                     padding: $gutter * .5;
                     white-space: nowrap;

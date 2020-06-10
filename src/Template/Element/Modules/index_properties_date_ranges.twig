@@ -1,0 +1,24 @@
+<date-ranges-list inline-template>
+    <div class="index-date-ranges" :class="showAll? 'show-all' : ''">
+        <div>
+            {% for dateRange in dateRanges %}
+                <div class="date-range">
+                    <div>
+                        {% if dateRange.end_date %} from {% else %} on {% endif %}
+                        <span class="date">{{ Time.format(dateRange.start_date) }}</span>
+                    </div>
+
+                    {% if dateRange.end_date %}
+                        <div>
+                            to <span class="date">{{ Time.format(dateRange.end_date) }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if dateRanges|length > 1 %}
+            <span class="show-toggle" @click.stop.prevent="showAll = !showAll" role="switch"></span>
+        {% endif %}
+    </div>
+</date-ranges-list>
