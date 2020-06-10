@@ -24,6 +24,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/elements';
 
 // elements
+@import '../Element/Form/calendar';
 @import '../Element/Form/trees';
 @import '../Element/Form/publish_properties';
 @import '../Element/Form/relations';
@@ -33,6 +34,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Element/Menu/colophon';
 @import '../Element/Menu/menu';
 @import '../Element/Menu/sidebar';
+@import '../Element/Modules/index_properties';
 @import '../Element/FilterBox/filter_box';
 @import '../Element/panel';
 @import '../Element/filter_type';
