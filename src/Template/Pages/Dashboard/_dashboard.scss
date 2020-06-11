@@ -9,9 +9,10 @@ body.view-dashboard {
                 margin-top: $gutter * 3;
             }
 
-            header h2 {
+            header {
                 h2 {
                     margin-bottom: $gutter * .75;
+                    font-size: $font-size-llg;
                 }
             }
         }
@@ -35,7 +36,7 @@ body.view-dashboard {
             position: relative;
             height: 0;
             background-color: $gray-700;
-            font-size: $font-size-sm;
+            font-size: $font-size-base;
             line-height: 1;
             letter-spacing: .5px;
 
