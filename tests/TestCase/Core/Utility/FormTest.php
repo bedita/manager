@@ -380,7 +380,6 @@ class FormTest extends TestCase
                         ],
                     ],
                     'multiple' => 'checkbox',
-                    'value' => [],
                 ],
             ],
             'enum' => [

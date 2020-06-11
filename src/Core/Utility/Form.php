@@ -192,7 +192,6 @@ class Form
                 'type' => 'select',
                 'options' => $options,
                 'multiple' => 'checkbox',
-                'value' => (array)Hash::extract((array)$value, '{n}.name'),
             ];
         }
 
