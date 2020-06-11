@@ -135,6 +135,9 @@ class SchemaComponent extends Component
     protected function fetchSchema(string $type)
     {
         $schema = ApiClientProvider::getApiClient()->schema($type);
+        if (empty($schema)) {
+            return false;
+        }
         // add special property `roles` to `users`
         if ($type === 'users') {
             $schema['properties']['roles'] = [
@@ -176,7 +179,12 @@ class SchemaComponent extends Component
             'page_size' => 100,
         ];
         $url = sprintf('/model/categories?filter[type]=%s', $type);
-        $response = ApiClientProvider::getApiClient()->get($url, $query);
+        try {
+            $response = ApiClientProvider::getApiClient()->get($url, $query);
+        } catch (BEditaClientException $ex) {
+            // we ignore filter errors for now
+            $response = [];
+        }
 
         return array_map(
             function ($item) {
