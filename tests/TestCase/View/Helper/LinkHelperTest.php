@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2019 ChannelWeb Srl, Chialab Srl
+ * Copyright 2020 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -24,6 +24,51 @@ use Cake\View\View;
  */
 class LinkHelperTest extends TestCase
 {
+
+    /**
+     * Data provider for `testFromAPI` test case.
+     *
+     * @return array
+     */
+    public function fromAPIProvider(): array
+    {
+        return [
+            'empty url' => [
+                '', // apiBaseUrl
+                '', // webBaseUrl
+                '', // apiUrl
+                '', // expected
+            ],
+            'not empty url' => [
+                '/api/objects', // apiBaseUrl
+                '/objects', // webBaseUrl
+                'https://www.gustavo.com/api/objects', // apiUrl
+                'https://www.gustavo.com/objects', // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `fromAPI`
+     *
+     * @param string $apiBaseUrl The api base url
+     * @param string $webBaseUrl The web base url
+     * @param string $apiUrl The api url
+     * @param string $expected The url expected
+     * @return void
+     *
+     * @dataProvider fromAPIProvider()
+     * @covers ::fromAPI()
+     */
+    public function testFromAPI($apiBaseUrl, $webBaseUrl, $apiUrl, $expected): void
+    {
+        $layout = new LinkHelper(new View(null, null, null, []));
+        $layout->apiBaseUrl = $apiBaseUrl;
+        $layout->webBaseUrl = $webBaseUrl;
+        $result = $layout->fromAPI($apiUrl);
+        $this->expectOutputString($expected);
+    }
+
     /**
      * Data provider for `testObjectNav` test case.
      *
