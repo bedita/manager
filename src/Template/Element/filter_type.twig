@@ -4,8 +4,8 @@
     inline-template>
 
     <div class="filter-container filter-type">
-        <label>
-            <input type="checkbox" :checked="!selectedTypes.length" v-on:click.prevent.stop="togglaAll">
+        <label v-on:click.prevent.stop="togglaAll">
+            <input type="checkbox" v-model="selectedTypes.length === 0">
             <div class="has-background-module-{{ currentModule.name }}">
                 <span>{{ __('All Types') }}</span>
             </div>
