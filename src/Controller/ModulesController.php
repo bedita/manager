@@ -185,37 +185,40 @@ class ModulesController extends AppController
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
         // REMOVE THIS
-        $schema['properties']['categories'] = json_decode('{
-            "oneOf": [
-                {
-                    "type": "null"
-                },
-                {
-                    "type": "array",
-                    "uniqueItems": true,
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "geografia e viaggi",
-                            "letteratura",
-                            "sport e giochi",
-                            "cat_1"
-                        ]
-                    }
-                }
-            ]
-        }', true);
+        $schema['categories'] = [
+            [
+                'name' => 'geografia e viaggi',
+                'label' => 'Geografia e Viaggi',
+            ],
+            [
+                'name' => 'letteratura',
+                'label' => 'Letteratura',
+            ],
+            [
+                'name' => 'sport e giochi',
+                'label' => 'Sport e giochi',
+            ],
+        ];
 
         $object = $response['data'];
+
+        // set checked state of categories
+        $categories = $schema['categories'];
+        if (!empty($object['attributes']['categories'])) {
+            $names = Hash::extract($object, 'attributes.categories.{n}.name');
+            foreach ($categories as &$category) {
+                $category['checked'] = in_array($category['name'], $names);
+            }
+        }
 
         // setup `currentAttributes` and recover failure data from session.
         $this->Modules->setupAttributes($object);
 
         $included = (!empty($response['included'])) ? $response['included'] : [];
-        $this->set(compact('object', 'included', 'schema'));
+        $this->set(compact('object', 'included', 'schema', 'categories'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        // relatinos between objects
+        // relations between objects
         $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);

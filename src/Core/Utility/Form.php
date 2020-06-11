@@ -41,7 +41,7 @@ class Form
     /**
      * Control types
      */
-    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum'];
+    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
 
     /**
      * Get control by schema, control type, and value
@@ -128,6 +128,39 @@ class Form
     }
 
     /**
+     * Control for categories
+     *
+     * @param array $categories Categories.
+     * @return array
+     */
+    protected static function categoriesControl($categories): array
+    {
+        $options = array_map(
+            function ($category) {
+                return [
+                    'value' => $category['name'],
+                    'text' => $category['label'],
+                ];
+            },
+            $categories
+        );
+
+        $checked = [];
+        foreach ($categories as $category) {
+            if (isset($category['checked']) && $category['checked']) {
+                $checked[] = $category['name'];
+            }
+        }
+
+        return [
+            'type' => 'select',
+            'options' => $options,
+            'multiple' => 'checkbox',
+            'value' => $checked,
+        ];
+    }
+
+    /**
      * Control for checkbox
      *
      * @param mixed|null $value Property value.
@@ -159,7 +192,7 @@ class Form
                 'type' => 'select',
                 'options' => $options,
                 'multiple' => 'checkbox',
-                'value' => (array)Hash::extract($value, '{n}.name'),
+                'value' => (array)Hash::extract((array)$value, '{n}.name'),
             ];
         }
 
@@ -210,12 +243,16 @@ class Form
      *   'number'
      *   'checkbox'
      *   'json'
+     *   'categories'
      *
      * @param mixed $schema The property schema
      * @return string
      */
     public static function controlTypeFromSchema($schema): string
     {
+        if (isset($schema['type']) && $schema['type'] === 'categories') {
+            return 'categories';
+        }
         if (!is_array($schema)) {
             return 'text';
         }

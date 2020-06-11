@@ -134,6 +134,12 @@ class FormTest extends TestCase
                     ],
                 ],
             ],
+            'categories' => [
+                'categories',
+                [
+                    'type' => 'categories',
+                ],
+            ],
         ];
     }
 
@@ -374,6 +380,7 @@ class FormTest extends TestCase
                         ],
                     ],
                     'multiple' => 'checkbox',
+                    'value' => [],
                 ],
             ],
             'enum' => [
