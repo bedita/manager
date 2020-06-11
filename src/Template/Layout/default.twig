@@ -14,9 +14,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 <html>
 <head>
     {{ Html.charset()|raw }}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
+    {% element 'meta' %}
+    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
@@ -29,8 +28,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% element 'custom_colors' %}
 
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&display=swap" rel="stylesheet prefetch" crossorigin>
-
-    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
     {% element 'json_meta_config' %}
 </head>
