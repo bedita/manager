@@ -15,10 +15,10 @@
             {% if resources %}
             <nav class="table-header">
 
-                <div class="first-cell">{{ Link.sort('id')}}</div>
+                <div class="first-cell"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
 
                 {% for prop in properties %}
-                    <div class="{{ prop }}-cell">{{ Link.sort(prop) }}</div>
+                    <div class="{{ prop }}-cell"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
                 {% endfor %}
                 <div class="action-cell"></div>
 

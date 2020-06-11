@@ -13,9 +13,9 @@
         {% if resources %}
             {# list resources : table header #}
             <nav class="table-header has-border-black">
-                <div class="narrow">{{ Link.sort('id')}}</div>
+                <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
                 {% for prop in properties %}
-                    <div class="{{ Link.sortClass(prop) }} caz">{{ (Link.sort(prop)) }}</div>
+                    <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
                 {% endfor %}
                 <div></div>
             </nav>

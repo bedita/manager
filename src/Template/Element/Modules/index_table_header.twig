@@ -7,7 +7,7 @@
 
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
-            {{ Link.sort(prop) }}
+            <a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a>
         </div>
     {% endfor %}
 
@@ -15,14 +15,16 @@
         <div>{{ __('type') }}</div>
     {% endif %}
 
-    <div class="narrow">{{ __('status') }}</div>
+    <div class="narrow {{ Link.sortClass('status') }}">
+        <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
+    </div>
 
     <div class="{{ Link.sortClass('modified') }}">
-        {{ Link.sort('modified')}}
+        <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
     </div>
 
     <div class="narrow {{ Link.sortClass('id') }}">
-        {{ Link.sort('id')}}
+        <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>
     </div>
 
     <div></div>
