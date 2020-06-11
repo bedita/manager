@@ -23,12 +23,13 @@
             {# list resources : rows #}
             {% for resource in resources %}
 
+                {% set viewAction = 'model:view:' ~ resourceType %}
                 {% set rowClasses = 'table-row' %}
                 {% if prop == 'enabled' and propVal != 1 %}
                     {% set rowClasses = rowClasses ~ ' object-status-off' %}
                 {% endif %}
 
-                <a href="{{ Url.build({'_name': 'model:view:relations', 'id': resource.id}) }}"
+                <a href="{{ Url.build({'_name': viewAction, 'id': resource.id}) }}"
                     class="{{ rowClasses }}">
 
                     <div class="narrow"> {{ resource.id }}</div>
