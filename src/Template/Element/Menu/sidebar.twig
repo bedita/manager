@@ -39,18 +39,20 @@
             </a>
         </div>
 
-        <div>
-            <p class="has-text-size-smaller">
-            {% for code, name in I18n.getLanguages() %}
-                {% if code != I18n.getLang() %}
-                    <a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}">{{ name[:3] | upper }}</a>
-                {% else %}
-                    <span class="has-font-weight-bold">{{ name[:3] | upper }}</span>
-                {% endif %}
-                {% if not loop.last %} | {% endif %}
-            {% endfor %}
-            </p>
-        </div>
+        {% if I18n.getLanguages|length > 1 %}
+            <div>
+                <p class="has-text-size-smaller">
+                {% for code, name in I18n.getLanguages() %}
+                    {% if code != I18n.getLang() %}
+                        <a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}">{{ name[:3] | upper }}</a>
+                    {% else %}
+                        <span class="has-font-weight-bold">{{ name[:3] | upper }}</span>
+                    {% endif %}
+                    {% if not loop.last %} | {% endif %}
+                {% endfor %}
+                </p>
+            </div>
+        {% endif %}
 
         <div>
             <p><a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout">{{ __('Log out') }}</a></p>
