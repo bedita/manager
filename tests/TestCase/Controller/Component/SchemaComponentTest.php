@@ -88,6 +88,11 @@ class SchemaComponentTest extends TestCase
                 new \RuntimeException('I am some other kind of exception', 999),
                 'you-are-not-my-type',
             ],
+            'no schema' => [
+                false,
+                [],
+                'some-type',
+            ],
         ];
     }
 
@@ -284,7 +289,7 @@ class SchemaComponentTest extends TestCase
         $apiClient->method('get')
                 ->willReturn($roles);
         $apiClient->method('schema')
-                ->willReturn([]);
+                ->willReturn(['type' => 'object']);
 
         ApiClientProvider::setApiClient($apiClient);
         Cache::clearAll();
@@ -332,9 +337,9 @@ class SchemaComponentTest extends TestCase
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
         $apiClient->method('get')
-                ->willReturn($categories);
+            ->willReturn($categories);
         $apiClient->method('schema')
-                ->willReturn([]);
+            ->willReturn(['type' => 'object']);
 
         ApiClientProvider::setApiClient($apiClient);
         Cache::clearAll();
@@ -353,5 +358,28 @@ class SchemaComponentTest extends TestCase
             ],
         ];
         static::assertEquals($expected, $result['categories']);
+    }
+
+    /**
+     * Test `fetchCategories` with API error.
+     *
+     * @return void
+     * @covers ::fetchCategories()
+     */
+    public function testFetchCategoriesFail()
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException(''));
+        $apiClient->method('schema')
+            ->willReturn(['type' => 'object']);
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->getSchema('documents');
+        static::assertEquals(['type' => 'object'], $result);
     }
 }
