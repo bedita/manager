@@ -20,17 +20,20 @@ body.view-module {
                     display: table-cell;
                     height: $gutter * 2;
                     white-space: nowrap;
-                    vertical-align: bottom;
                     border-bottom: 1px solid $gray-550;
-
-                    height: $gutter * 3.25;
-                    padding: $gutter * .375 $gutter;
+                    padding: $gutter * 1.5 $gutter $gutter * .375;
+                    vertical-align: baseline;
                     &:empty:not(.title-cell) {
                         width: 0; padding-left: 0; padding-right: 0; overflow: hidden;
                     }
 
                     &.select-cell {
                         padding-left: 0;
+                        padding-right: 0;
+                        input[type="checkbox"] {
+                            position: relative; top: 1px;
+                            cursor: cell;
+                        }
                     }
                 }
             }
@@ -39,17 +42,10 @@ body.view-module {
             .table-header {
                 > div {
                     height: $gutter * 3.25;
-                    padding: $gutter * .5 $gutter;
                     line-height: 1;
                     border-bottom-color: inherit;
                     &:first-letter { text-transform: uppercase; }
-
-                    a {
-                        display: flex;
-                        align-items: flex-end;
-                        height: 100%;
-                        text-transform: capitalize;
-                    }
+                    a { text-transform: capitalize; }
 
                     &.sort {
                         padding-bottom: 0;
@@ -86,8 +82,6 @@ body.view-module {
 
                 // table cells
                 > div {
-                    height: $gutter * 3.25;
-
                     &.narrow {
                         width: 1px;
                     }
