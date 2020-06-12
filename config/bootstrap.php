@@ -83,7 +83,7 @@ try {
         'sizeAvailable' => [10, 20, 50, 100],
     ]);
 
-    Configure::load('app', 'default');
+    Configure::load('app', 'default', false);
 
     Configure::config('ini', new IniConfig());
     Configure::load('version', 'ini');
