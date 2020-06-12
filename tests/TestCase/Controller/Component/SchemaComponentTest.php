@@ -88,6 +88,11 @@ class SchemaComponentTest extends TestCase
                 new \RuntimeException('I am some other kind of exception', 999),
                 'you-are-not-my-type',
             ],
+            'no schema' => [
+                false,
+                [],
+                'some-type',
+            ],
         ];
     }
 
@@ -284,7 +289,7 @@ class SchemaComponentTest extends TestCase
         $apiClient->method('get')
                 ->willReturn($roles);
         $apiClient->method('schema')
-                ->willReturn([]);
+                ->willReturn(['type' => 'object']);
 
         ApiClientProvider::setApiClient($apiClient);
         Cache::clearAll();
@@ -297,5 +302,84 @@ class SchemaComponentTest extends TestCase
             'enum' => ['admin', 'manager'],
         ];
         static::assertEquals($expected, $result['properties']['roles']);
+    }
+
+    /**
+     * Test `fetchSchema` for `categories`.
+     *
+     * @return void
+     * @covers ::fetchSchema()
+     * @covers ::fetchCategories()
+     */
+    public function testFetchCategories()
+    {
+        $categories = [
+            'data' => [
+                [
+                    'id' => '1',
+                    'attributes' => [
+                        'name' => 'cat-1',
+                        'label' => 'Category 1',
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'attributes' => [
+                        'name' => 'cat-2',
+                        'label' => 'Category 2',
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($categories);
+        $apiClient->method('schema')
+            ->willReturn(['type' => 'object']);
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->getSchema('documents');
+        static::assertNotEmpty($result);
+        static::assertNotEmpty($result['categories']);
+
+        $expected = [
+            [
+                'name' => 'cat-1',
+                'label' => 'Category 1',
+            ],
+            [
+                'name' => 'cat-2',
+                'label' => 'Category 2',
+            ],
+        ];
+        static::assertEquals($expected, $result['categories']);
+    }
+
+    /**
+     * Test `fetchCategories` with API error.
+     *
+     * @return void
+     * @covers ::fetchCategories()
+     */
+    public function testFetchCategoriesFail()
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException(''));
+        $apiClient->method('schema')
+            ->willReturn(['type' => 'object']);
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->getSchema('documents');
+        static::assertEquals(['type' => 'object'], $result);
     }
 }

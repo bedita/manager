@@ -135,6 +135,9 @@ class SchemaComponent extends Component
     protected function fetchSchema(string $type)
     {
         $schema = ApiClientProvider::getApiClient()->schema($type);
+        if (empty($schema)) {
+            return false;
+        }
         // add special property `roles` to `users`
         if ($type === 'users') {
             $schema['properties']['roles'] = [
@@ -142,8 +145,9 @@ class SchemaComponent extends Component
                 'enum' => $this->fetchRoles(),
             ];
         }
+        $categories = $this->fetchCategories($type);
 
-        return $schema;
+        return $schema + array_filter(compact('categories'));
     }
 
     /**
@@ -160,6 +164,37 @@ class SchemaComponent extends Component
         $response = ApiClientProvider::getApiClient()->get('/roles', $query);
 
         return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
+    }
+
+    /**
+     * Fetch `categories`
+     * This should be called only for types having `"Categories"` association
+     *
+     * @param string $type Object type name
+     * @return array
+     */
+    protected function fetchCategories(string $type): array
+    {
+        $query = [
+            'page_size' => 100,
+        ];
+        $url = sprintf('/model/categories?filter[type]=%s', $type);
+        try {
+            $response = ApiClientProvider::getApiClient()->get($url, $query);
+        } catch (BEditaClientException $ex) {
+            // we ignore filter errors for now
+            $response = [];
+        }
+
+        return array_map(
+            function ($item) {
+                return [
+                    'name' => Hash::get((array)$item, 'attributes.name'),
+                    'label' => Hash::get((array)$item, 'attributes.label'),
+                ];
+            },
+            (array)Hash::get((array)$response, 'data')
+        );
     }
 
     /**

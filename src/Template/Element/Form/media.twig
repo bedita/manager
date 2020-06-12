@@ -1,4 +1,4 @@
-{% if included or object.attributes.provider_extra.html %}
+{% if streams or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
 <section class="fieldset order-1" id="included" :class="isOpen? '' : 'closed'">
 
@@ -14,17 +14,10 @@
                 style="padding-bottom: {{ 100 * object.attributes.provider_extra.height / object.attributes.provider_extra.width }}%;">
                 {{ object.attributes.provider_extra.html|raw }}
             </div>
-        {% endif %}
+        {% else %}
 
-        {# Display included streams#}
-        {% if included %}
-
-        {% set hasFile = false %}
-        {# cycle over included elements, show only streams #}
-        {% for o in included %}
-            {% if o.type == 'streams' %}
-            {% set hasFile = true %}
-            {% set stream = o %}
+            {# Show first stream #}
+            {% set stream = streams|first %}
 
             {# the stream #}
             <div class="stream">
@@ -82,16 +75,13 @@
                     </tbody>
                 </table>
             </div>
-            {% endif %}
-        {% endfor %}
-        {% endif %}
 
-        {% if hasFile %}
         <h3>{{ __('Change File') }}</h3>
         <div class="tab-container">
             {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
             {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
         </div>
+
         {% endif %}
 
     </div>
