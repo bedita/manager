@@ -130,11 +130,13 @@ class Form
     /**
      * Control for categories
      *
-     * @param array $categories Categories.
+     * @param array $value Property value.
+     * @param array $schema Object schema array.
      * @return array
      */
-    protected static function categoriesControl($categories): array
+    protected static function categoriesControl($value, array $schema): array
     {
+        $categories = $schema['categories'];
         $options = array_map(
             function ($category) {
                 return [
@@ -146,9 +148,12 @@ class Form
         );
 
         $checked = [];
-        foreach ($categories as $category) {
-            if (isset($category['checked']) && $category['checked']) {
-                $checked[] = $category['name'];
+        if (!empty($value)) {
+            $names = Hash::extract($value, '{n}.name');
+            foreach ($categories as $category) {
+                if (in_array($category['name'], $names)) {
+                    $checked[] = $category['name'];
+                }
             }
         }
 

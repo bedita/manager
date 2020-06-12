@@ -184,32 +184,7 @@ class ModulesController extends AppController
         $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
         $schema = $this->Schema->getSchema($this->objectType, $revision);
 
-        // REMOVE THIS
-        $schema['categories'] = [
-            [
-                'name' => 'geografia e viaggi',
-                'label' => 'Geografia e Viaggi',
-            ],
-            [
-                'name' => 'letteratura',
-                'label' => 'Letteratura',
-            ],
-            [
-                'name' => 'sport e giochi',
-                'label' => 'Sport e giochi',
-            ],
-        ];
-
         $object = $response['data'];
-
-        // set checked state of categories
-        $categories = $schema['categories'];
-        if (!empty($object['attributes']['categories'])) {
-            $names = Hash::extract($object, 'attributes.categories.{n}.name');
-            foreach ($categories as &$category) {
-                $category['checked'] = in_array($category['name'], $names);
-            }
-        }
 
         // setup `currentAttributes` and recover failure data from session.
         $this->Modules->setupAttributes($object);

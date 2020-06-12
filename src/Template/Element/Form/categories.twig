@@ -5,7 +5,14 @@
 				<h2>{{ __('Categories') }}</h2>
 			</header>
 			<div v-show="isOpen" class="tab-container">
-				{% set options = Schema.controlOptions('categories', categories, {'type': 'categories'})|merge({'label': false}) %}
+				{% set options = Schema.controlOptions(
+					'categories',
+					object['attributes']['categories'],
+					{
+						'type': 'categories',
+						'categories': schema['categories']
+					}
+				)|merge({'label': false}) %}
 				{{ Form.control('categories', options)|raw }}
 			</div>
 		</section>
