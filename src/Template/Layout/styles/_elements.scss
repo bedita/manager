@@ -171,8 +171,13 @@ nav.pagination {
     display: flex;
     align-items: center;
     > div {
-        margin-left: $gutter *.5;
-        &:first-child { margin-left: auto; }
+        &:not(:first-child) {
+            margin-left: $gutter;
+        }
+
+        &.page-size {
+            select { margin-left : $gutter * .5; }
+        }
 
         &.pagination-buttons {
             display: flex;
@@ -190,9 +195,11 @@ nav.pagination {
             }
 
             .pages-delimiter {
+                &:after {
+                    content: '…';
+                }
                 margin-left: $gutter * .5;
-                font-size: 2rem;
-                line-height: 1;
+                font-size: $font-size-llg;
             }
         }
     }
@@ -386,5 +393,4 @@ a.close-button {
     background: $black;
     opacity: 0.4;
     border-radius: $gutter * 0.25;
-
 }

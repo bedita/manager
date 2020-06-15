@@ -430,7 +430,7 @@ return [
             'objects' => '#230637',
             'folders' => '#072440',
             'documents' => '#cc4700',
-            'media' => '#b3001b',
+            'media' => '#a80019',
             'images' => '#d5002b',
             'videos' => '#d5002b',
             'audio' => '#d5002b',
@@ -438,9 +438,9 @@ return [
             'events' => '#09c',
             'locations' => '#641',
             'news' => '#036',
-            'users' => '#223526',
+            'users' => '#000000',
             'profiles' => '#093',
-            'trash' => '#1c1c1c',
+            'trash' => '#000000',
         ],
     ],
 
@@ -547,6 +547,17 @@ return [
     // 'Pagination' => [
     //     'sizeAvailable' => [10, 20, 50, 100],
     // ],
+
+    /**
+     * Delayed load defaults (used in ajax calls)
+     *
+     * - start => first load starts after this interval
+     * - interval => for multiple dealied loads, this is the interval between calls
+     */
+    'ajaxLoadDelay' => [
+        'startAfter' => 400,
+        'interval' => 50,
+    ],
 
     /**
      * Export default settings

@@ -10,15 +10,17 @@
 BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 */
 
-@import './styles/variables';   // common variables used for color, margins, typography
+@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
 @import './styles/mixins';
 
 // general
-@import './styles/normalize';
+@import './styles/base_normalize';
 @import './styles/base';
 @import './styles/layout';      // main grid base layout
+@import './styles/buttons';
 @import './styles/forms';
 @import './styles/forms_file';
+@import './styles/utility_classes';
 @import './styles/elements';
 
 // elements
@@ -30,9 +32,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Element/Form/map';
 @import '../Element/Flash/flash';
 @import '../Element/Menu/colophon';
-@import '../Element/Menu/commands';
-@import '../Element/Menu/side-menu';
 @import '../Element/Menu/menu';
+@import '../Element/Menu/sidebar';
 @import '../Element/Modules/index_properties';
 @import '../Element/FilterBox/filter_box';
 @import '../Element/panel';
@@ -48,6 +49,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Pages/UserProfile/userprofile-view';
 @import '../Pages/Model/model-index';
 @import '../Pages/Model/model-view';
+
+@import './styles/non-production';
 
 // vue
 [v-cloak] {
@@ -72,18 +75,4 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         height: $gutter * 2;
         width: $gutter * 2;
     }
-}
-
-.cake-error {
-    position: relative;
-    z-index: 1;
-    max-width: 100%;
-    padding: 1rem;
-    margin: .5rem;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    background: #000;
-    font-size: 12px;
-    a { color: #62b9f3; }
 }

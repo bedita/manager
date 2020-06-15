@@ -42,18 +42,30 @@ export default {
     created() {
         try {
             this.allIds = JSON.parse(this.ids);
-        } catch(error) {
+        } catch (error) {
             console.error(error);
         }
     },
 
     computed: {
-        selectedIds() {
-            return JSON.stringify(this.selectedRows);
-        },
         allChecked() {
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
         }
+    },
+
+    watch: {
+        selectedRows(val) {
+            console.log(val)
+            if (!val.length) {
+                this.$refs.checkAllCB.checked = false;
+                this.$refs.checkAllCB.indeterminate = false;
+            } else if (val.length == this.allIds.length) {
+                this.$refs.checkAllCB.checked = true;
+                this.$refs.checkAllCB.indeterminate = false;
+            } else {
+                this.$refs.checkAllCB.indeterminate = true;
+            }
+        },
     },
 
     /**
@@ -80,10 +92,10 @@ export default {
         },
 
         /**
-        * Submit bulk actions form
-        *
-        * @return {void}
-        */
+         * Submit bulk actions form
+         *
+         * @return {void}
+         */
         bulkActions() {
             if (this.selectedRows.length < 1) {
                 return;
@@ -134,7 +146,7 @@ export default {
          * @return {void}
          */
         selectRow(event) {
-            if(event.target.type != 'checkbox') {
+            if (event.target.type != 'checkbox') {
                 event.preventDefault();
                 var cb = event.target.querySelector('input[type=checkbox]');
                 let position = this.selectedRows.indexOf(cb.value);
@@ -147,5 +159,3 @@ export default {
         }
     }
 }
-
-

@@ -1,3 +1,26 @@
+.filter-box {
+    > div {
+        flex: 1 1 0;
+        &:first-child {
+            flex: none;
+            max-width: 100%;
+        }
+        &:last-child {
+            margin-top: $gutter;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        display: flex;
+        > div:last-child {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0;
+        }
+    }
+}
+
+
 .filters-container {
     .filter-container, .filter-buttons {
         margin-top: $gutter;

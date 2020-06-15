@@ -73,26 +73,39 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Sort by field direction and link
+     * Returns sort url by field direction
      *
      * @param string $field the Field.
-     * @return void
+     * @return string
      */
-    public function sort($field): void
+    public function sortUrl($field): string
     {
-        $class = '';
-        $query = $this->getView()->getRequest()->getQuery();
+        $sort = $this->getView()->getRequest()->getQuery('sort');
         $sortValue = $field; // <= ascendant order
-        if (!empty($query) && in_array('sort', array_keys($query))) {
-            if ($query['sort'] === $field) { // it was ascendant sort
-                $class = 'sort down';
-                $sortValue = '-' . $field; // <= descendant order
-            } elseif ($query['sort'] === ('-' . $field)) { // it was descendant sort
-                $class = 'sort up';
-            }
+        if ($sort === $field) { // it was ascendant sort
+            $sortValue = '-' . $field; // <= descendant order
         }
-        $url = $this->replaceParamUrl('sort', $sortValue);
-        echo '<a href="' . $url . '" class="' . $class . '">' . Inflector::humanize($field) . '</a>';
+
+        return $this->replaceParamUrl('sort', $sortValue);
+    }
+
+    /**
+     * Returns sort class by field direction
+     *
+     * @param string $field the Field.
+     * @return string
+     */
+    public function sortClass($field): string
+    {
+        $sort = $this->getView()->getRequest()->getQuery('sort');
+        $class = '';
+        if ($sort === $field) { // it was ascendant sort
+            $class = 'sort down';
+        } elseif ($sort === ('-' . $field)) { // it was descendant sort
+            $class = 'sort up';
+        }
+
+        return $class;
     }
 
     /**

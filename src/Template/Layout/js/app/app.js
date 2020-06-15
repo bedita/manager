@@ -23,6 +23,7 @@ const _vueInstance = new Vue({
 
     components: {
         PanelView,
+        Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),

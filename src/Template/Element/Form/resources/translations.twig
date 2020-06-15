@@ -8,7 +8,6 @@
 %}
 
 {% if object and object.relationships.translations %}
-    {% set loadOnStart = 500 %}
 
     <div class="resource {{ resourceName }}">
         <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start=true ref={{ resourceName }}>
@@ -17,7 +16,7 @@
                 <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                     <h2>
                         {{ __(resourceName|humanize)|lower }}
-                        <span class="tag is-smallest is-black space-around-half"
+                        <span class="tag is-smallest is-black mx-05"
                             :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                         </span>
                     </h2>
@@ -26,7 +25,7 @@
                 <div v-show="isOpen" class="tab-container">
 
                     <relation-view inline-template
-                        :load-on-start={{ loadOnStart }}
+                        :load-on-start="{{config('ajaxLoadDelay.start')|default(0)}}"
 
                         relation-name={{ resourceName }}
                         config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}

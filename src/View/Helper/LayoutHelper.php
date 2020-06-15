@@ -32,53 +32,23 @@ class LayoutHelper extends Helper
     public $helpers = ['Html'];
 
     /**
-     * Primary sidebar visibility
+     * Is Dashboard
      *
      * @return bool True if visible for view
      */
-    public function primarySidebar(): bool
+    public function isDashboard(): bool
     {
         return in_array($this->_View->getName(), ['Dashboard']);
     }
 
     /**
-     * Secondary sidebar visibility
+     * Is Login
      *
      * @return bool True if visible for view
      */
-    public function secondarySidebar(): bool
+    public function isLogin(): bool
     {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
-    }
-
-    /**
-     * Menu header visibility
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutHeader(): bool
-    {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
-    }
-
-    /**
-     * Layout content visibility. Always visible (for now)
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutContent(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Layout footer visibility
-     *
-     * @return bool True if visible for view
-     */
-    public function layoutFooter(): bool
-    {
-        return !in_array($this->_View->getName(), ['Dashboard', 'Login']);
+        return in_array($this->_View->getName(), ['Login']);
     }
 
     /**
@@ -133,6 +103,7 @@ class LayoutHelper extends Helper
             'UserProfile' => 'has-background-black icon-user',
             'Import' => 'has-background-black icon-download-alt',
             'ObjectTypes' => 'has-background-black',
+            'Relations' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

@@ -1,0 +1,35 @@
+// non production environemnt
+.cake-error {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    padding: 1rem;
+    margin: .5rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #000;
+    font-size: 12px;
+    a { color: #62b9f3; }
+}
+
+body[alert-message] {
+    padding-top: 2rem !important;
+
+    &:after {
+        content: attr(alert-message);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2rem;
+        background-color: crimson;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main.layout > .layout-sidebar > .sidebar {
+        top: 2rem;
+    }
+}

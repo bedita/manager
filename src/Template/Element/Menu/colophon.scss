@@ -1,8 +1,20 @@
 .menu-colophon {
-    font-size: 12px;
+    padding: $gutter * 1.5 0 0;
+    border-top: 1px solid #495057;
     color: $gray-500;
+    font-size: 12px;
     font-weight: 100;
+
+    @media (min-width: 568px) {
+        padding: 0;
+        border: none;
+    }
+
     span {
         display: block;
+    }
+
+    .view-login & {
+        display: none;
     }
 }

@@ -1,0 +1,125 @@
+#{$button-inputs},
+button, .button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: top;
+
+    position: relative;
+    height: $gutter * 2;
+    min-width: $dashboard-item-width / 2;
+    flex-shrink: 0;
+    box-shadow: none;
+    padding-bottom: calc(.375em - 1px);
+    padding-left: .75em;
+    padding-right: .75em;
+    padding-top: calc(.375em - 1px);
+
+    border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+
+    // -- overridden by specific utility buttons
+    background-color: $gray-200;
+    border-color: $gray-200;
+    color: $gray-900;
+    // --
+
+    font-family: $font-family-sans-serif;
+    font-size: $font-size-sssm;
+    font-weight: $font-weight-medium;
+    text-transform: uppercase;
+    line-height: 1;
+
+    cursor: pointer;
+
+    user-select: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+
+
+    // button states
+    &:disabled, &.disabled {
+        color: $gray-800 !important;
+        background-color: $gray-600 !important;
+        border-color: $gray-600 !important;
+        pointer-events: none;
+    }
+
+
+    &:hover {
+        background-color: $gray-600;
+        color: #FFF;
+        outline: 0;
+    }
+
+
+    // button modifiers
+    &.is-width-auto {
+        min-width: initial;
+    }
+
+    &.is-small {
+        height: $gutter * 1.5;
+        padding-left: .5em;
+        padding-right: .5em;
+        font-size: $font-size-sssm;
+    }
+
+    &.is-dark {
+        background-color: $gray-700;
+        color: $gray-300;
+    }
+
+    &.is-loading-spinner {
+        color: transparent!important;
+        pointer-events: none;
+        &:after {
+            position: absolute;
+            border-color: $gray-600;
+            border-right-color: transparent;
+            border-top-color: transparent;
+        }
+    }
+
+    &.icon-only-icon {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        width: auto;
+        min-width: initial;
+        color: $white;
+        font-size: 1rem;
+    }
+}
+
+
+// utility buttons
+.button {
+    &-primary {
+        background-color: $white;
+        border-color: $white;
+        color: $black;
+    }
+    &-secondary {
+        background-color: $gray-300;
+        border-color: $gray-300;
+        color: $black;
+    }
+    &-outlined {
+        background-color: transparent;
+        border-color: $white;
+        color: $white;
+        &:disabled, &.disabled {
+        }
+    }
+    &-text {
+        background-color: transparent;
+        border-color: transparent;
+        color: $white;
+        &:disabled, &.disabled {
+        }
+    }
+}

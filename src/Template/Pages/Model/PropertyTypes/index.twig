@@ -15,10 +15,10 @@
             {% if resources %}
             <nav class="table-header">
 
-                <div class="first-cell">{{ Link.sort('id')}}</div>
+                <div class="first-cell"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
 
                 {% for prop in properties %}
-                    <div class="{{ prop }}-cell">{{ Link.sort(prop) }}</div>
+                    <div class="{{ prop }}-cell"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
                 {% endfor %}
                 <div class="action-cell"></div>
 
@@ -139,9 +139,9 @@
         {# end list-objects #}
 
         {# commands links to append in left side bar (commands menu) #}
-        {% do _view.append('commands-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'})|raw) %}
-        {% do _view.append('commands-links', Html.link(__('Relations'), {'_name': 'model:list:relations'})|raw) %}
-        {% do _view.append('commands-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'})|raw) %}
+        {% do _view.append('module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'})|raw) %}
+        {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'})|raw) %}
+        {% do _view.append('module-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'})|raw) %}
 
     </div> {# end module-content #}
 </model-index>

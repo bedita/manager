@@ -87,23 +87,37 @@
 
         {{ Form.end()|raw }}
 
-        {# Append "Save" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+
+        {# append buttons to sidebar #}
+        {# Append "Save" #}
+        {% do _view.append('module-buttons', Form.button( __('Save'),
+            {
+                'form': 'form-main',
+                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+            })
+        ) %}
+
+        {# Append "Clone" #}
         {% if object.id %}
-        {# Append "Clone" to commands in commands menu. Must stay here, before the form end. #}
-        {% do _view.append('commands', Html.link(
-            __('Clone'),
-            {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
-            {'@click.prevent': 'clone'}
-        )) %}
+            {% do _view.append('module-buttons', Html.link(
+                __('Clone'),
+                {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
+                {'@click.prevent': 'clone', 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+            )) %}
         {% endif %}
 
-        {# Append "Delete" to commands in commands menu. #}
-        {% do _view.append('commands', Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': objectType}, {'data': {'id': object.id}})) %}
+        {# Append "Trash (move to)" #}
+        {% do _view.append('module-buttons',
+            Form.postButton(
+                __('Trash-verb'),
+                {'_name': 'modules:delete', 'object_type': objectType},
+                {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+            )
+        ) %}
 
-        {# Append "Prev" and "Next" to commands in commands menu. #}
+        {# Append "Prev" and "Next" #}
         {% if object.id and objectNav %}
-            {% do _view.append('commands', Link.objectNav(objectNav)) %}
+            {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
         {% endif %}
     </div>
 

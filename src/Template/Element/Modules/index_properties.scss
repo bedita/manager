@@ -3,12 +3,12 @@
 
     // toggle button
     .show-toggle {
-        padding: 0 1rem;
-        font-weight: $font-weight-bold;
-        font-size: $font-size-lllg;
-        line-height: .75;
-        &:after {
-            content: '+';
+        margin-left: $gutter;
+        line-height: 1;
+        height: 20px;
+        cursor: cell;
+        &:focus {
+            outline: none;
         }
     }
 
@@ -16,20 +16,26 @@
     .date-range:not(:first-child) { display: none; }
     &.show-all {
         .date-range:not(:first-child) { display: flex; }
-        .show-toggle:after { content: '–'; }
     }
 
     .date-range {
         display: flex;
-        margin-bottom: $gutter * .25;
+        .date-range ~ .date-range {
+            margin-top: $gutter * .25;
+        }
+        &:last-child:not(:first-child) { margin-bottom: 1px; } // adjust space when expanded
 
-        // date elements
-        >*:first-child {
-            margin-right: $gutter;
+        .date-item {
+            display: flex;
+            &:first-child {
+                margin-right: $gutter * .5;
+            }
+
+            .date {
+                margin-left: $gutter * .5;
+                font-weight: $font-weight-bold;
+            }
         }
 
-        .date {
-            font-weight: $font-weight-bold;
-        }
     }
 }

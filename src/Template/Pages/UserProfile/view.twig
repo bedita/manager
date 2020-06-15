@@ -52,7 +52,13 @@
 
         {{ Form.end()|raw }}
 
-        {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %}
+        {# append "save" to sidebar #}
+        {% do _view.append('module-buttons', Form.button( __('Save'),
+            {
+                'form': 'form-main',
+                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+            })
+        ) %}
     </div>
 
 </div>

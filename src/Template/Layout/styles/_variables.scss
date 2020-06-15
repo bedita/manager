@@ -3,8 +3,8 @@
 */
 
 // family
-$font-family-sans-serif:      'Mukta', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-family-serif:           Georgia, 'Times New Roman', Times, serif;
+$font-family-sans-serif:      'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-serif:           'IBM Plex Serif', Georgia, 'Times New Roman', Times, serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 
@@ -18,13 +18,15 @@ $font-size-ssm:               ($font-size-base * .8125) !default;
 $font-size-sssm:              ($font-size-base * .75) !default;
 
 // weight
-$font-weight-light:           300 !default;
-$font-weight-normal:          400 !default;
-$font-weight-bold:            700 !default;
+$font-weight-light:           200 !default;
+$font-weight-normal:          300 !default;
+$font-weight-medium:          400 !default;
+$font-weight-bold:            500 !default;
 $font-weight-base:            $font-weight-normal !default;
 
 // line
 $line-height-base:            1.5 !default;
+$line-height-sm:              1.25 !default;
 
 
 /*
@@ -69,20 +71,13 @@ $pending:      rgb(231, 200, 24);
 
 
 /*
-** MEDIA BREAKPOINTS
-*/
-// $phone: 768px;
-// $phablet: 768px;
-$tablet: 768px;
-// $desktop: ;
-// $widescreen: ;
-
-
-/*
 ** LAYOUT
 */
 
 $gutter: 16px;
+$dashboard-item-width: $gutter * 11;
+$dashboard-item-height: $gutter * 7.5;
+$dashboard-items-ratio: 68.2%;
 
 
 /*
@@ -90,3 +85,53 @@ $gutter: 16px;
 */
 
 $animation-duration-base: .3s;
+
+
+/*
+** Tag collections
+*/
+$text-inputs:   'input[type="color"]',
+                'input[type="date"]',
+                'input[type="datetime"]',
+                'input[type="datetime-local"]',
+                'input[type="email"]',
+                'input[type="month"]',
+                'input[type="number"]',
+                'input[type="password"]',
+                'input[type="search"]',
+                'input[type="tel"]',
+                'input[type="text"]',
+                'input[type="time"]',
+                'input[type="url"]',
+                'input[type="week"]',
+                'input:not([type])';
+// use like
+// #{$text-inputs} {
+//     background-color: red;
+// }
+
+$button-inputs: 'input[type="submit"]',
+                'input[type="button"]',
+                'input[type="reset"]';
+$button-inputs-hover: 'input[type="submit"]:hover',
+                      'input[type="button"]:hover',
+                      'input[type="reset"]:hover';
+
+
+/*
+** TODO: MEDIA BREAKPOINTS
+*/
+
+// $phone: 768px;
+// $phablet: 768px;
+$tablet: 768px;
+// $desktop: ;
+// $widescreen: ;
+
+// $max-1024w:      "(max-width: 1024px)";
+// $max-768w:       "(max-width: 770px)";
+// $tablet:         "(min-width: 768px) and (max-width: 1023px)";
+// $desktop:        "(min-width: 1024px)";
+// @media screen and (max-width: 780px) {
+// }
+

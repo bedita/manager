@@ -1,0 +1,31 @@
+<nav class="table-header has-border-module-{{ currentModule.name }}">
+    <div class="select-cell narrow" @click="toggleAll">
+        <input type="checkbox" ref="checkAllCB">
+    </div>
+
+    <div></div> {# thumb column #}
+
+    {% for prop in properties %}
+        <div class="{{ Link.sortClass(prop) }}">
+            <a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a>
+        </div>
+    {% endfor %}
+
+    {% if currentModule.hints.multiple_types %}
+        <div>{{ __('type') }}</div>
+    {% endif %}
+
+    <div class="narrow {{ Link.sortClass('status') }}">
+        <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
+    </div>
+
+    <div class="{{ Link.sortClass('modified') }}">
+        <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
+    </div>
+
+    <div class="narrow {{ Link.sortClass('id') }}">
+        <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>
+    </div>
+
+    <div></div>
+</nav>

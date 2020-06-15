@@ -3,13 +3,13 @@
         <div>
             {% for dateRange in dateRanges %}
                 <div class="date-range">
-                    <div>
+                    <div class="date-item">
                         {% if dateRange.end_date %} from {% else %} on {% endif %}
                         <span class="date">{{ Time.format(dateRange.start_date) }}</span>
                     </div>
 
                     {% if dateRange.end_date %}
-                        <div>
+                        <div class="date-item">
                             to <span class="date">{{ Time.format(dateRange.end_date) }}</span>
                         </div>
                     {% endif %}
@@ -18,7 +18,9 @@
         </div>
 
         {% if dateRanges|length > 1 %}
-            <span class="show-toggle" @click.stop.prevent="showAll = !showAll" role="switch"></span>
+            <button class="show-toggle icon icon-only-icon" :class="showAll? 'icon-minus' : 'icon-plus'" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll">
+                <span class="is-sr-only">{{ __('More') }}</span>
+            </button>
         {% endif %}
     </div>
 </date-ranges-list>

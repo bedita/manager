@@ -1,4 +1,7 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
+{% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
+    {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
+{% endif %}
 
 {% set query = _view.getRequest().getQueryParams() %}
 {% set treeView = currentModule.name == 'folders' and query is empty %}
@@ -8,178 +11,42 @@
 {% set ids = Array.extract(objects, '{*}.id') %}
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
+
         {% if treeView %}
+
             <tree-view></tree-view>
+
         {% else %}
+
             <div class="list-objects">
-
-                {# list objects : table header #}
                 {% if objects %}
-                <nav class="table-header">
-                    <div @click="toggleAll">
-                        <input type="checkbox" :checked="allChecked">
-                    </div>
-
-                    <div class="thumb-cell"></div>
-
-                    {% for prop in properties %}
-                        <div>{{ Link.sort(prop) }}</div>
-                    {% endfor %}
-                    <div>{{ Link.sort('id')}}</div>
-                    {% if currentModule.hints.multiple_types %}
-                        <div>{{ __('Type') }}</div>
-                    {% endif %}
-
-                    <div>{{ __('Status') }}</div>
-                    <div>{{ Link.sort('modified')}}</div>
-                    <div></div>
-                </nav>
+                    {% element 'Modules/index_table_header' %}
                 {% endif %}
 
-                {# list objects : rows #}
                 {% for object in objects %}
-                    <a
-                        href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}"
-                        title="{{ object.attributes.title }}"
-                        class="object-status-{{ object.attributes.status }}">
-
-                            <div class="{{ prop }}-cell" @click="selectRow">
-                                {{ Form.unlockField('oneItem') }}
-                                <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows">
-                            </div>
-
-                            <div class="thumb-cell">{% element 'Modules/thumb' { 'object': object } %}</div>
-
-                            {% for prop in properties %}
-                                {% if (prop == 'date_ranges') %}
-                                    <div class="{{ prop }}-cell">
-                                        {% element 'Modules/index_properties_date_ranges' { dateRanges: object.attributes[prop] } %}
-                                    </div>
-                                {% else %}
-                                    <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                                        {{ Schema.format(object.attributes[prop], schema.properties[prop]) }}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-
-                            <div>{{ object.id }}</div>
-
-                            {% if currentModule.hints.multiple_types %}
-                                <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
-                            {% endif %}
-
-                            <div>{{ __(object.attributes.status) }}</div>
-
-                            <div>{{ Time.format(object.meta.modified) }}</div>
-
-                            <div class="buttons">
-                            {% if in_array('DELETE', currentModule.hints.allow) %}
-                                {{ Form.postButton(__('Trash-verb'), {'_name': 'modules:delete', 'object_type': object.type}, {'class': '', 'data': {'id': object.id}})|raw}}
-                            {% endif %}
-                            </div>
-                    </a>
+                    {% element 'Modules/index_table_row' { 'object': object } %}
                 {% else %}
                     {{ __('No items found') }}
                 {% endfor %}
-
-            </div> {# end list-objects #}
+            </div>
 
             {# bulk actions #}
             {% if objects %}
-                <div class="bulk-actions" :class="!selectedRows.length? '' : 'enabled'">
-                    <header>
-                        <p>{{ __('Actions on selected items') }}</p>
-                    </header>
-                    <nav>
-                        {{ Form.create(null, {
-                            'id': 'bulk-actions',
-                            'url': {'_name': 'modules:bulkActions', 'object_type': objectType, '?': _view.request.getQuery()},
-                        })|raw }}
-
-                            <section class="fieldset" :disabled="!selectedRows.length">
-                                <input type="submit" @click="bulkActions" value="{{ __('Set selected') }}">
-                                <input type="hidden" name="ids" v-bind:value="selectedRows">
-                                {{ Form.unlockField('ids') }}
-
-                                {% for key in bulkActions %}
-                                    {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
-                                    {% set options = options|merge({ 'name': 'attributes[' ~ key ~ ']' }) %}
-
-                                    {% if options.type == 'checkbox' %}
-                                        {# custom radio input for type checkbox #}
-                                        {% set radio =  {
-                                            "type":"radio",
-                                            "options":
-                                                [
-                                                    { "value": 1, "text": "{{ __('Yes') }}" },
-                                                    { "value": 0, "text": "{{ __('No') }}" }
-                                                ],
-                                            "name": "attributes[" ~ key ~ "]"
-                                        } %}
-                                        {{ Form.control(key, radio)|raw }}
-
-                                    {% else %}
-                                        {{ Form.control(key, options)|raw }}
-                                    {% endif %}
-
-
-                                    {% if options.class == 'json' %}
-                                        {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
-                                    {% endif %}
-                                {% endfor %}
-
-                            </section>
-                        {{ Form.end()|raw }}
-
-                        {# trash #}
-                        {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
-                                <input type="hidden" name="ids" v-bind:value="selectedRows">
-                                {{ Form.unlockField('ids') }}
-                                <button @click.prevent="trash" :disabled="!selectedRows.length">{{ __('Move to trash') }}</button>
-                            {{ Form.end()|raw }}
-                        {% endif %}
-
-                        {# export #}
-                        {% if not currentModule.hints.multiple_types %}
-                        {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-                            <input type="hidden" name="ids" v-model="selectedRows">
-                            {{ Form.unlockField('ids') }}
-                            {{ Form.hidden('objectType', {'value': objectType})|raw }}
-                            <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
-
-                            {# Export all or filtered #}
-                            {% if _view.request.getQuery('filter') %}
-                                {{ Form.hidden('filter', {'value': _view.request.getQuery('filter')|json_encode})|raw }}
-                            {% endif %}
-                            {{ Form.hidden('q', {'value': _view.request.getQuery('q')})|raw }}
-
-                            {% set exportLabel = __('Export All') %}
-                            {% if _view.request.getQuery('filter') or _view.request.getQuery('q') %}
-                                {% set exportLabel = __('Export Filtered') %}
-                            {% endif %}
-                            <button @click.prevent="exportAll">{{ exportLabel }}</button>
-                        {{ Form.end()|raw }}
-                        {% endif %}
-                    </nav>
-                </div>
+                {% element 'Modules/index_bulk' {} %}
             {% endif %}
+
         {% endif %}
 
 
         {# commands to append in side bar (commands menu) #}
         {% if in_array('POST', currentModule.hints.allow) %}
-            {% do _view.append('commands',
-                Html.link(__('Create new'), {'_name': 'modules:create', 'object_type': objectType})|raw
+            {% do _view.append('module-buttons',
+                Html.link(__('Create new'),
+                    {'_name': 'modules:create', 'object_type': objectType},
+                    {'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name}
+                )|raw
             ) %}
         {% endif %}
-
-        {# {% do _view.append('commands-footer',
-            Html.link(__(''),
-                {'_name': 'trash:list', 'filter': {'type': objectType}},
-                {'class': 'trashcan icon-trash-2'}
-            )
-        )%} #}
 
     </div> {# end module-content #}
 </modules-index>
