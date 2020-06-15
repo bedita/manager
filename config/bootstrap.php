@@ -83,6 +83,12 @@ try {
         'sizeAvailable' => [10, 20, 50, 100],
     ]);
 
+    // default delay for loading relations in views
+    Configure::write('ajaxLoadDelay', [
+        'startAfter' => 400,
+        'interval' => 50,
+    ]);
+
     Configure::load('app', 'default', false);
 
     Configure::config('ini', new IniConfig());
