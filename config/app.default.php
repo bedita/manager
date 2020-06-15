@@ -554,10 +554,10 @@ return [
      * - start => first load starts after this interval
      * - interval => for multiple dealied loads, this is the interval between calls
      */
-    'ajaxLoadDelay' => [
-        'startAfter' => 400,
-        'interval' => 50,
-    ],
+    // 'ajaxLoadDelay' => [
+    //     'startAfter' => 400,
+    //     'interval' => 50,
+    // ],
 
     /**
      * Export default settings
