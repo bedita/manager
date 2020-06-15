@@ -13,7 +13,7 @@ return [
                 'name' => 'children',
                 'inverse_name' => 'children',
                 'label' => 'Folder children objects',
-                'inbverse_label' => 'Folder children objects',
+                'inverse_label' => 'Folder children objects',
             ],
             'left' => ['folders'],
             'right' => ['objects'],

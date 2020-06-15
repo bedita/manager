@@ -204,6 +204,13 @@ class AppController extends Controller
                 }
             );
         }
+
+        // prepare categories
+        if (!empty($data['categories'])) {
+            $data['categories'] = array_map(function ($category) {
+                return ['name' => $category];
+            }, $data['categories']);
+        }
     }
 
     /**

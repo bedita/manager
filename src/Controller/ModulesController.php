@@ -195,7 +195,7 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        // relatinos between objects
+        // relations between objects
         $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);

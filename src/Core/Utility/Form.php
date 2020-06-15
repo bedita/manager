@@ -41,7 +41,7 @@ class Form
     /**
      * Control types
      */
-    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum'];
+    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
 
     /**
      * Get control by schema, control type, and value
@@ -128,6 +128,44 @@ class Form
     }
 
     /**
+     * Control for categories
+     *
+     * @param array $value Property value.
+     * @param array $schema Object schema array.
+     * @return array
+     */
+    protected static function categoriesControl($value, array $schema): array
+    {
+        $categories = $schema['categories'];
+        $options = array_map(
+            function ($category) {
+                return [
+                    'value' => $category['name'],
+                    'text' => $category['label'],
+                ];
+            },
+            $categories
+        );
+
+        $checked = [];
+        if (!empty($value)) {
+            $names = Hash::extract($value, '{n}.name');
+            foreach ($categories as $category) {
+                if (in_array($category['name'], $names)) {
+                    $checked[] = $category['name'];
+                }
+            }
+        }
+
+        return [
+            'type' => 'select',
+            'options' => $options,
+            'multiple' => 'checkbox',
+            'value' => $checked,
+        ];
+    }
+
+    /**
      * Control for checkbox
      *
      * @param mixed|null $value Property value.
@@ -147,8 +185,8 @@ class Form
         foreach ($schema['oneOf'] as $one) {
             if (!empty($one['type']) && ($one['type'] === 'array')) {
                 $options = array_map(
-                    function ($value) {
-                        return ['value' => $value, 'text' => Inflector::humanize($value)];
+                    function ($item) {
+                        return ['value' => $item, 'text' => Inflector::humanize($item)];
                     },
                     (array)Hash::extract($one, 'items.enum')
                 );
@@ -209,12 +247,16 @@ class Form
      *   'number'
      *   'checkbox'
      *   'json'
+     *   'categories'
      *
      * @param mixed $schema The property schema
      * @return string
      */
     public static function controlTypeFromSchema($schema): string
     {
+        if (isset($schema['type']) && $schema['type'] === 'categories') {
+            return 'categories';
+        }
         if (!is_array($schema)) {
             return 'text';
         }

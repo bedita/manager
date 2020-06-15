@@ -73,7 +73,9 @@ class PropertiesComponent extends Component
      * @var array
      */
     protected $excluded = [
+        'categories',
         'date_ranges',
+        'tags',
     ];
 
     /**

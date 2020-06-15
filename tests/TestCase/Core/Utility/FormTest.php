@@ -134,6 +134,12 @@ class FormTest extends TestCase
                     ],
                 ],
             ],
+            'categories' => [
+                'categories',
+                [
+                    'type' => 'categories',
+                ],
+            ],
         ];
     }
 
