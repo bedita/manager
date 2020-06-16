@@ -1,9 +1,3 @@
-{#
-    load-on-start, loading events timing:
-    1000ms    - first relation
-    gap 200ms - till last relation
-#}
-
 {% if objectRelations %}
 <section class="relations">
 
@@ -22,14 +16,13 @@
                         </h2>
                     </header>
 
-                    {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
                     {% if relationName == 'children' %}
                         <div v-show="isOpen" class="tab-container">
-                            {% element 'Form/children' {'relationName': relationName, 'loadOnStart': wait } %}
+                            {% element 'Form/children' {'relationName': relationName } %}
                         </div>
                     {% else %}
                         <div v-show="isOpen" class="tab-container">
-                            {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName], 'loadOnStart': wait } %}
+                            {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName] } %}
                         </div>
                     {% endif %}
 

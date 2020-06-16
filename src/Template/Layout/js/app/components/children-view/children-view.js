@@ -7,7 +7,6 @@
  * <children-view> component used for ModulesPage -> View
  *
  * @prop {String} relationName name of the relation used by the PaginatiedContentMixin
- * @prop {Boolean} loadOnStart load content on component init
  *
  */
 

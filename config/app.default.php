@@ -549,17 +549,6 @@ return [
     // ],
 
     /**
-     * Delayed load defaults (used in ajax calls)
-     *
-     * - start => first load starts after this interval
-     * - interval => for multiple dealied loads, this is the interval between calls
-     */
-    // 'ajaxLoadDelay' => [
-    //     'startAfter' => 400,
-    //     'interval' => 50,
-    // ],
-
-    /**
      * Export default settings
      *
      * - limit => max number of exported elements on export all

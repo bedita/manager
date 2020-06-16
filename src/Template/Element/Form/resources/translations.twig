@@ -25,8 +25,6 @@
                 <div v-show="isOpen" class="tab-container">
 
                     <relation-view inline-template
-                        :load-on-start="{{config('ajaxLoadDelay.start')|default(0)}}"
-
                         relation-name={{ resourceName }}
                         config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                         ref="relation"

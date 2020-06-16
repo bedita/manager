@@ -1,9 +1,3 @@
-{#
-    load-on-start, loading events timing
-    800ms  - all folders (tree-view)
-    900ms - relations with folders
-#}
-
 {% set relationName = 'parents' %}
 <property-view inline-template :tab-open="tabsOpen">
     <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">

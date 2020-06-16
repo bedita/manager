@@ -1,9 +1,3 @@
-{#
-    load-on-start, loading events timing:
-    1000ms    - first relation
-    gap 200ms - till last relation
-#}
-
 {% for resourceName in resourceRelations %}
     {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
 
@@ -20,7 +14,6 @@
 
             <div v-show="false" class="tab-container">
                 <resource-relation-view inline-template
-                    :load-on-start={{ wait }}
                     relation-name={{ resourceName }}
                     ref="relation"
 
