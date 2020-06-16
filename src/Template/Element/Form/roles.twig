@@ -18,7 +18,6 @@
             <relation-view
                 inline-template
                 relation-name={{ relationName }}
-                :load-on-start=true
 
                 @loading="onToggleLoading"
                 @count="onCount">
@@ -27,7 +26,6 @@
                     <roles-list-view
                         inline-template
                         relation-name={{ relationName }}
-                        load-on-start="100"
                         :related-objects="objects"
 
                         @remove-relations="setRemovedRelated">

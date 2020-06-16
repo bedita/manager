@@ -7,7 +7,6 @@
  * <relation-view> component used for ModulesPage -> View
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
- * @property {Boolean} loadOnStart load content on component init
  * @property {Boolean} multipleChoice set view for multiple choice
  * @property {String} configPaginateSizes set pagination
  *
@@ -45,7 +44,6 @@ export default {
             type: Object,
             required: false,
         },
-        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -369,12 +367,7 @@ export default {
          * @return {void}
          */
         async loadOnMounted() {
-            if (this.loadOnStart) {
-                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-
-                await sleep(t);
-                await this.loadRelatedObjects();
-            }
+            await this.loadRelatedObjects();
             return Promise.resolve();
         },
 

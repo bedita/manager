@@ -2,7 +2,6 @@
     relation-name="children"
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
-    :load-on-start={{ loadOnStart }}
     @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view children-view">
