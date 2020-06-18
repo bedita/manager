@@ -7,7 +7,7 @@
 
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
-            <a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a>
+            <a href="{{ Link.sortUrl(prop) }}">{{ __(prop)|humanize }}</a>
         </div>
     {% endfor %}
 
