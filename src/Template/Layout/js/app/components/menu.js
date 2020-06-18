@@ -41,7 +41,7 @@ export default {
             let urlPath = '';
             if (this.popUpAction == 'search') {
                 urlPath += "/objects?q=";
-            } else if (this.popUpAction == 'go') {
+            } else if (this.popUpAction == 'id') {
                 urlPath += "/view/";
             }
 
