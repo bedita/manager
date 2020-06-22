@@ -28,15 +28,6 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
-    protected const FIXED_RELATIONSHIPS = [
-        'parent',
-        'children',
-        'parents',
-        'translations',
-        'streams',
-        'roles',
-    ];
-
     /**
      * Object type currently used
      *
@@ -195,13 +186,8 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        // relations between objects
-        $relationsSchema = array_intersect_key($this->Schema->getRelationsSchema(), $object['relationships']);
-        // relations between objects and resources
-        $resourceRelations = array_diff(array_keys($object['relationships']), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
-
-        $this->set(compact('relationsSchema', 'resourceRelations'));
-        $this->set('objectRelations', array_keys($relationsSchema));
+        // setup relations metadata
+        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $object['relationships']);
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
