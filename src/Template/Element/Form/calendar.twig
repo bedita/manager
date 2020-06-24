@@ -17,21 +17,34 @@
                         <div>
                             <span>{{ __('From') }}</span>
                             <div>
-                                <input type="text"
+                                <input type="text" v-if="!dateRange.params.all_day"
                                     :name="'date_ranges[' + index + '][start_date]'"
                                     v-model="dateRange.start_date"
                                     v-datepicker="true" date="true" time="true" />
+                                <input type="text" v-if="dateRange.params.all_day"
+                                    :name="'date_ranges[' + index + '][start_date]'"
+                                    v-model="dateRange.start_date"
+                                    v-datepicker="true" date="true" />
                             </div>
                         </div>
                         <div>
                             <span>{{ __('To') }}</span>
                             <div>
-                                <input type="text"
+                                <input type="text" v-if="!dateRange.params.all_day"
                                     :name="'date_ranges[' + index + '][end_date]'"
                                     v-model="dateRange.end_date"
                                     v-datepicker="true" date="true" time="true" />
+                                <input type="text" v-if="dateRange.params.all_day"
+                                    :name="'date_ranges[' + index + '][end_date]'"
+                                    v-model="dateRange.end_date"
+                                    v-datepicker="true" date="true" />
                             </div>
                         </div>
+                        <div>
+                            <input type="checkbox"
+                                :name="'date_ranges[' + index + '][params][all_day]'"
+                                v-model="dateRange.params.all_day" />
+                            <span>{{ __('All day') }}</span>
                         <div>
                             <span>&nbsp;</span>
                             <div>

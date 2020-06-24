@@ -16,7 +16,9 @@ export default {
             emptyDateRange: {
                 start_date: '',
                 end_date: '',
-                params: '',
+                params: {
+                    all_day: false
+                },
             },
             dateRanges: [],
         };
@@ -27,6 +29,11 @@ export default {
      */
     mounted() {
         this.dateRanges = JSON.parse(this.$el.dataset.items);
+        this.dateRanges.forEach(element => {
+            if (element.params === null) {
+                element.params = { all_day: false };
+            }
+        });
         if (!this.dateRanges.length) {
             this.add();
         }
@@ -40,7 +47,6 @@ export default {
         /**
          * Add date range to list.
          *
-         * @param {Event} e The event
          * @returns {void}
          */
         add() {
@@ -51,7 +57,6 @@ export default {
          * Remove date range from list.
          *
          * @param {Integer} index The index
-         * @param {Event} e The event
          * @returns {void}
          */
         remove(index) {
