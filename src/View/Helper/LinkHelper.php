@@ -92,19 +92,7 @@ class LinkHelper extends Helper
 
         $currentPage = Hash::get($request->getQueryParams(), 'page');
 
-        if (!isset($currentPage)) {
-            return $this->replaceQueryParams($replace);
-        }
-
-        if ($resetPage) {
-            $replace['page'] = 1;
-
-            return $this->replaceQueryParams($replace);
-        }
-
-        // reset the page if sort field has changed
-        parse_str(parse_url(urldecode($request->referer()), PHP_URL_QUERY), $prevQuery);
-        if (Hash::get($prevQuery, 'sort') !== $sortValue) {
+        if (isset($currentPage) && $resetPage) {
             $replace['page'] = 1;
         }
 
