@@ -117,7 +117,7 @@ class SchemaComponent extends Component
             return false;
         }
         $cacheRevision = empty($schema['revision']) ? null : $schema['revision'];
-        if ($cacheRevision === $revision) {
+        if ($revision === null || $cacheRevision === $revision) {
             return $schema;
         }
         // remove from cache if revision don't match
