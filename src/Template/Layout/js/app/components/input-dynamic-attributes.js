@@ -47,9 +47,6 @@ export default {
             on = { input: e => { this.$emit("update:value", e.target.checked); } };
         }
 
-        // always force date format without time
-        delete attrs.time;
-
         // create and return input element
         return createElement('input', {
             // Custom directives
