@@ -29,6 +29,7 @@ class Form
      */
     public const CUSTOM_CONTROLS = [
         'confirm-password',
+        'date_ranges',
         'end_date',
         'lang',
         'old_password',
@@ -313,6 +314,16 @@ class Form
         }
 
         return ['type' => 'select'] + compact('options');
+    }
+
+    /**
+     * Options for `date_ranges`
+     *
+     * @return array
+     */
+    protected static function dateRangesOptions(): array
+    {
+        return static::datetimeControl(null);
     }
 
     /**
