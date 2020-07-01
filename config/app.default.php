@@ -403,18 +403,20 @@ return [
     /**
      * Modules configuration.
      *
-     * Array having as key actual API endpoint like `documents`, `users`....
+     * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
+     * Modules order will follow key order of this configuration.
      *
      * Array value may contain:
      *
-     *  'label' - module label to display, if not set key is used
+     *  'label' - module label to display, if not set `key` will be used
      *  'shortLabel' - short label, 3 character recommended
      *  'color' - primary color code,
      *  'secondaryColor' - secondary color code,
-     *  'sort' - sort order to be used in index, use a field name prepending optionl `-` sign
-     *          to indicate a descendant order, f.i. '-title' sort by title in reverse alphabetical order
+     *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
+     *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
      *          (default is '-id'),
-     *  'class' - additional class to use in module box (could be `icon-article`, `icon-rocket`...)
+     *  'class' - additional class to use in module box; could be `icon-article`,
+     *          have a look in `webroot/css/be-icons-codes.css` for a complete list
      */
     'Modules' => [
         'objects' => [
