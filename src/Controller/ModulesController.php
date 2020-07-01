@@ -80,10 +80,8 @@ class ModulesController extends AppController
             return $result;
         }
 
-        $query = $this->request->getQueryParams();
-
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $query);
+            $response = $this->apiClient->getObjects($this->objectType, $this->indexQuery());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -117,6 +115,26 @@ class ModulesController extends AppController
         $this->setObjectNav($objects);
 
         return null;
+    }
+
+    /**
+     * Retrieve `index` module query string
+     *
+     * @return array
+     */
+    protected function indexQuery()
+    {
+        $query = $this->request->getQueryParams();
+        // return URL query string if `filter`, `sort`, or `q` are set
+        $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
+        if (!empty($subQuery)) {
+            return $query;
+        }
+
+        // set sort order: use `currentModule.sort` or default '-id'
+        $query['sort'] = (string)Hash::get($this->viewVars, 'currentModule.sort', '-id');
+
+        return $query;
     }
 
     /**
