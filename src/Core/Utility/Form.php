@@ -123,7 +123,6 @@ class Form
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'time' => 'false',
             'value' => $value,
         ];
     }
