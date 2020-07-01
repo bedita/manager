@@ -6,8 +6,8 @@
         <section class="dashboard-section">
             <div class="dashboard-items">
             {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders', 'publications']) %}
-                {% set title = __(name|humanize) %}
-                {% set class = 'dashboard-item has-background-module-' ~ name %}
+                {% set title = __(module.label|default(name)|humanize) %}
+                {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class)|trim %}
                 {% if module.hints.multiple_types %}
                     {% set class = class ~ ' icon-th-large-1' %}
                 {% endif %}
@@ -41,9 +41,9 @@
                     { '_name': 'modules:list', 'object_type': 'objects' },
                     { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
 
-                <a href="#" class="dashboard-item has-background-black icon-list-1" disabled>{{ __('All categories') }}</a>
+                {# <a href="#" class="dashboard-item has-background-black icon-list-1" disabled>{{ __('All categories') }}</a> #}
 
-                <a href="#" class="dashboard-item has-background-black icon-tag" disabled>{{ __('All tags') }}</a>
+                {# <a href="#" class="dashboard-item has-background-black icon-tag" disabled>{{ __('All tags') }}</a> #}
             </div>
         </section>
 
@@ -60,13 +60,17 @@
 
         <section class="dashboard-section">
             <div class="dashboard-items dashboard-utility">
-                {{ Html.link(__('Trash can'),
-                    { '_name': 'trash:list' },
-                    { 'title': __('Trash'), 'class': 'dashboard-item has-background-black icon-trash-2' } )|raw }}
+                {% if modules.trash %}
+                    {{ Html.link(__('Trash can'),
+                        { '_name': 'trash:list' },
+                        { 'title': __('Trash'), 'class': 'dashboard-item has-background-black icon-trash-2' } )|raw }}
+                {% endif %}
 
-                {{ Html.link(__('System users'),
-                    {'_name': 'modules:list', 'object_type': 'users'},
-                    {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
+                {% if modules.users %}
+                    {{ Html.link(__('System users'),
+                        {'_name': 'modules:list', 'object_type': 'users'},
+                        {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
+                {% endif %}
             </div>
         </section>
 
@@ -93,7 +97,7 @@
                     { '_name': 'user_profile:view' },
                     { 'title': __('User Profile'), 'class': 'dashboard-item has-background-black icon-user' } )|raw }}
 
-                <a href="#" class="dashboard-item has-background-black icon-cog" disabled>{{ __('Settings') }}</a>
+                {# <a href="#" class="dashboard-item has-background-black icon-cog" disabled>{{ __('Settings') }}</a> #}
             </div>
         </section>
         {% endif %}

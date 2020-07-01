@@ -71,11 +71,13 @@ class LayoutHelper extends Helper
         $currentModule = (array)$this->getView()->get('currentModule');
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $name = $currentModule['name'];
+            $label = Hash::get($currentModule, 'label', $name);
+            $class = (string)Hash::get($currentModule, 'class');
 
             return $this->Html->link(
-                Inflector::humanize($name),
+                Inflector::humanize($label),
                 ['_name' => 'modules:list', 'object_type' => $name],
-                ['class' => sprintf('has-background-module-%s', $name)]
+                ['class' => trim(sprintf('has-background-module-%s %s', $name, $class))]
             );
         }
 
