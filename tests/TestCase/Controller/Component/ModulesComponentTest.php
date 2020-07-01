@@ -956,4 +956,95 @@ class ModulesComponentTest extends TestCase
         $result = $this->Modules->prepareQuery($query);
         static::assertEquals($expected, $result);
     }
+
+    /**
+     * Data provider for `testSetupRelationsMeta`
+     *
+     * @return void
+     */
+    public function setupRelationsProvider()
+    {
+        return [
+            'simple' => [
+                [
+                    'relationsSchema' => [
+                        'has_media' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => ['has_media' => 'Has Media'],
+                ],
+                [
+                    'has_media' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [],
+                ],
+            ],
+            'inverse' => [
+                [
+                    'relationsSchema' => [
+                        'media_of' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => ['media_of' => 'Media Of'],
+                ],
+                [
+                    'media_of' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                ],
+                [
+                    'media_of' => [],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `setupRelationsMeta` method
+     *
+     * @return void
+     *
+     * @dataProvider setupRelationsProvider
+     * @covers ::setupRelationsMeta()
+     *
+     * @param array $expected Expected result.
+     * @param array $schema Schema array.
+     * @param array $relationships Relationships array.
+     */
+    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships)
+    {
+        $this->Modules->setupRelationsMeta($schema, $relationships);
+
+        $viewVars = $this->Modules->getController()->viewVars;
+        foreach ($expected as $key => $value) {
+            $this->assertEquals($value, $viewVars[$key]);
+        }
+    }
 }

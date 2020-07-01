@@ -32,6 +32,14 @@ use Psr\Log\LogLevel;
  */
 class ModulesComponent extends Component
 {
+    protected const FIXED_RELATIONSHIPS = [
+        'parent',
+        'children',
+        'parents',
+        'translations',
+        'streams',
+        'roles',
+    ];
 
     /**
      * {@inheritDoc}
@@ -439,5 +447,39 @@ class ModulesComponent extends Component
         }
 
         return $query;
+    }
+
+    /**
+     * Setup relations information metadata.
+     *
+     * @param array $schema Relations schema.
+     * @param array $relationships The object.
+     * @return void
+     */
+    public function setupRelationsMeta(array $schema, array $relationships): void
+    {
+        // relations between objects
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        // relations between objects and resources
+        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+        // set objectRelations array with name as key and label as value
+        $relationNames = array_keys($relationsSchema);
+        $objectRelations = array_combine(
+            $relationNames,
+            array_map(
+                function ($r) use ($relationsSchema) {
+                    // return 'label' or 'inverse_label' looking at 'name'
+                    $attributes = $relationsSchema[$r]['attributes'];
+                    if ($r === $attributes['name']) {
+                        return $attributes['label'];
+                    }
+
+                    return $attributes['inverse_label'];
+                },
+                $relationNames
+            )
+        );
+
+        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
     }
 }

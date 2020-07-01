@@ -1,7 +1,7 @@
 {% if objectRelations %}
 <section class="relations">
 
-    {% for relationName in objectRelations %}
+    {% for relationName, relationLabel in objectRelations %}
 
         <div class="relation">
             <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
@@ -9,7 +9,7 @@
 
                     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                         <h2>
-                            {{ relationName|humanize|lower }}
+                            {{ relationLabel }}
                             <span class="tag is-smallest is-black mx-05"
                                 :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                             </span>
