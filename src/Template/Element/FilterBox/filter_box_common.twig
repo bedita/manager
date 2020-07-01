@@ -75,7 +75,7 @@
             </label>
         </span>
 
-        <span v-if="filter.date && (filter.name !== 'date_ranges')">
+        <span v-else-if="filter.date">
             <label>{{ __('From') }}
             <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" />
             </label>
@@ -84,7 +84,7 @@
             </label>
         </span>
 
-        <span v-if="!filter.date && (filter.type === 'text' || filter.type === 'number')">
+        <span v-else-if="filter.type === 'text' || filter.type === 'number'">
             <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
         </span>
     </div>
