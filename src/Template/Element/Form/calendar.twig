@@ -1,59 +1,48 @@
-{# Calendar: use date_ranges if set in object attributes#}
-
-{% if object.attributes.date_ranges is defined %}
-
 <property-view inline-template :tab-open="tabsOpen">
 <section class="fieldset order-{{ cssOrder }}" id="date_ranges" :class="isOpen? '' : 'closed'">
-
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
         <h2>{{ __('Calendar') }}</h2>
     </header>
 
-   <div v-show="isOpen" class="tab-container">
-        <date-ranges-view inline-template data-items={{ object.attributes.date_ranges|json_encode }}>
+    <div v-show="isOpen" class="tab-container">
+        <date-ranges-view inline-template ranges={{ object.attributes.date_ranges|json_encode }}>
             <div>
                 <div class="date-ranges-list">
-                    <div v-for="(dateRange, index) in dateRanges" class="date-ranges-item">
+                    <div class="date-ranges-item" v-for="(dateRange, index) in dateRanges" :key="`range-${index}`">
                         <div>
                             <span>{{ __('From') }}</span>
                             <div>
-                                <input type="text" v-if="!dateRange.params.all_day"
-                                    :name="'date_ranges[' + index + '][start_date]'"
+                                <input type="text" :id="`start_date_${index}`"
+                                    :name="`date_ranges[${index}][start_date]`"
                                     v-model="dateRange.start_date"
-                                    v-datepicker="true" date="true" time="true" />
-                                <input type="text" v-if="dateRange.params.all_day"
-                                    :name="'date_ranges[' + index + '][start_date]'"
-                                    v-model="dateRange.start_date"
-                                    v-datepicker="true" date="true" />
+                                    @change="onDateChanged(dateRange, $event)"
+                                    v-datepicker="true" date="true" :time="!dateRange.params.all_day"
+                                />
                             </div>
                         </div>
                         <div>
                             <span>{{ __('To') }}</span>
                             <div>
-                                <input type="text" v-if="!dateRange.params.all_day"
-                                    :name="'date_ranges[' + index + '][end_date]'"
+                                <input type="text" :id="`end_date_${index}`"
+                                    :name="`date_ranges[${index}][end_date]`"
                                     v-model="dateRange.end_date"
-                                    v-datepicker="true" date="true" time="true" />
-                                <input type="text" v-if="dateRange.params.all_day"
-                                    :name="'date_ranges[' + index + '][end_date]'"
-                                    v-model="dateRange.end_date"
-                                    v-datepicker="true" date="true" />
+                                    @change="onDateChanged(dateRange, $event)"
+                                    v-datepicker="true" date="true" :time="!dateRange.params.all_day"
+                                />
                             </div>
                         </div>
                         <div>
-                            <input type="checkbox"
-                                :name="'date_ranges[' + index + '][params][all_day]'"
-                                v-model="dateRange.params.all_day" />
-                            <span>{{ __('All day') }}</span>
+                            <input type="checkbox" :id="`all_day_${index}`"
+                                :name="`date_ranges[${index}][params][all_day]`"
+                                v-model="dateRange.params.all_day"
+                                @change="onAllDayChanged(dateRange, $event)" />
+                            <label :for="`all_day_${index}`">{{ __('All day') }}</label>
+                        </div>
                         <div>
-                            <span>&nbsp;</span>
-                            <div>
-                                <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">{{ __('Remove') }}</button>
-                            </div>
+                            <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">{{ __('Remove') }}</button>
                         </div>
                     </div>
                 </div>
-
                 <button @click.prevent="add">{{ __('Add') }}</button>
             </div>
         </date-ranges-view>
@@ -61,5 +50,3 @@
     </div>
 </section>
 </property-view>
-
-{% endif %}
