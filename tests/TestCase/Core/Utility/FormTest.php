@@ -244,6 +244,16 @@ class FormTest extends TestCase
                     'value' => null,
                 ],
             ],
+            'date_ranges' => [
+                'date_ranges',
+                [
+                    'type' => 'text',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
+                    'time' => 'true',
+                    'value' => null,
+                ],
+            ],
         ];
     }
 
@@ -257,6 +267,7 @@ class FormTest extends TestCase
      * @dataProvider customControlOptionsProvider()
      * @covers ::customControlOptions()
      * @covers ::langOptions
+     * @covers ::dateRangesOptions(()
      * @covers ::startDateOptions()
      * @covers ::endDateOptions()
      * @covers ::statusOptions
@@ -336,7 +347,6 @@ class FormTest extends TestCase
                     'type' => 'text',
                     'v-datepicker' => 'true',
                     'date' => 'true',
-                    'time' => 'false',
                     'value' => '2018-01-31',
                 ],
             ],

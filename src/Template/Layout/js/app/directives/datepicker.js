@@ -31,7 +31,9 @@ export default {
                     return;
                 }
                 el.vm.attrs = vnode.data.attrs;
-                if (vnode.data && vnode.data.domProps && vnode.data.domProps.value) {
+                if (vnode.data && vnode.data.attrs && vnode.data.attrs.value) {
+                    el.vm.setDate(new Date(vnode.data.attrs.value));
+                } else if (vnode.data && vnode.data.domProps && vnode.data.domProps.value) {
                     el.vm.setDate(new Date(vnode.data.domProps.value));
                 } else {
                     el.vm.setDate(null);

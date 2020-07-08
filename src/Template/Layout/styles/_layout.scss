@@ -12,10 +12,7 @@ main.layout {
                              "sidebar content-body"
                              "sidebar footer";
         grid-template-rows: auto 1fr auto;
-        grid-template-columns: calc(33.33% - 10.63px) auto;
-        @media (min-width: 768px) {
-            grid-template-columns: $dashboard-item-width auto;
-        }
+        grid-template-columns: $dashboard-item-width auto;
 
         .view-module & {
             grid-template-rows: ($dashboard-item-height + $gutter) auto;

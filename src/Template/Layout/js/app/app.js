@@ -219,7 +219,7 @@ const _vueInstance = new Vue({
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                const urlParams = decodeURI(window.location.search);
+                const urlParams = decodeURIComponent(window.location.search);
 
                 // search for q='some string' both after ? and & tokens
                 const queryStringExp = /[?&]q=([^&#]*)/g;
@@ -318,15 +318,18 @@ const _vueInstance = new Vue({
                                     Object.keys(filter).forEach((modifier) => {
                                         if (filter[modifier] !== '') {
                                             // look up for param modifier (i.e dates)
-                                            fields.push(`filter[${filterKey}][${modifier}]=${filter[modifier]}`);
+                                            const encoded = encodeURIComponent(filter[modifier]);
+                                            fields.push(`filter[${filterKey}][${modifier}]=${encoded}`);
                                         }
                                     });
                                 } else if (query[filterKey] !== '') {
-                                    fields.push(`filter[${filterKey}]=${query[filterKey]}`);
+                                    const encoded = encodeURIComponent(query[filterKey]);
+                                    fields.push(`filter[${filterKey}]=${encoded}`);
                                 }
                             });
                         } else {
-                            fields.push(`${key}=${query}`);
+                            const encoded = encodeURIComponent(query);
+                            fields.push(`${key}=${encoded}`);
                         }
                     }
                 });
