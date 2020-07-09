@@ -64,7 +64,7 @@
             <a href="#" v-show="!isMedia"  :disabled="saving" @click.prevent="closePanel()">{{ __('close') }}</a>
         </header>
 
-        <div>
+        <div class="mb-1">
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                 :pagination.sync="pagination"

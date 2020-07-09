@@ -5,23 +5,25 @@
     @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view children-view">
-        <div class="related-list">
+        <div class="related-list-container">
             {# FilterBoxView #}
-            <filter-box-view
-                :config-paginate-sizes="configPaginateSizes"
-                :pagination.sync="pagination"
-                :show-filter-buttons=false
+            <div class="mb-1">
+                <filter-box-view
+                    :config-paginate-sizes="configPaginateSizes"
+                    :pagination.sync="pagination"
+                    :show-filter-buttons=false
 
-                objects-label="{{ __('objects') }}"
+                    objects-label="{{ __('objects') }}"
 
-                @filter-update-current-page="onUpdateCurrentPage"
-                @filter-update-page-size="onUpdatePageSize"
-                @filter-objects="onFilterObjects"
-                inline-template>
+                    @filter-update-current-page="onUpdateCurrentPage"
+                    @filter-update-page-size="onUpdatePageSize"
+                    @filter-objects="onFilterObjects"
+                    inline-template>
 
-                    {% element 'FilterBox/filter_box' %}
+                        {% element 'FilterBox/filter_box' %}
 
-            </filter-box-view>
+                </filter-box-view>
+            </div>
 
             {# children objects #}
             <div class="related-objects-list columns"

@@ -1,0 +1,68 @@
+<div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+    v-for="(related, index) in objects"
+    :key="related.id"
+    :class="containsId(removedRelated, related.id)? 'removed' : ''"
+    draggable
+    :drag-data="JSON.stringify(related)">
+
+    <article class="box" v-bind:class="related.type">
+
+        <div class="priority">
+            <span class="badge"><: related.meta.relation.priority :></span>
+        </div>
+
+        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
+            <figure>
+                <img :src="related.meta.thumb_url" />
+            </figure>
+        </div>
+
+        <div class="box-body pb-05">
+            <div class="is-flex space-between align-center">
+                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                <span class="is-upppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+            </div>
+
+            <header class="is-flex space-between mt-05 mb-05">
+                <h1 class="m-0 has-text-size-smallest"><: related.attributes.title || related.attributes.name :></h1>
+                <span class="has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
+            </header>
+        </div>
+
+        <div>
+            <div v-if="relationHasParams()">
+                <ul class="params-list">
+                    <li v-for="(param, key) in relationSchema">
+                        <span><: key :></span>&nbsp;
+                            <span v-if="getParamHelper(related, key)" class="tag param-value"><: formatParam(key, getParamHelper(related, key)) :></span>
+                    </li>
+                </ul>
+            </div>
+
+            <button v-if="isPanelOpen(related.id)" class="is-small icon-coffee"
+                    @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+
+            <button v-else class="is-small icon-th-list-1"
+                :disabled="isPanelOpen()"
+                @click.prevent.stop="editRelationParams({
+                    object: {{ object|json_encode }},
+                    related: related,
+                    relationName: relationName,
+                    schema: relationSchema,
+                })">{{ __('Params') }}</button>
+        </div>
+
+        <footer class="is-flex space-between mt-1 pb-05">
+            <a class="button is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+
+            <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view file') }}</a>
+            {# <button v-if="related.meta.url" class="is-small icon-download" @click.prevent.stop="$helpers.downloadResource(related.meta.url)">{{ __('download') }}</button> #}
+
+            <a class="button is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
+                v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
+            </a>
+        </footer>
+
+    </article>
+
+</div>
