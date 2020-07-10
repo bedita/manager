@@ -107,15 +107,7 @@ nav.pagination {
                 word-break: break-word;
                 font-size: $font-size-sm;
                 min-height: $font-size-lg * 2;
-                &:empty {
-                    content: 'untitled';
-                    opacity: .5;
-                }
             }
-        }
-
-        ul.params-list {
-            list-style: none;
         }
 
         .priority {

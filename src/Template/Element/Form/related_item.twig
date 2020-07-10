@@ -34,6 +34,7 @@
         </header>
     </div>
 
+    {% if not stage and not add %}
     <div class="p-05 has-text-size-smaller" v-if="relationSchema">
         <dl v-if="relationHasParams()" class="mb-05">
             <template v-for="(param, key) in relationSchema">
@@ -57,6 +58,7 @@
                 schema: relationSchema,
             })">{{ __('Edit params') }}</button>
     </div>
+    {% endif %}
 
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}

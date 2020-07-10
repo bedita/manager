@@ -48,10 +48,10 @@ main.layout {
     .panel-is-open & {
         > .layout-header,
         > .layout-content {
-            transform: translateX(-$dashboard-item-width);
+            transform: translateX(-$dashboard-item-width - $gutter);
         }
         > .layout-sidebar {
-            opacity: .1;
+            opacity: 0;
         }
         .main-panel.on {
             transform: translateX(0);
