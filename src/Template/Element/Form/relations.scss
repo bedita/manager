@@ -148,31 +148,6 @@ nav.pagination {
 
 .edit-relation {
     @extend %relation-panel-common;
-
-    > nav {
-        padding: $gutter $gutter 0;
-        margin: 0;
-    }
-
-    .object-attributes, .params-list {
-        overflow: auto;
-        margin-right: 0;
-        margin-left: $gutter;
-        margin-top: $gutter;
-        padding-right: $gutter;
-    }
-
-    .params-list {
-        flex-grow: 1;
-
-        > div {
-            margin-bottom: $gutter * .5;
-        }
-
-        input, select {
-            width: 100%;
-        }
-    }
 }
 
 .relations-add {
