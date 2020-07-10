@@ -27,12 +27,12 @@
                         inline-template
                         relation-name={{ relationName }}
                         :related-objects="objects"
-
                         @remove-relations="setRemovedRelated">
 
                         <div class="roles-list-view">
                             <div v-for="res in objects">
-                                <input type="checkbox" :value="res" v-model="checkedRelations"/><span class="name"><: res.attributes.name :></span>
+                                <input type="checkbox" :value="res" v-model="checkedRelations"/>
+                                <span class="mx-05"><: res.attributes.name :></span>
                             </div>
 
                             <div class="save-relations">
@@ -44,7 +44,6 @@
                                 })|raw }}
                                 {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
                             </div>
-
                         </div>
 
                     </roles-list-view>

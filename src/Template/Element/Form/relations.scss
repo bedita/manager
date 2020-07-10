@@ -24,7 +24,6 @@ nav.pagination {
 
 
 .related-list-container {
-
     .columns {
         .column:empty { padding: 0; }
         &.isLoading {
@@ -45,16 +44,6 @@ nav.pagination {
         background-color: $gray-800;
         border-radius: $gutter * .5;
         border: 1px solid $gray-700;
-        .column:not(:last-child) {
-            flex-shrink: 0;
-            flex-basis: 12 * $gutter;
-        }
-    }
-}
-
-.roles-list-view {
-    span.name {
-        margin-left: $gutter / 2;
     }
 }
 
