@@ -39,8 +39,16 @@
                 sortable
                 :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
 
-                {# related object #}
-                {% element 'Form/related_item' %}
+                {# related objects #}
+                <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                    v-for="(related, index) in objects"
+                    :key="related.id"
+                    :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                    draggable
+                    :drag-data="JSON.stringify(related)">
+
+                    {% element 'Form/related_item' %}
+                </div>
 
                 {# empty element: keep for flex layout #}
                 <div class="column"></div>
@@ -48,38 +56,18 @@
 
 
             {# staged objects to be added #}
-            <p class="column is-1 has-text-size-smallest" v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
-            <div class="related-objects-list staged-objects columns" v-if="addedRelations.length">
+            <p class="column is-1 has-text-size-smallest mb-05 mt-05 " v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
+            <div class="related-new-objects-list mb-2 columns" v-if="addedRelations.length">
                 <div class="related-object column"
                     v-for="related in addedRelations"
                     :key="related.id"
                     :class="containsId(removedRelated, related.id) ? 'removed' : '' ">
-                    <article class="box has-background-gray-700 has-text-gray-100 has-text-size-smaller"
-                            v-bind:class="related.type">
 
-                        <header>
-                            <h1><: related.attributes.title || related.attributes.name :></h1>
-                            <span class="has-text-size-smaller prop-id"><: related.id :></span>
-                        </header>
-
-                        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
-                            <figure>
-                                <img :src="related.meta.thumb_url" />
-                            </figure>
-                        </div>
-
-                        <div>
-                            <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
-                            <span class="tag" v-if="related.attributes.status"><: related.attributes.status :></span>
-                        </div>
-
-                        <footer>
-                            <a @click.prevent="removeAddedRelations(related.id)">{{ __('click to remove') }}</a>
-                        </footer>
-                    </article>
+                    {% element 'Form/related_item' { 'stage': true } %}
                 </div>
 
                 {# empty element: keep for flex layout #}
+                {# TODO: grid #}
                 <div class="column"></div>
                 <div class="column"></div>
                 <div class="column"></div>

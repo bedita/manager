@@ -34,35 +34,20 @@ nav.pagination {
     }
 
     .related-objects-list {
-
-
-        // add relations?
-        & ~ .related-objects-list {
-            padding: $gutter * .5;
-            background-color: $gray-800;
-            margin: 0 0 $gutter * 2;
-            border-radius: $gutter * .5;
-            border: 1px solid $gray-700;
-            .column:not(:last-child) {
-                flex-shrink: 0;
-                flex-basis: 12 * $gutter;
-                article { position: relative; padding-bottom: $gutter * 1.5; }
-                footer {
-                    @extend .full-size-absolute;
-                    a {
-                        @extend .full-size-absolute;
-                        display: flex;
-                        justify-content: center;
-                        align-items: flex-end;
-                        padding-bottom: $gutter * .25;
-                    }
-                }
-            }
-        }
-
         main.panel-is-open .module-form & {
             cursor: auto;
             pointer-events: none;
+        }
+    }
+
+    .related-new-objects-list { // add relations container
+        padding: $gutter * .5;
+        background-color: $gray-800;
+        border-radius: $gutter * .5;
+        border: 1px solid $gray-700;
+        .column:not(:last-child) {
+            flex-shrink: 0;
+            flex-basis: 12 * $gutter;
         }
     }
 }
