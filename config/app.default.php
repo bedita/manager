@@ -415,8 +415,8 @@ return [
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
      *          (default is '-id'),
-     *  'class' - additional class to use in module box; could be `icon-article`,
-     *          have a look in `webroot/css/be-icons-codes.css` for a complete list
+     *  'icon' - icon code, f.i. `icon-article`, have a look in
+     *      `webroot/css/be-icons-codes.css` for a complete list of codes
      */
     'Modules' => [
         'objects' => [
@@ -432,22 +432,22 @@ return [
         'documents' => [
             'shortLabel' => 'docs',
             'color' => '#cc4700',
-            // 'class' => 'icon-article',
+            // 'icon' => 'icon-article',
         ],
         'events' => [
             'shortLabel' => 'evt',
             'color' => '#09c',
-            // 'class' => 'icon-music',
+            // 'icon' => 'icon-music',
         ],
         'news' => [
             // 'shortLabel' => 'new',
             'color' => '#036',
             // 'sort' => 'title',
-            // 'class' => 'icon-newspaper',
+            // 'icon' => 'icon-newspaper',
         ],
         'locations' => [
             'color' => '#641',
-            'class' => 'icon-map-pin',
+            'icon' => 'icon-map-pin',
         ],
         'media' => [
             'shortLabel' => 'med',
@@ -457,19 +457,19 @@ return [
         'images' => [
             'shortLabel' => 'img',
             'color' => '#d5002b',
-            // 'class' => 'icon-picture',
+            // 'icon' => 'icon-picture',
         ],
         'videos' => [
             'color' => '#d5002b',
-            // 'class' => 'icon-video',
+            // 'icon' => 'icon-video',
         ],
         'audio' => [
             'color' => '#d5002b',
-            // 'class' => 'icon-music',
+            // 'icon' => 'icon-music',
         ],
         'files' => [
             'color' => '#d5002b',
-            // 'class' => 'icon-article',
+            // 'icon' => 'icon-article',
         ],
         'users' => [
             'shortLabel' => 'usr',
@@ -479,7 +479,7 @@ return [
             // 'shortLabel' => 'pro',
             'color' => '#093',
             // 'sort' => 'title',
-            // 'class' => 'address-book',
+            // 'icon' => 'address-book',
         ],
     ],
 

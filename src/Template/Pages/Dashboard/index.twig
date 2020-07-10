@@ -7,7 +7,7 @@
             <div class="dashboard-items">
             {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders', 'publications']) %}
                 {% set title = __(module.label|default(name)|humanize) %}
-                {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class)|trim %}
+                {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
                 {% if module.hints.multiple_types %}
                     {% set class = class ~ ' icon-th-large-1' %}
                 {% endif %}
