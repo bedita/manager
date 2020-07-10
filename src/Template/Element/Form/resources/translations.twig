@@ -38,7 +38,7 @@
                                 {# related objects #}
                                 <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
 
-                                    <div class="related-object new-button column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768">
+                                    <div class="related-object new-button column is-one-eight-fullhd is-one-fifth-desktop is-one-quarter-1024 is-one-third-mobile">
                                         <article class="box has-background-black has-text-gray-100 has-text-size-smaller">
                                             {{ Html.link('+', {
                                                 '_name': 'translations:add',
@@ -50,7 +50,7 @@
                                         </article>
                                     </div>
 
-                                    <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                                    <div class="related-object column is-one-eight-fullhd is-one-fifth-desktop is-one-quarter-1024 is-one-third-mobile"
                                         v-for="(related, index) in objects"
                                         :key="related.id"
                                         :class="containsId(removedRelated, related.id)? 'removed' : ''">

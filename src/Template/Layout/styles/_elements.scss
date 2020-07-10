@@ -97,16 +97,13 @@
 
 // flex columns
 .columns {
-    display: flex;
+    display: block;
     flex-wrap: wrap;
     margin-left: -($gutter * .5);
     margin-right: -($gutter * .5);
     margin-top: -($gutter * .5);
-    &-responsive-tablet {
-        display: block;
-        @media screen and (min-width: $tablet) {
-            display: flex;
-        }
+    @media screen and (min-width: 420px) {
+        display: flex;
     }
 }
 
@@ -118,19 +115,19 @@
     padding: ($gutter * .5);
     &.is-1 {
         flex: none;
-        width: 100%;
+        flex-basis: 100%;
     }
     &.is-2 {
         flex: none;
-        width: 50%;
+        flex-basis: 50%;
     }
     &.is-3 {
         flex: none;
-        width: 33.33333%;
+        flex-basis: 33.33333%;
     }
     &.is-4 {
         flex: none;
-        width: 25%;
+        flex-basis: 25%;
     }
     &.is-narrow {
         flex: none;
@@ -140,53 +137,103 @@
     &.is-one-third-1024 {
         @media screen and (min-width: 769px) {
             flex: none;
-            width: 33.33333%;
+            flex-basis: 33.33333%;
         }
     }
     &.is-one-quarter-1024 {
         @media screen and (min-width: 769px) {
             flex: none;
-            width: 25%;
+            flex-basis: 25%;
         }
     }
 
     &.is-one-third-desktop {
         @media screen and (min-width: 1088px) {
             flex: none;
-            width: 33.33333%;
+            flex-basis: 33.33333%;
         }
     }
     &.is-one-quarter-desktop {
         @media screen and (min-width: 1088px) {
             flex: none;
-            width: 25%;
+            flex-basis: 25%;
         }
     }
     &.is-one-fifth-desktop {
         @media screen and (min-width: 1088px) {
             flex: none;
-            width: 20%;
+            flex-basis: 20%;
         }
     }
 
-    &.is-one-eight-bigscreen {
-        @media screen and (min-width: 1580px) {
+    &.is-one-quarter-widescreen {
+        @media screen and (min-width: 1440px) {
             flex: none;
-            width: 12.5%;
+            flex-basis: 25%;
+        }
+    }
+    &.is-one-fifth-widescreen {
+        @media screen and (min-width: 1440px) {
+            flex: none;
+            flex-basis: 20%;
+        }
+    }
+    &.is-one-sixth-widescreen {
+        @media screen and (min-width: 1440px) {
+            flex: none;
+            flex-basis: 16.6666%;
+        }
+    }
+    &.is-one-eight-widescreen {
+        @media screen and (min-width: 1440px) {
+            flex: none;
+            flex-basis: 12.5%;
+        }
+    }
+
+    &.is-one-quarter-fullhd {
+        @media screen and (min-width: 1600px) {
+            flex: none;
+            flex-basis: 25%;
+        }
+    }
+    &.is-one-sixth-fullhd {
+        @media screen and (min-width: 1600px) {
+            flex: none;
+            flex-basis: 16.6666%;
+        }
+    }
+    &.is-one-eight-fullhd {
+        @media screen and (min-width: 1600px) {
+            flex: none;
+            flex-basis: 12.5%;
+        }
+    }
+
+    &.is-one-eight-ultra {
+        @media screen and (min-width: 2080px) {
+            flex: none;
+            flex-basis: 12.5%;
         }
     }
 
 
-    &.is-one-third-768 {
+    &.is-one-half-mobile {
         @media screen and (max-width: 768px) {
             flex: none;
-            width: 33.33333%;
+            flex-basis: 50%;
         }
     }
-    &.is-one-quarter-768 {
+    &.is-one-third-mobile {
         @media screen and (max-width: 768px) {
             flex: none;
-            width: 25%;
+            flex-basis: 33.33333%;
+        }
+    }
+    &.is-one-quarter-mobile {
+        @media screen and (max-width: 768px) {
+            flex: none;
+            flex-basis: 25%;
         }
     }
 }

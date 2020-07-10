@@ -40,7 +40,7 @@
                 :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
 
                 {# related objects #}
-                <div class="related-object column is-one-eight-bigscreen is-one-fifth-desktop is-one-quarter-1024 is-one-third-768"
+                <div class="related-object column is-3 is-one-half-mobile is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd is-one-eight-ultra"
                     v-for="(related, index) in objects"
                     :key="related.id"
                     :class="containsId(removedRelated, related.id)? 'removed' : ''"
