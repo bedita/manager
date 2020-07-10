@@ -30,6 +30,7 @@
 
 .is-upppercase { text-transform: uppercase; }
 .is-lowercase  { text-transform: lowercase; }
+.is-capitalized  { text-transform: capitalize; }
 
 
 // colors
@@ -97,9 +98,9 @@
 .mb-1     { margin-bottom: $gutter; }
 .mb-2     { margin-bottom: $gutter * 2; }
 
-.pb-025   { padding: $gutter * .25; }
-.pb-05    { padding: $gutter * .5; }
-.pb-1     { padding: $gutter; }
+.p-025   { padding: $gutter * .25; }
+.p-05    { padding: $gutter * .5; }
+.p-1     { padding: $gutter; }
 
 
 // screen readers only

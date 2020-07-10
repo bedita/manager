@@ -18,27 +18,28 @@
             </figure>
         </div>
 
-        <div class="box-body pb-05">
+        <div class="box-body p-05">
             <div class="is-flex space-between align-center">
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
                 <span class="is-upppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
             </div>
 
-            <header class="is-flex space-between mt-05 mb-05">
+            <header class="is-flex space-between mt-05">
                 <h1 class="m-0 has-text-size-smallest"><: related.attributes.title || related.attributes.name :></h1>
                 <span class="has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
             </header>
         </div>
 
-        <div class="pb-05">
-            <div v-if="relationHasParams()">
-                <ul class="params-list">
-                    <li v-for="(param, key) in relationSchema">
-                        <span><: key :></span>&nbsp;
-                            <span v-if="getParamHelper(related, key)" class="tag param-value"><: formatParam(key, getParamHelper(related, key)) :></span>
-                    </li>
-                </ul>
-            </div>
+        <div class="p-05 has-text-size-smaller" v-if="relationSchema">
+            <dl v-if="relationHasParams()" class="mb-05">
+                <template v-for="(param, key) in relationSchema">
+                    <dt class="is-capitalized"><: key :></dt>
+                    <dd>
+                        <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
+                        <span v-else>-</span>
+                    </dd>
+                </template>
+            </dl>
 
             <button v-if="isPanelOpen(related.id)" class="is-small icon-coffee"
                     @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
@@ -50,10 +51,10 @@
                     related: related,
                     relationName: relationName,
                     schema: relationSchema,
-                })">{{ __('Params') }}</button>
+                })">{{ __('Edit params') }}</button>
         </div>
 
-        <footer class="is-flex space-between mt-1 pb-05">
+        <footer class="is-flex space-between mt-05 p-05">
             <a class="button button-outlined-white is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
 
             <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view file') }}</a>
