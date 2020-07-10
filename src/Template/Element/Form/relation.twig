@@ -1,12 +1,9 @@
 <relation-view inline-template
     relation-name={{ relationName }}
     :relation-data='{{ relationSchema|json_encode|raw }}'
-
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
-
-    @loading="onToggleLoading"
-    @count="onCount">
+    @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view">
         <div class="related-list-container">
@@ -19,9 +16,7 @@
                     :show-filter-buttons="false"
                     :relation-types="relationTypes"
                     :init-filter="activeFilter"
-
                     objects-label="{{ __('objects') }}"
-
                     @filter-update-current-page="onUpdateCurrentPage"
                     @filter-update-page-size="onUpdatePageSize"
                     @filter-objects="onFilterObjects"

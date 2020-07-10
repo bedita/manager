@@ -1,9 +1,10 @@
 {#
     Several switches on kind of relation view:
-    • common (relation.twig)
-    • stage (relation.twig)
-    • add (relations_add.twig)
+    • common      (relation.twig)
+    • stage       (relation.twig)
+    • add         (relations_add.twig)
     • translation (translations.twig)
+    • children    (translations.twig)
 #}
 
 <article class="box"
@@ -17,10 +18,14 @@
     {%- endif -%} >
 
 
-    {# PRIORITY #}
-    {% if common %}
+    {# PRIORITY (or position) #}
+    {% if common or children %}
         <div class="priority">
-            <span class="badge"><: related.meta.relation.priority :></span>
+            {% if children %}
+                <span class="badge" v-html="index + 1"><: related.meta.relation.priority :></span>
+            {% else %}
+                <span class="badge"><: related.meta.relation.priority :></span>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -58,6 +63,7 @@
                     <: related.attributes.title || related.attributes.name || '-' :>
                 {% endif %}
             </h1>
+
             {% if not translation %}
                 <span class="has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
             {% endif %}
@@ -90,6 +96,20 @@
                 schema: relationSchema,
             })">{{ __('Edit params') }}</button>
     </div>
+    {% endif %}
+
+
+    {# CHILDREN position #}
+    {% if children %}
+        <div class="container-grid p-05">
+            <dl>
+                <dt>{{ __('Move to position') }}:</dt>
+                <dd>
+                    <input class="input-narrow" type="number" min="1" step="1"
+                        v-model="positions[related.id]" @change="onInputPosition(related)" @keyup="onInputPosition(related)"/>
+                </dd>
+            </dl>
+        </div>
     {% endif %}
 
 
