@@ -96,7 +96,7 @@
                     {{ __('Add') }}
                     <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
                     {{ __('objects to') }} <: relationName | humanize :>
-                </button>
+            </button>
 
             <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('Close') }}</button>
         </footer>

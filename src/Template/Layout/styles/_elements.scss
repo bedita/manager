@@ -65,11 +65,12 @@
     align-items: center;
     line-height: 0;
     background-color: $white;
-    border: 2px solid $gray-900;
+    border: 1px solid $gray-600;
     border-radius: 50%;
     padding: $gutter * .75;
     font-size: $font-size-sssm;
     font-weight: $font-weight-bold;
+    box-shadow: 0 0 2px #000;
     &:after {
         content: '';
         display: block;
