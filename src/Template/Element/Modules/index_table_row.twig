@@ -3,7 +3,7 @@
     {% set routeName = 'trash:view' %}
 {% endif %}
 
-{% set buttonClasses = 'button button-text is-width-auto' %}
+{% set buttonClasses = 'button button-text-white is-width-auto' %}
 
 <a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"
     class="table-row object-status-{{ object.attributes.status }}">

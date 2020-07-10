@@ -1036,3 +1036,11 @@
 .icon-linkedin-squared:before { content: '\f30c'; } /* '' */
 .icon-twitter-rect:before { content: '\f314'; } /* '' */
 .icon-youtube-1:before { content: '\f315'; } /* '' */
+
+/* common modules icons */
+.icon-documents:before { content: '\f0f6'; } /* '' */
+.icon-users:before { content: '\f2c0'; } /* '' */
+.icon-profiles:before { content: '\f2bc'; } /* '' */
+.icon-files:before { content: '\e85e'; } /* '' */
+.icon-events:before { content: '\f274'; } /* '' */
+.icon-news:before { content: '\e859'; } /* '' */

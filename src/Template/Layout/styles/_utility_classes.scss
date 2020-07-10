@@ -134,6 +134,12 @@
     }
 }
 
+.icon-opaque {
+    &:before {
+        opacity: 1 !important;
+    }
+}
+
 
 // flex
 .is-flex {

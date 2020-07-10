@@ -11,9 +11,10 @@
             <span class="badge"><: related.meta.relation.priority :></span>
         </div>
 
-        <div class="thumbnail" v-if="related.meta && related.meta.thumb_url" >
-            <figure>
-                <img :src="related.meta.thumb_url" />
+        <div class="thumbnail" v-bind:class="'has-text-module-' + related.type">
+            <figure class="center-icon icon-opaque"
+                :class="(related.meta && related.meta.thumb_url)? '' : `icon-${related.type}`">
+                <img :src="related.meta.thumb_url" v-if="related.meta && related.meta.thumb_url" />
             </figure>
         </div>
 
@@ -29,7 +30,7 @@
             </header>
         </div>
 
-        <div>
+        <div class="pb-05">
             <div v-if="relationHasParams()">
                 <ul class="params-list">
                     <li v-for="(param, key) in relationSchema">
@@ -53,12 +54,11 @@
         </div>
 
         <footer class="is-flex space-between mt-1 pb-05">
-            <a class="button is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+            <a class="button button-outlined-white is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
 
             <a v-if="related.meta.url" class="button is-small icon-forward" :href="related.meta.url" target="_blank">{{ __('view file') }}</a>
-            {# <button v-if="related.meta.url" class="is-small icon-download" @click.prevent.stop="$helpers.downloadResource(related.meta.url)">{{ __('download') }}</button> #}
 
-            <a class="button is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
+            <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
             </a>
         </footer>
