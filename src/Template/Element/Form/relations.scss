@@ -32,14 +32,7 @@ nav.pagination {
         }
     }
 
-    .related-objects-list {
-        main.panel-is-open .module-form & {
-            cursor: auto;
-            pointer-events: none;
-        }
-    }
-
-    .related-new-objects-list { // add relations container
+    .related-new-objects-list { // staged relations container
         padding: $gutter * .5;
         background-color: $gray-800;
         border-radius: $gutter * .5;
@@ -124,14 +117,8 @@ nav.pagination {
     > * {
         display: flex;
         flex-direction: column;
-        margin-top: $gutter;
-        flex: none;
-        > * {
-            margin-left: $gutter;
-            margin-right: $gutter;
-            flex: none;
-        }
     }
+
     .shrinks {
         flex-shrink: 1 !important;
         overflow-y: auto;
@@ -207,21 +194,9 @@ nav.pagination {
         cursor: pointer;
 
         &.selected {
-            &:after {
-                @extend .full-size-absolute;
-                content: "✓";
-                z-index: 10;
-                padding: 1rem;
-                display: flex;
-                justify-content: flex-start;
-                align-items: flex-end;
-                background-color: rgba(14, 120, 190, 0.5);
-                color: white;
-                text-transform: uppercase;
-                font-size: 3rem;
-                font-weight: bold;
-                line-height: 1;
-            }
+            background-color: $info;
+            color: $white;
+            .thumbnail { background-color: $info; }
         }
     }
 }

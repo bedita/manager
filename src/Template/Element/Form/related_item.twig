@@ -9,7 +9,7 @@
 
 <article class="box"
     {%- if add %}
-        :class="elementClasses(related)"
+        :class="selectClasses(related)"
         @click="toggle(related, $event)"
         draggable
         :drag-data="JSON.stringify(related)"
@@ -119,7 +119,9 @@
             <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
 
         {% elseif add %}
-            <a class="button button-outlined-white is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
+            <button class="button-outlined-white button-text is-small has-font-weight-bold "
+                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check has-text-white' : 'icon-check-empty'">{{ __('Select') }}</button>
+            <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
 
         {% elseif translation %}
             {% set baseUrl= Url.build({ '_name': 'translations:edit', 'object_type': object.type, 'id': object.id, 'lang': ''}, true) %}

@@ -86,6 +86,8 @@
 
 // spacing
 .m-0      { margin: 0 !important; }
+.m-1      { margin: $gutter !important; }
+.mx-025   { margin-left: $gutter * .25; margin-right: $gutter * .25; }
 .mx-05    { margin-left: $gutter * .5; margin-right: $gutter * .5; }
 .mx-1     { margin-left: $gutter;      margin-right: $gutter; }
 .mx-2     { margin-left: $gutter * 2;  margin-right: $gutter * 2; }
@@ -98,9 +100,12 @@
 .mb-1     { margin-bottom: $gutter; }
 .mb-2     { margin-bottom: $gutter * 2; }
 
-.p-025   { padding: $gutter * .25; }
-.p-05    { padding: $gutter * .5; }
-.p-1     { padding: $gutter; }
+.p-025    { padding: $gutter * .25; }
+.p-05     { padding: $gutter * .5; }
+.p-1      { padding: $gutter; }
+.px-05    { padding-left: $gutter * .5; padding-right: $gutter * .5; }
+.px-1     { padding-left: $gutter;      padding-right: $gutter; }
+.px-2     { padding-left: $gutter * 2;  padding-right: $gutter * 2; }
 
 
 // screen readers only
@@ -169,4 +174,3 @@
 .order-7          { order: 7 !important; }
 .order-8          { order: 8 !important; }
 .order-bottom     { order: 100 !important; }
-

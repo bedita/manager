@@ -73,7 +73,6 @@ main.layout {
         box-shadow: 0 0 0 black;
         transform: translateX(101%);
         transition: .3s transform;
-        overflow: hidden;
         will-change: transform;
 
         .main-panel-body {
@@ -87,8 +86,6 @@ main.layout {
 
         footer {
             display: flex;
-            flex-shrink: 0;
-            justify-content: space-between;
         }
 
         &.on {
