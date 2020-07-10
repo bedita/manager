@@ -48,7 +48,7 @@
                     draggable
                     :drag-data="JSON.stringify(related)">
 
-                    {% element 'Form/related_item' %}
+                    {% element 'Form/related_item' { 'common': true } %}
                 </div>
 
                 {# empty element: keep for flex layout #}
@@ -89,6 +89,7 @@
         <div class="mt-1">
             <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+
             <button v-else
                 class="icon-hdd"
                 :disabled="isPanelOpen()"

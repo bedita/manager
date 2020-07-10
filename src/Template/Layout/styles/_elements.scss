@@ -166,6 +166,12 @@
         }
     }
 
+    &.is-one-third-widescreen {
+        @media screen and (min-width: 1440px) {
+            flex: none;
+            flex-basis: 33.33333%;
+        }
+    }
     &.is-one-quarter-widescreen {
         @media screen and (min-width: 1440px) {
             flex: none;
@@ -191,6 +197,12 @@
         }
     }
 
+    &.is-one-third-fullhd {
+        @media screen and (min-width: 1600px) {
+            flex: none;
+            flex-basis: 33.33333%;
+        }
+    }
     &.is-one-quarter-fullhd {
         @media screen and (min-width: 1600px) {
             flex: none;
