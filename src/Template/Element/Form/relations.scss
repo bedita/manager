@@ -141,7 +141,7 @@
         &.selected {
             background-color: $info;
             color: $white;
-            .thumbnail { background-color: $info; }
+            .thumbnail { background-color: $info; opacity: .8; }
         }
     }
 }

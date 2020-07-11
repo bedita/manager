@@ -45,7 +45,7 @@
     <div class="box-body p-05">
         <div class="is-flex space-between align-center">
             {% if translation %}
-                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.attributes.lang :></span>
+                <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
             {% endif %}
