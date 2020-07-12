@@ -5,7 +5,8 @@
 
     {% if object.id %}
     <header>
-        <h1 untitled-label="{{ __('Untitled') }}">{{ translation.attributes.translated_fields.title }} <span>[{{ __('translation of') }}]</span> {{ object.attributes.title }}</h1>
+        <h1 untitled-label="{{ __('Untitled') }}">{{ translation.attributes.translated_fields.title }}</h1>
+        <h2><span class="has-text-size-small has-text-gray-400 has-font-style-italic">{{ __('translation of') }}</span> {{ object.attributes.title }}</h2>
     </header>
     {% endif %}
 

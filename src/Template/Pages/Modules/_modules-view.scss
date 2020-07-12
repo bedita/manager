@@ -1,20 +1,8 @@
 body.view-module, body.translation-module {
 
     .modules-view {
-        overflow-x: hidden;
-
         >header {
-            display: inline-flex;
             min-height: 3 * $gutter;
-
-            a {
-                margin-left: $gutter;
-            }
-
-            button {
-                margin-left: $gutter * .5;
-            }
-
             h1:empty {
                 &:before {
                     content: attr(untitled-label);
@@ -25,65 +13,36 @@ body.view-module, body.translation-module {
         }
     }
 
-    // view
+    // viewù
     .module-form {
-        margin-top: $gutter;
-
         form {
-            // layout
-            display: flex;
-            flex-wrap: wrap;
+            @media screen and (min-width: 768px) {
+                display: grid;
+                grid-gap: 0 $gutter;
+                grid-template-areas: "header-view header-view"
+                                     "main-view side-view"
+                                     "submain-view side-view"
+                                     "full-view full-view";
+                grid-template-columns: 6fr 4fr;
+                .form-header { grid-area: header-view; }
+                .form-column:first-of-type { grid-area: main-view; }
+                .form-column:last-of-type { grid-area: side-view; }
+                section.relations { margin-top: 1.5rem; grid-area: full-view; }
+            }
 
-            .form-column {
-                display: contents;
-                width: 100%;
-
-                // REMOVE
-                pre {
-                    max-width: 400px;
-                    overflow: auto;
-                    background-color: $gray-800;
-                    padding: .5rem;
-                }
-
-                @media screen and (min-width: 780px) {
-                    display: block;
-                    &:first-of-type { width: 67%; padding-right: $gutter; }
-                    &:last-of-type { width: 33%; }
-                }
-                @media screen and (min-width: 1024px) {
-                    &:first-of-type { width: 55%; padding-right: 2 * $gutter; }
-                    &:last-of-type { width: 45%; }
-                }
+            @media screen and (min-width: 960px) {
+                grid-gap: 0 $gutter * 1.5;
+                grid-template-columns: 2fr 1fr;
+                section.relations { grid-area: submain-view; }
             }
 
             section.fieldset {
-                width: 100%;
-                order: 0;
-            }
-
-            section.resources {
-                width: 100%;
-            }
-
-            // section content
-            section.fieldset, section.resources {
                 .tab-container {
-                    margin-bottom: $gutter * 1.5;
-                }
-
-                > div,
-                .tab-container >div {
-                    margin: $gutter 0;
-                    &:first-child {
-                        margin-top: 0;
-                    }
-                }
-
-                &.closed {
-                    .tab {
-                        color: $gray-600;
-                        background: linear-gradient(to right, $gray-800, $gray-900);
+                    padding: $gutter 0;
+                    > div {
+                        &:not(:first-child) {
+                            margin: $gutter 0;
+                        }
                     }
                 }
 
@@ -156,65 +115,55 @@ body.view-module, body.translation-module {
                 }
             }
         }
-
-        section.relations {
-            width: 100%;
-            margin-top: $gutter * 4;
-        }
     }
 }
 
 body.translation-module {
-    header {
-        h1 {
-            span {
-                color: $gray-550;
-                font-size: $font-size-sssm;
-            }
-        }
-    }
-
     .form-column.original {
         opacity: .8;
     }
 
-    .form-header {
-        width: 100%;
-        margin-bottom: $gutter * 2;
-        border-bottom: 1px solid $gray-500;
-        padding-bottom: $gutter;
-    }
-
     // TODO: refactor this css
-    .module-form form .form-column:first-of-type { width: 50% !important; }
-    .module-form form .form-column:last-of-type { width: 50% !important }
+    .module-form form { grid-template-columns: 50% 50% !important; }
 }
 
-
-.fieldset .tab {
-    display: flex;
-    align-items: center;
-    margin-bottom: $gutter;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    min-height: 32px;
-    background-color: $gray-800;
-    color: $gray-500;
-    border-radius: 3px;
-    cursor: pointer;
-
-    &.is-loading-spinner {
-        button {
-            display: none;
-        }
+.fieldset {
+    ~ .fieldset {
+        margin-top: $gutter * 1.5;
     }
+    .tab {
+        display: flex;
+        align-items: center;
+        padding-bottom: $gutter * .5;
+        padding-right: $gutter * .5;
+        border-bottom: 1px solid $gray-700;
+        cursor: pointer;
 
-    h2 {
-        flex-grow: 1;
-        margin: 0; padding: 0;
-        font-size: 1.25rem;
-        &:first-letter {
-            text-transform: capitalize;
+        &.is-loading-spinner {
+            button {
+                display: none;
+            }
+        }
+
+        h2 {
+            flex-grow: 1;
+            margin: 0; padding: 0;
+            font-size: $font-size-sm;
+            padding-right: $gutter;
+            &:first-letter {
+                text-transform: capitalize;
+            }
+        }
+
+        &:before {
+            content: '+';
+            margin-right: .375rem;
+            font-size: $font-size-llg;
+        }
+        &.open {
+            &:before {
+                content: '–';
+            }
         }
     }
 }

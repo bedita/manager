@@ -112,23 +112,3 @@ body {
         }
     }
 }
-
-.fieldset .tab {
-    display: flex;
-    align-items: center;
-    margin-bottom: $gutter;
-    padding: .25rem .5rem;
-    background-color: $gray-800;
-    color: $gray-500;
-    border-radius: 3px;
-    cursor: pointer;
-
-    h2 {
-        flex-grow: 1;
-        margin: 0; padding: 0;
-        font-size: 1.25rem;
-        &:first-letter {
-            text-transform: capitalize;
-        }
-    }
-}

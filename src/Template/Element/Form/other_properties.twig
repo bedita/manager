@@ -6,9 +6,11 @@
 
 <property-view inline-template :tab-open="tabsOpen">
 
-    <section class="fieldset order-{{ cssOrder }}" id="{{ group|underscore }}_properties" :class="isOpen? '' : 'closed'">
+    <section class="fieldset order-{{ cssOrder }}" id="{{ group|underscore }}_properties">
 
-        <header @click.prevent="toggleVisibility()" class="tab unselectable">
+        <header @click.prevent="toggleVisibility()"
+             class="tab unselectable"
+             :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
             <h2>{{ __(group|humanize) }}</h2>
         </header>
 

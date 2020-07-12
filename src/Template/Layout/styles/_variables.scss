@@ -122,16 +122,15 @@ $button-inputs-hover: 'input[type="submit"]:hover',
 ** TODO: MEDIA BREAKPOINTS
 */
 
-// $phone: 768px;
-// $phablet: 768px;
-$tablet: 768px;
-// $desktop: ;
-// $widescreen: ;
+// $phablet:    568px;
+// $tablet:     768px;
+// $desktop:    960px;
+// $widescreen: 1366px;
+// $fullhd:     1600px;
 
-// $max-1024w:      "(max-width: 1024px)";
-// $max-768w:       "(max-width: 770px)";
-// $tablet:         "(min-width: 768px) and (max-width: 1023px)";
-// $desktop:        "(min-width: 1024px)";
-// @media screen and (max-width: 780px) {
-// }
+// $min-phablet:    "screen and (min-width: 568px)";
+// $min-tablet:     "screen and (min-width: 768px)";
+// $min-desktop:    "screen and (min-width: 960px)";
+// $min-widescreen: "screen and (min-width: 1366px)";
+// $min-fullhd:     "screen and (min-width: 1600px)";
 

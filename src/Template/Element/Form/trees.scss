@@ -4,7 +4,6 @@
     line-height: 1;
 
     > .tree-list-node {
-        padding: $gutter 0;
         border-bottom: solid 1px currentColor;
 
         &[data-status='draft'],
