@@ -5,7 +5,7 @@
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
             :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __('Metadata') }}</h2>
+            <h2>{{ __('Advanced') }}</h2>
         </header>
 
         <div v-show="isOpen" class="tab-container">
