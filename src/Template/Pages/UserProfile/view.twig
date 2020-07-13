@@ -1,6 +1,7 @@
+{% do _view.assign('bodyViewClass', 'userprofiles-view') %}
 {% do _view.assign('title', 'User Profile') %}
 
-<div class="userprofiles-view">
+<div class="modules-view">
 
     {% if object.attributes.username %}
     <header>
@@ -8,14 +9,14 @@
     </header>
     {% endif %}
 
-    <div class="profile-form">
+    <div class="module-form">
 
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
             'url': {'_name': 'user_profile:save', 'object_type': 'users'},
             'id': 'form-main',
         })|raw }}
 
-            <div class="form-column">
+            <div class="main-view-column">
                 <section class="fieldset order-0">
                     <div class="tab-container">
                         {{ Form.hidden('id', {'value': object.id})|raw }}

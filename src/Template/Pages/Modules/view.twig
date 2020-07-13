@@ -29,7 +29,7 @@
             {# Init `_jsonKeys` data #}
             {{ write_config('_jsonKeys', []) }}
 
-            <div class="form-column is-flex is-flex-column">
+            <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
                 {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
                     {% element 'Form/upload' %}
@@ -51,7 +51,7 @@
                 {% element 'Form/other_properties' %}
             </div>
 
-            <div class="form-column is-flex is-flex-column">
+            <div class="side-view-column is-flex is-flex-column">
                 {% element 'Form/publish_properties' %}
 
                 {% element 'Form/resource_relations' %}

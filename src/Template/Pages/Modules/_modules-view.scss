@@ -1,4 +1,4 @@
-body.view-module, body.translation-module {
+body.view-module, body.translation-module, body.userprofiles-view {
 
     .modules-view {
         >header {
@@ -25,8 +25,8 @@ body.view-module, body.translation-module {
                                      "full-view full-view";
                 grid-template-columns: 6fr 4fr;
                 .form-header { grid-area: header-view; }
-                .form-column:first-of-type { grid-area: main-view; }
-                .form-column:last-of-type { grid-area: side-view; }
+                .main-view-column { grid-area: main-view; }
+                .side-view-column { grid-area: side-view; }
                 section.relations { margin-top: 1.5rem; grid-area: full-view; }
             }
 
@@ -119,7 +119,7 @@ body.view-module, body.translation-module {
 }
 
 body.translation-module {
-    .form-column.original {
+    .original {
         opacity: .8;
     }
 
