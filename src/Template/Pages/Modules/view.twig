@@ -42,12 +42,12 @@
 
                 {% element 'Form/core_properties' %}
 
+                {% element 'Form/custom_left' %}
+
                 {# calendar using `date_ranges` #}
                 {% element 'Form/calendar' %}
 
                 {% element 'Form/categories' %}
-
-                {% element 'Form/custom_left' %}
 
                 {% element 'Form/media' %}
 
@@ -61,7 +61,7 @@
 
                 {% element 'Form/meta' %}
 
-                {% element 'Form/translations' {'resourceName': 'translations'} %}
+                {% element 'Form/custom_right' %}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
                 {% if object.relationships.roles %}
@@ -72,9 +72,9 @@
                     {% element 'Form/trees' %}
                 {% endif %}
 
-                {% element 'Form/advanced_properties' %}
+                {% element 'Form/translations' {'resourceName': 'translations'} %}
 
-                {% element 'Form/custom_right' %}
+                {% element 'Form/advanced_properties' %}
 
                 {% element 'Form/resource_relations' %}
             </div>
