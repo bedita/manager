@@ -430,6 +430,9 @@ class Form
         return [
             'class' => 'title',
             'type' => 'text',
+            'templates' => [
+                'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+            ],
         ];
     }
 

@@ -13,46 +13,16 @@ body.view-module, body.translation-module, body.userprofiles-view {
         }
     }
 
-    // viewù
+    // view
     .module-form {
         form {
-            @media screen and (min-width: 768px) {
-                display: grid;
-                grid-gap: 0 $gutter;
-                grid-template-areas: "header-view header-view"
-                                     "main-view side-view"
-                                     "submain-view side-view"
-                                     "full-view full-view";
-                grid-template-columns: 6fr 4fr;
-                .form-header { grid-area: header-view; }
-                .main-view-column { grid-area: main-view; }
-                .side-view-column { grid-area: side-view; }
-                section.relations { margin-top: 1.5rem; grid-area: full-view; }
-            }
-
-            @media screen and (min-width: 960px) {
-                grid-gap: 0 $gutter * 1.5;
-                grid-template-columns: 2fr 1fr;
-                section.relations { grid-area: submain-view; }
-            }
-
-            section.fieldset {
-                .tab-container {
-                    padding: $gutter 0;
-                    > div {
-                        &:not(:first-child) {
-                            margin: $gutter 0;
-                        }
-                    }
-                }
-
+            section.fieldset .tab-container {
                 .create-media-box {
                     padding: $gutter * .5 $gutter $gutter * 1.25;
                     margin-bottom: $gutter * 1.5;
                     background-color: $gray-800;
                     border-radius: 4px;
                 }
-
 
                 #{$text-inputs}, textarea {
                     width: 100%;
@@ -61,11 +31,16 @@ body.view-module, body.translation-module, body.userprofiles-view {
 
                 #{$text-inputs} {
                     &.input-narrow {
-                        max-width: 4rem;
+                        max-width: 4 * $gutter;
                     }
                 }
 
+                select {
+                    min-width: 12 * $gutter;
+                }
+
                 label {
+                    display: block;
                     flex: 1 0 100%;
                     margin-right: $gutter;
                     line-height: $gutter * 1.5;
@@ -117,6 +92,8 @@ body.translation-module {
     .module-form form { grid-template-columns: 50% 50% !important; }
 }
 
+
+// tabs layout
 .fieldset {
     ~ .fieldset {
         margin-top: $gutter * 1.5;
@@ -137,9 +114,8 @@ body.translation-module {
 
         h2 {
             flex-grow: 1;
-            margin: 0; padding: 0;
+            margin: 0; padding: 0 $gutter 0 0;
             font-size: $font-size-sm;
-            padding-right: $gutter;
             &:first-letter {
                 text-transform: capitalize;
             }
@@ -157,5 +133,64 @@ body.translation-module {
                 }
             }
         }
+    }
+}
+
+// general layout
+body.view-module, body.translation-module, body.userprofiles-view {
+    .module-form form {
+
+        // arrange form elements
+        section.fieldset {
+            .tab-container {
+                padding: $gutter 0;
+                > div {
+                    margin: $gutter 0;
+                    &:first-child {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+
+        // responsive grid
+        @media screen and (min-width: 768px) {
+            display: grid;
+            grid-gap: 0 $gutter;
+            grid-template-areas: "header-view header-view"
+                                    "main-view side-view"
+                                    "submain-view side-view"
+                                    "full-view full-view";
+            grid-template-columns: 6fr 4fr;
+            .form-header { grid-area: header-view; }
+            .main-view-column { grid-area: main-view; }
+            .side-view-column { grid-area: side-view; }
+            section.relations { margin-top: 1.5rem; grid-area: full-view; }
+        }
+
+        @media screen and (min-width: 960px) {
+            grid-gap: 0 $gutter * 1.5;
+            grid-template-columns: 2fr 1fr;
+            section.relations { grid-area: submain-view; }
+        }
+
+        .main-view-column section.fieldset .tab-container {
+            @media screen and (min-width: 1366px) {
+                grid-template-columns: 1fr 1fr 1fr;
+                display: grid;
+                grid-gap: 1rem;
+                > div {
+                    margin: 0;
+                }
+
+                .input.title, .input.textarea, .input.checkbox {
+                    grid-column: 1/-1;
+                }
+                .input.select select {
+                    width: 100%;
+                }
+            }
+        }
+
     }
 }
