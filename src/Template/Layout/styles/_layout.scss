@@ -11,11 +11,11 @@ main.layout {
         grid-template-areas: "sidebar content-header"
                              "sidebar content-body"
                              "sidebar footer";
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: ($dashboard-item-height + $gutter) auto;
         grid-template-columns: $dashboard-item-width auto;
 
-        .view-module & {
-            grid-template-rows: ($dashboard-item-height + $gutter) auto;
+        .view-dashboard & {
+            grid-template-rows: auto 1fr auto;
         }
 
         > .layout-footer { display: none; }
