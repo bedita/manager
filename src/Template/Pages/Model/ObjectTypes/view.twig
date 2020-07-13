@@ -18,6 +18,8 @@
             'check-changes': 'true',
         })|raw }}
 
+            {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+
             <div class="main-view-column">
                 <section class="fieldset">
                     <div class="tab-container">
@@ -40,8 +42,6 @@
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
-
-                        {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
                     </div>
                 </section>
             </div>

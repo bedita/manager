@@ -1,5 +1,5 @@
 <div class="relations-add">
-    <section v-show="isMedia" class="mt-1">
+    <section v-show="isMedia" class="mt-1 mb-1">
         <header class="mx-1 tab unselectable open"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
@@ -57,11 +57,11 @@
     </section>
 
     <section class="shrinks">
-        <header class="mx-1 tab unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
+        <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
             <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
         </header>
 
-        <div class="px-1 mb-1">
+        <div class="px-1 mt-1 mb-1">
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                 :pagination.sync="pagination"

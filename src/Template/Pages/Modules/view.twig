@@ -26,6 +26,11 @@
             'check-changes': 'true',
         })|raw }}
 
+            {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+            {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
+                {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
+            {% endif %}
+
             {# Init `_jsonKeys` data #}
             {{ write_config('_jsonKeys', []) }}
 
@@ -54,11 +59,9 @@
             <div class="side-view-column is-flex is-flex-column">
                 {% element 'Form/publish_properties' %}
 
-                {% element 'Form/resource_relations' %}
-
                 {% element 'Form/meta' %}
 
-                {% element 'Form/resources/translations' {'resourceName': 'translations'} %}
+                {% element 'Form/translations' {'resourceName': 'translations'} %}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
                 {% if object.relationships.roles %}
@@ -72,6 +75,8 @@
                 {% element 'Form/advanced_properties' %}
 
                 {% element 'Form/custom_right' %}
+
+                {% element 'Form/resource_relations' %}
             </div>
 
             {# relations view #}

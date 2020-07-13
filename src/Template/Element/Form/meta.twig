@@ -2,29 +2,31 @@
 
 {% if meta %}
 <property-view inline-template :tab-open="tabsOpen">
-<section class="fieldset" id="meta" :class="isOpen? '' : 'closed'">
+    <section class="fieldset">
 
-    <header @click.prevent="toggleVisibility()" class="tab unselectable">
-        <h2>{{ __('Metadata') }}</h2>
-    </header>
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Metadata') }}</h2>
+        </header>
 
-    <div v-show="isOpen" class="tab-container">
-        <table>
-            <tbody>
-                <tr>
-                    <th>{{ __('id') }}:</th>
-                    <td>{{ (object) ? object.id : resource.id }}</td>
-                </tr>
-                {% for key, val in meta %}
+        <div v-show="isOpen" class="tab-container">
+            <table>
+                <tbody>
                     <tr>
-                        <th>{{ key }}:</th>
-                        <td>{{ Schema.format(val, schema.properties[key]) }}</td>
+                        <th>{{ __('id') }}:</th>
+                        <td>{{ (object) ? object.id : resource.id }}</td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                    {% for key, val in meta %}
+                        <tr>
+                            <th>{{ key }}:</th>
+                            <td>{{ Schema.format(val, schema.properties[key]) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-</section>
+    </section>
 </property-view>
 {% endif %}

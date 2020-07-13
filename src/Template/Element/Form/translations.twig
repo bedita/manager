@@ -1,13 +1,17 @@
 {% if object and object.relationships.translations %}
 
     <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start="false" ref={{ resourceName }}>
-        <section class="fieldset" :class="isOpen? '' : 'closed'">
 
-            <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                <h2>
-                    {{ __(resourceName|humanize)|lower }}
-                </h2>
-                <span class="has-text-size-smallest"><: totalObjects :></span>
+        <section class="fieldset">
+
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="[
+                    isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
+                    isLoading? 'is-loading-spinner' : ''
+                ]">
+                    <h2>{{ __(resourceName|humanize)|lower }}</h2>
+                    <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
             </header>
 
             <div v-show="isOpen" class="tab-container">
@@ -59,6 +63,7 @@
             </div>
 
         </section>
+
     </property-view>
 
 {% endif %}

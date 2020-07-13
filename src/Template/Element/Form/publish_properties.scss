@@ -1,3 +1,4 @@
+// TODO: refactor
 #publish_properties {
     .tab-container {
         display: flex;
@@ -5,7 +6,7 @@
         >div {
             width: calc(50% - 8px);
             &:first-child  { width: 100%; }
-            &:nth-child(2) { width: 100%; margin: 4px 0 4px; }
+            &:nth-child(2) { width: 100%; margin-bottom: 0; }
             &:last-child { margin-left: 12px; margin-bottom: 8px; }
         }
     }

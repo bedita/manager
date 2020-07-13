@@ -3,9 +3,10 @@
 {% if object.attributes.date_ranges is defined %}
 
 <property-view inline-template :tab-open="tabsOpen">
-<section class="fieldset" id="date_ranges" :class="isOpen? '' : 'closed'">
-
-    <header @click.prevent="toggleVisibility()" class="tab unselectable">
+<section class="fieldset">
+    <header @click.prevent="toggleVisibility()"
+        class="tab unselectable"
+        :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
         <h2>{{ __('Calendar') }}</h2>
     </header>
 

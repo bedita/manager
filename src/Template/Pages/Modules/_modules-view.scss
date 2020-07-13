@@ -155,14 +155,16 @@ body.translation-module {
             }
         }
 
-        &:before {
-            content: '+';
-            margin-right: .375rem;
-            font-size: $font-size-llg;
-        }
-        &.open {
+        &:not(.tab-static) {
             &:before {
-                content: '–';
+                content: '+';
+                margin-right: .375rem;
+                font-size: $font-size-llg;
+            }
+            &.open {
+                &:before {
+                    content: '–';
+                }
             }
         }
     }
