@@ -71,16 +71,6 @@ body.view-module, body.translation-module, body.userprofiles-view {
                     line-height: $gutter * 1.5;
                 }
 
-                div.input.status {
-                    display: flex;
-                    flex-wrap: wrap;
-                    label:not(:first-child) {
-                        flex: 0 0 auto;
-                        margin-right: $gutter;
-                        cursor: pointer;
-                    }
-                }
-
                 .stream {
                     display: flex;
                 }

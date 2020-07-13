@@ -6,8 +6,18 @@
         >div {
             width: calc(50% - 8px);
             &:first-child  { width: 100%; }
-            &:nth-child(2) { width: 100%; margin-bottom: 0; }
-            &:last-child { margin-left: 12px; margin-bottom: 8px; }
+            &:last-child { margin-left: 12px; }
+            &.input.status {
+                width: 100%;
+                margin-bottom: 0;
+                display: flex;
+                flex-wrap: wrap;
+                label:not(:first-child) {
+                    flex: 0 0 auto;
+                    margin-right: $gutter;
+                    cursor: pointer;
+                }
+            }
         }
     }
 }
