@@ -5,16 +5,18 @@
 
     <header>
         <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
+        <span class="has-background-module-{{ object.type }} tag has-font-weight-bold">{{ object.type|capitalize }}</span>
     </header>
 
     <div class="module-form">
-            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-                'url': {'_name': 'trash:list'},
-                'id': 'form-main',
-            })|raw }}
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'trash:list'},
+            'id': 'form-main',
+        })|raw }}
 
             <div class="main-view-column">
                 {% element 'Form/core_properties' %}
+                {% element 'Form/custom_left' %}
 
                 {# media #}
                 {% if objectType in ['images', 'files', 'audio', 'videos'] %}
@@ -23,19 +25,16 @@
                     {% endif %}
                 {% endif %}
 
-                {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
+                {% element 'Form/other_properties' %}
             </div>
 
             <div class="side-view-column">
-                {% element 'Form/publish_properties' {'cssOrder': '1'} %}
+                {% element 'Form/publish_properties' %}
 
                 {% element 'Form/advanced_properties' %}
 
-                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+                {% element 'Form/meta' %}
             </div>
-
-            {# temp relations view #}
-            {% element 'Form/relations' %}
 
         {{ Form.end()|raw }}
 
