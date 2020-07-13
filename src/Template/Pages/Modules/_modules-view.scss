@@ -174,16 +174,20 @@ body.view-module, body.translation-module, body.userprofiles-view {
             section.relations { grid-area: submain-view; }
         }
 
+        @media screen and (min-width: 1600px) {
+            grid-template-columns: 3fr 1fr;
+        }
+
         .main-view-column section.fieldset .tab-container {
             @media screen and (min-width: 1366px) {
                 grid-template-columns: 1fr 1fr 1fr;
                 display: grid;
-                grid-gap: 1rem;
+                grid-gap: $gutter * 1.5 $gutter;
                 > div {
                     margin: 0;
                 }
 
-                .input.title, .input.textarea, .input.checkbox {
+                .input.title, .input.textarea {
                     grid-column: 1/-1;
                 }
                 .input.select select {
