@@ -16,19 +16,18 @@
             'id': 'form-main',
         })|raw }}
 
+            {{ Form.hidden('id', {'value': object.id})|raw }}
             <div class="main-view-column">
-                <section class="fieldset order-0">
-                    <div class="tab-container">
-                        {{ Form.hidden('id', {'value': object.id})|raw }}
-                    </div>
-                </section>
 
                 {% set jsonKeys = [] %}
-                {% for group, attributes in properties if group != 'other' and attributes %}
-                    <section class="fieldset order-{{ loop.index }}">
-                        <header>
-                            <h2>{{ __(group|humanize) }}</h2>
-                        </header>
+                {% for group, attributes in properties if group != 'other' and group != 'password_change' and attributes %}
+                    <section class="fieldset">
+                        {% if group|trim  %}
+                            <header>
+                                <h2 class="m-0">{{ __(group|humanize) }}</h2>
+                            </header>
+                        {% endif %}
+
                         <div class="tab-container">
                             {% for key, value in attributes %}
                                 {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
@@ -45,11 +44,32 @@
                         </div>
                     </section>
                 {% endfor %}
-
-                {% if jsonKeys %}
-                    {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
-                {% endif %}
             </div>
+
+            <div class="side-view-column">
+                {% for group, attributes in properties if group == 'password_change' and attributes %}
+                    <section class="fieldset">
+                        <header class="mt-25">
+                            <h3 class="is-upppercase">{{ __('Change password') }}</h3>
+                        </header>
+
+                        <div class="tab-container">
+                            {% for key, value in attributes %}
+                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                                {% if options.class and options.class == 'json' %}
+                                    {% set jsonKeys = jsonKeys|merge([key]) %}
+                                {% endif %}
+
+                                {{ Form.control(key, options)|raw }}
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>
+
+            {% if jsonKeys %}
+                {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
+            {% endif %}
 
         {{ Form.end()|raw }}
 
