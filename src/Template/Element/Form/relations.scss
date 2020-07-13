@@ -1,117 +1,26 @@
-nav.pagination {
-    // TODO: forse non necessario
-    // justify-content: flex-end;
-
-    .filter-search {
-        display: flex;
-        margin: 0;
-
-        .search-query {
-            flex: 1;
-        }
-
-        .search-types, button {
-            margin-left: $gutter / 2;
-        }
-    }
-
-    .page-size, .pagination-buttons {
-        &.hide {
-            display: none;
-        }
-    }
-}
-
-.relation-view {
-    .relation-view-actions {
-        margin-top: $gutter;
-    }
-}
-
-.related-objects-list {
-
+.related-list-container {
     .columns {
-        .column:empty { padding: 0; }
         &.isLoading {
             opacity: .2;
             pointer-events: none;
         }
     }
 
-    & ~ .related-objects-list {
+    .related-new-objects-list { // staged relations container
         padding: $gutter * .5;
         background-color: $gray-800;
-        margin: 0 0 $gutter * 2;
         border-radius: $gutter * .5;
         border: 1px solid $gray-700;
-        .column:not(:last-child) {
-            flex-shrink: 0;
-            flex-basis: 12 * $gutter;
-            article { position: relative; padding-bottom: $gutter * 1.5; }
-            footer {
-                @extend .full-size-absolute;
-                a {
-                    @extend .full-size-absolute;
-                    display: flex;
-                    justify-content: center;
-                    align-items: flex-end;
-                    padding-bottom: $gutter * .25;
-                }
-            }
-        }
-    }
-
-    main.panel-is-open .module-form & {
-        cursor: auto;
-        pointer-events: none;
     }
 }
 
-.roles-list-view {
-    span.name {
-        margin-left: $gutter / 2;
-    }
-}
-
-.resource.translations {
-    .related-object {
-        width: 33.3%;
-
-        article h2 {
-            font-size: 14px;
-        }
-
-        &.new-button {
-            width: 33.3%;
-            min-height: $gutter * 8;
-
-            article {
-                position:  absolute;
-                top: $gutter/2;
-                left: $gutter/2;
-                bottom: $gutter/2;
-                right: $gutter/2;
-
-                a {
-                    margin: auto;
-                    font-size: 26px;
-                    width: 100%;
-                    text-align: center;
-                }
-            }
-        }
-    }
-}
 
 // single related object
 .related-object {
     position: relative;
-    min-width: 230px;
 
     article {
-        display: flex;
-        flex-direction: column;
-        box-shadow: none;
+        height: 100%;
 
         &.unselectable {
             pointer-events: none;
@@ -119,129 +28,45 @@ nav.pagination {
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: $gutter;
-
             h1 {
-                padding: 0 4px;
-                margin: 0;
-                padding-right: $gutter;
-                word-break: break-word;
-                font-size: $font-size-sm;
-                font-weight: $font-weight-light;
-                line-height: $font-size-lg;
                 min-height: $font-size-lg * 2;
-                pointer-events: none;
-
-                &:empty {
-                    content: 'untitled';
-                    opacity: .5;
-                }
+                padding-right: $gutter * .75;
+                word-break: break-word;
+                line-height: 1.25em;;
             }
-            .prop-id {
-                opacity: .5;
-                font-size: $font-size-sssm;
-                line-height: $gutter;
-                white-space: nowrap;
-            }
-        }
-
-        ul.params-list {
-            list-style: none;
-            padding: $gutter * 0.25;
         }
 
         .priority {
-            margin-bottom: $gutter;
+            position: absolute;
+            top: $gutter * .5;
+            left: $gutter * .5;
+            z-index: 10;
         }
 
-        >div {
-            &:not(:last-of-type) {
-                margin-bottom: $gutter;
-            }
-            &.thumbnail {
-                figure {
-                    // placeholder in attesa di mettere il thumb
-                    background-color: $gray-900;
-                    position: relative;
+        .thumbnail {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 63%; // 16 / 9 56%
+            background-color: $gray-100;
+            pointer-events: none;
+            figure {
+                @extend .full-size-absolute;
+                font-size: 2.5rem; // icons
+                img {
+                    display: block;
+                    object-fit: cover;
                     width: 100%;
-                    padding-bottom: 63%; // 16 / 9 56%
-                    overflow: hidden;
-                    img {
-                        position: absolute;
-                        top: 0; left: 50%;
-                        display: block;
-                        height: 100%;
-                        transform: translateX(-50%);
-                        pointer-events: none;
-                    }
+                    height: 100%;
                 }
-
-                .cover {
-                    position: relative;
-                    width: 100%;
-                    padding-bottom: 63%; // 16 / 9 56%
-                    overflow: hidden;
-
-                    .icon-cover {
-                        position: absolute;
-                        top: 0;
-                        left: 50%;
-                        display: block;
-                        height: 100%;
-                        transform: translateX(-50%);
-                        font-size: 8em;
-
-                        &::before{
-                            margin: 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        &.images,
-        &.videos {
-            div.thumbnail {
-                display: block;
             }
         }
 
         footer {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            margin-top: $gutter * 0.5;
-
-            a {
-                background-color: transparent;
-                color: $gray-100;
-                line-height: 1rem;
-                cursor: pointer;
-            }
-
-            button {
-                background-color: transparent;
-                color: $gray-100;
-            }
-
             a:last-child {
                 margin-left: auto;
             }
-
-            button + a:last-child {
-                margin-left: 0;
-            }
-            a:hover, button:hover { background-color: $gray-100; color: $black; }
         }
-    }
-
-    > footer{
-        position: absolute;
-        transform: translateY(-100%);
-        padding-bottom: $gutter * .5;
-        padding-left: $gutter * .5;
     }
 
     &.removed {
@@ -262,25 +87,12 @@ nav.pagination {
     > * {
         display: flex;
         flex-direction: column;
-        margin-top: $gutter;
-        flex: none;
-        > * {
-            margin-left: $gutter;
-            margin-right: $gutter;
-            flex: none;
-        }
     }
+
     .shrinks {
         flex-shrink: 1 !important;
         overflow-y: auto;
         overflow-x: hidden;
-    }
-
-
-    footer {
-        display: flex;
-        justify-content: space-between;
-        margin: $gutter;
     }
 
     header.tab {
@@ -306,31 +118,6 @@ nav.pagination {
 
 .edit-relation {
     @extend %relation-panel-common;
-
-    > nav {
-        padding: $gutter $gutter 0;
-        margin: 0;
-    }
-
-    .object-attributes, .params-list {
-        overflow: auto;
-        margin-right: 0;
-        margin-left: $gutter;
-        margin-top: $gutter;
-        padding-right: $gutter;
-    }
-
-    .params-list {
-        flex-grow: 1;
-
-        > div {
-            margin-bottom: $gutter * .5;
-        }
-
-        input, select {
-            width: 100%;
-        }
-    }
 }
 
 .relations-add {
@@ -349,38 +136,12 @@ nav.pagination {
 
     // ui specs
     .related-object article {
-        position: relative;
-        background-color: $gray-700;
         cursor: pointer;
 
-        &.selected { background-color: $info; }
-
-        footer {
-            justify-content: center;
-            width: calc(100% + 16px);
-            margin-left: -8px;
-            margin-bottom: -8px;
-            height: 24px;
-            a {
-                justify-content: center;
-                display: inline-flex;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-                background-color: $gray-800;
-            }
-            &:hover {
-                a {
-                    background-color: $gray-600;
-                }
-            }
+        &.selected {
+            background-color: $info;
+            color: $white;
+            .thumbnail { background-color: $info; opacity: .8; }
         }
-    }
-}
-
-// TODO: review
-.relations-add, .relation-view {
-    .filter-box {
-        margin-bottom: $gutter;
     }
 }

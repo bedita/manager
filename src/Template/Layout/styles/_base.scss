@@ -49,3 +49,14 @@ label, th { font-weight: normal; }
 div, section {
     &:focus { outline: none; }
 }
+
+dl {
+    margin: 0;
+    dd {
+        margin: 0;
+        font-weight: $font-weight-bold;
+    }
+    dd + dt {
+        margin-top: $gutter * .25;
+    }
+}

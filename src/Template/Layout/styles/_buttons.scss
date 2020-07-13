@@ -115,7 +115,24 @@ button, .button {
         &:disabled, &.disabled {
         }
     }
+    &-outlined-white {
+        background-color: transparent;
+        border-color: $black;
+        color: $black;
+        &:hover {
+            border-color: $gray-600;
+        }
+        &:disabled, &.disabled {
+        }
+    }
     &-text {
+        background-color: transparent;
+        border-color: transparent;
+        color: $black;
+        &:disabled, &.disabled {
+        }
+    }
+    &-text-white {
         background-color: transparent;
         border-color: transparent;
         color: $white;
