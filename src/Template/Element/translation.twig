@@ -40,7 +40,7 @@
             {% set translatable = Schema.translatableFields(schema.properties) %}
 
             <div class="main-view-column">
-                <section class="fieldset order-{{ order|default('0') }}">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
                             <div class="input text ">
@@ -53,7 +53,7 @@
             </div>
 
             <div class="side-view-column original">
-                <section class="fieldset order-{{ order|default('0') }}">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
                             <div class="input text ">

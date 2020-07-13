@@ -1,4 +1,4 @@
-<section class="fieldset order-{{ order|default('0') }}" id="core_properties">
+<section class="fieldset" id="core_properties">
     <div class="tab-container">
         {% for key, value in properties.core %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}

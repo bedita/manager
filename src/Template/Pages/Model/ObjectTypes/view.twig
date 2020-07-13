@@ -19,7 +19,7 @@
         })|raw }}
 
             <div class="main-view-column">
-                <section class="fieldset order-0">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
@@ -47,7 +47,7 @@
             </div>
 
             <div class="side-view-column">
-                <section class="fieldset order-3">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}

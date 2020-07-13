@@ -3,7 +3,7 @@
 {% if object.attributes.date_ranges is defined %}
 
 <property-view inline-template :tab-open="tabsOpen">
-<section class="fieldset order-{{ cssOrder }}" id="date_ranges" :class="isOpen? '' : 'closed'">
+<section class="fieldset" id="date_ranges" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
         <h2>{{ __('Calendar') }}</h2>

@@ -1,4 +1,4 @@
-<section class="fieldset order-{{ cssOrder }}" id="publish_properties">
+<section class="fieldset" id="publish_properties">
     <div class="tab-container">
         {% for key, value in properties.publish %}
             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}

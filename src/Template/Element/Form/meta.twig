@@ -2,7 +2,7 @@
 
 {% if meta %}
 <property-view inline-template :tab-open="tabsOpen">
-<section class="fieldset order-{{ order|default('0') }}" id="meta" :class="isOpen? '' : 'closed'">
+<section class="fieldset" id="meta" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
         <h2>{{ __('Metadata') }}</h2>

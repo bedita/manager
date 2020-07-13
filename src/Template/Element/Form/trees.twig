@@ -1,6 +1,6 @@
 {% set relationName = 'parents' %}
 <property-view inline-template :tab-open="tabsOpen">
-    <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
+    <section class="fieldset" id="trees" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
         <h2>{{ __('Folders') }}</h2>

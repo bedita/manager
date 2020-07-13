@@ -2,7 +2,7 @@
     {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
 
     <property-view inline-template :tab-open-at-start=true ref={{ resourceName }}>
-        <section class="fieldset order-{{ cssOrder }} closed">
+        <section class="fieldset closed">
             <header class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                 <h2>
                     {{ __(resourceName|humanize)|lower }}

@@ -9,7 +9,7 @@
             :tab-open="tabsOpen"
             :is-default-open="!!'{{ config('Maps.mapbox.token') }}'" :tab-open-at-start="!!'{{ config('Maps.mapbox.token') }}'">
 
-            <section class="fieldset order-1" id="map" :class="isOpen? '' : 'closed'">
+            <section class="fieldset" id="map" :class="isOpen? '' : 'closed'">
 
                 <header @click.prevent="toggleVisibility()" class="tab unselectable">
                     <h2>{{ __('Map') }}</h2>

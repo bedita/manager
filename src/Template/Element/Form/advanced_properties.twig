@@ -1,6 +1,6 @@
 {% if properties.advanced %}
 <property-view inline-template :tab-open="tabsOpen">
-<section class="fieldset order-3" id="advanced_properties" :class="isOpen? '' : 'closed'">
+<section class="fieldset" id="advanced_properties" :class="isOpen? '' : 'closed'">
 
     <header @click.prevent="toggleVisibility()" class="tab unselectable">
         <h2>{{ __('Advanced') }}</h2>
