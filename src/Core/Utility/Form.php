@@ -108,6 +108,9 @@ class Form
             'date' => 'true',
             'time' => 'true',
             'value' => $value,
+            'templates' => [
+                'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+            ],
         ];
     }
 
@@ -124,6 +127,9 @@ class Form
             'v-datepicker' => 'true',
             'date' => 'true',
             'value' => $value,
+            'templates' => [
+                'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+            ],
         ];
     }
 
