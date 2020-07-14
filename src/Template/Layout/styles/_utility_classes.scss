@@ -90,10 +90,15 @@
 // spacing
 .m-0      { margin: 0 !important; }
 .m-1      { margin: $gutter !important; }
+
 .mx-025   { margin-left: $gutter * .25; margin-right: $gutter * .25; }
-.mx-05    { margin-left: $gutter * .5; margin-right: $gutter * .5; }
-.mx-1     { margin-left: $gutter;      margin-right: $gutter; }
-.mx-2     { margin-left: $gutter * 2;  margin-right: $gutter * 2; }
+.mx-05    { margin-left: $gutter * .5;  margin-right: $gutter * .5; }
+.mx-1     { margin-left: $gutter;       margin-right: $gutter; }
+.mx-2     { margin-left: $gutter * 2;   margin-right: $gutter * 2; }
+.my-025   { margin-top: $gutter * .25;  margin-bottom: $gutter * .25; }
+.my-05    { margin-top: $gutter * .5;   margin-bottom: $gutter * .5; }
+.my-1     { margin-top: $gutter;        margin-bottom: $gutter; }
+.my-2     { margin-top: $gutter * 2;    margin-bottom: $gutter * 2; }
 .mt-0     { margin-top: 0 !important; }
 .mt-05    { margin-top: $gutter * .5; }
 .mt-1     { margin-top: $gutter; }
