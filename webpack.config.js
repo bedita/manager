@@ -39,7 +39,7 @@ let webpackPlugins = [
     ], {
         root: path.resolve(__dirname, BUNDLE.webroot),
         verbose: false,
-        exclude: ['be-icons-codes.css', 'be-icons-font.css'],
+        exclude: ['be-icons-codes.css', 'be-icons-font.css', 'libs'],
     }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`

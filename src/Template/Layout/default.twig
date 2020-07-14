@@ -77,31 +77,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% endif %}
     </main>
 
-
-    {# set timezone-offset value before login #}
-    {% if _view.name == 'Login' %}
-    <script>
-        Date.prototype.stdTimezoneOffset = function() {
-            var jan = new Date(this.getFullYear(), 0, 1);
-            var jul = new Date(this.getFullYear(), 6, 1);
-            return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-        }
-
-        Date.prototype.dst = function() {
-            return this.getTimezoneOffset() < this.stdTimezoneOffset();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var inputTZElement = document.getElementById('timezone-offset');
-            if (inputTZElement) {
-                var tz = (-60) * (new Date().getTimezoneOffset()) + ' ' + (new Date().dst() ? '1' : '0');
-                inputTZElement.value = tz;
-            }
-        });
-    </script>
-    {% endif %}
-
-
     {# {{ Html.script('manifest.bundle')|raw }} #}
 
     {# vendors.bundle it's only generated when vendors are imported statically, uncomment if you do so #}
@@ -109,6 +84,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {% if _view.name != 'Login' %}
         {{ Link.pluginsJsBundle()|raw }}
+    {% else %}
+        {# timezone-offset used in controller and TWIG #}
+        {{ Html.script('libs/timezone.js')|raw }}
     {% endif %}
 
     {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
