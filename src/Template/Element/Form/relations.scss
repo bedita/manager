@@ -90,13 +90,17 @@
     }
 
     .shrinks {
-        flex-shrink: 1 !important;
+        flex: 1;
         overflow-y: auto;
         overflow-x: hidden;
     }
 
     header.tab {
         cursor: auto;
+    }
+
+    footer {
+        display: flex;
     }
 
     form[disabled] {
@@ -126,10 +130,8 @@
     .create-new-object {
         form > * {
             margin-bottom: $gutter;
-
-            input[name=title] {
-                max-width: 50%;
-                margin-left: $gutter * .5;
+            label {
+                margin-right: $gutter * .5;
             }
         }
     }

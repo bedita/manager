@@ -53,44 +53,5 @@ main.layout {
         > .layout-sidebar {
             opacity: 0;
         }
-        .main-panel.on {
-            transform: translateX(0);
-            box-shadow: 0 0 32px black;
-        }
-    }
-
-    // side panel
-    .main-panel {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0; right: 0;
-        min-width: 25 * $gutter;
-        width: 60%;
-        height: 100vh;
-        z-index: 100;
-        background-color: $black;
-        box-shadow: 0 0 0 black;
-        transform: translateX(101%);
-        transition: .3s transform;
-        will-change: transform;
-
-        .main-panel-body {
-            height: 100%;
-            flex: 1 1 0;
-        }
-
-        .panel-slot-container {
-            height: 100%;
-        }
-
-        footer {
-            display: flex;
-        }
-
-        &.on {
-            transform: translateX(0);
-            box-shadow: 0 0 32px black;
-        }
     }
 }

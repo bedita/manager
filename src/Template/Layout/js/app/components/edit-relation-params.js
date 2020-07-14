@@ -20,7 +20,7 @@ export default {
                 <h2><span><: t('Edit parameters of') :>: <: relationName | humanize :></span> &nbsp;</h2>
             </header>
 
-            <div class="mx-1">
+            <div class="mx-1 mt-1">
                 <h2><: t('Object') :>: <: object.attributes.title :></h2>
                 <div>
                     <span class="tag" :class="objectColorClass"><: object.type :></span>

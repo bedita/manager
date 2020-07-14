@@ -1,19 +1,21 @@
 <div class="relations-add">
     <section v-show="isMedia" class="mt-1 mb-1">
-        <header class="mx-1 tab unselectable open"
+        <header class="mx-1 tab unselectable"
+            :class="showCreateObjectForm? 'open' : ''"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
 
             <h2><span v-show="relationName">{{ __('create new') }} <: relationName | humanize :></span> &nbsp;</h2>
         </header>
 
-        <div class="create-new-object mx-1 mb-1" v-if="showCreateObjectForm">
+        <div class="create-new-object mt-1 mx-1 mb-1" v-if="showCreateObjectForm">
             <form name="create-object" :disabled="saving" @submit.prevent="createObject">
                 {{ Form.control('upload_behavior', {
                     'type': 'hidden',
                     'v-bind:value': 'activeIndex == 1? `embed` : `file`'
                 }) | raw }}
                 {{ Form.unlockField('upload_behavior')}}
+
                 <div class="h-tabs">
                     <ul>
                         <li :class="getContentTabClass(0)"
@@ -22,6 +24,12 @@
                             v-on:click="activeIndex = 1"><a>{{ __('Embed online content') }}</a></li>
                     </ul>
                 </div>
+
+                <div class="input text">
+                    <label for="title">{{ __('Title') }}</label>
+                    <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
+                </div>
+
                 <div class="h-tabs-contents">
                     <div class="h-tab" v-if="activeIndex == 0">
                         <div class="dropzone">
@@ -44,11 +52,6 @@
                                 'placeholder': __('Remote URL') }) | raw }}
                         </div>
                     </div>
-                </div>
-
-                <div class="input text">
-                    <label for="title">{{ __('Title') }}</label>
-                    <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
                 </div>
 
                 <button :disabled="this.file === null && this.url === null" type="submit">{{ __('create') }}</button>
