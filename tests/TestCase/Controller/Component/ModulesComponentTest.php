@@ -303,7 +303,6 @@ class ModulesComponentTest extends TestCase
                     'supporto',
                     'gustavo',
                     'trash',
-                    'plugin',
                 ],
                 [
                     'resources' => [
@@ -331,21 +330,16 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'bedita',
-                    'supporto',
-                ],
-                [
-                    [
-                        'name' => 'plugin',
-                    ],
+                    'bedita' => [],
+                    'supporto' => [],
                 ],
             ],
             'ok (trash first)' => [
                 [
                     'trash',
                     'supporto',
-                    'bedita',
                     'gustavo',
+                    'bedita',
                 ],
                 [
                     'resources' => [
@@ -373,8 +367,8 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'trash',
-                    'supporto',
+                    'trash' => [],
+                    'supporto' => [],
                 ],
             ],
             'client exception' => [
@@ -393,17 +387,17 @@ class ModulesComponentTest extends TestCase
      *
      * @param string[]|\Exception $expected Expected result.
      * @param array|\Exception $meta Response to `/home` endpoint.
-     * @param string[] $order Configured modules order.
+     * @param array $modules Modules configuration.
      * @return void
      *
      * @dataProvider getModulesProvider()
+     * @covers ::modulesFromMeta()
      * @covers ::getMeta()
      * @covers ::getModules()
      */
-    public function testGetModules($expected, $meta, array $order = [], array $plugins = []): void
+    public function testGetModules($expected, $meta, array $modules = []): void
     {
-        Configure::write('Modules.order', $order);
-        Configure::write('Modules.plugins', $plugins);
+        Configure::write('Modules', $modules);
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -472,7 +466,7 @@ class ModulesComponentTest extends TestCase
                     'version' => 'v4.0.0-gustavo',
                 ],
                 [
-                    'gustavo',
+                    'gustavo' => [],
                 ],
             ],
             'with current module' => [
@@ -508,7 +502,7 @@ class ModulesComponentTest extends TestCase
                     'version' => 'v4.0.0-gustavo',
                 ],
                 [
-                    'gustavo',
+                    'gustavo' => [],
                 ],
                 'supporto',
             ],
@@ -532,16 +526,16 @@ class ModulesComponentTest extends TestCase
      * @param string|null $currentModule Expected current module name.
      * @param array $project Expected project info.
      * @param array $meta Response to `/home` endpoint.
-     * @param string[] $order Configured modules order.
+     * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
      *
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
-    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null): void
+    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
-        Configure::write('Modules.order', $order);
+        Configure::write('Modules', $config);
 
         if ($userId) {
             $this->Auth->setUser(['id' => $userId]);

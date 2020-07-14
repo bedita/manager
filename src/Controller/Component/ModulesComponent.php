@@ -120,14 +120,34 @@ class ModulesComponent extends Component
     /**
      * Create internal list of available modules in `$this->modules` as an array with `name` as key
      * and return it.
-     * Modules are read from `/home` endpoint
+     * Modules are created from configuration and merged with information read from `/home` endpoint
      *
      * @return array
      */
     public function getModules(): array
     {
-        $modulesOrder = (array)Configure::read('Modules.order');
+        $modules = (array)Configure::read('Modules');
+        $metaModules = $this->modulesFromMeta();
+        $modules = array_intersect_key($modules, $metaModules);
+        array_walk(
+            $modules,
+            function (&$data, $key) use ($metaModules) {
+                $data = array_merge((array)Hash::get($metaModules, $key), $data);
+            }
+        );
+        $this->modules = array_merge($modules, array_diff_key($metaModules, $modules));
 
+        return $this->modules;
+    }
+
+    /**
+     * Modules data from `/home` endpoint 'meta' response.
+     * Modules are object endpoints from BE4 API
+     *
+     * @return array
+     */
+    protected function modulesFromMeta(): array
+    {
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
@@ -138,29 +158,9 @@ class ModulesComponent extends Component
             ->reject(function (array $data) {
                 return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
             })
-            ->sortBy(function (array $data) use ($modulesOrder) {
-                $name = Hash::get($data, 'name');
-                $idx = array_search($name, $modulesOrder);
-                if ($idx === false) {
-                    // No configured order for this module. Use hash to preserve order, and ensure it is after other modules.
-                    $idx = count($modulesOrder) + hexdec(hash('crc32', $name));
-
-                    if ($name === 'trash') {
-                        // Trash eventually.
-                        $idx = PHP_INT_MAX;
-                    }
-                }
-
-                return -$idx;
-            })
             ->toList();
-        $plugins = (array)Configure::read('Modules.plugins');
-        if (!empty($plugins)) {
-            $modules = array_merge($modules, $plugins);
-        }
-        $this->modules = Hash::combine($modules, '{n}.name', '{n}');
 
-        return $this->modules;
+        return Hash::combine($modules, '{n}.name', '{n}');
     }
 
     /**

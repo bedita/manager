@@ -403,44 +403,83 @@ return [
     /**
      * Modules configuration.
      *
-     * Contains an array of settings to use for modules configuration.
+     * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
+     * Modules order will follow key order of this configuration.
      *
-     * ## Options
+     * Array value may contain:
      *
-     * - `order` - The order in which modules will be displayed.
+     *  'label' - module label to display, if not set `key` will be used
+     *  'shortLabel' - short label, 3 character recommended
+     *  'color' - primary color code,
+     *  'secondaryColor' - secondary color code,
+     *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
+     *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
+     *          (default is '-id'),
+     *  'icon' - icon code, f.i. `icon-article`, have a look in
+     *      `webroot/css/be-icons-codes.css` for a complete list of codes
      */
     'Modules' => [
-        'order' => [
-            'objects',
-            'folders',
-            'documents',
-            'events',
-            'news',
-            'locations',
-            'media',
-            'images',
-            'videos',
-            'audio',
-            'files',
-            'users',
-            'profiles',
+        'objects' => [
+            'shortLabel' => 'obj',
+            'color' => '#230637',
+            'secondaryColor' => '#d95700',
+            'sort' => '-modified',
         ],
-
-        'colors' => [
-            'objects' => '#230637',
-            'folders' => '#072440',
-            'documents' => '#cc4700',
-            'media' => '#a80019',
-            'images' => '#d5002b',
-            'videos' => '#d5002b',
-            'audio' => '#d5002b',
-            'files' => '#d5002b',
-            'events' => '#09c',
-            'locations' => '#641',
-            'news' => '#036',
-            'users' => '#000000',
-            'profiles' => '#093',
-            'trash' => '#000000',
+        'folders' => [
+            // 'shortLabel' => 'fol',
+            'color' => '#072440',
+        ],
+        'documents' => [
+            'shortLabel' => 'docs',
+            'color' => '#cc4700',
+            // 'icon' => 'icon-article',
+        ],
+        'events' => [
+            'shortLabel' => 'evt',
+            'color' => '#09c',
+            // 'icon' => 'icon-music',
+        ],
+        'news' => [
+            // 'shortLabel' => 'new',
+            'color' => '#036',
+            // 'sort' => 'title',
+            // 'icon' => 'icon-newspaper',
+        ],
+        'locations' => [
+            'color' => '#641',
+            'icon' => 'icon-map-pin',
+        ],
+        'media' => [
+            'shortLabel' => 'med',
+            'color' => '#a80019',
+            'sort' => '-modified',
+        ],
+        'images' => [
+            'shortLabel' => 'img',
+            'color' => '#d5002b',
+            // 'icon' => 'icon-picture',
+        ],
+        'videos' => [
+            'color' => '#d5002b',
+            // 'icon' => 'icon-video',
+        ],
+        'audio' => [
+            'color' => '#d5002b',
+            // 'icon' => 'icon-music',
+        ],
+        'files' => [
+            'color' => '#d5002b',
+            // 'icon' => 'icon-article',
+        ],
+        'users' => [
+            'shortLabel' => 'usr',
+            'color' => '#000000',
+        ],
+        'profiles' => [
+            // 'shortLabel' => 'pro',
+            'color' => '#093',
+            // 'sort' => 'title',
+            // 'icon' => 'address-book',
         ],
     ],
 
