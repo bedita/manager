@@ -210,20 +210,7 @@ export const PanelView = {
         }
     },
 
-    watch: {
-        /**
-         * panel open property watcher to determine window body class
-         *
-         * @param {Boolean} value
-         */
-        open(value) {
-            if (value) {
-                window.document.body.classList.add('panel-is-open');
-            } else {
-                window.document.body.classList.remove('panel-is-open');
-            }
-        }
-    },
+    watch: { },
 
     created() {
         // set up global panel listeners

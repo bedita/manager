@@ -100,13 +100,15 @@ const _vueInstance = new Vue({
         // load url params when component initialized
         this.loadUrlParams();
 
-        let cl = document.querySelector('html').classList;
+        const rootEl = document.querySelector('html');
+        const bodyEl = document.querySelector('body');
         PanelEvents.listen('panel:requested', null, () => {
-            cl.add('is-clipped');
+            bodyEl.classList.add('panel-is-open');
+            rootEl.classList.add('is-clipped');
         });
-
         PanelEvents.listen('panel:closed', null, () => {
-            cl.remove('is-clipped');
+            bodyEl.classList.remove('panel-is-open');
+            rootEl.classList.remove('is-clipped');
         });
     },
 
