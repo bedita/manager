@@ -23,7 +23,6 @@
 */
 
 import Vue from 'vue';
-import { t } from 'ttag';
 
 /**
  * Event bus to communicate from/to PanelView
@@ -124,59 +123,18 @@ export const PanelEvents = new Vue({
  */
 export const PanelView = {
     template: /*template*/`
-        <aside class="main-panel" :class="open ? 'on' : ''">
-            <header v-if="!customHeader" class="tab unselectable open">
-                <h2><span v-show="closeButtonVisible"><: t(headerLabel) | humanize :></span> &nbsp;</h2>
-                <a href="#" @click.prevent="close()"><: t(closeButtonLabel) :></a>
-            </header>
-
-            <section class="fieldset main-panel-body">
+        <aside class="main-panel-container" :class="isOpen ? 'on' : ''">
+            <div class="main-panel">
                 <slot :data="data" :action="action"></slot>
-            </section>
-
-            <footer v-if="!customFooter">
-                <p>
-                    <button v-show="saveButtonVisible" class="has-background-info has-text-white"
-                        @click.prevent="save()"><: t(saveButtonLabel) :></button>
-                </p>
-            </footer>
+            </div>
         </aside>
     `,
 
-    props: {
-        customHeader: {
-            type: Boolean,
-            default: false,
-        },
-        customFooter: {
-            type: Boolean,
-            default: false,
-        },
-        saveButtonVisible: {
-            type: Boolean,
-            default: true,
-        },
-        headerLabel: {
-            type: String,
-            default: () => t('Panel'),
-        },
-        saveButtonLabel: {
-            type: String,
-            default: () => t('save'),
-        },
-        closeButtonLabel: {
-            type: String,
-            default: () => t('close'),
-        },
-        closeButtonVisible: {
-            type: Boolean,
-            default: true,
-        },
-    },
+    props: { },
 
     data() {
         return {
-            open: false,
+            isOpen: false,
             stack: [],
         }
     },
@@ -219,7 +177,7 @@ export const PanelView = {
         PanelEvents.listen('panel:request', null, (request) => {
             let { data, from } = request;
 
-            this.open = true;
+            this.isOpen = true;
             this.stack.push(request);
 
             PanelEvents.send('panel:requested', null, request);
@@ -237,17 +195,17 @@ export const PanelView = {
         });
 
         PanelEvents.listen('panel:open', null, (request) => {
-            this.open = true;
+            this.isOpen = true;
             PanelEvents.send('panel:opened', null, request);
         });
 
         PanelEvents.listen('panel:hide', null, (request) => {
-            this.open = false;
+            this.isOpen = false;
             PanelEvents.send('panel:hidden', null, request);
         });
 
         PanelEvents.listen('panel:close', null, () => {
-            this.open = false;
+            this.isOpen = false;
             this.pop();
         });
     },
@@ -262,9 +220,9 @@ export const PanelView = {
             const stack = this.stack;
             const last = stack.pop();
             if (stack.length) {
-                this.open = true;
+                this.isOpen = true;
             } else {
-                this.open = false;
+                this.isOpen = false;
                 PanelEvents.$emit('panel:closed', last);
             }
         },

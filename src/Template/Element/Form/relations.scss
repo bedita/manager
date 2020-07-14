@@ -120,11 +120,15 @@
 }
 
 
-.edit-relation {
+.main-panel-container .edit-relation {
     @extend %relation-panel-common;
 }
 
-.relations-add {
+.main-panel-container .upload-files {
+    @extend %relation-panel-common;
+}
+
+.main-panel-container .relations-add {
     @extend %relation-panel-common;
 
     .create-new-object {

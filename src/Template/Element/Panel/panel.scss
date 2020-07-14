@@ -1,30 +1,25 @@
-// side panel
-.main-panel {
-    display: flex;
-    flex-direction: column;
+.main-panel-container {
     position: fixed;
     top: 0; right: 0;
-    min-width: 25 * $gutter;
-    width: 60%;
+    min-width: 20 * $gutter;
+    width: 100%;
+    @media screen and (min-width: 768px) {
+        width: 60%;
+    }
     height: 100vh;
     z-index: 100;
-    background-color: $black;
-    box-shadow: 0 0 0 black;
     transform: translateX(101%);
     transition: .3s transform;
     will-change: transform;
+    z-index: 1001;
 
-    .main-panel-body {
+    .main-panel {
         height: 100%;
-        flex: 1 1 0;
+        background-color: $black;
     }
 
-    .panel-slot-container {
+    .panel-slot {
         height: 100%;
-    }
-
-    footer {
-        display: flex;
     }
 
     &.on {
@@ -33,125 +28,55 @@
     }
 }
 
-
-// create-new-object
-
-.upload-files {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    .upload-list {
-        flex-grow: 1;
-        overflow-y: auto;
+.main-panel {
+    .fieldset:first-child {
+        padding-top: $gutter;
     }
+}
 
-    footer {
-        justify-content: flex-end;
-
-        .add-uploads-action {
-            margin-right: auto;
+// multiple file upload .../app/components/upload-files-view.js
+.main-panel-container .upload-files {
+    .upload-item {
+        & ~ .upload-item {
+            margin-top: $gutter;
         }
 
-        .retry-action {
-            margin: 0 $gutter * .5;
-        }
-    }
-
-    .upload-info {
-        // display: flex;
-        flex-direction: column;
-        padding: $gutter;
-        border: 1px solid $gray-800;
-        border-radius: $gutter * 0.25;
-        margin: $gutter * 0.5;
-
-        .name {
-            padding: 0 0 $gutter *.5 0;
-        }
-
-        .error {
-            margin: $gutter * .5;
-        }
-
-        .abort.is-loading-spinner {
-            &:after {
-                border-color: $white;
-                border-right-color: transparent;
-                border-top-color: transparent;
+        .upload-item-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            .name {
+                margin-right: auto;
+            }
+            button {
+                margin-left: $gutter * .5;
             }
         }
 
-        .abort, .success, .retry {
-            background-color: $black;
-            color: $white;
-            float: right;
-            margin-right: $gutter * 0.25;
-            height: 24px;
-            width: 24px;
-            margin-bottom: $gutter * .5;
-
-            &:before {
-                margin: 0;
-            }
-
-            &.success {
-                color: $info;
-                cursor: default;
-            }
-
-            &.abort {
-                &:hover {
-                    color: $danger;
-                    background-color: $white;
-                }
-            }
-
-            &.retry {
-                &:hover {
-                    color: $white;
-                    background-color: $gray-800;
-                }
-            }
+        .message {
+            line-height: 1.25rem;
+            min-height: 1.25rem;
         }
 
         .progress-bar {
-            display: flex;
-            min-height: 20px;
             width: 100%;
-            border-radius: 20px;
-            background: $gray-800;
-            box-shadow: 0 2px 5px $gray-900 inset;
+            margin: $gutter * .75 0 $gutter * .75;
 
             .progress-bar-status {
-                display: block;
-                height: 14px;
-                margin: 3px;
-                border-radius: 20px;
+                min-width: $gutter;
+                height: 2px;
             }
             .progress-bar-status.in-progress {
                 background-color: $gray-400;
-                min-width: 14px;
             }
-
             .progress-bar-status.done {
                 background-color: $info;
             }
-
             .progress-bar-status.error {
                 background-color: $danger;
             }
-
             .progress-bar-status.cancelled {
-                background-color: $warning;
-            }
-
-            @keyframes pulse {
-                0% { opacity: 1 }
-                25% { opacity: 0.8 }
-                50% { opacity: 0.6 }
-                75% { opacity: 0.4 }
-                100% { opacity: 0.2 }
+                background-color: $gray-700;
             }
         }
     }

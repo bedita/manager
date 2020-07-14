@@ -130,7 +130,15 @@ const _vueInstance = new Vue({
     },
 
     methods: {
-        // Events Listeners
+
+        /**
+         * Close panel
+         *
+         * @return {void}
+         */
+        closePanel() {
+            PanelEvents.closePanel();
+        },
 
         /**
          * Clone object

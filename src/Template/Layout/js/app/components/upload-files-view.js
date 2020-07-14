@@ -22,41 +22,62 @@ export default {
 
     template: /*template*/`
     <div class="upload-files">
-        <section class="upload-list" droppable accepted-drop="from-files">
-            <div class="upload-info"
-                :key="index"
-                v-for="(info, index) in Array.from(uploadProgressInfo.values())">
+        <section class="fieldset shrinks">
+            <header class="mx-1 tab tab-static unselectable">
+                <h2>File upload</h2>
+            </header>
 
-                <span class="name"><: info.file.name :></span>
+            <div class="px-1 mt-1 mb-1">
 
-                <button v-show="!info.error && !info.cancelled && !info.done"
-                    class="abort icon-cancel"
-                    :class="{'is-loading-spinner': info.pending }"
-                    @click="abortUpload(info.file)">
-                </button>
-                <button v-show="!info.error && !info.cancelled && info.done" class="success icon-ok"></button>
-                <button v-show="info.error || info.cancelled" class="retry icon-ccw" @click="tryUpload([info.file])"></button>
-
-                <div class="progress-bar">
-                    <div class="progress-bar-status" :class="progressBarCss(info)" :style="progressBarStep(info)"></div>
-                </div>
-                <div class="error">
-                    <: info.errorMsg :>
-                </div>
             </div>
-        </section>
-        <footer v-show="actionRequired">
-            <button v-show="showAddSuccesfulUploadsButton" class="has-background-info has-text-white add-uploads-action"
-                @click.prevent="addSuccesfulUploads()"><: t('Add Uploaded') :>
-            </button>
-            <button class="has-background-info has-text-white retry-action"
-                @click.prevent="tryUpload(getFailedUploads())"><: t('Retry All') :>
-            </button>
-            <button class="has-background-info has-text-white"
-                @click.prevent="closePanel()"><: t('Close ') :>
-            </button>
-        </footer>
 
+            <div class="px-1 shrinks">
+                <div class="upload-list" droppable accepted-drop="from-files">
+                    <div class="upload-item"
+                        :key="index"
+                        v-for="(info, index) in Array.from(uploadProgressInfo.values())">
+
+                        <div class="upload-item-header" :class="{'is-loading-spinner': info.pending }">
+                            <span class="name"><: info.file.name :></span>
+
+                            <button v-show="!info.error && !info.cancelled && !info.done && !info.pending"
+                                class="button-outlined icon-cancel"
+                                @click="abortUpload(info.file)">
+                            </button>
+
+                            <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
+
+                            <button v-show="info.error || info.cancelled" class="button-outlined icon-ccw" @click="tryUpload([info.file])"></button>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-bar-status" :class="progressBarCss(info)" :style="progressBarStep(info)"></div>
+                        </div>
+
+                        <div class="message">
+                            <span v-show="!info.error && !info.cancelled && info.done"><: t('done') :></span>
+                            <span v-show="!info.error && !info.cancelled && !info.done"><: info.progress :>%</span>
+                            <span v-show="info.error && !info.cancelled && !info.done"><: info.errorMsg :></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <footer class="p-1" v-show="actionRequired">
+                <button v-show="showAddSuccesfulUploadsButton" class="has-background-info has-text-white"
+                    @click.prevent="addSuccesfulUploads()"><: t('Add Uploaded') :>
+                </button>
+
+                <button class="has-background-info has-text-white mx-1"
+                    @click.prevent="tryUpload(getFailedUploads())"><: t('Retry All') :>
+                </button>
+
+                <button class="has-background-info has-text-white mx-1"
+                    @click.prevent="closePanel()"><: t('Close ') :>
+                </button>
+            </footer>
+        </section>
     </div>
     `,
 

@@ -1,5 +1,6 @@
 // main grids
 main.layout {
+    position: relative;
     width: 100%;
     min-height: 100vh;
     min-height: calc(var(--vh, 1vh) * 100); // iOS adjust with script and fallback
@@ -35,7 +36,8 @@ main.layout {
 
 
 
-// panel stuff
+// on panel show / hide
+body:not(.view-login) main.layout > .layout-content { background-color: $defaultBackground; } // covers sidebar on translate
 main.layout {
     > .layout-header,
     > .layout-content {
@@ -52,6 +54,9 @@ main.layout {
         }
         > .layout-sidebar {
             opacity: 0;
+        }
+        .backdrop {
+            display: blocK;
         }
     }
 }
