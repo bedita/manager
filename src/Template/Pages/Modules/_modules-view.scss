@@ -191,7 +191,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
                 .input.select select {
                     width: 100%;
                 }
-                .input.title, .input.textarea {
+                .input.title, .input.textarea, .stream, .grid-span-full {
                     grid-column: 1/-1;
                 }
             }
