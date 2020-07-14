@@ -153,6 +153,8 @@ body.view-module, body.translation-module, body.userprofiles-view {
             }
         }
 
+        section.relations { margin-top: 1.5rem; }
+
         // responsive grid
         @media screen and (min-width: 768px) {
             display: grid;
@@ -165,7 +167,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
             .form-header { grid-area: header-view; }
             .main-view-column { grid-area: main-view; }
             .side-view-column { grid-area: side-view; }
-            section.relations { margin-top: 1.5rem; grid-area: full-view; }
+            section.relations { grid-area: full-view; }
         }
 
         @media screen and (min-width: 1024px) {

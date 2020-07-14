@@ -5,7 +5,7 @@ body {
     font-family: $font-family-base;
     font-size: $font-size-sm;
     line-height: $line-height-base;
-    background-color: $gray-900; // best practice, apply a default `background-color`
+    background-color: $defaultBackground;
     // background-image: linear-gradient(160deg, $gray-900 0%, $gray-800 100%);
     background-attachment: fixed;
     background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 <div class="relations-add">
-    <section v-show="isMedia" class="mt-1 mb-1">
+    <section v-show="isMedia" class="fieldset mt-1 mb-1">
         <header class="mx-1 tab unselectable"
             :class="showCreateObjectForm? 'open' : ''"
             :disabled="saving"
@@ -8,7 +8,7 @@
             <h2><span v-show="relationName">{{ __('create new') }} <: relationName | humanize :></span> &nbsp;</h2>
         </header>
 
-        <div class="create-new-object mt-1 mx-1 mb-1" v-if="showCreateObjectForm">
+        <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
             <form name="create-object" :disabled="saving" @submit.prevent="createObject">
                 {{ Form.control('upload_behavior', {
                     'type': 'hidden',
@@ -59,7 +59,7 @@
         </div>
     </section>
 
-    <section class="shrinks">
+    <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
             <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
         </header>
