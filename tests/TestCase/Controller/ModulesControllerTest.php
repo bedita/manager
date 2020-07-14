@@ -175,6 +175,7 @@ class ModulesControllerTest extends TestCase
      * Test `index` method
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -200,6 +201,7 @@ class ModulesControllerTest extends TestCase
      * Session filter data must be empty
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      *
      * @return void
      */

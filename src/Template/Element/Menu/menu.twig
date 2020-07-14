@@ -4,8 +4,8 @@
         <nav role="menu">
             {# Core object modules #}
             {% for name, module in modules if name != 'trash' %}
-                {% set label = __(name|humanize) %}
-                {% set shortLabel = label[0:3] %}
+                {% set label = __(module.label|default(name)|humanize) %}
+                {% set shortLabel = module.shortLabel|default(label[0:3]) %}
                 {% if label|length > 8 %}
                     {% set label = label[0:3] %}
                 {% endif %}

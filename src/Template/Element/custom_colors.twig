@@ -1,7 +1,8 @@
 <style type="text/css">
 
     {# module colors #}
-    {% for name, color in config('Modules.colors', []) %}
+    {% for name, module in modules if module.color %}
+        {% set color = module.color %}
         :root { --color-{{ name }}: {{ color }}; }
         .has-background-module-{{ name }} { background-color: {{ color }} !important; }
         .has-border-module-{{ name }} { border-color: {{ color }} !important; }
