@@ -196,22 +196,6 @@ const _vueInstance = new Vue({
         },
 
         /**
-         * on page click:
-         * - if panel is open, close it and stop event propagation
-         * - if panel is closed do nothing
-         *
-         * @return {void}
-         */
-        pageClick(event) {
-            // temporary comment: we do not want that panel is closed, when it contains pagination...
-            // if (this.panelIsOpen) {
-            //     this.closePanel();
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            // }
-        },
-
-        /**
         * extract params from page url
         *
         * @returns {void}
