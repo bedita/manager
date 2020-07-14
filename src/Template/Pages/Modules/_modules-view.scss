@@ -43,7 +43,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
                     display: block;
                     flex: 1 0 100%;
                     margin-right: $gutter;
-                    line-height: $gutter * 1.5;
+                    line-height: $gutter * 1.75;
                 }
 
                 .stream {
@@ -168,7 +168,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
             section.relations { margin-top: 1.5rem; grid-area: full-view; }
         }
 
-        @media screen and (min-width: 960px) {
+        @media screen and (min-width: 1024px) {
             grid-gap: 0 $gutter * 1.5;
             grid-template-columns: 2fr 1fr;
             section.relations { grid-area: submain-view; }
@@ -179,19 +179,18 @@ body.view-module, body.translation-module, body.userprofiles-view {
         }
 
         .main-view-column section.fieldset .tab-container {
-            @media screen and (min-width: 1366px) {
-                grid-template-columns: 1fr 1fr 1fr;
+            @media screen and (min-width: 1024px) {
+                grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
                 display: grid;
                 grid-gap: $gutter * 1.5 $gutter;
                 > div {
                     margin: 0;
                 }
-
-                .input.title, .input.textarea {
-                    grid-column: 1/-1;
-                }
                 .input.select select {
                     width: 100%;
+                }
+                .input.title, .input.textarea {
+                    grid-column: 1/-1;
                 }
             }
         }
