@@ -33,7 +33,7 @@ Locale(BEDITA.locale);
 // General Configs
 
 // TO-DO to be a dynamic array
-export const ACCEPTABLE_MEDIA = ['media', 'image', 'video', 'audio', 'files'];
+export const ACCEPTABLE_MEDIA = ['media', 'images', 'videos', 'audio', 'files'];
 
 // Global mixins
 
