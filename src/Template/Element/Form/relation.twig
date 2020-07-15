@@ -1,6 +1,10 @@
+{% if relationName == 'children' %}
+<children-view inline-template
+{% else %}
 <relation-view inline-template
-    relation-name={{ relationName }}
     :relation-data='{{ relationSchema|json_encode|raw }}'
+{% endif %}
+    relation-name={{ relationName }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     @loading="onToggleLoading" @count="onCount">
@@ -30,7 +34,7 @@
 
             {# RELATED OBJECTS #}
             <div class="mb-1" v-show="objects.length">
-                <div class="columns" sortable>
+                <div class="columns" droppable sortable>
                     <div
                         class="related-object column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="(related, index) in objects"
@@ -39,7 +43,11 @@
                         draggable
                         :drag-data="JSON.stringify(related)">
 
-                        {% element 'Form/related_item' { 'common': true } %}
+                        {% if relationName == 'children' %}
+                            {% element 'Form/related_item' { 'children': true } %}
+                        {% else %}
+                            {% element 'Form/related_item' { 'common': true } %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -93,7 +101,6 @@
 
                 <button v-else
                     class="icon-hdd"
-                    :disabled="isPanelOpen()"
                     @click.prevent.stop="addRelatedObjects({
                         object: {{object|json_encode}},
                         relationName: relationName,

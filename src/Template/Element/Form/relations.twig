@@ -16,15 +16,12 @@
                         <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
                 </header>
 
-                {% if relationName == 'children' %}
-                    <div v-show="isOpen" class="tab-container">
-                        {% element 'Form/children' {'relationName': relationName } %}
-                    </div>
-                {% else %}
-                    <div v-show="isOpen" class="tab-container">
-                        {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName] } %}
-                    </div>
-                {% endif %}
+                <div v-show="isOpen" class="tab-container">
+                    {% element 'Form/relation' {
+                        'relationName': relationName,
+                        'relationSchema': relationName != 'children'? relationsSchema[relationName] : null,
+                    } %}
+                </div>
 
             </section>
         </property-view>

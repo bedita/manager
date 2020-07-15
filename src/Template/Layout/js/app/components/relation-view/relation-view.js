@@ -56,20 +56,22 @@ export default {
 
     data() {
         return {
-            method: 'relatedJson',                      // define AppController method to be used
+            method: 'relatedJson',      // define AppController method to be used
             loading: false,
-            count: 0,                                   // count number of related objects, on change triggers an event
+            count: 0,                   // count number of related objects, on change triggers an event
 
-            requesterId: null, // panel requerster id
-            removedRelated: [],                         // staged removed related objects
-            addedRelations: [],                         // staged added objects to be saved
-            modifiedRelations: [],                      // staged modified relation params
+            requesterId: null,          // panel requerster id
+            removedRelated: [],         // staged removed related objects
+            addedRelations: [],         // staged added objects to be saved
+            modifiedRelations: [],      // staged modified relation params
 
-            removedRelationsData: [],                   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],                     // array of serialized new relations
+            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
+            addedRelationsData: [],     // array of serialized new relations
 
-            relationsData: [], // hidden field containing serialized json passed on form submit
-            activeFilter: {}, // current active filter for objects list
+            relationsData: [],          // hidden field containing serialized json passed on form submit
+            activeFilter: {},           // current active filter for objects list
+
+            positions: {},              // usede in children relations
         }
     },
 
@@ -225,6 +227,7 @@ export default {
             return this.requesterId === id;
         },
 
+        // common relations priorities
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
 
@@ -236,6 +239,46 @@ export default {
                 this.modifyRelation(object);
                 return object;
             });
+        },
+
+        // children position
+        updatePositions(movedObject, newIndex) {
+            const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+
+            // moves the object in the objects array from the old index to the new index
+            this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
+
+            this.objects = this.objects.map((object, index) => {
+                object.meta.relation.position = index + 1;
+                object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                this.modifyRelation(object);
+                return object;
+            });
+        },
+
+        /**
+         * update relation position and stage for saving - children
+         *
+         * @param {Object} related related object
+         *
+         * @returns {void}
+         */
+        onInputPosition(related) {
+            const oldPosition = related.meta.relation.position;
+            const newPosition = this.positions[related.id] !== '' ? this.positions[related.id] : undefined;
+            if (newPosition !== oldPosition) {
+                // try to deep copy the object
+                try {
+                    const copy = JSON.parse(JSON.stringify(related));
+                    copy.meta.relation.position = newPosition;
+                    this.modifyRelation(copy);
+                } catch (exp) {
+                    // silent error
+                    console.error('[ChildrenView -> updatePosition] something\'s wrong with the data');
+                }
+            } else {
+                this.removeModifiedRelations(related.id);
+            }
         },
 
         /**
@@ -348,8 +391,12 @@ export default {
             const newIndex = list.indexOf(element)
             const object = transfer.data;
 
-            object.meta.relation.priority = newIndex + 1;
-            this.updatePriorities(object, newIndex);
+            if (this.relationName == 'children') {
+                this.updatePositions(object, newIndex);
+            } else {
+                object.meta.relation.priority = newIndex + 1;
+                this.updatePriorities(object, newIndex);
+            }
         },
 
         /**
