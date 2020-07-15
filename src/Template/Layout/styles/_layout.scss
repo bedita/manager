@@ -31,7 +31,7 @@ main.layout {
     > .layout-footer { padding: $gutter 0; }
 
     > .layout-sidebar, > .layout-footer { max-width: 100%; overflow-x: hidden; }
-    > .layout-content { max-width: 100%; overflow-x: auto; }
+    > .layout-content { max-width: 100%; }
 }
 
 
