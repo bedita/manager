@@ -37,7 +37,7 @@
                             })|raw }}
 
                             {# related objects #}
-                            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
+                            <div class="columns" v-bind:class="loading? 'isLoading' : ''">
                                 <div class="related-object column is-2 is-one-third-fullhd"
                                     v-for="(related, index) in objects"
                                     :key="related.id"

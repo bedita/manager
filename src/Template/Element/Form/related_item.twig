@@ -120,7 +120,8 @@
 
         {% elseif add %}
             <button class="button-outlined-white button-text is-small has-font-weight-bold "
-                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check has-text-white' : 'icon-check-empty'">{{ __('Select') }}</button>
+                v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
+                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check has-text-info' : 'icon-check-empty'"></button>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
 
         {% elseif translation %}

@@ -19,7 +19,7 @@
         overflow: hidden;
         @media (min-width: 568px) {
             height: 0;
-            padding-bottom: #{$dashboard-items-ratio};
+            padding-bottom: $dashboard-items-ratio;
         }
     }
 

@@ -306,27 +306,20 @@ a.close-button {
 
 
 // TODO: controllare questo dragover
-.dragover {
-    position: relative;
-    min-height: 8 * $gutter;
-
-    &:after {
-        position: absolute;
-        top: $gutter * 0.25;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0px $gutter * .25;
-        content: "Drop Here";
-        border-radius: $gutter * 0.25;
-        background: $black;
-        opacity: 0.7;
-        font-size: 2em;
-        height: calc(100% - #{$gutter * .5});
-        width: calc(100% - #{$gutter * .75});
-    }
-}
+// .dragover {
+//     position: relative;
+//     &:after {
+//         content: "Drop Here";
+//         @extend .full-size-absolute;
+//         z-index: 100;
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         background: rgba(0, 0, 0, .85);
+//         font-size: $font-size-2;
+//         font-weight: $font-weight-bold;
+//     }
+// }
 
 .sorting {
     background: $black;

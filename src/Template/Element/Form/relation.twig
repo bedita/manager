@@ -6,10 +6,11 @@
     @loading="onToggleLoading" @count="onCount">
 
     <div class="relation-view">
+
         <div class="related-list-container">
 
             {# FilterBoxView #}
-            <div class="mb-1">
+            <div class="mb-1" v-if="pagination.count">
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
@@ -27,37 +28,34 @@
                 </filter-box-view>
             </div>
 
-            {# related objects #}
-            <div class="related-objects-list columns"
-                :class="loading? 'isLoading' : ''"
-                droppable
-                sortable
-                :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
+            {# RELATED OBJECTS #}
+            <div class="mb-1" v-show="objects.length">
+                <div class="columns" sortable>
+                    <div
+                        class="related-object column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                        v-for="(related, index) in objects"
+                        :key="related.id"
+                        :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                        draggable
+                        :drag-data="JSON.stringify(related)">
 
-                {# related objects #}
-                <div
-                    class="related-object column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
-                    v-for="(related, index) in objects"
-                    :key="related.id"
-                    :class="containsId(removedRelated, related.id)? 'removed' : ''"
-                    draggable
-                    :drag-data="JSON.stringify(related)">
-
-                    {% element 'Form/related_item' { 'common': true } %}
+                        {% element 'Form/related_item' { 'common': true } %}
+                    </div>
                 </div>
             </div>
 
+            {# STAGED OBJECTS #}
+            <div class="mb-1 has-background-gray-950 p-1" v-if="addedRelations.length">
+                <p class="has-text-size-smallest mb-1">{{ __('New relations (save to keep)') }}</p>
+                <div class="columns">
+                    <div
+                        class="related-object column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                        v-for="related in addedRelations"
+                        :key="related.id"
+                        :class="containsId(removedRelated, related.id) ? 'removed' : '' ">
 
-            {# staged objects to be added #}
-            <p class="column is-1 has-text-size-smallest mb-05 mt-05 " v-if="addedRelations.length">{{ __('New relations (save to keep)') }}</p>
-            <div class="related-new-objects-list mb-2 columns" v-if="addedRelations.length">
-                <div
-                    class="related-object column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
-                    v-for="related in addedRelations"
-                    :key="related.id"
-                    :class="containsId(removedRelated, related.id) ? 'removed' : '' ">
-
-                    {% element 'Form/related_item' { 'stage': true } %}
+                        {% element 'Form/related_item' { 'stage': true } %}
+                    </div>
                 </div>
             </div>
 
@@ -78,21 +76,31 @@
             {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
         </div>
 
-        <div class="mt-1">
-            <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
-                @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+        <div class="mt-5">
+            {# DROP FILES #}
+            {% set types = ['media', 'images', 'videos', 'audio', 'files'] %}
+            {% set acceptedTypes = types | filter((item) => item in relationSchema.right) | join(', ') %}
+            {% if acceptedTypes|length %}
+                <div class="drop-area mb-1" placeholder="{{ __('Drop new files Here') }}"
+                    droppable
+                    :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
+                </div>
+            {% endif %}
 
-            <button v-else
-                class="icon-hdd"
-                :disabled="isPanelOpen()"
-                @click.prevent.stop="addRelatedObjects({
-                    object: {{object|json_encode}},
-                    relationName: relationName,
-                    alreadyInView: alreadyInView,
-                    relationTypes: relationTypes,
-                })">{{ __('add objects') }}</button>
+            <div>
+                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
+                    @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
 
-            <button @click.prevent.stop="reloadObjects()">{{ __('reload') }}</button>
+                <button v-else
+                    class="icon-hdd"
+                    :disabled="isPanelOpen()"
+                    @click.prevent.stop="addRelatedObjects({
+                        object: {{object|json_encode}},
+                        relationName: relationName,
+                        alreadyInView: alreadyInView,
+                        relationTypes: relationTypes,
+                    })">{{ __('add objects') }}</button>
+            </div>
         </div>
 
     </div>

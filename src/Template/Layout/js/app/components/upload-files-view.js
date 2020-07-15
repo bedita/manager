@@ -27,7 +27,7 @@ export default {
                 <h2>File upload</h2>
             </header>
 
-            <div class="px-1 mt-1 mb-1">
+            <div class="px-1 my-1">
 
             </div>
 

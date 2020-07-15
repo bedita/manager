@@ -401,6 +401,7 @@ export default {
 
         /**
          * reload all related objects
+         * UNUSED
          *
          * @return {Array} objs objects retrieved
          */
