@@ -33,6 +33,7 @@ export default {
         RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
         RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
     },
 
     props: {

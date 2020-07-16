@@ -89,10 +89,12 @@
             {% set types = ['media', 'images', 'videos', 'audio', 'files'] %}
             {% set acceptedTypes = types | filter((item) => item in relationSchema.right) | join(', ') %}
             {% if acceptedTypes|length %}
-                <div class="drop-area mb-1" placeholder="{{ __('Drop new files Here') }}"
-                    droppable
-                    :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']">
-                </div>
+                {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
+
+                <drop-upload
+                    placeholder="{{ __('Click or drop new files here') }}"
+                    @new-relations="appendRelations"
+                    ></drop-upload>
             {% endif %}
 
             <div>
