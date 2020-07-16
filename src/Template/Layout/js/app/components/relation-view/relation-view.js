@@ -346,7 +346,7 @@ export default {
         editRelationParams(data) {
             this.requesterId = data.related.id;
             PanelEvents.requestPanel({
-                action: 'upload-files',
+                action: 'edit-relation-params',
                 from: this,
                 data,
             });
