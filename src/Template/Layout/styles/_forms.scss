@@ -38,6 +38,7 @@ select {
 }
 
 label {
+    margin-right: $gutter;
     > input {
         margin-right: $gutter * .5;
     }
