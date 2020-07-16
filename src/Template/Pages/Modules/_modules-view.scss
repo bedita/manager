@@ -153,7 +153,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
             }
         }
 
-        section.relations { margin-top: 1.5rem; }
+        section.relations { margin: 1.5rem 0; }
 
         // responsive grid
         @media screen and (min-width: 768px) {

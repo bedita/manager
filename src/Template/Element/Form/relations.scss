@@ -28,11 +28,8 @@
     }
 }
 
-
-// single related object
-.related-object {
-    position: relative;
-
+// related item (relate-item-twig)
+.related-item-column {
     article {
         height: 100%;
 
@@ -97,7 +94,6 @@
     flex-direction: column;
     height: 100%;
 
-    // layout
     > * {
         display: flex;
         flex-direction: column;
