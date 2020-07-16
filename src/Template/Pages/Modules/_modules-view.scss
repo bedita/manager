@@ -104,7 +104,6 @@ body.translation-module {
         padding-bottom: $gutter * .5;
         padding-right: $gutter * .5;
         border-bottom: 1px solid $gray-700;
-        cursor: pointer;
 
         &.is-loading-spinner {
             button {
@@ -122,6 +121,7 @@ body.translation-module {
         }
 
         &:not(.tab-static) {
+            cursor: pointer;
             &:before {
                 content: '+';
                 margin-right: .375rem;

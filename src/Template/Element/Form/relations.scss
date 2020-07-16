@@ -23,13 +23,11 @@
             opacity: .4;
         }
 
-        header {
-            h1 {
-                min-height: $font-size-lg * 2;
-                padding-right: $gutter * .75;
-                word-break: break-word;
-                line-height: 1.25em;;
-            }
+        header h1 {
+            min-height: $font-size-lg * 2;
+            padding-right: $gutter * .75;
+            word-break: break-word;
+            line-height: 1.25em;;
         }
 
         .priority {
@@ -167,10 +165,6 @@
         overflow-x: hidden;
     }
 
-    header.tab {
-        cursor: auto;
-    }
-
     footer {
         display: flex;
     }
@@ -185,18 +179,10 @@
         pointer-events: none;
         cursor: default;
     }
-
-    .open h2 {
-        cursor: pointer;
-    }
 }
 
 
 .main-panel-container .edit-relation {
-    @extend %relation-panel-common;
-}
-
-.main-panel-container .upload-files {
     @extend %relation-panel-common;
 }
 
@@ -212,7 +198,6 @@
         }
     }
 
-    // ui specs
     .related-item-column article {
         cursor: pointer;
 
