@@ -1,4 +1,4 @@
-body.view-module, body.translation-module, body.userprofiles-view {
+body.view-module, body.userprofiles-view {
 
     .modules-view {
         >header {
@@ -83,16 +83,6 @@ body.view-module, body.translation-module, body.userprofiles-view {
     }
 }
 
-body.translation-module {
-    .original {
-        opacity: .8;
-    }
-
-    // TODO: refactor this css
-    .module-form form { grid-template-columns: 50% 50% !important; }
-}
-
-
 // tabs layout
 .fieldset {
     ~ .fieldset {
@@ -136,11 +126,10 @@ body.translation-module {
     }
 }
 
-// general layout
+
+// general view form layout
 body.view-module, body.translation-module, body.userprofiles-view {
     .module-form form {
-
-        // arrange form elements
         section.fieldset {
             .tab-container {
                 padding: $gutter 0;
@@ -154,8 +143,10 @@ body.view-module, body.translation-module, body.userprofiles-view {
         }
 
         section.relations { margin: 1.5rem 0; }
+    }
 
-        // responsive grid
+    // responsive grid
+    .module-form form {
         @media screen and (min-width: 768px) {
             display: grid;
             grid-gap: 0 $gutter;
@@ -179,8 +170,22 @@ body.view-module, body.translation-module, body.userprofiles-view {
         @media screen and (min-width: 1600px) {
             grid-template-columns: 3fr 1fr;
         }
+    }
+}
 
-        .main-view-column section.fieldset .tab-container {
+body.translation-module {
+    .original {
+        opacity: .8;
+    }
+
+    // TODO: refactor this css
+    .module-form form { grid-template-columns: 1fr 1fr !important; }
+}
+
+// form elements responsive grid
+body.view-module, body.userprofiles-view {
+    &:not(.translation-module) {
+        .module-form form .main-view-column section.fieldset .tab-container {
             @media screen and (min-width: 1024px) {
                 grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
                 display: grid;
@@ -196,6 +201,5 @@ body.view-module, body.translation-module, body.userprofiles-view {
                 }
             }
         }
-
     }
 }
