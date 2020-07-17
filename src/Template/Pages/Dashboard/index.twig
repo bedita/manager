@@ -27,7 +27,7 @@
             <div class="dashboard-items dashboard-utility">
                 {% if modules.publications %}
                     {{ Html.link(__('Publications'),
-                        { '_name': 'modules:list', 'object_type': 'folders' },
+                        { '_name': 'modules:list', 'object_type': 'publications' },
                         { 'title': __('Publications'), 'class': 'dashboard-item has-background-module-publications icon-globe-1', } )|raw }}
                 {% endif %}
 
