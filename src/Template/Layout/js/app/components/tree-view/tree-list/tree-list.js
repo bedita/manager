@@ -19,10 +19,10 @@ export default {
 
     template: `
         <div class="tree-list-node" :data-status="item.status">
-            <div class="node-element">
+            <div class="node-element py-05">
                 <label
                     class="node-label"
-                    :class="relationName ? 'has-relation' : ''"
+                    :class="relationName ? '' : 'icon-folder'"
                     v-on="{ click: relationName ? () => {} : toggle }"
                 >
                     <input
@@ -37,6 +37,7 @@ export default {
                 </label>
                 <button
                     v-if="!item.children || item.children.length !== 0"
+                    class="is-small"
                     :class="nodeClasses"
                     @click="toggle"
                     ></button>

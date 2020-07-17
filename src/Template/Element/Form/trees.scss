@@ -4,7 +4,7 @@
     line-height: 1;
 
     > .tree-list-node {
-        border-bottom: solid 1px currentColor;
+        border-bottom: solid 1px $gray-800;
 
         &[data-status='draft'],
         &[data-status='off'] {
@@ -17,7 +17,7 @@
             align-items: center;
 
             > label.node-label {
-                flex: none;
+                flex: none !important;
                 margin-right: $gutter;
                 color: inherit;
                 line-height: $gutter * 2;
@@ -28,19 +28,6 @@
                     margin-top: -$gutter / 8;
                     margin-right: $gutter / 2;
                     vertical-align: middle;
-                }
-
-                &:not(.has-relation) {
-                    &::before {
-                        content: '';
-                        display: inline-block;
-                        width: 1em;
-                        height: 1em;
-                        margin-right: $gutter / 2;
-                        vertical-align: middle;
-                        background: var(--color-folders);
-                        border-radius: 50%;
-                    }
                 }
             }
 
@@ -60,8 +47,8 @@
             }
 
             > button {
-                padding: 0;
-                margin: 0 0 0 $gutter / 2;
+                margin: 0 0 0 $gutter * .75;
+                min-width: $gutter * 2;
                 color: currentColor;
                 background: transparent;
                 border: 0;
@@ -69,7 +56,6 @@
                 &.is-loading-spinner {
                     width: 1.35em;
                     height: 1em;
-
                     &::after {
                         vertical-align: middle;
                         border-left-color: rgba(255, 255, 255, 0.75);

@@ -55,6 +55,13 @@ button, .button {
         outline: 0;
     }
 
+    &:focus {
+        outline: 0;
+        background-color: $gray-600;
+        border-color: #fff;
+        color: #FFF;
+    }
+
 
     // button modifiers
     &.is-width-auto {
