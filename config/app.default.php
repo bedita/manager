@@ -422,64 +422,45 @@ return [
         'objects' => [
             'shortLabel' => 'obj',
             'color' => '#230637',
-            'secondaryColor' => '#d95700',
+            // 'secondaryColor' => '#d95700',
             'sort' => '-modified',
+            // 'icon' => 'icon-cube',
         ],
         'folders' => [
-            // 'shortLabel' => 'fol',
             'color' => '#072440',
         ],
         'documents' => [
-            'shortLabel' => 'docs',
             'color' => '#cc4700',
-            // 'icon' => 'icon-article',
         ],
         'events' => [
-            'shortLabel' => 'evt',
             'color' => '#09c',
-            // 'icon' => 'icon-music',
         ],
         'news' => [
-            // 'shortLabel' => 'new',
             'color' => '#036',
-            // 'sort' => 'title',
-            // 'icon' => 'icon-newspaper',
         ],
         'locations' => [
             'color' => '#641',
-            'icon' => 'icon-map-pin',
         ],
         'media' => [
-            'shortLabel' => 'med',
             'color' => '#a80019',
-            'sort' => '-modified',
         ],
         'images' => [
-            'shortLabel' => 'img',
             'color' => '#d5002b',
-            // 'icon' => 'icon-picture',
         ],
         'videos' => [
             'color' => '#d5002b',
-            // 'icon' => 'icon-video',
         ],
         'audio' => [
             'color' => '#d5002b',
-            // 'icon' => 'icon-music',
         ],
         'files' => [
             'color' => '#d5002b',
-            // 'icon' => 'icon-article',
         ],
         'users' => [
-            'shortLabel' => 'usr',
             'color' => '#000000',
         ],
         'profiles' => [
-            // 'shortLabel' => 'pro',
             'color' => '#093',
-            // 'sort' => 'title',
-            // 'icon' => 'address-book',
         ],
     ],
 
