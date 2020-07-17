@@ -152,6 +152,9 @@ class SchemaHelperTest extends TestCase
                 [
                     'class' => 'title',
                     'type' => 'text',
+                    'templates' => [
+                        'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+                    ],
                     'value' => 'test',
                 ],
                 // schema type
@@ -203,6 +206,9 @@ class SchemaHelperTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => 'test',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
                 // schema type
                 [
