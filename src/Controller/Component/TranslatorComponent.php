@@ -24,27 +24,6 @@ use Cake\Utility\Hash;
 class TranslatorComponent extends Component
 {
     /**
-     * Text to translate
-     *
-     * @var string
-     */
-    protected $text = null;
-
-    /**
-     * Source language
-     *
-     * @var string
-     */
-    protected $source = null;
-
-    /**
-     * Target language
-     *
-     * @var string
-     */
-    protected $target = null;
-
-    /**
      * Translator engine
      *
      * @var TranslatorInterface
