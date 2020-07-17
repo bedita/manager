@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use BEdita\SDK\BEditaClientException;
 use Cake\Utility\Hash;
 
 /**
