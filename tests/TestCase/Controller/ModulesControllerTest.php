@@ -180,10 +180,8 @@ class ModulesControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        // Setup controller for test. Set sort to avoid redirect.
-        $this->setupController(['query' => [
-            'sort' => '-id',
-        ]]);
+        // Setup controller for test
+        $this->setupController();
 
         // do controller call
         $result = $this->controller->index();
@@ -195,28 +193,6 @@ class ModulesControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['objects', 'meta', 'links', 'types', 'properties']);
-    }
-
-    /**
-     * Test `index` method with `sort` query param not set
-     * A redirect to default `sort=-id` should be performed
-     *
-     * @covers ::index()
-     *
-     * @return void
-     */
-    public function testIndexNoSort(): void
-    {
-        // Setup controller for test without `sort` query param
-        $this->setupController();
-
-        // do controller call
-        $result = $this->controller->index();
-
-        // verify response type and location
-        $locationHeader = $result->getHeaderLine('Location');
-        static::assertEquals('text/html', $result->getType());
-        static::assertEquals(sprintf('/%s?sort=-id', $this->controller->getObjectType()), $locationHeader);
     }
 
     /**

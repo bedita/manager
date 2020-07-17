@@ -82,17 +82,6 @@ class ModulesController extends AppController
 
         $query = $this->request->getQueryParams();
 
-        // sort by descending id if no other sort is specified
-        if (empty($query['sort'])) {
-            $query['sort'] = '-id';
-
-            return $this->redirect([
-                '_name' => 'modules:list',
-                'object_type' => $this->objectType,
-                '?' => $query,
-            ]);
-        }
-
         try {
             $response = $this->apiClient->getObjects($this->objectType, $query);
         } catch (BEditaClientException $e) {

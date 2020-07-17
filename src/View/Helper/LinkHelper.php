@@ -81,17 +81,14 @@ class LinkHelper extends Helper
      */
     public function sortUrl($field, $resetPage = true): string
     {
-        $replace = [];
         $request = $this->getView()->getRequest();
         $sort = $request->getQuery('sort');
         $sortValue = $field; // <= ascendant order
         if ($sort === $field) { // it was ascendant sort
             $sortValue = '-' . $field; // <= descendant order
         }
-        $replace['sort'] = $sortValue;
-
+        $replace = ['sort' => $sortValue];
         $currentPage = Hash::get($request->getQueryParams(), 'page');
-
         if (isset($currentPage) && $resetPage) {
             $replace['page'] = 1;
         }
