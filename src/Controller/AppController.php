@@ -66,6 +66,7 @@ class AppController extends Controller
             'currentModuleName' => $this->name,
         ]);
         $this->loadComponent('Schema');
+        $this->loadComponent('Translator');
     }
 
     /**

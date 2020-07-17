@@ -638,4 +638,15 @@ return [
     // 'Project' => [
     //     'name' => 'My Project',
     // ],
+
+    /**
+     * Translator engine configuration
+     */
+    // 'Translator' => [
+    //     'class' => '\App\Core\I18n\DummyTranslator',
+    //     'options' => [
+    //         'url' => 'www.my-dummy-translator.com',
+    //         'apiKey' => 'abcde',
+    //     ],
+    // ],
 ];
