@@ -275,7 +275,7 @@ export default {
                     this.modifyRelation(copy);
                 } catch (exp) {
                     // silent error
-                    console.error('[ChildrenView -> updatePosition] something\'s wrong with the data');
+                    console.error('[RelationView -> updatePosition] something\'s wrong with the data');
                 }
             } else {
                 this.removeModifiedRelations(related.id);
