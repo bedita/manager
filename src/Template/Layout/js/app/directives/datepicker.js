@@ -1,9 +1,6 @@
 /**
  * Datepicker vue directive
- *
  */
-
-
 export default {
     install(Vue) {
         Vue.directive('datepicker', {
@@ -33,6 +30,7 @@ export default {
                 if (!el.vm) {
                     return;
                 }
+                el.vm.attrs = vnode.data.attrs;
                 if (vnode.data && vnode.data.attrs && vnode.data.attrs.value) {
                     el.vm.setDate(new Date(vnode.data.attrs.value));
                 } else if (vnode.data && vnode.data.domProps && vnode.data.domProps.value) {
@@ -51,6 +49,6 @@ export default {
                     delete el.vm;
                 }
             },
-        })
+        });
     }
 }

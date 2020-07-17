@@ -43,7 +43,7 @@ export default {
          *
          * @param {Event} event event object
          */
-        handleChange(evente) {
+        handleChange(event) {
             this.text = event.target.value;
             this.$emit('input', this.text);
         }
