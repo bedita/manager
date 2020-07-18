@@ -4,6 +4,8 @@
 
 .unselectable { user-select: none; }
 
+.pointer-events-none { pointer-events: none; }
+
 .is-text-hidden { @include hide-text(); }
 
 .is-clipped { overflow: hidden!important; }

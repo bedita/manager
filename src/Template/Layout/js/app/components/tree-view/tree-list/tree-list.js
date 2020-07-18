@@ -22,7 +22,10 @@ export default {
             <div class="node-element py-05">
                 <label
                     class="node-label"
-                    :class="relationName ? '' : 'icon-folder'"
+                    :class="{
+                        'icon-folder': !relationName,
+                        'has-text-gray-550 disabled': item.id == objectId,
+                    }"
                     v-on="{ click: relationName ? () => {} : toggle }"
                 >
                     <input
