@@ -32,8 +32,8 @@
 
     {# RIBBON (new items) #}
     {% if stage %}
-        <div class="priority">
-            <span class="badge has-text-white" :class="'has-background-module-' + related.type">{{ __('new') }}</span>
+        <div class="ribbon" :class="'has-background-module-' + related.type">
+            {{ __('NEW') }}
         </div>
     {% endif %}
 
