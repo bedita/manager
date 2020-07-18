@@ -10,7 +10,7 @@
         <date-ranges-view inline-template ranges={{ object.attributes.date_ranges|json_encode }}>
             <div>
                 <div class="date-ranges-list">
-                    <div class="date-ranges-item" v-for="(dateRange, index) in dateRanges" :key="`range-${index}`">
+                    <div class="date-ranges-item mb-1" v-for="(dateRange, index) in dateRanges" :key="`range-${index}`">
                         <div>
                             <span>{{ __('From') }}</span>
                             <div>
@@ -34,17 +34,19 @@
                             </div>
                         </div>
                         <div>
-                            <input type="checkbox" :id="`all_day_${index}`"
-                                :name="`date_ranges[${index}][params][all_day]`"
-                                v-model="dateRange.params.all_day"
-                                @change="onAllDayChanged(dateRange, $event)" />
-                            <label :for="`all_day_${index}`">{{ __('All day') }}</label>
+                            <label :for="`all_day_${index}`" class="m-0 nowrap has-text-size-smaller">
+                                <input type="checkbox" :id="`all_day_${index}`"
+                                    :name="`date_ranges[${index}][params][all_day]`"
+                                    v-model="dateRange.params.all_day"
+                                    @change="onAllDayChanged(dateRange, $event)" />
+                                {{ __('All day') }}</label>
                         </div>
                         <div>
                             <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">{{ __('Remove') }}</button>
                         </div>
                     </div>
                 </div>
+
                 <button @click.prevent="add">{{ __('Add') }}</button>
             </div>
         </date-ranges-view>
