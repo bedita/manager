@@ -1,5 +1,7 @@
 <relation-view inline-template
+{% if relationName != 'children' %}
     :relation-data='{{ relationSchema|json_encode|raw }}'
+{% endif %}
     relation-name={{ relationName }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
