@@ -2,7 +2,7 @@
     Several switches on kind of relation view:
     • common      (relation.twig)
     • stage       (relation.twig)
-    • add         (relations_add.twig)
+    • add         (relations_add.twig in panel)
     • translation (translations.twig)
     • children    (translations.twig)
 #}
@@ -14,7 +14,7 @@
         draggable
         :drag-data="JSON.stringify(related)"
     {% else %}
-        :class="related.type"
+        :class="`${related.type} has-shadow-color-${related.type}`"
     {%- endif -%} >
 
 
@@ -30,9 +30,17 @@
     {% endif %}
 
 
+    {# RIBBON (new items) #}
+    {% if stage %}
+        <div class="priority">
+            <span class="badge has-text-white" :class="'has-background-module-' + related.type">{{ __('new') }}</span>
+        </div>
+    {% endif %}
+
+
     {# THUMBNAIL #}
     {% if not translation %}
-    <div class="thumbnail" v-bind:class="'has-text-module-' + related.type">
+    <div class="thumbnail" :class="'has-text-module-' + related.type">
         <figure class="center-icon icon-opaque"
             :class="(related.meta && related.meta.thumb_url)? '' : `icon-cube icon-${related.type}`">
             <img :src="related.meta.thumb_url" v-if="related.meta && related.meta.thumb_url" />
@@ -116,6 +124,7 @@
     {# BUTTONS #}
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
             <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
 
         {% elseif add %}
