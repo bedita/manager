@@ -1,7 +1,5 @@
-{% if relationName == 'children' %}
-<children-view inline-template
-{% else %}
 <relation-view inline-template
+{% if relationName != 'children' %}
     :relation-data='{{ relationSchema|json_encode|raw }}'
 {% endif %}
     relation-name={{ relationName }}
