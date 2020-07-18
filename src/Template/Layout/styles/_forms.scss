@@ -187,24 +187,28 @@ form {
 }
 
 // Date Picker
-    input.flatpickr-input.form-control {
-        min-width: 8rem;
+.datepicker, .date-ranges-item {
+    input.flatpickr-input + input.form-control {
+        text-overflow: ellipsis;
+        padding-right: 20px;
     }
 
     .clear-button {
+        position: relative;
+        top: 3px;
+        margin-left: -20px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 18px;
         height: 18px;
-        margin-left: -24px;
         z-index: 10;
-        color: $gray-500;
+        color: $gray-550;
         font-size: 24px;
-        vertical-align: middle;
         cursor: pointer;
 
         &:hover {
             color: $gray-900;
         }
     }
+}
