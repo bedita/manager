@@ -9,7 +9,10 @@ button, .button {
 
     position: relative;
     height: $gutter * 2;
-    min-width: $dashboard-item-width / 2;
+    min-width: $gutter * 3;
+    @media screen and (min-width: 1440px) {
+        min-width: $gutter * 4;
+    }
     flex-shrink: 0;
     box-shadow: none;
     padding-bottom: calc(.375em - 1px);
