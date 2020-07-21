@@ -531,8 +531,6 @@ const _vueInstance = new Vue({
             if (!text) {
                 return;
             }
-            const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/translate`;
             const formData = new FormData();
             formData.append('from', from);
             formData.append('to', to);
@@ -549,7 +547,7 @@ const _vueInstance = new Vue({
 
             let responseJson = {translation: []};
             try {
-                const response = await fetch(postUrl, options);
+                const response = await fetch(`${window.location.origin}/translate`, options);
                 responseJson = await response.json();
             } catch (error) {
                 console.error(error);
