@@ -47,18 +47,18 @@ class TranslatorComponent extends Component
     /**
      * Translate a text $text from language source $from to language target $to
      *
-     * @param string $text The text to translate
+     * @param array $texts Array of texts to translate
      * @param string $from The source language
      * @param string $to The target language
      * @return string The translation
      * @throws \Exception when no translator engine is set in configuration
      */
-    public function translate(string $text, string $from, string $to): string
+    public function translate(array $texts, string $from, string $to): string
     {
         if ($this->Translator === null) {
             throw new \Exception('No translator engine is set in configuration');
         }
 
-        return $this->Translator->translate($text, $from, $to);
+        return $this->Translator->translate($texts, $from, $to);
     }
 }

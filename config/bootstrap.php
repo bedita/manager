@@ -226,4 +226,5 @@ Type::build('timestamp')
 Configure::write('CsrfExceptions', [
     'PropertyTypes' => ['save'],
     'Modules' => ['saveJson'],
+    'Translator' => ['translate'],
 ]);

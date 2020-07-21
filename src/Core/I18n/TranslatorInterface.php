@@ -29,10 +29,18 @@ interface TranslatorInterface
     /**
      * Translate a text $text from language source $from to language target $to
      *
-     * @param string $text The text to translate
+     * @param array $texts The texts to translate
      * @param string $from The source language
      * @param string $to The target language
-     * @return string The translation
+     * @return string The translation in json format, i.e.
+     * {
+     *     "translation": [
+     *         "<translation of first text>",
+     *         "<translation of second text>",
+     *         [...]
+     *         "<translation of last text>"
+     *     ]
+     * }
      */
     public function translate(string $text, string $from, string $to): string;
 }

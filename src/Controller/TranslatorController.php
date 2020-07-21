@@ -20,6 +20,15 @@ use Cake\Utility\Hash;
 class TranslatorController extends AppController
 {
     /**
+     * {@inheritDoc}
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Security->setConfig('unlockedActions', ['translate']);
+    }
+
+    /**
      * Translate text.
      *
      * @return void
@@ -27,13 +36,14 @@ class TranslatorController extends AppController
     public function translate(): void
     {
         $this->viewBuilder()->setClassName('Json');
-        $this->request->allowMethod(['get']);
-        $query = $this->request->getQueryParams();
-        $from = Hash::get($query, 'from');
-        $to = Hash::get($query, 'to');
-        $text = Hash::get($query, 'text');
+        $this->request->allowMethod(['post']);
+        $data = $this->request->getData();
+        $from = Hash::get($data, 'from');
+        $to = Hash::get($data, 'to');
+        $text = Hash::get($data, 'text');
+        $texts = (is_array($text)) ? $text : [$text];
         try {
-            $translation = $this->Translator->translate($text, $from, $to);
+            $translation = $this->Translator->translate($texts, $from, $to);
             $this->set(compact('translation'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
