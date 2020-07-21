@@ -12,7 +12,99 @@
 import { PanelEvents } from 'app/components/panel-view';
 import { t } from 'ttag';
 
+const getBoolean = () => {
+    return `<!-- Boolean -> switch button true/false --->
+        <div v-if="param.type == 'boolean'">
+            <label class="switch">
+                <input type="checkbox" v-model="editingParams[key] ">
+                <span class="slider round"></span>
+            </label>
+        </div>`;
+};
+
+const getString = () => {
+    return `<!-- String -> can be date-time, enum, text --->
+        <div v-if="param.type == 'string'">
+            <!-- String, format: date-time -> datepicker --->
+            <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
+
+            <!-- String Enum -> select/option --->
+            <div v-else-if="param.enum !== undefined">
+                <select v-model="editingParams[key]">
+                    <option v-for="item in param.enum" :value="item"><: item :></option>
+                </select>
+            </div>
+
+            <!-- String -> input text --->
+            <input v-else type="text" v-model="editingParams[key]">
+        </div>`;
+};
+
+const getNumber = () => {
+    return `<!-- Number -> input number --->
+        <div v-if="param.type == 'number'">
+            <label>
+                <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
+            </label>
+        </div>`;
+};
+
+const getInteger = () => {
+    return `<!-- Integer -> input integer --->
+        <div v-if="param.type == 'integer'">
+            <label>
+                <input type="number" :name="key" v-model.number="editingParams[key]">
+            </label>
+        </div>`;
+};
+
+const oneOf = () => {
+    return `<!-- oneOf --->
+        <div v-if="param.oneOf">
+
+            <!-- Boolean -> switch button true/false --->
+            <div v-if="param.oneOf[1].type == 'boolean'">
+                <label class="switch">
+                    <input type="checkbox" v-model="editingParams[key] ">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <!-- String -> can be date-time, enum, text --->
+            <div v-if="param.oneOf[1].type == 'string'">
+                <!-- String, format: date-time -> datepicker --->
+                <input v-if="param.oneOf[1].format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
+
+                <!-- String Enum -> select/option --->
+                <div v-else-if="param.oneOf[1].enum !== undefined">
+                    <select v-model="editingParams[key]">
+                        <option v-for="item in param.oneOf[1].enum" :value="item"><: item :></option>
+                    </select>
+                </div>
+
+                <!-- String -> input text --->
+                <input v-else type="text" v-model="editingParams[key]">
+            </div>
+
+            <!-- Number -> input number --->
+            <div v-if="param.oneOf[1].type == 'number'">
+                <label>
+                    <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
+                </label>
+            </div>
+
+            <!-- Integer -> input integer --->
+            <div v-if="param.oneOf[1].type == 'integer'">
+                <label>
+                    <input type="number" :name="key" v-model.number="editingParams[key]">
+                </label>
+            </div>
+
+        </div>`;
+};
+
 export default {
+
     template: /*template*/
     `<div v-if="relationName" class="edit-relation">
         <section>
@@ -42,42 +134,11 @@ export default {
 
                 <div class="mb-1" v-for="(param, key) in schema">
                     <p :title="key"><: param.description || key :></p>
-
-                    <!-- Boolean -> switch button true/false --->
-                    <div v-if="param.type == 'boolean'">
-                        <label class="switch">
-                            <input type="checkbox" v-model="editingParams[key] ">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-
-                    <div v-if="param.type == 'string'">
-                        <!-- String, format: date-time -> datepicker --->
-                        <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
-
-                        <!-- String Enum -> select/option --->
-                        <div v-else-if="param.enum !== undefined">
-                            <select v-model="editingParams[key]">
-                                <option v-for="item in param.enum" :value="item"><: item :></option>
-                            </select>
-                        </div>
-                        <!-- String -> input text --->
-                        <input v-else type="text" v-model="editingParams[key]">
-                    </div>
-
-                    <!-- Number -> input number --->
-                    <div v-if="param.type == 'number'">
-                        <label>
-                            <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
-                        </label>
-                    </div>
-
-                    <!-- Integer -> input integer --->
-                    <div v-if="param.type == 'integer'">
-                        <label>
-                            <input type="number" :name="key" v-model.number="editingParams[key]">
-                        </label>
-                    </div>
+                    ${oneOf()}
+                    ${getBoolean()}
+                    ${getString()}
+                    ${getNumber()}
+                    ${getInteger()}
                 </div>
             </form>
 
