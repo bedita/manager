@@ -646,6 +646,14 @@ export default {
                 return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
             }
 
+            // oneOf
+            if(schema && schema[key].oneOf) {
+                const firstNotNull = schema[key].oneOf.find(p => p.type !== 'null');
+                if (firstNotNull.format  === 'date-time') {
+                    return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
+                }
+            }
+
             return value;
         },
 
