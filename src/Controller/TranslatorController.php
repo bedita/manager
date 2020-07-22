@@ -43,8 +43,9 @@ class TranslatorController extends AppController
         $text = Hash::get($data, 'text');
         $texts = (is_array($text)) ? $text : [$text];
         try {
-            $translation = $this->Translator->translate($texts, $from, $to);
-            $this->set(compact('translation'));
+            $json = $this->Translator->translate($texts, $from, $to);
+            $decoded = json_decode($json);
+            $this->set('translation', $decoded->translation);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $this->set(compact('error'));
