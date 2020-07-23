@@ -35,8 +35,13 @@ body.view-module, body.userprofiles-view {
                     }
                 }
 
-                .select select {
-                    min-width: 12 * $gutter;
+                .select {
+                    select {
+                        min-width: 12 * $gutter;
+                    }
+                    label {
+                        cursor: pointer;
+                    }
                 }
 
                 label {
