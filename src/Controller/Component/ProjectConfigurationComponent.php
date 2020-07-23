@@ -81,7 +81,7 @@ class ProjectConfigurationComponent extends Component
     {
         $response = (array)ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
 
-        $config = Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.content');
+        $config = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes.content');
         array_walk(
             $config,
             function (&$value, $key) {

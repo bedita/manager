@@ -84,7 +84,7 @@
     <div class="p-05 has-text-size-smaller" v-if="relationSchema">
         <dl v-if="relationHasParams()" class="mb-05">
             <template v-for="(param, key) in relationSchema">
-                <dt class="is-capitalized"><: key :></dt>
+                <dt class="is-capitalized"><: key|humanize :></dt>
                 <dd>
                     <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
                     <span v-else>-</span>

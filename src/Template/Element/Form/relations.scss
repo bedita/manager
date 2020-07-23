@@ -131,6 +131,25 @@
 
 .main-panel-container .edit-relation {
     @extend %relation-panel-common;
+    label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0;
+        >* {
+            margin-top: .125rem;
+        }
+    }
+
+    #{$text-inputs}, select {
+        &:not(.input-narrow) {
+            min-width: 12rem;
+        }
+    }
+
+    .input-narrow {
+        width: 3rem;
+    }
 }
 
 .main-panel-container .relations-add {
