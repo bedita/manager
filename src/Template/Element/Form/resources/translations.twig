@@ -15,7 +15,8 @@
 
                 <div v-show="isOpen" class="tab-container">
 
-                    <div class="input select "><label for="lang">The language of this object is</label><select name="lang" id="lang"><option value="en">English</option><option value="it" selected="selected">Italiano</option></select></div>
+                    {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
+                    {{ Form.control('lang', options)|raw }}
 
                     <relation-view inline-template
                         relation-name={{ resourceName }}
