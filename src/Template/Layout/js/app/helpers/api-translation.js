@@ -42,7 +42,6 @@ const methods = {
         } catch (error) {
             console.error(error);
         }
-        console.log('translate("', text, '","', from, '","', to, '")', responseJson);
 
         return responseJson;
     },
