@@ -6,7 +6,7 @@
 
                 <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                     <h2>
-                        {{ __(resourceName|humanize)|lower }}
+                        {{ __('Language and translations') }}
                         <span class="tag is-smallest is-black mx-05"
                             :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                         </span>
@@ -15,8 +15,19 @@
 
                 <div v-show="isOpen" class="tab-container">
 
-                    {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
-                    {{ Form.control('lang', options)|raw }}
+                    <div>
+                        {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
+                        {{ Form.control('lang', options)|raw }}
+
+                        {{ Html.link(__('Add translation'), {
+                            '_name': 'translations:add',
+                            'object_type': object.type,
+                            'id': object.id
+                        }, {
+                            'target': '_blank',
+                            'class' : 'icon-plus button mt-1',
+                        })|raw }}
+                    </div>
 
                     <relation-view inline-template
                         relation-name={{ resourceName }}
@@ -28,16 +39,6 @@
 
                         <div class="relation-view">
                             <div class="related-list-container">
-
-                                {{ Html.link(__('New translation'), {
-                                    '_name': 'translations:add',
-                                    'object_type': object.type,
-                                    'id': object.id
-                                }, {
-                                    'target': '_blank',
-                                    'class' : 'icon-plus button mb-1',
-                                })|raw }}
-
                                 {# related objects #}
                                 <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
                                     <div class="related-object column is-2 is-one-third-fullhd"
