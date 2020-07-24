@@ -16,6 +16,7 @@ namespace App\Controller\Component;
 use App\Core\I18n\TranslatorInterface;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 
 /**
@@ -51,12 +52,12 @@ class TranslatorComponent extends Component
      * @param string $from The source language
      * @param string $to The target language
      * @return string The translation
-     * @throws \Exception when no translator engine is set in configuration
+     * @throws Cake\Http\Exception\InternalErrorException when no translator engine is set in configuration
      */
     public function translate(array $texts, string $from, string $to): string
     {
         if ($this->Translator === null) {
-            throw new \Exception('No translator engine is set in configuration');
+            throw new InternalErrorException('No translator engine is set in configuration');
         }
 
         return $this->Translator->translate($texts, $from, $to);
