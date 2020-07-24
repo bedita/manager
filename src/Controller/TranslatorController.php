@@ -12,8 +12,6 @@
  */
 namespace App\Controller;
 
-use Cake\Utility\Hash;
-
 /**
  * Translator controller.
  */
@@ -38,13 +36,14 @@ class TranslatorController extends AppController
     {
         $this->viewBuilder()->setClassName('Json');
         $this->request->allowMethod(['post']);
-        $data = $this->request->getData();
-        $from = Hash::get($data, 'from');
-        $to = Hash::get($data, 'to');
-        $text = Hash::get($data, 'text');
+        $text = $this->request->getData('text', '');
         $texts = (is_array($text)) ? $text : [$text];
         try {
-            $json = $this->Translator->translate($texts, $from, $to);
+            $json = $this->Translator->translate(
+                $texts,
+                (string)$this->request->getData('from'),
+                (string)$this->request->getData('to')
+            );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);
         } catch (\Exception $e) {
