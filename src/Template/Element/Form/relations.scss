@@ -1,23 +1,19 @@
-.related-list-container {
-    .columns {
-        &.isLoading {
-            opacity: .2;
-            pointer-events: none;
+.relation-view {
+    .related-list-container {
+        .columns {
+            &.isLoading {
+                opacity: .2;
+                pointer-events: none;
+            }
         }
-    }
-
-    .related-new-objects-list { // staged relations container
-        padding: $gutter * .5;
-        background-color: $gray-800;
-        border-radius: $gutter * .5;
-        border: 1px solid $gray-700;
     }
 }
 
-
-// single related object
-.related-object {
-    position: relative;
+// related item (relate-item-twig)
+.related-item-column {
+    &.sorting {
+        opacity: 0.2;
+    }
 
     article {
         height: 100%;
@@ -27,13 +23,11 @@
             opacity: .4;
         }
 
-        header {
-            h1 {
-                min-height: $font-size-lg * 2;
-                padding-right: $gutter * .75;
-                word-break: break-word;
-                line-height: 1.25em;;
-            }
+        header h1 {
+            min-height: $font-size-lg * 2;
+            padding-right: $gutter * .75;
+            word-break: break-word;
+            line-height: 1.25em;;
         }
 
         .priority {
@@ -77,26 +71,102 @@
 }
 
 
+// drop and upload
+.drop-area {
+    position: relative;
+    width: 100%;
+    min-height: $gutter * 5;
+    background-color: $gray-950;
+    transition: .2s transform;
+
+    &.dragover {
+        transform: scale(1.05);
+        color: #fff;
+        background-color: #000;
+    }
+
+    .upload-placeholder {
+        color: $gray-550;
+        margin: auto;
+    }
+
+    .file-input {
+        @extend .full-size-absolute;
+        opacity: 0;
+        outline: 0;
+        cursor: pointer;
+    }
+
+    .upload-items {
+        .upload-item {
+            width: 100%;
+            & ~ .upload-item {
+                margin-top: $gutter;
+            }
+
+            .upload-item-header {
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-end;
+                .name {
+                    margin-right: auto;
+                    word-break: break-word;
+                }
+                button {
+                    margin-left: $gutter * .5;
+                }
+            }
+
+            .message {
+                line-height: 1.25rem;
+                min-height: 1.25rem;
+            }
+
+            .progress-bar {
+                width: 100%;
+                margin: $gutter * .75 0 $gutter * .75;
+
+                .progress-bar-status {
+                    min-width: $gutter;
+                    height: 2px;
+                }
+                .progress-bar-status.in-progress {
+                    background-color: $gray-400;
+                }
+                .progress-bar-status.done {
+                    background-color: $info;
+                }
+                .progress-bar-status.error {
+                    background-color: $error;
+                }
+                .progress-bar-status.cancelled {
+                    background-color: $gray-700;
+                }
+            }
+        }
+    }
+}
+
+
 // in panel
 %relation-panel-common {
     display: flex;
     flex-direction: column;
     height: 100%;
 
-    // layout
     > * {
         display: flex;
         flex-direction: column;
     }
 
     .shrinks {
-        flex-shrink: 1 !important;
+        flex: 1;
         overflow-y: auto;
         overflow-x: hidden;
     }
 
-    header.tab {
-        cursor: auto;
+    footer {
+        display: flex;
     }
 
     form[disabled] {
@@ -109,39 +179,63 @@
         pointer-events: none;
         cursor: default;
     }
+}
 
-    .open h2 {
-        cursor: pointer;
+
+.main-panel-container .edit-relation {
+    @extend %relation-panel-common;
+    label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0;
+        >* {
+            margin-top: .125rem;
+        }
+    }
+
+    #{$text-inputs}, select {
+        &:not(.input-narrow) {
+            min-width: 12rem;
+        }
+    }
+
+    .input-narrow {
+        width: 3rem;
     }
 }
 
-
-.edit-relation {
-    @extend %relation-panel-common;
-}
-
-.relations-add {
+.main-panel-container .relations-add {
     @extend %relation-panel-common;
 
     .create-new-object {
         form > * {
             margin-bottom: $gutter;
-
-            input[name=title] {
-                max-width: 50%;
-                margin-left: $gutter * .5;
+            label {
+                margin-right: $gutter * .5;
             }
         }
     }
 
-    // ui specs
-    .related-object article {
+    .related-item-column article {
         cursor: pointer;
 
         &.selected {
-            background-color: $info;
-            color: $white;
-            .thumbnail { background-color: $info; opacity: .8; }
+            position: relative;
+            &:after {
+                content: "✓";
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                width: $gutter * 2.25; height: $gutter * 2.25;
+                top: $gutter * .5; left: $gutter * .5;
+                border: 2px solid white;
+                border-radius: 50%;
+                background-color: $info;
+                color: #fff;
+                font-weight: $font-weight-black;
+            }
         }
     }
 }

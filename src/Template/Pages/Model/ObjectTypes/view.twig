@@ -18,8 +18,10 @@
             'check-changes': 'true',
         })|raw }}
 
-            <div class="form-column">
-                <section class="fieldset order-0">
+            {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+
+            <div class="main-view-column">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
@@ -40,14 +42,12 @@
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
-
-                        {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
                     </div>
                 </section>
             </div>
 
-            <div class="form-column">
-                <section class="fieldset order-3">
+            <div class="side-view-column">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
@@ -59,7 +59,7 @@
                     </div>
                 </section>
 
-                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+                {% element 'Form/meta' %}
             </div>
 
         {{ Form.end()|raw }}

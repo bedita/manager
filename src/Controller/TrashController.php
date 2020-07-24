@@ -106,7 +106,7 @@ class TrashController extends AppController
         $schema = $this->Schema->getSchema($object['type']);
 
         $this->set(compact('object', 'schema'));
-        $this->set('properties', $this->Properties->viewGroups($object, 'trash'));
+        $this->set('properties', $this->Properties->viewGroups($object, $object['type']));
 
         return null;
     }

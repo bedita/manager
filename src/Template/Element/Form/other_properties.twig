@@ -1,35 +1,33 @@
 {# Remaining properties groups: 'other' and custom groups not in 'core', '_keep', 'publish', 'advanced' #}
 {% set otherProperties = Array.removeKeys(properties, ['core', '_keep', 'publish', 'advanced']) %}
 {% for group, props in otherProperties %}
+    {% if props %}
 
-{% if props %}
+    <property-view inline-template :tab-open="tabsOpen">
 
-<property-view inline-template :tab-open="tabsOpen">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __(group|humanize) }}</h2>
+            </header>
 
-    <section class="fieldset order-{{ cssOrder }}" id="{{ group|underscore }}_properties" :class="isOpen? '' : 'closed'">
+            <div v-show="isOpen" class="tab-container">
+                {% for key, value in props %}
 
-        <header @click.prevent="toggleVisibility()" class="tab unselectable">
-            <h2>{{ __(group|humanize) }}</h2>
-        </header>
+                    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
 
-        <div v-show="isOpen" class="tab-container">
-            {% for key, value in props %}
+                    {{ Form.control(key, options)|raw }}
 
-                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                    {% if options.class == 'json' %}
+                        {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
+                    {% endif %}
 
-                {{ Form.control(key, options)|raw }}
+                {% endfor %}
+            </div>
+        </section>
 
-                {% if options.class == 'json' %}
-                    {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
-                {% endif %}
+    </property-view>
 
-            {% endfor %}
-        </div>
-
-    </section>
-
-</property-view>
-
-{% endif %}
-
+    {% endif %}
 {% endfor %}

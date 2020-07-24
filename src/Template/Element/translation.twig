@@ -6,7 +6,8 @@
 
     {% if object.id %}
     <header>
-        <h1 untitled-label="{{ __('Untitled') }}">{{ translation.attributes.translated_fields.title }} <span>[{{ __('translation of') }}]</span> {{ object.attributes.title }}</h1>
+        <h1 untitled-label="{{ __('Untitled') }}">{{ translation.attributes.translated_fields.title }}</h1>
+        <h2><span class="has-text-size-small has-text-gray-400 has-font-style-italic">{{ __('translation of') }} &nbsp;</span> {{ object.attributes.title }}</h2>
     </header>
     {% endif %}
 
@@ -29,12 +30,19 @@
                 <section class="fieldset">
                     {% set languageLabel = "#{__('Language')} (#{__('original')}: #{object.attributes.lang})" %}
                     {% set options = Schema.controlOptions('lang', null, []) %}
-                    {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}
-                    {% set options = options|merge({
-                        'label': languageLabel,
-                        'value': translation.attributes.lang,
-                        'options': langOptions,
-                    }) %}
+                    {% if options.options %}
+                        {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}
+                        {% set options = options|merge({
+                            'label': languageLabel,
+                            'value': translation.attributes.lang,
+                            'options': langOptions,
+                        }) %}
+                    {% else %}
+                        {% set options = options|merge({
+                            'label': languageLabel,
+                            'value': translation.attributes.lang,
+                        }) %}
+                    {% endif %}
                     {{ Form.control('lang', options)|raw }}
                 </section>
 
@@ -48,8 +56,8 @@
             </header>
 
 
-            <div class="form-column">
-                <section class="fieldset order-{{ order|default('0') }}">
+            <div class="main-view-column">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
                             <div class="input text ">
@@ -63,8 +71,8 @@
                 </section>
             </div>
 
-            <div class="form-column original">
-                <section class="fieldset order-{{ order|default('0') }}">
+            <div class="side-view-column original">
+                <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
                             <div class="input text ">

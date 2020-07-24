@@ -62,9 +62,10 @@ class ProjectConfigurationComponentTest extends TestCase
                     'Simple' => ['a' => 2],
                 ],
                 [
-                    'id' => 'Simple',
+                    'id' => '13',
                     'type' => 'config',
                     'attributes' => [
+                        'name' => 'Simple',
                         'content' => '{"a":2}',
                     ],
                 ],

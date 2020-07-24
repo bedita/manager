@@ -11,12 +11,13 @@
 
 #{$text-inputs} {
     padding: 0 .5em;
-    min-width: 5rem;
+    min-width: 4rem;
     height: $gutter * 2;
     border: none;
     border-radius: 2px;
     background-color: $gray-100;
     font-family: $font-family-sans-serif;
+    font-size: $font-size-ssm;
     line-height: 1.5em;
 
     &:focus {
@@ -38,12 +39,17 @@ select {
 }
 
 label {
+    margin-right: $gutter;
     > input {
         margin-right: $gutter * .5;
     }
     > input[type="radio"],
     > input[type="checkbox"] {
-        margin-right: $gutter * .25;
+        margin-right: $gutter * .5;
+    }
+    &.disabled {
+        pointer-events: none;
+        cursor: auto;
     }
 }
 
@@ -181,24 +187,28 @@ form {
 }
 
 // Date Picker
-    input.flatpickr-input.form-control {
-        min-width: 8rem;
+.datepicker, .date-ranges-item {
+    input.flatpickr-input + input.form-control {
+        text-overflow: ellipsis;
+        padding-right: 20px;
     }
 
     .clear-button {
+        position: relative;
+        top: 3px;
+        margin-left: -20px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 18px;
         height: 18px;
-        margin-left: -24px;
         z-index: 10;
-        color: $gray-500;
+        color: $gray-550;
         font-size: 24px;
-        vertical-align: middle;
         cursor: pointer;
 
         &:hover {
             color: $gray-900;
         }
     }
+}

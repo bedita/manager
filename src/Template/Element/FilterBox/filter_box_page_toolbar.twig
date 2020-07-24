@@ -5,14 +5,14 @@
         <span class="has-font-weight-bold"><: pagination.count :></span> <span><: t(objectsLabel) :></span>
     </div>
 
-    <div class="page-size" :class="pagination.count <= paginateSizes[0] && 'hide'">
+    <div class="page-size" v-show="pagination.count > paginateSizes[0]">
         <span>{{ __('Size') }}</span>
         <select class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
             <option v-for="size in paginateSizes"><: size :></option>
         </select>
     </div>
 
-    <div class="pagination-buttons" :class="pagination.count <= pagination.page_size && 'hide'">
+    <div class="pagination-buttons" v-show="pagination.count > pagination.page_size">
         <div v-if="isFullPaginationLayout">
             <button
                 v-for="i in pagination.page_count" :key="i"

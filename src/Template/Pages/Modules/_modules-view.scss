@@ -1,20 +1,8 @@
-body.view-module, body.translation-module {
+body.view-module, body.userprofiles-view {
 
     .modules-view {
-        overflow-x: hidden;
-
         >header {
-            display: inline-flex;
             min-height: 3 * $gutter;
-
-            a {
-                margin-left: $gutter;
-            }
-
-            button {
-                margin-left: $gutter * .5;
-            }
-
             h1:empty {
                 &:before {
                     content: attr(untitled-label);
@@ -27,73 +15,14 @@ body.view-module, body.translation-module {
 
     // view
     .module-form {
-        margin-top: $gutter;
-
         form {
-            // layout
-            display: flex;
-            flex-wrap: wrap;
-
-            .form-column {
-                display: contents;
-                width: 100%;
-
-                // REMOVE
-                pre {
-                    max-width: 400px;
-                    overflow: auto;
-                    background-color: $gray-800;
-                    padding: .5rem;
-                }
-
-                @media screen and (min-width: 780px) {
-                    display: block;
-                    &:first-of-type { width: 67%; padding-right: $gutter; }
-                    &:last-of-type { width: 33%; }
-                }
-                @media screen and (min-width: 1024px) {
-                    &:first-of-type { width: 55%; padding-right: 2 * $gutter; }
-                    &:last-of-type { width: 45%; }
-                }
-            }
-
-            section.fieldset {
-                width: 100%;
-                order: 0;
-            }
-
-            section.resources {
-                width: 100%;
-            }
-
-            // section content
-            section.fieldset, section.resources {
-                .tab-container {
-                    margin-bottom: $gutter * 1.5;
-                }
-
-                > div,
-                .tab-container >div {
-                    margin: $gutter 0;
-                    &:first-child {
-                        margin-top: 0;
-                    }
-                }
-
-                &.closed {
-                    .tab {
-                        color: $gray-600;
-                        background: linear-gradient(to right, $gray-800, $gray-900);
-                    }
-                }
-
+            section.fieldset .tab-container {
                 .create-media-box {
                     padding: $gutter * .5 $gutter $gutter * 1.25;
                     margin-bottom: $gutter * 1.5;
                     background-color: $gray-800;
                     border-radius: 4px;
                 }
-
 
                 #{$text-inputs}, textarea {
                     width: 100%;
@@ -102,24 +31,23 @@ body.view-module, body.translation-module {
 
                 #{$text-inputs} {
                     &.input-narrow {
-                        max-width: 4rem;
+                        max-width: 4 * $gutter;
+                    }
+                }
+
+                .select {
+                    select {
+                        min-width: 12 * $gutter;
+                    }
+                    label {
+                        cursor: pointer;
                     }
                 }
 
                 label {
+                    display: block;
                     flex: 1 0 100%;
-                    margin-right: $gutter;
-                    line-height: $gutter * 1.5;
-                }
-
-                div.input.status {
-                    display: flex;
-                    flex-wrap: wrap;
-                    label:not(:first-child) {
-                        flex: 0 0 auto;
-                        margin-right: $gutter;
-                        cursor: pointer;
-                    }
+                    line-height: $gutter * 1.75;
                 }
 
                 .stream {
@@ -156,65 +84,126 @@ body.view-module, body.translation-module {
                 }
             }
         }
+    }
+}
 
-        section.relations {
-            width: 100%;
-            margin-top: $gutter * 4;
+// tabs layout
+.fieldset {
+    ~ .fieldset {
+        margin-top: $gutter * 1.5;
+    }
+    .tab {
+        display: flex;
+        align-items: center;
+        padding-bottom: $gutter * .5;
+        padding-right: $gutter * .5;
+        border-bottom: 1px solid $gray-700;
+
+        &.is-loading-spinner {
+            button {
+                display: none;
+            }
+        }
+
+        h2 {
+            flex-grow: 1;
+            margin: 0; padding: 0 $gutter 0 0;
+            font-size: $font-size-sm;
+            &:first-letter {
+                text-transform: capitalize;
+            }
+        }
+
+        &:not(.tab-static) {
+            cursor: pointer;
+            &:before {
+                content: '+';
+                margin-right: .375rem;
+                font-size: $font-size-llg;
+            }
+            &.open {
+                &:before {
+                    content: '–';
+                }
+            }
+        }
+    }
+}
+
+
+// general view form layout
+body.view-module, body.translation-module, body.userprofiles-view {
+    .module-form form {
+        section.fieldset {
+            .tab-container {
+                padding: $gutter 0;
+                > div {
+                    margin: $gutter 0;
+                    &:first-child {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+
+        section.relations { margin: 1.5rem 0; }
+    }
+
+    // responsive grid
+    .module-form form {
+        @media screen and (min-width: 768px) {
+            display: grid;
+            grid-gap: 0 $gutter;
+            grid-template-areas: "header-view header-view"
+                                    "main-view side-view"
+                                    "submain-view side-view"
+                                    "full-view full-view";
+            grid-template-columns: 6fr 4fr;
+            .form-header { grid-area: header-view; }
+            .main-view-column { grid-area: main-view; }
+            .side-view-column { grid-area: side-view; }
+            section.relations { grid-area: full-view; }
+        }
+
+        @media screen and (min-width: 1024px) {
+            grid-gap: 0 $gutter * 1.5;
+            grid-template-columns: 2fr 1fr;
+            section.relations { grid-area: submain-view; }
+        }
+
+        @media screen and (min-width: 1600px) {
+            grid-template-columns: 3fr 1fr;
         }
     }
 }
 
 body.translation-module {
-    header {
-        h1 {
-            span {
-                color: $gray-550;
-                font-size: $font-size-sssm;
-            }
-        }
-    }
-
-    .form-column.original {
+    .original {
         opacity: .8;
     }
 
-    .form-header {
-        width: 100%;
-        margin-bottom: $gutter * 2;
-        border-bottom: 1px solid $gray-500;
-        padding-bottom: $gutter;
-    }
-
     // TODO: refactor this css
-    .module-form form .form-column:first-of-type { width: 50% !important; }
-    .module-form form .form-column:last-of-type { width: 50% !important }
+    .module-form form { grid-template-columns: 1fr 1fr !important; }
 }
 
-
-.fieldset .tab {
-    display: flex;
-    align-items: center;
-    margin-bottom: $gutter;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    min-height: 32px;
-    background-color: $gray-800;
-    color: $gray-500;
-    border-radius: 3px;
-    cursor: pointer;
-
-    &.is-loading-spinner {
-        button {
-            display: none;
-        }
-    }
-
-    h2 {
-        flex-grow: 1;
-        margin: 0; padding: 0;
-        font-size: 1.25rem;
-        &:first-letter {
-            text-transform: capitalize;
+// form elements responsive grid
+body.view-module, body.userprofiles-view {
+    &:not(.translation-module) {
+        .module-form form .main-view-column section.fieldset .tab-container {
+            @media screen and (min-width: 1024px) {
+                grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
+                display: grid;
+                grid-gap: $gutter * 1.5 $gutter;
+                > div {
+                    margin: 0;
+                }
+                .input.select select {
+                    width: 100%;
+                }
+                .input.title, .input.textarea, .stream, .grid-span-full {
+                    grid-column: 1/-1;
+                }
+            }
         }
     }
 }

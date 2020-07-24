@@ -18,6 +18,7 @@
         "build": "webpack --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development",
+        "dev": "webpack --mode development",
         "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
         "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
     },

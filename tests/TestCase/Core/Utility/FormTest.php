@@ -14,9 +14,7 @@
 namespace App\Test\TestCase\Core\Utility;
 
 use App\Core\Utility\Form;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
-use Cake\View\View;
 
 /**
  * {@see \App\Core\Utility\Form} Test Case
@@ -222,6 +220,9 @@ class FormTest extends TestCase
                 [
                     'class' => 'title',
                     'type' => 'text',
+                    'templates' => [
+                        'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'start_date' => [
@@ -232,6 +233,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'end_date' => [
@@ -242,6 +246,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'date_ranges' => [
@@ -252,6 +259,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
         ];
@@ -337,6 +347,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => '2018-01-31 08:45:00',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'date' => [
@@ -348,6 +361,9 @@ class FormTest extends TestCase
                     'v-datepicker' => 'true',
                     'date' => 'true',
                     'value' => '2018-01-31',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'checkbox' => [
