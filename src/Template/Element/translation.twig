@@ -1,4 +1,5 @@
 {% do _view.assign('bodyViewClass', 'translation-module') %}
+{% set translatable = Schema.translatableFields(schema.properties) %}
 
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
@@ -34,9 +35,14 @@
                     }) %}
                     {{ Form.control('lang', options)|raw }}
                 </section>
+
+                <section class="fieldset">
+                    <button @click.prevent="fetchAllTranslations">
+                        {{ __('Translate all fields automatically') }}
+                    </button>
+                </section>
             </header>
 
-            {% set translatable = Schema.translatableFields(schema.properties) %}
 
             <div class="form-column">
                 <section class="fieldset order-{{ order|default('0') }}">
@@ -44,6 +50,8 @@
                         {% for key in translatable %}
                             <div class="input text ">
                                 {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
+                                {% set options = options|merge({'disabled': 'disabled'}) %}
+                                {% set options = options|merge({'ref': key}) %}
                                 {{ Form.control('translated_fields.' ~ key, options)|raw }}
                             </div>
                         {% endfor %}
@@ -60,6 +68,15 @@
                                 {% set options = options|merge({'disabled': 'disabled'}) %}
                                 {{ Form.control(key, options)|raw }}
                             </div>
+                            {% set translationParams = {
+                                'field': key,
+                                'content': object.attributes[key],
+                                'from': object.attributes.lang,
+                                'to': 'en'
+                            } %}
+                            <button @click.prevent="fetchTranslation({{ translationParams|json_encode }})">
+                                {{ __('Translate field automatically') }}
+                            </button>
                         {% endfor %}
                     </div>
             </div>
@@ -78,7 +95,7 @@
         {# Append "Save" to sidebar #}
         {% do _view.append('module-buttons', Form.button( __('Save'),
             {
-                'form': 'form-main',
+                'form': 'form-translate',
                 'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
             })
         ) %}

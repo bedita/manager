@@ -34,5 +34,23 @@ export default {
                 return this.tabsOpen = !this.tabsOpen;
             }
         },
+
+        fetchAllTranslations() {
+            this.$helpers.autoTranslate('<b>i will eat</b> an <span>aubergine</span>', 'en', 'it');
+            this.$helpers.autoTranslate(['one', 'two', 'three'], 'en', 'it');
+        },
+
+        fetchTranslation(object) {
+            this.$helpers.autoTranslate(object.content, object.from, object.to)
+                .then((r) => {
+                    if (r && r.translation) {
+                        this.$refs[object.field].value = r.translation;
+                    }
+                    console.log('translate field:', object.field);
+                    console.log('from:', object.from);
+                    console.log('to:', object.to);
+                    console.log(r);
+                });
+        },
     }
 }
