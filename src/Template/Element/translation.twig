@@ -38,11 +38,13 @@
                     {{ Form.control('lang', options)|raw }}
                 </section>
 
+                {% if config('Translator.class') %}
                 <section class="fieldset">
                     <button @click.prevent="fetchAllTranslations">
                         {{ __('Translate all fields automatically') }}
                     </button>
                 </section>
+                {% endif %}
             </header>
 
 
@@ -70,6 +72,7 @@
                                 {% set options = options|merge({'disabled': 'disabled'}) %}
                                 {{ Form.control(key, options)|raw }}
                             </div>
+                            {% if config('Translator.class') %}
                             {% set translationParams = {
                                 'field': key,
                                 'content': object.attributes[key],
@@ -79,6 +82,7 @@
                             <button @click.prevent="fetchTranslation({{ translationParams|json_encode }})">
                                 {{ __('Translate field automatically') }}
                             </button>
+                            {% endif %}
                         {% endfor %}
                     </div>
             </div>
