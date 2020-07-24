@@ -12,8 +12,8 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
-
 import viewHelper from 'app/helpers/view';
+import autoTranslation from 'app/helpers/api-translation';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -88,6 +88,7 @@ const _vueInstance = new Vue({
 
         // Register helpers
         Vue.use(viewHelper);
+        Vue.use(autoTranslation);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
@@ -108,10 +109,6 @@ const _vueInstance = new Vue({
         PanelEvents.listen('panel:closed', null, () => {
             cl.remove('is-clipped');
         });
-
-        // debug
-        this.translate('translate me', 'en', 'it');
-        this.translate(['one', 'two', 'three'], 'en', 'it');
     },
 
     watch: {
@@ -509,52 +506,6 @@ const _vueInstance = new Vue({
          */
         isNumeric(num) {
             return !isNaN(num);
-        },
-
-        /**
-         * Translate text(s) from a language to another.
-         *
-         * @param {Array|String} text The text(s) to translate
-         * @param {String} from The source language
-         * @param {String} to The target language
-         * @returns {JSON} The translation data, i.e.
-         * {
-         *     "translation": [
-         *         "<translation of first text>",
-         *         "<translation of second text>",
-         *         [...]
-         *         "<translation of last text>"
-         *     ]
-         * }
-         */
-        async translate(text, from, to) {
-            if (!text) {
-                return;
-            }
-            const formData = new FormData();
-            formData.append('from', from);
-            formData.append('to', to);
-            formData.append('text', text);
-            const options = {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                    'X-CSRF-Token': BEDITA.csrfToken,
-                },
-                body: formData,
-            };
-
-            let responseJson = {translation: []};
-            try {
-                const response = await fetch(`${window.location.origin}/translate`, options);
-                responseJson = await response.json();
-            } catch (error) {
-                console.error(error);
-            }
-            console.log('translate("', text, '","', from, '","', to, '")', responseJson);
-
-            return responseJson;
         },
     }
 });
