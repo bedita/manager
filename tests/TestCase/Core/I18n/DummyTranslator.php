@@ -39,7 +39,7 @@ class DummyTranslator implements TranslatorInterface
      *     ]
      * }
      */
-    public function translate($texts, string $from, string $to): string
+    public function translate(array $texts, string $from, string $to): string
     {
         $translation = [];
         foreach ($texts as $text) {
