@@ -61,6 +61,7 @@ class TranslatorComponentTest extends TestCase
      * @return void
      *
      * @covers ::translate()
+     * @covers ::initialize()
      */
     public function testTranslateInternalErrorException(): void
     {
@@ -75,6 +76,7 @@ class TranslatorComponentTest extends TestCase
      * @return void
      *
      * @covers ::translate()
+     * @covers ::initialize()
      */
     public function testTranslate(): void
     {
