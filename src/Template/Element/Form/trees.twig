@@ -1,31 +1,34 @@
 {% set relationName = 'parents' %}
+
 <property-view inline-template :tab-open="tabsOpen">
-    <section class="fieldset order-{{ cssOrder }}" id="trees" :class="isOpen? '' : 'closed'">
+    <section class="fieldset">
 
-    <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-        <h2>{{ __('Folders') }}</h2>
-    </header>
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Folders') }}</h2>
+        </header>
 
-    <div v-if="isOpen" class="tab-container">
+        <div v-if="isOpen" class="tab-container">
+            {# TODO put it in config #}
+            {% if objectType == 'folders' %}
+                {% set relationName = 'parent' %}
+                {% set paths = [object.meta.path]%}
+                {% set options = { 'multiple': 'false' }%}
+            {% else %}
+                {% set relationName = 'parents' %}
+                {% set paths = included|map(o => o.meta.path ~ '/' ~ object.id) %}
+                {% set options = { 'multiple': 'true' }%}
+            {% endif %}
 
-        {# TODO put it in config #}
-        {% if objectType == 'folders' %}
-            {% set relationName = 'parent' %}
-            {% set paths = [object.meta.path]%}
-            {% set options = { 'multiple': 'false' }%}
-        {% else %}
-            {% set relationName = 'parents' %}
-            {% set paths = included|map(o => o.meta.path ~ '/' ~ object.id) %}
-            {% set options = { 'multiple': 'true' }%}
-        {% endif %}
+            <tree-view
+                relation-name={{ relationName }}
+                :object-id={{ object.id }}
+                :object-paths='{{ paths|json_encode|raw }}'
+                :multiple-choice={{ options.multiple }}>
+            </tree-view>
 
-        <tree-view
-            relation-name={{ relationName }}
-            :object-id={{ object.id }}
-            :object-paths='{{ paths|json_encode|raw }}'
-            :multiple-choice={{ options.multiple }}>
-        </tree-view>
-        {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
-    </div>
-</section>
+            {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
+        </div>
+    </section>
 </property-view>

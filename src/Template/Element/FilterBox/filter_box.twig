@@ -4,7 +4,7 @@
     </div>
 
     {% if not hidePagination %}
-        <div>
+        <div v-if="pagination.count">
             {% element 'FilterBox/filter_box_page_toolbar' %}
         </div>
     {% endif %}

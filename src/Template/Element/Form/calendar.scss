@@ -5,7 +5,10 @@
 
     .date-ranges-item {
         display: grid;
-        grid-template-columns: 1fr 1fr 0.3fr auto;
+        grid-template-columns: 1fr 1fr auto;
+        @media screen and (min-width: 1024px) {
+            grid-template-columns: 1fr 1fr auto auto;
+        }
         gap: $gutter;
         margin-bottom: $gutter * .5;
         align-items: flex-end;

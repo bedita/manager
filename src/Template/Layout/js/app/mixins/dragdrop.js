@@ -236,7 +236,7 @@ export const DragdropMixin = {
             // check if draggable is accepted for drop target (if no rules are defined all draggable are accepted)
             let draggedElement = dragdropPayload.dragged;
 
-            if (this._sortEnabled) {
+            if (this._sortEnabled && draggedElement) {
                 draggedElement.classList.add('sorting');
                 this.sortElement(draggedElement, ev);
             }
@@ -316,8 +316,10 @@ export const DragdropMixin = {
             ev.stopPropagation();
 
             if (this._sortEnabled) {
-                draggedElement.classList.remove('sorting');
-                this.$emit('sort-end', dragdropPayload);
+                if (draggedElement && draggedElement.classList) {
+                    draggedElement.classList.remove('sorting');
+                    this.$emit('sort-end', dragdropPayload);
+                }
             }
 
             if (!this._dropEnabled || !this.isAcceptedDrag()) {

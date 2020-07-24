@@ -1,0 +1,34 @@
+.main-panel-container {
+    position: fixed;
+    top: 0; right: 0;
+    min-width: 20 * $gutter;
+    width: 100%;
+    @media screen and (min-width: 768px) {
+        width: 60%;
+    }
+    height: 100vh;
+    transform: translateX(101%);
+    transition: .3s transform;
+    will-change: transform;
+    z-index: 1001;
+
+    .main-panel {
+        height: 100%;
+        background-color: $black;
+    }
+
+    .panel-slot {
+        height: 100%;
+    }
+
+    &.on {
+        transform: translateX(0);
+        box-shadow: 0 0 32px black;
+    }
+}
+
+.main-panel {
+    .fieldset:first-child {
+        padding-top: $gutter;
+    }
+}

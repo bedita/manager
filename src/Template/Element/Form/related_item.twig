@@ -76,7 +76,7 @@
     <div class="p-05 has-text-size-smaller" v-if="relationSchema">
         <dl v-if="relationHasParams()" class="mb-05">
             <template v-for="(param, key) in relationSchema">
-                <dt class="is-capitalized"><: key :></dt>
+                <dt class="is-capitalized"><: key|humanize :></dt>
                 <dd>
                     <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
                     <span v-else>-</span>
@@ -119,19 +119,19 @@
             <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
 
         {% elseif add %}
-            <button class="button-outlined-white button-text is-small has-font-weight-bold "
-                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check has-text-white' : 'icon-check-empty'">{{ __('Select') }}</button>
+            <button class="is-small has-font-weight-bold mr-1"
+                v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
+                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
 
         {% elseif translation %}
             {% set baseUrl= Url.build({ '_name': 'translations:edit', 'object_type': object.type, 'id': object.id, 'lang': ''}, true) %}
-            <a class="button button-outlined-white is-small" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">{{ __('Open') }}</a>
+            <a class="button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">{{ __('Open') }}</a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)"
                 v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
 
         {% else %}
-            <a class="button button-outlined-white is-small" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
-
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
             </a>

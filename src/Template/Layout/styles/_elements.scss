@@ -1,3 +1,12 @@
+// generic full size backdrop
+.backdrop {
+    display: none;
+    @extend .full-size-absolute;
+    background-color: #000;
+    opacity: .75;
+}
+
+
 // simple tag
 .tag:not(body) {
     display: inline-flex;
@@ -84,170 +93,12 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: none;
-    border-radius: 4px;
     background-color: $white;
     color: $black;
     box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
     overflow: hidden;
     .box-body {
         flex-grow: 1;
-    }
-}
-
-
-// flex columns
-.columns {
-    display: block;
-    flex-wrap: wrap;
-    margin-left: -($gutter * .5);
-    margin-right: -($gutter * .5);
-    margin-top: -($gutter * .5);
-    @media screen and (min-width: 420px) {
-        display: flex;
-    }
-}
-
-.column {
-    display: block;
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-    padding: ($gutter * .5);
-    &.is-1 {
-        flex: none;
-        flex-basis: 100%;
-    }
-    &.is-2 {
-        flex: none;
-        flex-basis: 50%;
-    }
-    &.is-3 {
-        flex: none;
-        flex-basis: 33.33333%;
-    }
-    &.is-4 {
-        flex: none;
-        flex-basis: 25%;
-    }
-    &.is-narrow {
-        flex: none;
-        max-width: 100%;
-    }
-
-    &.is-one-third-1024 {
-        @media screen and (min-width: 769px) {
-            flex: none;
-            flex-basis: 33.33333%;
-        }
-    }
-    &.is-one-quarter-1024 {
-        @media screen and (min-width: 769px) {
-            flex: none;
-            flex-basis: 25%;
-        }
-    }
-
-    &.is-one-third-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            flex-basis: 33.33333%;
-        }
-    }
-    &.is-one-quarter-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            flex-basis: 25%;
-        }
-    }
-    &.is-one-fifth-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            flex-basis: 20%;
-        }
-    }
-
-    &.is-one-third-widescreen {
-        @media screen and (min-width: 1440px) {
-            flex: none;
-            flex-basis: 33.33333%;
-        }
-    }
-    &.is-one-quarter-widescreen {
-        @media screen and (min-width: 1440px) {
-            flex: none;
-            flex-basis: 25%;
-        }
-    }
-    &.is-one-fifth-widescreen {
-        @media screen and (min-width: 1440px) {
-            flex: none;
-            flex-basis: 20%;
-        }
-    }
-    &.is-one-sixth-widescreen {
-        @media screen and (min-width: 1440px) {
-            flex: none;
-            flex-basis: 16.6666%;
-        }
-    }
-    &.is-one-eight-widescreen {
-        @media screen and (min-width: 1440px) {
-            flex: none;
-            flex-basis: 12.5%;
-        }
-    }
-
-    &.is-one-third-fullhd {
-        @media screen and (min-width: 1600px) {
-            flex: none;
-            flex-basis: 33.33333%;
-        }
-    }
-    &.is-one-quarter-fullhd {
-        @media screen and (min-width: 1600px) {
-            flex: none;
-            flex-basis: 25%;
-        }
-    }
-    &.is-one-sixth-fullhd {
-        @media screen and (min-width: 1600px) {
-            flex: none;
-            flex-basis: 16.6666%;
-        }
-    }
-    &.is-one-eight-fullhd {
-        @media screen and (min-width: 1600px) {
-            flex: none;
-            flex-basis: 12.5%;
-        }
-    }
-
-    &.is-one-eight-ultra {
-        @media screen and (min-width: 2080px) {
-            flex: none;
-            flex-basis: 12.5%;
-        }
-    }
-
-
-    &.is-one-half-mobile {
-        @media screen and (max-width: 768px) {
-            flex: none;
-            flex-basis: 50%;
-        }
-    }
-    &.is-one-third-mobile {
-        @media screen and (max-width: 768px) {
-            flex: none;
-            flex-basis: 33.33333%;
-        }
-    }
-    &.is-one-quarter-mobile {
-        @media screen and (max-width: 768px) {
-            flex: none;
-            flex-basis: 25%;
-        }
     }
 }
 
@@ -449,34 +300,4 @@ a.close-button {
     display: block;
     height: 1px;
     margin: 1.5rem 0;
-}
-
-
-// TODO: controllare questo dragover
-.dragover {
-    position: relative;
-    min-height: 8 * $gutter;
-
-    &:after {
-        position: absolute;
-        top: $gutter * 0.25;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0px $gutter * .25;
-        content: "Drop Here";
-        border-radius: $gutter * 0.25;
-        background: $black;
-        opacity: 0.7;
-        font-size: 2em;
-        height: calc(100% - #{$gutter * .5});
-        width: calc(100% - #{$gutter * .75});
-    }
-}
-
-.sorting {
-    background: $black;
-    opacity: 0.4;
-    border-radius: $gutter * 0.25;
 }

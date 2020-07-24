@@ -1,5 +1,6 @@
 // main grids
 main.layout {
+    position: relative;
     width: 100%;
     min-height: 100vh;
     min-height: calc(var(--vh, 1vh) * 100); // iOS adjust with script and fallback
@@ -11,11 +12,11 @@ main.layout {
         grid-template-areas: "sidebar content-header"
                              "sidebar content-body"
                              "sidebar footer";
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: ($dashboard-item-height + $gutter) auto;
         grid-template-columns: $dashboard-item-width auto;
 
-        .view-module & {
-            grid-template-rows: ($dashboard-item-height + $gutter) auto;
+        .view-dashboard & {
+            grid-template-rows: auto 1fr auto;
         }
 
         > .layout-footer { display: none; }
@@ -30,12 +31,13 @@ main.layout {
     > .layout-footer { padding: $gutter 0; }
 
     > .layout-sidebar, > .layout-footer { max-width: 100%; overflow-x: hidden; }
-    > .layout-content { max-width: 100%; overflow-x: auto; }
+    > .layout-content { max-width: 100%; }
 }
 
 
 
-// panel stuff
+// on panel show / hide
+body:not(.view-login) main.layout > .layout-content { background-color: $defaultBackground; } // covers sidebar on translate
 main.layout {
     > .layout-header,
     > .layout-content {
@@ -53,44 +55,8 @@ main.layout {
         > .layout-sidebar {
             opacity: 0;
         }
-        .main-panel.on {
-            transform: translateX(0);
-            box-shadow: 0 0 32px black;
-        }
-    }
-
-    // side panel
-    .main-panel {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0; right: 0;
-        min-width: 25 * $gutter;
-        width: 60%;
-        height: 100vh;
-        z-index: 100;
-        background-color: $black;
-        box-shadow: 0 0 0 black;
-        transform: translateX(101%);
-        transition: .3s transform;
-        will-change: transform;
-
-        .main-panel-body {
-            height: 100%;
-            flex: 1 1 0;
-        }
-
-        .panel-slot-container {
-            height: 100%;
-        }
-
-        footer {
-            display: flex;
-        }
-
-        &.on {
-            transform: translateX(0);
-            box-shadow: 0 0 32px black;
+        .backdrop {
+            display: blocK;
         }
     }
 }
