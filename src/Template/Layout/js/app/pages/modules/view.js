@@ -43,13 +43,15 @@ export default {
         fetchTranslation(object) {
             this.$helpers.autoTranslate(object.content, object.from, object.to)
                 .then((r) => {
-                    if (r && r.translation) {
+                    if (!r.translation) {
+                        return;
+                    }
+
+                    if (CKEDITOR.instances && CKEDITOR.instances['translated-fields-' + object.field]) {
+                        CKEDITOR.instances['translated-fields-' + object.field].setData(r.translation);
+                    } else {
                         this.$refs[object.field].value = r.translation;
                     }
-                    console.log('translate field:', object.field);
-                    console.log('from:', object.from);
-                    console.log('to:', object.to);
-                    console.log(r);
                 });
         },
     }
