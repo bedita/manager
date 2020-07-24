@@ -14,6 +14,8 @@ namespace App\Controller;
 
 /**
  * Translator controller.
+ *
+ * @property \App\Controller\Component\TranslatorComponent $Translator
  */
 class TranslatorController extends AppController
 {

@@ -42,5 +42,5 @@ interface TranslatorInterface
      *     ]
      * }
      */
-    public function translate(string $text, string $from, string $to): string;
+    public function translate(array $text, string $from, string $to): string;
 }
