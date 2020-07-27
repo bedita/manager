@@ -47,8 +47,19 @@
                 </section>
 
                 {% if config('Translator.class') %}
+                {% set data = [] %}
+                {% for key in translatable %}
+                    {% set data = data|merge({
+                        (loop.index0): {
+                            'field': key,
+                            'content': object.attributes[key],
+                            'from': object.attributes.lang,
+                            'to': translation.attributes.lang
+                        }
+                    }) %}
+                {% endfor %}
                 <section class="fieldset">
-                    <button @click.prevent="fetchAllTranslations">
+                    <button @click.prevent="fetchAllTranslations({{ data|json_encode }})">
                         {{ __('Translate all fields automatically') }}
                     </button>
                 </section>
@@ -85,7 +96,7 @@
                                 'field': key,
                                 'content': object.attributes[key],
                                 'from': object.attributes.lang,
-                                'to': 'en'
+                                'to': translation.attributes.lang
                             } %}
                             <button @click.prevent="fetchTranslation({{ translationParams|json_encode }})">
                                 {{ __('Translate field automatically') }}

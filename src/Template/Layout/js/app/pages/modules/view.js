@@ -35,9 +35,10 @@ export default {
             }
         },
 
-        fetchAllTranslations() {
-            this.$helpers.autoTranslate('<b>i will eat</b> an <span>aubergine</span>', 'en', 'it');
-            this.$helpers.autoTranslate(['one', 'two', 'three'], 'en', 'it');
+        fetchAllTranslations(data) {
+            for (let key in data) {
+                this.fetchTranslation(data[key]);
+            }
         },
 
         fetchTranslation(object) {
