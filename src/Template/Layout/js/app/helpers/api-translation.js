@@ -35,15 +35,12 @@ const methods = {
             body: formData,
         };
 
-        let responseJson = {translation: []};
-        try {
-            const response = await fetch(`${window.location.origin}/translate`, options);
-            responseJson = await response.json();
-        } catch (error) {
-            console.error(error);
-        }
-
-        return responseJson;
+        await fetch(`${window.location.origin}/translate`, options)
+            .catch(error => {
+                console.error(error);
+                return error;
+            })
+            .then(r => response.json());
     },
 }
 

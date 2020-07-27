@@ -68,10 +68,12 @@ export default {
 
         async fetchTranslation(object) {
             await this.$helpers.autoTranslate(object.content, object.from, object.to)
-                .then((r) => {
+                .catch(r => {
+                    throw new Error(`Unablea to translate field ${object.field}`);
+                })
+                .then(r => {
                     if (!r.translation) {
                         throw new Error(`Unable to translate field ${object.field}`);
-                        return;
                     }
 
                     if (CKEDITOR.instances && CKEDITOR.instances['translated-fields-' + object.field]) {
