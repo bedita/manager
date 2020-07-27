@@ -35,16 +35,42 @@ export default {
             }
         },
 
-        fetchAllTranslations(data) {
-            for (let key in data) {
-                this.fetchTranslation(data[key]);
-            }
+        async translateAll(data, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+
+            await Promise.all(
+                Object.keys(data).map(key =>
+                    this.fetchTranslation(data[key])
+                )
+            ).catch((error) => {
+                    alert(error);
+                    console.log(error);
+                })
+            .finally(() => {
+                el.classList.remove('is-loading-spinner');
+            });
         },
 
-        fetchTranslation(object) {
-            this.$helpers.autoTranslate(object.content, object.from, object.to)
+        translate(object, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+
+            this.fetchTranslation(object)
+                .catch((error) => {
+                    alert(error);
+                    console.log(error);
+                })
+                .finally(() => {
+                    el.classList.remove('is-loading-spinner');
+                });
+        },
+
+        async fetchTranslation(object) {
+            await this.$helpers.autoTranslate(object.content, object.from, object.to)
                 .then((r) => {
                     if (!r.translation) {
+                        throw new Error(`Unable to translate field ${object.field}`);
                         return;
                     }
 

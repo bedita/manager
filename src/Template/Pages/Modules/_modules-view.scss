@@ -184,6 +184,13 @@ body.translation-module {
 
     // TODO: refactor this css
     .module-form form { grid-template-columns: 1fr 1fr !important; }
+
+    .main-view-column .field-actions {
+        text-align: right;
+    }
+    .original .field-align-aid {
+        height: $gutter * 2; // match button on the other column
+    }
 }
 
 // form elements responsive grid
