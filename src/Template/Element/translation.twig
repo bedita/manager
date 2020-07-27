@@ -1,4 +1,5 @@
 {% do _view.assign('bodyViewClass', 'translation-module') %}
+{% set translatable = Schema.translatableFields(schema.properties) %}
 
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
@@ -26,27 +27,70 @@
                     ) %}
                     {{ Form.control('status', options)|raw }}
                 </section>
-                <section class="fieldset">
+
+                <section class="fieldset is-flex wrap">
                     {% set languageLabel = "#{__('Language')} (#{__('original')}: #{object.attributes.lang})" %}
                     {% set options = Schema.controlOptions('lang', null, []) %}
-                    {% set options = options|merge({
-                        'label': languageLabel,
-                        'value': translation.attributes.lang,
-                    }) %}
+                    {% if options.options %}
+                        {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}
+                        {% set options = options|merge({
+                            'label': languageLabel,
+                            'value': translation.attributes.lang,
+                            'options': langOptions,
+                            'class': 'mr-2 mb-1'
+                        }) %}
+                    {% else %}
+                        {% set options = options|merge({
+                            'label': languageLabel,
+                            'value': translation.attributes.lang,
+                        }) %}
+                    {% endif %}
+
                     {{ Form.control('lang', options)|raw }}
+
+                    {% if config('Translator.class') %}
+                        {% set data = [] %}
+                        {% for key in translatable %}
+                            {% set data = data|merge({
+                                (loop.index0): {
+                                    'field': key,
+                                    'content': object.attributes[key],
+                                    'from': object.attributes.lang,
+                                    'to': translation.attributes.lang
+                                }
+                            }) %}
+                        {% endfor %}
+
+                        <button class="mb-1" @click.prevent="translateAll({{ data|json_encode }}, $event)">
+                            {{ __('Auto-translate all fields') }}
+                        </button>
+                    {% endif %}
                 </section>
             </header>
 
-            {% set translatable = Schema.translatableFields(schema.properties) %}
 
             <div class="main-view-column">
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
-                            <div class="input text ">
-                                {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
-                                {{ Form.control('translated_fields.' ~ key, options)|raw }}
-                            </div>
+                            {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
+                            {% set options = options|merge({'ref': key}) %}
+                            {{ Form.control('translated_fields.' ~ key, options)|raw }}
+
+                            {# automatic translate button #}
+                            {% if config('Translator.class') %}
+                                {% set translationParams = {
+                                    'field': key,
+                                    'content': object.attributes[key],
+                                    'from': object.attributes.lang,
+                                    'to': translation.attributes.lang
+                                } %}
+                                <div class="field-actions">
+                                    <button @click.prevent="translate({{ translationParams|json_encode }}, $event)">
+                                        {{ __('Auto-translate') }} {{ key }}
+                                    </button>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </section>
@@ -56,11 +100,14 @@
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
-                            <div class="input text ">
-                                {% set options = Schema.controlOptions(key, object.attributes[key], schema.properties[key]) %}
-                                {% set options = options|merge({'disabled': 'disabled'}) %}
-                                {{ Form.control(key, options)|raw }}
-                            </div>
+                            {% set options = Schema.controlOptions(key, object.attributes[key], schema.properties[key]) %}
+                            {% set options = options|merge({'disabled': 'disabled'}) %}
+                            {{ Form.control(key, options)|raw }}
+
+                            {# spacer when auto translate is available #}
+                            {% if config('Translator.class') %}
+                                <div class="field-align-aid"></div>
+                            {% endif %}
                         {% endfor %}
                     </div>
             </div>

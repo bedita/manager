@@ -12,8 +12,8 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
-
 import viewHelper from 'app/helpers/view';
+import autoTranslation from 'app/helpers/api-translation';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -87,6 +87,7 @@ const _vueInstance = new Vue({
 
         // Register helpers
         Vue.use(viewHelper);
+        Vue.use(autoTranslation);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();

@@ -34,5 +34,54 @@ export default {
                 return this.tabsOpen = !this.tabsOpen;
             }
         },
+
+        async translateAll(data, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+
+            await Promise.all(
+                Object.keys(data).map(key =>
+                    this.fetchTranslation(data[key])
+                )
+            ).catch((error) => {
+                    alert(error);
+                    console.log(error);
+                })
+            .finally(() => {
+                el.classList.remove('is-loading-spinner');
+            });
+        },
+
+        translate(object, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+
+            this.fetchTranslation(object)
+                .catch((error) => {
+                    alert(error);
+                    console.log(error);
+                })
+                .finally(() => {
+                    el.classList.remove('is-loading-spinner');
+                });
+        },
+
+        async fetchTranslation(object) {
+            await this.$helpers.autoTranslate(object.content, object.from, object.to)
+                .catch(r => {
+                    throw new Error(`Unablea to translate field ${object.field}`);
+                })
+                .then(r => {
+                    if (!r.translation) {
+                        throw new Error(`Unable to translate field ${object.field}`);
+                    }
+
+                    if (CKEDITOR.instances && CKEDITOR.instances['translated-fields-' + object.field]) {
+                        CKEDITOR.instances['translated-fields-' + object.field].setData(r.translation);
+                    } else {
+                        this.$refs[object.field].value = r.translation;
+                    }
+                });
+        },
     }
 }
