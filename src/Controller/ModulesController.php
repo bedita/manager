@@ -278,6 +278,10 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
         $this->ProjectConfiguration->read();
 
+        // setup relations metadata
+        $relationships = array_flip((array)Hash::get($schema, 'relations'));
+        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $relationships);
+
         return null;
     }
 
