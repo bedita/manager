@@ -501,6 +501,18 @@ return [
         //         'surname',
         //         'username',
         //     ],
+        //     'relations' => [
+        //         'foo_with',
+        //         'fooed_by',
+        //     ],
+        //     'filter' => [
+        //         'select_field',
+        //         'another_one',
+        //     ],
+        //     'bulk' => [
+        //         'status',
+        //         'other_field',
+        //     ],
         // ],
     // ],
 
