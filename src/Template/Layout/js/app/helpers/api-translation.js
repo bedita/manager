@@ -46,6 +46,6 @@ const methods = {
 
 export default {
     install (Vue, options) {
-        Vue.prototype.$helpers = methods;
+        Vue.prototype.$helpers.autoTranslate = methods.autoTranslate;
     }
 };
