@@ -95,6 +95,24 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `relationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::relationsList()
+     */
+    public function testRelationsList(): void
+    {
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->relationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
      * Data provider for `testViewGroups` test case.
      *
      * @return array
