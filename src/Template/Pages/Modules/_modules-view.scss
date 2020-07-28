@@ -159,6 +159,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
                                     "submain-view side-view"
                                     "full-view full-view";
             grid-template-columns: 6fr 4fr;
+            grid-template-rows: auto auto 1fr auto;
             .form-header { grid-area: header-view; }
             .main-view-column { grid-area: main-view; }
             .side-view-column { grid-area: side-view; }
