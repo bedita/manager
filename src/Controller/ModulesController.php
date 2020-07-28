@@ -205,7 +205,11 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
         // setup relations metadata
-        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $object['relationships']);
+        $this->Modules->setupRelationsMeta(
+            $this->Schema->getRelationsSchema(),
+            $object['relationships'],
+            $this->Properties->relationsList($this->objectType)
+        );
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);

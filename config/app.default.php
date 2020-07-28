@@ -475,6 +475,9 @@ return [
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
+     *  - 'relations' relations ordering by relation name
+     *  - 'filter' filters to display
+     *  - 'bulk' bulk actions list
      */
     // 'Properties' => [
         // 'foos' => [

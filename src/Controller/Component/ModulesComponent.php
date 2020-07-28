@@ -454,9 +454,10 @@ class ModulesComponent extends Component
      *
      * @param array $schema Relations schema.
      * @param array $relationships The object.
+     * @param array $order order Ordered names.
      * @return void
      */
-    public function setupRelationsMeta(array $schema, array $relationships): void
+    public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
     {
         // relations between objects
         $relationsSchema = array_intersect_key($schema, $relationships);
@@ -464,6 +465,8 @@ class ModulesComponent extends Component
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
         $relationNames = array_keys($relationsSchema);
+        $relationNames = array_unique(array_intersect($order, $relationNames) + $relationNames);
+
         $objectRelations = array_combine(
             $relationNames,
             array_map(
