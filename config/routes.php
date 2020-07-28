@@ -252,4 +252,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'bulkActions'],
         ['_name' => 'modules:bulkActions']
     );
+
+    // translator service
+    $routes->connect(
+        '/translate',
+        ['controller' => 'Translator', 'action' => 'translate'],
+        ['_name' => 'translator:translate']
+    );
 });

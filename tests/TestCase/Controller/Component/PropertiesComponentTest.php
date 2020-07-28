@@ -272,7 +272,6 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                     'publish' => [
                     ],
@@ -285,7 +284,6 @@ class PropertiesComponentTest extends TestCase
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                 ],
                 'foos',
@@ -293,7 +291,6 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title',
                         'body',
-                        'lang',
                     ],
                 ],
             ],
@@ -308,14 +305,12 @@ class PropertiesComponentTest extends TestCase
                     ],
                     'other' => [
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                 ],
                 [
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                         'date_ranges' => [],
                     ],
                 ],

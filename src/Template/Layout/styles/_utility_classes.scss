@@ -112,8 +112,10 @@
 
 .mr-05    { margin-right: $gutter * .5; }
 .mr-1     { margin-right: $gutter; }
+.mr-2     { margin-right: $gutter * 2; }
 .ml-05    { margin-left: $gutter * .5; }
 .ml-1     { margin-left: $gutter; }
+.ml-2     { margin-left: $gutter * 2; }
 
 .mb-0     { margin-bottom: 0 !important; }
 .mb-05    { margin-bottom: $gutter * .5; }
@@ -195,6 +197,9 @@
     }
     &.align-center {
         align-items: center;
+    }
+    &.wrap {
+        flex-wrap: wrap;
     }
 }
 

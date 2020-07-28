@@ -159,6 +159,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
                                     "submain-view side-view"
                                     "full-view full-view";
             grid-template-columns: 6fr 4fr;
+            grid-template-rows: auto auto 1fr auto;
             .form-header { grid-area: header-view; }
             .main-view-column { grid-area: main-view; }
             .side-view-column { grid-area: side-view; }
@@ -184,6 +185,13 @@ body.translation-module {
 
     // TODO: refactor this css
     .module-form form { grid-template-columns: 1fr 1fr !important; }
+
+    .main-view-column .field-actions {
+        text-align: right;
+    }
+    .original .field-align-aid {
+        height: $gutter * 2; // match button on the other column
+    }
 }
 
 // form elements responsive grid

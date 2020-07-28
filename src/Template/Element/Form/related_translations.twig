@@ -1,20 +1,35 @@
 {% if object and object.relationships.translations %}
 
     <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start="false" ref={{ resourceName }}>
+        <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
 
-        <section class="fieldset">
-
-            <header @click.prevent="toggleVisibility()"
+            <header @click.prevent="toggleVisibility();"
                 class="tab unselectable"
-                :class="[
-                    isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
-                    isLoading? 'is-loading-spinner' : ''
-                ]">
-                    <h2>{{ __(resourceName|humanize)|lower }}</h2>
-                    <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>
+                    {{ __('Language and translations') }}
+                    <span class="tag is-smallest is-black mx-05"
+                        :class="!totalObjects? 'empty' : ''"><: totalObjects :>
+                    </span>
+                </h2>
             </header>
 
+
             <div v-show="isOpen" class="tab-container">
+
+                <div>
+                    {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
+                    {{ Form.control('lang', options)|raw }}
+
+                    {{ Html.link(__('Add translation'), {
+                        '_name': 'translations:add',
+                        'object_type': object.type,
+                        'id': object.id
+                    }, {
+                        'target': '_blank',
+                        'class' : 'icon-plus button mt-1',
+                    })|raw }}
+                </div>
 
                 <relation-view inline-template
                     relation-name={{ resourceName }}
@@ -26,19 +41,9 @@
 
                     <div class="relation-view">
                         <div class="related-list-container">
-
-                            {{ Html.link(__('New translation'), {
-                                '_name': 'translations:add',
-                                'object_type': object.type,
-                                'id': object.id
-                            }, {
-                                'target': '_blank',
-                                'class' : 'icon-plus button mb-1',
-                            })|raw }}
-
                             {# related objects #}
-                            <div class="columns" v-bind:class="loading? 'isLoading' : ''">
-                                <div class="related-item-column column is-2 is-one-third-fullhd"
+                            <div class="related-objects-list columns" v-bind:class="loading? 'isLoading' : ''">
+                                <div class="related-object column is-2 is-one-third-fullhd"
                                     v-for="(related, index) in objects"
                                     :key="related.id"
                                     :class="containsId(removedRelated, related.id)? 'removed' : ''">
@@ -63,7 +68,6 @@
             </div>
 
         </section>
-
     </property-view>
 
 {% endif %}

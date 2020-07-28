@@ -76,6 +76,7 @@ class PropertiesComponent extends Component
         'categories',
         'date_ranges',
         'tags',
+        'lang',
     ];
 
     /**
