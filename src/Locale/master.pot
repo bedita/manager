@@ -158,6 +158,9 @@ msgstr ""
 msgid "From"
 msgstr ""
 
+msgid "History"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr ""
 

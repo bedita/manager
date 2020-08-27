@@ -161,6 +161,9 @@ msgstr "Cartelle"
 msgid "From"
 msgstr "Da"
 
+msgid "History"
+msgstr "Cronologia modifiche"
+
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
