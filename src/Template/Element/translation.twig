@@ -44,6 +44,9 @@
                             'ref': 'translateTo',
                         }) %}
                     {% endif %}
+                    {% if translation.attributes.lang %}
+                        {% set options = options|merge({'readonly': true}) %}
+                    {% endif %}
 
                     {{ Form.control('lang', options)|raw }}
 
