@@ -67,6 +67,7 @@ export default {
 
         fetchTranslation(object) {
             if (!object.to) {
+                // use `value` from select on new translations
                 object.to = this.$refs.translateTo.value;
             }
 
