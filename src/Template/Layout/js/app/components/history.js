@@ -12,7 +12,7 @@ export default {
             <summary><: date :></summary>
             <ul class="history-items">
                 <li class="history-item" v-for="item in history[date]">
-                    <div><: item.user_id :></div>
+                    <div><: getAuthorName(item.user) :></div>
                     <div class="changed-properties">
                         <span class="action"><: item.user_action :></span>
                         <ul>
@@ -40,6 +40,21 @@ export default {
         getFormattedTime: function (date) {
             return moment(date).format('kk:mm');
         },
+        /**
+         * Get formatted user name.
+         * @param {Object} userObj User data
+         */
+        getAuthorName: function (userObj) {
+            if (!userObj) {
+                return;
+            }
+            const user = userObj.attributes;
+
+            return user.title ||
+                `${user.name || ''} ${user.surname || ''}`.trim() ||
+                user.username ||
+                '';
+        }
     },
 
     computed: {
@@ -55,6 +70,7 @@ export default {
     },
 
     async created() {
+        moment.locale(LOCALE);
         const baseUrl = new URL(BEDITA.base).pathname;
         const options = {
             credentials: 'same-origin',
@@ -62,21 +78,28 @@ export default {
                 accept: 'application/json',
             }
         };
-        moment.locale(LOCALE);
 
         this.isLoading = true;
-        const response = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.objectId}`, options);
-        const json = await response.json();
+        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.objectId}`, options);
+        const historyJson = await historyRes.json();
+        const history = historyJson.data;
+
+        // fetch users involved in the object history
+        const usersId = history.map((change) => change.meta.user_id);
+        const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
+        const userJson = await userRes.json();
+        const users = userJson.data;
 
         // group changes by date
-        this.history = json.data.reduce((accumulator, change) => {
-            const createdDate = moment(change.meta.created).format('DD MMM YYYY');
+        this.history = history.reduce((accumulator, { meta: change }) => {
+            change.user = users.find((user) => user.id == change.user_id);
+            const createdDate = moment(change.created).format('DD MMM YYYY');
             accumulator[createdDate] = accumulator[createdDate] || [];
-            accumulator[createdDate].push(change.meta);
+            accumulator[createdDate].push(change);
             return accumulator;
         }, {});
 
-        this.$emit('count', json.meta.pagination.count);
+        this.$emit('count', historyJson.meta.pagination.count);
         this.isLoading = false;
     },
 }
