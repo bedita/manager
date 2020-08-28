@@ -66,6 +66,10 @@ export default {
         },
 
         fetchTranslation(object) {
+            if (!object.to) {
+                object.to = this.$refs.translateTo.value;
+            }
+
             return this.$helpers.autoTranslate(object.content, object.from, object.to)
                 .catch(r => {
                     throw new Error(`Unablea to translate field ${object.field}`);

@@ -37,7 +37,8 @@
                             'label': languageLabel,
                             'value': translation.attributes.lang,
                             'options': langOptions,
-                            'class': 'mr-2 mb-1'
+                            'class': 'mr-2 mb-1',
+                            'ref': 'translateTo',
                         }) %}
                     {% else %}
                         {% set options = options|merge({
