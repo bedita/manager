@@ -12,14 +12,16 @@ export default {
             <summary><: date :></summary>
             <ul class="history-items">
                 <li class="history-item" v-for="item in history[date]">
-                    <div><: getAuthorName(item.user) :></div>
-                    <div class="changed-properties">
-                        <span class="action"><: item.user_action :></span>
-                        <ul>
-                            <li v-for="(value, property) in item.changed"><: property :></li>
-                        </ul>
+                    <div class="history-item-data">
+                        <div><: getAuthorName(item.user) :></div>
+                        <div class="changed-properties">
+                            <span class="action"><: item.user_action :></span>
+                            <ul>
+                                <li v-for="(value, property) in item.changed"><: property :></li>
+                            </ul>
+                        </div>
+                        <div class="change-time"><: getFormattedTime(item.created) :></div>
                     </div>
-                    <div><: getFormattedTime(item.created) :></div>
                 </li>
             </ul>
         </details>

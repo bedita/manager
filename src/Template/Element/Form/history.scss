@@ -52,15 +52,21 @@
                     border-image: linear-gradient(to bottom, $gray-600 50%, transparent 50%) 1;
                 }
 
-                > * {
-                    padding-right: 3rem;
-                }
+                .history-item-data {
+                    display: inline-grid;
+                    grid-gap: 2rem;
+                    grid-template-columns: 1fr 1fr auto;
+                    width: 100%;
 
-                .changed-properties {
-                    display: flex;
+                    > * {
+                        display: flex;
+                        align-items: center;
+                    }
 
-                    .action {
-                        margin-right: 0.5rem;
+                    .changed-properties {
+                        .action {
+                            margin-right: 1rem;
+                        }
                     }
                 }
             }
