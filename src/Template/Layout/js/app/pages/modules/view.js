@@ -83,8 +83,10 @@ export default {
                         throw new Error(`Unable to translate field ${object.field}`);
                     }
 
-                    if (CKEDITOR.instances && CKEDITOR.instances['translated-fields-' + object.field]) {
-                        CKEDITOR.instances['translated-fields-' + object.field].setData(r.translation);
+                    const field = object.field.replaceAll('_', '-');
+                    const ckfield = `translated-fields-${field}`;
+                    if (CKEDITOR.instances && CKEDITOR.instances[ckfield]) {
+                        CKEDITOR.instances[ckfield].setData(r.translation);
                     } else {
                         this.$refs[object.field].value = r.translation;
                     }
