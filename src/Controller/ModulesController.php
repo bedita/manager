@@ -463,10 +463,10 @@ class ModulesController extends AppController
     }
 
     /**
-     * Relation data load callig api `GET /:object_type/:id/related/:relation`
+     * Relation data load via API => `GET /:object_type/:id/related/:relation`
      *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
+     * @param string|int $id The object ID.
+     * @param string $relation The relation name.
      * @return void
      */
     public function relatedJson($id, string $relation): void
