@@ -575,13 +575,13 @@ class ModulesController extends AppController
             return $defaultUrl;
         }
 
-        $schema = (array)$this->Schema->getSchema();
-        $types = (array)Hash::get($schema, sprintf('relations.%s.types', $relation));
+        $relationsSchema = $this->Schema->getRelationsSchema();
+        $types = $this->Modules->relatedTypes($relationsSchema, $relation);
         if (count($types) === 1) {
             return sprintf('/%s', $types[0]);
         }
 
-        return '/objects?filter[type]= ' . implode($types);
+        return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
 
     /**

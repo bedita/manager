@@ -185,7 +185,7 @@ class SchemaComponent extends Component
 
         return [
             'associations' => (array)Hash::get((array)$response, 'data.attributes.associations'),
-            'relations' => (array)Hash::get((array)$response, 'data.meta.relations'),
+            'relations' => array_flip((array)Hash::get((array)$response, 'data.meta.relations')),
         ];
     }
 
