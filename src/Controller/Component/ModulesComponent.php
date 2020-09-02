@@ -453,7 +453,7 @@ class ModulesComponent extends Component
      * Setup relations information metadata.
      *
      * @param array $schema Relations schema.
-     * @param array $relationships The object.
+     * @param array $relationships The object relationships.
      * @return void
      */
     public function setupRelationsMeta(array $schema, array $relationships): void
