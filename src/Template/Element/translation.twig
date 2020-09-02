@@ -1,3 +1,4 @@
+{% do _view.assign('title', __('Translations')) %}
 {% do _view.assign('bodyViewClass', 'translation-module') %}
 {% set translatable = Schema.translatableFields(schema.properties) %}
 
@@ -30,20 +31,21 @@
 
                 <section class="fieldset is-flex wrap">
                     {% set languageLabel = "#{__('Language')} (#{__('original')}: #{object.attributes.lang})" %}
-                    {% set options = Schema.controlOptions('lang', null, []) %}
+                    {% set options = Schema.controlOptions('lang', null, [])|default({})|merge({
+                        'label': languageLabel,
+                        'value': translation.attributes.lang,
+                    }) %}
+
                     {% if options.options %}
                         {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}
                         {% set options = options|merge({
-                            'label': languageLabel,
-                            'value': translation.attributes.lang,
                             'options': langOptions,
-                            'class': 'mr-2 mb-1'
+                            'class': 'mr-2 mb-1',
+                            'ref': 'translateTo',
                         }) %}
-                    {% else %}
-                        {% set options = options|merge({
-                            'label': languageLabel,
-                            'value': translation.attributes.lang,
-                        }) %}
+                    {% endif %}
+                    {% if translation.attributes.lang %}
+                        {% set options = options|merge({'readonly': true}) %}
                     {% endif %}
 
                     {{ Form.control('lang', options)|raw }}

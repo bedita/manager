@@ -38,18 +38,17 @@ export default {
         async translateAll(data, e) {
             const el = e.currentTarget;
             el.classList.add('is-loading-spinner');
-
-            await Promise.all(
-                Object.keys(data).map(key =>
-                    this.fetchTranslation(data[key])
-                )
-            ).catch((error) => {
-                    alert(error);
-                    console.log(error);
-                })
-            .finally(() => {
-                el.classList.remove('is-loading-spinner');
-            });
+            try {
+                await Promise.all(
+                    Object.keys(data).map(key =>
+                        this.fetchTranslation(data[key])
+                    )
+                );
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+            el.classList.remove('is-loading-spinner');
         },
 
         translate(object, e) {
@@ -66,18 +65,28 @@ export default {
                 });
         },
 
-        async fetchTranslation(object) {
-            await this.$helpers.autoTranslate(object.content, object.from, object.to)
+        fetchTranslation(object) {
+            if (!object.content) {
+                return;
+            }
+            if (!object.to) {
+                // use `value` from select on new translations
+                object.to = this.$refs.translateTo.value;
+            }
+
+            return this.$helpers.autoTranslate(object.content, object.from, object.to)
                 .catch(r => {
-                    throw new Error(`Unablea to translate field ${object.field}`);
+                    throw new Error(`Unable to translate field ${object.field}`);
                 })
                 .then(r => {
                     if (!r.translation) {
                         throw new Error(`Unable to translate field ${object.field}`);
                     }
 
-                    if (CKEDITOR.instances && CKEDITOR.instances['translated-fields-' + object.field]) {
-                        CKEDITOR.instances['translated-fields-' + object.field].setData(r.translation);
+                    const field = object.field.replaceAll('_', '-');
+                    const ckfield = `translated-fields-${field}`;
+                    if (CKEDITOR.instances && CKEDITOR.instances[ckfield]) {
+                        CKEDITOR.instances[ckfield].setData(r.translation);
                     } else {
                         this.$refs[object.field].value = r.translation;
                     }
