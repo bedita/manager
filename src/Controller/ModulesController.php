@@ -570,12 +570,12 @@ class ModulesController extends AppController
             'parent' => '/folders',
             'parents' => '/folders',
         ];
-        $defaultUrl = Hash::get($defaults, $relation);
+        $defaultUrl = (string)Hash::get($defaults, $relation);
         if (!empty($defaultUrl)) {
             return $defaultUrl;
         }
 
-        $schema = $this->Schema->getSchema();
+        $schema = (array)$this->Schema->getSchema();
         $types = (array)Hash::get($schema, sprintf('relations.%s.types', $relation));
         if (count($types) === 1) {
             return sprintf('/%s', $types[0]);
