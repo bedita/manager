@@ -502,8 +502,13 @@ return [
         //         'username',
         //     ],
         //     'relations' => [
-        //         'foo_with',
-        //         'fooed_by',
+        //         'main' => [
+        //             'foo_with',
+        //             'fooed_by',
+        //         ],
+        //         'aside' => [
+        //             'fooing',
+        //         ],
         //     ],
         //     'filter' => [
         //         'select_field',

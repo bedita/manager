@@ -77,10 +77,13 @@
                 {% element 'Form/advanced_properties' %}
 
                 {% element 'Form/resource_relations' %}
+
+                {# aside relations view #}
+                {% element 'Form/relations' {'relations': objectRelations.aside} %}
             </div>
 
-            {# relations view #}
-            {% element 'Form/relations' %}
+            {# main relations view #}
+            {% element 'Form/relations' {'relations': objectRelations.main} %}
 
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}

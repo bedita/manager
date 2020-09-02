@@ -453,8 +453,8 @@ class ModulesComponent extends Component
      * Setup relations information metadata.
      *
      * @param array $schema Relations schema.
-     * @param array $relationships The object.
-     * @param array $order order Ordered names.
+     * @param array $relationships Object relationships.
+     * @param array $order order Ordered names in 'main' and 'aside'.
      * @return void
      */
     public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
@@ -465,10 +465,32 @@ class ModulesComponent extends Component
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
         $relationNames = array_keys($relationsSchema);
-        $relationNames = array_unique(array_intersect($order, $relationNames) + $relationNames);
 
-        $objectRelations = array_combine(
-            $relationNames,
+        // define 'main' and 'aside' relation groups
+        $aside = array_intersect((array)Hash::get($order, 'aside'), $relationNames);
+        $relationNames = array_diff($relationNames, $aside);
+        $main = array_intersect((array)Hash::get($order, 'main'), $relationNames);
+        $main = array_unique($main + $relationNames);
+
+        $objectRelations = [
+            'main' => $this->relationLabels($relationsSchema, $main),
+            'aside' => $this->relationLabels($relationsSchema, $aside),
+        ];
+
+        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Retrieve associative array with names as keys and labels as values.
+     *
+     * @param array $schema Relations schema.
+     * @param array $names Relation names.
+     * @return array
+     */
+    protected function relationLabels(array &$relationsSchema, array $names): array
+    {
+        return array_combine(
+            $names,
             array_map(
                 function ($r) use ($relationsSchema) {
                     // return 'label' or 'inverse_label' looking at 'name'
@@ -479,10 +501,8 @@ class ModulesComponent extends Component
 
                     return $attributes['inverse_label'];
                 },
-                $relationNames
+                $names
             )
         );
-
-        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
     }
 }
