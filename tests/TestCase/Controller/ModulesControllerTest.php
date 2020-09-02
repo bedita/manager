@@ -1032,6 +1032,49 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `saveRelated` method
+     *
+     * @covers ::saveRelated()
+     *
+     * @return void
+     */
+    public function testSaveRelated()
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+        ]);
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.org'])
+            ->getMock();
+        $apiClient->method('save')
+            ->willReturn(['data' => ['id' => 1]]);
+        $apiClient->method('addRelated')
+            ->willReturn([]);
+
+        $this->controller->apiClient = $apiClient;
+
+        $requestData = [];
+        $result = $this->controller->save($requestData, '1');
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
+
+        $requestData = [
+            '_api' => [
+                [
+                    'method' => 'addRelated',
+                    'relation' => '',
+                    'relatedIds' => [],
+                ],
+            ],
+        ];
+        $result = $this->controller->save($requestData, '1');
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
+    }
+
+    /**
      * Get test object id
      *
      * @return void
