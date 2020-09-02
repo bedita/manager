@@ -406,4 +406,38 @@ class SchemaComponentTest extends TestCase
 
         return [];
     }
+
+    /**
+     * Test `fetchObjectTypeMeta` method.
+     *
+     * @return void
+     * @covers ::fetchObjectTypeMeta()
+     */
+    public function testFetchObjectTypeMeta()
+    {
+        $objectType = [
+            'data' => [
+                'attributes' => [
+                    'associations' => ['Categories'],
+                ],
+                'meta' => [
+                    'relations' => ['has_media'],
+                ],
+            ],
+        ];
+
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($objectType);
+        $apiClient->method('schema')
+            ->willReturn(['type' => 'object']);
+
+        ApiClientProvider::setApiClient($apiClient);
+
+        $result = $this->Schema->getSchema('documents');
+        static::assertEquals(['Categories'], $result['associations']);
+        static::assertEquals(['has_media' => 0], $result['relations']);
+    }
 }
