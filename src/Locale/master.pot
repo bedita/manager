@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-11-28 14:49:48 \n"
+"POT-Creation-Date: 2020-09-03 14:30:12 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -14,7 +14,10 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr ""
 
-msgid "Add objects to"
+msgid "Add"
+msgstr ""
+
+msgid "Add translation"
 msgstr ""
 
 msgid "Advanced"
@@ -26,16 +29,31 @@ msgstr ""
 msgid "All Types"
 msgstr ""
 
+msgid "All categories"
+msgstr ""
+
+msgid "All day"
+msgstr ""
+
 msgid "All media"
 msgstr ""
 
 msgid "All objects"
 msgstr ""
 
+msgid "All tags"
+msgstr ""
+
 msgid "An extension stopped the file upload"
 msgstr ""
 
 msgid "Any"
+msgstr ""
+
+msgid "Auto-translate"
+msgstr ""
+
+msgid "Auto-translate all fields"
 msgstr ""
 
 msgid "BEdita Web site"
@@ -56,19 +74,40 @@ msgstr ""
 msgid "Cannot produce a thumbnail for this file"
 msgstr ""
 
+msgid "Categories"
+msgstr ""
+
 msgid "Change File"
+msgstr ""
+
+msgid "Change password"
 msgstr ""
 
 msgid "Children"
 msgstr ""
 
+msgid "Click or drop new files here"
+msgstr ""
+
 msgid "Clone"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Core properties"
 msgstr ""
 
 msgid "Create new"
 msgstr ""
 
+msgid "Created"
+msgstr ""
+
 msgid "Current password"
+msgstr ""
+
+msgid "Custom properties"
 msgstr ""
 
 msgid "Dashboard"
@@ -92,6 +131,9 @@ msgstr ""
 msgid "Direct access by id or unique name"
 msgstr ""
 
+msgid "Discard"
+msgstr ""
+
 msgid "Documents"
 msgstr ""
 
@@ -101,7 +143,10 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-msgid "Edit Params"
+msgid "Edit"
+msgstr ""
+
+msgid "Edit params"
 msgstr ""
 
 msgid "Embed online content"
@@ -134,6 +179,9 @@ msgstr ""
 msgid "Export All"
 msgstr ""
 
+msgid "Export Filtered"
+msgstr ""
+
 msgid "Failed to write file to disk"
 msgstr ""
 
@@ -158,6 +206,9 @@ msgstr ""
 msgid "From"
 msgstr ""
 
+msgid "From date"
+msgstr ""
+
 msgid "History"
 msgstr ""
 
@@ -179,6 +230,9 @@ msgstr ""
 msgid "Import warn"
 msgstr ""
 
+msgid "Inherited properties"
+msgstr ""
+
 msgid "Invalid username or password"
 msgstr ""
 
@@ -189,6 +243,9 @@ msgid "Jobs"
 msgstr ""
 
 msgid "Language"
+msgstr ""
+
+msgid "Language and translations"
 msgstr ""
 
 msgid "Locations"
@@ -219,6 +276,12 @@ msgid "Missing thumb url"
 msgstr ""
 
 msgid "Module access not authorized"
+msgstr ""
+
+msgid "More"
+msgstr ""
+
+msgid "Move to position"
 msgstr ""
 
 msgid "Move to trash"
@@ -281,7 +344,13 @@ msgstr ""
 msgid "On"
 msgstr ""
 
+msgid "Open"
+msgstr ""
+
 msgid "Open image"
+msgstr ""
+
+msgid "Open module"
 msgstr ""
 
 msgid "Options"
@@ -293,19 +362,28 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+msgid "Permanently delete"
+msgstr ""
+
+msgid "Pick"
+msgstr ""
+
 msgid "Please provide a Mapbox access token in app configuration"
 msgstr ""
 
 msgid "Preferences and Tools"
 msgstr ""
 
-msgid "Priority"
-msgstr ""
-
 msgid "Profiles"
 msgstr ""
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
+msgstr ""
+
+msgid "Publications"
 msgstr ""
 
 msgid "Publish End"
@@ -335,6 +413,9 @@ msgstr ""
 msgid "Restore"
 msgstr ""
 
+msgid "Restored"
+msgstr ""
+
 msgid "Result"
 msgstr ""
 
@@ -347,16 +428,10 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Search in BEdita"
-msgstr ""
-
 msgid "Set selected"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
-
-msgid "Show more"
 msgstr ""
 
 msgid "Sign in"
@@ -392,6 +467,9 @@ msgstr ""
 msgid "To"
 msgstr ""
 
+msgid "To date"
+msgstr ""
+
 msgid "Translation(s) deleted"
 msgstr ""
 
@@ -410,6 +488,9 @@ msgstr ""
 msgid "Trashcan"
 msgstr ""
 
+msgid "Trashd"
+msgstr ""
+
 msgid "Uname"
 msgstr ""
 
@@ -417,6 +498,9 @@ msgid "Unknown upload error"
 msgstr ""
 
 msgid "Untitled"
+msgstr ""
+
+msgid "Updated"
 msgstr ""
 
 msgid "Upload"
@@ -449,9 +533,6 @@ msgstr ""
 msgid "View original"
 msgstr ""
 
-msgid "View trashed "
-msgstr ""
-
 msgid "Yes"
 msgstr ""
 
@@ -465,12 +546,6 @@ msgid "add to"
 msgstr ""
 
 msgid "cancel"
-msgstr ""
-
-msgid "click to remove"
-msgstr ""
-
-msgid "close"
 msgstr ""
 
 msgid "code"
@@ -491,9 +566,6 @@ msgstr ""
 msgid "current password"
 msgstr ""
 
-msgid "download"
-msgstr ""
-
 msgid "empty"
 msgstr ""
 
@@ -503,13 +575,7 @@ msgstr ""
 msgid "id"
 msgstr ""
 
-msgid "last modified"
-msgstr ""
-
 msgid "modified"
-msgstr ""
-
-msgid "move to"
 msgstr ""
 
 msgid "new password"
@@ -518,19 +584,10 @@ msgstr ""
 msgid "objects"
 msgstr ""
 
-msgid "of"
-msgstr ""
-
-msgid "open"
+msgid "objects to"
 msgstr ""
 
 msgid "original"
-msgstr ""
-
-msgid "position"
-msgstr ""
-
-msgid "reload"
 msgstr ""
 
 msgid "remove"
@@ -560,8 +617,21 @@ msgstr ""
 msgid "undo remove"
 msgstr ""
 
-msgid "view file"
+msgid "view parent"
 msgstr ""
 
 msgid "www.bedita.com"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:152
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:465
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:467
+msgid "Do you really want to trash the object?"
 msgstr ""

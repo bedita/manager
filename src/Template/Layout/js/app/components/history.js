@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { t } from 'ttag';
 
 const LOCALE = BEDITA.locale.slice(0, 2);
 
@@ -12,16 +13,12 @@ export default {
             <summary><: date :></summary>
             <ul class="history-items">
                 <li class="history-item" v-for="item in history[date]">
-                    <div class="history-item-data">
-                        <div><: getAuthorName(item.user) :></div>
-                        <div class="changed-properties">
-                            <span class="action"><: item.user_action :></span>
-                            <ul>
-                                <li v-for="(value, property) in item.changed"><: property :></li>
-                            </ul>
-                        </div>
-                        <div class="change-time"><: getFormattedTime(item.created) :></div>
+                    <div><: getAuthorName(item.user) :></div>
+                    <div class="changed-properties">
+                        <span class="action"><: getActionLabel(item.user_action) :></span>
+                        <div><: Object.keys(item.changed).join(', ') :></div>
                     </div>
+                    <div class="change-time"><: getFormattedTime(item.created) :></div>
                 </li>
             </ul>
         </details>
@@ -45,6 +42,7 @@ export default {
         /**
          * Get formatted user name.
          * @param {Object} userObj User data
+         * @return {string}
          */
         getAuthorName: function (userObj) {
             if (!userObj) {
@@ -56,6 +54,19 @@ export default {
                 `${user.name || ''} ${user.surname || ''}`.trim() ||
                 user.username ||
                 '';
+        },
+        /**
+         * Translate user action.
+         * Capitalize it before translation and then add colon.
+         * @param {string} action User action name
+         * @return {string}
+         */
+        getActionLabel(action) {
+            let label = t`${action.replace(/^\w/, (c) => c.toUpperCase())}d`;
+            if (action !== 'trash' && action != 'restore') {
+                label += ':';
+            }
+            return label;
         }
     },
 
@@ -67,7 +78,7 @@ export default {
         sortedDates: function () {
             return Object.keys(this.history)
                 .sort((date1, date2) => moment(date1, 'DD MMM YYYY').diff(moment(date2, 'DD MMM YYYY')))
-                    .reverse();
+                .reverse();
         },
     },
 
@@ -82,7 +93,7 @@ export default {
         };
 
         this.isLoading = true;
-        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.objectId}`, options);
+        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.objectId}&page_size=100`, options);
         const historyJson = await historyRes.json();
         const history = historyJson.data;
 
@@ -100,6 +111,9 @@ export default {
             accumulator[createdDate].push(change);
             return accumulator;
         }, {});
+
+        // sort changes by time in descending order
+        Object.keys(this.history).forEach((date) => this.history[date].reverse());
 
         this.$emit('count', historyJson.meta.pagination.count);
         this.isLoading = false;
