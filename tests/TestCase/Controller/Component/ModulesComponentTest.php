@@ -972,7 +972,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['has_media' => 'Has Media'],
+                    'objectRelations' => [
+                        'main' => [
+                            'has_media' => 'Has Media',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'has_media' => [
@@ -1001,7 +1006,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['media_of' => 'Media Of'],
+                    'objectRelations' => [
+                        'main' => [
+                            'media_of' => 'Media Of',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'media_of' => [
@@ -1017,6 +1027,68 @@ class ModulesComponentTest extends TestCase
                     'media_of' => [],
                 ],
             ],
+            'ordered' => [
+                [
+                    'relationsSchema' => [
+                        'has_media' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                        ],
+                        'attach' => [
+                            'attributes' => [
+                                'name' => 'attach',
+                                'label' => 'Attach',
+                                'inverse_name' => 'attached_to',
+                                'inverse_label' => 'Attached To',
+                            ],
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => [
+                        'main' => [
+                            'attach' => 'Attach',
+                        ],
+                        'aside' => [
+                            'has_media' => 'Has Media',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                    'attach' => [
+                        'attributes' => [
+                            'name' => 'attach',
+                            'label' => 'Attach',
+                            'inverse_name' => 'attached_to',
+                            'inverse_label' => 'Attached To',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [],
+                    'attach' => [],
+                ],
+                [
+                    'main' => [
+                        'attach',
+                    ],
+                    'aside' => [
+                        'has_media',
+                    ],
+                ],
+            ],
+
         ];
     }
 
@@ -1027,14 +1099,16 @@ class ModulesComponentTest extends TestCase
      *
      * @dataProvider setupRelationsProvider
      * @covers ::setupRelationsMeta()
+     * @covers ::relationLabels()
      *
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
+     * @param array $order Order array.
      */
-    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships)
+    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [])
     {
-        $this->Modules->setupRelationsMeta($schema, $relationships);
+        $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
         $viewVars = $this->Modules->getController()->viewVars;
         foreach ($expected as $key => $value) {

@@ -475,6 +475,9 @@ return [
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
+     *  - 'relations' relations ordering by relation name
+     *  - 'filter' filters to display
+     *  - 'bulk' bulk actions list
      */
     // 'Properties' => [
         // 'foos' => [
@@ -497,6 +500,23 @@ return [
         //         'name',
         //         'surname',
         //         'username',
+        //     ],
+        //     'relations' => [
+        //         'main' => [
+        //             'foo_with',
+        //             'fooed_by',
+        //         ],
+        //         'aside' => [
+        //             'fooing',
+        //         ],
+        //     ],
+        //     'filter' => [
+        //         'select_field',
+        //         'another_one',
+        //     ],
+        //     'bulk' => [
+        //         'status',
+        //         'other_field',
         //     ],
         // ],
     // ],

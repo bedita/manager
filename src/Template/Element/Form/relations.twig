@@ -1,7 +1,7 @@
-{% if objectRelations %}
+{% if relations %}
 <section class="relations">
 
-    {% for relationName, relationLabel in objectRelations %}
+    {% for relationName, relationLabel in relations %}
 
         <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
             <section class="fieldset">
