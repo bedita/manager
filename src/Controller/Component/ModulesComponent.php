@@ -482,13 +482,13 @@ class ModulesComponent extends Component
     /**
      * Retrieve associative array with names as keys and labels as values.
      *
-     * @param array $schema Relations schema.
+     * @param array $relationsSchema Relations schema.
      * @param array $names Relation names.
      * @return array
      */
     protected function relationLabels(array &$relationsSchema, array $names): array
     {
-        return array_combine(
+        return (array)array_combine(
             $names,
             array_map(
                 function ($r) use ($relationsSchema) {
