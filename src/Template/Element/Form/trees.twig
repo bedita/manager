@@ -10,28 +10,20 @@
         </header>
 
         <div v-if="isOpen" class="tab-container">
-            {# TODO put it in config #}
             {% if objectType == 'folders' %}
                 {% set relationName = 'parent' %}
-                {% set paths = [object.meta.path]%}
                 {% set options = { 'multiple': 'false' }%}
             {% else %}
                 {% set relationName = 'parents' %}
-                {% if not object.id %}
-                    {% set paths = [] %}
-                {% else %}
-                    {% set paths = included|map(o => o.meta.path ~ '/' ~ object.id) %}
-                {% endif %}
                 {% set options = { 'multiple': 'true' }%}
             {% endif %}
 
             <tree-view
                 relation-name={{ relationName }}
-                :object-id={{ object.id|default(0) }}
-                :object-paths='{{ paths|json_encode|raw }}'
+                object-type={{ object.type }}
+                object-id={{ object.id }}
                 :multiple-choice={{ options.multiple }}>
             </tree-view>
-
             {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
         </div>
     </section>

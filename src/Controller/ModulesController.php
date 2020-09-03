@@ -176,11 +176,7 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $query = [];
-            if ($this->objectType !== 'folders') {
-                $query['include'] = 'parents';
-            }
-            $response = $this->apiClient->getObject($id, $this->objectType, $query);
+            $response = $this->apiClient->getObject($id, $this->objectType);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);

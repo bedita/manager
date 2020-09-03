@@ -1,82 +1,82 @@
-.tree-view {
+.tree-view-node {
     color: $gray-100;
     padding: 0 $gutter * .5;
     line-height: 1;
 
-    > .tree-list-node {
+    &.is-root {
         border-bottom: solid 1px $gray-800;
+    }
+
+    .node-element {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
         &[data-status='draft'],
         &[data-status='off'] {
             color: $gray-500;
         }
 
-        .node-element {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+        > label.node-label {
+            flex: none !important;
+            margin-right: $gutter;
+            color: inherit;
+            line-height: $gutter * 2;
+            cursor: pointer;
 
-            > label.node-label {
-                flex: none !important;
-                margin-right: $gutter;
-                color: inherit;
-                line-height: $gutter * 2;
-                cursor: pointer;
-
-                > input[type='checkbox'],
-                > input[type='radio'] {
-                    margin-top: -$gutter / 8;
-                    margin-right: $gutter / 2;
-                    vertical-align: middle;
-                }
-            }
-
-            > a {
-                display: inline-block;
-                padding: $gutter / 2 $gutter * 1.5;
-                margin-left: $gutter;
+            > input[type='checkbox'],
+            > input[type='radio'] {
+                margin-top: -$gutter / 8;
+                margin-right: $gutter / 2;
                 vertical-align: middle;
-                text-transform: uppercase;
-                border: solid 1px currentColor;
-                border-radius: 2px;
-                opacity: 0;
+            }
+        }
 
-                &:focus {
-                    opacity: 1;
+        > a {
+            display: inline-block;
+            padding: $gutter / 2 $gutter * 1.5;
+            margin-left: $gutter;
+            vertical-align: middle;
+            text-transform: uppercase;
+            border: solid 1px currentColor;
+            border-radius: 2px;
+            opacity: 0;
+
+            &:focus {
+                opacity: 1;
+            }
+        }
+
+        > button {
+            margin: 0 0 0 $gutter * .75;
+            min-width: $gutter * 2;
+            color: currentColor;
+            background: transparent;
+            border: 0;
+
+            &.is-loading-spinner {
+                width: 1.35em;
+                height: 1em;
+                &::after {
+                    vertical-align: middle;
+                    border-left-color: rgba(255, 255, 255, 0.75);
                 }
             }
+        }
 
-            > button {
-                margin: 0 0 0 $gutter * .75;
-                min-width: $gutter * 2;
-                color: currentColor;
-                background: transparent;
-                border: 0;
-
-                &.is-loading-spinner {
-                    width: 1.35em;
-                    height: 1em;
-                    &::after {
-                        vertical-align: middle;
-                        border-left-color: rgba(255, 255, 255, 0.75);
-                    }
-                }
-            }
-
-            &:hover {
-                > a {
-                    opacity: 1;
-                }
+        &:hover {
+            > a {
+                opacity: 1;
             }
         }
     }
 
-    .node-children {
+    .node-element ~ .node-children {
         &:not(:empty) {
             margin-top: -$gutter;
             margin-left: 3 * $gutter / 8;
             padding-top: $gutter;
-            padding-left: $gutter;
+            padding-left: $gutter / 2;
             border-left: solid 1px rgba(255, 255, 255, 0.25);
         }
     }
