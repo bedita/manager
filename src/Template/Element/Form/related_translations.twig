@@ -1,4 +1,4 @@
-{% if object and object.relationships.translations %}
+{% if schema.properties.lang %}
 
     <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start="false" ref={{ resourceName }}>
         <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
@@ -21,6 +21,7 @@
                     {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
                     {{ Form.control('lang', options)|raw }}
 
+                {% if object.relationships.translations %}
                     {{ Html.link(__('Add translation'), {
                         '_name': 'translations:add',
                         'object_type': object.type,
@@ -29,8 +30,10 @@
                         'target': '_blank',
                         'class' : 'icon-plus button mt-1',
                     })|raw }}
+                {% endif %}
                 </div>
 
+                {% if object.relationships.translations %}
                 <relation-view inline-template
                     relation-name={{ resourceName }}
                     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
@@ -65,6 +68,7 @@
 
                     </div>
                 </relation-view>
+                {% endif %}
             </div>
 
         </section>

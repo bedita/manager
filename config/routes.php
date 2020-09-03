@@ -170,6 +170,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
+        '/:object_type/view/new',
+        ['controller' => 'Modules', 'action' => 'create'],
+        ['_name' => 'modules:create']
+    );
+
+    $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
@@ -215,11 +221,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/view/:id/relationData/:relation',
         ['controller' => 'Modules', 'action' => 'relationData'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationData']
-    );
-    $routes->connect(
-        '/:object_type/create',
-        ['controller' => 'Modules', 'action' => 'create'],
-        ['_name' => 'modules:create']
     );
     $routes->connect(
         '/:object_type/save',

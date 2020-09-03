@@ -17,7 +17,7 @@ const methods = {
     *     ]
     * }
     */
-    async autoTranslate(text, from, to) {
+   autoTranslate(text, from, to) {
         if (!text) {
             return;
         }
@@ -34,13 +34,12 @@ const methods = {
             },
             body: formData,
         };
-
-        await fetch(`${window.location.origin}/translate`, options)
+        return fetch(`${window.location.origin}/translate`, options)
             .catch(error => {
                 console.error(error);
                 return error;
             })
-            .then(r => response.json());
+            .then(r => r.json());
     },
 }
 

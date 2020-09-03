@@ -15,7 +15,6 @@ namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
 use App\Utility\OEmbed;
-use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -454,7 +453,7 @@ class ModulesComponent extends Component
      *
      * @param array $schema Relations schema.
      * @param array $relationships Object relationships.
-     * @param array $order order Ordered names in 'main' and 'aside'.
+     * @param array $order order Ordered names inside 'main' and 'aside' keys.
      * @return void
      */
     public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
@@ -504,5 +503,23 @@ class ModulesComponent extends Component
                 $names
             )
         );
+    }
+
+    /**
+     * Get related types from relation name.
+     *
+     * @param array $schema Relations schema.
+     * @param string $relation Relation name.
+     * @return array
+     */
+    public function relatedTypes(array $schema, string $relation): array
+    {
+        $relationsSchema = (array)Hash::get($schema, $relation);
+        $name = (string)Hash::get($relationsSchema, 'attributes.name');
+        if ($name === $relation) {
+            return (array)Hash::get($relationsSchema, 'right');
+        }
+
+        return (array)Hash::get($relationsSchema, 'left');
     }
 }

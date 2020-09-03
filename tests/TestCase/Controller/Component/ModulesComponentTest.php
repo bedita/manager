@@ -1096,4 +1096,37 @@ class ModulesComponentTest extends TestCase
             $this->assertEquals($value, $viewVars[$key]);
         }
     }
+
+    /**
+     * Test `relatedTypes` method
+     *
+     * @return void
+     * @covers ::relatedTypes()
+     */
+    public function testRelatedTypes()
+    {
+        $schema = [
+            'has_media' => [
+                'attributes' => [
+                    'name' => 'has_media',
+                    'inverse_name' => 'media_of',
+                ],
+                'left' => ['documents'],
+                'right' => ['media'],
+            ],
+            'media_of' => [
+                'attributes' => [
+                    'name' => 'has_media',
+                    'inverse_name' => 'media_of',
+                ],
+                'left' => ['documents'],
+                'right' => ['media'],
+            ],
+        ];
+
+        $types = $this->Modules->relatedTypes($schema, 'has_media');
+        static::assertEquals(['media'], $types);
+        $types = $this->Modules->relatedTypes($schema, 'media_of');
+        static::assertEquals(['documents'], $types);
+    }
 }

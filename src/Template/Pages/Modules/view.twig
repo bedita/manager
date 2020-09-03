@@ -68,7 +68,7 @@
                     {% element 'Form/roles' %}
                 {% endif %}
 
-                {% if modules.folders and _view.getRequest().getParam('action') != 'create' and _view.getRequest().getParam('action') != 'clone' %}
+                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
                     {% element 'Form/trees' %}
                 {% endif %}
 
