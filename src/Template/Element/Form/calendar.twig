@@ -1,6 +1,6 @@
-{# Calendar: use date_ranges if set in object attributes#}
+{# Calendar: use date_ranges if `DateRanges` association is set #}
 
-{% if object.attributes.date_ranges is defined %}
+{% if in_array('DateRanges', schema.associations) %}
 <property-view inline-template :tab-open="tabsOpen">
 <section class="fieldset">
     <header @click.prevent="toggleVisibility()"

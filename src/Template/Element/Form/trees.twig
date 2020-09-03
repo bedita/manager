@@ -17,13 +17,17 @@
                 {% set options = { 'multiple': 'false' }%}
             {% else %}
                 {% set relationName = 'parents' %}
-                {% set paths = included|map(o => o.meta.path ~ '/' ~ object.id) %}
+                {% if not object.id %}
+                    {% set paths = [] %}
+                {% else %}
+                    {% set paths = included|map(o => o.meta.path ~ '/' ~ object.id) %}
+                {% endif %}
                 {% set options = { 'multiple': 'true' }%}
             {% endif %}
 
             <tree-view
                 relation-name={{ relationName }}
-                :object-id={{ object.id }}
+                :object-id={{ object.id|default(0) }}
                 :object-paths='{{ paths|json_encode|raw }}'
                 :multiple-choice={{ options.multiple }}>
             </tree-view>
