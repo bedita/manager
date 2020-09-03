@@ -972,7 +972,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['has_media' => 'Has Media'],
+                    'objectRelations' => [
+                        'main' => [
+                            'has_media' => 'Has Media',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'has_media' => [
@@ -1001,7 +1006,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['media_of' => 'Media Of'],
+                    'objectRelations' => [
+                        'main' => [
+                            'media_of' => 'Media Of',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'media_of' => [
@@ -1039,8 +1049,12 @@ class ModulesComponentTest extends TestCase
                     ],
                     'resourceRelations' => [],
                     'objectRelations' => [
-                        'attach' => 'Attach',
-                        'has_media' => 'Has Media',
+                        'main' => [
+                            'attach' => 'Attach',
+                        ],
+                        'aside' => [
+                            'has_media' => 'Has Media',
+                        ],
                     ],
                 ],
                 [
@@ -1066,8 +1080,12 @@ class ModulesComponentTest extends TestCase
                     'attach' => [],
                 ],
                 [
-                    'attach',
-                    'has_media',
+                    'main' => [
+                        'attach',
+                    ],
+                    'aside' => [
+                        'has_media',
+                    ],
                 ],
             ],
 
@@ -1081,6 +1099,7 @@ class ModulesComponentTest extends TestCase
      *
      * @dataProvider setupRelationsProvider
      * @covers ::setupRelationsMeta()
+     * @covers ::relationLabels()
      *
      * @param array $expected Expected result.
      * @param array $schema Schema array.
