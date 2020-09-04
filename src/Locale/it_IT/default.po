@@ -18,10 +18,10 @@ msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
 
 msgid "Add"
-msgstr ""
+msgstr "Aggiungi"
 
 msgid "Add translation"
-msgstr ""
+msgstr "Aggiungi traduzione"
 
 msgid "Advanced"
 msgstr "Avanzate"
@@ -33,10 +33,10 @@ msgid "All Types"
 msgstr "Tutti i tipi"
 
 msgid "All categories"
-msgstr ""
+msgstr "Tutte le categorie"
 
 msgid "All day"
-msgstr ""
+msgstr "Tutto il giorno"
 
 msgid "All media"
 msgstr "Tutti i media"
@@ -45,7 +45,7 @@ msgid "All objects"
 msgstr "Tutti gli oggetti"
 
 msgid "All tags"
-msgstr ""
+msgstr "Tutti i tag"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
@@ -54,10 +54,10 @@ msgid "Any"
 msgstr "Qualsiasi"
 
 msgid "Auto-translate"
-msgstr ""
+msgstr "Traduci automaticamente"
 
 msgid "Auto-translate all fields"
-msgstr ""
+msgstr "Traduci automaticamente tutti i campi"
 
 msgid "BEdita Web site"
 msgstr "Sito BEdita"
@@ -78,19 +78,19 @@ msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
 
 msgid "Categories"
-msgstr ""
+msgstr "Categorie"
 
 msgid "Change File"
 msgstr "Cambia File"
 
 msgid "Change password"
-msgstr ""
+msgstr "Cambia password"
 
 msgid "Children"
 msgstr "Contenuti"
 
 msgid "Click or drop new files here"
-msgstr ""
+msgstr "Clicca o rilascia qui i file nuovi"
 
 msgid "Clone"
 msgstr "Clona"
@@ -99,7 +99,7 @@ msgid "Close"
 msgstr "Chiudi"
 
 msgid "Core properties"
-msgstr ""
+msgstr "Proprietà principali"
 
 msgid "Create new"
 msgstr "Crea nuovo"
@@ -111,7 +111,7 @@ msgid "Current password"
 msgstr "Password corrente"
 
 msgid "Custom properties"
-msgstr ""
+msgstr "Proprietà personalizzate"
 
 msgid "Dashboard"
 msgstr "Cruscotto"
@@ -135,22 +135,22 @@ msgid "Direct access by id or unique name"
 msgstr "Link diretto per ID o nome univoco"
 
 msgid "Discard"
-msgstr ""
+msgstr "Scarta"
 
 msgid "Documents"
 msgstr "Documenti"
 
 msgid "Download"
-msgstr ""
+msgstr "Scarica"
 
 msgid "Draft"
-msgstr ""
+msgstr "Bozza"
 
 msgid "Edit"
-msgstr ""
+msgstr "Modifica"
 
 msgid "Edit params"
-msgstr ""
+msgstr "Modifica parametri"
 
 msgid "Embed online content"
 msgstr "Incorpora contenuti online"
@@ -183,7 +183,7 @@ msgid "Export All"
 msgstr "Esporta Tutti"
 
 msgid "Export Filtered"
-msgstr ""
+msgstr "Esporta Filtrati"
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -210,7 +210,7 @@ msgid "From"
 msgstr "Da"
 
 msgid "From date"
-msgstr ""
+msgstr "Dalla data"
 
 msgid "History"
 msgstr "Cronologia modifiche"
@@ -234,10 +234,10 @@ msgid "Import warn"
 msgstr "Avviso in importazione"
 
 msgid "Inherited properties"
-msgstr ""
+msgstr "Proprietà ereditate"
 
 msgid "Invalid username or password"
-msgstr ""
+msgstr "Username o password non validi"
 
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
@@ -249,7 +249,7 @@ msgid "Language"
 msgstr "Lingua"
 
 msgid "Language and translations"
-msgstr ""
+msgstr "Lingua e traduzioni"
 
 msgid "Locations"
 msgstr "Luoghi"
@@ -282,10 +282,10 @@ msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
 msgid "More"
-msgstr ""
+msgstr "Altro/i"
 
 msgid "Move to position"
-msgstr ""
+msgstr "Sposta alla posizione"
 
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
@@ -348,13 +348,13 @@ msgid "On"
 msgstr ""
 
 msgid "Open"
-msgstr ""
+msgstr "Apri"
 
 msgid "Open image"
 msgstr "Apri immagine"
 
 msgid "Open module"
-msgstr ""
+msgstr "Apri modulo"
 
 msgid "Options"
 msgstr "Opzioni"
@@ -366,10 +366,10 @@ msgid "Password"
 msgstr ""
 
 msgid "Permanently delete"
-msgstr ""
+msgstr "Elimina definitivamente"
 
 msgid "Pick"
-msgstr ""
+msgstr "Scegli"
 
 msgid "Please provide a Mapbox access token in app configuration"
 msgstr ""
@@ -383,13 +383,13 @@ msgid "Profiles"
 msgstr "Profili"
 
 msgid "Properties"
-msgstr ""
+msgstr "Proprietà"
 
 msgid "Property types"
 msgstr "Tipi di priorità"
 
 msgid "Publications"
-msgstr ""
+msgstr "Pubblicazioni"
 
 msgid "Publish End"
 msgstr "Data revoca pubblicazione"
@@ -449,7 +449,7 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "System users"
-msgstr ""
+msgstr "Utenti di sistema"
 
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
@@ -473,7 +473,7 @@ msgid "To"
 msgstr "A"
 
 msgid "To date"
-msgstr ""
+msgstr "Alla data"
 
 msgid "Translation(s) deleted"
 msgstr "Traduzione(i) rimossa(e)"
@@ -548,7 +548,7 @@ msgid "add objects"
 msgstr "aggiungi oggetti"
 
 msgid "add to"
-msgstr ""
+msgstr "aggiungi a"
 
 msgid "cancel"
 msgstr "annulla"
@@ -590,7 +590,7 @@ msgid "objects"
 msgstr "oggetti"
 
 msgid "objects to"
-msgstr ""
+msgstr "oggetti a"
 
 msgid "original"
 msgstr "originale"
@@ -617,13 +617,13 @@ msgid "type"
 msgstr "tipo"
 
 msgid "undo"
-msgstr ""
+msgstr "annulla"
 
 msgid "undo remove"
 msgstr "annulla rimozione"
 
 msgid "view parent"
-msgstr ""
+msgstr "visualizza padre"
 
 msgid "www.bedita.com"
 msgstr ""
