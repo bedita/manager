@@ -42,7 +42,7 @@ module.exports = {
 
     optimization: {
         minimize: true,
-    }
+    },
 
     module: {
         rules: [

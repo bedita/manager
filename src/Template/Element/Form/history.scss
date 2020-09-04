@@ -1,0 +1,70 @@
+.history {
+    .history-content {
+        $module-color: var(--module-color);
+
+        summary {
+            padding-bottom: 0.5rem;
+            font-weight: $font-weight-bold;
+            text-transform: uppercase;
+            cursor: pointer;
+
+            /* Things to remove summary marker */
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::marker {
+                display: none;
+            }
+
+            /* Firefox */
+            list-style-type: none;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul.history-items {
+            padding-left: 1rem;
+
+            li.history-item {
+                display: inline-grid;
+                grid-gap: 1rem;
+                grid-template-columns: auto 0.5fr 1.5fr auto;
+                width: 100%;
+                padding: 0.5rem 0;
+                border-left: 1px solid $gray-600;
+
+                &::before {
+                    content: '\25CF';
+                    color: $module-color;
+                    margin: 2px 0 0 -6px;
+                    font-size: 12px;
+                }
+
+                > * {
+                    display: flex;
+                }
+
+                .changed-properties {
+                    .action {
+                        margin-right: 1rem;
+                        text-transform: capitalize;
+                    }
+                }
+
+                &:first-of-type {
+                    padding-top: 1rem;
+                }
+
+                &:last-of-type {
+                    padding-bottom: 1rem;
+                    border-image: linear-gradient(to bottom, $gray-600 0 1.4rem, transparent 1.4rem 100%) 1;
+                }
+            }
+        }
+    }
+}

@@ -146,7 +146,8 @@ body.view-module, body.translation-module, body.userprofiles-view {
             }
         }
 
-        section.relations { margin: 1.5rem 0; }
+        section.history { margin: 1.5rem 0; }
+        section.relations { margin: 1.5rem 0 0; }
     }
 
     // responsive grid
@@ -157,19 +158,23 @@ body.view-module, body.translation-module, body.userprofiles-view {
             grid-template-areas: "header-view header-view"
                                     "main-view side-view"
                                     "submain-view side-view"
-                                    "full-view full-view";
+                                    "submain-view-1 side-view"
+                                    "full-view full-view"
+                                    "full-view-1 full-view-1";
             grid-template-columns: 6fr 4fr;
             grid-template-rows: auto auto 1fr auto;
             .form-header { grid-area: header-view; }
             .main-view-column { grid-area: main-view; }
             .side-view-column { grid-area: side-view; }
             section.relations { grid-area: full-view; }
+            section.history { grid-area: full-view-1; }
         }
 
         @media screen and (min-width: 1024px) {
             grid-gap: 0 $gutter * 1.5;
             grid-template-columns: 2fr 1fr;
             section.relations { grid-area: submain-view; }
+            section.history { grid-area: submain-view-1; }
         }
 
         @media screen and (min-width: 1600px) {

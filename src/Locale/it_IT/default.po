@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2019-11-28 14:49:48 \n"
+"POT-Creation-Date: 2020-09-03 14:30:12 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -17,8 +17,11 @@ msgstr ""
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
 
-msgid "Add objects to"
-msgstr "Aggiungi oggetti a"
+msgid "Add"
+msgstr ""
+
+msgid "Add translation"
+msgstr ""
 
 msgid "Advanced"
 msgstr "Avanzate"
@@ -29,17 +32,32 @@ msgstr "Tutti"
 msgid "All Types"
 msgstr "Tutti i tipi"
 
+msgid "All categories"
+msgstr ""
+
+msgid "All day"
+msgstr ""
+
 msgid "All media"
 msgstr "Tutti i media"
 
 msgid "All objects"
 msgstr "Tutti gli oggetti"
 
+msgid "All tags"
+msgstr ""
+
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
 
 msgid "Any"
 msgstr "Qualsiasi"
+
+msgid "Auto-translate"
+msgstr ""
+
+msgid "Auto-translate all fields"
+msgstr ""
 
 msgid "BEdita Web site"
 msgstr "Sito BEdita"
@@ -59,20 +77,41 @@ msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
 msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
 
+msgid "Categories"
+msgstr ""
+
 msgid "Change File"
 msgstr "Cambia File"
+
+msgid "Change password"
+msgstr ""
 
 msgid "Children"
 msgstr "Contenuti"
 
+msgid "Click or drop new files here"
+msgstr ""
+
 msgid "Clone"
 msgstr "Clona"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "Core properties"
+msgstr ""
 
 msgid "Create new"
 msgstr "Crea nuovo"
 
+msgid "Created"
+msgstr "Creato"
+
 msgid "Current password"
 msgstr "Password corrente"
+
+msgid "Custom properties"
+msgstr ""
 
 msgid "Dashboard"
 msgstr "Cruscotto"
@@ -95,6 +134,9 @@ msgstr "Descrizione"
 msgid "Direct access by id or unique name"
 msgstr "Link diretto per ID o nome univoco"
 
+msgid "Discard"
+msgstr ""
+
 msgid "Documents"
 msgstr "Documenti"
 
@@ -104,8 +146,11 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-msgid "Edit Params"
-msgstr "Modifica Parametri"
+msgid "Edit"
+msgstr ""
+
+msgid "Edit params"
+msgstr ""
 
 msgid "Embed online content"
 msgstr "Incorpora contenuti online"
@@ -137,6 +182,9 @@ msgstr "Esporta"
 msgid "Export All"
 msgstr "Esporta Tutti"
 
+msgid "Export Filtered"
+msgstr ""
+
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
 
@@ -161,6 +209,12 @@ msgstr "Cartelle"
 msgid "From"
 msgstr "Da"
 
+msgid "From date"
+msgstr ""
+
+msgid "History"
+msgstr "Cronologia modifiche"
+
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
@@ -179,6 +233,9 @@ msgstr "Filtro di importazione non selezionato"
 msgid "Import warn"
 msgstr "Avviso in importazione"
 
+msgid "Inherited properties"
+msgstr ""
+
 msgid "Invalid username or password"
 msgstr ""
 
@@ -190,6 +247,9 @@ msgstr "Processi"
 
 msgid "Language"
 msgstr "Lingua"
+
+msgid "Language and translations"
+msgstr ""
 
 msgid "Locations"
 msgstr "Luoghi"
@@ -220,6 +280,12 @@ msgstr "Url miniatura mancante"
 
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
+
+msgid "More"
+msgstr ""
+
+msgid "Move to position"
+msgstr ""
 
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
@@ -281,8 +347,14 @@ msgstr ""
 msgid "On"
 msgstr ""
 
+msgid "Open"
+msgstr ""
+
 msgid "Open image"
 msgstr "Apri immagine"
+
+msgid "Open module"
+msgstr ""
 
 msgid "Options"
 msgstr "Opzioni"
@@ -293,6 +365,12 @@ msgstr "Altro"
 msgid "Password"
 msgstr ""
 
+msgid "Permanently delete"
+msgstr ""
+
+msgid "Pick"
+msgstr ""
+
 msgid "Please provide a Mapbox access token in app configuration"
 msgstr ""
 "Per visualizzare la mappa è necessario inserire un token di accesso a Mapbox "
@@ -301,14 +379,17 @@ msgstr ""
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
 
-msgid "Priority"
-msgstr "Priorità"
-
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property types"
 msgstr "Tipi di priorità"
+
+msgid "Publications"
+msgstr ""
 
 msgid "Publish End"
 msgstr "Data revoca pubblicazione"
@@ -337,6 +418,9 @@ msgstr "Risorsa \"%s\" non trovata"
 msgid "Restore"
 msgstr "Ripristina"
 
+msgid "Restored"
+msgstr "Recuperato"
+
 msgid "Result"
 msgstr "Risultato"
 
@@ -349,17 +433,11 @@ msgstr "Salva"
 msgid "Search"
 msgstr "Cerca"
 
-msgid "Search in BEdita"
-msgstr "Cerca in BEdita"
-
 msgid "Set selected"
 msgstr "Applica a selezione"
 
 msgid "Settings"
 msgstr "Impostazioni"
-
-msgid "Show more"
-msgstr "Mostra di più"
 
 msgid "Sign in"
 msgstr "Accedi"
@@ -394,6 +472,9 @@ msgstr "Titolo"
 msgid "To"
 msgstr "A"
 
+msgid "To date"
+msgstr ""
+
 msgid "Translation(s) deleted"
 msgstr "Traduzione(i) rimossa(e)"
 
@@ -412,6 +493,9 @@ msgstr "Cestina"
 msgid "Trashcan"
 msgstr "Cestino"
 
+msgid "Trashd"
+msgstr "Cancellato"
+
 msgid "Uname"
 msgstr "Nome univoco"
 
@@ -420,6 +504,9 @@ msgstr "Errore sconosciuto durante caricamento"
 
 msgid "Untitled"
 msgstr "Senza titolo"
+
+msgid "Updated"
+msgstr "Aggiornato"
 
 msgid "Upload"
 msgstr "Caricare"
@@ -451,9 +538,6 @@ msgstr "Visualizza"
 msgid "View original"
 msgstr "Vedi originale"
 
-msgid "View trashed "
-msgstr ""
-
 msgid "Yes"
 msgstr "Sì"
 
@@ -468,12 +552,6 @@ msgstr ""
 
 msgid "cancel"
 msgstr "annulla"
-
-msgid "click to remove"
-msgstr "clicca per rimuovere"
-
-msgid "close"
-msgstr "chiudi"
 
 msgid "code"
 msgstr "codice"
@@ -493,9 +571,6 @@ msgstr "crea nuovo"
 msgid "current password"
 msgstr "password corrente"
 
-msgid "download"
-msgstr ""
-
 msgid "empty"
 msgstr "vuoto"
 
@@ -505,14 +580,8 @@ msgstr "nome del file"
 msgid "id"
 msgstr ""
 
-msgid "last modified"
-msgstr "ultima modifica"
-
 msgid "modified"
 msgstr "modificato"
-
-msgid "move to"
-msgstr "sposta in"
 
 msgid "new password"
 msgstr "nuova password"
@@ -520,20 +589,11 @@ msgstr "nuova password"
 msgid "objects"
 msgstr "oggetti"
 
-msgid "of"
-msgstr "di"
-
-msgid "open"
+msgid "objects to"
 msgstr ""
 
 msgid "original"
 msgstr "originale"
-
-msgid "position"
-msgstr "posizione"
-
-msgid "reload"
-msgstr "ricarica"
 
 msgid "remove"
 msgstr "rimuovi"
@@ -562,20 +622,63 @@ msgstr ""
 msgid "undo remove"
 msgstr "annulla rimozione"
 
-msgid "view file"
-msgstr "mostra file"
+msgid "view parent"
+msgstr ""
 
 msgid "www.bedita.com"
 msgstr ""
 
-#~ msgid "Please insert a new title on \"${ title }\" clone"
-#~ msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+#: src/Template/Layout/js/app/app.js:152
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#~ msgid "If you confirm, this data will be gone forever"
-#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+#: src/Template/Layout/js/app/app.js:465
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
-#~ msgid "Do you really want to trash the object?"
-#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+#: src/Template/Layout/js/app/app.js:467
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+
+#~ msgid "Add objects to"
+#~ msgstr "Aggiungi oggetti a"
+
+#~ msgid "Edit Params"
+#~ msgstr "Modifica Parametri"
+
+#~ msgid "Priority"
+#~ msgstr "Priorità"
+
+#~ msgid "Search in BEdita"
+#~ msgstr "Cerca in BEdita"
+
+#~ msgid "Show more"
+#~ msgstr "Mostra di più"
+
+#~ msgid "click to remove"
+#~ msgstr "clicca per rimuovere"
+
+#~ msgid "close"
+#~ msgstr "chiudi"
+
+#~ msgid "last modified"
+#~ msgstr "ultima modifica"
+
+#~ msgid "move to"
+#~ msgstr "sposta in"
+
+#~ msgid "of"
+#~ msgstr "di"
+
+#~ msgid "position"
+#~ msgstr "posizione"
+
+#~ msgid "reload"
+#~ msgstr "ricarica"
+
+#~ msgid "view file"
+#~ msgstr "mostra file"
 
 #~ msgid "Apply"
 #~ msgstr "Applica"
@@ -597,9 +700,6 @@ msgstr ""
 
 #~ msgid "log out"
 #~ msgstr "esci"
-
-#~ msgid "Close"
-#~ msgstr "Chiudi"
 
 #~ msgid "Error"
 #~ msgstr "Errore"
