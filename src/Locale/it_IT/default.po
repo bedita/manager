@@ -90,7 +90,7 @@ msgid "Children"
 msgstr "Contenuti"
 
 msgid "Click or drop new files here"
-msgstr "Clicca o rilascia qui i file nuovi"
+msgstr "Clicca o trascina qui i nuovi file"
 
 msgid "Clone"
 msgstr "Clona"
@@ -282,7 +282,7 @@ msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
 msgid "More"
-msgstr "Altro/i"
+msgstr "Altro"
 
 msgid "Move to position"
 msgstr "Sposta alla posizione"
@@ -623,7 +623,7 @@ msgid "undo remove"
 msgstr "annulla rimozione"
 
 msgid "view parent"
-msgstr "visualizza padre"
+msgstr "visualizza genitore"
 
 msgid "www.bedita.com"
 msgstr ""
