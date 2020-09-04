@@ -1040,11 +1040,16 @@ class ModulesControllerTest extends TestCase
      */
     public function testSaveRelated()
     {
-        $this->setupController([
+        $request = new ServerRequest([
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
         ]);
+        $this->controller = new ModulesControllerSample($request);
+
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.org'])
             ->getMock();
@@ -1055,21 +1060,31 @@ class ModulesControllerTest extends TestCase
 
         $this->controller->apiClient = $apiClient;
 
-        $requestData = [];
-        $result = $this->controller->save($requestData, '1');
+        $result = $this->controller->save();
         static::assertEquals(302, $result->getStatusCode());
         static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
 
-        $requestData = [
-            '_api' => [
-                [
-                    'method' => 'addRelated',
-                    'relation' => '',
-                    'relatedIds' => [],
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                '_api' => [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => '',
+                        'relatedIds' => [],
+                    ],
                 ],
             ],
-        ];
-        $result = $this->controller->save($requestData, '1');
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $this->controller = new ModulesControllerSample($request);
+        $this->controller->apiClient = $apiClient;
+
+        $result = $this->controller->save();
         static::assertEquals(302, $result->getStatusCode());
         static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
     }
