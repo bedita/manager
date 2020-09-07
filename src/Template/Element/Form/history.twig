@@ -6,7 +6,7 @@
                 <span class="has-text-size-smallest" v-show="!isLoading && totalObjects"><: totalObjects :></span>
             </header>
             <div v-show="isOpen" class="tab-container">
-                <keep-alive><history v-if="isOpen" :object-id={{ object.id }} @count="onCount"></history></keep-alive>
+                <keep-alive><history v-if="isOpen" :object-id="{{ object.id|default('null') }}" @count="onCount"></history></keep-alive>
             </div>
         </section>
     </section>
