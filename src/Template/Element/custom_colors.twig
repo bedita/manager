@@ -9,6 +9,7 @@
         .has-text-module-{{ name }} { color: {{ color }} !important; }
         .button-primary-hover-module-{{ name }}:hover { background-color: {{ color }}; border-color: {{ color }}; color: #fff; }
         .button-outlined-hover-module-{{ name }}:hover { background-color: transparent !important; border-color: {{ color }}; }
+        .has-shadow-color-{{ name }} { --box-shadow-color: {{ color }}; }
     {%- endfor -%}
 
     {# override alert message color if in config #}

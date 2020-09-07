@@ -31,7 +31,7 @@
             </div>
 
             {# RELATED OBJECTS #}
-            <div class="mb-1" v-show="objects.length">
+            <div class="mb-1" v-show="objects.length || addedRelations.length">
                 <div class="columns" droppable sortable>
                     <div
                         class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
@@ -47,18 +47,12 @@
                             {% element 'Form/related_item' { 'common': true } %}
                         {% endif %}
                     </div>
-                </div>
-            </div>
 
-            {# STAGED OBJECTS #}
-            <div class="mb-1 has-background-gray-950 p-1" v-if="addedRelations.length">
-                <p class="has-text-size-smallest mb-1">{{ __('New relations (save to keep)') }}</p>
-                <div class="columns">
-                    <div
-                        class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                    {# STAGED OBJECTS (new relations) #}
+                    <div v-if="addedRelations.length"
+                        class="related-item-column column added is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="related in addedRelations"
-                        :key="related.id"
-                        :class="containsId(removedRelated, related.id) ? 'removed' : '' ">
+                        :key="related.id">
 
                         {% element 'Form/related_item' { 'stage': true } %}
                     </div>

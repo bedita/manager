@@ -73,6 +73,11 @@ $error:        rgb(187, 26, 26);
 $warning:      rgb(231, 200, 24);
 $pending:      rgb(231, 200, 24);
 
+$defaultShadowColor:  rgba(0, 0, 0, .5);
+:root {
+  --box-shadow-color: rgba(0, 0, 0, .5);
+}
+
 
 /*
 ** LAYOUT

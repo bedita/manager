@@ -298,6 +298,9 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        // extract related objects data
+        $relatedData = (array)Hash::get($requestData, '_api');
+        unset($requestData['_api']);
 
         try {
             // upload file (if available)
@@ -306,7 +309,7 @@ class ModulesController extends AppController
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
             $objectId = (string)Hash::get($response, 'data.id');
-            $this->saveRelated($requestData, $objectId);
+            $this->saveRelated($relatedData, $objectId);
         } catch (InternalErrorException | BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
@@ -328,28 +331,26 @@ class ModulesController extends AppController
         return $this->redirect([
             '_name' => 'modules:view',
             'object_type' => $this->objectType,
-            'id' => Hash::get($response, 'data.id'),
+            'id' => $objectId,
         ]);
     }
 
     /**
      * Save related objects reading from `_api` key in request data.
      *
-     * @param array $requestData Request data
+     * @param array $relatedData Related objects data
      * @param string $id Object ID
      * @return void
      */
-    protected function saveRelated(array &$requestData, string $id): void
+    protected function saveRelated(array $relatedData, string $id): void
     {
-        $apiRequest = (array)Hash::get($requestData, '_api');
-        unset($requestData['_api']);
-        if (empty($apiRequest)) {
+        if (empty($relatedData)) {
             return;
         }
-        foreach ($apiRequest as $api) {
-            $method = (string)Hash::get($api, 'method');
-            $relation = (string)Hash::get($api, 'relation');
-            $relatedIds = (array)Hash::get($api, 'relatedIds');
+        foreach ($relatedData as $rel) {
+            $method = (string)Hash::get($rel, 'method');
+            $relation = (string)Hash::get($rel, 'relation');
+            $relatedIds = (array)Hash::get($rel, 'relatedIds');
             if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                 $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
             }
