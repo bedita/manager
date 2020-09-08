@@ -38,10 +38,17 @@ class FormTest extends TestCase
                 ],
             ],
             'html' => [
-                'textarea',
+                'richtext',
                 [
                     'type' => 'string',
                     'contentMediaType' => 'text/html',
+                ],
+            ],
+            'txt' => [
+                'plaintext',
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/plain',
                 ],
             ],
             'date-time' => [
@@ -326,14 +333,23 @@ class FormTest extends TestCase
                     'value' => json_encode($value),
                 ],
             ],
-            'textarea' => [
+            'richtext' => [
                 [],
-                'textarea',
+                'richtext',
                 $value,
                 [
                     'type' => 'textarea',
                     'v-richeditor' => 'true',
                     'ckconfig' => 'configNormal',
+                    'value' => $value,
+                ],
+            ],
+            'plaintext' => [
+                [],
+                'textarea',
+                $value,
+                [
+                    'type' => 'textarea',
                     'value' => $value,
                 ],
             ],
