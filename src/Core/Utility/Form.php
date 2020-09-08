@@ -42,7 +42,17 @@ class Form
     /**
      * Control types
      */
-    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
+    public const CONTROL_TYPES = ['json', 'richtext', 'plaintext', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
+
+    /**
+     * Map JSON Schema `contentMediaType` to supported control types
+     *
+     * @var array
+     */
+    public const CONTENT_MEDIA_TYPES = [
+        'text/html' => 'richtext',
+        'text/plain' => 'plaintext',
+    ];
 
     /**
      * Get control by schema, control type, and value
@@ -79,12 +89,26 @@ class Form
     }
 
     /**
-     * Control for textarea
+     * Control for plaintext
      *
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function textareaControl($value): array
+    protected static function plaintextControl($value): array
+    {
+        return [
+            'type' => 'textarea',
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Control for richtext
+     *
+     * @param mixed|null $value Property value.
+     * @return array
+     */
+    protected static function richtextControl($value): array
     {
         return [
             'type' => 'textarea',
@@ -245,15 +269,16 @@ class Form
      * Infer control type from property schema
      * Possible return values:
      *
-     *   'text'
+     *   'categories'
+     *   'checkbox'
      *   'date-time'
      *   'date'
-     *   'textarea'
      *   'enum'
-     *   'number'
-     *   'checkbox'
      *   'json'
-     *   'categories'
+     *   'number'
+     *   'plaintext'
+     *   'richtext'
+     *   'text'
      *
      * @param mixed $schema The property schema
      * @return string
@@ -448,7 +473,8 @@ class Form
      *
      *    format 'date-time' => 'date-time'
      *    format 'date' => 'date'
-     *    contentMediaType => 'textarea'
+     *    contentMediaType 'text/plain' => 'plaintext'
+     *    contentMediaType 'text/html' => 'richtext'
      *    schema.enum is an array => 'enum'
      *
      * Return 'text' otherwise.
@@ -461,8 +487,10 @@ class Form
         if (!empty($schema['format']) && in_array($schema['format'], ['date', 'date-time'])) {
             return $schema['format'];
         }
-        if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
-            return 'textarea';
+        $contentType = (string)Hash::get($schema, 'contentMediaType');
+        $controlType = (string)Hash::get(self::CONTENT_MEDIA_TYPES, $contentType);
+        if (!empty($controlType)) {
+            return $controlType;
         }
         if (!empty($schema['enum']) && is_array($schema['enum'])) {
             return 'enum';
