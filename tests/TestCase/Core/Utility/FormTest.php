@@ -210,14 +210,14 @@ class FormTest extends TestCase
                         ],
                         [
                             'value' => 'de',
-                            'text' => 'Deutsh',
+                            'text' => 'Deutsch',
                         ],
                     ],
                 ],
                 [
                     'Project.config.I18n.languages' => [
                         'en' => 'English',
-                        'de' => 'Deutsh',
+                        'de' => 'Deutsch',
                     ],
                 ],
             ],
