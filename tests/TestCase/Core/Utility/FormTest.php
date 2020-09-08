@@ -483,7 +483,8 @@ class FormTest extends TestCase
      * @dataProvider controlProvider()
      * @covers ::control
      * @covers ::jsonControl
-     * @covers ::textareaControl
+     * @covers ::richtextControl
+     * @covers ::plaintextControl
      * @covers ::datetimeControl
      * @covers ::dateControl
      * @covers ::checkboxControl
