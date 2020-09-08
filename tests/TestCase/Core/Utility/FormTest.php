@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Core\Utility;
 
 use App\Core\Utility\Form;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -65,10 +66,16 @@ class FormTest extends TestCase
                     'format' => 'date',
                 ],
             ],
-            'number' => [
+            'integer' => [
                 'number',
                 [
                     'type' => 'integer',
+                ],
+            ],
+            'number' => [
+                'number',
+                [
+                    'type' => 'number',
                 ],
             ],
             'checkbox' => [
@@ -157,6 +164,12 @@ class FormTest extends TestCase
      *
      * @dataProvider controlTypeFromSchemaProvider()
      * @covers ::controlTypeFromSchema()
+     * @covers ::typeFromString()
+     * @covers ::typeFromNumber()
+     * @covers ::typeFromInteger()
+     * @covers ::typeFromBoolean()
+     * @covers ::typeFromArray()
+     * @covers ::typeFromObject()
      */
     public function testControlTypeFromSchema(string $expected, $schema): void
     {
@@ -186,6 +199,29 @@ class FormTest extends TestCase
                     'type' => 'text',
                 ],
             ],
+            'lang options' => [
+                'lang',
+                [
+                    'type' => 'select',
+                    'options' => [
+                        [
+                            'value' => 'en',
+                            'text' => 'English',
+                        ],
+                        [
+                            'value' => 'de',
+                            'text' => 'Deutsh',
+                        ],
+                    ],
+                ],
+                [
+                    'Project.config.I18n.languages' => [
+                        'en' => 'English',
+                        'de' => 'Deutsh',
+                    ],
+                ],
+            ],
+
             'status' => [
                 'status',
                 [
@@ -279,6 +315,7 @@ class FormTest extends TestCase
      *
      * @param string $name The field name.
      * @param array $expected Expected result.
+     * @param array $config Configuration.
      * @return void
      *
      * @dataProvider customControlOptionsProvider()
@@ -299,8 +336,11 @@ class FormTest extends TestCase
      * @covers ::typeFromArray
      * @covers ::typeFromObject
      */
-    public function testCustomControlOptions(string $name, array $expected): void
+    public function testCustomControlOptions(string $name, array $expected, array $config = []): void
     {
+        if (!empty($config)) {
+            Configure::write($config);
+        }
         $actual = Form::customControlOptions($name);
 
         static::assertSame($expected, $actual);
@@ -346,7 +386,7 @@ class FormTest extends TestCase
             ],
             'plaintext' => [
                 [],
-                'textarea',
+                'plaintext',
                 $value,
                 [
                     'type' => 'textarea',
