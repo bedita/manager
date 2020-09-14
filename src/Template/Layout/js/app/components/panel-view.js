@@ -113,7 +113,7 @@ export const PanelEvents = new Vue({
  * @listens panel:save save event
  * @listens panel:open open panel (just visibility)
  * @listens panel:hide hide panel (keep rendered component alive)
- * @listens panel:close close panle and flush data
+ * @listens panel:close close panel and flush data
  *
  * @emits panel:requested the panel has been requested
  * @emits panel:saved a save event happened

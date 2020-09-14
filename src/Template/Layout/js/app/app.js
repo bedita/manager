@@ -35,6 +35,7 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
@@ -144,10 +145,9 @@ const _vueInstance = new Vue({
          * Clone object
          * Prompt for title change
          *
-         * @param {Event} e The event
          * @return {void}
          */
-        clone(e) {
+        clone() {
             const title = document.getElementById('title').value;
             const msg = t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
@@ -155,7 +155,9 @@ const _vueInstance = new Vue({
                 const query = `?title=${cloneTitle}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
-                window.location.replace(`${origin}${path}${query}`);
+                const url = `${origin}${path}${query}`;
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
             }
         },
 

@@ -1,5 +1,7 @@
 import moment from 'moment';
 import { t } from 'ttag';
+import { PanelEvents } from '../panel-view';
+
 
 const LOCALE = BEDITA.locale.slice(0, 2);
 
@@ -10,15 +12,16 @@ export default {
     template: `<div class="history-content" style="--module-color: ${BEDITA.currentModule.color}">
         <div v-if="isLoading" class="is-loading-spinner"></div>
         <details v-for="date in sortedDates" open>
-            <summary class="pb-05 has-text-transform-upper has-font-weight-bold"><: date :></summary>
+            <summary class="pb-05 is-upppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
-                    <div class="is-flex"><: getAuthorName(item.user) :></div>
-                    <div class="is-flex">
-                        <span class="mr-1 is-capitalized"><: getActionLabel(item.user_action) :></span>
-                        <div><: Object.keys(item.changed).join(', ') :></div>
-                    </div>
                     <div class="change-time"><: getFormattedTime(item.created) :></div>
+                    <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.user) :></a></div>
+                    <div class="is-flex">
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
+                        <button class="button button-text-white is-width-auto"><: t('restore') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="clone(item)"><: t('clone') :></button>
+                    </div>
                 </li>
             </ul>
         </details>
@@ -63,11 +66,34 @@ export default {
          */
         getActionLabel(action) {
             let label = t`${action.replace(/^\w/, (c) => c.toUpperCase())}d`;
-            if (action !== 'trash' && action != 'restore') {
+            if (action !== 'trash' && action !== 'restore') {
                 label += ':';
             }
             return label;
-        }
+        },
+        /**
+         * Open panel to show changes' details.
+         * @param {Object} data History item
+         */
+        showChanges(data) {
+            PanelEvents.requestPanel({
+                action: 'history-info',
+                from: this,
+                data,
+            });
+        },
+        restore(data) {},
+        clone(item) {
+            // prima fare un restore della history
+            const title = document.getElementById('title').value || t('Untitled');
+            const cloneTitle = title + '-copy';
+            const query = `?title=${cloneTitle}`;
+            const origin = window.location.origin;
+            const path = window.location.pathname.replace('/view/', '/clone/');
+            const url = `${origin}${path}${query}`;
+            const newTab = window.open(url, '_blank');
+            newTab.focus();
+        },
     },
 
     computed: {
