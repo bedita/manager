@@ -71,7 +71,7 @@ export const PanelEvents = new Vue({
         },
 
         /**
-        * send event with payload and if "to" is set, it extract its _uid and use it to match the evant signature
+        * send event with payload and if "to" is set, it extract its _uid and use it to match the event signature
         *
         * @param {String} evtName event name
         * @param {VueComponent|null} to view component recipient

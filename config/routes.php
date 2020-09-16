@@ -238,6 +238,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:clone']
     );
     $routes->connect(
+        '/:object_type/clone/:id/history/:historyId',
+        ['controller' => 'Modules', 'action' => 'cloneFromHistory'],
+        ['pass' => ['id', 'historyId'], '_name' => 'modules:cloneFromHistory']
+    );
+    $routes->connect(
         '/:object_type/delete',
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']

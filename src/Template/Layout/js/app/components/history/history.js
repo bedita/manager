@@ -15,12 +15,12 @@ export default {
             <summary class="pb-05 is-upppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
-                    <div class="change-time"><: getFormattedTime(item.created) :></div>
-                    <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.user) :></a></div>
+                    <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
+                    <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto"><: t('restore') :></button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="clone(item)"><: t('clone') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.meta)"><: t('restore') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('clone') :></button>
                     </div>
                 </li>
             </ul>
@@ -30,12 +30,13 @@ export default {
     data() {
         return {
             history: [],
+            rawHistory: [],
             isLoading: false,
         };
     },
 
     props: {
-        objectId: [String, Number],
+        object: Object,
     },
 
     methods: {
@@ -72,8 +73,8 @@ export default {
             return label;
         },
         /**
-         * Open panel to show changes' details.
-         * @param {Object} data History item
+         * Open panel to show changes.
+         * @param {Object} data History item changes
          */
         showChanges(data) {
             PanelEvents.requestPanel({
@@ -81,19 +82,57 @@ export default {
                 from: this,
                 data,
             });
+            PanelEvents.listen('history-info:restore', this, this.onRestore);
         },
-        restore(data) {},
-        clone(item) {
-            // prima fare un restore della history
+        /**
+         * Restore data from a point of history and place it in the form.
+         * Ask for confirmation first.
+         * @param {Object} item History item to restore
+         */
+        onRestore(item) {
+            if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
+                return;
+            }
+
+            const restored = this.restoreHistoryItem(item);
+            const form = this.$el.closest('#form-main');
+            Object.keys(this.object.attributes).forEach((key) => {
+                const elem = [...form.elements].find((el) => el.name === key);
+                elem.value = key in restored ? restored[key] : '';
+            });
+            PanelEvents.closePanel();
+        },
+        /**
+         * Open a new tab with the url to create a copy of the object at a certain point of the history.
+         * @param {string} historyId ID of the history item to restore
+         */
+        onClone(historyId) {
             const title = document.getElementById('title').value || t('Untitled');
             const cloneTitle = title + '-copy';
-            const query = `?title=${cloneTitle}`;
             const origin = window.location.origin;
             const path = window.location.pathname.replace('/view/', '/clone/');
-            const url = `${origin}${path}${query}`;
+            const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
             const newTab = window.open(url, '_blank');
             newTab.focus();
         },
+        /**
+         * Restore the object as it was at a certain point of its history.
+         * @param {Object} item History item representing the point to restore
+         * @return {Object}
+         */
+        restoreHistoryItem(item) {
+            const historyPart = this.rawHistory
+                .filter((i) => moment(i.meta.created).isSameOrBefore(moment(item.created)))
+                .sort((item1, item2) => moment(item1.meta.created).diff(moment(item2.meta.created)));
+
+            const restoredData = historyPart.reduce((acc, val) => {
+                const data = val.meta.changed;
+                Object.keys(data).forEach((key) => acc[key] = data[key]);
+                return acc;
+            }, {});
+
+            return restoredData;
+        }
     },
 
     computed: {
@@ -119,22 +158,23 @@ export default {
         };
 
         this.isLoading = true;
-        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.objectId}&page_size=100`, options);
+        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.object.id}&page_size=100`, options);
         const historyJson = await historyRes.json();
-        const history = historyJson.data;
+        this.rawHistory = historyJson.data;
 
         // fetch users involved in the object history
-        const usersId = history.map((change) => change.meta.user_id);
+        let usersId = this.rawHistory.map((change) => change.meta.user_id);
+        usersId = [...new Set(usersId)]; // remove duplicates
         const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
         const userJson = await userRes.json();
         const users = userJson.data;
 
         // group changes by date
-        this.history = history.reduce((accumulator, { meta: change }) => {
-            change.user = users.find((user) => user.id == change.user_id);
-            const createdDate = moment(change.created).format('DD MMM YYYY');
+        this.history = this.rawHistory.reduce((accumulator, item) => {
+            item.meta.user = users.find((user) => user.id == item.meta.user_id);
+            const createdDate = moment(item.meta.created).format('DD MMM YYYY');
             accumulator[createdDate] = accumulator[createdDate] || [];
-            accumulator[createdDate].push(change);
+            accumulator[createdDate].push(item);
             return accumulator;
         }, {});
 

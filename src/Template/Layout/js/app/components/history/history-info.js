@@ -1,5 +1,6 @@
 import { t } from 'ttag';
 import moment from 'moment';
+import { PanelEvents } from '../panel-view';
 
 export default {
     template: `<div class="history-info">
@@ -15,18 +16,24 @@ export default {
             <div class="px-1 shrinks">
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
-                    <div v-for="(value, key) in changed"><: key | humanize :>: <: value :></div>
-                    <button class="mt-2"><: t('restore') :></button>
+                    <div v-for="(value, key) in changed"><: key | humanize :>: "<: value :>"</div>
+                    <button class="mt-2" @click.stop.prevent="restore()"><: t('restore') :></button>
                 </div>
             </div>
         </section>
     </div>`,
 
     props: {
-        created: String,
-        user: Object,
-        user_action: String,
-        changed: Object,
+        meta: Object,
+    },
+
+    data() {
+        return {
+            created: this.meta.created,
+            changed: this.meta.changed,
+            user: this.meta.user,
+            user_action: this.meta.user_action,
+        }
     },
 
     computed: {
@@ -63,4 +70,10 @@ export default {
             return label;
         },
     },
+
+    methods: {
+        restore() {
+            PanelEvents.sendBack('history-info:restore', this.meta);
+        }
+    }
 }

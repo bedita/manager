@@ -431,6 +431,61 @@ class ModulesController extends AppController
     }
 
     /**
+     * Clone an object from a specific point of the history.
+     *
+     * @param string|int $id Object ID.
+     * @param string|int $historyId History object ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function cloneFromHistory($id, $historyId): ?Response
+    {
+        $this->viewBuilder()->setTemplate('view');
+
+        $schema = $this->Schema->getSchema();
+        if (!is_array($schema)) {
+            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+        try {
+            $historyResponse = $this->apiClient->get('/history', ['filter' => ['resource_id' => $id]]);
+
+            $history = $historyResponse['data'];
+            usort($history, function ($a, $b) {
+                return strtotime($a['meta']['created']) - strtotime($b['meta']['created']);
+            });
+
+            $index = array_search($historyId, array_column($history, 'id'));
+            $historySlice = array_slice($history, 0, $index + 1);
+
+            $attributes = [];
+            foreach ($historySlice as $item) {
+                foreach ($item['meta']['changed'] as $key => $value) {
+                    $attributes[$key] = $value;
+                }
+            }
+
+            $title = $this->request->getQuery('title');
+            if ($title) {
+                $attributes['title'] = $title;
+            }
+        } catch (BEditaClientException $e) {
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
+        }
+        $object = [
+            'type' => $this->objectType,
+            'attributes' => $attributes,
+        ];
+        $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+
+        return null;
+    }
+
+    /**
      * Delete single resource.
      *
      * @return \Cake\Http\Response|null
