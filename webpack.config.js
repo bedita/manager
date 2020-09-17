@@ -9,11 +9,11 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -193,6 +193,33 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                use: [ 'raw-loader' ]
+            },
+            {
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader',
+                        options: {
+                            injectType: 'singletonStyleTag',
+                            attributes: {
+                                'data-cke': true
+                            }
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: styles.getPostCssConfig({
+                            themeImporter: {
+                                themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+                            },
+                            minify: true,
+                        }),
+                    },
+                ]
+            },
+            {
                 test: /\.vue$/,
                 use: 'vue-loader'
             },
@@ -256,6 +283,9 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'node_modules'),
                 ],
+                exclude: [
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+                ],
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
@@ -286,6 +316,9 @@ module.exports = {
             {
                 include: [
                     path.resolve(__dirname, 'node_modules'),
+                ],
+                exclude: [
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
                 ],
                 test: /\.svg$/,
                 use: 'svg-url-loader',

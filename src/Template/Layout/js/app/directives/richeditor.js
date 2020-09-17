@@ -3,7 +3,6 @@
  * v-richeditor directive to activate ckeditor on element
  *
  */
-
 export default {
     install(Vue) {
         Vue.directive('richeditor', {
@@ -12,18 +11,38 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            inserted (el) {
-                import(/* webpackChunkName: "richtext-editor-input" */'app/components/richtext-editor-input')
-                    .then(module => module.default)
-                    .then((component) => {
-                        const Constructor = Vue.extend(component);
-                        const vm = new Constructor({
-                            propsData: {
-                                el,
-                            }
-                        });
-                        vm.$mount();
-                    });
+            async inserted(el) {
+                const { ClassicEditor, ...plugins } = await import(/* webpackChunkName: "ckeditor" */'app/lib/ckeditor');
+
+                ClassicEditor.create(el, {
+                    plugins: Object.values(plugins),
+                    toolbar: {
+                        shouldNotGroupWhenFull: true,
+                        items: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strikethrough',
+                            'code',
+                            'subscript',
+                            'superscript',
+                            'removeFormat',
+                            '|',
+                            'alignment',
+                            '|',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            'blockQuote',
+                            'insertTable',
+                            '|',
+                            'undo',
+                            'redo',
+                        ]
+                    },
+                });
             },
         })
     }

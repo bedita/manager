@@ -170,8 +170,6 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => 'true',
-                    'ckconfig' => 'configNormal',
-                    'type' => 'textarea',
                     'value' => 'test',
                 ],
                 // schema type
@@ -187,7 +185,6 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => 'true',
-                    'ckconfig' => 'configNormal',
                     'value' => 'test',
                 ],
                 // schema type
