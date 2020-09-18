@@ -83,7 +83,9 @@ export default {
                         throw new Error(`Unable to translate field ${object.field}`);
                     }
 
-                    this.$refs[object.field].value = r.translation;
+                    let input = this.$refs[object.field];
+                    input.value = r.translation;
+                    input.dispatchEvent(new CustomEvent('change'));
                 });
         },
     }

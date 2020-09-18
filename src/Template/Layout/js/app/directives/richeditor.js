@@ -14,7 +14,7 @@ export default {
             async inserted(el) {
                 const { ClassicEditor, ...plugins } = await import(/* webpackChunkName: "ckeditor" */'app/lib/ckeditor');
 
-                ClassicEditor.create(el, {
+                const editor = await ClassicEditor.create(el, {
                     plugins: Object.values(plugins),
                     toolbar: {
                         shouldNotGroupWhenFull: true,
@@ -42,6 +42,12 @@ export default {
                             'redo',
                         ]
                     },
+                });
+
+                el.addEventListener('change', () => {
+                    if (el.value !== editor.getData()) {
+                        editor.setData(el.value);
+                    }
                 });
             },
         })
