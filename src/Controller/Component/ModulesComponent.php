@@ -419,7 +419,7 @@ class ModulesComponent extends Component
         $timestamp = $session->read($timestampKey);
 
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if (strtotime($timestamp) < strtotime("-5 minutes")) {
+        if ($timestamp > strtotime("-5 minutes")) {
             //  => merge with $object['attributes']
             $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
