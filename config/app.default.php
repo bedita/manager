@@ -669,4 +669,39 @@ return [
     //         'apiKey' => 'abcde',
     //     ],
     // ],
+
+    /**
+     * Default RichTextEditor configuration.
+     */
+    // 'RichTextEditor' => [
+    //     'default' => [
+    //         'toolbar' => [
+    //             'heading',
+    //             '|',
+    //             'bold',
+    //             'italic',
+    //             'underline',
+    //             'strikethrough',
+    //             'code',
+    //             'subscript',
+    //             'superscript',
+    //             'removeFormat',
+    //             '|',
+    //             'alignment',
+    //             '|',
+    //             'specialCharacters',
+    //             'link',
+    //             'bulletedList',
+    //             'numberedList',
+    //             'blockQuote',
+    //             'insertTable',
+    //             'horizontalLine',
+    //             '|',
+    //             'undo',
+    //             'redo',
+    //             '|',
+    //             'editSource',
+    //         ],
+    //     ],
+    // ],
 ];
