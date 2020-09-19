@@ -14,6 +14,7 @@ export { default as Paragraph } from '@ckeditor/ckeditor5-paragraph/src/paragrap
 export { default as PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 export { default as RemoveFormat } from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 export { default as Strikethrough } from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+export { default as Source } from './plugins/source';
 export { default as SpecialCharacters } from '@ckeditor/ckeditor5-special-characters/src/specialcharacters';
 export { default as SpecialCharactersEssentials } from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials';
 export { default as Subscript } from '@ckeditor/ckeditor5-basic-styles/src/subscript';
