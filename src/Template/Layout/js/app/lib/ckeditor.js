@@ -6,6 +6,7 @@ export {default as Bold } from '@ckeditor/ckeditor5-basic-styles/src/bold';
 export {default as Code } from '@ckeditor/ckeditor5-basic-styles/src/code';
 export {default as Essentials } from '@ckeditor/ckeditor5-essentials/src/essentials';
 export {default as Heading } from '@ckeditor/ckeditor5-heading/src/heading';
+export {default as HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
 export {default as Italic } from '@ckeditor/ckeditor5-basic-styles/src/italic';
 export {default as Link } from '@ckeditor/ckeditor5-link/src/link';
 export {default as List } from '@ckeditor/ckeditor5-list/src/list';

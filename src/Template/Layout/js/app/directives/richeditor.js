@@ -37,6 +37,7 @@ export default {
                             'numberedList',
                             'blockQuote',
                             'insertTable',
+                            'horizontalLine',
                             '|',
                             'undo',
                             'redo',

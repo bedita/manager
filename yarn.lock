@@ -1129,6 +1129,15 @@
     "@ckeditor/ckeditor5-ui" "^22.0.0"
     "@ckeditor/ckeditor5-utils" "^22.0.0"
 
+"@ckeditor/ckeditor5-horizontal-line@^22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-horizontal-line/-/ckeditor5-horizontal-line-22.0.0.tgz#4d8227b946b94ea74ca8d40bf26482356edb710f"
+  integrity sha512-mQGG38mt5T2HJWzV6kbT4ZrkY0v/2YA8nY7HOypjNMVtME/5lUp98FU/LdlCR/7Kw4T48NCCleQ62w2hNL7gHQ==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^22.0.0"
+    "@ckeditor/ckeditor5-ui" "^22.0.0"
+    "@ckeditor/ckeditor5-widget" "^22.0.0"
+
 "@ckeditor/ckeditor5-image@^22.0.0":
   version "22.0.0"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-image/-/ckeditor5-image-22.0.0.tgz#c698ea8396c71fdb3df32e363cb8ba888df314b4"
