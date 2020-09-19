@@ -379,7 +379,7 @@ class FormTest extends TestCase
                 $value,
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => 'true',
+                    'v-richeditor' => '',
                     'value' => $value,
                 ],
             ],

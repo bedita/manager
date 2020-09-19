@@ -169,7 +169,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => 'true',
+                    'v-richeditor' => '',
                     'value' => 'test',
                 ],
                 // schema type
@@ -184,7 +184,7 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => 'true',
+                    'v-richeditor' => '',
                     'value' => 'test',
                 ],
                 // schema type

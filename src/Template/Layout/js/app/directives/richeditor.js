@@ -1,3 +1,31 @@
+const DEFAULT_TOOLBAR = [
+    'heading',
+    '|',
+    'bold',
+    'italic',
+    'underline',
+    'strikethrough',
+    'code',
+    'subscript',
+    'superscript',
+    'removeFormat',
+    '|',
+    'alignment',
+    '|',
+    'specialCharacters',
+    'link',
+    'bulletedList',
+    'numberedList',
+    'blockQuote',
+    'insertTable',
+    'horizontalLine',
+    '|',
+    'undo',
+    'redo',
+    '|',
+    'editSource',
+];
+
 /**
  *
  * v-richeditor directive to activate ckeditor on element
@@ -11,40 +39,21 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            async inserted(el) {
+            async inserted(el, binding) {
                 const { ClassicEditor, ...plugins } = await import(/* webpackChunkName: "ckeditor" */'app/lib/ckeditor');
+
+                let items = JSON.parse(binding.expression || '');
+                if (!items) {
+                    items = DEFAULT_TOOLBAR;
+                } else if (!Array.isArray(items)) {
+                    items = [items];
+                }
 
                 const editor = await ClassicEditor.create(el, {
                     plugins: Object.values(plugins),
                     toolbar: {
                         shouldNotGroupWhenFull: true,
-                        items: [
-                            'heading',
-                            '|',
-                            'bold',
-                            'italic',
-                            'underline',
-                            'strikethrough',
-                            'code',
-                            'subscript',
-                            'superscript',
-                            'removeFormat',
-                            '|',
-                            'alignment',
-                            '|',
-                            'specialCharacters',
-                            'link',
-                            'bulletedList',
-                            'numberedList',
-                            'blockQuote',
-                            'insertTable',
-                            'horizontalLine',
-                            '|',
-                            'undo',
-                            'redo',
-                            '|',
-                            'editSource',
-                        ],
+                        items,
                     },
                     heading: {
                         options: [
