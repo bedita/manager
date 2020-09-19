@@ -10,6 +10,7 @@ export {default as Italic } from '@ckeditor/ckeditor5-basic-styles/src/italic';
 export {default as Link } from '@ckeditor/ckeditor5-link/src/link';
 export {default as List } from '@ckeditor/ckeditor5-list/src/list';
 export {default as Paragraph } from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+export {default as PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 export {default as RemoveFormat } from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 export {default as Strikethrough } from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
 export {default as Subscript } from '@ckeditor/ckeditor5-basic-styles/src/subscript';

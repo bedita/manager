@@ -34,6 +34,7 @@
         "@ckeditor/ckeditor5-link": "^22.0.0",
         "@ckeditor/ckeditor5-list": "^22.0.0",
         "@ckeditor/ckeditor5-paragraph": "^22.0.0",
+        "@ckeditor/ckeditor5-paste-from-office": "^22.0.0",
         "@ckeditor/ckeditor5-remove-format": "^22.0.0",
         "@ckeditor/ckeditor5-table": "^22.0.0",
         "@ckeditor/ckeditor5-theme-lark": "^22.0.0",

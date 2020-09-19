@@ -1176,6 +1176,15 @@
     "@ckeditor/ckeditor5-ui" "^22.0.0"
     "@ckeditor/ckeditor5-utils" "^22.0.0"
 
+"@ckeditor/ckeditor5-paste-from-office@^22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-paste-from-office/-/ckeditor5-paste-from-office-22.0.0.tgz#f7b20fa6a3ff8ea92e666e584bb968d2c6c0efec"
+  integrity sha512-auOaGxU9NNmqccG7l54u/D8ngXkJROACwvvSnIkj0VD19wFw/E4Ue+aW82qCMDYh4LoRkhmnq9iaxmb1yBdbdw==
+  dependencies:
+    "@ckeditor/ckeditor5-clipboard" "^22.0.0"
+    "@ckeditor/ckeditor5-core" "^22.0.0"
+    "@ckeditor/ckeditor5-engine" "^22.0.0"
+
 "@ckeditor/ckeditor5-remove-format@^22.0.0":
   version "22.0.0"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-remove-format/-/ckeditor5-remove-format-22.0.0.tgz#42b37253ec7858608872041ceaa9a19873bd34a8"
