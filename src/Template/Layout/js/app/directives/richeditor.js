@@ -61,7 +61,7 @@ export default {
                 });
 
                 editor.model.document.on('change:data', () => {
-                    let isChanged = el.value !== element.dataset.originalValue;
+                    let isChanged = el.value !== el.dataset.originalValue;
                     el.dispatchEvent(new CustomEvent('change', {
                         bubbles: true,
                         detail: {
