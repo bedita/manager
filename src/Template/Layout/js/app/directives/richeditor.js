@@ -49,6 +49,17 @@ export default {
                         editor.setData(el.value);
                     }
                 });
+
+                editor.model.document.on('change:data', () => {
+                    let isChanged = el.value !== element.dataset.originalValue;
+                    el.dispatchEvent(new CustomEvent('change', {
+                        bubbles: true,
+                        detail: {
+                            id: el.id,
+                            isChanged,
+                        }
+                    }));
+                });
             },
         })
     }
