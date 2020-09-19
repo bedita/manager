@@ -54,14 +54,18 @@ export default {
                     },
                 });
 
+                let changing = false;
+
                 el.addEventListener('change', () => {
-                    if (el.value !== editor.getData()) {
+                    if (!changing && el.value !== editor.getData()) {
                         editor.setData(el.value);
                     }
                 });
 
-                editor.model.document.on('change:data', () => {
+                editor.model.document.on('change', () => {
                     let isChanged = el.value !== el.dataset.originalValue;
+
+                    changing = true;
                     el.dispatchEvent(new CustomEvent('change', {
                         bubbles: true,
                         detail: {
@@ -69,6 +73,7 @@ export default {
                             isChanged,
                         }
                     }));
+                    changing = false;
                 });
             },
         })
