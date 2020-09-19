@@ -39,6 +39,9 @@ export default class Source extends Plugin {
 
             view.on('execute', () => {
                 if (!codemirror) {
+                    if (editor.ui.focusTracker.focusedElement) {
+                        editor.ui.focusTracker.focusedElement.blur();
+                    }
                     wasReadOnly = editor.isReadOnly;
                     editor.isReadOnly = true;
                     editor.ui.element.appendChild(textarea);

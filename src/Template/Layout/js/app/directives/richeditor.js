@@ -75,7 +75,7 @@ export default {
                     }
                 });
 
-                editor.model.document.on('change', () => {
+                editor.model.document.on('change:data', () => {
                     let isChanged = el.value !== el.dataset.originalValue;
 
                     changing = true;
