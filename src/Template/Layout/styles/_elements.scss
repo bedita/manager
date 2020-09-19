@@ -384,4 +384,8 @@ a.close-button {
     .ck-label {
         display: none !important;
     }
+
+    .ck-content {
+        min-height: 12 * $gutter;
+    }
 }

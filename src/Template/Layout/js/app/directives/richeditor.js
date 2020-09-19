@@ -32,6 +32,7 @@ export default {
                             '|',
                             'alignment',
                             '|',
+                            'specialCharacters',
                             'link',
                             'bulletedList',
                             'numberedList',

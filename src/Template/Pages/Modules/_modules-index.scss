@@ -168,20 +168,6 @@ body.view-module {
 
                         .input.textarea {
                             border-color: #adb5bd !important;
-                            span, div {
-                                color: #495057 !important;
-                                background-color: #adb5bd !important;
-                                border-color: #adb5bd !important;
-                                pointer-events: none;
-                            }
-
-                            div.cke_inner {
-                                background-color: #768494 !important;
-
-                                div.cke_contents {
-                                    opacity: 0.4;
-                                }
-                            }
                         }
                     }
 

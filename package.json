@@ -37,6 +37,7 @@
         "@ckeditor/ckeditor5-paragraph": "^22.0.0",
         "@ckeditor/ckeditor5-paste-from-office": "^22.0.0",
         "@ckeditor/ckeditor5-remove-format": "^22.0.0",
+        "@ckeditor/ckeditor5-special-characters": "^22.0.0",
         "@ckeditor/ckeditor5-table": "^22.0.0",
         "@ckeditor/ckeditor5-theme-lark": "^22.0.0",
         "abortcontroller-polyfill": "^1.1.9",

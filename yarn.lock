@@ -1212,6 +1212,16 @@
     "@ckeditor/ckeditor5-ui" "^22.0.0"
     "@ckeditor/ckeditor5-utils" "^22.0.0"
 
+"@ckeditor/ckeditor5-special-characters@^22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-special-characters/-/ckeditor5-special-characters-22.0.0.tgz#040a1f3c827171700840e9ba19723fb86a30b092"
+  integrity sha512-eCXsXKH2jH4yIdY9hvqgHgNeDa/5P04ZTYSx/Ofq5xTjC9axoM+QRTK1L4zhthEzme6g9PSMN3WJUpSRuQDZDg==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^22.0.0"
+    "@ckeditor/ckeditor5-typing" "^22.0.0"
+    "@ckeditor/ckeditor5-ui" "^22.0.0"
+    "@ckeditor/ckeditor5-utils" "^22.0.0"
+
 "@ckeditor/ckeditor5-table@^22.0.0":
   version "22.0.0"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-table/-/ckeditor5-table-22.0.0.tgz#e7ab348057590a2085aebc92dfdb68db2a58a97d"
