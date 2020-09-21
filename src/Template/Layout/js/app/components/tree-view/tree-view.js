@@ -12,10 +12,13 @@ const API_OPTIONS = {
  *
  * <tree-view> component used for ModulesPage -> View
  *
- * @TODO
- * JSdoc
- * replace objectId and objectType with model object
- * style/template review
+ * @property {Object} store The folders store.
+ * @property {string} parent The parent of the tree item.
+ * @property {Object} node The model of the tree item.
+ * @property {Object} object The current item to place in the tree.
+ * @property {string} relationName The name of the relation to save.
+ * @property {boolean} multipleChoice Should handle multiple relations.
+ * @property {Array} parents The list of current item parents.
  */
 export default {
     name: 'tree-view',
@@ -30,12 +33,13 @@ export default {
             <div
                 v-if="parent"
                 class="node-element py-05"
-                :data-status="node.attributes.status">
+                :data-status="node.attributes.status"
+            >
                 <label
                     class="node-label"
                     :class="{
                         'icon-folder': !relationName,
-                        'has-text-gray-550 disabled': node.id == objectId,
+                        'has-text-gray-550 disabled': node.id == object.id,
                     }"
                     v-on="{ click: relationName ? () => {} : toggle }"
                 >
@@ -43,7 +47,7 @@ export default {
                         v-if="relationName"
                         :type="multipleChoice ? 'checkbox' : 'radio'"
                         :name="'relations[' + relationName + '][replaceRelated][]'"
-                        :value="nodeValue"
+                        :value="value"
                         :checked="isParent"
                         @change="toggleFolderRelation"
                     />
@@ -51,7 +55,8 @@ export default {
                 </label>
                 <div
                     v-if="relationName && isParent"
-                    class="tree-params">
+                    class="tree-params"
+                >
                     <label>
                         <input
                             type="checkbox"
@@ -62,7 +67,7 @@ export default {
                     </label>
                 </div>
                 <button
-                    v-if="(!node.children || node.children.length !== 0) && node.id != objectId"
+                    v-if="(!node.children || node.children.length !== 0) && node.id != object.id"
                     :class="{
                         'is-loading-spinner': isLoading,
                         'icon-down-open': !isLoading && isOpen,
@@ -75,12 +80,12 @@ export default {
             <div class="node-children" v-show="isOpen || !parent">
                 <tree-view
                     v-for="(child, index) in node.children"
+                    :store="store"
                     :parents="parents"
                     :parent="node"
                     :key="index"
                     :node="child"
-                    :object-type="objectType"
-                    :object-id="objectId"
+                    :object="object"
                     :relation-name="relationName"
                     :multiple-choice="multipleChoice"
                 ></tree-view>
@@ -89,18 +94,15 @@ export default {
     `,
 
     props: {
+        store: {
+            type: Object,
+            default: () => ({}),
+        },
+        parent: Object,
         parents: {
             type: Array,
             default: () => ([]),
         },
-        objectType: String,
-        objectId: [String, Number],
-        relationName: String,
-        multipleChoice: {
-            type: Boolean,
-            default: true,
-        },
-        parent: Object,
         node: {
             type: Object,
             default: () => ({
@@ -109,6 +111,12 @@ export default {
                 },
                 children: [],
             }),
+        },
+        object: Object,
+        relationName: String,
+        multipleChoice: {
+            type: Boolean,
+            default: true,
         },
     },
 
@@ -120,6 +128,11 @@ export default {
     },
 
     computed: {
+        /**
+         * Check if the item a root.
+         *
+         * @return {boolean}
+         */
         isRoot() {
             if (!this.parent) {
                 return false;
@@ -127,10 +140,20 @@ export default {
             return !this.parent.id;
         },
 
+        /**
+         * Check if the item is the parent of the current node.
+         *
+         * @return {boolean}
+         */
         isParent() {
             return !!this.parents.find(({ id }) => id == this.node.id);
         },
 
+        /**
+         * Check if the child item is part of the menu.
+         *
+         * @return {boolean}
+         */
         isMenu() {
             if (!this.isParent) {
                 return false;
@@ -144,7 +167,7 @@ export default {
         /**
          * The folders link.
          *
-         * @return {String}
+         * @return {string}
         */
         url() {
             if (!this.node) {
@@ -159,7 +182,7 @@ export default {
          *
          * @return {string}
          */
-        nodeValue() {
+        value() {
             let menu = true;
             if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
                 menu = !!this.node.meta.relation.menu;
@@ -186,20 +209,26 @@ export default {
     },
 
     methods: {
+        /**
+         * Load tree roots.
+         *
+         * @return {Promise}
+         */
         async loadRoots() {
-            let parents = [];
-            if (this.objectId) {
-                parents = await this.preload(this.objectId, this.objectType);
+            if (this.object && this.object.id) {
+                await this.preload(this.object);
             }
 
             let page = 1;
             let roots = [];
             do {
-                let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}`, API_OPTIONS);
+                let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 if (json.data) {
                     roots.push(
-                        ...json.data.map((object) => parents.find((parent) => parent.id == object.id) || object)
+                        ...json.data.map((object) =>
+                            this.store[object.id] || (this.store[object.id] = object)
+                        )
                     )
                 }
                 if (!json.meta ||
@@ -216,10 +245,10 @@ export default {
         /**
          * Preload folders passed as object paths.
          *
-         * @param {string} id The leaf object id.
+         * @param {Object} object The lead object to preload.
          * @return {Promise}
          */
-        async preload(id, type) {
+        async preload({ id, type }) {
             if (!type) {
                 let response = await fetch(`${API_URL}api/objects/${id}`, API_OPTIONS);
                 let json = await response.json();
@@ -229,57 +258,82 @@ export default {
             if (type === 'folders') {
                 let response = await fetch(`${API_URL}api/folders/${id}`, API_OPTIONS)
                 let { data: folder } = await response.json();
+                this.store[folder.id] = folder;
                 let parent = await this.loadParent(folder);
                 if (!parent) {
                     return [];
                 }
                 this.parents.push(parent);
-                return [await this.loadFolder(parent, folder)];
+                await this.loadChildren(parent);
+                return [await this.loadFolderParentRecursive(parent)];
             }
 
             let response = await fetch(`${API_URL}api/${type}/${id}?include=parents`);
             let json = await response.json();
+            let included = json.included || [];
             return await Promise.all(
-                json.included.map(async (folder) => {
+                included.map(async (folder) => {
+                    this.store[folder.id] = folder;
                     this.parents.push(folder);
-                    return this.loadFolder(folder, false);
+                    return this.loadFolderParentRecursive(folder);
                 })
             );
         },
 
+        /**
+         * Load folder parent.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
         async loadParent(folder) {
             let response = await fetch(`${API_URL}api/folders/${folder.id}/parent`, API_OPTIONS);
             let json = await response.json();
-
-            return json.data;
+            let { data: object } = json;
+            if (!object) {
+                return null;
+            }
+            return this.store[object.id] || (this.store[object.id] = object);
         },
 
-        async loadFolder(folder, child) {
+        /**
+         * Load folder children.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadChildren(folder) {
             let page = 1;
-            if (child !== false) {
-                let children = [];
-                do {
-                    let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
-                    let childrenJson = await childrenRes.json();
-                    children.push(
-                        ...childrenJson.data.map((object) => {
-                            if (child && child.id == object.id) {
-                                return child;
-                            }
-                            return object;
-                        })
-                    );
-                    if (childrenJson.meta.pagination.page_count == page) {
-                        break;
-                    }
-                    page++;
-                } while (true);
-                folder.children = children;
-            }
+            let children = [];
+            do {
+                let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
+                let childrenJson = await childrenRes.json();
+                children.push(
+                    ...childrenJson.data.map((object) =>
+                        this.store[object.id] || (this.store[object.id] = object)
+                    )
+                );
+                if (childrenJson.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+            folder.children = children;
+        },
 
+        /**
+         * Load folder children and parent.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadFolderParentRecursive(folder) {
             let parent = await this.loadParent(folder);
             if (parent) {
-                return await this.loadFolder(parent, folder);
+                if (!parent.children) {
+                    await this.loadChildren(parent);
+                }
+                return await this.loadFolderParentRecursive(parent);
             }
 
             return folder;
@@ -289,6 +343,7 @@ export default {
          * Toggle children visibility
          * Fetch children if not provided.
          *
+         * @param {Event} event The click event.
          * @return {Promise}
          */
         async toggle(event) {
@@ -317,6 +372,12 @@ export default {
             this.isLoading = false;
         },
 
+        /**
+         * Add/remove parent.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
         toggleFolderRelation(event) {
             if (this.multipleChoice) {
                 let index = this.parents.findIndex(({ id }) => id == this.node.id);
@@ -337,6 +398,12 @@ export default {
             }
         },
 
+        /**
+         * Toggle menu param.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
         toggleFolderRelationMenu(event) {
             let relation = this.node.meta.relation || {};
             relation.menu = event.target.checked;

@@ -47,6 +47,13 @@
             }
         }
 
+        .tree-params {
+            label {
+                display: flex !important;
+                align-items: center;
+            }
+        }
+
         > button {
             margin: 0 0 0 $gutter * .75;
             min-width: $gutter * 2;

@@ -20,8 +20,7 @@
 
             <tree-view
                 relation-name={{ relationName }}
-                object-type={{ object.type }}
-                object-id={{ object.id }}
+                :object='{{ { id: object.id, type: object.type }|json_encode }}'
                 :multiple-choice={{ options.multiple }}>
             </tree-view>
             {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
