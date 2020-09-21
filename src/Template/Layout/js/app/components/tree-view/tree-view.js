@@ -39,7 +39,7 @@ export default {
                     class="node-label"
                     :class="{
                         'icon-folder': !relationName,
-                        'has-text-gray-550 disabled': node.id == object.id,
+                        'has-text-gray-550 disabled': object && node.id == object.id,
                     }"
                     v-on="{ click: relationName ? () => {} : toggle }"
                 >
@@ -67,7 +67,7 @@ export default {
                     </label>
                 </div>
                 <button
-                    v-if="(!node.children || node.children.length !== 0) && node.id != object.id"
+                    v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
                     :class="{
                         'is-loading-spinner': isLoading,
                         'icon-down-open': !isLoading && isOpen,
