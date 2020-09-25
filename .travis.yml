@@ -60,7 +60,7 @@ jobs:
       after_success: skip
     - name: "Yarn build"
       language: node_js
-      node_js: 10
+      node_js: 12
       before_install: skip
       install:
         - yarn

@@ -112,8 +112,7 @@ class Form
     {
         return [
             'type' => 'textarea',
-            'v-richeditor' => 'true',
-            'ckconfig' => 'configNormal',
+            'v-richeditor' => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
             'value' => $value,
         ];
     }

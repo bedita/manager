@@ -376,3 +376,20 @@ a.close-button {
         }
     }
 }
+
+.ck-editor {
+    --ck-color-base-background: #{$gray-200};
+    color: #000;
+
+    .ck-label {
+        display: none !important;
+    }
+
+    .ck-content {
+        min-height: 12 * $gutter;
+    }
+
+    .CodeMirror {
+        font-size: 1.2em;
+    }
+}
