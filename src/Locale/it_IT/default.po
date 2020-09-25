@@ -628,6 +628,9 @@ msgstr "visualizza genitore"
 msgid "www.bedita.com"
 msgstr ""
 
+#~ msgid "There are unsaved changes, are you sure you want to leave page?"
+#~ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
+
 #~ msgid "New relations (save to keep)"
 #~ msgstr "Nuove relazioni (salvare per mantenerle)"
 

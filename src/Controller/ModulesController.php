@@ -442,45 +442,101 @@ class ModulesController extends AppController
         $this->viewBuilder()->setTemplate('view');
 
         $schema = $this->Schema->getSchema();
-        if (!is_array($schema)) {
-            $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
+        $object = $this->_restoreHistoryData($id, $historyId);
 
-            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
-        }
-        try {
-            $historyResponse = $this->apiClient->get('/history', ['filter' => ['resource_id' => $id]]);
+        $this->set(compact('object', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-            $history = $historyResponse['data'];
-            usort($history, function ($a, $b) {
-                return strtotime($a['meta']['created']) - strtotime($b['meta']['created']);
-            });
+        return null;
+    }
 
-            $index = array_search($historyId, array_column($history, 'id'));
-            $historySlice = array_slice($history, 0, $index + 1);
+    /**
+     * Restore data of an object from a specific point of its history.
+     *
+     * @param string|int $id Object ID.
+     * @param string|int $historyId History object ID.
+     * @return array
+     */
+    private function _restoreHistoryData($id, $historyId): array
+    {
+        $schema = $this->Schema->getSchema();
+        $historyResponse = $this->apiClient->get('/history', [
+            'filter' => [
+                'resource_id' => $id,
+                'resource_type' => 'objects',
+                'id' => ['ge' => $historyId],
+            ],
+            'sort' => 'created',
+            'page_size' => 100,
+        ]);
 
-            $attributes = [];
-            foreach ($historySlice as $item) {
-                foreach ($item['meta']['changed'] as $key => $value) {
-                    $attributes[$key] = $value;
-                }
+        $attributes = array_fill_keys(array_keys($schema['properties']), null);
+
+        foreach ($historyResponse['data'] as $item) {
+            foreach ($item['meta']['changed'] as $key => $value) {
+                $attributes[$key] = $value;
             }
-
-            $title = $this->request->getQuery('title');
-            if ($title) {
-                $attributes['title'] = $title;
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
+
+        $title = $this->request->getQuery('title');
+        if ($title) {
+            $attributes['title'] = $title;
+        }
+
         $object = [
             'type' => $this->objectType,
             'attributes' => $attributes,
         ];
-        $this->set(compact('object', 'schema'));
+
+        return $object;
+    }
+
+    /**
+     * Restore data of an object from a specific point of its history.
+     *
+     * @param string|int $id Object ID.
+     * @param string|int $historyId History object ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function restoreFromHistory($id, $historyId): ?Response
+    {
+        $this->request->allowMethod(['get']);
+        $this->viewBuilder()->setTemplate('view');
+
+        try {
+            $query = [];
+            if ($this->objectType !== 'folders') {
+                $query['include'] = 'parents';
+            }
+            $response = $this->apiClient->getObject($id, $this->objectType, $query);
+        } catch (BEditaClientException $e) {
+            // Error! Back to index.
+            $this->log($e, LogLevel::ERROR);
+            $this->Flash->error(__('Error retrieving the requested content'), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
+        }
+        $this->ProjectConfiguration->read();
+
+        $revision = Hash::get($response, 'meta.schema.' . $this->objectType . '.revision', null);
+        $schema = $this->Schema->getSchema($this->objectType, $revision);
+
+        $object = $response['data'];
+
+        $object = $this->_restoreHistoryData($id, $historyId); // SISTEMARE I DATI. TIPO SERVE L'ID CREDO
+
+        // setup `currentAttributes` and recover failure data from session.
+        $this->Modules->setupAttributes($object);
+
+        $included = (!empty($response['included'])) ? $response['included'] : [];
+        $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
+        $streams = Hash::get($typeIncluded, 'streams');
+        $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+
+        // set objectNav
+        $objectNav = $this->getObjectNav((string)$id);
+        $this->set('objectNav', $objectNav);
 
         return null;
     }

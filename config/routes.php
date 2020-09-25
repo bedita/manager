@@ -180,6 +180,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
     );
+    $routes->connect(
+        '/:object_type/view/:id/history/:historyId',
+        ['controller' => 'Modules', 'action' => 'restoreFromHistory'],
+        ['pass' => ['id', 'historyId'], '_name' => 'modules:restoreFromHistory']
+    );
     // Translations
     $routes->connect(
         '/:object_type/translation/save',

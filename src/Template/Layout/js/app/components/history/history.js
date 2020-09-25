@@ -19,7 +19,7 @@ export default {
                     <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.meta)"><: t('restore') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item)"><: t('restore') :></button>
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('clone') :></button>
                     </div>
                 </li>
@@ -94,13 +94,31 @@ export default {
                 return;
             }
 
-            const restored = this.restoreHistoryItem(item);
-            const form = this.$el.closest('#form-main');
-            Object.keys(this.object.attributes).forEach((key) => {
-                const elem = [...form.elements].find((el) => el.name === key);
-                elem.value = key in restored ? restored[key] : '';
-            });
-            PanelEvents.closePanel();
+            // const restored = this.restoreHistoryItem(item);
+            // const form = this.$el.closest('#form-main');
+
+            // Object.keys(this.object.attributes).forEach((key) => {
+            //     // GESTIRE I FOTTUTI VALORI ARRAY DI restored[key]
+            //     const elements = [...form.querySelectorAll(`[name="${key}"]`)];
+            //     let elem = elements[0];
+            //     if (elements.some((el) => el.type === 'checkbox' || el.type === 'radio')) {
+            //         elem = elements.find((el) => el.value === restored[key]); // controllare se va anche coi checkbox
+            //         if (elem) {
+            //             // check the input representing the current value
+            //             elem.checked = !!(key in restored);
+            //         }
+            //     } else {
+            //         elem.value = key in restored ? restored[key] : '';
+            //     }
+
+            //     // manually trigger change event to let the app be aware of it
+            //     elem.dispatchEvent(new Event('change', { bubbles: true }));
+            // });
+
+            // // close the panel if this method was called by it
+            // PanelEvents.closePanel();
+
+            window.location.replace(`${window.location.origin}${window.location.pathname}/history/${item.id}`);
         },
         /**
          * Open a new tab with the url to create a copy of the object at a certain point of the history.

@@ -12,6 +12,10 @@ export default {
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
     },
 
+    props: {
+        object: Object,
+    },
+
     /**
      * component properties
      *
@@ -25,6 +29,21 @@ export default {
 
     mounted() {
         window.addEventListener('keydown', this.toggleTabs);
+
+        // manually trigger changes for cloned data
+        if (window.location.pathname.includes('/clone')) {
+            Object.keys(this.object.attributes).forEach((key) => {
+                if (this.object.attributes[key]) {
+                    this.$el.dispatchEvent(new CustomEvent('change', {
+                        bubbles: true,
+                        detail: {
+                            id: key,
+                            isChanged: true,
+                        }
+                    }));
+                }
+            });
+        }
     },
 
     methods: {

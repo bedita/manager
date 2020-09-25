@@ -368,7 +368,7 @@ const _vueInstance = new Vue({
          *
          * @returns {void}
          */
-        alertBeforePageUnload(view) {
+        alertBeforePageUnload() {
             /*
                 Listen for focusin: "normal" HTML element need to store original value in order to make a diff with new values
             */
@@ -408,23 +408,21 @@ const _vueInstance = new Vue({
                         }
                     }
                 }
-
             }, true);
 
             /*
                 Listen for change: Handles change events and checks if form/page has been modified
             */
             this.$el.addEventListener('change', (ev) => {
-                const element = ev.target;
-                const form = element && element.form;
-
                 const sender = ev.detail;
-                if (typeof sender !== 'undefined' && sender.id) {
+                if (sender && sender.id) {
                     this.dataChanged.set(sender.id, {
                         changed: sender.isChanged
                     });
                 } else {
                     // support for normal change Events trying to figure out a unique id
+                    const element = ev.target;
+                    const form = element && element.form;
                     const checkChanges = form && form.getAttribute('check-changes') === 'true';
                     if (checkChanges && element.name) {
                         const name = element.name;
@@ -435,22 +433,23 @@ const _vueInstance = new Vue({
                         let id = `${formId}#${elementId}`;
 
                         if (element.type === 'radio' || element.type === 'checkbox') {
-                            if (element.type === 'checkbox') {
-                                const checked = document.querySelectorAll(`input[name='${name}']:checked`);
-                                if (checked) {
-                                    value = JSON.stringify(checked);
-                                }
-                            }
                             id = `${formId}#${name}`;
                         }
 
-                        if (!id || id === '') {
-                            // if I can't make an id out of don't bother
+                        if (!id) {
+                            // if I can't make an id out of this, don't bother
                             return true;
                         }
 
+                        if (element.type === 'checkbox') {
+                            const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                            if (checked) {
+                                value = JSON.stringify(checked);
+                            }
+                        }
+
                         this.dataChanged.set(id, {
-                            changed: value !== originalValue
+                            changed: value !== originalValue,
                         });
                     }
                 }
@@ -477,18 +476,13 @@ const _vueInstance = new Vue({
             });
 
             /*
-
+                Ask confirmation before leaving the page if there are unsaved changes
             */
-            window.onbeforeunload = function (ev) {
-                let isDataChanged = false;
+            window.onbeforeunload = () => {
                 for (const [key, value] of _vueInstance.dataChanged) {
                     if (value.changed) {
-                        isDataChanged = true;
-                        break;
+                        return t`There are unsaved changes, are you sure you want to leave page?`;
                     }
-                }
-                if (isDataChanged) {
-                    return 'There are unsaved changes, are you sure you want to leave page?';
                 }
             }
         },
