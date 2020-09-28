@@ -10,7 +10,9 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\Component\HistoryComponent Test Case
+ * {@see \App\Controller\Component\HistoryComponent} Test Case
+ *
+ * @coversDefaultClass \App\Controller\Component\HistoryComponent
  */
 class HistoryComponentTest extends TestCase
 {
