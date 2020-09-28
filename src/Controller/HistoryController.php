@@ -52,8 +52,8 @@ class HistoryController extends AppController
     /**
      * Load history data and write into config by ID.
      *
-     * @param string $id The object type.
-     * @param int $historyId Object ID.
+     * @param string|int $id The object type.
+     * @param string|int $historyId Object ID.
      * @return void
      */
     protected function setHistory($id, $historyId): void
