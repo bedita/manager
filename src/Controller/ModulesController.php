@@ -203,7 +203,7 @@ class ModulesController extends AppController
         $included = (!empty($response['included'])) ? $response['included'] : [];
         $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
         $streams = Hash::get($typeIncluded, 'streams');
-        $this->History->load($object);
+        $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
@@ -427,7 +427,7 @@ class ModulesController extends AppController
             'type' => $this->objectType,
             'attributes' => $attributes,
         ];
-        $this->History->load($object);
+        $this->History->load($id, $object);
         $this->set(compact('object', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 

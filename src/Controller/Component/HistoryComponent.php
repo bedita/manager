@@ -19,15 +19,16 @@ class HistoryComponent extends Component
      * Load object history from session by ID.
      * If found, overwrite object.attributes and delete history key from session.
      *
+     * @param string|int $id The ID
      * @param array $object The object
      * @return void
      */
-    public function load(array &$object): void
+    public function load($id, array &$object): void
     {
-        if (empty($object) || empty($object['id'])) {
+        if (empty($id) || empty($object)) {
             return;
         }
-        $key = sprintf($this->key, $object['id']);
+        $key = sprintf($this->key, $id);
         $session = $this->getController()->request->getSession();
         $data = (string)$session->read($key);
         if (empty($data)) {

@@ -86,10 +86,12 @@ class HistoryComponentTest extends TestCase
     {
         return [
             'empty object' => [
+                '',
                 [],
                 '',
             ],
             'object no data' => [
+                10,
                 [
                     'objectType' => 'documents',
                     'id' => 10,
@@ -98,6 +100,7 @@ class HistoryComponentTest extends TestCase
                 '',
             ],
             'a dummy document' => [
+                10,
                 [
                     'objectType' => 'documents',
                     'id' => 10,
@@ -113,18 +116,19 @@ class HistoryComponentTest extends TestCase
      *
      * @covers ::load()
      * @dataProvider loadProvider()
+     * @param string|int $id The id
      * @param array $object The object for test
      * @param string $expected The expected object
      * @return void
      */
-    public function testLoad(array $object, string $expected): void
+    public function testLoad($id, array $object, string $expected): void
     {
         $session = $this->HistoryComponent->getController()->request->getSession();
         if ($expected != '') {
             $key = sprintf('history.%s.attributes', $object['id']);
             $session->write($key, $expected);
         }
-        $this->HistoryComponent->load($object);
+        $this->HistoryComponent->load($id, $object);
         if ($expected != '') {
             static::assertNull($session->read($key));
             static::assertEquals($object['attributes'], (array)json_decode($expected, true));
