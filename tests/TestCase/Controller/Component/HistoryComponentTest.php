@@ -8,6 +8,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Component\HistoryComponent} Test Case
@@ -45,6 +46,13 @@ class HistoryComponentTest extends TestCase
     private $ApiClient = null;
 
     /**
+     * Document ID
+     *
+     * @var string
+     */
+    private $documentId = null;
+
+    /**
      * {@inheritDoc}
      */
     public function setUp(): void
@@ -65,6 +73,10 @@ class HistoryComponentTest extends TestCase
                 'REQUEST_METHOD' => 'GET',
             ],
         ]);
+        $response = $this->ApiClient->save('documents', [
+            'title' => 'test history controller',
+        ]);
+        $this->documentId = Hash::get($response, 'data.id');
     }
 
     /**
@@ -74,6 +86,8 @@ class HistoryComponentTest extends TestCase
     {
         unset($this->HistoryComponent);
         unset($this->SchemaComponent);
+        unset($this->ApiClient);
+        unset($this->documentId);
         parent::tearDown();
     }
 
@@ -86,24 +100,19 @@ class HistoryComponentTest extends TestCase
     {
         return [
             'empty object' => [
-                '',
                 [],
                 '',
             ],
             'object no data' => [
-                10,
                 [
                     'objectType' => 'documents',
-                    'id' => 10,
                     'historyId' => 1,
                 ],
                 '',
             ],
             'a dummy document' => [
-                10,
                 [
                     'objectType' => 'documents',
-                    'id' => 10,
                     'historyId' => 1,
                 ],
                 '{"title":"dummy"}',
@@ -116,19 +125,18 @@ class HistoryComponentTest extends TestCase
      *
      * @covers ::load()
      * @dataProvider loadProvider()
-     * @param string|int $id The id
      * @param array $object The object for test
      * @param string $expected The expected object
      * @return void
      */
-    public function testLoad($id, array $object, string $expected): void
+    public function testLoad(array $object, string $expected): void
     {
         $session = $this->HistoryComponent->getController()->request->getSession();
         if ($expected != '') {
-            $key = sprintf('history.%s.attributes', $object['id']);
+            $key = sprintf('history.%s.attributes', $this->documentId);
             $session->write($key, $expected);
         }
-        $this->HistoryComponent->load($id, $object);
+        $this->HistoryComponent->load($this->documentId, $object);
         if ($expected != '') {
             static::assertNull($session->read($key));
             static::assertEquals($object['attributes'], (array)json_decode($expected, true));
@@ -145,13 +153,23 @@ class HistoryComponentTest extends TestCase
     public function writeProvider(): array
     {
         return [
-            'non existent doc' => [
+            'test document, keepUname false' => [
                 [
                     'objectType' => 'documents',
-                    'id' => 10,
+                    'id' => $this->documentId,
                     'historyId' => 1,
+                    'keepUname' => false,
                 ],
-                '{"id":null,"status":null,"uname":null,"locked":null,"created":null,"modified":null,"published":null,"title":null,"description":null,"body":null,"extra":null,"lang":null,"created_by":null,"modified_by":null,"publish_start":null,"publish_end":null}',
+                '{"status":"","uname":"","title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+            ],
+            'test document, keepUname true' => [
+                [
+                    'objectType' => 'documents',
+                    'id' => $this->documentId,
+                    'historyId' => 1,
+                    'keepUname' => true,
+                ],
+                '{"status":"","uname":null,"title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
             ],
         ];
     }

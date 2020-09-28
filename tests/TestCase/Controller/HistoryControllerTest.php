@@ -2,8 +2,10 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\HistoryController;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\HistoryController} Test Case
@@ -18,6 +20,20 @@ class HistoryControllerTest extends TestCase
      * @var \App\Controller\HistoryController
      */
     public $HistoryController;
+
+    /**
+     * Client class
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    private $ApiClient = null;
+
+    /**
+     * Document ID
+     *
+     * @var string
+     */
+    private $documentId = null;
 
     /**
      * {@inheritDoc}
@@ -35,6 +51,15 @@ class HistoryControllerTest extends TestCase
                 ],
             ])
         );
+        $user = getenv('BEDITA_ADMIN_USR');
+        $pass = getenv('BEDITA_ADMIN_PWD');
+        $this->ApiClient = ApiClientProvider::getApiClient();
+        $response = $this->ApiClient->authenticate($user, $pass);
+        $this->ApiClient->setupTokens($response['meta']);
+        $response = $this->ApiClient->save('documents', [
+            'title' => 'test history controller',
+        ]);
+        $this->documentId = Hash::get($response, 'data.id');
     }
 
     /**
@@ -43,6 +68,8 @@ class HistoryControllerTest extends TestCase
     public function tearDown(): void
     {
         unset($this->HistoryController);
+        unset($this->ApiClient);
+        unset($this->documentId);
         parent::tearDown();
     }
 
@@ -54,9 +81,9 @@ class HistoryControllerTest extends TestCase
     public function cloneProvider(): array
     {
         return [
-            'documents 10 history 1' => [
+            'test document history 1' => [
                 [
-                    'id' => 10,
+                    'id' => $this->documentId,
                     'historyId' => 1,
                 ],
             ],
@@ -90,9 +117,9 @@ class HistoryControllerTest extends TestCase
     public function restoreProvider(): array
     {
         return [
-            'documents 10 history 1' => [
+            'test document history 1' => [
                 [
-                    'id' => 10,
+                    'id' => $this->documentId,
                     'historyId' => 1,
                 ],
             ],
@@ -126,12 +153,21 @@ class HistoryControllerTest extends TestCase
     public function setHistoryProvider(): array
     {
         return [
-            'document with no history' => [
+            'document keepUname false' => [
                 [
-                    'id' => 10,
+                    'id' => $this->documentId,
                     'historyId' => 1,
+                    'keepUname' => false,
                 ],
-                '{"id":null,"status":null,"uname":null,"locked":null,"created":null,"modified":null,"published":null,"title":null,"description":null,"body":null,"extra":null,"lang":null,"created_by":null,"modified_by":null,"publish_start":null,"publish_end":null}',
+                '{"status":"","uname":"","title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+            ],
+            'document keepUname true' => [
+                [
+                    'id' => $this->documentId,
+                    'historyId' => 1,
+                    'keepUname' => true,
+                ],
+                '{"status":"","uname":null,"title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
             ],
         ];
     }
@@ -141,7 +177,8 @@ class HistoryControllerTest extends TestCase
      *
      * @covers ::setHistory()
      * @dataProvider setHistoryProvider()
-     * @param array $data The data for test
+     * @param array $data
+     * @param string $expected
      * @return void
      */
     public function testSetHistory(array $data, string $expected): void
@@ -150,10 +187,12 @@ class HistoryControllerTest extends TestCase
         $id = (string)$data['id'];
         /** @var string $historyId */
         $historyId = (string)$data['historyId'];
+        /** @var bool $keepUname */
+        $keepUname = (bool)$data['keepUname'];
 
         // call protected method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
-        $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId]);
+        $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId, $keepUname]);
         $actual = $this->HistoryController->request->getSession()->read(sprintf('history.%s.attributes', $id));
         static::assertEquals($actual, $expected);
     }

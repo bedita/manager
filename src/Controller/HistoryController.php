@@ -30,7 +30,7 @@ class HistoryController extends AppController
      */
     public function clone($id, $historyId): ?Response
     {
-        $this->setHistory($id, $historyId);
+        $this->setHistory($id, $historyId, false);
 
         return $this->redirect(['_name' => 'modules:clone', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
     }
@@ -44,7 +44,7 @@ class HistoryController extends AppController
      */
     public function restore($id, $historyId): ?Response
     {
-        $this->setHistory($id, $historyId);
+        $this->setHistory($id, $historyId, true);
 
         return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
     }
@@ -54,12 +54,13 @@ class HistoryController extends AppController
      *
      * @param string|int $id The object type.
      * @param string|int $historyId Object ID.
+     * @param bool $keepUname Keep previous uname.
      * @return void
      */
-    protected function setHistory($id, $historyId): void
+    protected function setHistory($id, $historyId, $keepUname): void
     {
         $objectType = $this->request->getParam('object_type');
-        $options = compact('objectType', 'id', 'historyId') + [
+        $options = compact('objectType', 'id', 'historyId', 'keepUname') + [
             'ApiClient' => $this->apiClient,
             'Request' => $this->request,
             'Schema' => $this->Schema,

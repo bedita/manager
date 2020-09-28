@@ -2,6 +2,7 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Utility\Hash;
 
 /**
  * History component
@@ -53,6 +54,8 @@ class HistoryComponent extends Component
         $id = (string)$options['id'];
         /** @var string $historyId */
         $historyId = (string)$options['historyId'];
+        /** @var bool $keepUname */
+        $keepUname = (bool)$options['keepUname'];
         /** @var \BEdita\SDK\BEditaClient; $ApiClient */
         $ApiClient = $options['ApiClient'];
 
@@ -71,7 +74,17 @@ class HistoryComponent extends Component
         /** @var \App\Controller\Component\SchemaComponent $Schema */
         $Schema = $options['Schema'];
         $schema = $Schema->getSchema($objectType);
-        $attributes = array_fill_keys(array_keys($schema['properties']), null);
+        $attributes = array_fill_keys(
+            array_keys(
+                array_filter(
+                    $schema['properties'],
+                    function ($schema) {
+                        return empty($schema['readOnly']);
+                    }
+                )
+            ),
+            ''
+        );
 
         // rebuild attributes along history items
         foreach ($historyResponse['data'] as $item) {
@@ -84,6 +97,12 @@ class HistoryComponent extends Component
         $title = $Request->getQuery('title');
         if ($title) {
             $attributes['title'] = $title;
+        }
+
+        // if keep uname, recover it from object
+        if ($keepUname) {
+            $response = $ApiClient->getObject($id, $objectType);
+            $attributes['uname'] = Hash::get($response, 'data.attributes.uname');
         }
 
         // write attributes into session
