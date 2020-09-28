@@ -6,9 +6,9 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\HistoryController Test Case
+ * {@see \App\Controller\HistoryController} Test Case
  *
- * @uses \App\Controller\HistoryController
+ * @coversDefaultClass \App\Controller\HistoryController
  */
 class HistoryControllerTest extends TestCase
 {
