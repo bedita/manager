@@ -1,11 +1,12 @@
 
     {# Lookup in properties configuration if a cusom element `_element` key is set.
        Then load custom element or use Schema helper to display properties #}
-    {% set customElement = Layout.customPropsElement(currentModule.name, group) %}
+    {% set k = 'Properties.' ~ currentModule.name ~ '.view.' ~ group ~ '._element' %}
+    {% set customElement = config(k) %}
+
     {% if customElement %}
         {% element customElement {'properties' : properties} %}
     {% else %}
-
 
         {% for key, value in properties %}
 
