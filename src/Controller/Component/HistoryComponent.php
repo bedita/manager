@@ -85,7 +85,7 @@ class HistoryComponent extends Component
             $attributes['title'] = $title;
         }
 
-        // write attributes into config
+        // write attributes into session
         $key = sprintf($this->key, $id);
         $session = $this->getController()->request->getSession();
         $session->write($key, json_encode($attributes));
