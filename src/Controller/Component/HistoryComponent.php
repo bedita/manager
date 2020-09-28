@@ -16,8 +16,8 @@ class HistoryComponent extends Component
     protected $key = 'history.%s.attributes';
 
     /**
-     * Load object history from config by ID.
-     * If found, overwrite object.attributes and delete history key from config.
+     * Load object history from session by ID.
+     * If found, overwrite object.attributes and delete history key from session.
      *
      * @param array $object The object
      * @return void
@@ -39,7 +39,7 @@ class HistoryComponent extends Component
     }
 
     /**
-     * Write in cache the history data
+     * Write the history data to session.
      *
      * @param array $options The options
      * @return void
