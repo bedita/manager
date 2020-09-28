@@ -182,8 +182,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/:object_type/view/:id/history/:historyId',
-        ['controller' => 'Modules', 'action' => 'restoreFromHistory'],
-        ['pass' => ['id', 'historyId'], '_name' => 'modules:restoreFromHistory']
+        ['controller' => 'History', 'action' => 'restore'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:restore']
     );
     // Translations
     $routes->connect(
@@ -244,8 +244,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/:object_type/clone/:id/history/:historyId',
-        ['controller' => 'Modules', 'action' => 'cloneFromHistory'],
-        ['pass' => ['id', 'historyId'], '_name' => 'modules:cloneFromHistory']
+        ['controller' => 'History', 'action' => 'clone'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
     );
     $routes->connect(
         '/:object_type/delete',
