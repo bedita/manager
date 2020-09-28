@@ -26,7 +26,7 @@ class HistoryComponent extends Component
     {
         $key = sprintf($this->key, $object['id']);
         $session = $this->getController()->request->getSession();
-        $data = $session->read($key);
+        $data = (string)$session->read($key);
         if (empty($data)) {
             return;
         }
