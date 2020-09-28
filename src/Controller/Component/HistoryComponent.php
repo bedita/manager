@@ -11,7 +11,7 @@ class HistoryComponent extends Component
     /**
      * Key for history data to store.
      *
-     * @var array
+     * @var string
      */
     protected $key = 'history.%s.attributes';
 
