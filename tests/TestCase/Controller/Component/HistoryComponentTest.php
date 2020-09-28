@@ -83,7 +83,11 @@ class HistoryComponentTest extends TestCase
     public function loadProvider(): array
     {
         return [
-            'empty data' => [
+            'empty object' => [
+                [],
+                '',
+            ],
+            'object no data' => [
                 [
                     'objectType' => 'documents',
                     'id' => 10,
@@ -113,14 +117,14 @@ class HistoryComponentTest extends TestCase
      */
     public function testLoad(array $object, string $expected): void
     {
-        $key = sprintf('history.%s.attributes', $object['id']);
         $session = $this->HistoryComponent->getController()->request->getSession();
         if ($expected != '') {
+            $key = sprintf('history.%s.attributes', $object['id']);
             $session->write($key, $expected);
         }
         $this->HistoryComponent->load($object);
-        static::assertNull($session->read($key));
         if ($expected != '') {
+            static::assertNull($session->read($key));
             static::assertEquals($object['attributes'], (array)json_decode($expected, true));
         } else {
             static::assertArrayNotHasKey('attributes', $object);

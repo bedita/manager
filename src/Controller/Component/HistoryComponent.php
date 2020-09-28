@@ -24,6 +24,9 @@ class HistoryComponent extends Component
      */
     public function load(array &$object): void
     {
+        if (empty($object) || empty($object['id'])) {
+            return;
+        }
         $key = sprintf($this->key, $object['id']);
         $session = $this->getController()->request->getSession();
         $data = (string)$session->read($key);
