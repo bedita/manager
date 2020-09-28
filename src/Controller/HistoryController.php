@@ -32,7 +32,7 @@ class HistoryController extends AppController
     {
         $this->setHistory($id, $historyId);
 
-        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
+        return $this->redirect(['_name' => 'modules:clone', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
     }
 
     /**
