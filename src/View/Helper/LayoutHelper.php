@@ -109,4 +109,18 @@ class LayoutHelper extends Helper
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
     }
+
+    /**
+     * Custom properties view element
+     *
+     * @param string $type Object type name
+     * @param string $group Property group name
+     * @return string|null Custom element path if found
+     */
+    public function customPropsElement(string $type, string $group): string
+    {
+        return (string)Configure::read(
+            sprintf('Properties.%s.view.%s._element', $type, $group)
+        );
+    }
 }
