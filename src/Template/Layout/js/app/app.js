@@ -148,7 +148,7 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         clone() {
-            const title = document.getElementById('title').value;
+            const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
             if (cloneTitle) {

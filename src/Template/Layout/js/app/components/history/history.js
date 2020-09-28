@@ -19,7 +19,7 @@ export default {
                     <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item)"><: t('restore') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('restore') :></button>
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('clone') :></button>
                     </div>
                 </li>
@@ -74,83 +74,42 @@ export default {
         },
         /**
          * Open panel to show changes.
-         * @param {Object} data History item changes
+         * @param {Object} item History item changes
          */
-        showChanges(data) {
+        showChanges(item) {
             PanelEvents.requestPanel({
                 action: 'history-info',
                 from: this,
-                data,
+                data: item,
             });
             PanelEvents.listen('history-info:restore', this, this.onRestore);
         },
         /**
-         * Restore data from a point of history and place it in the form.
+         * Set the URL to restore data from a point of the history and refresh the form.
          * Ask for confirmation first.
-         * @param {Object} item History item to restore
+         * @param {string} historyId ID of the History item to restore
          */
-        onRestore(item) {
+        onRestore(historyId) {
             if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
                 return;
             }
 
-            // const restored = this.restoreHistoryItem(item);
-            // const form = this.$el.closest('#form-main');
-
-            // Object.keys(this.object.attributes).forEach((key) => {
-            //     // GESTIRE I FOTTUTI VALORI ARRAY DI restored[key]
-            //     const elements = [...form.querySelectorAll(`[name="${key}"]`)];
-            //     let elem = elements[0];
-            //     if (elements.some((el) => el.type === 'checkbox' || el.type === 'radio')) {
-            //         elem = elements.find((el) => el.value === restored[key]); // controllare se va anche coi checkbox
-            //         if (elem) {
-            //             // check the input representing the current value
-            //             elem.checked = !!(key in restored);
-            //         }
-            //     } else {
-            //         elem.value = key in restored ? restored[key] : '';
-            //     }
-
-            //     // manually trigger change event to let the app be aware of it
-            //     elem.dispatchEvent(new Event('change', { bubbles: true }));
-            // });
-
-            // // close the panel if this method was called by it
-            // PanelEvents.closePanel();
-
-            window.location.replace(`${window.location.origin}${window.location.pathname}/history/${item.id}`);
+            window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
         },
         /**
-         * Open a new tab with the url to create a copy of the object at a certain point of the history.
+         * Open a new tab with the URL to create a new object with data restored from `historyId` object.
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
             const title = document.getElementById('title').value || t('Untitled');
-            const cloneTitle = title + '-copy';
+            const msg = t`Please insert a new title on "${title}" clone`;
+            const cloneTitle = prompt(msg, title + ' -copy');
             const origin = window.location.origin;
             const path = window.location.pathname.replace('/view/', '/clone/');
             const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
             const newTab = window.open(url, '_blank');
             newTab.focus();
         },
-        /**
-         * Restore the object as it was at a certain point of its history.
-         * @param {Object} item History item representing the point to restore
-         * @return {Object}
-         */
-        restoreHistoryItem(item) {
-            const historyPart = this.rawHistory
-                .filter((i) => moment(i.meta.created).isSameOrBefore(moment(item.created)))
-                .sort((item1, item2) => moment(item1.meta.created).diff(moment(item2.meta.created)));
-
-            const restoredData = historyPart.reduce((acc, val) => {
-                const data = val.meta.changed;
-                Object.keys(data).forEach((key) => acc[key] = data[key]);
-                return acc;
-            }, {});
-
-            return restoredData;
-        }
     },
 
     computed: {

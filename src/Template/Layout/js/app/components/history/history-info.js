@@ -25,12 +25,13 @@ export default {
 
     props: {
         meta: Object,
+        id: String,
     },
 
     data() {
         return {
-            created: this.meta.created,
             changed: this.meta.changed,
+            created: this.meta.created,
             user: this.meta.user,
             user_action: this.meta.user_action,
         }
@@ -73,7 +74,7 @@ export default {
 
     methods: {
         restore() {
-            PanelEvents.sendBack('history-info:restore', this.meta);
+            PanelEvents.sendBack('history-info:restore', this.id);
         }
     }
 }
