@@ -469,6 +469,9 @@ msgstr "La miniatura non è pronta"
 msgid "Title"
 msgstr "Titolo"
 
+msgid "Long Lat Coordinates"
+msgstr "Coordinate Long Lat"
+
 msgid "To"
 msgstr "A"
 

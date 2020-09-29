@@ -464,6 +464,9 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Long Lat Coordinates"
+msgstr ""
+
 msgid "To"
 msgstr ""
 
