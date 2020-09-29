@@ -3,7 +3,18 @@
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
 
-    {% element 'Modules/view_header' %}
+    <header>
+        {% if object.id %}
+            <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+            {% for obj in included %}
+                {% if obj.type == 'streams' %}
+                    <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
+        {% endif %}
+    </header>
 
     <div class="module-form">
 
