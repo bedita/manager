@@ -475,6 +475,9 @@ msgstr "Coordinate Long Lat"
 msgid "GET"
 msgstr "GET"
 
+msgid "Remove"
+msgstr "Rimuovi"
+
 msgid "To"
 msgstr "A"
 

@@ -470,6 +470,9 @@ msgstr ""
 msgid "GET"
 msgstr ""
 
+msgid "Remove"
+msgstr ""
+
 msgid "To"
 msgstr ""
 

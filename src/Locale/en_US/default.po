@@ -470,6 +470,9 @@ msgstr ""
 msgid "Long Lat Coordinates"
 msgstr ""
 
+msgid "Remove"
+msgstr ""
+
 msgid "GET"
 msgstr ""
 
