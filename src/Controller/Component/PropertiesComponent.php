@@ -75,7 +75,6 @@ class PropertiesComponent extends Component
     protected $excluded = [
         'categories',
         'date_ranges',
-        'has_location',
         'tags',
         'lang',
     ];
