@@ -31,7 +31,12 @@ export default {
                     <div class="is-flex mt-1">
                         <div class="is-flex-column is-expanded">
                             <label><: t('Long Lat Coordinates') :>
-                                <input type="text"/>
+                                <div class="is-flex">
+                                    <input class="coordinates" type="text"/>
+                                    <button class="get-coordinates icon-globe">
+                                        <: t('GET') :>
+                                    </button>
+                                </div>
                             </label>
                         </div>
                         <div class="is-flex-column">

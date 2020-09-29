@@ -472,6 +472,9 @@ msgstr "Titolo"
 msgid "Long Lat Coordinates"
 msgstr "Coordinate Long Lat"
 
+msgid "GET"
+msgstr "GET"
+
 msgid "To"
 msgstr "A"
 

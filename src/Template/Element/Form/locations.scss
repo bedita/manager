@@ -9,5 +9,17 @@
     }
 
     .location-form {
+        .coordinates {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .get-coordinates {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            background-color: $defaultBackground;
+            border-color: $white;
+            color: $white;
+        }
     }
 }
