@@ -36,7 +36,7 @@
         </nav>
         <nav role="utility">
 
-            <button class="icon icon-trash icon-only-icon" title="{{ currentModule.name|humanize ~ __(' in Trashcan') }}" onclick="window.location='{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}';"><span class="is-sr-only">{{ __('Trash') }}</span></button>
+            <button class="icon icon-trash icon-only-icon has-text-module-{{ currentModule.name }}" title="{{ currentModule.name|humanize ~ __(' in Trashcan') }}" onclick="window.location='{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}';"><span class="is-sr-only">{{ __('Trash') }}</span></button>
 
             <button class="icon icon-search icon-only-icon" title="{{ __('Search') }}" v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>
 
