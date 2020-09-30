@@ -97,8 +97,28 @@ export default {
     },
 
     async mounted() {
-        this.createAutoCompleteConfig('title', (res) => res.attributes.title);
-        this.createAutoCompleteConfig('address', (res) => res); // TODO Change
+        this.createAutoCompleteConfig('title', (res) => res.attributes.title, (elem, input) => elem.attributes.title.indexOf(input) !== -1);
+        this.createAutoCompleteConfig('address',
+        (res) => {
+            let string = '';
+            if (res.attributes.address) {
+                string += `${res.attributes.address}, `;
+            }
+
+            if (res.attributes.postal_code) {
+                string += `${res.attributes.postal_code}, `;
+            }
+
+            if (res.attributes.region) {
+                string += `${res.attributes.region}, `;
+            }
+
+            return string.substring(0, string.length - 2);
+        },
+        (elem, input) => {
+            const string = `${elem.attributes.address},${elem.attributes.postal_code},${elem.attributes.region}`;
+            return string.indexOf(input) !== -1;
+        });
     },
 
 
@@ -108,7 +128,7 @@ export default {
         },
         onAddressInput() {
         },
-        createAutoCompleteConfig(field, renderFunc) {
+        createAutoCompleteConfig(field, renderFunc, filterFunc) {
             const options = {
                 baseClass: `autocomplete-${field}`,
                 search: (input) => {
@@ -116,13 +136,22 @@ export default {
 
                     return new Promise(resolve => {
                         if (input.length < 3) {
+                            // do not search with less than 3 chars
                             return resolve([]);
                         }
 
                         fetch(requestUrl, options)
                             .then(response => response.json())
                             .then(data => {
-                                resolve(data.data);
+                                let results = data.data;
+
+                                if (!results) {
+                                    return resolve([]);
+                                }
+
+                                // filter locations
+                                results = results.filter((elem) => filterFunc(elem, input));
+                                resolve(results);
                             });
                     })
                 },
@@ -139,12 +168,6 @@ export default {
                             </div>
                         </li>
                         `
-                },
-
-                onSubmit: (result) => {
-                    // do something,
-                    console.log('cossa')
-                    return true;
                 },
             }
 
