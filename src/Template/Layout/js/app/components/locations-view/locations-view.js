@@ -1,5 +1,3 @@
-import { t } from 'ttag';
-
 /**
  * Templates that uses this component (directly or indirectly):
  *  ...
@@ -16,8 +14,12 @@ export default {
     },
 
     template: `<div class="locations">
-        <div v-for="(location, key) in locations.data">
+        <div v-for="(location, key) in locations">
             <location-view :index=key :location=location />
+        </div>
+        <div class="buttons is-flex mt-1">
+            <button v-if="!pristine" @click.prevent @click="onAddNew"> <: t("add new") :> </button>
+            <button v-if="!pristine" @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
         </div>
     </div>`,
 
@@ -28,6 +30,7 @@ export default {
     data() {
         return {
             locations: [],
+            pristine: true,
         }
     },
 
@@ -39,8 +42,18 @@ export default {
             }
         };
         const requestUrl = `${window.location.href}/relatedJson/has_location`;
-        this.locations = await (await fetch(requestUrl, options)).json();
+        this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
+        this.$on('location-changed', () => {
+            this.pristine = false;
+        });
     },
-    methods: {},
+    methods: {
+        onAddNew() {
+            this.locations.push({});
+        },
+        onRemove() {
+            this.locations.pop({});
+        },
+    },
 }

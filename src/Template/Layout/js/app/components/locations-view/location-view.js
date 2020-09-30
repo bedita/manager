@@ -12,7 +12,7 @@ import { t } from 'ttag';
  */
 export default {
     template: `
-        <div class="location is-flex">
+        <div class="location mb-2 is-flex">
             <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
                 <: index + 1 :>
             </div>
@@ -56,10 +56,6 @@ export default {
                         </label>
                     </div>
                 </div>
-                <div class="buttons is-flex mt-1">
-                    <button :disabled="!pristine"> <: t("add new") :> </button>
-                    <button class="icon-unlink remove" :disabled="!pristine"> <: t("remove") :> </button>
-                </div>
             </div>
         </div>`,
 
@@ -70,7 +66,6 @@ export default {
 
     data() {
         return {
-            pristine: true,
         }
     },
 
@@ -79,7 +74,7 @@ export default {
 
     methods: {
         onChange() {
-
-        }
+            this.$parent.$emit('location-changed');
+        },
     }
 }
