@@ -1,4 +1,24 @@
 import { t } from 'ttag';
+import Autocomplete from '@trevoreyre/autocomplete-vue';
+import Vue from 'vue';
+
+const AutocompleteConstructor = Vue.extend(Autocomplete);
+function createAutocomplete(el, options) {
+	let component = new AutocompleteConstructor({
+		propsData: options
+	});
+	component.$mount(el);
+	return component;
+}
+
+const options = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
+
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -11,6 +31,9 @@ import { t } from 'ttag';
  *
  */
 export default {
+    components: {
+        Autocomplete,
+    },
     template: `
         <div class="location mb-2 is-flex">
             <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
@@ -20,12 +43,15 @@ export default {
                 <div class="is-flex">
                     <div class="is-flex-column is-expanded">
                         <label><: t('Title') :>
-                            <input @change="onChange" type="text"/>
+                            <div class="autocomplete">
+                                <input @change="onChange" type="text" class="autocomplete-input">
+                                <ul class="autocomplete-result-list"></ul>
+                            </div>
                         </label>
                     </div>
                     <div class="is-flex-column is-expanded">
                         <label><: t('Address') :>
-                            <input @change="onChange" type="text"/>
+                            <input @input="onAddressInput" @change="onChange" type="text"/>
                         </label>
                     </div>
                 </div>
@@ -69,12 +95,55 @@ export default {
         }
     },
 
-    async created() {
+    async mounted() {
+        createAutocomplete('.autocomplete', {
+            // Search function can return a promise
+            // which resolves with an array of
+            // results. In this case we're using
+            // the Wikipedia search API.
+            search: (input) => {
+                const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
+
+                return new Promise(resolve => {
+                    if (input.length < 3) {
+                        return resolve([]);
+                    }
+
+                    fetch(requestUrl, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            resolve(data.data);
+                        });
+                })
+            },
+
+            getResultValue: (result) => {
+                return result.attributes.title
+            },
+
+            renderResult: (result) => {
+                return `
+                    <li>
+                        <div class="location-title">
+                            ${result.attributes.title}
+                        </div>
+                    </li>
+                    `
+            },
+
+            onSubmit: (result) => {
+                // do something,
+                console.log('cossa')
+                return true;
+            },
+        });
     },
 
     methods: {
         onChange() {
             this.$parent.$emit('location-changed');
+        },
+        onAddressInput() {
         },
     }
 }

@@ -1,3 +1,12 @@
+import { t } from 'ttag';
+
+const options = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  ...
@@ -35,12 +44,6 @@ export default {
     },
 
     async created() {
-        const options = {
-            credentials: 'same-origin',
-            headers: {
-                'accept': 'application/json',
-            }
-        };
         const requestUrl = `${window.location.href}/relatedJson/has_location`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
