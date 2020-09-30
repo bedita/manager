@@ -43,15 +43,10 @@
         }
 
 
-        nav[role="utility"] {
+        nav[role="group"] {
             position: relative;
             padding-top: $gutter;
 
-            button.icon-only-icon:first-child {
-                font-size: 1.75rem;
-                margin-right: $gutter * .5;
-
-            }
 
             .popup {
                 display: flex;
