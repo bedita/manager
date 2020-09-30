@@ -9,10 +9,10 @@
         nav[role="menu"] {
             display: grid;
             row-gap: $gutter * .5;
-            grid-template-columns: repeat(auto-fill, $gutter * 2.5);
+            grid-template-columns: repeat(auto-fill, $gutter * 1.5);
             .menu-item-label { display: none; }
             @media screen and (min-width: 1024px) {
-                grid-template-columns: repeat(auto-fill, $gutter * 4);
+                grid-template-columns: repeat(auto-fill, $gutter * 3);
                 .menu-item-label { display: block; }
                 .menu-item-short-label { display: none; }
             }
@@ -43,7 +43,7 @@
         }
 
 
-        nav[role="search"] {
+        nav[role="utility"] {
             position: relative;
             padding-top: $gutter;
 

@@ -13,7 +13,7 @@
     > *:not(:last-child) { margin-bottom: $gutter;}
 
     button, .button {
-        min-width: $dashboard-item-width / 2;
+        width: $dashboard-item-width / 2;
     }
 
     &-bedita-logo, &-project-title {
