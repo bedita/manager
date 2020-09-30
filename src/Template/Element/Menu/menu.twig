@@ -36,12 +36,12 @@
         </nav>
         <nav role="utility">
 
-            <button class="icon icon-trash icon-only-icon" title="{{ __('Trash') }}" onclick="window.location='{{ Url.build('trash') }}';"><span class="is-sr-only">{{ __('Trash') }}</span></button>
+            <button class="icon icon-trash icon-only-icon" title="{{ __('Trash') }}" onclick="window.location='{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}';"><span class="is-sr-only">{{ __('Trash') }}</span></button>
 
             <button class="icon icon-search icon-only-icon" title="{{ __('Search') }}" v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>
-            
+
             <button class="icon icon-cube icon-only-icon" title="{{ __('Direct access by id or unique name') }}" v-on:click.prevent="togglePopup('id')"><span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span></button>
-            
+
             <div class="popup" v-show="this.popUpAction">
                 <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys" :placeholder="popUpAction">
                 <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
