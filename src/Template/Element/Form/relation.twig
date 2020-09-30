@@ -9,6 +9,16 @@
 
     <div class="relation-view">
 
+        {# Relation custom element #}
+        {% set k = 'Properties.' ~ currentModule.name ~ '.relations._element.' ~ relationName %}
+        {% set customElement = config(k) %}
+        {% if customElement %}
+            {% element customElement {
+                'relationName': relationName,
+                'relationSchema': relationsSchema,
+            } %}
+        {% else %}
+
         <div class="related-list-container">
 
             {# FilterBoxView #}
@@ -59,21 +69,6 @@
                 </div>
             </div>
 
-            {# hidden field - relations serialized json #}
-            {{ Form.control(relationName ~ 'removeRelated', {
-                'type': 'hidden',
-                'name': 'relations[' ~ relationName ~ '][removeRelated]',
-                'v-model': 'removedRelationsData'
-            })|raw }}
-            {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
-
-            {# Relations serialized json form element #}
-            {{ Form.control(relationName ~ 'addRelated', {
-                'type': 'hidden',
-                'name': 'relations[' ~ relationName ~ '][addRelated]',
-                'v-model': 'addedRelationsData'
-            })|raw }}
-            {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
         </div>
 
         <div class="mt-5">
@@ -103,6 +98,25 @@
                     })">{{ __('add objects') }}</button>
             </div>
         </div>
+
+        {# End relation custom element #}
+        {% endif %}
+
+        {# hidden field - relations serialized json #}
+        {{ Form.control(relationName ~ 'removeRelated', {
+            'type': 'hidden',
+            'name': 'relations[' ~ relationName ~ '][removeRelated]',
+            'v-model': 'removedRelationsData'
+        })|raw }}
+        {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+
+        {# Relations serialized json form element #}
+        {{ Form.control(relationName ~ 'addRelated', {
+            'type': 'hidden',
+            'name': 'relations[' ~ relationName ~ '][addRelated]',
+            'v-model': 'addedRelationsData'
+        })|raw }}
+        {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
 
     </div>
 </relation-view>
