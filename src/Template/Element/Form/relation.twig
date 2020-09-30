@@ -9,7 +9,9 @@
 
     <div class="relation-view">
 
-        {# Relation custom element #}
+        {# Lookup in properties configuration if a custom element for this relation is set
+           in `Properties.{moduleName}.relations._element.{relationName}`.
+           Then load custom element or use default relation view #}
         {% set k = 'Properties.' ~ currentModule.name ~ '.relations._element.' ~ relationName %}
         {% set customElement = config(k) %}
         {% if customElement %}
@@ -99,7 +101,7 @@
             </div>
         </div>
 
-        {# End relation custom element #}
+        {# End relation custom or default view #}
         {% endif %}
 
         {# hidden field - relations serialized json #}
