@@ -40,7 +40,7 @@
     }
 }
 
-.autocomplete {
+.autocomplete-title, .autocomplete-address {
     margin: 0 auto;
     max-height: 10em;
 
@@ -58,7 +58,7 @@
     }
 }
 
-.autocomplete-result {
+.autocomplete-title-result, .autocomplete-address-result {
   border-top: 1px solid #eee;
   padding: 16px;
   background: transparent;

@@ -18,8 +18,6 @@ const options = {
     }
 };
 
-
-
 /**
  * Templates that uses this component (directly or indirectly):
  *  ...
@@ -43,7 +41,7 @@ export default {
                 <div class="is-flex">
                     <div class="is-flex-column is-expanded">
                         <label><: t('Title') :>
-                            <div class="autocomplete">
+                            <div class="autocomplete-title">
                                 <input @change="onChange" type="text" class="autocomplete-input">
                                 <ul class="autocomplete-result-list"></ul>
                             </div>
@@ -51,7 +49,10 @@ export default {
                     </div>
                     <div class="is-flex-column is-expanded">
                         <label><: t('Address') :>
-                            <input @input="onAddressInput" @change="onChange" type="text"/>
+                            <div class="autocomplete-address">
+                                <input @change="onChange" type="text" class="autocomplete-input">
+                                <ul class="autocomplete-result-list"></ul>
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -96,54 +97,58 @@ export default {
     },
 
     async mounted() {
-        createAutocomplete('.autocomplete', {
-            // Search function can return a promise
-            // which resolves with an array of
-            // results. In this case we're using
-            // the Wikipedia search API.
-            search: (input) => {
-                const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
-
-                return new Promise(resolve => {
-                    if (input.length < 3) {
-                        return resolve([]);
-                    }
-
-                    fetch(requestUrl, options)
-                        .then(response => response.json())
-                        .then(data => {
-                            resolve(data.data);
-                        });
-                })
-            },
-
-            getResultValue: (result) => {
-                return result.attributes.title
-            },
-
-            renderResult: (result) => {
-                return `
-                    <li>
-                        <div class="location-title">
-                            ${result.attributes.title}
-                        </div>
-                    </li>
-                    `
-            },
-
-            onSubmit: (result) => {
-                // do something,
-                console.log('cossa')
-                return true;
-            },
-        });
+        this.createAutoCompleteConfig('title', (res) => res.attributes.title);
+        this.createAutoCompleteConfig('address', (res) => res); // TODO Change
     },
+
 
     methods: {
         onChange() {
             this.$parent.$emit('location-changed');
         },
         onAddressInput() {
+        },
+        createAutoCompleteConfig(field, renderFunc) {
+            const options = {
+                baseClass: `autocomplete-${field}`,
+                search: (input) => {
+                    const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
+
+                    return new Promise(resolve => {
+                        if (input.length < 3) {
+                            return resolve([]);
+                        }
+
+                        fetch(requestUrl, options)
+                            .then(response => response.json())
+                            .then(data => {
+                                resolve(data.data);
+                            });
+                    })
+                },
+
+                getResultValue: (result) => {
+                    return renderFunc(result);
+                },
+
+                renderResult: (result) => {
+                    return `
+                        <li>
+                            <div class="location-title">
+                                ${result.attributes.title}
+                            </div>
+                        </li>
+                        `
+                },
+
+                onSubmit: (result) => {
+                    // do something,
+                    console.log('cossa')
+                    return true;
+                },
+            }
+
+            return createAutocomplete(`.autocomplete-${field}`, options);
         },
     }
 }
