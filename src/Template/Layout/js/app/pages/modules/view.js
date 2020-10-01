@@ -29,27 +29,12 @@ export default {
 
     mounted() {
         window.addEventListener('keydown', this.toggleTabs);
-
-        // manually trigger changes for cloned data
-        if (window.location.pathname.includes('/clone')) {
-            Object.keys(this.object.attributes).forEach((key) => {
-                if (this.object.attributes[key]) {
-                    this.$el.dispatchEvent(new CustomEvent('change', {
-                        bubbles: true,
-                        detail: {
-                            id: key,
-                            isChanged: true,
-                        }
-                    }));
-                }
-            });
-        }
     },
 
     methods: {
         toggleTabs(e) {
             let key = e.which || e.keyCode || 0;
-            if(key === 27) {
+            if (key === 27) {
                 return this.tabsOpen = !this.tabsOpen;
             }
         },
