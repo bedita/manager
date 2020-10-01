@@ -12,7 +12,7 @@
             grid-template-columns: repeat(auto-fill, $gutter * 2.5);
             .menu-item-label { display: none; }
             @media screen and (min-width: 1024px) {
-                grid-template-columns: repeat(auto-fill, $gutter * 4);
+                grid-template-columns: repeat(auto-fill, $gutter * 3);
                 .menu-item-label { display: block; }
                 .menu-item-short-label { display: none; }
             }
@@ -29,7 +29,8 @@
 
                 &-label, &-short-label {
                     margin-top: $gutter * .25;
-                    font-size: $font-size-sssm;
+                    font-size: $font-size-smallest;
+                    letter-spacing: .5px;
                     text-transform: lowercase;
                 }
 
@@ -43,15 +44,8 @@
         }
 
 
-        nav[role="search"] {
+        nav[role="group"] {
             position: relative;
-            padding-top: $gutter;
-
-            button.icon-only-icon:first-child {
-                font-size: 1.75rem;
-                margin-right: $gutter * .5;
-
-            }
 
             .popup {
                 display: flex;
