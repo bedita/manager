@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-<modules-view inline-template ref="moduleView">
+<modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
 <div class="modules-view">
 
     <header>
@@ -84,7 +84,9 @@
             {# main relations view #}
             {% element 'Form/relations' {'relations': objectRelations.main} %}
 
-            {% element 'Form/history' %}
+            {% if object.id %}
+                {% element 'Form/history' %}
+            {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}

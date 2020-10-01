@@ -12,6 +12,10 @@ export default {
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
     },
 
+    props: {
+        object: Object,
+    },
+
     /**
      * component properties
      *
@@ -30,7 +34,7 @@ export default {
     methods: {
         toggleTabs(e) {
             let key = e.which || e.keyCode || 0;
-            if(key === 27) {
+            if (key === 27) {
                 return this.tabsOpen = !this.tabsOpen;
             }
         },

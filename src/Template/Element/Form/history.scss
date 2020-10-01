@@ -26,7 +26,7 @@
             li.history-item {
                 display: inline-grid;
                 grid-gap: 1rem;
-                grid-template-columns: auto 0.5fr 1.5fr auto;
+                grid-template-columns: auto auto 1fr auto;
                 border-left: 1px solid;
 
                 &::before {
