@@ -2,6 +2,7 @@ import { t } from 'ttag';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import Vue from 'vue';
 
+// for compatibility with the third-party Vue component
 const AutocompleteConstructor = Vue.extend(Autocomplete);
 function createAutocomplete(el, options) {
 	let component = new AutocompleteConstructor({
@@ -42,7 +43,7 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Title') :>
                             <div class="autocomplete-title">
-                                <input @change="onChange" type="text" class="autocomplete-input">
+                                <input type="text" class="autocomplete-input">
                                 <ul class="autocomplete-result-list"></ul>
                             </div>
                         </label>
@@ -50,7 +51,7 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Address') :>
                             <div class="autocomplete-address">
-                                <input @change="onChange" type="text" class="autocomplete-input">
+                                <input type="text" class="autocomplete-input"">
                                 <ul class="autocomplete-result-list"></ul>
                             </div>
                         </label>
@@ -60,7 +61,7 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Long Lat Coordinates') :>
                             <div class="is-flex">
-                                <input class="coordinates" @change="onChange" type="text"/>
+                                <input class="coordinates" type="text"/>
                                 <button disabled class="get-coordinates icon-globe">
                                     <: t('GET') :>
                                 </button>
@@ -69,17 +70,17 @@ export default {
                     </div>
                     <div class="is-flex-column">
                         <label> Zoom
-                            <input @change="onChange" type="number" min="2" max="20"/>
+                            <input type="number" min="2" max="20"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Pitch°
-                            <input @change="onChange" type="number" min="0" max="60"/>
+                            <input type="number" min="0" max="60"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Bearing°
-                            <input @change="onChange" type="number" min="-180" max="180"/>
+                            <input type="number" min="-180" max="180"/>
                         </label>
                     </div>
                 </div>
@@ -97,40 +98,56 @@ export default {
     },
 
     async mounted() {
-        this.createAutoCompleteConfig('title', (res) => res.attributes.title, (elem, input) => elem.attributes.title.indexOf(input) !== -1);
-        this.createAutoCompleteConfig('address',
-        (res) => {
+        // create two autocomplete fields with configurations
+        this.createAutoCompleteConfig(
+            'title',
+            (res) => res.attributes.title,
+            (elem, input) => {
+                return elem.attributes.title && elem.attributes.title.toLowerCase().indexOf(input) !== -1;
+            },
+            this.location && this.location.attributes.title || '',
+        );
+
+        const getAddress = (model) => {
+            if (!model.attributes) {
+                return '';
+            }
+            ù
             let string = '';
-            if (res.attributes.address) {
-                string += `${res.attributes.address}, `;
+            if (model.attributes.address) {
+                string += `${model.attributes.address}, `;
             }
 
-            if (res.attributes.postal_code) {
-                string += `${res.attributes.postal_code}, `;
+            if (model.attributes.postal_code) {
+                string += `${model.attributes.postal_code}, `;
             }
 
-            if (res.attributes.region) {
-                string += `${res.attributes.region}, `;
+            if (model.attributes.region) {
+                string += `${model.attributes.region}, `;
             }
 
             return string.substring(0, string.length - 2);
-        },
-        (elem, input) => {
-            const string = `${elem.attributes.address},${elem.attributes.postal_code},${elem.attributes.region}`;
-            return string.indexOf(input) !== -1;
-        });
+        };
+
+        this.createAutoCompleteConfig(
+            'address',
+            (res) => {
+                return getAddress(res);
+            },
+            (elem, input) => {
+                const string = `${elem.attributes.address},${elem.attributes.postal_code},${elem.attributes.region}`;
+                return string && string.toLowerCase().indexOf(input) !== -1;
+            },
+            getAddress(this.location)
+        );
     },
 
 
     methods: {
-        onChange() {
-            this.$parent.$emit('location-changed');
-        },
-        onAddressInput() {
-        },
-        createAutoCompleteConfig(field, renderFunc, filterFunc) {
+        createAutoCompleteConfig(field, renderFunc, filterFunc, defaultValue) {
             const options = {
                 baseClass: `autocomplete-${field}`,
+                defaultValue,
                 search: (input) => {
                     const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
 
@@ -149,7 +166,7 @@ export default {
                                     return resolve([]);
                                 }
 
-                                // filter locations
+                                // filter locations using the input 'filterFunc' function
                                 results = results.filter((elem) => filterFunc(elem, input));
                                 resolve(results);
                             });
@@ -169,6 +186,8 @@ export default {
                         </li>
                         `
                 },
+
+                // TODO sistemare il submit
             }
 
             return createAutocomplete(`.autocomplete-${field}`, options);

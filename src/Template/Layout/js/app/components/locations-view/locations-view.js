@@ -27,8 +27,8 @@ export default {
             <location-view :index=key :location=location />
         </div>
         <div class="buttons is-flex mt-1">
-            <button v-if="!pristine" @click.prevent @click="onAddNew"> <: t("add new") :> </button>
-            <button v-if="!pristine" @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
+            <button @click.prevent @click="onAddNew"> <: t("add new") :> </button>
+            <button @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
         </div>
     </div>`,
 
@@ -39,17 +39,12 @@ export default {
     data() {
         return {
             locations: [],
-            pristine: true,
         }
     },
 
     async created() {
         const requestUrl = `${window.location.href}/relatedJson/has_location`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
-
-        this.$on('location-changed', () => {
-            this.pristine = false;
-        });
     },
     methods: {
         onAddNew() {
