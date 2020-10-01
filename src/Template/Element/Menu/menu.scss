@@ -9,7 +9,7 @@
         nav[role="menu"] {
             display: grid;
             row-gap: $gutter * .5;
-            grid-template-columns: repeat(auto-fill, $gutter * 1.5);
+            grid-template-columns: repeat(auto-fill, $gutter * 2.5);
             .menu-item-label { display: none; }
             @media screen and (min-width: 1024px) {
                 grid-template-columns: repeat(auto-fill, $gutter * 3);
@@ -29,7 +29,8 @@
 
                 &-label, &-short-label {
                     margin-top: $gutter * .25;
-                    font-size: $font-size-sssm;
+                    font-size: $font-size-smallest;
+                    letter-spacing: .5px;
                     text-transform: lowercase;
                 }
 
@@ -45,8 +46,6 @@
 
         nav[role="group"] {
             position: relative;
-            padding-top: $gutter;
-
 
             .popup {
                 display: flex;
