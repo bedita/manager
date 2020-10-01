@@ -651,6 +651,18 @@ return [
     //     ],
     // ],
 
+
+    /**
+     * Location providers and access tokens
+     */
+    // 'Location' => [
+    //     'google' => [
+    //         'url' => '###',
+    //         'key' => '###',
+    //     ],
+    // ],
+
+
     /**
      * Project data that can override data from `/home` API call
      * Currently only `name` is used

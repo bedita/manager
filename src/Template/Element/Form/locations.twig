@@ -9,7 +9,10 @@
             <h2>{{ __('Locations') }}</h2>
         </header>
         <div v-show="isOpen" class="tab-container">
-            <locations-view :object="{{ object|json_encode }}">
+            <locations-view
+                apikey="{{ config('Location.google.key') }}"
+                apiurl="{{ config('Location.google.url') }}"
+                :object="{{ object|json_encode }}">
             </locations-view>
         </div>
     </section>

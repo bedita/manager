@@ -24,7 +24,7 @@ export default {
 
     template: `<div class="locations">
         <div v-for="(location, key) in locations">
-            <location-view :index=key :location=location />
+            <location-view :index=key :locationdata=location :apikey="apikey" :apiurl="apiurl"/>
         </div>
         <div class="buttons is-flex mt-1">
             <button @click.prevent @click="onAddNew"> <: t("add new") :> </button>
@@ -34,6 +34,8 @@ export default {
 
     props: {
         object: Object,
+        apikey: String,
+        apiurl: String,
     },
 
     data() {
