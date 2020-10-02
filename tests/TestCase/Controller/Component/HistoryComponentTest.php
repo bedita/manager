@@ -388,6 +388,14 @@ class HistoryComponentTest extends TestCase
                 ],
                 '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="dummy"/></div>',
             ],
+            'categories' => [
+                [
+                    'categories',
+                    '',
+                    [],
+                ],
+                '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" value=""/></div>',
+            ],
         ];
     }
 
