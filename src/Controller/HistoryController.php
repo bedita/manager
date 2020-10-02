@@ -15,6 +15,7 @@ class HistoryController extends AppController
 {
     /**
      * {@inheritDoc}
+     * {@codeCoverageIgnore}
      */
     public function initialize(): void
     {

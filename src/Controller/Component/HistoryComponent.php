@@ -36,6 +36,7 @@ class HistoryComponent extends Component
 
     /**
      * {@inheritDoc}
+     * {@codeCoverageIgnore}
      */
     public function initialize(array $config)
     {
