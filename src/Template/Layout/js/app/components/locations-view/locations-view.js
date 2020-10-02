@@ -50,7 +50,10 @@ export default {
     },
     methods: {
         onAddNew() {
-            this.locations.push({});
+            this.locations.push({
+                // TODO altro?
+                attributes: {},
+            });
         },
         onRemove() {
             this.locations.pop({});

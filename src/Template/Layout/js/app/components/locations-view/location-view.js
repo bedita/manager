@@ -49,6 +49,7 @@ export default {
                                 base-class="autocomplete-address"
                                 :get-result-value="getAddress"
                                 @submit="onSubmitAddress"
+                                @change="onChangeAddress"
                             >
                             </autocomplete>
                         </label>
@@ -105,11 +106,16 @@ export default {
     methods: {
         onSubmitTitle(result) {
             this.$refs.address.value = this.address(result);
-            this.location = result;
+            this.location = result; // set address on model from retrieved location
         },
         onSubmitAddress(result) {
             this.$refs.title.value = result.attributes.title;
-            this.location = result;
+            this.location = result; // set address on model from retrieved location
+            this.fullAddress = !!result;
+        },
+        onChangeAddress(event) {
+            const result = event.target.value;
+            this.location.attributes.address = result;
             this.fullAddress = !!result;
         },
         searchTitle(input) {
@@ -159,7 +165,7 @@ export default {
                         }
 
                         const filterFunc = (elem, input) => {
-                            const string = `${elem.attributes.address},${elem.attributes.postal_code},${elem.attributes.region}`;
+                            const string = this.address(elem);
                             return string && string.toLowerCase().indexOf(input.toLowerCase()) !== -1;
                         };
 
@@ -182,30 +188,22 @@ export default {
             return this.address(this.location);
         },
         address(model) {
+            // TODO change according to the field that will be used for 'location' as full address
             if (!model || !model.attributes) {
                 return '';
             }
 
             let string = '';
             if (model.attributes.address) {
-                string += `${model.attributes.address}, `;
+                string = `${model.attributes.address}`;
             }
 
-            if (model.attributes.postal_code) {
-                string += `${model.attributes.postal_code}, `;
-            }
-
-            if (model.attributes.region) {
-                string += `${model.attributes.region}, `;
-            }
-
-            string = string.replace(/<\/?[^>]+(>|$)/g, '');
-            return string.substring(0, string.length - 2);
+            return string.replace(/<\/?[^>]+(>|$)/g, '');
         },
         async geocode() {
             const retrieveGeocode = () => {
                 const geocoder = new window.google.maps.Geocoder();
-                geocoder.geocode({address: this.address(this.location)}, (results, status) => {
+                geocoder.geocode({ address: this.address(this.location) }, (results, status) => {
                     if (status === "OK" && results.length) {
                         const result = results[0];
                         this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
