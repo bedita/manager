@@ -37,6 +37,7 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
@@ -147,18 +148,19 @@ const _vueInstance = new Vue({
          * Clone object
          * Prompt for title change
          *
-         * @param {Event} e The event
          * @return {void}
          */
-        clone(e) {
-            const title = document.getElementById('title').value;
+        clone() {
+            const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
             if (cloneTitle) {
                 const query = `?title=${cloneTitle}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
-                window.location.replace(`${origin}${path}${query}`);
+                const url = `${origin}${path}${query}`;
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
             }
         },
 
@@ -369,7 +371,7 @@ const _vueInstance = new Vue({
          *
          * @returns {void}
          */
-        alertBeforePageUnload(view) {
+        alertBeforePageUnload() {
             /*
                 Listen for focusin: "normal" HTML element need to store original value in order to make a diff with new values
             */
@@ -409,23 +411,21 @@ const _vueInstance = new Vue({
                         }
                     }
                 }
-
             }, true);
 
             /*
                 Listen for change: Handles change events and checks if form/page has been modified
             */
             this.$el.addEventListener('change', (ev) => {
-                const element = ev.target;
-                const form = element && element.form;
-
                 const sender = ev.detail;
-                if (typeof sender !== 'undefined' && sender.id) {
+                if (sender && sender.id) {
                     this.dataChanged.set(sender.id, {
                         changed: sender.isChanged
                     });
                 } else {
                     // support for normal change Events trying to figure out a unique id
+                    const element = ev.target;
+                    const form = element && element.form;
                     const checkChanges = form && form.getAttribute('check-changes') === 'true';
                     if (checkChanges && element.name) {
                         const name = element.name;
@@ -436,22 +436,23 @@ const _vueInstance = new Vue({
                         let id = `${formId}#${elementId}`;
 
                         if (element.type === 'radio' || element.type === 'checkbox') {
-                            if (element.type === 'checkbox') {
-                                const checked = document.querySelectorAll(`input[name='${name}']:checked`);
-                                if (checked) {
-                                    value = JSON.stringify(checked);
-                                }
-                            }
                             id = `${formId}#${name}`;
                         }
 
-                        if (!id || id === '') {
-                            // if I can't make an id out of don't bother
+                        if (!id) {
+                            // if I can't make an id out of this, don't bother
                             return true;
                         }
 
+                        if (element.type === 'checkbox') {
+                            const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                            if (checked) {
+                                value = JSON.stringify(checked);
+                            }
+                        }
+
                         this.dataChanged.set(id, {
-                            changed: value !== originalValue
+                            changed: value !== originalValue,
                         });
                     }
                 }
@@ -478,18 +479,13 @@ const _vueInstance = new Vue({
             });
 
             /*
-
+                Ask confirmation before leaving the page if there are unsaved changes
             */
-            window.onbeforeunload = function (ev) {
-                let isDataChanged = false;
+            window.onbeforeunload = () => {
                 for (const [key, value] of _vueInstance.dataChanged) {
                     if (value.changed) {
-                        isDataChanged = true;
-                        break;
+                        return t`There are unsaved changes, are you sure you want to leave page?`;
                     }
-                }
-                if (isDataChanged) {
-                    return 'There are unsaved changes, are you sure you want to leave page?';
                 }
             }
         },

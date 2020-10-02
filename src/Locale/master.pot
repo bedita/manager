@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-09-03 14:30:12 \n"
+"POT-Creation-Date: 2020-09-24 08:00:30 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -287,13 +287,13 @@ msgstr ""
 msgid "Move to trash"
 msgstr ""
 
+msgid "NEW"
+msgstr ""
+
 msgid "New entry in"
 msgstr ""
 
 msgid "New object in"
-msgstr ""
-
-msgid "New relations (save to keep)"
 msgstr ""
 
 msgid "News"
@@ -630,17 +630,4 @@ msgid "view parent"
 msgstr ""
 
 msgid "www.bedita.com"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:152
-#, javascript-format
-msgid "Please insert a new title on \"${ title }\" clone"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:465
-msgid "If you confirm, this data will be gone forever"
-msgstr ""
-
-#: src/Template/Layout/js/app/app.js:467
-msgid "Do you really want to trash the object?"
 msgstr ""
