@@ -1,5 +1,4 @@
 import { t } from 'ttag';
-import Vue from 'vue';
 
 const options = {
     credentials: 'same-origin',
@@ -59,8 +58,8 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Long Lat Coordinates') :>
                             <div class="is-flex">
-                                <input class="coordinates" type="text"/>
-                                <button @click.prevent :disabled="!fullAddress" class="get-coordinates icon-globe">
+                                <input class="coordinates" type="text" :value="coordinates"/>
+                                <button @click.prevent :disabled="!fullAddress" @click="geocode" class="get-coordinates icon-globe">
                                     <: t('GET') :>
                                 </button>
                             </div>
@@ -95,13 +94,13 @@ export default {
         return {
             location: this.locationdata,
             fullAddress: false,
+            coordinates: '',
         }
     },
 
     async mounted() {
         this.fullAddress = !!this.address(this.location);
     },
-
 
     methods: {
         onSubmitTitle(result) {
@@ -200,7 +199,36 @@ export default {
                 string += `${model.attributes.region}, `;
             }
 
+            string = string.replace(/<\/?[^>]+(>|$)/g, '');
             return string.substring(0, string.length - 2);
+        },
+        async geocode() {
+            const retrieveGeocode = () => {
+                const geocoder = new window.google.maps.Geocoder();
+                geocoder.geocode({address: this.address(this.location)}, (results, status) => {
+                    if (status === "OK" && results.length) {
+                        const result = results[0];
+                        this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
+                    } else {
+                        this.coordinates = '';
+                        console.error("Error in geocoding address");
+                    }
+                });
+            };
+
+            if (document.querySelector('#googleapi')) {
+                return retrieveGeocode();
+            }
+
+            var script = document.createElement('script');
+            script.src = `${this.apiurl}js?key=${this.apikey}&callback=initMap`;
+            script.defer = true;
+            script.id = "googleapi";
+
+            window.initMap = () => {
+               retrieveGeocode();
+            };
+            document.head.appendChild(script);
         },
     }
 }
