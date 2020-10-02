@@ -29,7 +29,7 @@ interface TranslatorInterface
     /**
      * Translate a text $text from language source $from to language target $to
      *
-     * @param array $texts The texts to translate
+     * @param array $text The texts to translate
      * @param string $from The source language
      * @param string $to The target language
      * @return string The translation in json format, i.e.
