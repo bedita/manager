@@ -493,6 +493,8 @@ return [
         //              'publish_field',
         //         ],
         //         'advanced' => [
+        //              // Use custom element in `MyPlugin` to display this group
+        //              '_element' => 'MyPlugin/advanced',
         //              'extra_field',
         //         ],
         //     ],
