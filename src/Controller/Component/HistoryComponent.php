@@ -195,14 +195,10 @@ class HistoryComponent extends Component
         if (array_key_exists($field, $schema)) {
             return (array)$schema[$field];
         }
-        if (array_key_exists('properties', $schema) && array_key_exists($field, $schema['properties'])) {
-            return (array)$schema['properties'][$field];
-        }
-        if (array_key_exists('relations', $schema) && array_key_exists($field, $schema['relations'])) {
-            return (array)$schema['relations'][$field];
-        }
-        if (array_key_exists('associations', $schema) && array_key_exists($field, $schema['associations'])) {
-            return (array)$schema['associations'][$field];
+        foreach (['properties', 'relations', 'associations'] as $key) {
+            if (Hash::check($schema, sprintf('%s.%s', $key, $field))) {
+                return (array)Hash::get($schema, sprintf('%s.%s', $key, $field));
+            }
         }
 
         return [];
