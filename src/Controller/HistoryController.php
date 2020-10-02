@@ -3,11 +3,13 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * History Controller
  *
  * @property \App\Controller\Component\HistoryComponent $History
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class HistoryController extends AppController
 {
@@ -19,6 +21,25 @@ class HistoryController extends AppController
         parent::initialize();
 
         $this->loadComponent('History');
+        $this->loadComponent('Schema');
+    }
+
+    /**
+     * Get history data by ID
+     *
+     * @param string|int $id Object ID.
+     * @return void
+     */
+    public function info($id): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->request->allowMethod('get');
+        $schema = $this->Schema->getSchema($this->request->getParam('object_type'));
+        $response = $this->History->fetch($id, $schema);
+        $data = $response['data'];
+        $meta = $response['meta'];
+        $this->set(compact('data', 'meta'));
+        $this->set('_serialize', ['data', 'meta', ]);
     }
 
     /**

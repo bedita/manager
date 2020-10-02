@@ -135,7 +135,7 @@ export default {
         };
 
         this.isLoading = true;
-        const historyRes = await fetch(`${baseUrl}api/history?filter[resource_id]=${this.object.id}&page_size=100`, options);
+        const historyRes = await fetch(`${baseUrl}${this.object.type}/history/${this.object.id}`, options);
         const historyJson = await historyRes.json();
         this.rawHistory = historyJson.data;
 

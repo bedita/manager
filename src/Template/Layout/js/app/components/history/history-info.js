@@ -16,7 +16,7 @@ export default {
             <div class="px-1 shrinks">
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
-                    <div v-for="(value, key) in changed"><: key | humanize :>: "<: value :>"</div>
+                    <div v-for="(value, key) in changed" v-html="value"></div>
                     <button class="mt-2" @click.stop.prevent="restore()"><: t('restore') :></button>
                 </div>
             </div>

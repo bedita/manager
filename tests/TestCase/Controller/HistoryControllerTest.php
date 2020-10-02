@@ -91,6 +91,22 @@ class HistoryControllerTest extends TestCase
     }
 
     /**
+     * Test `info` method
+     *
+     * @covers ::info()
+     * @param array $data The data for test
+     * @return void
+     */
+    public function testInfo(): void
+    {
+        $this->HistoryController->info($this->documentId);
+        $vars = ['data', 'meta'];
+        foreach ($vars as $var) {
+            static::assertNotEmpty($this->HistoryController->viewVars[$var]);
+        }
+    }
+
+    /**
      * Test `clone` method
      *
      * @covers ::clone()
