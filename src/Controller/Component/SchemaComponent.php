@@ -146,8 +146,9 @@ class SchemaComponent extends Component
             ];
         }
         $categories = $this->fetchCategories($type);
+        $objectTypeMeta = $this->fetchObjectTypeMeta($type);
 
-        return $schema + array_filter(compact('categories'));
+        return $schema + $objectTypeMeta + array_filter(compact('categories'));
     }
 
     /**
@@ -164,6 +165,28 @@ class SchemaComponent extends Component
         $response = ApiClientProvider::getApiClient()->get('/roles', $query);
 
         return (array)Hash::extract((array)$response, 'data.{n}.attributes.name');
+    }
+
+    /**
+     * Fetch object type metadata
+     *
+     * @param string $type Object type.
+     * @return array
+     */
+    protected function fetchObjectTypeMeta(string $type): array
+    {
+        $query = [
+            'fields' => 'associations,relations',
+        ];
+        $response = ApiClientProvider::getApiClient()->get(
+            sprintf('/model/object_types/%s', $type),
+            $query
+        );
+
+        return [
+            'associations' => (array)Hash::get((array)$response, 'data.attributes.associations'),
+            'relations' => array_flip((array)Hash::get((array)$response, 'data.meta.relations')),
+        ];
     }
 
     /**

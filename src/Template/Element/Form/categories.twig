@@ -1,20 +1,25 @@
 {% if schema.categories is defined %}
-	<property-view inline-template :tab-open="tabsOpen">
-		<section class="fieldset order-{{ cssOrder }}" id="categories" :class="isOpen? '' : 'closed'">
-			<header @click.prevent="toggleVisibility()" class="tab unselectable">
-				<h2>{{ __('Categories') }}</h2>
-			</header>
-			<div v-show="isOpen" class="tab-container">
-				{% set options = Schema.controlOptions(
-					'categories',
-					object['attributes']['categories'],
-					{
-						'type': 'categories',
-						'categories': schema['categories']
-					}
-				)|merge({'label': false}) %}
-				{{ Form.control('categories', options)|raw }}
-			</div>
-		</section>
-	</property-view>
+    <property-view inline-template :tab-open="tabsOpen">
+
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Categories') }}</h2>
+            </header>
+
+            <div v-show="isOpen" class="tab-container">
+                {% set options = Schema.controlOptions(
+                    'categories',
+                    object['attributes']['categories'],
+                    {
+                        'type': 'categories',
+                        'categories': schema['categories']
+                    }
+                )|merge({'label': false}) %}
+                {{ Form.control('categories', options)|raw }}
+            </div>
+        </section>
+
+    </property-view>
 {% endif %}

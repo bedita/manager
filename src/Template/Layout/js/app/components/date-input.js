@@ -1,4 +1,5 @@
 import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/dark.css';
 
 import flatpickr from 'flatpickr';
 import moment from 'moment';
@@ -28,8 +29,8 @@ const TIME_FORMAT = 'D/M/Y HH:mm';
 const FLATPICKR_OPTIONS = {
     enableTime: false,
     altInput: true,
-    dateFormat: 'Z', // ISO8601 for db
     altFormat: DATE_FORMAT,
+    dateFormat: 'Z', // ISO8601 for db
     animate: false,
     time_24hr: true,
 };
@@ -43,7 +44,6 @@ export default {
         <slot></slot>
     </div>
     `,
-
     props: {
         el: {
             type: HTMLInputElement,
@@ -53,54 +53,30 @@ export default {
             required: true,
         },
     },
-
-    mounted() {
-        // set locale
-        if (LOCALE !== 'en') {
-            moment.locale(LOCALE);
-            flatpickr.localize(LOCALES_AVAILABLE[LOCALE]);
-        }
-
-        let element = this.el;
-        let options = Object.assign({}, FLATPICKR_OPTIONS);
-
-        if (this.attrs.time) {
-            options.enableTime = true;
-            options.altFormat = TIME_FORMAT;
-        }
-
-        // custom format Date so we can show the current timezone
-        options.formatDate = (dateObj, format) => {
-            // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
-            if (format === 'Z') {
-                return moment(dateObj, moment.ISO_8601).format('YYYY-MM-DDTHH:mm:ssZ');
+    watch: {
+        attrs: function(val) {
+            if (val.time != this.instance.config.enableTime) {
+                // flatpickr doesn't allow dynamic config change. we must destroy and re-create it.
+                /// see https://github.com/flatpickr/flatpickr/issues/1546
+                const date = this.instance.latestSelectedDateObj;
+                this.instance.destroy();
+                this.setupDatepicker();
+                this.setDate(date);
             }
-            // or else timezone infos will be added to date string
-            let now = new Date();
-            let offset = now.getTimezoneOffset();
-            let tmz = offset / 60;
-            let sgn = tmz < 0 ? '+' : '-';
-            let formatUTC = `${format} (UTC${sgn}${Math.abs(tmz)})`;
-            return moment(dateObj).format(formatUTC);
         }
+    },
+    mounted() {
+        this.setupDatepicker();
+        let clearButton = document.createElement('span');
+        clearButton.classList.add('clear-button');
+        clearButton.innerHTML = '&times;';
+        clearButton.addEventListener('click', (ev) => {
+            ev.preventDefault()
+            ev.stopPropagation();
+            this.instance.clear();
+        });
 
-        try {
-            let datePicker = this.instance = flatpickr(element, options);
-            element.dataset.originalValue = element.value;
-
-            let clearButton = document.createElement('span');
-            clearButton.classList.add('clear-button');
-            clearButton.innerHTML = '&times;';
-            clearButton.addEventListener('click', (ev) => {
-                ev.preventDefault()
-                ev.stopPropagation();
-                datePicker.clear();
-            });
-
-            element.parentElement.appendChild(clearButton);
-        } catch (err) {
-            console.error(err);
-        }
+        this.el.parentElement.appendChild(clearButton);
     },
 
     destroyed() {
@@ -112,12 +88,50 @@ export default {
 
     methods: {
         setDate(date) {
-            if (this.instance) {
-                if (date) {
-                    this.instance.setDate(date);
-                } else {
-                    this.instance.clear();
+            if (!this.instance) {
+                return;
+            }
+            if (date) {
+                this.instance.setDate(date);
+            } else {
+                this.instance.clear();
+            }
+        },
+        setupDatepicker(date) {
+            // set locale
+            if (LOCALE !== 'en') {
+                moment.locale(LOCALE);
+                flatpickr.localize(LOCALES_AVAILABLE[LOCALE]);
+            }
+
+            let element = this.el;
+            let options = Object.assign({}, FLATPICKR_OPTIONS);
+
+            if (this.attrs.time) {
+                options.enableTime = true;
+                options.altFormat = TIME_FORMAT;
+            }
+
+            // custom format Date so we can show the current timezone
+            options.formatDate = (dateObj, format) => {
+                // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
+                if (format === 'Z') {
+                    return moment(dateObj, moment.ISO_8601).format('YYYY-MM-DDTHH:mm:ssZ');
                 }
+                // or else timezone infos will be added to date string
+                let now = new Date();
+                let offset = now.getTimezoneOffset();
+                let tmz = offset / 60;
+                let sgn = tmz <= 0 ? '+' : '-';
+                let formatUTC = `${format} (UTC${sgn}${Math.abs(tmz)})`;
+                return moment(dateObj).format(formatUTC);
+            }
+
+            try {
+                let datePicker = this.instance = flatpickr(element, options);
+                element.dataset.originalValue = element.value;
+            } catch (err) {
+                console.error(err);
             }
         },
     },

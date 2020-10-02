@@ -95,6 +95,24 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `relationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::relationsList()
+     */
+    public function testRelationsList(): void
+    {
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->relationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
      * Data provider for `testViewGroups` test case.
      *
      * @return array
@@ -272,7 +290,6 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                     'publish' => [
                     ],
@@ -285,7 +302,6 @@ class PropertiesComponentTest extends TestCase
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                 ],
                 'foos',
@@ -293,7 +309,6 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title',
                         'body',
-                        'lang',
                     ],
                 ],
             ],
@@ -308,14 +323,12 @@ class PropertiesComponentTest extends TestCase
                     ],
                     'other' => [
                         'body' => 'some text',
-                        'lang' => 'en',
                     ],
                 ],
                 [
                     'attributes' => [
                         'title' => 'Example',
                         'body' => 'some text',
-                        'lang' => 'en',
                         'date_ranges' => [],
                     ],
                 ],

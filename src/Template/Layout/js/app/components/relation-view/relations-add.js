@@ -283,11 +283,12 @@ export default {
             this.addedObjects = this.addedObjects.filter((added) => added.id !== object.id);
         },
 
-        elementClasses(related) {
+        // css class on items
+        selectClasses(related) {
             return [
                 `from-relation-${this.relationName}`,
                 {
-                    selected: this.selectedObjects.indexOf(related) != -1,
+                    selected: this.selectedObjects.indexOf(related) !== -1,
                     unselectable: this.isUnselectableObject(related.id),
                 }
             ]

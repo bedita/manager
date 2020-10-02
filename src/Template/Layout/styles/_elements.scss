@@ -1,3 +1,12 @@
+// generic full size backdrop
+.backdrop {
+    display: none;
+    @extend .full-size-absolute;
+    background-color: #000;
+    opacity: .75;
+}
+
+
 // simple tag
 .tag:not(body) {
     display: inline-flex;
@@ -57,111 +66,37 @@
 }
 
 
+// simple circle badge
+.badge {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 0;
+    background-color: $white;
+    border-radius: 50%;
+    padding: $gutter * .75;
+    font-size: $font-size-sssm;
+    font-weight: $font-weight-black;
+    box-shadow: 0 0 2px #000;
+    &:after {
+        content: '';
+        display: block;
+        padding-bottom: 100%;
+    }
+}
+
+
 // simple box
 .box {
-    display: block;
-    padding: $gutter * .5;
-    border-radius: 4px;
-    background-color: $gray-200;
-    color: $gray-900;
-    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
-    overflow: hidden;
-}
-
-
-// flex columns
-.columns {
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    margin-left: -($gutter * .5);
-    margin-right: -($gutter * .5);
-    margin-top: -($gutter * .5);
-    &-responsive-tablet {
-        display: block;
-        @media screen and (min-width: $tablet) {
-            display: flex;
-        }
-    }
-}
-
-.column {
-    display: block;
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-    padding: ($gutter * .5);
-    &.is-1 {
-        flex: none;
-        width: 100%;
-    }
-    &.is-2 {
-        flex: none;
-        width: 50%;
-    }
-    &.is-3 {
-        flex: none;
-        width: 33.33333%;
-    }
-    &.is-4 {
-        flex: none;
-        width: 25%;
-    }
-    &.is-narrow {
-        flex: none;
-        max-width: 100%;
-    }
-
-    &.is-one-third-1024 {
-        @media screen and (min-width: 769px) {
-            flex: none;
-            width: 33.33333%;
-        }
-    }
-    &.is-one-quarter-1024 {
-        @media screen and (min-width: 769px) {
-            flex: none;
-            width: 25%;
-        }
-    }
-
-    &.is-one-third-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            width: 33.33333%;
-        }
-    }
-    &.is-one-quarter-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            width: 25%;
-        }
-    }
-    &.is-one-fifth-desktop {
-        @media screen and (min-width: 1088px) {
-            flex: none;
-            width: 20%;
-        }
-    }
-
-    &.is-one-eight-bigscreen {
-        @media screen and (min-width: 1580px) {
-            flex: none;
-            width: 12.5%;
-        }
-    }
-
-
-    &.is-one-third-768 {
-        @media screen and (max-width: 768px) {
-            flex: none;
-            width: 33.33333%;
-        }
-    }
-    &.is-one-quarter-768 {
-        @media screen and (max-width: 768px) {
-            flex: none;
-            width: 25%;
-        }
+    flex-direction: column;
+    background-color: $white;
+    color: $black;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    .box-body {
+        flex-grow: 1;
     }
 }
 
@@ -366,31 +301,95 @@ a.close-button {
 }
 
 
-// TODO: controllare questo dragover
-.dragover {
+// drop and upload
+.drop-area {
     position: relative;
-    min-height: 8 * $gutter;
+    width: 100%;
+    min-height: $gutter * 5;
+    background-color: $gray-950;
+    transition: .2s transform;
 
-    &:after {
-        position: absolute;
-        top: $gutter * 0.25;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0px $gutter * .25;
-        content: "Drop Here";
-        border-radius: $gutter * 0.25;
-        background: $black;
-        opacity: 0.7;
-        font-size: 2em;
-        height: calc(100% - #{$gutter * .5});
-        width: calc(100% - #{$gutter * .75});
+    &.dragover {
+        transform: scale(1.05);
+        color: #fff;
+        background-color: #000;
+    }
+
+    .upload-placeholder {
+        color: $gray-550;
+        margin: auto;
+    }
+
+    .file-input {
+        @extend .full-size-absolute;
+        opacity: 0;
+        outline: 0;
+        cursor: pointer;
+    }
+
+    .upload-items {
+        .upload-item {
+            width: 100%;
+            & ~ .upload-item {
+                margin-top: $gutter;
+            }
+
+            .upload-item-header {
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-end;
+                .name {
+                    margin-right: auto;
+                    word-break: break-word;
+                }
+                button {
+                    margin-left: $gutter * .5;
+                }
+            }
+
+            .message {
+                line-height: 1.25rem;
+                min-height: 1.25rem;
+            }
+
+            .progress-bar {
+                width: 100%;
+                margin: $gutter * .75 0 $gutter * .75;
+
+                .progress-bar-status {
+                    min-width: $gutter;
+                    height: 2px;
+                }
+                .progress-bar-status.in-progress {
+                    background-color: $gray-400;
+                }
+                .progress-bar-status.done {
+                    background-color: $info;
+                }
+                .progress-bar-status.error {
+                    background-color: $error;
+                }
+                .progress-bar-status.cancelled {
+                    background-color: $gray-700;
+                }
+            }
+        }
     }
 }
 
-.sorting {
-    background: $black;
-    opacity: 0.4;
-    border-radius: $gutter * 0.25;
+.ck-editor {
+    --ck-color-base-background: #{$gray-200};
+    color: #000;
+
+    .ck-label {
+        display: none !important;
+    }
+
+    .ck-content {
+        min-height: 12 * $gutter;
+    }
+
+    .CodeMirror {
+        font-size: 1.2em;
+    }
 }

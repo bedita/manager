@@ -34,5 +34,59 @@ export default {
                 return this.tabsOpen = !this.tabsOpen;
             }
         },
+
+        async translateAll(data, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+            try {
+                await Promise.all(
+                    Object.keys(data).map(key =>
+                        this.fetchTranslation(data[key])
+                    )
+                );
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+            el.classList.remove('is-loading-spinner');
+        },
+
+        translate(object, e) {
+            const el = e.currentTarget;
+            el.classList.add('is-loading-spinner');
+
+            this.fetchTranslation(object)
+                .catch((error) => {
+                    alert(error);
+                    console.log(error);
+                })
+                .finally(() => {
+                    el.classList.remove('is-loading-spinner');
+                });
+        },
+
+        fetchTranslation(object) {
+            if (!object.content) {
+                return;
+            }
+            if (!object.to) {
+                // use `value` from select on new translations
+                object.to = this.$refs.translateTo.value;
+            }
+
+            return this.$helpers.autoTranslate(object.content, object.from, object.to)
+                .catch(r => {
+                    throw new Error(`Unable to translate field ${object.field}`);
+                })
+                .then(r => {
+                    if (!r.translation) {
+                        throw new Error(`Unable to translate field ${object.field}`);
+                    }
+
+                    let input = this.$refs[object.field];
+                    input.value = r.translation;
+                    input.dispatchEvent(new CustomEvent('change'));
+                });
+        },
     }
 }

@@ -76,6 +76,7 @@ class PropertiesComponent extends Component
         'categories',
         'date_ranges',
         'tags',
+        'lang',
     ];
 
     /**
@@ -178,5 +179,18 @@ class PropertiesComponent extends Component
     public function bulkList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
+    }
+
+    /**
+     * List of ordered relations to display.
+     * Relations not included will be displayed after these.
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function relationsList(string $type): array
+    {
+        return $this->getConfig(sprintf('Properties.%s.relations', $type), []);
     }
 }

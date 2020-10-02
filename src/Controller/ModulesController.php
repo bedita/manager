@@ -80,10 +80,8 @@ class ModulesController extends AppController
             return $result;
         }
 
-        $query = $this->request->getQueryParams();
-
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $query);
+            $response = $this->apiClient->getObjects($this->objectType, $this->indexQuery());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -117,6 +115,26 @@ class ModulesController extends AppController
         $this->setObjectNav($objects);
 
         return null;
+    }
+
+    /**
+     * Retrieve `index` module query string
+     *
+     * @return array
+     */
+    protected function indexQuery()
+    {
+        $query = $this->request->getQueryParams();
+        // return URL query string if `filter`, `sort`, or `q` are set
+        $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
+        if (!empty($subQuery)) {
+            return $query;
+        }
+
+        // set sort order: use `currentModule.sort` or default '-id'
+        $query['sort'] = (string)Hash::get($this->viewVars, 'currentModule.sort', '-id');
+
+        return $query;
     }
 
     /**
@@ -187,7 +205,11 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
         // setup relations metadata
-        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $object['relationships']);
+        $this->Modules->setupRelationsMeta(
+            $this->Schema->getRelationsSchema(),
+            $object['relationships'],
+            $this->Properties->relationsList($this->objectType)
+        );
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
@@ -260,6 +282,10 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
         $this->ProjectConfiguration->read();
 
+        // setup relations metadata
+        $relationships = (array)Hash::get($schema, 'relations');
+        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $relationships);
+
         return null;
     }
 
@@ -272,23 +298,18 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        // extract related objects data
+        $relatedData = (array)Hash::get($requestData, '_api');
+        unset($requestData['_api']);
 
         try {
-            if (!empty($requestData['_api'])) {
-                foreach ($requestData['_api'] as $api) {
-                    extract($api); // method, id, type, relation, relatedIds
-                    if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
-                        $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
-                    }
-                }
-            }
-            unset($requestData['_api']);
-
             // upload file (if available)
             $this->Modules->upload($requestData);
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
+            $objectId = (string)Hash::get($response, 'data.id');
+            $this->saveRelated($relatedData, $objectId);
         } catch (InternalErrorException | BEditaClientException | UploadException $e) {
             // Error! Back to object view or index.
             $this->log($e, LogLevel::ERROR);
@@ -310,8 +331,30 @@ class ModulesController extends AppController
         return $this->redirect([
             '_name' => 'modules:view',
             'object_type' => $this->objectType,
-            'id' => Hash::get($response, 'data.id'),
+            'id' => $objectId,
         ]);
+    }
+
+    /**
+     * Save related objects reading from `_api` key in request data.
+     *
+     * @param array $relatedData Related objects data
+     * @param string $id Object ID
+     * @return void
+     */
+    protected function saveRelated(array $relatedData, string $id): void
+    {
+        if (empty($relatedData)) {
+            return;
+        }
+        foreach ($relatedData as $rel) {
+            $method = (string)Hash::get($rel, 'method');
+            $relation = (string)Hash::get($rel, 'relation');
+            $relatedIds = (array)Hash::get($rel, 'relatedIds');
+            if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
+                $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
+            }
+        }
     }
 
     /**
@@ -425,14 +468,21 @@ class ModulesController extends AppController
     }
 
     /**
-     * Relation data load callig api `GET /:object_type/:id/related/:relation`
+     * Relation data load via API => `GET /:object_type/:id/related/:relation`
      *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
+     * @param string|int $id The object ID.
+     * @param string $relation The relation name.
      * @return void
      */
     public function relatedJson($id, string $relation): void
     {
+        if ($id === 'new') {
+            $this->set('data', []);
+            $this->set('_serialize', ['data']);
+
+            return;
+        }
+
         $this->request->allowMethod(['get']);
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
@@ -483,29 +533,16 @@ class ModulesController extends AppController
      * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
-     * @param string|int $id the object identifier.
-     * @param string $relation the relating name.
+     * @param string|int $id The object ID.
+     * @param string $relation The relation name.
      * @return void
      */
     public function relationshipsJson($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
-        $path = sprintf('/%s/%s/%s', $this->objectType, $id, $relation);
+        $available = $this->availableRelationshipsUrl($relation);
 
         try {
-            switch ($relation) {
-                case 'children':
-                    $available = '/objects';
-                    break;
-                case 'parent':
-                case 'parents':
-                    $available = '/folders';
-                    break;
-                default:
-                    $response = $this->apiClient->get($path, ['page_size' => 1]); // page_size 1: we need just the available
-                    $available = $response['links']['available'];
-            }
-
             $query = $this->Modules->prepareQuery($this->request->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
@@ -523,6 +560,33 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
+    }
+
+    /**
+     * Retrieve URL to get objects available for a relation
+     *
+     * @param string $relation The relation name.
+     * @return string
+     */
+    protected function availableRelationshipsUrl(string $relation): string
+    {
+        $defaults = [
+            'children' => '/objects',
+            'parent' => '/folders',
+            'parents' => '/folders',
+        ];
+        $defaultUrl = (string)Hash::get($defaults, $relation);
+        if (!empty($defaultUrl)) {
+            return $defaultUrl;
+        }
+
+        $relationsSchema = $this->Schema->getRelationsSchema();
+        $types = $this->Modules->relatedTypes($relationsSchema, $relation);
+        if (count($types) === 1) {
+            return sprintf('/%s', $types[0]);
+        }
+
+        return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
 
     /**

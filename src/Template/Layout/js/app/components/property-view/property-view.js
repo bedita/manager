@@ -18,9 +18,9 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
         ResourceRelationView: () => import(/* webpackChunkName: "resource-relation-view" */'app/components/relation-view/resource-relation-view'),
-        ChildrenView: () => import(/* webpackChunkName: "children-view" */'app/components/children-view/children-view'),
         MapView: () => import(/* webpackChunkName: "map-view" */'app/components/map-view'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
+        History: () => import(/* webpackChunkName: "history" */'app/components/history'),
     },
 
     props: {

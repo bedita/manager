@@ -1,19 +1,7 @@
-<section class="fieldset order-{{ order|default('0') }}" id="core_properties">
+<section class="fieldset">
     <div class="tab-container">
-        {% for key, value in properties.core %}
-            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-            {{ Form.control(key, options)|raw }}
 
-            {% if options.class == 'json' %}
-                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
-            {% endif %}
+        {% element 'Form/group_properties' {'properties' : properties.core, 'group': 'core'} %}
 
-        {% endfor %}
-
-        {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
-
-        {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
-        {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
-        {% endif %}
     </div>
 </section>

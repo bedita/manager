@@ -5,7 +5,7 @@ body {
     font-family: $font-family-base;
     font-size: $font-size-sm;
     line-height: $line-height-base;
-    background-color: $gray-900; // best practice, apply a default `background-color`
+    background-color: $defaultBackground;
     // background-image: linear-gradient(160deg, $gray-900 0%, $gray-800 100%);
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -48,4 +48,15 @@ label, th { font-weight: normal; }
 
 div, section {
     &:focus { outline: none; }
+}
+
+dl {
+    margin: 0;
+    dd {
+        margin: 0;
+        font-weight: $font-weight-bold;
+    }
+    dd + dt {
+        margin-top: $gutter * .25;
+    }
 }

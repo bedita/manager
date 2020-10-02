@@ -303,7 +303,6 @@ class ModulesComponentTest extends TestCase
                     'supporto',
                     'gustavo',
                     'trash',
-                    'plugin',
                 ],
                 [
                     'resources' => [
@@ -331,21 +330,16 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'bedita',
-                    'supporto',
-                ],
-                [
-                    [
-                        'name' => 'plugin',
-                    ],
+                    'bedita' => [],
+                    'supporto' => [],
                 ],
             ],
             'ok (trash first)' => [
                 [
                     'trash',
                     'supporto',
-                    'bedita',
                     'gustavo',
+                    'bedita',
                 ],
                 [
                     'resources' => [
@@ -373,8 +367,8 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'trash',
-                    'supporto',
+                    'trash' => [],
+                    'supporto' => [],
                 ],
             ],
             'client exception' => [
@@ -393,17 +387,17 @@ class ModulesComponentTest extends TestCase
      *
      * @param string[]|\Exception $expected Expected result.
      * @param array|\Exception $meta Response to `/home` endpoint.
-     * @param string[] $order Configured modules order.
+     * @param array $modules Modules configuration.
      * @return void
      *
      * @dataProvider getModulesProvider()
+     * @covers ::modulesFromMeta()
      * @covers ::getMeta()
      * @covers ::getModules()
      */
-    public function testGetModules($expected, $meta, array $order = [], array $plugins = []): void
+    public function testGetModules($expected, $meta, array $modules = []): void
     {
-        Configure::write('Modules.order', $order);
-        Configure::write('Modules.plugins', $plugins);
+        Configure::write('Modules', $modules);
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -472,7 +466,7 @@ class ModulesComponentTest extends TestCase
                     'version' => 'v4.0.0-gustavo',
                 ],
                 [
-                    'gustavo',
+                    'gustavo' => [],
                 ],
             ],
             'with current module' => [
@@ -508,7 +502,7 @@ class ModulesComponentTest extends TestCase
                     'version' => 'v4.0.0-gustavo',
                 ],
                 [
-                    'gustavo',
+                    'gustavo' => [],
                 ],
                 'supporto',
             ],
@@ -532,16 +526,16 @@ class ModulesComponentTest extends TestCase
      * @param string|null $currentModule Expected current module name.
      * @param array $project Expected project info.
      * @param array $meta Response to `/home` endpoint.
-     * @param string[] $order Configured modules order.
+     * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
      *
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
-    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $order = [], ?string $currentModuleName = null): void
+    public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
-        Configure::write('Modules.order', $order);
+        Configure::write('Modules', $config);
 
         if ($userId) {
             $this->Auth->setUser(['id' => $userId]);
@@ -978,7 +972,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['has_media' => 'Has Media'],
+                    'objectRelations' => [
+                        'main' => [
+                            'has_media' => 'Has Media',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'has_media' => [
@@ -1007,7 +1006,12 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                     'resourceRelations' => [],
-                    'objectRelations' => ['media_of' => 'Media Of'],
+                    'objectRelations' => [
+                        'main' => [
+                            'media_of' => 'Media Of',
+                        ],
+                        'aside' => [],
+                    ],
                 ],
                 [
                     'media_of' => [
@@ -1023,6 +1027,68 @@ class ModulesComponentTest extends TestCase
                     'media_of' => [],
                 ],
             ],
+            'ordered' => [
+                [
+                    'relationsSchema' => [
+                        'has_media' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                        ],
+                        'attach' => [
+                            'attributes' => [
+                                'name' => 'attach',
+                                'label' => 'Attach',
+                                'inverse_name' => 'attached_to',
+                                'inverse_label' => 'Attached To',
+                            ],
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => [
+                        'main' => [
+                            'attach' => 'Attach',
+                        ],
+                        'aside' => [
+                            'has_media' => 'Has Media',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                    'attach' => [
+                        'attributes' => [
+                            'name' => 'attach',
+                            'label' => 'Attach',
+                            'inverse_name' => 'attached_to',
+                            'inverse_label' => 'Attached To',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [],
+                    'attach' => [],
+                ],
+                [
+                    'main' => [
+                        'attach',
+                    ],
+                    'aside' => [
+                        'has_media',
+                    ],
+                ],
+            ],
+
         ];
     }
 
@@ -1033,18 +1099,53 @@ class ModulesComponentTest extends TestCase
      *
      * @dataProvider setupRelationsProvider
      * @covers ::setupRelationsMeta()
+     * @covers ::relationLabels()
      *
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
+     * @param array $order Order array.
      */
-    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships)
+    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [])
     {
-        $this->Modules->setupRelationsMeta($schema, $relationships);
+        $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
         $viewVars = $this->Modules->getController()->viewVars;
         foreach ($expected as $key => $value) {
             $this->assertEquals($value, $viewVars[$key]);
         }
+    }
+
+    /**
+     * Test `relatedTypes` method
+     *
+     * @return void
+     * @covers ::relatedTypes()
+     */
+    public function testRelatedTypes()
+    {
+        $schema = [
+            'has_media' => [
+                'attributes' => [
+                    'name' => 'has_media',
+                    'inverse_name' => 'media_of',
+                ],
+                'left' => ['documents'],
+                'right' => ['media'],
+            ],
+            'media_of' => [
+                'attributes' => [
+                    'name' => 'has_media',
+                    'inverse_name' => 'media_of',
+                ],
+                'left' => ['documents'],
+                'right' => ['media'],
+            ],
+        ];
+
+        $types = $this->Modules->relatedTypes($schema, 'has_media');
+        static::assertEquals(['media'], $types);
+        $types = $this->Modules->relatedTypes($schema, 'media_of');
+        static::assertEquals(['documents'], $types);
     }
 }

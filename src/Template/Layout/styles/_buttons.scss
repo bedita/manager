@@ -9,7 +9,10 @@ button, .button {
 
     position: relative;
     height: $gutter * 2;
-    min-width: $dashboard-item-width / 2;
+    min-width: $gutter * 3;
+    @media screen and (min-width: 1440px) {
+        min-width: $gutter * 4;
+    }
     flex-shrink: 0;
     box-shadow: none;
     padding-bottom: calc(.375em - 1px);
@@ -55,6 +58,13 @@ button, .button {
         outline: 0;
     }
 
+    &:focus {
+        outline: 0;
+        background-color: $gray-600;
+        border-color: #fff;
+        color: #FFF;
+    }
+
 
     // button modifiers
     &.is-width-auto {
@@ -78,7 +88,7 @@ button, .button {
         pointer-events: none;
         &:after {
             position: absolute;
-            border-color: $gray-600;
+            border-color: $gray-900;
             border-right-color: transparent;
             border-top-color: transparent;
         }
@@ -115,7 +125,24 @@ button, .button {
         &:disabled, &.disabled {
         }
     }
+    &-outlined-white {
+        background-color: transparent;
+        border-color: $black;
+        color: $black;
+        &:hover {
+            border-color: $gray-600;
+        }
+        &:disabled, &.disabled {
+        }
+    }
     &-text {
+        background-color: transparent;
+        border-color: transparent;
+        color: $black;
+        &:disabled, &.disabled {
+        }
+    }
+    &-text-white {
         background-color: transparent;
         border-color: transparent;
         color: $white;

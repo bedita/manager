@@ -1,13 +1,7 @@
-<section class="fieldset order-{{ cssOrder }}" id="publish_properties">
+<section class="fieldset" id="publish-properties">
     <div class="tab-container">
-        {% for key, value in properties.publish %}
-            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-            {{ Form.control(key, options)|raw }}
 
-            {% if options.class == 'json' %}
-                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
-            {% endif %}
+        {% element 'Form/group_properties' {'properties' : properties.publish, 'group': 'publish'} %}
 
-        {% endfor %}
     </div>
 </section>

@@ -2,15 +2,16 @@
 
 <property-view inline-template :tab-open="tabsOpen">
 
-    <section class="fieldset order-{{ cssOrder }}" id="user_roles" :class="isOpen? '' : 'closed'">
+    <section class="fieldset">
 
-        <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-            <h2>
-                {{ relationName|humanize|lower }}
-                <span class="tag is-smallest is-black mx-05"
-                    :class="!totalObjects? 'empty' : ''"><: totalObjects :>
-                </span>
-            </h2>
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="[
+                isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
+                isLoading? 'is-loading-spinner' : ''
+            ]">
+                <h2>{{ __(relationName|humanize)|lower }}</h2>
+                <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
         </header>
 
         <div v-show="isOpen" class="tab-container">
@@ -27,12 +28,12 @@
                         inline-template
                         relation-name={{ relationName }}
                         :related-objects="objects"
-
                         @remove-relations="setRemovedRelated">
 
                         <div class="roles-list-view">
                             <div v-for="res in objects">
-                                <input type="checkbox" :value="res" v-model="checkedRelations"/><span class="name"><: res.attributes.name :></span>
+                                <input type="checkbox" :value="res" v-model="checkedRelations"/>
+                                <span class="mx-05"><: res.attributes.name :></span>
                             </div>
 
                             <div class="save-relations">
@@ -44,7 +45,6 @@
                                 })|raw }}
                                 {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
                             </div>
-
                         </div>
 
                     </roles-list-view>

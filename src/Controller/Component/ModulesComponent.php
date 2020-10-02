@@ -15,7 +15,6 @@ namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
 use App\Utility\OEmbed;
-use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -120,14 +119,34 @@ class ModulesComponent extends Component
     /**
      * Create internal list of available modules in `$this->modules` as an array with `name` as key
      * and return it.
-     * Modules are read from `/home` endpoint
+     * Modules are created from configuration and merged with information read from `/home` endpoint
      *
      * @return array
      */
     public function getModules(): array
     {
-        $modulesOrder = (array)Configure::read('Modules.order');
+        $modules = (array)Configure::read('Modules');
+        $metaModules = $this->modulesFromMeta();
+        $modules = array_intersect_key($modules, $metaModules);
+        array_walk(
+            $modules,
+            function (&$data, $key) use ($metaModules) {
+                $data = array_merge((array)Hash::get($metaModules, $key), $data);
+            }
+        );
+        $this->modules = array_merge($modules, array_diff_key($metaModules, $modules));
 
+        return $this->modules;
+    }
+
+    /**
+     * Modules data from `/home` endpoint 'meta' response.
+     * Modules are object endpoints from BE4 API
+     *
+     * @return array
+     */
+    protected function modulesFromMeta(): array
+    {
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
@@ -138,29 +157,9 @@ class ModulesComponent extends Component
             ->reject(function (array $data) {
                 return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
             })
-            ->sortBy(function (array $data) use ($modulesOrder) {
-                $name = Hash::get($data, 'name');
-                $idx = array_search($name, $modulesOrder);
-                if ($idx === false) {
-                    // No configured order for this module. Use hash to preserve order, and ensure it is after other modules.
-                    $idx = count($modulesOrder) + hexdec(hash('crc32', $name));
-
-                    if ($name === 'trash') {
-                        // Trash eventually.
-                        $idx = PHP_INT_MAX;
-                    }
-                }
-
-                return -$idx;
-            })
             ->toList();
-        $plugins = (array)Configure::read('Modules.plugins');
-        if (!empty($plugins)) {
-            $modules = array_merge($modules, $plugins);
-        }
-        $this->modules = Hash::combine($modules, '{n}.name', '{n}');
 
-        return $this->modules;
+        return Hash::combine($modules, '{n}.name', '{n}');
     }
 
     /**
@@ -420,7 +419,7 @@ class ModulesComponent extends Component
         $timestamp = $session->read($timestampKey);
 
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if (strtotime($timestamp) < strtotime("-5 minutes")) {
+        if ($timestamp > strtotime("-5 minutes")) {
             //  => merge with $object['attributes']
             $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
@@ -453,10 +452,11 @@ class ModulesComponent extends Component
      * Setup relations information metadata.
      *
      * @param array $schema Relations schema.
-     * @param array $relationships The object.
+     * @param array $relationships Object relationships.
+     * @param array $order order Ordered names inside 'main' and 'aside' keys.
      * @return void
      */
-    public function setupRelationsMeta(array $schema, array $relationships): void
+    public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
     {
         // relations between objects
         $relationsSchema = array_intersect_key($schema, $relationships);
@@ -464,8 +464,32 @@ class ModulesComponent extends Component
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
         $relationNames = array_keys($relationsSchema);
-        $objectRelations = array_combine(
-            $relationNames,
+
+        // define 'main' and 'aside' relation groups
+        $aside = array_intersect((array)Hash::get($order, 'aside'), $relationNames);
+        $relationNames = array_diff($relationNames, $aside);
+        $main = array_intersect((array)Hash::get($order, 'main'), $relationNames);
+        $main = array_unique($main + $relationNames);
+
+        $objectRelations = [
+            'main' => $this->relationLabels($relationsSchema, $main),
+            'aside' => $this->relationLabels($relationsSchema, $aside),
+        ];
+
+        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Retrieve associative array with names as keys and labels as values.
+     *
+     * @param array $relationsSchema Relations schema.
+     * @param array $names Relation names.
+     * @return array
+     */
+    protected function relationLabels(array &$relationsSchema, array $names): array
+    {
+        return (array)array_combine(
+            $names,
             array_map(
                 function ($r) use ($relationsSchema) {
                     // return 'label' or 'inverse_label' looking at 'name'
@@ -476,10 +500,26 @@ class ModulesComponent extends Component
 
                     return $attributes['inverse_label'];
                 },
-                $relationNames
+                $names
             )
         );
+    }
 
-        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    /**
+     * Get related types from relation name.
+     *
+     * @param array $schema Relations schema.
+     * @param string $relation Relation name.
+     * @return array
+     */
+    public function relatedTypes(array $schema, string $relation): array
+    {
+        $relationsSchema = (array)Hash::get($schema, $relation);
+        $name = (string)Hash::get($relationsSchema, 'attributes.name');
+        if ($name === $relation) {
+            return (array)Hash::get($relationsSchema, 'right');
+        }
+
+        return (array)Hash::get($relationsSchema, 'left');
     }
 }

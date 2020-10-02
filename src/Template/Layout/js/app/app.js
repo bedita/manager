@@ -12,8 +12,8 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
-
 import viewHelper from 'app/helpers/view';
+import autoTranslation from 'app/helpers/api-translation';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -39,7 +39,6 @@ const _vueInstance = new Vue({
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
-        UploadFilesView: () => import(/* webpackChunkName: "upload-files-view" */'app/components/upload-files-view'),
     },
 
     data() {
@@ -88,6 +87,7 @@ const _vueInstance = new Vue({
 
         // Register helpers
         Vue.use(viewHelper);
+        Vue.use(autoTranslation);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
@@ -100,13 +100,15 @@ const _vueInstance = new Vue({
         // load url params when component initialized
         this.loadUrlParams();
 
-        let cl = document.querySelector('html').classList;
+        const rootEl = document.querySelector('html');
+        const bodyEl = document.querySelector('body');
         PanelEvents.listen('panel:requested', null, () => {
-            cl.add('is-clipped');
+            bodyEl.classList.add('panel-is-open');
+            rootEl.classList.add('is-clipped');
         });
-
         PanelEvents.listen('panel:closed', null, () => {
-            cl.remove('is-clipped');
+            bodyEl.classList.remove('panel-is-open');
+            rootEl.classList.remove('is-clipped');
         });
     },
 
@@ -128,7 +130,15 @@ const _vueInstance = new Vue({
     },
 
     methods: {
-        // Events Listeners
+
+        /**
+         * Close panel
+         *
+         * @return {void}
+         */
+        closePanel() {
+            PanelEvents.closePanel();
+        },
 
         /**
          * Clone object
@@ -193,22 +203,6 @@ const _vueInstance = new Vue({
          */
         onUpdateQueryTypes(types) {
             this.selectedTypes = types;
-        },
-
-        /**
-         * on page click:
-         * - if panel is open, close it and stop event propagation
-         * - if panel is closed do nothing
-         *
-         * @return {void}
-         */
-        pageClick(event) {
-            // temporary comment: we do not want that panel is closed, when it contains pagination...
-            // if (this.panelIsOpen) {
-            //     this.closePanel();
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            // }
         },
 
         /**

@@ -9,7 +9,6 @@
             {% for obj in included %}
                 {% if obj.type == 'streams' %}
                     <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
-                    {# <button class="icon-download" @click="$helpers.downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button> #}
                 {% endif %}
             {% endfor %}
         {% else %}
@@ -26,14 +25,15 @@
             'check-changes': 'true',
         })|raw }}
 
+            {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+            {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
+                {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
+            {% endif %}
+
             {# Init `_jsonKeys` data #}
             {{ write_config('_jsonKeys', []) }}
 
-            {# Inside form-column there are form elements, they may have a cssOrder property that reorders
-                the elements in single column view, in small viewports. cssOrder may assume the string
-                values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
-
-            <div class="form-column">
+            <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
                 {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
                     {% element 'Form/upload' %}
@@ -41,51 +41,53 @@
 
                 {% element 'Form/core_properties' %}
 
+                {% element 'Form/custom_left' %}
+
                 {# calendar using `date_ranges` #}
-                {% element 'Form/calendar' {'cssOrder': '1'} %}
+                {% element 'Form/calendar' %}
 
                 {% element 'Form/categories' %}
 
-                {% element 'Form/custom_left' %}
-
-                {# show media stream or embed external provider #}
                 {% element 'Form/media' %}
 
-                {# map #}
                 {% element 'Form/map' %}
 
-                {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
+                {% element 'Form/other_properties' %}
             </div>
 
-            <div class="form-column ordered-column">
-                {% element 'Form/publish_properties' {'cssOrder': '0'} %}
+            <div class="side-view-column is-flex is-flex-column">
+                {% element 'Form/publish_properties' %}
 
-                {% element 'Form/resource_relations' {'cssOrder': '5'} %}
-
-                {% element 'Form/resources/translations' {'resourceName': 'translations', 'cssOrder': '2' } %}
-
-                {# if `roles` in relationships (`users` only) display custom roles element #}
-                {% if object.relationships.roles %}
-                    {% element 'Form/roles' {'cssOrder': '3'} %}
-                {% endif %}
-
-                {% if modules.folders and _view.getRequest().getParam('action') != 'create' and _view.getRequest().getParam('action') != 'clone' %}
-                    {% element 'Form/trees' {'cssOrder': '4'} %}  {# loads folders after 800ms, relations with folders after 1000ms - see file #}
-                {% endif %}
-
-                {% element 'Form/advanced_properties' %}
+                {% element 'Form/meta' %}
 
                 {% element 'Form/custom_right' %}
 
-                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+                {# if `roles` in relationships (`users` only) display custom roles element #}
+                {% if object.relationships.roles %}
+                    {% element 'Form/roles' %}
+                {% endif %}
+
+                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
+                    {% element 'Form/trees' %}
+                {% endif %}
+
+                {% element 'Form/related_translations' {'resourceName': 'translations'} %}
+
+                {% element 'Form/advanced_properties' %}
+
+                {% element 'Form/resource_relations' %}
+
+                {# aside relations view #}
+                {% element 'Form/relations' {'relations': objectRelations.aside} %}
             </div>
 
-            {# relations view #}
-            {# loads first relation after 1200ms, than every 300ms till last relation, see file #}
-            {% element 'Form/relations' %}
+            {# main relations view #}
+            {% element 'Form/relations' {'relations': objectRelations.main} %}
 
-        {# Set `_jsonKeys` hidden input from config #}
-        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+            {% element 'Form/history' %}
+
+            {# Set `_jsonKeys` hidden input from config #}
+            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
 
         {{ Form.end()|raw }}
 

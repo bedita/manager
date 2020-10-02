@@ -22,21 +22,22 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/forms_file';
 @import './styles/utility_classes';
 @import './styles/elements';
+@import './styles/columns';
 
 // elements
 @import '../Element/Form/calendar';
 @import '../Element/Form/trees';
 @import '../Element/Form/publish_properties';
 @import '../Element/Form/relations';
-@import '../Element/Form/children';
 @import '../Element/Form/map';
+@import '../Element/Form/history';
 @import '../Element/Flash/flash';
 @import '../Element/Menu/colophon';
 @import '../Element/Menu/menu';
 @import '../Element/Menu/sidebar';
 @import '../Element/Modules/index_properties';
 @import '../Element/FilterBox/filter_box';
-@import '../Element/panel';
+@import '../Element/Panel/panel';
 @import '../Element/filter_type';
 
 // Pages
@@ -46,7 +47,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Pages/Import/import';
 @import '../Pages/Modules/modules-index';
 @import '../Pages/Modules/modules-view';
-@import '../Pages/UserProfile/userprofile-view';
 @import '../Pages/Model/model-index';
 @import '../Pages/Model/model-view';
 

@@ -13,6 +13,7 @@ $font-size-base:              1rem !default; // Assumes the browser default, typ
 $font-size-lg:                ($font-size-base * 1.125) !default;
 $font-size-llg:               ($font-size-base * 1.25) !default;
 $font-size-lllg:              ($font-size-base * 1.5) !default;
+$font-size-2:                 ($font-size-base * 2) !default;
 $font-size-sm:                ($font-size-base * .875) !default;
 $font-size-ssm:               ($font-size-base * .8125) !default;
 $font-size-sssm:              ($font-size-base * .75) !default;
@@ -22,6 +23,7 @@ $font-weight-light:           200 !default;
 $font-weight-normal:          300 !default;
 $font-weight-medium:          400 !default;
 $font-weight-bold:            500 !default;
+$font-weight-black:           800 !default;
 $font-weight-base:            $font-weight-normal !default;
 
 // line
@@ -45,7 +47,7 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
-$gray-950: #1c1c1c !default;
+$gray-950: #17191c !default;
 $black:    #000 !default;
 
 $grays: () !default;
@@ -61,13 +63,20 @@ $grays: map-merge((
   "900": $gray-900
 ), $grays);
 
+$defaultBackground:   $gray-900;
+
 $info:         hsl(204, 86%, 40%);
 $danger:       hsl(348, 100%, 61%);
 $light-danger: hsl(348, 87%, 12%);
 $success:      hsl(175, 60%, 47%);
-$warning:      rgb(202, 126, 26);
 $error:        rgb(187, 26, 26);
+$warning:      rgb(231, 200, 24);
 $pending:      rgb(231, 200, 24);
+
+$defaultShadowColor:  rgba(0, 0, 0, .5);
+:root {
+  --box-shadow-color: rgba(0, 0, 0, .5);
+}
 
 
 /*
@@ -122,16 +131,15 @@ $button-inputs-hover: 'input[type="submit"]:hover',
 ** TODO: MEDIA BREAKPOINTS
 */
 
-// $phone: 768px;
-// $phablet: 768px;
-$tablet: 768px;
-// $desktop: ;
-// $widescreen: ;
+// $phablet:    568px;
+// $tablet:     768px;
+// $desktop:    960px;
+// $widescreen: 1366px;
+// $fullhd:     1600px;
 
-// $max-1024w:      "(max-width: 1024px)";
-// $max-768w:       "(max-width: 770px)";
-// $tablet:         "(min-width: 768px) and (max-width: 1023px)";
-// $desktop:        "(min-width: 1024px)";
-// @media screen and (max-width: 780px) {
-// }
+// $min-phablet:    "screen and (min-width: 568px)";
+// $min-tablet:     "screen and (min-width: 768px)";
+// $min-desktop:    "screen and (min-width: 960px)";
+// $min-widescreen: "screen and (min-width: 1366px)";
+// $min-fullhd:     "screen and (min-width: 1600px)";
 

@@ -403,44 +403,64 @@ return [
     /**
      * Modules configuration.
      *
-     * Contains an array of settings to use for modules configuration.
+     * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
+     * Modules order will follow key order of this configuration.
      *
-     * ## Options
+     * Array value may contain:
      *
-     * - `order` - The order in which modules will be displayed.
+     *  'label' - module label to display, if not set `key` will be used
+     *  'shortLabel' - short label, 3 character recommended
+     *  'color' - primary color code,
+     *  'secondaryColor' - secondary color code,
+     *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
+     *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
+     *          (default is '-id'),
+     *  'icon' - icon code, f.i. `icon-article`, have a look in
+     *      `webroot/css/be-icons-codes.css` for a complete list of codes
      */
     'Modules' => [
-        'order' => [
-            'objects',
-            'folders',
-            'documents',
-            'events',
-            'news',
-            'locations',
-            'media',
-            'images',
-            'videos',
-            'audio',
-            'files',
-            'users',
-            'profiles',
+        'objects' => [
+            'shortLabel' => 'obj',
+            'color' => '#230637',
+            // 'secondaryColor' => '#d95700',
+            'sort' => '-modified',
+            // 'icon' => 'icon-cube',
         ],
-
-        'colors' => [
-            'objects' => '#230637',
-            'folders' => '#072440',
-            'documents' => '#cc4700',
-            'media' => '#a80019',
-            'images' => '#d5002b',
-            'videos' => '#d5002b',
-            'audio' => '#d5002b',
-            'files' => '#d5002b',
-            'events' => '#09c',
-            'locations' => '#641',
-            'news' => '#036',
-            'users' => '#000000',
-            'profiles' => '#093',
-            'trash' => '#000000',
+        'folders' => [
+            'color' => '#072440',
+        ],
+        'documents' => [
+            'color' => '#cc4700',
+        ],
+        'events' => [
+            'color' => '#09c',
+        ],
+        'news' => [
+            'color' => '#036',
+        ],
+        'locations' => [
+            'color' => '#641',
+        ],
+        'media' => [
+            'color' => '#a80019',
+        ],
+        'images' => [
+            'color' => '#d5002b',
+        ],
+        'videos' => [
+            'color' => '#d5002b',
+        ],
+        'audio' => [
+            'color' => '#d5002b',
+        ],
+        'files' => [
+            'color' => '#d5002b',
+        ],
+        'users' => [
+            'color' => '#000000',
+        ],
+        'profiles' => [
+            'color' => '#093',
         ],
     ],
 
@@ -455,6 +475,9 @@ return [
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
+     *  - 'relations' relations ordering by relation name
+     *  - 'filter' filters to display
+     *  - 'bulk' bulk actions list
      */
     // 'Properties' => [
         // 'foos' => [
@@ -470,6 +493,8 @@ return [
         //              'publish_field',
         //         ],
         //         'advanced' => [
+        //              // Use custom element in `MyPlugin` to display this group
+        //              '_element' => 'MyPlugin/advanced',
         //              'extra_field',
         //         ],
         //     ],
@@ -477,6 +502,23 @@ return [
         //         'name',
         //         'surname',
         //         'username',
+        //     ],
+        //     'relations' => [
+        //         'main' => [
+        //             'foo_with',
+        //             'fooed_by',
+        //         ],
+        //         'aside' => [
+        //             'fooing',
+        //         ],
+        //     ],
+        //     'filter' => [
+        //         'select_field',
+        //         'another_one',
+        //     ],
+        //     'bulk' => [
+        //         'status',
+        //         'other_field',
         //     ],
         // ],
     // ],
@@ -617,5 +659,51 @@ return [
      */
     // 'Project' => [
     //     'name' => 'My Project',
+    // ],
+
+    /**
+     * Translator engine configuration
+     */
+    // 'Translator' => [
+    //     'class' => '\App\Core\I18n\DummyTranslator',
+    //     'options' => [
+    //         'url' => 'www.my-dummy-translator.com',
+    //         'apiKey' => 'abcde',
+    //     ],
+    // ],
+
+    /**
+     * Default RichTextEditor configuration.
+     */
+    // 'RichTextEditor' => [
+    //     'default' => [
+    //         'toolbar' => [
+    //             'heading',
+    //             '|',
+    //             'bold',
+    //             'italic',
+    //             'underline',
+    //             'strikethrough',
+    //             'code',
+    //             'subscript',
+    //             'superscript',
+    //             'removeFormat',
+    //             '|',
+    //             'alignment',
+    //             '|',
+    //             'specialCharacters',
+    //             'link',
+    //             'bulletedList',
+    //             'numberedList',
+    //             'blockQuote',
+    //             'insertTable',
+    //             'horizontalLine',
+    //             '|',
+    //             'undo',
+    //             'redo',
+    //             '|',
+    //             'editSource',
+    //         ],
+    //     ],
     // ],
 ];

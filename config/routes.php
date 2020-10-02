@@ -170,6 +170,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
+        '/:object_type/view/new',
+        ['controller' => 'Modules', 'action' => 'create'],
+        ['_name' => 'modules:create']
+    );
+
+    $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
@@ -217,11 +223,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationData']
     );
     $routes->connect(
-        '/:object_type/create',
-        ['controller' => 'Modules', 'action' => 'create'],
-        ['_name' => 'modules:create']
-    );
-    $routes->connect(
         '/:object_type/save',
         ['controller' => 'Modules', 'action' => 'save'],
         ['_name' => 'modules:save']
@@ -251,5 +252,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/bulkActions',
         ['controller' => 'Modules', 'action' => 'bulkActions'],
         ['_name' => 'modules:bulkActions']
+    );
+
+    // translator service
+    $routes->connect(
+        '/translate',
+        ['controller' => 'Translator', 'action' => 'translate'],
+        ['_name' => 'translator:translate']
     );
 });

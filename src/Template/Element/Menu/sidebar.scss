@@ -12,6 +12,9 @@
 
     > *:not(:last-child) { margin-bottom: $gutter;}
 
+    button, .button {
+        min-width: $dashboard-item-width / 2;
+    }
 
     &-bedita-logo, &-project-title {
         width: 100%;
@@ -19,7 +22,7 @@
         overflow: hidden;
         @media (min-width: 568px) {
             height: 0;
-            padding-bottom: #{$dashboard-items-ratio};
+            padding-bottom: $dashboard-items-ratio;
         }
     }
 
@@ -47,6 +50,15 @@
         line-height: $line-height-sm;
         word-break: break-word;
         min-height: 120px;
+        // make whole area clickable
+        position: relative;
+        a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     }
 
 

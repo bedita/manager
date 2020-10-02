@@ -1,9 +1,10 @@
+<div class="backdrop" @click="closePanel()"></div>
+
 <panel-view :custom-footer="true" :custom-header="true">
-    <div class="panel-slot-container" slot-scope="props">
+    <div class="panel-slot" slot-scope="props">
         <edit-relation-params v-if="props.action === 'edit-relation-params'" v-bind="props.data"> </edit-relation-params>
         <relations-add v-if="props.action === 'relations-add'" v-bind="props.data" inline-template>
-            {% element 'relations_add' %}
+            {% element 'Panel/relations_add' %}
         </relations-add>
-        <upload-files-view v-if="props.action === 'upload-files'" v-bind="props.data" />
     </div>
 </panel-view>
