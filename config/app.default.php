@@ -511,6 +511,10 @@ return [
         //         'aside' => [
         //             'fooing',
         //         ],
+        //         '_element' => [
+        //             // use custom element in `MyPlugin` for `fooed_by`
+        //             'fooed_by' => 'MyPlugin.fooed_by',
+        //         ],
         //     ],
         //     'filter' => [
         //         'select_field',
