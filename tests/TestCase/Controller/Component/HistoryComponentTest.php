@@ -332,17 +332,17 @@ class HistoryComponentTest extends TestCase
                 ['dummy', ['dummy' => ['dummy-expected']]],
                 ['dummy-expected'],
             ],
-            'properties' => [
-                ['properties', ['properties' => ['properties-expected']]],
-                ['properties-expected'],
+            'title' => [
+                ['properties', ['properties' => ['title' => 'title-expected']]],
+                ['title' => 'title-expected'],
             ],
             'relations' => [
-                ['relations', ['relations' => ['relations-expected']]],
-                ['relations-expected'],
+                ['relations', ['relations' => ['relationName' => 'relationName-expected']]],
+                ['relationName' => 'relationName-expected'],
             ],
             'associations' => [
-                ['associations', ['associations' => ['associations-expected']]],
-                ['associations-expected'],
+                ['associations', ['associations' => ['associationName' => 'associationName-expected']]],
+                ['associationName' => 'associationName-expected'],
             ],
         ];
     }
