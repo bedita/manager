@@ -76,17 +76,24 @@ class LinkHelper extends Helper
      * Returns sort url by field direction
      *
      * @param string $field the Field.
+     * @param bool $resetPage flag to reset pagination.
      * @return string
      */
-    public function sortUrl($field): string
+    public function sortUrl($field, $resetPage = true): string
     {
-        $sort = $this->getView()->getRequest()->getQuery('sort');
+        $request = $this->getView()->getRequest();
+        $sort = $request->getQuery('sort');
         $sortValue = $field; // <= ascendant order
         if ($sort === $field) { // it was ascendant sort
             $sortValue = '-' . $field; // <= descendant order
         }
+        $replace = ['sort' => $sortValue];
+        $currentPage = Hash::get($request->getQueryParams(), 'page');
+        if (isset($currentPage) && $resetPage) {
+            $replace['page'] = 1;
+        }
 
-        return $this->replaceParamUrl('sort', $sortValue);
+        return $this->replaceQueryParams($replace);
     }
 
     /**
@@ -116,7 +123,7 @@ class LinkHelper extends Helper
      */
     public function page($page): void
     {
-        echo $this->replaceParamUrl('page', $page);
+        echo $this->replaceQueryParams(['page' => $page]);
     }
 
     /**
@@ -127,7 +134,7 @@ class LinkHelper extends Helper
      */
     public function pageSize($pageSize): void
     {
-        echo $this->replaceParamUrl('page_size', $pageSize);
+        echo $this->replaceQueryParams(['page_size' => $pageSize]);
     }
 
     /**
@@ -151,19 +158,17 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Replace parameter on url.
+     * Replace query parameters on current request.
      *
-     * @param string $parameter parameter name.
-     * @param string|int $value the Value to set for parameter.
-     * @return string url
+     * @param array $queryParams list of query params to replace.
+     * @return string new uri
      */
-    private function replaceParamUrl($parameter, $value): string
+    private function replaceQueryParams(array $queryParams): string
     {
-        $query = $this->getView()->getRequest()->getQuery();
-        $query[$parameter] = $value;
-        $here = $this->getView()->getRequest()->getAttribute('here');
+        $request = $this->getView()->getRequest();
+        $query = array_merge($request->getQueryParams(), $queryParams);
 
-        return $this->webBaseUrl . $here . '?' . http_build_query($query);
+        return (string)$request->getUri()->withQuery(http_build_query($query));
     }
 
     /**
