@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-09-16 14:46:03 \n"
+"POT-Creation-Date: 2020-10-02 15:21:00 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -10,6 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Plural-Forms: nplurals=2; plural=(n != 1); \n"
+
+msgid " in Trashcan"
+msgstr ""
 
 msgid "&"
 msgstr ""
@@ -139,9 +142,6 @@ msgstr "Scarta"
 
 msgid "Documents"
 msgstr "Documenti"
-
-msgid "Download"
-msgstr "Scarica"
 
 msgid "Draft"
 msgstr "Bozza"
@@ -628,8 +628,12 @@ msgstr "visualizza genitore"
 msgid "www.bedita.com"
 msgstr ""
 
+#~ msgid "Download"
+#~ msgstr "Scarica"
+
 #~ msgid "There are unsaved changes, are you sure you want to leave page?"
-#~ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
+#~ msgstr ""
+#~ "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
 #~ msgid "New relations (save to keep)"
 #~ msgstr "Nuove relazioni (salvare per mantenerle)"
@@ -737,3 +741,10 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Avviso"
+
+#~ msgid "version by"
+#~ msgstr "versione di"
+
+#, javascript-format
+#~ msgid "on ${date}"
+#~ msgstr "del ${date}"

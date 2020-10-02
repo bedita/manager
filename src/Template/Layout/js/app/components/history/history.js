@@ -19,8 +19,8 @@ export default {
                     <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('restore') :></button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('clone') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('Clone') :></button>
                     </div>
                 </li>
             </ul>

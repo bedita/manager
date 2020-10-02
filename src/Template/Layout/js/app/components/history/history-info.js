@@ -7,17 +7,16 @@ export default {
         <section class="fieldset shrinks">
             <header class="mx-1 tab tab-static unselectable">
                 <h2>
-                    <span>Version by</span>
+                    <span><: t('version by') :></span>
                     <span class="has-font-weight-bold"><: authorName :></span>
-                    <span>on</span>
-                    <span><: formattedDate :></span>
+                    <span><: t('on ' + formattedDate) :></span>
                 </h2>
             </header>
             <div class="px-1 shrinks">
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
                     <div v-for="(value, key) in changed" v-html="value"></div>
-                    <button class="mt-2" @click.stop.prevent="restore()"><: t('restore') :></button>
+                    <button class="mt-2" @click.stop.prevent="restore()"><: t('Restore') :></button>
                 </div>
             </div>
         </section>
