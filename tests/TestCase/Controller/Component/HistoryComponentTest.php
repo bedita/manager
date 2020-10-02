@@ -344,6 +344,10 @@ class HistoryComponentTest extends TestCase
                 ['associationName', ['associations' => ['associationName' => ['associationName-expected']]]],
                 ['associationName-expected'],
             ],
+            'not existing field' => [
+                ['not-existing', ['dummy' => ['dummy-expected']]],
+                [],
+            ],
         ];
     }
 
