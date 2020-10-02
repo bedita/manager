@@ -40,6 +40,7 @@
         "@ckeditor/ckeditor5-special-characters": "^22.0.0",
         "@ckeditor/ckeditor5-table": "^22.0.0",
         "@ckeditor/ckeditor5-theme-lark": "^22.0.0",
+        "@trevoreyre/autocomplete-vue": "^2.2.0",
         "abortcontroller-polyfill": "^1.1.9",
         "autosize": "^4.0.2",
         "axios": "^0.18.0",
