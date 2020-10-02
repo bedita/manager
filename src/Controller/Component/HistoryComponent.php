@@ -193,16 +193,16 @@ class HistoryComponent extends Component
     private function fieldSchema(string $field, array $schema): array
     {
         if (array_key_exists($field, $schema)) {
-            return $schema[$field];
+            return (array)$schema[$field];
         }
-        if (array_key_exists($field, $schema['properties'])) {
-            return $schema['properties'][$field];
+        if (array_key_exists('properties', $schema) && array_key_exists($field, $schema['properties'])) {
+            return (array)$schema['properties'][$field];
         }
-        if (array_key_exists($field, $schema['relations'])) {
-            return $schema['relations'][$field];
+        if (array_key_exists('relations', $schema) && array_key_exists($field, $schema['relations'])) {
+            return (array)$schema['relations'][$field];
         }
-        if (array_key_exists($field, $schema['associations'])) {
-            return $schema['associations'][$field];
+        if (array_key_exists('associations', $schema) && array_key_exists($field, $schema['associations'])) {
+            return (array)$schema['associations'][$field];
         }
 
         return [];
