@@ -176,7 +176,7 @@ class HistoryComponent extends Component
             $formatted = [];
             foreach ($changed as $field => $value) {
                 $fieldSchema = $this->fieldSchema($field, $schema);
-                $formatted[$field] = $this->field($field, $value, $fieldSchema);
+                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $schema));
             }
             $history['meta']['changed'] = $formatted;
         }
@@ -202,23 +202,5 @@ class HistoryComponent extends Component
         }
 
         return [];
-    }
-
-    /**
-     * Single field by its property schema
-     *
-     * @param string $field The field to format
-     * @param mixed $value The value
-     * @param array $schema The property schema
-     * @return string The html field
-     */
-    private function field(string $field, $value, array $schema): string
-    {
-        if ($field === 'categories') {
-            $schema = ['type' => 'categories', 'categories' => $schema];
-        }
-        $options = $this->SchemaHelper->controlOptions($field, $value, $schema);
-
-        return $this->FormHelper->control($field, $options);
     }
 }

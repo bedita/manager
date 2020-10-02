@@ -222,7 +222,7 @@ class HistoryComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'title' => '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="test history controller"/></div>',
+                    'title' => 'Title: test history controller',
                 ],
             ],
         ];
@@ -292,7 +292,7 @@ class HistoryComponentTest extends TestCase
                         [
                             'meta' => [
                                 'changed' => [
-                                    'lang' => '<div class="input text"><label for="lang">Lang</label><input type="text" name="lang" id="lang" value="en"/></div>',
+                                    'lang' => 'Lang: en',
                                 ],
                             ],
                         ],
@@ -365,58 +365,6 @@ class HistoryComponentTest extends TestCase
         // call private method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
         $actual = $test->invokeMethod($this->HistoryComponent, 'fieldSchema', [$data[0], $data[1]]);
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Provider for `testField` method
-     *
-     * @return array
-     */
-    public function fieldProvider(): array
-    {
-        return [
-            'title' => [
-                [
-                    'title',
-                    'dummy',
-                    [
-                        'oneOf' => [
-                            ['type' => null],
-                            ['type' => 'string', 'contentMediaType' => 'text/Html'],
-                        ],
-                        '$id' => '/properties/title',
-                        'title' => 'Title',
-                        'description' => '',
-                    ],
-                ],
-                '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="dummy"/></div>',
-            ],
-            'categories' => [
-                [
-                    'categories',
-                    '',
-                    [],
-                ],
-                '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" value=""/></div>',
-            ],
-        ];
-    }
-
-    /**
-     * Test `field` method
-     *
-     * @covers ::field()
-     * @dataProvider fieldProvider()
-     * @param array $data The data for test
-     * @param string $expected The expected value
-     * @return void
-     */
-    public function testField(array $data, string $expected): void
-    {
-        // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
-        $actual = $test->invokeMethod($this->HistoryComponent, 'field', [$data[0], $data[1], $data[2]]);
         static::assertEquals($expected, $actual);
     }
 }
