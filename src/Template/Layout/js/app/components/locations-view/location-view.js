@@ -206,6 +206,8 @@ export default {
                 geocoder.geocode({ address: this.address(this.location) }, (results, status) => {
                     if (status === "OK" && results.length) {
                         const result = results[0];
+
+                        // Longitude, Latitude format: see https://docs.mapbox.com/api/#coordinate-format
                         this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
                     } else {
                         this.coordinates = '';
@@ -218,6 +220,7 @@ export default {
                 return retrieveGeocode();
             }
 
+            // init script
             var script = document.createElement('script');
             script.src = `${this.apiurl}js?key=${this.apikey}&callback=initMap`;
             script.defer = true;
