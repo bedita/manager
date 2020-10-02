@@ -176,7 +176,7 @@ class HistoryComponent extends Component
             $formatted = [];
             foreach ($changed as $field => $value) {
                 $fieldSchema = $this->fieldSchema($field, $schema);
-                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $schema));
+                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
             }
             $history['meta']['changed'] = $formatted;
         }
