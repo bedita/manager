@@ -68,17 +68,17 @@ export default {
                     </div>
                     <div class="is-flex-column">
                         <label> Zoom
-                            <input @change="onRelationDataChange" name="zoom" type="number" min="2" max="20"/>
+                            <input @change="onRelationDataChange" :value="zoom" data-name="zoom" type="number" min="2" max="20"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Pitch°
-                            <input @change="onRelationDataChange" name="pitch" type="number" min="0" max="60"/>
+                            <input @change="onRelationDataChange" :value="pitch" data-name="pitch" type="number" min="0" max="60"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Bearing°
-                            <input @change="onRelationDataChange" name="bearing" type="number" min="-180" max="180"/>
+                            <input @change="onRelationDataChange" :value="bearing" data-name="bearing" type="number" min="-180" max="180"/>
                         </label>
                     </div>
                 </div>
@@ -96,9 +96,9 @@ export default {
             location: this.locationdata,
             fullAddress: false,
             coordinates: '',
-            zoom: 2,
-            pitch: 0,
-            bearing: 0,
+            zoom: this.locationdata.meta.relation.params.zoom && parseInt(this.locationdata.meta.relation.params.zoom) || 2,
+            pitch: this.locationdata.meta.relation.params.pitch && parseInt(this.locationdata.meta.relation.params.pitch) || 0,
+            bearing: this.locationdata.meta.relation.params.bearing && parseInt(this.locationdata.meta.relation.params.bearing) || 0,
         }
     },
 
@@ -109,23 +109,32 @@ export default {
     methods: {
         onRelationDataChange(event) {
             const target = event.target;
-            const value = event.target.value;
-            const attributeName = event.target.getAttribute('name');
-            this[attributeName] = value;
+            const value = target.value;
+            const attributeName = target.dataset['name'];
+            this[attributeName] = parseInt(value);
+
+            this.location.meta.relation.params.zoom = this.zoom;
+            this.location.meta.relation.params.pitch = this.pitch;
+            this.location.meta.relation.params.bearing = this.bearing;
+
+            this.$parent.$emit('modified', this.location);
         },
         onSubmitTitle(result) {
             this.$refs.address.value = this.address(result);
             this.location = result; // set address on model from retrieved location
+            this.$parent.$emit('modified', this.location);
         },
         onSubmitAddress(result) {
             this.$refs.title.value = result.attributes.title;
             this.location = result; // set address on model from retrieved location
             this.fullAddress = !!result;
+            this.$parent.$emit('modified', this.location);
         },
         onChangeAddress(event) {
             const result = event.target.value;
             this.location.attributes.address = result;
             this.fullAddress = !!result;
+            this.$parent.$emit('modified', this.location);
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;

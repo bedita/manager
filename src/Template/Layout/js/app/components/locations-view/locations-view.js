@@ -49,13 +49,47 @@ export default {
     async created() {
         const requestUrl = `${window.location.href}/relatedJson/has_location`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
+
+        this.locations.forEach((location) => {
+            if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
+                location.meta.relation.params = {};
+            }
+        });
+
+        this.$on('modified',(location) => {
+            if (!this.addedRelationsData || !this.addedRelationsData.length) {
+                this.addedRelationsData.push(location);
+
+                this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
+                return;
+            }
+
+            let foundLocation = this.addedRelationsData.filter((elem) => elem.attributes.id === location.attributes.id);
+            if (foundLocation) {
+                foundLocation = location;
+
+                this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
+                return;
+            }
+        });
+
+        // add available locations on relation model
+        this.addedRelationsData.push(...this.locations);
     },
     methods: {
         onAddNew() {
-            this.locations.push({
-                // TODO altro?
+            // create new empty location
+            const newLocation = {
                 attributes: {},
-            });
+                meta: {
+                    relation: {
+                        params: {},
+                    },
+                },
+            };
+
+            // add on view
+            this.locations.push(newLocation);
         },
         onRemove() {
             // retrieve last relation (now remove button removes the last one)
@@ -63,6 +97,8 @@ export default {
 
             // add this location to the array of removed locations
             this.removedRelationsData.push(removedLocation);
+
+            this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
 
             // remove it also from view
             this.locations.pop({});
