@@ -645,18 +645,27 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
+msgid "by"
+msgstr "di"
+
+msgid "version by"
+msgstr "versione di"
+
+msgid "on"
+msgstr "del"
+
+msgid ""
+"Restored data will replace current data (you can still check the data "
+"before saving). Are you sure?"
+msgstr ""
+"I dati recuperati sostiruiranno quelli attuali (potrai comunque "
+"controllarli prima di salvare). Vuoi continuare?"
+
 #~ msgid "Download"
 #~ msgstr "Scarica"
 
 #~ msgid "New relations (save to keep)"
 #~ msgstr "Nuove relazioni (salvare per mantenerle)"
-
-#~ msgid ""
-#~ "Restored data will replace current data (you can still check the data "
-#~ "before saving). Are you sure?"
-#~ msgstr ""
-#~ "I dati recuperati sostiruiranno quelli attuali (potrai comunque "
-#~ "controllarli prima di salvare). Vuoi continuare?"
 
 #~ msgid "Add objects to"
 #~ msgstr "Aggiungi oggetti a"
@@ -743,14 +752,5 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 #~ msgstr "Il nome utente e/o la password non corrispondono"
 
 #~ msgid "Warning"
+
 #~ msgstr "Avviso"
-
-#~ msgid "by"
-#~ msgstr "di"
-
-#~ msgid "version by"
-#~ msgstr "versione di"
-
-#, javascript-format
-#~ msgid "on ${date}"
-#~ msgstr "del ${date}"

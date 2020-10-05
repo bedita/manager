@@ -8,7 +8,7 @@ export default {
                 <h2>
                     <span><: t('version by') :></span>
                     <span class="has-font-weight-bold"><: authorName :></span>
-                    <span><: t('on ' + formattedDate) :></span>
+                    <span><: t('on') :> <: formattedDate :></span>
                 </h2>
             </header>
             <div class="px-1 shrinks">
