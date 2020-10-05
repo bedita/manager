@@ -1,20 +1,7 @@
 {# Locations: show add relation form if the relation is set #}
 
-{% if objectRelations.main.has_location %}
-<property-view inline-template :tab-open="tabsOpen">
-    <section class="fieldset">
-        <header @click.prevent="toggleVisibility()"
-            class="tab unselectable"
-            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __('Locations') }}</h2>
-        </header>
-        <div v-show="isOpen" class="tab-container">
-            <locations-view
-                apikey="{{ config('Location.google.key') }}"
-                apiurl="{{ config('Location.google.url') }}"
-                :object="{{ object|json_encode }}">
-            </locations-view>
-        </div>
-    </section>
-</property-view>
-{% endif %}
+<locations-view
+    apikey="{{ config('Location.google.key') }}"
+    apiurl="{{ config('Location.google.url') }}"
+    :object="{{ object|json_encode }}">
+</locations-view>
