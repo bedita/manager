@@ -14,7 +14,6 @@
  *
  */
 
-import sleep from 'sleep-promise';
 import flatpickr from 'flatpickr';
 
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';

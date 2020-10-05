@@ -36,6 +36,8 @@ export default {
         object: Object,
         apikey: String,
         apiurl: String,
+        addedRelationsData: Array,
+        removedRelationsData: Array,
     },
 
     data() {
@@ -56,6 +58,13 @@ export default {
             });
         },
         onRemove() {
+            // retrieve last relation (now remove button removes the last one)
+            const removedLocation = this.locations[this.locations.length - 1];
+
+            // add this location to the array of removed locations
+            this.removedRelationsData.push(removedLocation);
+
+            // remove it also from view
             this.locations.pop({});
         },
     },

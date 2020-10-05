@@ -3,5 +3,7 @@
 <locations-view
     apikey="{{ config('Location.google.key') }}"
     apiurl="{{ config('Location.google.url') }}"
-    :object="{{ object|json_encode }}">
-</locations-view>
+    :object="{{ object|json_encode }}"
+    :removed-relations-data="removedRelationsData"
+    :added-relations-data="addedRelationsData"
+></locations-view>

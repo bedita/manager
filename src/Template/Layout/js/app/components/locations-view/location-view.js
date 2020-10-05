@@ -68,17 +68,17 @@ export default {
                     </div>
                     <div class="is-flex-column">
                         <label> Zoom
-                            <input type="number" min="2" max="20"/>
+                            <input @change="onRelationDataChange" name="zoom" type="number" min="2" max="20"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Pitch°
-                            <input type="number" min="0" max="60"/>
+                            <input @change="onRelationDataChange" name="pitch" type="number" min="0" max="60"/>
                         </label>
                     </div>
                     <div class="is-flex-column">
                         <label> Bearing°
-                            <input type="number" min="-180" max="180"/>
+                            <input @change="onRelationDataChange" name="bearing" type="number" min="-180" max="180"/>
                         </label>
                     </div>
                 </div>
@@ -96,6 +96,9 @@ export default {
             location: this.locationdata,
             fullAddress: false,
             coordinates: '',
+            zoom: 2,
+            pitch: 0,
+            bearing: 0,
         }
     },
 
@@ -104,6 +107,12 @@ export default {
     },
 
     methods: {
+        onRelationDataChange(event) {
+            const target = event.target;
+            const value = event.target.value;
+            const attributeName = event.target.getAttribute('name');
+            this[attributeName] = value;
+        },
         onSubmitTitle(result) {
             this.$refs.address.value = this.address(result);
             this.location = result; // set address on model from retrieved location
