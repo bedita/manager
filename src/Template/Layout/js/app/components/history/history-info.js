@@ -1,4 +1,3 @@
-import { t } from 'ttag';
 import moment from 'moment';
 import { PanelEvents } from '../panel-view';
 
@@ -63,7 +62,8 @@ export default {
          * @return {string}
          */
         actionLabel() {
-            let label = t`${this.user_action.replace(/^\w/, (c) => c.toUpperCase())}d`;
+            const changeAction = this.user_action.replace(/^\w/, (c) => c.toUpperCase()) + 'd';
+            let label = this.t(changeAction);
             if (this.user_action !== 'trash' && this.user_action !== 'restore') {
                 label += ':';
             }

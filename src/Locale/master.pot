@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-02 15:54:12 \n"
+"POT-Creation-Date: 2020-10-05 10:04:01 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -621,4 +621,21 @@ msgid "view parent"
 msgstr ""
 
 msgid "www.bedita.com"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:152
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:466
+msgid "If you confirm, this data will be gone forever"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:468
+msgid "Do you really want to trash the object?"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:484
+msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""

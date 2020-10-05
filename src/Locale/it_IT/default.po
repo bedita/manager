@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-02 15:21:00 \n"
+"POT-Creation-Date: 2020-10-05 09:53:42 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -628,25 +628,28 @@ msgstr "visualizza genitore"
 msgid "www.bedita.com"
 msgstr ""
 
+#: src/Template/Layout/js/app/app.js:152
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+
+#: src/Template/Layout/js/app/app.js:466
+msgid "If you confirm, this data will be gone forever"
+msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+
+#: src/Template/Layout/js/app/app.js:468
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+
+#: src/Template/Layout/js/app/app.js:484
+msgid "There are unsaved changes, are you sure you want to leave page?"
+msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
+
 #~ msgid "Download"
 #~ msgstr "Scarica"
 
-#~ msgid "There are unsaved changes, are you sure you want to leave page?"
-#~ msgstr ""
-#~ "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
-
 #~ msgid "New relations (save to keep)"
 #~ msgstr "Nuove relazioni (salvare per mantenerle)"
-
-#, javascript-format
-#~ msgid "Please insert a new title on \"${ title }\" clone"
-#~ msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
-
-#~ msgid "If you confirm, this data will be gone forever"
-#~ msgstr "Se confermi, questo dato verrà eliminato definitivamente"
-
-#~ msgid "Do you really want to trash the object?"
-#~ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #~ msgid ""
 #~ "Restored data will replace current data (you can still check the data "
@@ -741,6 +744,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Avviso"
+
+#~ msgid "by"
+#~ msgstr "di"
 
 #~ msgid "version by"
 #~ msgstr "versione di"

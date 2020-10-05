@@ -1,7 +1,5 @@
 import moment from 'moment';
-import { t } from 'ttag';
 import { PanelEvents } from '../panel-view';
-
 
 const LOCALE = BEDITA.locale.slice(0, 2);
 
@@ -16,7 +14,7 @@ export default {
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
-                    <div class="is-flex">by <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
+                    <div class="is-flex"><: t('by') :> <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
@@ -60,19 +58,6 @@ export default {
                 '';
         },
         /**
-         * Translate user action.
-         * Capitalize it before translation and then add colon.
-         * @param {string} action User action name
-         * @return {string}
-         */
-        getActionLabel(action) {
-            let label = t`${action.replace(/^\w/, (c) => c.toUpperCase())}d`;
-            if (action !== 'trash' && action !== 'restore') {
-                label += ':';
-            }
-            return label;
-        },
-        /**
          * Open panel to show changes.
          * @param {Object} item History item changes
          */
@@ -90,7 +75,7 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
+            if (!confirm(this.t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
                 return;
             }
 
@@ -101,8 +86,8 @@ export default {
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || t('Untitled');
-            const msg = t`Please insert a new title on "${title}" clone`;
+            const title = document.getElementById('title').value || this.t('Untitled');
+            const msg = this.t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
             const origin = window.location.origin;
             const path = window.location.pathname.replace('/view/', '/clone/');
