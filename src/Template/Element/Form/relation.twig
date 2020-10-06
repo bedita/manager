@@ -3,8 +3,6 @@
     :relation-data='{{ relationSchema|json_encode|raw }}'
 {% endif %}
     relation-name={{ relationName }}
-    :removed-relations-data={{ removedRelationsData|json_encode }}
-    :added-relations-data={{ addedRelationsData|json_encode }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     @loading="onToggleLoading" @count="onCount">

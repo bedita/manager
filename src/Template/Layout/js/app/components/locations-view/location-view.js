@@ -113,9 +113,9 @@ export default {
             const attributeName = target.dataset['name'];
             this[attributeName] = parseInt(value);
 
-            this.location.meta.relation.params.zoom = this.zoom;
-            this.location.meta.relation.params.pitch = this.pitch;
-            this.location.meta.relation.params.bearing = this.bearing;
+            this.location.meta.relation.params.zoom = `${this.zoom}`;
+            this.location.meta.relation.params.pitch = `${this.pitch}`;
+            this.location.meta.relation.params.bearing = `${this.bearing}`;
 
             this.$parent.$emit('modified', this.location);
         },

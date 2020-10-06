@@ -16,7 +16,7 @@
 
 import flatpickr from 'flatpickr';
 
-import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
@@ -141,8 +141,16 @@ export default {
         this.$on('sort-end', this.onSort);
 
         this.$on('locations-modified', (added, removed) => {
-            this.addedRelationsData = added;
-            this.removedRelationsData = removed;
+            this.addedRelationsData = [...added];
+            this.objects = [...added];
+            added.forEach((elem) => {
+                this.updateRelationParams(elem);
+            })
+
+            this.removedRelationsData = [...removed];
+            removed.forEach((elem) => {
+                this.updateRelationParams(elem);
+            })
         });
     },
 

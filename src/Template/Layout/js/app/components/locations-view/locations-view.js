@@ -36,8 +36,8 @@ export default {
         object: Object,
         apikey: String,
         apiurl: String,
-        addedRelationsData: Array,
-        removedRelationsData: Array,
+        addedRelationsData: [Array, String],
+        removedRelationsData: [Array, String],
     },
 
     data() {
@@ -54,7 +54,11 @@ export default {
 
         this.locations.forEach((location) => {
             if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
-                location.meta.relation.params = {};
+                location.meta = {
+                    relation: {
+                        params: {},
+                    },
+                };
             }
         });
 
@@ -67,30 +71,29 @@ export default {
             };
         };
 
-        this.$on('modified',(location) => {
+        this.$on('modified', (location) => {
             location = transformLocationForApi(location);
 
             if (!this.added || !this.added.length) {
-
                 this.added.push(location);
-
                 return;
             }
 
             this.added.forEach((data) => {
                 const dataID = data.id || data.attributes.id;
-                const locationID = location.id || location.attributes.id;
+                const locationID = location.id;
+
+                if (!locationID) {
+                    console.log(location)
+                    // TODO handle new location
+                    return;
+                }
 
                 if (dataID == locationID) {
                     data = transformLocationForApi(location);
-                    console.log('qui');
                 }
-
-                console.log('dato parsato', data);
-
             })
 
-            console.log(this.added[0])
             this.$parent.$emit('locations-modified', this.added, this.removed);
         });
 
