@@ -141,8 +141,6 @@ export default {
         this.$on('sort-end', this.onSort);
 
         this.$on('locations-modified', (added, removed) => {
-            console.log(added, removed);
-
             this.addedRelationsData = added;
             this.removedRelationsData = removed;
         });

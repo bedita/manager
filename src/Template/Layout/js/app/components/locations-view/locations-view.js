@@ -43,6 +43,8 @@ export default {
     data() {
         return {
             locations: [],
+            added: this.addedRelationsData,
+            removed: this.removedRelationsData,
         }
     },
 
@@ -56,25 +58,44 @@ export default {
             }
         });
 
+        // API that saves relation data needs the following format
+        const transformLocationForApi = (location) => {
+            return {
+                id: location.id,
+                type: 'locations',
+                meta: location.meta,
+            };
+        };
+
         this.$on('modified',(location) => {
-            if (!this.addedRelationsData || !this.addedRelationsData.length) {
-                this.addedRelationsData.push(location);
+            location = transformLocationForApi(location);
 
-                this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
+            if (!this.added || !this.added.length) {
+
+                this.added.push(location);
+
                 return;
             }
 
-            let foundLocation = this.addedRelationsData.filter((elem) => elem.attributes.id === location.attributes.id);
-            if (foundLocation) {
-                foundLocation = location;
+            this.added.forEach((data) => {
+                const dataID = data.id || data.attributes.id;
+                const locationID = location.id || location.attributes.id;
 
-                this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
-                return;
-            }
+                if (dataID == locationID) {
+                    data = transformLocationForApi(location);
+                    console.log('qui');
+                }
+
+                console.log('dato parsato', data);
+
+            })
+
+            console.log(this.added[0])
+            this.$parent.$emit('locations-modified', this.added, this.removed);
         });
 
         // add available locations on relation model
-        this.addedRelationsData.push(...this.locations);
+        this.added.push(...this.locations);
     },
     methods: {
         onAddNew() {
@@ -96,9 +117,9 @@ export default {
             const removedLocation = this.locations[this.locations.length - 1];
 
             // add this location to the array of removed locations
-            this.removedRelationsData.push(removedLocation);
+            this.removed.push(transformLocationForApi(removedLocation));
 
-            this.$parent.$emit('locations-modified', this.addedRelationsData, this.removedRelationsData);
+            this.$parent.$emit('locations-modified', this.added, this.removed);
 
             // remove it also from view
             this.locations.pop({});
