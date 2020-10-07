@@ -1,8 +1,12 @@
 <?php
 namespace App\Controller\Component;
 
+use App\View\Helper\SchemaHelper;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
+use Cake\View\Helper\FormHelper;
 
 /**
  * History component
@@ -15,6 +19,33 @@ class HistoryComponent extends Component
      * @var string
      */
     protected $key = 'history.%s.attributes';
+
+    /**
+     * Form Helper
+     *
+     * @var \Cake\View\Helper\FormHelper
+     */
+    protected $FormHelper = null;
+
+    /**
+     * Schema Helper
+     *
+     * @var \App\View\Helper\SchemaHelper
+     */
+    protected $SchemaHelper = null;
+
+    /**
+     * {@inheritDoc}
+     * {@codeCoverageIgnore}
+     */
+    public function initialize(array $config)
+    {
+        $view = new \Cake\View\View();
+        $this->SchemaHelper = new SchemaHelper($view);
+        $this->FormHelper = new FormHelper($view);
+
+        parent::initialize($config);
+    }
 
     /**
      * Load object history from session by ID.
@@ -109,5 +140,67 @@ class HistoryComponent extends Component
         $key = sprintf($this->key, $id);
         $session = $this->getController()->request->getSession();
         $session->write($key, json_encode($attributes));
+    }
+
+    /**
+     * Fetch history by ID.
+     *
+     * @param string|int $id The ID
+     * @param array $schema The schema for object type
+     * @return array
+     */
+    public function fetch($id, array $schema): array
+    {
+        $filter = ['resource_id' => $id];
+        $response = (array)ApiClientProvider::getApiClient()->get('/history', compact('filter') + ['page_size' => 100]);
+        $this->formatResponseData($response, $schema);
+
+        return $response;
+    }
+
+    /**
+     * Parse response data from history and format values considering schema.
+     *
+     * @param array $response The response to parse and format
+     * @param array $schema The schema
+     * @return void
+     */
+    private function formatResponseData(array &$response, array $schema): void
+    {
+        if (empty($response['data']) || empty($schema)) {
+            return;
+        }
+        $data = Hash::get($response, 'data');
+        foreach ($data as &$history) {
+            $changed = Hash::get($history, 'meta.changed');
+            $formatted = [];
+            foreach ($changed as $field => $value) {
+                $fieldSchema = $this->fieldSchema($field, $schema);
+                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
+            }
+            $history['meta']['changed'] = $formatted;
+        }
+        $response['data'] = $data;
+    }
+
+    /**
+     * Schema by field
+     *
+     * @param string $field The field
+     * @param array $schema The schema
+     * @return array
+     */
+    private function fieldSchema(string $field, array $schema): array
+    {
+        if (array_key_exists($field, $schema)) {
+            return (array)$schema[$field];
+        }
+        foreach (['properties', 'relations', 'associations'] as $key) {
+            if (Hash::check($schema, sprintf('%s.%s', $key, $field))) {
+                return (array)Hash::get($schema, sprintf('%s.%s', $key, $field));
+            }
+        }
+
+        return [];
     }
 }
