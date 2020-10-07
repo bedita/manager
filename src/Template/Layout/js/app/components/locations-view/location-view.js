@@ -7,6 +7,26 @@ const options = {
     }
 };
 
+function convertFromPoint(input) {
+    if (!input) {
+        return;
+    }
+    let match = input.match(/point\(([^)]*)\)/i);
+    if (!match) {
+        return;
+    }
+    let [lon, lat] = match[1].split(' ');
+    return `${lat}, ${lon}`;
+}
+
+function convertToPoint(input) {
+    if (!input) {
+        return;
+    }
+    let [lat, lon] = input.split(/\s*,\s*/);
+    return `POINT(${lon} ${lat})`;
+}
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  ...
@@ -20,6 +40,7 @@ const options = {
 export default {
     template: `
         <div class="location mb-2 is-flex">
+            <input type="hidden" name="relations[has_location][replaceRelated][]" :value="locationValue" />
             <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
                 <: index + 1 :>
             </div>
@@ -96,11 +117,34 @@ export default {
         return {
             location: this.locationdata,
             fullAddress: false,
-            coordinates: '',
+            coordinates: convertFromPoint(this.locationdata.attributes.coords),
             zoom: this.locationdata.meta.relation.params.zoom && parseInt(this.locationdata.meta.relation.params.zoom) || 2,
             pitch: this.locationdata.meta.relation.params.pitch && parseInt(this.locationdata.meta.relation.params.pitch) || 0,
             bearing: this.locationdata.meta.relation.params.bearing && parseInt(this.locationdata.meta.relation.params.bearing) || 0,
         }
+    },
+
+    computed: {
+        locationValue() {
+            return JSON.stringify({
+                id: this.location && this.location.id,
+                type: 'locations',
+                attributes: {
+                    status: 'on',
+                    ...(this.location && this.location.attributes || {}),
+                    coords: convertToPoint(this.coordinates),
+                },
+                meta: {
+                    relation: {
+                        params: {
+                            zoom: `${this.zoom}`,
+                            pitch: `${this.pitch}`,
+                            bearing: `${this.bearing}`,
+                        },
+                    },
+                },
+            });
+        },
     },
 
     async mounted() {
@@ -117,19 +161,17 @@ export default {
             this.location.meta.relation.params.zoom = `${this.zoom}`;
             this.location.meta.relation.params.pitch = `${this.pitch}`;
             this.location.meta.relation.params.bearing = `${this.bearing}`;
-
-            this.$parent.$emit('modified', this.location);
         },
         onSubmitTitle(result) {
             this.$refs.address.value = this.address(result);
             this.location = result; // set address on model from retrieved location
-            this.$parent.$emit('modified', this.location);
+            this.coordinates = convertFromPoint(this.location.attributes.coords);
         },
         onSubmitAddress(result) {
             this.$refs.title.value = result.attributes.title;
-            this.location = result; // set address on model from retrieved location
             this.fullAddress = !!result;
-            this.$parent.$emit('modified', this.location);
+            this.location = result; // set address on model from retrieved location
+            this.coordinates = convertFromPoint(this.location.attributes.coords);
         },
         onChangeTitle(event) {
             const result = event.target.value;
@@ -139,7 +181,6 @@ export default {
             const result = event.target.value;
             this.location.attributes.address = result;
             this.fullAddress = !!result;
-            this.$parent.$emit('modified', this.location);
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;

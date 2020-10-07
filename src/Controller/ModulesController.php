@@ -354,6 +354,15 @@ class ModulesController extends AppController
             $method = (string)Hash::get($rel, 'method');
             $relation = (string)Hash::get($rel, 'relation');
             $relatedIds = (array)Hash::get($rel, 'relatedIds');
+
+            foreach ($relatedIds as $key => &$data) {
+                if (!empty($data['attributes'])) {
+                    $object = $this->apiClient->save($data['type'], array_merge([
+                        'id' => $data['id'] ?? null,
+                    ], $data['attributes']));
+                    $data['id'] = $object['data']['id'];
+                }
+            }
             if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                 $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
             }

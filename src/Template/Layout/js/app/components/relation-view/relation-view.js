@@ -66,9 +66,6 @@ export default {
             addedRelations: [],         // staged added objects to be saved
             modifiedRelations: [],      // staged modified relation params
 
-            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],     // array of serialized new relations
-
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
 
@@ -139,19 +136,6 @@ export default {
 
         // enable related objects drop
         this.$on('sort-end', this.onSort);
-
-        this.$on('locations-modified', (added, removed) => {
-            this.addedRelationsData = [...added];
-            this.objects = [...added];
-            added.forEach((elem) => {
-                this.updateRelationParams(elem);
-            })
-
-            this.removedRelationsData = [...removed];
-            removed.forEach((elem) => {
-                this.updateRelationParams(elem);
-            })
-        });
     },
 
     beforeDestroy() {
@@ -630,8 +614,6 @@ export default {
         prepareRelationsToSave() {
             const relations = this.addedRelations.concat(this.modifiedRelations);
             let difference = relations.filter(rel => !this.containsId(this.removedRelated, rel.id));
-
-            this.addedRelationsData = JSON.stringify(this.formatObjects(difference));
 
             const isChanged = !!difference.length;
             this.$el.dispatchEvent(new CustomEvent('change', {
