@@ -252,7 +252,6 @@ export default {
             return this.address(this.location);
         },
         address(model) {
-            // TODO change according to the field that will be used for 'location' as full address
             if (!model || !model.attributes) {
                 return '';
             }
