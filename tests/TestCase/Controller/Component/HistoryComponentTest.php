@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\HistoryComponent;
 use App\Controller\Component\SchemaComponent;
+use App\Test\TestCase\Controller\AppControllerTest;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -139,7 +140,7 @@ class HistoryComponentTest extends TestCase
         $this->HistoryComponent->load($this->documentId, $object);
         if ($expected != '') {
             static::assertNull($session->read($key));
-            static::assertEquals($object['attributes'], (array)json_decode($expected, true));
+            static::assertEquals((array)json_decode($expected, true), $object['attributes']);
         } else {
             static::assertArrayNotHasKey('attributes', $object);
         }
@@ -193,6 +194,177 @@ class HistoryComponentTest extends TestCase
         $this->HistoryComponent->write($options);
         $session = $this->HistoryComponent->getController()->request->getSession();
         $actual = $session->read(sprintf('history.%s.attributes', $options['id']));
-        static::assertEquals($actual, $expected);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Provider for `testFetch` method
+     *
+     * @return array
+     */
+    public function fetchProvider(): array
+    {
+        return [
+            'a document history' => [
+                [
+                    $this->documentId,
+                    [
+                        'properties' => [
+                            'title' => [
+                                'oneOf' => [
+                                    ['type' => null],
+                                    ['type' => 'string'],
+                                ],
+                                '$id' => '/properties/title',
+                                'title' => 'Title',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Title: test history controller',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `fetch` method
+     *
+     * @covers ::fetch()
+     * @dataProvider fetchProvider()
+     * @param array $data The data for test
+     * @param mixed $expected The expected value
+     * @return void
+     */
+    public function testFetch(array $data, $expected): void
+    {
+        $response = $this->HistoryComponent->fetch($data[0], $data[1]);
+        $actual = $response['data'][0]['meta']['changed'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Provider for `testFormatResponseData` method
+     *
+     * @return array
+     */
+    public function formatResponseDataProvider(): array
+    {
+        return [
+            'empty response data' => [
+                [['data' => []], ['something']],
+                ['data' => []],
+            ],
+            'empty schema' => [
+                [['data' => ['something']], []],
+                ['data' => ['something']],
+            ],
+            'some history' => [
+                [
+                    [
+                        'data' => [
+                            [
+                                'meta' => [
+                                    'changed' => [
+                                        'lang' => 'en',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'properties' => [
+                            'lang' => [
+                                'oneOf' => [
+                                    ['type' => null],
+                                    ['type' => 'string'],
+                                ],
+                                '$id' => '/properties/lang',
+                                'title' => 'Lang',
+                                'description' => 'language tag, RFC 5646',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'data' => [
+                        [
+                            'meta' => [
+                                'changed' => [
+                                    'lang' => 'Lang: en',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `formatResponseData` method
+     *
+     * @covers ::formatResponseData()
+     * @dataProvider formatResponseDataProvider()
+     * @param array $data The data for test
+     * @param mixed $expected The expected value
+     * @return void
+     */
+    public function testFormatResponseData(array $data, $expected): void
+    {
+        // call private method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
+        $actual = $data[0];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Provider for `testFieldSchema` method
+     *
+     * @return array
+     */
+    public function fieldSchemaProvider(): array
+    {
+        return [
+            'first level' => [
+                ['dummy', ['dummy' => ['dummy-expected']]],
+                ['dummy-expected'],
+            ],
+            'title' => [
+                ['title', ['properties' => ['title' => ['title-expected']]]],
+                ['title-expected'],
+            ],
+            'relations' => [
+                ['relationName', ['relations' => ['relationName' => ['relationName-expected']]]],
+                ['relationName-expected'],
+            ],
+            'associations' => [
+                ['associationName', ['associations' => ['associationName' => ['associationName-expected']]]],
+                ['associationName-expected'],
+            ],
+            'not existing field' => [
+                ['not-existing', ['dummy' => ['dummy-expected']]],
+                [],
+            ],
+        ];
+    }
+
+    /**
+     * Test `fieldSchema` method
+     *
+     * @covers ::fieldSchema()
+     * @dataProvider fieldSchemaProvider()
+     * @param array $data The data for test
+     * @param mixed $expected The expected value
+     * @return void
+     */
+    public function testFieldSchema(array $data, $expected): void
+    {
+        // call private method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $actual = $test->invokeMethod($this->HistoryComponent, 'fieldSchema', [$data[0], $data[1]]);
+        static::assertEquals($expected, $actual);
     }
 }
