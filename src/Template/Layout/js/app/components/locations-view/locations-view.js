@@ -71,7 +71,26 @@ export default {
             };
         };
 
-        this.$on('modified', (location) => {
+        this.$on('modified', async (location) => {
+            // save location if not already saved
+            if (!location.id) {
+                location.type = 'locations';
+
+                console.log('location', location)
+                const requestUrl = `${BEDITA.base}/api/locations`;
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: location,
+                    }),
+                });
+                console.log('response', response)
+            }
+
             location = transformLocationForApi(location);
 
             if (!this.added || !this.added.length) {
@@ -82,12 +101,6 @@ export default {
             this.added.forEach((data) => {
                 const dataID = data.id || data.attributes.id;
                 const locationID = location.id;
-
-                if (!locationID) {
-                    console.log(location)
-                    // TODO handle new location
-                    return;
-                }
 
                 if (dataID == locationID) {
                     data = transformLocationForApi(location);
