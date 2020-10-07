@@ -13,6 +13,8 @@
 namespace App\Controller;
 
 use BEdita\WebTools\Controller\ApiProxyTrait;
+use Cake\Event\Event;
+use Cake\Http\Response;
 
 /**
  * ApiController class.
@@ -24,4 +26,18 @@ use BEdita\WebTools\Controller\ApiProxyTrait;
 class ApiController extends AppController
 {
     use ApiProxyTrait;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function beforeFilter(Event $event): ?Response
+    {
+        parent::beforeFilter($event);
+
+        $this->Security->setConfig('unlockedActions', ['post', 'patch', 'delete']);
+
+        return null;
+    }
 }
