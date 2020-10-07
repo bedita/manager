@@ -161,6 +161,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     // API proxy
     $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
         $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+        $routes->post('/**', ['controller' => 'Api', 'action' => 'post'], 'post');
+        $routes->patch('/**', ['controller' => 'Api', 'action' => 'patch'], 'patch');
+        $routes->delete('/**', ['controller' => 'Api', 'action' => 'delete'], 'delete');
     });
 
     // Modules.
