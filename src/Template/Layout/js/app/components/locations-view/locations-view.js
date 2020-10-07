@@ -52,6 +52,8 @@ export default {
         const requestUrl = `${window.location.href}/relatedJson/has_location`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
+        // add params for location that does not have them
+        console.log(this.locations)
         this.locations.forEach((location) => {
             if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
                 location.meta = {
@@ -62,8 +64,8 @@ export default {
             }
         });
 
-        // API that saves relation data needs the following format
         const transformLocationForApi = (location) => {
+            // API that saves relation data needs the following format
             return {
                 id: location.id,
                 type: 'locations',
@@ -71,47 +73,54 @@ export default {
             };
         };
 
+        const saveLocation = async (location) => {
+            location.type = 'locations';
+
+            const requestUrl = `${BEDITA.base}/api/locations`;
+            let response = await fetch(requestUrl, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: location,
+                }),
+            });
+            response = await response.json();
+            return response;
+        };
+
+        // add available locations on relation model
+        this.added.push(...this.locations);
+
         this.$on('modified', async (location) => {
             // save location if not already saved
             if (!location.id) {
-                location.type = 'locations';
+                const response = await saveLocation(location);
 
-                console.log('location', location)
-                const requestUrl = `${BEDITA.base}/api/locations`;
-                const response = await fetch(requestUrl, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        data: location,
-                    }),
-                });
-                console.log('response', response)
+                // set new id to the object id in order to relate it
+                location.id = response.data.id;
             }
 
             location = transformLocationForApi(location);
 
             if (!this.added || !this.added.length) {
+                // location is not on 'added'
                 this.added.push(location);
-                return;
+            } else {
+                this.added.forEach((data) => {
+                    const dataID = data.id || data.attributes.id;
+                    const locationID = location.id;
+
+                    if (dataID == locationID) {
+                        // location is already on 'added'
+                        data = transformLocationForApi(location);
+                    }
+                })
             }
-
-            this.added.forEach((data) => {
-                const dataID = data.id || data.attributes.id;
-                const locationID = location.id;
-
-                if (dataID == locationID) {
-                    data = transformLocationForApi(location);
-                }
-            })
-
             this.$parent.$emit('locations-modified', this.added, this.removed);
         });
-
-        // add available locations on relation model
-        this.added.push(...this.locations);
     },
     methods: {
         onAddNew() {
@@ -127,6 +136,8 @@ export default {
 
             // add on view
             this.locations.push(newLocation);
+
+            this.added = [...this.locations];
         },
         onRemove() {
             // retrieve last relation (now remove button removes the last one)
@@ -139,6 +150,8 @@ export default {
 
             // remove it also from view
             this.locations.pop({});
+
+            this.added = [...this.locations];
         },
     },
 }

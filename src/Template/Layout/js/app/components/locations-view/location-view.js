@@ -35,6 +35,7 @@ export default {
                                 base-class="autocomplete-title"
                                 :get-result-value="getTitle"
                                 @submit="onSubmitTitle"
+                                @change="onChangeTitle"
                             >
                             </autocomplete>
                         </label>
@@ -129,6 +130,10 @@ export default {
             this.location = result; // set address on model from retrieved location
             this.fullAddress = !!result;
             this.$parent.$emit('modified', this.location);
+        },
+        onChangeTitle(event) {
+            const result = event.target.value;
+            this.location.attributes.title = result;
         },
         onChangeAddress(event) {
             const result = event.target.value;
