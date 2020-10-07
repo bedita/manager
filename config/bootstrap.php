@@ -227,4 +227,5 @@ Configure::write('CsrfExceptions', [
     'PropertyTypes' => ['save'],
     'Modules' => ['saveJson'],
     'Translator' => ['translate'],
+    'Api' => ['post', 'patch', 'delete'],
 ]);
