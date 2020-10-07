@@ -82,7 +82,8 @@ export default {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: {
-                      'Content-Type': 'application/json'
+                      'Content-Type': 'application/json',
+                      'X-CSRF-Token': BEDITA.csrfToken,
                     },
                     body: JSON.stringify({
                         data: location,
