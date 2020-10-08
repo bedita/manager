@@ -493,6 +493,8 @@ return [
         //              'publish_field',
         //         ],
         //         'advanced' => [
+        //              // Use custom element in `MyPlugin` to display this group
+        //              '_element' => 'MyPlugin/advanced',
         //              'extra_field',
         //         ],
         //     ],
@@ -508,6 +510,10 @@ return [
         //         ],
         //         'aside' => [
         //             'fooing',
+        //         ],
+        //         '_element' => [
+        //             // use custom element in `MyPlugin` for `fooed_by`
+        //             'fooed_by' => 'MyPlugin.fooed_by',
         //         ],
         //     ],
         //     'filter' => [

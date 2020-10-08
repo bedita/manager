@@ -154,6 +154,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     // API proxy
     $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
         $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+        $routes->post('/**', ['controller' => 'Api', 'action' => 'post'], 'post');
+        $routes->patch('/**', ['controller' => 'Api', 'action' => 'patch'], 'patch');
+        $routes->delete('/**', ['controller' => 'Api', 'action' => 'delete'], 'delete');
     });
 
     // Modules.
@@ -172,6 +175,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
+    );
+    $routes->connect(
+        '/:object_type/view/:id/history/:historyId',
+        ['controller' => 'History', 'action' => 'restore'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:restore']
     );
     // Translations
     $routes->connect(
@@ -229,6 +237,16 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/clone/:id',
         ['controller' => 'Modules', 'action' => 'clone'],
         ['pass' => ['id'], '_name' => 'modules:clone']
+    );
+    $routes->connect(
+        '/:object_type/clone/:id/history/:historyId',
+        ['controller' => 'History', 'action' => 'clone'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
+    );
+    $routes->connect(
+        '/:object_type/history/:id',
+        ['controller' => 'History', 'action' => 'info'],
+        ['pass' => ['id'], '_name' => 'history:info']
     );
     $routes->connect(
         '/:object_type/delete',

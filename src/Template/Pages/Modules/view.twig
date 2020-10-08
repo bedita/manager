@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-<modules-view inline-template ref="moduleView">
+<modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
 <div class="modules-view">
 
     <header>
@@ -9,7 +9,6 @@
             {% for obj in included %}
                 {% if obj.type == 'streams' %}
                     <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
-                    {# <button class="icon-download" @click="$helpers.downloadResource('{{obj.meta.url}}')">{{ __('Download') }}</button> #}
                 {% endif %}
             {% endfor %}
         {% else %}
@@ -85,7 +84,9 @@
             {# main relations view #}
             {% element 'Form/relations' {'relations': objectRelations.main} %}
 
-            {% element 'Form/history' %}
+            {% if object.id %}
+                {% element 'Form/history' %}
+            {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-09-03 14:30:12 \n"
+"POT-Creation-Date: 2020-10-05 09:53:42 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -10,6 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Plural-Forms: nplurals=2; plural=(n != 1); \n"
+
+msgid " in Trashcan"
+msgstr ""
 
 msgid "&"
 msgstr ""
@@ -138,9 +141,6 @@ msgid "Discard"
 msgstr ""
 
 msgid "Documents"
-msgstr ""
-
-msgid "Download"
 msgstr ""
 
 msgid "Draft"
@@ -290,13 +290,13 @@ msgstr ""
 msgid "Move to trash"
 msgstr ""
 
+msgid "NEW"
+msgstr ""
+
 msgid "New entry in"
 msgstr ""
 
 msgid "New object in"
-msgstr ""
-
-msgid "New relations (save to keep)"
 msgstr ""
 
 msgid "News"
@@ -631,10 +631,14 @@ msgstr ""
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:465
+#: src/Template/Layout/js/app/app.js:466
 msgid "If you confirm, this data will be gone forever"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:467
+#: src/Template/Layout/js/app/app.js:468
 msgid "Do you really want to trash the object?"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:484
+msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""

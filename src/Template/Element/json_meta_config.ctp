@@ -26,7 +26,7 @@
         'relations': {},
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
         'locale': locale,
-        'csrfToken': '<?= $csrfToken ?>'
+        'csrfToken': <?= $csrfToken ?>
     };
 
     if (BEDITA.plugins) {
