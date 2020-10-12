@@ -471,7 +471,7 @@ class ModulesComponent extends Component
         $aside = array_intersect((array)Hash::get($order, 'aside'), $relationNames);
         $relationNames = array_diff($relationNames, $aside);
         $main = array_intersect((array)Hash::get($order, 'main'), $relationNames);
-        $main = array_unique($main + $relationNames);
+        $main = array_unique(array_merge($main, $relationNames));
 
         $objectRelations = [
             'main' => $this->relationLabels($relationsSchema, $main),

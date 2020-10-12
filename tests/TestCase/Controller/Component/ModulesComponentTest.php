@@ -1052,9 +1052,9 @@ class ModulesComponentTest extends TestCase
                     'objectRelations' => [
                         'main' => [
                             'attach' => 'Attach',
+                            'has_media' => 'Has Media',
                         ],
                         'aside' => [
-                            'has_media' => 'Has Media',
                         ],
                     ],
                 ],
@@ -1085,7 +1085,6 @@ class ModulesComponentTest extends TestCase
                         'attach',
                     ],
                     'aside' => [
-                        'has_media',
                     ],
                 ],
             ],
@@ -1114,8 +1113,11 @@ class ModulesComponentTest extends TestCase
         $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
         $viewVars = $this->Modules->getController()->viewVars;
+
+        static::assertEquals(array_keys($expected), array_keys($viewVars));
+
         foreach ($expected as $key => $value) {
-            $this->assertEquals($value, $viewVars[$key]);
+            static::assertEquals($value, $viewVars[$key]);
         }
     }
 
