@@ -49,6 +49,7 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Title') :>
                             <autocomplete
+                                autocomplete="none"
                                 ref="title"
                                 class="autocomplete-title"
                                 :default-value="getDefaultTitle()"
@@ -64,6 +65,7 @@ export default {
                     <div class="is-flex-column is-expanded">
                         <label><: t('Address') :>
                             <autocomplete
+                                autocomplete="none"
                                 ref="address"
                                 class="autocomplete-address"
                                 :default-value="getDefaultAddress()"
@@ -116,7 +118,8 @@ export default {
     data() {
         return {
             location: this.locationdata,
-            fullAddress: false,
+            title: this.locationdata.attributes.title,
+            fullAddress: this.address(this.locationdata),
             coordinates: convertFromPoint(this.locationdata.attributes.coords),
             zoom: this.locationdata.meta.relation.params.zoom && parseInt(this.locationdata.meta.relation.params.zoom) || 2,
             pitch: this.locationdata.meta.relation.params.pitch && parseInt(this.locationdata.meta.relation.params.pitch) || 0,
@@ -126,12 +129,15 @@ export default {
 
     computed: {
         locationValue() {
-            return JSON.stringify({
+            const response = JSON.stringify({
                 id: this.location && this.location.id,
                 type: 'locations',
                 attributes: {
                     status: 'on',
-                    ...(this.location && this.location.attributes || {}),
+                    ...(this.location && Object.keys(this.location.attributes).length && this.location.attributes || {
+                        title: this.title || '',
+                        address: this.fullAddress || '',
+                    }),
                     coords: convertToPoint(this.coordinates),
                 },
                 meta: {
@@ -144,11 +150,9 @@ export default {
                     },
                 },
             });
+            console.log(response);
+            return response;
         },
-    },
-
-    async mounted() {
-        this.fullAddress = !!this.address(this.location);
     },
 
     methods: {
@@ -174,13 +178,12 @@ export default {
             this.coordinates = convertFromPoint(this.location.attributes.coords);
         },
         onChangeTitle(event) {
-            const result = event.target.value;
-            this.location.attributes.title = result;
+            const title = event.target.value;
+            this.title = title;
         },
         onChangeAddress(event) {
-            const result = event.target.value;
-            this.location.attributes.address = result;
-            this.fullAddress = !!result;
+            const address = event.target.value;
+            this.fullAddress = address;
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;

@@ -357,9 +357,20 @@ class ModulesController extends AppController
 
             foreach ($relatedIds as $key => &$data) {
                 if (!empty($data['attributes'])) {
-                    $object = $this->apiClient->save($data['type'], array_merge([
-                        'id' => $data['id'] ?? null,
-                    ], $data['attributes']));
+                    // avoid empty objects
+                    $saveObject = false;
+                    foreach ($data['attributes'] as $key => $field) {
+                        if ($key != 'status' && !empty($field)) {
+                            $saveObject = true;
+                        }
+                    }
+
+                    if ($saveObject == true) {
+                        $object = $this->apiClient->save($data['type'], array_merge([
+                            'id' => $data['id'] ?? null,
+                        ], $data['attributes']));
+                    }
+
                     $data['id'] = $object['data']['id'];
                 }
             }
