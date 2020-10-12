@@ -455,6 +455,29 @@ class SchemaComponentTest extends TestCase
                 [], // types
                 [], // expected
             ],
+            'no right data' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                ['mices', 'elefants', 'cats', 'dogs'], // types
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // expected
+            ],
             'full example' => [
                 [
                     'hates' => [

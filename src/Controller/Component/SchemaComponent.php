@@ -113,6 +113,9 @@ class SchemaComponent extends Component
     {
         $relationsSchema = array_intersect_key($schema, $relationships);
         foreach ($relationsSchema as &$relSchema) {
+            if (!array_key_exists('right', $relSchema)) {
+                continue;
+            }
             if (!in_array('objects', $relSchema['right'])) {
                 continue;
             }

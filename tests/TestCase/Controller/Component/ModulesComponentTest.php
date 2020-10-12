@@ -15,6 +15,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
+use App\Controller\Component\SchemaComponent;
 use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -1108,6 +1109,8 @@ class ModulesComponentTest extends TestCase
      */
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [])
     {
+        $registry = $this->Modules->getController()->components();
+        $this->Modules->getController()->Schema = $registry->load(SchemaComponent::class);
         $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
         $viewVars = $this->Modules->getController()->viewVars;
