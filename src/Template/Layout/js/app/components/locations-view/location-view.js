@@ -106,6 +106,9 @@ export default {
                         </label>
                     </div>
                 </div>
+                <div class="location-buttons">
+                    <button @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
+                </div>
             </div>
         </div>`,
     props: {
@@ -129,7 +132,7 @@ export default {
 
     computed: {
         locationValue() {
-            const response = JSON.stringify({
+            return JSON.stringify({
                 id: this.location && this.location.id,
                 type: 'locations',
                 attributes: {
@@ -150,12 +153,13 @@ export default {
                     },
                 },
             });
-            console.log(response);
-            return response;
         },
     },
 
     methods: {
+        onRemove() {
+            this.$parent.$emit('removed', this.index);
+        },
         onRelationDataChange(event) {
             const target = event.target;
             const value = target.value;

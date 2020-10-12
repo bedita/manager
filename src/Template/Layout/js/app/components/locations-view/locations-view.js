@@ -24,12 +24,11 @@ export default {
 
     template: `<div class="locations">
         <div v-if="!locations" class="is-loading-spinner"></div>
-        <div v-if="locations" v-for="(location, key) in locations">
-            <location-view :index=key :locationdata=location :apikey="apikey" :apiurl="apiurl"/>
+        <div v-if="locations" v-for="(location, index) in locations">
+            <location-view :key=index :index=index :locationdata=location :apikey="apikey" :apiurl="apiurl"/>
         </div>
         <div v-if="locations" class="buttons is-flex mt-1">
             <button @click.prevent @click="onAddNew"> <: t("add new") :> </button>
-            <button @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
         </div>
     </div>`,
 
@@ -60,6 +59,13 @@ export default {
             }
         });
     },
+
+    async mounted() {
+        this.$on('removed', (index) => {
+            this.locations.splice(index, 1);
+        });
+    },
+
     methods: {
         onAddNew() {
             // create new empty location
@@ -75,10 +81,6 @@ export default {
 
             // add on view
             this.locations.push(newLocation);
-        },
-        onRemove() {
-            // remove it also from view
-            this.locations.pop({});
         },
     },
 }
