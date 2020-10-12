@@ -102,6 +102,27 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Relations schema by schema and relationships.
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @param array $types The types to use instead of 'objects'
+     * @return array
+     */
+    public function relationsSchema(array $schema, array $relationships, array $types): array
+    {
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        foreach ($relationsSchema as &$relSchema) {
+            if (!in_array('objects', $relSchema['right'])) {
+                continue;
+            }
+            $relSchema['right'] = $types;
+        }
+
+        return $relationsSchema;
+    }
+
+    /**
      * Load schema from cache with revision check.
      * If cached revision don't match cache is removed.
      *

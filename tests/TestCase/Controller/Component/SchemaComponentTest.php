@@ -171,7 +171,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getRelationsSchema()
      * @covers ::fetchRelationData()
      */
-    public function testRelationsSchema()
+    public function testRelationMethods()
     {
         $relations = [
             'data' => [
@@ -439,5 +439,66 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->getSchema('documents');
         static::assertEquals(['Categories'], $result['associations']);
         static::assertEquals(['has_media' => 0], $result['relations']);
+    }
+
+    /**
+     * Provider for `testRelationsSchema`.
+     *
+     * @return array
+     */
+    public function relationsSchemaProvider(): array
+    {
+        return [
+            'empty data' => [
+                [], // schema
+                [], // relationships
+                [], // types
+                [], // expected
+            ],
+            'full example' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['objects'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                ['mices', 'elefants', 'cats', 'dogs'], // types
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['mices', 'elefants', 'cats', 'dogs'],
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `relationsSchema` method
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @param array $types The types
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider relationsSchemaProvider()
+     * @covers ::relationsSchema()
+     */
+    public function testRelationsSchema(array $schema, array $relationships, array $types, array $expected): void
+    {
+        $actual = $this->Schema->relationsSchema($schema, $relationships, $types);
+        static::assertEquals($expected, $actual);
     }
 }

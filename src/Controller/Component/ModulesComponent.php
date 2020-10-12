@@ -459,7 +459,9 @@ class ModulesComponent extends Component
     public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
     {
         // relations between objects
-        $relationsSchema = array_intersect_key($schema, $relationships);
+        $types = $this->objectTypes(false);
+        sort($types);
+        $relationsSchema = $this->getController()->Schema->relationsSchema($schema, $relationships, $types);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
