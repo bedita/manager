@@ -1110,8 +1110,6 @@ class ModulesComponentTest extends TestCase
      */
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [])
     {
-        $registry = $this->Modules->getController()->components();
-        $this->Modules->getController()->Schema = $registry->load(SchemaComponent::class);
         $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
         $viewVars = $this->Modules->getController()->viewVars;
