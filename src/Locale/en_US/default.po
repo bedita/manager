@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-07 11:05:02 \n"
+"POT-Creation-Date: 2020-10-13 07:23:24 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -450,6 +450,9 @@ msgid "System users"
 msgstr ""
 
 msgid "Temporary folder missing"
+msgstr ""
+
+msgid "The main language is"
 msgstr ""
 
 msgid "The thumbnail is not available"

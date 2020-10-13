@@ -19,18 +19,19 @@
 
                 <div>
                     {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
+                    {% set options = options|merge({ 'label': __('The main language is') }) %}
                     {{ Form.control('lang', options)|raw }}
 
-                {% if object.relationships.translations %}
-                    {{ Html.link(__('Add translation'), {
-                        '_name': 'translations:add',
-                        'object_type': object.type,
-                        'id': object.id
-                    }, {
-                        'target': '_blank',
-                        'class' : 'icon-plus button mt-1',
-                    })|raw }}
-                {% endif %}
+                    {% if object.relationships.translations %}
+                        {{ Html.link(__('Add translation'), {
+                            '_name': 'translations:add',
+                            'object_type': object.type,
+                            'id': object.id
+                        }, {
+                            'target': '_blank',
+                            'class' : 'icon-plus button mt-1',
+                        })|raw }}
+                    {% endif %}
                 </div>
 
                 {% if object.relationships.translations %}
