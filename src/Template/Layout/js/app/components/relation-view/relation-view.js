@@ -61,6 +61,9 @@ export default {
             loading: false,
             count: 0,                   // count number of related objects, on change triggers an event
 
+            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
+            addedRelationsData: [],     // array of serialized new relations
+
             requesterId: null,          // panel requerster id
             removedRelated: [],         // staged removed related objects
             addedRelations: [],         // staged added objects to be saved
@@ -614,6 +617,8 @@ export default {
         prepareRelationsToSave() {
             const relations = this.addedRelations.concat(this.modifiedRelations);
             let difference = relations.filter(rel => !this.containsId(this.removedRelated, rel.id));
+
+            this.addedRelationsData = JSON.stringify(this.formatObjects(difference));
 
             const isChanged = !!difference.length;
             this.$el.dispatchEvent(new CustomEvent('change', {
