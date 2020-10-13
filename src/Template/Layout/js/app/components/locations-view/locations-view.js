@@ -14,8 +14,6 @@ const options = {
  * <locations-view> component used for ModulesPage -> View
  *
  * Handle Locations and reverse geocoding from addresses
- *
- *
  */
 export default {
     components: {
@@ -25,10 +23,10 @@ export default {
     template: `<div class="locations">
         <div v-if="!locations" class="is-loading-spinner"></div>
         <div v-if="locations" v-for="(location, index) in locations">
-            <location-view :key=index :index=index :locationdata=location :apikey="apikey" :apiurl="apiurl"/>
+            <location-view :key='locationSymbol(location)' :index='index' :locationdata='location' :apikey='apikey' :apiurl='apiurl' />
         </div>
         <div v-if="locations" class="buttons is-flex mt-1">
-            <button @click.prevent @click="onAddNew"> <: t("add new") :> </button>
+            <button @click.prevent @click="onAddNew"><: t('add new') :></button>
         </div>
     </div>`,
 
@@ -82,5 +80,13 @@ export default {
             // add on view
             this.locations.push(newLocation);
         },
+        /**
+         * Provide an unique key vor the v-for
+         * @param {Object} location
+         * @return {Object}
+         */
+        locationSymbol(location) {
+            return Symbol(location);
+        }
     },
 }
