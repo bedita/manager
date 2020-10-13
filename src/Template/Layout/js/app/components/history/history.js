@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { t } from 'ttag';
 import { PanelEvents } from '../panel-view';
 
 const LOCALE = BEDITA.locale.slice(0, 2);
@@ -75,7 +76,7 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            if (!confirm(this.t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
+            if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
                 return;
             }
 
@@ -86,9 +87,15 @@ export default {
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || this.t('Untitled');
-            const msg = this.t`Please insert a new title on "${title}" clone`;
+            const title = document.getElementById('title').value || t('Untitled');
+
+            const msg = t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
+
+            if (!cloneTitle) {
+                return;
+            }
+
             const origin = window.location.origin;
             const path = window.location.pathname.replace('/view/', '/clone/');
             const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
