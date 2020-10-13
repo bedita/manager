@@ -42,6 +42,11 @@ class MyModulesComponent extends ModulesComponent
     {
         return $this->meta;
     }
+
+    public function objectTypes(?bool $abstract = null): array
+    {
+        return ['mices', 'elefants', 'cats', 'dogs'];
+    }
 }
 
 /**
@@ -78,6 +83,7 @@ class ModulesComponentTest extends TestCase
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
+        $this->MyModules = $registry->load(MyModulesComponent::class);
     }
 
     /**
@@ -1165,7 +1171,6 @@ class ModulesComponentTest extends TestCase
             'empty data' => [
                 [], // schema
                 [], // relationships
-                [], // types
                 [], // expected
             ],
             'no right data' => [
@@ -1181,7 +1186,6 @@ class ModulesComponentTest extends TestCase
                     'hates' => [],
                     'loves' => [],
                 ], // relationships
-                ['mices', 'elefants', 'cats', 'dogs'], // types
                 [
                     'hates' => [
                         'left' => ['elefants'],
@@ -1206,7 +1210,6 @@ class ModulesComponentTest extends TestCase
                     'hates' => [],
                     'loves' => [],
                 ], // relationships
-                ['mices', 'elefants', 'cats', 'dogs'], // types
                 [
                     'hates' => [
                         'left' => ['elefants'],
@@ -1214,7 +1217,7 @@ class ModulesComponentTest extends TestCase
                     ],
                     'loves' => [
                         'left' => ['robots'],
-                        'right' => ['mices', 'elefants', 'cats', 'dogs'],
+                        'right' => ['cats', 'dogs', 'elefants', 'mices'],
                     ],
                 ], // expected
             ],
@@ -1226,17 +1229,16 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $schema The schema
      * @param array $relationships The relationships
-     * @param array $types The types
      * @param array $expected The expected result
      * @return void
      * @dataProvider relationsSchemaProvider()
      * @covers ::relationsSchema()
      */
-    public function testRelationsSchema(array $schema, array $relationships, array $types, array $expected): void
+    public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
-        $actual = $test->invokeMethod($this->Modules, 'relationsSchema', [$schema, $relationships, $types]);
+        $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
         static::assertEquals($expected, $actual);
     }
 }
