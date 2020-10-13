@@ -359,8 +359,8 @@ class ModulesController extends AppController
                 if (!empty($data['attributes'])) {
                     // avoid empty objects
                     $saveObject = false;
-                    foreach ($data['attributes'] as $key => $field) {
-                        if ($key != 'status' && !empty($field)) {
+                    foreach ($data['attributes'] as $k => $field) {
+                        if ($k != 'status' && !empty($field)) {
                             $saveObject = true;
                         }
                     }

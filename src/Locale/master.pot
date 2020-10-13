@@ -464,7 +464,7 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-msgid "Long Lat Coordinates"
+msgid "Lat long Coordinates"
 msgstr ""
 
 msgid "GET"

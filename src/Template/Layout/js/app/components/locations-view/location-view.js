@@ -81,7 +81,7 @@ export default {
                 </div>
                 <div class="is-flex mt-1">
                     <div class="is-flex-column is-expanded">
-                        <label><: t('Long Lat Coordinates') :>
+                        <label><: t('Lat long Coordinates') :>
                             <div class="is-flex">
                                 <input class="coordinates" type="text" :value="coordinates"/>
                                 <button @click.prevent :disabled="!fullAddress" @click="geocode" class="get-coordinates icon-globe">
