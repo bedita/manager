@@ -461,7 +461,7 @@ class ModulesComponent extends Component
         // relations between objects
         $types = $this->objectTypes(false);
         sort($types);
-        $relationsSchema = $this->getController()->Schema->relationsSchema($schema, $relationships, $types);
+        $relationsSchema = $this->relationsSchema($schema, $relationships, $types);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
@@ -479,6 +479,26 @@ class ModulesComponent extends Component
         ];
 
         $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Relations schema by schema and relationships.
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @param array $types The types to use instead of 'objects'
+     * @return array
+     */
+    protected function relationsSchema(array $schema, array $relationships, array $types): array
+    {
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        foreach ($relationsSchema as &$relSchema) {
+            if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {
+                $relSchema['right'] = $types;
+            }
+        }
+
+        return $relationsSchema;
     }
 
     /**

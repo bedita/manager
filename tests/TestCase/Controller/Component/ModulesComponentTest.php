@@ -17,6 +17,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Core\Exception\UploadException;
+use App\Test\TestCase\Controller\AppControllerTest;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -24,6 +25,7 @@ use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -1152,5 +1154,91 @@ class ModulesComponentTest extends TestCase
         static::assertEquals(['media'], $types);
         $types = $this->Modules->relatedTypes($schema, 'media_of');
         static::assertEquals(['documents'], $types);
+    }
+
+    /**
+     * Provider for `testRelationsSchema`.
+     *
+     * @return array
+     */
+    public function relationsSchemaProvider(): array
+    {
+        return [
+            'empty data' => [
+                [], // schema
+                [], // relationships
+                [], // types
+                [], // expected
+            ],
+            'no right data' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                ['mices', 'elefants', 'cats', 'dogs'], // types
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // expected
+            ],
+            'full example' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['objects'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                ['mices', 'elefants', 'cats', 'dogs'], // types
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['mices', 'elefants', 'cats', 'dogs'],
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `relationsSchema` method
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @param array $types The types
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider relationsSchemaProvider()
+     * @covers ::relationsSchema()
+     */
+    public function testRelationsSchema(array $schema, array $relationships, array $types, array $expected): void
+    {
+        // call private method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $actual = $test->invokeMethod($this->Modules, 'relationsSchema', [$schema, $relationships, $types]);
+        static::assertEquals($expected, $actual);
     }
 }
