@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-05 09:53:42 \n"
+"POT-Creation-Date: 2020-10-07 11:05:02 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -627,6 +627,7 @@ msgid "www.bedita.com"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:152
+#: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
