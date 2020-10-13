@@ -1,26 +1,21 @@
-{#
-    load-on-start, loading events timing:
-    1000ms    - first relation
-    gap 200ms - till last relation
-#}
-
 {% for resourceName in resourceRelations %}
-    {% set wait = 500 + (loop.index * 200) %}
+    {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
 
     <property-view inline-template :tab-open-at-start=true ref={{ resourceName }}>
-        <section class="resources fieldset order-{{ cssOrder }} closed">
-            <header class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
+        <section class="fieldset">
+
+            <header class="tab tab-static unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                 <h2>
                     {{ __(resourceName|humanize)|lower }}
-                    <span class="tag is-smallest is-black space-around-half"
+                    <span class="tag is-smallest is-black mx-05"
                         :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                     </span>
                 </h2>
             </header>
 
-            <div v-show="false" class="tab-container">
+            {# TODO: review, commented out, v-show is always false!!! #}
+            {# <div v-show="false" class="tab-container">
                 <resource-relation-view inline-template
-                    :load-on-start={{ wait }}
                     relation-name={{ resourceName }}
                     ref="relation"
 
@@ -29,7 +24,8 @@
 
                     <div class="resource-relation-view"></div>
                 </resource-relation-view>
-            </div>
+            </div> #}
+
         </section>
     </property-view>
 

@@ -403,44 +403,64 @@ return [
     /**
      * Modules configuration.
      *
-     * Contains an array of settings to use for modules configuration.
+     * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
+     * Modules order will follow key order of this configuration.
      *
-     * ## Options
+     * Array value may contain:
      *
-     * - `order` - The order in which modules will be displayed.
+     *  'label' - module label to display, if not set `key` will be used
+     *  'shortLabel' - short label, 3 character recommended
+     *  'color' - primary color code,
+     *  'secondaryColor' - secondary color code,
+     *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
+     *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
+     *          (default is '-id'),
+     *  'icon' - icon code, f.i. `icon-article`, have a look in
+     *      `webroot/css/be-icons-codes.css` for a complete list of codes
      */
     'Modules' => [
-        'order' => [
-            'objects',
-            'folders',
-            'documents',
-            'events',
-            'news',
-            'locations',
-            'media',
-            'images',
-            'videos',
-            'audio',
-            'files',
-            'users',
-            'profiles',
+        'objects' => [
+            'shortLabel' => 'obj',
+            'color' => '#230637',
+            // 'secondaryColor' => '#d95700',
+            'sort' => '-modified',
+            // 'icon' => 'icon-cube',
         ],
-
-        'colors' => [
-            'objects' => '#230637',
-            'folders' => '#072440',
-            'documents' => '#cc4700',
-            'media' => '#b3001b',
-            'images' => '#d5002b',
-            'videos' => '#d5002b',
-            'audio' => '#d5002b',
-            'files' => '#d5002b',
-            'events' => '#09c',
-            'locations' => '#641',
-            'news' => '#036',
-            'users' => '#223526',
-            'profiles' => '#093',
-            'trash' => '#1c1c1c',
+        'folders' => [
+            'color' => '#072440',
+        ],
+        'documents' => [
+            'color' => '#cc4700',
+        ],
+        'events' => [
+            'color' => '#09c',
+        ],
+        'news' => [
+            'color' => '#036',
+        ],
+        'locations' => [
+            'color' => '#641',
+        ],
+        'media' => [
+            'color' => '#a80019',
+        ],
+        'images' => [
+            'color' => '#d5002b',
+        ],
+        'videos' => [
+            'color' => '#d5002b',
+        ],
+        'audio' => [
+            'color' => '#d5002b',
+        ],
+        'files' => [
+            'color' => '#d5002b',
+        ],
+        'users' => [
+            'color' => '#000000',
+        ],
+        'profiles' => [
+            'color' => '#093',
         ],
     ],
 
@@ -455,8 +475,11 @@ return [
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
      *  - 'index' properties to display in index view (other than id, status and modified)
+     *  - 'relations' relations ordering by relation name
+     *  - 'filter' filters to display
+     *  - 'bulk' bulk actions list
      */
-    'Properties' => [
+    // 'Properties' => [
         // 'foos' => [
         //     'view' => [
         //         '_keep' => [
@@ -470,6 +493,8 @@ return [
         //              'publish_field',
         //         ],
         //         'advanced' => [
+        //              // Use custom element in `MyPlugin` to display this group
+        //              '_element' => 'MyPlugin/advanced',
         //              'extra_field',
         //         ],
         //     ],
@@ -478,8 +503,29 @@ return [
         //         'surname',
         //         'username',
         //     ],
+        //     'relations' => [
+        //         'main' => [
+        //             'foo_with',
+        //             'fooed_by',
+        //         ],
+        //         'aside' => [
+        //             'fooing',
+        //         ],
+        //         '_element' => [
+        //             // use custom element in `MyPlugin` for `fooed_by`
+        //             'fooed_by' => 'MyPlugin.fooed_by',
+        //         ],
+        //     ],
+        //     'filter' => [
+        //         'select_field',
+        //         'another_one',
+        //     ],
+        //     'bulk' => [
+        //         'status',
+        //         'other_field',
+        //     ],
         // ],
-    ],
+    // ],
 
     /**
      * Custom view elements configuration.
@@ -494,11 +540,11 @@ return [
      * ```
      * In this example: if current module is `documents` => `Form/included` element is loaded from `MyPlugin` plugin
      */
-    'Elements' => [
-        // 'documents' => [
-        //     'Form/included' => 'MyPlugin',
-        // ],
-    ],
+    // 'Elements' => [
+    //     // 'documents' => [
+    //     //     'Form/included' => 'MyPlugin',
+    //     // ],
+    // ],
 
     /**
      * Additional plugins to load with this format: 'PluginName' => load options array
@@ -510,12 +556,12 @@ return [
      * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
-    'Plugins' => [
+    // 'Plugins' => [
         // 'MyPlugin' => ['autoload' => true, 'bootstrap' => true, 'routes' => true], // a simple plugin
 
         // Uncomment to enable `DebugKit` - 'debug' mode is required
         //'DebugKit' => ['bootstrap' => true, 'debugOnly' => true],
-    ],
+    // ],
 
     /**
      * Plugin modules settings.
@@ -523,40 +569,39 @@ return [
      * Default empty.
      * Configuration generally written by plugins via bootstrap.
      */
-    'PluginModules' => [
-        /*
-        // plugin module example
-        // unique name
-        'My Module' => [
-            'title' => 'My Module',
-            // routing rules
-            'route' => Router::url(['_name': 'my_module:index']),
-            // css class
-            'class' => [
-                'dashboard' => 'has-background-black icon-sample',
-                'menu' => 'has-background-black',
-            ],
-        ],
-        */
-    ],
+    // 'PluginModules' => [
+
+    //     // plugin module example
+    //     // unique name
+    //     'My Module' => [
+    //         'title' => 'My Module',
+    //         // routing rules
+    //         'route' => Router::url(['_name': 'my_module:index']),
+    //         // css class
+    //         'class' => [
+    //             'dashboard' => 'has-background-black icon-sample',
+    //             'menu' => 'has-background-black',
+    //         ],
+    //     ],
+    // ],
 
     /**
      * Pagination default settings
      *
      * - sizeAvailable => available page size on modules view index
      */
-    'Pagination' => [
-        'sizeAvailable' => [10, 20, 50, 100],
-    ],
+    // 'Pagination' => [
+    //     'sizeAvailable' => [10, 20, 50, 100],
+    // ],
 
     /**
      * Export default settings
      *
      * - limit => max number of exported elements on export all
      */
-    'Export' => [
-        'limit' => 10000,
-    ],
+    // 'Export' => [
+    //     'limit' => 10000,
+    // ],
 
     /**
      * I18n setup for frontend.
@@ -609,6 +654,60 @@ return [
     // 'Maps' => [
     //     'mapbox' => [
     //         'token' => '###',
+    //     ],
+    // ],
+
+    /**
+     * Project data that can override data from `/home` API call
+     * Currently only `name` is used
+     */
+    // 'Project' => [
+    //     'name' => 'My Project',
+    // ],
+
+    /**
+     * Translator engine configuration
+     */
+    // 'Translator' => [
+    //     'class' => '\App\Core\I18n\DummyTranslator',
+    //     'options' => [
+    //         'url' => 'www.my-dummy-translator.com',
+    //         'apiKey' => 'abcde',
+    //     ],
+    // ],
+
+    /**
+     * Default RichTextEditor configuration.
+     */
+    // 'RichTextEditor' => [
+    //     'default' => [
+    //         'toolbar' => [
+    //             'heading',
+    //             '|',
+    //             'bold',
+    //             'italic',
+    //             'underline',
+    //             'strikethrough',
+    //             'code',
+    //             'subscript',
+    //             'superscript',
+    //             'removeFormat',
+    //             '|',
+    //             'alignment',
+    //             '|',
+    //             'specialCharacters',
+    //             'link',
+    //             'bulletedList',
+    //             'numberedList',
+    //             'blockQuote',
+    //             'insertTable',
+    //             'horizontalLine',
+    //             '|',
+    //             'undo',
+    //             'redo',
+    //             '|',
+    //             'editSource',
+    //         ],
     //     ],
     // ],
 ];

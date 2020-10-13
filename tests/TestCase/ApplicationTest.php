@@ -13,6 +13,7 @@
 namespace App\Test\TestCase;
 
 use App\Application;
+use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -49,19 +50,20 @@ class ApplicationTest extends TestCase
 
         static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
         static::assertInstanceOf(AssetMiddleware::class, $middleware->get(1));
-        static::assertInstanceOf(I18nMiddleware::class, $middleware->get(2));
-        static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(3));
-        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(4));
+        static::assertInstanceOf(ProjectMiddleware::class, $middleware->get(2));
+        static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
+        static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
+        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));
     }
 
     /**
-     * Test load from config method
+     * Test `loadPluginsFromConfig` method
      *
      * @return void
      *
-     * @covers ::loadFromConfig()
+     * @covers ::loadPluginsFromConfig()
      */
-    public function testLoadConfig()
+    public function testLoadPlugins()
     {
         $app = new Application(CONFIG);
         $app->bootstrap();
@@ -75,15 +77,33 @@ class ApplicationTest extends TestCase
         $app->getPlugins()->remove('Bake');
         Configure::write('debug', 1);
         Configure::write('Plugins', $pluginsConfig);
-        $app->loadFromConfig();
+        $app->loadPluginsFromConfig();
         $this->assertTrue($app->getPlugins()->has('DebugKit'));
         $this->assertTrue($app->getPlugins()->has('Bake'));
         $app->getPlugins()->remove('DebugKit');
         $app->getPlugins()->remove('Bake');
         Configure::write('debug', 0);
-        $app->loadFromConfig();
+        $app->loadPluginsFromConfig();
         $this->assertFalse($app->getPlugins()->has('DebugKit'));
         $this->assertTrue($app->getPlugins()->has('Bake'));
         Configure::write('debug', $debug);
+    }
+
+    /**
+     * Test `loadProjectConfig` method
+     *
+     * @return void
+     *
+     * @covers ::loadProjectConfig()
+     */
+    public function testLoadProjectConfig()
+    {
+        $projectsPath = TESTS . 'files' . DS . 'projects' . DS;
+        Configure::write('Project.name', null);
+        Application::loadProjectConfig('none', $projectsPath);
+        static::assertNull(Configure::read('Project.name'));
+
+        Application::loadProjectConfig('test', $projectsPath);
+        static::assertEquals('Test', Configure::read('Project.name'));
     }
 }

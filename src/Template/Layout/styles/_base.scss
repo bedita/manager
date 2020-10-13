@@ -1,192 +1,62 @@
-*,
-*::before,
-*::after {
-    box-sizing: border-box; // 1
-}
+// base
 
 body {
     overflow-x: hidden;
     font-family: $font-family-base;
     font-size: $font-size-sm;
     line-height: $line-height-base;
-    background-color: $gray-900; // best practice, apply a default `background-color`
+    background-color: $defaultBackground;
     // background-image: linear-gradient(160deg, $gray-900 0%, $gray-800 100%);
     background-attachment: fixed;
     background-repeat: no-repeat;
-    color: $gray-100;
-    font-weight: $font-weight-light;
+    color: $white;
+    font-weight: $font-weight-base;
     text-align: left;               // explicit initial text-align value so that we can later use `inherit`
 }
 
-a {
-    color: inherit;
-}
-a, a:link, a:hover, a:active, a:visited {
-    text-decoration: none;
-}
+*,
+*::before,
+*::after { box-sizing: border-box; }
 
-figure {
-    margin: 0;
-}
-
-fieldset {
-    border: none;
-}
-
-textarea:focus, input:focus{
-    outline: none;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
-}
-
-label, th {
-    font-weight: normal;
-}
-
+h1 { margin-bottom: $gutter; }
 h1, h2, h3 {
     margin-top: 0;
     line-height: 1.125em;
-    font-weight: $font-weight-light;
-}
-
-h1 {
-    margin-bottom: $gutter;
+    font-weight: $font-weight-base;
 }
 
 p { margin: 0; }
 
+a { color: inherit; }
+a,
+a:link, a:hover, a:active, a:visited {
+    text-decoration: none;
+}
+
+b, strong {
+    font-weight: $font-weight-bold;
+}
+
+figure { margin: 0; }
+
+fieldset { border: none; }
+
+textarea:focus,
+input:focus { outline: none; box-shadow: inset 0 0 6px rgba(0, 0, 0, .2); }
+
+label, th { font-weight: normal; }
+
 div, section {
-    &:focus {
-        outline: none;
+    &:focus { outline: none; }
+}
+
+dl {
+    margin: 0;
+    dd {
+        margin: 0;
+        font-weight: $font-weight-bold;
+    }
+    dd + dt {
+        margin-top: $gutter * .25;
     }
 }
-
-// helper classes
-.full-size-absolute { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 !important; }
-.unselectable {
-    user-select: none;
-}
-
-.is-text-hidden {
-    @include hide-text();
-}
-
-.is-clipped {
-    overflow: hidden!important;
-}
-
-.is-expanded {
-    width: 100%;
-}
-
-.nowrap {
-    white-space: nowrap;
-}
-
-.center-icon {
-    position: relative;
-    &:before {
-        position: absolute;
-        width: 100% !important;
-        text-align: center !important;
-        top: 50%;
-        left: 0;
-        margin-top: -.5em;
-    }
-}
-
-.icon-only-icon {
-    &:before {
-        margin-right: 0 !important;
-    }
-}
-
-.space-around {
-    margin-left: $gutter;
-    margin-right: $gutter;
-}
-.space-around-half {
-    margin-left: $gutter * .5;
-    margin-right: $gutter * .5;
-}
-
-
-// typography
-.has-text-size-base     { font-size: $font-size-base; }
-.has-text-size-large    { font-size: $font-size-lg; }
-.has-text-size-larger   { font-size: $font-size-llg; }
-.has-text-size-largest  { font-size: $font-size-lllg; }
-.has-text-size-small    { font-size: $font-size-sm; }
-.has-text-size-smaller  { font-size: $font-size-ssm; }
-.has-text-size-smallest { font-size: $font-size-sssm; }
-.has-text-size-smallest { font-size: $font-size-sssm; }
-.has-font-weight-light  { font-weight: $font-weight-light; }
-.has-font-weight-normal { font-weight: $font-weight-normal; }
-.has-font-weight-bold   { font-weight: $font-weight-bold; }
-
-
-
-// colors
-.has-background-transparent  { background-color: transparent !important; }
-.has-background-white        { background-color: $white !important; }
-.has-background-black        { background-color: $black !important; }
-.has-background-gray-100     { background-color: $gray-100 !important; }
-.has-background-gray-200     { background-color: $gray-200 !important; }
-.has-background-gray-300     { background-color: $gray-300 !important; }
-.has-background-gray-400     { background-color: $gray-400 !important; }
-.has-background-gray-500     { background-color: $gray-500 !important; }
-.has-background-gray-550     { background-color: $gray-550 !important; }
-.has-background-gray-600     { background-color: $gray-600 !important; }
-.has-background-gray-700     { background-color: $gray-700 !important; }
-.has-background-gray-800     { background-color: $gray-800 !important; }
-.has-background-gray-900     { background-color: $gray-900 !important; }
-.has-background-danger       { background-color: $danger !important; }
-.has-background-light-danger { background-color: $light-danger !important; }
-.has-background-info         { background-color: $info !important; }
-
-.has-text-transparent { color: transparent !important; }
-.has-text-white       { color: $white !important; }
-.has-text-black       { color: $black !important; }
-.has-text-gray-100    { color: $gray-100 !important; }
-.has-text-gray-200    { color: $gray-200 !important; }
-.has-text-gray-300    { color: $gray-300 !important; }
-.has-text-gray-400    { color: $gray-400 !important; }
-.has-text-gray-500    { color: $gray-500 !important; }
-.has-text-gray-550    { color: $gray-550 !important; }
-.has-text-gray-600    { color: $gray-600 !important; }
-.has-text-gray-700    { color: $gray-700 !important; }
-.has-text-gray-800    { color: $gray-800 !important; }
-.has-text-gray-900    { color: $gray-900 !important; }
-.has-text-danger      { color: $danger !important; }
-.has-text-info        { color: $info !important; }
-
-.has-border-transparent { border-color: transparent !important; }
-.has-border-white       { border-color: $white !important; }
-.has-border-black       { border-color: $black !important; }
-.has-border-gray-100    { border-color: $gray-100 !important; }
-.has-border-gray-200    { border-color: $gray-200 !important; }
-.has-border-gray-300    { border-color: $gray-300 !important; }
-.has-border-gray-400    { border-color: $gray-400 !important; }
-.has-border-gray-500    { border-color: $gray-500 !important; }
-.has-border-gray-550    { border-color: $gray-550 !important; }
-.has-border-gray-600    { border-color: $gray-600 !important; }
-.has-border-gray-700    { border-color: $gray-700 !important; }
-.has-border-gray-800    { border-color: $gray-800 !important; }
-.has-border-gray-900    { border-color: $gray-900 !important; }
-.has-border-danger      { border-color: $danger !important; }
-.has-border-info        { border-color: $info !important; }
-
-
-
-// orders
-
-.ordered-column      { display: flex !important; flex-direction: column }
-
-.order-top    { order: 0 !important; }
-.order-1      { order: 1 !important; }
-.order-2      { order: 2 !important; }
-.order-3      { order: 3 !important; }
-.order-4      { order: 4 !important; }
-.order-5      { order: 5 !important; }
-
-.order-bottom { order: 100 !important; }
-

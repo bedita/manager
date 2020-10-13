@@ -1,0 +1,217 @@
+// utility classes
+
+.full-size-absolute { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0 !important; }
+
+.unselectable { user-select: none; }
+
+.pointer-events-none { pointer-events: none; }
+
+.is-text-hidden { @include hide-text(); }
+
+.is-clipped { overflow: hidden!important; }
+
+.is-expanded { width: 100%; }
+
+.nowrap { white-space: nowrap; flex-wrap: nowrap; }
+
+
+// typography
+.has-text-size-base         { font-size: $font-size-base; } // 16px
+.has-text-size-large        { font-size: $font-size-lg; }   // 18px
+.has-text-size-larger       { font-size: $font-size-llg; }  // 20px
+.has-text-size-largest      { font-size: $font-size-lllg; } // 24px
+.has-text-size-small        { font-size: $font-size-sm; }   // 14px
+.has-text-size-smaller      { font-size: $font-size-ssm; }  // 13px
+.has-text-size-smallest     { font-size: $font-size-sssm; } // 12px
+
+.has-font-weight-light      { font-weight: $font-weight-light; }
+.has-font-weight-normal     { font-weight: $font-weight-normal; }
+.has-font-weight-bold       { font-weight: $font-weight-bold; }
+
+.has-text-transform-upper   { text-transform: uppercase; }
+.has-text-transform-lower   { text-transform: lowercase; }
+
+.has-font-style-italic      { font-style: italic; }
+
+.is-upppercase { text-transform: uppercase; }
+.is-lowercase  { text-transform: lowercase; }
+.is-capitalized  { text-transform: capitalize; }
+
+
+// colors
+.has-background-transparent  { background-color: transparent !important; }
+.has-background-white        { background-color: $white !important; }
+.has-background-black        { background-color: $black !important; }
+.has-background-gray-100     { background-color: $gray-100 !important; }
+.has-background-gray-200     { background-color: $gray-200 !important; }
+.has-background-gray-300     { background-color: $gray-300 !important; }
+.has-background-gray-400     { background-color: $gray-400 !important; }
+.has-background-gray-500     { background-color: $gray-500 !important; }
+.has-background-gray-550     { background-color: $gray-550 !important; }
+.has-background-gray-600     { background-color: $gray-600 !important; }
+.has-background-gray-700     { background-color: $gray-700 !important; }
+.has-background-gray-800     { background-color: $gray-800 !important; }
+.has-background-gray-900     { background-color: $gray-900 !important; }
+.has-background-gray-950     { background-color: $gray-950 !important; }
+.has-background-danger       { background-color: $danger !important; }
+.has-background-light-danger { background-color: $light-danger !important; }
+.has-background-info         { background-color: $info !important; }
+
+.has-text-transparent { color: transparent !important; }
+.has-text-white       { color: $white !important; }
+.has-text-black       { color: $black !important; }
+.has-text-gray-100    { color: $gray-100 !important; }
+.has-text-gray-200    { color: $gray-200 !important; }
+.has-text-gray-300    { color: $gray-300 !important; }
+.has-text-gray-400    { color: $gray-400 !important; }
+.has-text-gray-500    { color: $gray-500 !important; }
+.has-text-gray-550    { color: $gray-550 !important; }
+.has-text-gray-600    { color: $gray-600 !important; }
+.has-text-gray-700    { color: $gray-700 !important; }
+.has-text-gray-800    { color: $gray-800 !important; }
+.has-text-gray-900    { color: $gray-900 !important; }
+.has-text-danger      { color: $danger !important; }
+.has-text-info        { color: $info !important; }
+
+.has-border-transparent { border-color: transparent !important; }
+.has-border-white       { border-color: $white !important; }
+.has-border-black       { border-color: $black !important; }
+.has-border-gray-100    { border-color: $gray-100 !important; }
+.has-border-gray-200    { border-color: $gray-200 !important; }
+.has-border-gray-300    { border-color: $gray-300 !important; }
+.has-border-gray-400    { border-color: $gray-400 !important; }
+.has-border-gray-500    { border-color: $gray-500 !important; }
+.has-border-gray-550    { border-color: $gray-550 !important; }
+.has-border-gray-600    { border-color: $gray-600 !important; }
+.has-border-gray-700    { border-color: $gray-700 !important; }
+.has-border-gray-800    { border-color: $gray-800 !important; }
+.has-border-gray-900    { border-color: $gray-900 !important; }
+.has-border-danger      { border-color: $danger !important; }
+.has-border-info        { border-color: $info !important; }
+
+
+// spacing
+.m-0      { margin: 0 !important; }
+.m-1      { margin: $gutter !important; }
+
+.mx-025   { margin-left: $gutter * .25; margin-right: $gutter * .25; }
+.mx-05    { margin-left: $gutter * .5;  margin-right: $gutter * .5; }
+.mx-1     { margin-left: $gutter;       margin-right: $gutter; }
+.mx-2     { margin-left: $gutter * 2;   margin-right: $gutter * 2; }
+.my-025   { margin-top: $gutter * .25;  margin-bottom: $gutter * .25; }
+.my-05    { margin-top: $gutter * .5;   margin-bottom: $gutter * .5; }
+.my-1     { margin-top: $gutter;        margin-bottom: $gutter; }
+.my-2     { margin-top: $gutter * 2;    margin-bottom: $gutter * 2; }
+
+.mt-0     { margin-top: 0 !important; }
+.mt-05    { margin-top: $gutter * .5; }
+.mt-1     { margin-top: $gutter; }
+.mt-15    { margin-top: $gutter * 1.5; }
+.mt-2     { margin-top: $gutter * 2; }
+.mt-25    { margin-top: $gutter * 2.5; }
+
+.mr-05    { margin-right: $gutter * .5; }
+.mr-1     { margin-right: $gutter; }
+.mr-2     { margin-right: $gutter * 2; }
+.ml-05    { margin-left: $gutter * .5; }
+.ml-1     { margin-left: $gutter; }
+.ml-2     { margin-left: $gutter * 2; }
+
+.mb-0     { margin-bottom: 0 !important; }
+.mb-05    { margin-bottom: $gutter * .5; }
+.mb-1     { margin-bottom: $gutter; }
+.mb-15    { margin-bottom: $gutter * 1.5; }
+.mb-2     { margin-bottom: $gutter * 2; }
+.mb-25    { margin-bottom: $gutter * 2.5; }
+
+.p-025    { padding: $gutter * .25; }
+.p-05     { padding: $gutter * .5; }
+.p-1      { padding: $gutter; }
+.px-05    { padding-left: $gutter * .5; padding-right: $gutter * .5; }
+.px-1     { padding-left: $gutter;      padding-right: $gutter; }
+.px-2     { padding-left: $gutter * 2;  padding-right: $gutter * 2; }
+.py-05    { padding-top: $gutter * .5;  padding-bottom: $gutter * .5; }
+.py-1     { padding-top: $gutter;       padding-bottom: $gutter; }
+.py-2     { padding-top: $gutter * 2;   padding-bottom: $gutter * 2; }
+
+.pt-05    { padding-top: $gutter * .5; }
+.pt-1     { padding-top: $gutter; }
+.pt-2     { padding-top: $gutter * 2; }
+.pt-25    { padding-top: $gutter * 2.5; }
+.pb-05    { padding-bottom: $gutter * .5; }
+.pb-1     { padding-bottom: $gutter; }
+.pb-2     { padding-bottom: $gutter * 2; }
+.pb-25    { padding-bottom: $gutter * 2.5; }
+
+
+// screen readers only
+.is-sr-only {
+    border: none!important;
+    clip: rect(0,0,0,0)!important;
+    height: .01em!important;
+    overflow: hidden!important;
+    padding: 0!important;
+    position: absolute!important;
+    white-space: nowrap!important;
+    width: .01em!important;
+}
+
+
+// icons TODO: move with icon definition
+.center-icon {
+    position: relative;
+    &:before {
+        position: absolute;
+        width: 100% !important;
+        text-align: center !important;
+        top: 50%;
+        left: 0;
+        margin-top: -.5em;
+    }
+}
+
+.icon-only-icon {
+    &:before {
+        margin-right: 0 !important;
+    }
+}
+
+.icon-opaque {
+    &:before {
+        opacity: 1 !important;
+    }
+}
+
+
+// flex
+.is-flex {
+    display: flex;
+    &-column {
+        flex-direction: column;
+    }
+    &.space-between {
+        justify-content: space-between;
+    }
+    &.justify-center {
+        justify-content: center;
+    }
+    &.align-center {
+        align-items: center;
+    }
+    &.wrap {
+        flex-wrap: wrap;
+    }
+}
+
+
+// orders
+.order-top        { order: 0 !important; }
+.order-1          { order: 1 !important; }
+.order-2          { order: 2 !important; }
+.order-3          { order: 3 !important; }
+.order-4          { order: 4 !important; }
+.order-5          { order: 5 !important; }
+.order-6          { order: 6 !important; }
+.order-7          { order: 7 !important; }
+.order-8          { order: 8 !important; }
+.order-bottom     { order: 100 !important; }

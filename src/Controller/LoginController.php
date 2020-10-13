@@ -12,7 +12,9 @@
  */
 namespace App\Controller;
 
+use App\Application;
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
@@ -21,6 +23,15 @@ use Psr\Log\LogLevel;
  */
 class LoginController extends AppController
 {
+    use InstanceConfigTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $_defaultConfig = [
+        // Projects configuration files base path
+        'projectsPath' => CONFIG . 'projects' . DS,
+    ];
 
     /**
      * Display login page or perform login via API.
@@ -35,14 +46,29 @@ class LoginController extends AppController
         if (!$this->request->is('post')) {
             // Handle flash messages
             $this->handleFlashMessages($this->request->getQueryParams());
+            // Load available projects info
+            $this->loadAvailableProjects();
 
             // Display login form.
             return null;
         }
 
-        // Attempted login.
-        $user = null;
-        $reason = 'Invalid username or password';
+        return $this->authRequest();
+    }
+
+    /**
+     * Perform login auth request via POST.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    protected function authRequest(): ?Response
+    {
+        $reason = __('Invalid username or password');
+        // Load project config if `multi project` setup
+        Application::loadProjectConfig(
+            (string)$this->request->getData('project'),
+            (string)$this->getConfig('projectsPath')
+        );
         try {
             $user = $this->Auth->identify();
         } catch (BEditaClientException $e) {
@@ -57,14 +83,54 @@ class LoginController extends AppController
             $user['timezone'] = $this->userTimezone();
             // Successful login. Redirect.
             $this->Auth->setUser($user);
+            // Setup current project name.
+            $this->setupCurrentProject();
 
             return $this->redirect($this->Auth->redirectUrl());
         }
 
         // Failed login.
         $this->Flash->error(__($reason));
+        $this->loadAvailableProjects();
 
         return null;
+    }
+
+    /**
+     * Look for available projects in `config/projects/` folder
+     *
+     * @return void
+     */
+    protected function loadAvailableProjects(): void
+    {
+        $projects = [];
+        $lookup = (string)$this->getConfig('projectsPath') . '*.php';
+        $available = (array)glob($lookup);
+        foreach ($available as $filename) {
+            $return = include $filename;
+            if (!is_array($return) || empty($return['Project']['name'])) {
+                continue;
+            }
+            $projects[] = [
+                'value' => pathinfo($filename, PATHINFO_FILENAME),
+                'text' => $return['Project']['name'],
+            ];
+        }
+        $this->set(compact('projects'));
+    }
+
+    /**
+     * Setup current project name in session if selected from login form
+     *
+     * @return void
+     */
+    protected function setupCurrentProject(): void
+    {
+        $project = $this->request->getData('project');
+        if (empty($project)) {
+            return;
+        }
+        $this->request->getSession()->write('_project', $project);
     }
 
     /**
@@ -89,13 +155,15 @@ class LoginController extends AppController
     /**
      * Logout and redirect to login page.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function logout(): Response
+    public function logout(): ?Response
     {
         $this->request->allowMethod(['get']);
+        $redirect = $this->redirect($this->Auth->logout());
+        $this->request->getSession()->destroy();
 
-        return $this->redirect($this->Auth->logout());
+        return $redirect;
     }
 
     /**

@@ -12,8 +12,8 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
-
 import viewHelper from 'app/helpers/view';
+import autoTranslation from 'app/helpers/api-translation';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -23,6 +23,10 @@ const _vueInstance = new Vue({
 
     components: {
         PanelView,
+        Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
+        DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
+        DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
+        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
@@ -31,11 +35,11 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
-        UploadFilesView: () => import(/* webpackChunkName: "upload-files-view" */'app/components/upload-files-view'),
     },
 
     data() {
@@ -84,6 +88,7 @@ const _vueInstance = new Vue({
 
         // Register helpers
         Vue.use(viewHelper);
+        Vue.use(autoTranslation);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
@@ -96,13 +101,15 @@ const _vueInstance = new Vue({
         // load url params when component initialized
         this.loadUrlParams();
 
-        let cl = document.querySelector('html').classList;
+        const rootEl = document.querySelector('html');
+        const bodyEl = document.querySelector('body');
         PanelEvents.listen('panel:requested', null, () => {
-            cl.add('is-clipped');
+            bodyEl.classList.add('panel-is-open');
+            rootEl.classList.add('is-clipped');
         });
-
         PanelEvents.listen('panel:closed', null, () => {
-            cl.remove('is-clipped');
+            bodyEl.classList.remove('panel-is-open');
+            rootEl.classList.remove('is-clipped');
         });
     },
 
@@ -124,24 +131,33 @@ const _vueInstance = new Vue({
     },
 
     methods: {
-        // Events Listeners
+
+        /**
+         * Close panel
+         *
+         * @return {void}
+         */
+        closePanel() {
+            PanelEvents.closePanel();
+        },
 
         /**
          * Clone object
          * Prompt for title change
          *
-         * @param {Event} e The event
          * @return {void}
          */
-        clone(e) {
-            const title = document.getElementById('title').value;
+        clone() {
+            const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const cloneTitle = prompt(msg, title + ' -copy');
             if (cloneTitle) {
                 const query = `?title=${cloneTitle}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
-                window.location.replace(`${origin}${path}${query}`);
+                const url = `${origin}${path}${query}`;
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
             }
         },
 
@@ -192,22 +208,6 @@ const _vueInstance = new Vue({
         },
 
         /**
-         * on page click:
-         * - if panel is open, close it and stop event propagation
-         * - if panel is closed do nothing
-         *
-         * @return {void}
-         */
-        pageClick(event) {
-            // temporary comment: we do not want that panel is closed, when it contains pagination...
-            // if (this.panelIsOpen) {
-            //     this.closePanel();
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            // }
-        },
-
-        /**
         * extract params from page url
         *
         * @returns {void}
@@ -215,7 +215,7 @@ const _vueInstance = new Vue({
         loadUrlParams() {
             // look for query string params in window url
             if (window.location.search) {
-                const urlParams = decodeURI(window.location.search);
+                const urlParams = decodeURIComponent(window.location.search);
 
                 // search for q='some string' both after ? and & tokens
                 const queryStringExp = /[?&]q=([^&#]*)/g;
@@ -314,15 +314,18 @@ const _vueInstance = new Vue({
                                     Object.keys(filter).forEach((modifier) => {
                                         if (filter[modifier] !== '') {
                                             // look up for param modifier (i.e dates)
-                                            fields.push(`filter[${filterKey}][${modifier}]=${filter[modifier]}`);
+                                            const encoded = encodeURIComponent(filter[modifier]);
+                                            fields.push(`filter[${filterKey}][${modifier}]=${encoded}`);
                                         }
                                     });
                                 } else if (query[filterKey] !== '') {
-                                    fields.push(`filter[${filterKey}]=${query[filterKey]}`);
+                                    const encoded = encodeURIComponent(query[filterKey]);
+                                    fields.push(`filter[${filterKey}]=${encoded}`);
                                 }
                             });
                         } else {
-                            fields.push(`${key}=${query}`);
+                            const encoded = encodeURIComponent(query);
+                            fields.push(`${key}=${encoded}`);
                         }
                     }
                 });
@@ -365,7 +368,7 @@ const _vueInstance = new Vue({
          *
          * @returns {void}
          */
-        alertBeforePageUnload(view) {
+        alertBeforePageUnload() {
             /*
                 Listen for focusin: "normal" HTML element need to store original value in order to make a diff with new values
             */
@@ -381,14 +384,20 @@ const _vueInstance = new Vue({
                             // storing original value for the element
                             if (element.type === 'radio') {
                                 const name = element.name;
-                                const group = document.querySelectorAll(`input[name=${name}]`);
-                                const checked = document.querySelector(`input[name=${name}]:checked`);
-                                group.forEach(el => el.dataset.originalValue = checked.value);
+                                if (name) {
+                                    const group = document.querySelectorAll(`input[name='${name}']`);
+                                    const checked = document.querySelector(`input[name='${name}']:checked`);
+                                    if (checked) {
+                                        group.forEach(el => el.dataset.originalValue = checked.value);
+                                    }
+                                }
                             } else if (element.type === 'checkbox') {
                                 const name = element.name;
                                 if (name) {
-                                    const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                                    element.dataset.originalValue = JSON.stringify(checked);
+                                    const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                                    if (checked) {
+                                        element.dataset.originalValue = JSON.stringify(checked);
+                                    }
                                 }
                             } else {
                                 element.dataset.originalValue = element.value;
@@ -399,23 +408,21 @@ const _vueInstance = new Vue({
                         }
                     }
                 }
-
             }, true);
 
             /*
                 Listen for change: Handles change events and checks if form/page has been modified
             */
             this.$el.addEventListener('change', (ev) => {
-                const element = ev.target;
-                const form = element && element.form;
-
                 const sender = ev.detail;
-                if (typeof sender !== 'undefined' && sender.id) {
+                if (sender && sender.id) {
                     this.dataChanged.set(sender.id, {
                         changed: sender.isChanged
                     });
                 } else {
                     // support for normal change Events trying to figure out a unique id
+                    const element = ev.target;
+                    const form = element && element.form;
                     const checkChanges = form && form.getAttribute('check-changes') === 'true';
                     if (checkChanges && element.name) {
                         const name = element.name;
@@ -426,20 +433,23 @@ const _vueInstance = new Vue({
                         let id = `${formId}#${elementId}`;
 
                         if (element.type === 'radio' || element.type === 'checkbox') {
-                            if (element.type === 'checkbox') {
-                                const checked = document.querySelectorAll(`input[name=${name}]:checked`);
-                                value = JSON.stringify(checked);
-                            }
                             id = `${formId}#${name}`;
                         }
 
-                        if (!id || id === '') {
-                            // if I can't make an id out of don't bother
+                        if (!id) {
+                            // if I can't make an id out of this, don't bother
                             return true;
                         }
 
+                        if (element.type === 'checkbox') {
+                            const checked = document.querySelectorAll(`input[name='${name}']:checked`);
+                            if (checked) {
+                                value = JSON.stringify(checked);
+                            }
+                        }
+
                         this.dataChanged.set(id, {
-                            changed: value !== originalValue
+                            changed: value !== originalValue,
                         });
                     }
                 }
@@ -466,18 +476,13 @@ const _vueInstance = new Vue({
             });
 
             /*
-
+                Ask confirmation before leaving the page if there are unsaved changes
             */
-            window.onbeforeunload = function (ev) {
-                let isDataChanged = false;
+            window.onbeforeunload = () => {
                 for (const [key, value] of _vueInstance.dataChanged) {
                     if (value.changed) {
-                        isDataChanged = true;
-                        break;
+                        return t`There are unsaved changes, are you sure you want to leave page?`;
                     }
-                }
-                if (isDataChanged) {
-                    return 'There are unsaved changes, are you sure you want to leave page?';
                 }
             }
         },

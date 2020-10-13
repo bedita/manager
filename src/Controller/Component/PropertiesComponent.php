@@ -15,6 +15,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * Component to handle properties view in modules.
@@ -72,7 +73,10 @@ class PropertiesComponent extends Component
      * @var array
      */
     protected $excluded = [
+        'categories',
         'date_ranges',
+        'tags',
+        'lang',
     ];
 
     /**
@@ -81,7 +85,7 @@ class PropertiesComponent extends Component
     public function initialize(array $config)
     {
         Configure::load('properties');
-        $propConfig = array_merge(Configure::read('DefaultProperties'), Configure::read('Properties'));
+        $propConfig = array_merge(Configure::read('DefaultProperties'), (array)Configure::read('Properties'));
         $this->setConfig('Properties', $propConfig);
         parent::initialize($config);
     }
@@ -113,7 +117,7 @@ class PropertiesComponent extends Component
     {
         $properties = $used = [];
         $keep = $this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
-        $attributes = array_merge(array_fill_keys($keep, ''), $object['attributes']);
+        $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
         unset($defaults['_keep']);
@@ -175,5 +179,18 @@ class PropertiesComponent extends Component
     public function bulkList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
+    }
+
+    /**
+     * List of ordered relations to display.
+     * Relations not included will be displayed after these.
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function relationsList(string $type): array
+    {
+        return $this->getConfig(sprintf('Properties.%s.relations', $type), []);
     }
 }

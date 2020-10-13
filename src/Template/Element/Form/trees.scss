@@ -1,88 +1,90 @@
-.tree-view {
-    label {
-        color: $gray-600;
+.tree-view-node {
+    color: $gray-100;
+    padding: 0 $gutter * .5;
+    line-height: 1;
+
+    &.is-root {
+        border-bottom: solid 1px $gray-800;
     }
-    .tree-related-object label {
-        color: $gray-100;
-    }
 
+    .node-element {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
-    .tree-list-single-choice {
-        .node-element {
-            border: 1px solid transparent;
+        &[data-status='draft'],
+        &[data-status='off'] {
+            color: $gray-500;
+        }
 
-            &.disabled {
-                opacity: 0.7;
+        > label.node-label {
+            flex: none !important;
+            margin-right: $gutter;
+            color: inherit;
+            line-height: $gutter * 2;
+            cursor: pointer;
+
+            > input[type='checkbox'],
+            > input[type='radio'] {
+                margin-top: -$gutter / 8;
+                margin-right: $gutter / 2;
+                vertical-align: middle;
             }
+        }
 
-            &:not(.disabled):hover {
-                cursor: pointer;
+        > a {
+            display: inline-block;
+            padding: $gutter / 2 $gutter * 1.5;
+            margin-left: $gutter;
+            vertical-align: middle;
+            text-transform: uppercase;
+            border: solid 1px currentColor;
+            border-radius: 2px;
+            opacity: 0;
+
+            &:focus {
+                opacity: 1;
             }
+        }
 
+        .tree-params {
             label {
-                cursor: inherit;
-                text-decoration: inherit;
+                display: flex !important;
+                align-items: center;
             }
+        }
 
-            &.tree-related-object{
-                &.was-related-object{
-                    text-decoration: line-through;
+        > button {
+            margin: 0 0 0 $gutter * .75;
+            min-width: $gutter * 2;
+            color: currentColor;
+            background: transparent;
+            border: 0;
+
+            &.is-loading-spinner {
+                width: 1.35em;
+                height: 1em;
+                &::after {
+                    vertical-align: middle;
+                    border-left-color: rgba(255, 255, 255, 0.75);
                 }
+            }
+        }
+
+        &:hover {
+            > a {
+                opacity: 1;
             }
         }
     }
 
-    .tree-entry-list {
-        padding: 0 $gutter * .5;
-        // margin-left: - ($gutter * 1.5);
-        line-height: 1;
-
-        .tree-list-node {
-            .node-element {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                height: $gutter * 1.5;
-
-                > input, > label {
-                    margin-left: $gutter * .5;
-                }
-
-                > span.icon, > input, > label {
-                    cursor: pointer;
-                }
-
-                &.node-folder {
-                    label {
-                        margin-left: 11px;
-                    }
-                }
-
-                .icon {
-                    font-size: 20px;
-                    &:before { margin-right: 0; }
-                    &.unicode-branch {
-                        width: 20px;
-                        text-align: center;
-                        cursor: default;
-                        &:before {
-                            content: '└';
-                            color: $gray-800;
-                        }
-                    }
-                }
-
-                label {
-                    flex-basis: auto;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-            }
-
-            .node-children {
-                margin-left: $gutter * 3;
-            }
+    .node-element ~ .node-children {
+        &:not(:empty) {
+            margin-top: -$gutter;
+            margin-left: 3 * $gutter / 8;
+            padding-top: $gutter;
+            padding-left: $gutter / 2;
+            border-left: solid 1px rgba(255, 255, 255, 0.25);
         }
     }
 }

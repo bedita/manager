@@ -14,9 +14,9 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
-use Aura\Intl\Exception;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -46,6 +46,16 @@ class ModulesControllerSample extends ModulesController
     public function descendants(): array
     {
         return parent::descendants();
+    }
+
+    /**
+     * Public version of parent function (protected)
+     *
+     * @return void
+     */
+    public function availableRelationshipsUrl(string $relation): string
+    {
+        return parent::availableRelationshipsUrl($relation);
     }
 
     /**
@@ -175,6 +185,7 @@ class ModulesControllerTest extends TestCase
      * Test `index` method
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -200,6 +211,7 @@ class ModulesControllerTest extends TestCase
      * Session filter data must be empty
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -651,6 +663,24 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `relatedJson` method on `new` object
+     *
+     * @covers ::relatedJson()
+     *
+     * @return void
+     */
+    public function testRelatedJsonNew(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->relatedJson('new', 'has_media');
+
+        static::assertEquals([], $this->controller->viewVars['data']);
+    }
+
+    /**
      * Data provider for `testRelationshipsJson` test case.
      *
      * @return array
@@ -971,6 +1001,92 @@ class ModulesControllerTest extends TestCase
         $actual = $this->controller->getSchemaForIndex($type);
 
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `availableRelationshipsUrl` method
+     *
+     * @covers ::availableRelationshipsUrl()
+     *
+     * @return void
+     */
+    public function testAvailableRelationshipsUrl()
+    {
+        $this->setupController();
+        $url = $this->controller->availableRelationshipsUrl('children');
+        static::assertEquals('/objects', $url);
+
+        $this->controller->Modules = $this->createMock(ModulesComponent::class);
+        $this->controller->Modules->method('relatedTypes')
+            ->willReturn(['documents']);
+
+        $url = $this->controller->availableRelationshipsUrl('test_relation');
+        static::assertEquals('/documents', $url);
+
+        $this->controller->Modules = $this->createMock(ModulesComponent::class);
+        $this->controller->Modules->method('relatedTypes')
+            ->willReturn(['images', 'profiles']);
+
+        $url = $this->controller->availableRelationshipsUrl('test_relation');
+        static::assertEquals('/objects?filter[type][]=images&filter[type][]=profiles', $url);
+    }
+
+    /**
+     * Test `saveRelated` method
+     *
+     * @covers ::saveRelated()
+     *
+     * @return void
+     */
+    public function testSaveRelated()
+    {
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $this->controller = new ModulesControllerSample($request);
+
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.org'])
+            ->getMock();
+        $apiClient->method('save')
+            ->willReturn(['data' => ['id' => 1]]);
+        $apiClient->method('addRelated')
+            ->willReturn([]);
+
+        $this->controller->apiClient = $apiClient;
+
+        $result = $this->controller->save();
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
+
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                '_api' => [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => '',
+                        'relatedIds' => [],
+                    ],
+                ],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $this->controller = new ModulesControllerSample($request);
+        $this->controller->apiClient = $apiClient;
+
+        $result = $this->controller->save();
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
     }
 
     /**

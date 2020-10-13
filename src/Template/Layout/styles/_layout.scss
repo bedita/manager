@@ -1,126 +1,62 @@
+// main grids
 main.layout {
-    display: grid;
-    grid-template-areas: "main-sidebar  secondary-sidebar  content-header"
-                        "main-sidebar  secondary-sidebar  content"
-                        "main-sidebar  footer  footer";
-    grid-template-columns: auto auto 1fr;
-    grid-template-rows: auto 1fr auto;
-    padding: $gutter;
+    position: relative;
+    width: 100%;
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100); // iOS adjust with script and fallback
+    padding: 0 $gutter;
 
+    @media (min-width: 568px) {
+        display: grid;
+        grid-gap: 0 $gutter;
+        grid-template-areas: "sidebar content-header"
+                             "sidebar content-body"
+                             "sidebar footer";
+        grid-template-rows: ($dashboard-item-height + $gutter) auto;
+        grid-template-columns: $dashboard-item-width auto;
 
-    > .layout-sidebar-primary {
-        grid-area: main-sidebar;
-        margin-right: 2px;
-    }
-
-    > .layout-sidebar-secondary {
-        grid-area: secondary-sidebar;
-
-        > * {
-            transition: .3s transform;
+        .view-dashboard & {
+            grid-template-rows: auto 1fr auto;
         }
+
+        > .layout-footer { display: none; }
     }
 
-    > .layout-header {
-        grid-area: content-header;
+    > .layout-sidebar { grid-area: sidebar; }
+    > .layout-header  { grid-area: content-header; }
+    > .layout-footer  { grid-area: footer; }
+    > .layout-content { grid-area: content-body; }
 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 110px;
-        transition: .3s transform;
-    }
+    > .layout-content,
+    > .layout-footer { padding: $gutter 0; }
 
+    > .layout-sidebar, > .layout-footer { max-width: 100%; overflow-x: hidden; }
+    > .layout-content { max-width: 100%; }
+}
+
+
+
+// on panel show / hide
+body:not(.view-login) main.layout > .layout-content { background-color: $defaultBackground; } // covers sidebar on translate
+main.layout {
+    > .layout-header,
     > .layout-content {
-        grid-area: content;
         transition: .3s transform;
-        overflow-x: hidden;
-        .view-login & { overflow-x: initial; }
+    }
+    > .layout-sidebar .sidebar {
+        transition: .3s opacity;
     }
 
-    > .layout-footer {
-        grid-area: footer;
-
-        margin-top: $gutter * 4;
-        border-top: 1px solid #495057;
-        padding: $gutter * .5 0 0;
-        margin-left: 90px + $gutter;
-    }
-
-    &.panel-is-open {
-        > .layout-header, > .layout-content {
-            transform: translateX(-114px);
+    .panel-is-open & {
+        > .layout-header,
+        > .layout-content {
+            transform: translateX(-$dashboard-item-width - $gutter);
         }
-        > .layout-sidebar-secondary {
-            > * {
-                transform: translateX(-114px);
-            }
+        > .layout-sidebar {
+            opacity: 0;
         }
-        .main-panel.on {
-            transform: translateX(0);
-            box-shadow: 0 0 32px black;
+        .backdrop {
+            display: blocK;
         }
-    }
-    .main-panel.on {
-        transform: translateX(0);
-        box-shadow: 0 0 32px black;
-    }
-}
-
-// side panel
-.main-panel {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; right: 0;
-    min-width: 25 * $gutter;
-    width: 60%;
-    height: 100vh;
-    z-index: 100;
-    background-color: $black;
-    box-shadow: 0 0 0 black;
-    transform: translateX(101%);
-    transition: .3s transform;
-    overflow: hidden;
-    will-change: transform;
-
-    .main-panel-body {
-        height: 100%;
-        flex: 1 1 0;
-    }
-
-    .panel-slot-container {
-        height: 100%;
-    }
-
-    footer {
-        display: flex;
-        flex-shrink: 0;
-        justify-content: space-between;
-        padding: $gutter;
-    }
-}
-
-
-// non production environemnt
-body[alert-message] {
-    padding-top: 2rem !important;
-
-    &:after {
-        content: attr(alert-message);
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 2rem;
-        background-color: crimson;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    main.layout>.layout-sidebar-secondary>* {
-        top: calc(16px + 2rem);
     }
 }

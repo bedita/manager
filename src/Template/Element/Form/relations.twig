@@ -1,42 +1,30 @@
-{#
-    load-on-start, loading events timing:
-    1000ms    - first relation
-    gap 200ms - till last relation
-#}
-
-{% if objectRelations %}
+{% if relations %}
 <section class="relations">
 
-    {% for relationName in objectRelations %}
+    {% for relationName, relationLabel in relations %}
 
-        <div class="relation">
-            <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
-                <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
+        <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
+            <section class="fieldset">
 
-                    <header @click.prevent="toggleVisibility();" class="tab unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
-                        <h2>
-                            {{ relationName|humanize|lower }}
-                            <span class="tag is-smallest is-black space-around-half"
-                                :class="!totalObjects? 'empty' : ''"><: totalObjects :>
-                            </span>
-                        </h2>
-                    </header>
+                <header @click.prevent="toggleVisibility()"
+                    class="tab unselectable"
+                    :class="[
+                        isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
+                        isLoading? 'is-loading-spinner' : ''
+                    ]">
+                        <h2>{{ relationLabel }}</h2>
+                        <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
+                </header>
 
-                    {% if relationName == 'children' %}
-                        <div v-show="isOpen" class="tab-container">
-                            {% set wait = 500 + (loop.index * 200) %}
-                            {% element 'Form/children' {'relationName': relationName, 'loadOnStart': wait } %}
-                        </div>
-                    {% else %}
-                        <div v-show="isOpen" class="tab-container">
-                            {% set wait = 500 + (loop.index * 200) %}
-                            {% element 'Form/relation' {'relationName': relationName, 'relationSchema': relationsSchema[relationName], 'loadOnStart': wait } %}
-                        </div>
-                    {% endif %}
+                <div v-show="isOpen" class="tab-container">
+                    {% element 'Form/relation' {
+                        'relationName': relationName,
+                        'relationSchema': relationName != 'children'? relationsSchema[relationName] : null,
+                    } %}
+                </div>
 
-                </section>
-            </property-view>
-        </div>
+            </section>
+        </property-view>
 
     {% endfor %}
 

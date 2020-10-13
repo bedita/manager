@@ -5,20 +5,18 @@
 
     <header>
         <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
+        <span class="has-background-module-{{ object.type }} tag has-font-weight-bold">{{ object.type|capitalize }}</span>
     </header>
 
     <div class="module-form">
-            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-                'url': {'_name': 'trash:list'},
-                'id': 'form-main',
-            })|raw }}
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'trash:list'},
+            'id': 'form-main',
+        })|raw }}
 
-            {# Inside form-column there are form elements, they may have a cssOrder property that reorders
-                the elements in single column view, in small viewports. cssOrder may assume the string
-                values "1", "2", "3" or "bottom". If missing, the default for cssOrder in "0". #}
-
-            <div class="form-column">
+            <div class="main-view-column">
                 {% element 'Form/core_properties' %}
+                {% element 'Form/custom_left' %}
 
                 {# media #}
                 {% if objectType in ['images', 'files', 'audio', 'videos'] %}
@@ -27,25 +25,22 @@
                     {% endif %}
                 {% endif %}
 
-                {% element 'Form/other_properties' {'cssOrder': '2'} %} {# Content #}
+                {% element 'Form/other_properties' %}
             </div>
 
-            <div class="form-column">
-                {% element 'Form/publish_properties' {'cssOrder': '1'} %}
+            <div class="side-view-column">
+                {% element 'Form/publish_properties' %}
 
                 {% element 'Form/advanced_properties' %}
 
-                {% element 'Form/meta' {'cssOrder': 'bottom'}  %}
+                {% element 'Form/meta' %}
             </div>
-
-            {# temp relations view #}
-            {% element 'Form/relations' %}
 
         {{ Form.end()|raw }}
 
         {# Append "Delete" and "Restore" to commands in commands menu. #}
-        {% do _view.append('commands', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
-        {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}
+        {% do _view.append('module-buttons', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
+        {% do _view.append('module-buttons', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}
     </div>
 
 </div>

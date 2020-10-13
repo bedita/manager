@@ -1,73 +1,105 @@
 {{ _view.assign('title', __('Dashboard')) }}
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
-<div class="dashboard">
-    <section>
-        <ul class="dashboard-items">
-        {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders']) %}
-            <li class="has-background-module-{{ name }} {% if module.hints.multiple_types %} icon-th-large-1 {% endif %}">
+<dashboard q="{{ _view.getRequest().getSession().read('objects.filter.q') }}" inline-template>
+    <div class="dashboard">
+        <section class="dashboard-section">
+            <div class="dashboard-items">
+            {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders', 'publications']) %}
+                {% set title = __(module.label|default(name)|humanize) %}
+                {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
                 {% if module.hints.multiple_types %}
-                    {% set title = 'All ' ~ __(name|humanize|lower) %}
-                {% else %}
-                    {% set title = __(name|humanize) %}
+                    {% set class = class ~ ' icon-th-large-1' %}
                 {% endif %}
-                {{ Html.link(__(title), {'_name': 'modules:list', 'object_type': name}, {'title': __(title)})|raw }}
-            </li>
-        {% endfor %}
-        {% for k, plugin in config('PluginModules') %}
-            <li class="{{ plugin.class.dashboard }}">
-                {{ Html.link(__(plugin.title|humanize), plugin.route, {'title': __(plugin.title|humanize)})|raw }}
-            </li>
-        {% endfor %}
-        </ul>
-    </section>
 
-    <section>
-        <ul class="dashboard-items dashboard-utility">
-            <li class="has-background-module-objects icon-th-large-1">
-                {{ Html.link(__('All objects'), {'_name': 'modules:list', 'object_type': 'objects'}, {'title': __('All objects')})|raw }}
-            </li>
-            {% if modules.folders %}
-            <li class="has-background-module-folders icon-folder">
-                {{ Html.link(__('Folders'), {'_name': 'modules:list', 'object_type': 'folders'}, {'title': __('Folders')})|raw }}
-            </li>
-            {% endif %}
-            <li class="has-background-module-users icon-group">
-                {{ Html.link(__('System users'), {'_name': 'modules:list', 'object_type': 'users'}, {'title': __('System users')})|raw }}
-            </li>
-            <li class="has-background-module-trash icon-trash-2">
-                {{ Html.link(__('Trash can'), {'_name': 'trash:list'}, {'title': __('Trash')})|raw }}
-            </li>
-        </ul>
-    </section>
+                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name })|raw }}" class="{{ class }}">
+                    <span>{{ title }}</span>
+                </a>
+            {% endfor %}
 
-    {% if user %}
-    <section>
-        <header class="has-text-gray-550">
-            <h2>{{ __('Preferences and Tools') }}</h2>
-        </header>
-        <ul class="dashboard-items dashboard-utility">
-            {# <li class="has-background-black icon-wrench">
-                <a>{{ __('Settings') }}</a>
-            </li> #}
-            {% if config('Filters.import') %}
-            <li class="has-background-black icon-download-alt">
-                {{ Html.link(__('Import'), {'_name': 'import:index'})|raw }}
-            </li>
-            {% endif %}
-            {% if in_array('admin', user.roles) %}
-            <li class="has-background-black icon-database">
-                {{ Html.link(__('Data modeling'), {'_name': 'model:list:object_types'})|raw }}
-            </li>
-            {% endif %}
-            <li class="has-background-black icon-user">
-                <a>{{ __('User Profile') }}</a>
-                {{ Html.link(__(''), {'_name': 'user_profile:view'}, {'title': __('User Profile')})|raw }}
-            </li>
-            <li class="has-background-black has-text-danger icon-logout logout-button">
-                {{ Html.link(__('Log out'), {'_name': 'logout'})|raw }}
-            </li>
-        </ul>
-    </section>
-    {% endif %}
-</div>
+            {% for k, plugin in config('PluginModules', []) %}
+                <li class="{{ plugin.class.dashboard }}">
+                    {{ Html.link(__(plugin.title|humanize), plugin.route, {'title': __(plugin.title|humanize)})|raw }}
+                </li>
+            {% endfor %}
+            </div>
+
+            <div class="dashboard-items dashboard-utility">
+                {% if modules.publications %}
+                    {{ Html.link(__('Publications'),
+                        { '_name': 'modules:list', 'object_type': 'publications' },
+                        { 'title': __('Publications'), 'class': 'dashboard-item has-background-module-publications icon-globe-1', } )|raw }}
+                {% endif %}
+
+                {% if modules.folders %}
+                    {{ Html.link(__('Folders'),
+                        { '_name': 'modules:list', 'object_type': 'folders' },
+                        { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
+                {% endif %}
+
+                {{ Html.link(__('All objects'),
+                    { '_name': 'modules:list', 'object_type': 'objects' },
+                    { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
+
+                {# <a href="#" class="dashboard-item has-background-black icon-list-1" disabled>{{ __('All categories') }}</a> #}
+
+                {# <a href="#" class="dashboard-item has-background-black icon-tag" disabled>{{ __('All tags') }}</a> #}
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <header>
+                <h2>{{ __('Search') }}</h2>
+            </header>
+
+            <nav role="search">
+                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
+            </nav>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="dashboard-items dashboard-utility">
+                {% if modules.trash %}
+                    {{ Html.link(__('Trash can'),
+                        { '_name': 'trash:list' },
+                        { 'title': __('Trash'), 'class': 'dashboard-item has-background-black icon-trash-2' } )|raw }}
+                {% endif %}
+
+                {% if modules.users %}
+                    {{ Html.link(__('System users'),
+                        {'_name': 'modules:list', 'object_type': 'users'},
+                        {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
+                {% endif %}
+            </div>
+        </section>
+
+        {% if user %}
+        <section class="dashboard-section">
+            <header>
+                <h2>{{ __('Preferences and Tools') }}</h2>
+            </header>
+
+            <div class="dashboard-items dashboard-utility">
+                {% if config('Filters.import') %}
+                    {{ Html.link(__('Import'),
+                        { '_name': 'import:index' },
+                        { 'title': __('Import'), 'class': 'dashboard-item has-background-black icon-download-alt' } )|raw }}
+                {% endif %}
+
+                {% if in_array('admin', user.roles) %}
+                    {{ Html.link(__('Data modeling'),
+                        { '_name': 'model:list:object_types' },
+                        { 'title': __('Data modeling'), 'class': 'dashboard-item has-background-black icon-database' } )|raw }}
+                {% endif %}
+
+                {{ Html.link(__('User Profile'),
+                    { '_name': 'user_profile:view' },
+                    { 'title': __('User Profile'), 'class': 'dashboard-item has-background-black icon-user' } )|raw }}
+
+                {# <a href="#" class="dashboard-item has-background-black icon-cog" disabled>{{ __('Settings') }}</a> #}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</dashboard>

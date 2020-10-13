@@ -1,63 +1,56 @@
 <main-menu inline-template>
-<ul role="menu" :class="popUpAction? 'popup-on' : ''">
+    <div class="menu-bar">
 
-    {# Core object modules #}
-    {% for name, module in modules if name != 'trash' %}
-        <li class="has-background-module-{{ name }} {{ name == currentModule.name ? 'current' : '' }}">
-            {{ Html.link(
-                __(name|humanize)|slice(0, 2),
-                { '_name': 'modules:list', 'object_type': name, 'plugin': null },
-                { 'tooltip': __(name|humanize), 'class': 'square' })|raw }}
-        </li>
-    {% endfor %}
+        <nav role="menu">
+            {# Core object modules #}
+            {% for name, module in modules if name != 'trash' %}
+                {% set label = __(module.label|default(name)|humanize) %}
+                {% set shortLabel = module.shortLabel|default(label[0:3]) %}
+                {% if label|length > 8 %}
+                    {% set label = label[0:3] %}
+                {% endif %}
 
-    {# Plugin modules #}
-    {% for k, plugin in config('PluginModules') %}
-        <li class="{{ plugin.class.menu }}">
-            {{ Html.link(__(plugin.title|humanize)|slice(0, 2),
-                plugin.route,
-                {'tooltip': __(plugin.title|humanize), 'class': 'square'})|raw }}
-        </li>
-    {% endfor %}
+                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) }}"
+                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
+                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
+                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                    <span class="menu-item-label">{{ label }}</span>
+                    <span class="menu-item-short-label">{{ shortLabel }}</span>
+                </a>
+            {% endfor %}
 
-    {# trash #}
-    {% if currentModule.name != "trash" %}
-        {% if currentModule.hints.multiple_types %}
-            {% set elementClass = "space-around-half has-background-module-" ~ currentModule.name %}
-        {% else %}
-            {% set elementClass = "has-text-module-" ~ currentModule.name %}
-        {% endif %}
-        <li class="has-background-transparent {{ elementClass }} icon-trash-2 center-icon has-tooltip-align-right">
-        {{ Html.link(__(''),
-            {'_name': 'trash:list', 'filter': {'type': objectType}},
-            {'tooltip': __('View trashed ') ~ currentModule.name|humanize, 'class': 'square'}
-        )|raw }}
-    </li>
-    {% endif %}
+            {# Plugin modules #}
+            {% for k, plugin in config('PluginModules') %}
+                {% set label = __(plugin.title|humanize) %}
+                {% if label|length > 7 %}
+                    {% set label = label[0:3] %}
+                {% endif %}
 
-    <li class="has-background-transparent spacer">&nbsp;</li>
+                <a href="{{ Url.build(plugin.route) }}"
+                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
+                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
+                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                    <span class="menu-item-label">{{ label }}</span>
+                </a>
+            {% endfor %}
+        </nav>
 
-    {# search #}
-    <li class="has-background-black icon-search center-icon has-tooltip-align-right">
-        {{ Html.link(__(''), '', {
-            'tooltip': __('Search'),
-            'class': 'square',
-            'v-on:click.prevent': "togglePopup('search')",
-        })|raw }}
-    </li>
+        <nav role="group" class="pt-05">
+            <a class="button icon icon-trash icon-only-icon has-text-module-{{ currentModule.name }}"
+                title="{{ currentModule.name|humanize ~ __(' in Trashcan') }}"
+                href="{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}"><span class="is-sr-only">{{ __('Trash') }}</span></a>
 
-    {# look up by id #}
-    <li class="has-background-black icon-tag center-icon has-tooltip-align-right">
-        {{ Html.link(__(''), '', {
-            'tooltip': __('Direct access by id or unique name'),
-            'class': 'square',
-            'v-on:click.prevent': "togglePopup('go')",
-        })|raw }}
-    </li>
+            <button role="search" class="icon icon-search icon-only-icon ml-05" title="{{ __('Search') }}"
+                v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>
 
-    <div class="popup">
-        <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys">
-        <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
+            <button class="icon icon-cube icon-only-icon ml-05" title="{{ __('Direct access by id or unique name') }}"
+                v-on:click.prevent="togglePopup('id')"><span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span></button>
+
+            <div class="popup" v-show="this.popUpAction">
+                <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys" :placeholder="popUpAction">
+                <button :disabled="!searchString" v-on:click="go"><: popUpAction :></button>
+            </div>
+        </nav>
+
     </div>
-</ul>
 </main-menu>

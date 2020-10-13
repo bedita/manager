@@ -12,5 +12,3 @@ import ModulesView from 'app/pages/modules/view';
 export default {
     extends: ModulesView,
 }
-
-

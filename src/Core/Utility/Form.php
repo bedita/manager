@@ -29,6 +29,7 @@ class Form
      */
     public const CUSTOM_CONTROLS = [
         'confirm-password',
+        'date_ranges',
         'end_date',
         'lang',
         'old_password',
@@ -41,7 +42,17 @@ class Form
     /**
      * Control types
      */
-    public const CONTROL_TYPES = ['json', 'textarea', 'date-time', 'date', 'checkbox', 'enum'];
+    public const CONTROL_TYPES = ['json', 'richtext', 'plaintext', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
+
+    /**
+     * Map JSON Schema `contentMediaType` to supported control types
+     *
+     * @var array
+     */
+    public const CONTENT_MEDIA_TYPES = [
+        'text/html' => 'richtext',
+        'text/plain' => 'plaintext',
+    ];
 
     /**
      * Get control by schema, control type, and value
@@ -78,17 +89,30 @@ class Form
     }
 
     /**
-     * Control for textarea
+     * Control for plaintext
      *
      * @param mixed|null $value Property value.
      * @return array
      */
-    protected static function textareaControl($value): array
+    protected static function plaintextControl($value): array
     {
         return [
             'type' => 'textarea',
-            'v-richeditor' => 'true',
-            'ckconfig' => 'configNormal',
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Control for richtext
+     *
+     * @param mixed|null $value Property value.
+     * @return array
+     */
+    protected static function richtextControl($value): array
+    {
+        return [
+            'type' => 'textarea',
+            'v-richeditor' => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
             'value' => $value,
         ];
     }
@@ -107,6 +131,9 @@ class Form
             'date' => 'true',
             'time' => 'true',
             'value' => $value,
+            'templates' => [
+                'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+            ],
         ];
     }
 
@@ -122,8 +149,48 @@ class Form
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'time' => 'false',
             'value' => $value,
+            'templates' => [
+                'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+            ],
+        ];
+    }
+
+    /**
+     * Control for categories
+     *
+     * @param array $value Property value.
+     * @param array $schema Object schema array.
+     * @return array
+     */
+    protected static function categoriesControl($value, array $schema): array
+    {
+        $categories = $schema['categories'];
+        $options = array_map(
+            function ($category) {
+                return [
+                    'value' => $category['name'],
+                    'text' => $category['label'],
+                ];
+            },
+            $categories
+        );
+
+        $checked = [];
+        if (!empty($value)) {
+            $names = Hash::extract($value, '{n}.name');
+            foreach ($categories as $category) {
+                if (in_array($category['name'], $names)) {
+                    $checked[] = $category['name'];
+                }
+            }
+        }
+
+        return [
+            'type' => 'select',
+            'options' => $options,
+            'multiple' => 'checkbox',
+            'value' => $checked,
         ];
     }
 
@@ -147,8 +214,8 @@ class Form
         foreach ($schema['oneOf'] as $one) {
             if (!empty($one['type']) && ($one['type'] === 'array')) {
                 $options = array_map(
-                    function ($value) {
-                        return ['value' => $value, 'text' => Inflector::humanize($value)];
+                    function ($item) {
+                        return ['value' => $item, 'text' => Inflector::humanize($item)];
                     },
                     (array)Hash::extract($one, 'items.enum')
                 );
@@ -201,20 +268,25 @@ class Form
      * Infer control type from property schema
      * Possible return values:
      *
-     *   'text'
+     *   'categories'
+     *   'checkbox'
      *   'date-time'
      *   'date'
-     *   'textarea'
      *   'enum'
-     *   'number'
-     *   'checkbox'
      *   'json'
+     *   'number'
+     *   'plaintext'
+     *   'richtext'
+     *   'text'
      *
      * @param mixed $schema The property schema
      * @return string
      */
     public static function controlTypeFromSchema($schema): string
     {
+        if (isset($schema['type']) && $schema['type'] === 'categories') {
+            return 'categories';
+        }
         if (!is_array($schema)) {
             return 'text';
         }
@@ -252,14 +324,14 @@ class Form
     }
 
     /**
-     * Options for lang
-     * If available, use config `Project.I18n.languages`
+     * Options for lang, using configuration loaded from API
+     * If available, use config `Project.config.I18n.languages`
      *
      * @return array
      */
     protected static function langOptions(): array
     {
-        $languages = Configure::read('Project.I18n.languages');
+        $languages = Configure::read('Project.config.I18n.languages');
         if (empty($languages)) {
             return [
                 'type' => 'text',
@@ -271,6 +343,16 @@ class Form
         }
 
         return ['type' => 'select'] + compact('options');
+    }
+
+    /**
+     * Options for `date_ranges`
+     *
+     * @return array
+     */
+    protected static function dateRangesOptions(): array
+    {
+        return static::datetimeControl(null);
     }
 
     /**
@@ -378,6 +460,9 @@ class Form
         return [
             'class' => 'title',
             'type' => 'text',
+            'templates' => [
+                'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+            ],
         ];
     }
 
@@ -387,7 +472,8 @@ class Form
      *
      *    format 'date-time' => 'date-time'
      *    format 'date' => 'date'
-     *    contentMediaType => 'textarea'
+     *    contentMediaType 'text/plain' => 'plaintext'
+     *    contentMediaType 'text/html' => 'richtext'
      *    schema.enum is an array => 'enum'
      *
      * Return 'text' otherwise.
@@ -400,8 +486,10 @@ class Form
         if (!empty($schema['format']) && in_array($schema['format'], ['date', 'date-time'])) {
             return $schema['format'];
         }
-        if (!empty($schema['contentMediaType']) && $schema['contentMediaType'] === 'text/html') {
-            return 'textarea';
+        $contentType = (string)Hash::get($schema, 'contentMediaType');
+        $controlType = (string)Hash::get(self::CONTENT_MEDIA_TYPES, $contentType);
+        if (!empty($controlType)) {
+            return $controlType;
         }
         if (!empty($schema['enum']) && is_array($schema['enum'])) {
             return 'enum';

@@ -29,3 +29,7 @@
 //  __('modified');
 //  __('title');
 //  __('All media');
+//  __('Created');
+//..__('Updated');
+//..__('Trashd');
+//..__('Restored');

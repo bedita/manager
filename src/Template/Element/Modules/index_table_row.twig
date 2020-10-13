@@ -1,0 +1,88 @@
+{% set routeName = 'modules:view' %}
+{% if isTrash %}
+    {% set routeName = 'trash:view' %}
+{% endif %}
+
+{% set buttonClasses = 'button button-text-white is-width-auto' %}
+
+<a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"
+    class="table-row object-status-{{ object.attributes.status }}">
+
+        <div class="select-cell narrow" @click="selectRow">
+            {{ Form.unlockField('oneItem') }}
+            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows">
+        </div>
+
+        <div class="thumb-cell narrow">
+            {%- if not isTrash %}
+                {% element 'Modules/thumb' { 'object': object } %}
+            {% endif -%}
+        </div>
+
+        {% for prop in properties %}
+            {% if (prop == 'date_ranges') %}
+                <div class="{{ prop }}-cell">
+                    {% element 'Modules/index_properties_date_ranges' { dateRanges: object.attributes[prop] } %}
+                </div>
+            {% else %}
+                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                    {{ Schema.format(object.attributes[prop], schema.properties[prop]) }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% if currentModule.hints.multiple_types %}
+            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
+        {% endif %}
+
+        <div class="narrow">{{ __(object.attributes.status) }}</div>
+
+        <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+
+        <div class="narrow">{{ object.id }}</div>
+
+        {# COMMANDS #}
+        <div class="buttons-cell narrow">
+        {% if isTrash %}
+
+            {% if in_array('PATCH', currentModule.hints.allow) %}
+                {{ Form.postButton(__('Restore'),
+                    {'_name': 'trash:restore'},
+                    {
+                        'data': {'ids': object.id, 'query': q},
+                        'title': __('Restore') ~ ' ' ~ object.attributes.title|escape,
+                        'class': buttonClasses,
+                    }
+                )|raw }}
+            {% endif %}
+
+            {{ Form.postButton(__('Delete'),
+                {'_name': 'trash:delete'},
+                {
+                    'data': {'ids': object.id, 'query': q},
+                    'class': buttonClasses,
+                    'title': __('Permanently delete') ~ ' ' ~ object.attributes.title|escape,
+                    'onclick': confirm,
+                }
+            )|raw }}
+
+        {% else %}
+
+            <button
+                title="{{ __('Edit') }} {{ object.attributes.title }}"
+                class="{{ buttonClasses }}">{{ __('Edit') }}</button>
+
+            {% if in_array('DELETE', currentModule.hints.allow) %}
+                {{ Form.postButton(__('Trash-verb'),
+                    {'_name': 'modules:delete', 'object_type': object.type},
+                    {
+                        'data': {'id': object.id},
+                        'title': __('Move to trash') ~ ' ' ~ object.attributes.title|escape,
+                        'class': buttonClasses,
+                    }
+                )|raw}}
+            {% endif %}
+
+        {% endif %}
+        </div>
+</a>

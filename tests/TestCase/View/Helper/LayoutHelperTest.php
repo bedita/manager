@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2019 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -25,178 +25,72 @@ use Cake\View\View;
 class LayoutHelperTest extends TestCase
 {
     /**
-     * Data provider for `testPrimarySidebar` test case.
+     * Data provider for `testIsDashboard` test case.
      *
      * @return array
      */
-    public function primarySidebarProvider(): array
+    public function isDashboardProvider(): array
     {
         return [
             'dashboard' => [
                 'Dashboard',
                 true,
             ],
-            'login' => [
-                'Login',
-                false,
-            ],
         ];
     }
 
     /**
-     * Test primarySidebar
+     * Test isDashboard
      *
      * @param string $name The view name
      * @param bool $expected The expected result
      *
-     * @dataProvider primarySidebarProvider()
-     * @covers ::primarySidebar()
+     * @dataProvider isDashboardProvider()
+     * @covers ::isDashboard()
      */
-    public function testPrimarySidebar($name, $expected): void
+    public function testIsDashboard($name, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View($request, $response, $events, $data));
-        $result = $layout->primarySidebar();
+        $result = $layout->isDashboard();
         static::assertSame($result, $expected);
     }
 
     /**
-     * Data provider for `testSecondarySidebar` test case.
+     * Data provider for `testIsLogin` test case.
      *
      * @return array
      */
-    public function secondarySidebarProvider(): array
+    public function isLoginProvider(): array
     {
         return [
-            'import' => [
-                'Import',
-                null,
-                true,
-            ],
-            'user profile' => [
-                'UserProfile',
-                null,
-                true,
-            ],
-            'currentModule not empty' => [
-                null,
-                'Objects',
-                true,
-            ],
-        ];
-    }
-
-    /**
-     * Test secondarySidebar
-     *
-     * @param string $name The view name
-     * @param string $currentModule The current module
-     * @param bool $expected The expected result
-     *
-     * @dataProvider secondarySidebarProvider()
-     * @covers ::secondarySidebar()
-     */
-    public function testSecondarySidebar($name, $currentModule, $expected): void
-    {
-        $request = $response = $events = null;
-        $data = ['name' => $name];
-        $view = new View($request, $response, $events, $data);
-        $view->set('currentModule', $currentModule);
-        $layout = new LayoutHelper($view);
-        $result = $layout->secondarySidebar();
-        static::assertSame($result, $expected);
-    }
-
-    /**
-     * Data provider for `testLayoutHeader` test case.
-     *
-     * @return array
-     */
-    public function layoutHeaderProvider(): array
-    {
-        return [
-            'dashboard' => [
-                'Dashboard',
-                false,
-            ],
             'login' => [
                 'Login',
-                false,
-            ],
-            'objects' => [
-                'Objects',
                 true,
+            ],
+            'other' => [
+                'Trash',
+                false,
             ],
         ];
     }
 
     /**
-     * Test layoutHeader
+     * Test isLogin
      *
      * @param string $name The view name
      * @param bool $expected The expected result
      *
-     * @dataProvider layoutHeaderProvider()
-     * @covers ::layoutHeader()
+     * @dataProvider isLoginProvider()
+     * @covers ::isLogin()
      */
-    public function testLayoutHeader($name, $expected): void
+    public function testIsLogin($name, $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View($request, $response, $events, $data));
-        $result = $layout->layoutHeader();
-        static::assertSame($result, $expected);
-    }
-
-    /**
-     * Test layoutContent
-     *
-     * @covers ::layoutContent()
-     */
-    public function testLayoutContent(): void
-    {
-        $layout = new LayoutHelper(new View());
-        static::assertSame($layout->layoutContent(), true);
-    }
-
-    /**
-     * Data provider for `testLayoutFooter` test case.
-     *
-     * @return array
-     */
-    public function layoutFooterProvider(): array
-    {
-        return [
-            'login' => [
-                'Login',
-                false,
-            ],
-            'dashboard' => [
-                'Dashboard',
-                false,
-            ],
-            'currentModule not empty' => [
-                'Objects',
-                true,
-            ],
-        ];
-    }
-
-    /**
-     * Test layoutFooter
-     *
-     * @param string $name View name
-     * @param bool $expected The expected result
-     *
-     * @dataProvider layoutFooterProvider()
-     * @covers ::layoutFooter()
-     */
-    public function testLayoutFooter($name, $expected): void
-    {
-        $data = ['name' => $name];
-        $layout = new LayoutHelper(new View(null, null, null, $data));
-        $result = $layout->layoutFooter();
+        $result = $layout->isLogin();
         static::assertSame($result, $expected);
     }
 

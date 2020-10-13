@@ -17,7 +17,7 @@ env:
     - BEDITA_API=http://127.0.0.1:8080
     - BEDITA_ADMIN_USR=admin
     - BEDITA_ADMIN_PWD=admin
-    - BEDITA_DOCKER_IMG=bedita/bedita:4.0.0
+    - BEDITA_DOCKER_IMG=bedita/bedita:4.1.0
 
 before_install:
   # Use GitHub OAuth token with Composer to increase API limits.
@@ -48,6 +48,7 @@ jobs:
     - php: 7.1
     - php: 7.2
     - php: 7.3
+    - php: 7.4
     - name: "PHP code sniffer"
       php: 7.2
       env: "RUN=phpcs"
@@ -59,7 +60,7 @@ jobs:
       after_success: skip
     - name: "Yarn build"
       language: node_js
-      node_js: 10
+      node_js: 12
       before_install: skip
       install:
         - yarn

@@ -5,6 +5,7 @@
 /composer.local.json
 /config/app.php
 /config/.env
+/config/projects/*
 /coverage/*
 /index.html
 /logs/*
@@ -65,4 +66,5 @@ bundle-report.*.html
 /webroot/css/app*
 /webroot/css/**/*.map
 /webroot/css/vendors/async
-/webroot/js
+/webroot/js/*.js
+/webroot/js/vendors

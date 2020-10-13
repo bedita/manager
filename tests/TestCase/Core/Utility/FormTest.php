@@ -16,7 +16,6 @@ namespace App\Test\TestCase\Core\Utility;
 use App\Core\Utility\Form;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
-use Cake\View\View;
 
 /**
  * {@see \App\Core\Utility\Form} Test Case
@@ -40,10 +39,17 @@ class FormTest extends TestCase
                 ],
             ],
             'html' => [
-                'textarea',
+                'richtext',
                 [
                     'type' => 'string',
                     'contentMediaType' => 'text/html',
+                ],
+            ],
+            'txt' => [
+                'plaintext',
+                [
+                    'type' => 'string',
+                    'contentMediaType' => 'text/plain',
                 ],
             ],
             'date-time' => [
@@ -60,10 +66,16 @@ class FormTest extends TestCase
                     'format' => 'date',
                 ],
             ],
-            'number' => [
+            'integer' => [
                 'number',
                 [
                     'type' => 'integer',
+                ],
+            ],
+            'number' => [
+                'number',
+                [
+                    'type' => 'number',
                 ],
             ],
             'checkbox' => [
@@ -134,6 +146,12 @@ class FormTest extends TestCase
                     ],
                 ],
             ],
+            'categories' => [
+                'categories',
+                [
+                    'type' => 'categories',
+                ],
+            ],
         ];
     }
 
@@ -146,6 +164,12 @@ class FormTest extends TestCase
      *
      * @dataProvider controlTypeFromSchemaProvider()
      * @covers ::controlTypeFromSchema()
+     * @covers ::typeFromString()
+     * @covers ::typeFromNumber()
+     * @covers ::typeFromInteger()
+     * @covers ::typeFromBoolean()
+     * @covers ::typeFromArray()
+     * @covers ::typeFromObject()
      */
     public function testControlTypeFromSchema(string $expected, $schema): void
     {
@@ -175,6 +199,29 @@ class FormTest extends TestCase
                     'type' => 'text',
                 ],
             ],
+            'lang options' => [
+                'lang',
+                [
+                    'type' => 'select',
+                    'options' => [
+                        [
+                            'value' => 'en',
+                            'text' => 'English',
+                        ],
+                        [
+                            'value' => 'de',
+                            'text' => 'Deutsch',
+                        ],
+                    ],
+                ],
+                [
+                    'Project.config.I18n.languages' => [
+                        'en' => 'English',
+                        'de' => 'Deutsch',
+                    ],
+                ],
+            ],
+
             'status' => [
                 'status',
                 [
@@ -216,6 +263,9 @@ class FormTest extends TestCase
                 [
                     'class' => 'title',
                     'type' => 'text',
+                    'templates' => [
+                        'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'start_date' => [
@@ -226,6 +276,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'end_date' => [
@@ -236,6 +289,22 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
+                ],
+            ],
+            'date_ranges' => [
+                'date_ranges',
+                [
+                    'type' => 'text',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
+                    'time' => 'true',
+                    'value' => null,
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
         ];
@@ -246,11 +315,13 @@ class FormTest extends TestCase
      *
      * @param string $name The field name.
      * @param array $expected Expected result.
+     * @param array $config Configuration.
      * @return void
      *
      * @dataProvider customControlOptionsProvider()
      * @covers ::customControlOptions()
      * @covers ::langOptions
+     * @covers ::dateRangesOptions(()
      * @covers ::startDateOptions()
      * @covers ::endDateOptions()
      * @covers ::statusOptions
@@ -265,8 +336,11 @@ class FormTest extends TestCase
      * @covers ::typeFromArray
      * @covers ::typeFromObject
      */
-    public function testCustomControlOptions(string $name, array $expected): void
+    public function testCustomControlOptions(string $name, array $expected, array $config = []): void
     {
+        if (!empty($config)) {
+            Configure::write($config);
+        }
         $actual = Form::customControlOptions($name);
 
         static::assertSame($expected, $actual);
@@ -299,14 +373,22 @@ class FormTest extends TestCase
                     'value' => json_encode($value),
                 ],
             ],
-            'textarea' => [
+            'richtext' => [
                 [],
-                'textarea',
+                'richtext',
                 $value,
                 [
                     'type' => 'textarea',
-                    'v-richeditor' => 'true',
-                    'ckconfig' => 'configNormal',
+                    'v-richeditor' => '""',
+                    'value' => $value,
+                ],
+            ],
+            'plaintext' => [
+                [],
+                'plaintext',
+                $value,
+                [
+                    'type' => 'textarea',
                     'value' => $value,
                 ],
             ],
@@ -320,6 +402,9 @@ class FormTest extends TestCase
                     'date' => 'true',
                     'time' => 'true',
                     'value' => '2018-01-31 08:45:00',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'date' => [
@@ -330,8 +415,10 @@ class FormTest extends TestCase
                     'type' => 'text',
                     'v-datepicker' => 'true',
                     'date' => 'true',
-                    'time' => 'false',
                     'value' => '2018-01-31',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
                 ],
             ],
             'checkbox' => [
@@ -435,7 +522,8 @@ class FormTest extends TestCase
      * @dataProvider controlProvider()
      * @covers ::control
      * @covers ::jsonControl
-     * @covers ::textareaControl
+     * @covers ::richtextControl
+     * @covers ::plaintextControl
      * @covers ::datetimeControl
      * @covers ::dateControl
      * @covers ::checkboxControl

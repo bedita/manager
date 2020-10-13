@@ -1,0 +1,107 @@
+<div class="relations-add">
+    <section v-show="isMedia" class="fieldset mb-1">
+        <header class="mx-1 tab unselectable"
+            :class="showCreateObjectForm? 'open' : ''"
+            :disabled="saving"
+            @click="showCreateObjectForm = !showCreateObjectForm">
+
+            <h2><span v-show="relationName">{{ __('create new') }} <: relationName | humanize :></span> &nbsp;</h2>
+        </header>
+
+        <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
+            <form name="create-object" :disabled="saving" @submit.prevent="createObject">
+                {{ Form.control('upload_behavior', {
+                    'type': 'hidden',
+                    'v-bind:value': 'activeIndex == 1? `embed` : `file`'
+                }) | raw }}
+                {{ Form.unlockField('upload_behavior')}}
+
+                <div class="h-tabs">
+                    <ul>
+                        <li :class="getContentTabClass(0)"
+                            v-on:click="activeIndex = 0"><a>{{ __('Upload local file') }}</a></li>
+                        <li v-if="isEmbeddable()" :class="getContentTabClass(1)"
+                            v-on:click="activeIndex = 1"><a>{{ __('Embed online content') }}</a></li>
+                    </ul>
+                </div>
+
+                <div class="input text">
+                    <label for="title">{{ __('Title') }}</label>
+                    <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
+                </div>
+
+                <div class="h-tabs-contents">
+                    <div class="h-tab" v-if="activeIndex == 0">
+                        <div class="dropzone">
+                            <div class="input file">
+                                <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-tab" v-if="activeIndex == 1">
+                        <div class="input text">
+                            <label for="remote_url">{{ __('Video') }}</label>
+                            {{ Form.text('remote_url', {
+                                'id': 'remote_url',
+                                'type': 'text',
+                                'autocomplete': 'off',
+                                'autocorrect': 'off',
+                                'autocapitalize': 'off',
+                                'spellcheck': 'false',
+                                '@keyup': 'processUrl',
+                                'placeholder': __('Remote URL') }) | raw }}
+                        </div>
+                    </div>
+                </div>
+
+                <button :disabled="this.file === null && this.url === null" type="submit">{{ __('create') }}</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="fieldset shrinks">
+        <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
+            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
+        </header>
+
+        <div class="px-1 my-1">
+            <filter-box-view
+                config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+                :pagination.sync="pagination"
+                :show-filter-buttons="false"
+                :relation-types="relationTypes"
+                objects-label="{{ __('objects') }}"
+
+                @filter-update-current-page="onUpdateCurrentPage"
+                @filter-update-page-size="onUpdatePageSize"
+                @filter-objects="onFilterObjects"
+                inline-template>
+
+                    {% element 'FilterBox/filter_box' %}
+
+            </filter-box-view>
+        </div>
+
+        <div class="px-1 shrinks">
+            <div class="columns">
+                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects">
+                    {% element 'Form/related_item' { 'add': true } %}
+                </div>
+            </div>
+        </div>
+
+        <footer class="p-1">
+            <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
+                @click.prevent="addRelationsToObject({
+                    relationName: relationName,
+                    objects: selectedObjects,
+                })">
+                    {{ __('Add') }}
+                    <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
+                    {{ __('objects to') }} <: relationName | humanize :>
+            </button>
+
+            <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('Close') }}</button>
+        </footer>
+    </section>
+</div>

@@ -17,6 +17,7 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
@@ -72,26 +73,46 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Sort by field direction and link
+     * Returns sort url by field direction
      *
      * @param string $field the Field.
-     * @return void
+     * @param bool $resetPage flag to reset pagination.
+     * @return string
      */
-    public function sort($field): void
+    public function sortUrl($field, $resetPage = true): string
     {
-        $class = '';
-        $query = $this->getView()->getRequest()->getQuery();
+        $request = $this->getView()->getRequest();
+        $sort = $request->getQuery('sort');
         $sortValue = $field; // <= ascendant order
-        if (!empty($query) && in_array('sort', array_keys($query))) {
-            if ($query['sort'] === $field) { // it was ascendant sort
-                $class = 'sort down';
-                $sortValue = '-' . $field; // <= descendant order
-            } elseif ($query['sort'] === ('-' . $field)) { // it was descendant sort
-                $class = 'sort up';
-            }
+        if ($sort === $field) { // it was ascendant sort
+            $sortValue = '-' . $field; // <= descendant order
         }
-        $url = $this->replaceParamUrl('sort', $sortValue);
-        echo '<a href="' . $url . '" class="' . $class . '">' . __($field) . '</a>';
+        $replace = ['sort' => $sortValue];
+        $currentPage = Hash::get($request->getQueryParams(), 'page');
+        if (isset($currentPage) && $resetPage) {
+            $replace['page'] = 1;
+        }
+
+        return $this->replaceQueryParams($replace);
+    }
+
+    /**
+     * Returns sort class by field direction
+     *
+     * @param string $field the Field.
+     * @return string
+     */
+    public function sortClass($field): string
+    {
+        $sort = $this->getView()->getRequest()->getQuery('sort');
+        $class = '';
+        if ($sort === $field) { // it was ascendant sort
+            $class = 'sort down';
+        } elseif ($sort === ('-' . $field)) { // it was descendant sort
+            $class = 'sort up';
+        }
+
+        return $class;
     }
 
     /**
@@ -102,7 +123,7 @@ class LinkHelper extends Helper
      */
     public function page($page): void
     {
-        echo $this->replaceParamUrl('page', $page);
+        echo $this->replaceQueryParams(['page' => $page]);
     }
 
     /**
@@ -113,7 +134,7 @@ class LinkHelper extends Helper
      */
     public function pageSize($pageSize): void
     {
-        echo $this->replaceParamUrl('page_size', $pageSize);
+        echo $this->replaceQueryParams(['page_size' => $pageSize]);
     }
 
     /**
@@ -137,19 +158,17 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Replace parameter on url.
+     * Replace query parameters on current request.
      *
-     * @param string $parameter parameter name.
-     * @param string|int $value the Value to set for parameter.
-     * @return string url
+     * @param array $queryParams list of query params to replace.
+     * @return string new uri
      */
-    private function replaceParamUrl($parameter, $value): string
+    private function replaceQueryParams(array $queryParams): string
     {
-        $query = $this->getView()->getRequest()->getQuery();
-        $query[$parameter] = $value;
-        $here = $this->getView()->getRequest()->getAttribute('here');
+        $request = $this->getView()->getRequest();
+        $query = array_merge($request->getQueryParams(), $queryParams);
 
-        return $this->webBaseUrl . $here . '?' . http_build_query($query);
+        return (string)$request->getUri()->withQuery(http_build_query($query));
     }
 
     /**

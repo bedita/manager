@@ -1,7 +1,6 @@
 /**
 * View component used for editing relations param
 *
-*
 * @property {String} relationName
 * @property {Object} object
 * @property {Object} related
@@ -10,88 +9,59 @@
 */
 
 import { PanelEvents } from 'app/components/panel-view';
+import PropertyField from 'app/components/edit-relation-param';
 import { t } from 'ttag';
 
 export default {
-    template: /*template*/
+    template:
     `<div v-if="relationName" class="edit-relation">
         <section>
-            <header class="tab unselectable">
-                <h2><span><: t('Edit parameters of') :>: <: relationName | humanize :></span> &nbsp;</h2>
-                <a href="#" @click.prevent="closeParamsView()"><: t('close') :></a>
+            <header class="mx-1 mt-1 mb-1 tab unselectable">
+                <h2><span><: t('Relation parameters') :> - <: relationName | humanize :></span></h2>
             </header>
 
-            <div class="object-attributes">
-                <h2><: t('Object') :>: <: object.attributes.title :></h2>
-                <div>
-                    <span class="tag" :class="objectColorClass"><: object.type :></span>
-                    <span class="tag"><: object.attributes.status :></span>
-                </div>
-
-                <h2><: t('Related to') :>: <: relatedName :></h2>
+            <div class="mx-1">
+                <p class="mb-05"><: relatedName :></p>
                 <div>
                     <span class="tag" :class="relatedColorClass"><: related.type :></span>
                     <span class="tag"><: relatedStatus :></span>
                 </div>
+
+                <p class="mt-1 mb-05"><: t('In relation with') :> “<: object.attributes.title :>”</p>
+                <div>
+                    <span class="tag" :class="objectColorClass"><: object.type :></span>
+                    <span class="tag"><: object.attributes.status :></span>
+                </div>
             </div>
 
-            <form ref="paramsForm" class="params-list" @change="checkParams()" @keyup="checkParams()">
-                <div>
-                    <label><: t('Priority') :></label>
-                    <input type="number" step="1" v-model.number="priority" />
+            <form class="mt-2 mx-1" ref="paramsForm" @change="checkParams()" @keyup="checkParams()">
+                <div class="mb-1">
+                    <label><: t('Priority') :>
+                        <input class="input-narrow" type="number" step="1" v-model.number="priority" />
+                    </label>
                 </div>
 
-                <div v-for="(param, key) in schema">
-                    <label :title="key"><: param.description || key :>
-
-                        <!-- Boolean -> switch button true/false --->
-                        <div v-if="param.type == 'boolean'">
-                            <label class="switch">
-                                <input type="checkbox" v-model="editingParams[key] ">
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-
-                        <div v-if="param.type == 'string'">
-                            <!-- String, format: date-time -> datepicker --->
-                            <input v-if="param.format == 'date-time'" v-datepicker time="true" v-model="editingParams[key]"></input>
-
-                            <!-- String Enum -> select/option --->
-                            <div v-else-if="param.enum !== undefined">
-                                <select v-model="editingParams[key]">
-                                    <option v-for="item in param.enum" :value="item"><: item :></option>
-                                </select>
-                            </div>
-                            <!-- String -> input text --->
-                            <input v-else type="text" v-model="editingParams[key]">
-                        </div>
-
-                        <!-- Number -> input number --->
-                        <div v-if="param.type == 'number'">
-                            <label>
-                                <input type="number" :name="key" step="any" v-model.number="editingParams[key]">
-                            </label>
-                        </div>
-
-                        <!-- Integer -> input integer --->
-                        <div v-if="param.type == 'integer'">
-                            <label>
-                                <input type="number" :name="key" v-model.number="editingParams[key]">
-                            </label>
-                        </div>
-                    </label>
+                <div class="mb-1" v-for="(param, key) in schema">
+                    <PropertyField
+                        v-model="editingParams[key]"
+                        :property="param"
+                        :propertyKey="key"></PropertyField>
                 </div>
             </form>
 
-            <footer>
-                <p>
-                    <button v-show="isModified"
-                        class="has-background-info has-text-white"
-                        @click.prevent="saveParams()"><: t('Save ') :></button>
-                </p>
+            <footer class="p-1">
+                <button :disabled="!isModified"
+                    class="has-background-info has-text-white"
+                    @click.prevent="saveParams()"><: t('Save ') :></button>
+
+                    <button class="mx-1" href="#" @click="closeParamsView()"><: t('Cancel') :></button>
             </footer>
         </section>
     </div>`,
+
+    components: {
+        PropertyField,
+    },
 
     props: {
         relationName: {

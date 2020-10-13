@@ -62,9 +62,10 @@ class ProjectConfigurationComponentTest extends TestCase
                     'Simple' => ['a' => 2],
                 ],
                 [
-                    'id' => 'Simple',
+                    'id' => '13',
                     'type' => 'config',
                     'attributes' => [
+                        'name' => 'Simple',
                         'content' => '{"a":2}',
                     ],
                 ],
@@ -86,7 +87,7 @@ class ProjectConfigurationComponentTest extends TestCase
      */
     public function testRead($expected, $config): void
     {
-        Configure::write('Project', null);
+        Configure::write('Project.config', null);
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -100,7 +101,7 @@ class ProjectConfigurationComponentTest extends TestCase
 
         $project = $this->ProjectConfiguration->read();
         static::assertSame($expected, $project);
-        static::assertSame($expected, Configure::read('Project'));
+        static::assertSame($expected, Configure::read('Project.config'));
     }
 
     /**
@@ -112,7 +113,7 @@ class ProjectConfigurationComponentTest extends TestCase
     public function testReadFromConf(): void
     {
         $data = ['Conf' => true];
-        Configure::write('Project', $data);
+        Configure::write('Project.config', $data);
         $project = $this->ProjectConfiguration->read();
         static::assertSame($data, $project);
     }
@@ -125,7 +126,7 @@ class ProjectConfigurationComponentTest extends TestCase
      */
     public function testReadError(): void
     {
-        Configure::write('Project', null);
+        Configure::write('Project.config', null);
         Cache::clear(false, ProjectConfigurationComponent::CACHE_CONFIG);
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)

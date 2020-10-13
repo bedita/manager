@@ -4,6 +4,7 @@
 {% if filterActive %}
     {% set containerClass = 'filters-container filters-container-active' %}
 {% endif %}
+
 <div class="{{ containerClass }}" :class="filterList.length > 1? '' : 'basic-filters-only'">
     {# dynamic filter object types #}
     <div class="filter-container search-types" v-if="rightTypes.length > 1">
@@ -37,7 +38,7 @@
     {# other dynamic filters #}
     <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date? 'date' : '' ]">
         <input type="hidden" :name="filter.name" :value="filter.value">
-        <div class="filter-label"><: t(filter.name) :></div>
+        <div class="filter-label"><: filter.name | humanize :></div>
 
         <span v-if="filter.type === 'select' || filter.type === 'radio'">
             <select v-model="queryFilter.filter[filter.name]" :id="filter.name" class="{{ selectBaseClasses }}">
@@ -65,23 +66,32 @@
             </label>
         </span>
 
-        <span v-if="filter.date">
-            <label>{{ __('From') }}
-            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" :time="false" />
+        <span v-if="filter.name === 'date_ranges'">
+            <label>{{ __('From date') }}
+            <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
             </label>
-            <label>{{ __('To') }}
-            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" :time="false" />
+            <label>{{ __('To date') }}
+            <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
             </label>
         </span>
 
-        <span v-if="!filter.date && (filter.type === 'text' || filter.type === 'number')">
+        <span v-else-if="filter.date">
+            <label>{{ __('From') }}
+            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" />
+            </label>
+            <label>{{ __('To') }}
+            <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" />
+            </label>
+        </span>
+
+        <span v-else-if="filter.type === 'text' || filter.type === 'number'">
             <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
         </span>
     </div>
 
     <div class="filter-buttons">
-        <button v-show="showFilterButtons" @click.prevent="applyFilter()">{{ __('Search') }}</button>
-        <button v-show="showFilterButtons" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
+        <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="applyFilter()">{{ __('Search') }}</button>
+        <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
     </div>
 </div>
 

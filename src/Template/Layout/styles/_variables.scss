@@ -3,8 +3,8 @@
 */
 
 // family
-$font-family-sans-serif:      'Mukta', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-family-serif:           Georgia, 'Times New Roman', Times, serif;
+$font-family-sans-serif:      'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-serif:           'IBM Plex Serif', Georgia, 'Times New Roman', Times, serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 
@@ -13,18 +13,23 @@ $font-size-base:              1rem !default; // Assumes the browser default, typ
 $font-size-lg:                ($font-size-base * 1.125) !default;
 $font-size-llg:               ($font-size-base * 1.25) !default;
 $font-size-lllg:              ($font-size-base * 1.5) !default;
+$font-size-2:                 ($font-size-base * 2) !default;
 $font-size-sm:                ($font-size-base * .875) !default;
 $font-size-ssm:               ($font-size-base * .8125) !default;
 $font-size-sssm:              ($font-size-base * .75) !default;
+$font-size-smallest:          ($font-size-base * .625) !default;
 
 // weight
-$font-weight-light:           300 !default;
-$font-weight-normal:          400 !default;
-$font-weight-bold:            700 !default;
+$font-weight-light:           200 !default;
+$font-weight-normal:          300 !default;
+$font-weight-medium:          400 !default;
+$font-weight-bold:            500 !default;
+$font-weight-black:           800 !default;
 $font-weight-base:            $font-weight-normal !default;
 
 // line
 $line-height-base:            1.5 !default;
+$line-height-sm:              1.25 !default;
 
 
 /*
@@ -43,7 +48,7 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
-$gray-950: #1c1c1c !default;
+$gray-950: #17191c !default;
 $black:    #000 !default;
 
 $grays: () !default;
@@ -59,23 +64,20 @@ $grays: map-merge((
   "900": $gray-900
 ), $grays);
 
+$defaultBackground:   $gray-900;
+
 $info:         hsl(204, 86%, 40%);
 $danger:       hsl(348, 100%, 61%);
 $light-danger: hsl(348, 87%, 12%);
 $success:      hsl(175, 60%, 47%);
-$warning:      rgb(202, 126, 26);
 $error:        rgb(187, 26, 26);
+$warning:      rgb(231, 200, 24);
 $pending:      rgb(231, 200, 24);
 
-
-/*
-** MEDIA BREAKPOINTS
-*/
-// $phone: 768px;
-// $phablet: 768px;
-$tablet: 768px;
-// $desktop: ;
-// $widescreen: ;
+$defaultShadowColor:  rgba(0, 0, 0, .5);
+:root {
+  --box-shadow-color: rgba(0, 0, 0, .5);
+}
 
 
 /*
@@ -83,6 +85,9 @@ $tablet: 768px;
 */
 
 $gutter: 16px;
+$dashboard-item-width: $gutter * 11;
+$dashboard-item-height: $gutter * 7.5;
+$dashboard-items-ratio: 68.2%;
 
 
 /*
@@ -90,3 +95,52 @@ $gutter: 16px;
 */
 
 $animation-duration-base: .3s;
+
+
+/*
+** Tag collections
+*/
+$text-inputs:   'input[type="color"]',
+                'input[type="date"]',
+                'input[type="datetime"]',
+                'input[type="datetime-local"]',
+                'input[type="email"]',
+                'input[type="month"]',
+                'input[type="number"]',
+                'input[type="password"]',
+                'input[type="search"]',
+                'input[type="tel"]',
+                'input[type="text"]',
+                'input[type="time"]',
+                'input[type="url"]',
+                'input[type="week"]',
+                'input:not([type])';
+// use like
+// #{$text-inputs} {
+//     background-color: red;
+// }
+
+$button-inputs: 'input[type="submit"]',
+                'input[type="button"]',
+                'input[type="reset"]';
+$button-inputs-hover: 'input[type="submit"]:hover',
+                      'input[type="button"]:hover',
+                      'input[type="reset"]:hover';
+
+
+/*
+** TODO: MEDIA BREAKPOINTS
+*/
+
+// $phablet:    568px;
+// $tablet:     768px;
+// $desktop:    960px;
+// $widescreen: 1366px;
+// $fullhd:     1600px;
+
+// $min-phablet:    "screen and (min-width: 568px)";
+// $min-tablet:     "screen and (min-width: 768px)";
+// $min-desktop:    "screen and (min-width: 960px)";
+// $min-widescreen: "screen and (min-width: 1366px)";
+// $min-fullhd:     "screen and (min-width: 1600px)";
+

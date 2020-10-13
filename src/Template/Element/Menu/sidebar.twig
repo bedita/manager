@@ -1,0 +1,66 @@
+<div class="sidebar">
+    {% if Layout.isDashboard() %}
+        <div class="sidebar-bedita-logo">{# css logo #}</div>
+    {% endif %}
+
+    <div class="sidebar-project-title">
+        {{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}
+    </div>
+
+    {# module specific #}
+    {% if not Layout.isLogin() and not Layout.isDashboard() %}
+        <div class="sidebar-module-commands">
+            <div class="module-box">
+                {{ Layout.moduleLink()|raw }}
+            </div>
+
+            <div class="module-buttons">
+                {{ _view.fetch('module-buttons')|raw }}
+                {% if currentModule.hints.multiple_types and types.right is iterable %}
+                    {% element 'filter_type' %}
+                {% endif %}
+            </div>
+
+            <div class="module-links">
+                {{ _view.fetch('module-links')|raw }}
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="sidebar-body">
+        <div>
+            <a href="{{ Url.build({ '_name': 'user_profile:view' }) }}">
+                {%- if user.attributes.title %}
+                    {{ user.attributes.title }}
+                {% else %}
+                    {{ user.attributes.name }} {{ user.attributes.surname }}
+                {% endif -%}
+            </a>
+        </div>
+
+        {% if I18n.getLanguages|length > 1 %}
+            <div>
+                <p class="has-text-size-smaller">
+                {% for code, name in I18n.getLanguages() %}
+                    {% if code != I18n.getLang() %}
+                        <a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}">{{ name[:3] | upper }}</a>
+                    {% else %}
+                        <span class="has-font-weight-bold">{{ name[:3] | upper }}</span>
+                    {% endif %}
+                    {% if not loop.last %} | {% endif %}
+                {% endfor %}
+                </p>
+            </div>
+        {% endif %}
+
+        <div>
+            <p><a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout">{{ __('Log out') }}</a></p>
+        </div>
+    </div>
+
+
+    <div class="sidebar-footer">
+        {% element 'Menu/colophon' %}
+    </div>
+</div>

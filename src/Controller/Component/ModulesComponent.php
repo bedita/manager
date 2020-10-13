@@ -15,7 +15,6 @@ namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
 use App\Utility\OEmbed;
-use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -32,6 +31,14 @@ use Psr\Log\LogLevel;
  */
 class ModulesComponent extends Component
 {
+    protected const FIXED_RELATIONSHIPS = [
+        'parent',
+        'children',
+        'parents',
+        'translations',
+        'streams',
+        'roles',
+    ];
 
     /**
      * {@inheritDoc}
@@ -112,14 +119,34 @@ class ModulesComponent extends Component
     /**
      * Create internal list of available modules in `$this->modules` as an array with `name` as key
      * and return it.
-     * Modules are read from `/home` endpoint
+     * Modules are created from configuration and merged with information read from `/home` endpoint
      *
      * @return array
      */
     public function getModules(): array
     {
-        $modulesOrder = Configure::read('Modules.order');
+        $modules = (array)Configure::read('Modules');
+        $metaModules = $this->modulesFromMeta();
+        $modules = array_intersect_key($modules, $metaModules);
+        array_walk(
+            $modules,
+            function (&$data, $key) use ($metaModules) {
+                $data = array_merge((array)Hash::get($metaModules, $key), $data);
+            }
+        );
+        $this->modules = array_merge($modules, array_diff_key($metaModules, $modules));
 
+        return $this->modules;
+    }
+
+    /**
+     * Modules data from `/home` endpoint 'meta' response.
+     * Modules are object endpoints from BE4 API
+     *
+     * @return array
+     */
+    protected function modulesFromMeta(): array
+    {
         $meta = $this->getMeta();
         $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
@@ -130,29 +157,9 @@ class ModulesComponent extends Component
             ->reject(function (array $data) {
                 return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
             })
-            ->sortBy(function (array $data) use ($modulesOrder) {
-                $name = Hash::get($data, 'name');
-                $idx = array_search($name, $modulesOrder);
-                if ($idx === false) {
-                    // No configured order for this module. Use hash to preserve order, and ensure it is after other modules.
-                    $idx = count($modulesOrder) + hexdec(hash('crc32', $name));
-
-                    if ($name === 'trash') {
-                        // Trash eventually.
-                        $idx = PHP_INT_MAX;
-                    }
-                }
-
-                return -$idx;
-            })
             ->toList();
-        $plugins = Configure::read('Modules.plugins');
-        if ($plugins) {
-            $modules = array_merge($modules, $plugins);
-        }
-        $this->modules = Hash::combine($modules, '{n}.name', '{n}');
 
-        return $this->modules;
+        return Hash::combine($modules, '{n}.name', '{n}');
     }
 
     /**
@@ -163,8 +170,9 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
+        // Project name may be set via `config` and it takes precedence if set
         $project = [
-            'name' => Hash::get($meta, 'project.name', ''),
+            'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
             'colophon' => '', // TODO: populate this value.
         ];
@@ -357,15 +365,31 @@ class ModulesComponent extends Component
      * @param array $data The data to store into session.
      * @return void
      */
-    public function setDataFromFailedSave($type, $data): void
+    public function setDataFromFailedSave(string $type, array $data): void
     {
         if (empty($data) || empty($data['id']) || empty($type)) {
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
         $session = $this->getController()->request->getSession();
+        unset($data['id']); // remove 'id', avoid future merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
+    }
+
+    /**
+     * Set current attributes from loaded $object data in `currentAttributes`.
+     * Load session failure data if available.
+     *
+     * @param array $object The object.
+     * @return void
+     */
+    public function setupAttributes(array &$object): void
+    {
+        $currentAttributes = json_encode((array)Hash::get($object, 'attributes'));
+        $this->getController()->set(compact('currentAttributes'));
+
+        $this->updateFromFailedSave($object);
     }
 
     /**
@@ -376,15 +400,15 @@ class ModulesComponent extends Component
      * @param array $object The object.
      * @return void
      */
-    public function updateFromFailedSave(array &$object): void
+    protected function updateFromFailedSave(array &$object): void
     {
-        if (empty($object) || empty($object['id']) || empty($object['type'])) {
-            return;
-        }
-
         // check session data for object id => use `failedSave.{type}.{id}` as key
         $session = $this->getController()->request->getSession();
-        $key = sprintf('failedSave.%s.%s', $object['type'], $object['id']);
+        $key = sprintf(
+            'failedSave.%s.%s',
+            Hash::get($object, 'type'),
+            Hash::get($object, 'id')
+        );
         $data = $session->read($key);
         if (empty($data)) {
             return;
@@ -395,7 +419,7 @@ class ModulesComponent extends Component
         $timestamp = $session->read($timestampKey);
 
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if (strtotime($timestamp) < strtotime("-5 minutes")) {
+        if ($timestamp > strtotime("-5 minutes")) {
             //  => merge with $object['attributes']
             $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
@@ -403,5 +427,99 @@ class ModulesComponent extends Component
         // remove session data
         $session->delete($key);
         $session->delete($timestampKey);
+    }
+
+    /**
+     * Prepare query string to make BE4 API call
+     *
+     * @param array $query Input query string
+     * @return array
+     */
+    public function prepareQuery(array $query): array
+    {
+        // cleanup `filter`, remove empty keys
+        $filter = array_filter((array)Hash::get($query, 'filter'));
+        $remove = array_flip(['count', 'page_items', 'page_count', 'filter']);
+        $query = array_diff_key($query, $remove);
+        if (!empty($filter)) {
+            $query += compact('filter');
+        }
+
+        return $query;
+    }
+
+    /**
+     * Setup relations information metadata.
+     *
+     * @param array $schema Relations schema.
+     * @param array $relationships Object relationships.
+     * @param array $order order Ordered names inside 'main' and 'aside' keys.
+     * @return void
+     */
+    public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
+    {
+        // relations between objects
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        // relations between objects and resources
+        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+        // set objectRelations array with name as key and label as value
+        $relationNames = array_keys($relationsSchema);
+
+        // define 'main' and 'aside' relation groups
+        $aside = array_intersect((array)Hash::get($order, 'aside'), $relationNames);
+        $relationNames = array_diff($relationNames, $aside);
+        $main = array_intersect((array)Hash::get($order, 'main'), $relationNames);
+        $main = array_unique(array_merge($main, $relationNames));
+
+        $objectRelations = [
+            'main' => $this->relationLabels($relationsSchema, $main),
+            'aside' => $this->relationLabels($relationsSchema, $aside),
+        ];
+
+        $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Retrieve associative array with names as keys and labels as values.
+     *
+     * @param array $relationsSchema Relations schema.
+     * @param array $names Relation names.
+     * @return array
+     */
+    protected function relationLabels(array &$relationsSchema, array $names): array
+    {
+        return (array)array_combine(
+            $names,
+            array_map(
+                function ($r) use ($relationsSchema) {
+                    // return 'label' or 'inverse_label' looking at 'name'
+                    $attributes = $relationsSchema[$r]['attributes'];
+                    if ($r === $attributes['name']) {
+                        return $attributes['label'];
+                    }
+
+                    return $attributes['inverse_label'];
+                },
+                $names
+            )
+        );
+    }
+
+    /**
+     * Get related types from relation name.
+     *
+     * @param array $schema Relations schema.
+     * @param string $relation Relation name.
+     * @return array
+     */
+    public function relatedTypes(array $schema, string $relation): array
+    {
+        $relationsSchema = (array)Hash::get($schema, $relation);
+        $name = (string)Hash::get($relationsSchema, 'attributes.name');
+        if ($name === $relation) {
+            return (array)Hash::get($relationsSchema, 'right');
+        }
+
+        return (array)Hash::get($relationsSchema, 'left');
     }
 }

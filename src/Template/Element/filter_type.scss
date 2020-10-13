@@ -1,7 +1,6 @@
 .filter-type {
     display: flex;
     flex-direction: column;
-    margin-top: -1px;
 
     label {
         cursor: pointer;
@@ -30,7 +29,7 @@
                 text-overflow: ellipsis;
                 flex: 1;
                 min-width: 0;
-                font-weight: 100;
+                font-weight: 300;
                 letter-spacing: .5px;
                 font-size: 11px;
                 text-transform: capitalize;

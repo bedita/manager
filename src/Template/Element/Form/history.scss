@@ -1,0 +1,50 @@
+.history {
+    .history-content {
+        $module-color: var(--module-color);
+
+        summary {
+            cursor: pointer;
+
+            /* Things to remove summary marker */
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::marker {
+                display: none;
+            }
+
+            /* Firefox */
+            list-style-type: none;
+        }
+
+        ul.history-items {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 1rem;
+
+            li.history-item {
+                display: inline-grid;
+                grid-gap: 1rem;
+                grid-template-columns: auto auto 1fr auto;
+                border-left: 1px solid;
+
+                &::before {
+                    content: '\25CF';
+                    color: $module-color;
+                    margin: 2px 0 0 -6px;
+                    font-size: 12px;
+                }
+
+                &:first-of-type {
+                    padding-top: 1rem;
+                }
+
+                &:last-of-type {
+                    padding-bottom: 1rem;
+                    border-image: linear-gradient(to bottom, $gray-600 0 1.4rem, transparent 1.4rem 100%) 1;
+                }
+            }
+        }
+    }
+}

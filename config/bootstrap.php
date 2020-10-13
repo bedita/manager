@@ -78,7 +78,12 @@ try {
         ],
         'switchLangUrl' => '/lang',
     ]);
-    Configure::load('app', 'default');
+    // default pagination
+    Configure::write('Pagination', [
+        'sizeAvailable' => [10, 20, 50, 100],
+    ]);
+
+    Configure::load('app', 'default', false);
 
     Configure::config('ini', new IniConfig());
     Configure::load('version', 'ini');
@@ -218,7 +223,8 @@ Type::build('timestamp')
  *
  * Array having `controller` as key and actions array as value.
  */
-Configure::write('CrsfExceptions', [
+Configure::write('CsrfExceptions', [
     'PropertyTypes' => ['save'],
     'Modules' => ['saveJson'],
+    'Translator' => ['translate'],
 ]);

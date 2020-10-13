@@ -12,9 +12,11 @@
  */
 namespace App;
 
+use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -33,7 +35,6 @@ class Application extends BaseApplication
     {
         parent::bootstrap();
         $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
-        $this->loadFromConfig();
     }
 
     /**
@@ -46,15 +47,17 @@ class Application extends BaseApplication
     }
 
     /**
-     * Load plugins from 'Plugins' configuration
+     * Load plugins from 'Plugins' configuration.
+     * This method will be invoked by `ProjectMiddleware`.
+     * Should not be invoked in `bootstrap`, to avoid duplicate plugin bootstratp calls.
      *
      * @return void
      */
-    public function loadFromConfig(): void
+    public function loadPluginsFromConfig(): void
     {
-        $plugins = Configure::read('Plugins');
+        $plugins = Configure::read('Plugins', []);
         if ($plugins) {
-            $_defaults = [
+            $defaults = [
                 'debugOnly' => false,
                 'autoload' => false,
                 'bootstrap' => false,
@@ -62,9 +65,10 @@ class Application extends BaseApplication
                 'ignoreMissing' => false,
             ];
             foreach ($plugins as $plugin => $options) {
-                $options = array_merge($_defaults, $options);
+                $options = array_merge($defaults, $options);
                 if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
                     $this->addPlugin($plugin, $options);
+                    $this->plugins->get($plugin)->bootstrap($this);
                 }
             }
         }
@@ -84,6 +88,10 @@ class Application extends BaseApplication
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
+
+            // Load current project configuration if `multiproject` instance
+            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
+            ->add(new ProjectMiddleware($this))
 
             // Add I18n middleware.
             ->add(new I18nMiddleware([
@@ -119,5 +127,24 @@ class Application extends BaseApplication
         });
 
         return $csrf;
+    }
+
+    /**
+     * Load project configuration if corresponding config file is found
+     *
+     * @param string|null $project The project name.
+     * @param string $projectsPath The project configuration files base path.
+     * @return void
+     */
+    public static function loadProjectConfig(?string $project, string $projectsPath): void
+    {
+        if (empty($project)) {
+            return;
+        }
+
+        if (file_exists($projectsPath . $project . '.php')) {
+            Configure::config('projects', new PhpConfig($projectsPath));
+            Configure::load($project, 'projects');
+        }
     }
 }

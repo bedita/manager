@@ -12,8 +12,8 @@ return [
             'attributes' => [
                 'name' => 'children',
                 'inverse_name' => 'children',
-                'label' => 'Folder children objects',
-                'inbverse_label' => 'Folder children objects',
+                'label' => 'Folder children',
+                'inverse_label' => 'Folder children',
             ],
             'left' => ['folders'],
             'right' => ['objects'],

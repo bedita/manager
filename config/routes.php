@@ -151,6 +151,14 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:uname']
     );
 
+    // API proxy
+    $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
+        $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+        $routes->post('/**', ['controller' => 'Api', 'action' => 'post'], 'post');
+        $routes->patch('/**', ['controller' => 'Api', 'action' => 'patch'], 'patch');
+        $routes->delete('/**', ['controller' => 'Api', 'action' => 'delete'], 'delete');
+    });
+
     // Modules.
     $routes->connect(
         '/:object_type',
@@ -158,9 +166,20 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
+        '/:object_type/view/new',
+        ['controller' => 'Modules', 'action' => 'create'],
+        ['_name' => 'modules:create']
+    );
+
+    $routes->connect(
         '/:object_type/view/:id',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
+    );
+    $routes->connect(
+        '/:object_type/view/:id/history/:historyId',
+        ['controller' => 'History', 'action' => 'restore'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:restore']
     );
     // Translations
     $routes->connect(
@@ -200,19 +219,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'relation'], '_name' => 'modules:resourcesJson']
     );
     $routes->connect(
-        '/:object_type/view/:id/treeJson/:relation',
-        ['controller' => 'Modules', 'action' => 'treeJson'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:treeJson']
-    );
-    $routes->connect(
         '/:object_type/view/:id/relationData/:relation',
         ['controller' => 'Modules', 'action' => 'relationData'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationData']
-    );
-    $routes->connect(
-        '/:object_type/create',
-        ['controller' => 'Modules', 'action' => 'create'],
-        ['_name' => 'modules:create']
     );
     $routes->connect(
         '/:object_type/save',
@@ -230,6 +239,16 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id'], '_name' => 'modules:clone']
     );
     $routes->connect(
+        '/:object_type/clone/:id/history/:historyId',
+        ['controller' => 'History', 'action' => 'clone'],
+        ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
+    );
+    $routes->connect(
+        '/:object_type/history/:id',
+        ['controller' => 'History', 'action' => 'info'],
+        ['pass' => ['id'], '_name' => 'history:info']
+    );
+    $routes->connect(
         '/:object_type/delete',
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
@@ -244,5 +263,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/bulkActions',
         ['controller' => 'Modules', 'action' => 'bulkActions'],
         ['_name' => 'modules:bulkActions']
+    );
+
+    // translator service
+    $routes->connect(
+        '/translate',
+        ['controller' => 'Translator', 'action' => 'translate'],
+        ['_name' => 'translator:translate']
     );
 });

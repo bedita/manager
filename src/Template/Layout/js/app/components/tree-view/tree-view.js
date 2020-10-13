@@ -1,30 +1,119 @@
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
  *
  * <tree-view> component used for ModulesPage -> View
  *
- * @prop {String} relationName
- * @prop {Boolean} loadOnStart load content on component init
- * @prop {Boolean} multipleChoice
- *
+ * @property {Object} store The folders store.
+ * @property {string} parent The parent of the tree item.
+ * @property {Object} node The model of the tree item.
+ * @property {Object} object The current item to place in the tree.
+ * @property {string} relationName The name of the relation to save.
+ * @property {boolean} multipleChoice Should handle multiple relations.
+ * @property {Array} parents The list of current item parents.
  */
-
-import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
-import sleep from 'sleep-promise';
-
 export default {
-    extends: RelationshipsView,
-    components: {
-        TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
-    },
+    name: 'tree-view',
+
+    template: `
+        <div
+            class="tree-view-node"
+            :class="{
+                'is-root': isRoot,
+            }">
+            <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
+            <div
+                v-if="parent"
+                class="node-element py-05"
+                :data-status="node.attributes.status"
+            >
+                <label
+                    class="node-label"
+                    :class="{
+                        'icon-folder': !relationName,
+                        'has-text-gray-550 disabled': object && node.id == object.id,
+                    }"
+                    v-on="{ click: relationName ? () => {} : toggle }"
+                >
+                    <input
+                        v-if="relationName"
+                        :type="multipleChoice ? 'checkbox' : 'radio'"
+                        :name="'relations[' + relationName + '][replaceRelated][]'"
+                        :value="value"
+                        :checked="isParent"
+                        @change="toggleFolderRelation"
+                    />
+                    <: node.attributes.title :>
+                </label>
+                <div
+                    v-if="relationName && isParent"
+                    class="tree-params"
+                >
+                    <label>
+                        <input
+                            type="checkbox"
+                            :checked="isMenu"
+                            @change="toggleFolderRelationMenu"
+                        />
+                        <: t('Menu') :>
+                    </label>
+                </div>
+                <button
+                    v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
+                    :class="{
+                        'is-loading-spinner': isLoading,
+                        'icon-down-open': !isLoading && isOpen,
+                        'icon-right-open': !isLoading && !isOpen,
+                    }"
+                    @click="toggle"
+                ></button>
+                <a :href="url"><: t('edit') :></a>
+            </div>
+            <div class="node-children" v-show="isOpen || !parent">
+                <tree-view
+                    v-for="(child, index) in node.children"
+                    :store="store"
+                    :parents="parents"
+                    :parent="node"
+                    :key="index"
+                    :node="child"
+                    :object="object"
+                    :relation-name="relationName"
+                    :multiple-choice="multipleChoice"
+                ></tree-view>
+            </div>
+        </div>
+    `,
 
     props: {
-        relatedObjects: {
-            type: Array,
-            default: () => [],
+        store: {
+            type: Object,
+            default: () => ({}),
         },
-        loadOnStart: [Boolean, Number],
+        parent: Object,
+        parents: {
+            type: Array,
+            default: () => ([]),
+        },
+        node: {
+            type: Object,
+            default: () => ({
+                attributes: {
+                    status: 'on',
+                },
+                children: [],
+            }),
+        },
+        object: Object,
+        relationName: String,
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -33,243 +122,291 @@ export default {
 
     data() {
         return {
-            jsonTree: {},   // json tree version of the objects list based on path
-        }
+            isOpen: false,
+            isLoading: false,
+        };
     },
 
-    /**
-     * load content if flag set to true after component is created
-     *
-     * @return {void}
-     */
-    created() {
-        this.loadTree();
-    },
-
-    watch: {
+    computed: {
         /**
-         * watch pendingRelations used as a model for view's checkboxes and separates relations in
-         * ones to be added and ones to be removed according to the already related objects Array
+         * Check if the item a root.
          *
-         * @param {Array} pendingRels
+         * @return {boolean}
          */
-        pendingRelations(pendingRels) {
-            // handles relations to be added
-            let relationsToAdd = pendingRels.filter((rel) => {
-                return !this.isRelated(rel.id);
-            });
-
-            if (!this.multipleChoice) {
-                if(relationsToAdd.length) {
-                    relationsToAdd = relationsToAdd[0];
-                }
+        isRoot() {
+            if (!this.parent) {
+                return false;
             }
-
-            const isChanged = !!relationsToAdd.length;
-            this.$el.dispatchEvent(new CustomEvent('change', {
-                bubbles: true,
-                detail: {
-                    id: this.$vnode.tag,
-                    isChanged,
-                }
-            }));
-
-            this.relationsData = this.relationFormatterHelper(relationsToAdd);
-
-            // handles relations to be removes
-            let relationsToRemove = this.relatedObjects.filter((rel) => {
-                return !this.isPending(rel.id);
-            });
-
-            // emit event to pass data to parent
-            this.$emit('remove-relations', relationsToRemove);
+            return !this.parent.id;
         },
 
         /**
-         * watch objects and insert already related objects into pendingRelations
+         * Check if the item is the parent of the current node.
          *
-         * @return {void}
+         * @return {boolean}
          */
-        objects() {
-            this.pendingRelations = this.objects.filter((rel) => {
-                return this.isRelated(rel.id);
+        isParent() {
+            return !!this.parents.find(({ id }) => id == this.node.id);
+        },
+
+        /**
+         * Check if the child item is part of the menu.
+         *
+         * @return {boolean}
+         */
+        isMenu() {
+            if (!this.isParent) {
+                return false;
+            }
+            if (!this.node.meta.relation) {
+                return true;
+            }
+            return !!this.node.meta.relation.menu;
+        },
+
+        /**
+         * The folders link.
+         *
+         * @return {string}
+        */
+        url() {
+            if (!this.node) {
+                return;
+            }
+            let API_URL = new URL(BEDITA.base).pathname;
+            return `${API_URL}folders/view/${this.node.id}`;
+        },
+
+        /**
+         * The input value for the current item.
+         *
+         * @return {string}
+         */
+        value() {
+            let menu = true;
+            if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
+                menu = !!this.node.meta.relation.menu;
+            }
+            return JSON.stringify({
+                id: this.node.id,
+                type: this.node.type,
+                meta: {
+                    relation: {
+                        menu,
+                    },
+                },
             });
         },
+    },
+
+    async mounted() {
+        if (!this.node.id) {
+            this.isLoading = true;
+            await this.loadRoots();
+            this.isLoading = false;
+        }
+        this.isOpen = !!this.node.children;
     },
 
     methods: {
         /**
-         * check loadOnStart prop and load content if set to true
+         * Load tree roots.
          *
-         * @return {void}
+         * @return {Promise}
          */
-        async loadTree() {
-            if (this.loadOnStart) {
-                var t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-                await sleep(t);
-                await this.loadObjects();
-                this.jsonTree = {
-                    name: 'Root',
-                    root: true,
-                    object: {},
-                    children: this.createTree(),
-                };
-            }
-        },
-
-        /**
-         * add an object from pendingrelations Array if not present
-         *
-         * @event add-relation triggered from sub components
-         *
-         * @param {Object} related
-         *
-         * @return {void}
-         */
-        addRelation(related) {
-            if (!related || !related.id === undefined) {
-                console.error('[addRelation] needs first param (related) as {object} with property id set');
-                return;
-            }
-            if (!this.containsId(this.pendingRelations, related.id)) {
-                this.pendingRelations.push(related);
-            }
-        },
-
-        /**
-         * remove an object from pendingRelations Array
-         *
-         * @event remove-relation triggered from sub components
-         *
-         * @param {Object} related
-         *
-         * @return {void}
-         */
-        removeRelation(related) {
-            if (!related || !related.id) {
-                console.error('[removeRelation] needs first param (related) as {object} with property id set');
-                return;
-            }
-            this.pendingRelations = this.pendingRelations.filter(pending => pending.id !== related.id);
-        },
-
-        /**
-         * remove all related objects from pendingRelations Array
-         *
-         * @event remove-all-relations triggered from sub components
-         *
-         * @return {void}
-         */
-        removeAllRelations() {
-            this.pendingRelations = [];
-            this._setChildrenData(this, 'stageRelated', false);
-        },
-
-        /**
-         * util function to set recursively all sub-components 'dataName' var with dataValue
-         *
-         * @param {Object} obj
-         * @param {String} dataName
-         * @param {any} dataValue
-         */
-        _setChildrenData(obj, dataName, dataValue) {
-            if (obj !== undefined && dataName in obj) {
-                obj[dataName] = dataValue;
+        async loadRoots() {
+            if (this.object && this.object.id) {
+                await this.preload(this.object);
             }
 
-            obj.$children.forEach(child => {
-                this._setChildrenData(child, dataName, dataValue);
-            });
-        },
-
-        /**
-         * create a json Tree from a list of objects with path
-         *
-         * @return {Object} json tree
-         */
-        createTree() {
-            let jsonTree = [];
-            this.objects.forEach((obj) => {
-                let path = obj.meta.path && obj.meta.path.split('/');
-                if (path.length) {
-                    // Remove first blank element from the parts array.
-                    path.shift();
-
-                    // initialize currentLevel to root
-                    let currentLevel = jsonTree;
-
-                    path.forEach((id) => {
-                        // check to see if the path already exists.
-                        let existingPath = this.findPath(currentLevel, id);
-
-
-                        if (existingPath) {
-                            // The path to this item was already in the tree, so I set the current level to this path's children
-                            currentLevel = existingPath.children;
-                        } else {
-                            // create a new node
-                            let currentObj = obj;
-
-                            // if current object is not the same as the discovered node get it from objects array
-                            if (currentObj.id !== id) {
-                                currentObj = this.findObjectById(id);
-                            }
-
-                            let newNode = {
-                                id: id,
-                                related: this.isRelated(id),
-                                name: currentObj.attributes.title || '',
-                                object: currentObj,
-                                children: [],
-                            };
-
-                            currentLevel.push(newNode);
-                            currentLevel = newNode.children;
-                        }
-                    });
+            let page = 1;
+            let roots = [];
+            do {
+                let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
+                let json = await response.json();
+                if (json.data) {
+                    roots.push(
+                        ...json.data.map((object) =>
+                            this.store[object.id] || (this.store[object.id] = object)
+                        )
+                    )
                 }
-            });
+                if (!json.meta ||
+                    !json.meta.pagination ||
+                    json.meta.pagination.page_count === json.meta.pagination.page) {
+                    break;
+                }
+                page = json.meta.pagination.page + 1;
+            } while (true);
 
-            return jsonTree;
+            this.node.children.push(...roots);
         },
 
         /**
-         * check if part is already contained in the tree
+         * Preload folders passed as object paths.
          *
-         * @param {Number} paths
-         * @param {Number} part
-         *
-         * @return {Object|Boolean}
+         * @param {Object} object The lead object to preload.
+         * @return {Promise}
          */
-        findPath(paths, part) {
-            let path = paths.filter(path => path.id === part);
-            return path.length ? path[0] : false;
+        async preload({ id, type }) {
+            if (!type) {
+                let response = await fetch(`${API_URL}api/objects/${id}`, API_OPTIONS);
+                let json = await response.json();
+                type = json.data.type;
+            }
+
+            if (type === 'folders') {
+                let response = await fetch(`${API_URL}api/folders/${id}`, API_OPTIONS)
+                let { data: folder } = await response.json();
+                this.store[folder.id] = folder;
+                let parent = await this.loadParent(folder);
+                if (!parent) {
+                    return [];
+                }
+                this.parents.push(parent);
+                await this.loadChildren(parent);
+                return [await this.loadFolderParentRecursive(parent)];
+            }
+
+            let response = await fetch(`${API_URL}api/${type}/${id}?include=parents`);
+            let json = await response.json();
+            let included = json.included || [];
+            return await Promise.all(
+                included.map(async (folder) => {
+                    this.store[folder.id] = folder;
+                    this.parents.push(folder);
+                    return this.loadFolderParentRecursive(folder);
+                })
+            );
         },
 
         /**
-         * check if relatedObjects contains object with a specific id
+         * Load folder parent.
          *
-         * @param {Number} id
-         *
-         * @return {Boolean}
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
          */
-        isRelated(id) {
-            return this.relatedObjects.filter((relatedObject) => {
-                return id === relatedObject.id;
-            }).length ? true : false;
+        async loadParent(folder) {
+            let response = await fetch(`${API_URL}api/folders/${folder.id}/parent`, API_OPTIONS);
+            let json = await response.json();
+            let { data: object } = json;
+            if (!object) {
+                return null;
+            }
+            return this.store[object.id] || (this.store[object.id] = object);
         },
 
         /**
-         * check if pendingRelations contains object with a specific id
+         * Load folder children.
          *
-         * @param {Number} id
-         *
-         * @return {Boolean}
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
          */
-        isPending(id) {
-            return this.pendingRelations.filter((pendingRelation) => {
-                return id === pendingRelation.id;
-            }).length ? true : false;
+        async loadChildren(folder) {
+            let page = 1;
+            let children = [];
+            do {
+                let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
+                let childrenJson = await childrenRes.json();
+                children.push(
+                    ...childrenJson.data.map((object) =>
+                        this.store[object.id] || (this.store[object.id] = object)
+                    )
+                );
+                if (childrenJson.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+            folder.children = children;
         },
-    }
+
+        /**
+         * Load folder children and parent.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadFolderParentRecursive(folder) {
+            let parent = await this.loadParent(folder);
+            if (parent) {
+                if (!parent.children) {
+                    await this.loadChildren(parent);
+                }
+                return await this.loadFolderParentRecursive(parent);
+            }
+
+            return folder;
+        },
+
+        /**
+         * Toggle children visibility
+         * Fetch children if not provided.
+         *
+         * @param {Event} event The click event.
+         * @return {Promise}
+         */
+        async toggle(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            this.isOpen = !this.isOpen;
+            if (this.node.children || this.isLoading) {
+                return;
+            }
+
+            let page = 1;
+            let children = [];
+            this.isLoading = true;
+            do {
+                let response = await fetch(`${API_URL}api/folders?filter[parent]=${this.node.id}&page=${page}`, API_OPTIONS);
+                let json = await response.json();
+                children.push(...json.data);
+                if (json.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+
+            this.node.children = children;
+            this.isLoading = false;
+        },
+
+        /**
+         * Add/remove parent.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
+        toggleFolderRelation(event) {
+            if (this.multipleChoice) {
+                let index = this.parents.findIndex(({ id }) => id == this.node.id);
+                if (event.target.checked) {
+                    if (index === -1) {
+                        this.parents.push(this.node);
+                    }
+                } else if (index !== -1) {
+                    this.parents.splice(index, 1);
+                }
+            } else {
+                if (this.parents.length) {
+                    this.parents.splice(0, 1);
+                }
+                if (event.target.checked) {
+                    this.parents.push(this.node);
+                }
+            }
+        },
+
+        /**
+         * Toggle menu param.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
+        toggleFolderRelationMenu(event) {
+            let relation = this.node.meta.relation || {};
+            relation.menu = event.target.checked;
+        },
+    },
 }

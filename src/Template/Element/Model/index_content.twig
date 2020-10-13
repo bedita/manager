@@ -1,0 +1,82 @@
+{% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+<div class="module-header">
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+</div>
+
+<div class="module-index">
+    <div class="list-objects">
+
+        {% if resources %}
+            {# list resources : table header #}
+            <nav class="table-header has-border-black">
+                <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+                {% for prop in properties %}
+                    <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
+                {% endfor %}
+                <div></div>
+            </nav>
+
+            {# list resources : rows #}
+            {% for resource in resources %}
+
+                {% set viewAction = 'model:view:' ~ resourceType %}
+                {% set rowClasses = 'table-row' %}
+                {% if prop == 'enabled' and propVal != 1 %}
+                    {% set rowClasses = rowClasses ~ ' object-status-off' %}
+                {% endif %}
+
+                <a href="{{ Url.build({'_name': viewAction, 'id': resource.id}) }}"
+                    class="{{ rowClasses }}">
+
+                    <div class="narrow"> {{ resource.id }}</div>
+
+                    {% for prop in properties %}
+                        {% if resource.attributes[prop] is defined %}
+                            {% set propVal = resource.attributes[prop] %}
+                        {% else %}
+                            {% set propVal = resource.meta[prop] %}
+                        {% endif %}
+
+                        <div class="{{ prop }}-cell">
+                            {% if resourceType == 'object_types' and prop == 'name' %}
+                                <span class="tag has-background-module-{{ propVal }}">{{ propVal }}</span>
+                            {% else %}
+                                {{ Schema.format(propVal, schema.properties[prop]) }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="buttons-cell narrow">
+                        {% set buttonClasses = 'button button-text-white is-width-auto' %}
+                        <button
+                            title="{{ __('Edit') }} {{ resource.attributes.name }}"
+                            class="{{ buttonClasses }}">{{ __('Edit') }}</button>
+
+                        {# TODO: uncomment `delete` action once controller part is available #}
+                        {# <div class="buttons">
+                        {% if in_array('DELETE', currentModule.hints.allow) %}
+                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
+                        {% endif %}
+                        </div> #}
+                    </div>
+
+                </a>
+            {% endfor %}
+
+        {% else %}
+                {{ __('No items found') }}
+        {% endif %}
+
+    </div>
+    {# end list-objects #}
+
+    {# append links to sidebar #}
+    {% do _view.append('module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
+    {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
+    {% do _view.append('module-links', Html.link(__('Properties'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
+
+</div> {# end module-index #}

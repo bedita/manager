@@ -7,7 +7,6 @@
  * <relation-view> component used for ModulesPage -> View
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
- * @property {Boolean} loadOnStart load content on component init
  * @property {Boolean} multipleChoice set view for multiple choice
  * @property {String} configPaginateSizes set pagination
  *
@@ -34,7 +33,7 @@ export default {
         RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
         RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
     },
 
     props: {
@@ -46,7 +45,6 @@ export default {
             type: Object,
             required: false,
         },
-        loadOnStart: [Boolean, Number],
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -59,20 +57,22 @@ export default {
 
     data() {
         return {
-            method: 'relatedJson',                      // define AppController method to be used
+            method: 'relatedJson',      // define AppController method to be used
             loading: false,
-            count: 0,                                   // count number of related objects, on change triggers an event
+            count: 0,                   // count number of related objects, on change triggers an event
 
-            requesterId: null, // panel requerster id
-            removedRelated: [],                         // staged removed related objects
-            addedRelations: [],                         // staged added objects to be saved
-            modifiedRelations: [],                      // staged modified relation params
+            requesterId: null,          // panel requerster id
+            removedRelated: [],         // staged removed related objects
+            addedRelations: [],         // staged added objects to be saved
+            modifiedRelations: [],      // staged modified relation params
 
-            removedRelationsData: [],                   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],                     // array of serialized new relations
+            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
+            addedRelationsData: [],     // array of serialized new relations
 
-            relationsData: [], // hidden field containing serialized json passed on form submit
-            activeFilter: {}, // current active filter for objects list
+            relationsData: [],          // hidden field containing serialized json passed on form submit
+            activeFilter: {},           // current active filter for objects list
+
+            positions: {},              // usede in children relations
         }
     },
 
@@ -228,6 +228,7 @@ export default {
             return this.requesterId === id;
         },
 
+        // common relations priorities
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
 
@@ -239,6 +240,46 @@ export default {
                 this.modifyRelation(object);
                 return object;
             });
+        },
+
+        // children position
+        updatePositions(movedObject, newIndex) {
+            const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+
+            // moves the object in the objects array from the old index to the new index
+            this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
+
+            this.objects = this.objects.map((object, index) => {
+                object.meta.relation.position = index + 1;
+                object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                this.modifyRelation(object);
+                return object;
+            });
+        },
+
+        /**
+         * update relation position and stage for saving - children
+         *
+         * @param {Object} related related object
+         *
+         * @returns {void}
+         */
+        onInputPosition(related) {
+            const oldPosition = related.meta.relation.position;
+            const newPosition = this.positions[related.id] !== '' ? this.positions[related.id] : undefined;
+            if (newPosition !== oldPosition) {
+                // try to deep copy the object
+                try {
+                    const copy = JSON.parse(JSON.stringify(related));
+                    copy.meta.relation.position = newPosition;
+                    this.modifyRelation(copy);
+                } catch (exp) {
+                    // silent error
+                    console.error('[RelationView -> updatePosition] something\'s wrong with the data');
+                }
+            } else {
+                this.removeModifiedRelations(related.id);
+            }
         },
 
         /**
@@ -351,8 +392,12 @@ export default {
             const newIndex = list.indexOf(element)
             const object = transfer.data;
 
-            object.meta.relation.priority = newIndex + 1;
-            this.updatePriorities(object, newIndex);
+            if (this.relationName == 'children') {
+                this.updatePositions(object, newIndex);
+            } else {
+                object.meta.relation.priority = newIndex + 1;
+                this.updatePriorities(object, newIndex);
+            }
         },
 
         /**
@@ -370,12 +415,7 @@ export default {
          * @return {void}
          */
         async loadOnMounted() {
-            if (this.loadOnStart) {
-                const t = (typeof this.loadOnStart === 'number')? this.loadOnStart : 0;
-
-                await sleep(t);
-                await this.loadRelatedObjects();
-            }
+            await this.loadRelatedObjects();
             return Promise.resolve();
         },
 
@@ -409,6 +449,7 @@ export default {
 
         /**
          * reload all related objects
+         * UNUSED
          *
          * @return {Array} objs objects retrieved
          */
@@ -603,6 +644,14 @@ export default {
             // formatting ISO 8061 date to human
             if (schema !== undefined && schema[key].format === 'date-time') {
                 return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
+            }
+
+            // oneOf
+            if(schema && schema[key].oneOf) {
+                const firstNotNull = schema[key].oneOf.find(p => p.type !== 'null');
+                if (firstNotNull.format  === 'date-time') {
+                    return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
+                }
             }
 
             return value;

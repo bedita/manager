@@ -1,10 +1,11 @@
-<div class="columns columns-responsive-tablet">
-    <div class="column is-narrow">
+<div class="filter-box">
+    <div>
         {% element 'FilterBox/filter_box_common' %}
     </div>
 
-    <div class="column">
-        {% element 'FilterBox/filter_box_page_toolbar' %}
-    </div>
+    {% if not hidePagination %}
+        <div v-if="pagination.count">
+            {% element 'FilterBox/filter_box_page_toolbar' %}
+        </div>
+    {% endif %}
 </div>
-
