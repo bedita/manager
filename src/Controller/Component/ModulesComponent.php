@@ -459,7 +459,7 @@ class ModulesComponent extends Component
     public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
     {
         // relations between objects
-        $relationsSchema = array_intersect_key($schema, $relationships);
+        $relationsSchema = $this->relationsSchema($schema, $relationships);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
@@ -477,6 +477,27 @@ class ModulesComponent extends Component
         ];
 
         $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Relations schema by schema and relationships.
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @return array
+     */
+    protected function relationsSchema(array $schema, array $relationships): array
+    {
+        $types = $this->objectTypes(false);
+        sort($types);
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        foreach ($relationsSchema as &$relSchema) {
+            if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {
+                $relSchema['right'] = $types;
+            }
+        }
+
+        return $relationsSchema;
     }
 
     /**
