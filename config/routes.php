@@ -76,13 +76,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'user_profile:save']
     );
 
-    // Tree.
-    $routes->connect(
-        '/treeJson',
-        ['controller' => 'Tree', 'action' => 'treeJson'],
-        ['_name' => 'tree:treeJson']
-    );
-
     // Model.
     Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 

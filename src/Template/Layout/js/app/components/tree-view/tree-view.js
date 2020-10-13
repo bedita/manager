@@ -1,4 +1,10 @@
-let rootsPromise;
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -6,59 +12,200 @@ let rootsPromise;
  *
  * <tree-view> component used for ModulesPage -> View
  *
- * @prop {String} objectId
- * @prop {Array} objectPaths
- * @prop {String} relationName
- * @prop {Boolean} multipleChoice
+ * @property {Object} store The folders store.
+ * @property {string} parent The parent of the tree item.
+ * @property {Object} node The model of the tree item.
+ * @property {Object} object The current item to place in the tree.
+ * @property {string} relationName The name of the relation to save.
+ * @property {boolean} multipleChoice Should handle multiple relations.
+ * @property {Array} parents The list of current item parents.
  */
 export default {
-    components: {
-        TreeList: () => import(/* webpackChunkName: "tree-list" */'app/components/tree-view/tree-list/tree-list'),
-    },
+    name: 'tree-view',
 
-    template: `<div class="tree-view">
-        <div v-if="isLoading" class="is-loading-spinner"></div>
-        <tree-list
-            v-for="(child) in objects"
-            :key="child.id"
-            :item="child"
-            :object-id="objectId"
-            :object-paths="objectPaths"
-            :relation-name="relationName"
-            :multiple-choice="multipleChoice"
-        ></tree-list>
-    </div>`,
-
-    data() {
-        return {
-            objects: [],
-            isLoading: false,
-        };
-    },
+    template: `
+        <div
+            class="tree-view-node"
+            :class="{
+                'is-root': isRoot,
+            }">
+            <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
+            <div
+                v-if="parent"
+                class="node-element py-05"
+                :data-status="node.attributes.status"
+            >
+                <label
+                    class="node-label"
+                    :class="{
+                        'icon-folder': !relationName,
+                        'has-text-gray-550 disabled': object && node.id == object.id,
+                    }"
+                    v-on="{ click: relationName ? () => {} : toggle }"
+                >
+                    <input
+                        v-if="relationName"
+                        :type="multipleChoice ? 'checkbox' : 'radio'"
+                        :name="'relations[' + relationName + '][replaceRelated][]'"
+                        :value="value"
+                        :checked="isParent"
+                        @change="toggleFolderRelation"
+                    />
+                    <: node.attributes.title :>
+                </label>
+                <div
+                    v-if="relationName && isParent"
+                    class="tree-params"
+                >
+                    <label>
+                        <input
+                            type="checkbox"
+                            :checked="isMenu"
+                            @change="toggleFolderRelationMenu"
+                        />
+                        <: t('Menu') :>
+                    </label>
+                </div>
+                <button
+                    v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
+                    :class="{
+                        'is-loading-spinner': isLoading,
+                        'icon-down-open': !isLoading && isOpen,
+                        'icon-right-open': !isLoading && !isOpen,
+                    }"
+                    @click="toggle"
+                ></button>
+                <a :href="url"><: t('edit') :></a>
+            </div>
+            <div class="node-children" v-show="isOpen || !parent">
+                <tree-view
+                    v-for="(child, index) in node.children"
+                    :store="store"
+                    :parents="parents"
+                    :parent="node"
+                    :key="index"
+                    :node="child"
+                    :object="object"
+                    :relation-name="relationName"
+                    :multiple-choice="multipleChoice"
+                ></tree-view>
+            </div>
+        </div>
+    `,
 
     props: {
-        objectId: [String, Number],
-        objectPaths: Array,
-        relationName: {
-            type: String,
+        store: {
+            type: Object,
+            default: () => ({}),
         },
+        parent: Object,
+        parents: {
+            type: Array,
+            default: () => ([]),
+        },
+        node: {
+            type: Object,
+            default: () => ({
+                attributes: {
+                    status: 'on',
+                },
+                children: [],
+            }),
+        },
+        object: Object,
+        relationName: String,
         multipleChoice: {
             type: Boolean,
             default: true,
         },
-        maxSize: {
-            type: Number,
-            default: 20,
+    },
+
+    data() {
+        return {
+            isOpen: false,
+            isLoading: false,
+        };
+    },
+
+    computed: {
+        /**
+         * Check if the item a root.
+         *
+         * @return {boolean}
+         */
+        isRoot() {
+            if (!this.parent) {
+                return false;
+            }
+            return !this.parent.id;
+        },
+
+        /**
+         * Check if the item is the parent of the current node.
+         *
+         * @return {boolean}
+         */
+        isParent() {
+            return !!this.parents.find(({ id }) => id == this.node.id);
+        },
+
+        /**
+         * Check if the child item is part of the menu.
+         *
+         * @return {boolean}
+         */
+        isMenu() {
+            if (!this.isParent) {
+                return false;
+            }
+            if (!this.node.meta.relation) {
+                return true;
+            }
+            return !!this.node.meta.relation.menu;
+        },
+
+        /**
+         * The folders link.
+         *
+         * @return {string}
+        */
+        url() {
+            if (!this.node) {
+                return;
+            }
+            let API_URL = new URL(BEDITA.base).pathname;
+            return `${API_URL}folders/view/${this.node.id}`;
+        },
+
+        /**
+         * The input value for the current item.
+         *
+         * @return {string}
+         */
+        value() {
+            let menu = true;
+            if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
+                menu = !!this.node.meta.relation.menu;
+            }
+            return JSON.stringify({
+                id: this.node.id,
+                type: this.node.type,
+                meta: {
+                    relation: {
+                        menu,
+                    },
+                },
+            });
         },
     },
 
-    async created() {
-        if (!rootsPromise) {
-            rootsPromise = this.loadObjects();
+    async mounted() {
+        if (!this.node.id) {
+            this.isLoading = true;
+            await this.loadRoots();
+            this.isLoading = false;
         }
-        this.isLoading = true;
-        this.objects = await rootsPromise;
-        this.isLoading = false;
+        this.isOpen = !!this.node.children;
     },
 
     methods: {
@@ -67,26 +214,22 @@ export default {
          *
          * @return {Promise}
          */
-        async loadObjects() {
-            const size = await this.checkTreeSize();
-            if (size < this.maxSize) {
-                return this.loadFullTree();
+        async loadRoots() {
+            if (this.object && this.object.id) {
+                await this.preload(this.object);
             }
 
-            const baseUrl = new URL(BEDITA.base).pathname;
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                }
-            };
             let page = 1;
-            let objects = [];
+            let roots = [];
             do {
-                let response = await fetch(`${baseUrl}treeJson?page=${page}`, options);
+                let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 if (json.data) {
-                    objects.push(...this.transformResponse(json.data))
+                    roots.push(
+                        ...json.data.map((object) =>
+                            this.store[object.id] || (this.store[object.id] = object)
+                        )
+                    )
                 }
                 if (!json.meta ||
                     !json.meta.pagination ||
@@ -96,146 +239,174 @@ export default {
                 page = json.meta.pagination.page + 1;
             } while (true);
 
-            if (this.objectPaths) {
-                await this.preloadPaths(objects, this.objectPaths);
-            }
-
-            return objects;
-        },
-
-        /**
-         * Return the tree size (folders count).
-         *
-         * @return {Promise<number>}
-         */
-        async checkTreeSize() {
-            const baseUrl = new URL(BEDITA.base).pathname;
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                }
-            };
-            const response = await fetch(`${baseUrl}treeJson?full=1&page_size=1`, options);
-            const json = await response.json();
-            if (!json.meta || !json.meta.pagination) {
-                return null;
-            }
-            return json.meta.pagination.count;
-        },
-
-        /**
-         * Load the full tree recursively.
-         *
-         * @return {Promise<Array>}
-         */
-        async loadFullTree() {
-            const baseUrl = new URL(BEDITA.base).pathname;
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                }
-            };
-
-            const map = new Map();
-
-            let page = 1;
-            let objects = [];
-            do {
-                let response = await fetch(`${baseUrl}treeJson?full=1&page=${page}`, options);
-                let json = await response.json();
-                if (json.data) {
-                    this.transformResponse(json.data, true).forEach((item) => {
-                        let chunks = item.path.split('/').slice(1, -1);
-                        let parentId = chunks[chunks.length - 1];
-                        if (map.get(item.id)) {
-                            item.children.push(...map.get(item.id).children);
-                        }
-                        map.set(item.id, item);
-                        if (!parentId) {
-                            objects.push(item);
-                        } else {
-                            let parentItem = map.get(parentId) || {
-                                id: parentId,
-                                children: [],
-                            };
-                            parentItem.children.push(item);
-                            map.set(parentId, parentItem);
-                        }
-                    });
-                }
-                if (!json.meta ||
-                    !json.meta.pagination ||
-                    json.meta.pagination.page_count === json.meta.pagination.page) {
-                    break;
-                }
-                page = json.meta.pagination.page + 1;
-            } while (true);
-
-            return objects;
-        },
-
-        /**
-         * Transform response objects into tree items.
-         *
-         * @param {Array} objects The list of objects.
-         * @param {boolean} setupChildren Should setup children array.
-         * @return {Array}
-         */
-        transformResponse(objects, setupChildren = false) {
-            return objects
-                .map((folder) => (
-                    {
-                        id: folder.id,
-                        type: folder.type,
-                        status: folder.attributes.status,
-                        title: folder.attributes.title || folder.attributes.uname,
-                        path: folder.meta.path,
-                        children: setupChildren ? [] : undefined,
-                    }
-                ));
+            this.node.children.push(...roots);
         },
 
         /**
          * Preload folders passed as object paths.
          *
-         * @param {Array} roots A list of root folders.
-         * @param {Array} paths A list of object paths.
+         * @param {Object} object The lead object to preload.
          * @return {Promise}
          */
-        async preloadPaths(roots, paths) {
-            const baseUrl = new URL(BEDITA.base).pathname;
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
+        async preload({ id, type }) {
+            if (!type) {
+                let response = await fetch(`${API_URL}api/objects/${id}`, API_OPTIONS);
+                let json = await response.json();
+                type = json.data.type;
+            }
+
+            if (type === 'folders') {
+                let response = await fetch(`${API_URL}api/folders/${id}`, API_OPTIONS)
+                let { data: folder } = await response.json();
+                this.store[folder.id] = folder;
+                let parent = await this.loadParent(folder);
+                if (!parent) {
+                    return [];
                 }
-            };
+                this.parents.push(parent);
+                await this.loadChildren(parent);
+                return [await this.loadFolderParentRecursive(parent)];
+            }
 
-            for (let i = 0; i < paths.length; i++) {
-                let path = paths[i].split('/').slice(1, -1);
-                let rootId = path.shift();
-                let currentFolder = roots.find((f) => f.id == rootId);
+            let response = await fetch(`${API_URL}api/${type}/${id}?include=parents`);
+            let json = await response.json();
+            let included = json.included || [];
+            return await Promise.all(
+                included.map(async (folder) => {
+                    this.store[folder.id] = folder;
+                    this.parents.push(folder);
+                    return this.loadFolderParentRecursive(folder);
+                })
+            );
+        },
 
-                for (let k = 0; k < path.length; k++) {
-                    let id = path[k];
-                    let page = 1;
-                    let folderChildren = [];
-                    do {
-                        let response = await fetch(`${baseUrl}treeJson/?root=${currentFolder.id}&page=${page}`, options);
-                        let json = await response.json();
-                        folderChildren.push(...this.transformResponse(json.data));
-                        if (json.meta.pagination.page_count == page) {
-                            break;
-                        }
-                        page++;
-                    } while (true);
+        /**
+         * Load folder parent.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadParent(folder) {
+            let response = await fetch(`${API_URL}api/folders/${folder.id}/parent`, API_OPTIONS);
+            let json = await response.json();
+            let { data: object } = json;
+            if (!object) {
+                return null;
+            }
+            return this.store[object.id] || (this.store[object.id] = object);
+        },
 
-                    currentFolder.children = folderChildren;
-                    currentFolder = folderChildren.find((f) => f.id == id);
+        /**
+         * Load folder children.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadChildren(folder) {
+            let page = 1;
+            let children = [];
+            do {
+                let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
+                let childrenJson = await childrenRes.json();
+                children.push(
+                    ...childrenJson.data.map((object) =>
+                        this.store[object.id] || (this.store[object.id] = object)
+                    )
+                );
+                if (childrenJson.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+            folder.children = children;
+        },
+
+        /**
+         * Load folder children and parent.
+         *
+         * @param {Object} folder The folder data model.
+         * @return {Promise}
+         */
+        async loadFolderParentRecursive(folder) {
+            let parent = await this.loadParent(folder);
+            if (parent) {
+                if (!parent.children) {
+                    await this.loadChildren(parent);
+                }
+                return await this.loadFolderParentRecursive(parent);
+            }
+
+            return folder;
+        },
+
+        /**
+         * Toggle children visibility
+         * Fetch children if not provided.
+         *
+         * @param {Event} event The click event.
+         * @return {Promise}
+         */
+        async toggle(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            this.isOpen = !this.isOpen;
+            if (this.node.children || this.isLoading) {
+                return;
+            }
+
+            let page = 1;
+            let children = [];
+            this.isLoading = true;
+            do {
+                let response = await fetch(`${API_URL}api/folders?filter[parent]=${this.node.id}&page=${page}`, API_OPTIONS);
+                let json = await response.json();
+                children.push(...json.data);
+                if (json.meta.pagination.page_count == page) {
+                    break;
+                }
+                page++;
+            } while (true);
+
+            this.node.children = children;
+            this.isLoading = false;
+        },
+
+        /**
+         * Add/remove parent.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
+        toggleFolderRelation(event) {
+            if (this.multipleChoice) {
+                let index = this.parents.findIndex(({ id }) => id == this.node.id);
+                if (event.target.checked) {
+                    if (index === -1) {
+                        this.parents.push(this.node);
+                    }
+                } else if (index !== -1) {
+                    this.parents.splice(index, 1);
+                }
+            } else {
+                if (this.parents.length) {
+                    this.parents.splice(0, 1);
+                }
+                if (event.target.checked) {
+                    this.parents.push(this.node);
                 }
             }
-        }
-    }
+        },
+
+        /**
+         * Toggle menu param.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
+        toggleFolderRelationMenu(event) {
+            let relation = this.node.meta.relation || {};
+            relation.menu = event.target.checked;
+        },
+    },
 }

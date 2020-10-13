@@ -184,10 +184,12 @@ export default {
         onChangeTitle(event) {
             const title = event.target.value;
             this.title = title;
+            this.location.attributes.title = title;
         },
         onChangeAddress(event) {
             const address = event.target.value;
             this.fullAddress = address;
+            this.location.attributes.address = address;
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
@@ -297,7 +299,7 @@ export default {
             script.id = "googleapi";
 
             window.initMap = () => {
-               retrieveGeocode();
+                retrieveGeocode();
             };
             document.head.appendChild(script);
         },
