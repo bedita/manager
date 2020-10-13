@@ -15,7 +15,6 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
-use App\Controller\Component\SchemaComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
 use BEdita\SDK\BEditaClient;
