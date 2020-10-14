@@ -361,13 +361,12 @@ class ModulesController extends AppController
                         }
                     }
 
-                    if ($saveObject == true) {
+                    if ($saveObject === true) {
                         $object = $this->apiClient->save($data['type'], array_merge([
                             'id' => $data['id'] ?? null,
                         ], $data['attributes']));
+                        $data['id'] = Hash::get($object, 'data.id');
                     }
-
-                    $data['id'] = $object['data']['id'];
                 }
             }
             if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
