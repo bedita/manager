@@ -88,6 +88,19 @@ class OptionsTest extends TestCase
                     'value' => 'draft',
                 ],
             ],
+            'old_password' => [
+                'old_password',
+                '12345',
+                [
+                    'autocomplete' => 'current-password',
+                    'class' => 'password',
+                    'default' => '',
+                    'label' => __('Current password'),
+                    'placeholder' => __('current password'),
+                    'type' => 'password',
+                    'value' => '12345',
+                ],
+            ],
             'password' => [
                 'password',
                 '12345',
