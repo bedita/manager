@@ -185,6 +185,27 @@ class ControlTest extends TestCase
                     ],
                 ],
             ],
+            'categories' => [
+                [
+                    'categories' => [
+                        ['name' => 'animals', 'label' => 'Animals'],
+                        ['name' => 'furnitures', 'label' => 'Furnitures'],
+                        ['name' => 'houses', 'label' => 'Houses'],
+                    ],
+                ], // schema
+                'categories', // type
+                [['name' => 'animals'],['name' => 'houses']], // value
+                [
+                    'type' => 'select',
+                    'options' => [
+                        ['value' => 'animals', 'text' => 'Animals'],
+                        ['value' => 'furnitures', 'text' => 'Furnitures'],
+                        ['value' => 'houses', 'text' => 'Houses'],
+                    ],
+                    'multiple' => 'checkbox',
+                    'value' => ['animals', 'houses'],
+                ], // expected
+            ],
         ];
     }
 
@@ -193,7 +214,7 @@ class ControlTest extends TestCase
      *
      * @param array $schema Object schema array.
      * @param string $type Control type.
-     * @param string|null $value Property value.
+     * @param mixed|null $value Property value.
      * @param array $expected The expected control.
      * @return void
      *
@@ -206,8 +227,9 @@ class ControlTest extends TestCase
      * @covers ::date
      * @covers ::checkbox
      * @covers ::enum
+     * @covers ::categories
      */
-    public function testControl(array $schema, string $type, ?string $value, array $expected): void
+    public function testControl(array $schema, string $type, $value, array $expected): void
     {
         $actual = Control::control($schema, $type, $value);
 
