@@ -534,7 +534,7 @@ class ModulesComponent extends Component
         if (empty($objects)) {
             return;
         }
-        foreach ($objects as $key => &$obj) {
+        foreach ($objects as &$obj) {
             $this->saveObject($obj);
         }
     }
