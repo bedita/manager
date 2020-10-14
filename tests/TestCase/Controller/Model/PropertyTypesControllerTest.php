@@ -93,7 +93,7 @@ class PropertyTypesControllerTest extends TestCase
             'addPropertyTypesRequest' => [
                 [
                     [
-                        // 'id' => '12',
+                        // 'id' => '13',
                         'type' => 'property_types',
                         'attributes' => [
                                 'name' => 'giovanni',
@@ -118,7 +118,7 @@ class PropertyTypesControllerTest extends TestCase
             'editPropertyTypesRequest' => [
                 [
                     [
-                        'id' => '12',
+                        'id' => '13',
                         'type' => 'property_types',
                         'attributes' => [
                                 'name' => 'enrico',
@@ -131,7 +131,7 @@ class PropertyTypesControllerTest extends TestCase
                 [
                     'editPropertyTypes' => [
                         [
-                            'id' => '12',
+                            'id' => '13',
                             'attributes' => [
                                 'name' => 'enrico',
                                 'params' => [
@@ -144,10 +144,10 @@ class PropertyTypesControllerTest extends TestCase
                 'edited',
             ],
             'removePropertyTypesRequest' => [
-                [ '12' ],
+                [ '13' ],
                 [
                     'removePropertyTypes' => [
-                        '12',
+                        '13',
                     ],
                 ],
                 'removed',

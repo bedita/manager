@@ -171,7 +171,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getRelationsSchema()
      * @covers ::fetchRelationData()
      */
-    public function testRelationsSchema()
+    public function testRelationMethods()
     {
         $relations = [
             'data' => [

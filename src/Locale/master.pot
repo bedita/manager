@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-05 10:04:01 \n"
+"POT-Creation-Date: 2020-10-13 07:23:24 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -449,6 +449,9 @@ msgstr ""
 msgid "Temporary folder missing"
 msgstr ""
 
+msgid "The main language is"
+msgstr ""
+
 msgid "The thumbnail is not available"
 msgstr ""
 
@@ -633,6 +636,7 @@ msgid "www.bedita.com"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:152
+#: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
