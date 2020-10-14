@@ -349,9 +349,10 @@ class ModulesController extends AppController
         foreach ($relatedData as $rel) {
             $method = (string)Hash::get($rel, 'method');
             $relation = (string)Hash::get($rel, 'relation');
-            $relatedIds = (array)Hash::get($rel, 'relatedIds');
+            $relatedObjects = (array)Hash::get($rel, 'relatedIds');
+            $this->Modules->saveObjects($relatedObjects);
             if (in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
-                $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedIds);
+                $this->apiClient->{$method}($id, $this->objectType, $relation, $relatedObjects);
             }
         }
     }

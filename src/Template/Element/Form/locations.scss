@@ -1,0 +1,88 @@
+.locations {
+    width: fit-content;
+
+    input, .order {
+        border-radius: 2px;
+    }
+
+    .order {
+        height: 0.5rem;
+        margin-top: 1.75rem;
+    }
+
+    .location-form {
+        .coordinates {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .get-coordinates {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            background-color: $defaultBackground;
+            border-color: $white;
+            color: $white;
+        }
+    }
+
+    button {
+        text-transform: uppercase;
+        background-color: $defaultBackground;
+        border-color: $white;
+        color: $white;
+    }
+
+    .location-form {
+        .location-buttons {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 0.5rem;
+            margin-top: 1rem;
+
+            .remove {
+                border: none;
+            }
+        }
+    }
+}
+
+.buttons {
+    padding-left: 3.5rem;
+}
+
+.autocomplete-title, .autocomplete-address {
+    margin: 0;
+
+    ul {
+        margin: 0;
+        background-color: $white;
+        max-height: 15em;
+        overflow: auto;
+        padding: 0 0.5rem;
+
+        li {
+            list-style-type: none;
+            color: $defaultBackground;
+            padding: 0 0.5rem;
+            border-bottom: 1px solid $gray-500;
+        }
+    }
+}
+
+.autocomplete-title-result, .autocomplete-address-result {
+  border-top: 1px solid $white;
+  padding: 1rem;
+  background: transparent;
+}
+
+.group {
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  background: $white;
+}
+
+.location-data {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}

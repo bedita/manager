@@ -467,6 +467,15 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Lat long Coordinates"
+msgstr ""
+
+msgid "GET"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
 msgid "To"
 msgstr ""
 
