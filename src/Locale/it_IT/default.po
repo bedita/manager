@@ -472,6 +472,15 @@ msgstr "La miniatura non è pronta"
 msgid "Title"
 msgstr "Titolo"
 
+msgid "Lat long Coordinates"
+msgstr "Coordinate Lat Long"
+
+msgid "GET"
+msgstr "GET"
+
+msgid "Remove"
+msgstr "Rimuovi"
+
 msgid "To"
 msgstr "A"
 
