@@ -34,13 +34,13 @@ class FormTest extends TestCase
         return [
             'name with chars to remove' => [
                 Options::class,
-                'old_passwordOptions',
-                [Options::class, 'oldPasswordOptions'],
+                'old_password',
+                [Options::class, 'oldPassword'],
             ],
             'name with chars to remove' => [
                 Options::class,
-                'confirm_passwordOptions',
-                [Options::class, 'confirmPasswordOptions'],
+                'confirm_password',
+                [Options::class, 'confirmPassword'],
             ],
         ];
     }
