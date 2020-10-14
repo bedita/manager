@@ -498,6 +498,13 @@ class SchemaHelperTest extends TestCase
                     'type' => 'object',
                 ],
             ],
+            'type not in string, number, integer, boolean, array, object' => [
+                'Dummy',
+                'Dummy',
+                [
+                    'type' => 'dummy',
+                ],
+            ],
         ];
     }
 
