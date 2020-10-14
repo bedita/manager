@@ -99,6 +99,17 @@ class ControlTest extends TestCase
                     ],
                 ],
             ],
+            'checkbox true' => [
+                [
+                    'type' => 'array',
+                ],
+                'checkbox',
+                'true',
+                [
+                    'type' => 'checkbox',
+                    'checked' => true,
+                ],
+            ],
             'checkbox' => [
                 [
                     'type' => 'array',
@@ -139,6 +150,20 @@ class ControlTest extends TestCase
                         ],
                     ],
                     'multiple' => 'checkbox',
+                ],
+            ],
+            'checkbox no options' => [
+                [
+                    'type' => 'array',
+                    'oneOf' => [
+                        [],
+                    ],
+                ],
+                'checkbox',
+                'false',
+                [
+                    'type' => 'checkbox',
+                    'checked' => false,
                 ],
             ],
             'enum' => [

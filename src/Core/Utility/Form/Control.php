@@ -176,7 +176,7 @@ class Control
         if (empty($schema['oneOf'])) {
             return [
                 'type' => 'checkbox',
-                'checked' => (bool)$value,
+                'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             ];
         }
 
@@ -201,7 +201,7 @@ class Control
 
         return [
             'type' => 'checkbox',
-            'checked' => (bool)$value,
+            'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
         ];
     }
 
