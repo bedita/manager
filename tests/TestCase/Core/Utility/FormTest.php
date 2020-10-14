@@ -191,16 +191,20 @@ class FormTest extends TestCase
         return [
             'not custom' => [
                 'name',
+                null,
                 [],
             ],
             'lang' => [
                 'lang',
+                'en',
                 [
                     'type' => 'text',
+                    'value' => 'en',
                 ],
             ],
             'lang options' => [
                 'lang',
+                'en',
                 [
                     'type' => 'select',
                     'options' => [
@@ -213,6 +217,7 @@ class FormTest extends TestCase
                             'text' => 'Deutsch',
                         ],
                     ],
+                    'value' => 'en',
                 ],
                 [
                     'Project.config.I18n.languages' => [
@@ -221,9 +226,9 @@ class FormTest extends TestCase
                     ],
                 ],
             ],
-
             'status' => [
                 'status',
+                'draft',
                 [
                     'type' => 'radio',
                     'options' => [
@@ -234,19 +239,23 @@ class FormTest extends TestCase
                     'templateVars' => [
                         'containerClass' => 'status',
                     ],
+                    'value' => 'draft',
                 ],
             ],
             'password' => [
                 'password',
+                '12345',
                 [
                     'class' => 'password',
                     'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
                     'default' => '',
+                    'value' => '12345',
                 ],
             ],
             'confirm-password' => [
                 'confirm-password',
+                '12345',
                 [
                     'label' => __('Retype password'),
                     'id' => 'confirm_password',
@@ -256,26 +265,30 @@ class FormTest extends TestCase
                     'autocomplete' => 'new-password',
                     'default' => '',
                     'type' => 'password',
+                    'value' => '12345',
                 ],
             ],
             'title' => [
                 'title',
+                'dummy',
                 [
                     'class' => 'title',
                     'type' => 'text',
                     'templates' => [
                         'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
                     ],
+                    'value' => 'dummy',
                 ],
             ],
             'start_date' => [
                 'start_date',
+                '2020-10-14',
                 [
                     'type' => 'text',
                     'v-datepicker' => 'true',
                     'date' => 'true',
                     'time' => 'true',
-                    'value' => null,
+                    'value' => '2020-10-14',
                     'templates' => [
                         'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
                     ],
@@ -283,6 +296,21 @@ class FormTest extends TestCase
             ],
             'end_date' => [
                 'end_date',
+                '2020-10-15',
+                [
+                    'type' => 'text',
+                    'v-datepicker' => 'true',
+                    'date' => 'true',
+                    'time' => 'true',
+                    'value' => '2020-10-15',
+                    'templates' => [
+                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                    ],
+                ],
+            ],
+            'date_ranges' => [
+                'date_ranges',
+                null,
                 [
                     'type' => 'text',
                     'v-datepicker' => 'true',
@@ -294,17 +322,15 @@ class FormTest extends TestCase
                     ],
                 ],
             ],
-            'date_ranges' => [
-                'date_ranges',
+            'coords' => [
+                'coords',
+                'POINT(11.123125 44.6123245)',
                 [
-                    'type' => 'text',
-                    'v-datepicker' => 'true',
-                    'date' => 'true',
-                    'time' => 'true',
-                    'value' => null,
+                    'class' => 'coordinates',
                     'templates' => [
-                        'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
+                        'inputContainer' => '<div class="input coordinates {{type}}{{required}}">{{content}}<coordinates-view latitude="44.6123245" longitude="11.123125" /></div>',
                     ],
+                    'type' => 'readonly',
                 ],
             ],
         ];
@@ -314,6 +340,7 @@ class FormTest extends TestCase
      * Test `customControlOptions` method.
      *
      * @param string $name The field name.
+     * @param mixed|null $value The field value.
      * @param array $expected Expected result.
      * @param array $config Configuration.
      * @return void
@@ -329,6 +356,7 @@ class FormTest extends TestCase
      * @covers ::passwordOptions
      * @covers ::confirmpasswordOptions
      * @covers ::titleOptions
+     * @covers ::coordsOptions
      * @covers ::typeFromString
      * @covers ::typeFromNumber
      * @covers ::typeFromInteger
@@ -336,13 +364,13 @@ class FormTest extends TestCase
      * @covers ::typeFromArray
      * @covers ::typeFromObject
      */
-    public function testCustomControlOptions(string $name, array $expected, array $config = []): void
+    public function testCustomControlOptions(string $name, $value, array $expected, array $config = []): void
     {
         if (!empty($config)) {
             Configure::write($config);
         }
-        $actual = Form::customControlOptions($name);
-
+        $actual = Form::customControlOptions($name, $value);
+        ksort($expected);
         static::assertSame($expected, $actual);
     }
 

@@ -37,6 +37,7 @@ class Form
         'start_date',
         'status',
         'title',
+        'coords',
     ];
 
     /**
@@ -311,29 +312,33 @@ class Form
      * Get controls option by property name.
      *
      * @param string $name The field name.
+     * @param mixed|null $value The field value.
      * @return array
      */
-    public static function customControlOptions($name): array
+    public static function customControlOptions(string $name, $value): array
     {
         if (!in_array($name, Form::CUSTOM_CONTROLS)) {
             return [];
         }
         $method = Form::getMethod(sprintf('%sOptions', $name));
+        $options = call_user_func_array($method, [$value]);
+        ksort($options);
 
-        return call_user_func_array($method, []);
+        return $options;
     }
 
     /**
      * Options for lang, using configuration loaded from API
      * If available, use config `Project.config.I18n.languages`
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function langOptions(): array
+    protected static function langOptions($value): array
     {
         $languages = Configure::read('Project.config.I18n.languages');
         if (empty($languages)) {
-            return [
+            return compact('value') + [
                 'type' => 'text',
             ];
         }
@@ -342,37 +347,40 @@ class Form
             $options[] = ['value' => $key, 'text' => __($description)];
         }
 
-        return ['type' => 'select'] + compact('options');
+        return ['type' => 'select'] + compact('options', 'value');
     }
 
     /**
      * Options for `date_ranges`
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function dateRangesOptions(): array
+    protected static function dateRangesOptions($value): array
     {
-        return static::datetimeControl(null);
+        return static::datetimeControl($value);
     }
 
     /**
      * Options for `start_date`
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function startDateOptions(): array
+    protected static function startDateOptions($value): array
     {
-        return static::datetimeControl(null);
+        return static::datetimeControl($value);
     }
 
     /**
      * Options for `end_date`
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function endDateOptions(): array
+    protected static function endDateOptions($value): array
     {
-        return static::datetimeControl(null);
+        return static::datetimeControl($value);
     }
 
     /**
@@ -382,11 +390,12 @@ class Form
      *   - Draft ('draft')
      *   - Off ('off')
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function statusOptions(): array
+    protected static function statusOptions($value): array
     {
-        return [
+        return compact('value') + [
             'type' => 'radio',
             'options' => [
                 ['value' => 'on', 'text' => __('On')],
@@ -402,11 +411,12 @@ class Form
     /**
      * Options for old password
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function oldpasswordOptions(): array
+    protected static function oldpasswordOptions($value): array
     {
-        return [
+        return compact('value') + [
             'class' => 'password',
             'label' => __('Current password'),
             'placeholder' => __('current password'),
@@ -419,11 +429,12 @@ class Form
     /**
      * Options for password
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function passwordOptions(): array
+    protected static function passwordOptions($value): array
     {
-        return [
+        return compact('value') + [
             'class' => 'password',
             'placeholder' => __('new password'),
             'autocomplete' => 'new-password',
@@ -434,11 +445,12 @@ class Form
     /**
      * Options for confirm password
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function confirmpasswordOptions(): array
+    protected static function confirmpasswordOptions($value): array
     {
-        return [
+        return compact('value') + [
             'label' => __('Retype password'),
             'id' => 'confirm_password',
             'name' => 'confirm-password',
@@ -453,15 +465,39 @@ class Form
     /**
      * Options for title
      *
+     * @param mixed|null $value The field value.
      * @return array
      */
-    protected static function titleOptions(): array
+    protected static function titleOptions($value): array
     {
-        return [
+        return compact('value') + [
             'class' => 'title',
             'type' => 'text',
             'templates' => [
                 'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+            ],
+        ];
+    }
+
+    /**
+     * Options for coords
+     *
+     * @param mixed|null $value The field value.
+     * @return array
+     */
+    protected static function coordsOptions($value): array
+    {
+        $latitude = '';
+        $longitude = '';
+        if (!empty($value)) {
+            sscanf($value, 'POINT(%f %f)', $longitude, $latitude);
+        }
+
+        return [
+            'type' => 'readonly',
+            'class' => 'coordinates',
+            'templates' => [
+                'inputContainer' => sprintf('<div class="input coordinates {{type}}{{required}}">{{content}}<coordinates-view latitude="%s" longitude="%s" /></div>', $latitude, $longitude),
             ],
         ];
     }

@@ -16,6 +16,7 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use Cake\View\View;
 
 /**
@@ -78,7 +79,6 @@ class SchemaHelperTest extends TestCase
             'status' => [
                 // expected result
                 [
-                    'type' => 'radio',
                     'options' => [
                         ['value' => 'on', 'text' => __('On')],
                         ['value' => 'draft', 'text' => __('Draft')],
@@ -87,6 +87,7 @@ class SchemaHelperTest extends TestCase
                     'templateVars' => [
                         'containerClass' => 'status',
                     ],
+                    'type' => 'radio',
                     'value' => 'on',
                 ],
                 // schema type
@@ -99,10 +100,10 @@ class SchemaHelperTest extends TestCase
             'password' => [
                 // expected result
                 [
-                    'class' => 'password',
-                    'placeholder' => __('new password'),
                     'autocomplete' => 'new-password',
+                    'class' => 'password',
                     'default' => '',
+                    'placeholder' => __('new password'),
                     'value' => '',
                 ],
                 // schema type
@@ -115,13 +116,13 @@ class SchemaHelperTest extends TestCase
             'confirm-password' => [
                 // expected result
                 [
-                    'label' => __('Retype password'),
-                    'id' => 'confirm_password',
-                    'name' => 'confirm-password',
-                    'class' => 'confirm-password',
-                    'placeholder' => __('confirm password'),
                     'autocomplete' => 'new-password',
+                    'class' => 'confirm-password',
                     'default' => '',
+                    'id' => 'confirm_password',
+                    'label' => __('Retype password'),
+                    'name' => 'confirm-password',
+                    'placeholder' => __('confirm password'),
                     'type' => 'password',
                     'value' => '',
                 ],
@@ -135,9 +136,9 @@ class SchemaHelperTest extends TestCase
             'json' => [
                 // expected result
                 [
+                    'class' => 'json',
                     'type' => 'textarea',
                     'v-jsoneditor' => 'true',
-                    'class' => 'json',
                     'value' => json_encode('{ "example": { "this": "is", "an": "example" } }'),
                 ],
                 // schema type
@@ -151,10 +152,10 @@ class SchemaHelperTest extends TestCase
                 // expected result
                 [
                     'class' => 'title',
-                    'type' => 'text',
                     'templates' => [
                         'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
                     ],
+                    'type' => 'text',
                     'value' => 'test',
                 ],
                 // schema type
@@ -198,14 +199,14 @@ class SchemaHelperTest extends TestCase
             'publish_start' => [
                 // expected result
                 [
-                    'type' => 'text',
-                    'v-datepicker' => 'true',
                     'date' => 'true',
                     'time' => 'true',
-                    'value' => 'test',
+                    'type' => 'text',
                     'templates' => [
                         'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
                     ],
+                    'v-datepicker' => 'true',
+                    'value' => 'test',
                 ],
                 // schema type
                 [
@@ -218,11 +219,11 @@ class SchemaHelperTest extends TestCase
             'enum' => [
                 // expected result
                 [
-                    'type' => 'select',
                     'options' => [
                         ['value' => 'good', 'text' => 'Good'],
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
+                    'type' => 'select',
                 ],
                 // schema type
                 [
@@ -238,12 +239,12 @@ class SchemaHelperTest extends TestCase
             'enum nullable' => [
                 // expected result
                 [
-                    'type' => 'select',
                     'options' => [
                         ['value' => '', 'text' => ''],
                         ['value' => 'good', 'text' => 'Good'],
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
+                    'type' => 'select',
                 ],
                 // schema type
                 [
@@ -266,8 +267,8 @@ class SchemaHelperTest extends TestCase
             'checkbox' => [
                 // expected result
                 [
-                    'type' => 'checkbox',
                     'checked' => true,
+                    'type' => 'checkbox',
                 ],
                 // schema type
                 [
@@ -279,7 +280,7 @@ class SchemaHelperTest extends TestCase
             'array multiple checkbox' => [
                 // expected result
                 [
-                    'type' => 'select',
+                    'multiple' => 'checkbox',
                     'options' => [
                         [
                             'value' => 'a',
@@ -298,7 +299,7 @@ class SchemaHelperTest extends TestCase
                             'text' => 'D',
                         ],
                     ],
-                    'multiple' => 'checkbox',
+                    'type' => 'select',
                 ],
                 // schema type
                 [
@@ -339,7 +340,7 @@ class SchemaHelperTest extends TestCase
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
-        static::assertSame($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -353,7 +354,8 @@ class SchemaHelperTest extends TestCase
     {
         Configure::write('Project.config.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
-        static::assertSame(['type' => 'text', 'value' => null], $actual);
+        static::assertEquals('text', Hash::get($actual, 'type'));
+        static::assertNull(Hash::get($actual, 'value'));
 
         $i18n = [
             'languages' => [
@@ -365,7 +367,6 @@ class SchemaHelperTest extends TestCase
         $actual = $this->Schema->controlOptions('lang', null, []);
 
         $expected = [
-            'type' => 'select',
             'options' => [
                 [
                     'value' => 'en',
@@ -376,6 +377,7 @@ class SchemaHelperTest extends TestCase
                     'text' => 'German',
                 ],
             ],
+            'type' => 'select',
             'value' => null,
         ];
         static::assertSame($expected, $actual);

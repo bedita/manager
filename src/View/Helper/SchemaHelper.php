@@ -42,10 +42,8 @@ class SchemaHelper extends Helper
      */
     public function controlOptions(string $name, $value, $schema = []): array
     {
-        $options = Form::customControlOptions($name);
+        $options = Form::customControlOptions($name, $value);
         if (!empty($options)) {
-            $options['value'] = $value;
-
             return $options;
         }
         $type = Form::controlTypeFromSchema((array)$schema);
