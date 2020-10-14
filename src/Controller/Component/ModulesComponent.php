@@ -522,4 +522,44 @@ class ModulesComponent extends Component
 
         return (array)Hash::get($relationsSchema, 'left');
     }
+
+    /**
+     * Save objects and set 'id' inside each object in $objects
+     *
+     * @param array $objects The objects
+     * @return void
+     */
+    public function saveObjects(array &$objects): void
+    {
+        if (empty($objects)) {
+            return;
+        }
+        foreach ($objects as $key => &$obj) {
+            $this->saveObject($obj);
+        }
+    }
+
+    /**
+     * Save single object and set 'id' inside param $object
+     *
+     * @param array $object The object
+     * @return void
+     */
+    public function saveObject(array &$object): void
+    {
+        // no attributes? then return
+        if (empty($object['attributes'])) {
+            return;
+        }
+        foreach ($object['attributes'] as $key => $val) {
+            if ($key === 'status' || empty($val)) {
+                continue;
+            }
+            $apiClient = ApiClientProvider::getApiClient();
+            $saved = $apiClient->save($object['type'], array_merge(['id' => $object['id'] ?? null], $object['attributes']));
+            $object['id'] = Hash::get($saved, 'data.id');
+
+            return; // not necessary cycling over all attributes
+        }
+    }
 }
