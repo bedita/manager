@@ -194,7 +194,7 @@ class ControlTest extends TestCase
                     ],
                 ], // schema
                 'categories', // type
-                [['name' => 'animals'],['name' => 'houses']], // value
+                [['name' => 'animals'], ['name' => 'houses']], // value
                 [
                     'type' => 'select',
                     'options' => [
