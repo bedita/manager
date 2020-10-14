@@ -42,6 +42,7 @@ const _vueInstance = new Vue({
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
+        CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
     },
 
     data() {
