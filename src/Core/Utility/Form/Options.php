@@ -45,7 +45,7 @@ class Options
         if (!in_array($name, Options::CUSTOM_CONTROLS)) {
             return [];
         }
-        $method = Form::getMethod(Options::class, sprintf('%s', $name));
+        $method = Form::getMethod(Options::class, $name);
         $options = call_user_func_array($method, [$value]);
         ksort($options);
 
