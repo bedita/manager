@@ -11,12 +11,16 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Core\Utility\Form;
+namespace App\Form;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
+/**
+ * ControlType class provides methods to get control types per type, according to schema property data.
+ * Used by SchemaHelper to build control options for a property schema (@see \App\View\Helper\SchemaHelper::controlOptions)
+ */
 class ControlType
 {
     /**

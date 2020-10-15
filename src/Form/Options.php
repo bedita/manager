@@ -11,10 +11,14 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Core\Utility\Form;
+namespace App\Form;
 
 use Cake\Core\Configure;
 
+/**
+ * Options class provides methods to get custom control options, according to schema property data.
+ * Used by SchemaHelper to build control options for a property schema (@see \App\View\Helper\SchemaHelper::controlOptions)
+ */
 class Options
 {
     /**

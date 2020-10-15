@@ -11,12 +11,15 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Core\Utility\Form;
+namespace App\Form;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
+/**
+ * Form class provides utilities for \App\Form classes.
+ */
 class Form
 {
     /**

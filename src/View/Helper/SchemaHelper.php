@@ -13,9 +13,9 @@
 
 namespace App\View\Helper;
 
-use App\Core\Utility\Form\Control;
-use App\Core\Utility\Form\ControlType;
-use App\Core\Utility\Form\Options;
+use App\Form\Control;
+use App\Form\ControlType;
+use App\Form\Options;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;

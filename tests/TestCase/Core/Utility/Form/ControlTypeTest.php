@@ -13,13 +13,13 @@
 
 namespace App\Test\TestCase\Core\Utility\Form;
 
-use App\Core\Utility\Form\ControlType;
+use App\Form\ControlType;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Core\Utility\Form\ControlType} Test Case
+ * {@see \App\Form\ControlType} Test Case
  *
- * @coversDefaultClass \App\Core\Utility\Form\ControlType
+ * @coversDefaultClass \App\Form\ControlType
  */
 class ControlTypeTest extends TestCase
 {

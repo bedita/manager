@@ -13,14 +13,14 @@
 
 namespace App\Test\TestCase\Core\Utility\Form;
 
-use App\Core\Utility\Form\Form;
-use App\Core\Utility\Form\Options;
+use App\Form\Form;
+use App\Form\Options;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Core\Utility\Form\Form} Test Case
+ * {@see \App\Form\Form} Test Case
  *
- * @coversDefaultClass \App\Core\Utility\Form\Form
+ * @coversDefaultClass \App\Form\Form
  */
 class FormTest extends TestCase
 {
