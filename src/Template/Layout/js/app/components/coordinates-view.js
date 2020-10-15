@@ -9,7 +9,7 @@
 export default {
     template: `<div class="input text coordinates-content">
         <input type="hidden" name="coords" :value="pointValue" />
-        <input type="text" :value="value" @change="update($event.target.value)" />
+        <input placeholder="Latitude, Longitude" type="text" :value="value" @change="update($event.target.value)" />
     </div>`,
 
     props: {
