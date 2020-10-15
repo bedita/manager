@@ -37,7 +37,7 @@ class Control
         if (!in_array($type, Control::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
-        $method = Form::getMethod(Control::class, sprintf('%s', $type));
+        $method = Form::getMethod(Control::class, $type);
 
         return call_user_func_array($method, [$value, $schema]);
     }
