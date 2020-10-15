@@ -210,17 +210,14 @@ class Options
      */
     public static function coords($value): array
     {
-        $latitude = '';
-        $longitude = '';
-        if (!empty($value)) {
-            sscanf($value, 'POINT(%f %f)', $longitude, $latitude);
-        }
+        $label = sprintf('<label>%s</label>', __('Coordinates'));
+        $coordinatesView = sprintf('<coordinates-view coordinates="%s" />', $value);
 
         return [
             'type' => 'readonly',
             'class' => 'coordinates',
             'templates' => [
-                'inputContainer' => sprintf('<div class="input coordinates {{type}}{{required}}">{{content}}<coordinates-view latitude="%s" longitude="%s" /></div>', $latitude, $longitude),
+                'inputContainer' => sprintf('<div class="input coordinates {{type}}{{required}}">%s%s</div>', $label, $coordinatesView),
             ],
         ];
     }

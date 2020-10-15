@@ -7,10 +7,10 @@
  * Handle coordinates
  */
 export default {
-    template: `
-        <input type="hidden" name="coordinates" :value="pointValue" />
-        <input type="text" :value="value" />
-    `,
+    template: `<div class="input text coordinates-content">
+        <input type="hidden" name="coords" :value="pointValue" />
+        <input type="text" :value="value" @change="update($event.target.value)" />
+    </div>`,
 
     props: {
         coordinates: String,
@@ -18,8 +18,8 @@ export default {
 
     data() {
         return {
-            value: this.convertFromPoint(this.coordinates),
-        }
+            value: this.convertFromPoint(this.coordinates)
+        };
     },
 
     computed: {
@@ -47,6 +47,10 @@ export default {
             }
             let [lat, lon] = input.split(/\s*,\s*/);
             return `POINT(${lon} ${lat})`;
+        },
+
+        update(value) {
+            this.value = value;
         }
     },
-}
+};

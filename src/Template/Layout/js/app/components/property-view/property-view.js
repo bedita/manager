@@ -21,6 +21,7 @@ export default {
         MapView: () => import(/* webpackChunkName: "map-view" */'app/components/map-view'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         History: () => import(/* webpackChunkName: "history" */'app/components/history/history'),
+        CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
     },
 
     props: {

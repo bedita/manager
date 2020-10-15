@@ -29,7 +29,6 @@ class Form
      */
     public static function getMethod(string $className, string $name): array
     {
-        $class = new $className();
         $methodName = Inflector::variable(str_replace('-', '_', $name));
         $method = [$className, $methodName];
         if (is_callable($method)) {
