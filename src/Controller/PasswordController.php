@@ -102,7 +102,7 @@ class PasswordController extends AppController
             'login' => true,
         ];
         try {
-            $result = $this->apiClient->patch(
+            $result = (array)$this->apiClient->patch(
                 '/auth/change',
                 json_encode($data),
                 ['Content-Type' => 'application/json']
@@ -113,10 +113,7 @@ class PasswordController extends AppController
         }
 
         $tokens = $result['meta'];
-        $user = new \ArrayObject($result['data']
-            + compact('tokens')
-            + Hash::combine($result, 'included.{n}.attributes.name', 'included.{n}.id', 'included.{n}.type'));
-        $this->Authentication->setIdentity($user);
+        $this->apiClient->setupTokens($tokens);
         $this->set(compact('result'));
 
         return $this->redirect(['_name' => 'dashboard']);
