@@ -44,13 +44,13 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         v-cloak
         class="layout">
 
-        {% if not Layout.isLogin() %}
+        {% if not Layout.isLogin() and user %}
         <aside class="layout-sidebar">
             {% element 'Menu/sidebar' %}
         </aside>
         {% endif %}
 
-        {% if not Layout.isLogin() and not Layout.isDashboard() %}
+        {% if not Layout.isLogin() and not Layout.isDashboard() and user %}
             <header class="layout-header">
                 {% element 'Menu/menu' %}
             </header>
@@ -60,13 +60,13 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
             {{ _view.fetch('content')|raw }}
         </div>
 
-        {% if not Layout.isLogin() %}
+        {% if not Layout.isLogin() and user %}
         <div class="layout-footer">
             {% element 'Menu/colophon' %}
         </div>
         {% endif %}
 
-        {% if not Layout.isLogin() and not Layout.isDashboard() %}
+        {% if not Layout.isLogin() and not Layout.isDashboard() and user %}
             {% element 'Panel/panel' %}
         {% endif %}
 
