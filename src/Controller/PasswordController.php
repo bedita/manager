@@ -109,7 +109,8 @@ class PasswordController extends AppController
             );
         } catch (BEditaClientException $ex) {
             $this->Flash->error(__($ex->getMessage()));
-            $this->redirect(['_name' => 'password:reset']);
+
+            return $this->redirect(['_name' => 'password:reset']);
         }
 
         $tokens = $result['meta'];
