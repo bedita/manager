@@ -26,6 +26,7 @@ class PasswordController extends AppController
 {
     /**
      * {@inheritDoc}
+     * {@codeCoverageIgnore}
      */
     public function initialize(): void
     {
@@ -35,6 +36,7 @@ class PasswordController extends AppController
 
     /**
      * {@inheritDoc}
+     * {@codeCoverageIgnore}
      */
     public function beforeFilter(Event $event): ?Response
     {
