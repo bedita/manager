@@ -67,6 +67,24 @@ export default {
                     },
                 });
 
+                const allowAttributes = [
+                    'id',
+                    'name',
+                    'class',
+                    'style',
+                    'lang',
+                    'role',
+                    'aria-label',
+                ];
+
+                editor.model.schema.extend('$root', { allowAttributes } );
+                editor.model.schema.extend('$block', { allowAttributes } );
+                editor.model.schema.extend('$text', { allowAttributes });
+
+                for (let i = 0; i < allowAttributes.length; i++) {
+                    editor.conversion.attributeToAttribute({ model: allowAttributes[i], view: allowAttributes[i] });
+                }
+
                 let changing = false;
 
                 el.addEventListener('change', () => {
