@@ -1,40 +1,51 @@
+{% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
+
 <div class="relations-add">
-    <section v-show="isMedia" class="fieldset mb-1">
+    <section class="fieldset mb-1">
         <header class="mx-1 tab unselectable"
-            :class="showCreateObjectForm? 'open' : ''"
+            :class="showCreateObjectForm ? 'open' : ''"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
-
-            <h2><span v-show="relationName">{{ __('create new') }} <: relationName | humanize :></span> &nbsp;</h2>
+            <h2><span v-show="relationName">{{ __('create new') }} "<: relationName | humanize :></span>"&nbsp;</h2>
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <form name="create-object" :disabled="saving" @submit.prevent="createObject">
+            <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject" v-model="object">
                 {{ Form.control('upload_behavior', {
                     'type': 'hidden',
                     'v-bind:value': 'activeIndex == 1? `embed` : `file`'
                 }) | raw }}
                 {{ Form.unlockField('upload_behavior')}}
 
-                <div class="h-tabs">
-                    <ul>
-                        <li :class="getContentTabClass(0)"
-                            v-on:click="activeIndex = 0"><a>{{ __('Upload local file') }}</a></li>
-                        <li v-if="isEmbeddable()" :class="getContentTabClass(1)"
-                            v-on:click="activeIndex = 1"><a>{{ __('Embed online content') }}</a></li>
-                    </ul>
-                </div>
+                <section class="fieldset mb-1">
+                    <div class="container">
+                        <div class="select">
+                            <label for="related_object_type">{{ __('Type') }}</label>
+                            <select id="related_object_type" name="related_object_type" class="{{ selectBaseClasses }}" v-if="relationTypes">
+                                <option v-for="type in relationTypes.right"><: t(type) :></option>
+                            </select>
+                        </div>
 
-                <div class="input text">
-                    <label for="title">{{ __('Title') }}</label>
-                    <input type="text" name="title" id="title" :placeholder="titlePlaceholder" />
-                </div>
+                        {% set options = Schema.controlOptions(
+                            'status',
+                            object.attributes.status|default('draft'),
+                            schema.properties['status']
+                        ) %}
+                        {{ Form.control('status', options)|raw }}
 
-                <div class="h-tabs-contents">
+                        {% set options = Schema.controlOptions('title', '', schema.properties.title) %}
+                        {{ Form.control('title', options)|raw }}
+
+                        {% set options = Schema.controlOptions('description', '', schema.properties.description) %}
+                        {{ Form.control('description', options)|raw }}
+                    </div>
+                </section>
+
+                <div class="h-tabs-contents" v-show="isMedia">
                     <div class="h-tab" v-if="activeIndex == 0">
                         <div class="dropzone">
                             <div class="input file">
-                                <input type="file" name="file" id="file" class="drop-file" @change="processFile" />
+                                <input type="file" name="file" id="file" class="drop-file" />
                             </div>
                         </div>
                     </div>
@@ -48,7 +59,6 @@
                                 'autocorrect': 'off',
                                 'autocapitalize': 'off',
                                 'spellcheck': 'false',
-                                '@keyup': 'processUrl',
                                 'placeholder': __('Remote URL') }) | raw }}
                         </div>
                     </div>
@@ -61,7 +71,7 @@
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;<: relationName | humanize :></span> &nbsp;</h2>
+            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;"<: relationName | humanize :>"</span> &nbsp;</h2>
         </header>
 
         <div class="px-1 my-1">

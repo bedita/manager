@@ -155,15 +155,6 @@
 .main-panel-container .relations-add {
     @extend %relation-panel-common;
 
-    .create-new-object {
-        form > * {
-            margin-bottom: $gutter;
-            label {
-                margin-right: $gutter * .5;
-            }
-        }
-    }
-
     .related-item-column article {
         cursor: pointer;
 

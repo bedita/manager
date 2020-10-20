@@ -54,11 +54,13 @@ export default {
 
             // create object form data
             saving: false,
-            showCreateObjectForm: false,
             file: null,
             url: null,
-            objectType: '',
-            titlePlaceholder: '',
+            showCreateObjectForm: false,
+            object: {
+                object_type: '',
+                attributes: {},
+            },
 
             // handle tabs
             activeIndex: 0,
@@ -101,6 +103,19 @@ export default {
     },
 
     watch: {
+        relationTypes: {
+            immediate: true,
+            handler(newVal) {
+                console.log(newVal);
+                if (!newVal || !newVal.right) {
+                    this.object.object_type = null;
+                    return;
+                }
+
+                this.object.object_type = newVal.right[0];
+            },
+        },
+
         relationName: {
             immediate: true,
             handler(newVal, oldVal) {
@@ -202,18 +217,9 @@ export default {
             this.saving = true;
             this.loading = true;
 
-            const formData = new FormData(target);
-
-            // use file name if title is not provided
-            if (formData.get('title') === '') {
-                formData.set('title', this.titlePlaceholder);
-            }
-
-            formData.append('model-type', this.objectType);
-
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${this.objectType}/saveJson`;
+            const postUrl = `${baseUrl}/api/${this.object.object_type}`;
 
             const options = {
                 method: 'POST',
@@ -222,7 +228,9 @@ export default {
                     'accept': 'application/json',
                     'X-CSRF-Token': this.getCSFRToken(),
                 },
-                body: formData,
+                body: JSON.stringify({
+                    data: this.object,
+                }),
             };
 
             try {
@@ -298,96 +306,11 @@ export default {
          * clear form
          *
          * @param {HTMLElement} form create new object form
-         * @param {Boolean} showForm keep showing form (default = false)
          *
          * @return {void}
          */
-        resetForm(form, showForm = false) {
+        resetForm(form) {
             form.reset();
-            this.titlePlaceholder = 'title';
-            this.showCreateObjectForm = showForm;
-        },
-
-        /**
-         * set file, object type and placeholder
-         *
-         * @param {HTMLElement} target input file element
-         *
-         * @return {Boolean} file process success
-         */
-        processFile({ target }) {
-            this.file = target.files[0];
-            if (!this.file) {
-                return false;
-            }
-
-            this.objectType = this.getObjectType(this.file);
-            this.titlePlaceholder = this.file && this.file.name;
-
-            return true;
-        },
-
-        /**
-         * set object type for url upload
-         *
-         * @param {Event} event The event
-         *
-         * @return {void}
-         */
-        processUrl(event) {
-            if (event.target.value.length > 0) {
-                this.url = event.target.value;
-            } else {
-                this.url = null;
-            }
-            this.objectType = 'videos';
-        },
-
-        /**
-         * get BEobject type from file's mimetype
-         *
-         * @param {File} file
-         *
-         * @return {String} object type
-         */
-        getObjectType(file) {
-            let type = file.type && file.type.split('/')[0];
-            const hasPlural = /audio/g.test(type) ? '' : 's';
-
-            if (this.knownTypes.indexOf(type) === -1) {
-                type = 'file';
-            }
-            return `${type}${hasPlural}`;
-        },
-
-        /**
-         * Verify if right relation types are fine for url embed.
-         * Now only allowed type is 'videos' (and 'media')
-         *
-         * @return {Boolean}
-         */
-        isEmbeddable() {
-            // predefined relations like `children` don't have relationTypes
-            if (!this.relationTypes) {
-                return true;
-            }
-            const right = this.relationTypes.right || [];
-
-            return right.includes('videos') || right.includes('media');
-        },
-
-        /**
-         * Content tab class by index of tab clicked
-         *
-         * @param {Number} index The tab index
-         * @return {string}
-         */
-        getContentTabClass(index) {
-            if (this.activeIndex == index) {
-                return 'is-active';
-            }
-
-            return '';
         },
 
         /**

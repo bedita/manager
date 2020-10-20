@@ -1,0 +1,109 @@
+.object-form {
+    .fieldset > .tab-container,
+    .fieldset > .container {
+        padding: $gutter 0;
+
+        > div {
+            margin: $gutter 0;
+
+            &:first-child {
+                margin: 0;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
+            display: grid;
+            grid-gap: $gutter * 1.5 $gutter;
+
+            > div {
+                margin: 0;
+            }
+
+            .input.select select {
+                width: 100%;
+            }
+
+            .input.title, .input.textarea, .stream, .grid-span-full {
+                grid-column: 1/-1;
+            }
+        }
+
+        .create-media-box {
+            padding: $gutter * .5 $gutter $gutter * 1.25;
+            margin-bottom: $gutter * 1.5;
+            background-color: $gray-800;
+            border-radius: 4px;
+        }
+
+        #{$text-inputs}, textarea {
+            width: 100%;
+            background-color: $gray-200;
+        }
+
+        #{$text-inputs} {
+            &.input-narrow {
+                max-width: 4 * $gutter;
+            }
+        }
+
+        .select {
+            select {
+                min-width: 12 * $gutter;
+            }
+            label {
+                cursor: pointer;
+            }
+        }
+
+        label {
+            display: block;
+            flex: 1 0 100%;
+            line-height: $gutter * 1.75;
+        }
+
+        .stream {
+            display: flex;
+        }
+        .thumb {
+            background-color: $gray-400;
+            display: inline-block;
+            a {
+                display: block;
+                background-image: linear-gradient(45deg, $gray-300 25%, transparent 25%), linear-gradient(-45deg, $gray-300 25%, transparent 25%), linear-gradient(45deg, transparent 75%, $gray-300 75%), linear-gradient(-45deg, transparent 75%, $gray-300 75%);
+                background-size: 20px 20px;
+                background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+                img {
+                    display: block;
+                    max-width: 100%;
+                }
+            }
+        }
+
+        .embedded-container {
+            position: relative;
+            padding-bottom: 56.25%; // default 16/9
+            padding-top: 30px;
+            height: 0;
+            overflow: hidden;
+            iframe, object, embed {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .input.status {
+            display: flex;
+            flex-wrap: wrap;
+
+            label:not(:first-child) {
+                flex: 0 0 auto;
+                margin-right: $gutter;
+                cursor: pointer;
+            }
+        }
+    }
+}
