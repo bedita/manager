@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-20 10:00:59 \n"
+"POT-Creation-Date: 2020-10-20 13:20:13 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -100,6 +100,9 @@ msgstr "Clona"
 
 msgid "Close"
 msgstr "Chiudi"
+
+msgid "Confirm new password"
+msgstr "Conferma nuova password"
 
 msgid "Coordinates"
 msgstr "Coordinate"
@@ -245,6 +248,9 @@ msgstr "Avviso in importazione"
 msgid "Inherited properties"
 msgstr "Proprietà ereditate"
 
+msgid "Insert password twice"
+msgstr "Inserisci nuovamente la password"
+
 msgid "Invalid username or password"
 msgstr "Username o password non validi"
 
@@ -307,6 +313,9 @@ msgstr "Nuova voce in"
 
 msgid "New object in"
 msgstr "Nuovo oggetto in"
+
+msgid "New password"
+msgstr "Nuova password"
 
 msgid "News"
 msgstr "Novità"
@@ -470,7 +479,8 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "Submit your email address and follow the instructions sent by email."
-msgstr "Invia il tuo indirizzo e-mail e segui le istruzioni inviate tramite e-mail."
+msgstr ""
+"Invia il tuo indirizzo e-mail e segui le istruzioni inviate tramite e-mail."
 
 msgid "System users"
 msgstr "Utenti di sistema"
@@ -570,6 +580,9 @@ msgstr "Sì"
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
+
+msgid "You have requested a password change, please provide a new password"
+msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"

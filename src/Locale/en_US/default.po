@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-20 10:00:59 \n"
+"POT-Creation-Date: 2020-10-20 13:20:13 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -99,6 +99,9 @@ msgid "Clone"
 msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "Confirm new password"
 msgstr ""
 
 msgid "Coordinates"
@@ -245,6 +248,9 @@ msgstr ""
 msgid "Inherited properties"
 msgstr ""
 
+msgid "Insert password twice"
+msgstr ""
+
 msgid "Invalid username or password"
 msgstr ""
 
@@ -306,6 +312,9 @@ msgid "New entry in"
 msgstr ""
 
 msgid "New object in"
+msgstr ""
+
+msgid "New password"
 msgstr ""
 
 msgid "News"
@@ -567,6 +576,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "You are not authorized to access that location."
+msgstr ""
+
+msgid "You have requested a password change, please provide a new password"
 msgstr ""
 
 msgid "add objects"
