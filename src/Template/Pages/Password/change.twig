@@ -1,0 +1,29 @@
+<div>
+    <h1>{{ __('Change password') }}</h1>
+    <p>{{ __('You have requested a password change, please provide a new password') }}.</p>
+</div>
+
+{{ Form.create(null, {'url': {'_name': 'password:change'}})|raw }}
+
+    {{ Form.control('uuid', {'type': 'hidden', 'value': uuid})|raw }}
+
+    <div>
+        <label>{{ __('New password') }}</label>
+        <div>
+            {{ Form.password('password', {'placeholder': '••••••'})|raw }}
+        </div>
+        <p class="help">{{ __('Insert password twice') }}.</p>
+    </div>
+
+    <div>
+        <label>{{ __('Confirm new password') }}</label>
+        <div>
+            {{ Form.password('checkpassword', {'placeholder': '••••••'})|raw }}
+        </div>
+    </div>
+
+    <div>
+        {{ Form.button(__('Change password'), {'type': 'submit'})|raw }}
+    </div>
+
+{{ Form.end()|raw }}
