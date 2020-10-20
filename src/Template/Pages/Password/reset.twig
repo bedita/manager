@@ -1,4 +1,4 @@
-<div class="content">
+<div>
     <h1>{{ __('Password reset') }}</h1>
     <p>{{ __('Submit your email address and follow the instructions sent by email.') }}</p>
 </div>
@@ -7,9 +7,9 @@
     'url': {'_name': 'password:reset'},
 })|raw }}
 
-<div class="field">
-    <label class="label">{{ __('Email') }}</label>
-    <div class="control has-icons-left">
+<div>
+    <label>{{ __('Email') }}</label>
+    <div>
         {{ Form.text('email', {
             'autocomplete': 'email',
             'autocorrect': 'off',
@@ -18,20 +18,9 @@
             'placeholder': 'e.g. john@example.com',
             'class': 'input',
         })|raw }}
-
-        <span class="icon is-small is-left">
-            <i class="fas fa-envelope"></i>
-        </span>
     </div>
 </div>
 
-<div class="field">
-    <div class="control">
-        {{ Form.button(__('Request password reset'), {
-            'type': 'submit',
-            'class': 'button is-info',
-        })|raw }}
-    </div>
-</div>
+{{ Form.button(__('Request password reset'), {'type': 'submit'})|raw }}
 
 {{ Form.end()|raw }}
