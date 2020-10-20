@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-13 07:23:24 \n"
+"POT-Creation-Date: 2020-10-20 10:00:59 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -101,6 +101,9 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+msgid "Coordinates"
+msgstr ""
+
 msgid "Core properties"
 msgstr ""
 
@@ -150,6 +153,9 @@ msgid "Edit"
 msgstr ""
 
 msgid "Edit params"
+msgstr ""
+
+msgid "Email"
 msgstr ""
 
 msgid "Embed online content"
@@ -204,6 +210,9 @@ msgid "Files"
 msgstr ""
 
 msgid "Folders"
+msgstr ""
+
+msgid "Forgot your password?"
 msgstr ""
 
 msgid "From"
@@ -365,10 +374,19 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+msgid "Password reset"
+msgstr ""
+
+msgid "Password reset request sent"
+msgstr ""
+
 msgid "Permanently delete"
 msgstr ""
 
 msgid "Pick"
+msgstr ""
+
+msgid "Please check your mailbox and follow the instructions"
 msgstr ""
 
 msgid "Please provide a Mapbox access token in app configuration"
@@ -402,6 +420,9 @@ msgid "Remote URL"
 msgstr ""
 
 msgid "Remove"
+msgstr ""
+
+msgid "Request password reset"
 msgstr ""
 
 msgid "Reset filters"
@@ -446,6 +467,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Submit your email address and follow the instructions sent by email."
+msgstr ""
+
 msgid "System users"
 msgstr ""
 
@@ -468,15 +492,6 @@ msgid "Thumbnail is not ready"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "Lat long Coordinates"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "GET"
 msgstr ""
 
 msgid "To"
@@ -638,20 +653,24 @@ msgstr ""
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:152
+#: src/Template/Layout/js/app/app.js:156
 #: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:466
+#: src/Template/Layout/js/app/app.js:470
 msgid "If you confirm, this data will be gone forever"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:468
+#: src/Template/Layout/js/app/app.js:472
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:488
 msgid "There are unsaved changes, are you sure you want to leave page?"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/locations-view/locations-view.js:84
+msgid "Lat long Coordinates"
 msgstr ""
