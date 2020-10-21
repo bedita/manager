@@ -62,7 +62,7 @@ export default {
                     items = [items];
                 }
 
-                const editor = await ClassicEditor.create(element, {
+                const editor = element.editor = await ClassicEditor.create(element, {
                     plugins: Object.values(plugins),
                     toolbar: {
                         shouldNotGroupWhenFull: true,
@@ -120,6 +120,17 @@ export default {
                     }));
                     changing = false;
                 });
+            },
+
+            update(element) {
+                const editor = element.editor;
+                if (!editor) {
+                    return;
+                }
+
+                if (element.value !== editor.getData()) {
+                    editor.setData(element.value);
+                }
             },
         })
     }

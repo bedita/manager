@@ -16,6 +16,13 @@ import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 import sleep from 'sleep-promise';
 
+const createData = (type = '') => ({
+    type,
+    attributes: {
+        status: 'draft',
+    },
+});
+
 export default {
     mixins: [ PaginatedContentMixin, DragdropMixin ],
 
@@ -57,15 +64,7 @@ export default {
             file: null,
             url: null,
             showCreateObjectForm: false,
-            object: {
-                type: '',
-                attributes: {
-                    status: 'draft',
-                },
-            },
-
-            // handle tabs
-            activeIndex: 0,
+            object: createData(),
         };
     },
 
@@ -209,8 +208,8 @@ export default {
          *
          * @return {void}
          */
-        async createObject({ target }) {
-            if (!target) {
+        async createObject(event) {
+            if (!event.target) {
                 // form element might be tempered
                 return;
             }
@@ -226,6 +225,14 @@ export default {
             formData.append('model-type', this.object.type);
             for (let attr in this.object.attributes) {
                 formData.set(attr, this.object.attributes[attr]);
+            }
+
+            if (this.file) {
+                formData.set('file', this.file);
+            }
+
+            if (this.url) {
+                formData.set('url', this.url);
             }
 
             const options = {
@@ -247,7 +254,7 @@ export default {
                 // add newly added object to list / selected
                 this.objects = createdObjects.concat(this.objects);
                 this.selectedObjects = createdObjects.concat(this.selectedObjects);
-                this.resetForm(target);
+                this.resetForm(event);
             } catch (error) {
                 // need a modal to better handling of errors
                 if (error.code === 20) {
@@ -256,7 +263,7 @@ export default {
                     alert('Error while uploading/creating new object. Retry');
                     console.error(error);
                 }
-                this.resetForm(target, true);
+                this.resetForm(event);
             } finally {
                 this.saving = false;
                 this.loading = false;
@@ -309,13 +316,14 @@ export default {
 
         /**
          * clear form
-         *
-         * @param {HTMLElement} form create new object form
-         *
          * @return {void}
          */
-        resetForm(form) {
-            form.reset();
+        resetForm(event) {
+            event.preventDefault();
+
+            this.file = null;
+            this.url = null;
+            this.object = createData(this.relationTypes && this.relationTypes.right[0]);
         },
 
         /**
@@ -404,6 +412,22 @@ export default {
          */
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
+        },
+
+        /**
+         * set file, object type and placeholder
+         *
+         * @param {Event} event input file change event
+         */
+        processFile(event) {
+            this.file = event.target.files[0];
+            if (!this.file) {
+                return false;
+            }
+
+            if (!this.object.attributes.title) {
+                this.object.attributes.title = this.file.name;
+            }
         },
     },
 };

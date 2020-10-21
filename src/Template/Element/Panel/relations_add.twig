@@ -12,8 +12,14 @@
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
             <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject">
                 {{ Form.control('upload_behavior', {
+                    'id': 'url_behavior',
                     'type': 'hidden',
-                    'v-bind:value': 'activeIndex == 1? `embed` : `file`'
+                    'v-bind:value': 'url'
+                }) | raw }}
+                {{ Form.control('upload_behavior', {
+                    'id': 'file_behavior',
+                    'type': 'hidden',
+                    'v-bind:value': 'file'
                 }) | raw }}
                 {{ Form.unlockField('upload_behavior')}}
 
@@ -48,22 +54,16 @@
                         {{ Form.control('description', options + {
                             'v-model': 'object.attributes.description'
                         })|raw }}
-                    </div>
-                </section>
 
-                <div class="h-tabs-contents" v-show="isMedia">
-                    <div class="h-tab" v-if="activeIndex == 0">
-                        <div class="dropzone">
-                            <div class="input file">
-                                <input type="file" name="file" id="file" class="drop-file" />
-                            </div>
+                        <div class="input text" v-if="isMedia">
+                            <label for="file">{{ __('File') }}</label>
+                            <input type="file" name="file" v-on:change="processFile" id="file" class="drop-file" />
                         </div>
-                    </div>
-                    <div class="h-tab" v-if="activeIndex == 1">
-                        <div class="input text">
-                            <label for="remote_url">{{ __('Video') }}</label>
+                        <div class="input text" v-if="isMedia">
+                            <label for="remote_url">{{ __('Url') }}</label>
                             {{ Form.text('remote_url', {
                                 'id': 'remote_url',
+                                'v-model': 'url',
                                 'type': 'text',
                                 'autocomplete': 'off',
                                 'autocorrect': 'off',
@@ -72,9 +72,9 @@
                                 'placeholder': __('Remote URL') }) | raw }}
                         </div>
                     </div>
-                </div>
-
-                <button :disabled="!object.attributes.title && !object.attributes.description && !file" type="submit">{{ __('create') }}</button>
+                </section>
+                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" type="submit">{{ __('create') }}</button>
+                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="resetForm">{{ __('reset') }}</button>
             </form>
         </div>
     </section>
