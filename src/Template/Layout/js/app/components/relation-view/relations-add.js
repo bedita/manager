@@ -80,15 +80,11 @@ export default {
          */
         isMedia() {
             // predefined relations like `children` don't have relationTyps
-            if (!this.relationTypes) {
+            if (!this.object) {
                 return true;
             }
-            const right = this.relationTypes.right || [];
-            // actual types should be read from API
-            const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
-            const intersection = right.filter(x => mediaTypes.includes(x));
 
-            return (intersection.length > 0);
+            return ['media', 'audio', 'files', 'images', 'videos'].indexOf(this.object.type) !== -1;
         },
     },
 
