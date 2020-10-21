@@ -58,8 +58,10 @@ export default {
             url: null,
             showCreateObjectForm: false,
             object: {
-                object_type: '',
-                attributes: {},
+                type: '',
+                attributes: {
+                    status: 'draft',
+                },
             },
 
             // handle tabs
@@ -106,13 +108,12 @@ export default {
         relationTypes: {
             immediate: true,
             handler(newVal) {
-                console.log(newVal);
                 if (!newVal || !newVal.right) {
-                    this.object.object_type = null;
+                    this.object.type = null;
                     return;
                 }
 
-                this.object.object_type = newVal.right[0];
+                this.object.type = newVal.right[0];
             },
         },
 
@@ -219,7 +220,13 @@ export default {
 
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/api/${this.object.object_type}`;
+            const postUrl = `${baseUrl}/${this.object.type}/saveJson`;
+
+            const formData = new FormData();
+            formData.append('model-type', this.object.type);
+            for (let attr in this.object.attributes) {
+                formData.set(attr, this.object.attributes[attr]);
+            }
 
             const options = {
                 method: 'POST',
@@ -228,9 +235,7 @@ export default {
                     'accept': 'application/json',
                     'X-CSRF-Token': this.getCSFRToken(),
                 },
-                body: JSON.stringify({
-                    data: this.object,
-                }),
+                body: formData,
             };
 
             try {

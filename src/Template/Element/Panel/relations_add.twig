@@ -10,7 +10,7 @@
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject" v-model="object">
+            <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject">
                 {{ Form.control('upload_behavior', {
                     'type': 'hidden',
                     'v-bind:value': 'activeIndex == 1? `embed` : `file`'
@@ -21,7 +21,11 @@
                     <div class="container">
                         <div class="select">
                             <label for="related_object_type">{{ __('Type') }}</label>
-                            <select id="related_object_type" name="related_object_type" class="{{ selectBaseClasses }}" v-if="relationTypes">
+                            <select id="related_object_type"
+                                name="related_object_type"
+                                class="{{ selectBaseClasses }}"
+                                v-if="relationTypes"
+                                v-model="object.type">
                                 <option v-for="type in relationTypes.right"><: t(type) :></option>
                             </select>
                         </div>
@@ -31,13 +35,19 @@
                             object.attributes.status|default('draft'),
                             schema.properties['status']
                         ) %}
-                        {{ Form.control('status', options)|raw }}
+                        {{ Form.control('status', options + {
+                            'v-model': 'object.attributes.status'
+                        })|raw }}
 
                         {% set options = Schema.controlOptions('title', '', schema.properties.title) %}
-                        {{ Form.control('title', options)|raw }}
+                        {{ Form.control('title', options + {
+                            'v-model': 'object.attributes.title'
+                        })|raw }}
 
                         {% set options = Schema.controlOptions('description', '', schema.properties.description) %}
-                        {{ Form.control('description', options)|raw }}
+                        {{ Form.control('description', options + {
+                            'v-model': 'object.attributes.description'
+                        })|raw }}
                     </div>
                 </section>
 
@@ -64,7 +74,7 @@
                     </div>
                 </div>
 
-                <button :disabled="this.file === null && this.url === null" type="submit">{{ __('create') }}</button>
+                <button :disabled="!object.attributes.title && !object.attributes.description && !file" type="submit">{{ __('create') }}</button>
             </form>
         </div>
     </section>

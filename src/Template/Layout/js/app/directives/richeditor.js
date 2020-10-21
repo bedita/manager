@@ -26,6 +26,13 @@ const DEFAULT_TOOLBAR = [
     'editSource',
 ];
 
+const emit = (vnode, name, data) => {
+    let handlers = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
+    if (handlers && handlers[name]) {
+        handlers[name].fns(data);
+    }
+};
+
 /**
  *
  * v-richeditor directive to activate ckeditor on element
@@ -34,12 +41,18 @@ const DEFAULT_TOOLBAR = [
 export default {
     install(Vue) {
         Vue.directive('richeditor', {
+            bind(element, binding, vnode) {
+                element.addEventListener('change', (event) => {
+                    emit(vnode, 'input', event);
+                });
+            },
+
             /**
              * dynamic load richtext-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */
-            async inserted(el, binding) {
+            async inserted(element, binding, vnode) {
                 const { ClassicEditor, ...plugins } = await import(/* webpackChunkName: "ckeditor" */'app/lib/ckeditor');
 
                 let items = JSON.parse(binding.expression || '');
@@ -49,7 +62,7 @@ export default {
                     items = [items];
                 }
 
-                const editor = await ClassicEditor.create(el, {
+                const editor = await ClassicEditor.create(element, {
                     plugins: Object.values(plugins),
                     toolbar: {
                         shouldNotGroupWhenFull: true,
@@ -87,22 +100,23 @@ export default {
 
                 let changing = false;
 
-                el.addEventListener('change', () => {
-                    if (!changing && el.value !== editor.getData()) {
-                        editor.setData(el.value);
+                element.addEventListener('change', () => {
+                    if (!changing && element.value !== editor.getData()) {
+                        editor.setData(element.value);
                     }
                 });
 
                 editor.model.document.on('change:data', () => {
-                    let isChanged = el.value !== el.dataset.originalValue;
+                    let isChanged = element.value !== element.dataset.originalValue;
 
                     changing = true;
-                    el.dispatchEvent(new CustomEvent('change', {
+                    element.value = editor.getData();
+                    element.dispatchEvent(new CustomEvent('change', {
                         bubbles: true,
                         detail: {
-                            id: el.id,
+                            id: element.id,
                             isChanged,
-                        }
+                        },
                     }));
                     changing = false;
                 });
