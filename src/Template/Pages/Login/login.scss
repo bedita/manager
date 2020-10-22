@@ -43,7 +43,7 @@ body.view-login {
                     width: 240px;
                 }
 
-                label {
+                p.help > a, label {
                     font-size: 11px;
                     color: $gray-550;
                     font-weight: normal;
