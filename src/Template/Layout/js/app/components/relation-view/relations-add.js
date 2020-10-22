@@ -16,6 +16,13 @@ import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 import sleep from 'sleep-promise';
 
+const createData = (type = '') => ({
+    type,
+    attributes: {
+        status: 'draft',
+    },
+});
+
 export default {
     mixins: [ PaginatedContentMixin, DragdropMixin ],
 
@@ -54,14 +61,10 @@ export default {
 
             // create object form data
             saving: false,
-            showCreateObjectForm: false,
             file: null,
             url: null,
-            objectType: '',
-            titlePlaceholder: '',
-
-            // handle tabs
-            activeIndex: 0,
+            showCreateObjectForm: false,
+            object: createData(),
         };
     },
 
@@ -77,15 +80,11 @@ export default {
          */
         isMedia() {
             // predefined relations like `children` don't have relationTyps
-            if (!this.relationTypes) {
+            if (!this.object) {
                 return true;
             }
-            const right = this.relationTypes.right || [];
-            // actual types should be read from API
-            const mediaTypes = ['media', 'audio', 'files', 'images', 'videos'];
-            const intersection = right.filter(x => mediaTypes.includes(x));
 
-            return (intersection.length > 0);
+            return ['media', 'audio', 'files', 'images', 'videos'].indexOf(this.object.type) !== -1;
         },
     },
 
@@ -101,6 +100,18 @@ export default {
     },
 
     watch: {
+        relationTypes: {
+            immediate: true,
+            handler(newVal) {
+                if (!newVal || !newVal.right) {
+                    this.object.type = null;
+                    return;
+                }
+
+                this.object.type = newVal.right[0];
+            },
+        },
+
         relationName: {
             immediate: true,
             handler(newVal, oldVal) {
@@ -193,8 +204,8 @@ export default {
          *
          * @return {void}
          */
-        async createObject({ target }) {
-            if (!target) {
+        async createObject(event) {
+            if (!event.target) {
                 // form element might be tempered
                 return;
             }
@@ -202,18 +213,23 @@ export default {
             this.saving = true;
             this.loading = true;
 
-            const formData = new FormData(target);
-
-            // use file name if title is not provided
-            if (formData.get('title') === '') {
-                formData.set('title', this.titlePlaceholder);
-            }
-
-            formData.append('model-type', this.objectType);
-
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${this.objectType}/saveJson`;
+            const postUrl = `${baseUrl}/${this.object.type}/saveJson`;
+
+            const formData = new FormData();
+            formData.append('model-type', this.object.type);
+            for (let attr in this.object.attributes) {
+                formData.set(attr, this.object.attributes[attr]);
+            }
+
+            if (this.file) {
+                formData.set('file', this.file);
+            }
+
+            if (this.url) {
+                formData.set('url', this.url);
+            }
 
             const options = {
                 method: 'POST',
@@ -234,7 +250,7 @@ export default {
                 // add newly added object to list / selected
                 this.objects = createdObjects.concat(this.objects);
                 this.selectedObjects = createdObjects.concat(this.selectedObjects);
-                this.resetForm(target);
+                this.resetForm(event);
             } catch (error) {
                 // need a modal to better handling of errors
                 if (error.code === 20) {
@@ -243,7 +259,7 @@ export default {
                     alert('Error while uploading/creating new object. Retry');
                     console.error(error);
                 }
-                this.resetForm(target, true);
+                this.resetForm(event);
             } finally {
                 this.saving = false;
                 this.loading = false;
@@ -296,98 +312,14 @@ export default {
 
         /**
          * clear form
-         *
-         * @param {HTMLElement} form create new object form
-         * @param {Boolean} showForm keep showing form (default = false)
-         *
          * @return {void}
          */
-        resetForm(form, showForm = false) {
-            form.reset();
-            this.titlePlaceholder = 'title';
-            this.showCreateObjectForm = showForm;
-        },
+        resetForm(event) {
+            event.preventDefault();
 
-        /**
-         * set file, object type and placeholder
-         *
-         * @param {HTMLElement} target input file element
-         *
-         * @return {Boolean} file process success
-         */
-        processFile({ target }) {
-            this.file = target.files[0];
-            if (!this.file) {
-                return false;
-            }
-
-            this.objectType = this.getObjectType(this.file);
-            this.titlePlaceholder = this.file && this.file.name;
-
-            return true;
-        },
-
-        /**
-         * set object type for url upload
-         *
-         * @param {Event} event The event
-         *
-         * @return {void}
-         */
-        processUrl(event) {
-            if (event.target.value.length > 0) {
-                this.url = event.target.value;
-            } else {
-                this.url = null;
-            }
-            this.objectType = 'videos';
-        },
-
-        /**
-         * get BEobject type from file's mimetype
-         *
-         * @param {File} file
-         *
-         * @return {String} object type
-         */
-        getObjectType(file) {
-            let type = file.type && file.type.split('/')[0];
-            const hasPlural = /audio/g.test(type) ? '' : 's';
-
-            if (this.knownTypes.indexOf(type) === -1) {
-                type = 'file';
-            }
-            return `${type}${hasPlural}`;
-        },
-
-        /**
-         * Verify if right relation types are fine for url embed.
-         * Now only allowed type is 'videos' (and 'media')
-         *
-         * @return {Boolean}
-         */
-        isEmbeddable() {
-            // predefined relations like `children` don't have relationTypes
-            if (!this.relationTypes) {
-                return true;
-            }
-            const right = this.relationTypes.right || [];
-
-            return right.includes('videos') || right.includes('media');
-        },
-
-        /**
-         * Content tab class by index of tab clicked
-         *
-         * @param {Number} index The tab index
-         * @return {string}
-         */
-        getContentTabClass(index) {
-            if (this.activeIndex == index) {
-                return 'is-active';
-            }
-
-            return '';
+            this.file = null;
+            this.url = null;
+            this.object = createData(this.relationTypes && this.relationTypes.right[0]);
         },
 
         /**
@@ -476,6 +408,22 @@ export default {
          */
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
+        },
+
+        /**
+         * set file, object type and placeholder
+         *
+         * @param {Event} event input file change event
+         */
+        processFile(event) {
+            this.file = event.target.files[0];
+            if (!this.file) {
+                return false;
+            }
+
+            if (!this.object.attributes.title) {
+                this.object.attributes.title = this.file.name;
+            }
         },
     },
 };
