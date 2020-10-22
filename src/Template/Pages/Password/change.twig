@@ -1,4 +1,4 @@
-<div>
+<div class="mb-1">
     <h1>{{ __('Change password') }}</h1>
     <p>{{ __('You have requested a password change, please provide a new password') }}.</p>
 </div>
@@ -7,15 +7,14 @@
 
     {{ Form.control('uuid', {'type': 'hidden', 'value': uuid})|raw }}
 
-    <div>
+    <div class="mb-1">
         <label>{{ __('New password') }}</label>
         <div>
             {{ Form.password('password', {'placeholder': '••••••'})|raw }}
         </div>
-        <p class="help">{{ __('Insert password twice') }}.</p>
     </div>
 
-    <div>
+    <div class="mb-1">
         <label>{{ __('Confirm new password') }}</label>
         <div>
             {{ Form.password('checkpassword', {'placeholder': '••••••'})|raw }}

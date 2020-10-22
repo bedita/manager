@@ -1,4 +1,4 @@
-<div>
+<div class="mb-1">
     <h1>{{ __('Password reset') }}</h1>
     <p>{{ __('Submit your email address and follow the instructions sent by email.') }}</p>
 </div>
@@ -7,10 +7,11 @@
     'url': {'_name': 'password:reset'},
 })|raw }}
 
-<div>
-    <label>{{ __('Email') }}</label>
+<div class="mb-1">
+    <label for="email">{{ __('Email') }}</label>
     <div>
         {{ Form.text('email', {
+            'id': 'email',
             'autocomplete': 'email',
             'autocorrect': 'off',
             'autocapitalize': 'off',
