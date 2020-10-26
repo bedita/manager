@@ -14,6 +14,7 @@ import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
+import Autocomplete from '@trevoreyre/autocomplete-vue';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -23,6 +24,7 @@ const _vueInstance = new Vue({
 
     components: {
         PanelView,
+        Autocomplete,
         Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
@@ -40,6 +42,7 @@ const _vueInstance = new Vue({
         FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
+        CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
     },
 
     data() {
@@ -89,6 +92,7 @@ const _vueInstance = new Vue({
         // Register helpers
         Vue.use(viewHelper);
         Vue.use(autoTranslation);
+        Vue.use(Autocomplete);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();

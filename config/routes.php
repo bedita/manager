@@ -45,6 +45,18 @@ Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
 
+    // Reset & change password
+    $routes->connect(
+        '/login/reset',
+        ['controller' => 'Password', 'action' => 'reset'],
+        ['_name' => 'password:reset']
+    );
+    $routes->connect(
+        '/login/change',
+        ['controller' => 'Password', 'action' => 'change'],
+        ['_name' => 'password:change']
+    );
+
     // Login.
     $routes->connect(
         '/login',

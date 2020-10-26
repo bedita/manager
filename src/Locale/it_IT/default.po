@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-07 11:05:02 \n"
+"POT-Creation-Date: 2020-10-20 13:20:13 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -101,6 +101,12 @@ msgstr "Clona"
 msgid "Close"
 msgstr "Chiudi"
 
+msgid "Confirm new password"
+msgstr "Conferma nuova password"
+
+msgid "Coordinates"
+msgstr "Coordinate"
+
 msgid "Core properties"
 msgstr "Proprietà principali"
 
@@ -151,6 +157,9 @@ msgstr "Modifica"
 
 msgid "Edit params"
 msgstr "Modifica parametri"
+
+msgid "Email"
+msgstr "E-mail"
 
 msgid "Embed online content"
 msgstr "Incorpora contenuti online"
@@ -206,6 +215,9 @@ msgstr "File"
 msgid "Folders"
 msgstr "Cartelle"
 
+msgid "Forgot your password?"
+msgstr "Hai dimenticato la password?"
+
 msgid "From"
 msgstr "Da"
 
@@ -235,6 +247,9 @@ msgstr "Avviso in importazione"
 
 msgid "Inherited properties"
 msgstr "Proprietà ereditate"
+
+msgid "Insert password twice"
+msgstr "Inserisci nuovamente la password"
 
 msgid "Invalid username or password"
 msgstr "Username o password non validi"
@@ -298,6 +313,9 @@ msgstr "Nuova voce in"
 
 msgid "New object in"
 msgstr "Nuovo oggetto in"
+
+msgid "New password"
+msgstr "Nuova password"
 
 msgid "News"
 msgstr "Novità"
@@ -365,11 +383,20 @@ msgstr "Altro"
 msgid "Password"
 msgstr ""
 
+msgid "Password reset"
+msgstr "Reimposta password"
+
+msgid "Password reset request sent"
+msgstr "Richiesta di reimpostazione password inviata"
+
 msgid "Permanently delete"
 msgstr "Elimina definitivamente"
 
 msgid "Pick"
 msgstr "Scegli"
+
+msgid "Please check your mailbox and follow the instructions"
+msgstr "Controlla la tua casella di posta e segui le istruzioni"
 
 msgid "Please provide a Mapbox access token in app configuration"
 msgstr ""
@@ -405,6 +432,9 @@ msgstr "Indirizzo remoto"
 
 msgid "Remove"
 msgstr "Rimuovi"
+
+msgid "Request password reset"
+msgstr "Reimposta password"
 
 msgid "Reset filters"
 msgstr "Reset filtri"
@@ -448,11 +478,18 @@ msgstr "Dimensione"
 msgid "Status"
 msgstr "Stato"
 
+msgid "Submit your email address and follow the instructions sent by email."
+msgstr ""
+"Invia il tuo indirizzo e-mail e segui le istruzioni inviate tramite e-mail."
+
 msgid "System users"
 msgstr "Utenti di sistema"
 
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
+
+msgid "The main language is"
+msgstr "La lingua principale è"
 
 msgid "The thumbnail is not available"
 msgstr "La miniatura non è disponibile"
@@ -544,6 +581,9 @@ msgstr "Sì"
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
+msgid "You have requested a password change, please provide a new password"
+msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
+
 msgid "add objects"
 msgstr "aggiungi oggetti"
 
@@ -628,39 +668,43 @@ msgstr "visualizza genitore"
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:152
+#: src/Template/Layout/js/app/app.js:156
 #: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#: src/Template/Layout/js/app/app.js:466
+#: src/Template/Layout/js/app/app.js:470
 msgid "If you confirm, this data will be gone forever"
 msgstr "Se confermi, questo dato verrà eliminato definitivamente"
 
-#: src/Template/Layout/js/app/app.js:468
+#: src/Template/Layout/js/app/app.js:472
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:488
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
-msgid "by"
-msgstr "di"
+#: src/Template/Layout/js/app/components/locations-view/locations-view.js:84
+msgid "Lat long Coordinates"
+msgstr "Coordinate Lat Long"
 
-msgid "version by"
-msgstr "versione di"
+#~ msgid "by"
+#~ msgstr "di"
 
-msgid "on"
-msgstr "del"
+#~ msgid "version by"
+#~ msgstr "versione di"
 
-msgid ""
-"Restored data will replace current data (you can still check the data "
-"before saving). Are you sure?"
-msgstr ""
-"I dati recuperati sostiruiranno quelli attuali (potrai comunque "
-"controllarli prima di salvare). Vuoi continuare?"
+#~ msgid "on"
+#~ msgstr "del"
+
+#~ msgid ""
+#~ "Restored data will replace current data (you can still check the data "
+#~ "before saving). Are you sure?"
+#~ msgstr ""
+#~ "I dati recuperati sostiruiranno quelli attuali (potrai comunque "
+#~ "controllarli prima di salvare). Vuoi continuare?"
 
 #~ msgid "Download"
 #~ msgstr "Scarica"

@@ -16,6 +16,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
+use App\Test\TestCase\Controller\AppControllerTest;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -23,6 +24,7 @@ use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -38,6 +40,11 @@ class MyModulesComponent extends ModulesComponent
     protected function oEmbedMeta(string $url): ?array
     {
         return $this->meta;
+    }
+
+    public function objectTypes(?bool $abstract = null): array
+    {
+        return ['mices', 'elefants', 'cats', 'dogs'];
     }
 }
 
@@ -75,6 +82,7 @@ class ModulesComponentTest extends TestCase
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
+        $this->MyModules = $registry->load(MyModulesComponent::class);
     }
 
     /**
@@ -252,6 +260,7 @@ class ModulesComponentTest extends TestCase
                     'documents',
                     'events',
                     'news',
+                    'links',
                     'locations',
                     'images',
                     'videos',
@@ -259,6 +268,7 @@ class ModulesComponentTest extends TestCase
                     'files',
                     'users',
                     'profiles',
+                    'publications',
                 ],
                 false,
             ],
@@ -1149,5 +1159,231 @@ class ModulesComponentTest extends TestCase
         static::assertEquals(['media'], $types);
         $types = $this->Modules->relatedTypes($schema, 'media_of');
         static::assertEquals(['documents'], $types);
+    }
+
+    /**
+     * Provider for `testRelationsSchema`.
+     *
+     * @return array
+     */
+    public function relationsSchemaProvider(): array
+    {
+        return [
+            'empty data' => [
+                [], // schema
+                [], // relationships
+                [], // expected
+            ],
+            'no right data' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                    ],
+                ], // expected
+            ],
+            'full example' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['objects'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [],
+                    'loves' => [],
+                ], // relationships
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['cats', 'dogs', 'elefants', 'mices'],
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `relationsSchema` method
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider relationsSchemaProvider()
+     * @covers ::relationsSchema()
+     */
+    public function testRelationsSchema(array $schema, array $relationships, array $expected): void
+    {
+        // call private method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for testSaveObjects
+     *
+     * @return array
+     */
+    public function saveObjectsProvider(): array
+    {
+        return [
+            'empty data' => [
+                [], // objects
+                [], // expected
+            ],
+            'empty attributes' => [
+                [['attributes' => []]], // objects
+                [['attributes' => []]], // expected
+            ],
+            'full example' => [
+                [
+                    [
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title dummy one',
+                            'status' => 'on',
+                            'something-empty' => '',
+                            'something-not-empty' => 'not empty',
+                        ],
+                    ],
+                    [
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title dummy two',
+                            'status' => 'on',
+                            'something-empty' => '',
+                            'something-not-empty' => 'not empty',
+                        ],
+                    ],
+                ], // objects
+                [
+                    [
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title dummy one',
+                            'status' => 'on',
+                            'something-empty' => '',
+                            'something-not-empty' => 'not empty',
+                        ],
+                    ],
+                    [
+                        'type' => 'documents',
+                        'attributes' => [
+                            'title dummy two',
+                            'status' => 'on',
+                            'something-empty' => '',
+                            'something-not-empty' => 'not empty',
+                        ],
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `saveObjects`
+     *
+     * @param array $objects The test objects
+     * @param array $expected The expected data
+     * @return void
+     * @dataProvider saveObjectsProvider
+     * @covers ::saveObjects()
+     * @covers ::saveObject()
+     */
+    public function testSaveObjects(array $objects, array $expected): void
+    {
+        $this->setupApi();
+        $this->Modules->saveObjects($objects);
+        foreach ($expected as $index => &$exp) {
+            if (!empty($exp['attributes'])) {
+                $object = $objects[$index];
+                static::assertArrayHasKey('id', $object);
+                static::assertNotNull($object['id']);
+                $exp['id'] = $object['id'];
+            }
+        }
+        static::assertEquals($expected, $objects);
+    }
+
+    /**
+     * Data provider for testSaveObject
+     *
+     * @return array
+     */
+    public function saveObjectProvider(): array
+    {
+        return [
+            'empty data' => [
+                [], // object
+                [], // expected
+            ],
+            'empty attributes' => [
+                ['attributes' => []], // object
+                ['attributes' => []], // expected
+            ],
+            'full example' => [
+                [
+                    'type' => 'documents',
+                    'attributes' => [
+                        'status' => 'on',
+                        'something-empty' => '',
+                        'something-not-empty' => 'not empty',
+                    ],
+                ], // object
+                [
+                    'type' => 'documents',
+                    'attributes' => [
+                        'status' => 'on',
+                        'something-empty' => '',
+                        'something-not-empty' => 'not empty',
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `saveObject`
+     *
+     * @param array $object The test object
+     * @param array $expected The expected data
+     * @return void
+     * @dataProvider saveObjectProvider
+     * @covers ::saveObject()
+     */
+    public function testSaveObject(array $object, array $expected): void
+    {
+        $this->setupApi();
+        $this->Modules->saveObject($object);
+        if (!empty($expected['attributes'])) {
+            static::assertArrayHasKey('id', $object);
+            static::assertNotNull($object['id']);
+            $expected['id'] = $object['id'];
+        }
+        static::assertEquals($expected, $object);
     }
 }

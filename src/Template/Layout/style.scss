@@ -25,7 +25,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/columns';
 
 // elements
+@import '../Element/Form/form';
 @import '../Element/Form/calendar';
+@import '../Element/Form/locations';
 @import '../Element/Form/trees';
 @import '../Element/Form/publish_properties';
 @import '../Element/Form/relations';

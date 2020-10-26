@@ -19,7 +19,7 @@
                 <div v-show="isOpen" class="tab-container">
                     {% element 'Form/relation' {
                         'relationName': relationName,
-                        'relationSchema': relationName != 'children'? relationsSchema[relationName] : null,
+                        'relationSchema': relationsSchema[relationName],
                     } %}
                 </div>
 

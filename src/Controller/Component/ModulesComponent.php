@@ -459,7 +459,7 @@ class ModulesComponent extends Component
     public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
     {
         // relations between objects
-        $relationsSchema = array_intersect_key($schema, $relationships);
+        $relationsSchema = $this->relationsSchema($schema, $relationships);
         // relations between objects and resources
         $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
@@ -477,6 +477,27 @@ class ModulesComponent extends Component
         ];
 
         $this->getController()->set(compact('relationsSchema', 'resourceRelations', 'objectRelations'));
+    }
+
+    /**
+     * Relations schema by schema and relationships.
+     *
+     * @param array $schema The schema
+     * @param array $relationships The relationships
+     * @return array
+     */
+    protected function relationsSchema(array $schema, array $relationships): array
+    {
+        $types = $this->objectTypes(false);
+        sort($types);
+        $relationsSchema = array_intersect_key($schema, $relationships);
+        foreach ($relationsSchema as &$relSchema) {
+            if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {
+                $relSchema['right'] = $types;
+            }
+        }
+
+        return $relationsSchema;
     }
 
     /**
@@ -521,5 +542,45 @@ class ModulesComponent extends Component
         }
 
         return (array)Hash::get($relationsSchema, 'left');
+    }
+
+    /**
+     * Save objects and set 'id' inside each object in $objects
+     *
+     * @param array $objects The objects
+     * @return void
+     */
+    public function saveObjects(array &$objects): void
+    {
+        if (empty($objects)) {
+            return;
+        }
+        foreach ($objects as &$obj) {
+            $this->saveObject($obj);
+        }
+    }
+
+    /**
+     * Save single object and set 'id' inside param $object
+     *
+     * @param array $object The object
+     * @return void
+     */
+    public function saveObject(array &$object): void
+    {
+        // no attributes? then return
+        if (empty($object['attributes'])) {
+            return;
+        }
+        foreach ($object['attributes'] as $key => $val) {
+            if ($key === 'status' || empty($val)) {
+                continue;
+            }
+            $apiClient = ApiClientProvider::getApiClient();
+            $saved = $apiClient->save($object['type'], array_merge(['id' => $object['id'] ?? null], $object['attributes']));
+            $object['id'] = Hash::get($saved, 'data.id');
+
+            return; // not necessary cycling over all attributes
+        }
     }
 }

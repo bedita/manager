@@ -14,10 +14,9 @@
  *
  */
 
-import sleep from 'sleep-promise';
 import flatpickr from 'flatpickr';
 
-import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { RelationSchemaMixin } from 'app/mixins/relation-schema';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
@@ -34,6 +33,7 @@ export default {
         RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
+        LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
     },
 
     props: {
@@ -61,13 +61,13 @@ export default {
             loading: false,
             count: 0,                   // count number of related objects, on change triggers an event
 
+            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
+            addedRelationsData: [],     // array of serialized new relations
+
             requesterId: null,          // panel requerster id
             removedRelated: [],         // staged removed related objects
             addedRelations: [],         // staged added objects to be saved
             modifiedRelations: [],      // staged modified relation params
-
-            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],     // array of serialized new relations
 
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list

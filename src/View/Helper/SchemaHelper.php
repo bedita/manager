@@ -13,7 +13,9 @@
 
 namespace App\View\Helper;
 
-use App\Core\Utility\Form;
+use App\Form\Control;
+use App\Form\ControlType;
+use App\Form\Options;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -42,15 +44,13 @@ class SchemaHelper extends Helper
      */
     public function controlOptions(string $name, $value, $schema = []): array
     {
-        $options = Form::customControlOptions($name);
+        $options = Options::customControl($name, $value);
         if (!empty($options)) {
-            $options['value'] = $value;
-
             return $options;
         }
-        $type = Form::controlTypeFromSchema((array)$schema);
+        $type = ControlType::fromSchema((array)$schema);
 
-        return Form::control((array)$schema, $type, $value);
+        return Control::control((array)$schema, $type, $value);
     }
 
     /**
@@ -137,7 +137,7 @@ class SchemaHelper extends Helper
                 return static::typeFromSchema($subSchema);
             }
         }
-        if (empty($schema['type']) || !in_array($schema['type'], Form::SCHEMA_PROPERTY_TYPES)) {
+        if (empty($schema['type']) || !in_array($schema['type'], ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'string';
         }
         $format = Hash::get($schema, 'format');

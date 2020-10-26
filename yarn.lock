@@ -1389,6 +1389,11 @@
   resolved "https://registry.npmjs.org/@sphinxxxx/color-conversion/-/color-conversion-2.2.2.tgz#03ecc29279e3c0c832f6185a5bfa3497858ac8ca"
   integrity sha512-XExJS3cLqgrmNBIP3bBw6+1oQ1ksGjFh0+oClDKFYpCCqx/hlqwWO5KO/S63fzUo67SxI9dMrF0y5T/Ey7h8Zw==
 
+"@trevoreyre/autocomplete-vue@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/@trevoreyre/autocomplete-vue/-/autocomplete-vue-2.2.0.tgz#db1fd94bc001ccba296cdd370fdae122117b311e"
+  integrity sha512-A5j986nM6htTbCpEW9BbwlqCobIMD4+uicAYGCSI8DM1ojK8meCyVI23jK+gAxi+vjhraCBneKI+vbwB8sL0ig==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.npmjs.org/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
