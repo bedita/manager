@@ -20,6 +20,8 @@ env:
     - BEDITA_DOCKER_IMG=bedita/bedita:4.2.1
 
 before_install:
+  # Downgrade composer, we don't support composer 2 yet...
+  - composer self-update 1.10.16
   # Use GitHub OAuth token with Composer to increase API limits.
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi
   - docker pull ${BEDITA_DOCKER_IMG}
