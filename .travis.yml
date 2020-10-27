@@ -18,8 +18,11 @@ env:
     - BEDITA_ADMIN_USR=admin
     - BEDITA_ADMIN_PWD=admin
     - BEDITA_DOCKER_IMG=bedita/bedita:4.2.1
+    - COMPOSER_VERSION=1.10.16
 
 before_install:
+  # Downgrade composer, we don't support composer 2 yet...
+  - composer self-update ${COMPOSER_VERSION}
   # Use GitHub OAuth token with Composer to increase API limits.
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi
   - docker pull ${BEDITA_DOCKER_IMG}
@@ -51,7 +54,8 @@ jobs:
     - name: "PHP code sniffer"
       php: 7.2
       env: "RUN=phpcs"
-      before_install: skip
+      before_install:
+        - composer self-update ${COMPOSER_VERSION}
       script: |
         vendor/bin/phpcs -n -p --extensions=php \
           --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=/Migrations/,/Seeds/ \
