@@ -25,13 +25,14 @@ export default class InsertPlaceholders extends Plugin {
                     action: 'relations-add',
                     from: this,
                     data: {
-                        relationName: 'placeholders',
+                        relationName: 'placeholder',
                     },
                 });
 
                 // @TODO get list
 
                 editor.model.change((writer) => {
+                    let data = {};
                     let element = writer.createElement('placeholder', {
                         id: data.id,
                         type: data.type,
