@@ -12,6 +12,7 @@ const DEFAULT_TOOLBAR = [
     '|',
     'alignment',
     '|',
+    'insertPlaceholder',
     'specialCharacters',
     'link',
     'bulletedList',
