@@ -1,8 +1,15 @@
 import { PanelEvents } from 'app/components/panel-view';
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import imageIcon from '@ckeditor/ckeditor5-core/theme/icons/image.svg';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+
+const baseUrl = new URL(BEDITA.base).pathname;
+const options = {
+    credentials: 'same-origin',
+    headers: {
+        accept: 'application/json',
+    }
+};
 
 export default class InsertPlaceholders extends Plugin {
     init() {
@@ -38,7 +45,6 @@ export default class InsertPlaceholders extends Plugin {
                                 id: data.id,
                                 type: data.type,
                                 params: {},
-                                data,
                             });
 
                             editor.model.insertContent(element, editor.model.document.selection);
@@ -60,7 +66,7 @@ export default class InsertPlaceholders extends Plugin {
                 allowWhere: '$text',
                 isInline: true,
                 isObject: true,
-                allowAttributes: ['id', 'type', 'params', 'data'],
+                allowAttributes: ['id', 'type', 'params'],
             });
 
             // convert the placeholder model to ckeditor output
@@ -94,25 +100,48 @@ export default class InsertPlaceholders extends Plugin {
                 view: (modelItem, { writer }) => createPlaceholderView(modelItem, writer),
             });
 
+            let cache = {};
+            function fetchData(type, id) {
+                if (!cache[id]) {
+                    cache[id] = fetch(`${baseUrl}api/${type}/${id}`, options)
+                        .then((response) => response.json());
+                }
+
+                return cache[id];
+            }
+
             function createPlaceholderView(modelItem, writer) {
                 let id = modelItem.getAttribute('id');
                 let type = modelItem.getAttribute('type');
-                let data = modelItem.getAttribute('data');
                 let params = modelItem.getAttribute('params') || {};
                 let placeholderView = writer.createRawElement('span', { class: 'be-placeholder' }, (/** @type {HTMLElement} */ dom) => {
                     dom.innerHTML = `<!-- BE-PLACEHOLDER.${id}.${btoa(params)} -->`;
                     let root = dom.shadowRoot || dom.attachShadow({
                         mode: 'open',
                     });
+                    root.innerHTML = '';
 
-                    switch (type) {
-                        case 'images':
-                            root.innerHTML = `<img src="${data.attributes.uri}" alt="${data.attributes.title}" />`;
-                            break;
-                        default:
-                            root.innerHTML = `<iframe src="${data.attributes.uri}"></iframe>`;
-                            break;
-                    }
+                    fetchData(type, id)
+                        .then((json) => {
+                            let data = json.data;
+                            if (data.id == modelItem.getAttribute('id')) {
+                                return data;
+                            }
+                        })
+                        .then((data) => {
+                            if (data) {
+                                return;
+                            }
+
+                            switch (type) {
+                                case 'images':
+                                    root.innerHTML = `<img src="${data.attributes.uri}" alt="${data.attributes.title}" />`;
+                                    break;
+                                default:
+                                    root.innerHTML = `<iframe src="${data.attributes.uri}"></iframe>`;
+                                    break;
+                            }
+                        });
                 });
 
                 return placeholderView;
