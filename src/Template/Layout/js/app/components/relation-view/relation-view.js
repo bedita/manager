@@ -53,6 +53,10 @@ export default {
             type: String,
             default: '[]',
         },
+        readonly: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
