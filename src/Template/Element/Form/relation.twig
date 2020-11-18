@@ -1,7 +1,7 @@
 <relation-view inline-template
     :relation-data='{{ relationSchema|json_encode|raw }}'
     relation-name={{ relationName }}
-    readonly={{ readonly }}
+    :readonly={{ readonly ? 'true' : 'false' }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     @loading="onToggleLoading" @count="onCount">
@@ -54,7 +54,7 @@
                             {% if relationName == 'children' %}
                                 {% element 'Form/related_item' { 'children': true } %}
                             {% else %}
-                                {% element 'Form/related_item' { 'common': true } %}
+                                {% element 'Form/related_item' { 'common': true, 'readonly': readonly } %}
                             {% endif %}
                         </div>
 
