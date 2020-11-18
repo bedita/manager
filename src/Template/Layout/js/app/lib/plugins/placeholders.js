@@ -11,6 +11,8 @@ const options = {
     }
 };
 
+const regex = /BE-PLACEHOLDER\.(\d+)\.((?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=))/;
+
 export default class InsertPlaceholders extends Plugin {
     init() {
         const editor = this.editor;
@@ -70,24 +72,28 @@ export default class InsertPlaceholders extends Plugin {
             });
 
             // convert the placeholder model to ckeditor output
-            // conversion.for('upcast').elementToElement( {
-            //     view: {
-            //         name: 'span',
-            //         classes: ['be-placeholder'],
-            //     },
-            //     model: (viewElement, { writer }) => {
-            //         console.log('VIEW ELEMENT', viewElement);
-            //         let fragment = writer.createDocumentFragment(viewElement.getChildren());
-            //         let comment = htmlProcessor.toData(fragment);
-            //         console.log('DATA', viewElement);
+            conversion.for('upcast').elementToElement( {
+                view: {
+                    name: 'span',
+                    classes: ['be-placeholder'],
+                },
+                model: (viewElement, { writer }) => {
+                    let fragment = writer.createDocumentFragment(viewElement.getChildren());
+                    console.log('UPCAST', fragment);
+                    // let comment = htmlProcessor.toData(fragment);
+                    // let match = comment.match(regex);
+                    // if (!match) {
+                    //     return;
+                    // }
 
-            //         return writer.createElement('placeholder', {
-            //             id: comment,
-            //             type: comment,
-            //             params: comment,
-            //         });
-            //     }
-            // });
+                    // let id = match[1];
+                    // let params = match[2];
+                    // return writer.createElement('placeholder', {
+                    //     id,
+                    //     params: atob(comment),
+                    // });
+                }
+            });
 
             conversion.for('editingDowncast').elementToElement( {
                 model: 'placeholder',
@@ -103,7 +109,14 @@ export default class InsertPlaceholders extends Plugin {
             let cache = {};
             function fetchData(type, id) {
                 if (!cache[id]) {
-                    cache[id] = fetch(`${baseUrl}api/${type}/${id}`, options)
+                    let fetchType = Promise.resolve(type);
+                    if (!type) {
+                        fetchType = fetch(`${baseUrl}api/objects/${id}`, options)
+                            .then((response) => response.json())
+                            .then((json) => json.data.type);
+                    }
+                    cache[id] = fetchType
+                        .then((type) => fetch(`${baseUrl}api/${type}/${id}`, options))
                         .then((response) => response.json());
                 }
 
@@ -114,7 +127,7 @@ export default class InsertPlaceholders extends Plugin {
                 let id = modelItem.getAttribute('id');
                 let type = modelItem.getAttribute('type');
                 let params = modelItem.getAttribute('params') || {};
-                let placeholderView = writer.createRawElement('span', { class: 'be-placeholder' }, (/** @type {HTMLElement} */ dom) => {
+                let placeholderView = writer.createRawElement('span', { class: 'be-placeholder', style: params }, (/** @type {HTMLElement} */ dom) => {
                     dom.innerHTML = `<!-- BE-PLACEHOLDER.${id}.${btoa(params)} -->`;
                     let root = dom.shadowRoot || dom.attachShadow({
                         mode: 'open',
@@ -133,7 +146,7 @@ export default class InsertPlaceholders extends Plugin {
                                 return;
                             }
 
-                            switch (type) {
+                            switch (data.type) {
                                 case 'images':
                                     root.innerHTML = `<img src="${data.attributes.uri}" alt="${data.attributes.title}" />`;
                                     break;
