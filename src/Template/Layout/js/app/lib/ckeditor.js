@@ -1,6 +1,7 @@
 export { default as ClassicEditor } from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 export { default as Alignment } from '@ckeditor/ckeditor5-alignment/src/alignment';
 export { default as Autoformat } from '@ckeditor/ckeditor5-autoformat/src/autoformat';
+export { default as Clipboard } from '@ckeditor/ckeditor5-clipboard/src/clipboard';
 export { default as BlockQuote } from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 export { default as Bold } from '@ckeditor/ckeditor5-basic-styles/src/bold';
 export { default as Code } from '@ckeditor/ckeditor5-basic-styles/src/code';
