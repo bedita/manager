@@ -28,87 +28,90 @@ function convertToPoint(input) {
 }
 
 /**
- * Templates that uses this component (directly or indirectly):
- *  ...
- *
  * <location-view> component used for ModulesPage -> View
  *
  * Handle Locations and reverse geocoding from addresses
  */
 export default {
-    template: `
-        <div class="location mb-2 is-flex">
-            <input type="hidden" :name="'relations[' + relationName + '][replaceRelated][]'" :value="locationValue" />
-            <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
-                <: index + 1 :>
-            </div>
-            <div class="location-form is-flex-column">
-                <div class="is-flex">
-                    <div class="is-flex-column is-expanded">
-                        <label><: t('Title') :>
-                            <autocomplete
-                                autocomplete="none"
-                                ref="title"
-                                class="autocomplete-title"
-                                :default-value="getDefaultTitle()"
-                                :search="searchTitle"
-                                base-class="autocomplete-title"
-                                :get-result-value="getTitle"
-                                @submit="onSubmitTitle"
-                                @change="onChangeTitle"
-                            >
-                            </autocomplete>
-                        </label>
-                    </div>
-                    <div class="is-flex-column is-expanded">
-                        <label><: t('Address') :>
-                            <autocomplete
-                                autocomplete="none"
-                                ref="address"
-                                class="autocomplete-address"
-                                :default-value="getDefaultAddress()"
-                                :search="searchAddress"
-                                base-class="autocomplete-address"
-                                :get-result-value="getAddress"
-                                @submit="onSubmitAddress"
-                                @change="onChangeAddress"
-                            >
-                            </autocomplete>
-                        </label>
-                    </div>
+    template: `<div class="location mb-2 is-flex">
+        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated][]'" :value="locationValue" />
+        <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
+            <: index + 1 :>
+        </div>
+        <div class="location-form is-flex-column">
+            <div class="is-flex">
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        <: t('Title') :>
+                        <autocomplete
+                            autocomplete="none"
+                            ref="title"
+                            class="autocomplete-title"
+                            :default-value="getDefaultTitle()"
+                            :search="searchTitle"
+                            base-class="autocomplete-title"
+                            :get-result-value="getTitle"
+                            @submit="onSubmitTitle"
+                            @change="onChangeTitle"
+                        >
+                        </autocomplete>
+                    </label>
                 </div>
-                <div class="is-flex mt-1">
-                    <div class="is-flex-column is-expanded">
-                        <label><: t('Lat long Coordinates') :>
-                            <div class="is-flex">
-                                <input class="coordinates" type="text" :value="coordinates"/>
-                                <button @click.prevent :disabled="!fullAddress" @click="geocode" class="get-coordinates icon-globe">
-                                    <: t('GET') :>
-                                </button>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="is-flex-column">
-                        <label> Zoom
-                            <input @change="onRelationDataChange" :value="zoom" data-name="zoom" type="number" min="2" max="20"/>
-                        </label>
-                    </div>
-                    <div class="is-flex-column">
-                        <label> Pitch°
-                            <input @change="onRelationDataChange" :value="pitch" data-name="pitch" type="number" min="0" max="60"/>
-                        </label>
-                    </div>
-                    <div class="is-flex-column">
-                        <label> Bearing°
-                            <input @change="onRelationDataChange" :value="bearing" data-name="bearing" type="number" min="-180" max="180"/>
-                        </label>
-                    </div>
-                </div>
-                <div class="location-buttons">
-                    <button @click.prevent @click="onRemove" class="icon-unlink remove"> <: t("remove") :> </button>
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        <: t('Address') :>
+                        <autocomplete
+                            autocomplete="none"
+                            ref="address"
+                            class="autocomplete-address"
+                            :default-value="getDefaultAddress()"
+                            :search="searchAddress"
+                            base-class="autocomplete-address"
+                            :get-result-value="getAddress"
+                            @submit="onSubmitAddress"
+                            @change="onChangeAddress"
+                        >
+                        </autocomplete>
+                    </label>
                 </div>
             </div>
-        </div>`,
+            <div class="is-flex mt-1">
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        <: t('Long Lat Coordinates') :>
+                        <div class="is-flex">
+                            <input class="coordinates" type="text" :value="coordinates"/>
+                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apikey || !fullAddress">
+                                <: t('GET') :>
+                            </button>
+                        </div>
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        Zoom
+                        <input @change="onRelationDataChange" :value="zoom" data-name="zoom" type="number" min="2" max="20"/>
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        Pitch°
+                        <input @change="onRelationDataChange" :value="pitch" data-name="pitch" type="number" min="0" max="60"/>
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        Bearing°
+                        <input @change="onRelationDataChange" :value="bearing" data-name="bearing" type="number" min="-180" max="180"/>
+                    </label>
+                </div>
+            </div>
+            <div class="location-buttons">
+                <button @click.prevent @click="onRemove" class="icon-unlink remove"><: t("remove") :></button>
+            </div>
+        </div>
+    </div>`,
+
     props: {
         index: Number,
         apikey: String,
@@ -299,7 +302,7 @@ export default {
             var script = document.createElement('script');
             script.src = `${this.apiurl}js?key=${this.apikey}&callback=initMap`;
             script.defer = true;
-            script.id = "googleapi";
+            script.id = 'googleapi';
 
             window.initMap = () => {
                 retrieveGeocode();

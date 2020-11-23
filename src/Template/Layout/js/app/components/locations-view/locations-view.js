@@ -25,7 +25,7 @@ export default {
         <div v-if="locations" v-for="(location, index) in locations">
             <location-view :key='locationSymbol(location)' :index='index' :locationdata='location' :apikey='apikey' :apiurl='apiurl' :relation-name='relationName' />
         </div>
-        <div v-if="locations" class="buttons is-flex mt-1">
+        <div v-if="locations" class="is-flex mt-1">
             <button @click.prevent @click="onAddNew"><: t('add new') :></button>
         </div>
     </div>`,
