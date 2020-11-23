@@ -34,13 +34,11 @@ function convertToPoint(input) {
  * <location-view> component used for ModulesPage -> View
  *
  * Handle Locations and reverse geocoding from addresses
- *
- *
  */
 export default {
     template: `
         <div class="location mb-2 is-flex">
-            <input type="hidden" name="relations[has_location][replaceRelated][]" :value="locationValue" />
+            <input type="hidden" :name="'relations[' + relationName + '][replaceRelated][]'" :value="locationValue" />
             <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
                 <: index + 1 :>
             </div>
@@ -116,6 +114,7 @@ export default {
         apikey: String,
         apiurl: String,
         locationdata: Object,
+        relationName: String,
     },
 
     data() {
@@ -124,9 +123,9 @@ export default {
             title: this.locationdata.attributes.title,
             fullAddress: this.address(this.locationdata),
             coordinates: convertFromPoint(this.locationdata.attributes.coords),
-            zoom: this.locationdata.meta.relation.params.zoom && parseInt(this.locationdata.meta.relation.params.zoom) || 2,
-            pitch: this.locationdata.meta.relation.params.pitch && parseInt(this.locationdata.meta.relation.params.pitch) || 0,
-            bearing: this.locationdata.meta.relation.params.bearing && parseInt(this.locationdata.meta.relation.params.bearing) || 0,
+            zoom: parseInt(this.locationdata.meta.relation.params.zoom || 2),
+            pitch: parseInt(this.locationdata.meta.relation.params.pitch || 0),
+            bearing: parseInt(this.locationdata.meta.relation.params.bearing || 0),
         }
     },
 
@@ -176,7 +175,7 @@ export default {
             this.coordinates = convertFromPoint(this.location.attributes.coords);
         },
         onSubmitAddress(result) {
-            this.$refs.title.value = result.attributes.title;
+            this.$refs.title.value = result && result.attributes.title;
             this.fullAddress = !!result;
             this.location = result; // set address on model from retrieved location
             this.coordinates = convertFromPoint(this.location.attributes.coords);
@@ -246,7 +245,7 @@ export default {
                         results = results.filter((elem) => filterFunc(elem, input));
                         resolve(results);
                     });
-            })
+            });
         },
         getTitle(model) {
             return model.attributes && model.attributes.title;
@@ -274,6 +273,10 @@ export default {
         },
         async geocode() {
             const retrieveGeocode = () => {
+                if (!window.google || !window.google.maps) {
+                    return;
+                }
+
                 const geocoder = new window.google.maps.Geocoder();
                 geocoder.geocode({ address: this.address(this.location) }, (results, status) => {
                     if (status === "OK" && results.length) {
