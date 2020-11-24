@@ -82,7 +82,7 @@ class PropertyHelperTest extends TestCase
             ],
             'categories' => [
                 'categories',
-                [['name' => 'cat-1'],['name' => 'cat-3']],
+                [['name' => 'cat-1'], ['name' => 'cat-3']],
                 ['class' => 'test'],
                 [
                     ['name' => 'cat-1', 'label' => 'category 1'],
@@ -110,7 +110,7 @@ class PropertyHelperTest extends TestCase
      * @covers ::view()
      * @covers ::schema()
      */
-    public function testView(string $key, $value, array $options = [], array $schema, string $expected): void
+    public function testView(string $key, $value, array $options = [], array $schema = [], string $expected = ''): void
     {
         $view = new View(null, null, null, []);
         if ($key === 'categories') {
