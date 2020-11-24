@@ -38,18 +38,12 @@ class Control
      */
     public static function control(array $schema, string $type, $value): array
     {
-        $handlers = Configure::read('Control.handlers', []);
-        if (!empty($handlers)) {
-            $handlers = Hash::combine($handlers, '{n}.type', '{n}');
-        }
-        $types = array_merge(self::CONTROL_TYPES, array_keys($handlers));
-        if (!in_array($type, $types)) {
-            return compact('type', 'value');
-        }
-        if (in_array($type, array_keys($handlers))) {
-            $handler = Hash::get($handlers, $type);
-
+        $handler = Configure::read(sprintf('Control.handlers.%s', $type));
+        if (!empty($handler)) {
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
+        }
+        if (!in_array($type, self::CONTROL_TYPES)) {
+            return compact('type', 'value');
         }
 
         return call_user_func_array(Form::getMethod(self::class, $type), [$value, $schema]);
