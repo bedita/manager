@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\PropertyHelper;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -24,6 +25,24 @@ use Cake\View\View;
  */
 class PropertyHelperTest extends TestCase
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
+    {
+        Configure::write(
+            'Control.handlers',
+            array_merge(
+                (array)\Cake\Core\Configure::read('Control.handlers'),
+                [
+                    'custom' => [
+                        'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
+                        'method' => 'dummy',
+                    ],
+                ]
+            )
+        );
+    }
 
     /**
      * Data provider for `testView` test case.
@@ -93,6 +112,26 @@ class PropertyHelperTest extends TestCase
                 ],
                 '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" value=""/><div class="checkbox"><label for="categories-cat-1" class="selected"><input type="checkbox" name="categories[]" value="cat-1" checked="checked" id="categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="categories-cat-2"><input type="checkbox" name="categories[]" value="cat-2" id="categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="categories-cat-3" class="selected"><input type="checkbox" name="categories[]" value="cat-3" checked="checked" id="categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="categories-cat-4"><input type="checkbox" name="categories[]" value="cat-4" id="categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="categories-cat-5"><input type="checkbox" name="categories[]" value="cat-5" id="categories-cat-5" class="test">category 5</label></div></div>',
             ],
+            'object' => [
+                'an object',
+                ['an' => 'object'],
+                [],
+                [
+                    'type' => 'object',
+                    '$id' => '/properties/object',
+                ],
+                '<div class="input textarea"><label for="an-object">An Object</label><textarea name="an object" v-jsoneditor="true" class="json" id="an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
+            ],
+            'html' => [
+                'custom control',
+                'something',
+                [],
+                [
+                    'type' => 'custom',
+                    '$id' => '/properties/custom',
+                ],
+                '<dummy></dummy>',
+            ],
         ];
     }
 
@@ -122,5 +161,16 @@ class PropertyHelperTest extends TestCase
         $property = new PropertyHelper($view);
         $actual = $property->view($key, $value, $options);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Dummy function to test custom control.
+     *
+     * @param mixed|null $value The value
+     * @return array
+     */
+    public static function dummy($value): array
+    {
+        return ['html' => '<dummy></dummy>'];
     }
 }

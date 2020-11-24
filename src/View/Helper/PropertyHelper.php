@@ -47,7 +47,7 @@ class PropertyHelper extends Helper
     {
         $controlOptions = $this->Schema->controlOptions($key, $value, $this->schema($key));
         if (Hash::get($controlOptions, 'class') === 'json') {
-            $jsonKeys = Configure::read('_jsonKeys');
+            $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$key]));
         }
         if (Hash::check($controlOptions, 'html')) {

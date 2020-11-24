@@ -58,11 +58,14 @@ class ControlType
      */
     public static function fromSchema($schema): string
     {
-        if (isset($schema['type']) && $schema['type'] === 'categories') {
-            return 'categories';
-        }
         if (!is_array($schema)) {
             return 'text';
+        }
+        if (!empty(Configure::read(sprintf('Control.handlers.%s', $schema['type'])))) {
+            return $schema['type'];
+        }
+        if (isset($schema['type']) && $schema['type'] === 'categories') {
+            return 'categories';
         }
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $subSchema) {
