@@ -82,7 +82,7 @@ export default {
                     <label>
                         <: t('Long Lat Coordinates') :>
                         <div class="is-flex">
-                            <input class="coordinates" type="text" :value="coordinates"/>
+                            <input class="coordinates" type="text" :value="coordinates" @change="onCoordsChange" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apikey || !location.attributes.address">
                                 <: t('GET') :>
                             </button>
@@ -166,18 +166,7 @@ export default {
     },
 
     methods: {
-        onRemove() {
-            this.$parent.$emit('removed', this.index);
-        },
-        onRelationDataChange(event) {
-            const target = event.target;
-            const value = target.value;
-            const attributeName = target.dataset['name'];
-            this[attributeName] = parseInt(value);
-
-            this.location.meta.relation.params.zoom = `${this.zoom}`;
-            this.location.meta.relation.params.pitch = `${this.pitch}`;
-            this.location.meta.relation.params.bearing = `${this.bearing}`;
+        onChange() {
             this.$parent.$emit('updated', this.index, this.location);
         },
         onSubmitTitle(result) {
@@ -197,9 +186,6 @@ export default {
         onInputAddress(event) {
             const address = event.target.value;
             this.location.attributes.address = address;
-        },
-        onChange() {
-            this.$parent.$emit('updated', this.index, this.location);
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
@@ -309,6 +295,24 @@ export default {
                 retrieveGeocode();
             };
             document.head.appendChild(script);
+        },
+        onCoordsChange(event) {
+            this.location.attributes.coords = convertToPoint(event.target.value);
+            this.onChange();
+        },
+        onRelationDataChange(event) {
+            const target = event.target;
+            const value = target.value;
+            const attributeName = target.dataset['name'];
+            this[attributeName] = parseInt(value);
+
+            this.location.meta.relation.params.zoom = `${this.zoom}`;
+            this.location.meta.relation.params.pitch = `${this.pitch}`;
+            this.location.meta.relation.params.bearing = `${this.bearing}`;
+            this.$parent.$emit('updated', this.index, this.location);
+        },
+        onRemove() {
+            this.$parent.$emit('removed', this.index);
         },
     }
 }
