@@ -36,24 +36,11 @@
                             </select>
                         </div>
 
-                        {% set options = Schema.controlOptions(
-                            'status',
-                            object.attributes.status|default('draft'),
-                            schema.properties['status']
-                        ) %}
-                        {{ Form.control('status', options + {
-                            'v-model': 'object.attributes.status'
-                        })|raw }}
+                        {{ Property.view('status', object.attributes.status|default('draft'), schema.properties.status, {'v-model': 'object.attributes.status'})|raw }}
 
-                        {% set options = Schema.controlOptions('title', '', schema.properties.title) %}
-                        {{ Form.control('title', options + {
-                            'v-model': 'object.attributes.title'
-                        })|raw }}
+                        {{ Property.view('title', '', schema.properties.title, {'v-model': 'object.attributes.title'})|raw }}
 
-                        {% set options = Schema.controlOptions('description', '', schema.properties.description) %}
-                        {{ Form.control('description', options + {
-                            'v-model': 'object.attributes.description'
-                        })|raw }}
+                        {{ Property.view('description', '', schema.properties.description, {'v-model': 'object.attributes.description'})|raw }}
 
                         <div class="input text" v-if="isMedia">
                             <label for="file">{{ __('File') }}</label>

@@ -21,12 +21,7 @@
 
             <header class="form-header">
                 <section class="fieldset">
-                    {% set options = Schema.controlOptions(
-                        'status',
-                        translation.attributes.status|default('draft'),
-                        schema.properties['status']
-                    ) %}
-                    {{ Form.control('status', options)|raw }}
+                    {{ Property.view('status', translation.attributes.status|default('draft'), schema.properties.status)|raw }}
                 </section>
 
                 <section class="fieldset is-flex wrap">
@@ -102,9 +97,7 @@
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
-                            {% set options = Schema.controlOptions(key, object.attributes[key], schema.properties[key]) %}
-                            {% set options = options|merge({'disabled': 'disabled'}) %}
-                            {{ Form.control(key, options)|raw }}
+                            {{ Property.view(key, object.attributes[key], schema.properties[key], {'disabled': 'disabled'})|raw }}
 
                             {# spacer when auto translate is available #}
                             {% if config('Translator.class') %}
