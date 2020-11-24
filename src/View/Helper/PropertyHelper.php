@@ -52,7 +52,7 @@ class PropertyHelper extends Helper
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$key]));
         }
         if (Hash::check($controlOptions, 'html')) {
-            return Hash::get($controlOptions, 'html');
+            return Hash::get($controlOptions, 'html', '');
         }
 
         return $this->Form->control($key, array_merge($controlOptions, $options));
