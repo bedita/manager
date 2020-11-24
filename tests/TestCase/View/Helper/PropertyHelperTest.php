@@ -130,7 +130,7 @@ class PropertyHelperTest extends TestCase
                     'type' => 'custom',
                     '$id' => '/properties/custom',
                 ],
-                '<dummy></dummy>',
+                '<dummy>something</dummy>',
             ],
         ];
     }
@@ -171,6 +171,6 @@ class PropertyHelperTest extends TestCase
      */
     public static function dummy($value): array
     {
-        return ['html' => '<dummy></dummy>'];
+        return ['html' => sprintf('<dummy>%s</dummy>', $value)];
     }
 }
