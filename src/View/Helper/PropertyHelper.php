@@ -73,6 +73,6 @@ class PropertyHelper extends Helper
             ];
         }
 
-        return Hash::get($schema, sprintf('properties.%s', $key));
+        return Hash::get($schema, sprintf('properties.%s', $key), []);
     }
 }
