@@ -52,7 +52,8 @@ export default {
                             base-class="autocomplete-title"
                             :get-result-value="getTitle"
                             @submit="onSubmitTitle"
-                            @change="onChangeTitle"
+                            @input="onInputTitle"
+                            @change="onChange"
                         >
                         </autocomplete>
                     </label>
@@ -69,7 +70,8 @@ export default {
                             base-class="autocomplete-address"
                             :get-result-value="getAddress"
                             @submit="onSubmitAddress"
-                            @change="onChangeAddress"
+                            @input="onInputAddress"
+                            @change="onChange"
                         >
                         </autocomplete>
                     </label>
@@ -81,7 +83,7 @@ export default {
                         <: t('Long Lat Coordinates') :>
                         <div class="is-flex">
                             <input class="coordinates" type="text" :value="coordinates"/>
-                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apikey || !fullAddress">
+                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apikey || !location.attributes.address">
                                 <: t('GET') :>
                             </button>
                         </div>
@@ -124,11 +126,19 @@ export default {
         return {
             location: this.locationdata,
             title: this.locationdata.attributes.title,
-            fullAddress: this.address(this.locationdata),
             coordinates: convertFromPoint(this.locationdata.attributes.coords),
-            zoom: parseInt(this.locationdata.meta.relation.params.zoom || 2),
-            pitch: parseInt(this.locationdata.meta.relation.params.pitch || 0),
-            bearing: parseInt(this.locationdata.meta.relation.params.bearing || 0),
+            zoom: parseInt(this.locationdata.meta &&
+                this.locationdata.meta.relation &&
+                this.locationdata.meta.relation.params &&
+                this.locationdata.meta.relation.params.zoom) || 2,
+            pitch: parseInt(this.locationdata.meta &&
+                this.locationdata.meta.relation &&
+                this.locationdata.meta.relation.params &&
+                this.locationdata.meta.relation.params.pitch) || 0,
+            bearing: parseInt(this.locationdata.meta &&
+                this.locationdata.meta.relation &&
+                this.locationdata.meta.relation.params &&
+                this.locationdata.meta.relation.params.bearing) || 0,
         }
     },
 
@@ -139,10 +149,7 @@ export default {
                 type: 'locations',
                 attributes: {
                     status: 'on',
-                    ...(this.location && Object.keys(this.location.attributes).length && this.location.attributes || {
-                        title: this.title || '',
-                        address: this.fullAddress || '',
-                    }),
+                    ...(this.location && this.location.attributes || {}),
                     coords: convertToPoint(this.coordinates),
                 },
                 meta: {
@@ -171,27 +178,28 @@ export default {
             this.location.meta.relation.params.zoom = `${this.zoom}`;
             this.location.meta.relation.params.pitch = `${this.pitch}`;
             this.location.meta.relation.params.bearing = `${this.bearing}`;
+            this.$parent.$emit('updated', this.index, this.location);
         },
         onSubmitTitle(result) {
-            this.$refs.address.value = this.address(result);
-            this.location = result; // set address on model from retrieved location
+            this.location = result; // set the retrieved location as model
             this.coordinates = convertFromPoint(this.location.attributes.coords);
+            this.$parent.$emit('updated', this.index, this.location);
         },
         onSubmitAddress(result) {
-            this.$refs.title.value = result && result.attributes.title;
-            this.fullAddress = !!result;
-            this.location = result; // set address on model from retrieved location
+            this.location = result; // set the retrieved location as model
             this.coordinates = convertFromPoint(this.location.attributes.coords);
+            this.$parent.$emit('updated', this.index, this.location);
         },
-        onChangeTitle(event) {
+        onInputTitle(event) {
             const title = event.target.value;
-            this.title = title;
             this.location.attributes.title = title;
         },
-        onChangeAddress(event) {
+        onInputAddress(event) {
             const address = event.target.value;
-            this.fullAddress = address;
             this.location.attributes.address = address;
+        },
+        onChange() {
+            this.$parent.$emit('updated', this.index, this.location);
         },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
@@ -211,12 +219,8 @@ export default {
                             return resolve([]);
                         }
 
-                        const filterFunc = (elem, input) => {
-                            return elem.attributes.title && elem.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1;
-                        };
-
-                        // filter locations using the input 'filterFunc' function
-                        results = results.filter((elem) => filterFunc(elem, input));
+                        // filter locations by input title
+                        results = results.filter(elem => elem.attributes.title && elem.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
                         resolve(results);
                     });
             })
@@ -263,16 +267,11 @@ export default {
             return this.address(this.location);
         },
         address(model) {
-            if (!model || !model.attributes) {
+            if (!model || !model.attributes || !model.attributes.address) {
                 return '';
             }
 
-            let string = '';
-            if (model.attributes.address) {
-                string = `${model.attributes.address}`;
-            }
-
-            return string.replace(/<\/?[^>]+(>|$)/g, '');
+            return `${model.attributes.address}`.replace(/<\/?[^>]+(>|$)/g, '');
         },
         async geocode() {
             const retrieveGeocode = () => {
@@ -287,6 +286,8 @@ export default {
 
                         // Longitude, Latitude format: see https://docs.mapbox.com/api/#coordinate-format
                         this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
+                        this.location.attributes.coords = convertToPoint(this.coordinates);
+                        this.$parent.$emit('updated', this.index, this.location);
                     } else {
                         this.coordinates = '';
                         console.error("Error in geocoding address");
