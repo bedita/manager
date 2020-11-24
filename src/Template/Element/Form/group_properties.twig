@@ -10,7 +10,7 @@
 
         {% for key, value in properties %}
 
-            {{ Property.view(key, value, schema.properties[key])|raw }}
+            {{ Property.view(key, value)|raw }}
 
         {% endfor %}
 

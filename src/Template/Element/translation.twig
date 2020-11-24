@@ -21,7 +21,7 @@
 
             <header class="form-header">
                 <section class="fieldset">
-                    {{ Property.view('status', translation.attributes.status|default('draft'), schema.properties.status)|raw }}
+                    {{ Property.view('status', translation.attributes.status|default('draft'))|raw }}
                 </section>
 
                 <section class="fieldset is-flex wrap">
@@ -97,7 +97,7 @@
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key in translatable %}
-                            {{ Property.view(key, object.attributes[key], schema.properties[key], {'disabled': 'disabled'})|raw }}
+                            {{ Property.view(key, object.attributes[key], {'disabled': 'disabled'})|raw }}
 
                             {# spacer when auto translate is available #}
                             {% if config('Translator.class') %}

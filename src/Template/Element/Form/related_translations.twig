@@ -18,7 +18,7 @@
             <div v-show="isOpen" class="tab-container">
 
                 <div>
-                    {{ Property.view('lang', object.attributes.lang, schema.properties.lang, { 'label': __('The main language is') })|raw }}
+                    {{ Property.view('lang', object.attributes.lang, { 'label': __('The main language is') })|raw }}
 
                     {% if object.relationships.translations %}
                         {{ Html.link(__('Add translation'), {

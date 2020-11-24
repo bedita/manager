@@ -40,13 +40,12 @@ class PropertyHelper extends Helper
      *
      * @param string $key The property key
      * @param mixed|null $value The property value
-     * @param array $schema The property schema
      * @param array $options The form element options, if any
      * @return string
      */
-    public function view(string $key, $value, array $schema, array $options = []): string
+    public function view(string $key, $value, array $options = []): string
     {
-        $controlOptions = $this->Schema->controlOptions($key, $value, $schema);
+        $controlOptions = $this->Schema->controlOptions($key, $value, $this->schema($key));
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$key]));
@@ -56,5 +55,24 @@ class PropertyHelper extends Helper
         }
 
         return $this->Form->control($key, array_merge($controlOptions, $options));
+    }
+
+    /**
+     * Schema array by key
+     *
+     * @param string $key The attribute key
+     * @return array
+     */
+    public function schema(string $key): array
+    {
+        $schema = (array)$this->_View->get('schema');
+        if (in_array($key, ['associations', 'categories', 'relations'])) {
+            return [
+                'type' => $key,
+                $key => Hash::get($schema, sprintf('%s', $key)),
+            ];
+        }
+
+        return Hash::get($schema, sprintf('properties.%s', $key));
     }
 }
