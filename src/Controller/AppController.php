@@ -263,17 +263,15 @@ class AppController extends Controller
         if ($type === 'folders') {
             $relation = 'parent';
         }
-        if ($changedParents && !empty($data['relations'][$relation])) {
-            return;
-        }
         if (empty($changedParents)) {
             unset($data['relations'][$relation]);
 
             return;
         }
-
-        // remaining case: all parents deselected => replace with empty set
-        $data['relations'][$relation] = ['replaceRelated' => []];
+        if (empty($data['relations'][$relation])) {
+            // all parents deselected => replace with empty set
+            $data['relations'][$relation] = ['replaceRelated' => []];
+        }
     }
 
     /**
