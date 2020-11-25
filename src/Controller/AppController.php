@@ -249,7 +249,7 @@ class AppController extends Controller
     }
 
     /**
-     * Handle `parents` or `parent` relationship looking at `_changedParens` input flag
+     * Handle `parents` or `parent` relationship looking at `_changedParents` input flag
      *
      * @param string $type Object type
      * @param array $data Form data
@@ -272,7 +272,7 @@ class AppController extends Controller
             return;
         }
 
-        // remaining case: all parents deseleced => replace with empty set
+        // remaining case: all parents deselected => replace with empty set
         $data['relations'][$relation] = ['replaceRelated' => []];
     }
 
