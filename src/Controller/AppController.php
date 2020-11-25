@@ -221,6 +221,7 @@ class AppController extends Controller
      */
     protected function prepareRelations(array &$data): void
     {
+        $this->setupParentsRelation($data);
         // relations data for view/save - prepare api calls
         if (!empty($data['relations'])) {
             $api = [];
@@ -237,7 +238,7 @@ class AppController extends Controller
                             $ids
                         );
                     }
-                    if (!empty($relatedIds)) {
+                    if ($method === 'replaceRelated' || !empty($relatedIds)) {
                         $api[] = compact('method', 'id', 'relation', 'relatedIds');
                     }
                 }
@@ -245,6 +246,29 @@ class AppController extends Controller
             $data['_api'] = $api;
         }
         unset($data['relations']);
+    }
+
+    /**
+     * Handle `parents` relationship looking at `_changedParens` input flag
+     *
+     * @param array $data Form data
+     * @return void
+     */
+    protected function setupParentsRelation(array &$data): void
+    {
+        $changedParents = (bool)Hash::get($data, '_changedParents');
+        unset($data['_changedParents']);
+        if ($changedParents && !empty($data['relations']['parents'])) {
+            return;
+        }
+        if (empty($changedParents)) {
+            unset($data['relations']['parents']);
+
+            return;
+        }
+
+        // remaining case: all parents deseleced => replace with empty set
+        $data['relations']['parents'] = ['replaceRelated' => []];
     }
 
     /**
