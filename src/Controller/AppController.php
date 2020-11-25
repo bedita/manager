@@ -161,6 +161,7 @@ class AppController extends Controller
         $data = (array)$this->request->getData();
 
         $this->specialAttributes($type, $data);
+        $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
 
@@ -221,7 +222,6 @@ class AppController extends Controller
      */
     protected function prepareRelations(array &$data): void
     {
-        $this->setupParentsRelation($data);
         // relations data for view/save - prepare api calls
         if (!empty($data['relations'])) {
             $api = [];
@@ -249,26 +249,31 @@ class AppController extends Controller
     }
 
     /**
-     * Handle `parents` relationship looking at `_changedParens` input flag
+     * Handle `parents` or `parent` relationship looking at `_changedParens` input flag
      *
+     * @param string $type Object type
      * @param array $data Form data
      * @return void
      */
-    protected function setupParentsRelation(array &$data): void
+    protected function setupParentsRelation(string $type, array &$data): void
     {
         $changedParents = (bool)Hash::get($data, '_changedParents');
         unset($data['_changedParents']);
-        if ($changedParents && !empty($data['relations']['parents'])) {
+        $relation = 'parents';
+        if ($type === 'folders') {
+            $relation = 'parent';
+        }
+        if ($changedParents && !empty($data['relations'][$relation])) {
             return;
         }
         if (empty($changedParents)) {
-            unset($data['relations']['parents']);
+            unset($data['relations'][$relation]);
 
             return;
         }
 
         // remaining case: all parents deseleced => replace with empty set
-        $data['relations']['parents'] = ['replaceRelated' => []];
+        $data['relations'][$relation] = ['replaceRelated' => []];
     }
 
     /**
