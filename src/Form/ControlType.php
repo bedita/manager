@@ -58,7 +58,7 @@ class ControlType
      */
     public static function fromSchema($schema): string
     {
-        if (!is_array($schema)) {
+        if (!is_array($schema) || empty($schema['type'])) {
             return 'text';
         }
         if (!empty(Configure::read(sprintf('Control.handlers.%s', $schema['type'])))) {
