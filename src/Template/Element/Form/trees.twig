@@ -24,7 +24,7 @@
                 :multiple-choice={{ options.multiple }}>
             </tree-view>
             {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
-            {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents', 'ref': 'changedParents'})|raw }}
+            {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}
             {{ Form.unlockField('_changedParents')}}
         </div>
     </section>
