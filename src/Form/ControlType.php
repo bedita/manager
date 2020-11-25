@@ -61,11 +61,9 @@ class ControlType
         if (!is_array($schema)) {
             return 'text';
         }
-        if (isset($schema['type']) && !empty(Configure::read(sprintf('Control.handlers.%s', $schema['type'])))) {
-            return $schema['type'];
-        }
-        if (isset($schema['type']) && $schema['type'] === 'categories') {
-            return 'categories';
+        $schemaType = Hash::get($schema, 'type', null);
+        if ($schemaType === 'categories' || !empty(Configure::read(sprintf('Control.handlers.%s', $schemaType)))) {
+            return $schemaType;
         }
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $subSchema) {
@@ -76,10 +74,10 @@ class ControlType
                 return ControlType::fromSchema($subSchema);
             }
         }
-        if (empty($schema['type']) || !in_array($schema['type'], ControlType::SCHEMA_PROPERTY_TYPES)) {
+        if (empty($schemaType) || !in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
-        $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schema['type'])));
+        $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schemaType)));
 
         return call_user_func_array($method, [$schema]);
     }
