@@ -14,16 +14,16 @@
                     ]">
                         <h2>{{ relationLabel }}</h2>
                         <div class="buttons" v-show="isOpen">
-                            <button data-switch="block" class="switch-view icon-th-large"></button>
-                            <button data-switch="list" class="switch-view icon-th-list"></button>
+                            <button @click.prevent @click.stop="switchBlockView()" :data-active="blockView" class="switch-view icon-th-large"></button>
+                            <button @click.prevent @click.stop="switchListView()" :data-active="!blockView" class="switch-view icon-th-list"></button>
                         </div>
                         <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
                 </header>
-
                 <div v-show="isOpen" class="tab-container">
                     {% element 'Form/relation' {
                         'relationName': relationName,
                         'relationSchema': relationsSchema[relationName],
+                        'blockView': blockView,
                     } %}
                 </div>
 

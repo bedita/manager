@@ -53,6 +53,10 @@ export default {
             type: String,
             default: '[]',
         },
+        blockView: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -72,7 +76,7 @@ export default {
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
 
-            positions: {},              // usede in children relations
+            positions: {},              // used in children relations
         }
     },
 
