@@ -26,6 +26,10 @@ function convertToPoint(input) {
     return `POINT(${lon} ${lat})`;
 }
 
+function stripHtml(str) {
+    return str.replace(/<\/?[^>]+(>|$)/g, '');
+}
+
 /**
  * <location-view> component used for ModulesPage -> View
  *
@@ -165,16 +169,52 @@ export default {
     },
 
     methods: {
+        /**
+         * Check if a location's `attrName` already appears between a list of locations.
+         * In that case append its `suffixAttr` as suffix to be more distinguishable.
+         * Do it for both
+         * @param {Object} location The location to process
+         * @param {array} locations The locations list
+         * @param {string} attrName The attribute name to search duplicates for
+         * @param {string} suffixAttr The attribute name to use as suffix
+         */
+        applySuffix(location, locations, attrName, suffixAttr) {
+            if (!location.attributes[suffixAttr] || !this.fetchedLocations) {
+                return;
+            }
+
+            let duplicateValueIdx = this.fetchedLocations.findIndex((rawLocation) =>
+                rawLocation.id != location.id &&
+                rawLocation.attributes[attrName].toLowerCase() === location.attributes[attrName].toLowerCase()
+            );
+            if (duplicateValueIdx == -1) {
+                return;
+            }
+
+            location.attributes[attrName] = stripHtml(`${location.attributes[attrName]} (${location.attributes[suffixAttr]})`);
+
+            const duplicateValue = this.fetchedLocations[duplicateValueIdx];
+            if (!duplicateValue.attributes[suffixAttr]) {
+                return;
+            }
+
+            // if `suffixAttr` is set, append the value also for the duplicate
+            locations[duplicateValueIdx].attributes[attrName] = stripHtml(`${duplicateValue.attributes[attrName]} (${duplicateValue.attributes[suffixAttr]})`);
+        },
         onChange() {
             this.$parent.$emit('updated', this.index, this.location);
         },
         onSubmitTitle(result) {
-            this.location = result; // set the retrieved location as model
+            // use original fetched location instead of the "potentially" edited one (see `searchAddress` method)
+            let location = this.fetchedLocations.find((item) => item.id == result.id);
+            this.location = location; // set the retrieved location as model
             this.coordinates = convertFromPoint(this.location.attributes.coords);
             this.$parent.$emit('updated', this.index, this.location);
         },
         onSubmitAddress(result) {
-            this.location = result; // set the retrieved location as model
+            // use original fetched location instead of the "potentially" edited one (see `searchAddress` method)
+            let location = this.fetchedLocations.find((item) => item.id == result.id);
+            this.location = location; // set the retrieved location as model
             this.coordinates = convertFromPoint(this.location.attributes.coords);
             this.$parent.$emit('updated', this.index, this.location);
         },
@@ -187,7 +227,7 @@ export default {
             this.location.attributes.address = address;
         },
         searchTitle(input) {
-            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
+            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=title`;
 
             return new Promise(resolve => {
                 if (input.length < 3) {
@@ -199,19 +239,23 @@ export default {
                     .then(response => response.json())
                     .then(data => {
                         let results = data.data;
-
                         if (!results) {
                             return resolve([]);
                         }
 
-                        // filter locations by input title
-                        results = results.filter(elem => elem.attributes.title && elem.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
+                        // only pick locations that include input string in the title
+                        results = results.filter((location) => location.attributes.title && location.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
+                        // store raw filtered data
+                        this.fetchedLocations = results.slice();
+
+                        results.forEach((location) => this.applySuffix(location, results, 'title', 'address'));
+
                         resolve(results);
                     });
             })
         },
         searchAddress(input) {
-            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}`;
+            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=address`;
 
             return new Promise(resolve => {
                 if (input.length < 3) {
@@ -223,18 +267,20 @@ export default {
                     .then(response => response.json())
                     .then(data => {
                         let results = data.data;
-
                         if (!results) {
                             return resolve([]);
                         }
 
-                        const filterFunc = (elem, input) => {
-                            const string = this.address(elem);
-                            return string && string.toLowerCase().indexOf(input.toLowerCase()) !== -1;
-                        };
+                        // only pick locations that include input string in the address
+                        results = results.filter((location) => {
+                            const address = this.address(location);
+                            return address && address.toLowerCase().indexOf(input.toLowerCase()) !== -1;
+                        });
+                        // store raw fetched data
+                        this.fetchedLocations = results.slice();
 
-                        // filter locations using the input 'filterFunc' function
-                        results = results.filter((elem) => filterFunc(elem, input));
+                        results.forEach((location) => this.applySuffix(location, results, 'address', 'title'));
+
                         resolve(results);
                     });
             });
@@ -256,7 +302,7 @@ export default {
                 return '';
             }
 
-            return `${model.attributes.address}`.replace(/<\/?[^>]+(>|$)/g, '');
+            return stripHtml(`${model.attributes.address}`);
         },
         async geocode() {
             const retrieveGeocode = () => {
