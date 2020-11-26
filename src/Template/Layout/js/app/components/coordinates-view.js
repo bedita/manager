@@ -44,7 +44,7 @@ export default {
             if (!input) {
                 return;
             }
-            let [lat, lon] = input.split(/\s*,\s*/);
+            let [lon, lat] = input.split(/\s*,\s*/);
             return `POINT(${lon} ${lat})`;
         },
 
