@@ -57,6 +57,7 @@ export default {
                             @submit="onSubmitTitle"
                             @input="onInputTitle"
                             @change="onChange"
+                            :debounce-time="500"
                         >
                         </autocomplete>
                     </label>
@@ -75,6 +76,7 @@ export default {
                             @submit="onSubmitAddress"
                             @input="onInputAddress"
                             @change="onChange"
+                            :debounce-time="500"
                         >
                         </autocomplete>
                     </label>
