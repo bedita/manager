@@ -53,7 +53,7 @@ export default {
             type: String,
             default: '[]',
         },
-        blockView: {
+        listView: {
             type: Boolean,
             default: false,
         },

@@ -1,6 +1,6 @@
 <relation-view inline-template
     :relation-data='{{ relationSchema|json_encode|raw }}'
-    :block-view=blockView
+    :list-view=listView
     relation-name={{ relationName }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
@@ -43,14 +43,13 @@
 
             {# RELATED OBJECTS #}
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
-                <div class="columns" droppable sortable>
+                <div :data-list="listView" class="columns" droppable sortable>
                     <div
                         class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="(related, index) in objects"
                         :key="related.id"
                         :class="containsId(removedRelated, related.id)? 'removed' : ''"
                         draggable
-                        :data-block="blockView"
                         :drag-data="JSON.stringify(related)">
 
                         {% if relationName == 'children' %}
@@ -64,7 +63,6 @@
                     <div v-if="addedRelations.length"
                         class="related-item-column column added is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="related in addedRelations"
-                        :data-block="blockView"
                         :key="related.id">
 
                         {% element 'Form/related_item' { 'stage': true } %}

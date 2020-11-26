@@ -44,7 +44,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
-            blockView: false,
+            listView: false,
         }
     },
 
@@ -71,10 +71,10 @@ export default {
             }
         },
         switchBlockView() {
-            this.blockView = true;
+            this.listView = false;
         },
         switchListView() {
-            this.blockView = false;
+            this.listView = true;
         },
     }
 }

@@ -5,6 +5,24 @@
                 opacity: .2;
                 pointer-events: none;
             }
+
+            &[data-list='true'] {
+                display: table;
+                border-collapse: collapse;
+                min-width: 100%;
+
+                .related-item-column {
+                    display: table-row;
+
+                    .priority, .tag {
+                        display: table-cell;
+                        height: 32px;
+                        white-space: nowrap;
+                        border-bottom: 1px solid #8e959e;
+                        vertical-align: baseline;
+                    }
+                }
+            }
         }
     }
 }
