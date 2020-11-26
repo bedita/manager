@@ -53,7 +53,7 @@
                         :drag-data="JSON.stringify(related)">
 
                         {% if relationName == 'children' %}
-                            {% element 'Form/related_item' { 'children': true } %}
+                            {% element 'Form/related_item' { 'children': true  } %}
                         {% else %}
                             {% element 'Form/related_item' { 'common': true } %}
                         {% endif %}

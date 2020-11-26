@@ -13,13 +13,77 @@
 
                 .related-item-column {
                     display: table-row;
+                    border-bottom: 1px solid #8e959e;
 
-                    .priority, .tag {
-                        display: table-cell;
-                        height: 32px;
-                        white-space: nowrap;
-                        border-bottom: 1px solid #8e959e;
-                        vertical-align: baseline;
+                    .box {
+                        background-color: transparent;
+                        flex-direction: row;
+                        color: #fff;
+                        box-shadow: none;
+
+                        .thumbnail {
+                            display: none;
+                        }
+
+                        .tag {
+                            margin-right: 1rem;
+                        }
+
+                        .priority {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            top: 0;
+                            left: 0;
+
+                            .badge {
+                                display: flex;
+                                background-color: #fff;
+                                color: #000;
+                                box-shadow: none;
+                                border-radius: 0;
+                            }
+                        }
+
+                        .box-body {
+                            display: flex;
+                            padding: 1rem;
+
+                            header {
+                                width: 100%;
+                                margin: 0 1rem;
+
+                                > h1 {
+                                    display: flex;
+                                    align-items: center;
+                                }
+
+                                .id {
+                                    display: none;
+                                }
+
+                                .modified {
+                                    display: flex;
+                                    align-items: center;
+                                }
+                            }
+                        }
+                    }
+
+                    footer {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 0;
+
+                        a {
+                            border: none;
+                            color: #fff;
+                            margin-right: 0;
+
+                            &::before {
+                                content: '';
+                            }
+                        }
                     }
                 }
             }
@@ -46,6 +110,10 @@
             padding-right: $gutter * .75;
             word-break: break-word;
             line-height: 1.25em;;
+        }
+
+        .modified {
+            display: none;
         }
 
         .priority {
