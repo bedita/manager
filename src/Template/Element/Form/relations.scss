@@ -176,3 +176,21 @@
         }
     }
 }
+
+.relations {
+    .fieldset {
+        .buttons {
+            display: flex;
+            margin-right: 0.5rem;
+
+            .switch-view {
+                border: none;
+                background-color: transparent;
+                color: #fff;
+                width: 1.5rem;
+                height: 1rem;
+                min-width: 1rem;
+            }
+        }
+    }
+}
