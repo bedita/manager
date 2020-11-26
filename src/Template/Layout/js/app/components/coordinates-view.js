@@ -9,7 +9,7 @@
 export default {
     template: `<div class="input text coordinates-content">
         <input type="hidden" name="coords" :value="pointValue" />
-        <input placeholder="Latitude, Longitude" type="text" :value="value" @change="update($event.target.value)" />
+        <input placeholder="Long, Lat" type="text" :value="value" @change="update($event.target.value)" />
     </div>`,
 
     props: {
@@ -37,8 +37,7 @@ export default {
             if (!match) {
                 return;
             }
-            let [lon, lat] = match[1].split(' ');
-            return `${lat}, ${lon}`;
+            return match[1].split(' ').join(', ');
         },
 
         convertToPoint(input) {

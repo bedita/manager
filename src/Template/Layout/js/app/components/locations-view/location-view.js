@@ -15,15 +15,14 @@ function convertFromPoint(input) {
     if (!match) {
         return;
     }
-    let [lon, lat] = match[1].split(' ');
-    return `${lat}, ${lon}`;
+    return match[1].split(' ').join(', ');
 }
 
 function convertToPoint(input) {
     if (!input) {
         return;
     }
-    let [lat, lon] = input.split(/\s*,\s*/);
+    let [lon, lat] = input.split(/\s*,\s*/);
     return `POINT(${lon} ${lat})`;
 }
 
