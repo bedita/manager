@@ -187,7 +187,7 @@ class OptionsTest extends TestCase
                 [
                     'class' => 'coordinates',
                     'templates' => [
-                        'inputContainer' => '<div class="input coordinates {{type}}{{required}}"><label>Coordinates</label><coordinates-view coordinates="POINT(11.123125 44.6123245)" /></div>',
+                        'inputContainer' => '<div class="input coordinates {{type}}{{required}}"><label>' . __('Long Lat Coordinates') . '</label><coordinates-view coordinates="POINT(11.123125 44.6123245)" /></div>',
                     ],
                     'type' => 'readonly',
                 ],
