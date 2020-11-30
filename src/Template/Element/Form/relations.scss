@@ -13,13 +13,13 @@
 
                 .related-item-column {
                     display: table-row;
-                    border-bottom: 1px solid #8e959e;
 
                     .box {
                         background-color: transparent;
                         flex-direction: row;
                         color: #fff;
                         box-shadow: none;
+                        padding: 0 0.5rem;
 
                         .thumbnail {
                             display: none;
@@ -48,6 +48,9 @@
                         .box-body {
                             display: flex;
                             padding: 1rem;
+                            margin-left: 1rem;
+                            padding-left: 0;
+                            border-bottom: 1px solid #8e959e;
 
                             header {
                                 width: 100%;
@@ -74,6 +77,8 @@
                         display: flex;
                         align-items: center;
                         margin-top: 0;
+                        border-bottom: 1px solid #8e959e;
+                        padding-right: 0;
 
                         a {
                             border: none;
@@ -81,7 +86,7 @@
                             margin-right: 0;
 
                             &::before {
-                                content: '';
+                                content: none;
                             }
                         }
                     }
