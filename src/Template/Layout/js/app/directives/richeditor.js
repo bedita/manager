@@ -3,6 +3,7 @@ import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 
 import 'tinymce/plugins/paste';
+import 'tinymce/plugins/autoresize';
 import 'tinymce/plugins/charmap';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
@@ -62,22 +63,25 @@ export default {
              * @param {Object} element DOM object
              */
             async inserted(element, binding, vnode) {
+                let changing = false;
                 let items = JSON.parse(binding.expression || '');
                 if (!items) {
                     items = DEFAULT_TOOLBAR;
                 }
 
-                const [editor] = element.editor = await tinymce.init({
+                const [editor] = await tinymce.init({
                     target: element,
                     skin: false,
                     content_css: false,
                     menubar: false,
                     branding: false,
+                    max_height: 500,
                     toolbar: DEFAULT_TOOLBAR,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     plugins: [
                         'paste',
+                        'autoresize',
                         'code',
                         'charmap',
                         'link',
@@ -86,12 +90,10 @@ export default {
                         'hr',
                         'code',
                     ].join(' '),
+                    autoresize_bottom_margin: 50,
                 });
 
-                console.log(editor);
-
-                let changing = false;
-
+                element.editor = editor;
                 element.addEventListener('change', () => {
                     if (!changing && element.value !== editor.getContent()) {
                         editor.setContent(element.value);

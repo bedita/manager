@@ -377,19 +377,20 @@ a.close-button {
     }
 }
 
-.ck-editor {
-    --ck-color-base-background: #{$gray-200};
-    color: #000;
-
-    .ck-label {
-        display: none !important;
+/* TINYMCE */
+.tox.tox-tinymce,
+.tox.tox-tinymce-aux {
+    .tox-tbtn {
+        min-width: 0;
     }
 
-    .ck-content {
-        min-height: 12 * $gutter;
+    .tox-dialog-wrap__backdrop {
+        background: rgba(0, 0, 0, 0.8);
     }
 
-    .CodeMirror {
-        font-size: 1.2em;
+    .tox-dialog {
+        button {
+            min-width: 0;
+        }
     }
 }
