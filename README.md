@@ -138,7 +138,7 @@ Then you may run the image with
 docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0
 ```
 
-You can then set env vars accordingly like this
+You can then set env vars accordingly like this:
 
 ```env
 export BEDITA_API="http://localhost:8090"
