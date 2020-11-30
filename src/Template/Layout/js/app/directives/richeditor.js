@@ -194,15 +194,17 @@ const open = async (editor) => {
         },
     });
 
-    // let textarea = document.querySelector('.tox-textarea');
-    // console.log(textarea);
-    // codemirror = CodeMirror.fromTextArea(textarea, {
-    //     mode: 'text/html',
-    // });
+    let textarea = document.querySelector('.tox-textarea');
+    textarea.value = format(editor.getContent());
+    let codemirror = CodeMirror.fromTextArea(textarea, {
+        mode: 'text/html',
+        lineNumbers: true,
+        theme: 'monokai',
+    });
 
-    // codemirror.on('change', () => {
-    //     textarea.value = codemirror.getValue();
-    // });
+    codemirror.on('change', () => {
+        textarea.value = codemirror.getValue();
+    });
 };
 
 const register = (editor) => {

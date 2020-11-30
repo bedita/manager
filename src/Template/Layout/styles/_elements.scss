@@ -376,21 +376,3 @@ a.close-button {
         }
     }
 }
-
-/* TINYMCE */
-.tox.tox-tinymce,
-.tox.tox-tinymce-aux {
-    .tox-tbtn {
-        min-width: 0;
-    }
-
-    .tox-dialog-wrap__backdrop {
-        background: rgba(0, 0, 0, 0.8);
-    }
-
-    .tox-dialog {
-        button {
-            min-width: 0;
-        }
-    }
-}
