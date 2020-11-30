@@ -41,6 +41,8 @@ export default class InsertPlaceholders extends Plugin {
 
                 let onSave = (objects) => {
                     PanelEvents.closePanel();
+                    PanelEvents.stop('relations-add:save', this, onSave);
+                    PanelEvents.stop('panel:close', this, onClose);
                     objects.forEach((data) => {
                         editor.model.change((writer) => {
                             let element = writer.createElement('placeholder', {
@@ -97,13 +99,13 @@ export default class InsertPlaceholders extends Plugin {
 
             conversion.for('editingDowncast').elementToElement( {
                 model: 'placeholder',
-                view: (modelItem, { writer }) => createPlaceholderView(modelItem, writer),
+                view: (model, { writer }) => createPlaceholderView(model, writer),
             });
 
             // convert html to ckeditor placeholder model
             conversion.for('dataDowncast').elementToElement( {
                 model: 'placeholder',
-                view: (modelItem, { writer }) => createPlaceholderView(modelItem, writer),
+                view: (model, { writer }) => createPlaceholderView(model, writer),
             });
 
             let cache = {};
@@ -123,38 +125,49 @@ export default class InsertPlaceholders extends Plugin {
                 return cache[id];
             }
 
-            function createPlaceholderView(modelItem, writer) {
-                let id = modelItem.getAttribute('id');
-                let type = modelItem.getAttribute('type');
-                let params = modelItem.getAttribute('params') || {};
+            function loadPreview(model, dom, type, id) {
+                let root = dom.shadowRoot || dom.attachShadow({
+                    mode: 'open',
+                });
+                root.innerHTML = 'Loading...';
+
+                fetchData(type, id)
+                    .then((json) => {
+                        let data = json.data;
+                        if (data.id == model.getAttribute('id')) {
+                            return data;
+                        }
+                    })
+                    .then((data) => {
+                        if (!data) {
+                            return;
+                        }
+
+                        switch (data.type) {
+                            case 'images':
+                                root.innerHTML = `<img src="${data.meta.media_url}" alt="${data.attributes.title}" />`;
+                                break;
+                            default:
+                                if (data.meta.media_url) {
+                                    root.innerHTML = `<iframe src="${data.meta.media_url}"></iframe>`;
+                                } else {
+                                    `<div class="embed-card">
+                                        <h1>${data.attributes.title || t('Untitled')}</h1>
+                                        <div class="description">${data.attributes.description || ''}</div>
+                                    </div>`
+                                }
+                                break;
+                        }
+                    });
+            }
+
+            function createPlaceholderView(model, writer) {
+                let id = model.getAttribute('id');
+                let type = model.getAttribute('type');
+                let params = model.getAttribute('params') || {};
                 let placeholderView = writer.createRawElement('span', { class: 'be-placeholder', style: params }, (/** @type {HTMLElement} */ dom) => {
                     dom.innerHTML = `<!-- BE-PLACEHOLDER.${id}.${btoa(params)} -->`;
-                    let root = dom.shadowRoot || dom.attachShadow({
-                        mode: 'open',
-                    });
-                    root.innerHTML = '';
-
-                    fetchData(type, id)
-                        .then((json) => {
-                            let data = json.data;
-                            if (data.id == modelItem.getAttribute('id')) {
-                                return data;
-                            }
-                        })
-                        .then((data) => {
-                            if (data) {
-                                return;
-                            }
-
-                            switch (data.type) {
-                                case 'images':
-                                    root.innerHTML = `<img src="${data.attributes.uri}" alt="${data.attributes.title}" />`;
-                                    break;
-                                default:
-                                    root.innerHTML = `<iframe src="${data.attributes.uri}"></iframe>`;
-                                    break;
-                            }
-                        });
+                    loadPreview(model, dom, type, id);
                 });
 
                 return placeholderView;
