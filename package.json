@@ -27,7 +27,7 @@
         "abortcontroller-polyfill": "^1.1.9",
         "autosize": "^4.0.2",
         "axios": "^0.18.0",
-        "codemirror": "^5.57.0",
+        "codemirror": "^5.58.3",
         "deepmerge": "^2.2.1",
         "flatpickr": "^4.4.7",
         "jsoneditor": "^5.15.0",

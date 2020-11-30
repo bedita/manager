@@ -272,17 +272,6 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(woff|eot|gif)$/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 8092 * 1024,
-                        }
-                    }
-                ]
-            },
-            {
                 include: [
                     path.resolve(__dirname, 'node_modules'),
                 ],
