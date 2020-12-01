@@ -80,8 +80,8 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
-        $features = $this->Schema->objectTypesFeatures();
-        $this->getController()->set(compact('modules', 'project', 'features'));
+        $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
+        $this->getController()->set(compact('modules', 'project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
