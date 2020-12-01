@@ -28,6 +28,7 @@ use Psr\Log\LogLevel;
  * Component to load available modules.
  *
  * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
 {
@@ -43,7 +44,7 @@ class ModulesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public $components = ['Auth'];
+    public $components = ['Auth', 'Schema'];
 
     /**
      * {@inheritDoc}
@@ -79,7 +80,8 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
-        $this->getController()->set(compact('modules', 'project'));
+        $features = $this->Schema->objectTypesFeatures();
+        $this->getController()->set(compact('modules', 'project', 'features'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
