@@ -270,15 +270,18 @@ class SchemaComponent extends Component
         foreach ($response['data'] as $res) {
             $left = (array)Hash::extract($res, 'relationships.left_object_types.data.{n}.id');
             $types = array_intersect_key($typeNames, array_flip($left));
-            $res['left'] = $this->concreteTypes($types, $descendants);
+            $left = $this->concreteTypes($types, $descendants);
 
             $right = (array)Hash::extract($res, 'relationships.right_object_types.data.{n}.id');
             $types = array_intersect_key($typeNames, array_flip($right));
-            $res['right'] = $this->concreteTypes($types, $descendants);
+            $right = $this->concreteTypes($types, $descendants);
 
             unset($res['relationships'], $res['links']);
-            $relations[$res['attributes']['name']] = $res;
-            $relations[$res['attributes']['inverse_name']] = $res;
+            $relations[$res['attributes']['name']] = $res + compact('left', 'right');
+            $relations[$res['attributes']['inverse_name']] = $res + [
+                'left' => $right,
+                'right' => $left,
+            ];
         }
         Configure::load('relations');
 

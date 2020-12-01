@@ -538,12 +538,8 @@ class ModulesComponent extends Component
     public function relatedTypes(array $schema, string $relation): array
     {
         $relationsSchema = (array)Hash::get($schema, $relation);
-        $name = (string)Hash::get($relationsSchema, 'attributes.name');
-        if ($name === $relation) {
-            return (array)Hash::get($relationsSchema, 'right');
-        }
 
-        return (array)Hash::get($relationsSchema, 'left');
+        return (array)Hash::get($relationsSchema, 'right');
     }
 
     /**
