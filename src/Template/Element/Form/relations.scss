@@ -45,12 +45,20 @@
                             }
                         }
 
+                        .children-position {
+                            display: none;
+                        }
+
                         .box-body {
                             display: flex;
                             padding: 1rem;
                             margin-left: 1rem;
                             padding-left: 0;
                             border-bottom: 1px solid #8e959e;
+
+                            .status {
+                                width: 3rem;
+                            }
 
                             header {
                                 width: 100%;
