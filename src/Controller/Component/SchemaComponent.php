@@ -351,6 +351,12 @@ class SchemaComponent extends Component
     /**
      * Fetch object types information via API and manipulate response array.
      *
+     * Resulting array will contain:
+     *  * `descendants` - associative array having abstract types as keys
+     *          and all concrete descendant types list as value
+     *  * `uploadable` - list of concrete types having "Streams" associated,
+     *          types that can be instantiated via file upload (like images, files)
+     *
      * @return array
      */
     protected function fetchObjectTypesFeatures(): array
@@ -362,7 +368,8 @@ class SchemaComponent extends Component
         ];
         $response = (array)ApiClientProvider::getApiClient()->get('/model/object_types', $query);
 
-        $descendants = array_filter(array_unique(Hash::extract($response, 'data.{n}.attributes.parent_name')));
+        $descendants = (array)Hash::extract($response, 'data.{n}.attributes.parent_name');
+        $descendants = array_filter(array_unique($descendants));
         $types = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes');
         $descendants = array_fill_keys($descendants, []);
         $uploadable = [];
