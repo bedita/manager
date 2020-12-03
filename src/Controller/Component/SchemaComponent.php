@@ -306,6 +306,7 @@ class SchemaComponent extends Component
                 $res[] = $type;
             }
         }
+        sort($res);
 
         return array_values(array_unique($res));
     }
