@@ -11,7 +11,7 @@ export default {
     template: `<div class="history-content" style="--module-color: ${BEDITA.currentModule.color}">
         <div v-if="isLoading" class="is-loading-spinner"></div>
         <details v-for="date in sortedDates" open>
-            <summary class="pb-05 is-upppercase has-font-weight-bold"><: date :></summary>
+            <summary class="pb-05 is-uppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>

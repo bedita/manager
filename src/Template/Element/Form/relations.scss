@@ -5,6 +5,101 @@
                 opacity: .2;
                 pointer-events: none;
             }
+
+            &[data-list='true'] {
+                display: table;
+                border-collapse: collapse;
+                min-width: 100%;
+
+                .related-item-column {
+                    display: table-row;
+
+                    .box {
+                        background-color: transparent;
+                        flex-direction: row;
+                        color: #fff;
+                        box-shadow: none;
+                        padding: 0 0.5rem;
+
+                        .thumbnail {
+                            display: none;
+                        }
+
+                        .tag {
+                            margin-right: 1rem;
+                        }
+
+                        .priority {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            top: 0;
+                            left: 0;
+
+                            .badge {
+                                display: flex;
+                                background-color: #fff;
+                                color: #000;
+                                box-shadow: none;
+                                border-radius: 0;
+                            }
+                        }
+
+                        .children-position {
+                            display: none;
+                        }
+
+                        .box-body {
+                            display: flex;
+                            padding: 1rem;
+                            margin-left: 1rem;
+                            padding-left: 0;
+                            border-bottom: 1px solid #8e959e;
+
+                            .status {
+                                width: 3rem;
+                            }
+
+                            header {
+                                width: 100%;
+                                margin: 0 1rem;
+
+                                > h1 {
+                                    display: flex;
+                                    align-items: center;
+                                }
+
+                                .id {
+                                    display: none;
+                                }
+
+                                .modified {
+                                    display: flex;
+                                    align-items: center;
+                                }
+                            }
+                        }
+                    }
+
+                    footer {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 0;
+                        border-bottom: 1px solid #8e959e;
+                        padding-right: 0;
+
+                        a {
+                            border: none;
+                            color: #fff;
+                            margin-right: 0;
+
+                            &::before {
+                                content: none;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -28,6 +123,10 @@
             padding-right: $gutter * .75;
             word-break: break-word;
             line-height: 1.25em;;
+        }
+
+        .modified {
+            display: none;
         }
 
         .priority {
@@ -172,6 +271,28 @@
                 background-color: $info;
                 color: #fff;
                 font-weight: $font-weight-black;
+            }
+        }
+    }
+}
+
+.relations {
+    .fieldset {
+        .buttons {
+            display: flex;
+            margin-right: 0.5rem;
+
+            .switch-view {
+                border: none;
+                background-color: transparent;
+                color: #495057;
+                width: 1.5rem;
+                height: 1rem;
+                min-width: 1rem;
+
+                &[data-active="true"] {
+                    color: #fff;
+                }
             }
         }
     }
