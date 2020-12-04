@@ -292,16 +292,15 @@ class SchemaComponent extends Component
      * Retrieve concrete types from types list using `descendants` array
      *
      * @param array $types Object types
-     * @param array $descendants Descendants
+     * @param array $descendants Descendants array
      * @return array
      */
-    protected function concreteTypes(array $types, array &$descendants): array
+    protected function concreteTypes(array $types, array $descendants): array
     {
         $res = [];
         foreach ($types as $type) {
-            $concreteTypes = (array)Hash::get($descendants, $type);
-            if (!empty($concreteTypes)) {
-                $res += $concreteTypes;
+            if (!empty($descendants[$type])) {
+                $res += $descendants[$type];
             } else {
                 $res[] = $type;
             }
