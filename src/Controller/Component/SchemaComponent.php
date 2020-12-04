@@ -378,7 +378,7 @@ class SchemaComponent extends Component
             if ($abstract) {
                 continue;
             }
-            $parent = Hash::get($data, 'parent_name');
+            $parent = (string)Hash::get($data, 'parent_name');
             $this->setDescendant($name, $parent, $types, $descendants);
             if (!(bool)Hash::get($types, $name . '.is_abstract')) {
                 $assoc = (array)Hash::get($types, $name . '.associations');
@@ -402,13 +402,12 @@ class SchemaComponent extends Component
      */
     protected function setDescendant(string $name, string $parent, array &$types, array &$descendants): void
     {
-        if (!empty($descendants[$parent] && in_array($name, $descendants[$parent]))) {
+        $desc = (array)Hash::get($descendants, $parent);
+        if (empty($parent) || in_array($name, $desc)) {
             return;
         }
         $descendants[$parent][] = $name;
-        $superParent = Hash::get($types, $parent . '.parent_name');
-        if ($superParent) {
-            $this->setDescendant($name, $superParent, $types, $descendants);
-        }
+        $superParent = (string)Hash::get($types, $parent . '.parent_name');
+        $this->setDescendant($name, $superParent, $types, $descendants);
     }
 }
