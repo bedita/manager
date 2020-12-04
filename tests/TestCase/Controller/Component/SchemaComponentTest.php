@@ -440,4 +440,20 @@ class SchemaComponentTest extends TestCase
         static::assertEquals(['Categories'], $result['associations']);
         static::assertEquals(['has_media' => 0], $result['relations']);
     }
+
+    /**
+     * Test `descendants` method on abstract type
+     *
+     * @covers ::descendants()
+     *
+     * @return void
+     */
+    public function testDescendants(): void
+    {
+        $result = $this->Schema->descendants('non-existent');
+        static::assertEmpty($result);
+
+        $result = $this->Schema->descendants('objects');
+        static::assertNotEmpty($result);
+    }
 }
