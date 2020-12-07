@@ -32,8 +32,8 @@ Locale(BEDITA.locale);
 
 // General Configs
 
-// TO-DO to be a dynamic array
-export const ACCEPTABLE_MEDIA = ['media', 'images', 'videos', 'audio', 'files'];
+// Media object types with possible file uploads
+export const ACCEPTABLE_MEDIA = BEDITA.uploadable;
 
 // Global mixins
 
