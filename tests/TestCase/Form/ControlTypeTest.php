@@ -34,9 +34,10 @@ class ControlTypeTest extends TestCase
             array_merge(
                 (array)\Cake\Core\Configure::read('Control.handlers'),
                 [
-                    'custom' => [
+                    '/properties/custom' => [
                         'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
                         'method' => 'dummy',
+                        'type' => 'cats',
                     ],
                 ]
             )
@@ -172,9 +173,9 @@ class ControlTypeTest extends TestCase
                 ],
             ],
             'custom' => [
-                'custom',
+                'cats',
                 [
-                    'type' => 'custom',
+                    '$id' => '/properties/custom',
                 ],
             ],
         ];

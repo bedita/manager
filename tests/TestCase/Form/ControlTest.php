@@ -34,9 +34,10 @@ class ControlTest extends TestCase
             array_merge(
                 (array)\Cake\Core\Configure::read('Control.handlers'),
                 [
-                    'custom' => [
+                    '/properties/custom' => [
                         'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
                         'method' => 'dummy',
+                        'type' => 'cats',
                     ],
                 ]
             )
@@ -252,10 +253,9 @@ class ControlTest extends TestCase
             ],
             'html' => [
                 [
-                    'type' => 'custom',
                     '$id' => '/properties/custom',
                 ], // schema
-                'custom', // type
+                'cats', // type
                 'something', // value
                 ['html' => '<dummy>something</dummy>'], // expected
             ],

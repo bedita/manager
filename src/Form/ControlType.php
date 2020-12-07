@@ -61,8 +61,12 @@ class ControlType
         if (!is_array($schema)) {
             return 'text';
         }
+        // verify if there's an handler by $schema.$id property
+        if (!empty(Configure::read(sprintf('Control.handlers.%s.type', Hash::get($schema, '$id', null))))) {
+            return Configure::read(sprintf('Control.handlers.%s.type', Hash::get($schema, '$id', null)));
+        }
         $schemaType = Hash::get($schema, 'type', null);
-        if ($schemaType === 'categories' || !empty(Configure::read(sprintf('Control.handlers.%s', $schemaType)))) {
+        if ($schemaType === 'categories') {
             return $schemaType;
         }
         if (!empty($schema['oneOf'])) {
