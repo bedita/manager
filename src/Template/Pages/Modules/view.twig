@@ -35,7 +35,7 @@
 
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
-                {% if object.id is empty and objectType in ['images', 'files', 'audio', 'videos'] %}
+                {% if object.id is empty and objectType in uploadable %}
                     {% element 'Form/upload' %}
                 {% endif %}
 
