@@ -52,7 +52,7 @@ class PropertyHelper extends Helper
             return (string)Hash::get($controlOptions, 'html', '');
         }
 
-        return $this->Form->control($key, array_merge($controlOptions, $options));
+        return $this->Form->control($name, array_merge($controlOptions, $options));
     }
 
     /**
