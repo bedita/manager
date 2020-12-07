@@ -32,43 +32,45 @@ class PropertyHelper extends Helper
     public $helpers = ['Form', 'Schema'];
 
     /**
-     * View the property
+     * Generates a form control element for an object property by name, value and options.
+     * Use SchemaHelper (@see \App\View\Helper\SchemaHelper) to get control options by schema model.
+     * Use FormHelper (@see \Cake\View\Helper\FormHelper::control) to render control.
      *
-     * @param string $key The property key
+     * @param string $name The property name
      * @param mixed|null $value The property value
      * @param array $options The form element options, if any
      * @return string
      */
-    public function view(string $key, $value, array $options = []): string
+    public function control(string $name, $value, array $options = []): string
     {
-        $controlOptions = $this->Schema->controlOptions($key, $value, $this->schema($key));
+        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name));
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
-            Configure::write('_jsonKeys', array_merge($jsonKeys, [$key]));
+            Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
         }
         if (Hash::check($controlOptions, 'html')) {
-            return Hash::get($controlOptions, 'html', '');
+            return (string)Hash::get($controlOptions, 'html', '');
         }
 
         return $this->Form->control($key, array_merge($controlOptions, $options));
     }
 
     /**
-     * Schema array by key
+     * Schema array by attribute name
      *
-     * @param string $key The attribute key
+     * @param string $name The attribute name
      * @return array
      */
-    public function schema(string $key): array
+    public function schema(string $name): array
     {
         $schema = (array)$this->_View->get('schema');
-        if (in_array($key, ['associations', 'categories', 'relations'])) {
+        if (in_array($name, ['associations', 'categories', 'relations'])) {
             return [
-                'type' => $key,
-                $key => Hash::get($schema, sprintf('%s', $key)),
+                'type' => $name,
+                $name => Hash::get($schema, sprintf('%s', $name)),
             ];
         }
 
-        return Hash::get($schema, sprintf('properties.%s', $key), []);
+        return Hash::get($schema, sprintf('properties.%s', $name), []);
     }
 }

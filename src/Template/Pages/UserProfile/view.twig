@@ -34,7 +34,7 @@
                                 {% if key == 'email' or key == 'username' %}
                                     {% set options = options|merge({'readonly': 'true'}) %}
                                 {% endif %}
-                                {{ Property.view(key, value, options)|raw }}
+                                {{ Property.control(key, value, options)|raw }}
                             {% endfor %}
                         </div>
                     </section>
@@ -50,7 +50,7 @@
 
                         <div class="tab-container">
                             {% for key, value in attributes %}
-                                {{ Property.view(key, value)|raw }}
+                                {{ Property.control(key, value)|raw }}
                             {% endfor %}
                         </div>
                     </section>

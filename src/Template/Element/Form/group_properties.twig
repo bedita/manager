@@ -10,7 +10,7 @@
 
         {% for key, value in properties %}
 
-            {{ Property.view(key, value)|raw }}
+            {{ Property.control(key, value)|raw }}
 
         {% endfor %}
 

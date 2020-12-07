@@ -9,7 +9,7 @@
             </header>
 
             <div v-show="isOpen" class="tab-container">
-                {{ Property.view('categories', object.attributes.categories, {'label': false})|raw }}
+                {{ Property.control('categories', object.attributes.categories, {'label': false})|raw }}
             </div>
         </section>
 

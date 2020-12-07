@@ -36,11 +36,11 @@
                             </select>
                         </div>
 
-                        {{ Property.view('status', object.attributes.status|default('draft'), {'v-model': 'object.attributes.status'})|raw }}
+                        {{ Property.control('status', object.attributes.status|default('draft'), {'v-model': 'object.attributes.status'})|raw }}
 
-                        {{ Property.view('title', '', {'v-model': 'object.attributes.title'})|raw }}
+                        {{ Property.control('title', '', {'v-model': 'object.attributes.title'})|raw }}
 
-                        {{ Property.view('description', '', {'v-model': 'object.attributes.description'})|raw }}
+                        {{ Property.control('description', '', {'v-model': 'object.attributes.description'})|raw }}
 
                         <div class="input text" v-if="isMedia">
                             <label for="file">{{ __('File') }}</label>

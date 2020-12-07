@@ -52,7 +52,7 @@
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class == 'json' %}
-                                {{ Property.view(key, value)|raw }}
+                                {{ Property.control(key, value)|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>

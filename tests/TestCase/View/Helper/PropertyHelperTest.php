@@ -45,11 +45,11 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testView` test case.
+     * Data provider for `testControl` test case.
      *
      * @return array
      */
-    public function viewProvider(): array
+    public function controlProvider(): array
     {
         return [
             'text' => [
@@ -136,7 +136,7 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
-     * Test `view`
+     * Test `control`
      *
      * @param string $key The key
      * @param mixed|null $value The value
@@ -145,11 +145,11 @@ class PropertyHelperTest extends TestCase
      * @param string $expected The expected result
      * @return void
      *
-     * @dataProvider viewProvider()
-     * @covers ::view()
+     * @dataProvider controlProvider()
+     * @covers ::control()
      * @covers ::schema()
      */
-    public function testView(string $key, $value, array $options = [], array $schema = [], string $expected = ''): void
+    public function testControl(string $key, $value, array $options = [], array $schema = [], string $expected = ''): void
     {
         $view = new View(null, null, null, []);
         if ($key === 'categories') {
@@ -159,7 +159,7 @@ class PropertyHelperTest extends TestCase
         }
         $view->set('schema', $schema);
         $property = new PropertyHelper($view);
-        $actual = $property->view($key, $value, $options);
+        $actual = $property->control($key, $value, $options);
         static::assertEquals($expected, $actual);
     }
 
