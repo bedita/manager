@@ -13,11 +13,7 @@
 namespace App\View\Helper;
 
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
-use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
