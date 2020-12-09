@@ -39,7 +39,6 @@ class PropertyHelperTest extends TestCase
                         'descr' => [ // a field
                             'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
                             'method' => 'dummy',
-                            'type' => 'string', // property type
                         ],
                     ],
                 ]
@@ -130,7 +129,6 @@ class PropertyHelperTest extends TestCase
                 'something',
                 [],
                 [
-                    'type' => 'custom',
                     'name' => 'descr',
                 ],
                 '<dummy>something</dummy>',

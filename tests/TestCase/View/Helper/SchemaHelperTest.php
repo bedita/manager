@@ -54,7 +54,6 @@ class SchemaHelperTest extends TestCase
                         'descr' => [ // a field
                             'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
                             'method' => 'dummy',
-                            'type' => 'string', // property type
                         ],
                     ],
                 ]
