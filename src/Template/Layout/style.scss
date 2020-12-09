@@ -9,7 +9,6 @@
 
 BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 */
-
 @import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
 @import './styles/mixins';
 
@@ -23,6 +22,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/utility_classes';
 @import './styles/elements';
 @import './styles/columns';
+@import './styles/richtexteditor';
 
 // elements
 @import '../Element/Form/form';

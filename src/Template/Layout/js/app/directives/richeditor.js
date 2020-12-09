@@ -1,30 +1,41 @@
+import CodeMirror from 'codemirror';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'tinymce/tinymce';
+import 'tinymce/icons/default';
+import 'tinymce/themes/silver';
+import 'tinymce/plugins/paste';
+import 'tinymce/plugins/autoresize';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/hr';
+
 const DEFAULT_TOOLBAR = [
-    'heading',
+    'styleselect',
     '|',
     'bold',
     'italic',
     'underline',
-    'strikethrough',
-    'code',
-    'subscript',
-    'superscript',
-    'removeFormat',
     '|',
-    'alignment',
+    'alignleft',
+    'aligncenter',
+    'alignright',
     '|',
-    'specialCharacters',
+    'bullist',
+    'numlist',
+    '|',
     'link',
-    'bulletedList',
-    'numberedList',
-    'blockQuote',
-    'insertTable',
-    'horizontalLine',
+    'blockquote',
+    'charmap',
+    'hr',
+    'table',
     '|',
     'undo',
     'redo',
     '|',
-    'editSource',
-];
+    'code',
+].join(' ');
 
 const emit = (vnode, name, data) => {
     let handlers = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
@@ -35,7 +46,7 @@ const emit = (vnode, name, data) => {
 
 /**
  *
- * v-richeditor directive to activate ckeditor on element
+ * v-richeditor directive to activate tinymce on element
  *
  */
 export default {
@@ -53,63 +64,48 @@ export default {
              * @param {Object} element DOM object
              */
             async inserted(element, binding, vnode) {
-                const { ClassicEditor, ...plugins } = await import(/* webpackChunkName: "ckeditor" */'app/lib/ckeditor');
-
+                let changing = false;
                 let items = JSON.parse(binding.expression || '');
                 if (!items) {
                     items = DEFAULT_TOOLBAR;
-                } else if (!Array.isArray(items)) {
-                    items = [items];
                 }
 
-                const editor = element.editor = await ClassicEditor.create(element, {
-                    plugins: Object.values(plugins),
-                    toolbar: {
-                        shouldNotGroupWhenFull: true,
-                        items,
-                    },
-                    heading: {
-                        options: [
-                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                            { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                            { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                            { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' },
-                        ],
-                    },
+                const [editor] = await tinymce.init({
+                    target: element,
+                    skin: false,
+                    content_css: false,
+                    menubar: false,
+                    branding: false,
+                    max_height: 500,
+                    toolbar: DEFAULT_TOOLBAR,
+                    toolbar_mode: 'wrap',
+                    block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
+                    plugins: [
+                        'paste',
+                        'autoresize',
+                        'code',
+                        'charmap',
+                        'link',
+                        'lists',
+                        'table',
+                        'hr',
+                        'code',
+                    ].join(' '),
+                    autoresize_bottom_margin: 50,
                 });
 
-                const allowAttributes = [
-                    'id',
-                    'name',
-                    'class',
-                    'style',
-                    'lang',
-                    'role',
-                    'aria-label',
-                ];
-
-                editor.model.schema.extend('$root', { allowAttributes } );
-                editor.model.schema.extend('$block', { allowAttributes } );
-
-                for (let i = 0; i < allowAttributes.length; i++) {
-                    editor.conversion.attributeToAttribute({ model: allowAttributes[i], view: allowAttributes[i] });
-                }
-
-                let changing = false;
-
+                element.editor = editor;
                 element.addEventListener('change', () => {
-                    if (!changing && element.value !== editor.getData()) {
-                        editor.setData(element.value);
+                    if (!changing && element.value !== editor.getContent()) {
+                        editor.setContent(element.value);
                     }
                 });
 
-                editor.model.document.on('change:data', () => {
+                editor.on('change', () => {
                     let isChanged = element.value !== element.dataset.originalValue;
 
                     changing = true;
-                    element.value = editor.getData();
+                    element.value = editor.getContent();
                     element.dispatchEvent(new CustomEvent('change', {
                         bubbles: true,
                         detail: {
@@ -127,10 +123,110 @@ export default {
                     return;
                 }
 
-                if (element.value !== editor.getData()) {
-                    editor.setData(element.value);
+                if (element.value !== editor.getContent()) {
+                    editor.setContent(element.value);
                 }
             },
         })
     }
 }
+
+function format(html) {
+    let tab = '\t';
+    let result = '';
+    let indent= '';
+
+    html.split(/>\s*</).forEach((element) => {
+        if (element.match( /^\/\w/ )) {
+            indent = indent.substring(tab.length);
+        }
+
+        result += indent + '<' + element + '>\r\n';
+
+        if (element.match( /^<?\w[^>]*[^\/]$/ )) {
+            indent += tab;
+        }
+    });
+
+    return result.substring(1, result.length-3);
+}
+
+const setContent = (editor, html) => {
+    editor.focus();
+    editor.undoManager.transact(function () {
+        editor.setContent(html);
+    });
+    editor.selection.setCursorLocation();
+    editor.nodeChanged();
+};
+
+const getContent = (editor) => editor.getContent({ source_view: true });
+
+const open = async (editor) => {
+    const editorContent = getContent(editor);
+    const dialog = editor.windowManager.open({
+        title: 'Source Code',
+        size: 'large',
+        body: {
+            type: 'panel',
+            items: [{
+                type: 'textarea',
+                name: 'code',
+                id: 'codemirror',
+            }],
+        },
+        buttons: [
+            {
+                type: 'cancel',
+                name: 'cancel',
+                text: 'Cancel'
+            },
+            {
+                type: 'submit',
+                name: 'save',
+                text: 'Save',
+                primary: true,
+            }
+        ],
+        initialData: { code: editorContent },
+        onSubmit: (api) => {
+            setContent(editor, api.getData().code);
+            api.close();
+        },
+    });
+
+    let textarea = document.querySelector('.tox-textarea');
+    textarea.value = format(editor.getContent());
+    let codemirror = CodeMirror.fromTextArea(textarea, {
+        mode: 'text/html',
+        lineNumbers: true,
+        theme: 'monokai',
+    });
+
+    codemirror.on('change', () => {
+        textarea.value = codemirror.getValue();
+    });
+};
+
+const register = (editor) => {
+    editor.addCommand('mceCodeEditor', () => {
+        open(editor);
+    });
+
+    editor.ui.registry.addButton('code', {
+        icon: 'sourcecode',
+        tooltip: 'Source code',
+        onAction: () => open(editor),
+    });
+
+    editor.ui.registry.addMenuItem('code', {
+        icon: 'sourcecode',
+        text: 'Source code',
+        onAction: () => open(editor),
+    });
+};
+
+tinymce.util.Tools.resolve('tinymce.PluginManager').add('code', function(editor) {
+    register(editor);
+    return {};
+});
