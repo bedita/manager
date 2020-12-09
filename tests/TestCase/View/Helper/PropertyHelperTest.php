@@ -35,9 +35,12 @@ class PropertyHelperTest extends TestCase
             array_merge(
                 (array)\Cake\Core\Configure::read('Control.handlers'),
                 [
-                    'custom' => [
-                        'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
-                        'method' => 'dummy',
+                    'dummies' => [ // an object type
+                        'descr' => [ // a field
+                            'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
+                            'method' => 'dummy',
+                            'type' => 'string', // property type
+                        ],
                     ],
                 ]
             )
@@ -123,12 +126,12 @@ class PropertyHelperTest extends TestCase
                 '<div class="input textarea"><label for="an-object">An Object</label><textarea name="an object" v-jsoneditor="true" class="json" id="an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
             ],
             'html' => [
-                'custom control',
+                'descr',
                 'something',
                 [],
                 [
                     'type' => 'custom',
-                    '$id' => '/properties/custom',
+                    'name' => 'descr',
                 ],
                 '<dummy>something</dummy>',
             ],
@@ -158,6 +161,7 @@ class PropertyHelperTest extends TestCase
             $schema = ['properties' => [$key => $schema]];
         }
         $view->set('schema', $schema);
+        $view->set('objectType', 'dummies');
         $property = new PropertyHelper($view);
         $actual = $property->control($key, $value, $options);
         static::assertEquals($expected, $actual);
