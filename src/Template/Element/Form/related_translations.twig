@@ -18,9 +18,7 @@
             <div v-show="isOpen" class="tab-container">
 
                 <div>
-                    {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
-                    {% set options = options|merge({ 'label': __('The main language is') }) %}
-                    {{ Form.control('lang', options)|raw }}
+                    {{ Property.control('lang', object.attributes.lang, { 'label': __('The main language is') })|raw }}
 
                     {% if object.relationships.translations %}
                         {{ Html.link(__('Add translation'), {

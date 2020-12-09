@@ -11,10 +11,9 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Core\Utility\Form;
+namespace App\Test\TestCase\Form;
 
 use App\Form\Control;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**

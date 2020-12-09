@@ -54,7 +54,7 @@ class LayoutHelperTest extends TestCase
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View($request, $response, $events, $data));
         $result = $layout->isDashboard();
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 
     /**
@@ -91,7 +91,7 @@ class LayoutHelperTest extends TestCase
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View($request, $response, $events, $data));
         $result = $layout->isLogin();
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 
     /**
@@ -128,7 +128,7 @@ class LayoutHelperTest extends TestCase
         $data = ['name' => $name];
         $layout = new LayoutHelper(new View($request, $response, $events, $data));
         $result = $layout->messages();
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 
     /**

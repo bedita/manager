@@ -30,16 +30,11 @@
 
                         <div class="tab-container">
                             {% for key, value in attributes %}
-                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                                {% if options.class and options.class == 'json' %}
-                                    {% set jsonKeys = jsonKeys|merge([key]) %}
-                                {% endif %}
-
+                                {% set options = {} %}
                                 {% if key == 'email' or key == 'username' %}
                                     {% set options = options|merge({'readonly': 'true'}) %}
                                 {% endif %}
-
-                                {{ Form.control(key, options)|raw }}
+                                {{ Property.control(key, value, options)|raw }}
                             {% endfor %}
                         </div>
                     </section>
@@ -55,12 +50,7 @@
 
                         <div class="tab-container">
                             {% for key, value in attributes %}
-                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                                {% if options.class and options.class == 'json' %}
-                                    {% set jsonKeys = jsonKeys|merge([key]) %}
-                                {% endif %}
-
-                                {{ Form.control(key, options)|raw }}
+                                {{ Property.control(key, value)|raw }}
                             {% endfor %}
                         </div>
                     </section>
