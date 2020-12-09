@@ -38,11 +38,6 @@ class Control
      */
     public static function control(array $schema, string $type, $value): array
     {
-        // verify if there's an handler by $schema.$id property
-        $handler = Configure::read(sprintf('Control.handlers.%s', Hash::get($schema, '$id', null)));
-        if (!empty($handler)) {
-            return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
-        }
         if (!in_array($type, self::CONTROL_TYPES)) {
             return compact('type', 'value');
         }

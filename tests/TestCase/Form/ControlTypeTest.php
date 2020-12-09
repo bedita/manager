@@ -14,7 +14,6 @@
 namespace App\Test\TestCase\Form;
 
 use App\Form\ControlType;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -24,26 +23,6 @@ use Cake\TestSuite\TestCase;
  */
 class ControlTypeTest extends TestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp(): void
-    {
-        Configure::write(
-            'Control.handlers',
-            array_merge(
-                (array)\Cake\Core\Configure::read('Control.handlers'),
-                [
-                    '/properties/custom' => [
-                        'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
-                        'method' => 'dummy',
-                        'type' => 'cats',
-                    ],
-                ]
-            )
-        );
-    }
-
     /**
      * Data provider for `testFromSchema` test case.
      *
@@ -170,12 +149,6 @@ class ControlTypeTest extends TestCase
                 'categories',
                 [
                     'type' => 'categories',
-                ],
-            ],
-            'custom' => [
-                'cats',
-                [
-                    '$id' => '/properties/custom',
                 ],
             ],
         ];

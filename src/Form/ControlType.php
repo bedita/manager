@@ -13,7 +13,6 @@
 
 namespace App\Form;
 
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
@@ -60,10 +59,6 @@ class ControlType
     {
         if (!is_array($schema)) {
             return 'text';
-        }
-        // verify if there's an handler by $schema.$id property
-        if (!empty(Configure::read(sprintf('Control.handlers.%s.type', Hash::get($schema, '$id', null))))) {
-            return Configure::read(sprintf('Control.handlers.%s.type', Hash::get($schema, '$id', null)));
         }
         $schemaType = Hash::get($schema, 'type', null);
         if ($schemaType === 'categories') {
