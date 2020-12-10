@@ -427,6 +427,149 @@ class LinkHelperTest extends TestCase
     }
 
     /**
+     * Get webroot/js/app.bundle.<number>.js file and return <number>
+     *
+     * @return string
+     */
+    private function getBundle(): string
+    {
+        $files = preg_grep('~^app.bundle.*\.js$~', scandir(WWW_ROOT . 'js' . DS));
+        foreach ($files as $filename) {
+            $filename = basename($filename, '.js');
+            $bundle = substr($filename, strlen('app.bundle.'));
+
+            return $bundle;
+        }
+
+        return '';
+    }
+
+    /**
+     * Data provider for `testJsBundle` test case.
+     *
+     * @return array
+     */
+    public function jsBundleProvider(): array
+    {
+        return [
+            'non existing js' => [
+                ['abcdefg'], // filter
+                '', // expected
+            ],
+            'existing js' => [
+                ['app'], // filter
+                sprintf('<script src="js/app.bundle.%s.js"></script>', $this->getBundle()), // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `jsBundle`
+     *
+     * @param array $filter The filter param
+     * @param string $expected The expected string
+     * @return void
+     * @dataProvider jsBundleProvider()
+     * @covers ::jsBundle
+     * @covers ::findFiles
+     */
+    public function testJsBundle(array $filter, string $expected): void
+    {
+        $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
+        $link->jsBundle($filter);
+        $actual = $this->getActualOutput();
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testCssBundle` test case.
+     *
+     * @return array
+     */
+    public function cssBundleProvider(): array
+    {
+        return [
+            'non existing css' => [
+                ['abcdefg'], // filter
+                '', // expected
+            ],
+            'existing css' => [
+                ['app'], // filter
+                sprintf('<link rel="stylesheet" href="css/app.%s.css"/>', $this->getBundle()), // expected
+            ],
+        ];
+
+    }
+
+    /**
+     * Test `cssBundle`
+     *
+     * @param array $filter The filter param
+     * @param string $expected The expected string
+     * @return void
+     * @dataProvider cssBundleProvider()
+     * @covers ::cssBundle
+     * @covers ::findFiles
+     */
+    public function testCssBundle(array $filter, string $expected): void
+    {
+        $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
+        $link->cssBundle($filter);
+        $actual = $this->getActualOutput();
+        static::assertEquals($expected, $actual);
+    }
+
+    public function findFilesProvider(): array
+    {
+        return [
+            'non existing file' => [
+                ['abcdefg'], // filter
+                'hijlm',
+                '', // expected
+            ],
+            'no filter' => [
+                [], // filter
+                'js',
+                'multi', // expected
+            ],
+            'app.bundle js' => [
+                ['app.bundle'], // filter
+                'js',
+                sprintf('app.bundle.%s.js', $this->getBundle()), // expected
+            ],
+            'app css' => [
+                ['app'], // filter
+                'css',
+                sprintf('app.%s.css', $this->getBundle()), // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `findFiles`
+     *
+     * @return void
+     * @dataProvider findFilesProvider()
+     * @covers ::findFiles
+     */
+    public function testFindFiles(array $filter, string $extension, string $expected): void
+    {
+        $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
+        // call protected method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $actual = $test->invokeMethod($link, 'findFiles', [$filter, $extension]);
+        if (empty($expected)) {
+            static::assertEmpty($actual);
+
+            return;
+        }
+        static::assertNotEmpty($actual);
+        if ($expected !== 'multi') {
+            static::assertEquals($expected, $actual[0]);
+        }
+    }
+
+    /**
      * Data provider for `testObjectNav` test case.
      *
      * @return array
