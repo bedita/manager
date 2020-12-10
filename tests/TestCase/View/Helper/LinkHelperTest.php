@@ -498,7 +498,6 @@ class LinkHelperTest extends TestCase
                 sprintf('<link rel="stylesheet" href="css/app.%s.css"/>', $this->getBundle()), // expected
             ],
         ];
-
     }
 
     /**
