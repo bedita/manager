@@ -42,6 +42,7 @@ class AppView extends TwigView
         $this->loadHelper('Array');
         $this->loadHelper('Html');
         $this->loadHelper('Link');
+        $this->loadHelper('Property');
         $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
         $this->loadHelper('Schema');
         $this->loadHelper('Text');

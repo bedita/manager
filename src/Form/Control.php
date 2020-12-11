@@ -38,12 +38,11 @@ class Control
      */
     public static function control(array $schema, string $type, $value): array
     {
-        if (!in_array($type, Control::CONTROL_TYPES)) {
+        if (!in_array($type, self::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
-        $method = Form::getMethod(Control::class, $type);
 
-        return call_user_func_array($method, [$value, $schema]);
+        return call_user_func_array(Form::getMethod(self::class, $type), [$value, $schema]);
     }
 
     /**

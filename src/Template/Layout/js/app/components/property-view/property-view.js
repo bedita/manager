@@ -44,6 +44,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
+            listView: false,
         }
     },
 
@@ -68,6 +69,12 @@ export default {
             if (this.totalObjects === 0 || force) {
                 this.totalObjects = n;
             }
+        },
+        switchBlockView() {
+            this.listView = false;
+        },
+        switchListView() {
+            this.listView = true;
         },
     }
 }

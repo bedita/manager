@@ -120,6 +120,6 @@ class LinkHelperTest extends TestCase
         $request = $response = $events = null;
         $layout = new LinkHelper(new View($request, $response, $events, $data));
         $result = $layout->objectNav($data);
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 }

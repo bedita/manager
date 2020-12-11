@@ -10,12 +10,12 @@
                 <span>{{ __('All Types') }}</span>
             </div>
         </label>
-        {% for type in types.right %}
+        {% for type in types.right if modules[type] %}
         <label>
             <input type="checkbox" value="{{ type }}" id="{{ type }}" v-model="selectedTypes">
             <div>
                 <i class="bullet has-background-module-{{ type }}"></i>
-                <span>{{ __(type) }}</span>
+                <span>{{ __(type|humanize) }}</span>
             </div>
         </label>
         {% endfor %}

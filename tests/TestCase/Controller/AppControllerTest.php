@@ -398,6 +398,72 @@ class AppControllerTest extends TestCase
                     ],
                 ],
             ],
+            'remove parent' => [
+                'documents', // object_type
+                [
+                    'id' => '1',
+                    '_api' => [ // expected new property in data
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '1',
+                            'relation' => 'parents',
+                            'relatedIds' => [],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '1', // fake document id
+                    'relations' => [],
+                    '_changedParents' => true,
+                ],
+            ],
+
+            'no parents action' => [
+                'folders', // object_type
+                [
+                    'id' => '2',
+                ],
+                [ // data provided
+                    'id' => '2',
+                    'relations' => [
+                        'parent' => [
+                            'replaceRelated' => [
+                                '{ "id": "1", "type": "folders"}',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'replace parents' => [
+                'documents', // object_type
+                [
+                    'id' => '2',
+                    '_api' => [ // expected new property in data
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '2',
+                            'relation' => 'parents',
+                            'relatedIds' => [
+                                [
+                                    'id' => '1',
+                                    'type' => 'folders',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '2',
+                    'relations' => [
+                        'parents' => [
+                            'replaceRelated' => [
+                                '{ "id": "1", "type": "folders"}',
+                            ],
+                        ],
+                    ],
+                    '_changedParents' => true,
+                ],
+            ],
         ];
     }
 
@@ -411,6 +477,7 @@ class AppControllerTest extends TestCase
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
      * @covers ::prepareRelations()
+     * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
      * @dataProvider prepareRequestProvider()
      *
@@ -424,7 +491,7 @@ class AppControllerTest extends TestCase
             ],
             'post' => $data,
             'params' => [
-                'object_type' => 'documents',
+                'object_type' => $objectType,
             ],
         ];
 

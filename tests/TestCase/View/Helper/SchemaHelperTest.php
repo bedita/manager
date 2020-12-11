@@ -43,6 +43,22 @@ class SchemaHelperTest extends TestCase
 
         $view = new View();
         $this->Schema = new SchemaHelper($view);
+        $view->set('objectType', 'dummies');
+
+        Configure::write(
+            'Control.handlers',
+            array_merge(
+                (array)\Cake\Core\Configure::read('Control.handlers'),
+                [
+                    'dummies' => [ // an object type
+                        'descr' => [ // a field
+                            'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
+                            'method' => 'dummy',
+                        ],
+                    ],
+                ]
+            )
+        );
     }
 
     /**
@@ -320,6 +336,18 @@ class SchemaHelperTest extends TestCase
                 ],
                 'test_array',
                 null,
+            ],
+            'custom handler' => [
+                // expected result
+                [
+                    'html' => '<dummy>something</dummy>',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'descr',
+                'something',
             ],
         ];
     }

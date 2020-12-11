@@ -52,8 +52,7 @@
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class == 'json' %}
-                                {{ Form.control(key, options)|raw }}
-                                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
+                                {{ Property.control(key, value)|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>

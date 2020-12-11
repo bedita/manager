@@ -11,6 +11,7 @@
  *
  */
 
+import { ACCEPTABLE_MEDIA } from 'config/config';
 import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
@@ -84,7 +85,7 @@ export default {
                 return true;
             }
 
-            return ['media', 'audio', 'files', 'images', 'videos'].indexOf(this.object.type) !== -1;
+            return ACCEPTABLE_MEDIA.indexOf(this.object.type) !== -1;
         },
     },
 

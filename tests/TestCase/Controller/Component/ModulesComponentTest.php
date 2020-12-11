@@ -556,7 +556,6 @@ class ModulesComponentTest extends TestCase
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/home')
             ->willReturn(compact('meta'));
 
         ApiClientProvider::setApiClient($apiClient);
@@ -1150,8 +1149,8 @@ class ModulesComponentTest extends TestCase
                     'name' => 'has_media',
                     'inverse_name' => 'media_of',
                 ],
-                'left' => ['documents'],
-                'right' => ['media'],
+                'left' => ['media'],
+                'right' => ['documents'],
             ],
         ];
 
