@@ -687,8 +687,8 @@ msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:84
-msgid "Lat long Coordinates"
-msgstr "Coordinate Lat Long"
+msgid "Long lat Coordinates"
+msgstr "Coordinate Long Lat"
 
 #~ msgid "by"
 #~ msgstr "di"
