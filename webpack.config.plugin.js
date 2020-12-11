@@ -2,13 +2,7 @@
 require('./webpack.config.environment');
 
 const webpack = require('webpack');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-// const extractSass = new ExtractTextPlugin({
-//     filename: `${BUNDLE.beditaPluginsRoot}/OpenCorporation/${BUNDLE.webroot}/${BUNDLE.cssDir}/OpenCorporation.style.css`,
-//     allChunks: true,
-// });
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // auto load installed plugins
 const pluginsFound = readDirs(BUNDLE.beditaPluginsRoot);
@@ -18,7 +12,7 @@ let aliases = {};
 
 pluginsFound.forEach(plugin => {
     entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`);
-    aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`)
+    aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`);
 });
 
 module.exports = {
@@ -44,6 +38,10 @@ module.exports = {
         minimize: true,
     },
 
+    plugins: [new MiniCssExtractPlugin({
+        filename: '[name]/webroot/css/[name].plugin.css',
+    })],
+
     module: {
         rules: [
             {
@@ -63,30 +61,24 @@ module.exports = {
                     ]
                 }
             },
-            // {
-            //     test: /\.(css|scss)$/,
-            //     include: [
-            //         path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/OpenCorporation/${BUNDLE.templateRoot}/Layout`),
-            //     ],
-            //     use: extractSass.extract({
-            //         fallback: 'style-loader',
-            //         use: [
-            //             {
-            //                 loader: 'css-loader',
-            //                 options: {
-            //                     minimize: !devMode,
-            //                     sourceMap: devMode,
-            //                 }
-            //             },
-            //             {
-            //                 loader: 'sass-loader',
-            //                 options: {
-            //                     sourceMap: devMode
-            //                 }
-            //             }
-            //         ],
-            //     }),
-            // },
+            {
+                test: /\.(scss|css)$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode
+                        }
+                    }
+                ],
+            },
         ]
     },
     devtool: devMode ? "source-map" : false,

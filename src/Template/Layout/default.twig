@@ -83,7 +83,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {# {{ Html.script('vendors.bundle')|raw }} #}
 
     {% if _view.name != 'Login' %}
-        {{ Link.pluginsJsBundle()|raw }}
+        {{ Link.pluginsBundle()|raw }}
     {% else %}
         {# timezone-offset used in controller and TWIG #}
         {{ Html.script('libs/timezone.js')|raw }}
