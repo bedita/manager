@@ -3,7 +3,7 @@
 
     {% for relationName, relationLabel in relations %}
 
-        <property-view inline-template :tab-open="tabsOpen" ref={{ relationName }}>
+        <property-view inline-template :tab-open="tabsOpen" tab-name="relation_{{ relationName }}" ref={{ relationName }}>
             <section class="fieldset">
 
                 <header @click.prevent="toggleVisibility()"

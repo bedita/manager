@@ -13,6 +13,8 @@
  *
  */
 
+const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
+
 export default {
     components: {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
@@ -29,9 +31,13 @@ export default {
             type: Boolean,
             default: false,
         },
+        tabName: {
+            type: String,
+            default: null,
+        },
         tabOpenAtStart: {
             type: Boolean,
-            default: false,
+            default: null,
         },
         isDefaultOpen: {
             type: Boolean,
@@ -49,7 +55,11 @@ export default {
     },
 
     mounted() {
-        this.isOpen = this.tabOpenAtStart;
+        if (this.tabOpenAtStart !== null) {
+            this.isOpen = this.tabOpenAtStart;
+            return;
+        }
+        this.isOpen = this.checkTabOpen();
     },
 
     watch: {
@@ -61,6 +71,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.updateStorage();
         },
         onToggleLoading(status) {
             this.isLoading = status;
@@ -75,6 +86,33 @@ export default {
         },
         switchListView() {
             this.listView = true;
+        },
+        checkTabOpen() {
+            if (!this.tabName) {
+                return false;
+            }
+            let tabs = this.readTabsOpen();
+            return (tabs.indexOf(this.tabName) >= 0);
+        },
+        readTabsOpen() {
+            let tabs = [];
+            if (localStorage.getItem(STORAGE_TABS_KEY)) {
+                tabs = JSON.parse(localStorage.getItem(STORAGE_TABS_KEY));
+            }
+            return tabs;
+        },
+        updateStorage() {
+            if (!this.tabName) {
+                return;
+            }
+            let tabs = this.readTabsOpen();
+            const pos = tabs.indexOf(this.tabName);
+            if (this.isOpen && pos < 0) {
+                tabs.push(this.tabName);
+            } else if (!this.isOpen && pos >= 0) {
+                tabs.splice(pos, 1);
+            }
+            localStorage.setItem(STORAGE_TABS_KEY, JSON.stringify(tabs));
         },
     }
 }

@@ -1,6 +1,5 @@
 {% if schema.properties.lang %}
-
-    <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start="false" ref={{ resourceName }}>
+    <property-view inline-template :tab-open="tabsOpen" tab-name="translations" ref={{ resourceName }}>
         <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
 
             <header @click.prevent="toggleVisibility();"
