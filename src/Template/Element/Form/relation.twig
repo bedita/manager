@@ -41,26 +41,25 @@
                     </filter-box-view>
                 </div>
 
-            {# RELATED OBJECTS #}
-            <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
-                <div :data-list="listView" class="columns" droppable sortable>
-                    <div
-                        class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
-                        v-for="(related, index) in objects"
-                        :key="related.id"
-                        :class="containsId(removedRelated, related.id)? 'removed' : ''"
-                        draggable
-                        :drag-data="JSON.stringify(related)">
+                {# RELATED OBJECTS #}
+                <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
+                    <div :data-list="listView" class="columns" droppable sortable>
+                        <div
+                            class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                            v-for="(related, index) in objects"
+                            :key="related.id"
+                            :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                            draggable
+                            :drag-data="JSON.stringify(related)">
 
-                        {% if relationName == 'children' %}
-                            {% element 'Form/related_item' { 'children': true  } %}
-                        {% else %}
-                            {% element 'Form/related_item' { 'common': true, 'readonly': readonly } %}
-                        {% endif %}
+                            {% if relationName == 'children' %}
+                                {% element 'Form/related_item' { 'children': true  } %}
+                            {% else %}
+                                {% element 'Form/related_item' { 'common': true, 'readonly': readonly } %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-            </div>
 
             {% if not readonly %}
                 <div class="mt-5">
@@ -89,21 +88,8 @@
                             })">{{ __('add objects') }}</button>
                     </div>
                 </div>
-            </div>
-
-        </div>
-
-        <div class="mt-5">
-            {# DROP FILES #}
-            {% set acceptedTypes = uploadable | filter((item) => item in relationSchema.right) | join(', ') %}
-            {% if acceptedTypes|length %}
-                {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
-
-                <drop-upload
-                    placeholder="{{ __('Click or drop new files here') }}"
-                    @new-relations="appendRelations"
-                    ></drop-upload>
             {% endif %}
+        </div>
 
         {# End relation custom or default view #}
         {% endif %}
