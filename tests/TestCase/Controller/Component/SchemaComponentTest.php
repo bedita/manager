@@ -170,6 +170,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::getRelationsSchema()
      * @covers ::fetchRelationData()
+     * @covers ::concreteTypes()
      */
     public function testRelationMethods()
     {
@@ -214,7 +215,7 @@ class SchemaComponentTest extends TestCase
                     'id' => '9',
                     'type' => 'object_types',
                     'attributes' => [
-                        'name' => 'images',
+                        'name' => 'media',
                     ],
                 ],
             ],
@@ -258,7 +259,7 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->getRelationsSchema();
         static::assertEmpty($result);
 
-        $message = $this->Schema->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Schema->getController()->request->getSession()->read('Flash.flash.0.message');
         static::assertEquals('Client Exception', $message);
     }
 
@@ -439,5 +440,113 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->getSchema('documents');
         static::assertEquals(['Categories'], $result['associations']);
         static::assertEquals(['has_media' => 0], $result['relations']);
+    }
+
+    /**
+     * Test `descendants` method on abstract type
+     *
+     * @covers ::descendants()
+     *
+     * @return void
+     */
+    public function testDescendants(): void
+    {
+        $result = $this->Schema->descendants('non-existent');
+        static::assertEmpty($result);
+
+        $result = $this->Schema->descendants('objects');
+        static::assertNotEmpty($result);
+    }
+
+    /**
+     * Test `objectTypesFeatures` method.
+     *
+     * @return void
+     * @covers ::objectTypesFeatures()
+     * @covers ::fetchObjectTypesFeatures()
+     * @covers ::setDescendant()
+     */
+    public function testObjectTypesFeatures()
+    {
+        $objectTypes = [
+            'data' => [
+                [
+                    'id' => '1',
+                    'attributes' => [
+                        'name' => 'objects',
+                        'is_abstract' => true,
+                        'parent_name' => null,
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'attributes' => [
+                        'name' => 'media',
+                        'is_abstract' => true,
+                        'parent_name' => 'objects',
+                    ],
+                ],
+                [
+                    'id' => '3',
+                    'attributes' => [
+                        'name' => 'images',
+                        'is_abstract' => false,
+                        'parent_name' => 'media',
+                        'associations' => ['Streams'],
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($objectTypes);
+        ApiClientProvider::setApiClient($apiClient);
+
+        Cache::clearAll();
+
+        $result = $this->Schema->objectTypesFeatures();
+        static::assertNotEmpty($result);
+        static::assertNotEmpty($result['descendants']);
+        static::assertNotEmpty($result['uploadable']);
+
+        $expected = [
+            'descendants' => [
+                'objects' => [
+                    'images',
+                ],
+                'media' => [
+                    'images',
+                ],
+            ],
+            'uploadable' => [
+                'images',
+            ],
+        ];
+        static::assertEquals($expected, $result);
+    }
+
+    /**
+     * Test `objectTypesFeatures` with API error.
+     *
+     * @return void
+     * @covers ::objectTypesFeatures()
+     */
+    public function testObjectTypesFeaturesFail()
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException('Error'));
+
+        ApiClientProvider::setApiClient($apiClient);
+        Cache::clearAll();
+        $result = $this->Schema->objectTypesFeatures();
+        static::assertEmpty($result);
     }
 }

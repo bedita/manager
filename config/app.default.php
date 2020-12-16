@@ -722,4 +722,21 @@ return [
     //         ],
     //     ],
     // ],
+
+    /**
+     * Control handler configuration.
+     * This adds custom handlers to render object fields controls.
+     *
+     * In the following example: cats.moustaches control is rendered through Path\To\SomeClass::countMoustaches
+     */
+    // 'Control' => [
+    //     'handlers' => [
+    //         'cats' => [
+    //             'moustaches' => [
+    //                 'class' => 'Path\To\SomeClass',
+    //                 'method' => 'countMoustaches',
+    //             ],
+    //         ],
+    //     ],
+    // ],
 ];

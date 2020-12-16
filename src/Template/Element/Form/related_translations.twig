@@ -1,6 +1,5 @@
 {% if schema.properties.lang %}
-
-    <property-view inline-template :tab-open="tabsOpen" :tab-open-at-start="false" ref={{ resourceName }}>
+    <property-view inline-template :tab-open="tabsOpen" tab-name="translations" ref={{ resourceName }}>
         <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
 
             <header @click.prevent="toggleVisibility();"
@@ -18,9 +17,7 @@
             <div v-show="isOpen" class="tab-container">
 
                 <div>
-                    {% set options = Schema.controlOptions('lang', object.attributes.lang, schema.properties.lang) %}
-                    {% set options = options|merge({ 'label': __('The main language is') }) %}
-                    {{ Form.control('lang', options)|raw }}
+                    {{ Property.control('lang', object.attributes.lang, { 'label': __('The main language is') })|raw }}
 
                     {% if object.relationships.translations %}
                         {{ Html.link(__('Add translation'), {

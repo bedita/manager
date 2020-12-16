@@ -23,17 +23,18 @@ export default {
     template: `<div class="locations">
         <div v-if="!locations" class="is-loading-spinner"></div>
         <div v-if="locations" v-for="(location, index) in locations">
-            <location-view :key='locationSymbol(location)' :index='index' :locationdata='location' :apikey='apikey' :apiurl='apiurl' />
+            <location-view :key="locationSymbol(location)" :index="index" :locationdata="location" :apikey="apikey" :apiurl="apiurl" :relation-name="relationName" />
         </div>
-        <div v-if="locations" class="buttons is-flex mt-1">
+        <div v-if="locations" class="is-flex mt-1">
             <button @click.prevent @click="onAddNew"><: t('add new') :></button>
         </div>
     </div>`,
 
     props: {
-        object: Object,
         apikey: String,
         apiurl: String,
+        relationName: String,
+        object: Object,
     },
 
     data() {
@@ -43,7 +44,7 @@ export default {
     },
 
     async created() {
-        const requestUrl = `${window.location.href}/relatedJson/has_location`;
+        const requestUrl = `${window.location.href}/relatedJson/${this.relationName}`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
         // add params for location that does not have them
@@ -61,6 +62,16 @@ export default {
     async mounted() {
         this.$on('removed', (index) => {
             this.locations.splice(index, 1);
+        });
+        this.$on('updated', (index, location) => {
+            if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
+                location.meta = {
+                    relation: {
+                        params: {},
+                    },
+                };
+            }
+            this.locations.splice(index, 1, location);
         });
     },
 

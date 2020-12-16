@@ -58,7 +58,7 @@
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
             {% endif %}
 
-            <span class="is-upppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+            <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
         </div>
 
         <header class="is-flex space-between mt-05">
@@ -73,7 +73,10 @@
             </h1>
 
             {% if not translation %}
-                <span class="has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
+                <span class="modified">
+                    <: new Date(related.meta.modified).toLocaleDateString() + ', ' + new Date(related.meta.modified).toLocaleTimeString() :>
+                </span>
+                <span class="id has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
             {% endif %}
         </header>
     </div>
@@ -111,7 +114,7 @@
 
     {# CHILDREN position #}
     {% if children %}
-        <div class="container-grid p-05">
+        <div class="children-position container-grid p-05">
             <dl>
                 <dt>{{ __('Move to position') }}:</dt>
                 <dd>

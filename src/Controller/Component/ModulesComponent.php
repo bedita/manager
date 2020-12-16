@@ -28,6 +28,7 @@ use Psr\Log\LogLevel;
  * Component to load available modules.
  *
  * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
 {
@@ -43,7 +44,7 @@ class ModulesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public $components = ['Auth'];
+    public $components = ['Auth', 'Schema'];
 
     /**
      * {@inheritDoc}
@@ -79,7 +80,8 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
-        $this->getController()->set(compact('modules', 'project'));
+        $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
+        $this->getController()->set(compact('modules', 'project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
@@ -536,12 +538,8 @@ class ModulesComponent extends Component
     public function relatedTypes(array $schema, string $relation): array
     {
         $relationsSchema = (array)Hash::get($schema, $relation);
-        $name = (string)Hash::get($relationsSchema, 'attributes.name');
-        if ($name === $relation) {
-            return (array)Hash::get($relationsSchema, 'right');
-        }
 
-        return (array)Hash::get($relationsSchema, 'left');
+        return (array)Hash::get($relationsSchema, 'right');
     }
 
     /**

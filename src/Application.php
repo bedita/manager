@@ -84,14 +84,14 @@ class Application extends BaseApplication
             // and make an error page/response
             ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
 
+            // Load current project configuration if `multiproject` instance
+            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
+            ->add(new ProjectMiddleware($this))
+
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
-
-            // Load current project configuration if `multiproject` instance
-            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
-            ->add(new ProjectMiddleware($this))
 
             // Add I18n middleware.
             ->add(new I18nMiddleware([

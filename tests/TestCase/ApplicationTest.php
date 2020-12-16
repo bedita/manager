@@ -49,8 +49,8 @@ class ApplicationTest extends TestCase
         $middleware = $app->middleware($middleware);
 
         static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
-        static::assertInstanceOf(AssetMiddleware::class, $middleware->get(1));
-        static::assertInstanceOf(ProjectMiddleware::class, $middleware->get(2));
+        static::assertInstanceOf(ProjectMiddleware::class, $middleware->get(1));
+        static::assertInstanceOf(AssetMiddleware::class, $middleware->get(2));
         static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
         static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));

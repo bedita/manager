@@ -37,7 +37,7 @@ class TranslationsController extends ModulesController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id);
+            $response = $this->apiClient->getObject($id, $this->objectType);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
