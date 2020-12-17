@@ -15,6 +15,7 @@ namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
@@ -40,25 +41,33 @@ class SchemaHelperTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $view = new View();
-        $this->Schema = new SchemaHelper($view);
+        // setup request, view and helper
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ]);
+        $view = new View($request, null, null, []);
         $view->set('objectType', 'dummies');
-
-        Configure::write(
-            'Control.handlers',
-            array_merge(
-                (array)\Cake\Core\Configure::read('Control.handlers'),
-                [
-                    'dummies' => [ // an object type
-                        'descr' => [ // a field
-                            'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
-                            'method' => 'dummy',
-                        ],
-                    ],
-                ]
-            )
-        );
+        $this->Schema = new SchemaHelper($view);
+        // set control handlers
+        $control = (array)Configure::read('Control');
+        $control['handlers'] = [
+            'dummies' => [ // an object type
+                'descr' => [ // a field
+                    'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
+                    'method' => 'dummy',
+                ],
+            ],
+        ];
+        Configure::write('Control', $control);
+        // set properties not sortable
+        $properties = (array)Configure::read('Properties');
+        $properties['dummies']['nosort'] = ['not_sortable_1', 'not_sortable_2'];
+        Configure::write('Properties', $properties);
     }
 
     /**
@@ -553,6 +562,45 @@ class SchemaHelperTest extends TestCase
     public function testFormat($expected, $value, array $schema)
     {
         $actual = $this->Schema->format($value, $schema);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testSortable` test case.
+     *
+     * @return array
+     */
+    public function sortableProvider(): array
+    {
+        return [
+            'sortable' => [
+                'anything',
+                true,
+            ],
+            'not sortable 1' => [
+                'not_sortable_1',
+                false,
+            ],
+            'not sortable 2' => [
+                'not_sortable_2',
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Test `sortable` method
+     *
+     * @param string $field The field
+     * @param bool $expected Expected result
+     * @return void
+     *
+     * @dataProvider sortableProvider()
+     * @covers ::sortable()
+     */
+    public function testSortable(string $field, bool $expected): void
+    {
+        $actual = $this->Schema->sortable($field);
         static::assertSame($expected, $actual);
     }
 }

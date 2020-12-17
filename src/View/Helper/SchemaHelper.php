@@ -197,4 +197,22 @@ class SchemaHelper extends Helper
 
         return $fields;
     }
+
+    /**
+     * Check if field is sortable.
+     * When field is in 'Properties.nosort' list, it's not sortable.
+     *
+     * @param string $field The field to check
+     * @return bool
+     */
+    public function sortable(string $field): bool
+    {
+        $objectType = (string)$this->getView()->getRequest()->getParam('object_type');
+        $fields = (array)Configure::read(sprintf('Properties.%s.nosort', $objectType));
+        if (empty($fields)) {
+            return true;
+        }
+
+        return !in_array($field, $fields);
+    }
 }
