@@ -199,20 +199,28 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Check if field is sortable.
-     * When field is in 'Properties.nosort' list, it's not sortable.
+     * Verify field's schema, return true if field is sortable.
      *
      * @param string $field The field to check
      * @return bool
      */
     public function sortable(string $field): bool
     {
-        $objectType = (string)$this->getView()->getRequest()->getParam('object_type');
-        $fields = (array)Configure::read(sprintf('Properties.%s.nosort', $objectType));
-        if (empty($fields)) {
-            return true;
-        }
+        $schema = (array)$this->_View->get('schema');
+        $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
 
-        return !in_array($field, $fields);
+        // empty schema, then not sortable
+        if (empty($schema)) {
+            return false;
+        }
+        $type = self::typeFromSchema($schema);
+
+        // not sortable: 'array', 'object'
+        if (in_array($type, ['array', 'object'])) {
+            return false;
+        }
+        // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
+
+        return true;
     }
 }
