@@ -616,42 +616,42 @@ class SchemaHelperTest extends TestCase
             ],
             'oneOf, string: sortable' => [
                 'dummy_oneof_string',
-                ['oneOf' => [['type' => 'null'], ['type' => 'string']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'string']]],
                 true,
             ],
             'oneOf, number: sortable' => [
                 'dummy_oneof_number',
-                ['oneOf' => [['type' => 'null'], ['type' => 'number']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'number']]],
                 true,
             ],
             'oneOf, integer: sortable' => [
                 'dummy_oneof_integer',
-                ['oneOf' => [['type' => 'null'], ['type' => 'integer']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'integer']]],
                 true,
             ],
             'oneOf, boolean: sortable' => [
                 'dummy_oneof_boolean',
-                ['oneOf' => [['type' => 'null'], ['type' => 'boolean']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'boolean']]],
                 true,
             ],
             'oneOf, date-time: sortable' => [
                 'dummy_oneof_date-time',
-                ['oneOf' => [['type' => 'null'], ['type' => 'date-time']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'date-time']]],
                 true,
             ],
             'oneOf, date: sortable' => [
                 'dummy_oneof_date',
-                ['oneOf' => [['type' => 'null'], ['type' => 'date']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'date']]],
                 true,
             ],
             'oneOf, array: not sortable' => [
                 'dummy_oneof_array',
-                ['oneOf' => [['type' => 'null'], ['type' => 'array']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'array']]],
                 false,
             ],
             'oneOf, object: not sortable' => [
                 'dummy_oneof_object',
-                ['oneOf' => [['type' => 'null'], ['type' => 'object']],],
+                ['oneOf' => [['type' => 'null'], ['type' => 'object']]],
                 false,
             ],
         ];
