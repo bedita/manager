@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
@@ -65,6 +66,22 @@ class ModulesController extends AppController
         $this->set('objectType', $this->objectType);
 
         return parent::beforeRender($event);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @codeCoverageIgnore
+     */
+    public function beforeFilter(Event $event): ?Response
+    {
+        $currentModule = $this->Modules->getConfig('currentModuleName');
+        $key = sprintf('%s.unlockedFields', $currentModule);
+        $unlocked = (array)Configure::read($key);
+        if (!empty($unlocked)) {
+            $this->Security->setConfig('unlockedFields', $unlocked);
+        }
+
+        return parent::beforeFilter($event);
     }
 
     /**
