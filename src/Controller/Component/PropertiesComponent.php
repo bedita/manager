@@ -130,6 +130,9 @@ class PropertiesComponent extends Component
                 if (array_key_exists($item, $attributes)) {
                     $p[$item] = $attributes[$item];
                 }
+                if (array_key_exists('_element', $items)) {
+                    $p['_element'] = $item;
+                }
             }
             $properties[$group] = $p;
             if ($group !== 'other') {
