@@ -229,7 +229,29 @@ module.exports = {
                 ]
             },
             {
+                test: /\.lazy\.(scss|css)$/,
+                include: [
+                    path.resolve(__dirname, BUNDLE.templateRoot),
+                ],
+
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].css',
+                        },
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    },
+                ]
+            },
+            {
                 test: /\.(scss|css)$/,
+                exclude: /\.lazy\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, BUNDLE.templateRoot),
                 ],
@@ -240,14 +262,14 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: devMode,
-                        }
+                        },
                     },
                     {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: devMode,
-                        }
-                    }
+                        },
+                    },
                 ]
             },
             {

@@ -1,7 +1,18 @@
 import 'tinymce/tinymce';
 import { PanelEvents } from 'app/components/panel-view';
+import tinymce from 'tinymce/tinymce';
+
+/**
+ * @todo
+ * custom element
+ * size
+ * resize/floating
+ * draggable
+ * not editable content
+ */
 
 const cache = {};
+const regex = /BE-PLACEHOLDER\.(\d+)\.([-A-Za-z0-9+=]{1,50}|=[^=]|={3,})/;
 const baseUrl = new URL(BEDITA.base).pathname;
 const options = {
     credentials: 'same-origin',
@@ -10,14 +21,11 @@ const options = {
     }
 };
 
-function fetchData(type, id) {
+function fetchData(id) {
     if (!cache[id]) {
-        let fetchType = Promise.resolve(type);
-        if (!type) {
-            fetchType = fetch(`${baseUrl}api/objects/${id}`, options)
-                .then((response) => response.json())
-                .then((json) => json.data.type);
-        }
+        let fetchType = fetch(`${baseUrl}api/objects/${id}`, options)
+            .then((response) => response.json())
+            .then((json) => json.data.type);
         cache[id] = fetchType
             .then((type) => fetch(`${baseUrl}api/${type}/${id}`, options))
             .then((response) => response.json());
@@ -26,53 +34,73 @@ function fetchData(type, id) {
     return cache[id];
 }
 
-function loadPreview(editor, { id, type }) {
-    let dom = editor.getBody().querySelector(`[data-id="${id}"].be-placeholder`);
-    if (!dom) {
-        return;
-    }
+function loadPreview(editor, node, id) {
+    node.empty();
 
-    let root = dom.shadowRoot || dom.attachShadow({
-        mode: 'open',
-    });
-    root.innerHTML = 'Loading...';
-    console.log(editor, dom);
+    let text = tinymce.html.Node.create('#text');
+    text.value = 'loading…';
+    node.append(text);
 
-    fetchData(type, id)
+    fetchData(id)
         .then((json) => json.data)
         .then((data) => {
             if (!data) {
                 return;
             }
 
+            let dom = editor.getBody().querySelector(`[data-placeholder="${data.id}"]`);
+            if (!dom) {
+                return;
+            }
+
+            let content = '';
             switch (data.type) {
                 case 'images':
-                    root.innerHTML = `<img src="${data.meta.media_url}" alt="${data.attributes.title}" />`;
+                    content = `<img src="${data.meta.media_url}" alt="${data.attributes.title}" />`;
                     break;
                 default:
                     if (data.meta.media_url) {
-                        root.innerHTML = `<iframe src="${data.meta.media_url}"></iframe>`;
+                        content = `<iframe src="${data.meta.media_url}"></iframe>`;
                     } else {
-                        `<div class="embed-card">
+                        content = `<div class="embed-card">
                             <h1>${data.attributes.title || t('Untitled')}</h1>
                             <div class="description">${data.attributes.description || ''}</div>
                         </div>`
                     }
                     break;
             }
+
+            dom.innerHTML = content;
         });
 }
 
-function createPlaceholderView(editor, { id, params = {} }) {
-    let placeholderView = editor.dom.create('span', {
-        'data-id': id,
-        'class': 'be-placeholder',
-        'style': params,
-    }, `<!-- BE-PLACEHOLDER.${id}.${btoa(params)} -->`);
-    return placeholderView;
-}
-
 tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function(editor) {
+    editor.on('PreInit', function () {
+        editor.parser.addAttributeFilter('data-placeholder', function(nodes) {
+            nodes.forEach((node) => {
+                let comment = node.firstChild.value;
+                let match = comment.match(regex);
+                if (!match) {
+                    return;
+                }
+                let [, id, params] = match;
+                node.attr('style', params || '');
+                node.attr('contenteditable', 'false');
+                loadPreview(editor, node, id);
+            });
+        });
+        editor.serializer.addAttributeFilter('data-placeholder', function(nodes) {
+            nodes.forEach((node) => {
+                let id = node.attributes.map['data-placeholder'];
+                let params = node.attributes.map['style'];
+                node.empty();
+                let comment = tinymce.html.Node.create('#comment');
+                comment.value = `BE-PLACEHOLDER.${id}.${btoa(params)}`;
+                node.append(comment);
+            });
+        });
+    });
+
     editor.ui.registry.addButton('placeholders', {
         icon: 'image',
         tooltip: 'Add placeholder',
@@ -81,7 +109,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 action: 'relations-add',
                 from: this,
                 data: {
-                    relationName: 'attach',
+                    relationName: 'placeholders',
                 },
             });
 
@@ -90,9 +118,11 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 PanelEvents.stop('relations-add:save', this, onSave);
                 PanelEvents.stop('panel:close', this, onClose);
                 objects.forEach((data) => {
-                    let view = createPlaceholderView(editor, data);
-                    editor.selection.setNode(view);
-                    loadPreview(editor, data);
+                    let view = editor.dom.create('span', {
+                        'data-placeholder': data.id,
+                        'style': data.params,
+                    }, `<!-- BE-PLACEHOLDER.${data.id}.${btoa(data.params)} -->`);
+                    editor.insertContent(view.outerHTML);
                 });
             };
 
@@ -106,78 +136,3 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
         },
     });
 });
-
-// import { PanelEvents } from 'app/components/panel-view';
-// import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-// import imageIcon from '@ckeditor/ckeditor5-core/theme/icons/image.svg';
-// import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-
-// const regex = /BE-PLACEHOLDER\.(\d+)\.((?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=))/;
-
-// export default class InsertPlaceholders extends Plugin {
-//     init() {
-//         const editor = this.editor;
-
-//         editor.ui.componentFactory.add('insertPlaceholder', (locale) => {
-//             const view = new ButtonView(locale);
-//             const schema = this.editor.model.schema;
-//             const conversion = this.editor.conversion;
-
-//             // add the button view to the editor
-//             view.set({
-//                 label: 'Insert placeholder',
-//                 icon: imageIcon,
-//                 tooltip: true
-//             });
-
-//             // add placeholder relation on button click
-//             view.on('execute', () => {
-//             });
-
-//             // register the placeholder schema to the ckeditor model
-//             schema.register('placeholder', {
-//                 allowWhere: '$text',
-//                 isInline: true,
-//                 isObject: true,
-//                 allowAttributes: ['id', 'type', 'params'],
-//             });
-
-//             // convert the placeholder model to ckeditor output
-//             conversion.for('upcast').elementToElement( {
-//                 view: {
-//                     name: 'span',
-//                     classes: ['be-placeholder'],
-//                 },
-//                 model: (viewElement, { writer }) => {
-//                     let fragment = writer.createDocumentFragment(viewElement.getChildren());
-//                     console.log('UPCAST', fragment);
-//                     // let comment = htmlProcessor.toData(fragment);
-//                     // let match = comment.match(regex);
-//                     // if (!match) {
-//                     //     return;
-//                     // }
-
-//                     // let id = match[1];
-//                     // let params = match[2];
-//                     // return writer.createElement('placeholder', {
-//                     //     id,
-//                     //     params: atob(comment),
-//                     // });
-//                 }
-//             });
-
-//             conversion.for('editingDowncast').elementToElement( {
-//                 model: 'placeholder',
-//                 view: (model, { writer }) => createPlaceholderView(model, writer),
-//             });
-
-//             // convert html to ckeditor placeholder model
-//             conversion.for('dataDowncast').elementToElement( {
-//                 model: 'placeholder',
-//                 view: (model, { writer }) => createPlaceholderView(model, writer),
-//             });
-
-//             return view;
-//         });
-//     }
-// }

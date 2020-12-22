@@ -71,10 +71,11 @@ export default {
                     items = DEFAULT_TOOLBAR;
                 }
 
-                const [editor] = await tinymce.init({
+                let { default: contentCSS } = await import('../../../richeditor.lazy.scss');
+                let [editor] = await tinymce.init({
                     target: element,
                     skin: false,
-                    content_css: false,
+                    content_css: contentCSS,
                     menubar: false,
                     branding: false,
                     max_height: 500,

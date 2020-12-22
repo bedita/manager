@@ -406,7 +406,7 @@ const _vueInstance = new Vue({
                             } else {
                                 element.dataset.originalValue = element.value;
                             }
-                        } else if (element.nodeName === 'TEXTAREA' || element.getAttribute('contenteditable')) {
+                        } else if (element.nodeName === 'TEXTAREA') {
                             // storing original value for the element
                             element.dataset.originalValue = element.value;
                         }
