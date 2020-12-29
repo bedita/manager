@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
+use Cake\Controller\Exception\SecurityException;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
@@ -83,8 +84,35 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
+        $this->Security->setConfig('blackHoleCallback', 'blackhole');
 
         return null;
+    }
+
+    /**
+     * Handle security blackhole with logs for now
+     *
+     * @param string $type Excepion type
+     * @param SecurityException $exception Raised exception
+     * @return void
+     * @throws \Cake\Http\Exception\BadRequestException
+     * @codeCoverageIgnore
+     */
+    public function blackhole($type, SecurityException $exception): void
+    {
+        // Log original exception
+        $this->log($exception, 'error');
+
+        // Log form data & session id
+        $token = (array)$this->request->getData('_Token');
+        unset($token['debug']);
+        $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
+        $this->log('[Blackhole] form data: ' . json_encode(array_keys($this->request->getData())), 'debug');
+        $this->log('[Blackhole] form session id: ' . $this->request->getData('_session_id'), 'debug');
+        $this->log('[Blackhole] current session id: ' . $this->request->getSession()->id(), 'debug');
+
+        // Throw a generic bad request exception.
+        throw new BadRequestException();
     }
 
     /**
@@ -182,6 +210,9 @@ class AppController extends Controller
      */
     protected function specialAttributes(string $type, array &$data): void
     {
+        // remove temporary session id
+        unset($data['_session_id']);
+
         // when saving users, if password is empty, unset it
         if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);

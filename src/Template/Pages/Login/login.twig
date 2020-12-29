@@ -42,6 +42,9 @@
     {{ Form.submit(__('Sign in'))|raw }}
     <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
 
+    {# Temp hidden to check session id #}
+    {{ Form.hidden('_session_id', {'value': _view.getRequest().getSession().id()})|raw }}
+
     {{ Form.end()|raw }}
 
     <footer>
