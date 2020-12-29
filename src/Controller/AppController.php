@@ -107,7 +107,7 @@ class AppController extends Controller
         $token = (array)$this->request->getData('_Token');
         unset($token['debug']);
         $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
-        $this->log('[Blackhole] form data: ' . json_encode(array_keys($this->request->getData())), 'debug');
+        $this->log('[Blackhole] form fields: ' . json_encode(array_keys($this->request->getData())), 'debug');
         $this->log('[Blackhole] form session id: ' . $this->request->getData('_session_id'), 'debug');
         $this->log('[Blackhole] current session id: ' . $this->request->getSession()->id(), 'debug');
 
