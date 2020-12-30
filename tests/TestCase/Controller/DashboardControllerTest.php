@@ -151,7 +151,7 @@ class DashboardControllerTest extends TestCase
         // call private method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
         $recentItems = $test->invokeMethod($this->Dashboard, 'recentItems', []);
-        $actual = count($recentItems);
-        static::assertGreaterThanOrEqual(1, $actual);
+        // at least 1 element (the admin user itself)
+        static::assertGreaterThanOrEqual(1, count($recentItems));
     }
 }
