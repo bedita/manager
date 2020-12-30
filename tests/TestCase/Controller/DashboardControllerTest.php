@@ -14,6 +14,8 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\DashboardController;
+use App\Test\TestCase\Controller\AppControllerTest;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -97,6 +99,7 @@ class DashboardControllerTest extends TestCase
      * @param string $method The request method, can be 'GET', 'PATCH', 'POST', 'DELETE'
      *
      * @covers ::index()
+     * @covers ::recentItems()
      * @dataProvider indexProvider()
      *
      * @return void
@@ -118,5 +121,37 @@ class DashboardControllerTest extends TestCase
         $response = $this->Dashboard->response;
 
         static::assertEquals(200, $response->getStatusCode());
+        // recent items
+        static::assertArrayHasKey('recentItems', $this->Dashboard->viewVars);
+        static::assertEmpty($this->Dashboard->viewVars['recentItems']);
+    }
+
+    /**
+     * Test `recentItems` method
+     *
+     * @covers ::recentItems()
+     *
+     * @return void
+     */
+    public function testRecentItems(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        // setup api
+        $client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $client->authenticate($adminUser, $adminPassword);
+        $client->setupTokens($response['meta']);
+        // set auth user dummy
+        $this->Dashboard->Auth->setUser(['id' => 1]);
+        // call private method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $recentItems = $test->invokeMethod($this->Dashboard, 'recentItems', []);
+        $actual = count($recentItems);
+        static::assertGreaterThanOrEqual(1, $actual);
     }
 }
