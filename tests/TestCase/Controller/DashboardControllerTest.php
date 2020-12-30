@@ -146,7 +146,7 @@ class DashboardControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $client->authenticate($adminUser, $adminPassword);
         $client->setupTokens($response['meta']);
-        // set auth user dummy
+        // set auth user admin
         $this->Dashboard->Auth->setUser(['id' => 1]);
         // call private method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
