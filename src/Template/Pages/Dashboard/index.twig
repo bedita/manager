@@ -114,9 +114,8 @@
                     <div>{{ __('language') }}</div>
                     <div>{{ __('modified') }}</div>
                 </nav>
-                {% set routeName = 'modules:view' %}
                 {% for object in recentItems %}
-                    <a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}" class="table-row object-status-{{ object.attributes.status }}">
+                    <a href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}" class="table-row object-status-{{ object.attributes.status }}">
                         <div class="narrow">{{ object.attributes.title|default(__('untitled')) }}</div>
                         <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
                         <div class="narrow">{{ object.attributes.status }}</div>
