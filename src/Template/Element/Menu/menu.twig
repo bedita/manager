@@ -20,16 +20,16 @@
             {% endfor %}
 
             {# Plugin modules #}
-            {% for k, plugin in config('PluginModules') %}
+            {% for pluginName, plugin in config('PluginModules') %}
                 {% set label = __(plugin.title|humanize) %}
                 {% if label|length > 7 %}
                     {% set label = label[0:3] %}
                 {% endif %}
 
                 <a href="{{ Url.build(plugin.route) }}"
-                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
-                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
-                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                    title="{{ __('Open module') }} {{ __(pluginName|humanize) }}"
+                    class="menu-item {{ pluginName == currentModule.name ? 'current' : '' }}">
+                    <span class="menu-item-color-bar has-background-module-{{ pluginName }}" aria-hidden="true"></span>
                     <span class="menu-item-label">{{ label }}</span>
                 </a>
             {% endfor %}
