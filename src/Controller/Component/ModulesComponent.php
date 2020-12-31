@@ -130,7 +130,7 @@ class ModulesComponent extends Component
         $modules = (array)Configure::read('Modules');
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
-       });
+        });
         $metaModules = $this->modulesFromMeta();
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
