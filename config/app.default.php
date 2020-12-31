@@ -406,7 +406,7 @@ return [
      * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
      * Modules order will follow key order of this configuration.
      * In case of core or plugin modules not directly served by ModulesController
-     * (generally modules not related tobject types) a 'route' attribute can be specified for
+     * (generally modules not related to bject types) a 'route' attribute can be specified for
      * custom controller and action rules.
      *
      * Array value may contain:
@@ -414,7 +414,7 @@ return [
      *  'label' - module label to display, if not set `key` will be used
      *  'shortLabel' - short label, 3 character recommended
      *  'color' - primary color code,
-     *  'route' - (optional) custom route, used by plugin modules mainly
+     *  'route' - (optional) custom route (named route or absolute/relative URL) used by plugin modules mainly
      *  'secondaryColor' - secondary color code,
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
