@@ -405,12 +405,16 @@ return [
      *
      * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
      * Modules order will follow key order of this configuration.
+     * In case of core or plugin modules not directly served by ModulesController
+     * (generally modules not related tobject types) a 'route' attribute can be specified for
+     * custom controller and action rules.
      *
      * Array value may contain:
      *
      *  'label' - module label to display, if not set `key` will be used
      *  'shortLabel' - short label, 3 character recommended
      *  'color' - primary color code,
+     *  'route' - (optional) custom route, used by plugin modules mainly
      *  'secondaryColor' - secondary color code,
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
@@ -551,9 +555,9 @@ return [
      * Where options array may contain
      *
      * - `debugOnly` - boolean - (default: false) Whether or not you want to load the plugin when in 'debug' mode only
-     * - `bootstrap` - boolean - (default: false) Whether or not you want the $plugin/config/bootstrap.php file loaded.
-     * - `routes` - boolean - (default: false) Whether or not you want to load the $plugin/config/routes.php file.
-     * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
+     * - `bootstrap` - boolean - (default: true) Whether or not you want the $plugin/config/bootstrap.php file loaded.
+     * - `routes` - boolean - (default: true) Whether or not you want to load the $plugin/config/routes.php file.
+     * - `ignoreMissing` - boolean - (default: true) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
     // 'Plugins' => [
@@ -561,28 +565,6 @@ return [
 
         // Uncomment to enable `DebugKit` - 'debug' mode is required
         //'DebugKit' => ['bootstrap' => true, 'debugOnly' => true],
-    // ],
-
-    /**
-     * Plugin modules settings.
-     *
-     * Default empty.
-     * Configuration generally written by plugins via bootstrap.
-     */
-    // 'PluginModules' => [
-
-    //     // plugin module example
-    //     // unique name
-    //     'My Module' => [
-    //         'title' => 'My Module',
-    //         // routing rules
-    //         'route' => Router::url(['_name': 'my_module:index']),
-    //         // css class
-    //         'class' => [
-    //             'dashboard' => 'has-background-black icon-sample',
-    //             'menu' => 'has-background-black',
-    //         ],
-    //     ],
     // ],
 
     /**
