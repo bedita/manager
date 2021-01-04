@@ -54,7 +54,7 @@ class ExportComponentTest extends TestCase
      */
     public function testSpreadsheet(): void
     {
-        $spreadsheet = $this->Export->spreadsheet([], []);
+        $spreadsheet = $this->Export->spreadsheet([['name', 'surname'], ['John', 'Doe'], ['Johanna', 'Doe']], ['title' => 'Test Spreadsheet']);
         $actual = get_class($spreadsheet);
         $expected = \PhpOffice\PhpSpreadsheet\Spreadsheet::class;
         static::assertEquals($expected, $actual);
