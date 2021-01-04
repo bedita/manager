@@ -2,25 +2,11 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ExportComponent;
+use App\Test\TestCase\Controller\AppControllerTest;
 use Cake\Controller\ComponentRegistry;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-
-/**
- * Test utility class, to mock some methods
- */
-class MyExportComponent extends ExportComponent
-{
-    protected $test = null;
-    public function download(Spreadsheet $spreadsheet, string $extension, array $options): void
-    {
-        $this->test = compact('spreadsheet', 'extension', 'options');
-    }
-    public function exit(): void
-    {
-        // do nothing
-    }
-}
 
 /**
  * {@see \App\Controller\Component\ExportComponent} Test Case
@@ -45,7 +31,7 @@ class ExportComponentTest extends TestCase
     {
         parent::setUp();
         $registry = new ComponentRegistry();
-        $this->Export = new MyExportComponent($registry);
+        $this->Export = new ExportComponent($registry);
     }
 
     /**
@@ -74,6 +60,49 @@ class ExportComponentTest extends TestCase
         static::assertEquals($expected, $actual);
     }
 
+    public function columnProvider(): array
+    {
+        return [
+            '1 A' => [
+                1,
+                'A',
+            ],
+            '26 Z' => [
+                26,
+                'Z',
+            ],
+            '27 AA' => [
+                27,
+                'AA',
+            ],
+            '52 AZ' => [
+                52,
+                'AZ',
+            ],
+            '53 BA' => [
+                53,
+                'BA',
+            ],
+        ];
+    }
+
+    /**
+     * Test `column` method
+     *
+     * @param integer $number The column number
+     * @param string $expected The column string
+     * @return void
+     * @covers ::column()
+     * @dataProvider columnProvider()
+     */
+    public function testColumn(int $number, string $expected): void
+    {
+        // call protected method using AppControllerTest->invokeMethod
+        $test = new AppControllerTest(new ServerRequest());
+        $actual = $test->invokeMethod($this->Export, 'column', [$number]);
+        static::assertEquals($expected, $actual);
+    }
+
     /**
      * Provider for `testFormats()`.
      *
@@ -90,14 +119,6 @@ class ExportComponentTest extends TestCase
                 'ods',
                 'application/vnd.oasis.opendocument.spreadsheet',
             ],
-            'pdf' => [
-                'pdf',
-                'application/pdf',
-            ],
-            'xls' => [
-                'xls',
-                'application/vnd.ms-excel',
-            ],
             'xlsx' => [
                 'xlsx',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -106,25 +127,24 @@ class ExportComponentTest extends TestCase
     }
 
     /**
-     * Test `csv`, `ods`, `pdf`, `xls` and `xlsx` method
+     * Test `csv`, `ods`, `xlsx` methods
      *
+     * @param string $method The method to call
+     * @param string $format The content type format
+     * @return void
      * @covers ::csv()
      * @covers ::ods()
-     * @covers ::pdf()
-     * @covers ::xls()
      * @covers ::xlsx()
+     * @covers ::download()
      * @dataProvider formatsProvider()
-     * @return void
      */
     public function testFormats(string $method, string $format): void
     {
         $spreadsheet = $this->Export->spreadsheet([], []);
         $filename = sprintf('test.%s', $method);
-        $this->Export->{$method}($spreadsheet, $filename);
+        $actual = $this->Export->{$method}($spreadsheet, $filename);
         $options = compact('filename', 'format');
         $extension = ucfirst($method);
-        $expected = compact('spreadsheet', 'extension', 'options');
-        $actual = $this->Export->test;
-        static::assertEquals($expected, $actual);
+        static::assertEquals($format, $actual['contentType']);
     }
 }

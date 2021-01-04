@@ -209,7 +209,7 @@ class ExportController extends AppController
      * @param array $fields The fields
      * @return void
      */
-    private function fillRowFields(&$row, $data, $fields)
+    private function fillRowFields(&$row, $data, $fields): void
     {
         foreach ($fields as $field) {
             $row[$field] = '';
