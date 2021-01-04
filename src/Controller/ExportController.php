@@ -44,12 +44,12 @@ class ExportController extends AppController
     /**
      * Export data to format specified by user
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function export(): Response
+    public function export(): ?Response
     {
         // allow only specific export formats: csv, ods, xlsx
-        $format = $this->request->getData('format');
+        $format = (string)$this->request->getData('format');
         if (!in_array($format, ['csv', 'ods', 'xlsx'])) {
             return null;
         }
