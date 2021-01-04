@@ -6,7 +6,6 @@ use App\Test\TestCase\Controller\AppControllerTest;
 use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
  * {@see \App\Controller\Component\ExportComponent} Test Case
@@ -47,19 +46,77 @@ class ExportComponentTest extends TestCase
     }
 
     /**
-     * Test `spreadsheet` method
+     * Provider for `testCheckFormat`.
      *
-     * @covers ::spreadsheet()
-     * @return void
+     * @return array
      */
-    public function testSpreadsheet(): void
+    public function checkFormatProvider(): array
     {
-        $spreadsheet = $this->Export->spreadsheet([['name', 'surname'], ['John', 'Doe'], ['Johanna', 'Doe']], ['title' => 'Test Spreadsheet']);
-        $actual = get_class($spreadsheet);
-        $expected = \PhpOffice\PhpSpreadsheet\Spreadsheet::class;
+        return [
+            'false' => [
+                'pdf',
+                false,
+            ],
+            'true' => [
+                'ods',
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `checkFormat` method
+     *
+     * @return void
+     * @covers ::checkFormat()
+     * @dataProvider checkFormatProvider()
+     */
+    public function testCheckFormat(string $format, bool $expected): void
+    {
+        $actual = $this->Export->checkFormat($format);
         static::assertEquals($expected, $actual);
     }
 
+    /**
+     * Provider for `testFormat`.
+     *
+     * @return array
+     */
+    public function formatProvider(): array
+    {
+        return [
+            '1 A' => [ // array $properties, array $expected
+                'csv', // format
+                [['Name', 'Surname'], ['John', 'Doe'], ['Anna', 'Doe']], // rows
+                'test.csv', // filename
+                ['title' => 'CSV test file'], // properties
+                [
+                    'content' => '"Name","Surname"' . "\n" . '"John","Doe"' . "\n" . '"Anna","Doe"' . "\n",
+                    'contentType' => 'text/csv',
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `format` method
+     *
+     * @return void
+     * @covers ::format()
+     * @covers ::csv()
+     * @dataProvider formatProvider()
+     */
+    public function testFormat(string $format, array $rows, string $filename, array $properties, array $expected): void
+    {
+        $actual = $this->Export->format($format, $rows, $filename, $properties);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Provider for `testColumn`.
+     *
+     * @return array
+     */
     public function columnProvider(): array
     {
         return [
@@ -129,8 +186,8 @@ class ExportComponentTest extends TestCase
     /**
      * Test `csv`, `ods`, `xlsx` methods
      *
-     * @param string $method The method to call
      * @param string $format The content type format
+     * @param string $contentType The content type
      * @return void
      * @covers ::csv()
      * @covers ::ods()
@@ -138,13 +195,11 @@ class ExportComponentTest extends TestCase
      * @covers ::download()
      * @dataProvider formatsProvider()
      */
-    public function testFormats(string $method, string $format): void
+    public function testFormats(string $format, string $contentType): void
     {
-        $spreadsheet = $this->Export->spreadsheet([], []);
-        $filename = sprintf('test.%s', $method);
-        $actual = $this->Export->{$method}($spreadsheet, $filename);
+        $filename = sprintf('test.%s', $format);
+        $actual = $this->Export->format($format, [], $filename, []);
         $options = compact('filename', 'format');
-        $extension = ucfirst($method);
-        static::assertEquals($format, $actual['contentType']);
+        static::assertEquals($contentType, $actual['contentType']);
     }
 }

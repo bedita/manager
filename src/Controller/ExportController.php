@@ -48,9 +48,8 @@ class ExportController extends AppController
      */
     public function export(): ?Response
     {
-        // allow only specific export formats: csv, ods, xlsx
         $format = (string)$this->request->getData('format');
-        if (!in_array($format, ['csv', 'ods', 'xlsx'])) {
+        if (!$this->Export->checkFormat($format)) {
             return null;
         }
         // check request (allowed methods and required parameters)
@@ -64,9 +63,8 @@ class ExportController extends AppController
         $rows = $this->rows($data['objectType'], $ids);
 
         // create spreadsheet and return as download
-        $spreadsheet = $this->Export->spreadsheet($rows);
         $filename = sprintf('%s_%s.%s', $data['objectType'], date('Ymd-His'), $format);
-        $data = $this->Export->{$format}($spreadsheet, $filename);
+        $data = $this->Export->format($format, $rows, $filename);
 
         // output
         $response = $this->response->withStringBody(Hash::get($data, 'content'));

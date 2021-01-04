@@ -2,19 +2,22 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Controller\ComponentRegistry;
-use Cake\Http\Response;
 use Cake\Utility\Hash;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
 
 /**
  * Export component. Utility to create csv, ods and xlsx spreadsheets.
  */
 class ExportComponent extends Component
 {
+    /**
+     * Allowed formats for export
+     *
+     * @var array
+     */
+    const ALLOWED_FORMATS = ['csv', 'ods', 'xlsx'];
+
     /**
      * Spreadsheet columns int/letter mapping.
      *
@@ -42,13 +45,26 @@ class ExportComponent extends Component
     ];
 
     /**
+     * Check if format is allowed
+     *
+     * @param string $format The format
+     * @return bool
+     */
+    public function checkFormat(string $format): bool
+    {
+        return in_array($format, static::ALLOWED_FORMATS);
+    }
+
+    /**
      * Create spreadsheet with data from rows, using properties.
      *
-     * @param array $rows THe data
+     * @param string $format The format
+     * @param array $rows The data
+     * @param string $filename The file name
      * @param array $properties The properties
-     * @return Spreadsheet
+     * @return array
      */
-    public function spreadsheet(array $rows, array $properties = []): Spreadsheet
+    public function format(string $format, array $rows, string $filename, array $properties = []): array
     {
         $spreadsheet = new Spreadsheet();
 
@@ -75,7 +91,7 @@ class ExportComponent extends Component
         // set autofilter
         $spreadsheet->getActiveSheet()->setAutoFilter($spreadsheet->getActiveSheet()->calculateWorksheetDimension());
 
-        return $spreadsheet;
+        return $this->{$format}($spreadsheet, $filename);
     }
 
     /**
