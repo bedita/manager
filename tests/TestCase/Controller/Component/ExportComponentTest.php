@@ -85,7 +85,7 @@ class ExportComponentTest extends TestCase
     public function formatProvider(): array
     {
         return [
-            '1 A' => [ // array $properties, array $expected
+            '1 A' => [
                 'csv', // format
                 [['Name', 'Surname'], ['John', 'Doe'], ['Anna', 'Doe']], // rows
                 'test.csv', // filename
