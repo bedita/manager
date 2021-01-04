@@ -56,6 +56,15 @@
         {% if not currentModule.hints.multiple_types %}
             {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
 
+                <select name="format" id="exportformat">
+                    <option value="csv">Csv</option>
+                    <option value="ods">Ods</option>
+                    <option value="pdf">Pdf</option>
+                    <option value="xls">Xls</option>
+                    <option value="xlsx">Xlsx</option>
+                </select>
+                {{ Form.unlockField('format') }}
+
                 <input type="hidden" name="ids" v-model="selectedRows">
                 {{ Form.unlockField('ids') }}
                 {{ Form.hidden('objectType', {'value': objectType})|raw }}
