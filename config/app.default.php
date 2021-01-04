@@ -598,9 +598,13 @@ return [
      * Export default settings
      *
      * - limit => max number of exported elements on export all
+     * - formats => array of formats enabled for export
+     * - default => default format
      */
     // 'Export' => [
     //     'limit' => 10000,
+    //     'formats' => ['csv', 'ods', 'xlsx'],
+    //     'default' => 'xlsx'
     // ],
 
     /**

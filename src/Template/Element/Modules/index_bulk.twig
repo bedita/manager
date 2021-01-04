@@ -56,12 +56,12 @@
         {% if not currentModule.hints.multiple_types %}
             {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
 
+                {% set formats = config('Export.formats', ['csv']) %}
+                {% set defaultFormat = config('Export.default', 'csv') %}
                 <select name="format" id="exportformat">
-                    <option value="csv">Csv</option>
-                    <option value="ods">Ods</option>
-                    <option value="pdf">Pdf</option>
-                    <option value="xls">Xls</option>
-                    <option value="xlsx">Xlsx</option>
+                {% for format in formats %}
+                    <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ format|humanize }}</option>
+                {% endfor %}
                 </select>
                 {{ Form.unlockField('format') }}
 
