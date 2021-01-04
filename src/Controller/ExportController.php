@@ -48,9 +48,9 @@ class ExportController extends AppController
      */
     public function export(): Response
     {
-        // allow only specific export formats: csv, ods, pdf, xls, xlsx
+        // allow only specific export formats: csv, ods, xlsx
         $format = $this->request->getData('format');
-        if (!in_array($format, ['csv', 'ods', 'pdf', 'xls', 'xlsx'])) {
+        if (!in_array($format, ['csv', 'ods', 'xlsx'])) {
             return null;
         }
         // check request (allowed methods and required parameters)
