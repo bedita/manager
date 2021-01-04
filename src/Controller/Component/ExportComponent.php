@@ -11,7 +11,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
 
 /**
- * Export component
+ * Export component. Utility to create csv, ods and xlsx spreadsheets.
  */
 class ExportComponent extends Component
 {
@@ -65,7 +65,7 @@ class ExportComponent extends Component
         if (!empty($rows)) {
             $first = array_values(array_shift($rows));
             foreach ($first as $k => $v) {
-                $spreadsheet->getActiveSheet()->setCellValue(sprintf('%s1', self::LETTERS[$k + 1]), $v);
+                $spreadsheet->getActiveSheet()->setCellValue(sprintf('%s1', $this->column($k + 1)), $v);
             }
         }
 
@@ -79,16 +79,41 @@ class ExportComponent extends Component
     }
 
     /**
+     * Calculate excel column name from integer number of column.
+     *
+     * @param int $num The number
+     * @return string
+     */
+    protected function column(int $num): string
+    {
+        if (array_key_exists($num, self::LETTERS)) {
+            return self::LETTERS[$num];
+        }
+        $div = intdiv($num, 26);
+        $mod = $num % 26;
+        if ($mod === 0) {
+            $firstLetter = self::LETTERS[$div - 1];
+            $secondLetter = 'Z';
+        } else {
+            $firstLetter = self::LETTERS[$div];
+            $secondLetter = self::LETTERS[$mod];
+        }
+
+        return $firstLetter . $secondLetter;
+    }
+
+    /**
      * Create spreadsheet file into memory and redirect output to download it as csv
      *
      * @param Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
-     * @return void
+     * @return array
      */
-    public function csv(Spreadsheet $spreadsheet, string $filename = 'export.csv'): void
+    public function csv(Spreadsheet $spreadsheet, string $filename = 'export.csv'): array
     {
         $options = compact('filename') + ['format' => 'text/csv'];
-        $this->download($spreadsheet, 'Csv', $options);
+
+        return $this->download($spreadsheet, 'Csv', $options);
     }
 
     /**
@@ -96,42 +121,13 @@ class ExportComponent extends Component
      *
      * @param Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
-     * @return void
+     * @return array
      */
-    public function ods(Spreadsheet $spreadsheet, string $filename = 'export.ods'): void
+    public function ods(Spreadsheet $spreadsheet, string $filename = 'export.ods'): array
     {
         $options = compact('filename') + ['format' => 'application/vnd.oasis.opendocument.spreadsheet'];
-        $this->download($spreadsheet, 'Ods', $options);
-    }
 
-    /**
-     * Create spreadsheet file into memory and redirect output to download it as pdf
-     *
-     * @param Spreadsheet $spreadsheet The spreadsheet
-     * @param string $filename The file name
-     * @return void
-     */
-    public function pdf(Spreadsheet $spreadsheet, string $filename = 'export.pdf'): void
-    {
-        IOFactory::registerWriter('Pdf', Mpdf::class);
-        $spreadsheet->getActiveSheet()->setShowGridLines(false);
-        $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-        $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
-        $options = compact('filename') + ['format' => 'application/pdf'];
-        $this->download($spreadsheet, 'Pdf', $options);
-    }
-
-    /**
-     * Create spreadsheet file into memory and redirect output to download it as xls
-     *
-     * @param Spreadsheet $spreadsheet The spreadsheet
-     * @param string $filename The file name
-     * @return void
-     */
-    public function xls(Spreadsheet $spreadsheet, string $filename = 'export.xls'): void
-    {
-        $options = compact('filename') + ['format' => 'application/vnd.ms-excel'];
-        $this->download($spreadsheet, 'Xls', $options);
+        return $this->download($spreadsheet, 'Ods', $options);
     }
 
     /**
@@ -139,48 +135,32 @@ class ExportComponent extends Component
      *
      * @param Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
-     * @return void
+     * @return array
      */
-    public function xlsx(Spreadsheet $spreadsheet, string $filename = 'export.xlsx'): void
+    public function xlsx(Spreadsheet $spreadsheet, string $filename = 'export.xlsx'): array
     {
         $options = compact('filename') + ['format' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-        $this->download($spreadsheet, 'Xlsx', $options);
+
+        return $this->download($spreadsheet, 'Xlsx', $options);
     }
 
     /**
-     * Just exit. Useful having a separated function, to better handling unit tests.
-     *
-     * @return void
-     * @codeCoverageIgnore
-     */
-    public function exit(): void
-    {
-        exit;
-    }
-
-    /**
-     * Create spreadsheet and set it as download.
+     * Create spreadsheet, write to a temporary file, set content and content type and return them.
      *
      * @param Spreadsheet $spreadsheet The spreadsheet
      * @param string $extension The extension, can be 'Csv', 'Ods', 'Pdf', 'Xls', 'Xlsx'
      * @param array $options The options
-     * @return void
-     * @codeCoverageIgnore
+     * @return array
      */
-    protected function download(Spreadsheet $spreadsheet, string $extension, array $options): void
+    protected function download(Spreadsheet $spreadsheet, string $extension, array $options): array
     {
-        // Redirect output to a client’s web browser (Xlsx)
-        header(sprintf('Content-Type: %s', Hash::get($options, 'format')));
-        header(sprintf('Content-Disposition: attachment;filename="%s"', Hash::get($options, 'filename')));
-        header(sprintf('Cache-Control: max-age=%d', Hash::get($options, 'max-age', 0)));
-
-        // If you're serving to IE over SSL, then the following may be needed
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header('Pragma: public'); // HTTP/1.0
-
+        $tmpfilename = tempnam('/tmp', Hash::get($options, 'filename'));
         $writer = IOFactory::createWriter($spreadsheet, $extension);
-        $writer->save('php://output');
+        $writer->save($tmpfilename);
+        $content = file_get_contents($tmpfilename);
+        $contentType = Hash::get($options, 'format');
+        unlink($tmpfilename);
+
+        return compact('content', 'contentType');
     }
 }
