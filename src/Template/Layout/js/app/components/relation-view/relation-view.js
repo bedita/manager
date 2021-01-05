@@ -57,6 +57,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        preCount: {
+            type: Number,
+            default: -1,
+        },
     },
 
     data() {
@@ -434,6 +438,9 @@ export default {
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false) {
+            if (this.preCount === 0) {
+                return [];
+            }
             this.loading = true;
 
             return this.getPaginatedObjects(true, filter)

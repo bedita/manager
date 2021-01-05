@@ -43,6 +43,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        preCount: {
+            type: Number,
+            default: -1,
+        },
     },
 
     data() {
@@ -60,6 +64,9 @@ export default {
             return;
         }
         this.isOpen = this.checkTabOpen();
+        if (this.preCount >= 0) {
+            this.totalObjects = this.preCount;
+        }
     },
 
     watch: {
