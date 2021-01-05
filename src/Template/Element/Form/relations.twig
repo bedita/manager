@@ -17,7 +17,9 @@
                             <button @click.prevent @click.stop="switchBlockView()" :data-active="!listView" class="switch-view icon-th-large"></button>
                             <button @click.prevent @click.stop="switchListView()" :data-active="listView" class="switch-view icon-th-list"></button>
                         </div>
-                        <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
+                        <span class="tag is-smallest is-black mx-05" v-show="!isLoading"
+                            :class="!totalObjects? 'empty' : ''"><: totalObjects :>
+                        </span>
                 </header>
                 <div v-show="isOpen" class="tab-container">
                     {% element 'Form/relation' {
