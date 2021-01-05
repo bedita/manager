@@ -212,7 +212,7 @@ class ModulesComponent extends Component
     {
         $types = [];
         foreach ($this->modules as $name => $data) {
-            if (!$data['hints']['object_type']) {
+            if (empty($data['hints']['object_type'])) {
                 continue;
             }
             if ($abstract === null || $data['hints']['multiple_types'] === $abstract) {
