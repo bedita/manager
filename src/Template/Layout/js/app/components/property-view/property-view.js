@@ -78,6 +78,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.checkLoadRelated();
             this.updateStorage();
         },
         onToggleLoading(status) {
@@ -120,6 +121,11 @@ export default {
                 tabs.splice(pos, 1);
             }
             localStorage.setItem(STORAGE_TABS_KEY, JSON.stringify(tabs));
+        },
+        checkLoadRelated() {
+            if (this.isOpen && this.$refs.relation) {
+                this.$refs.relation.loadRelatedObjects();
+            }
         },
     }
 }
