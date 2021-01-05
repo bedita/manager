@@ -12,14 +12,13 @@
                     {% set class = class ~ ' icon-th-large-1' %}
                 {% endif %}
 
-                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name })|raw }}" class="{{ class }}">
+                {% if module.route %}
+                    {% set url = Url.build(module.route) %}
+                {% else %}
+                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                {% endif %}
+                <a href="{{ url }}" class="{{ class }}">
                     <span>{{ title }}</span>
-                </a>
-            {% endfor %}
-
-            {% for k, plugin in config('PluginModules', []) %}
-                <a href="{{ Url.build(plugin.route)|raw }}" class="{{ plugin.class.dashboard }}">
-                    <span>{{ plugin.title|humanize }}</span>
                 </a>
             {% endfor %}
             </div>
@@ -74,7 +73,6 @@
             </div>
         </section>
 
-        {% if user %}
         <section class="dashboard-section">
             <header>
                 <h2>{{ __('Preferences and Tools') }}</h2>
@@ -100,6 +98,32 @@
                 {# <a href="#" class="dashboard-item has-background-black icon-cog" disabled>{{ __('Settings') }}</a> #}
             </div>
         </section>
-        {% endif %}
+
+        <section class="dashboard-section">
+            <header>
+                <h2>{{ __('Your recent items') }}</h2>
+            </header>
+
+            <div class="list-objects">
+                <nav class="table-header has-border-module-{{ currentModule.name }}">
+                    <div>{{ __('title') }}</div>
+                    <div>{{ __('type') }}</div>
+                    <div>{{ __('status') }}</div>
+                    <div>{{ __('language') }}</div>
+                    <div>{{ __('modified') }}</div>
+                </nav>
+                {% for object in recentItems %}
+                    <a href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}" class="table-row object-status-{{ object.attributes.status }}">
+                        <div class="narrow">{{ object.attributes.title|default(__('untitled')) }}</div>
+                        <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
+                        <div class="narrow">{{ object.attributes.status }}</div>
+                        <div class="narrow">{{ object.attributes.lang }}</div>
+                        <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+                    </a>
+                {% else %}
+                    {{ __('No items found') }}
+                {% endfor %}
+            </div>
+        </section>
     </div>
 </dashboard>
