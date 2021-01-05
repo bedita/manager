@@ -128,6 +128,9 @@ class ModulesComponent extends Component
     public function getModules(): array
     {
         $modules = (array)Configure::read('Modules');
+        $pluginModules = array_filter($modules, function ($item) {
+            return !empty($item['route']);
+        });
         $metaModules = $this->modulesFromMeta();
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
@@ -136,7 +139,11 @@ class ModulesComponent extends Component
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
             }
         );
-        $this->modules = array_merge($modules, array_diff_key($metaModules, $modules));
+        $this->modules = array_merge(
+            $modules,
+            array_diff_key($metaModules, $modules),
+            $pluginModules
+        );
 
         return $this->modules;
     }
