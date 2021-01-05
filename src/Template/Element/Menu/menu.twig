@@ -2,7 +2,7 @@
     <div class="menu-bar">
 
         <nav role="menu">
-            {# Core object modules #}
+            {# Core modules #}
             {% for name, module in modules if name != 'trash' %}
                 {% set label = __(module.label|default(name)|humanize) %}
                 {% set shortLabel = module.shortLabel|default(label[0:3]) %}
@@ -10,27 +10,16 @@
                     {% set label = label[0:3] %}
                 {% endif %}
 
-                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) }}"
-                    title="{{ __('Open module') }} {{ __(name|humanize) }}"
+                {% if module.route %}
+                    {% set url = Url.build(module.route) %}
+                {% else %}
+                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                {% endif %}
+                <a href="{{ url }}" title="{{ __('Open module') }} {{ __(name|humanize) }}"
                     class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
                     <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
                     <span class="menu-item-label">{{ label }}</span>
                     <span class="menu-item-short-label">{{ shortLabel }}</span>
-                </a>
-            {% endfor %}
-
-            {# Plugin modules #}
-            {% for pluginName, plugin in config('PluginModules') %}
-                {% set label = __(plugin.title|humanize) %}
-                {% if label|length > 7 %}
-                    {% set label = label[0:3] %}
-                {% endif %}
-
-                <a href="{{ Url.build(plugin.route) }}"
-                    title="{{ __('Open module') }} {{ __(pluginName|humanize) }}"
-                    class="menu-item {{ pluginName == currentModule.name ? 'current' : '' }}">
-                    <span class="menu-item-color-bar has-background-module-{{ pluginName }}" aria-hidden="true"></span>
-                    <span class="menu-item-label">{{ label }}</span>
                 </a>
             {% endfor %}
         </nav>

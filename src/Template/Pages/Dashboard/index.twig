@@ -12,14 +12,13 @@
                     {% set class = class ~ ' icon-th-large-1' %}
                 {% endif %}
 
-                <a href="{{ Url.build({ '_name': 'modules:list', 'object_type': name })|raw }}" class="{{ class }}">
+                {% if module.route %}
+                    {% set url = Url.build(module.route) %}
+                {% else %}
+                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                {% endif %}
+                <a href="{{ url }}" class="{{ class }}">
                     <span>{{ title }}</span>
-                </a>
-            {% endfor %}
-
-            {% for k, plugin in config('PluginModules', []) %}
-                <a href="{{ Url.build(plugin.route)|raw }}" class="{{ plugin.class.dashboard }}">
-                    <span>{{ plugin.title|humanize }}</span>
                 </a>
             {% endfor %}
             </div>
