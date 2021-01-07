@@ -150,7 +150,8 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
+            $query = ['count' => 'all'];
+            $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
