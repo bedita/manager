@@ -80,6 +80,7 @@ export default {
                     toolbar: DEFAULT_TOOLBAR,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
+                    entity_encoding: 'raw',
                     plugins: [
                         'paste',
                         'autoresize',
