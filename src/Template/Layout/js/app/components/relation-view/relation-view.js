@@ -57,13 +57,18 @@ export default {
             type: Boolean,
             default: false,
         },
+        preCount: {
+            type: Number,
+            default: -1,
+        },
     },
 
     data() {
         return {
             method: 'relatedJson',      // define AppController method to be used
             loading: false,
-            count: 0,                   // count number of related objects, on change triggers an event
+            objectsLoaded: false,       // objects loaded flag
+            positions: {},              // used in children relations
 
             removedRelationsData: [],   // hidden field containing serialized json passed on form submit
             addedRelationsData: [],     // array of serialized new relations
@@ -110,7 +115,10 @@ export default {
         PanelEvents.listen('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
 
-        await this.loadOnMounted();
+        // if preCount is '-1' => no object count from API, force load
+        if (this.preCount === -1 || this.$parent.isOpen) {
+            await this.loadOnMounted();
+        }
 
         // check if relation is related to media objects
         if (this.relationTypes && this.relationTypes.right) {
@@ -192,7 +200,7 @@ export default {
          */
         onUpdatePageSize(pageSize) {
             this.setPageSize(pageSize);
-            this.loadRelatedObjects(this.activeFilter);
+            this.loadRelatedObjects(this.activeFilter, true);
         },
 
         /**
@@ -429,24 +437,28 @@ export default {
          * @emits Event#count count objects event
          *
          * @param {Object} filter object containing filters
-         * @param {Boolean} force force recount of related objects
+         * @param {Boolean} force force reload of related objects
          *
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false) {
+            if (this.preCount === 0 || (this.objectsLoaded && !force)) {
+                return [];
+            }
             this.loading = true;
 
             return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
+                    this.objectsLoaded = true;
                     return objs;
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
                         this.loading = false;
-                        console.error(error);s
+                        console.error(error);
                     }
                 });
         },

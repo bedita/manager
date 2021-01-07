@@ -2,6 +2,7 @@
     :relation-data='{{ relationSchema|json_encode|raw }}'
     :list-view=listView
     relation-name={{ relationName }}
+    :pre-count={{ preCount }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     @loading="onToggleLoading" @count="onCount">
