@@ -1,9 +1,6 @@
 {% for resourceName in resourceRelations %}
-    {% set wait = config('ajaxLoadDelay.start')|default(0) + (loop.index * config('ajaxLoadDelay.interval')|default(0)) %}
-
     <property-view inline-template :tab-open-at-start=true ref={{ resourceName }}>
         <section class="fieldset">
-
             <header class="tab tab-static unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                 <h2>
                     {{ __(resourceName|humanize)|lower }}
@@ -27,6 +24,5 @@
 
         </section>
     </property-view>
-
 {% endfor %}
 
