@@ -585,7 +585,11 @@ return [
      */
     // 'Export' => [
     //     'limit' => 10000,
-    //     'formats' => ['csv', 'ods', 'xlsx'],
+    //     'formats' => [
+    //        'CSV' => 'csv', // label => value
+    //        'Open Document' => 'ods',
+    //        'MS Excel' => 'xlsx'
+    //     ],
     //     'default' => 'xlsx'
     // ],
 
