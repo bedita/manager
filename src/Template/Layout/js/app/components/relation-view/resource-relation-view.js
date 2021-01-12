@@ -6,14 +6,13 @@
  *
  * <relation-view> component used for ModulesPage -> View
  *
- * @property {String} relationName name of the relation used by the PaginatiedContentMixin
+ * @property {String} relationName name of the relation used by the PaginatedContentMixin
 
  * @requires
  *
  */
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
-import sleep from 'sleep-promise';
 
 export default {
     mixins: [
@@ -32,6 +31,7 @@ export default {
             method: 'relatedJson',                      // define AppController method to be used
             loading: false,
             count: 0,                                   // count number of related objects, on change triggers an event
+            annotations: []
         }
     },
 
@@ -96,6 +96,7 @@ export default {
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
+                    this.annotations = objs;
                     return objs;
                 })
                 .catch((error) => {

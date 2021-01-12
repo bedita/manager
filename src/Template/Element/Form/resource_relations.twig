@@ -13,18 +13,17 @@
                 </h2>
             </header>
 
-            {# TODO: review, commented out, v-show is always false!!! #}
-            {# <div v-show="false" class="tab-container">
+            <div class="tab-container">
                 <resource-relation-view inline-template
                     relation-name={{ resourceName }}
                     ref="relation"
-
                     @loading="onToggleLoading"
                     @count="onCount">
-
-                    <div class="resource-relation-view"></div>
+                    <div class="resource-relation-view">
+                        <div v-for="(note, index) in annotations" :key="index"><: index + 1 :>: <: note.attributes.description :></div>
+                    </div>
                 </resource-relation-view>
-            </div> #}
+            </div>
 
         </section>
     </property-view>
