@@ -18,6 +18,8 @@ use Cake\Utility\Hash;
 
 /**
  * Export controller: upload and load using filters
+ *
+ * @property \App\Controller\Component\ExportComponent $Export
  */
 class ExportController extends AppController
 {
@@ -29,12 +31,27 @@ class ExportController extends AppController
     const DEFAULT_EXPORT_LIMIT = 10000;
 
     /**
-     * Export data in csv format
-     *
-     * @return \Cake\Http\Response
+     * {@inheritDoc}
+     * {@codeCoverageIgnore}
      */
-    public function export(): Response
+    public function initialize(): void
     {
+        parent::initialize();
+
+        $this->loadComponent('Export');
+    }
+
+    /**
+     * Export data to format specified by user
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function export(): ?Response
+    {
+        $format = (string)$this->request->getData('format');
+        if (!$this->Export->checkFormat($format)) {
+            return null;
+        }
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
             'allowedMethods' => ['post'],
@@ -42,11 +59,18 @@ class ExportController extends AppController
         ]);
         $ids = $this->request->getData('ids');
 
-        // load csv data for objects by object type and ids
-        $rows = $this->csvRows($data['objectType'], $ids);
+        // load data for objects by object type and ids
+        $rows = $this->rows($data['objectType'], $ids);
 
-        // save data to csv and output it to browser
-        return $this->csv($rows, $data['objectType']);
+        // create spreadsheet and return as download
+        $filename = sprintf('%s_%s.%s', $data['objectType'], date('Ymd-His'), $format);
+        $data = $this->Export->format($format, $rows, $filename);
+
+        // output
+        $response = $this->response->withStringBody(Hash::get($data, 'content'));
+        $response = $response->withType(Hash::get($data, 'contentType'));
+
+        return $response->withDownload($filename);
     }
 
     /**
@@ -59,10 +83,10 @@ class ExportController extends AppController
      * @param string $ids Object IDs comma separated string
      * @return array
      */
-    protected function csvRows(string $objectType, string $ids = ''): array
+    protected function rows(string $objectType, string $ids = ''): array
     {
         if (empty($ids)) {
-            return $this->csvAll($objectType);
+            return $this->rowsAll($objectType);
         }
 
         $data = [];
@@ -74,12 +98,12 @@ class ExportController extends AppController
     }
 
     /**
-     * Load all CSV data for a given type using limit and query filters.
+     * Load all data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
      * @return array
      */
-    protected function csvAll(string $objectType): array
+    protected function rowsAll(string $objectType): array
     {
         $data = [];
         $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
@@ -162,67 +186,6 @@ class ExportController extends AppController
     }
 
     /**
-     * Create csv data (string) per rows/objects and output it to browser
-     *
-     * @param array $rows The rows data
-     * @param string $objectType The object type
-     * @return \Cake\Http\Response
-     */
-    private function csv(array $rows, string $objectType): Response
-    {
-        $result = $this->processCsv($rows, $objectType);
-        extract($result); // => $filename, $csv
-
-        return $this->outputCsv($filename, $csv);
-    }
-
-    /**
-     * Output csv file.
-     *
-     * @param string $filename The file name.
-     * @param string $csv The csv string data.
-     * @return \Cake\Http\Response
-     */
-    protected function outputCsv($filename, $csv): Response
-    {
-        $response = $this->response->withStringBody($csv);
-        $response = $response->withType('text/csv');
-
-        return $response->withDownload(sprintf('%s.csv', $filename));
-    }
-
-    /**
-     * Process data (string) per rows/objects.
-     * Create a temporary csv file.
-     * Return filename and csv string in an array.
-     *
-     * @param array $rows The rows data.
-     * @param string $objectType The object type.
-     * @return array
-     */
-    private function processCsv(array $rows, string $objectType): array
-    {
-        $csv = '';
-        $fields = array_shift($rows);
-        $filename = sprintf('%s_%s', $objectType, date('Ymd-His'));
-        $tmpfilename = tempnam('/tmp', $filename);
-        if ($tmpfilename) {
-            $fp = fopen($tmpfilename, 'w+');
-            if (!empty($fp)) {
-                fputcsv($fp, $fields);
-                foreach ($rows as $row) {
-                    fputcsv($fp, $row);
-                }
-                $csv = file_get_contents($tmpfilename);
-                fclose($fp);
-            }
-        }
-        unlink($tmpfilename);
-
-        return compact('csv', 'filename');
-    }
-
-    /**
      * Get fields array using data first element attributes
      *
      * @param array $response The response from which extract fields
@@ -244,7 +207,7 @@ class ExportController extends AppController
      * @param array $fields The fields
      * @return void
      */
-    private function fillRowFields(&$row, $data, $fields)
+    private function fillRowFields(&$row, $data, $fields): void
     {
         foreach ($fields as $field) {
             $row[$field] = '';

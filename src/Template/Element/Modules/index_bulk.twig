@@ -56,6 +56,19 @@
         {% if not currentModule.hints.multiple_types %}
             {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
 
+                {% set formats = config('Export.formats', {
+                    'CSV': 'csv',
+                    'Open Document': 'ods',
+                    'MS Excel': 'xlsx'
+                }) %}
+                {% set defaultFormat = config('Export.default', 'xslx') %}
+                <select name="format" id="exportformat">
+                {% for label,format in formats %}
+                    <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+                {% endfor %}
+                </select>
+                {{ Form.unlockField('format') }}
+
                 <input type="hidden" name="ids" v-model="selectedRows">
                 {{ Form.unlockField('ids') }}
                 {{ Form.hidden('objectType', {'value': objectType})|raw }}
