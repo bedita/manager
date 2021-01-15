@@ -24,7 +24,7 @@
         <div class="related-list-container">
 
             {# FilterBoxView #}
-            <div class="mb-1">
+            <div class="mb-1" v-show="objects.length > 10 || addedRelations.length > 10">
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"

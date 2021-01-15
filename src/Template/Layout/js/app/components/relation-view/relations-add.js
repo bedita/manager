@@ -373,6 +373,10 @@ export default {
          * @return {Promise} repsonse from server
          */
         async loadObjects(filter) {
+            if (!filter) {
+                filter = {};
+            }
+            filter.sort = '-created';
             this.objects = [];
             this.loading = true;
             let response = await this.getPaginatedObjects(true, filter);
