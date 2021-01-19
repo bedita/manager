@@ -377,13 +377,21 @@ class AppController extends Controller
             return $this->redirect((string)$this->request->getUri()->withQuery(''));
         }
 
+        // _search === 1 => request from button Search
+        if ($this->request->getQuery('_search') === '1') {
+            $session->delete($sessionKey);
+            $q = $this->request->getQueryParams();
+            unset($q['_search']);
+            $query = http_build_query($q, null, '&', PHP_QUERY_RFC3986);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery($query));
+        }
+
         // write request query parameters (if any) in session
         if (!empty($this->request->getQueryParams())) {
             $session->write($sessionKey, $this->request->getQueryParams());
 
             return null;
-        } else { // empty? remove session key
-            $session->delete($sessionKey);
         }
 
         // read request query parameters from session and redirect to proper page

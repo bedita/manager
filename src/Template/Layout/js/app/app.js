@@ -362,8 +362,11 @@ const _vueInstance = new Vue({
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
+                _search: 1
             });
-            window.location.replace(url);
+            if (confirm(url)) {
+                window.location.replace(url);
+            }
         },
 
         /**
