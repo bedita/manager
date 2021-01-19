@@ -364,9 +364,7 @@ const _vueInstance = new Vue({
                 sort: this.sort,
                 _search: 1
             });
-            if (confirm(url)) {
-                window.location.replace(url);
-            }
+            window.location.replace(url);
         },
 
         /**
