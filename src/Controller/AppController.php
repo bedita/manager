@@ -363,12 +363,14 @@ class AppController extends Controller
      * Query parameters found: write them on session with proper key ({currentModuleName}.filter)
      * Session data for session key: build uri from session data and redirect to new uri.
      *
+     * @param string|null $action The action
      * @return \Cake\Http\Response|null
      */
-    protected function applySessionFilter(): ?Response
+    protected function applySessionFilter(string $action = null): ?Response
     {
+        $module = $this->Modules->getConfig('currentModuleName');
+        $sessionKey = ($action !== null) ? sprintf('%s.%s.filter', $module, $action) : sprintf('%s.filter', $module);
         $session = $this->request->getSession();
-        $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
 
         // if reset request, delete session data by key and redirect to proper uri
         if ($this->request->getQuery('reset') === '1') {
@@ -378,8 +380,9 @@ class AppController extends Controller
         }
 
         // write request query parameters (if any) in session
-        if (!empty($this->request->getQueryParams())) {
-            $session->write($sessionKey, $this->request->getQueryParams());
+        $params = $this->queryParams();
+        if (!empty($params)) {
+            $session->write($sessionKey, $params);
 
             return null;
         }
@@ -392,6 +395,33 @@ class AppController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Return query params.
+     * If filter has key(s) with value `__remove`, this removes them from filter.
+     *
+     * @return array
+     */
+    protected function queryParams(): array
+    {
+        $params = $this->request->getQueryParams();
+        if (empty($params)) {
+            return [];
+        }
+        if (!array_key_exists('filter', $params)) {
+            return $params;
+        }
+        foreach ($params['filter'] as $key => $val) {
+            if ($val === '__remove') {
+                unset($params['filter'][$key]);
+            }
+        }
+        if (empty($params['filter'])) {
+            unset($params['filter']);
+        }
+
+        return $params;
     }
 
     /**

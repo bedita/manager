@@ -672,6 +672,7 @@ class AppControllerTest extends TestCase
                     ],
                 ],
                 'App.filter', // session key
+                null, // action
                 'anything', // session value
                 null, // expected session value
                 '302', // expected http status code
@@ -688,6 +689,7 @@ class AppControllerTest extends TestCase
                     ],
                 ],
                 'App.filter', // session key
+                null, // action
                 null, // session value
                 ['any' => 'thing'], // expected session value
                 null, // expected http status code
@@ -703,10 +705,28 @@ class AppControllerTest extends TestCase
                     ],
                 ],
                 'App.filter', // session key
+                null, // action
                 ['any' => 'thing'], // session value
                 ['any' => 'thing'], // expected session value
                 '302', // expected http status code
                 '\Cake\Http\Response', // result type
+            ],
+            'action not null' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => ['any' => 'thing'],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.actionSample.filter', // session key
+                'actionSample', // action
+                null, // session value
+                ['any' => 'thing'], // expected session value
+                null, // expected http status code
+                null, // result type
             ],
         ];
     }
@@ -723,10 +743,19 @@ class AppControllerTest extends TestCase
      * @param mixed|null $expectedSessionValue
      * @param string|null $expectedHttpStatusCode
      * @param string|null $expectedResultType
+     * @param string|null $action
      *
      * @return void
      */
-    public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType): void
+    public function testApplySessionFilter(
+            array $requestConfig,
+            string $sessionKey,
+            string $action = null,
+            $sessionValue,
+            $expectedSessionValue,
+            string $expectedHttpStatusCode = null,
+            string $expectedResultType = null
+        ): void
     {
         // Setup controller for test
         $this->setupController($requestConfig);
@@ -739,7 +768,7 @@ class AppControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('applySessionFilter');
         $method->setAccessible(true);
-        $result = $method->invokeArgs($this->AppController, []);
+        $result = $method->invokeArgs($this->AppController, [$action]);
 
         // verify session data and http status code
         static::assertEquals($session->read($sessionKey), $expectedSessionValue);
@@ -751,6 +780,109 @@ class AppControllerTest extends TestCase
         if ($expectedResultType === '\Cake\Http\Response') {
             static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);
         }
+    }
+
+    /**
+     * Data provider for `testQueryParams` test case.
+     *
+     * @return array
+     */
+    public function queryParamsProvider(): array
+    {
+        return [
+            'empty' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                [], // expected
+            ],
+            'no filter' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [
+                        'page' => 1,
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                [
+                    'page' => 1,
+                ], // expected
+            ],
+            'filter one key __remove' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [
+                        'filter' => [
+                            'someKey' => '__remove',
+                        ],
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                [], // expected
+            ],
+            'filter one key __remove + other keys' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [
+                        'filter' => [
+                            'someKey' => '__remove',
+                            'anotherKey1' => 'a value 1',
+                            'anotherKey2' => 'a value 2',
+                        ],
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                [
+                    'filter' => [
+                        'anotherKey1' => 'a value 1',
+                        'anotherKey2' => 'a value 2',
+                    ],
+                ], // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `queryParams` method
+     *
+     * @covers ::queryParams()
+     * @dataProvider queryParamsProvider()
+     *
+     * @param array $config The controller config
+     * @param string $key The session key
+     * @param mixed|null $val The session value
+     * @param array $expected The expected value
+     * @return void
+     */
+    public function testQueryParams(array $config, string $key, $val, array $expected): void
+    {
+        // Setup controller for test
+        $this->setupController($config);
+
+        // get session and write data on it
+        $session = $this->AppController->request->getSession();
+        $session->write($key, $val);
+
+        // do controller call
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('queryParams');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, []);
+
+        static::assertEquals($expected, $actual);
     }
 
     /**

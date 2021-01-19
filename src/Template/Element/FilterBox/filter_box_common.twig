@@ -28,7 +28,7 @@
     {# status if available #}
     <div class="filter-container radio" v-if="Object.keys(statusFilter).length !== 0">
         <label>
-            <input type="radio" :name="statusFilter.name" value="" v-model="queryFilter.filter['status']">{{ __('All') }}
+            <input type="radio" :name="statusFilter.name" value="__remove" v-model="queryFilter.filter['status']">{{ __('All') }}
         </label>
         <label v-for="s in statusFilter.options">
             <input type="radio" :name="statusFilter.name" :value="s.value" v-model="queryFilter.filter['status']"><: s.text :>
@@ -42,7 +42,7 @@
 
         <span v-if="filter.type === 'select' || filter.type === 'radio'">
             <select v-model="queryFilter.filter[filter.name]" :id="filter.name" class="{{ selectBaseClasses }}">
-                <option value="">
+                <option value="__remove">
                     {{ __('All') }}
                 </option>
                 <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
@@ -53,7 +53,7 @@
 
         <span v-if="filter.type === 'checkbox'">
             <label>
-                <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
+                <input type="radio" v-model="queryFilter.filter[filter.name]" value="__remove">
                 {{ __('Any') }}
             </label>
             <label>
