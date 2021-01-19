@@ -382,7 +382,7 @@ class AppController extends Controller
             $session->write($sessionKey, $this->request->getQueryParams());
 
             return null;
-        } else { // empty? remove sessione key
+        } else { // empty? remove session key
             $session->delete($sessionKey);
         }
 
