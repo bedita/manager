@@ -748,15 +748,14 @@ class AppControllerTest extends TestCase
      * @return void
      */
     public function testApplySessionFilter(
-            array $requestConfig,
-            string $sessionKey,
-            string $action = null,
-            $sessionValue,
-            $expectedSessionValue,
-            string $expectedHttpStatusCode = null,
-            string $expectedResultType = null
-        ): void
-    {
+        array $requestConfig,
+        string $sessionKey,
+        string $action = null,
+        $sessionValue,
+        $expectedSessionValue,
+        string $expectedHttpStatusCode = null,
+        string $expectedResultType = null
+    ): void {
         // Setup controller for test
         $this->setupController($requestConfig);
 
