@@ -335,9 +335,8 @@ const _vueInstance = new Vue({
                 url += fields.length ? queryId : '';
                 url += fields.join(separator);
             }
-            if (confirm(url)) {
-                return url;
-            }
+
+            return url;
         },
 
         /**
