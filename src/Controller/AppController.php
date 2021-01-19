@@ -382,6 +382,8 @@ class AppController extends Controller
             $session->write($sessionKey, $this->request->getQueryParams());
 
             return null;
+        } else { // empty? remove sessione key
+            $session->delete($sessionKey);
         }
 
         // read request query parameters from session and redirect to proper page

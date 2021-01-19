@@ -693,7 +693,7 @@ class AppControllerTest extends TestCase
                 null, // expected http status code
                 null, // result type
             ],
-            'data from session' => [ // expected read session filter and redirect
+            'data from session, no filter' => [ // expected read session filter and redirect
                 [ // request config
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
@@ -704,9 +704,9 @@ class AppControllerTest extends TestCase
                 ],
                 'App.filter', // session key
                 ['any' => 'thing'], // session value
-                ['any' => 'thing'], // expected session value
-                '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                null, // expected session value
+                null, // expected http status code
+                null, // result type
             ],
         ];
     }
