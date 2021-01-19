@@ -382,9 +382,17 @@ class AppController extends Controller
         // write request query parameters (if any) in session
         $params = $this->queryParams();
         if (!empty($params)) {
+            if ($params === $session->read($sessionKey)) {
+                return null;
+            }
             $session->write($sessionKey, $params);
+            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
 
-            return null;
+            return $this->redirect((string)$this->request->getUri()->withQuery($query));
+        } elseif ($session->read($sessionKey) !== null) {
+            $session->delete($sessionKey);
+
+            return $this->redirect((string)$this->request->getUri()->withQuery(''));
         }
 
         // read request query parameters from session and redirect to proper page
