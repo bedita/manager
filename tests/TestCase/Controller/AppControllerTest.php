@@ -693,7 +693,7 @@ class AppControllerTest extends TestCase
                 null, // expected http status code
                 null, // result type
             ],
-            'data from session, no filter' => [ // expected read session filter and redirect
+            'data from session, no filter' => [
                 [ // request config
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
