@@ -382,7 +382,7 @@ class AppController extends Controller
             $session->delete($sessionKey);
             $q = $this->request->getQueryParams();
             unset($q['_search']);
-            $query = http_build_query($q, null, '&', PHP_QUERY_RFC3986);
+            $query = http_build_query($q, '', '&', PHP_QUERY_RFC3986);
 
             return $this->redirect((string)$this->request->getUri()->withQuery($query));
         }
@@ -396,7 +396,7 @@ class AppController extends Controller
 
         // read request query parameters from session and redirect to proper page
         if ($session->check($sessionKey)) {
-            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
+            $query = http_build_query($session->read($sessionKey), '', '&', PHP_QUERY_RFC3986);
 
             return $this->redirect((string)$this->request->getUri()->withQuery($query));
         }
