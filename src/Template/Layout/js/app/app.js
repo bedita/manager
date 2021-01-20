@@ -306,12 +306,11 @@ const _vueInstance = new Vue({
                 let fields = [];
 
                 paramsKeys.forEach((key) =>  {
-                    if (params[key] && params[key] !== '') {
+                    if (params[key]) {
                         const query = params[key];
 
                         // parse filter property
                         if (key === 'filter') {
-                            let filter = '';
                             Object.keys(query).forEach((filterKey) => {
                                 if (typeof query[filterKey] === 'object') {
                                     const filter = query[filterKey];
@@ -363,6 +362,7 @@ const _vueInstance = new Vue({
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
+                _search: 1
             });
             window.location.replace(url);
         },
