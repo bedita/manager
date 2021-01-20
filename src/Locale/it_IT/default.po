@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-20 13:20:13 \n"
+"POT-Creation-Date: 2021-01-20 16:47:03 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -104,9 +104,6 @@ msgstr "Chiudi"
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
 
-msgid "Coordinates"
-msgstr "Coordinate"
-
 msgid "Core properties"
 msgstr "Proprietà principali"
 
@@ -197,6 +194,9 @@ msgstr "Esporta Filtrati"
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
 
+msgid "File"
+msgstr ""
+
 msgid "File is too big, form MAX_FILE_SIZE exceeded"
 msgstr "File troppo grande, dimensione massima form superata (MAX_FILE_SIZE)"
 
@@ -248,9 +248,6 @@ msgstr "Avviso in importazione"
 msgid "Inherited properties"
 msgstr "Proprietà ereditate"
 
-msgid "Insert password twice"
-msgstr "Inserisci nuovamente la password"
-
 msgid "Invalid username or password"
 msgstr "Username o password non validi"
 
@@ -277,6 +274,9 @@ msgstr "Accedi"
 
 msgid "Login required"
 msgstr "È richiesto il login"
+
+msgid "Long Lat Coordinates"
+msgstr ""
 
 msgid "Map"
 msgstr "Mappa"
@@ -533,6 +533,9 @@ msgstr "Cestino"
 msgid "Trashd"
 msgstr "Cancellato"
 
+msgid "Type"
+msgstr ""
+
 msgid "Uname"
 msgstr "Nome univoco"
 
@@ -551,6 +554,9 @@ msgstr "Caricare"
 msgid "Upload local file"
 msgstr "Carica file locale"
 
+msgid "Url"
+msgstr ""
+
 msgid "User Profile"
 msgstr "Profilo Utente"
 
@@ -562,9 +568,6 @@ msgstr "Nome utente"
 
 msgid "Users"
 msgstr "Utenti"
-
-msgid "Video"
-msgstr ""
 
 msgid "Videos"
 msgstr "Video"
@@ -583,6 +586,9 @@ msgstr "Non sei autorizzato ad accedere a quest'area."
 
 msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
+
+msgid "Your recent items"
+msgstr ""
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
@@ -620,6 +626,9 @@ msgstr "nome del file"
 msgid "id"
 msgstr ""
 
+msgid "language"
+msgstr ""
+
 msgid "modified"
 msgstr "modificato"
 
@@ -637,6 +646,9 @@ msgstr "originale"
 
 msgid "remove"
 msgstr "rimuovi"
+
+msgid "reset"
+msgstr ""
 
 msgid "scheduled from"
 msgstr "programmato da"
@@ -662,33 +674,52 @@ msgstr "annulla"
 msgid "undo remove"
 msgstr "annulla rimozione"
 
+msgid "untitled"
+msgstr ""
+
 msgid "view parent"
 msgstr "visualizza genitore"
+
+msgid "warning"
+msgstr "attenzione"
 
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:156
+#: src/Template/Layout/js/app/app.js:158
 #: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#: src/Template/Layout/js/app/app.js:470
-msgid "If you confirm, this data will be gone forever"
-msgstr "Se confermi, questo dato verrà eliminato definitivamente"
+#: src/Template/Layout/js/app/app.js:476
+msgid "If you confirm, this data will be gone forever. Are you sure?"
+msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
 
-#: src/Template/Layout/js/app/app.js:472
+#: src/Template/Layout/js/app/app.js:478
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/app.js:488
+#: src/Template/Layout/js/app/app.js:481
+msgid "yes, proceed"
+msgstr "sì, prosegui"
+
+#: src/Template/Layout/js/app/app.js:495
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
-#: src/Template/Layout/js/app/components/locations-view/locations-view.js:84
-msgid "Long lat Coordinates"
-msgstr "Coordinate Long Lat"
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:264
+msgid "Error while creating new object."
+msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+#~ msgid "Coordinates"
+#~ msgstr "Coordinate"
+
+#~ msgid "Insert password twice"
+#~ msgstr "Inserisci nuovamente la password"
+
+#~ msgid "Long lat Coordinates"
+#~ msgstr "Coordinate Long Lat"
 
 #~ msgid "by"
 #~ msgstr "di"

@@ -8,6 +8,7 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
+import { BeditaDialog } from './components/bedita-dialog/bedita-dialog';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -43,6 +44,7 @@ const _vueInstance = new Vue({
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
+        BeditaDialog,
     },
 
     data() {
@@ -459,28 +461,36 @@ const _vueInstance = new Vue({
                 }
             });
 
-            /*
-                Listen for submit: if action is /delete it shows warning prompt
+            /**
+            * Listen for submit: if action is /delete it shows warning dialog
             */
             this.$el.addEventListener('submit', (ev) => {
+                ev.preventDefault();
                 const form = ev.target;
-                if (form) {
-                    let msg = '';
-                    if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
-                        msg = t`If you confirm, this data will be gone forever`;
-                    } else if (form.action.endsWith('/delete')) {
-                        msg = t`Do you really want to trash the object?`;
-                    }
-                    _vueInstance.dataChanged.clear();
-                    if (msg && !confirm(msg)) {
-                        ev.preventDefault();
-                        return;
-                    }
+                if (!form) {
+                    return;
                 }
+
+                let msg = '';
+                if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
+                    msg = t`If you confirm, this data will be gone forever. Are you sure?`;
+                } else if (form.action.endsWith('/delete')) {
+                    msg = t`Do you really want to trash the object?`;
+                }
+
+                _vueInstance.dataChanged.clear();
+                if (!msg) {
+                    return form.submit();
+                }
+
+                let dialog = this.$root.$refs.beditaDialog;
+                dialog.confirmMessage = t`yes, proceed`;
+                dialog.confirmCallback = form.submit.bind(form);
+                dialog.warning(msg);
             });
 
-            /*
-                Ask confirmation before leaving the page if there are unsaved changes
+            /**
+            * Ask confirmation before leaving the page if there are unsaved changes
             */
             window.onbeforeunload = () => {
                 for (const [key, value] of _vueInstance.dataChanged) {

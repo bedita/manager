@@ -1,0 +1,73 @@
+.bedita-dialog {
+    z-index: 1;
+
+    .backdrop {
+        display: block;
+
+        &.fade-enter-active,
+        &.fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        &.fade-enter,
+        &.fade-leave-to {
+            opacity: 0;
+        }
+
+        &.fade-enter-to,
+        &.fade-leave {
+            opacity: 0.75;
+        }
+    }
+
+    .dialog {
+        position: fixed;
+        width: 600px;
+        height: 200px;
+        top: 0;
+        left: calc(50vw - 300px);
+        margin-top: 10%;
+        border-top: 4px solid transparent;
+
+        &.slide-enter-active,
+        &.slide-leave-active {
+            transition: transform .5s;
+        }
+
+        &.slide-enter,
+        &.slide-leave-to {
+            transform: translateY(-100%);
+        }
+
+        &.slide-enter-to,
+        &.slide-leave {
+            transform: translateY(0);
+        }
+
+        header {
+            .icon-cancel-1 {
+                cursor: pointer;
+
+                &::before {
+                    margin: 0;
+                }
+            }
+        }
+
+        &.warning {
+            border-color: $warning;
+
+            .icon-attention-circled {
+                color: $warning;
+            }
+        }
+
+        &.error {
+            border-color: $error;
+
+            .icon-attention-circled {
+                color: $error;
+            }
+        }
+    }
+}

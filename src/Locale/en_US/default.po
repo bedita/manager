@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2020-10-20 13:20:13 \n"
+"POT-Creation-Date: 2021-01-20 16:47:03 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -104,9 +104,6 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
-msgid "Coordinates"
-msgstr ""
-
 msgid "Core properties"
 msgstr ""
 
@@ -197,6 +194,9 @@ msgstr ""
 msgid "Failed to write file to disk"
 msgstr ""
 
+msgid "File"
+msgstr ""
+
 msgid "File is too big, form MAX_FILE_SIZE exceeded"
 msgstr ""
 
@@ -248,9 +248,6 @@ msgstr ""
 msgid "Inherited properties"
 msgstr ""
 
-msgid "Insert password twice"
-msgstr ""
-
 msgid "Invalid username or password"
 msgstr ""
 
@@ -276,6 +273,9 @@ msgid "Login"
 msgstr ""
 
 msgid "Login required"
+msgstr ""
+
+msgid "Long Lat Coordinates"
 msgstr ""
 
 msgid "Map"
@@ -530,6 +530,9 @@ msgstr ""
 msgid "Trashd"
 msgstr "Trashed"
 
+msgid "Type"
+msgstr ""
+
 msgid "Uname"
 msgstr ""
 
@@ -548,6 +551,9 @@ msgstr ""
 msgid "Upload local file"
 msgstr ""
 
+msgid "Url"
+msgstr ""
+
 msgid "User Profile"
 msgstr ""
 
@@ -558,9 +564,6 @@ msgid "Username"
 msgstr ""
 
 msgid "Users"
-msgstr ""
-
-msgid "Video"
 msgstr ""
 
 msgid "Videos"
@@ -579,6 +582,9 @@ msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "You have requested a password change, please provide a new password"
+msgstr ""
+
+msgid "Your recent items"
 msgstr ""
 
 msgid "add objects"
@@ -617,6 +623,9 @@ msgstr ""
 msgid "id"
 msgstr ""
 
+msgid "language"
+msgstr ""
+
 msgid "modified"
 msgstr ""
 
@@ -633,6 +642,9 @@ msgid "original"
 msgstr ""
 
 msgid "remove"
+msgstr ""
+
+msgid "reset"
 msgstr ""
 
 msgid "scheduled from"
@@ -659,30 +671,40 @@ msgstr ""
 msgid "undo remove"
 msgstr ""
 
+msgid "untitled"
+msgstr ""
+
 msgid "view parent"
+msgstr ""
+
+msgid "warning"
 msgstr ""
 
 msgid "www.bedita.com"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:156
+#: src/Template/Layout/js/app/app.js:158
 #: src/Template/Layout/js/app/components/history/history.js:92
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:470
-msgid "If you confirm, this data will be gone forever"
+#: src/Template/Layout/js/app/app.js:476
+msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:472
+#: src/Template/Layout/js/app/app.js:478
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:488
+#: src/Template/Layout/js/app/app.js:481
+msgid "yes, proceed"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:495
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/locations-view/locations-view.js:84
-msgid "Long lat Coordinates"
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:264
+msgid "Error while creating new object."
 msgstr ""
