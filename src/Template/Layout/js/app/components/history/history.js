@@ -88,19 +88,20 @@ export default {
          */
         onClone(historyId) {
             const title = document.getElementById('title').value || t('Untitled');
-
             const msg = t`Please insert a new title on "${title}" clone`;
-            const cloneTitle = prompt(msg, title + ' -copy');
+            const defaultTitle = title + '-' + t`copy`;
+            let dialog = this.$root.$refs.beditaDialog;
 
-            if (!cloneTitle) {
-                return;
-            }
+            const confirmCallback = (cloneTitle = defaultTitle) => {
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
+                dialog.hide();
+            };
 
-            const origin = window.location.origin;
-            const path = window.location.pathname.replace('/view/', '/clone/');
-            const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
-            const newTab = window.open(url, '_blank');
-            newTab.focus();
+            dialog.prompt(msg, defaultTitle, confirmCallback);
         },
     },
 

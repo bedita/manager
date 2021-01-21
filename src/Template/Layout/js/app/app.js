@@ -156,15 +156,20 @@ const _vueInstance = new Vue({
         clone() {
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
-            const cloneTitle = prompt(msg, title + ' -copy');
-            if (cloneTitle) {
+            const defaultTitle = title + '-' + t`copy`;
+            let dialog = this.$root.$refs.beditaDialog;
+
+            const confirmCallback = (cloneTitle = defaultTitle) => {
                 const query = `?title=${cloneTitle}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
                 const newTab = window.open(url, '_blank');
                 newTab.focus();
-            }
+                dialog.hide();
+            };
+
+            dialog.prompt(msg, defaultTitle, confirmCallback);
         },
 
         /**
@@ -484,9 +489,7 @@ const _vueInstance = new Vue({
                 }
 
                 let dialog = this.$root.$refs.beditaDialog;
-                dialog.confirmMessage = t`yes, proceed`;
-                dialog.confirmCallback = form.submit.bind(form);
-                dialog.warning(msg);
+                dialog.confirm(msg, t`yes, proceed`, form.submit.bind(form));
             });
 
             /**

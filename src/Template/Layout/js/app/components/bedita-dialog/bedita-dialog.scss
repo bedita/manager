@@ -23,7 +23,7 @@
     .dialog {
         position: fixed;
         width: 600px;
-        height: 200px;
+        min-height: 200px;
         top: 0;
         left: calc(50vw - 300px);
         margin-top: 10%;
@@ -44,16 +44,6 @@
             transform: translateY(0);
         }
 
-        header {
-            .icon-cancel-1 {
-                cursor: pointer;
-
-                &::before {
-                    margin: 0;
-                }
-            }
-        }
-
         &.warning {
             border-color: $warning;
 
@@ -68,6 +58,31 @@
             .icon-attention-circled {
                 color: $error;
             }
+        }
+
+        &.prompt,
+        &.info {
+            border-color: $info;
+
+            .icon-info-1,
+            .icon-info-circled {
+                color: $info;
+            }
+        }
+
+        header {
+            .icon-cancel-1 {
+                cursor: pointer;
+
+                &::before {
+                    margin: 0;
+                }
+            }
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid $gray-600;
         }
     }
 }

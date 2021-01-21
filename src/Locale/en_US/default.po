@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-01-20 16:47:03 \n"
+"POT-Creation-Date: 2021-01-21 11:04:19 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -684,7 +684,7 @@ msgid "www.bedita.com"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:158
-#: src/Template/Layout/js/app/components/history/history.js:92
+#: src/Template/Layout/js/app/components/history/history.js:91
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
@@ -697,14 +697,18 @@ msgstr ""
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:481
+#: src/Template/Layout/js/app/app.js:487
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:495
+#: src/Template/Layout/js/app/app.js:496
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:264
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:263
 msgid "Error while creating new object."
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:92
+msgid "copy"
 msgstr ""

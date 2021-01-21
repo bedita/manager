@@ -260,7 +260,6 @@ export default {
 
                 let dialog = this.$root.$refs.beditaDialog;
                 dialog.cancelMessage = '';
-                dialog.confirmMessage = 'ok';
                 dialog.error(t`Error while creating new object.`);
                 console.error(error);
 
