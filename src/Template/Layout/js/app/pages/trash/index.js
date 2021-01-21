@@ -8,6 +8,7 @@
  */
 
 import ModulesIndex from 'app/pages/modules/index';
+import { t } from 'ttag';
 
 export default {
     extends: ModulesIndex,
@@ -33,11 +34,12 @@ export default {
             if (this.selectedRows.length < 1) {
                 return;
             }
-            if (confirm('Confirm deletion of ' + this.selectedRows.length + ' item from the trash')) {
-                document.getElementById('form-delete').submit();
-            }
+
+            let number = this.selectedRows.length;
+            let message = t`Do you confirm the deletion of ${number} item from the trash?`;
+            let form = document.getElementById('form-delete');
+            let dialog = this.$root.$refs.beditaDialog;
+            dialog.confirm(message, t`yes, proceed`, form.submit.bind(form));
         },
     }
 }
-
-

@@ -76,18 +76,17 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
-                return;
-            }
-
-            window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
+            let message = t`Restored data will replace current data (you can still check the data before saving). Are you sure?`;
+            let dialog = this.$root.$refs.beditaDialog;
+            let confirmCallback = () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
+            dialog.confirm(message, t`yes, proceed`, confirmCallback);
         },
         /**
          * Open a new tab with the URL to create a new object with data restored from `historyId` object.
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || t('Untitled');
+            const title = document.getElementById('title').value || t`Untitled`;
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
             let dialog = this.$root.$refs.beditaDialog;

@@ -14,7 +14,7 @@ export const BeditaDialog = {
             <div class="dialog p-1 has-background-white has-text-black" :class="dialogType" v-if="isOpen">
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
-                        <span class="is-capitalized mr-05" v-if="headerText"><: headerText :></span>
+                        <span class="is-capitalized mr-05" v-if="headerText"><: t(headerText) :></span>
                         <i :class="icon" class="has-text-size-larger" v-if="icon"></i>
                     </div>
                     <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
@@ -33,7 +33,7 @@ export const BeditaDialog = {
         return {
             isOpen: false,
             dialogType: 'warning',
-            headerText: t(this.dialogType),
+            headerText: '',
             icon: 'icon-attention-circled',
             message: '',
             confirmMessage: 'ok',
@@ -42,9 +42,9 @@ export const BeditaDialog = {
             inputValue: '',
         };
     },
-
     methods: {
-        show(message) {
+        show(message, headerText = this.dialogType) {
+            this.headerText = headerText;
             this.message = message;
             this.isOpen = true;
         },
@@ -63,7 +63,7 @@ export const BeditaDialog = {
         info(message) {
             this.dialogType = 'info';
             this.icon = 'icon-info-1';
-            this.show(message);
+            this.show(message, '');
         },
         confirm(message, confirmMessage, confirmCallback, type = 'warning') {
             this.dialogType = type;
@@ -73,11 +73,10 @@ export const BeditaDialog = {
         },
         prompt(message, defaultValue, confirmCallback) {
             this.dialogType = 'prompt';
-            this.headerText = '';
             this.icon = 'icon-info-1';
             this.inputValue = defaultValue || '';
             this.confirmCallback = confirmCallback;
-            this.show(message);
+            this.show(message, '');
         },
     },
 };

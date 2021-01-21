@@ -57,7 +57,7 @@ body.view-dashboard {
                 opacity: .5;
                 color: inherit;
                 font-size: $font-size-sssm;
-                z-index: 10;
+                z-index: 1;
                 filter: brightness(1);
                 transition: filter .3s;
             }
