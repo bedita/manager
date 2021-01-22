@@ -120,7 +120,7 @@ msgid "Custom properties"
 msgstr "Proprietà personalizzate"
 
 msgid "Dashboard"
-msgstr "Cruscotto"
+msgstr ""
 
 msgid "Data Import"
 msgstr "Importazione dati"
