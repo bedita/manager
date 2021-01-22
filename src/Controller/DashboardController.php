@@ -38,7 +38,16 @@ class DashboardController extends AppController
     public function index(): void
     {
         $this->request->allowMethod(['get']);
-        $this->set('recentItems', $this->recentItems());
+        try {
+            $this->set('recentItems', $this->recentItems());
+        } catch (\Exception $e) {
+            if ($e->getCode() === 401) {
+                $route = $this->loginRedirectRoute();
+                $this->Flash->error(__('Session expired'));
+
+                $this->redirect($route);
+            }
+        }
     }
 
     /**

@@ -127,6 +127,35 @@ class DashboardControllerTest extends TestCase
     }
 
     /**
+     * Test `index` method, for not authorized user
+     *
+     * @covers ::index()
+     * @covers ::recentItems()
+     *
+     * @return void
+     */
+    public function testIndexNotAuthorized(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        // setup api
+        $client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $client->authenticate($adminUser, $adminPassword);
+        $response['meta']['jwt'] .= '-invalid';
+        $client->setupTokens($response['meta']);
+        $this->Dashboard->Auth->setUser(['id' => 1]);
+        $this->Dashboard->index();
+        $response = $this->Dashboard->response;
+
+        static::assertEquals(302, $response->getStatusCode());
+    }
+
+    /**
      * Test `recentItems` method
      *
      * @covers ::recentItems()
