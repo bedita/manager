@@ -42,10 +42,8 @@ class DashboardController extends AppController
             $this->set('recentItems', $this->recentItems());
         } catch (\Exception $e) {
             if ($e->getCode() === 401) {
-                $route = $this->loginRedirectRoute();
-                $this->Flash->error(__('Session expired'));
-
-                $this->redirect($route);
+                // session expired or something went wrong with auth session: force logout
+                $this->redirect(['_name' => 'logout']);
             }
         }
     }
