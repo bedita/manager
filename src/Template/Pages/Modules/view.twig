@@ -1,29 +1,27 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
 <modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
-<div class="modules-view">
+    <div class="modules-view">
+        <header>
+            {% if object.id %}
+                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+                {% for obj in included %}
+                    {% if obj.type == 'streams' %}
+                        <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
+            {% endif %}
+        </header>
 
-    <header>
-        {% if object.id %}
-            <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
-            {% for obj in included %}
-                {% if obj.type == 'streams' %}
-                    <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
-        {% endif %}
-    </header>
-
-    <div class="module-form">
-
-        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
-            'type': 'file',
-            'url': {'_name': 'modules:save', 'object_type': objectType},
-            'id': 'form-main',
-            'check-changes': 'true',
-        })|raw }}
+        <div class="module-form">
+            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+                'type': 'file',
+                'url': {'_name': 'modules:save', 'object_type': objectType},
+                'id': 'form-main',
+                'check-changes': 'true',
+            })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
             {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
@@ -91,41 +89,39 @@
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
 
-        {{ Form.end()|raw }}
+            {{ Form.end()|raw }}
 
+            {# append buttons to sidebar #}
+            {# Append "Save" #}
+            {% do _view.append('module-buttons', Form.button( __('Save'),
+                {
+                    'form': 'form-main',
+                    'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                })
+            ) %}
 
-        {# append buttons to sidebar #}
-        {# Append "Save" #}
-        {% do _view.append('module-buttons', Form.button( __('Save'),
-            {
-                'form': 'form-main',
-                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
-            })
-        ) %}
+            {# Append "Clone" #}
+            {% if object.id %}
+                {% do _view.append('module-buttons', Html.link(
+                    __('Clone'),
+                    {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
+                    {'@click.prevent': 'clone', 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                )) %}
+            {% endif %}
 
-        {# Append "Clone" #}
-        {% if object.id %}
-            {% do _view.append('module-buttons', Html.link(
-                __('Clone'),
-                {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
-                {'@click.prevent': 'clone', 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-            )) %}
-        {% endif %}
+            {# Append "Trash (move to)" #}
+            {% do _view.append('module-buttons',
+                Form.postButton(
+                    __('Trash-verb'),
+                    {'_name': 'modules:delete', 'object_type': objectType},
+                    {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                )
+            ) %}
 
-        {# Append "Trash (move to)" #}
-        {% do _view.append('module-buttons',
-            Form.postButton(
-                __('Trash-verb'),
-                {'_name': 'modules:delete', 'object_type': objectType},
-                {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-            )
-        ) %}
-
-        {# Append "Prev" and "Next" #}
-        {% if object.id and objectNav %}
-            {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
-        {% endif %}
+            {# Append "Prev" and "Next" #}
+            {% if object.id and objectNav %}
+                {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
+            {% endif %}
+        </div>
     </div>
-
-</div>
 </modules-view>
