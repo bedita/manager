@@ -12,6 +12,8 @@
  */
 namespace App\Controller;
 
+use Cake\Utility\Hash;
+
 /**
  * Dashboard controller.
  */
@@ -36,5 +38,25 @@ class DashboardController extends AppController
     public function index(): void
     {
         $this->request->allowMethod(['get']);
+        $this->set('recentItems', $this->recentItems());
+    }
+
+    /**
+     * Load 20 most recent items modified by authenticated user.
+     *
+     * @return array
+     */
+    protected function recentItems(): array
+    {
+        $user = $this->Auth->user();
+        if (empty($user)) {
+            return [];
+        }
+        $filter = ['modified_by' => $user['id']];
+        $limit = 20;
+        $sort = '-modified';
+        $response = $this->apiClient->getObjects('objects', compact('filter', 'limit', 'sort'));
+
+        return (array)Hash::extract($response, 'data.{n}');
     }
 }

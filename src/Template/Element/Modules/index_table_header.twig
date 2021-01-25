@@ -7,7 +7,11 @@
 
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
-            <a href="{{ Link.sortUrl(prop) }}">{{ __(prop)|humanize }}</a>
+            {% if Schema.sortable(prop) %}
+                <a href="{{ Link.sortUrl(prop) }}">{{ __(prop)|humanize }}</a>
+            {% else %}
+                {{ __(prop)|humanize }}
+            {% endif %}
         </div>
     {% endfor %}
 
@@ -16,15 +20,27 @@
     {% endif %}
 
     <div class="narrow {{ Link.sortClass('status') }}">
-        <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
+        {% if Schema.sortable('status') %}
+            <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
+        {% else %}
+            {{ __('status') }}
+        {% endif %}
     </div>
 
     <div class="{{ Link.sortClass('modified') }}">
-        <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
+        {% if Schema.sortable('modified') %}
+            <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
+        {% else %}
+            {{ __('modified') }}
+        {% endif %}
     </div>
 
     <div class="narrow {{ Link.sortClass('id') }}">
-        <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>
+        {% if Schema.sortable('id') %}
+            <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>
+        {% else %}
+            {{ __('id') }}
+        {% endif %}
     </div>
 
     <div></div>

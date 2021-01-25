@@ -111,7 +111,7 @@ class ExportControllerTest extends TestCase
             new ServerRequest([
                 'environment' => ['REQUEST_METHOD' => 'POST'],
                 'params' => ['objectType' => 'users'],
-                'post' => ['ids' => '888,999', 'objectType' => 'users'],
+                'post' => ['ids' => '888,999', 'objectType' => 'users', 'format' => 'csv'],
             ])
         );
 
@@ -136,9 +136,9 @@ class ExportControllerTest extends TestCase
         $this->Export->apiClient = $apiClient;
 
         // expected csv.
-        $fields = 'id,name,skills,category';
-        $row1 = '999,gustavo,"[""smart"",""rich"",""beautiful""]",developer';
-        $row2 = '888,"john doe","[""humble"",""poor"",""ugly""]",poet';
+        $fields = '"id","name","skills","category"';
+        $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer"';
+        $row2 = '"888","john doe","[""humble"",""poor"",""ugly""]","poet"';
         $expected = sprintf('%s%s%s%s%s%s', $fields, "\n", $row1, "\n", $row2, "\n");
 
         // call export.
@@ -153,7 +153,7 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function csvRowsProvider(): array
+    public function rowsProvider(): array
     {
         return [
             'documents, all' => [
@@ -227,21 +227,19 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * test 'csvRows'.
-     *
-     * @covers ::csvRows()
-     * @covers ::csvAll
-     * @covers ::prepareQuery()
-     * @dataProvider csvRowsProvider()
+     * Test `rows` method.
      *
      * @param array $expected The expected result.
      * @param array $arguments Method arguments.
      * @param array $response API response.
      * @param array $post Post data.
-     *
      * @return void
+     * @covers ::rows()
+     * @covers ::rowsAll()
+     * @covers ::prepareQuery()
+     * @dataProvider rowsProvider()
      */
-    public function testCsvRows(array $expected, array $arguments, array $response, array $post = []): void
+    public function testRows(array $expected, array $arguments, array $response, array $post = []): void
     {
         // mock api get.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -264,7 +262,7 @@ class ExportControllerTest extends TestCase
         $this->Export->apiClient = $apiClient;
 
         $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('csvRows');
+        $method = $reflectionClass->getMethod('rows');
         $method->setAccessible(true);
 
         $actual = $method->invokeArgs($this->Export, $arguments);
@@ -318,15 +316,13 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * test 'fillDataFromResponse'.
-     *
-     * @covers ::fillDataFromResponse()
-     * @dataProvider fillDataFromResponseProvider()
+     * Test `fillDataFromResponse`.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
-     *
      * @return void
+     * @covers ::fillDataFromResponse()
+     * @dataProvider fillDataFromResponseProvider()
      */
     public function testFillDataFromResponse($input, $expected): void
     {
@@ -337,107 +333,6 @@ class ExportControllerTest extends TestCase
         $actual = $method->invokeArgs($this->Export, [ &$data, $response ]);
         static::assertEquals($expected['fields'], $actual);
         static::assertEquals($expected['data'], $data);
-    }
-
-    /**
-     * Data provider for `testCsv` test case.
-     *
-     * @return array
-     */
-    public function csvProvider(): array
-    {
-        return [
-            'basic csv' => [
-                [
-                    'rows' => [
-                        ['id', 'name', 'category', 'skills'],
-                        [999, 'gustavo', 'developer', '["smart","rich","beautiful"]'],
-                        [888, 'john doe', 'poet', '["humble","poor","ugly"]'],
-                    ],
-                    'objectType' => 'documents',
-                ], // input
-            ],
-        ];
-    }
-
-    /**
-     * test 'csv'.
-     *
-     * @covers ::csv()
-     * @dataProvider csvProvider()
-     *
-     * @param string|array $input The input for the function.
-     *
-     * @return void
-     */
-    public function testCsv($input): void
-    {
-        $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('csv');
-        $method->setAccessible(true);
-        extract($input); // => $rows, $objectType
-        $response = $method->invokeArgs($this->Export, [ $rows, $objectType ]);
-        static::assertInstanceOf('Cake\Http\Response', $response);
-    }
-
-    /**
-     * test 'outputCsv'.
-     *
-     * @covers ::outputCsv()
-     *
-     * @return void
-     */
-    public function testOutputCsv(): void
-    {
-        $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('outputCsv');
-        $method->setAccessible(true);
-        $response = $method->invokeArgs($this->Export, [ 'test', '' ]);
-        static::assertInstanceOf('Cake\Http\Response', $response);
-    }
-
-    /**
-     * Data provider for `testProcessCsv` test case.
-     *
-     * @return array
-     */
-    public function processCsvProvider(): array
-    {
-        return [
-            'basic csv' => [
-                [
-                    'rows' => [
-                        ['id', 'name', 'category', 'skills'],
-                        [999, 'gustavo', 'developer', '["smart","rich","beautiful"]'],
-                        [888, 'john doe', 'poet', '["humble","poor","ugly"]'],
-                    ],
-                    'objectType' => 'documents',
-                ], // input
-                sprintf('id,name,category,skills%s999,gustavo,developer,"[""smart"",""rich"",""beautiful""]"%s888,"john doe",poet,"[""humble"",""poor"",""ugly""]"%s', "\n", "\n", "\n"), // expected
-            ],
-        ];
-    }
-
-    /**
-     * test 'processCsv'.
-     *
-     * @covers ::processCsv()
-     * @dataProvider processCsvProvider()
-     *
-     * @param string|array $input The input for the function.
-     * @param string|array $expected The expected value.
-     *
-     * @return void
-     */
-    public function testProcessCsv($input, $expected): void
-    {
-        $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('processCsv');
-        $method->setAccessible(true);
-        extract($input); // => $rows, $objectType
-        $actual = $method->invokeArgs($this->Export, [ $rows, $objectType ]);
-        static::assertEquals($expected, $actual['csv']);
-        static::assertNotEmpty($actual['filename']);
     }
 
     /**
@@ -484,15 +379,13 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * test 'getFields'.
-     *
-     * @covers ::getFields()
-     * @dataProvider getFieldsProvider()
+     * Test `getFields` method.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
-     *
      * @return void
+     * @covers ::getFields()
+     * @dataProvider getFieldsProvider()
      */
     public function testGetFields($input, $expected): void
     {
@@ -553,15 +446,13 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * test 'fillRowFields'.
-     *
-     * @covers ::fillRowFields()
-     * @dataProvider fillRowFieldsProvider()
+     * Test `fillRowFields` method.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
-     *
      * @return void
+     * @covers ::fillRowFields()
+     * @dataProvider fillRowFieldsProvider()
      */
     public function testFillRowFields($input, $expected): void
     {
@@ -593,15 +484,13 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * test 'getValue'.
-     *
-     * @covers ::getValue()
-     * @dataProvider getValueProvider()
+     * Test `getValue` method.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
-     *
      * @return void
+     * @covers ::getValue()
+     * @dataProvider getValueProvider()
      */
     public function testGetValue($input, $expected): void
     {

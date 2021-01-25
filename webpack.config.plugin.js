@@ -30,8 +30,7 @@ module.exports = {
 
     resolve: {
         alias: aliases,
-
-        extensions: ['.js', '.vue', '.json', '.scss', '.css'],
+        extensions: ['.js', '.vue', '.json', '.scss', '.css', 'po'],
     },
 
     optimization: {
@@ -56,7 +55,7 @@ module.exports = {
                         ['@babel/preset-env', {
                             modules: false,
                             browsers: ['> 99%'],
-                            useBuiltIns: "usage",
+                            useBuiltIns: 'usage',
                         }]
                     ]
                 }
@@ -79,9 +78,17 @@ module.exports = {
                     }
                 ],
             },
+            {
+                test: /\.po$/,
+                use: [
+                    { loader: 'json-loader' },
+                    { loader: './webpack-gettext-loader' },
+                ],
+            },
         ]
     },
-    devtool: devMode ? "source-map" : false,
+
+    devtool: devMode ? 'source-map' : false,
 
     watch: devMode,
 
