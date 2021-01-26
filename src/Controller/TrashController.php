@@ -180,7 +180,7 @@ class TrashController extends AppController
             }
         }
 
-        $this->Flash->success(__('Object deleted from trash'));
+        $this->Flash->success(__('Object(s) deleted from trash'));
 
         return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
     }

@@ -6,75 +6,66 @@
 {# {% set resourceType = _view.request.params.resource_type %} #}
 {% set _csrfToken = _view.request.params['_csrfToken']|json_encode %}
 
-
 <model-index inline-template ids='{{ ids|json_encode }}' resources='{{ resources|json_encode }}' :csrf-token='{{ _csrfToken }}'>
     <div class="model-index">
         <div class="list-resources">
-
             {# list resources : table header #}
             {% if resources %}
-            <nav class="table-header">
-
-                <div class="first-cell"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
-
-                {% for prop in properties %}
-                    <div class="{{ prop }}-cell"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
-                {% endfor %}
-                <div class="action-cell"></div>
-
-            </nav>
+                <nav class="table-header">
+                    <div class="first-cell"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+                    {% for prop in properties %}
+                        <div class="{{ prop }}-cell"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
+                    {% endfor %}
+                    <div class="action-cell"></div>
+                </nav>
             {% endif %}
 
             {# list resources : rows #}
             <form id="property-types" check-changes="true">
             {% for resource in resources %}
-                    <div
-                        v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
-                        title="{{ resource.attributes.name }}"
-                        class="index-entry"
-                        :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
+                <div
+                    v-if="!containsId(deletedPropertyTypes, {{resource.id}})"
+                    title="{{ resource.attributes.name }}"
+                    class="index-entry"
+                    :class="containsId(removePropertyTypes, {{resource.id}}) && 'delete-property-type'">
 
-                            {% set propIndex = loop.index0 %}
-
-                            <div class="first-cell">{{ resource.id }}
-                                <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
-                            </div>
-
-                            {% for prop in properties %}
-
-                                {% if resource.attributes[prop] is defined %}
-                                    {% set propVal = resource.attributes[prop] %}
-                                {% else %}
-                                    {% set propVal = resource.meta[prop] %}
-                                {% endif %}
-
-                                {% set propVal = Schema.format(propVal, schema.properties[prop]) %}
-
-                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                                    {% if prop == 'name' %}
-                                        <input pattern="^\S+$" type="text" placeholder="name"
-                                            @keyup="editPropName({{ resource.id }}, $event.target.value)"
-                                            value="{{ propVal|raw }}" />
-                                    {% elseif prop == 'params' %}
-                                        <autosize-textarea
-                                            placeholder="params..."
-                                            @input="editPropParams({{ resource.id }}, ...arguments)"
-                                            {# :reset-value="formatParams(propertyTypes[{{ propIndex }}])" #}
-                                            :value="propertyTypes[{{ propIndex }}] ? formatParams(propertyTypes[{{ propIndex }}]) : {{ propVal|json_encode }}">
-                                        </autosize-textarea>
-                                    {% else %}
-                                        {{ propVal }}
-                                    {% endif %}
-                                </div>
-
-                            {% endfor %}
-
-                            <div class="action-cell">
-                                <button class="center-icon icon-trash inverted remove-action" @click.prevent="removePropertyType({{resource.id}})"></button>
-                                <button class="center-icon icon-ccw inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})"></button>
-                            </div>
+                    {% set propIndex = loop.index0 %}
+                    <div class="first-cell">{{ resource.id }}
+                        <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
                     </div>
 
+                    {% for prop in properties %}
+                        {% if resource.attributes[prop] is defined %}
+                            {% set propVal = resource.attributes[prop] %}
+                        {% else %}
+                            {% set propVal = resource.meta[prop] %}
+                        {% endif %}
+
+                        {% set propVal = Schema.format(propVal, schema.properties[prop]) %}
+
+                        <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {% if prop == 'name' %}
+                                <input pattern="^\S+$" type="text" placeholder="name"
+                                    @keyup="editPropName({{ resource.id }}, $event.target.value)"
+                                    value="{{ propVal|raw }}" />
+                            {% elseif prop == 'params' %}
+                                <autosize-textarea
+                                    placeholder="params..."
+                                    @input="editPropParams({{ resource.id }}, ...arguments)"
+                                    {# :reset-value="formatParams(propertyTypes[{{ propIndex }}])" #}
+                                    :value="propertyTypes[{{ propIndex }}] ? formatParams(propertyTypes[{{ propIndex }}]) : {{ propVal|json_encode }}">
+                                </autosize-textarea>
+                            {% else %}
+                                {{ propVal }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="action-cell">
+                        <button class="center-icon icon-trash inverted remove-action" @click.prevent="removePropertyType({{resource.id}})"></button>
+                        <button class="center-icon icon-ccw inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})"></button>
+                    </div>
+                </div>
             {% else %}
                 {{ __('No items found') }}
             {% endfor %}
@@ -107,9 +98,7 @@
                 </div>
             </div>
 
-            <div v-for="propertyType in newPropertyTypes"
-                class="index-entry new-row">
-
+            <div v-for="propertyType in newPropertyTypes" class="index-entry new-row">
                 <div class="first-cell">
                     <button type="button" @click="removeRow(propertyType)">-</button>
                 </div>
@@ -128,13 +117,10 @@
 
             <div class="index-entry">
                 <div v-if="formIsModified">
-                    <button @click="save">Save</button>
+                    <button @click.prevent.stop="save">{{ __('Save') }}</button>
                 </div>
             </div>
-
-
             </form>
-
         </div>
         {# end list-objects #}
 
@@ -142,6 +128,5 @@
         {% do _view.append('module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'})|raw) %}
         {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'})|raw) %}
         {% do _view.append('module-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'})|raw) %}
-
     </div> {# end module-content #}
 </model-index>

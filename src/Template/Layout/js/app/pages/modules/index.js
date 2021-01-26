@@ -1,3 +1,5 @@
+import { t } from 'ttag';
+
 /**
  * Templates that uses this component (directly or indirectly)
  *  Template/Modules/index.twig
@@ -5,7 +7,6 @@
  * <modules-index> component used for ModulesPage -> Index
  *
  */
-
 export default {
     components: {
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
@@ -135,9 +136,12 @@ export default {
             if (this.selectedRows.length < 1) {
                 return;
             }
-            if (confirm('Move ' + this.selectedRows.length + ' item to trash')) {
-                document.getElementById('form-delete').submit();
-            }
+
+            let number = this.selectedRows.length;
+            let message = t`Moving ${number} item(s) to trash. Are you sure?`;
+            let dialog = this.$root.$refs.beditaDialog;
+            let form = document.getElementById('form-delete');
+            dialog.confirm(message, t`yes, proceed`, form.submit.bind(form));
         },
 
         /**
