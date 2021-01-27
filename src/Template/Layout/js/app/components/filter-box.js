@@ -177,10 +177,8 @@ export default {
          * Handle Search input when value changes
          * If search text is empty or at least 3 characters long, ok.
          * Otherwise, warn that search text is too short.
-         *
-         * @param Event event The event
          */
-        onQueryStringChange(event) {
+        onQueryStringChange() {
             if (!this.searchFieldValid()) {
                 this.searchFieldDialog();
             }
