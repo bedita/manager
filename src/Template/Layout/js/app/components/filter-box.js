@@ -17,6 +17,7 @@
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
+import { t } from 'ttag';
 
 export default {
     components: {
@@ -26,11 +27,11 @@ export default {
     props: {
         objectsLabel: {
             type: String,
-            default: "Objects"
+            default: t`Objects`
         },
         placeholder: {
             type: String,
-            default: "Search"
+            default: t`Search`
         },
         showFilterButtons: {
             type: Boolean,
@@ -161,15 +162,66 @@ export default {
          *
          * @emits Event#filter-objects
          */
-        onQueryStringChange() {
-            let queryString = this.queryFilter.q || "";
+        onQueryStringKeyup() {
+            const queryString = this.queryFilter.q || "";
 
             clearTimeout(this.timer);
-            if (queryString.length >= 3 || queryString.length == 0) {
+            if (queryString.trim().length >= 3 || queryString.trim().length === 0) {
                 this.timer = setTimeout(() => {
                     this.$emit("filter-objects", this.queryFilter);
                 }, 300);
             }
+        },
+
+        /**
+         * Handle Search input when value changes
+         * If search text is empty or at least 3 characters long, ok.
+         * Otherwise, warn that search text is too short.
+         *
+         * @param Event event The event
+         */
+        onQueryStringChange(event) {
+            if (!this.searchFieldValid()) {
+                this.searchFieldDialog();
+            }
+        },
+
+        /**
+         * Verify search text.
+         * If is empty or more than 2 characters long, return true.
+         * Return false otherwise.
+         */
+        searchFieldValid() {
+            const search = document.getElementById('search');
+            if (!search) {
+                return true;
+            }
+            search.value = search.value.trim();
+            if (!this.queryFilter) {
+                this.queryFilter = {};
+            }
+            this.queryFilter.q = search.value;
+
+            return (search.value.length === 0 || search.value.length > 2);
+        },
+
+        /**
+         * Verify search text.
+         * If is empty or more than 2 characters long, ok.
+         * Show prompt dialog otherwise.
+         */
+        searchFieldDialog() {
+            const dialog = this.$root.$refs.beditaDialog;
+            dialog.cancelMessage = '';
+            const confirmCallback = (newVal) => {
+                search.value = newVal.trim();
+                if (!this.queryFilter) {
+                    this.queryFilter = {};
+                }
+                this.queryFilter.q = search.value;
+                dialog.hide();
+            };
+            dialog.prompt(t`Search text too short. Minimum length is 3. Retry`, search.value, confirmCallback);
         },
 
         onOtherFiltersChange() {
@@ -196,7 +248,12 @@ export default {
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
-            this.$emit("filter-objects-submit", this.queryFilter);
+            if (this.searchFieldValid()) {
+                this.$emit("filter-objects-submit", this.queryFilter);
+
+                return;
+            }
+            this.searchFieldDialog();
         },
 
         /**
