@@ -211,15 +211,7 @@ export default {
         searchFieldDialog() {
             const dialog = this.$root.$refs.beditaDialog;
             dialog.cancelMessage = '';
-            const confirmCallback = (newVal) => {
-                search.value = newVal.trim();
-                if (!this.queryFilter) {
-                    this.queryFilter = {};
-                }
-                this.queryFilter.q = search.value;
-                dialog.hide();
-            };
-            dialog.prompt(t`Search text too short. Minimum length is 3. Retry`, search.value, confirmCallback);
+            dialog.warning(t`Search text too short. Minimum length is 3. Retry`);
         },
 
         onOtherFiltersChange() {
