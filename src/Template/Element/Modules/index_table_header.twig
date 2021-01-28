@@ -19,7 +19,7 @@
         <div>{{ __('type') }}</div>
     {% endif %}
 
-    {% if object.attributes.status %}
+    {% if refObject.attributes.status %}
         <div class="narrow {{ Link.sortClass('status') }}">
             {% if Schema.sortable('status') %}
                 <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
@@ -29,7 +29,7 @@
         </div>
     {% endif %}
 
-    {% if object.meta.modified %}
+    {% if refObject.meta.modified %}
         <div class="{{ Link.sortClass('modified') }}">
             {% if Schema.sortable('modified') %}
                 <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
