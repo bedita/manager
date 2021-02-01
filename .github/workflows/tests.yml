@@ -20,7 +20,7 @@ jobs:
       - name: 'Setup PHP'
         uses: 'shivammathur/setup-php@v2'
         with:
-          php-version: '7.4'
+          php-version: '${{ matrix.php-version }}'
           tools: 'composer:v1'
           extensions: 'mbstring, intl'
           coverage: 'none'
@@ -59,7 +59,7 @@ jobs:
       - name: 'Setup PHP'
         uses: 'shivammathur/setup-php@v2'
         with:
-          php-version: '7.4'
+          php-version: '${{ matrix.php-version }}'
           tools: 'composer:v1, phpstan'
           extensions: 'mbstring, intl'
           coverage: 'none'
@@ -96,6 +96,11 @@ jobs:
       BEDITA_DOCKER_IMG: bedita/bedita:4.2.1
       COMPOSER_VERSION: 1.10.16
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+        php-version: [7.1, 7.2, 7.3, 7.4]
+
     steps:
       - name: 'Checkout current revision'
         uses: 'actions/checkout@v2'
@@ -127,7 +132,7 @@ jobs:
       - name: 'Setup PHP'
         uses: 'shivammathur/setup-php@v2'
         with:
-          php-version: '7.4'
+          php-version: '${{ matrix.php-version }}'
           tools: 'composer:v1'
           extensions: 'mbstring, intl, pdo_mysql.pdo'
           coverage: 'pcov'
@@ -141,9 +146,9 @@ jobs:
         uses: 'actions/cache@v2'
         with:
           path: '${{ steps.cachedir.outputs.path }}'
-          key: "composer-7.4-${{ hashFiles('**/composer.json') }}"
+          key: "composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}"
           restore-keys: |
-            composer-7.4-
+            composer-${{ matrix.php-version }}-
             composer-
 
       - name: 'Install dependencies with Composer'
@@ -164,5 +169,13 @@ jobs:
       - name: 'Archive code coverage results'
         uses: 'actions/upload-artifact@v2'
         with:
-          name: 'PHP 7.4'
+          name: 'PHP ${{ matrix.php-version }}'
           path: 'clover.xml'
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Yarn build'
+        run: 'yarn && yarn build'
