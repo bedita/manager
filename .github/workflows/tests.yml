@@ -89,13 +89,12 @@ jobs:
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-18.04'
     env:
-      global:
-        BEDITA_API_KEY=12345
-        BEDITA_API=http://127.0.0.1:8080
-        BEDITA_ADMIN_USR=admin
-        BEDITA_ADMIN_PWD=admin
-        BEDITA_DOCKER_IMG=bedita/bedita:4.2.1
-        COMPOSER_VERSION=1.10.16
+      BEDITA_API_KEY: 12345
+      BEDITA_API: http://127.0.0.1:8080
+      BEDITA_ADMIN_USR: admin
+      BEDITA_ADMIN_PWD: admin
+      BEDITA_DOCKER_IMG: bedita/bedita:4.2.1
+      COMPOSER_VERSION: 1.10.16
 
     steps:
       - name: 'Checkout current revision'
