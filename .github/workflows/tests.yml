@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: [7.2, 7.3, 7.4]
+        php-version: [7.2]
 
     steps:
       - name: 'Checkout current revision'
@@ -108,7 +108,6 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
         php-version: [7.2, 7.3, 7.4]
 
     steps:
@@ -181,6 +180,19 @@ jobs:
         with:
           name: 'PHP ${{ matrix.php-version }}'
           path: 'clover.xml'
+
+  js-build:
+    name: 'Check js build'
+    if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
+    runs-on: 'ubuntu-18.04'
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - name: 'Checkout current revision'
+        uses: 'actions/checkout@v2'
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
