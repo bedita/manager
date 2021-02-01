@@ -19,7 +19,7 @@ import Autocomplete from '@trevoreyre/autocomplete-vue';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
-
+// test
 const _vueInstance = new Vue({
     el: 'main',
 
