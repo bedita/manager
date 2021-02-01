@@ -25,7 +25,7 @@ use Cake\Http\Response;
  */
 class ApiController extends AppController
 {
-    use ApiProxyTrait;
+    use ApiProxyTrait; // dummy change to trigger github action
 
     /**
      * {@inheritDoc}
