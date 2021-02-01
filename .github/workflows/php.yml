@@ -1,4 +1,4 @@
-name: 'Run tests'
+name: 'Run phpcs, phpstan, phpunit'
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - '**/*.php'
 
 jobs:
-  coding-style:
+  cs:
     name: 'Check coding style'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-18.04'
@@ -52,7 +52,7 @@ jobs:
             --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=/Migrations/,/Seeds/ \
             ./config ./src ./tests ./config
 
-  static-code-analyzer:
+  stan:
     name: 'Static code analyzer'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-18.04'
@@ -94,7 +94,7 @@ jobs:
         run: |
           phpstan analyse --no-progress src
 
-  unit-tests:
+  unit:
     name: 'Run unit tests'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-18.04'
@@ -187,24 +187,3 @@ jobs:
         with:
           name: 'PHP ${{ matrix.php }}'
           path: 'clover.xml'
-
-  js-build:
-    name: 'Check js build'
-    if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-18.04'
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
-    steps:
-      - name: 'Checkout current revision'
-        uses: 'actions/checkout@v2'
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: 'Yarn build'
-        run: 'yarn && yarn build'

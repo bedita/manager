@@ -1,16 +1,18 @@
-name: 'Run js build'
+name: 'Run javascript build'
 
 on:
   pull_request:
     paths:
       - '**/*.js'
+      - '**/*.scss'
   push:
     paths:
       - '**/*.js'
+      - '**/*.scss'
 
 jobs:
-  js-build:
-    name: 'Check js build'
+  javascript-build:
+    name: 'Check javascript build'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-18.04'
 
