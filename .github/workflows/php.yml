@@ -1,4 +1,4 @@
-name: 'Run phpcs, phpstan, phpunit'
+name: 'php'
 
 on:
   pull_request:
