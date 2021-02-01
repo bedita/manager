@@ -375,7 +375,7 @@ const _vueInstance = new Vue({
         },
 
         /**
-         * alerts onbeforeunload if forms changed and it's not a submit.
+         * alerts onbeforeunload if forms changed and it's not a submit
          *
          * @returns {void}
          */
