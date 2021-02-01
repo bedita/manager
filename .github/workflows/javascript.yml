@@ -1,0 +1,31 @@
+name: 'Run js build'
+
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+  push:
+    paths:
+      - '**/*.js'
+
+jobs:
+  js-build:
+    name: 'Check js build'
+    if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
+    runs-on: 'ubuntu-18.04'
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - name: 'Checkout current revision'
+        uses: 'actions/checkout@v2'
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Yarn build'
+        run: 'yarn && yarn build'
