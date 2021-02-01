@@ -1,4 +1,4 @@
-name: 'Run javascript build'
+name: 'javascript'
 
 on:
   pull_request:
