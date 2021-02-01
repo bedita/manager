@@ -10,7 +10,7 @@
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject">
+            <form name="create-object" class="object-form" :disabled="saving">
                 {{ Form.control('upload_behavior', {
                     'id': 'url_behavior',
                     'type': 'hidden',
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </section>
-                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" type="submit">{{ __('create') }}</button>
+                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="createObject" type="button">{{ __('create') }}</button>
                 <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="resetForm">{{ __('reset') }}</button>
             </form>
         </div>
