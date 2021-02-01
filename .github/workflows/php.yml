@@ -176,6 +176,18 @@ jobs:
           percentage: '85'
           filename: 'clover.xml'
 
+      - name: 'Export coverage results'
+        uses: 'codecov/codecov-action@v1'
+        with:
+          file: './clover.xml'
+          env_vars: PHP_VERSION
+
+      - name: 'Archive code coverage results'
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: 'PHP ${{ matrix.php }}'
+          path: 'clover.xml'
+
   js-build:
     name: 'Check js build'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
