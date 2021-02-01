@@ -27,7 +27,7 @@ class FlashComponent extends CakeFlashComponent
     /**
      * {@inheritDoc}
      */
-    public function set($message, array $options = [])
+    public function set($message, array $options = []): void
     {
         $error = Hash::get($options, 'params');
         if ($error && ($error instanceof \Exception)) {
@@ -46,6 +46,6 @@ class FlashComponent extends CakeFlashComponent
             }
         }
 
-        return parent::set($message, $options);
+        parent::set($message, $options);
     }
 }
