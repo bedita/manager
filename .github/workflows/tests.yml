@@ -52,6 +52,10 @@ jobs:
     runs-on: 'ubuntu-18.04'
     continue-on-error: true
 
+    strategy:
+      matrix:
+        php-version: [7.1, 7.2, 7.3, 7.4]
+
     steps:
       - name: 'Checkout current revision'
         uses: 'actions/checkout@v2'
