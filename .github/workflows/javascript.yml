@@ -29,5 +29,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: 'Yarn install'
+        run: 'yarn'
+
       - name: 'Yarn build'
-        run: 'yarn && yarn build'
+        run: 'yarn build'
