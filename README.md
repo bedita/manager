@@ -1,6 +1,7 @@
 # BEdita Manager
 
 ![Github Actions](https://github.com/bedita/manager/workflows/Run%20phpcs,%20phpstan,%20phpunit/badge.svg)
+![Github Actions](https://github.com/bedita/manager/workflows/Run%20javascript%20build/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
 
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
