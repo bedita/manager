@@ -169,17 +169,12 @@ jobs:
       - name: 'Run PHPUnit with coverage'
         run: 'vendor/bin/phpunit --coverage-clover=clover.xml'
 
-      - name: 'Export coverage results'
-        uses: 'codecov/codecov-action@v1'
+      - name: Check test coverage
+        id: test-coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
-          file: './clover.xml'
-          env_vars: PHP_VERSION,DB_VENDOR
-
-      - name: 'Archive code coverage results'
-        uses: 'actions/upload-artifact@v2'
-        with:
-          name: 'PHP ${{ matrix.php-version }}'
-          path: 'clover.xml'
+          percentage: '85'
+          filename: 'clover.xml'
 
   js-build:
     name: 'Check js build'
