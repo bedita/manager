@@ -1,7 +1,7 @@
 # BEdita Manager
 
-![Github Actions](https://github.com/bedita/manager/workflows/php/badge.svg)
-![Github Actions](https://github.com/bedita/manager/workflows/javascript/badge.svg)
+[![Github Actions](https://github.com/bedita/manager/workflows/php/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Aphp)
+[![Github Actions](https://github.com/bedita/manager/workflows/javascript/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Ajavascript)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
 
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
