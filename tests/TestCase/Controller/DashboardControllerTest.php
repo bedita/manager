@@ -146,13 +146,18 @@ class DashboardControllerTest extends TestCase
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $client->authenticate($adminUser, $adminPassword);
+        $meta = $response['meta']['jwt'];
         $response['meta']['jwt'] .= '-invalid';
         $client->setupTokens($response['meta']);
         $this->Dashboard->Auth->setUser(['id' => 1]);
         $this->Dashboard->index();
-        $response = $this->Dashboard->response;
+        // reset setup tokens
+        $response['meta']['jwt'] = $meta;
+        $client->setupTokens($response['meta']);
+        // verify response
+        $dashboardResponse = $this->Dashboard->response;
 
-        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals(302, $dashboardResponse->getStatusCode());
     }
 
     /**
