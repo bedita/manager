@@ -11,7 +11,7 @@
         <div class="module-index">
             <div class="list-objects">
                 {% if objects %}
-                    {% element 'Modules/index_table_header' %}
+                    {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
                 {% endif %}
 
                 {% for object in objects %}

@@ -46,6 +46,6 @@ class FlashComponent extends CakeFlashComponent
             }
         }
 
-        return parent::set($message, $options);
+        parent::set($message, $options);
     }
 }

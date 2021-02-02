@@ -36,9 +36,13 @@
             <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
         {% endif %}
 
-        <div class="narrow">{{ __(object.attributes.status) }}</div>
+        {% if object.attributes.status %}
+            <div class="narrow">{{ __(object.attributes.status) }}</div>
+        {% endif %}
 
-        <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+        {% if object.meta.modified %}
+            <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+        {% endif %}
 
         <div class="narrow">{{ object.id }}</div>
 

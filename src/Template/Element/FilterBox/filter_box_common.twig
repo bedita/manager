@@ -19,9 +19,11 @@
     {# search #}
     <div class="filter-container filter-search input">
         <input type="text"
+            id="search"
             :placeholder="placeholder"
             v-model="queryFilter.q"
-            @keyup.prevent.stop="onQueryStringChange"
+            @keyup.prevent.stop="onQueryStringKeyup"
+            @change="onQueryStringChange"
             @keyup.enter.prevent.stop="applyFilter" />
     </div>
 
