@@ -1,5 +1,5 @@
 {% if schema.categories is defined %}
-    <property-view inline-template :tab-open="tabsOpen">
+    <property-view inline-template :tab-open="tabsOpen" tab-name="categories">
 
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()"
@@ -9,15 +9,7 @@
             </header>
 
             <div v-show="isOpen" class="tab-container">
-                {% set options = Schema.controlOptions(
-                    'categories',
-                    object['attributes']['categories'],
-                    {
-                        'type': 'categories',
-                        'categories': schema['categories']
-                    }
-                )|merge({'label': false}) %}
-                {{ Form.control('categories', options)|raw }}
+                {{ Property.control('categories', object.attributes.categories, {'label': false})|raw }}
             </div>
         </section>
 

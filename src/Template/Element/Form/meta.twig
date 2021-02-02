@@ -1,7 +1,7 @@
 {% set meta = (object) ? object.meta : resource.meta %}
 
 {% if meta %}
-<property-view inline-template :tab-open="tabsOpen">
+<property-view inline-template :tab-open="tabsOpen" tab-name="meta">
     <section class="fieldset">
 
         <header @click.prevent="toggleVisibility()"

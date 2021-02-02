@@ -29,6 +29,19 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 class Application extends BaseApplication
 {
     /**
+     * Default plugin options
+     *
+     * @var array
+     */
+    const PLUGIN_DEFAULTS = [
+        'debugOnly' => false,
+        'autoload' => false,
+        'bootstrap' => true,
+        'routes' => true,
+        'ignoreMissing' => true,
+    ];
+
+    /**
      * {@inheritDoc}
      */
     public function bootstrap()
@@ -55,21 +68,12 @@ class Application extends BaseApplication
      */
     public function loadPluginsFromConfig(): void
     {
-        $plugins = Configure::read('Plugins', []);
-        if ($plugins) {
-            $defaults = [
-                'debugOnly' => false,
-                'autoload' => false,
-                'bootstrap' => false,
-                'routes' => false,
-                'ignoreMissing' => false,
-            ];
-            foreach ($plugins as $plugin => $options) {
-                $options = array_merge($defaults, $options);
-                if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
-                    $this->addPlugin($plugin, $options);
-                    $this->plugins->get($plugin)->bootstrap($this);
-                }
+        $plugins = (array)Configure::read('Plugins');
+        foreach ($plugins as $plugin => $options) {
+            $options = array_merge(self::PLUGIN_DEFAULTS, $options);
+            if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
+                $this->addPlugin($plugin, $options);
+                $this->plugins->get($plugin)->bootstrap($this);
             }
         }
     }
@@ -84,14 +88,14 @@ class Application extends BaseApplication
             // and make an error page/response
             ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
 
+            // Load current project configuration if `multiproject` instance
+            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
+            ->add(new ProjectMiddleware($this))
+
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
-
-            // Load current project configuration if `multiproject` instance
-            // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
-            ->add(new ProjectMiddleware($this))
 
             // Add I18n middleware.
             ->add(new I18nMiddleware([

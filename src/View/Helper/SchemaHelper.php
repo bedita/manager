@@ -16,6 +16,7 @@ namespace App\View\Helper;
 use App\Form\Control;
 use App\Form\ControlType;
 use App\Form\Options;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -47,6 +48,13 @@ class SchemaHelper extends Helper
         $options = Options::customControl($name, $value);
         if (!empty($options)) {
             return $options;
+        }
+        // verify if there's an handler by $type.$name
+        $objectType = (string)$this->_View->get('objectType');
+        if (!empty(Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name)))) {
+            $handler = Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name));
+
+            return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
         $type = ControlType::fromSchema((array)$schema);
 
@@ -188,5 +196,31 @@ class SchemaHelper extends Helper
         }
 
         return $fields;
+    }
+
+    /**
+     * Verify field's schema, return true if field is sortable.
+     *
+     * @param string $field The field to check
+     * @return bool
+     */
+    public function sortable(string $field): bool
+    {
+        $schema = (array)$this->_View->get('schema');
+        $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
+
+        // empty schema, then not sortable
+        if (empty($schema)) {
+            return false;
+        }
+        $type = self::typeFromSchema($schema);
+
+        // not sortable: 'array', 'object'
+        if (in_array($type, ['array', 'object'])) {
+            return false;
+        }
+        // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
+
+        return true;
     }
 }

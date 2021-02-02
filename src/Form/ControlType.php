@@ -13,7 +13,6 @@
 
 namespace App\Form;
 
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
@@ -58,11 +57,12 @@ class ControlType
      */
     public static function fromSchema($schema): string
     {
-        if (isset($schema['type']) && $schema['type'] === 'categories') {
-            return 'categories';
-        }
         if (!is_array($schema)) {
             return 'text';
+        }
+        $schemaType = Hash::get($schema, 'type', null);
+        if ($schemaType === 'categories') {
+            return $schemaType;
         }
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $subSchema) {
@@ -73,10 +73,10 @@ class ControlType
                 return ControlType::fromSchema($subSchema);
             }
         }
-        if (empty($schema['type']) || !in_array($schema['type'], ControlType::SCHEMA_PROPERTY_TYPES)) {
+        if (empty($schemaType) || !in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
-        $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schema['type'])));
+        $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schemaType)));
 
         return call_user_func_array($method, [$schema]);
     }

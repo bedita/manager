@@ -11,10 +11,12 @@
  *
  */
 
-import { PaginatedContentMixin, DEFAULT_PAGINATION } from 'app/mixins/paginated-content';
+import { ACCEPTABLE_MEDIA } from 'config/config';
+import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 import sleep from 'sleep-promise';
+import { t } from 'ttag';
 
 const createData = (type = '') => ({
     type,
@@ -84,7 +86,7 @@ export default {
                 return true;
             }
 
-            return ['media', 'audio', 'files', 'images', 'videos'].indexOf(this.object.type) !== -1;
+            return ACCEPTABLE_MEDIA.indexOf(this.object.type) !== -1;
         },
     },
 
@@ -200,7 +202,7 @@ export default {
         /**
          * create new object
          *
-         * @param {HTMLElement} target form (Destructuring target from Event Object)
+         * @param {HTMLElement} target form
          *
          * @return {void}
          */
@@ -252,13 +254,15 @@ export default {
                 this.selectedObjects = createdObjects.concat(this.selectedObjects);
                 this.resetForm(event);
             } catch (error) {
-                // need a modal to better handling of errors
                 if (error.code === 20) {
                     throw error;
-                } else {
-                    alert('Error while uploading/creating new object. Retry');
-                    console.error(error);
                 }
+
+                let dialog = this.$root.$refs.beditaDialog;
+                dialog.cancelMessage = '';
+                dialog.error(t`Error while creating new object.`);
+                console.error(error);
+
                 this.resetForm(event);
             } finally {
                 this.saving = false;
@@ -372,6 +376,10 @@ export default {
          * @return {Promise} repsonse from server
          */
         async loadObjects(filter) {
+            if (!filter) {
+                filter = {};
+            }
+            filter.sort = '-created';
             this.objects = [];
             this.loading = true;
             let response = await this.getPaginatedObjects(true, filter);

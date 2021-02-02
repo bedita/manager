@@ -2,6 +2,7 @@
 <locations-view
     apikey="{{ config('Location.google.key') }}"
     apiurl="{{ config('Location.google.url') }}"
+    relation-name="{{ relationName }}"
     :object="{{ object|json_encode }}"
 ></locations-view>
 {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}

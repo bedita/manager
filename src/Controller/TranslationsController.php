@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClientException;
-use BEdita\SDK\BEditaException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -37,7 +36,7 @@ class TranslationsController extends ModulesController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id);
+            $response = $this->apiClient->getObject($id, $this->objectType);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);
@@ -174,7 +173,7 @@ class TranslationsController extends ModulesController
             }
             // remove completely the translation
             $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
-        } catch (BEditaException $e) {
+        } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 

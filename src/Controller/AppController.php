@@ -161,6 +161,7 @@ class AppController extends Controller
         $data = (array)$this->request->getData();
 
         $this->specialAttributes($type, $data);
+        $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
 
@@ -237,7 +238,7 @@ class AppController extends Controller
                             $ids
                         );
                     }
-                    if (!empty($relatedIds)) {
+                    if ($method === 'replaceRelated' || !empty($relatedIds)) {
                         $api[] = compact('method', 'id', 'relation', 'relatedIds');
                     }
                 }
@@ -245,6 +246,32 @@ class AppController extends Controller
             $data['_api'] = $api;
         }
         unset($data['relations']);
+    }
+
+    /**
+     * Handle `parents` or `parent` relationship looking at `_changedParents` input flag
+     *
+     * @param string $type Object type
+     * @param array $data Form data
+     * @return void
+     */
+    protected function setupParentsRelation(string $type, array &$data): void
+    {
+        $changedParents = (bool)Hash::get($data, '_changedParents');
+        unset($data['_changedParents']);
+        $relation = 'parents';
+        if ($type === 'folders') {
+            $relation = 'parent';
+        }
+        if (empty($changedParents)) {
+            unset($data['relations'][$relation]);
+
+            return;
+        }
+        if (empty($data['relations'][$relation])) {
+            // all parents deselected => replace with empty set
+            $data['relations'][$relation] = ['replaceRelated' => []];
+        }
     }
 
     /**
@@ -351,15 +378,18 @@ class AppController extends Controller
         }
 
         // write request query parameters (if any) in session
-        if (!empty($this->request->getQueryParams())) {
-            $session->write($sessionKey, $this->request->getQueryParams());
+        $params = $this->request->getQueryParams();
+        if (!empty($params)) {
+            unset($params['_search']);
+            $session->write($sessionKey, $params);
 
             return null;
         }
 
         // read request query parameters from session and redirect to proper page
-        if ($session->check($sessionKey)) {
-            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
+        $params = (array)$session->read($sessionKey);
+        if (!empty($params)) {
+            $query = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
             return $this->redirect((string)$this->request->getUri()->withQuery($query));
         }

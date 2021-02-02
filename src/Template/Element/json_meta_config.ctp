@@ -26,6 +26,10 @@
         'relations': {},
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
         'locale': locale,
+        <?php if (!empty($uploadable)): ?>
+        // types having files to upload
+        'uploadable': <?= json_encode((array)$uploadable, true) ?>,
+        <?php endif; ?>
         'csrfToken': <?= $csrfToken ?>
     };
 

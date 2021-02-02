@@ -214,7 +214,7 @@ class Options
      */
     public static function coords($value): array
     {
-        $label = sprintf('<label>%s</label>', __('Coordinates'));
+        $label = sprintf('<label>%s</label>', __('Long Lat Coordinates'));
         $coordinatesView = sprintf('<coordinates-view coordinates="%s" />', $value);
 
         return [

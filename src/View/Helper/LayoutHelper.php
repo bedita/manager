@@ -95,11 +95,6 @@ class LayoutHelper extends Helper
      */
     protected function commandLinkClass(): string
     {
-        $pluginClass = (string)Configure::read(sprintf('PluginModules.%s.class.dashboard', $this->_View->getName()));
-        if ($pluginClass) {
-            return $pluginClass;
-        }
-
         $moduleClasses = [
             'UserProfile' => 'has-background-black icon-user',
             'Import' => 'has-background-black icon-download-alt',

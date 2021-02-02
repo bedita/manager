@@ -18,12 +18,14 @@
                 {% element 'Form/core_properties' %}
                 {% element 'Form/custom_left' %}
 
-                {# media #}
-                {% if objectType in ['images', 'files', 'audio', 'videos'] %}
-                    {% if object.id is not empty %}
-                        {% element 'Form/included' %}
-                    {% endif %}
-                {% endif %}
+                {# calendar using `date_ranges` #}
+                {% element 'Form/calendar' %}
+
+                {% element 'Form/categories' %}
+
+                {% element 'Form/media' %}
+
+                {% element 'Form/map' %}
 
                 {% element 'Form/other_properties' %}
             </div>

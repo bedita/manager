@@ -28,6 +28,7 @@ use Psr\Log\LogLevel;
  * Component to load available modules.
  *
  * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
 {
@@ -43,7 +44,7 @@ class ModulesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public $components = ['Auth'];
+    public $components = ['Auth', 'Schema'];
 
     /**
      * {@inheritDoc}
@@ -79,7 +80,8 @@ class ModulesComponent extends Component
 
         $modules = $this->getModules();
         $project = $this->getProject();
-        $this->getController()->set(compact('modules', 'project'));
+        $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
+        $this->getController()->set(compact('modules', 'project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
         if (!empty($currentModuleName)) {
@@ -126,6 +128,9 @@ class ModulesComponent extends Component
     public function getModules(): array
     {
         $modules = (array)Configure::read('Modules');
+        $pluginModules = array_filter($modules, function ($item) {
+            return !empty($item['route']);
+        });
         $metaModules = $this->modulesFromMeta();
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
@@ -134,7 +139,11 @@ class ModulesComponent extends Component
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
             }
         );
-        $this->modules = array_merge($modules, array_diff_key($metaModules, $modules));
+        $this->modules = array_merge(
+            $modules,
+            array_diff_key($metaModules, $modules),
+            $pluginModules
+        );
 
         return $this->modules;
     }
@@ -203,7 +212,7 @@ class ModulesComponent extends Component
     {
         $types = [];
         foreach ($this->modules as $name => $data) {
-            if (!$data['hints']['object_type']) {
+            if (empty($data['hints']['object_type'])) {
                 continue;
             }
             if ($abstract === null || $data['hints']['multiple_types'] === $abstract) {
@@ -536,12 +545,8 @@ class ModulesComponent extends Component
     public function relatedTypes(array $schema, string $relation): array
     {
         $relationsSchema = (array)Hash::get($schema, $relation);
-        $name = (string)Hash::get($relationsSchema, 'attributes.name');
-        if ($name === $relation) {
-            return (array)Hash::get($relationsSchema, 'right');
-        }
 
-        return (array)Hash::get($relationsSchema, 'left');
+        return (array)Hash::get($relationsSchema, 'right');
     }
 
     /**

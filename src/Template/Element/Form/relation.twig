@@ -1,6 +1,8 @@
 <relation-view inline-template
     :relation-data='{{ relationSchema|json_encode|raw }}'
+    :list-view=listView
     relation-name={{ relationName }}
+    :pre-count={{ preCount }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
     ref="relation"
     @loading="onToggleLoading" @count="onCount">
@@ -22,7 +24,7 @@
         <div class="related-list-container">
 
             {# FilterBoxView #}
-            <div class="mb-1">
+            <div class="mb-1" v-show="objects.length > 10 || addedRelations.length > 10">
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
@@ -41,8 +43,8 @@
             </div>
 
             {# RELATED OBJECTS #}
-            <div class="mb-1" v-show="objects.length || addedRelations.length">
-                <div class="columns" droppable sortable>
+            <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
+                <div :data-list="listView" class="columns" droppable sortable>
                     <div
                         class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="(related, index) in objects"
@@ -52,7 +54,7 @@
                         :drag-data="JSON.stringify(related)">
 
                         {% if relationName == 'children' %}
-                            {% element 'Form/related_item' { 'children': true } %}
+                            {% element 'Form/related_item' { 'children': true  } %}
                         {% else %}
                             {% element 'Form/related_item' { 'common': true } %}
                         {% endif %}
@@ -73,8 +75,7 @@
 
         <div class="mt-5">
             {# DROP FILES #}
-            {% set types = ['media', 'images', 'videos', 'audio', 'files'] %}
-            {% set acceptedTypes = types | filter((item) => item in relationSchema.right) | join(', ') %}
+            {% set acceptedTypes = uploadable | filter((item) => item in relationSchema.right) | join(', ') %}
             {% if acceptedTypes|length %}
                 {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
 

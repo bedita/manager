@@ -1,7 +1,9 @@
 # BEdita Manager
 
-[![Build Status](https://travis-ci.org/bedita/manager.svg)](https://travis-ci.org/bedita/manager)
+[![Github Actions](https://github.com/bedita/manager/workflows/php/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Aphp)
+[![Github Actions](https://github.com/bedita/manager/workflows/javascript/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Ajavascript)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
+
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
 Official Backend Admin WebApp for [BEdita4 API](https://gihub.com/bedita/bedita).
@@ -138,7 +140,7 @@ Then you may run the image with
 docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0
 ```
 
-You can then set env vars accordingly like this
+You can then set env vars accordingly like this:
 
 ```env
 export BEDITA_API="http://localhost:8090"

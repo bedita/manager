@@ -11,7 +11,7 @@ export default {
     template: `<div class="history-content" style="--module-color: ${BEDITA.currentModule.color}">
         <div v-if="isLoading" class="is-loading-spinner"></div>
         <details v-for="date in sortedDates" open>
-            <summary class="pb-05 is-upppercase has-font-weight-bold"><: date :></summary>
+            <summary class="pb-05 is-uppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
@@ -76,31 +76,31 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            if (!confirm(t('Restored data will replace current data (you can still check the data before saving). Are you sure?'))) {
-                return;
-            }
-
-            window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
+            let message = t`Restored data will replace current data (you can still check the data before saving). Are you sure?`;
+            let dialog = this.$root.$refs.beditaDialog;
+            let confirmCallback = () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
+            dialog.confirm(message, t`yes, proceed`, confirmCallback);
         },
         /**
          * Open a new tab with the URL to create a new object with data restored from `historyId` object.
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || t('Untitled');
-
+            const title = document.getElementById('title').value || t`Untitled`;
             const msg = t`Please insert a new title on "${title}" clone`;
-            const cloneTitle = prompt(msg, title + ' -copy');
+            const defaultTitle = title + '-' + t`copy`;
+            let dialog = this.$root.$refs.beditaDialog;
 
-            if (!cloneTitle) {
-                return;
-            }
+            const confirmCallback = (cloneTitle = defaultTitle) => {
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
+                dialog.hide();
+            };
 
-            const origin = window.location.origin;
-            const path = window.location.pathname.replace('/view/', '/clone/');
-            const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
-            const newTab = window.open(url, '_blank');
-            newTab.focus();
+            dialog.prompt(msg, defaultTitle, confirmCallback);
         },
     },
 

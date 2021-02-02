@@ -161,59 +161,6 @@ nav.pagination {
 }
 
 
-// a css only close/delete button
-button.close-button,
-a.close-button {
-    -webkit-appearance: none;
-    background-color: rgba(10, 10, 10, .25);
-    &:hover { background-color: rgba(10, 10, 10, .5); }
-    border: none;
-    border-radius: 290486px;
-    cursor: pointer;
-    display: inline-block;
-    flex-grow: 0;
-    flex-shrink: 0;
-    font-size: 0;
-    height: $gutter * 1.25;
-    width: $gutter * 1.25;
-    max-height: $gutter * 1.25;
-    max-width: $gutter * 1.25;
-    min-height: $gutter * 1.25;
-    min-width: $gutter * 1.25;
-    outline: 0;
-    position: relative;
-    vertical-align: top;
-    &:before {
-        background-color: #fff;
-        content: "";
-        display: block;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-        transform: translateX(-50%) translateY(-50%) rotate(45deg);
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        height: 2px;
-        width: 50%;
-    }
-    &:after {
-        background-color: #fff;
-        content: "";
-        display: block;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-        transform: translateX(-50%) translateY(-50%) rotate(45deg);
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        height: 50%;
-        width: 2px;
-    }
-}
-
-
 // loader
 .is-loading-spinner:after {
     animation: spinAround .5s infinite linear;
@@ -374,22 +321,5 @@ a.close-button {
                 }
             }
         }
-    }
-}
-
-.ck-editor {
-    --ck-color-base-background: #{$gray-200};
-    color: #000;
-
-    .ck-label {
-        display: none !important;
-    }
-
-    .ck-content {
-        min-height: 12 * $gutter;
-    }
-
-    .CodeMirror {
-        font-size: 1.2em;
     }
 }

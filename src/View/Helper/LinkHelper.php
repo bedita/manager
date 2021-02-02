@@ -53,6 +53,7 @@ class LinkHelper extends Helper
      * {@inheritDoc}
      *
      * Init API and WebAPP base URL
+     * @codeCoverageIgnore
      */
     public function initialize(array $config)
     {
@@ -105,14 +106,17 @@ class LinkHelper extends Helper
     public function sortClass($field): string
     {
         $sort = $this->getView()->getRequest()->getQuery('sort');
-        $class = '';
+        if (empty($sort)) {
+            return '';
+        }
         if ($sort === $field) { // it was ascendant sort
-            $class = 'sort down';
-        } elseif ($sort === ('-' . $field)) { // it was descendant sort
-            $class = 'sort up';
+            return 'sort down';
+        }
+        if ($sort === ('-' . $field)) { // it was descendant sort
+            return 'sort up';
         }
 
-        return $class;
+        return '';
     }
 
     /**
@@ -145,16 +149,21 @@ class LinkHelper extends Helper
      */
     public function here($options = []): string
     {
+        $here = $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here');
         $query = $this->getView()->getRequest()->getQuery();
         if (empty($query) || !empty($options['no-query'])) {
-            return $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here');
+            return $here;
         }
 
         if (isset($options['exclude'])) {
             unset($query[$options['exclude']]);
         }
+        $q = http_build_query($query);
+        if (!empty($q)) {
+            return $here . '?' . $q;
+        }
 
-        return $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here') . '?' . http_build_query($query);
+        return $here;
     }
 
     /**
@@ -172,21 +181,36 @@ class LinkHelper extends Helper
     }
 
     /**
-     * Include plugin JS bundles.
-     *
-     * Plugin bundle MUST be in `plugins/MyPlugin/webroot/js/MyPlugin.plugin.js`
+     * Include plugin js and css bundles.
      *
      * @return void
      */
-    public function pluginsJsBundle(): void
+    public function pluginsBundle(): void
     {
         $plugins = Configure::read('Plugins', []);
-        foreach ($plugins as $plugin => $v) {
-            $path = Plugin::path($plugin) . sprintf('webroot%sjs%s%s.plugin.js', DS, DS, $plugin);
-            if (file_exists($path)) {
-                echo $this->Html->script(sprintf('%s.%s.plugin.js', $plugin, $plugin));
+        foreach (['js', 'css'] as $extension) {
+            foreach ($plugins as $plugin => $v) {
+                echo $this->pluginAsset($plugin, $extension);
             }
         }
+    }
+
+    /**
+     * Return js/css plugin asset by plugin and extension
+     *
+     * @param string $plugin The plugin
+     * @param string $extension the extension
+     * @return string
+     */
+    public function pluginAsset(string $plugin, string $extension): string
+    {
+        $path = sprintf('%swebroot%s%s%s%s.plugin.%s', Plugin::path($plugin), DS, $extension, DS, $plugin, $extension);
+        if (!file_exists($path)) {
+            return '';
+        }
+        $method = ($extension === 'js') ? 'script' : 'css';
+
+        return $this->Html->{$method}(sprintf('%s.%s.plugin.%s', $plugin, $plugin, $extension));
     }
 
     /**

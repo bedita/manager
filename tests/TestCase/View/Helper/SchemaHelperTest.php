@@ -15,6 +15,7 @@ namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
@@ -40,9 +41,29 @@ class SchemaHelperTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $view = new View();
+        // setup request, view and helper
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ]);
+        $view = new View($request, null, null, []);
+        $view->set('objectType', 'dummies');
         $this->Schema = new SchemaHelper($view);
+        // set control handlers
+        $control = (array)Configure::read('Control');
+        $control['handlers'] = [
+            'dummies' => [ // an object type
+                'descr' => [ // a field
+                    'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
+                    'method' => 'dummy',
+                ],
+            ],
+        ];
+        Configure::write('Control', $control);
     }
 
     /**
@@ -321,6 +342,18 @@ class SchemaHelperTest extends TestCase
                 'test_array',
                 null,
             ],
+            'custom handler' => [
+                // expected result
+                [
+                    'html' => '<dummy>something</dummy>',
+                ],
+                // schema type
+                [
+                    'type' => 'string',
+                ],
+                'descr',
+                'something',
+            ],
         ];
     }
 
@@ -525,6 +558,125 @@ class SchemaHelperTest extends TestCase
     public function testFormat($expected, $value, array $schema)
     {
         $actual = $this->Schema->format($value, $schema);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testSortable` test case.
+     *
+     * @return array
+     */
+    public function sortableProvider(): array
+    {
+        return [
+            'no schema, default not sortable' => [
+                'dummy_no_schema',
+                [],
+                false,
+            ],
+            'string: sortable' => [
+                'dummy_string',
+                ['type' => 'string'],
+                true,
+            ],
+            'number: sortable' => [
+                'dummy_number',
+                ['type' => 'number'],
+                true,
+            ],
+            'integer: sortable' => [
+                'dummy_integer',
+                ['type' => 'integer'],
+                true,
+            ],
+            'boolean: sortable' => [
+                'dummy_boolean',
+                ['type' => 'boolean'],
+                true,
+            ],
+            'date-time: sortable' => [
+                'dummy_date-time',
+                ['type' => 'date-time'],
+                true,
+            ],
+            'date: sortable' => [
+                'dummy_date',
+                ['type' => 'date'],
+                true,
+            ],
+            'array: not sortable' => [
+                'dummy_array',
+                ['type' => 'array'],
+                false,
+            ],
+            'object: not sortable' => [
+                'dummy_object',
+                ['type' => 'object'],
+                false,
+            ],
+            'oneOf, string: sortable' => [
+                'dummy_oneof_string',
+                ['oneOf' => [['type' => 'null'], ['type' => 'string']]],
+                true,
+            ],
+            'oneOf, number: sortable' => [
+                'dummy_oneof_number',
+                ['oneOf' => [['type' => 'null'], ['type' => 'number']]],
+                true,
+            ],
+            'oneOf, integer: sortable' => [
+                'dummy_oneof_integer',
+                ['oneOf' => [['type' => 'null'], ['type' => 'integer']]],
+                true,
+            ],
+            'oneOf, boolean: sortable' => [
+                'dummy_oneof_boolean',
+                ['oneOf' => [['type' => 'null'], ['type' => 'boolean']]],
+                true,
+            ],
+            'oneOf, date-time: sortable' => [
+                'dummy_oneof_date-time',
+                ['oneOf' => [['type' => 'null'], ['type' => 'date-time']]],
+                true,
+            ],
+            'oneOf, date: sortable' => [
+                'dummy_oneof_date',
+                ['oneOf' => [['type' => 'null'], ['type' => 'date']]],
+                true,
+            ],
+            'oneOf, array: not sortable' => [
+                'dummy_oneof_array',
+                ['oneOf' => [['type' => 'null'], ['type' => 'array']]],
+                false,
+            ],
+            'oneOf, object: not sortable' => [
+                'dummy_oneof_object',
+                ['oneOf' => [['type' => 'null'], ['type' => 'object']]],
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Test `sortable` method
+     *
+     * @param string $field The field
+     * @param array $schema The property schema
+     * @param bool $expected Expected result
+     * @return void
+     *
+     * @dataProvider sortableProvider()
+     * @covers ::sortable()
+     */
+    public function testSortable(string $field, array $schema, bool $expected): void
+    {
+        $view = $this->Schema->getView();
+        $view->set('schema', [
+            'properties' => [
+                $field => $schema,
+            ],
+        ]);
+        $actual = $this->Schema->sortable($field);
         static::assertSame($expected, $actual);
     }
 }

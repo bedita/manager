@@ -100,7 +100,7 @@ class ModulesController extends AppController
         $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
-        $this->set('types', ['right' => $this->descendants()]);
+        $this->set('types', ['right' => $this->Schema->descendants($this->objectType)]);
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
 
@@ -140,34 +140,6 @@ class ModulesController extends AppController
     }
 
     /**
-     * Retrieve descendants of `$this->objectType` if any
-     *
-     * @return array
-     */
-    protected function descendants(): array
-    {
-        if (!$this->Modules->isAbstract($this->objectType)) {
-            return [];
-        }
-        $filter = [
-            'parent' => $this->objectType,
-            'enabled' => true,
-        ];
-        $sort = 'name';
-
-        try {
-            $descendants = $this->apiClient->get('/model/object_types', compact('filter', 'sort') + ['fields' => 'name']);
-        } catch (BEditaClientException $e) {
-            // Error! Return empty list.
-            $this->log($e, LogLevel::ERROR);
-
-            return [];
-        }
-
-        return (array)Hash::extract($descendants, 'data.{n}.attributes.name');
-    }
-
-    /**
      * View single resource.
      *
      * @param string|int $id Resource ID.
@@ -178,7 +150,8 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
+            $query = ['count' => 'all'];
+            $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
             $this->log($e, LogLevel::ERROR);

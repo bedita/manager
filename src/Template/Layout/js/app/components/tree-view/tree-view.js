@@ -379,6 +379,7 @@ export default {
          * @return {void}
          */
         toggleFolderRelation(event) {
+            document.getElementById('changedParents').value = 1;
             if (this.multipleChoice) {
                 let index = this.parents.findIndex(({ id }) => id == this.node.id);
                 if (event.target.checked) {

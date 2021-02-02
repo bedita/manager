@@ -64,6 +64,7 @@ bundle-report.*.html
 # bundle directories
 /webroot/bundle-report
 /webroot/css/app*
+/webroot/css/vendors*
 /webroot/css/**/*.map
 /webroot/css/vendors/async
 /webroot/js/*.js
