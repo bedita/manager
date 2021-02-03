@@ -100,7 +100,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 action: 'relations-add',
                 from: this,
                 data: {
-                    relationName: 'poster',
+                    relationName: 'placeholders',
                 },
             });
 
