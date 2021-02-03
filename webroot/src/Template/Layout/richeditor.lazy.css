@@ -561,17 +561,37 @@ body {
   background: unset;
 }
 
-[data-placeholder] {
+[data-placeholder][data-mce-selected] {
+  outline: solid 2px #0e78be;
+}
+
+span[data-placeholder] {
   display: inline-flex;
   align-self: center;
   margin: 0.5em;
   padding: 0.25em;
   border: solid 1px currentColor;
 }
-[data-placeholder] img {
+span[data-placeholder] img {
   width: 3em;
   height: 3em;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   -webkit-user-drag: none;
+}
+
+div[data-placeholder] {
+  display: flex;
+  margin: 0.5em 0;
+  padding: 0.25em;
+  border: solid 1px currentColor;
+}
+div[data-placeholder] img {
+  width: 100%;
+  height: auto;
+}
+
+.mce-offscreen-selection {
+  position: absolute;
+  left: -9999999999999px;
 }

@@ -2,15 +2,6 @@ import 'tinymce/tinymce';
 import { PanelEvents } from 'app/components/panel-view';
 import tinymce from 'tinymce/tinymce';
 
-/**
- * @todo
- * custom element
- * size
- * resize/floating
- * draggable
- * not editable content
- */
-
 const cache = {};
 const regex = /BE-PLACEHOLDER\.(\d+)\.([-A-Za-z0-9+=]{1,50}|=[^=]|={3,})/;
 const baseUrl = new URL(BEDITA.base).pathname;
@@ -63,7 +54,7 @@ function loadPreview(editor, node, id) {
                         content = `<iframe src="${data.meta.media_url}"></iframe>`;
                     } else {
                         content = `<div class="embed-card">
-                            <h1>${data.attributes.title || t('Untitled')}</h1>
+                            <div class="title">${data.attributes.title || t('Untitled')}</div>
                             <div class="description">${data.attributes.description || ''}</div>
                         </div>`
                     }
@@ -109,30 +100,35 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 action: 'relations-add',
                 from: this,
                 data: {
-                    relationName: 'placeholders',
+                    relationName: 'poster',
                 },
             });
 
             let onSave = (objects) => {
                 PanelEvents.closePanel();
                 PanelEvents.stop('relations-add:save', this, onSave);
-                PanelEvents.stop('panel:close', this, onClose);
+                PanelEvents.stop('panel:closed', null, onClose);
                 objects.forEach((data) => {
-                    let view = editor.dom.create('span', {
+                    let node = editor.selection.getNode();
+                    let isEmptyBlock = node && node.children.length === 1 && node.children[0].tagName === 'BR';
+                    let view = editor.dom.create(isEmptyBlock ? 'div' : 'span', {
                         'data-placeholder': data.id,
                         'style': data.params,
                     }, `<!-- BE-PLACEHOLDER.${data.id}.${btoa(data.params)} -->`);
                     editor.insertContent(view.outerHTML);
+                    if (isEmptyBlock) {
+                        tinymce.dom.DOMUtils.DOM.remove(node);
+                    }
                 });
             };
 
             let onClose = () => {
                 PanelEvents.stop('relations-add:save', this, onSave);
-                PanelEvents.stop('panel:close', this, onClose);
+                PanelEvents.stop('panel:closed', null, onClose);
             };
 
             PanelEvents.listen('relations-add:save', this, onSave);
-            PanelEvents.listen('panel:close', this, onClose);
+            PanelEvents.listen('panel:closed', null, onClose);
         },
     });
 });
