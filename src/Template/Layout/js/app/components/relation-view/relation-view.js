@@ -721,6 +721,17 @@ export default {
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
+
+        /**
+         * Object type available to view.
+         *
+         * @param {String} type
+         *
+         * @return {Boolean} true if module is available
+         */
+        moduleAvailable(type) {
+            return (BEDITA.modules.indexOf(type) !== -1);
+        },
     }
 
 }
