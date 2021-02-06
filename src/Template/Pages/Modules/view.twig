@@ -93,15 +93,17 @@
 
             {# append buttons to sidebar #}
             {# Append "Save" #}
-            {% do _view.append('module-buttons', Form.button( __('Save'),
-                {
-                    'form': 'form-main',
-                    'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
-                })
-            ) %}
+            {% if Perms.canSave() %}
+                {% do _view.append('module-buttons', Form.button( __('Save'),
+                    {
+                        'form': 'form-main',
+                        'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                    })
+                ) %}
+            {% endif %}
 
             {# Append "Clone" #}
-            {% if object.id %}
+            {% if object.id and Perms.canCreate() %}
                 {% do _view.append('module-buttons', Html.link(
                     __('Clone'),
                     {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
@@ -110,13 +112,15 @@
             {% endif %}
 
             {# Append "Trash (move to)" #}
-            {% do _view.append('module-buttons',
-                Form.postButton(
-                    __('Trash-verb'),
-                    {'_name': 'modules:delete', 'object_type': objectType},
-                    {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                )
-            ) %}
+            {% if Perms.canDelete() %}
+                {% do _view.append('module-buttons',
+                    Form.postButton(
+                        __('Trash-verb'),
+                        {'_name': 'modules:delete', 'object_type': objectType},
+                        {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )
+                ) %}
+            {% endif %}
 
             {# Append "Prev" and "Next" #}
             {% if object.id and objectNav %}
