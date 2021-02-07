@@ -17,7 +17,6 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
@@ -50,6 +49,13 @@ class LinkHelper extends Helper
     protected $webBaseUrl = null;
 
     /**
+     * Request Query params
+     *
+     * @var array
+     */
+    protected $query = [];
+
+    /**
      * {@inheritDoc}
      *
      * Init API and WebAPP base URL
@@ -59,6 +65,7 @@ class LinkHelper extends Helper
     {
         $this->apiBaseUrl = Configure::read('API.apiBaseUrl');
         $this->webBaseUrl = Router::fullBaseUrl();
+        $this->query = $this->getView()->getRequest()->getQueryParams();
     }
 
     /**
@@ -82,14 +89,10 @@ class LinkHelper extends Helper
      */
     public function sortUrl($field, $resetPage = true): string
     {
-        $request = $this->getView()->getRequest();
-        $sort = $request->getQuery('sort');
-        $sortValue = $field; // <= ascendant order
-        if ($sort === $field) { // it was ascendant sort
-            $sortValue = '-' . $field; // <= descendant order
-        }
-        $replace = ['sort' => $sortValue];
-        $currentPage = Hash::get($request->getQueryParams(), 'page');
+        $sort = (string)Hash::get($this->query, 'sort');
+        $sort = $this->sortValue($field, $sort);
+        $replace = compact('sort');
+        $currentPage = Hash::get($this->query, 'page');
         if (isset($currentPage) && $resetPage) {
             $replace['page'] = 1;
         }
@@ -98,21 +101,55 @@ class LinkHelper extends Helper
     }
 
     /**
+     * Define sort query string value using sort string and current
+     * 'sort' value
+     *
+     * @param string $field Field to sort.
+     * @param string $sort Current sort value
+     * @return string
+     */
+    protected function sortValue(string $field, string $currentSort): string
+    {
+        $sort = $this->sortField($field); // <= ascendant order
+        if ($currentSort === $sort) { // it was ascendant sort
+            $sort = '-' . $sort; // <= descendant order
+        }
+
+        return $sort;
+    }
+
+    /**
+     * Retrieve 'sort' field from field name.
+     *
+     * @param string $field Field name.
+     * @return string
+     */
+    protected function sortField(string $field): string
+    {
+        if ($field === 'date_ranges') {
+            return 'date_ranges_min_start_date';
+        }
+
+        return $field;
+    }
+
+    /**
      * Returns sort class by field direction
      *
      * @param string $field the Field.
      * @return string
      */
-    public function sortClass($field): string
+    public function sortClass(string $field): string
     {
-        $sort = $this->getView()->getRequest()->getQuery('sort');
+        $sort = (string)Hash::get($this->query, 'sort');
         if (empty($sort)) {
             return '';
         }
-        if ($sort === $field) { // it was ascendant sort
+        $sortField = $this->sortField($field);
+        if ($sort === $sortField) { // it was ascendant sort
             return 'sort down';
         }
-        if ($sort === ('-' . $field)) { // it was descendant sort
+        if ($sort === ('-' . $sortField)) { // it was descendant sort
             return 'sort up';
         }
 
@@ -150,15 +187,14 @@ class LinkHelper extends Helper
     public function here($options = []): string
     {
         $here = $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here');
-        $query = $this->getView()->getRequest()->getQuery();
-        if (empty($query) || !empty($options['no-query'])) {
+        if (empty($this->query) || !empty($options['no-query'])) {
             return $here;
         }
 
         if (isset($options['exclude'])) {
-            unset($query[$options['exclude']]);
+            unset($this->query[$options['exclude']]);
         }
-        $q = http_build_query($query);
+        $q = http_build_query($this->query);
         if (!empty($q)) {
             return $here . '?' . $q;
         }
@@ -175,7 +211,7 @@ class LinkHelper extends Helper
     private function replaceQueryParams(array $queryParams): string
     {
         $request = $this->getView()->getRequest();
-        $query = array_merge($request->getQueryParams(), $queryParams);
+        $query = array_merge($this->query, $queryParams);
 
         return (string)$request->getUri()->withQuery(http_build_query($query));
     }
