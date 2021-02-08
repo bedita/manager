@@ -1499,11 +1499,17 @@ class ModulesComponentTest extends TestCase
         // $apiClient->method('save')
         //     ->willReturn(['data' => ['id' => 1]]);
         $apiClient->method('addRelated')
-            ->will($this->returnCallback(function() use (&$actual) { $actual = 'addRelated'; }));
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'addRelated';
+            }));
         $apiClient->method('removeRelated')
-            ->will($this->returnCallback(function() use (&$actual) { $actual = 'removeRelated'; }));
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'removeRelated';
+            }));
         $apiClient->method('replaceRelated')
-            ->will($this->returnCallback(function() use (&$actual) { $actual = 'replaceRelated'; }));
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'replaceRelated';
+            }));
         ApiClientProvider::setApiClient($apiClient);
 
         $this->Modules->saveRelated($id, $type, $relatedData);
