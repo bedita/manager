@@ -50,7 +50,7 @@
         <div class="buttons-cell narrow">
         {% if isTrash %}
 
-            {% if Perms.canSave() %}
+            {% if Perms.canSave(object.type) %}
                 {{ Form.postButton(__('Restore'),
                     {'_name': 'trash:restore'},
                     {
@@ -61,7 +61,7 @@
                 )|raw }}
             {% endif %}
 
-            {% if Perms.canDelete() %}
+            {% if Perms.canDelete(object.type) %}
                 {{ Form.postButton(__('Delete'),
                     {'_name': 'trash:delete'},
                     {
