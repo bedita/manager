@@ -1496,8 +1496,6 @@ class ModulesComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.org'])
             ->getMock();
-        // $apiClient->method('save')
-        //     ->willReturn(['data' => ['id' => 1]]);
         $apiClient->method('addRelated')
             ->will($this->returnCallback(function () use (&$actual) {
                 $actual = 'addRelated';
