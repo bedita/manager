@@ -18,6 +18,8 @@
 
         {% else %}
 
+        <div class="table-container">
+
             <div class="list-objects">
                 {% if objects %}
                     {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
@@ -29,6 +31,7 @@
                     {{ __('No items found') }}
                 {% endfor %}
             </div>
+        </div>
 
             {# bulk actions #}
             {% if objects %}
