@@ -9,6 +9,9 @@
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div>
         <div class="module-index">
+
+          <div class="table-container">
+
             <div class="list-objects">
                 {% if objects %}
                     {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
@@ -20,6 +23,8 @@
                     {{ __('No items found') }}
                 {% endfor %}
             </div>
+
+          </div>
 
             {% if objects %}
             <div class="bulk-actions has-border-module-{{ currentModule.name }}">
