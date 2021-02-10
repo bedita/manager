@@ -108,6 +108,12 @@ class LinkHelperTest extends TestCase
                 true, // reset page
                 'http://localhost/?page=1&sort=title', // expected
             ],
+            'revert sort' => [
+                $request->withQueryParams(['sort' => 'title']), // request
+                'title', // field
+                false, // reset page
+                'http://localhost/?sort=-title', // expected
+            ],
             'date ranges' => [
                 $request->withQueryParams(['page' => 1]), // request
                 'date_ranges', // field
