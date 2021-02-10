@@ -206,6 +206,10 @@ class SchemaHelper extends Helper
      */
     public function sortable(string $field): bool
     {
+        // exception 'date_ranges' default sortable
+        if ($field === 'date_ranges') {
+            return true;
+        }
         $schema = (array)$this->_View->get('schema');
         $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
 
