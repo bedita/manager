@@ -5,12 +5,12 @@
 
 {% set buttonClasses = 'button button-text-white is-width-auto' %}
 
-<a href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"
+<a {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
     class="table-row object-status-{{ object.attributes.status }}">
 
         <div class="select-cell narrow" @click="selectRow">
             {{ Form.unlockField('oneItem') }}
-            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows">
+            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
         </div>
 
         <div class="thumb-cell narrow">
@@ -50,7 +50,7 @@
         <div class="buttons-cell narrow">
         {% if isTrash %}
 
-            {% if in_array('PATCH', currentModule.hints.allow) %}
+            {% if Perms.canSave(object.type) %}
                 {{ Form.postButton(__('Restore'),
                     {'_name': 'trash:restore'},
                     {
@@ -61,23 +61,27 @@
                 )|raw }}
             {% endif %}
 
-            {{ Form.postButton(__('Delete'),
-                {'_name': 'trash:delete'},
-                {
-                    'data': {'ids': object.id, 'query': q},
-                    'class': buttonClasses,
-                    'title': __('Permanently delete') ~ ' ' ~ object.attributes.title|escape,
-                    'onclick': confirm,
-                }
-            )|raw }}
+            {% if Perms.canDelete(object.type) %}
+                {{ Form.postButton(__('Delete'),
+                    {'_name': 'trash:delete'},
+                    {
+                        'data': {'ids': object.id, 'query': q},
+                        'class': buttonClasses,
+                        'title': __('Permanently delete') ~ ' ' ~ object.attributes.title|escape,
+                        'onclick': confirm,
+                    }
+                )|raw }}
+            {% endif %}
 
         {% else %}
 
+            {% if Perms.canRead(object.type) %}
             <button
                 title="{{ __('Edit') }} {{ object.attributes.title }}"
                 class="{{ buttonClasses }}">{{ __('Edit') }}</button>
+            {% endif %}
 
-            {% if in_array('DELETE', currentModule.hints.allow) %}
+            {% if Perms.canDelete(object.type) %}
                 {{ Form.postButton(__('Trash-verb'),
                     {'_name': 'modules:delete', 'object_type': object.type},
                     {

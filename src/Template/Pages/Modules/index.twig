@@ -42,7 +42,7 @@
 
 
         {# commands to append in side bar (commands menu) #}
-        {% if in_array('POST', currentModule.hints.allow) %}
+        {% if Perms.canCreate() %}
             {% do _view.append('module-buttons',
                 Html.link(__('Create new'),
                     {'_name': 'modules:create', 'object_type': objectType},

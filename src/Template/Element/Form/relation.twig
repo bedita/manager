@@ -73,6 +73,7 @@
 
         </div>
 
+        {% if Perms.canSave() %}
         <div class="mt-5">
             {# DROP FILES #}
             {% set acceptedTypes = uploadable | filter((item) => item in relationSchema.right) | join(', ') %}
@@ -99,6 +100,7 @@
                     })">{{ __('add objects') }}</button>
             </div>
         </div>
+        {% endif %} {# Perms #}
 
         {# End relation custom or default view #}
         {% endif %}
