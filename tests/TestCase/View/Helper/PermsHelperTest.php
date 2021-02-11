@@ -89,7 +89,7 @@ class PermsHelperTest extends TestCase
      *
      * @param bool $expected Expected result
      * @param string $method Helper method
-     * @param string $module Mdule tested
+     * @param string $module Module tested
      * @return void
      *
      * @dataProvider isAllowedProvider()
