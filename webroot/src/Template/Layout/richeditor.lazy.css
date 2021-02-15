@@ -555,6 +555,11 @@ dl dd + dt {
   margin-top: 4px;
 }
 
+[class^=icon-],
+[class*=" icon-"] {
+  line-height: 1;
+}
+
 body {
   padding: 1em !important;
   color: unset;
