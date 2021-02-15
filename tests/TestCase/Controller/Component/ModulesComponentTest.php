@@ -23,6 +23,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -1384,5 +1385,132 @@ class ModulesComponentTest extends TestCase
             $expected['id'] = $object['id'];
         }
         static::assertEquals($expected, $object);
+    }
+
+    /**
+     * Data provider for `testSaveRelated`.
+     *
+     * @return array
+     */
+    public function saveRelatedProvider(): array
+    {
+        $dummy = ['id' => 123, 'type' => 'dummies'];
+
+        return [
+            'bad request exception' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'wrongMethod',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                new BadRequestException(__('Bad related data method')), // expected
+            ],
+            'addRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'addRelated', // expected
+            ],
+            'removeRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'removeRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'removeRelated', // expected
+            ],
+            'replaceRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'replaceRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
+            'folders children not folders' => [
+                111, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'addRelated', // expected
+            ],
+            'folders children folders' => [
+                222, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders']],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `saveRelated`
+     *
+     * @param string $id Object ID
+     * @param string $type Object type
+     * @param array $relatedData Related objects data
+     * @param mixed $expected The expected result
+     * @return void
+     * @dataProvider saveRelatedProvider
+     * @covers ::saveRelated()
+     * @covers ::folderChildrenRelated()
+     */
+    public function testSaveRelated(string $id, string $type, array $relatedData, $expected): void
+    {
+        if ($expected instanceof \Exception) {
+            $this->expectException(get_class($expected));
+            $this->expectExceptionCode($expected->getCode());
+            $this->expectExceptionMessage($expected->getMessage());
+        }
+        $actual = 'none';
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.org'])
+            ->getMock();
+        $apiClient->method('addRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'addRelated';
+            }));
+        $apiClient->method('removeRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'removeRelated';
+            }));
+        $apiClient->method('replaceRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'replaceRelated';
+            }));
+        ApiClientProvider::setApiClient($apiClient);
+
+        $this->Modules->saveRelated($id, $type, $relatedData);
+        static::assertEquals($expected, $actual);
     }
 }

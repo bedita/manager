@@ -33,3 +33,5 @@
 //..__('Updated');
 //..__('Trashd');
 //..__('Restored');
+//..__('Title');
+//..__('warning');
