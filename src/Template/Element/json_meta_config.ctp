@@ -24,7 +24,7 @@
         'currentModule': <?php if (!empty($currentModule)): ?> <?= json_encode($currentModule, true) ?> <?php else: ?>{ name: 'home' }<?php endif; ?>,
         'template': '<?= $this->template ?>',
         'relations': {},
-        'modules': <?= (!empty($modules)) ? json_encode(array_keys((array)$modules), true) : [] ?>,
+        'modules': <?= (!empty($modules)) ? json_encode(array_keys((array)$modules), true) : '[]' ?>,
         'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
         'locale': locale,
         <?php if (!empty($uploadable)): ?>
