@@ -25,7 +25,7 @@
         'template': '<?= $this->template ?>',
         'relations': {},
         'modules': <?= (!empty($modules)) ? json_encode(array_keys((array)$modules), true) : [] ?>,
-        'plugins': '<?= json_encode(\App\Plugin::loadedAppPlugins()) ?>',
+        'plugins': <?= json_encode(\App\Plugin::loadedAppPlugins()) ?>,
         'locale': locale,
         <?php if (!empty($uploadable)): ?>
         // types having files to upload

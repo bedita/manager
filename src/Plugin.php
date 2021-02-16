@@ -28,7 +28,7 @@ class Plugin extends CakePlugin
      *
      * @return array
      */
-    public static function loadedAppPlugins()
+    public static function loadedAppPlugins(): array
     {
         $sysPlugins = ['Bake', 'DebugKit', 'BEdita/WebTools', 'BEdita/I18n', 'Migrations', 'WyriHaximus/TwigView'];
 
