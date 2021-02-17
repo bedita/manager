@@ -5,16 +5,11 @@
     } elseif (!empty($this->request->getData('_csrfToken'))) {
         $csrfToken = json_encode($this->request->getData('_csrfToken'));
     }
-    $lang = \Cake\Core\Configure::read('I18n.lang', 'en');
 ?>
-
-<meta name="BEDITA.currLang" content="<?= $lang ?>" />
-<meta name="BEdita.base" content="<?= \Cake\Routing\Router::fullBaseUrl() ?>" />
 
 <script type="text/javascript">
 
     const BEDITA = {
-        'currLang': '<?= $lang ?>',
         'base': '<?= \Cake\Routing\Router::fullBaseUrl() ?>',
         'currentModule': <?= !empty($currentModule) ? json_encode($currentModule, true) : '{ name: "home" }' ?>,
         'template': '<?= $this->template ?>',
