@@ -343,7 +343,7 @@ class AppControllerTest extends TestCase
                 'supporters',
                 [
                     'id' => '9',
-                    'username' => 'gustavo'
+                    'username' => 'gustavo',
                 ],
                 [
                     'id' => '9',
