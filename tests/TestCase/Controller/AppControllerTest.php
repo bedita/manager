@@ -339,6 +339,18 @@ class AppControllerTest extends TestCase
                     'confirm-password' => '',
                 ],
             ],
+            'supporters' => [
+                'supporters',
+                [
+                    'id' => '9',
+                    'username' => 'gustavo'
+                ],
+                [
+                    'id' => '9',
+                    'username' => 'gustavo',
+                    'password' => '',
+                ],
+            ],
             'date ranges' => [ // test date_ranges array
                 'events', // object_type
                 [ // expected
