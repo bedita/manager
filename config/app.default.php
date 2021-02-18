@@ -488,7 +488,8 @@ return [
      *  - 'relations' relations ordering by relation name, containing these optional keys
      *      + 'main' first relations to show on main column, other relations will be appended
      *      + 'aside' relations to show on right aside column
-     *      + '_element' custom view element to use for this relation
+     *      + '_element' associative array with custom view element to use for a relation, defined like
+     *          '{relation_name}' => '{MyPlugin.template_path}'
      *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
