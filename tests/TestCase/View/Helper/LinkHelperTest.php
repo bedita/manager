@@ -108,6 +108,18 @@ class LinkHelperTest extends TestCase
                 true, // reset page
                 'http://localhost/?page=1&sort=title', // expected
             ],
+            'revert sort' => [
+                $request->withQueryParams(['sort' => 'title']), // request
+                'title', // field
+                false, // reset page
+                'http://localhost/?sort=-title', // expected
+            ],
+            'date ranges' => [
+                $request->withQueryParams(['page' => 1]), // request
+                'date_ranges', // field
+                false, // reset page
+                'http://localhost/?page=1&sort=date_ranges_min_start_date', // expected
+            ],
         ];
     }
 
@@ -121,6 +133,8 @@ class LinkHelperTest extends TestCase
      * @return void
      * @dataProvider sortUrlProvider()
      * @covers ::sortUrl
+     * @covers ::sortValue
+     * @covers ::sortField
      * @covers ::replaceQueryParams
      */
     public function testSortUrl(ServerRequest $request, string $field, bool $resetPage, string $expected): void

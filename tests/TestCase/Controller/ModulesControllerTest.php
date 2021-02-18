@@ -965,64 +965,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `saveRelated` method
-     *
-     * @covers ::saveRelated()
-     *
-     * @return void
-     */
-    public function testSaveRelated()
-    {
-        $request = new ServerRequest([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-        $this->controller = new ModulesControllerSample($request);
-
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://media.example.org'])
-            ->getMock();
-        $apiClient->method('save')
-            ->willReturn(['data' => ['id' => 1]]);
-        $apiClient->method('addRelated')
-            ->willReturn([]);
-
-        $this->controller->apiClient = $apiClient;
-
-        $result = $this->controller->save();
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
-
-        $request = new ServerRequest([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                '_api' => [
-                    [
-                        'method' => 'addRelated',
-                        'relation' => '',
-                        'relatedIds' => [],
-                    ],
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-        $this->controller = new ModulesControllerSample($request);
-        $this->controller->apiClient = $apiClient;
-
-        $result = $this->controller->save();
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
-    }
-
-    /**
      * Get test object id
      *
      * @return void

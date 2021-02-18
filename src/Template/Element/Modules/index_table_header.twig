@@ -19,21 +19,25 @@
         <div>{{ __('type') }}</div>
     {% endif %}
 
-    <div class="narrow {{ Link.sortClass('status') }}">
-        {% if Schema.sortable('status') %}
-            <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
-        {% else %}
-            {{ __('status') }}
-        {% endif %}
-    </div>
+    {% if refObject.attributes.status %}
+        <div class="narrow {{ Link.sortClass('status') }}">
+            {% if Schema.sortable('status') %}
+                <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
+            {% else %}
+                {{ __('status') }}
+            {% endif %}
+        </div>
+    {% endif %}
 
-    <div class="{{ Link.sortClass('modified') }}">
-        {% if Schema.sortable('modified') %}
-            <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
-        {% else %}
-            {{ __('modified') }}
-        {% endif %}
-    </div>
+    {% if refObject.meta.modified %}
+        <div class="{{ Link.sortClass('modified') }}">
+            {% if Schema.sortable('modified') %}
+                <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
+            {% else %}
+                {{ __('modified') }}
+            {% endif %}
+        </div>
+    {% endif %}
 
     <div class="narrow {{ Link.sortClass('id') }}">
         {% if Schema.sortable('id') %}

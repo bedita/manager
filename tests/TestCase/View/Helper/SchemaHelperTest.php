@@ -654,6 +654,11 @@ class SchemaHelperTest extends TestCase
                 ['oneOf' => [['type' => 'null'], ['type' => 'object']]],
                 false,
             ],
+            'date_ranges' => [
+                'date_ranges',
+                [],
+                true,
+            ],
         ];
     }
 
