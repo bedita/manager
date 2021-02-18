@@ -406,6 +406,10 @@ export default {
          * @return {void}
          */
         toggleFolderRelationMenu(event) {
+            if (this.isParent) {
+                document.getElementById('changedParents').value = 1;
+            }
+
             let relation = this.node.meta.relation || {};
             relation.menu = event.target.checked;
         },
