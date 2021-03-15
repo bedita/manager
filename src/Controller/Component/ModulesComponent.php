@@ -609,7 +609,7 @@ class ModulesComponent extends Component
             if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                 throw new BadRequestException(__('Bad related data method'));
             }
-            if ($relation === 'children' && $type === 'folders') {
+            if ($relation === 'children' && $type === 'folders' && in_array($method, ['addRelated', 'replaceRelated'])) {
                 $this->folderChildrenRelated($id, $relatedIds);
 
                 return;
@@ -619,7 +619,7 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Handle special case of `children` realation on `folders`
+     * Handle special case of `children` relation on `folders`
      *
      * @param string $id Object ID.
      * @param array $relatedIds Related objects as id/type pairs.
