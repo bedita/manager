@@ -375,10 +375,7 @@ export default {
          *
          * @return {Promise} repsonse from server
          */
-        async loadObjects(filter) {
-            if (!filter) {
-                filter = {};
-            }
+        async loadObjects(filter = {}) {
             filter.sort = '-created';
             this.objects = [];
             this.loading = true;
@@ -397,7 +394,8 @@ export default {
          *
          * @return {Promise} The response from server with new data
          */
-        async toPage(page, filter) {
+        async toPage(page, filter = {}) {
+            filter.sort = '-created';
             this.objects = [];
             this.loading = true;
             let response = await PaginatedContentMixin.methods.toPage.call(this, page, filter);
