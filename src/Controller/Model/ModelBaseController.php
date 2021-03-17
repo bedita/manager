@@ -17,6 +17,7 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 /**
@@ -118,6 +119,39 @@ abstract class ModelBaseController extends AppController
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+     * Save resource.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        $data = $this->request->getData();
+        $id = Hash::get($data, 'id');
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => $this->resourceType,
+                'attributes' => $data,
+            ],
+        ];
+        $endpoint = sprintf('/model/%s', $this->resourceType);
+
+        try {
+            if (empty($id)) {
+                $this->apiClient->post($endpoint, json_encode($body));
+            } else {
+                $body['data']['id'] = $id;
+                $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
+            }
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
     }
 
     /**

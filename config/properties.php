@@ -146,5 +146,15 @@ return [
                 'inverse_name',
             ],
         ],
+
+        // model/categories
+        'categories' => [
+            'index' => [
+                'name',
+                'label',
+                'object_type_name',
+                'enabled',
+            ],
+        ],
     ],
 ];
