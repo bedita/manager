@@ -12,6 +12,10 @@
  */
 namespace App\Controller\Model;
 
+use Cake\Event\Event;
+use Cake\Http\Response;
+use Cake\Utility\Hash;
+
 /**
  * Categories Model Controller: list, add, edit, remove categories
  *
@@ -24,4 +28,22 @@ class CategoriesController extends ModelBaseController
      * @var string
      */
     protected $resourceType = 'categories';
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeRender(Event $event): ?Response
+    {
+        $features = $this->Schema->objectTypesFeatures();
+        $categorized = (array)Hash::get($features, 'categorized');
+        $schema = $this->Schema->getSchema();
+        $schema['properties']['type']['enum'] = $categorized;
+        $typeFilter = $this->request->getQuery('filter[type]');
+        if (!empty($typeFilter)) {
+            $categorized = [$typeFilter];
+        }
+        $this->set(compact('categorized', 'schema'));
+
+        return parent::beforeRender($event);
+    }
 }

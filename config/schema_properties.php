@@ -216,6 +216,13 @@ return [
                 'description' => '',
                 'default' => true,
             ],
+            'type' => [
+                'type' => 'string',
+                '$id' => '/properties/enabled',
+                'title' => 'Type',
+                'description' => '',
+                'enum' => [],
+            ],
         ],
     ],
 ];

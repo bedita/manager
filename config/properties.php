@@ -155,6 +155,10 @@ return [
                 'object_type_name',
                 'enabled',
             ],
+            'filter' => [
+                'enabled',
+                'type',
+            ],
         ],
     ],
 ];

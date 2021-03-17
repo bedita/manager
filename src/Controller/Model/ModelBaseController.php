@@ -89,6 +89,7 @@ abstract class ModelBaseController extends AppController
         $this->set('links', (array)$response['links']);
         $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->indexList($this->resourceType));
+        $this->set('filter', $this->Properties->filterList($this->resourceType));
 
         return null;
     }
