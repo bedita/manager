@@ -18,7 +18,6 @@ use Cake\Event\Event;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
-use Psr\Log\LogLevel;
 
 /**
  * Model base controller class
@@ -70,15 +69,13 @@ abstract class ModelBaseController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
-
         try {
             $response = $this->apiClient->get(
                 sprintf('/model/%s', $this->resourceType),
                 $this->request->getQueryParams()
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
@@ -103,12 +100,10 @@ abstract class ModelBaseController extends AppController
      */
     public function view($id): ?Response
     {
-        $this->request->allowMethod(['get']);
-
         try {
             $response = $this->apiClient->get(sprintf('/model/%s/%s', $this->resourceType, $id));
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
@@ -156,12 +151,31 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
+     * Remove single resource.
+     *
+     * @param string $id Resource ID.
+     *
+     * @return \Cake\Http\Response
+     */
+    public function remove(string $id): Response
+    {
+        try {
+            $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $id));
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function beforeRender(Event $event): ?Response
     {
         $this->set('resourceType', $this->resourceType);
-        $this->set('moduleLink', ['_name' => 'model:list:object_types']);
+        $this->set('moduleLink', ['_name' => 'model:list:' . $this->resourceType]);
 
         return parent::beforeRender($event);
     }

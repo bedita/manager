@@ -99,6 +99,7 @@ Router::scope('/', function (RouteBuilder $routes) {
                 ['controller' => $name, 'action' => 'index'],
                 'list:' . $controller
             );
+
             $routes->get(
                 "/$controller/view/:id",
                 ['controller' => $name, 'action' => 'view'],
@@ -110,6 +111,12 @@ Router::scope('/', function (RouteBuilder $routes) {
                 ['controller' => $name, 'action' => 'save'],
                 'save:' . $controller
             );
+
+            $routes->post(
+                "/$controller/remove/:id",
+                ['controller' => $name, 'action' => 'remove'],
+                'remove:' . $controller
+            )->setPass(['id']);
         }
     });
 

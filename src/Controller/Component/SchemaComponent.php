@@ -390,6 +390,8 @@ class SchemaComponent extends Component
                 }
             }
         }
+        sort($categorized);
+        sort($uploadable);
 
         return compact('descendants', 'uploadable', 'categorized');
     }

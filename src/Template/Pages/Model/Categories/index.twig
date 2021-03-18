@@ -68,11 +68,11 @@
                             class="{{ buttonClasses }}">{{ __('Save') }}</button>
 
                         <button
-                            title="{{ __('Delete') }} {{ resource.attributes.name }}"
-                            class="{{ buttonClasses }}">{{ __('Delete') }}</button>
-                        {# <div class="buttons">
-                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
-                        </div> #}
+                            title="{{ __('Remove') }} {{ resource.attributes.name }}"
+                            class="{{ buttonClasses }}"
+                            formaction="{{ Url.build({'_name': 'model:remove:' ~ resource.type, 'id': resource.id}) }}">
+                                {{ __('Remove') }}
+                            </button>
                     </div>
                 {{ Form.end()|raw }}
 

@@ -38,10 +38,11 @@ class CategoriesController extends ModelBaseController
         $categorized = (array)Hash::get($features, 'categorized');
         $schema = $this->Schema->getSchema();
         $schema['properties']['type']['enum'] = $categorized;
-        $typeFilter = $this->request->getQuery('filter[type]');
-        if (!empty($typeFilter)) {
-            $categorized = [$typeFilter];
+        $filter = (array)$this->request->getQuery('filter');
+        if (!empty($filter['type'])) {
+            $categorized = [$filter['type']];
         }
+        $categorized = array_combine($categorized, $categorized);
         $this->set(compact('categorized', 'schema'));
 
         return parent::beforeRender($event);
