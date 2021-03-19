@@ -60,7 +60,7 @@ class RelationsControllerTest extends TestCase
             ->setConstructorArgs(['https://api.example.com'])
             ->getMock();
         $response = [
-            'data' => [['id' => 999,'attributes' => ['name' => 'dummy']]],
+            'data' => [['id' => 999, 'attributes' => ['name' => 'dummy']]],
             'meta' => [],
             'links' => [],
         ];
