@@ -9,6 +9,9 @@
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div>
         <div class="module-index">
+
+          <div class="table-container">
+
             <div class="list-objects">
                 {% if objects %}
                     {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
@@ -21,20 +24,22 @@
                 {% endfor %}
             </div>
 
+          </div>
+
             {% if objects %}
             <div class="bulk-actions has-border-module-{{ currentModule.name }}">
                 <header>
                     <p>{{ __('Actions on selected items') }}</p>
                 </header>
                 <nav>
-                    {% if (objects) and in_array('PATCH', currentModule.hints.allow) %}
+                    {% if (objects) and Perms.canSave() %}
                         {{ Form.create(null, {'id': 'form-restore', 'url': {'_name': 'trash:restore', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
                             {{ Form.unlockField('ids') }}
                             <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                         {{ Form.end()|raw }}
                     {% endif %}
-                    {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
+                    {% if (objects) and Perms.canDelete() %}
                         {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
                             {{ Form.unlockField('ids') }}

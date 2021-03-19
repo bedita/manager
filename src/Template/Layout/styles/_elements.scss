@@ -247,6 +247,11 @@ nav.pagination {
     margin: 1.5rem 0;
 }
 
+// overflow tables
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
 
 // drop and upload
 .drop-area {

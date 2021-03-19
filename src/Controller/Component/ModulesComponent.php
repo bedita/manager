@@ -20,6 +20,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -586,6 +587,94 @@ class ModulesComponent extends Component
             $object['id'] = Hash::get($saved, 'data.id');
 
             return; // not necessary cycling over all attributes
+        }
+    }
+
+    /**
+     * Save related objects.
+     *
+     * @param string $id Object ID
+     * @param string $type Object type
+     * @param array $relatedData Related objects data
+     * @return void
+     */
+    public function saveRelated(string $id, string $type, array $relatedData): void
+    {
+        foreach ($relatedData as $data) {
+            $method = (string)Hash::get($data, 'method');
+            $relation = (string)Hash::get($data, 'relation');
+            $relatedIds = (array)Hash::get($data, 'relatedIds');
+            // Do we need to call `saveObjects`? (probably NOT)
+            $this->saveObjects($relatedIds);
+            if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
+                throw new BadRequestException(__('Bad related data method'));
+            }
+            if ($relation === 'children' && $type === 'folders' && $method === 'removeRelated') {
+                $this->folderChildrenRemove($id, $relatedIds);
+
+                return;
+            }
+            if ($relation === 'children' && $type === 'folders' && in_array($method, ['addRelated', 'replaceRelated'])) {
+                $this->folderChildrenRelated($id, $relatedIds);
+
+                return;
+            }
+            ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $relatedIds);
+        }
+    }
+
+    /**
+     * Remove folder children.
+     * When a child is a subfolder, this use `PATCH /folders/:id/relationships/parent` to set parent to null
+     * When a child is not a subfolder, it's removed as usual by `removeRelated`
+     *
+     * @param string $id The Object ID
+     * @param array $related Related objects
+     * @return void
+     */
+    protected function folderChildrenRemove(string $id, array $related): void
+    {
+        $children = [];
+        // seek for subfolders, remove them changing parent to null
+        foreach ($related as $obj) {
+            if ($obj['type'] === 'folders') {
+                $endpoint = sprintf('/folders/%s/relationships/parent', $obj['id']);
+                ApiClientProvider::getApiClient()->patch($endpoint, null);
+                continue;
+            }
+            $children[] = $obj;
+        }
+        // children, not folders
+        if (!empty($children)) {
+            ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', $children);
+        }
+    }
+
+    /**
+     * Handle special case of `children` relation on `folders`
+     *
+     * @param string $id Object ID.
+     * @param array $relatedIds Related objects as id/type pairs.
+     * @return void
+     */
+    protected function folderChildrenRelated(string $id, array $relatedIds)
+    {
+        $notFolders = [];
+        $apiClient = ApiClientProvider::getApiClient();
+        foreach ($relatedIds as $item) {
+            $relType = Hash::get($item, 'type');
+            $relId = Hash::get($item, 'id');
+            if ($relType !== 'folders') {
+                $notFolders[] = $item;
+                continue;
+            }
+            // invert relation call => use 'parent' relation on children folder
+            $data = compact('id') + ['type' => 'folders'];
+            $apiClient->replaceRelated($relId, 'folders', 'parent', $data);
+        }
+
+        if (!empty($notFolders)) {
+            $apiClient->addRelated($id, 'folders', 'children', $notFolders);
         }
     }
 }
