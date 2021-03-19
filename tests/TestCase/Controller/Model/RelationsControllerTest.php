@@ -59,7 +59,11 @@ class RelationsControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.com'])
             ->getMock();
-        $response = ['data' => [['attributes' => ['name' => 'dummy']]]];
+        $response = [
+            'data' => [['id' => 999,'attributes' => ['name' => 'dummy']]],
+            'meta' => [],
+            'links' => [],
+        ];
         $apiClient->method('get')
             ->willReturn($response);
         $this->Relations->apiClient = $apiClient;
@@ -73,6 +77,19 @@ class RelationsControllerTest extends TestCase
         unset($this->Relations);
 
         parent::tearDown();
+    }
+
+    /**
+     * Test `index` method
+     *
+     * @covers ::index()
+     * @return void
+     */
+    public function testIndex(): void
+    {
+        $this->Relations->index();
+        $actual = $this->Relations->viewVars['resources'];
+        static::assertTrue(is_array($actual));
     }
 
     /**

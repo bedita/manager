@@ -31,6 +31,22 @@ class RelationsController extends ModelBaseController
     /**
      * {@inheritDoc}
      */
+    public function index(): ?Response
+    {
+        parent::index();
+        $resources = $this->viewVars['resources'];
+        foreach ($resources as &$resource) {
+            $resource['left_object_types'] = $this->relatedTypes($resource['id'], 'left');
+            $resource['right_object_types'] = $this->relatedTypes($resource['id'], 'right');
+        }
+        $this->set(compact('resources'));
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function view($id): ?Response
     {
         parent::view($id);
