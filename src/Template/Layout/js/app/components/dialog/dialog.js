@@ -58,7 +58,7 @@ export const Dialog = Vue.extend({
             this.dialogType = '';
             this.isOpen = false;
 
-            if (destroy ?? this.destroyOnHide) {
+            if (destroy != null ? destroy : this.destroyOnHide) {
                 if (this.$el.parentNode) {
                     this.$el.parentNode.removeChild(this.$el);
                 }
