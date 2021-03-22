@@ -34,6 +34,13 @@ abstract class ModelBaseController extends AppController
     protected $resourceType = null;
 
     /**
+     * Single resource view existence flag.
+     *
+     * @var bool
+     */
+    protected $singleView = true;
+
+    /**
      * {@inheritDoc}
      */
     public function initialize(): void
@@ -50,6 +57,7 @@ abstract class ModelBaseController extends AppController
 
     /**
      * Restrict `model` module access to `admin` for now
+     *
      * {@inheritDoc}
      */
     public function beforeFilter(Event $event): ?Response
@@ -137,7 +145,8 @@ abstract class ModelBaseController extends AppController
 
         try {
             if (empty($id)) {
-                $this->apiClient->post($endpoint, json_encode($body));
+                $response = $this->apiClient->post($endpoint, json_encode($body));
+                $id = Hash::get($response, '$data.id');
             } else {
                 $body['data']['id'] = $id;
                 $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
@@ -147,7 +156,16 @@ abstract class ModelBaseController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
+        if (!$this->singleView) {
+            return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
+        }
+
+        return $this->redirect(
+            [
+                '_name' => 'model:view:' . $this->resourceType,
+                'id' => $id,
+            ]
+        );
     }
 
     /**

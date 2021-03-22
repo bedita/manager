@@ -30,6 +30,13 @@ class CategoriesController extends ModelBaseController
     protected $resourceType = 'categories';
 
     /**
+     * Single resource view exists
+     *
+     * @var bool
+     */
+    protected $singleView = false;
+
+    /**
      * {@inheritDoc}
      */
     public function beforeRender(Event $event): ?Response
