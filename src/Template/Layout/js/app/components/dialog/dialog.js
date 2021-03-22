@@ -1,12 +1,11 @@
 import { t } from 'ttag';
+import Vue from 'vue';
 
 /**
  * Component to display a dialog.
- * Find its instance by searching its ref, then set its data or call its methods:
- * e.g. `this.$root.$refs.beditaDialog.confirm('are you sure?', 'yes', () => console.log('confirmed!'))`
  */
-export const BeditaDialog = {
-    template: `<div class="bedita-dialog">
+export const Dialog = Vue.extend({
+    template: `<div class="bedita-dialog" role="dialog">
         <transition name="fade">
             <div class="backdrop" @click="hide()" v-if="isOpen"></div>
         </transition>
@@ -22,7 +21,7 @@ export const BeditaDialog = {
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
                 <input class="mt-1" type="text" v-if="dialogType == 'prompt'" v-model.lazy="inputValue" />
                 <div class="actions mt-2">
-                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue);"><: confirmMessage :></button>
+                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, this);"><: confirmMessage :></button>
                     <button class="button-secondary cancel" @click="hide()" v-if="cancelMessage"><: cancelMessage :></button>
                 </div>
             </div>
@@ -31,6 +30,7 @@ export const BeditaDialog = {
 
     data() {
         return {
+            destroyOnHide: true,
             isOpen: false,
             dialogType: 'warning',
             headerText: '',
@@ -43,35 +43,48 @@ export const BeditaDialog = {
         };
     },
     methods: {
-        show(message, headerText = this.dialogType) {
+        show(message, headerText = this.dialogType, root = document.body) {
             this.headerText = headerText;
             this.message = message;
             this.isOpen = true;
+            if (!this.$el) {
+                this.$mount();
+            }
+            if (this.$el.parentNode !== root) {
+                root.appendChild(this.$el);
+            }
         },
-        hide() {
+        hide(destroy = false) {
             this.dialogType = '';
             this.isOpen = false;
+
+            if (this.destroyOnHide || destroy) {
+                if (this.$el.parentNode) {
+                    this.$el.parentNode.removeChild(this.$el);
+                }
+                this.$destroy();
+            }
         },
-        warning(message) {
+        warning(message, root = document.body) {
             this.dialogType = 'warning';
             this.show(message);
         },
-        error(message) {
+        error(message, root = document.body) {
             this.dialogType = 'error';
             this.show(message);
         },
-        info(message) {
+        info(message, root = document.body) {
             this.dialogType = 'info';
             this.icon = 'icon-info-1';
             this.show(message, '');
         },
-        confirm(message, confirmMessage, confirmCallback, type = 'warning') {
+        confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
             this.dialogType = type;
             this.confirmMessage = confirmMessage;
             this.confirmCallback = confirmCallback;
             this.show(message);
         },
-        prompt(message, defaultValue, confirmCallback) {
+        prompt(message, defaultValue, confirmCallback, root = document.body) {
             this.dialogType = 'prompt';
             this.icon = 'icon-info-1';
             this.inputValue = defaultValue || '';
@@ -79,4 +92,34 @@ export const BeditaDialog = {
             this.show(message, '');
         },
     },
+});
+
+export const warning = (message, root) => {
+    let dialog = new Dialog();
+    dialog.warning(message, root);
+    return dialog;
+};
+
+export const error = (message, root) => {
+    let dialog = new Dialog();
+    dialog.error(message, root);
+    return dialog;
+};
+
+export const info = (message, root) => {
+    let dialog = new Dialog();
+    dialog.info(message, root);
+    return dialog;
+};
+
+export const confirm = (message, confirmMessage, confirmCallback, type, root) => {
+    let dialog = new Dialog();
+    dialog.confirm(message, confirmMessage, confirmCallback, type, root);
+    return dialog;
+};
+
+export const prompt = (message, defaultValue, confirmCallback, root) => {
+    let dialog = new Dialog();
+    dialog.prompt(message, defaultValue, confirmCallback, root);
+    return dialog;
 };

@@ -15,6 +15,7 @@ import { ACCEPTABLE_MEDIA } from 'config/config';
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
+import { error as showError } from 'app/components/dialog/dialog';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
 
@@ -258,9 +259,7 @@ export default {
                     throw error;
                 }
 
-                let dialog = this.$root.$refs.beditaDialog;
-                dialog.cancelMessage = '';
-                dialog.error(t`Error while creating new object.`);
+                showError(t`Error while creating new object.`);
                 console.error(error);
 
                 this.resetForm(event);
