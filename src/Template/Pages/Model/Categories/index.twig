@@ -100,24 +100,26 @@
                         </div>
                     {% endfor %}
                     <div class="narrow"> {{ resource.id }}</div>
+                    {{ Form.hidden('id', {'value': resource.id})|raw }}
+                {{ Form.end()|raw }}
 
                     <div class="buttons-cell narrow">
                         {% set buttonClasses = 'button button-text-white is-width-auto' %}
 
-                        {{ Form.hidden('id', {'value': resource.id})|raw }}
+                        {{ Form.button( __('Save'),
+                            {
+                                'form': 'form-' ~ resource.id,
+                                'title': __('Save') ~ resource.attributes.name,
+                                'class': buttonClasses,
+                            })|raw }}
 
-                        <button
-                            title="{{ __('Save') }} {{ resource.attributes.name }}"
-                            class="{{ buttonClasses }}">{{ __('Save') }}</button>
-
-                        <button
-                            title="{{ __('Remove') }} {{ resource.attributes.name }}"
-                            class="{{ buttonClasses }}"
-                            formaction="{{ Url.build({'_name': 'model:remove:' ~ resource.type, 'id': resource.id}) }}">
-                                {{ __('Remove') }}
-                            </button>
+                        {{ Form.postButton(__('Remove'),
+                            {'_name': 'model:remove:' ~ resource.type, 'id': resource.id},
+                            {
+                                'title': __('Remove') ~ resource.attributes.name,
+                                'class': buttonClasses,
+                            })|raw }}
                     </div>
-                {{ Form.end()|raw }}
 
             {% endfor %}
 
