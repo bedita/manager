@@ -92,6 +92,18 @@ export default {
             let b = this.objects.map(o => o.id);
             return a.concat(b);
         },
+
+        /**
+         * Show filter conditions.
+         *
+         * @returns {boolean}
+         */
+        showFilter() {
+            return this.activeFilter.q ||
+                this.pagination.page > 1 ||
+                this.objects.length >= this.pagination.page_size ||
+                this.addedRelations.length >= this.pagination.page_size;
+        },
     },
 
     /**
