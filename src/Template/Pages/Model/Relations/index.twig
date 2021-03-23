@@ -15,7 +15,7 @@
             <nav class="table-header has-border-black">
                 <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
                 {% for prop in properties %}
-                    <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop) }}</a></div>
+                    <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(prop|humanize) }}</a></div>
                 {% endfor %}
                 <div>{{ __('Left types') }}</div>
                 <div>{{ __('Right types') }}</div>
