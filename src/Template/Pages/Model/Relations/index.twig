@@ -67,13 +67,6 @@
                         <button
                             title="{{ __('Edit') }} {{ resource.attributes.name }}"
                             class="{{ buttonClasses }}">{{ __('Edit') }}</button>
-
-                        {# TODO: uncomment `delete` action once controller part is available #}
-                        {# <div class="buttons">
-                        {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
-                        {% endif %}
-                        </div> #}
                     </div>
 
                 </a>
