@@ -34,7 +34,7 @@
                 <a href="{{ Url.build({'_name': viewAction, 'id': resource.id}) }}"
                     class="{{ rowClasses }}">
 
-                    <div class="narrow"> {{ resource.id }}</div>
+                    <div class="narrow">{{ resource.id }}</div>
 
                     {% for prop in properties %}
                         {% if resource.attributes[prop] is defined %}
@@ -73,7 +73,7 @@
             {% endfor %}
 
         {% else %}
-                {{ __('No items found') }}
+            {{ __('No items found') }}
         {% endif %}
 
     </div>
