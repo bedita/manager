@@ -62,12 +62,17 @@ abstract class ModelBaseController extends AppController
      */
     public function beforeFilter(Event $event): ?Response
     {
+        $res = parent::beforeFilter($event);
+        if ($res !== null) {
+            return $res;
+        }
+
         $roles = $this->Auth->user('roles');
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
 
-        return parent::beforeFilter($event);
+        return null;
     }
 
     /**
