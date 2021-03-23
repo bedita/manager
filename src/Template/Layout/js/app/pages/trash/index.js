@@ -8,6 +8,7 @@
  */
 
 import ModulesIndex from 'app/pages/modules/index';
+import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 export default {
@@ -31,15 +32,17 @@ export default {
          * @return {void}
          */
         deleteItem() {
-            if (this.selectedRows.length < 1) {
+            let number = this.selectedRows.length;
+            if (number < 1) {
                 return;
             }
 
-            let number = this.selectedRows.length;
-            let message = t`Do you confirm the deletion of ${number} item from the trash?`;
             let form = document.getElementById('form-delete');
-            let dialog = this.$root.$refs.beditaDialog;
-            dialog.confirm(message, t`yes, proceed`, form.submit.bind(form));
+            confirm(
+                t`Do you confirm the deletion of ${number} item from the trash?`,
+                t`yes, proceed`,
+                form.submit.bind(form)
+            );
         },
     }
 }

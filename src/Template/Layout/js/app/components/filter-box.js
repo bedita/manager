@@ -18,6 +18,7 @@
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
 import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
 
 export default {
     components: {
@@ -201,9 +202,7 @@ export default {
          * Show prompt dialog otherwise.
          */
         searchFieldDialog() {
-            const dialog = this.$root.$refs.beditaDialog;
-            dialog.cancelMessage = '';
-            dialog.warning(t`Search text too short. Minimum length is 3. Retry`);
+            warning(t`Search text too short. Minimum length is 3. Retry`);
         },
 
         onOtherFiltersChange() {

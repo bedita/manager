@@ -8,7 +8,7 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { BeditaDialog } from './components/bedita-dialog/bedita-dialog';
+import { confirm, prompt } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -44,7 +44,6 @@ const _vueInstance = new Vue({
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
-        BeditaDialog,
     },
 
     data() {
@@ -154,22 +153,19 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         clone() {
-            const title = document.getElementById('title').value || t('Untitled');
-            const msg = t`Please insert a new title on "${title}" clone`;
-            const defaultTitle = title + '-' + t`copy`;
-            let dialog = this.$root.$refs.beditaDialog;
+            let title = document.getElementById('title').value || t('Untitled');
+            let msg = t`Please insert a new title on "${title}" clone`;
+            let defaultTitle = title + '-' + t`copy`;
 
-            const confirmCallback = (cloneTitle = defaultTitle) => {
-                const query = `?title=${cloneTitle}`;
-                const origin = window.location.origin;
-                const path = window.location.pathname.replace('/view/', '/clone/');
-                const url = `${origin}${path}${query}`;
-                const newTab = window.open(url, '_blank');
+            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
+                let query = `?title=${cloneTitle || defaultTitle}`;
+                let origin = window.location.origin;
+                let path = window.location.pathname.replace('/view/', '/clone/');
+                let url = `${origin}${path}${query}`;
+                let newTab = window.open(url, '_blank');
                 newTab.focus();
-                dialog.hide();
-            };
-
-            dialog.prompt(msg, defaultTitle, confirmCallback);
+                dialog.hide(true);
+            });
         },
 
         /**
@@ -488,8 +484,7 @@ const _vueInstance = new Vue({
                     return form.submit();
                 }
 
-                let dialog = this.$root.$refs.beditaDialog;
-                dialog.confirm(msg, t`yes, proceed`, form.submit.bind(form));
+                confirm(msg, t`yes, proceed`, form.submit.bind(form));
             });
 
             /**

@@ -1,10 +1,9 @@
 {
     "parserOptions": {
-        "ecmaVersion": 2017,
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "globals": {
-        "vue": true,
-        "ClassicEditor": true
+        "vue": true
     }
 }
