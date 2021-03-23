@@ -609,7 +609,12 @@ class ModulesComponent extends Component
             if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
                 throw new BadRequestException(__('Bad related data method'));
             }
-            if ($relation === 'children' && $type === 'folders') {
+            if ($relation === 'children' && $type === 'folders' && $method === 'removeRelated') {
+                $this->folderChildrenRemove($id, $relatedIds);
+
+                return;
+            }
+            if ($relation === 'children' && $type === 'folders' && in_array($method, ['addRelated', 'replaceRelated'])) {
                 $this->folderChildrenRelated($id, $relatedIds);
 
                 return;
@@ -619,7 +624,34 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Handle special case of `children` realation on `folders`
+     * Remove folder children.
+     * When a child is a subfolder, this use `PATCH /folders/:id/relationships/parent` to set parent to null
+     * When a child is not a subfolder, it's removed as usual by `removeRelated`
+     *
+     * @param string $id The Object ID
+     * @param array $related Related objects
+     * @return void
+     */
+    protected function folderChildrenRemove(string $id, array $related): void
+    {
+        $children = [];
+        // seek for subfolders, remove them changing parent to null
+        foreach ($related as $obj) {
+            if ($obj['type'] === 'folders') {
+                $endpoint = sprintf('/folders/%s/relationships/parent', $obj['id']);
+                ApiClientProvider::getApiClient()->patch($endpoint, null);
+                continue;
+            }
+            $children[] = $obj;
+        }
+        // children, not folders
+        if (!empty($children)) {
+            ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', $children);
+        }
+    }
+
+    /**
+     * Handle special case of `children` relation on `folders`
      *
      * @param string $id Object ID.
      * @param array $relatedIds Related objects as id/type pairs.

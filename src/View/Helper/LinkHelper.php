@@ -105,7 +105,7 @@ class LinkHelper extends Helper
      * 'sort' value
      *
      * @param string $field Field to sort.
-     * @param string $sort Current sort value
+     * @param string $currentSort Current sort value
      * @return string
      */
     protected function sortValue(string $field, string $currentSort): string
