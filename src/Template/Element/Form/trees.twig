@@ -26,6 +26,7 @@
             {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
             {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}
             {{ Form.unlockField('_changedParents')}}
+            {{ Form.unlockField('_changedCanonical')}}
         </div>
     </section>
 </property-view>

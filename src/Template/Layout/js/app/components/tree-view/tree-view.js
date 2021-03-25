@@ -53,19 +53,6 @@ export default {
                     />
                     <: node.attributes.title :>
                 </label>
-                <div
-                    v-if="relationName && isParent"
-                    class="tree-params"
-                >
-                    <label>
-                        <input
-                            type="checkbox"
-                            :checked="isMenu"
-                            @change="toggleFolderRelationMenu"
-                        />
-                        <: t('Menu') :>
-                    </label>
-                </div>
                 <button
                     v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
                     :class="{
@@ -76,6 +63,37 @@ export default {
                     @click="toggle"
                 ></button>
                 <a :href="url"><: t('edit') :></a>
+                <div class="tree-params">
+                    <div
+                        v-if="relationName && isParent"
+                        class="tree-param"
+                    >
+                        <input
+                            :id="'tree-menu-' + node.id"
+                            type="checkbox"
+                            :checked="isMenu"
+                            @change="toggleFolderRelationMenu"
+                        />
+                        <label :for="'tree-menu-' + node.id">
+                            <: t('Menu') :>
+                        </label>
+                    </div>
+                    <div
+                        v-if="relationName && isParent && multipleChoice"
+                        class="tree-param"
+                    >
+                        <input
+                            :id="'tree-canonical-' + node.id"
+                            name="_changedCanonical"
+                            type="radio"
+                            :checked="isCanonical"
+                            @change="toggleFolderRelationCanonical"
+                        />
+                        <label :for="'tree-canonical-' + node.id">
+                            <: t('Canonical') :>
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="node-children" v-show="isOpen || !parent">
                 <tree-view
@@ -154,7 +172,7 @@ export default {
          *
          * @return {boolean}
          */
-        isMenu() {
+         isMenu() {
             if (!this.isParent) {
                 return false;
             }
@@ -162,6 +180,21 @@ export default {
                 return true;
             }
             return !!this.node.meta.relation.menu;
+        },
+
+         /**
+         * Check if this is the primary position.
+         *
+         * @return {boolean}
+         */
+        isCanonical() {
+            if (!this.isParent) {
+                return false;
+            }
+            if (!this.node.meta.relation) {
+                return false;
+            }
+            return !!this.node.meta.relation.canonical;
         },
 
         /**
@@ -187,12 +220,17 @@ export default {
             if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
                 menu = !!this.node.meta.relation.menu;
             }
+            let canonical = false;
+            if (this.node.meta.relation && ('canonical' in this.node.meta.relation)) {
+                canonical = !!this.node.meta.relation.canonical;
+            }
             return JSON.stringify({
                 id: this.node.id,
                 type: this.node.type,
                 meta: {
                     relation: {
                         menu,
+                        canonical,
                     },
                 },
             });
@@ -412,6 +450,21 @@ export default {
 
             let relation = this.node.meta.relation || {};
             relation.menu = event.target.checked;
+        },
+
+        /**
+         * Toggle canonical param.
+         *
+         * @param {Event} event The input change event.
+         * @return {void}
+         */
+         toggleFolderRelationCanonical(event) {
+            if (this.isParent) {
+                document.getElementById('changedParents').value = 1;
+            }
+
+            let relation = this.node.meta.relation || {};
+            relation.canonical = event.target.checked;
         },
     },
 }
