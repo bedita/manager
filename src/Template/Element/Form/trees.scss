@@ -10,6 +10,7 @@
     .node-element {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
 
         &[data-status='draft'],
@@ -48,14 +49,48 @@
         }
 
         .tree-params {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            padding-left: 1.25em;
+        }
+
+        .tree-param {
+            position: relative;
+            margin: $gutter / 4 $gutter / 2 $gutter / 4 0;
+
+            input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 0;
+                opacity: 0;
+                appearance: none;
+
+                &:checked + label {
+                    color: $white;
+                    background: var(--color-module, #000);
+                    border-color: transparent;
+                }
+            }
+
             label {
                 display: flex !important;
                 align-items: center;
+                margin: 0;
+                padding: 0.25em 0.5em;
+                color: $gray-500;
+                line-height: 1 !important;
+                border-radius: 2em;
+                border: solid 1px currentColor;
+                cursor: pointer;
             }
         }
 
         > button {
-            margin: 0 0 0 $gutter * .75;
+            margin: 0;
             min-width: $gutter * 2;
             color: currentColor;
             background: transparent;
