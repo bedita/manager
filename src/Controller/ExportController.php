@@ -96,7 +96,7 @@ class ExportController extends AppController
             return $this->rowsAll($objectType);
         }
 
-        $response = $this->apiClient->get($this->apiUrl(), ['filter' => ['id' => $ids]]);
+        $response = $this->apiClient->get($this->apiPath(), ['filter' => ['id' => $ids]]);
         $fields = $this->getFieldNames($response);
         $data = [$fields];
         $this->fillDataFromResponse($data, $response, $fields);
@@ -105,11 +105,11 @@ class ExportController extends AppController
     }
 
     /**
-     * Get API Url
+     * Get API path.
      *
      * @return string
      */
-    protected function apiUrl(): string
+    protected function apiPath(): string
     {
         return sprintf('/%s', $this->request->getData('objectType'));
     }
@@ -128,7 +128,7 @@ class ExportController extends AppController
         $total = 0;
         $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
-            $response = (array)$this->apiClient->get($this->apiUrl(), $query + compact('page'));
+            $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
             $page++;
