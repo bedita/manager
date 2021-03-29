@@ -50,12 +50,12 @@ class ExportControllerTest extends TestCase
             'gustavo' => [
                 'id' => 999,
                 'attributes' => ['name' => 'gustavo', 'skills' => ['smart', 'rich', 'beautiful']],
-                'meta' => ['category' => 'developer'],
+                'meta' => ['category' => 'developer', 'extra' => ['prop' => 2]],
             ],
             'johndoe' => [
                 'id' => 888,
                 'attributes' => ['name' => 'john doe', 'skills' => ['humble', 'poor', 'ugly']],
-                'meta' => ['category' => 'poet'],
+                'meta' => ['category' => 'poet', 'extra' => ['prop' => null]],
             ],
         ],
         'expected' => [
@@ -64,12 +64,14 @@ class ExportControllerTest extends TestCase
                 'name' => 'gustavo',
                 'skills' => '["smart","rich","beautiful"]',
                 'category' => 'developer',
+                'prop' => 2,
             ],
             'johndoe' => [
                 'id' => 888,
                 'name' => 'john doe',
                 'skills' => '["humble","poor","ugly"]',
                 'category' => 'poet',
+                'prop' => null,
             ],
         ],
     ];
@@ -135,9 +137,9 @@ class ExportControllerTest extends TestCase
         $this->Export->apiClient = $apiClient;
 
         // expected csv.
-        $fields = '"id","name","skills","category"';
-        $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer"';
-        $row2 = '"888","john doe","[""humble"",""poor"",""ugly""]","poet"';
+        $fields = '"id","name","skills","category","prop"';
+        $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer","2"';
+        $row2 = '"888","john doe","[""humble"",""poor"",""ugly""]","poet",""';
         $expected = sprintf('%s%s%s%s%s%s', $fields, "\n", $row1, "\n", $row2, "\n");
 
         // call export.
@@ -157,7 +159,7 @@ class ExportControllerTest extends TestCase
         return [
             'documents, all' => [
                 [
-                    ['id', 'name', 'skills', 'category'],
+                    ['id', 'name', 'skills', 'category', 'prop'],
                     $this->testdata['expected']['gustavo'],
                     $this->testdata['expected']['johndoe'],
                 ],
@@ -179,7 +181,7 @@ class ExportControllerTest extends TestCase
             ],
             'documents with ids' => [
                 [
-                    ['id', 'name', 'skills', 'category'],
+                    ['id', 'name', 'skills', 'category', 'prop'],
                     $this->testdata['expected']['gustavo'],
                 ],
                 [
@@ -200,7 +202,7 @@ class ExportControllerTest extends TestCase
             ],
             'query' => [
                 [
-                    ['id', 'name', 'skills', 'category'],
+                    ['id', 'name', 'skills', 'category', 'prop'],
                     $this->testdata['expected']['gustavo'],
                 ],
                 [
@@ -289,7 +291,7 @@ class ExportControllerTest extends TestCase
             ],
             'some data' => [
                 [
-                    'fields' => ['id', 'name', 'skills', 'category'],
+                    'fields' => ['id', 'name', 'skills', 'category', 'prop'],
                     'response' => [
                         'data' => [
                             0 => $this->testdata['input']['gustavo'],
@@ -321,7 +323,7 @@ class ExportControllerTest extends TestCase
         $method->setAccessible(true);
         extract($input); // => $fields, $response
         $data = [];
-        $actual = $method->invokeArgs($this->Export, [&$data, $response, $fields]);
+        $method->invokeArgs($this->Export, [&$data, $response, $fields]);
         static::assertEquals($expected, $data);
     }
 
@@ -344,6 +346,7 @@ class ExportControllerTest extends TestCase
                     'name',
                     'skills',
                     'category',
+                    'prop',
                 ], // expected
             ],
             'full data by custom key' => [
@@ -417,6 +420,7 @@ class ExportControllerTest extends TestCase
                         'name',
                         'category',
                         'skills',
+                        'prop',
                     ],
                 ], // input
                 [
@@ -424,6 +428,7 @@ class ExportControllerTest extends TestCase
                     'name' => 'gustavo',
                     'category' => 'developer',
                     'skills' => '["smart","rich","beautiful"]',
+                    'prop' => 2,
                 ], // expected
             ],
         ];
