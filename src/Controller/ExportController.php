@@ -96,10 +96,10 @@ class ExportController extends AppController
             return $this->rowsAll($objectType);
         }
 
-        $data = [];
         $response = $this->apiClient->get($this->apiUrl(), ['filter' => ['id' => $ids]]);
-        $fields = $this->fillDataFromResponse($data, $response);
-        array_unshift($data, $fields);
+        $fields = $this->getFieldNames($response);
+        $data = [$fields];
+        $this->fillDataFromResponse($data, $response, $fields);
 
         return $data;
     }
@@ -122,7 +122,7 @@ class ExportController extends AppController
      */
     protected function rowsAll(string $objectType): array
     {
-        $data = [];
+        $data = $fields = [];
         $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
         $pageCount = $page = 1;
         $total = 0;
@@ -133,9 +133,13 @@ class ExportController extends AppController
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
             $page++;
 
-            $fields = $this->fillDataFromResponse($data, $response);
+            if (empty($fields)) {
+                $fields = $this->getFieldNames($response);
+                $data = [$fields];
+            }
+
+            $this->fillDataFromResponse($data, $response, $fields);
         }
-        array_unshift($data, $fields);
 
         return $data;
     }
@@ -170,32 +174,28 @@ class ExportController extends AppController
      *
      * @param array $data The array of data
      * @param array $response The response to use as source for data
-     * @return array The fields representing each data item
+     * @param array $fields Field names array
+     * @return void
      */
-    protected function fillDataFromResponse(array &$data, array $response): array
+    protected function fillDataFromResponse(array &$data, array $response, array $fields): void
     {
         if (empty($response['data'])) {
-            return [];
+            return;
         }
-
-        // get fields for response 'attributes' and 'meta'
-        $fields = $this->getFields($response);
 
         // fill row data from response data
         foreach ($response['data'] as $val) {
             $data[] = $this->rowFields($val, $fields);
         }
-
-        return $fields;
     }
 
     /**
-     * Get fields array using data first element attributes
+     * Get field names array using data first element attributes
      *
      * @param array $response The response from which extract fields
      * @return array
      */
-    protected function getFields($response): array
+    protected function getFieldNames($response): array
     {
         $fields = (array)Hash::get($response, 'data.0.attributes');
         $meta = (array)Hash::get($response, 'data.0.meta');
