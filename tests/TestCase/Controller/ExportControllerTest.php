@@ -16,7 +16,6 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\ExportController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -119,7 +118,7 @@ class ExportControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        $apiClient->method('getObjects')
+        $apiClient->method('get')
             ->willReturn([
                 'data' => [
                     0 => $this->testdata['input']['gustavo'],
@@ -158,7 +157,7 @@ class ExportControllerTest extends TestCase
         return [
             'documents, all' => [
                 [
-                    ['id', 'name', 'skills', 'category' => 'category'],
+                    ['id', 'name', 'skills', 'category'],
                     $this->testdata['expected']['gustavo'],
                     $this->testdata['expected']['johndoe'],
                 ],
@@ -180,7 +179,7 @@ class ExportControllerTest extends TestCase
             ],
             'documents with ids' => [
                 [
-                    ['id', 'name', 'skills', 'category' => 'category'],
+                    ['id', 'name', 'skills', 'category'],
                     $this->testdata['expected']['gustavo'],
                 ],
                 [
@@ -201,7 +200,7 @@ class ExportControllerTest extends TestCase
             ],
             'query' => [
                 [
-                    ['id', 'name', 'skills', 'category' => 'category'],
+                    ['id', 'name', 'skills', 'category'],
                     $this->testdata['expected']['gustavo'],
                 ],
                 [
@@ -234,8 +233,10 @@ class ExportControllerTest extends TestCase
      * @param array $response API response.
      * @param array $post Post data.
      * @return void
+     *
      * @covers ::rows()
      * @covers ::rowsAll()
+     * @covers ::apiPath()
      * @covers ::prepareQuery()
      * @dataProvider rowsProvider()
      */
@@ -245,7 +246,7 @@ class ExportControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        $apiClient->method('getObjects')
+        $apiClient->method('get')
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
 
@@ -279,19 +280,16 @@ class ExportControllerTest extends TestCase
         return [
             'empty data' => [
                 [
-                    'data' => [],
+                    'fields' => [],
                     'response' => [
                         'data' => [],
                     ],
                 ], // input
-                [
-                    'data' => [],
-                    'fields' => [],
-                ], // expected
+                [], // expected
             ],
             'some data' => [
                 [
-                    'data' => [],
+                    'fields' => ['id', 'name', 'skills', 'category'],
                     'response' => [
                         'data' => [
                             0 => $this->testdata['input']['gustavo'],
@@ -300,16 +298,8 @@ class ExportControllerTest extends TestCase
                     ],
                 ], // input
                 [
-                    'data' => [
-                        0 => $this->testdata['expected']['gustavo'],
-                        1 => $this->testdata['expected']['johndoe'],
-                    ],
-                    'fields' => [
-                        'id',
-                        'name',
-                        'skills',
-                        'category' => 'category',
-                    ],
+                    0 => $this->testdata['expected']['gustavo'],
+                    1 => $this->testdata['expected']['johndoe'],
                 ], // expected
             ],
         ];
@@ -329,48 +319,46 @@ class ExportControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('fillDataFromResponse');
         $method->setAccessible(true);
-        extract($input); // => $data, $response
-        $actual = $method->invokeArgs($this->Export, [ &$data, $response ]);
-        static::assertEquals($expected['fields'], $actual);
-        static::assertEquals($expected['data'], $data);
+        extract($input); // => $fields, $response
+        $data = [];
+        $actual = $method->invokeArgs($this->Export, [&$data, $response, $fields]);
+        static::assertEquals($expected, $data);
     }
 
     /**
-     * Data provider for `testGetFields` test case.
+     * Data provider for `testGetFieldNames` test case.
      *
      * @return array
      */
-    public function getFieldsProvider(): array
+    public function getFieldNamesProvider(): array
     {
         return [
             'full data, default key' => [
                 [
-                    'response' => [
-                        'data' => [
-                            0 => $this->testdata['input']['gustavo'],
-                        ],
+                    'data' => [
+                        0 => $this->testdata['input']['gustavo'],
                     ],
                 ], // input
                 [
+                    'id',
                     'name',
                     'skills',
+                    'category',
                 ], // expected
             ],
             'full data by custom key' => [
                 [
-                    'response' => [
-                        'data' => [
-                            0 => [
-                                'user' => [
-                                    'name' => 'gustavo',
-                                    'category' => 'developer',
-                                ],
+                    'data' => [
+                        0 => [
+                            'attributes' => [
+                                'name' => 'gustavo',
+                                'category' => 'developer',
                             ],
                         ],
                     ],
-                    'key' => 'user',
                 ], // input
                 [
+                    'id',
                     'name',
                     'category',
                 ], // expected
@@ -379,36 +367,33 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * Test `getFields` method.
+     * Test `getFieldNames` method.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::getFields()
-     * @dataProvider getFieldsProvider()
+     * @covers ::getFieldNames()
+     * @dataProvider getFieldNamesProvider()
      */
-    public function testGetFields($input, $expected): void
+    public function testGetFields($response, $expected): void
     {
         $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('getFields');
+        $method = $reflectionClass->getMethod('getFieldNames');
         $method->setAccessible(true);
-        extract($input); // => $response, $key
-        $parameters = (empty($key)) ? [ $response ] : [ $response, $key ];
-        $actual = $method->invokeArgs($this->Export, $parameters);
+        $actual = $method->invokeArgs($this->Export, [$response]);
         static::assertEquals($expected, $actual);
     }
 
     /**
-     * Data provider for `testFillRowFields` test case.
+     * Data provider for `testRowFields` test case.
      *
      * @return array
      */
-    public function fillRowFieldsProvider(): array
+    public function rowFieldsProvider(): array
     {
         return [
             'empty data' => [
                 [
-                    'row' => [],
                     'data' => [],
                     'fields' => [
                         'id',
@@ -426,7 +411,6 @@ class ExportControllerTest extends TestCase
             ],
             'full data' => [
                 [
-                    'row' => [],
                     'data' => $this->testdata['input']['gustavo'],
                     'fields' => [
                         'id',
@@ -446,21 +430,21 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * Test `fillRowFields` method.
+     * Test `rowFields` method.
      *
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::fillRowFields()
-     * @dataProvider fillRowFieldsProvider()
+     * @covers ::rowFields()
+     * @dataProvider rowFieldsProvider()
      */
-    public function testFillRowFields($input, $expected): void
+    public function testRowFields($input, $expected): void
     {
         $reflectionClass = new \ReflectionClass($this->Export);
-        $method = $reflectionClass->getMethod('fillRowFields');
+        $method = $reflectionClass->getMethod('rowFields');
         $method->setAccessible(true);
-        extract($input); // => $row, $data, $field
-        $method->invokeArgs($this->Export, [&$row, $data, $fields]);
+        extract($input); // => $data, $field
+        $row = $method->invokeArgs($this->Export, [&$data, $fields]);
         static::assertEquals($expected, $row);
     }
 
