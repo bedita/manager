@@ -18,6 +18,7 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\ExportController} Test Case
@@ -103,6 +104,7 @@ class ExportControllerTest extends TestCase
      * test 'export'.
      *
      * @covers ::export()
+     * @covers ::getFileName()
      *
      * @return void
      */
@@ -147,6 +149,11 @@ class ExportControllerTest extends TestCase
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
         static::assertEquals($expected, $content);
+        // check 'Content-Disposition' header containing filename
+        $download = $response->getHeader('Content-Disposition');
+        $download = (string)Hash::get($download, '0');
+        static::assertEquals('attachment; filename="users_', substr($download, 0, 28));
+        static::assertEquals('.csv"', substr($download, strlen($download) - 5));
     }
 
     /**

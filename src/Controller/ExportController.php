@@ -70,7 +70,7 @@ class ExportController extends AppController
         $rows = $this->rows($data['objectType'], $ids);
 
         // create spreadsheet and return as download
-        $filename = sprintf('%s_%s.%s', $data['objectType'], date('Ymd-His'), $format);
+        $filename = $this->getFileName($data['objectType'], $format);
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
@@ -115,6 +115,18 @@ class ExportController extends AppController
     }
 
     /**
+     * Get exported file name.
+     *
+     * @param string $type Object or resource type.
+     * @param string $format The format.
+     * @return string
+     */
+    protected function getFileName(string $type, string $format): string
+    {
+        return sprintf('%s_%s.%s', $type, date('Ymd-His'), $format);
+    }
+
+    /**
      * Load all data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
@@ -131,14 +143,14 @@ class ExportController extends AppController
             $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
-            $page++;
 
-            if (empty($fields)) {
+            if ($page === 1) {
                 $fields = $this->getFieldNames($response);
                 $data = [$fields];
             }
 
             $this->fillDataFromResponse($data, $response, $fields);
+            $page++;
         }
 
         return $data;
