@@ -54,7 +54,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
-            listView: false,
+            listView: true,
         }
     },
 

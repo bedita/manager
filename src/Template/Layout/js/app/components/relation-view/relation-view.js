@@ -55,7 +55,7 @@ export default {
         },
         listView: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         preCount: {
             type: Number,
