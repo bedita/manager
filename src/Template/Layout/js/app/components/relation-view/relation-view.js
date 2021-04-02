@@ -53,10 +53,6 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
-            type: Boolean,
-            default: true,
-        },
         preCount: {
             type: Number,
             default: -1,
@@ -86,6 +82,9 @@ export default {
     },
 
     computed: {
+        listView() {
+            return this.relationName != 'poster' && this.relationName != 'attach';
+        },
         // array of ids of objects in view
         alreadyInView() {
             let a = this.addedRelations.map(o => o.id);
