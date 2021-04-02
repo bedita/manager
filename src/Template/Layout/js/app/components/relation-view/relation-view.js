@@ -45,6 +45,10 @@ export default {
             type: Object,
             required: false,
         },
+        acceptedLength: {
+            type: String,
+            default: '0',
+        },
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -52,6 +56,10 @@ export default {
         configPaginateSizes: {
             type: String,
             default: '[]',
+        },
+        listView: {
+            type: Boolean,
+            default: false,
         },
         preCount: {
             type: Number,
@@ -78,13 +86,12 @@ export default {
             activeFilter: {},           // current active filter for objects list
 
             positions: {},              // used in children relations
+
+            dataList: parseInt(this.acceptedLength) == 0,
         }
     },
 
     computed: {
-        listView() {
-            return this.relationName != 'poster' && this.relationName != 'attach';
-        },
         // array of ids of objects in view
         alreadyInView() {
             let a = this.addedRelations.map(o => o.id);
@@ -185,6 +192,10 @@ export default {
         loading(value) {
             this.$emit('loading', value);
         },
+
+        listView(value) {
+            this.dataList = value;
+        }
     },
 
     methods: {
