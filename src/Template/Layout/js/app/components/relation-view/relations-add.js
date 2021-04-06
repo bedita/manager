@@ -15,6 +15,7 @@ import { ACCEPTABLE_MEDIA } from 'config/config';
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
+import { error as showError } from 'app/components/dialog/dialog';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
 
@@ -258,9 +259,7 @@ export default {
                     throw error;
                 }
 
-                let dialog = this.$root.$refs.beditaDialog;
-                dialog.cancelMessage = '';
-                dialog.error(t`Error while creating new object.`);
+                showError(t`Error while creating new object.`);
                 console.error(error);
 
                 this.resetForm(event);
@@ -375,10 +374,7 @@ export default {
          *
          * @return {Promise} repsonse from server
          */
-        async loadObjects(filter) {
-            if (!filter) {
-                filter = {};
-            }
+        async loadObjects(filter = {}) {
             filter.sort = '-created';
             this.objects = [];
             this.loading = true;
@@ -397,7 +393,8 @@ export default {
          *
          * @return {Promise} The response from server with new data
          */
-        async toPage(page, filter) {
+        async toPage(page, filter = {}) {
+            filter.sort = '-created';
             this.objects = [];
             this.loading = true;
             let response = await PaginatedContentMixin.methods.toPage.call(this, page, filter);

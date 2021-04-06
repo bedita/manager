@@ -1,3 +1,4 @@
+import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 /**
@@ -139,9 +140,8 @@ export default {
 
             let number = this.selectedRows.length;
             let message = t`Moving ${number} item(s) to trash. Are you sure?`;
-            let dialog = this.$root.$refs.beditaDialog;
             let form = document.getElementById('form-delete');
-            dialog.confirm(message, t`yes, proceed`, form.submit.bind(form));
+            confirm(message, t`yes, proceed`, form.submit.bind(form));
         },
 
         /**

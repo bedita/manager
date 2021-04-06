@@ -18,6 +18,7 @@
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
 import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
 
 export default {
     components: {
@@ -190,17 +191,9 @@ export default {
          * Return false otherwise.
          */
         searchFieldValid() {
-            const search = document.getElementById('search');
-            if (!search) {
-                return true;
-            }
-            search.value = search.value.trim();
-            if (!this.queryFilter) {
-                this.queryFilter = {};
-            }
-            this.queryFilter.q = search.value;
+            this.queryFilter.q = this.queryFilter.q.trim();
 
-            return (search.value.length === 0 || search.value.length > 2);
+            return (this.queryFilter.q.length === 0 || this.queryFilter.q.length > 2);
         },
 
         /**
@@ -209,9 +202,7 @@ export default {
          * Show prompt dialog otherwise.
          */
         searchFieldDialog() {
-            const dialog = this.$root.$refs.beditaDialog;
-            dialog.cancelMessage = '';
-            dialog.warning(t`Search text too short. Minimum length is 3. Retry`);
+            warning(t`Search text too short. Minimum length is 3. Retry`);
         },
 
         onOtherFiltersChange() {

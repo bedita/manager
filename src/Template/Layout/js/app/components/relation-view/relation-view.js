@@ -96,6 +96,18 @@ export default {
             let b = this.objects.map(o => o.id);
             return a.concat(b);
         },
+
+        /**
+         * Show filter conditions.
+         *
+         * @returns {boolean}
+         */
+        showFilter() {
+            return this.activeFilter.q ||
+                this.pagination.page > 1 ||
+                this.objects.length >= this.pagination.page_size ||
+                this.addedRelations.length >= this.pagination.page_size;
+        },
     },
 
     /**
@@ -724,6 +736,17 @@ export default {
          */
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
+        },
+
+        /**
+         * Object type available to view.
+         *
+         * @param {String} type
+         *
+         * @return {Boolean} true if module is available
+         */
+        moduleAvailable(type) {
+            return (BEDITA.modules.indexOf(type) !== -1);
         },
     }
 

@@ -146,7 +146,7 @@
                 v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
 
         {% else %}
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">{{ __('Edit') }}</a>
             {% if not readonly %}
                 <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                     v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">

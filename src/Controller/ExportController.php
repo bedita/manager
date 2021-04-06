@@ -31,6 +31,13 @@ class ExportController extends AppController
     const DEFAULT_EXPORT_LIMIT = 10000;
 
     /**
+     * Default page size
+     *
+     * @var int
+     */
+    const DEFAULT_PAGE_SIZE = 500;
+
+    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
@@ -63,7 +70,7 @@ class ExportController extends AppController
         $rows = $this->rows($data['objectType'], $ids);
 
         // create spreadsheet and return as download
-        $filename = sprintf('%s_%s.%s', $data['objectType'], date('Ymd-His'), $format);
+        $filename = $this->getFileName($data['objectType'], $format);
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
@@ -89,12 +96,34 @@ class ExportController extends AppController
             return $this->rowsAll($objectType);
         }
 
-        $data = [];
-        $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
-        $fields = $this->fillDataFromResponse($data, $response);
-        array_unshift($data, $fields);
+        $response = $this->apiClient->get($this->apiPath(), ['filter' => ['id' => $ids]]);
+        $fields = $this->getFieldNames($response);
+        $data = [$fields];
+        $this->fillDataFromResponse($data, $response, $fields);
 
         return $data;
+    }
+
+    /**
+     * Get API path.
+     *
+     * @return string
+     */
+    protected function apiPath(): string
+    {
+        return sprintf('/%s', $this->request->getData('objectType'));
+    }
+
+    /**
+     * Get exported file name.
+     *
+     * @param string $type Object or resource type.
+     * @param string $format The format.
+     * @return string
+     */
+    protected function getFileName(string $type, string $format): string
+    {
+        return sprintf('%s_%s.%s', $type, date('Ymd-His'), $format);
     }
 
     /**
@@ -105,20 +134,24 @@ class ExportController extends AppController
      */
     protected function rowsAll(string $objectType): array
     {
-        $data = [];
+        $data = $fields = [];
         $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
         $pageCount = $page = 1;
         $total = 0;
-        $query = ['page_size' => 100] + $this->prepareQuery();
+        $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
-            $response = (array)$this->apiClient->getObjects($objectType, $query + compact('page'));
+            $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
-            $page++;
 
-            $fields = $this->fillDataFromResponse($data, $response);
+            if ($page === 1) {
+                $fields = $this->getFieldNames($response);
+                $data = [$fields];
+            }
+
+            $this->fillDataFromResponse($data, $response, $fields);
+            $page++;
         }
-        array_unshift($data, $fields);
 
         return $data;
     }
@@ -153,62 +186,48 @@ class ExportController extends AppController
      *
      * @param array $data The array of data
      * @param array $response The response to use as source for data
-     * @return array The fields representing each data item
-     */
-    private function fillDataFromResponse(array &$data, array $response): array
-    {
-        if (empty($response['data'])) {
-            return [];
-        }
-
-        // get fields for response 'attributes' and 'meta'
-        $fields = $this->getFields($response);
-        array_unshift($fields, 'id');
-        $metaFields = $this->getFields($response, 'meta');
-
-        // fill row data from response data
-        foreach ($response['data'] as $key => $val) {
-            $row = [];
-
-            // fill row fields
-            $this->fillRowFields($row, $val, $fields);
-
-            // fill row data for meta
-            $this->fillRowFields($row, $val, $metaFields);
-
-            $data[] = $row;
-        }
-        foreach ($metaFields as $f) {
-            $fields[$f] = $f;
-        }
-
-        return $fields;
-    }
-
-    /**
-     * Get fields array using data first element attributes
-     *
-     * @param array $response The response from which extract fields
-     * @param string $key The key
-     * @return array
-     */
-    private function getFields($response, $key = 'attributes'): array
-    {
-        $data = (array)Hash::get($response, sprintf('data.0.%s', $key), []);
-
-        return array_keys($data);
-    }
-
-    /**
-     * Fill row data per fields
-     *
-     * @param array $row The row to be filled with data
-     * @param mixed $data The data
-     * @param array $fields The fields
+     * @param array $fields Field names array
      * @return void
      */
-    private function fillRowFields(&$row, $data, $fields): void
+    protected function fillDataFromResponse(array &$data, array $response, array $fields): void
     {
+        if (empty($response['data'])) {
+            return;
+        }
+
+        // fill row data from response data
+        foreach ($response['data'] as $val) {
+            $data[] = $this->rowFields($val, $fields);
+        }
+    }
+
+    /**
+     * Get field names array using data first element attributes
+     *
+     * @param array $response The response from which extract fields
+     * @return array
+     */
+    protected function getFieldNames($response): array
+    {
+        $fields = (array)Hash::get($response, 'data.0.attributes');
+        $meta = (array)Hash::get($response, 'data.0.meta');
+        unset($meta['extra']);
+        $fields = array_merge(['id' => ''], $fields, $meta);
+        $fields = array_merge($fields, (array)Hash::get($response, 'data.0.meta.extra'));
+
+        return array_keys($fields);
+    }
+
+    /**
+     * Get row data per fields
+     *
+     * @param array $data The data
+     * @param array $fields The fields
+     * @return array
+     */
+    protected function rowFields(array $data, array $fields): array
+    {
+        $row = [];
         foreach ($fields as $field) {
             $row[$field] = '';
             if (isset($data[$field])) {
@@ -217,8 +236,12 @@ class ExportController extends AppController
                 $row[$field] = $this->getValue($data['attributes'][$field]);
             } elseif (isset($data['meta'][$field])) {
                 $row[$field] = $this->getValue($data['meta'][$field]);
+            } elseif (isset($data['meta']['extra'][$field])) {
+                $row[$field] = $this->getValue($data['meta']['extra'][$field]);
             }
         }
+
+        return $row;
     }
 
     /**
@@ -229,7 +252,7 @@ class ExportController extends AppController
      * @param mixed $value The value
      * @return mixed
      */
-    private function getValue($value)
+    protected function getValue($value)
     {
         if (is_array($value)) {
             return json_encode($value);

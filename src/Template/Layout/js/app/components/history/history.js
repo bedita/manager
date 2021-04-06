@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { t } from 'ttag';
 import { PanelEvents } from '../panel-view';
+import { confirm, prompt } from 'app/components/dialog/dialog';
 
 const LOCALE = BEDITA.locale.slice(0, 2);
 
@@ -76,31 +77,29 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            let message = t`Restored data will replace current data (you can still check the data before saving). Are you sure?`;
-            let dialog = this.$root.$refs.beditaDialog;
-            let confirmCallback = () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
-            dialog.confirm(message, t`yes, proceed`, confirmCallback);
+            confirm(
+                t`Restored data will replace current data (you can still check the data before saving). Are you sure?`,
+                t`yes, proceed`,
+                () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`)
+            );
         },
         /**
          * Open a new tab with the URL to create a new object with data restored from `historyId` object.
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || t`Untitled`;
-            const msg = t`Please insert a new title on "${title}" clone`;
-            const defaultTitle = title + '-' + t`copy`;
-            let dialog = this.$root.$refs.beditaDialog;
+            let title = document.getElementById('title').value || t`Untitled`;
+            let msg = t`Please insert a new title on "${title}" clone`;
+            let defaultTitle = title + '-' + t`copy`;
 
-            const confirmCallback = (cloneTitle = defaultTitle) => {
-                const origin = window.location.origin;
-                const path = window.location.pathname.replace('/view/', '/clone/');
-                const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
-                const newTab = window.open(url, '_blank');
+            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
+                let origin = window.location.origin;
+                let path = window.location.pathname.replace('/view/', '/clone/');
+                let url = `${origin}${path}/history/${historyId}?title=${cloneTitle || defaultTitle}`;
+                let newTab = window.open(url, '_blank');
                 newTab.focus();
                 dialog.hide();
-            };
-
-            dialog.prompt(msg, defaultTitle, confirmCallback);
+            });
         },
     },
 

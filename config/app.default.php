@@ -471,17 +471,30 @@ return [
     /**
      * Properties display configuration settings.
      *
-     * For each module name:
-     *  - 'view' properties groups to present as in object view, where groups are:
-     *      + '_keep' properties to keep even if not found in object
+     * Every key in this array is a module name, for each one we may have:
+     *
+     *  - 'view' properties groups to present in object view, where groups are:
+     *      + '_keep' special group of properties to keep and display even if not found in object
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
-     *  - 'index' properties to display in index view (other than id, status and modified)
-     *  - 'relations' relations ordering by relation name
+     *      + any custom name can be added as key, like 'my_group' or 'some_info'
+     *          => a tab named `My Group` or `Some Info` will be generated
+     *      + inside any of the groups above an optional '_element' can define a custom view element for this group
+     *
+     *  - 'index' properties to display in index view (other than `id`, `status` and `modified`, always displayed if set)
+     *
+     *  - 'relations' relations ordering by relation name, containing these optional keys
+     *      + 'main' first relations to show on main column, other relations will be appended
+     *      + 'aside' relations to show on right aside column
+     *      + '_element' associative array with custom view element to use for a relation, defined like
+     *          '{relation_name}' => '{MyPlugin.template_path}'
+     *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
+     *
+     * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
     // 'Properties' => [
         // 'foos' => [

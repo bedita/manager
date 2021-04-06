@@ -52,7 +52,7 @@ trait ReadCSVTrait
      */
     public function readCSVFile(string $filepath, ?array $options = []): void
     {
-        $options = array_merge($this->csvOptions, $options);
+        $options = array_merge($this->csvOptions, (array)$options);
         $this->csvKeys = $this->csvData = [];
 
         $filecontent = file($filepath); // <= into an array

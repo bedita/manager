@@ -160,7 +160,7 @@ class AppController extends Controller
     {
         $data = (array)$this->request->getData();
 
-        $this->specialAttributes($type, $data);
+        $this->specialAttributes($data);
         $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
@@ -176,14 +176,13 @@ class AppController extends Controller
     /**
      * Setup special attributes to be saved.
      *
-     * @param string $type Object or resource type
      * @param array $data Request data
      * @return void
      */
-    protected function specialAttributes(string $type, array &$data): void
+    protected function specialAttributes(array &$data): void
     {
-        // when saving users, if password is empty, unset it
-        if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
+        // if password is empty, unset it
+        if (array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);
             unset($data['confirm-password']);
         }

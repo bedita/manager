@@ -1469,6 +1469,18 @@ class ModulesComponentTest extends TestCase
                 ], // relatedData
                 'replaceRelated', // expected
             ],
+            'folders children mixed' => [
+                333, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'removeRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders'], ['id' => 456, 'type' => 'dummies']],
+                    ],
+                ], // relatedData
+                'removeRelated', // expected
+            ],
         ];
     }
 
@@ -1483,6 +1495,7 @@ class ModulesComponentTest extends TestCase
      * @dataProvider saveRelatedProvider
      * @covers ::saveRelated()
      * @covers ::folderChildrenRelated()
+     * @covers ::folderChildrenRemove()
      */
     public function testSaveRelated(string $id, string $type, array $relatedData, $expected): void
     {
