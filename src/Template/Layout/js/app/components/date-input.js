@@ -106,7 +106,7 @@ export default {
                 if (format === 'Z') {
                     // date? force hours to 12. datetime handles hours directly
                     if (!this.attrs.time) {
-                        dateObj.setHours(12);
+                        return dateObj.toISOString().replaceAll('00:00:00.000Z', '12:00:00.000Z');
                     }
                     return dateObj.toISOString();
                 }
