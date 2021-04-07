@@ -105,7 +105,7 @@ export default {
                 // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
                 if (format === 'Z') {
                     // date? force hours to 12. datetime handles hours directly
-                    if (!this.attrs.time) {
+                    if (!this.attrs.time && !this.attrs.daterange) {
                         dateObj.setHours(12);
                     }
                     return dateObj.toISOString();
