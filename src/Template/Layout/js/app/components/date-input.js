@@ -105,9 +105,13 @@ export default {
                 // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
                 if (format === 'Z') {
                     // date? force hours to 12. datetime handles hours directly
-                    if (!this.attrs.time && !this.attrs.daterange) {
-                        dateObj.setHours(12);
+                    if (!element.attributes.time && !element.attributes.daterange) {
+                        const date = new Date(dateObj.getTime())
+                        date.setHours(12);
+
+                        return date.toISOString();
                     }
+
                     return dateObj.toISOString();
                 }
                 return Intl.DateTimeFormat(LOCALE, dateFormatOptions).format(dateObj);
