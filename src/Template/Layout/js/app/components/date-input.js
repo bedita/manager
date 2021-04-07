@@ -104,6 +104,10 @@ export default {
             options.formatDate = (dateObj, format) => {
                 // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
                 if (format === 'Z') {
+                    // date? force hours to 12. datetime handles hours directly
+                    if (!this.attrs.time) {
+                        dateObj.setHours(12);
+                    }
                     return dateObj.toISOString();
                 }
                 return Intl.DateTimeFormat(LOCALE, dateFormatOptions).format(dateObj);
