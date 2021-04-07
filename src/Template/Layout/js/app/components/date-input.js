@@ -106,7 +106,7 @@ export default {
                 if (format === 'Z') {
                     // date? force hours to 12. datetime handles hours directly
                     if (!element.attributes.time && !element.attributes.daterange) {
-                        const date = new Date(dateObj.getTime())
+                        const date = new Date(dateObj.getTime());
                         date.setHours(12);
 
                         return date.toISOString();
