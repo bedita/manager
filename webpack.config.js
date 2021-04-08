@@ -8,7 +8,7 @@ require('./webpack.config.environment');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
@@ -98,20 +98,6 @@ if (devMode) {
             ]
         }),
     );
-} else {
-    // Production Plugins
-
-    webpackPlugins.push(
-        new OptimizeCssAssetsPlugin({
-            assetNameRegExp: /.css$/g,
-            cssProcessor: require('cssnano'),
-            cssProcessorOptions: {
-                discardComments: { removeAll: true },
-                reduceIdents: false, // unexpected behavior with animations
-            },
-            canPrint: false
-        })
-    );
 }
 
 module.exports = {
@@ -140,6 +126,16 @@ module.exports = {
     optimization: {
         chunkIds: 'named',
         minimize: true,
+        minimizer: [
+            new CssMinimizerPlugin({
+                test: /.css$/g,
+                minify: CssMinimizerPlugin.cssnanoMinify,
+                minimizerOptions: {
+                    discardComments: { removeAll: true },
+                    reduceIdents: false, // unexpected behavior with animations
+                }
+            })
+        ],
         usedExports: true, // treeshaking
         sideEffects: true, // check sideEffects flag in libraries
         runtimeChunk: {
