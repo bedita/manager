@@ -138,7 +138,7 @@ module.exports = {
 
     // extract vendors import and put them in separate file
     optimization: {
-        namedChunks: true,
+        chunkIds: 'named',
         minimize: true,
         usedExports: true, // treeshaking
         sideEffects: true, // check sideEffects flag in libraries
