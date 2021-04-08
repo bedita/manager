@@ -47,6 +47,10 @@ export default {
             type: Number,
             default: -1,
         },
+        acceptedLength: {
+            type: String,
+            default: '0',
+        },
     },
 
     data() {
@@ -54,7 +58,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
-            listView: false,
+            dataList: parseInt(this.acceptedLength) == 0,
         }
     },
 
@@ -90,10 +94,10 @@ export default {
             }
         },
         switchBlockView() {
-            this.listView = false;
+            this.dataList = false;
         },
         switchListView() {
-            this.listView = true;
+            this.dataList = true;
         },
         checkTabOpen() {
             if (!this.tabName) {

@@ -1,7 +1,6 @@
 <relation-view inline-template
     :relation-data='{{ relationSchema|json_encode|raw }}'
-    :list-view=listView
-    accepted-length={{ acceptedLength }}
+    :data-list=dataList
     relation-name={{ relationName }}
     :pre-count={{ preCount }}
     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
@@ -76,7 +75,7 @@
         {% if Perms.canSave() %}
         <div class="mt-5">
             {# DROP FILES #}
-            {% if acceptedTypes|length %}
+            {% if acceptedLength %}
                 {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
 
                 <drop-upload

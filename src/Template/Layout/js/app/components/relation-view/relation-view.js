@@ -45,10 +45,6 @@ export default {
             type: Object,
             required: false,
         },
-        acceptedLength: {
-            type: String,
-            default: '0',
-        },
         multipleChoice: {
             type: Boolean,
             default: true,
@@ -57,9 +53,9 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
+        dataList: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         preCount: {
             type: Number,
@@ -86,8 +82,6 @@ export default {
             activeFilter: {},           // current active filter for objects list
 
             positions: {},              // used in children relations
-
-            dataList: parseInt(this.acceptedLength) == 0,
         }
     },
 
@@ -192,10 +186,6 @@ export default {
         loading(value) {
             this.$emit('loading', value);
         },
-
-        listView(value) {
-            this.dataList = value;
-        }
     },
 
     methods: {
