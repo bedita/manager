@@ -6,6 +6,12 @@
                 pointer-events: none;
             }
 
+            .related-item-column {
+                .uname {
+                    display: none;
+                }
+            }
+
             &[data-list='true'] {
                 display: table;
                 border-collapse: collapse;
@@ -27,6 +33,10 @@
 
                         .tag {
                             margin-right: 1rem;
+                        }
+
+                        .uname {
+                            display: block;
                         }
 
                         .priority {
@@ -56,8 +66,13 @@
                             padding-left: 0;
                             border-bottom: 1px solid #8e959e;
 
-                            .status {
-                                width: 3rem;
+                            .status, .id {
+                                margin-right: 1rem;
+                            }
+
+                            .uname {
+                                margin-right: 1rem;
+                                width: 6rem;
                             }
 
                             header {
