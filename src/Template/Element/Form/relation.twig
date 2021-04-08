@@ -75,7 +75,7 @@
         {% if Perms.canSave() %}
         <div class="mt-5">
             {# DROP FILES #}
-            {% if acceptedLength %}
+            {% if uploadableNum %}
                 {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
 
                 <drop-upload

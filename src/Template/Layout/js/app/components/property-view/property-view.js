@@ -47,7 +47,7 @@ export default {
             type: Number,
             default: -1,
         },
-        acceptedLength: {
+        uploadableNum: {
             type: String,
             default: '0',
         },
@@ -58,7 +58,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
-            dataList: parseInt(this.acceptedLength) == 0,
+            dataList: parseInt(this.uploadableNum) == 0,
         }
     },
 

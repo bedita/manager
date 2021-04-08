@@ -2,12 +2,12 @@
 <section class="relations">
 
     {% for relationName, relationLabel in relations %}
-        {% set acceptedTypes = uploadable | filter((item) => item in relationsSchema[relationName].right) | join(', ') %}
-        {% set acceptedLength = acceptedTypes|length %}
+        {% set uploadableTypes = uploadable | filter((item) => item in relationsSchema[relationName].right) | join(', ') %}
+        {% set uploadableNum = uploadableTypes|length %}
 
         {% set preCount = object.relationships[relationName].meta.count|default(-1) %}
         <property-view inline-template :tab-open="tabsOpen" tab-name="relation_{{ relationName }}"
-            ref={{ relationName }} :pre-count={{ preCount }} accepted-length={{ acceptedLength }}>
+            ref={{ relationName }} :pre-count={{ preCount }} uploadable-num={{ uploadableNum }}>
             <section class="fieldset">
 
                 <header @click.prevent="toggleVisibility()"
@@ -29,7 +29,7 @@
                         'relationSchema': relationsSchema[relationName],
                         'dataList': dataList,
                         'preCount': preCount,
-                        'acceptedLength': acceptedLength,
+                        'uploadableNum': uploadableNum,
                     } %}
                 </div>
 
