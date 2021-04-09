@@ -279,6 +279,10 @@
     .related-item-column article {
         cursor: pointer;
 
+        .uname {
+            display: none;
+        }
+
         &.selected {
             position: relative;
             &:after {
