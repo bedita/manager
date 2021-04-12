@@ -26,7 +26,7 @@
                 </div>
             {% else %}
                 <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                    {% set propVal = object.attributes[prop] ?? object.meta[prop] %}
+                    {% set propVal = Property.objectValue(object, prop) %}
                     {{ Schema.format(propVal, schema.properties[prop])|striptags|truncate(100) }}
                 </div>
             {% endif %}

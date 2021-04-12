@@ -166,6 +166,86 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testObjectValue` test case.
+     *
+     * @return array
+     */
+    public function objectValueProvider(): array
+    {
+        return [
+            'object attribute' => [
+                [
+                    'attributes' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo' // expected
+            ],
+            'object meta' => [
+                [
+                    'meta' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo' // expected
+            ],
+            'stream attribute' => [
+                [
+                    'stream' => [
+                        'attributes' => [
+                            'dummy' => 'gustavo',
+                        ],
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo' // expected
+            ],
+            'stream meta' => [
+                [
+                    'stream' => [
+                        'meta' => [
+                            'dummy' => 'gustavo',
+                        ],
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo' // expected
+            ],
+            'not found' => [
+                [
+                    'attributes' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dddummy', // property
+                '' // expected
+            ],
+
+        ];
+    }
+
+    /**
+     * Test `objectValue`
+     *
+     * @param array $object The object
+     * @param string $property The property
+     * @param string $expected The expected value
+     * @return void
+     *
+     * @dataProvider objectValueProvider()
+     * @covers ::objectValue()
+     */
+    public function testObjectValue(array $object, string $property, string $expected): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->objectValue($object, $property);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Dummy function to test custom control.
      *
      * @param mixed|null $value The value

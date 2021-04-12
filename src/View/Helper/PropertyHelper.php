@@ -73,4 +73,28 @@ class PropertyHelper extends Helper
 
         return Hash::get($schema, sprintf('properties.%s', $name), []);
     }
+
+    /**
+     * Get object property value by object and property.
+     *
+     * @param array $object The object
+     * @param string $property The property
+     * @return string
+     */
+    public function objectValue(array $object, string $property): string
+    {
+        $paths = [
+            sprintf('attributes.%s', $property),
+            sprintf('meta.%s', $property),
+            sprintf('stream.attributes.%s', $property),
+            sprintf('stream.meta.%s', $property),
+        ];
+        foreach ($paths as $path) {
+            if (Hash::check($object, $path)) {
+                return Hash::get($object, $path);
+            }
+        }
+
+        return '';
+    }
 }
