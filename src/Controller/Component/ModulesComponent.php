@@ -695,16 +695,19 @@ class ModulesComponent extends Component
         }
         foreach ($objects as &$object) {
             $streamId = (string)Hash::get($object, 'relationships.streams.data.0.id');
-            if (!empty($streamId)) {
-                foreach ($included as $stream) {
-                    if ($stream['id'] === $streamId) {
-                        $object['stream'] = $stream;
-                        if (Hash::check($object, 'stream.meta.file_size')) {
-                            $size = (float)Hash::get($object, 'stream.meta.file_size');
-                            $object['stream']['meta']['file_size'] = File::formatBytes($size);
-                        }
-                    }
+            if (empty($streamId)) {
+                continue;
+            }
+            foreach ($included as $stream) {
+                if ($stream['id'] !== $streamId) {
+                    continue;
                 }
+                $object['stream'] = $stream;
+                if (Hash::check($object, 'stream.meta.file_size')) {
+                    $size = (float)Hash::get($object, 'stream.meta.file_size');
+                    $object['stream']['meta']['file_size'] = File::formatBytes($size);
+                }
+                break;
             }
         }
 
