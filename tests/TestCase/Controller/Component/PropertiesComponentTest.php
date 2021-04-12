@@ -75,6 +75,29 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `indexList()` method for media.
+     *
+     * @return void
+     *
+     * @covers ::indexList()
+     */
+    public function testIndexListMedia(): void
+    {
+        $index = [
+            'title',
+            'file_name',
+            'mime_type',
+            'file_size',
+        ];
+        $types = ['audios', 'files', 'images', 'media', 'videos'];
+        foreach ($types as $type) {
+            $this->createComponent();
+            $list = $this->Properties->indexList($type);
+            static::assertEquals($index, $list);
+        }
+    }
+
+    /**
      * Test `filterList()` method.
      *
      * @return void
