@@ -96,7 +96,7 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $objects = (array)$response['data'];
+        $objects = $this->Modules->objects($response);
         $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);

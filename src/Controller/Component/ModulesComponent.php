@@ -14,6 +14,7 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\File;
 use App\Utility\OEmbed;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -676,5 +677,37 @@ class ModulesComponent extends Component
         if (!empty($notFolders)) {
             $apiClient->addRelated($id, 'folders', 'children', $notFolders);
         }
+    }
+
+    /**
+     * Get objects from response data.
+     * Include streams, if any.
+     *
+     * @param array $response The API response
+     * @return array
+     */
+    public function objects(array $response): array
+    {
+        $objects = (array)Hash::get($response, 'data');
+        $included = (array)Hash::get($response, 'included');
+        if (empty($objects) || empty($included)) {
+            return $objects;
+        }
+        foreach ($objects as &$object) {
+            $streamId = (string)Hash::get($object, 'relationships.streams.data.0.id');
+            if (!empty($streamId)) {
+                foreach ($included as $stream) {
+                    if ($stream['id'] === $streamId) {
+                        $object['stream'] = $stream;
+                        if (Hash::check($object, 'stream.meta.file_size')) {
+                            $size = (float)Hash::get($object, 'stream.meta.file_size');
+                            $object['stream']['meta']['file_size'] = File::formatBytes($size);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $objects;
     }
 }
