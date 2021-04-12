@@ -31,27 +31,27 @@ class FileTest extends TestCase
     {
         return [
             '1.000000 ' => [
-                1024**0, // size
+                1024 ** 0, // size
                 null, // precision
                 '1.000000 ', // expected
             ],
             '1.000000 Kb' => [
-                1024**1, // size
+                1024 ** 1, // size
                 null, // precision
                 '1.000000 Kb', // expected
             ],
             '1.000000 Mb' => [
-                1024**2, // size
+                1024 ** 2, // size
                 null, // precision
                 '1.000000 Mb', // expected
             ],
             '1.000000 Gb' => [
-                1024**3, // size
+                1024 ** 3, // size
                 2, // precision
                 '1.000000 Gb', // expected
             ],
             '1.000000 Tb' => [
-                1024**4, // size
+                1024 ** 4, // size
                 2, // precision
                 '1.000000 Tb', // expected
             ],

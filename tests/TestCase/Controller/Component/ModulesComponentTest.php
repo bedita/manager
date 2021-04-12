@@ -1541,14 +1541,14 @@ class ModulesComponentTest extends TestCase
             ['id' => 3, 'type' => 'dummies'],
         ];
         $streams = [
-            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => 1024**1]],
-            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => 1024**2]],
-            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => 1024**3]],
+            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => 1024 ** 1]],
+            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => 1024 ** 2]],
+            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => 1024 ** 3]],
         ];
         $expectedStreams = [
-            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => File::formatBytes(1024**1)]],
-            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => File::formatBytes(1024**2)]],
-            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => File::formatBytes(1024**3)]],
+            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => File::formatBytes(1024 ** 1)]],
+            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => File::formatBytes(1024 ** 2)]],
+            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => File::formatBytes(1024 ** 3)]],
         ];
 
         return [
@@ -1576,19 +1576,19 @@ class ModulesComponentTest extends TestCase
                         'id' => 1,
                         'type' => 'dummies',
                         'relationships' => ['streams' => ['data' => [$streams[0]]]],
-                        'stream' => $expectedStreams[0]
+                        'stream' => $expectedStreams[0],
                     ],
                     [
                         'id' => 2,
                         'type' => 'dummies',
                         'relationships' => ['streams' => ['data' => [$streams[1]]]],
-                        'stream' => $expectedStreams[1]
+                        'stream' => $expectedStreams[1],
                     ],
                     [
                         'id' => 3,
                         'type' => 'dummies',
                         'relationships' => ['streams' => ['data' => [$streams[2]]]],
-                        'stream' => $expectedStreams[2]
+                        'stream' => $expectedStreams[2],
                     ],
                 ],
             ],

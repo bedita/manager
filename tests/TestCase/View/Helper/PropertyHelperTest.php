@@ -180,7 +180,7 @@ class PropertyHelperTest extends TestCase
                     ],
                 ], // object
                 'dummy', // property
-                'gustavo' // expected
+                'gustavo', // expected
             ],
             'object meta' => [
                 [
@@ -189,7 +189,7 @@ class PropertyHelperTest extends TestCase
                     ],
                 ], // object
                 'dummy', // property
-                'gustavo' // expected
+                'gustavo', // expected
             ],
             'stream attribute' => [
                 [
@@ -200,7 +200,7 @@ class PropertyHelperTest extends TestCase
                     ],
                 ], // object
                 'dummy', // property
-                'gustavo' // expected
+                'gustavo', // expected
             ],
             'stream meta' => [
                 [
@@ -211,7 +211,7 @@ class PropertyHelperTest extends TestCase
                     ],
                 ], // object
                 'dummy', // property
-                'gustavo' // expected
+                'gustavo', // expected
             ],
             'not found' => [
                 [
@@ -220,7 +220,7 @@ class PropertyHelperTest extends TestCase
                     ],
                 ], // object
                 'dddummy', // property
-                '' // expected
+                '', // expected
             ],
 
         ];
