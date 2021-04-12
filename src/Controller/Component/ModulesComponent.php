@@ -707,7 +707,7 @@ class ModulesComponent extends Component
                     $size = (float)Hash::get($object, 'stream.meta.file_size');
                     $object['stream']['meta']['file_size'] = File::formatBytes($size);
                 }
-                break;
+                break; // stop cycling over included
             }
         }
 
