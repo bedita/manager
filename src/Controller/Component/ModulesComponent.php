@@ -706,7 +706,7 @@ class ModulesComponent extends Component
                 }
                 $object['stream'] = $stream;
                 if (Hash::check($stream, 'meta.file_size')) {
-                    $size = (float)Hash::get($stream, 'meta.file_size');
+                    $size = (int)Hash::get($stream, 'meta.file_size');
                     $object['stream']['meta']['file_size'] = Number::toReadableSize($size);
                 }
                 break; // stop cycling over included
