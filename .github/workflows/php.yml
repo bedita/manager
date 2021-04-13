@@ -104,7 +104,6 @@ jobs:
       BEDITA_ADMIN_USR: admin
       BEDITA_ADMIN_PWD: admin
       BEDITA_DOCKER_IMG: bedita/bedita:4.2.1
-      COMPOSER_VERSION: 1.10.16
 
     strategy:
       matrix:
@@ -113,9 +112,6 @@ jobs:
     steps:
       - name: 'Checkout current revision'
         uses: 'actions/checkout@v2'
-
-      - name: 'Downgrade composer, not supporting composer 2 yet'
-        run: 'sudo composer self-update ${COMPOSER_VERSION}'
 
       - name: 'Composer config GH token if available'
         run: 'if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi'
