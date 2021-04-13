@@ -27,6 +27,7 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
+use Cake\I18n\Number;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -1546,9 +1547,9 @@ class ModulesComponentTest extends TestCase
             ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => 1024 ** 3]],
         ];
         $expectedStreams = [
-            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => File::formatBytes(1024 ** 1)]],
-            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => File::formatBytes(1024 ** 2)]],
-            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => File::formatBytes(1024 ** 3)]],
+            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 1)]],
+            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 2)]],
+            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 3)]],
         ];
 
         return [

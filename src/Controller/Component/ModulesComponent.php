@@ -23,6 +23,7 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\I18n\Number;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -707,7 +708,7 @@ class ModulesComponent extends Component
                 $object['stream'] = $stream;
                 if (Hash::check($stream, 'meta.file_size')) {
                     $size = (float)Hash::get($stream, 'meta.file_size');
-                    $object['stream']['meta']['file_size'] = File::formatBytes($size);
+                    $object['stream']['meta']['file_size'] = Number::toReadableSize($size);
                 }
                 break; // stop cycling over included
             }
