@@ -1568,6 +1568,7 @@ class ModulesComponentTest extends TestCase
                         ['id' => 1, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[0]]]]],
                         ['id' => 2, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[1]]]]],
                         ['id' => 3, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[2]]]]],
+                        ['id' => 4, 'type' => 'dummies'],
                     ],
                     'included' => $streams,
                 ],
@@ -1590,6 +1591,7 @@ class ModulesComponentTest extends TestCase
                         'relationships' => ['streams' => ['data' => [$streams[2]]]],
                         'stream' => $expectedStreams[2],
                     ],
+                    ['id' => 4, 'type' => 'dummies'],
                 ],
             ],
         ];
