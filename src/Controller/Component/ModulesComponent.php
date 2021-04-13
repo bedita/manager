@@ -699,13 +699,14 @@ class ModulesComponent extends Component
             if (empty($streamId)) {
                 continue;
             }
+            /** @var array $stream */
             foreach ($included as $stream) {
                 if ($stream['id'] !== $streamId) {
                     continue;
                 }
                 $object['stream'] = $stream;
-                if (Hash::check($object, 'stream.meta.file_size')) {
-                    $size = (float)Hash::get($object, 'stream.meta.file_size');
+                if (Hash::check($stream, 'meta.file_size')) {
+                    $size = (float)Hash::get($stream, 'meta.file_size');
                     $object['stream']['meta']['file_size'] = File::formatBytes($size);
                 }
                 break; // stop cycling over included
