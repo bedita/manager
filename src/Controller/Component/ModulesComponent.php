@@ -14,7 +14,6 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
-use App\Utility\File;
 use App\Utility\OEmbed;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
