@@ -21,7 +21,7 @@ use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
- * Base Application Controller
+ * Base Application Controller.
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
