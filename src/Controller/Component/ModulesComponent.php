@@ -693,6 +693,7 @@ class ModulesComponent extends Component
         if (empty($objects) || empty($included)) {
             return $objects;
         }
+        /** @var array $object */
         foreach ($objects as &$object) {
             $streamId = (string)Hash::get($object, 'relationships.streams.data.0.id');
             if (empty($streamId)) {

@@ -91,7 +91,7 @@ class PropertyHelper extends Helper
         ];
         foreach ($paths as $path) {
             if (Hash::check($object, $path)) {
-                return Hash::get($object, $path);
+                return (string)Hash::get($object, $path);
             }
         }
 
