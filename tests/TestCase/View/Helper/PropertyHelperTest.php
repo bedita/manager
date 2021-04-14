@@ -166,11 +166,11 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testObjectValue` test case.
+     * Data provider for `testValue` test case.
      *
      * @return array
      */
-    public function objectValueProvider(): array
+    public function valueProvider(): array
     {
         return [
             'object attribute' => [
@@ -227,21 +227,21 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
-     * Test `objectValue`
+     * Test `value`
      *
      * @param array $object The object
      * @param string $property The property
      * @param string $expected The expected value
      * @return void
      *
-     * @dataProvider objectValueProvider()
-     * @covers ::objectValue()
+     * @dataProvider valueProvider()
+     * @covers ::value()
      */
-    public function testObjectValue(array $object, string $property, string $expected): void
+    public function testValue(array $object, string $property, string $expected): void
     {
         $view = new View(null, null, null, []);
         $helper = new PropertyHelper($view);
-        $actual = $helper->objectValue($object, $property);
+        $actual = $helper->value($object, $property);
         static::assertEquals($expected, $actual);
     }
 

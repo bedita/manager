@@ -75,13 +75,13 @@ class PropertyHelper extends Helper
     }
 
     /**
-     * Get object property value by object and property.
+     * Get property value by resource and property.
      *
-     * @param array $object The object
+     * @param array $resource The resource
      * @param string $property The property
      * @return string
      */
-    public function objectValue(array $object, string $property): string
+    public function value(array $resource, string $property): string
     {
         $paths = [
             sprintf('attributes.%s', $property),
@@ -90,8 +90,8 @@ class PropertyHelper extends Helper
             sprintf('stream.meta.%s', $property),
         ];
         foreach ($paths as $path) {
-            if (Hash::check($object, $path)) {
-                return (string)Hash::get($object, $path);
+            if (Hash::check($resource, $path)) {
+                return (string)Hash::get($resource, $path);
             }
         }
 
