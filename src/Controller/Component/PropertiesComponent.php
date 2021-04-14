@@ -59,14 +59,6 @@ class PropertiesComponent extends Component
             'title',
         ],
 
-        // index properties list for media (audios, files, images, video, media)
-        'mediaIndex' => [
-            'title',
-            'file_name',
-            'mime_type',
-            'file_size',
-        ],
-
         'filter' => [
             'status',
         ],
@@ -160,11 +152,7 @@ class PropertiesComponent extends Component
      */
     public function indexList(string $type): array
     {
-        $source = 'index';
-        if (in_array($type, ['audios', 'files', 'images', 'media', 'videos'])) {
-            $source = 'mediaIndex';
-        }
-        $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups[$source]);
+        $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
 
         return array_diff($list, ['id', 'status', 'modified']);
     }
