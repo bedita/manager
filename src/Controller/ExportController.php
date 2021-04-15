@@ -55,18 +55,16 @@ class ExportController extends AppController
      */
     public function export(): ?Response
     {
-        $format = (string)$this->request->getData('format');
-
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
             'allowedMethods' => ['post'],
             'requiredParameters' => ['objectType'],
         ]);
 
+        $format = (string)$this->request->getData('format');
         if (!$this->Export->checkFormat($format)) {
             $this->Flash->error(__('Format not allowed'));
-
-            return $this->redirect(['_name' => 'modules:list', 'object_type' => $data['objectType']]);
+            return $this->redirect($this->referer());
         }
 
         $ids = $this->request->getData('ids');
