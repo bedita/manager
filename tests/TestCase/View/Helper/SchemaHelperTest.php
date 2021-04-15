@@ -498,6 +498,13 @@ class SchemaHelperTest extends TestCase
                     ],
                 ],
             ],
+            'byte' => [
+                '1 MB',
+                1024**2,
+                [
+                    'type' => 'byte',
+                ],
+            ],
             'bool' => [
                 'Yes',
                 true,
@@ -550,6 +557,7 @@ class SchemaHelperTest extends TestCase
      *
      * @dataProvider formatProvider()
      * @covers ::format()
+     * @covers ::formatByte()
      * @covers ::formatBoolean()
      * @covers ::formatDate()
      * @covers ::formatDateTime()
