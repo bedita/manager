@@ -32,6 +32,29 @@ class PropertyHelper extends Helper
     public $helpers = ['Form', 'Schema'];
 
     /**
+     * Special paths to retrieve properties from related resources
+     *
+     * @var array
+     */
+    public const RELATED_PATHS = [
+        'file_name' => 'relationships.streams.data.0.attributes.file_name',
+        'mime_type' => 'relationships.streams.data.0.attributes.mime_type',
+        'file_size' => 'relationships.streams.data.0.meta.file_size',
+    ];
+
+    /**
+     * Special properties having their own custom schema type
+     *
+     * @var array
+     */
+    public const SPECIAL_PROPS_TYPE = [
+        'associations' => 'associations',
+        'categories' => 'categories',
+        'relations' => 'relations',
+        'file_size' => 'byte',
+    ];
+
+    /**
      * Generates a form control element for an object property by name, value and options.
      * Use SchemaHelper (@see \App\View\Helper\SchemaHelper) to get control options by schema model.
      * Use FormHelper (@see \Cake\View\Helper\FormHelper::control) to render control.
@@ -56,22 +79,23 @@ class PropertyHelper extends Helper
     }
 
     /**
-     * Schema array by attribute name
+     * JSON Schema array of property name
      *
-     * @param string $name The attribute name
+     * @param string $name The property name
      * @return array
      */
     public function schema(string $name): array
     {
         $schema = (array)$this->_View->get('schema');
-        if (in_array($name, ['associations', 'categories', 'relations'])) {
-            return [
-                'type' => $name,
-                $name => Hash::get($schema, sprintf('%s', $name)),
-            ];
+        $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
+        if (!empty($res)) {
+            return $res;
         }
 
-        return Hash::get($schema, sprintf('properties.%s', $name), []);
+        return array_filter([
+            'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
+            $name => Hash::get($schema, sprintf('%s', $name)),
+        ]);
     }
 
     /**
@@ -83,18 +107,19 @@ class PropertyHelper extends Helper
      */
     public function value(array $resource, string $property): string
     {
-        $paths = [
+        $paths = array_filter([
             sprintf('attributes.%s', $property),
             sprintf('meta.%s', $property),
-            sprintf('stream.attributes.%s', $property),
-            sprintf('stream.meta.%s', $property),
-        ];
+            (string)Hash::get(self::RELATED_PATHS, $property),
+        ]);
+        $value = '';
         foreach ($paths as $path) {
             if (Hash::check($resource, $path)) {
-                return (string)Hash::get($resource, $path);
+                $value = (string)Hash::get($resource, $path);
+                break;
             }
         }
 
-        return '';
+        return $this->Schema->format($value, $this->schema($property));
     }
 }

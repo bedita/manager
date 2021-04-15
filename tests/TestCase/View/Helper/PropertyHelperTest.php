@@ -191,27 +191,18 @@ class PropertyHelperTest extends TestCase
                 'dummy', // property
                 'gustavo', // expected
             ],
-            'stream attribute' => [
+            'file_name' => [
                 [
-                    'stream' => [
-                        'attributes' => [
-                            'dummy' => 'gustavo',
+                    'relationships' => [
+                        'streams' => [
+                            'data' => [
+                                ['attributes' => ['file_name' => 'sample.txt']]
+                            ],
                         ],
                     ],
                 ], // object
-                'dummy', // property
-                'gustavo', // expected
-            ],
-            'stream meta' => [
-                [
-                    'stream' => [
-                        'meta' => [
-                            'dummy' => 'gustavo',
-                        ],
-                    ],
-                ], // object
-                'dummy', // property
-                'gustavo', // expected
+                'file_name', // property
+                'sample.txt', // expected
             ],
             'not found' => [
                 [
