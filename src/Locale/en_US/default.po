@@ -191,6 +191,9 @@ msgstr ""
 msgid "Export Filtered"
 msgstr ""
 
+msgid "Format not allowed"
+msgstr "Format choosen is not available"
+
 msgid "Failed to write file to disk"
 msgstr ""
 

@@ -64,7 +64,7 @@ class ExportController extends AppController
         ]);
 
         if (!$this->Export->checkFormat($format)) {
-            $this->Flash->error('Il formato selezionato non è disponibile!');
+            $this->Flash->error(__('Format not allowed'));
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $data['objectType']]);
         }
