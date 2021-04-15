@@ -11,7 +11,7 @@ const LOCALE = BEDITA.locale.slice(0, 2);
 export default {
     template: `<div class="history-content" style="--module-color: ${BEDITA.currentModule.color}">
         <div v-if="isLoading" class="is-loading-spinner"></div>
-        <details v-for="date in sortedDates" open>
+        <details v-if="sortedDates.length" v-for="date in sortedDates" open>
             <summary class="pb-05 is-uppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
@@ -25,6 +25,9 @@ export default {
                 </li>
             </ul>
         </details>
+        <div v-if="!isLoading && !sortedDates.length" open>
+            <label><: t('No History data found') :></label>
+        </div>
     </div>`,
 
     data() {
@@ -130,24 +133,28 @@ export default {
         const historyJson = await historyRes.json();
         this.rawHistory = historyJson.data;
 
-        // fetch users involved in the object history
-        let usersId = this.rawHistory.map((change) => change.meta.user_id);
-        usersId = [...new Set(usersId)]; // remove duplicates
-        const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
-        const userJson = await userRes.json();
-        const users = userJson.data;
+        // only if history data found, elaborate it
+        if (this.rawHistory.length) {
 
-        // group changes by date
-        this.history = this.rawHistory.reduce((accumulator, item) => {
-            item.meta.user = users.find((user) => user.id == item.meta.user_id);
-            const createdDate = moment(item.meta.created).format('DD MMM YYYY');
-            accumulator[createdDate] = accumulator[createdDate] || [];
-            accumulator[createdDate].push(item);
-            return accumulator;
-        }, {});
+            // fetch users involved in the object history
+            let usersId = this.rawHistory.map((change) => change.meta.user_id);
+            usersId = [...new Set(usersId)]; // remove duplicates
+            const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
+            const userJson = await userRes.json();
+            const users = userJson.data;
 
-        // sort changes by time in descending order
-        Object.keys(this.history).forEach((date) => this.history[date].reverse());
+            // group changes by date
+            this.history = this.rawHistory.reduce((accumulator, item) => {
+                item.meta.user = users.find((user) => user.id == item.meta.user_id);
+                const createdDate = moment(item.meta.created).format('DD MMM YYYY');
+                accumulator[createdDate] = accumulator[createdDate] || [];
+                accumulator[createdDate].push(item);
+                return accumulator;
+            }, {});
+
+            // sort changes by time in descending order
+            Object.keys(this.history).forEach((date) => this.history[date].reverse());
+        }
 
         this.$emit('count', historyJson.meta.pagination.count);
         this.isLoading = false;

@@ -53,9 +53,9 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
+        dataList: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         preCount: {
             type: Number,
