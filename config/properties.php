@@ -42,7 +42,7 @@ return [
             ],
         ],
         // media
-        'audios' => [
+        'audio' => [
             'index' => [
                 'title',
                 'file_name',
