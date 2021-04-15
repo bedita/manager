@@ -63,7 +63,7 @@ class ExportController extends AppController
 
         $format = (string)$this->request->getData('format');
         if (!$this->Export->checkFormat($format)) {
-            $this->Flash->error(__('Format not allowed'));
+            $this->Flash->error(__('Format choosen is not available'));
 
             return $this->redirect($this->referer());
         }

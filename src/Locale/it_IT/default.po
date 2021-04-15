@@ -191,7 +191,7 @@ msgstr "Esporta Tutti"
 msgid "Export Filtered"
 msgstr "Esporta Filtrati"
 
-msgid "Format not allowed"
+msgid "Format choosen is not available"
 msgstr "Il formato selezionato non è disponibile"
 
 msgid "Failed to write file to disk"
