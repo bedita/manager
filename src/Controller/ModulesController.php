@@ -26,6 +26,7 @@ use Psr\Log\LogLevel;
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class ModulesController extends AppController
 {
@@ -46,6 +47,7 @@ class ModulesController extends AppController
         $this->loadComponent('History');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         if (!empty($this->request)) {
             $this->objectType = $this->request->getParam('object_type');
@@ -96,10 +98,11 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $objects = (array)$response['data'];
+        $response = $this->ApiFormatter->embedIncluded((array)$response);
+        $objects = (array)Hash::get($response, 'data');
         $this->set('objects', $objects);
-        $this->set('meta', (array)$response['meta']);
-        $this->set('links', (array)$response['links']);
+        $this->set('meta', (array)Hash::get($response, 'meta'));
+        $this->set('links', (array)Hash::get($response, 'links'));
         $this->set('types', ['right' => $this->Schema->descendants($this->objectType)]);
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
