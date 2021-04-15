@@ -196,7 +196,7 @@ class PropertyHelperTest extends TestCase
                     'relationships' => [
                         'streams' => [
                             'data' => [
-                                ['attributes' => ['file_name' => 'sample.txt']]
+                                ['attributes' => ['file_name' => 'sample.txt']],
                             ],
                         ],
                     ],

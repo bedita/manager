@@ -500,7 +500,7 @@ class SchemaHelperTest extends TestCase
             ],
             'byte' => [
                 '1 MB',
-                1024**2,
+                1024 ** 2,
                 [
                     'type' => 'byte',
                 ],
