@@ -99,10 +99,10 @@ class PropertyHelper extends Helper
     }
 
     /**
-     * Get property value by resource and property.
+     * Get formatted property value of a resource or object.
      *
-     * @param array $resource The resource
-     * @param string $property The property
+     * @param array $resource Resource or object data
+     * @param string $property Property name
      * @return string
      */
     public function value(array $resource, string $property): string
