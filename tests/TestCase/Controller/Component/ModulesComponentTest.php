@@ -26,7 +26,6 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
-use Cake\I18n\Number;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -1525,90 +1524,6 @@ class ModulesComponentTest extends TestCase
         ApiClientProvider::setApiClient($apiClient);
 
         $this->Modules->saveRelated($id, $type, $relatedData);
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Data provider for `testObjects`.
-     *
-     * @return array
-     */
-    public function objectsProvider(): array
-    {
-        $objects = [
-            ['id' => 1, 'type' => 'dummies'],
-            ['id' => 2, 'type' => 'dummies'],
-            ['id' => 3, 'type' => 'dummies'],
-        ];
-        $streams = [
-            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => 1024 ** 1]],
-            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => 1024 ** 2]],
-            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => 1024 ** 3]],
-        ];
-        $expectedStreams = [
-            ['id' => '11', 'type' => 'streams', 'attributes' => ['key' => 111], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 1)]],
-            ['id' => '22', 'type' => 'streams', 'attributes' => ['key' => 222], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 2)]],
-            ['id' => '33', 'type' => 'streams', 'attributes' => ['key' => 333], 'meta' => ['file_size' => Number::toReadableSize(1024 ** 3)]],
-        ];
-
-        return [
-            'no data, no streams' => [
-                [],
-                [],
-            ],
-            'data, no streams' => [
-                [
-                    'data' => $objects,
-                ],
-                $objects,
-            ],
-            'data + streams' => [
-                [
-                    'data' => [
-                        ['id' => 1, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[0]]]]],
-                        ['id' => 2, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[1]]]]],
-                        ['id' => 3, 'type' => 'dummies', 'relationships' => ['streams' => ['data' => [$streams[2]]]]],
-                        ['id' => 4, 'type' => 'dummies'],
-                    ],
-                    'included' => $streams,
-                ],
-                [
-                    [
-                        'id' => 1,
-                        'type' => 'dummies',
-                        'relationships' => ['streams' => ['data' => [$streams[0]]]],
-                        'stream' => $expectedStreams[0],
-                    ],
-                    [
-                        'id' => 2,
-                        'type' => 'dummies',
-                        'relationships' => ['streams' => ['data' => [$streams[1]]]],
-                        'stream' => $expectedStreams[1],
-                    ],
-                    [
-                        'id' => 3,
-                        'type' => 'dummies',
-                        'relationships' => ['streams' => ['data' => [$streams[2]]]],
-                        'stream' => $expectedStreams[2],
-                    ],
-                    ['id' => 4, 'type' => 'dummies'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `objects`
-     *
-     * @param array $response The response
-     * @param array $expected The expected result
-     * @return void
-     * @dataProvider objectsProvider
-     * @covers ::objects()
-     */
-    public function testObjects(array $response, array $expected): void
-    {
-        $actual = $this->Modules->objects($response);
         static::assertEquals($expected, $actual);
     }
 }

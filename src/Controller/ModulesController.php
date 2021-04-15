@@ -26,6 +26,7 @@ use Psr\Log\LogLevel;
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class ModulesController extends AppController
 {
@@ -46,6 +47,7 @@ class ModulesController extends AppController
         $this->loadComponent('History');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         if (!empty($this->request)) {
             $this->objectType = $this->request->getParam('object_type');
@@ -96,7 +98,8 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $objects = $this->Modules->objects((array)$response);
+        $response = $this->ApiFormatter->addObjectsStream((array)$response);
+        $objects = (array)$response['data'];
         $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
