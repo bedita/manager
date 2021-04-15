@@ -174,8 +174,9 @@ class ExportControllerTest extends TestCase
 
         // call export.
         $response = $this->Export->export();
+        static::assertEquals(302, $response->getStatusCode());
         $flash = (array)$this->Export->request->getSession()->read('Flash.flash');
-        static::assertEquals(__('Format not allowed'), Hash::get($flash, '0.message'));
+        static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
     }
 
     /**
