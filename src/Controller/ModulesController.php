@@ -98,7 +98,7 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $response = $this->ApiFormatter->addObjectsStream((array)$response);
+        $response = $this->ApiFormatter->embedIncluded((array)$response);
         $objects = (array)$response['data'];
         $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
