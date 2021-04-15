@@ -46,6 +46,7 @@ class ModulesController extends AppController
         $this->loadComponent('History');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('ApiFormatter');
 
         if (!empty($this->request)) {
             $this->objectType = $this->request->getParam('object_type');
@@ -96,7 +97,8 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $objects = $this->Modules->objects((array)$response);
+        $response = $this->ApiFormatter->embedIncluded($response);
+        $objects = (array)$response['data'];
         $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
