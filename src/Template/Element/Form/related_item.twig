@@ -74,6 +74,12 @@
                 {% endif %}
             </h1>
 
+            <span v-if="relatedStream(related)" class="has-text-size-smallest">
+                <: relatedAttribute(related, 'file_name') :>
+                <: relatedAttribute(related, 'mime_type') :>
+                <: relatedAttribute(related, 'file_size', 'bytes') :>
+            </span>
+
             {% if not translation %}
                 <span class="modified">
                     <: new Date(related.meta.modified).toLocaleDateString() + ', ' + new Date(related.meta.modified).toLocaleTimeString() :>
