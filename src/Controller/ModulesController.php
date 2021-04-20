@@ -441,7 +441,7 @@ class ModulesController extends AppController
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
-            $response = $this->ApiFormatter->embedIncluded($response);
+            $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
