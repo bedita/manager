@@ -97,7 +97,7 @@
                                     display: none;
                                 }
 
-                                .modified {
+                                .modified, .other {
                                     display: flex;
                                     align-items: center;
                                 }
@@ -148,7 +148,7 @@
             line-height: 1.25em;;
         }
 
-        .modified {
+        .modified, .other {
             display: none;
         }
 
