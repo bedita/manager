@@ -37,8 +37,7 @@
         "sleep-promise": "^6.0.0",
         "tinymce": "^5.7.1",
         "ttag": "^1.7.24",
-        "vue": "^2.5.16",
-        "xmlhttprequest-ssl": "~1.6.2"
+        "vue": "^2.5.16"
     },
     "devDependencies": {
         "@babel/core": "^7.13.14",
