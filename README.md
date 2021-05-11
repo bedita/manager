@@ -29,7 +29,9 @@ If you are using a **.zip** or **.tar.gz** release file you just need to unpack 
 * Build JS/CSS bundles with `yarn` from `manager` folder
 
 ```bash
-yarn && yarn build
+yarn
+yarn build-plugins
+yarn build
 ```
 
 * Configure BEdita 4 API base URL and API KEY in `config/.env` like:
