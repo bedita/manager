@@ -17,6 +17,7 @@ use App\Form\Control;
 use App\Form\ControlType;
 use App\Form\Options;
 use Cake\Core\Configure;
+use Cake\I18n\Number;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -81,6 +82,17 @@ class SchemaHelper extends Helper
         }
 
         return (string)$value;
+    }
+
+    /**
+     * Format byte value
+     *
+     * @param mixed $value Property value.
+     * @return string
+     */
+    protected function formatByte($value): string
+    {
+        return (string)Number::toReadableSize((int)$value);
     }
 
     /**

@@ -53,9 +53,9 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
+        dataList: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         readonly: {
             type: Boolean,
@@ -748,6 +748,58 @@ export default {
         moduleAvailable(type) {
             return (BEDITA.modules.indexOf(type) !== -1);
         },
+
+        /**
+         * Return true when related object has streams data.
+         *
+         * @param {Object} related The object
+         * @returns
+         */
+        relatedStream(related) {
+            if (!related.relationships.streams) {
+                return false;
+            }
+            if (!('data' in related.relationships.streams)) {
+                return false;
+            }
+
+            return related.relationships.streams.data[0].attributes;
+        },
+
+        /**
+         * Get related object attribute.
+         *
+         * @param {Object} related The object
+         * @param {String} attribute The attribute name
+         * @param {String} format The format required, if any
+         * @returns {String}
+         */
+        relatedAttribute(related, attribute, format) {
+            let val = '';
+            const stream = related.relationships.streams.data[0];
+            if (attribute in stream.attributes) {
+                val = stream.attributes[attribute];
+            } else if (attribute in stream.meta) {
+                val = stream.meta[attribute];
+            }
+            if (format === 'bytes') {
+                return this.bytes(val);
+            }
+
+            return val;
+        },
+
+        /**
+         * Get bytes representation of size.
+         *
+         * @param {Number} size The size
+         * @returns {String}
+         */
+        bytes(size) {
+            let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
+
+            return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+        }
     }
 
 }
