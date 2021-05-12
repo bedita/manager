@@ -5,13 +5,11 @@
 body.view-dashboard {
     .dashboard {
         &-section {
-            & ~ .dashboard-section {
-                margin-top: $gutter * 3;
-            }
-
+            margin-bottom: $gutter;
             header {
                 h2 {
-                    margin-bottom: $gutter * .75;
+                    padding-top: $gutter;
+                    margin-bottom: $gutter;
                     font-size: $font-size-llg;
                 }
             }
@@ -19,17 +17,11 @@ body.view-dashboard {
 
         &-items {
             display: grid;
-
-            grid-gap: .75rem;
-            @media (min-width: 568px) { grid-gap: 1rem; }
-
+            grid-gap: $gutter;
             grid-template-columns: repeat(2, 1fr);
             @media (min-width: 768px) {
                 grid-template-columns: repeat(auto-fill, $dashboard-item-width);
             }
-        }
-        .dashboard-items + .dashboard-items {
-            margin-top: $gutter;
         }
 
         &-item {
@@ -51,12 +43,13 @@ body.view-dashboard {
 
             &[class^="icon-"]:before, &[class*=" icon-"]:before {
                 position: absolute;
-                top: $gutter * .25; right: $gutter * .25;
-                @media (min-width: 667px) { top: $gutter * .5; right: $gutter * .5; }
-                margin: 0 !important;
+                top: 50%; left: 0;
+                width: 100%;
+                // @media (min-width: 667px) { top: $gutter * .5; right: $gutter * .5; }
+                margin-top: -1rem !important;
                 opacity: .5;
-                color: inherit;
-                font-size: $font-size-sssm;
+                color: $white;
+                font-size: 1.75rem;
                 z-index: 1;
                 filter: brightness(1);
                 transition: filter .3s;
@@ -96,19 +89,6 @@ body.view-dashboard {
             input {
                 margin-right: $gutter * .5;
                 flex-grow: 1;
-            }
-        }
-
-        // utility icons
-        .dashboard-items.dashboard-utility {
-            .dashboard-item {
-                &[class^="icon-"]:before, &[class*=" icon-"]:before {
-                    top: 50%; left: 0;
-                    width: 100%;
-                    margin-top: -1rem !important;
-                    color: $white;
-                    font-size: 1.75rem;
-                }
             }
         }
 
@@ -235,4 +215,14 @@ body.view-dashboard {
             }
         }
     }
+
+
+    .dashboard-area {
+        @media (min-width: 1280px) {
+            grid-template-columns: ($dashboard-item-width * 4 + $gutter * 3) auto;
+            display:grid;
+            grid-gap: $gutter;
+        }
+    }
+
 }
