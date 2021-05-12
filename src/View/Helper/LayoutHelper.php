@@ -74,7 +74,7 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
 
             return $this->Html->link(
-                  __(Inflector::humanize($label)),
+                __(Inflector::humanize($label)),
                 ['_name' => 'modules:list', 'object_type' => $name],
                 ['class' => sprintf('has-background-module-%s', $name)]
             );
