@@ -428,6 +428,22 @@ class SchemaHelperTest extends TestCase
                 [],
                 [],
             ],
+            'simple' => [
+                [
+                    'field' => [
+                        'oneOf' => [
+                            [
+                                'type' => 'string',
+                                'contentMediaType' => 'text/plain',
+                            ],
+                            [
+                                'type' => 'null',
+                            ],
+                        ],
+                    ],
+                ],
+                ['field'],
+            ],
             'not translatable' => [
                 [
                     'field1' => [
