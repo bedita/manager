@@ -74,7 +74,7 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
 
             return $this->Html->link(
-                Inflector::humanize($label),
+                  __(Inflector::humanize($label)),
                 ['_name' => 'modules:list', 'object_type' => $name],
                 ['class' => sprintf('has-background-module-%s', $name)]
             );
@@ -82,7 +82,7 @@ class LayoutHelper extends Helper
 
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
-            Inflector::humanize($this->getView()->getName()),
+            __(Inflector::humanize($this->getView()->getName())),
             (array)$this->getView()->get('moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
