@@ -44,7 +44,7 @@ class SchemaHelper extends Helper
     public const DEFAULT_TRANSLATABLE = ['title', 'description', 'body'];
 
     /**
-     * Default translatable fields to be prepended in translations
+     * Translatable media types
      *
      * @var array
      */
