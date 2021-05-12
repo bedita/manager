@@ -44,6 +44,13 @@ class SchemaHelper extends Helper
     public const DEFAULT_TRANSLATABLE = ['title', 'description', 'body'];
 
     /**
+     * Default translatable fields to be prepended in translations
+     *
+     * @var array
+     */
+    public const TRANSLATABLE_MEDIATYPES = ['text/html', 'text/plain'];
+
+    /**
      * Get control options for a property schema.
      *
      * @param string $name Property name.
@@ -225,11 +232,12 @@ class SchemaHelper extends Helper
                 }
             );
         }
-        // accept as translatable 'string' type with any not empty 'contentMediaType'
+        // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'
         $type = (string)Hash::get($schema, 'type');
         $contentMediaType = Hash::get($schema, 'contentMediaType');
 
-        return $type === 'string' && !empty($contentMediaType);
+        return $type === 'string' &&
+            in_array($contentMediaType, static::TRANSLATABLE_MEDIATYPES);
     }
 
     /**
