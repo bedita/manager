@@ -105,6 +105,7 @@
 nav.pagination {
     display: flex;
     align-items: center;
+    white-space: nowrap;
     > div {
         &:not(:first-child) {
             margin-left: $gutter;
