@@ -4,6 +4,7 @@
 
 body.view-dashboard {
     .dashboard {
+        margin-top: $gutter;
         &-section {
             margin-bottom: $gutter;
             header {
