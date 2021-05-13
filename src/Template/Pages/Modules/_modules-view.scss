@@ -32,6 +32,7 @@ body.view-module, body.userprofiles-view {
         padding-bottom: $gutter * .5;
         padding-right: $gutter * .5;
         border-bottom: 1px solid $gray-700;
+        margin-bottom: $gutter;
 
         &.is-loading-spinner {
             button {
@@ -42,7 +43,7 @@ body.view-module, body.userprofiles-view {
         h2 {
             flex-grow: 1;
             margin: 0; padding: 0 $gutter 0 0;
-            font-size: $font-size-sm;
+            font-size: $font-size-base;
             &:first-letter {
                 text-transform: capitalize;
             }
@@ -52,8 +53,8 @@ body.view-module, body.userprofiles-view {
             cursor: pointer;
             &:before {
                 content: '+';
-                margin-right: .375rem;
-                font-size: $font-size-llg;
+                margin-right: $gutter;
+                font-size: $font-size-2;
             }
             &.open {
                 &:before {

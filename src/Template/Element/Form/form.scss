@@ -11,6 +11,12 @@
             }
         }
 
+        .input.title {
+            input[type=text] {
+                font-size: $font-size-llg;
+            }
+        }
+
         @media screen and (min-width: 1024px) {
             grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
             display: grid;
