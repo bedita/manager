@@ -752,10 +752,7 @@ export default {
          * @returns
          */
         relatedStream(related) {
-            if (!related.relationships.streams) {
-                return false;
-            }
-            if (!('data' in related.relationships.streams)) {
+            if (!related.relationships.streams || !related.relationships.streams.data || related.relationships.streams.data.length === 0) {
                 return false;
             }
 
