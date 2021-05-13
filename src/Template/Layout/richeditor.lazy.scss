@@ -1,0 +1,25 @@
+/*
+██████╗ ███████╗██████╗ ██╗████████╗ █████╗     ██╗  ██╗
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗    ██║  ██║
+██████╔╝█████╗  ██║  ██║██║   ██║   ███████║    ███████║
+██╔══██╗██╔══╝  ██║  ██║██║   ██║   ██╔══██║    ╚════██║
+██████╔╝███████╗██████╔╝██║   ██║   ██║  ██║         ██║
+╚═════╝ ╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝         ╚═╝
+BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
+*/
+@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
+@import './styles/mixins';
+
+// general
+@import './styles/base';
+
+body {
+    padding: 1em !important;
+    color: unset;
+    background: unset;
+}
+
+.mce-offscreen-selection {
+    position: absolute;
+    left: -9999999999999px;
+}
