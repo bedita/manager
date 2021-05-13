@@ -170,7 +170,7 @@ body.view-dashboard {
 
                 // table cells
                 > div {
-                    padding: $gutter * 1.5 $gutter $gutter * .375;
+                    padding: $gutter $gutter $gutter 0;
                     &.narrow {
                         width: 1px;
                     }
