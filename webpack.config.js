@@ -234,7 +234,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[path][name].css',
+                            name: `${BUNDLE.cssDir}/[name].css`,
                         },
                     },
                     {
@@ -250,6 +250,9 @@ module.exports = {
                 exclude: /\.lazy\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, BUNDLE.templateRoot),
+                ],
+                exclude: [
+                    /\.lazy\.(scss|css)$/,
                 ],
 
                 use: [
