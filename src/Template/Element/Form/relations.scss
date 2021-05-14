@@ -231,10 +231,10 @@
 
     footer {
         position: sticky;
+        background-color: $gray-800;
         bottom: 0;
         left: 0;
         display: flex;
-        background: $black;
     }
 
     form[disabled] {
@@ -278,6 +278,11 @@
 
     .related-item-column article {
         cursor: pointer;
+
+        footer {
+            position: static;
+            background: transparent;
+        }
 
         .uname {
             display: none;
