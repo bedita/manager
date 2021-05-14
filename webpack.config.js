@@ -225,9 +225,33 @@ module.exports = {
                 ]
             },
             {
+                test: /\.lazy\.(scss|css)$/,
+                include: [
+                    path.resolve(__dirname, BUNDLE.templateRoot),
+                ],
+
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: `${BUNDLE.cssDir}/[name].css`,
+                        },
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    },
+                ]
+            },
+            {
                 test: /\.(scss|css)$/,
                 include: [
                     path.resolve(__dirname, BUNDLE.templateRoot),
+                ],
+                exclude: [
+                    /\.lazy\.(scss|css)$/,
                 ],
 
                 use: [
