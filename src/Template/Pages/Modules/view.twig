@@ -56,7 +56,9 @@
             <div class="side-view-column is-flex is-flex-column">
                 {% element 'Form/publish_properties' %}
 
-                {% element 'Form/meta' %}
+                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
+                    {% element 'Form/trees' %}
+                {% endif %}
 
                 {% element 'Form/custom_right' %}
 
@@ -65,12 +67,10 @@
                     {% element 'Form/roles' %}
                 {% endif %}
 
-                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
-                    {% element 'Form/trees' %}
-                {% endif %}
-
                 {% element 'Form/related_translations' {'resourceName': 'translations'} %}
 
+                {% element 'Form/meta' %}
+                
                 {% element 'Form/advanced_properties' %}
 
                 {% element 'Form/resource_relations' %}

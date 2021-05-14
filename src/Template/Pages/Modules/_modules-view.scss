@@ -31,8 +31,7 @@ body.view-module, body.userprofiles-view {
         align-items: center;
         padding-bottom: $gutter * .5;
         padding-right: $gutter * .5;
-        border-bottom: 1px solid $gray-700;
-        margin-bottom: $gutter;
+        border-bottom: 1px solid $gray-100;
 
         &.is-loading-spinner {
             button {
@@ -101,7 +100,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
         }
 
         @media screen and (min-width: 1600px) {
-            grid-template-columns: 3fr 1fr;
+            grid-template-columns: 3fr 2fr;
         }
     }
 }

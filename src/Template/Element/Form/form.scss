@@ -1,7 +1,7 @@
 .object-form {
     .fieldset > .tab-container,
     .fieldset > .container {
-        padding: 0;
+        padding: $gutter 0 0 0;
 
         > div {
             margin: $gutter 0;
