@@ -49,6 +49,7 @@
         position: relative;
         overflow: hidden;
         .module-box a {
+            background-color: $gray-strange;
             font: $font-weight-normal $font-size-lg $font-family-serif;
         }
         @media (min-width: 568px) {
@@ -56,7 +57,6 @@
             padding-bottom: $dashboard-items-ratio;
         }
     }
-
 
     &-bedita-logo {
         width: $gutter * 3;
