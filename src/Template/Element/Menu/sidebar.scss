@@ -85,21 +85,19 @@
 
         // TODO: facacare, muovere in commands-link
         .listobjnav  {
-            text-align:center;
-            color:#DDD;
+            color:$gray-800;
             font-size:4em;
             a {
                 background-color: transparent;
-                color:yellowgreen;
+                color:white;
                 display: inline-flex;
                 &:hover {
                     color: inherit;
                 }
             }
             > div {
-                color:#DDD;
+                color:$gray-100;
                 font-size:11px;
-                text-align:center;
             }
         }
     }
