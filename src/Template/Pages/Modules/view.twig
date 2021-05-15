@@ -112,7 +112,7 @@
             {% endif %}
 
             {# Append "Trash (move to)" #}
-            {% if Perms.canDelete() %}
+            {% if object.id and Perms.canDelete() %}
                 {% do _view.append('module-buttons',
                     Form.postButton(
                         __('Trash-verb'),
@@ -126,6 +126,17 @@
             {% if object.id and objectNav %}
                 {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
             {% endif %}
+
+            {# Append "new" button #}
+            {# {% if object.id and Perms.canCreate() %}
+                {% do _view.append('module-buttons',
+                    Html.link(__('Create new'),
+                        {'_name': 'modules:create', 'object_type': objectType},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                    )|raw
+                ) %}
+            {% endif %} #}
+
         </div>
     </div>
 </modules-view>
