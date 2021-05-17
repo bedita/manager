@@ -1,9 +1,50 @@
+.module-box a {
+    position: relative;
+    display: flex;
+    height: $dashboard-item-height;
+    background-color: $gray-600;
+    font-size: $font-size-base;
+    padding: $gutter;
+    filter: brightness(1);
+    transition: filter .3s;
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: $gutter * 1.5;
+        background-color: $black;
+        opacity: .2;
+        transition: opacity .3s;
+    }
+
+    &:hover {
+        filter: brightness(1.2);
+        &:after { opacity: .5; }
+        &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8; }
+    }
+}
+
+.project-title {
+    width: 100%;
+    // make whole area clickable
+    position: relative;
+    overflow: hidden;
+    @media (min-width: 568px) {
+        height: 0;
+        padding-bottom: $dashboard-items-ratio;
+    }
+    .module-box a {
+        background-color: $gray-strange;
+        font: $font-weight-normal $font-size-lg $font-family-serif;
+    }
+}
+
 .sidebar {
     @media (min-width: 568px) {
         position: fixed;
         top: 0; left: $gutter;
     }
-
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -14,48 +55,6 @@
 
     button, .button {
         width: $dashboard-item-width / 2;
-    }
-
-    .module-box a {
-        position: relative;
-        display: flex;
-        height: $dashboard-item-height;
-        background-color: $gray-600;
-        font-size: $font-size-base;
-        padding: $gutter;
-        filter: brightness(1);
-        transition: filter .3s;
-
-        &:after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: $gutter * 1.5;
-            background-color: $black;
-            opacity: .2;
-            transition: opacity .3s;
-        }
-
-        &:hover {
-            filter: brightness(1.2);
-            &:after { opacity: .5; }
-            &[class^="icon-"]:before, &[class*=" icon-"]:before { opacity: .8; }
-        }
-    }
-
-    &-project-title {
-        width: 100%;
-        // make whole area clickable
-        position: relative;
-        overflow: hidden;
-        .module-box a {
-            background-color: $gray-strange;
-            font: $font-weight-normal $font-size-lg $font-family-serif;
-        }
-        @media (min-width: 568px) {
-            height: 0;
-            padding-bottom: $dashboard-items-ratio;
-        }
     }
 
     &-bedita-logo {
@@ -118,7 +117,7 @@
     // sidebar footer is in layout-footer on mobile
     &-footer {
         margin-top: $gutter;
-        display: none;
-        @media (min-width: 568px) { display: block; }
+        display: block;
+        // @media (min-width: 568px) { display: block; }
     }
 }
