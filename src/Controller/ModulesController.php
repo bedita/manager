@@ -562,12 +562,13 @@ class ModulesController extends AppController
             return;
         }
 
-        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
-
         $getThumbs = function (array $ids): ?array {
             try {
                 $res = $this->apiClient->get(
-                    sprintf('/media/thumbs?%s', http_build_query(['ids' => implode(',', $ids)])),
+                    sprintf('/media/thumbs?%s', http_build_query([
+                        'ids' => implode(',', $ids),
+                        'options' => ['w' => 400],
+                    ])),
                     $this->Modules->prepareQuery($this->request->getQueryParams())
                 );
 
@@ -593,7 +594,6 @@ class ModulesController extends AppController
             // if provider_thumbnail is found there's no need to extract it from thumbsResponse
             if ($thumbnail) {
                 $object['meta']['thumb_url'] = $thumbnail;
-                
                 continue;
             }
 

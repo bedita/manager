@@ -775,7 +775,7 @@ class ModulesControllerTest extends TestCase
                 ->getMock();
 
             $apiClient->method('get')
-                ->with('/media/thumbs?ids=43,45&options[w]=400')
+                ->with('/media/thumbs?ids=43%2C45&options[w]=400')
                 ->willReturn($mockResponse);
 
             $this->controller->apiClient = $apiClient;
