@@ -37,7 +37,6 @@ function stripHtml(str) {
  */
 export default {
     template: `<div class="location mb-2 is-flex">
-        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated][]'" :value="locationValue" />
         <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
             <: index + 1 :>
         </div>
@@ -88,7 +87,7 @@ export default {
                         <: t('Long Lat Coordinates') :>
                         <div class="is-flex">
                             <input class="coordinates" type="text" :value="coordinates" @change="onCoordsChange" />
-                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apikey || !location.attributes.address">
+                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !location.attributes.address">
                                 <: t('GET') :>
                             </button>
                         </div>
@@ -121,53 +120,30 @@ export default {
 
     props: {
         index: Number,
-        apikey: String,
-        apiurl: String,
-        locationdata: Object,
+        apiKey: String,
+        apiUrl: String,
+        locationData: Object,
         relationName: String,
     },
 
     data() {
         return {
-            location: this.locationdata,
-            title: this.locationdata.attributes.title,
-            coordinates: convertFromPoint(this.locationdata.attributes.coords),
-            zoom: parseInt(this.locationdata.meta &&
-                this.locationdata.meta.relation &&
-                this.locationdata.meta.relation.params &&
-                this.locationdata.meta.relation.params.zoom) || 2,
-            pitch: parseInt(this.locationdata.meta &&
-                this.locationdata.meta.relation &&
-                this.locationdata.meta.relation.params &&
-                this.locationdata.meta.relation.params.pitch) || 0,
-            bearing: parseInt(this.locationdata.meta &&
-                this.locationdata.meta.relation &&
-                this.locationdata.meta.relation.params &&
-                this.locationdata.meta.relation.params.bearing) || 0,
+            location: this.locationData,
+            title: this.locationData.attributes.title,
+            coordinates: convertFromPoint(this.locationData.attributes.coords),
+            zoom: parseInt(this.locationData.meta &&
+                this.locationData.meta.relation &&
+                this.locationData.meta.relation.params &&
+                this.locationData.meta.relation.params.zoom) || 2,
+            pitch: parseInt(this.locationData.meta &&
+                this.locationData.meta.relation &&
+                this.locationData.meta.relation.params &&
+                this.locationData.meta.relation.params.pitch) || 0,
+            bearing: parseInt(this.locationData.meta &&
+                this.locationData.meta.relation &&
+                this.locationData.meta.relation.params &&
+                this.locationData.meta.relation.params.bearing) || 0,
         }
-    },
-
-    computed: {
-        locationValue() {
-            return JSON.stringify({
-                id: this.location && this.location.id,
-                type: 'locations',
-                attributes: {
-                    status: 'on',
-                    ...(this.location && this.location.attributes || {}),
-                    coords: convertToPoint(this.coordinates),
-                },
-                meta: {
-                    relation: {
-                        params: {
-                            zoom: `${this.zoom}`,
-                            pitch: `${this.pitch}`,
-                            bearing: `${this.bearing}`,
-                        },
-                    },
-                },
-            });
-        },
     },
 
     methods: {
@@ -204,7 +180,25 @@ export default {
             locations[duplicateValueIdx].attributes[attrName] = stripHtml(`${duplicateValue.attributes[attrName]} (${duplicateValue.attributes[suffixAttr]})`);
         },
         onChange() {
-            this.$parent.$emit('updated', this.index, this.location);
+            let location = {
+                id: this.location && this.location.id,
+                type: 'locations',
+                attributes: {
+                    status: 'on',
+                    ...(this.location && this.location.attributes || {}),
+                    coords: convertToPoint(this.coordinates),
+                },
+                meta: {
+                    relation: {
+                        params: {
+                            zoom: `${this.zoom}`,
+                            pitch: `${this.pitch}`,
+                            bearing: `${this.bearing}`,
+                        },
+                    },
+                },
+            };
+            this.$parent.$emit('updated', this.index, location);
         },
         onSubmitTitle(result) {
             // use original fetched location instead of the "potentially" edited one (see `searchAddress` method)
@@ -334,7 +328,7 @@ export default {
 
             // init script
             var script = document.createElement('script');
-            script.src = `${this.apiurl}js?key=${this.apikey}&callback=initMap`;
+            script.src = `${this.apiUrl}js?key=${this.apiKey}&callback=initMap`;
             script.defer = true;
             script.id = 'googleapi';
 
