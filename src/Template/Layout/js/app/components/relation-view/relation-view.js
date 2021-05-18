@@ -507,9 +507,9 @@ export default {
         },
 
         /**
-         * remove related object: adding it to removedRelated Array
+         * remove related object adding it to removedRelated Array
          *
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -527,8 +527,7 @@ export default {
         /**
          * re-add removed related object: removing it from removedRelated Array
          *
-         * @param {Number} id
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -719,7 +718,7 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return relations.filter((rel) => rel.id === id).length;
+            return !!relations.find((rel) => rel.id === id);
         },
 
         /**
