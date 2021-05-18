@@ -564,22 +564,43 @@ class ModulesController extends AppController
 
         $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
 
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
-        $thumbsResponse = $this->apiClient->get($thumbs, $query);
+        $getThumbs = function (array $ids): ?array {
+            try {
+                $res = $this->apiClient->get(
+                    sprintf('/media/thumbs?%s', http_build_query(['ids' => implode(',', $ids)])),
+                    $this->Modules->prepareQuery($this->request->getQueryParams())
+                );
 
-        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
+                return Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
+            } catch (BEditaClientException $e) {
+                $this->log($e, 'error');
+
+                return null;
+            }
+        };
+
+        $thumbs = $getThumbs($ids);
+        if ($thumbs === null) {
+            // An error happened: let's try again by generating one thumbnail at a time.
+            $thumbs = [];
+            foreach ($ids as $id) {
+                $thumbs += (array)$getThumbs([$id]);
+            }
+        }
 
         foreach ($response['data'] as &$object) {
             $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
+            // if provider_thumbnail is found there's no need to extract it from thumbsResponse
             if ($thumbnail) {
                 $object['meta']['thumb_url'] = $thumbnail;
-                continue; // if provider_thumbnail is found there's no need to extract it from thumbsResponse
+                
+                continue;
             }
 
             // extract url of the matching objectid's thumb
-            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
-            if (count($thumbnail)) {
-                $object['meta']['thumb_url'] = $thumbnail[0];
+            $thumbnail = Hash::get($thumbs, $object['id']);
+            if ($thumbnail !== null) {
+                $object['meta']['thumb_url'] = $thumbnail;
             }
         }
     }
