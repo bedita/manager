@@ -130,6 +130,9 @@ class SchemaHelper extends Helper
      */
     protected function formatDate($value): string
     {
+        if (empty($value)) {
+            return '';
+        }
         return (string)$this->Time->format($value);
     }
 
@@ -141,6 +144,9 @@ class SchemaHelper extends Helper
      */
     protected function formatDateTime($value): string
     {
+        if (empty($value)) {
+            return '';
+        }
         return (string)$this->Time->format($value);
     }
 
