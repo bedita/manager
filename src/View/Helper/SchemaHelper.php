@@ -133,6 +133,7 @@ class SchemaHelper extends Helper
         if (empty($value)) {
             return '';
         }
+
         return (string)$this->Time->format($value);
     }
 
@@ -147,6 +148,7 @@ class SchemaHelper extends Helper
         if (empty($value)) {
             return '';
         }
+
         return (string)$this->Time->format($value);
     }
 
