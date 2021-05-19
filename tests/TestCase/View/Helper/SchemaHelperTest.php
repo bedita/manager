@@ -512,7 +512,7 @@ class SchemaHelperTest extends TestCase
     public function formatProvider(): array
     {
         return [
-            'dumy' => [
+            'dummy' => [
                 'dummy',
                 'dummy',
                 [
@@ -549,9 +549,25 @@ class SchemaHelperTest extends TestCase
                     'format' => 'date',
                 ],
             ],
+            'empty date' => [
+                '',
+                '',
+                [
+                    'type' => 'string',
+                    'format' => 'date',
+                ],
+            ],
             'date time' => [
                 '9/8/19, 4:35 PM',
                 '2019-09-08T16:35:15+00',
+                [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+            ],
+            'empty date time' => [
+                '',
+                '',
                 [
                     'type' => 'string',
                     'format' => 'date-time',
