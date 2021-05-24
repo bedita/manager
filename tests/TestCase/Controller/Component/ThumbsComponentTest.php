@@ -25,6 +25,13 @@ class ThumbsComponentTest extends TestCase
     public $Thumbs;
 
     /**
+     * BEdita client
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    public $client;
+
+    /**
      * setUp method
      *
      * @return void
@@ -35,6 +42,7 @@ class ThumbsComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $this->Thumbs = $registry->load(ThumbsComponent::class);
+        $this->client = ApiClientProvider::getApiClient();
     }
 
     /**
@@ -45,6 +53,7 @@ class ThumbsComponentTest extends TestCase
     public function tearDown()
     {
         unset($this->Thumbs);
+        ApiClientProvider::setApiClient($this->client);
 
         parent::tearDown();
     }
