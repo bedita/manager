@@ -323,7 +323,7 @@ class ModulesController extends AppController
             $response['data'] = [ $response['data'] ];
         }
 
-        $this->Thumbs->urls($response);
+        $this->Thumbs->urls((array)$response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -435,7 +435,7 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->Thumbs->urls($response);
+        $this->Thumbs->urls((array)$response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -485,7 +485,7 @@ class ModulesController extends AppController
             $query = $this->Query->prepare($this->request->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
-            $this->Thumbs->urls($response);
+            $this->Thumbs->urls((array)$response);
         } catch (BEditaClientException $ex) {
             $this->log($ex, LogLevel::ERROR);
 
