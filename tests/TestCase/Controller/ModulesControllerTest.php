@@ -768,19 +768,57 @@ class ModulesControllerTest extends TestCase
         $this->setupController();
 
         if (!empty($mockResponse)) {
-            $expectedException = new BEditaClientException('error');
-
             $apiClient = $this->getMockBuilder(BEditaClient::class)
                 ->setConstructorArgs(['https://media.example.com'])
                 ->getMock();
 
             $apiClient->method('get')
-                ->with('/media/thumbs?ids=43,45&options[w]=400')
+                ->with('/media/thumbs?ids=43%2C45&options%5Bw%5D=400')
                 ->willReturn($mockResponse);
 
             $this->controller->apiClient = $apiClient;
         }
 
+        $this->controller->getThumbsUrls($data);
+        static::assertEquals($expected, $data);
+    }
+
+    /**
+     * Test `getThumbsUrls` method, exception case
+     *
+     * @covers ::getThumbsUrls()
+     *
+     * @return void
+     */
+    public function testGetThumbsUrlsException(): void
+    {
+        $this->controller = new ModulesControllerSample(new ServerRequest([]));
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException('test'));
+        $this->controller->apiClient = $apiClient;
+        // on exception, no changes on data
+        $data = [
+            'data' => [
+                [
+                    'id' => '43',
+                    'type' => 'images',
+                    'attributes' => [
+                        'provider_thumbnail' => 'gustavo',
+                    ],
+                    'meta' => [],
+                ],
+                [
+                    'id' => '45',
+                    'type' => 'images',
+                    'meta' => [],
+                ],
+            ],
+        ];
+        $expected = $data;
+        $expected['data'][0]['meta']['thumb_url'] = 'gustavo';
         $this->controller->getThumbsUrls($data);
         static::assertEquals($expected, $data);
     }
