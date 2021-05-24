@@ -792,16 +792,14 @@ class ModulesControllerTest extends TestCase
      */
     public function testGetThumbsUrlsException(): void
     {
-        $exception = new BEditaClientException('test');
-        $this->expectException(get_class($exception));
-        $this->setupController();
+        $this->controller = new ModulesControllerSample(new ServerRequest([]));
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/media/thumbs?ids=43%2C45&options%5Bw%5D=400')
-            ->willThrowException($exception);
+            ->willThrowException(new BEditaClientException('test'));
         $this->controller->apiClient = $apiClient;
+        // on exception, no changes on data
         $data = [
             'data' => [
                 [
@@ -816,7 +814,9 @@ class ModulesControllerTest extends TestCase
                 ],
             ],
         ];
+        $expected = $data;
         $this->controller->getThumbsUrls($data);
+        static::assertEquals($expected, $data);
     }
 
     /**
