@@ -210,7 +210,6 @@ class ModulesControllerTest extends TestCase
      * Session filter data must be empty
      *
      * @covers ::index()
-     * @covers ::indexQuery()
      *
      * @return void
      */
