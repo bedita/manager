@@ -25,12 +25,12 @@ class ThumbsComponent extends Component
     /**
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
      *
-     * @param array $response Related objects response.
+     * @param array|null $response Related objects response.
      * @return void
      */
-    public function urls(array &$response): void
+    public function urls(?array &$response): void
     {
-        if (empty($response['data'])) {
+        if (empty($response) || empty($response['data'])) {
             return;
         }
 
