@@ -793,7 +793,7 @@ class ModulesControllerTest extends TestCase
     public function testGetThumbsUrlsException(): void
     {
         $exception = new BEditaClientException('test');
-        $this->expectException($exception);
+        $this->expectException(get_class($exception));
         $this->setupController();
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
