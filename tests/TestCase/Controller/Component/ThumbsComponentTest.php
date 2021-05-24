@@ -5,6 +5,7 @@ use App\Controller\Component\QueryComponent;
 use App\Controller\Component\ThumbsComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -144,12 +145,10 @@ class ThumbsComponentTest extends TestCase
             $apiClient = $this->getMockBuilder(BEditaClient::class)
                 ->setConstructorArgs(['https://media.example.com'])
                 ->getMock();
-
             $apiClient->method('get')
                 ->with('/media/thumbs?ids=43%2C45&options%5Bw%5D=400')
                 ->willReturn($mockResponse);
-
-            $controller->apiClient = $apiClient;
+            ApiClientProvider::setApiClient($apiClient);
         }
         $registry = $controller->components();
         $controller->Query = $registry->load(QueryComponent::class);
@@ -173,7 +172,7 @@ class ThumbsComponentTest extends TestCase
             ->getMock();
         $apiClient->method('get')
             ->willThrowException(new BEditaClientException('test'));
-        $controller->apiClient = $apiClient;
+        ApiClientProvider::setApiClient($apiClient);
         // on exception, no changes on data
         $data = [
             'data' => [
