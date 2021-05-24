@@ -805,6 +805,9 @@ class ModulesControllerTest extends TestCase
                 [
                     'id' => '43',
                     'type' => 'images',
+                    'attributes' => [
+                        'provider_thumbnail' => 'gustavo',
+                    ],
                     'meta' => [],
                 ],
                 [
@@ -815,6 +818,7 @@ class ModulesControllerTest extends TestCase
             ],
         ];
         $expected = $data;
+        $expected['data'][0]['meta']['thumb_url'] = 'gustavo';
         $this->controller->getThumbsUrls($data);
         static::assertEquals($expected, $data);
     }
