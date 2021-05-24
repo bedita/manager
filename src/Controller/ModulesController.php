@@ -26,6 +26,8 @@ use Psr\Log\LogLevel;
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \App\Controller\Component\QueryComponent $Query
+ * @property \App\Controller\Component\ThumbsComponent $Thumbs
  * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class ModulesController extends AppController
@@ -47,6 +49,8 @@ class ModulesController extends AppController
         $this->loadComponent('History');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('Query');
+        $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         if (!empty($this->request)) {
@@ -85,7 +89,7 @@ class ModulesController extends AppController
         }
 
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->indexQuery());
+            $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -120,26 +124,6 @@ class ModulesController extends AppController
         $this->setObjectNav($objects);
 
         return null;
-    }
-
-    /**
-     * Retrieve `index` module query string
-     *
-     * @return array
-     */
-    protected function indexQuery()
-    {
-        $query = $this->request->getQueryParams();
-        // return URL query string if `filter`, `sort`, or `q` are set
-        $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
-        if (!empty($subQuery)) {
-            return $query;
-        }
-
-        // set sort order: use `currentModule.sort` or default '-id'
-        $query['sort'] = (string)Hash::get($this->viewVars, 'currentModule.sort', '-id');
-
-        return $query;
     }
 
     /**
@@ -339,7 +323,7 @@ class ModulesController extends AppController
             $response['data'] = [ $response['data'] ];
         }
 
-        $this->getThumbsUrls($response);
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -438,7 +422,7 @@ class ModulesController extends AppController
         }
 
         $this->request->allowMethod(['get']);
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $query = $this->Query->prepare($this->request->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
@@ -451,7 +435,7 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->getThumbsUrls($response);
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -468,7 +452,7 @@ class ModulesController extends AppController
     public function resourcesJson($id, string $type): void
     {
         $this->request->allowMethod(['get']);
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $query = $this->Query->prepare($this->request->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
@@ -498,10 +482,10 @@ class ModulesController extends AppController
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
-            $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+            $query = $this->Query->prepare($this->request->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
-            $this->getThumbsUrls($response);
+            $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
             $this->log($ex, LogLevel::ERROR);
 
@@ -542,67 +526,6 @@ class ModulesController extends AppController
         }
 
         return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
-    }
-
-    /**
-     * Retrieve thumbnails URL of related objects in `meta.url` if present.
-     *
-     * @param array $response Related objects response.
-     * @return void
-     */
-    public function getThumbsUrls(array &$response): void
-    {
-        if (empty($response['data'])) {
-            return;
-        }
-
-        // extract ids of objects
-        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
-        if (empty($ids)) {
-            return;
-        }
-
-        $getThumbs = function (array $ids): ?array {
-            try {
-                $res = $this->apiClient->get(
-                    sprintf('/media/thumbs?%s', http_build_query([
-                        'ids' => implode(',', $ids),
-                        'options' => ['w' => 400],
-                    ])),
-                    $this->Modules->prepareQuery($this->request->getQueryParams())
-                );
-
-                return Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
-            } catch (BEditaClientException $e) {
-                $this->log($e, 'error');
-
-                return null;
-            }
-        };
-
-        $thumbs = $getThumbs($ids);
-        if ($thumbs === null) {
-            // An error happened: let's try again by generating one thumbnail at a time.
-            $thumbs = [];
-            foreach ($ids as $id) {
-                $thumbs += (array)$getThumbs([$id]);
-            }
-        }
-
-        foreach ($response['data'] as &$object) {
-            $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
-            // if provider_thumbnail is found there's no need to extract it from thumbsResponse
-            if ($thumbnail) {
-                $object['meta']['thumb_url'] = $thumbnail;
-                continue;
-            }
-
-            // extract url of the matching objectid's thumb
-            $thumbnail = Hash::get($thumbs, $object['id']);
-            if ($thumbnail !== null) {
-                $object['meta']['thumb_url'] = $thumbnail;
-            }
-        }
     }
 
     /**

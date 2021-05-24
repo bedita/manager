@@ -440,25 +440,6 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Prepare query string to make BE4 API call
-     *
-     * @param array $query Input query string
-     * @return array
-     */
-    public function prepareQuery(array $query): array
-    {
-        // cleanup `filter`, remove empty keys
-        $filter = array_filter((array)Hash::get($query, 'filter'));
-        $remove = array_flip(['count', 'page_items', 'page_count', 'filter']);
-        $query = array_diff_key($query, $remove);
-        if (!empty($filter)) {
-            $query += compact('filter');
-        }
-
-        return $query;
-    }
-
-    /**
      * Setup relations information metadata.
      *
      * @param array $schema Relations schema.
