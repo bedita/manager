@@ -768,8 +768,6 @@ class ModulesControllerTest extends TestCase
         $this->setupController();
 
         if (!empty($mockResponse)) {
-            $expectedException = new BEditaClientException('error');
-
             $apiClient = $this->getMockBuilder(BEditaClient::class)
                 ->setConstructorArgs(['https://media.example.com'])
                 ->getMock();
@@ -783,6 +781,42 @@ class ModulesControllerTest extends TestCase
 
         $this->controller->getThumbsUrls($data);
         static::assertEquals($expected, $data);
+    }
+
+    /**
+     * Test `getThumbsUrls` method, exception case
+     *
+     * @covers ::getThumbsUrls()
+     *
+     * @return void
+     */
+    public function testGetThumbsUrlsException(): void
+    {
+        $exception = new BEditaClientException('test');
+        $this->expectException($exception);
+        $this->setupController();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/media/thumbs?ids=43%2C45&options%5Bw%5D=400')
+            ->willThrowException($exception);
+        $this->controller->apiClient = $apiClient;
+        $data = [
+            'data' => [
+                [
+                    'id' => '43',
+                    'type' => 'images',
+                    'meta' => [],
+                ],
+                [
+                    'id' => '45',
+                    'type' => 'images',
+                    'meta' => [],
+                ],
+            ],
+        ];
+        $this->controller->getThumbsUrls($data);
     }
 
     /**
