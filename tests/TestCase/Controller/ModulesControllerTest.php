@@ -260,6 +260,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `view` method on error
+     *
+     * @covers ::view()
+     *
+     * @return void
+     */
+    public function testViewError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->view(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
      * Test `uname` method
      *
      * @covers ::uname()
@@ -294,7 +314,6 @@ class ModulesControllerTest extends TestCase
     public function testUname404(): void
     {
         // Setup controller for test
-        $exception = new BEditaClientException('Not Found', 404);
         $this->setupController();
 
         // do controller call
@@ -424,6 +443,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `clone` method, on error
+     *
+     * @covers ::clone()
+     *
+     * @return void
+     */
+    public function testCloneError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->clone(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
      * Test `save` method
      *
      * @covers ::save()
@@ -458,6 +497,73 @@ class ModulesControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $result->getStatusCode());
         static::assertEquals('text/html', $result->getType());
+    }
+
+    /**
+     * Test `save` method, on error
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveErrorNoPost(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $response = $this->controller->save();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
+     * Test `save` method, on error
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveErrorPostId(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $response = $this->controller->save();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
     }
 
     /**
@@ -572,6 +678,102 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `delete` method, ids
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteIds(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $o = $this->getTestObject();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => $o['id'],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // restore test object
+        $this->restoreTestObject($o['id'], 'documents');
+    }
+
+    /**
+     * Test `delete` method, on error
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // test by ids
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+    }
+
+    /**
      * Test `relatedJson` method
      *
      * @covers ::relatedJson()
@@ -609,6 +811,25 @@ class ModulesControllerTest extends TestCase
         $this->controller->relatedJson('new', 'has_media');
 
         static::assertEquals([], $this->controller->viewVars['data']);
+    }
+
+    /**
+     * Test `relatedJson` method, on error
+     *
+     * @covers ::relatedJson()
+     *
+     * @return void
+     */
+    public function testRelatedJsonError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->relatedJson(12346789, 'translations');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
     }
 
     /**

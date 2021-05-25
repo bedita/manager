@@ -189,11 +189,10 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
         } catch (BEditaClientException $e) {
-            if ($e->getCode() === 404) {
-                $error = sprintf(__('Resource "%s" not found', true), $id);
-            } else {
-                $error = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $e->getMessage());
-            }
+            $msg = $e->getMessage();
+            $error = $e->getCode() === 404 ?
+                sprintf(__('Resource "%s" not found', true), $id) :
+                sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
             $this->Flash->error($error);
 
             return $this->redirect($this->referer());
@@ -394,7 +393,7 @@ class ModulesController extends AppController
                     return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
                 }
 
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType]);
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
             }
         }
         $this->Flash->success(__('Object(s) deleted'));
