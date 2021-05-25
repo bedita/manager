@@ -612,6 +612,47 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `resourcesJson method
+     *
+     * @covers ::resourcesJson)
+     *
+     * @return void
+     */
+    public function testResourcesJson(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $this->controller->resourcesJson($id, 'documents');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'data']);
+    }
+
+    /**
+     * Test `resourcesJson method
+     *
+     * @covers ::resourcesJson)
+     *
+     * @return void
+     */
+    public function testResourcesJsonError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->resourcesJson(123456789, 'dummies');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
+    }
+
+    /**
      * Data provider for `testRelationshipsJson` test case.
      *
      * @return array
