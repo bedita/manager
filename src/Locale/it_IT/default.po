@@ -182,6 +182,9 @@ msgstr "Errore nel caricamento del contenuto richiesto"
 msgid "Events"
 msgstr "Eventi"
 
+msgid "Competition Notices"
+msgstr "Bandi"
+
 msgid "Export"
 msgstr "Esporta"
 
@@ -190,6 +193,9 @@ msgstr "Esporta Tutti"
 
 msgid "Export Filtered"
 msgstr "Esporta Filtrati"
+
+msgid "Format choosen is not available"
+msgstr "Il formato selezionato non è disponibile"
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -263,8 +269,26 @@ msgstr "Lingua"
 msgid "Language and translations"
 msgstr "Lingua e traduzioni"
 
-msgid "Locations"
+msgid "Places"
 msgstr "Luoghi"
+
+msgid "Locations"
+msgstr "Posizioni"
+
+msgid "Libraries"
+msgstr "Biblioteche"
+
+msgid "Bibliographies"
+msgstr "Bibliografie"
+
+msgid "Books"
+msgstr "Libri"
+
+msgid "Lecture Groups"
+msgstr "Gruppi di lettura"
+
+msgid "Galleries"
+msgstr "Gallerie"
 
 msgid "Log out"
 msgstr "Esci"
@@ -318,7 +342,7 @@ msgid "New password"
 msgstr "Nuova password"
 
 msgid "News"
-msgstr "Novità"
+msgstr "Notizie"
 
 msgid "No"
 msgstr "No"

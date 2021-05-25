@@ -26,6 +26,7 @@ use Psr\Log\LogLevel;
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class ModulesController extends AppController
 {
@@ -46,6 +47,7 @@ class ModulesController extends AppController
         $this->loadComponent('History');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         if (!empty($this->request)) {
             $this->objectType = $this->request->getParam('object_type');
@@ -96,10 +98,11 @@ class ModulesController extends AppController
 
         $this->ProjectConfiguration->read();
 
-        $objects = (array)$response['data'];
+        $response = $this->ApiFormatter->embedIncluded((array)$response);
+        $objects = (array)Hash::get($response, 'data');
         $this->set('objects', $objects);
-        $this->set('meta', (array)$response['meta']);
-        $this->set('links', (array)$response['links']);
+        $this->set('meta', (array)Hash::get($response, 'meta'));
+        $this->set('links', (array)Hash::get($response, 'links'));
         $this->set('types', ['right' => $this->Schema->descendants($this->objectType)]);
 
         $this->set('properties', $this->Properties->indexList($this->objectType));
@@ -438,6 +441,7 @@ class ModulesController extends AppController
         $query = $this->Modules->prepareQuery($this->request->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
+            $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
@@ -558,24 +562,45 @@ class ModulesController extends AppController
             return;
         }
 
-        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
+        $getThumbs = function (array $ids): ?array {
+            try {
+                $res = $this->apiClient->get(
+                    sprintf('/media/thumbs?%s', http_build_query([
+                        'ids' => implode(',', $ids),
+                        'options' => ['w' => 400],
+                    ])),
+                    $this->Modules->prepareQuery($this->request->getQueryParams())
+                );
 
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
-        $thumbsResponse = $this->apiClient->get($thumbs, $query);
+                return Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
+            } catch (BEditaClientException $e) {
+                $this->log($e, 'error');
 
-        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
+                return null;
+            }
+        };
+
+        $thumbs = $getThumbs($ids);
+        if ($thumbs === null) {
+            // An error happened: let's try again by generating one thumbnail at a time.
+            $thumbs = [];
+            foreach ($ids as $id) {
+                $thumbs += (array)$getThumbs([$id]);
+            }
+        }
 
         foreach ($response['data'] as &$object) {
             $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
+            // if provider_thumbnail is found there's no need to extract it from thumbsResponse
             if ($thumbnail) {
                 $object['meta']['thumb_url'] = $thumbnail;
-                continue; // if provider_thumbnail is found there's no need to extract it from thumbsResponse
+                continue;
             }
 
             // extract url of the matching objectid's thumb
-            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
-            if (count($thumbnail)) {
-                $object['meta']['thumb_url'] = $thumbnail[0];
+            $thumbnail = Hash::get($thumbs, $object['id']);
+            if ($thumbnail !== null) {
+                $object['meta']['thumb_url'] = $thumbnail;
             }
         }
     }

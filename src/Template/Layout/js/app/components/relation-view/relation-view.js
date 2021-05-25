@@ -53,9 +53,9 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
+        dataList: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         preCount: {
             type: Number,
@@ -91,6 +91,18 @@ export default {
             let a = this.addedRelations.map(o => o.id);
             let b = this.objects.map(o => o.id);
             return a.concat(b);
+        },
+
+        /**
+         * Show filter conditions.
+         *
+         * @returns {boolean}
+         */
+        showFilter() {
+            return this.activeFilter.q ||
+                this.pagination.page > 1 ||
+                this.objects.length >= this.pagination.page_size ||
+                this.addedRelations.length >= this.pagination.page_size;
         },
     },
 
@@ -495,9 +507,9 @@ export default {
         },
 
         /**
-         * remove related object: adding it to removedRelated Array
+         * remove related object adding it to removedRelated Array
          *
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -515,8 +527,7 @@ export default {
         /**
          * re-add removed related object: removing it from removedRelated Array
          *
-         * @param {Number} id
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -707,7 +718,7 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return relations.filter((rel) => rel.id === id).length;
+            return !!relations.find((rel) => rel.id === id);
         },
 
         /**
@@ -732,6 +743,55 @@ export default {
         moduleAvailable(type) {
             return (BEDITA.modules.indexOf(type) !== -1);
         },
+
+        /**
+         * Return true when related object has streams data.
+         *
+         * @param {Object} related The object
+         * @returns
+         */
+        relatedStream(related) {
+            if (!related.relationships.streams || !related.relationships.streams.data || related.relationships.streams.data.length === 0) {
+                return false;
+            }
+
+            return related.relationships.streams.data[0].attributes;
+        },
+
+        /**
+         * Get related object attribute.
+         *
+         * @param {Object} related The object
+         * @param {String} attribute The attribute name
+         * @param {String} format The format required, if any
+         * @returns {String}
+         */
+        relatedAttribute(related, attribute, format) {
+            let val = '';
+            const stream = related.relationships.streams.data[0];
+            if (attribute in stream.attributes) {
+                val = stream.attributes[attribute];
+            } else if (attribute in stream.meta) {
+                val = stream.meta[attribute];
+            }
+            if (format === 'bytes') {
+                return this.bytes(val);
+            }
+
+            return val;
+        },
+
+        /**
+         * Get bytes representation of size.
+         *
+         * @param {Number} size The size
+         * @returns {String}
+         */
+        bytes(size) {
+            let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
+
+            return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+        }
     }
 
 }

@@ -17,6 +17,7 @@ use App\Form\Control;
 use App\Form\ControlType;
 use App\Form\Options;
 use Cake\Core\Configure;
+use Cake\I18n\Number;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -34,6 +35,20 @@ class SchemaHelper extends Helper
      * @var array
      */
     public $helpers = ['Time'];
+
+    /**
+     * Default translatable fields to be prepended in translations
+     *
+     * @var array
+     */
+    public const DEFAULT_TRANSLATABLE = ['title', 'description', 'body'];
+
+    /**
+     * Translatable media types
+     *
+     * @var array
+     */
+    public const TRANSLATABLE_MEDIATYPES = ['text/html', 'text/plain'];
 
     /**
      * Get control options for a property schema.
@@ -84,6 +99,17 @@ class SchemaHelper extends Helper
     }
 
     /**
+     * Format byte value
+     *
+     * @param mixed $value Property value.
+     * @return string
+     */
+    protected function formatByte($value): string
+    {
+        return (string)Number::toReadableSize((int)$value);
+    }
+
+    /**
      * Format boolean value
      *
      * @param mixed $value Property value.
@@ -104,6 +130,10 @@ class SchemaHelper extends Helper
      */
     protected function formatDate($value): string
     {
+        if (empty($value)) {
+            return '';
+        }
+
         return (string)$this->Time->format($value);
     }
 
@@ -115,6 +145,10 @@ class SchemaHelper extends Helper
      */
     protected function formatDateTime($value): string
     {
+        if (empty($value)) {
+            return '';
+        }
+
         return (string)$this->Time->format($value);
     }
 
@@ -170,25 +204,13 @@ class SchemaHelper extends Helper
 
         $fields = [];
         foreach ($properties as $name => $property) {
-            if (!empty($property['oneOf'])) {
-                foreach ($property['oneOf'] as $one) {
-                    if (!empty($one['type']) && $one['type'] === 'null') {
-                        continue;
-                    }
-
-                    if (!empty($one['type']) && !empty($one['contentMediaType']) && $one['type'] === 'string' && $one['contentMediaType'] === 'text/html') {
-                        $fields[] = $name;
-                    }
-                }
-            } elseif (!empty($property['type']) && $property['type'] === 'string') {
-                if (!empty($property['contentMediaType']) && $property['contentMediaType'] === 'text/html') { // textarea
-                    $fields[] = $name;
-                }
+            if ($this->translatableType($property)) {
+                $fields[] = $name;
             }
         }
+
         // put specific fields at the beginning of the fields array
-        $prefields = array_reverse(['title', 'description']);
-        foreach ($prefields as $field) {
+        foreach (array_reverse(static::DEFAULT_TRANSLATABLE) as $field) {
             if (in_array($field, $fields)) {
                 unset($fields[array_search($field, $fields)]);
                 array_unshift($fields, $field);
@@ -196,6 +218,34 @@ class SchemaHelper extends Helper
         }
 
         return $fields;
+    }
+
+    /**
+     * Helper recursive method to check if a property is translatable checking its JSON SCHEMA
+     *
+     * @param array $schema Property schema
+     * @return bool
+     */
+    protected function translatableType(array $schema): bool
+    {
+        if (!empty($schema['oneOf'])) {
+            return array_reduce(
+                (array)$schema['oneOf'],
+                function ($carry, $item) {
+                    if ($carry) {
+                        return true;
+                    }
+
+                    return $this->translatableType((array)$item);
+                }
+            );
+        }
+        // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'
+        $type = (string)Hash::get($schema, 'type');
+        $contentMediaType = Hash::get($schema, 'contentMediaType');
+
+        return $type === 'string' &&
+            in_array($contentMediaType, static::TRANSLATABLE_MEDIATYPES);
     }
 
     /**

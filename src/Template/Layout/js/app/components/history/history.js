@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { t } from 'ttag';
 import { PanelEvents } from '../panel-view';
+import { confirm, prompt } from 'app/components/dialog/dialog';
 
 const LOCALE = BEDITA.locale.slice(0, 2);
 
@@ -10,7 +11,7 @@ const LOCALE = BEDITA.locale.slice(0, 2);
 export default {
     template: `<div class="history-content" style="--module-color: ${BEDITA.currentModule.color}">
         <div v-if="isLoading" class="is-loading-spinner"></div>
-        <details v-for="date in sortedDates" open>
+        <details v-if="sortedDates.length" v-for="date in sortedDates" open>
             <summary class="pb-05 is-uppercase has-font-weight-bold"><: date :></summary>
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
@@ -24,6 +25,9 @@ export default {
                 </li>
             </ul>
         </details>
+        <div v-if="!isLoading && !sortedDates.length" open>
+            <label><: t('No History data found') :></label>
+        </div>
     </div>`,
 
     data() {
@@ -76,31 +80,29 @@ export default {
          * @param {string} historyId ID of the History item to restore
          */
         onRestore(historyId) {
-            let message = t`Restored data will replace current data (you can still check the data before saving). Are you sure?`;
-            let dialog = this.$root.$refs.beditaDialog;
-            let confirmCallback = () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`);
-            dialog.confirm(message, t`yes, proceed`, confirmCallback);
+            confirm(
+                t`Restored data will replace current data (you can still check the data before saving). Are you sure?`,
+                t`yes, proceed`,
+                () => window.location.replace(`${window.location.origin}${window.location.pathname}/history/${historyId}`)
+            );
         },
         /**
          * Open a new tab with the URL to create a new object with data restored from `historyId` object.
          * @param {string} historyId ID of the history item to restore
          */
         onClone(historyId) {
-            const title = document.getElementById('title').value || t`Untitled`;
-            const msg = t`Please insert a new title on "${title}" clone`;
-            const defaultTitle = title + '-' + t`copy`;
-            let dialog = this.$root.$refs.beditaDialog;
+            let title = document.getElementById('title').value || t`Untitled`;
+            let msg = t`Please insert a new title on "${title}" clone`;
+            let defaultTitle = title + '-' + t`copy`;
 
-            const confirmCallback = (cloneTitle = defaultTitle) => {
-                const origin = window.location.origin;
-                const path = window.location.pathname.replace('/view/', '/clone/');
-                const url = `${origin}${path}/history/${historyId}?title=${cloneTitle}`;
-                const newTab = window.open(url, '_blank');
+            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
+                let origin = window.location.origin;
+                let path = window.location.pathname.replace('/view/', '/clone/');
+                let url = `${origin}${path}/history/${historyId}?title=${cloneTitle || defaultTitle}`;
+                let newTab = window.open(url, '_blank');
                 newTab.focus();
                 dialog.hide();
-            };
-
-            dialog.prompt(msg, defaultTitle, confirmCallback);
+            });
         },
     },
 
@@ -131,24 +133,28 @@ export default {
         const historyJson = await historyRes.json();
         this.rawHistory = historyJson.data;
 
-        // fetch users involved in the object history
-        let usersId = this.rawHistory.map((change) => change.meta.user_id);
-        usersId = [...new Set(usersId)]; // remove duplicates
-        const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
-        const userJson = await userRes.json();
-        const users = userJson.data;
+        // only if history data found, elaborate it
+        if (this.rawHistory.length) {
 
-        // group changes by date
-        this.history = this.rawHistory.reduce((accumulator, item) => {
-            item.meta.user = users.find((user) => user.id == item.meta.user_id);
-            const createdDate = moment(item.meta.created).format('DD MMM YYYY');
-            accumulator[createdDate] = accumulator[createdDate] || [];
-            accumulator[createdDate].push(item);
-            return accumulator;
-        }, {});
+            // fetch users involved in the object history
+            let usersId = this.rawHistory.map((change) => change.meta.user_id);
+            usersId = [...new Set(usersId)]; // remove duplicates
+            const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
+            const userJson = await userRes.json();
+            const users = userJson.data;
 
-        // sort changes by time in descending order
-        Object.keys(this.history).forEach((date) => this.history[date].reverse());
+            // group changes by date
+            this.history = this.rawHistory.reduce((accumulator, item) => {
+                item.meta.user = users.find((user) => user.id == item.meta.user_id);
+                const createdDate = moment(item.meta.created).format('DD MMM YYYY');
+                accumulator[createdDate] = accumulator[createdDate] || [];
+                accumulator[createdDate].push(item);
+                return accumulator;
+            }, {});
+
+            // sort changes by time in descending order
+            Object.keys(this.history).forEach((date) => this.history[date].reverse());
+        }
 
         this.$emit('count', historyJson.meta.pagination.count);
         this.isLoading = false;

@@ -670,6 +670,9 @@ class ModulesComponent extends Component
             }
             // invert relation call => use 'parent' relation on children folder
             $data = compact('id') + ['type' => 'folders'];
+            if (Hash::check((array)$item, 'meta')) {
+                $data += ['meta' => Hash::get((array)$item, 'meta')];
+            }
             $apiClient->replaceRelated($relId, 'folders', 'parent', $data);
         }
 

@@ -166,6 +166,77 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testValue` test case.
+     *
+     * @return array
+     */
+    public function valueProvider(): array
+    {
+        return [
+            'object attribute' => [
+                [
+                    'attributes' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo', // expected
+            ],
+            'object meta' => [
+                [
+                    'meta' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dummy', // property
+                'gustavo', // expected
+            ],
+            'file_name' => [
+                [
+                    'relationships' => [
+                        'streams' => [
+                            'data' => [
+                                ['attributes' => ['file_name' => 'sample.txt']],
+                            ],
+                        ],
+                    ],
+                ], // object
+                'file_name', // property
+                'sample.txt', // expected
+            ],
+            'not found' => [
+                [
+                    'attributes' => [
+                        'dummy' => 'gustavo',
+                    ],
+                ], // object
+                'dddummy', // property
+                '', // expected
+            ],
+
+        ];
+    }
+
+    /**
+     * Test `value`
+     *
+     * @param array $object The object
+     * @param string $property The property
+     * @param string $expected The expected value
+     * @return void
+     *
+     * @dataProvider valueProvider()
+     * @covers ::value()
+     */
+    public function testValue(array $object, string $property, string $expected): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->value($object, $property);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Dummy function to test custom control.
      *
      * @param mixed|null $value The value

@@ -8,6 +8,7 @@
  */
 
 import ModulesIndex from 'app/pages/modules/index';
+import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 export default {
@@ -257,10 +258,8 @@ export default {
             }
 
             // some property type has been removed. ask for confirmation before proceeding.
-            const types = this.removePropertyTypes.map((removed) => this.propertyTypes.find((type) => type.id == removed).attributes.name).join(', ');
-            let message = t`Do you really want to trash these property types? ${types}`;
-            let dialog = this.$root.$refs.beditaDialog;
-            dialog.confirm(message, t`yes, proceed`, performSave);
+            let types = this.removePropertyTypes.map((removed) => this.propertyTypes.find((type) => type.id == removed).attributes.name).join(', ');
+            confirm(t`Do you really want to trash these property types? ${types}`, t`yes, proceed`, performSave);
         },
 
         /**

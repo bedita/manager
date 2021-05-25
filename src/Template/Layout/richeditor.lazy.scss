@@ -1,0 +1,50 @@
+/*
+██████╗ ███████╗██████╗ ██╗████████╗ █████╗     ██╗  ██╗
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗    ██║  ██║
+██████╔╝█████╗  ██║  ██║██║   ██║   ███████║    ███████║
+██╔══██╗██╔══╝  ██║  ██║██║   ██║   ██╔══██║    ╚════██║
+██████╔╝███████╗██████╔╝██║   ██║   ██║  ██║         ██║
+╚═════╝ ╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝         ╚═╝
+BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
+*/
+@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
+@import './styles/mixins';
+
+// general
+@import './styles/base';
+
+body {
+    padding: 1em !important;
+    color: unset;
+    background: unset;
+    font-family: $font-family-monospace;
+    font-size: $font-size-base;
+}
+
+.mce-offscreen-selection {
+    position: absolute;
+    left: -9999999999999px;
+}
+
+p {
+    margin-bottom:.5rem;
+}
+
+blockquote {
+    padding-left:1rem;
+    margin-left:0;
+    border-left: 4px solid $gray-700;
+}
+
+a {
+    color: blue;
+}
+
+a:link, a:hover, a:active, a:visited {
+    text-decoration: underline;
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+   margin-top:1rem;
+   margin-bottom:.5rem;
+}

@@ -74,7 +74,7 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
 
             return $this->Html->link(
-                Inflector::humanize($label),
+                __(Inflector::humanize($label)),
                 ['_name' => 'modules:list', 'object_type' => $name],
                 ['class' => sprintf('has-background-module-%s', $name)]
             );
@@ -82,7 +82,7 @@ class LayoutHelper extends Helper
 
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
-            Inflector::humanize($this->getView()->getName()),
+            __(Inflector::humanize($this->getView()->getName())),
             (array)$this->getView()->get('moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
@@ -103,5 +103,26 @@ class LayoutHelper extends Helper
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
+    }
+
+    /**
+     * Return custom element via `Properties` configuration for
+     * a relation or property group in current module.
+     *
+     * @param string $item Relation or group name
+     * @param string $type Item type: `relation` or `group`
+     * @return string
+     */
+    public function customElement(string $item, string $type = 'relation'): string
+    {
+        $currentModule = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($currentModule, 'name');
+        if ($type === 'relation') {
+            $path = sprintf('Properties.%s.relations._element.%s', $name, $item);
+        } else {
+            $path = sprintf('Properties.%s.view.%s._element', $name, $item);
+        }
+
+        return (string)Configure::read($path);
     }
 }
