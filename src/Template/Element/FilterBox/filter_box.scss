@@ -47,7 +47,7 @@
         .filter-status-select { margin-left: $gutter * .5; }
         .filter-label:first-letter { text-transform: uppercase; }
 
-        label {
+        label, .filter-label {
             cursor: pointer;
             display: inline-block;
             flex-grow: 1;

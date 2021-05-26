@@ -428,6 +428,34 @@ class SchemaHelperTest extends TestCase
                 [],
                 [],
             ],
+            'simple' => [
+                [
+                    'field' => [
+                        'oneOf' => [
+                            [
+                                'type' => 'string',
+                                'contentMediaType' => 'text/plain',
+                            ],
+                            [
+                                'type' => 'null',
+                            ],
+                        ],
+                    ],
+                ],
+                ['field'],
+            ],
+            'not translatable' => [
+                [
+                    'field1' => [
+                        'type' => 'string',
+                    ],
+                    'field2' => [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/css',
+                    ],
+                ],
+                [],
+            ],
             'properties' => [
                 [
                     'dummy' => [
@@ -437,7 +465,7 @@ class SchemaHelperTest extends TestCase
                             ],
                             [
                                 'type' => 'string',
-                                'contentMediaType' => 'text/html',
+                                'contentMediaType' => 'text/plain',
                             ],
                         ],
                     ],
@@ -468,6 +496,7 @@ class SchemaHelperTest extends TestCase
      *
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
+     * @covers ::translatableType()
      */
     public function testTranslatableFields(array $properties, array $expected)
     {
@@ -496,6 +525,13 @@ class SchemaHelperTest extends TestCase
                             'contentMediaType' => 'text/html',
                         ],
                     ],
+                ],
+            ],
+            'byte' => [
+                '1 MB',
+                1024 ** 2,
+                [
+                    'type' => 'byte',
                 ],
             ],
             'bool' => [
@@ -550,6 +586,7 @@ class SchemaHelperTest extends TestCase
      *
      * @dataProvider formatProvider()
      * @covers ::format()
+     * @covers ::formatByte()
      * @covers ::formatBoolean()
      * @covers ::formatDate()
      * @covers ::formatDateTime()

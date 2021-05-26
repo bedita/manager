@@ -25,7 +25,7 @@ class ControlType
     /**
      * Schema property types
      */
-    public const SCHEMA_PROPERTY_TYPES = ['string', 'number', 'integer', 'boolean', 'array', 'object'];
+    public const SCHEMA_PROPERTY_TYPES = ['string', 'number', 'integer', 'boolean', 'array', 'object', 'byte'];
 
     /**
      * Map JSON Schema `contentMediaType` to supported control types

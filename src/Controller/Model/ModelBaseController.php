@@ -82,10 +82,13 @@ abstract class ModelBaseController extends AppController
      */
     public function index(): ?Response
     {
+        $this->request->allowMethod(['get']);
+        $query = $this->request->getQueryParams() + ['page_size' => 500];
+
         try {
             $response = $this->apiClient->get(
                 sprintf('/model/%s', $this->resourceType),
-                $this->request->getQueryParams()
+                $query
             );
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');

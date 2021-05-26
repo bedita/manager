@@ -159,6 +159,15 @@ export default {
 
     methods: {
         /**
+         * First char upper case for string.
+         * @param {String} str The string
+         * @returns
+         */
+        ucfirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+
+        /**
          * trigger filter-objects event when query string has 3 or more carachter
          *
          * @emits Event#filter-objects

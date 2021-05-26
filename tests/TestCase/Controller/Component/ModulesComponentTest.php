@@ -1457,6 +1457,29 @@ class ModulesComponentTest extends TestCase
                 ], // relatedData
                 'addRelated', // expected
             ],
+            'folders children position' => [
+                111, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [
+                            [
+                                'id' => 123,
+                                'type' => 'folders',
+                                'meta' => ['relation' => ['position' => 1]],
+                            ],
+                            [
+                                'id' => 124,
+                                'type' => 'folders',
+                                'meta' => ['relation' => ['position' => 2]],
+                            ],
+                        ],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
             'folders children folders' => [
                 222, // id
                 'folders', // type
