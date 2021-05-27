@@ -144,6 +144,7 @@ class ThumbsComponentTest extends TestCase
      *
      * @dataProvider urlsProvider()
      * @covers ::urls()
+     * @covers ::getThumbs()
      *
      * @return void
      */
@@ -170,6 +171,7 @@ class ThumbsComponentTest extends TestCase
      * Test `urls` method, exception case
      *
      * @covers ::urls()
+     * @covers ::getThumbs()
      *
      * @return void
      */

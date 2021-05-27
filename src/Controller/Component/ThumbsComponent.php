@@ -40,31 +40,12 @@ class ThumbsComponent extends Component
             return;
         }
 
-        $getThumbs = function (array $ids): ?array {
-            try {
-                $params = $this->getController()->getRequest()->getQueryParams();
-                $query = $this->getController()->Query->prepare($params);
-                $url = sprintf('/media/thumbs?%s', http_build_query([
-                    'ids' => implode(',', $ids),
-                    'options' => ['w' => 400],
-                ]));
-                $apiClient = ApiClientProvider::getApiClient();
-                $res = $apiClient->get($url, $query);
-
-                return Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
-            } catch (BEditaClientException $e) {
-                $this->getController()->log($e, 'error');
-
-                return null;
-            }
-        };
-
-        $thumbs = $getThumbs($ids);
+        $thumbs = $this->getThumbs($ids);
         if ($thumbs === null) {
             // An error happened: let's try again by generating one thumbnail at a time.
             $thumbs = [];
             foreach ($ids as $id) {
-                $thumbs += (array)$getThumbs([$id]);
+                $thumbs += (array)$this->getThumbs([$id]);
             }
         }
 
@@ -81,6 +62,32 @@ class ThumbsComponent extends Component
             if ($thumbnail !== null) {
                 $object['meta']['thumb_url'] = $thumbnail;
             }
+        }
+    }
+
+    /**
+     * Get thumbs by IDs
+     *
+     * @param array $ids The IDs
+     * @return array|null
+     */
+    protected function getThumbs(array $ids): ?array
+    {
+        try {
+            $params = $this->getController()->getRequest()->getQueryParams();
+            $query = $this->getController()->Query->prepare($params);
+            $url = sprintf('/media/thumbs?%s', http_build_query([
+                'ids' => implode(',', $ids),
+                'options' => ['w' => 400],
+            ]));
+            $apiClient = ApiClientProvider::getApiClient();
+            $res = $apiClient->get($url, $query);
+
+            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
+        } catch (BEditaClientException $e) {
+            $this->getController()->log($e, 'error');
+
+            return null;
         }
     }
 }
