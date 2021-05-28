@@ -12,7 +12,7 @@ jobs:
   cs:
     name: 'Check coding style'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    g: 'ubuntu-20.04'
+    runs-on: 'ubuntu-20.04'
 
     strategy:
       matrix:
