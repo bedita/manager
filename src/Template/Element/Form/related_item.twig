@@ -59,8 +59,6 @@
             {% endif %}
 
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
-            <span class="id has-text-size-smallest"><: related.id :></span>
-            <span class="uname has-text-size-smallest"><: related.attributes.uname :></span>
         </div>
 
         <header class="is-flex space-between mt-05">
@@ -90,9 +88,12 @@
 
             {% if not translation %}
                 <span class="modified">
-                    <: new Date(related.meta.modified).toLocaleDateString() + ', ' + new Date(related.meta.modified).toLocaleTimeString() :>
+                    <: new Date(related.meta.modified).toLocaleDateString() :>
                 </span>
             {% endif %}
+
+            {# <span class="id has-text-size-smallest"><: related.id :></span>
+            <span class="uname has-text-size-smallest"><: related.attributes.uname :></span> #}
         </header>
     </div>
 
