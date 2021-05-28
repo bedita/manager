@@ -12,7 +12,7 @@ jobs:
   cs:
     name: 'Check coding style'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-18.04'
+    runs-on: 'ubuntu-20.04'
 
     strategy:
       matrix:
@@ -55,7 +55,7 @@ jobs:
   stan:
     name: 'Static code analyzer'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-18.04'
+    runs-on: 'ubuntu-20.04'
     continue-on-error: true
 
     strategy:
@@ -97,7 +97,7 @@ jobs:
   unit:
     name: 'Run unit tests'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-18.04'
+    runs-on: 'ubuntu-20.04'
     env:
       BEDITA_API_KEY: 12345
       BEDITA_API: http://127.0.0.1:8080
