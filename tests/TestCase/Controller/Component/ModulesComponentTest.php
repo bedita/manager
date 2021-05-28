@@ -105,12 +105,14 @@ class ModulesComponentTest extends TestCase
      */
     public function getProjectProvider()
     {
+        $colophon = 'LGPL <a href="https://www.bedita.com" alt="BEdita Web site" target="_blank">www.bedita.com</a>';
+
         return [
             'ok' => [
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 [
                     'project' => [
@@ -123,7 +125,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 [],
             ],
@@ -131,7 +133,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -143,7 +145,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'Gustavo',
                     'version' => '4.1.2',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 [
                     'version' => '4.1.2',
@@ -443,6 +445,8 @@ class ModulesComponentTest extends TestCase
      */
     public function startupProvider(): array
     {
+        $colophon = 'LGPL <a href="https://www.bedita.com" alt="BEdita Web site" target="_blank">www.bedita.com</a>';
+
         return [
             'without current module' => [
                 1,
@@ -454,7 +458,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 [
                     'resources' => [
@@ -490,7 +494,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
+                    'colophon' => $colophon,
                 ],
                 [
                     'resources' => [
