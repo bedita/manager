@@ -88,14 +88,15 @@ class PropertyHelper extends Helper
     {
         $schema = (array)$this->_View->get('schema');
         $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
-        if (!empty($res)) {
-            return $res;
-        }
-
-        return array_filter([
+        $default = array_filter([
             'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
             $name => Hash::get($schema, sprintf('%s', $name)),
         ]);
+        if (in_array($name, self::SPECIAL_PROPS_TYPE)) {
+            return $default;
+        }
+
+        return !empty($res) ? $res : $default;
     }
 
     /**
