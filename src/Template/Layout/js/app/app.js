@@ -1,4 +1,4 @@
-import Vue from 'vue'; // test
+import Vue from 'vue';
 
 import 'libs/filters';
 import 'config/config';
