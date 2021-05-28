@@ -184,7 +184,6 @@ class ModulesComponent extends Component
         $project = [
             'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
-            'colophon' => 'LGPL <a href="https://www.bedita.com" alt="BEdita Web site" target="_blank">www.bedita.com</a>',
         ];
 
         return $project;
