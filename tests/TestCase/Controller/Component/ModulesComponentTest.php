@@ -110,7 +110,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'project' => [
@@ -123,7 +122,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 [],
             ],
@@ -131,7 +129,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -143,7 +140,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'Gustavo',
                     'version' => '4.1.2',
-                    'colophon' => '',
                 ],
                 [
                     'version' => '4.1.2',
@@ -454,7 +450,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [
@@ -490,7 +485,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [

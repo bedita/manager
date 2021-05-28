@@ -184,7 +184,6 @@ class ModulesComponent extends Component
         $project = [
             'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
-            'colophon' => '', // TODO: populate this value.
         ];
 
         return $project;
