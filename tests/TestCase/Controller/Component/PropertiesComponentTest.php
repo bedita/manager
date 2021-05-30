@@ -13,8 +13,6 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\PropertiesComponent;
-use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
