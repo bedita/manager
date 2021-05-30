@@ -8,7 +8,7 @@
                 <h2>{{ __('Categories') }}</h2>
             </header>
 
-            <div v-show="isOpen" class="tab-container">
+            <div v-show="isOpen" class="tab-container categories">
                 {{ Property.control('categories', object.attributes.categories, {'label': false})|raw }}
             </div>
         </section>
