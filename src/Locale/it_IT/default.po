@@ -612,7 +612,7 @@ msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 
 msgid "Your recent items"
-msgstr ""
+msgstr "I tuoi elementi più recenti"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
