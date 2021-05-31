@@ -3,7 +3,7 @@
         flex: 1 1 0;
         &:first-child {
             flex: none;
-            flex-grow: 1;
+            // flex-grow: 1;
             max-width: 100%;
         }
         &:last-child {
@@ -54,7 +54,7 @@
         label, .filter-label {
             cursor: pointer;
             display: inline-block;
-            flex-grow: 1;
+            // flex-grow: 1;
             &:not(:last-child) { margin-right: $gutter; }
         }
     }
