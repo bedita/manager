@@ -35,11 +35,12 @@
                     </header>
                     <div class="tab-container">
                         {% for index, datum in filters %}
-                            <div id="filter-{{ datum.value|lower }}-options" v-show="currentFilterId == {{ index }}">
+                            <div id="filter-{{ datum.value|lower }}-options" v-if="currentFilterId == {{ index }}">
                             {% if datum.options %}
                                 {% for optionName,optionData in datum.options %}
                                 <div>
                                     <label>{{ optionData.label }}</label>
+                                    {{ Form.unlockField(optionName) }}
                                     {% if optionData.dataType == 'boolean' %}
                                         {{ Form.control(optionName, {
                                             'type': 'checkbox',
