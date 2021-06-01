@@ -460,7 +460,7 @@ msgstr "Indirizzo remoto"
 msgid "Remove"
 msgstr "Rimuovi"
 
-msgid "Request password reset"
+msgid "Request password"
 msgstr "Reimposta password"
 
 msgid "Reset filters"
