@@ -299,6 +299,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Back to login"
+msgstr "Torna al login"
+
 msgid "Long Lat Coordinates"
 msgstr ""
 
@@ -457,7 +460,7 @@ msgstr "Indirizzo remoto"
 msgid "Remove"
 msgstr "Rimuovi"
 
-msgid "Request password reset"
+msgid "Request password"
 msgstr "Reimposta password"
 
 msgid "Reset filters"
