@@ -1,27 +1,61 @@
-<div class="mb-1">
-    <h1>{{ __('Password reset') }}</h1>
-    <p>{{ __('Submit your email address and follow the instructions sent by email.') }}</p>
-</div>
+{% do _view.assign('title', __('Login')) %}
+{% do _view.assign('bodyViewClass', 'view-login') %}
 
-{{ Form.create(null, {
-    'url': {'_name': 'password:reset'},
-})|raw }}
+<div class="login">
 
-<div class="mb-1">
-    <label for="email">{{ __('Email') }}</label>
-    <div>
-        {{ Form.text('email', {
-            'id': 'email',
-            'autocomplete': 'email',
-            'autocorrect': 'off',
-            'autocapitalize': 'off',
-            'spellcheck': 'false',
-            'placeholder': 'e.g. john@example.com',
-            'class': 'input',
+    <div class="login-title">
+
+        <div class="login-error">
+            {{ Flash.render()|raw }}
+        </div>
+
+         <div class="project-title">
+            <div class="module-box">
+                {{ Html.link( (project.name ?: 'BEdita Content Manager'), '/' ) | raw }}
+            </div>
+        </div>
+     </div>
+
+    <div class="login-form">
+    
+        <div class="mb-1">
+            <h1>{{ __('Password reset') }}</h1>
+            <p>{{ __('Submit your email address and follow the instructions sent by email.') }}</p>
+        </div>
+
+        {{ Form.create(null, {
+            'url': {'_name': 'password:reset'},
         })|raw }}
+
+        <div class="mb-1">
+            <label for="email">{{ __('Email') }}</label>
+            <div>
+                {{ Form.text('email', {
+                    'required':'required',
+                    'id': 'email',
+                    'autocomplete': 'email',
+                    'autocorrect': 'off',
+                    'autocapitalize': 'off',
+                    'spellcheck': 'false',
+                    'placeholder': 'e.g. john@example.com',
+                    'class': 'input',
+                })|raw }}
+            </div>
+        </div>
+
+        {{ Form.button(__('Request password'), {'type': 'submit'})|raw }}
+
+        {{ Form.end()|raw }}
+
+         <p class="mt-1">{{ Html.link( __('Back to login'), '/' ) | raw }}</p>
+    
     </div>
+
+    <footer>
+        <div class="sidebar-footer">
+            <div class="sidebar-bedita-logo white">{# css logo #}</div>
+            {% element 'Menu/colophon' %}
+        </div>  
+    </footer>
+
 </div>
-
-{{ Form.button(__('Request password reset'), {'type': 'submit'})|raw }}
-
-{{ Form.end()|raw }}

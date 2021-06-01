@@ -33,6 +33,7 @@
         {% endif %}
 
         {{ Form.control('username', {
+            'required':'required',
             'autocomplete': 'username',
             'autocorrect': 'off',
             'autocapitalize': 'off',
@@ -42,8 +43,8 @@
         })|raw }}
         
         {{ Form.control('password', {
+            'required':'required',
             'autocomplete': 'current-password',
-            'placeholder': '••••••',
             'label': 'Password',
         })|raw }}
 
@@ -53,8 +54,6 @@
             'style': 'display: none'
         })|raw }}
 
-
-
         {{ Form.submit(__('Sign in'))|raw }}
 
         <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
@@ -63,8 +62,8 @@
 
     </div>
     <footer>
-    <div class="sidebar-footer">
-        <div class="sidebar-bedita-logo white">{# css logo #}</div>
+        <div class="sidebar-footer">
+            <div class="sidebar-bedita-logo white">{# css logo #}</div>
             {% element 'Menu/colophon' %}
         </div>  
     </footer>

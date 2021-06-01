@@ -299,6 +299,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Back to login"
+msgstr "Torna al login"
+
 msgid "Long Lat Coordinates"
 msgstr ""
 
