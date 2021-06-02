@@ -299,6 +299,9 @@ msgstr "Accedi"
 msgid "Login required"
 msgstr "È richiesto il login"
 
+msgid "Back to login"
+msgstr "Torna al login"
+
 msgid "Long Lat Coordinates"
 msgstr ""
 
@@ -457,7 +460,7 @@ msgstr "Indirizzo remoto"
 msgid "Remove"
 msgstr "Rimuovi"
 
-msgid "Request password reset"
+msgid "Request password"
 msgstr "Reimposta password"
 
 msgid "Reset filters"
@@ -612,7 +615,7 @@ msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 
 msgid "Your recent items"
-msgstr ""
+msgstr "I tuoi elementi più recenti"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"

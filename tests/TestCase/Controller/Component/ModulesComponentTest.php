@@ -110,7 +110,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'project' => [
@@ -123,7 +122,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 [],
             ],
@@ -131,7 +129,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -143,7 +140,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'Gustavo',
                     'version' => '4.1.2',
-                    'colophon' => '',
                 ],
                 [
                     'version' => '4.1.2',
@@ -454,7 +450,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [
@@ -490,7 +485,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [
@@ -898,67 +892,6 @@ class ModulesComponentTest extends TestCase
         $expected = $object;
         $expected['attributes'] = array_merge($object['attributes'], $recover);
         static::assertEquals($expected, $object);
-    }
-
-    /**
-     * Data provider for `testPrepareQuery`
-     *
-     * @return void
-     */
-    public function prepareQueryProvider()
-    {
-        return [
-            'simple' => [
-                [
-                    'page_size' => 7,
-                    'q' => 'gustavo',
-                ],
-                [
-                    'page_items' => 32,
-                    'page_size' => 7,
-                    'count' => 123,
-                    'q' => 'gustavo',
-                    'filter' => [],
-                ],
-            ],
-
-            'filter 1' => [
-                [
-                    'filter' => [
-                        'type' => 'documents',
-                    ],
-                ],
-                [
-                    'filter' => [
-                        'type' => 'documents',
-                        'b' => null,
-                    ],
-                ],
-            ],
-            'filter 2' => [
-                [],
-                [
-                    'filter' => [
-                        'type' => null,
-                        'a' => '',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `prepareQuery` method.
-     *
-     * @return void
-     *
-     * @dataProvider prepareQueryProvider
-     * @covers ::prepareQuery()
-     */
-    public function testPrepareQuery(array $expected, array $query): void
-    {
-        $result = $this->Modules->prepareQuery($query);
-        static::assertEquals($expected, $result);
     }
 
     /**

@@ -1,13 +1,19 @@
 .object-form {
     .fieldset > .tab-container,
     .fieldset > .container {
-        padding: $gutter 0;
+        padding: $gutter 0 0 0;
 
         > div {
             margin: $gutter 0;
 
             &:first-child {
                 margin: 0;
+            }
+        }
+
+        .input.title {
+            input[type=text] {
+                font-size: $font-size-llg;
             }
         }
 

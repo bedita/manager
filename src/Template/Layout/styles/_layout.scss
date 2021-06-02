@@ -28,7 +28,7 @@ main.layout {
     > .layout-content { grid-area: content-body; }
 
     > .layout-content,
-    > .layout-footer { padding: $gutter 0; }
+    > .layout-footer { padding: 0; }
 
     > .layout-sidebar, > .layout-footer { max-width: 100%; overflow-x: hidden; }
     > .layout-content { max-width: 100%; overflow-x: hidden; }

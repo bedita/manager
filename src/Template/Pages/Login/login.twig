@@ -1,56 +1,71 @@
 {% do _view.assign('title', __('Login')) %}
 {% do _view.assign('bodyViewClass', 'view-login') %}
 
-<div class="login-form">
-    {{ Flash.render()|raw }}
+<div class="login">
 
-    {{ Form.create(null, {
-        'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
-    })|raw }}
+    <div class="login-title">
 
-    {% if projects %}
-    {{ Form.control('project', {
-        'type': 'select',
-        'options': projects,
-        'label': false,
-        'style': 'margin-bottom: 1rem; width: 100%;',
-    })|raw }}
-    {% endif %}
+        <div class="login-error">
+            {{ Flash.render()|raw }}
+        </div>
 
-    {{ Form.control('username', {
-        'autocomplete': 'username',
-        'autocorrect': 'off',
-        'autocapitalize': 'off',
-        'spellcheck': 'false',
-        'placeholder': 'e.g. john@example.com',
-        'label': false,
-    })|raw }}
-    <label>{{ __('Username') }}</label>
-    {{ Form.control('password', {
-        'autocomplete': 'current-password',
-        'placeholder': '••••••',
-        'label': false,
-    })|raw }}
-    <label>{{ __('Password') }}</label>
+         <div class="project-title">
+            <div class="module-box">
+                {{ Html.link( (config('Project.name') ?: 'BEdita Content Manager'), '/' ) | raw }}
+            </div>
+        </div>
+     </div>
 
-    {{ Form.control('timezone_offset', {
-        'label': false,
-        'value': '0',
-        'style': 'display: none'
-    })|raw }}
+    <div class="login-form">
 
-    {{ Form.submit(__('Sign in'))|raw }}
-    <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
+        {{ Form.create(null, {
+            'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
+        })|raw }}
 
-    {{ Form.end()|raw }}
+        {% if projects %}
+        <label>{{ __('Select a project') }}</label>
+        {{ Form.control('project', {
+            'type': 'select',
+            'options': projects,
+            'label': false,
+            'style': 'margin-bottom: 1rem; width: 100%;',
+        })|raw }}
+        {% endif %}
 
+        {{ Form.control('username', {
+            'required':'required',
+            'autocomplete': 'username',
+            'autocorrect': 'off',
+            'autocapitalize': 'off',
+            'spellcheck': 'false',
+            'placeholder': 'e.g. john@example.com',
+            'label': 'Username',
+        })|raw }}
+        
+        {{ Form.control('password', {
+            'required':'required',
+            'autocomplete': 'current-password',
+            'label': 'Password',
+        })|raw }}
+
+        {{ Form.control('timezone_offset', {
+            'label': false,
+            'value': '0',
+            'style': 'display: none'
+        })|raw }}
+
+        {{ Form.submit(__('Sign in'))|raw }}
+
+        <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
+
+        {{ Form.end()|raw }}
+
+    </div>
     <footer>
-        © {{ 'now'|date('Y') }} <span>~</span>
-        {{ Html.link(__('BEdita {0}', project.version), 'https://www.bedita.com/who-are-we', {'title': 'visit bedita.com', 'target': '_blank'})|raw }}
-        <span>~</span>
-        {% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
-        {{ authors|shuffle|toList(__('&'))|raw }}
-        <span>~</span>
-        {{ Html.link(__('www.bedita.com'), 'https://www.bedita.com', {'title': __('BEdita Web site'), 'target': '_blank'})|raw }}
+        <div class="sidebar-footer">
+            <div class="sidebar-bedita-logo white">{# css logo #}</div>
+            {% element 'Menu/colophon' %}
+        </div>  
     </footer>
 </div>
+

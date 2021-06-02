@@ -1,19 +1,21 @@
 <div class="sidebar">
-    {% if Layout.isDashboard() %}
-        <div class="sidebar-bedita-logo">{# css logo #}</div>
-    {% endif %}
 
-    <div class="sidebar-project-title">
-        {{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}
+    <div class="project-title">
+        <div class="module-box">
+            {{ Html.link( (project.name ?: 'BEdita 4'), '/' ) | raw }}
+        </div>
     </div>
 
     {# module specific #}
-    {% if not Layout.isLogin() and not Layout.isDashboard() %}
+    {% if not Layout.isLogin() %}
         <div class="sidebar-module-commands">
+
+        {% if not Layout.isDashboard() %}
             <div class="module-box">
                 {{ Layout.moduleLink()|raw }}
             </div>
-
+        {% endif %}
+        
             <div class="module-buttons">
                 {{ _view.fetch('module-buttons')|raw }}
                 {% if currentModule.hints.multiple_types and types.right is iterable %}
@@ -29,16 +31,7 @@
 
 
     <div class="sidebar-body">
-        <div>
-            <a href="{{ Url.build({ '_name': 'user_profile:view' }) }}">
-                {%- if user.attributes.title %}
-                    {{ user.attributes.title }}
-                {% else %}
-                    {{ user.attributes.name }} {{ user.attributes.surname }}
-                {% endif -%}
-            </a>
-        </div>
-
+        
         {% if I18n.getLanguages|length > 1 %}
             <div>
                 <p class="has-text-size-smaller">
@@ -54,13 +47,27 @@
             </div>
         {% endif %}
 
-        <div>
-            <p><a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout">{{ __('Log out') }}</a></p>
+        <div class="user">
+            <a title="go to {{ user.attributes.name }} profile" href="{{ Url.build({ '_name': 'user_profile:view' }) }}">
+                {%- if user.attributes.title %}
+                    {{ user.attributes.title }}
+                {% else %}
+                    {{ user.attributes.name }} {{ user.attributes.surname }}
+                {% endif -%}
+            </a>
         </div>
+
+        <div>
+            <p>
+                <a href="{{ Url.build({'_name': 'logout'}) }}" class="button button-outlined">{{ __('Log out') }}</a>
+            </p>
+        </div>
+
     </div>
 
 
     <div class="sidebar-footer">
+        <div class="sidebar-bedita-logo white">{# css logo #}</div>
         {% element 'Menu/colophon' %}
     </div>
 </div>
