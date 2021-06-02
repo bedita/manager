@@ -1,7 +1,17 @@
-<section class="fieldset">
-    <div class="tab-container">
+<property-view inline-template :tab-open="tabsOpen" tab-name="general">
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('General') }}</h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            {% element 'Form/group_properties' {'properties' : properties.core, 'group': 'core'} %}
+        </div>
+    </section>
+</property-view>
 
-        {% element 'Form/group_properties' {'properties' : properties.core, 'group': 'core'} %}
 
-    </div>
-</section>
+
+
+

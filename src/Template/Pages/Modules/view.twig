@@ -2,18 +2,18 @@
 
 <modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
     <div class="modules-view">
-        {# <header>
+        <header>
             {% if object.id %}
-                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
+                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
                 {% for obj in included %}
                     {% if obj.type == 'streams' %}
-                        <a class="button icon-forward" href="{{ obj.meta.url }}" target="_blank">{{ __('View') }}</a>
+                        <a class="button icon-forward mx-1" href="{{ obj.meta.url }}" target="_blank">{{ __('Open') }}</a>
                     {% endif %}
-                {% endfor %}
+                {% endfor %}</h1>
             {% else %}
                 <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
             {% endif %}
-        </header> #}
+        </header>
 
         <div class="module-form">
             {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
