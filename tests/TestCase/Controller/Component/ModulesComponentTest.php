@@ -455,7 +455,7 @@ class ModulesComponentTest extends TestCase
         $method = $reflectionClass->getMethod('modulesByRoleConfig');
         $method->setAccessible(true);
         $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
-        $actual = $method->invokeArgs($this->Modules, [ ['documents' => []] ]);
+        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'admin' => []] ]);
         static::assertEquals($expected, $actual);
 
         $expected = ['documents' => [], 'admin' => []];
