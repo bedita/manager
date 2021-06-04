@@ -103,6 +103,78 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testIsAllowedReadonly` test case
+     *
+     * @return array
+     */
+    public function isAllowedReadonlyProvider(): array
+    {
+        return [
+            'readonly GET' => [
+                ['readonly' => true],
+                'GET',
+                true,
+            ],
+            'not readonly GET' => [
+                [],
+                'GET',
+                true,
+            ],
+            'readonly POST' => [
+                ['readonly' => true],
+                'POST',
+                false,
+            ],
+            'not readonly POST' => [
+                [],
+                'POST',
+                true,
+            ],
+            'readonly PATCH' => [
+                ['readonly' => true],
+                'PATCH',
+                false,
+            ],
+            'not readonly PATCH' => [
+                [],
+                'PATCH',
+                true,
+            ],
+            'readonly DELETE' => [
+                ['readonly' => true],
+                'DELETE',
+                false,
+            ],
+            'not readonly DELETE' => [
+                [],
+                'DELETE',
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `isAllowed` by readonly config on modules
+     *
+     * @param array $currentModule The current module
+     * @param bool $expected Expected result
+     * @param string $httpMethod HTTP method
+     * @return void
+     *
+     * @dataProvider isAllowedReadonlyProvider()
+     * @covers ::isAllowed()
+     */
+    public function testIsAllowedReadonly(array $currentModule, string $httpMethod, bool $expected): void
+    {
+        $this->Perms->getView()->set('currentModule', $currentModule);
+        $reflectionClass = new \ReflectionClass($this->Perms);
+        $method = $reflectionClass->getMethod('isAllowed');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Perms, [ $httpMethod, 'documents' ]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `isAllowed` method with no current module perms.
      *
      * @return void
