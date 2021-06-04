@@ -156,7 +156,7 @@ class ModulesComponent extends Component
      * Module can be "readonly": add "'readonly' => true" to module.
      *
      * @param array $modules The modules
-     * @return void
+     * @return array
      */
     protected function modulesByRoleConfig(array $modules): array
     {
