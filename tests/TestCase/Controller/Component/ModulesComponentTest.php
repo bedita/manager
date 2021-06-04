@@ -225,8 +225,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
 
@@ -286,8 +285,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
@@ -428,6 +426,7 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
+        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
         static::assertSame($expected, $actual);
@@ -544,7 +543,7 @@ class ModulesComponentTest extends TestCase
         Configure::write('Modules', $config);
 
         if ($userId) {
-            $this->Auth->setUser(['id' => $userId]);
+            $this->Auth->setUser(['id' => $userId, 'roles' => ['guest']]);
         }
 
         // Setup mock API client.
