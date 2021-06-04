@@ -145,22 +145,37 @@ class ModulesComponent extends Component
             array_diff_key($metaModules, $modules),
             $pluginModules
         );
+        $this->modules = $this->modulesByRoleConfig($this->modules);
+
+        return $this->modules;
+    }
+
+    /**
+     * This filters modules and apply 'Role' config by user role, if any.
+     * Module can be "hidden": remove from $modules.
+     * Module can be "readonly": add "'readonly' => true" to module.
+     *
+     * @param array $modules The modules
+     * @return void
+     */
+    protected function modulesByRoleConfig(array $modules): array
+    {
         $user = $this->getController()->Auth->user();
         $role = (string)Hash::get($user, 'roles.0');
         $hidden = (array)Configure::read(sprintf('Roles.%s.hidden', $role));
         $readonly = (array)Configure::read(sprintf('Roles.%s.readonly', $role));
-        $keys = array_keys($this->modules);
+        $keys = array_keys($modules);
         foreach ($keys as $moduleName) {
             if (in_array($moduleName, $hidden)) {
-                unset($this->modules[$moduleName]);
+                unset($modules[$moduleName]);
                 continue;
             }
             if (in_array($moduleName, $readonly)) {
-                $this->modules[$moduleName]['readonly'] = true;
+                $modules[$moduleName]['readonly'] = true;
             }
         }
 
-        return $this->modules;
+        return $modules;
     }
 
     /**

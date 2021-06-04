@@ -433,6 +433,38 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
+     * Test `modulesByRoleConfig` method
+     *
+     * @return void
+     * @cover ::modulesByRoleConfig()
+     */
+    public function testModulesByRoleConfig(): void
+    {
+        Configure::write('Roles', [
+            'guest' => [
+                'hidden' => ['admin'],
+                'readonly' => ['documents'],
+            ],
+            'superadmin' => [
+                'hidden' => [],
+                'readonly' => [],
+            ],
+        ]);
+        $expected = ['documents' => ['readonly' => true],'events' => []];
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('modulesByRoleConfig');
+        $method->setAccessible(true);
+        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [],'events' => []] ]);
+        static::assertEquals($expected, $actual);
+
+        $expected = ['documents' => [],'events' => []];
+        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['superadmin']]);
+        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [],'events' => []] ]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testBeforeRender` test case.
      *
      * @return array
