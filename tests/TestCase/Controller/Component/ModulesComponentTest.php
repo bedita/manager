@@ -84,6 +84,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
         $this->MyModules = $registry->load(MyModulesComponent::class);
+        $controller->Auth = $this->Auth;
     }
 
     /**
