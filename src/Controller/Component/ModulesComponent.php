@@ -145,6 +145,20 @@ class ModulesComponent extends Component
             array_diff_key($metaModules, $modules),
             $pluginModules
         );
+        $user = $this->getController()->Auth->user();
+        $role = (string)Hash::get($user, 'roles.0');
+        $hidden = (array)Configure::read(sprintf('Roles.%s.hidden', $role));
+        $readonly = (array)Configure::read(sprintf('Roles.%s.readonly', $role));
+        $keys = array_keys($this->modules);
+        foreach ($keys as $moduleName) {
+            if (in_array($moduleName, $hidden)) {
+                unset($this->modules[$moduleName]);
+                continue;
+            }
+            if (in_array($moduleName, $readonly)) {
+                $this->modules[$moduleName]['readonly'] = true;
+            }
+        }
 
         return $this->modules;
     }

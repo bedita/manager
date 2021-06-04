@@ -103,6 +103,9 @@ class PermsHelper extends Helper
      */
     protected function isAllowed(string $method, string $module = null): bool
     {
+        if (in_array($method, ['POST', 'DELETE', 'PATCH']) && $this->isReadonly()) {
+            return false;
+        }
         if (empty($module)) {
             if (empty($this->current)) {
                 return true;
@@ -114,5 +117,17 @@ class PermsHelper extends Helper
         $allowed = (array)Hash::get($this->allowed, $module);
 
         return in_array($method, $allowed);
+    }
+
+    /**
+     * Check if module is readonly (by config).
+     *
+     * @return bool
+     */
+    protected function isReadonly(): bool
+    {
+        $currentModule = (array)$this->getView()->get('currentModule');
+
+        return Hash::check($currentModule, 'readonly');
     }
 }

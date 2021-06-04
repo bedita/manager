@@ -19,8 +19,8 @@ export default {
                     <div class="is-flex"><: t('by') :> <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('Clone') :></button>
+                        <button v-if="canSave" class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
+                        <button v-if="canSave" class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('Clone') :></button>
                     </div>
                 </li>
             </ul>
@@ -35,11 +35,13 @@ export default {
             history: [],
             rawHistory: [],
             isLoading: false,
+            canSave: true,
         };
     },
 
     props: {
         object: Object,
+        cansave: Boolean,
     },
 
     methods: {
@@ -129,6 +131,7 @@ export default {
         };
 
         this.isLoading = true;
+        this.canSave = this.cansave;
         const historyRes = await fetch(`${baseUrl}${this.object.type}/history/${this.object.id}`, options);
         const historyJson = await historyRes.json();
         this.rawHistory = historyJson.data;

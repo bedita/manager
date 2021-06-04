@@ -469,6 +469,20 @@ return [
     ],
 
     /**
+     * Modules accesses per role(s)
+     */
+    // 'Roles' => [
+    //     'manager' => [
+    //         'hidden' => ['admin'],
+    //         'readonly' => ['objects'],
+    //     ],
+    //     'guest' => [
+    //         'hidden' => ['admin', 'objects', 'users'],
+    //         'readonly' => ['documents'],
+    //     ],
+    // ],
+
+    /**
      * Properties display configuration settings.
      *
      * Every key in this array is a module name, for each one we may have:
