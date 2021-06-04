@@ -450,17 +450,17 @@ class ModulesComponentTest extends TestCase
                 'readonly' => [],
             ],
         ]);
-        $expected = ['documents' => ['readonly' => true], 'events' => []];
+        $expected = ['documents' => ['readonly' => true]];
         $reflectionClass = new \ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByRoleConfig');
         $method->setAccessible(true);
         $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
-        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'events' => []] ]);
+        $actual = $method->invokeArgs($this->Modules, [ ['documents' => []] ]);
         static::assertEquals($expected, $actual);
 
-        $expected = ['documents' => [], 'events' => []];
+        $expected = ['documents' => [], 'admin' => []];
         $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['superadmin']]);
-        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'events' => []] ]);
+        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'admin' => []] ]);
         static::assertEquals($expected, $actual);
     }
 
