@@ -54,7 +54,7 @@
     // > *:not(:last-child) { margin-bottom: $gutter;}
 
     button, .button {
-        width: $dashboard-item-width / 2;
+        width: $dashboard-item-width * .5;
     }
 
     &-bedita-logo {

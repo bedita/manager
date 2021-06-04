@@ -50,7 +50,7 @@ body.view-login {
                     label {
                         color: $white;
                         font-weight: normal;
-                        margin: $gutter 0 $gutter/4 0;
+                        margin: $gutter 0 $gutter * .25 0;
                     }
 
                     label, input {
