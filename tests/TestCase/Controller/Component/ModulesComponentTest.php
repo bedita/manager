@@ -440,7 +440,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testModulesByRoleConfig(): void
     {
-        Configure::write('Roles', [
+        Configure::write('AccessControl', [
             'guest' => [
                 'hidden' => ['admin'],
                 'readonly' => ['documents'],

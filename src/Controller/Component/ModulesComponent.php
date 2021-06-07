@@ -161,19 +161,20 @@ class ModulesComponent extends Component
     protected function modulesByRoleConfig(array $modules): array
     {
         $user = $this->getController()->Auth->user();
-        $role = (string)Hash::get($user, 'roles.0');
-        $hidden = (array)Configure::read(sprintf('Roles.%s.hidden', $role));
-        $readonly = (array)Configure::read(sprintf('Roles.%s.readonly', $role));
+        $roles = (array)Hash::get($user, 'roles');
+        $hidden = [];
+        $readonly = [];
+        foreach ($roles as $role) {
+            $hidden = array_merge($hidden, (array)Configure::read(sprintf('AccessControl.%s.hidden', $role)));
+            $readonly = array_merge($readonly, (array)Configure::read(sprintf('AccessControl.%s.readonly', $role)));
+        }
         $keys = array_keys($modules);
         foreach ($keys as $moduleName) {
-            if (in_array($moduleName, $hidden)) {
-                unset($modules[$moduleName]);
-                continue;
-            }
             if (in_array($moduleName, $readonly)) {
                 $modules[$moduleName]['readonly'] = true;
             }
         }
+        $modules = array_diff_key($modules, array_flip($hidden));
 
         return $modules;
     }

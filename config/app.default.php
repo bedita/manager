@@ -471,13 +471,13 @@ return [
     /**
      * Modules accesses per role(s)
      */
-    // 'Roles' => [
+    // 'AccessControl' => [
     //     'manager' => [
-    //         'hidden' => ['admin'],
-    //         'readonly' => ['objects'],
+    //         'hidden' => ['objects'],
+    //         'readonly' => ['documents'],
     //     ],
     //     'guest' => [
-    //         'hidden' => ['admin', 'objects', 'users'],
+    //         'hidden' => ['objects', 'users'],
     //         'readonly' => ['documents'],
     //     ],
     // ],
