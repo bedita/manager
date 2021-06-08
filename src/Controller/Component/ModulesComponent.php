@@ -145,38 +145,44 @@ class ModulesComponent extends Component
             array_diff_key($metaModules, $modules),
             $pluginModules
         );
-        $this->modules = $this->modulesByRoleConfig($this->modules);
+        $this->modulesByAccessControl();
 
         return $this->modules;
     }
 
     /**
-     * This filters modules and apply 'Role' config by user role, if any.
-     * Module can be "hidden": remove from $modules.
-     * Module can be "readonly": add "'readonly' => true" to module.
+     * This filters modules and apply 'AccessControl' config by user role, if any.
+     * Module can be "hidden": remove from modules.
+     * Module can be "readonly": adjust "hints.allow" for module.
      *
-     * @param array $modules The modules
-     * @return array
+     * @return void
      */
-    protected function modulesByRoleConfig(array $modules): array
+    protected function modulesByAccessControl(): void
     {
+        $accessControl = (array)Configure::read('AccessControl');
+        if (empty($accessControl)) {
+            return;
+        }
         $user = $this->getController()->Auth->user();
         $roles = (array)Hash::get($user, 'roles');
         $hidden = [];
         $readonly = [];
         foreach ($roles as $role) {
-            $hidden = array_merge($hidden, (array)Configure::read(sprintf('AccessControl.%s.hidden', $role)));
-            $readonly = array_merge($readonly, (array)Configure::read(sprintf('AccessControl.%s.readonly', $role)));
+            $h = (array)Hash::get($accessControl, sprintf('%s.hidden', $role));
+            $hidden = empty($hidden) ? $h : array_intersect($hidden, $h);
         }
-        $keys = array_keys($modules);
-        foreach ($keys as $moduleName) {
-            if (in_array($moduleName, $readonly)) {
-                $modules[$moduleName]['readonly'] = true;
-            }
+        if (empty($hidden) && empty($readonly)) {
+            return;
         }
-        $modules = array_diff_key($modules, array_flip($hidden));
-
-        return $modules;
+        // remove "hidden"
+        $this->modules = array_diff_key($this->modules, array_flip($hidden));
+        // make sure $readonly contains valid module names
+        $readonly = array_intersect($readonly, array_keys($this->modules));
+        foreach ($readonly as $key) {
+            $path = sprintf('%s.hints.allow', $key);
+            $allow = (array)Hash::get($this->modules, $path);
+            Hash::insert($this->modules, $path, array_diff($allow, ['POST', 'PATCH', 'DELETE']));
+        }
     }
 
     /**

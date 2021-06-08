@@ -433,34 +433,95 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Test `modulesByRoleConfig` method
+     * Data provider for `testModulesByAccessControl`.
      *
-     * @return void
-     * @cover ::modulesByRoleConfig()
+     * @return array
      */
-    public function testModulesByRoleConfig(): void
+    public function modulesByAccessControlProvider(): array
     {
-        Configure::write('AccessControl', [
-            'guest' => [
-                'hidden' => ['admin'],
-                'readonly' => ['documents'],
+        return [
+            'empty access control' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [],
+                [],
+                ['documents' => [], 'events' => [], 'news' => []],
             ],
-            'superadmin' => [
-                'hidden' => [],
-                'readonly' => [],
+            'empty roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                ['guest'],
+                ['id' => 1, 'roles' => []],
+                ['documents' => [], 'events' => [], 'news' => []],
             ],
-        ]);
-        $expected = ['documents' => ['readonly' => true]];
-        $reflectionClass = new \ReflectionClass($this->Modules);
-        $method = $reflectionClass->getMethod('modulesByRoleConfig');
-        $method->setAccessible(true);
-        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
-        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'admin' => []] ]);
-        static::assertEquals($expected, $actual);
+            'empty hidden, empty readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => [],
+                        'readonly' => [],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'hidden + readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => ['documents'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['events' => [], 'news' => []],
+            ],
+            'multi roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'role1' => [
+                        'hidden' => ['news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role2' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role3' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['role1', 'role2', 'role3']],
+                ['documents' => [], 'events' => []],
+            ],
+        ];
+    }
 
-        $expected = ['documents' => [], 'admin' => []];
-        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['superadmin']]);
-        $actual = $method->invokeArgs($this->Modules, [ ['documents' => [], 'admin' => []] ]);
+    /**
+     * Test `modulesByAccessControl` method
+     *
+     * @param array $modules The modules
+     * @param array $accessControl The AccessControl config
+     * @param array $user The user
+     * @param array $expected The expected modules
+     * @return void
+     * @dataProvider modulesByAccessControlProvider()
+     * @cover ::modulesByAccessControl()
+     */
+    public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
+    {
+        // set $this->Modules->modules
+        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property->setAccessible(true);
+        $property->setValue($this->Modules, $modules);
+        // set AccessControl
+        Configure::write('AccessControl', $accessControl);
+        // call modulesByAccessControl
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('modulesByAccessControl');
+        $method->setAccessible(true);
+        $this->Modules->getController()->Auth->setUser($user);
+        $method->invokeArgs($this->Modules, []);
+        $actual = $this->Modules->modules;
         static::assertEquals($expected, $actual);
     }
 
