@@ -170,6 +170,8 @@ class ModulesComponent extends Component
         foreach ($roles as $role) {
             $h = (array)Hash::get($accessControl, sprintf('%s.hidden', $role));
             $hidden = empty($hidden) ? $h : array_intersect($hidden, $h);
+            $r = (array)Hash::get($accessControl, sprintf('%s.readonly', $role));
+            $readonly = empty($readonly) ? $r : array_intersect($readonly, $r);
         }
         if (empty($hidden) && empty($readonly)) {
             return;
@@ -181,7 +183,7 @@ class ModulesComponent extends Component
         foreach ($readonly as $key) {
             $path = sprintf('%s.hints.allow', $key);
             $allow = (array)Hash::get($this->modules, $path);
-            Hash::insert($this->modules, $path, array_diff($allow, ['POST', 'PATCH', 'DELETE']));
+            $this->modules[$key]['hints']['allow'] = array_diff($allow, ['POST', 'PATCH', 'DELETE']);
         }
     }
 
