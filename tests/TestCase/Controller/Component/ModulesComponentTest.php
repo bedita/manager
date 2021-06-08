@@ -472,7 +472,7 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 ['id' => 1, 'roles' => ['somerole']],
-                ['events' => [], 'news' => []],
+                ['events' => ['hints' => ['allow' => []]], 'news' => []],
             ],
             'multi roles' => [
                 ['documents' => [], 'events' => [], 'news' => []],
@@ -491,7 +491,7 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 ['id' => 1, 'roles' => ['role1', 'role2', 'role3']],
-                ['documents' => [], 'events' => []],
+                ['documents' => [], 'events' => ['hints' => ['allow' => []]]],
             ],
         ];
     }
