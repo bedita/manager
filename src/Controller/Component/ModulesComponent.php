@@ -145,8 +145,46 @@ class ModulesComponent extends Component
             array_diff_key($metaModules, $modules),
             $pluginModules
         );
+        $this->modulesByAccessControl();
 
         return $this->modules;
+    }
+
+    /**
+     * This filters modules and apply 'AccessControl' config by user role, if any.
+     * Module can be "hidden": remove from modules.
+     * Module can be "readonly": adjust "hints.allow" for module.
+     *
+     * @return void
+     */
+    protected function modulesByAccessControl(): void
+    {
+        $accessControl = (array)Configure::read('AccessControl');
+        if (empty($accessControl)) {
+            return;
+        }
+        $user = $this->getController()->Auth->user();
+        $roles = (array)Hash::get($user, 'roles');
+        $hidden = [];
+        $readonly = [];
+        foreach ($roles as $role) {
+            $h = (array)Hash::get($accessControl, sprintf('%s.hidden', $role));
+            $hidden = empty($hidden) ? $h : array_intersect($hidden, $h);
+            $r = (array)Hash::get($accessControl, sprintf('%s.readonly', $role));
+            $readonly = empty($readonly) ? $r : array_intersect($readonly, $r);
+        }
+        if (empty($hidden) && empty($readonly)) {
+            return;
+        }
+        // remove "hidden"
+        $this->modules = array_diff_key($this->modules, array_flip($hidden));
+        // make sure $readonly contains valid module names
+        $readonly = array_intersect($readonly, array_keys($this->modules));
+        foreach ($readonly as $key) {
+            $path = sprintf('%s.hints.allow', $key);
+            $allow = (array)Hash::get($this->modules, $path);
+            $this->modules[$key]['hints']['allow'] = array_diff($allow, ['POST', 'PATCH', 'DELETE']);
+        }
     }
 
     /**

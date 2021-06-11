@@ -54,7 +54,7 @@ body.view-model {
                 }
 
                 div {
-                    padding: $gutter/4 $gutter/2;
+                    padding: $gutter * .25 $gutter * .5;
                     vertical-align: middle;
 
                     &.first-cell, &.action-cell {
