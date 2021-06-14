@@ -109,7 +109,8 @@ class AppController extends Controller
         $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
         $this->log('[Blackhole] form fields: ' . json_encode(array_keys($this->request->getData())), 'debug');
         $this->log('[Blackhole] form session id: ' . $this->request->getData('_session_id'), 'debug');
-        $this->log('[Blackhole] current session id: ' . $this->request->getSession()->id(), 'debug');
+        $sessionId = $this->request->getSession() ? $this->request->getSession()->id() : null;
+        $this->log('[Blackhole] current session id: ' . $sessionId, 'debug');
 
         // Throw a generic bad request exception.
         throw new BadRequestException();
