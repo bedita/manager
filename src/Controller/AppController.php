@@ -98,7 +98,7 @@ class AppController extends Controller
      * @throws \Cake\Http\Exception\BadRequestException
      * @codeCoverageIgnore
      */
-    public function blackhole($type, SecurityException $exception): void
+    public function blackhole(string $type, SecurityException $exception): void
     {
         // Log original exception
         $this->log($exception, 'error');
@@ -106,9 +106,10 @@ class AppController extends Controller
         // Log form data & session id
         $token = (array)$this->request->getData('_Token');
         unset($token['debug']);
+        $this->log('[Blackhole] type: ' . $type, 'debug');
         $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
-        $this->log('[Blackhole] form fields: ' . json_encode(array_keys($this->request->getData())), 'debug');
-        $this->log('[Blackhole] form session id: ' . $this->request->getData('_session_id'), 'debug');
+        $this->log('[Blackhole] form fields: ' . json_encode(array_keys((array)$this->request->getData())), 'debug');
+        $this->log('[Blackhole] form session id: ' . (string)$this->request->getData('_session_id'), 'debug');
         $sessionId = $this->request->getSession() ? $this->request->getSession()->id() : null;
         $this->log('[Blackhole] current session id: ' . $sessionId, 'debug');
 
