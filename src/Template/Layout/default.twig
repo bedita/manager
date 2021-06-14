@@ -11,7 +11,7 @@
 BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 -->
 
-<html>
+<html lang="{{ config('I18n.lang', 'en')}}">
 <head>
     {{ Html.charset()|raw }}
     {% element 'meta' %}
@@ -27,8 +27,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     {% element 'custom_colors' %}
 
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&display=swap" rel="stylesheet prefetch" crossorigin>
-
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap" rel="stylesheet">
+    
     {% element 'json_meta_config' %}
 </head>
 
@@ -73,8 +74,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {# flash messages #}
         {% if Layout.messages() %}
             {{ Flash.render()|raw }}
-        </section>
-    {% endif %}
+        {% endif %}
     </main>
 
     {# {{ Html.script('manifest.bundle')|raw }} #}

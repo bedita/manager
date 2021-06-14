@@ -1,49 +1,57 @@
 #flashMessagesContainer {
-
-    .message, .background-mask {
-        position: fixed;
-        left: 0;
-        width: 100%;
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
 
     .background-mask {
+        position: fixed;
         top: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0);
         transition: background-color .25s;
+        pointer-events: all;
         cursor: pointer;
     }
 
     .message {
-        bottom: 0;
-        max-height: 50%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        flex: 1 auto;
+        margin-top: auto;
         padding: $gutter * .75 $gutter;
-        border-top: .5rem solid transparent;
+        max-height: 50%;
+        max-width: 70%;
+        border-top: 4px solid transparent;
         background-color: $gray-100;
         color: $gray-900;
         font-size: $font-size-sm;
-
         transition: transform .25s;
         // when parent has not class 'on'
         transform: translateY(100%);
+        pointer-events: all;
 
-        >* {
+        > * {
             flex: 1 0 auto;
-            &:not(:last-child) { margin-top: $gutter * .25; }
         }
 
         // colors
-        &.success   { border-color: $success; }
-        &.info      { border-color: $info; }
-        &.error     { border-color: $error; }
-        &.warning   { border-color: $warning; }
-        &.success   [class^="icon-"] { color: $success; }
-        &.info      [class^="icon-"] { color: $info; }
-        &.error     [class^="icon-"] { color: $error; }
-        &.warning   [class^="icon-"] { color: $warning; }
+        &.success    { border-color: $success; }
+        &.info       { border-color: $info; }
+        &.error      { border-color: $error; }
+        &.warning    { border-color: $warning; }
+        &.success h2 [class^="icon-"] { color: $success; }
+        &.info h2    [class^="icon-"] { color: $info; }
+        &.error h2   [class^="icon-"] { color: $error; }
+        &.warning h2 [class^="icon-"] { color: $warning; }
 
         h2 {
             display: flex;
@@ -71,10 +79,16 @@
             }
         }
 
-        .close-button {
+        .icon-cancel-1 {
             position: absolute;
             top: $gutter * .5;
             right: $gutter;
+            cursor: pointer;
+            color: $black;
+
+            &::before {
+                margin: 0;
+            }
         }
     }
 
@@ -87,43 +101,4 @@
         }
     }
 
-}
-
-
-
-// login
-body.view-login {
-    #flashMessagesContainer {
-        position: absolute;
-        bottom: 100%; left: 0;
-        width: 180px;
-        height: auto;
-        margin-bottom: 1px;
-        @media screen and (max-width: 780px) {
-            width: 100%;
-        }
-
-        .message {
-            position: static;
-            margin: 0;
-            padding: $gutter * .25 $gutter * .5;
-            width: 100%;
-            min-height: auto;
-            border: none;
-            background-color: $error;
-            color: #fff;
-
-            h2 {
-                margin: 0; padding: 0;
-                font-size: $font-size-sm;
-                line-height: $line-height-base;
-            }
-
-            // no multiple messages
-            display: none;
-            &:last-of-type {
-                display: block;
-            }
-        }
-    }
 }

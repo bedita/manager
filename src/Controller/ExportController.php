@@ -18,6 +18,8 @@ use Cake\Utility\Hash;
 
 /**
  * Export controller: upload and load using filters
+ *
+ * @property \App\Controller\Component\ExportComponent $Export
  */
 class ExportController extends AppController
 {
@@ -29,24 +31,57 @@ class ExportController extends AppController
     const DEFAULT_EXPORT_LIMIT = 10000;
 
     /**
-     * Export data in csv format
+     * Default page size
      *
-     * @return \Cake\Http\Response
+     * @var int
      */
-    public function export(): Response
+    const DEFAULT_PAGE_SIZE = 500;
+
+    /**
+     * {@inheritDoc}
+     * {@codeCoverageIgnore}
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Export');
+    }
+
+    /**
+     * Export data to format specified by user
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function export(): ?Response
     {
         // check request (allowed methods and required parameters)
         $data = $this->checkRequest([
             'allowedMethods' => ['post'],
             'requiredParameters' => ['objectType'],
         ]);
+
+        $format = (string)$this->request->getData('format');
+        if (!$this->Export->checkFormat($format)) {
+            $this->Flash->error(__('Format choosen is not available'));
+
+            return $this->redirect($this->referer());
+        }
+
         $ids = $this->request->getData('ids');
 
-        // load csv data for objects by object type and ids
-        $rows = $this->csvRows($data['objectType'], $ids);
+        // load data for objects by object type and ids
+        $rows = $this->rows($data['objectType'], $ids);
 
-        // save data to csv and output it to browser
-        return $this->csv($rows, $data['objectType']);
+        // create spreadsheet and return as download
+        $filename = $this->getFileName($data['objectType'], $format);
+        $data = $this->Export->format($format, $rows, $filename);
+
+        // output
+        $response = $this->response->withStringBody(Hash::get($data, 'content'));
+        $response = $response->withType(Hash::get($data, 'contentType'));
+
+        return $response->withDownload($filename);
     }
 
     /**
@@ -59,42 +94,68 @@ class ExportController extends AppController
      * @param string $ids Object IDs comma separated string
      * @return array
      */
-    protected function csvRows(string $objectType, string $ids = ''): array
+    protected function rows(string $objectType, string $ids = ''): array
     {
         if (empty($ids)) {
-            return $this->csvAll($objectType);
+            return $this->rowsAll($objectType);
         }
 
-        $data = [];
-        $response = $this->apiClient->getObjects($objectType, ['filter' => ['id' => $ids]]);
-        $fields = $this->fillDataFromResponse($data, $response);
-        array_unshift($data, $fields);
+        $response = $this->apiClient->get($this->apiPath(), ['filter' => ['id' => $ids]]);
+        $fields = $this->getFieldNames($response);
+        $data = [$fields];
+        $this->fillDataFromResponse($data, $response, $fields);
 
         return $data;
     }
 
     /**
-     * Load all CSV data for a given type using limit and query filters.
+     * Get API path.
+     *
+     * @return string
+     */
+    protected function apiPath(): string
+    {
+        return sprintf('/%s', $this->request->getData('objectType'));
+    }
+
+    /**
+     * Get exported file name.
+     *
+     * @param string $type Object or resource type.
+     * @param string $format The format.
+     * @return string
+     */
+    protected function getFileName(string $type, string $format): string
+    {
+        return sprintf('%s_%s.%s', $type, date('Ymd-His'), $format);
+    }
+
+    /**
+     * Load all data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
      * @return array
      */
-    protected function csvAll(string $objectType): array
+    protected function rowsAll(string $objectType): array
     {
-        $data = [];
+        $data = $fields = [];
         $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
         $pageCount = $page = 1;
         $total = 0;
-        $query = ['page_size' => 100] + $this->prepareQuery();
+        $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
-            $response = (array)$this->apiClient->getObjects($objectType, $query + compact('page'));
+            $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
             $total += (int)Hash::get($response, 'meta.pagination.page_items');
-            $page++;
 
-            $fields = $this->fillDataFromResponse($data, $response);
+            if ($page === 1) {
+                $fields = $this->getFieldNames($response);
+                $data = [$fields];
+            }
+
+            $this->fillDataFromResponse($data, $response, $fields);
+            $page++;
         }
-        array_unshift($data, $fields);
 
         return $data;
     }
@@ -129,123 +190,48 @@ class ExportController extends AppController
      *
      * @param array $data The array of data
      * @param array $response The response to use as source for data
-     * @return array The fields representing each data item
-     */
-    private function fillDataFromResponse(array &$data, array $response): array
-    {
-        if (empty($response['data'])) {
-            return [];
-        }
-
-        // get fields for response 'attributes' and 'meta'
-        $fields = $this->getFields($response);
-        array_unshift($fields, 'id');
-        $metaFields = $this->getFields($response, 'meta');
-
-        // fill row data from response data
-        foreach ($response['data'] as $key => $val) {
-            $row = [];
-
-            // fill row fields
-            $this->fillRowFields($row, $val, $fields);
-
-            // fill row data for meta
-            $this->fillRowFields($row, $val, $metaFields);
-
-            $data[] = $row;
-        }
-        foreach ($metaFields as $f) {
-            $fields[$f] = $f;
-        }
-
-        return $fields;
-    }
-
-    /**
-     * Create csv data (string) per rows/objects and output it to browser
-     *
-     * @param array $rows The rows data
-     * @param string $objectType The object type
-     * @return \Cake\Http\Response
-     */
-    private function csv(array $rows, string $objectType): Response
-    {
-        $result = $this->processCsv($rows, $objectType);
-        extract($result); // => $filename, $csv
-
-        return $this->outputCsv($filename, $csv);
-    }
-
-    /**
-     * Output csv file.
-     *
-     * @param string $filename The file name.
-     * @param string $csv The csv string data.
-     * @return \Cake\Http\Response
-     */
-    protected function outputCsv($filename, $csv): Response
-    {
-        $response = $this->response->withStringBody($csv);
-        $response = $response->withType('text/csv');
-
-        return $response->withDownload(sprintf('%s.csv', $filename));
-    }
-
-    /**
-     * Process data (string) per rows/objects.
-     * Create a temporary csv file.
-     * Return filename and csv string in an array.
-     *
-     * @param array $rows The rows data.
-     * @param string $objectType The object type.
-     * @return array
-     */
-    private function processCsv(array $rows, string $objectType): array
-    {
-        $csv = '';
-        $fields = array_shift($rows);
-        $filename = sprintf('%s_%s', $objectType, date('Ymd-His'));
-        $tmpfilename = tempnam('/tmp', $filename);
-        if ($tmpfilename) {
-            $fp = fopen($tmpfilename, 'w+');
-            if (!empty($fp)) {
-                fputcsv($fp, $fields);
-                foreach ($rows as $row) {
-                    fputcsv($fp, $row);
-                }
-                $csv = file_get_contents($tmpfilename);
-                fclose($fp);
-            }
-        }
-        unlink($tmpfilename);
-
-        return compact('csv', 'filename');
-    }
-
-    /**
-     * Get fields array using data first element attributes
-     *
-     * @param array $response The response from which extract fields
-     * @param string $key The key
-     * @return array
-     */
-    private function getFields($response, $key = 'attributes'): array
-    {
-        $data = (array)Hash::get($response, sprintf('data.0.%s', $key), []);
-
-        return array_keys($data);
-    }
-
-    /**
-     * Fill row data per fields
-     *
-     * @param array $row The row to be filled with data
-     * @param mixed $data The data
-     * @param array $fields The fields
+     * @param array $fields Field names array
      * @return void
      */
-    private function fillRowFields(&$row, $data, $fields)
+    protected function fillDataFromResponse(array &$data, array $response, array $fields): void
     {
+        if (empty($response['data'])) {
+            return;
+        }
+
+        // fill row data from response data
+        foreach ($response['data'] as $val) {
+            $data[] = $this->rowFields($val, $fields);
+        }
+    }
+
+    /**
+     * Get field names array using data first element attributes
+     *
+     * @param array $response The response from which extract fields
+     * @return array
+     */
+    protected function getFieldNames($response): array
+    {
+        $fields = (array)Hash::get($response, 'data.0.attributes');
+        $meta = (array)Hash::get($response, 'data.0.meta');
+        unset($meta['extra']);
+        $fields = array_merge(['id' => ''], $fields, $meta);
+        $fields = array_merge($fields, (array)Hash::get($response, 'data.0.meta.extra'));
+
+        return array_keys($fields);
+    }
+
+    /**
+     * Get row data per fields
+     *
+     * @param array $data The data
+     * @param array $fields The fields
+     * @return array
+     */
+    protected function rowFields(array $data, array $fields): array
+    {
+        $row = [];
         foreach ($fields as $field) {
             $row[$field] = '';
             if (isset($data[$field])) {
@@ -254,8 +240,12 @@ class ExportController extends AppController
                 $row[$field] = $this->getValue($data['attributes'][$field]);
             } elseif (isset($data['meta'][$field])) {
                 $row[$field] = $this->getValue($data['meta'][$field]);
+            } elseif (isset($data['meta']['extra'][$field])) {
+                $row[$field] = $this->getValue($data['meta']['extra'][$field]);
             }
         }
+
+        return $row;
     }
 
     /**
@@ -266,7 +256,7 @@ class ExportController extends AppController
      * @param mixed $value The value
      * @return mixed
      */
-    private function getValue($value)
+    protected function getValue($value)
     {
         if (is_array($value)) {
             return json_encode($value);

@@ -8,6 +8,7 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
+import { confirm, prompt } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -152,17 +153,19 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         clone() {
-            const title = document.getElementById('title').value || t('Untitled');
-            const msg = t`Please insert a new title on "${title}" clone`;
-            const cloneTitle = prompt(msg, title + ' -copy');
-            if (cloneTitle) {
-                const query = `?title=${cloneTitle}`;
-                const origin = window.location.origin;
-                const path = window.location.pathname.replace('/view/', '/clone/');
-                const url = `${origin}${path}${query}`;
-                const newTab = window.open(url, '_blank');
+            let title = document.getElementById('title').value || t('Untitled');
+            let msg = t`Please insert a new title on "${title}" clone`;
+            let defaultTitle = title + '-' + t`copy`;
+
+            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
+                let query = `?title=${cloneTitle || defaultTitle}`;
+                let origin = window.location.origin;
+                let path = window.location.pathname.replace('/view/', '/clone/');
+                let url = `${origin}${path}${query}`;
+                let newTab = window.open(url, '_blank');
                 newTab.focus();
-            }
+                dialog.hide(true);
+            });
         },
 
         /**
@@ -306,12 +309,11 @@ const _vueInstance = new Vue({
                 let fields = [];
 
                 paramsKeys.forEach((key) =>  {
-                    if (params[key] && params[key] !== '') {
+                    if (params[key]) {
                         const query = params[key];
 
                         // parse filter property
                         if (key === 'filter') {
-                            let filter = '';
                             Object.keys(query).forEach((filterKey) => {
                                 if (typeof query[filterKey] === 'object') {
                                     const filter = query[filterKey];
@@ -363,6 +365,7 @@ const _vueInstance = new Vue({
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
+                _search: 1
             });
             window.location.replace(url);
         },
@@ -459,28 +462,33 @@ const _vueInstance = new Vue({
                 }
             });
 
-            /*
-                Listen for submit: if action is /delete it shows warning prompt
+            /**
+            * Listen for submit: if action is /delete it shows warning dialog
             */
             this.$el.addEventListener('submit', (ev) => {
+                ev.preventDefault();
                 const form = ev.target;
-                if (form) {
-                    let msg = '';
-                    if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
-                        msg = t`If you confirm, this data will be gone forever`;
-                    } else if (form.action.endsWith('/delete')) {
-                        msg = t`Do you really want to trash the object?`;
-                    }
-                    _vueInstance.dataChanged.clear();
-                    if (msg && !confirm(msg)) {
-                        ev.preventDefault();
-                        return;
-                    }
+                if (!form) {
+                    return;
                 }
+
+                let msg = '';
+                if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
+                    msg = t`If you confirm, this data will be gone forever. Are you sure?`;
+                } else if (form.action.endsWith('/delete')) {
+                    msg = t`Do you really want to trash the object?`;
+                }
+
+                _vueInstance.dataChanged.clear();
+                if (!msg) {
+                    return form.submit();
+                }
+
+                confirm(msg, t`yes, proceed`, form.submit.bind(form));
             });
 
-            /*
-                Ask confirmation before leaving the page if there are unsaved changes
+            /**
+            * Ask confirmation before leaving the page if there are unsaved changes
             */
             window.onbeforeunload = () => {
                 for (const [key, value] of _vueInstance.dataChanged) {

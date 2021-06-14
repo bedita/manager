@@ -53,9 +53,13 @@ export default {
             type: String,
             default: '[]',
         },
-        listView: {
+        dataList: {
             type: Boolean,
-            default: false,
+            default: true,
+        },
+        preCount: {
+            type: Number,
+            default: -1,
         },
     },
 
@@ -63,7 +67,8 @@ export default {
         return {
             method: 'relatedJson',      // define AppController method to be used
             loading: false,
-            count: 0,                   // count number of related objects, on change triggers an event
+            objectsLoaded: false,       // objects loaded flag
+            positions: {},              // used in children relations
 
             removedRelationsData: [],   // hidden field containing serialized json passed on form submit
             addedRelationsData: [],     // array of serialized new relations
@@ -86,6 +91,18 @@ export default {
             let a = this.addedRelations.map(o => o.id);
             let b = this.objects.map(o => o.id);
             return a.concat(b);
+        },
+
+        /**
+         * Show filter conditions.
+         *
+         * @returns {boolean}
+         */
+        showFilter() {
+            return this.activeFilter.q ||
+                this.pagination.page > 1 ||
+                this.objects.length >= this.pagination.page_size ||
+                this.addedRelations.length >= this.pagination.page_size;
         },
     },
 
@@ -110,7 +127,10 @@ export default {
         PanelEvents.listen('upload-files:save', this, this.appendRelationsFromPanel);
         PanelEvents.listen('panel:closed', null, this.resetPanelRequester);
 
-        await this.loadOnMounted();
+        // if preCount is '-1' => no object count from API, force load
+        if (this.preCount === -1 || this.$parent.isOpen) {
+            await this.loadOnMounted();
+        }
 
         // check if relation is related to media objects
         if (this.relationTypes && this.relationTypes.right) {
@@ -192,7 +212,7 @@ export default {
          */
         onUpdatePageSize(pageSize) {
             this.setPageSize(pageSize);
-            this.loadRelatedObjects(this.activeFilter);
+            this.loadRelatedObjects(this.activeFilter, true);
         },
 
         /**
@@ -429,24 +449,28 @@ export default {
          * @emits Event#count count objects event
          *
          * @param {Object} filter object containing filters
-         * @param {Boolean} force force recount of related objects
+         * @param {Boolean} force force reload of related objects
          *
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false) {
+            if (this.preCount === 0 || (this.objectsLoaded && !force)) {
+                return [];
+            }
             this.loading = true;
 
             return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
+                    this.objectsLoaded = true;
                     return objs;
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
                         this.loading = false;
-                        console.error(error);s
+                        console.error(error);
                     }
                 });
         },
@@ -483,9 +507,9 @@ export default {
         },
 
         /**
-         * remove related object: adding it to removedRelated Array
+         * remove related object adding it to removedRelated Array
          *
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -503,8 +527,7 @@ export default {
         /**
          * re-add removed related object: removing it from removedRelated Array
          *
-         * @param {Number} id
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -695,7 +718,7 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return relations.filter((rel) => rel.id === id).length;
+            return !!relations.find((rel) => rel.id === id);
         },
 
         /**
@@ -709,6 +732,66 @@ export default {
         buildViewUrl(objectType, objectId) {
             return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
         },
+
+        /**
+         * Object type available to view.
+         *
+         * @param {String} type
+         *
+         * @return {Boolean} true if module is available
+         */
+        moduleAvailable(type) {
+            return (BEDITA.modules.indexOf(type) !== -1);
+        },
+
+        /**
+         * Return true when related object has streams data.
+         *
+         * @param {Object} related The object
+         * @returns
+         */
+        relatedStream(related) {
+            if (!related.relationships.streams || !related.relationships.streams.data || related.relationships.streams.data.length === 0) {
+                return false;
+            }
+
+            return related.relationships.streams.data[0].attributes;
+        },
+
+        /**
+         * Get related object attribute.
+         *
+         * @param {Object} related The object
+         * @param {String} attribute The attribute name
+         * @param {String} format The format required, if any
+         * @returns {String}
+         */
+        relatedAttribute(related, attribute, format) {
+            let val = '';
+            const stream = related.relationships.streams.data[0];
+            if (attribute in stream.attributes) {
+                val = stream.attributes[attribute];
+            } else if (attribute in stream.meta) {
+                val = stream.meta[attribute];
+            }
+            if (format === 'bytes') {
+                return this.bytes(val);
+            }
+
+            return val;
+        },
+
+        /**
+         * Get bytes representation of size.
+         *
+         * @param {Number} size The size
+         * @returns {String}
+         */
+        bytes(size) {
+            let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
+
+            return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+        }
     }
 
 }

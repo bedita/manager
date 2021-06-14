@@ -185,7 +185,6 @@ class ModulesControllerTest extends TestCase
      * Test `index` method
      *
      * @covers ::index()
-     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -211,7 +210,6 @@ class ModulesControllerTest extends TestCase
      * Session filter data must be empty
      *
      * @covers ::index()
-     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -262,6 +260,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `view` method on error
+     *
+     * @covers ::view()
+     *
+     * @return void
+     */
+    public function testViewError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->view(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
      * Test `uname` method
      *
      * @covers ::uname()
@@ -296,7 +314,6 @@ class ModulesControllerTest extends TestCase
     public function testUname404(): void
     {
         // Setup controller for test
-        $exception = new BEditaClientException('Not Found', 404);
         $this->setupController();
 
         // do controller call
@@ -426,6 +443,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `clone` method, on error
+     *
+     * @covers ::clone()
+     *
+     * @return void
+     */
+    public function testCloneError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->clone(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
      * Test `save` method
      *
      * @covers ::save()
@@ -460,6 +497,73 @@ class ModulesControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $result->getStatusCode());
         static::assertEquals('text/html', $result->getType());
+    }
+
+    /**
+     * Test `save` method, on error
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveErrorNoPost(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $response = $this->controller->save();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
+     * Test `save` method, on error
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveErrorPostId(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $response = $this->controller->save();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
     }
 
     /**
@@ -574,6 +678,102 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `delete` method, ids
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteIds(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $o = $this->getTestObject();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => $o['id'],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // restore test object
+        $this->restoreTestObject($o['id'], 'documents');
+    }
+
+    /**
+     * Test `delete` method, on error
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // test by ids
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+    }
+
+    /**
      * Test `relatedJson` method
      *
      * @covers ::relatedJson()
@@ -611,6 +811,66 @@ class ModulesControllerTest extends TestCase
         $this->controller->relatedJson('new', 'has_media');
 
         static::assertEquals([], $this->controller->viewVars['data']);
+    }
+
+    /**
+     * Test `relatedJson` method, on error
+     *
+     * @covers ::relatedJson()
+     *
+     * @return void
+     */
+    public function testRelatedJsonError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->relatedJson(12346789, 'translations');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
+    }
+
+    /**
+     * Test `resourcesJson method
+     *
+     * @covers ::resourcesJson)
+     *
+     * @return void
+     */
+    public function testResourcesJson(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $this->controller->resourcesJson($id, 'documents');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'data']);
+    }
+
+    /**
+     * Test `resourcesJson method
+     *
+     * @covers ::resourcesJson)
+     *
+     * @return void
+     */
+    public function testResourcesJsonError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->resourcesJson(123456789, 'dummies');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
     }
 
     /**
@@ -672,117 +932,6 @@ class ModulesControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize']);
-    }
-
-    /**
-     * Data provider for `testGetThumbsUrls` test case.
-     *
-     * @return array
-     */
-    public function getThumbsUrlsProvider(): array
-    {
-        return [
-            // test with empty object
-            'emptyResponse' => [
-                [],
-                [],
-            ],
-            // test with objct without ids
-            'responseWithoutIds' => [
-                ['data' => []],
-                ['data' => []],
-            ],
-            // test with objct without ids
-            'responseWithoutIds' => [
-                ['data' => [
-                    'ids' => [],
-                ]],
-                ['data' => [
-                    'ids' => [],
-                ]],
-            ],
-            // correct result
-            'correctResponseMock' => [
-                [ // expected
-                    'data' => [
-                        [
-                            'id' => '43',
-                            'type' => 'images',
-                            'meta' =>
-                                [
-                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
-                                ],
-                        ],
-                        [
-                            'id' => '45',
-                            'type' => 'images',
-                            'meta' =>
-                                [
-                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
-                                ],
-                        ],
-                    ],
-                ],
-                [ // data
-                    'data' => [
-                        [
-                            'id' => '43',
-                            'type' => 'images',
-                            'meta' => [],
-                        ],
-                        [
-                            'id' => '45',
-                            'type' => 'images',
-                            'meta' => [],
-                        ],
-                    ],
-                ],
-                [ // mock response for api
-                    'meta' => [
-                        'thumbnails' => [
-                            [
-                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
-                                'id' => 43,
-                            ],
-                            [
-                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
-                                'id' => 45,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `getThumbsUrls` method
-     *
-     * @dataProvider getThumbsUrlsProvider()
-     * @covers ::getThumbsUrls()
-     *
-     * @return void
-     */
-    public function testGetThumbsUrls($expected, $data, $mockResponse = null): void
-    {
-        $this->setupController();
-
-        if (!empty($mockResponse)) {
-            $expectedException = new BEditaClientException('error');
-
-            $apiClient = $this->getMockBuilder(BEditaClient::class)
-                ->setConstructorArgs(['https://media.example.com'])
-                ->getMock();
-
-            $apiClient->method('get')
-                ->with('/media/thumbs?ids=43,45&options[w]=400')
-                ->willReturn($mockResponse);
-
-            $this->controller->apiClient = $apiClient;
-        }
-
-        $this->controller->getThumbsUrls($data);
-        static::assertEquals($expected, $data);
     }
 
     /**
@@ -962,64 +1111,6 @@ class ModulesControllerTest extends TestCase
 
         $url = $this->controller->availableRelationshipsUrl('test_relation');
         static::assertEquals('/objects?filter[type][]=images&filter[type][]=profiles', $url);
-    }
-
-    /**
-     * Test `saveRelated` method
-     *
-     * @covers ::saveRelated()
-     *
-     * @return void
-     */
-    public function testSaveRelated()
-    {
-        $request = new ServerRequest([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-        $this->controller = new ModulesControllerSample($request);
-
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://media.example.org'])
-            ->getMock();
-        $apiClient->method('save')
-            ->willReturn(['data' => ['id' => 1]]);
-        $apiClient->method('addRelated')
-            ->willReturn([]);
-
-        $this->controller->apiClient = $apiClient;
-
-        $result = $this->controller->save();
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
-
-        $request = new ServerRequest([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                '_api' => [
-                    [
-                        'method' => 'addRelated',
-                        'relation' => '',
-                        'relatedIds' => [],
-                    ],
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-        $this->controller = new ModulesControllerSample($request);
-        $this->controller->apiClient = $apiClient;
-
-        $result = $this->controller->save();
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('/documents/view/1', $result->getHeaderLine('Location'));
     }
 
     /**

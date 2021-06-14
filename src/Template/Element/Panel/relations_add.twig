@@ -1,4 +1,5 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
+{% set prefix = '_fast_create_' %}
 
 <div class="relations-add">
     <section class="fieldset mb-1">
@@ -6,11 +7,11 @@
             :class="showCreateObjectForm ? 'open' : ''"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
-            <h2><span v-show="relationName">{{ __('create new') }} "<: relationName | humanize :></span>"&nbsp;</h2>
+            <h2><span v-show="relationName"><strong>{{ __('create new') }}</strong> "<: relationName | humanize :></span>" {{ __('related object') }}&nbsp;</h2>
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <form name="create-object" class="object-form" :disabled="saving" @submit.prevent="createObject">
+            <form name="create-object" class="object-form" :disabled="saving">
                 {{ Form.control('upload_behavior', {
                     'id': 'url_behavior',
                     'type': 'hidden',
@@ -36,20 +37,20 @@
                             </select>
                         </div>
 
-                        {{ Property.control('status', object.attributes.status|default('draft'), {'v-model': 'object.attributes.status'})|raw }}
+                        {{ Property.control('status', object.attributes.status|default('draft'), {'id': prefix ~ 'status' , 'v-model': 'object.attributes.status'})|raw }}
 
-                        {{ Property.control('title', '', {'v-model': 'object.attributes.title'})|raw }}
+                        {{ Property.control('title', '', {'id': prefix ~ 'title' ,'v-model': 'object.attributes.title'})|raw }}
 
-                        {{ Property.control('description', '', {'v-model': 'object.attributes.description'})|raw }}
+                        {{ Property.control('description', '', {'id': prefix ~ 'description' ,'v-model': 'object.attributes.description'})|raw }}
 
                         <div class="input text" v-if="isMedia">
-                            <label for="file">{{ __('File') }}</label>
-                            <input type="file" name="file" v-on:change="processFile" id="file" class="drop-file" />
+                            <label for="{{ prefix }}file">{{ __('File') }}</label>
+                            <input type="file" name="file" v-on:change="processFile" id="{{ prefix }}file" class="drop-file" />
                         </div>
                         <div class="input text" v-if="isMedia">
-                            <label for="remote_url">{{ __('Url') }}</label>
+                            <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
                             {{ Form.text('remote_url', {
-                                'id': 'remote_url',
+                                'id': prefix ~ 'remote_url',
                                 'v-model': 'url',
                                 'type': 'text',
                                 'autocomplete': 'off',
@@ -60,7 +61,7 @@
                         </div>
                     </div>
                 </section>
-                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" type="submit">{{ __('create') }}</button>
+                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="createObject" type="button">{{ __('create') }}</button>
                 <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="resetForm">{{ __('reset') }}</button>
             </form>
         </div>
@@ -68,7 +69,7 @@
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;"<: relationName | humanize :>"</span> &nbsp;</h2>
+            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationName | humanize :></strong>"</span> relation</h2>
         </header>
 
         <div class="px-1 my-1">

@@ -59,10 +59,12 @@
             {% endif %}
 
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+            <span class="id has-text-size-smallest"><: related.id :></span>
+            <span class="uname has-text-size-smallest"><: related.attributes.uname :></span>
         </div>
 
         <header class="is-flex space-between mt-05">
-            <h1 class="m-0 has-text-size-small">
+            <h1 class="title m-0 has-text-size-small">
                 {% if translation %}
                     <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         <: related.attributes.translated_fields.title :>
@@ -72,11 +74,24 @@
                 {% endif %}
             </h1>
 
+            {% if not add %}
+            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
+                <: relatedAttribute(related, 'file_name') :>
+            </span>
+
+            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
+                <: relatedAttribute(related, 'mime_type') :>
+            </span>
+
+            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
+                <: relatedAttribute(related, 'file_size', 'bytes') :>
+            </span>
+            {% endif %}
+
             {% if not translation %}
                 <span class="modified">
                     <: new Date(related.meta.modified).toLocaleDateString() + ', ' + new Date(related.meta.modified).toLocaleTimeString() :>
                 </span>
-                <span class="id has-text-size-smallest nowrap has-text-gray-550"><: related.id :></span>
             {% endif %}
         </header>
     </div>
@@ -84,14 +99,16 @@
 
     {# PARAMS #}
     {% if common %}
-    <div class="p-05 has-text-size-smaller" v-if="relationSchema">
+    <div class="params p-05 has-text-size-smaller" v-if="relationSchema">
         <dl v-if="relationHasParams()" class="mb-05">
             <template v-for="(param, key) in relationSchema">
-                <dt class="is-capitalized"><: key|humanize :></dt>
-                <dd>
-                    <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
-                    <span v-else>-</span>
-                </dd>
+                <div class="term-container">
+                    <dt class="is-capitalized"><: key|humanize :></dt>
+                    <dd>
+                        <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
+                        <span v-else>-</span>
+                    </dd>
+                </div>
             </template>
         </dl>
 
@@ -125,6 +142,7 @@
 
 
     {# BUTTONS #}
+    {% if Perms.canSave() %}
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
@@ -143,11 +161,12 @@
                 v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
 
         {% else %}
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">{{ __('Edit') }}</a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
             </a>
         {% endif %}
     </footer>
+    {% endif %}
 
 </article>

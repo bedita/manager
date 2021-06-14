@@ -21,9 +21,10 @@ export default {
     },
 
     template: `<div class="locations">
+        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated]'" :value="locationsData" />
         <div v-if="!locations" class="is-loading-spinner"></div>
-        <div v-if="locations" v-for="(location, index) in locations">
-            <location-view :key="locationSymbol(location)" :index="index" :locationdata="location" :apikey="apikey" :apiurl="apiurl" :relation-name="relationName" />
+        <div v-else v-for="(location, index) in locations">
+            <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" />
         </div>
         <div v-if="locations" class="is-flex mt-1">
             <button @click.prevent @click="onAddNew"><: t('add new') :></button>
@@ -31,10 +32,9 @@ export default {
     </div>`,
 
     props: {
-        apikey: String,
-        apiurl: String,
+        apiKey: String,
+        apiUrl: String,
         relationName: String,
-        object: Object,
     },
 
     data() {
@@ -62,6 +62,7 @@ export default {
     async mounted() {
         this.$on('removed', (index) => {
             this.locations.splice(index, 1);
+            this.markChanged();
         });
         this.$on('updated', (index, location) => {
             if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
@@ -72,6 +73,7 @@ export default {
                 };
             }
             this.locations.splice(index, 1, location);
+            this.markChanged();
         });
     },
 
@@ -98,6 +100,25 @@ export default {
          */
         locationSymbol(location) {
             return Symbol(location);
+        },
+        /**
+         * Let the app know that something has changed here.
+         * @return {void}
+         */
+        markChanged() {
+            this.$el.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: {
+                    id: this.$vnode.tag,
+                    isChanged: true,
+                }
+            }));
         }
     },
+
+    computed: {
+        locationsData() {
+            return JSON.stringify(this.locations);
+        }
+    }
 }

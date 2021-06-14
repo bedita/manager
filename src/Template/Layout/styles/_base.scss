@@ -60,3 +60,8 @@ dl {
         margin-top: $gutter * .25;
     }
 }
+
+[class^='icon-'],
+[class*=' icon-'] {
+    line-height: 1;
+}

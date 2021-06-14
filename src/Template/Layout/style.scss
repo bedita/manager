@@ -42,6 +42,9 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Element/Panel/panel';
 @import '../Element/filter_type';
 
+// components
+@import './js/app/components/dialog/dialog.scss';
+
 // Pages
 @import '../Pages/Error/error';
 @import '../Pages/Login/login';

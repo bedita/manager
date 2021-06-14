@@ -43,6 +43,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        preCount: {
+            type: Number,
+            default: -1,
+        },
+        uploadableNum: {
+            type: String,
+            default: '0',
+        },
     },
 
     data() {
@@ -50,7 +58,7 @@ export default {
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
-            listView: false,
+            dataList: parseInt(this.uploadableNum) == 0,
         }
     },
 
@@ -60,6 +68,9 @@ export default {
             return;
         }
         this.isOpen = this.checkTabOpen();
+        if (this.preCount >= 0) {
+            this.totalObjects = this.preCount;
+        }
     },
 
     watch: {
@@ -71,6 +82,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.checkLoadRelated();
             this.updateStorage();
         },
         onToggleLoading(status) {
@@ -82,10 +94,10 @@ export default {
             }
         },
         switchBlockView() {
-            this.listView = false;
+            this.dataList = false;
         },
         switchListView() {
-            this.listView = true;
+            this.dataList = true;
         },
         checkTabOpen() {
             if (!this.tabName) {
@@ -113,6 +125,11 @@ export default {
                 tabs.splice(pos, 1);
             }
             localStorage.setItem(STORAGE_TABS_KEY, JSON.stringify(tabs));
+        },
+        checkLoadRelated() {
+            if (this.isOpen && this.$refs.relation) {
+                this.$refs.relation.loadRelatedObjects();
+            }
         },
     }
 }

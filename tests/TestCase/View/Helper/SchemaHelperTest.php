@@ -428,6 +428,34 @@ class SchemaHelperTest extends TestCase
                 [],
                 [],
             ],
+            'simple' => [
+                [
+                    'field' => [
+                        'oneOf' => [
+                            [
+                                'type' => 'string',
+                                'contentMediaType' => 'text/plain',
+                            ],
+                            [
+                                'type' => 'null',
+                            ],
+                        ],
+                    ],
+                ],
+                ['field'],
+            ],
+            'not translatable' => [
+                [
+                    'field1' => [
+                        'type' => 'string',
+                    ],
+                    'field2' => [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/css',
+                    ],
+                ],
+                [],
+            ],
             'properties' => [
                 [
                     'dummy' => [
@@ -437,7 +465,7 @@ class SchemaHelperTest extends TestCase
                             ],
                             [
                                 'type' => 'string',
-                                'contentMediaType' => 'text/html',
+                                'contentMediaType' => 'text/plain',
                             ],
                         ],
                     ],
@@ -468,6 +496,7 @@ class SchemaHelperTest extends TestCase
      *
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
+     * @covers ::translatableType()
      */
     public function testTranslatableFields(array $properties, array $expected)
     {
@@ -483,7 +512,7 @@ class SchemaHelperTest extends TestCase
     public function formatProvider(): array
     {
         return [
-            'dumy' => [
+            'dummy' => [
                 'dummy',
                 'dummy',
                 [
@@ -496,6 +525,13 @@ class SchemaHelperTest extends TestCase
                             'contentMediaType' => 'text/html',
                         ],
                     ],
+                ],
+            ],
+            'byte' => [
+                '1 MB',
+                1024 ** 2,
+                [
+                    'type' => 'byte',
                 ],
             ],
             'bool' => [
@@ -513,9 +549,25 @@ class SchemaHelperTest extends TestCase
                     'format' => 'date',
                 ],
             ],
+            'empty date' => [
+                '',
+                '',
+                [
+                    'type' => 'string',
+                    'format' => 'date',
+                ],
+            ],
             'date time' => [
                 '9/8/19, 4:35 PM',
                 '2019-09-08T16:35:15+00',
+                [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+            ],
+            'empty date time' => [
+                '',
+                '',
                 [
                     'type' => 'string',
                     'format' => 'date-time',
@@ -550,6 +602,7 @@ class SchemaHelperTest extends TestCase
      *
      * @dataProvider formatProvider()
      * @covers ::format()
+     * @covers ::formatByte()
      * @covers ::formatBoolean()
      * @covers ::formatDate()
      * @covers ::formatDateTime()
@@ -653,6 +706,11 @@ class SchemaHelperTest extends TestCase
                 'dummy_oneof_object',
                 ['oneOf' => [['type' => 'null'], ['type' => 'object']]],
                 false,
+            ],
+            'date_ranges' => [
+                'date_ranges',
+                [],
+                true,
             ],
         ];
     }

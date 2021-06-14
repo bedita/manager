@@ -22,19 +22,20 @@
     ],
     "require": {
         "php": ">=7.1",
-        "bedita/web-tools": "^1.5.0",
         "bedita/i18n": "^1.5",
+        "bedita/web-tools": "^1.6.0",
         "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
-        "wikimedia/composer-merge-plugin": "^1.4"
+        "phpoffice/phpspreadsheet": "^1.15",
+        "wikimedia/composer-merge-plugin": "^2.0.1"
     },
     "require-dev": {
         "cakephp/bake": "^1.11",
         "cakephp/debug_kit": "^3.19.0",
         "cakephp/cakephp-codesniffer": "~3.3.0",
         "psy/psysh": "@stable",
-        "phpunit/phpunit": "^6.0"
+        "phpunit/phpunit": "^6.5"
     },
     "autoload": {
         "psr-4": {
@@ -51,7 +52,6 @@
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
         "post-update-cmd": "App\\Console\\Installer::postInstall",
-        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump",
         "check": [
             "@test",
             "@cs-check"

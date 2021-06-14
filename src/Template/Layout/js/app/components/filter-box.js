@@ -17,6 +17,8 @@
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
+import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
 
 export default {
     components: {
@@ -26,11 +28,11 @@ export default {
     props: {
         objectsLabel: {
             type: String,
-            default: "Objects"
+            default: t`Objects`
         },
         placeholder: {
             type: String,
-            default: "Search"
+            default: t`Search`
         },
         showFilterButtons: {
             type: Boolean,
@@ -157,19 +159,59 @@ export default {
 
     methods: {
         /**
+         * First char upper case for string.
+         * @param {String} str The string
+         * @returns
+         */
+        ucfirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+
+        /**
          * trigger filter-objects event when query string has 3 or more carachter
          *
          * @emits Event#filter-objects
          */
-        onQueryStringChange() {
-            let queryString = this.queryFilter.q || "";
+        onQueryStringKeyup() {
+            const queryString = this.queryFilter.q || "";
 
             clearTimeout(this.timer);
-            if (queryString.length >= 3 || queryString.length == 0) {
+            if (queryString.trim().length >= 3 || queryString.trim().length === 0) {
                 this.timer = setTimeout(() => {
                     this.$emit("filter-objects", this.queryFilter);
                 }, 300);
             }
+        },
+
+        /**
+         * Handle Search input when value changes
+         * If search text is empty or at least 3 characters long, ok.
+         * Otherwise, warn that search text is too short.
+         */
+        onQueryStringChange() {
+            if (!this.searchFieldValid()) {
+                this.searchFieldDialog();
+            }
+        },
+
+        /**
+         * Verify search text.
+         * If is empty or more than 2 characters long, return true.
+         * Return false otherwise.
+         */
+        searchFieldValid() {
+            this.queryFilter.q = this.queryFilter.q.trim();
+
+            return (this.queryFilter.q.length === 0 || this.queryFilter.q.length > 2);
+        },
+
+        /**
+         * Verify search text.
+         * If is empty or more than 2 characters long, ok.
+         * Show prompt dialog otherwise.
+         */
+        searchFieldDialog() {
+            warning(t`Search text too short. Minimum length is 3. Retry`);
         },
 
         onOtherFiltersChange() {
@@ -196,7 +238,12 @@ export default {
          * @emits Event#filter-objects-submit
          */
         applyFilter() {
-            this.$emit("filter-objects-submit", this.queryFilter);
+            if (this.searchFieldValid()) {
+                this.$emit("filter-objects-submit", this.queryFilter);
+
+                return;
+            }
+            this.searchFieldDialog();
         },
 
         /**

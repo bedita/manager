@@ -1,0 +1,36 @@
+name: 'javascript'
+
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.scss'
+  push:
+    paths:
+      - '**/*.js'
+      - '**/*.scss'
+
+jobs:
+  javascript-build:
+    name: 'Check javascript build'
+    if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
+    runs-on: 'ubuntu-20.04'
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - name: 'Checkout current revision'
+        uses: 'actions/checkout@v2'
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Yarn install'
+        run: 'yarn install'
+
+      - name: 'Yarn build'
+        run: 'yarn build'

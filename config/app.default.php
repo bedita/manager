@@ -405,12 +405,16 @@ return [
      *
      * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
      * Modules order will follow key order of this configuration.
+     * In case of core or plugin modules not directly served by ModulesController
+     * (generally modules not related to bject types) a 'route' attribute can be specified for
+     * custom controller and action rules.
      *
      * Array value may contain:
      *
      *  'label' - module label to display, if not set `key` will be used
      *  'shortLabel' - short label, 3 character recommended
      *  'color' - primary color code,
+     *  'route' - (optional) custom route (named route or absolute/relative URL) used by plugin modules mainly
      *  'secondaryColor' - secondary color code,
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
@@ -465,19 +469,46 @@ return [
     ],
 
     /**
+     * Modules accesses per role(s)
+     */
+    // 'AccessControl' => [
+    //     'manager' => [
+    //         'hidden' => ['objects'],
+    //         'readonly' => ['documents'],
+    //     ],
+    //     'guest' => [
+    //         'hidden' => ['objects', 'users'],
+    //         'readonly' => ['documents'],
+    //     ],
+    // ],
+
+    /**
      * Properties display configuration settings.
      *
-     * For each module name:
-     *  - 'view' properties groups to present as in object view, where groups are:
-     *      + '_keep' properties to keep even if not found in object
+     * Every key in this array is a module name, for each one we may have:
+     *
+     *  - 'view' properties groups to present in object view, where groups are:
+     *      + '_keep' special group of properties to keep and display even if not found in object
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
      *      + 'other' remaining attributes
-     *  - 'index' properties to display in index view (other than id, status and modified)
-     *  - 'relations' relations ordering by relation name
+     *      + any custom name can be added as key, like 'my_group' or 'some_info'
+     *          => a tab named `My Group` or `Some Info` will be generated
+     *      + inside any of the groups above an optional '_element' can define a custom view element for this group
+     *
+     *  - 'index' properties to display in index view (other than `id`, `status` and `modified`, always displayed if set)
+     *
+     *  - 'relations' relations ordering by relation name, containing these optional keys
+     *      + 'main' first relations to show on main column, other relations will be appended
+     *      + 'aside' relations to show on right aside column
+     *      + '_element' associative array with custom view element to use for a relation, defined like
+     *          '{relation_name}' => '{MyPlugin.template_path}'
+     *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
+     *
+     * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
     // 'Properties' => [
         // 'foos' => [
@@ -551,9 +582,9 @@ return [
      * Where options array may contain
      *
      * - `debugOnly` - boolean - (default: false) Whether or not you want to load the plugin when in 'debug' mode only
-     * - `bootstrap` - boolean - (default: false) Whether or not you want the $plugin/config/bootstrap.php file loaded.
-     * - `routes` - boolean - (default: false) Whether or not you want to load the $plugin/config/routes.php file.
-     * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
+     * - `bootstrap` - boolean - (default: true) Whether or not you want the $plugin/config/bootstrap.php file loaded.
+     * - `routes` - boolean - (default: true) Whether or not you want to load the $plugin/config/routes.php file.
+     * - `ignoreMissing` - boolean - (default: true) Set to true to ignore missing bootstrap/routes files.
      * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
      */
     // 'Plugins' => [
@@ -561,28 +592,6 @@ return [
 
         // Uncomment to enable `DebugKit` - 'debug' mode is required
         //'DebugKit' => ['bootstrap' => true, 'debugOnly' => true],
-    // ],
-
-    /**
-     * Plugin modules settings.
-     *
-     * Default empty.
-     * Configuration generally written by plugins via bootstrap.
-     */
-    // 'PluginModules' => [
-
-    //     // plugin module example
-    //     // unique name
-    //     'My Module' => [
-    //         'title' => 'My Module',
-    //         // routing rules
-    //         'route' => Router::url(['_name': 'my_module:index']),
-    //         // css class
-    //         'class' => [
-    //             'dashboard' => 'has-background-black icon-sample',
-    //             'menu' => 'has-background-black',
-    //         ],
-    //     ],
     // ],
 
     /**
@@ -598,9 +607,17 @@ return [
      * Export default settings
      *
      * - limit => max number of exported elements on export all
+     * - formats => array of formats enabled for export
+     * - default => default format
      */
     // 'Export' => [
     //     'limit' => 10000,
+    //     'formats' => [
+    //        'CSV' => 'csv', // label => value
+    //        'Open Document' => 'ods',
+    //        'MS Excel' => 'xlsx'
+    //     ],
+    //     'default' => 'xlsx'
     // ],
 
     /**

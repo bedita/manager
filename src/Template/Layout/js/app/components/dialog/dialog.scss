@@ -1,0 +1,93 @@
+.bedita-dialog {
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 1;
+
+        &.fade-enter-active,
+        &.fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        &.fade-enter,
+        &.fade-leave-to {
+            opacity: 0;
+        }
+
+        &.fade-enter-to,
+        &.fade-leave {
+            opacity: 0.75;
+        }
+    }
+
+    .dialog {
+        position: fixed;
+        width: 600px;
+        z-index: 2;
+        min-height: 200px;
+        top: 0;
+        left: calc(50vw - 300px);
+        margin-top: 10%;
+        border-top: 4px solid transparent;
+
+        &.slide-enter-active,
+        &.slide-leave-active {
+            transition: transform .5s;
+        }
+
+        &.slide-enter,
+        &.slide-leave-to {
+            transform: translateY(-100%);
+        }
+
+        &.slide-enter-to,
+        &.slide-leave {
+            transform: translateY(0);
+        }
+
+        &.warning {
+            border-color: $warning;
+
+            .icon-attention-circled {
+                color: $warning;
+            }
+        }
+
+        &.error {
+            border-color: $error;
+
+            .icon-attention-circled {
+                color: $error;
+            }
+        }
+
+        &.prompt,
+        &.info {
+            border-color: $info;
+
+            .icon-info-1,
+            .icon-info-circled {
+                color: $info;
+            }
+        }
+
+        header {
+            .icon-cancel-1 {
+                cursor: pointer;
+
+                &::before {
+                    margin: 0;
+                }
+            }
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid $gray-600;
+        }
+    }
+}

@@ -75,10 +75,9 @@ export const PaginatedContentMixin = {
                     .then((json) => {
                         this.requestsQueue.pop();
 
-                        let objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
-                        if (!json.data) {
-                            // api response with error
-                            objects = [];
+                        let objects = [];
+                        if (json && 'data' in json) {
+                            objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
                         }
 
                         // if requestQueue is empty it means that this request is the last of the queue
@@ -87,7 +86,7 @@ export const PaginatedContentMixin = {
                             if (autoload) {
                                 this.objects = objects;
                             }
-                            this.pagination = json.meta && json.meta.pagination || this.pagination;
+                            this.pagination = json && json.meta && json.meta.pagination || this.pagination;
 
                             return objects;
                         }

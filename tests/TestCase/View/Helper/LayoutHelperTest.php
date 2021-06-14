@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\LayoutHelper;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -184,6 +185,66 @@ class LayoutHelperTest extends TestCase
         }
         $layout = new LayoutHelper($view);
         $result = $layout->moduleLink();
+        static::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider for `testCustomElement` test case.
+     *
+     * @return array
+     */
+    public function customElementProvider(): array
+    {
+        return [
+            'empty' => [
+                '',
+                'test',
+            ],
+            'empty relation' => [
+                'empty',
+                'my_relation',
+                'relation',
+                [
+                    'relations' => [
+                        '_element' => [
+                            'my_relation' => 'empty',
+                        ],
+                    ],
+                ],
+            ],
+            'my_element' => [
+                'MyPlugin.my_element',
+                'my_group',
+                'group',
+                [
+                    'view' => [
+                        'my_group' => ['_element' => 'MyPlugin.my_element'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `customElement` method
+     *
+     * @param string $expected The expected element
+     * @param string $item The item
+     * @param string $type The item type
+     * @param array $conf Configuration to use
+     * @return void
+     *
+     * @dataProvider customElementProvider()
+     * @covers ::customElement()
+     */
+    public function testCustomElement(string $expected, string $item, string $type = 'relation', array $conf = []): void
+    {
+        Configure::write('Properties.documents', $conf);
+        $view = new View();
+        $view->set('currentModule', ['name' => 'documents']);
+        $layout = new LayoutHelper($view);
+
+        $result = $layout->customElement($item, $type);
         static::assertSame($expected, $result);
     }
 }

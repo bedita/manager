@@ -41,9 +41,46 @@ return [
                 'roles',
             ],
         ],
-
         // media
+        'audio' => [
+            'index' => [
+                'title',
+                'file_name',
+                'mime_type',
+                'file_size',
+            ],
+        ],
+        'files' => [
+            'index' => [
+                'title',
+                'file_name',
+                'mime_type',
+                'file_size',
+            ],
+        ],
+        'images' => [
+            'index' => [
+                'title',
+                'file_name',
+                'mime_type',
+                'file_size',
+            ],
+        ],
+        'media' => [
+            'index' => [
+                'title',
+                'file_name',
+                'mime_type',
+                'file_size',
+            ],
+        ],
         'videos' => [
+            'index' => [
+                'title',
+                'file_name',
+                'mime_type',
+                'file_size',
+            ],
             'view' => [
                 'advanced' => [
                     'extra',

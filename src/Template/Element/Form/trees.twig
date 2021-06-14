@@ -6,7 +6,7 @@
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
             :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __('Folders') }}</h2>
+            <h2>{{ __('Position') }}</h2>
         </header>
 
         <div v-if="isOpen" class="tab-container">
@@ -26,6 +26,7 @@
             {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
             {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}
             {{ Form.unlockField('_changedParents')}}
+            {{ Form.unlockField('_changedCanonical')}}
         </div>
     </section>
 </property-view>

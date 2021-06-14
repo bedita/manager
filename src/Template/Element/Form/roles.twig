@@ -1,5 +1,10 @@
 {% set relationName = 'roles' %}
 
+{% set customElement = Layout.customElement(relationName) %}
+{% if customElement %}
+   {% element customElement %}
+{% else %}
+
 <property-view inline-template :tab-open="tabsOpen" tab-name="roles">
 
     <section class="fieldset">
@@ -11,7 +16,9 @@
                 isLoading? 'is-loading-spinner' : ''
             ]">
                 <h2>{{ __(relationName|humanize)|lower }}</h2>
-                <span class="has-text-size-smallest" v-show="!isLoading"><: totalObjects :></span>
+                <span class="tag is-smallest is-black mx-05" v-show="!isLoading">
+                    <: totalObjects :>
+                </span>
         </header>
 
         <div v-show="isOpen" class="tab-container">
@@ -67,3 +74,5 @@
     </section>
 
 </property-view>
+
+{% endif %}

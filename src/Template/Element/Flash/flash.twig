@@ -7,9 +7,9 @@
         <div class="background-mask" v-show="isVisible" v-on:click.self="hide"></div>
     {% endif %}
 
-    <div class="message {{ level }} {{ params.class|default('') }}">
+    <div class="message {{ level }}{{ (' ' ~ params.class|default(''))|trim }}">
         {% if _view.name != 'Login' %}
-            <button class="close-button" @click="hide"></button>
+            <i class="icon-cancel-1 has-text-size-larger" @click="hide"></i>
         {% endif %}
 
         <h2>
@@ -31,7 +31,7 @@
 
         {% if _view.name != 'Login' and level == 'error' %}
             {% if params and in_array('admin', user.roles) %}
-                <a v-on:click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('code') }}: {{ params.status }} {{ params.code }}<i class="icon-down-dir"></i></a>
+                <a @click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('code') }}: {{ params.status }} {{ params.code }}<i class="icon-down-dir"></i></a>
                 <div class="dump" v-show="isDumpVisible">
                     <code>
                     {% for key, value in params if value %}
@@ -45,7 +45,7 @@
                     {% endfor %}
                     </code>
                 </div>
-            {% else %}
+            {% elseif params.status or params.code %}
                 <p>{{ __('code') }}: {{ params.status }} {{ params.code }}</p>
             {% endif %}
         {% endif %}

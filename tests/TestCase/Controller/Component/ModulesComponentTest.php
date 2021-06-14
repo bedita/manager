@@ -23,6 +23,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -83,6 +84,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
         $this->MyModules = $registry->load(MyModulesComponent::class);
+        $controller->Auth = $this->Auth;
     }
 
     /**
@@ -109,7 +111,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'project' => [
@@ -122,7 +123,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 [],
             ],
@@ -130,7 +130,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
-                    'colophon' => '',
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -142,7 +141,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'Gustavo',
                     'version' => '4.1.2',
-                    'colophon' => '',
                 ],
                 [
                     'version' => '4.1.2',
@@ -227,8 +225,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
 
@@ -288,8 +285,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
@@ -430,9 +426,103 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
+        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModulesByAccessControl`.
+     *
+     * @return array
+     */
+    public function modulesByAccessControlProvider(): array
+    {
+        return [
+            'empty access control' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [],
+                [],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'empty roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                ['guest'],
+                ['id' => 1, 'roles' => []],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'empty hidden, empty readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => [],
+                        'readonly' => [],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'hidden + readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => ['documents'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['events' => ['hints' => ['allow' => []]], 'news' => []],
+            ],
+            'multi roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'role1' => [
+                        'hidden' => ['news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role2' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role3' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['role1', 'role2', 'role3']],
+                ['documents' => [], 'events' => ['hints' => ['allow' => []]]],
+            ],
+        ];
+    }
+
+    /**
+     * Test `modulesByAccessControl` method
+     *
+     * @param array $modules The modules
+     * @param array $accessControl The AccessControl config
+     * @param array $user The user
+     * @param array $expected The expected modules
+     * @return void
+     * @dataProvider modulesByAccessControlProvider()
+     * @cover ::modulesByAccessControl()
+     */
+    public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
+    {
+        // set $this->Modules->modules
+        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property->setAccessible(true);
+        $property->setValue($this->Modules, $modules);
+        // set AccessControl
+        Configure::write('AccessControl', $accessControl);
+        // call modulesByAccessControl
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('modulesByAccessControl');
+        $method->setAccessible(true);
+        $this->Modules->getController()->Auth->setUser($user);
+        $method->invokeArgs($this->Modules, []);
+        $actual = $this->Modules->modules;
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -453,7 +543,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [
@@ -489,7 +578,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
-                    'colophon' => '',
                 ],
                 [
                     'resources' => [
@@ -548,7 +636,7 @@ class ModulesComponentTest extends TestCase
         Configure::write('Modules', $config);
 
         if ($userId) {
-            $this->Auth->setUser(['id' => $userId]);
+            $this->Auth->setUser(['id' => $userId, 'roles' => ['guest']]);
         }
 
         // Setup mock API client.
@@ -897,67 +985,6 @@ class ModulesComponentTest extends TestCase
         $expected = $object;
         $expected['attributes'] = array_merge($object['attributes'], $recover);
         static::assertEquals($expected, $object);
-    }
-
-    /**
-     * Data provider for `testPrepareQuery`
-     *
-     * @return void
-     */
-    public function prepareQueryProvider()
-    {
-        return [
-            'simple' => [
-                [
-                    'page_size' => 7,
-                    'q' => 'gustavo',
-                ],
-                [
-                    'page_items' => 32,
-                    'page_size' => 7,
-                    'count' => 123,
-                    'q' => 'gustavo',
-                    'filter' => [],
-                ],
-            ],
-
-            'filter 1' => [
-                [
-                    'filter' => [
-                        'type' => 'documents',
-                    ],
-                ],
-                [
-                    'filter' => [
-                        'type' => 'documents',
-                        'b' => null,
-                    ],
-                ],
-            ],
-            'filter 2' => [
-                [],
-                [
-                    'filter' => [
-                        'type' => null,
-                        'a' => '',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `prepareQuery` method.
-     *
-     * @return void
-     *
-     * @dataProvider prepareQueryProvider
-     * @covers ::prepareQuery()
-     */
-    public function testPrepareQuery(array $expected, array $query): void
-    {
-        $result = $this->Modules->prepareQuery($query);
-        static::assertEquals($expected, $result);
     }
 
     /**
@@ -1384,5 +1411,168 @@ class ModulesComponentTest extends TestCase
             $expected['id'] = $object['id'];
         }
         static::assertEquals($expected, $object);
+    }
+
+    /**
+     * Data provider for `testSaveRelated`.
+     *
+     * @return array
+     */
+    public function saveRelatedProvider(): array
+    {
+        $dummy = ['id' => 123, 'type' => 'dummies'];
+
+        return [
+            'bad request exception' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'wrongMethod',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                new BadRequestException(__('Bad related data method')), // expected
+            ],
+            'addRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'addRelated', // expected
+            ],
+            'removeRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'removeRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'removeRelated', // expected
+            ],
+            'replaceRelated see_also' => [
+                111, // id
+                'dummies', // type
+                [
+                    [
+                        'method' => 'replaceRelated',
+                        'relation' => 'see_also',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
+            'folders children not folders' => [
+                111, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [$dummy],
+                    ],
+                ], // relatedData
+                'addRelated', // expected
+            ],
+            'folders children position' => [
+                111, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [
+                            [
+                                'id' => 123,
+                                'type' => 'folders',
+                                'meta' => ['relation' => ['position' => 1]],
+                            ],
+                            [
+                                'id' => 124,
+                                'type' => 'folders',
+                                'meta' => ['relation' => ['position' => 2]],
+                            ],
+                        ],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
+            'folders children folders' => [
+                222, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders']],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
+            ],
+            'folders children mixed' => [
+                333, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'removeRelated',
+                        'relation' => 'children',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders'], ['id' => 456, 'type' => 'dummies']],
+                    ],
+                ], // relatedData
+                'removeRelated', // expected
+            ],
+        ];
+    }
+
+    /**
+     * Test `saveRelated`
+     *
+     * @param string $id Object ID
+     * @param string $type Object type
+     * @param array $relatedData Related objects data
+     * @param mixed $expected The expected result
+     * @return void
+     * @dataProvider saveRelatedProvider
+     * @covers ::saveRelated()
+     * @covers ::folderChildrenRelated()
+     * @covers ::folderChildrenRemove()
+     */
+    public function testSaveRelated(string $id, string $type, array $relatedData, $expected): void
+    {
+        if ($expected instanceof \Exception) {
+            $this->expectException(get_class($expected));
+            $this->expectExceptionCode($expected->getCode());
+            $this->expectExceptionMessage($expected->getMessage());
+        }
+        $actual = 'none';
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.org'])
+            ->getMock();
+        $apiClient->method('addRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'addRelated';
+            }));
+        $apiClient->method('removeRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'removeRelated';
+            }));
+        $apiClient->method('replaceRelated')
+            ->will($this->returnCallback(function () use (&$actual) {
+                $actual = 'replaceRelated';
+            }));
+        ApiClientProvider::setApiClient($apiClient);
+
+        $this->Modules->saveRelated($id, $type, $relatedData);
+        static::assertEquals($expected, $actual);
     }
 }

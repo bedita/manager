@@ -44,7 +44,7 @@
         {{ Form.end()|raw }}
 
         {# trash #}
-        {% if (objects) and in_array('DELETE', currentModule.hints.allow) %}
+        {% if (objects) and Perms.canDelete() %}
             {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
                 <input type="hidden" name="ids" v-bind:value="selectedRows">
                 {{ Form.unlockField('ids') }}
@@ -55,6 +55,19 @@
         {# export #}
         {% if not currentModule.hints.multiple_types %}
             {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
+
+                {% set formats = config('Export.formats', {
+                    'CSV': 'csv',
+                    'Open Document': 'ods',
+                    'MS Excel': 'xlsx'
+                }) %}
+                {% set defaultFormat = config('Export.default', 'xslx') %}
+                <select name="format" id="exportformat">
+                {% for label,format in formats %}
+                    <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+                {% endfor %}
+                </select>
+                {{ Form.unlockField('format') }}
 
                 <input type="hidden" name="ids" v-model="selectedRows">
                 {{ Form.unlockField('ids') }}

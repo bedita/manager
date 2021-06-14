@@ -188,7 +188,7 @@ class AppController extends Controller
     {
         $data = (array)$this->request->getData();
 
-        $this->specialAttributes($type, $data);
+        $this->specialAttributes($data);
         $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
@@ -204,17 +204,16 @@ class AppController extends Controller
     /**
      * Setup special attributes to be saved.
      *
-     * @param string $type Object or resource type
      * @param array $data Request data
      * @return void
      */
-    protected function specialAttributes(string $type, array &$data): void
+    protected function specialAttributes(array &$data): void
     {
         // remove temporary session id
         unset($data['_session_id']);
 
-        // when saving users, if password is empty, unset it
-        if ($type === 'users' && array_key_exists('password', $data) && empty($data['password'])) {
+        // if password is empty, unset it
+        if (array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);
             unset($data['confirm-password']);
         }
@@ -409,15 +408,18 @@ class AppController extends Controller
         }
 
         // write request query parameters (if any) in session
-        if (!empty($this->request->getQueryParams())) {
-            $session->write($sessionKey, $this->request->getQueryParams());
+        $params = $this->request->getQueryParams();
+        if (!empty($params)) {
+            unset($params['_search']);
+            $session->write($sessionKey, $params);
 
             return null;
         }
 
         // read request query parameters from session and redirect to proper page
-        if ($session->check($sessionKey)) {
-            $query = http_build_query($session->read($sessionKey), null, '&', PHP_QUERY_RFC3986);
+        $params = (array)$session->read($sessionKey);
+        if (!empty($params)) {
+            $query = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
             return $this->redirect((string)$this->request->getUri()->withQuery($query));
         }

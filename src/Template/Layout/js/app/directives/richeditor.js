@@ -70,16 +70,18 @@ export default {
                     items = DEFAULT_TOOLBAR;
                 }
 
+                const { default: contentCSS } = await import('../../../richeditor.lazy.scss');
                 const [editor] = await tinymce.init({
                     target: element,
                     skin: false,
-                    content_css: false,
+                    content_css: contentCSS,
                     menubar: false,
                     branding: false,
                     max_height: 500,
                     toolbar: DEFAULT_TOOLBAR,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
+                    entity_encoding: 'raw',
                     plugins: [
                         'paste',
                         'autoresize',
