@@ -84,6 +84,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
         $this->MyModules = $registry->load(MyModulesComponent::class);
+        $controller->Auth = $this->Auth;
     }
 
     /**
@@ -224,8 +225,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
 
@@ -285,8 +285,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
-        $userId = 1;
-        $this->Auth->setUser(['id' => $userId]);
+        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
@@ -427,9 +426,103 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
+        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModulesByAccessControl`.
+     *
+     * @return array
+     */
+    public function modulesByAccessControlProvider(): array
+    {
+        return [
+            'empty access control' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [],
+                [],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'empty roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                ['guest'],
+                ['id' => 1, 'roles' => []],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'empty hidden, empty readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => [],
+                        'readonly' => [],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'hidden + readonly' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'somerole' => [
+                        'hidden' => ['documents'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['somerole']],
+                ['events' => ['hints' => ['allow' => []]], 'news' => []],
+            ],
+            'multi roles' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                [
+                    'role1' => [
+                        'hidden' => ['news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role2' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                    'role3' => [
+                        'hidden' => ['documents', 'news'],
+                        'readonly' => ['events'],
+                    ],
+                ],
+                ['id' => 1, 'roles' => ['role1', 'role2', 'role3']],
+                ['documents' => [], 'events' => ['hints' => ['allow' => []]]],
+            ],
+        ];
+    }
+
+    /**
+     * Test `modulesByAccessControl` method
+     *
+     * @param array $modules The modules
+     * @param array $accessControl The AccessControl config
+     * @param array $user The user
+     * @param array $expected The expected modules
+     * @return void
+     * @dataProvider modulesByAccessControlProvider()
+     * @cover ::modulesByAccessControl()
+     */
+    public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
+    {
+        // set $this->Modules->modules
+        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property->setAccessible(true);
+        $property->setValue($this->Modules, $modules);
+        // set AccessControl
+        Configure::write('AccessControl', $accessControl);
+        // call modulesByAccessControl
+        $reflectionClass = new \ReflectionClass($this->Modules);
+        $method = $reflectionClass->getMethod('modulesByAccessControl');
+        $method->setAccessible(true);
+        $this->Modules->getController()->Auth->setUser($user);
+        $method->invokeArgs($this->Modules, []);
+        $actual = $this->Modules->modules;
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -543,7 +636,7 @@ class ModulesComponentTest extends TestCase
         Configure::write('Modules', $config);
 
         if ($userId) {
-            $this->Auth->setUser(['id' => $userId]);
+            $this->Auth->setUser(['id' => $userId, 'roles' => ['guest']]);
         }
 
         // Setup mock API client.

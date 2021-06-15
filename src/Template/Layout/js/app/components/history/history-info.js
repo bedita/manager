@@ -16,7 +16,7 @@ export default {
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
                     <div v-for="(value, key) in changed" v-html="value"></div>
-                    <button class="mt-2" @click.stop.prevent="restore()"><: t('Restore') :></button>
+                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()"><: t('Restore') :></button>
                 </div>
             </div>
         </section>
@@ -25,6 +25,7 @@ export default {
     props: {
         meta: Object,
         id: String,
+        cansave: Boolean,
     },
 
     data() {
@@ -33,6 +34,7 @@ export default {
             created: this.meta.created,
             user: this.meta.user,
             user_action: this.meta.user_action,
+            canSave: true,
         }
     },
 
@@ -71,6 +73,10 @@ export default {
 
             return label;
         },
+    },
+
+    async created() {
+        this.canSave = this.cansave;
     },
 
     methods: {
