@@ -30,6 +30,7 @@ export default {
 
     mounted() {
         window.addEventListener('keydown', this.toggleTabs);
+        this.$refs.formMain.addEventListener('submit', this.submitForm);
     },
 
     methods: {
@@ -38,6 +39,40 @@ export default {
             if (key === 27) {
                 return this.tabsOpen = !this.tabsOpen;
             }
+        },
+
+        submitForm(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const data = new FormData(event.target);
+            const action = this.$refs.formMain.getAttribute('action');
+
+            fetch(`${action}Json`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(data.entries())),
+                mode: 'same-origin',
+                credentials: 'same-origin',
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                            .then((json) => {
+                                // clear map where changes are saved, to avoid alert message about unsaved changes
+                                window._vueInstance.dataChanged.clear();
+                                window.location.pathname = window.location.pathname.replace('/new', `/${json.data[0].id}`);
+                            });
+                    } else if (response.status === 302 && response.headers.get('Location').endsWith('/login')) {
+                        console.warn('session expired');
+                    }
+
+                    return response.text()
+                        .then((error) => Promise.reject(error));
+                })
+                .catch((error) => console.error(error));
         },
 
         async translateAll(data, e) {

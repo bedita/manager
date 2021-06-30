@@ -21,6 +21,7 @@
                 'url': {'_name': 'modules:save', 'object_type': objectType},
                 'id': 'form-main',
                 'check-changes': 'true',
+                'ref': 'formMain',
             })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
@@ -70,7 +71,7 @@
                 {% element 'Form/related_translations' {'resourceName': 'translations'} %}
 
                 {% element 'Form/meta' %}
-                
+
                 {% element 'Form/advanced_properties' %}
 
                 {% element 'Form/resource_relations' %}
