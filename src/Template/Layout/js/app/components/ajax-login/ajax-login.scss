@@ -33,6 +33,8 @@
         left: calc(50vw - 300px);
         margin-top: 10%;
         border-top: 4px solid transparent;
+        background-color: #fff;
+        color: #000;
 
         &.slide-enter-active,
         &.slide-leave-active {
