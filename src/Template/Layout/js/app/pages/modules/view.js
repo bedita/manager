@@ -1,3 +1,5 @@
+import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
+
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Modules/view.twig
@@ -41,13 +43,12 @@ export default {
             }
         },
 
-        submitForm(event) {
+        async submitForm(event) {
             event.preventDefault();
             event.stopPropagation();
             const data = new FormData(event.target);
-            const action = this.$refs.formMain.getAttribute('action');
-
-            fetch(`${action}Json`, {
+            const action = event.target.getAttribute('action');
+            const response = await fetch(`${action}Json`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -56,23 +57,42 @@ export default {
                 body: JSON.stringify(Object.fromEntries(data.entries())),
                 mode: 'same-origin',
                 credentials: 'same-origin',
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json()
-                            .then((json) => {
-                                // clear map where changes are saved, to avoid alert message about unsaved changes
-                                window._vueInstance.dataChanged.clear();
-                                window.location.pathname = window.location.pathname.replace('/new', `/${json.data[0].id}`);
-                            });
-                    } else if (response.status === 302 && response.headers.get('Location').endsWith('/login')) {
-                        console.warn('session expired');
-                    }
+                redirect: 'manual',
+            });
 
-                    return response.text()
-                        .then((error) => Promise.reject(error));
-                })
-                .catch((error) => console.error(error));
+            if (response.ok) {
+                const json = await response.json();
+                // clear form dirty state, to avoid alert message about unsaved changes when changing page
+                window._vueInstance.dataChanged.clear();
+                window.location.pathname = window.location.pathname.replace('/new', `/${json.data[0].id}`);
+
+                return;
+            }
+
+            // a redirect was performed; we assume it was to /login page
+            if (response.status === 0 && response.type === 'opaqueredirect') {
+                console.warn('session expired');
+                this.renewSession();
+
+                return;
+            }
+
+            const error = await response.text();
+            console.error(error);
+        },
+
+        renewSession() {
+            const iframe = new AjaxLogin({
+                propsData: {
+                    headerText: 'Login',
+                    message: 'Session expired, login to continue editing the object',
+                }
+            });
+            iframe.$mount();
+            iframe.$once('login', () => {
+                console.log('user logged in with AJAX request');
+            });
+            document.body.appendChild(iframe.$el);
         },
 
         async translateAll(data, e) {

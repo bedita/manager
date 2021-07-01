@@ -19,6 +19,11 @@ export default {
         };
     },
     created() {
+        if (document.referrer.endsWith('/login') && window.top !== window) {
+            console.log('AJAX login, posting message');
+            window.top.postMessage('login', BEDITA.base);
+        }
+
         this.searchString = this.q;
     },
     methods: {
