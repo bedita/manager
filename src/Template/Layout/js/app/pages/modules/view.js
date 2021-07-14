@@ -89,9 +89,6 @@ export default {
                 }
             });
             iframe.$mount();
-            iframe.$once('login', () => {
-                console.log('user logged in with AJAX request');
-            });
             document.body.appendChild(iframe.$el);
         },
 
