@@ -303,6 +303,9 @@ class ModulesController extends AppController
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        // extract related objects data
+        $relatedData = (array)Hash::get($requestData, '_api');
+        unset($requestData['_api']);
 
         try {
             // upload file (if available)
@@ -310,6 +313,8 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
+            $objectId = (string)Hash::get($response, 'data.id');
+            $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
