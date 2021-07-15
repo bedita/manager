@@ -317,6 +317,10 @@ class AppController extends Controller
     {
         if (!empty($data['_actualAttributes'])) {
             $attributes = json_decode($data['_actualAttributes'], true);
+            if ($attributes === null) {
+                $this->log(sprintf('Wrong _actualAttributes, not a json string: %s', $data['_actualAttributes']), 'error');
+                $attributes = [];
+            }
             foreach ($attributes as $key => $value) {
                 // remove unchanged attributes from $data
                 if (array_key_exists($key, $data) && !$this->hasFieldChanged($value, $data[$key])) {

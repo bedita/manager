@@ -306,6 +306,18 @@ class AppControllerTest extends TestCase
                     '_actualAttributes' => '{"title":"bibo","description":""}',
                 ],
             ],
+            'wrong json string actual attrs' => [ // test '_actualAttributes'
+                'documents', // object_type
+                [ // expected
+                    'title' => 'bibo',
+                    'description' => 'dido',
+                ],
+                [ // data provided
+                    'title' => 'bibo',
+                    'description' => 'dido',
+                    '_actualAttributes' => '{"title":"bibo","description":""}abcde',
+                ],
+            ],
             'fields null value' => [ // fields with value null, not changed and changed
                 'documents', // object_type
                 [ // expected
