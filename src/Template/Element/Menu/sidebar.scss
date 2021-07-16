@@ -55,6 +55,14 @@
     }
 }
 
+ul.concurrent-editors {
+    margin:0; padding:0;
+    li {
+        padding: .5rem 0 .5rem 0;
+        border-bottom: 1px solid $gray-600; 
+    }
+}
+
 .project-title {
     width: 100%;
     // make whole area clickable

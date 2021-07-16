@@ -16,14 +16,13 @@
                 {{ Layout.moduleLink()|raw }}
             </div>
             {% if editors|length > 1 %}
-            <div>
-                <b>{{ __('Alert!') }}</b>
+            <ul class="concurrent-editors">
+                <strong>{{ __('Alert!') }}</strong>
                 <span>{{ __('Concurrent users') }}:</span>
                 {% for editor in editors %}
-                    <div style="border-bottom: 1px solid #f8f9fa; ">{{ editor.name }}</div>
+                    <li>{{ editor.name }}</li>
                 {% endfor %}
-                </ul>
-            </div>
+            </ul>
             {% endif %}
         {% endif %}
 
