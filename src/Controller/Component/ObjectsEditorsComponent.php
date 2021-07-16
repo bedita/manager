@@ -57,12 +57,10 @@ class ObjectsEditorsComponent extends Component
         $editor = $this->editorName();
         $now = time();
         foreach ($this->objectsEditors[$id] as &$objectEditor) {
-            if ($found) {
-                continue;
-            }
             if ($objectEditor['name'] === $editor) {
                 $found = true;
                 $objectEditor['timestamp'] = $now;
+                break;
             }
         }
         if (!$found) {
