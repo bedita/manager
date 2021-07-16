@@ -89,7 +89,7 @@ class ObjectsEditorsComponent extends Component
             return null;
         }
 
-        if (!empty($user['attributes']['name']) && !empty($user['attributes']['name'])) {
+        if (!empty($user['attributes']['name']) && !empty($user['attributes']['surname'])) {
             return sprintf('%s %s', $user['attributes']['name'], $user['attributes']['surname']);
         }
         if (!empty($user['attributes']['username'])) {
