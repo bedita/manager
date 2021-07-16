@@ -5,6 +5,7 @@ use App\Controller\Component\ObjectsEditorsComponent;
 use Cake\Cache\Cache;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -55,9 +56,17 @@ class ObjectsEditorsComponentTest extends TestCase
      */
     public function testInitialize(): void
     {
-        $this->ObjectsEditors->initialize([]);
         // verify concurrent check time is not empty
+        $this->ObjectsEditors->initialize([]);
         static::assertNotEmpty($this->ObjectsEditors->concurrentCheckTime);
+
+        // verify concurrent check time is read from config
+        $expected = 15000;
+        Configure::write('Editors.concurrentCheckTime', 15000); // 15 seconds
+        $this->ObjectsEditors->initialize([]);
+        $actual = $this->ObjectsEditors->concurrentCheckTime;
+        static::assertEquals($expected, $actual);
+
         // verify objectsEditors is an array
         $expected = true;
         $actual = is_array($this->ObjectsEditors->objectsEditors);
