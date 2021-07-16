@@ -11,7 +11,7 @@ export const AjaxLogin = Vue.extend({
             <transition name="slide">
                 <div class="ajax-login">
                     <header>
-                        <span v-if="headerText"><: headerText :></span>
+                        <span class="title" v-if="headerText"><: headerText :></span>
                         <i class="icon-cancel-1 has-text-size-larger" @click="close()"></i>
                     </header>
                     <div class="content">
