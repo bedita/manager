@@ -86,6 +86,7 @@ class ObjectsEditorsComponentTest extends TestCase
             '99999' => [
                 ['name' => 'gustavo', 'timestamp' => $time],
                 ['name' => 'john doe', 'timestamp' => $time],
+                ['name' => 'jane doe', 'timestamp' => $time],
             ],
         ];
 
@@ -99,8 +100,20 @@ class ObjectsEditorsComponentTest extends TestCase
         $expected = [
             ['name' => 'gustavo', 'timestamp' => $time],
             ['name' => 'john doe', 'timestamp' => $time],
+            ['name' => 'jane doe', 'timestamp' => $time],
         ];
         $actual = $this->ObjectsEditors->objectsEditors['99999'];
+        static::assertEquals($expected, $actual);
+
+        // id found in objectsEditors
+        $user = ['id' => 12345, 'attributes' => ['name' => 'john', 'surname' => 'doe']];
+        $this->ObjectsEditors->getController()->Auth->setUser($user);
+        $this->ObjectsEditors->update('99999');
+        $expected = 'gustavo';
+        $actual = $this->ObjectsEditors->objectsEditors['99999'][0]['name'];
+        static::assertEquals($expected, $actual);
+        $expected = 'john doe';
+        $actual = $this->ObjectsEditors->objectsEditors['99999'][1]['name'];
         static::assertEquals($expected, $actual);
     }
 
