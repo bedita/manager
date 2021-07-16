@@ -80,16 +80,23 @@ class ObjectsEditorsComponent extends Component
     /**
      * Get editor name from authenticated user.
      *
-     * @return string
+     * @return string|null
      */
-    public function editorName(): string
+    public function editorName(): ?string
     {
         $user = $this->getController()->Auth->user();
-        if (empty($user['attributes']['name']) && empty($user['attributes']['name'])) {
+        if (empty($user)) {
+            return null;
+        }
+
+        if (!empty($user['attributes']['name']) && !empty($user['attributes']['name'])) {
+            return sprintf('%s %s', $user['attributes']['name'], $user['attributes']['surname']);
+        }
+        if (!empty($user['attributes']['username'])) {
             return $user['attributes']['username'];
         }
 
-        return sprintf('%s %s', $user['attributes']['name'], $user['attributes']['surname']);
+        return null;
     }
 
     /**

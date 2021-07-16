@@ -103,6 +103,18 @@ class ObjectsEditorsComponentTest extends TestCase
      */
     public function testEditorName(): void
     {
+        // empty user
+        $expected = null;
+        $actual = $this->ObjectsEditors->editorName();
+        static::assertEquals($expected, $actual);
+
+        // no username, no name, no surname
+        $user = ['id' => 123];
+        $this->ObjectsEditors->getController()->Auth->setUser($user);
+        $expected = null;
+        $actual = $this->ObjectsEditors->editorName();
+        static::assertEquals($expected, $actual);
+
         // username
         $user = ['id' => 123, 'attributes' => ['username' => 'gustavo']];
         $this->ObjectsEditors->getController()->Auth->setUser($user);
