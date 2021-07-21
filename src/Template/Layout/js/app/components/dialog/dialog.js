@@ -21,7 +21,7 @@ export const Dialog = Vue.extend({
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
                 <input class="mt-1" type="text" v-if="dialogType == 'prompt'" v-model.lazy="inputValue" />
                 <div class="actions mt-2">
-                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, this);"><: confirmMessage :></button>
+                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, $root)"><: confirmMessage :></button>
                     <button class="button-secondary cancel" @click="hide()" v-if="cancelMessage"><: cancelMessage :></button>
                 </div>
             </div>
