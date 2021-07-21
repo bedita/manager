@@ -64,6 +64,7 @@ export default {
                 // clear form dirty state, to avoid alert message about unsaved changes when changing page
                 window._vueInstance.dataChanged.clear();
                 window.location.pathname = window.location.pathname.replace('/new', `/${json.data[0].id}`);
+                window.location.pathname = window.location.pathname.replace('/clone', `/view`);
 
                 return;
             }
