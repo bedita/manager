@@ -55,7 +55,7 @@ export default {
 
     data() {
         return {
-            method: 'relationshipsJson',
+            method: 'relationships',
             endpoint: '',
             loading: false,
             selectedObjects: [],

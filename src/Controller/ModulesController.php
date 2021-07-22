@@ -374,7 +374,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relatedJson($id, string $relation): void
+    public function related($id, string $relation): void
     {
         if ($id === 'new') {
             $this->set('data', []);
@@ -411,7 +411,7 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resourcesJson($id, string $type): void
+    public function resources($id, string $type): void
     {
         $this->request->allowMethod(['get']);
         $query = $this->Query->prepare($this->request->getQueryParams());
@@ -438,7 +438,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relationshipsJson($id, string $relation): void
+    public function relationships($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
