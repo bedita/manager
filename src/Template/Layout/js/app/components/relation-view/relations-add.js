@@ -218,7 +218,7 @@ export default {
 
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${this.object.type}/saveJson`;
+            const postUrl = `${baseUrl}/${this.object.type}/save`;
 
             const formData = new FormData();
             formData.append('model-type', this.object.type);

@@ -84,9 +84,9 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function saveJson(): void
+    public function save(): void
     {
-        parent::saveJson();
+        parent::save();
     }
 }
 
@@ -463,43 +463,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `save` method
-     *
-     * @covers ::save()
-     *
-     * @return void
-     */
-    public function testSave(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object for test
-        $o = $this->getTestObject();
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'id' => $o['id'],
-                'title' => $o['attributes']['title'],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new ModulesControllerSample($request);
-
-        // do controller call
-        $result = $this->controller->save();
-
-        // verify response status code and type
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
-    }
-
-    /**
      * Test `save` method, on error
      *
      * @covers ::save()
@@ -568,10 +531,10 @@ class ModulesControllerTest extends TestCase
 
     /**
      *
-     * Data provider for `testSaveJson` test case.
+     * Data provider for `testSave` test case.
      *
      */
-    public function saveJsonProvider()
+    public function saveProvider()
     {
         return [
             'save' => [
@@ -606,14 +569,14 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `saveJson` method
+     * Test `save` method
      *
-     * @dataProvider saveJsonProvider()
-     * @covers ::saveJson()
+     * @dataProvider saveProvider()
+     * @covers ::save()
      *
      * @return void
      */
-    public function testSaveJson($expected, $data): void
+    public function testSave($expected, $data): void
     {
         // Setup controller for test
         $this->setupController();
@@ -630,7 +593,7 @@ class ModulesControllerTest extends TestCase
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $this->controller->saveJson();
+        $this->controller->save();
 
         // verify response status code and type
         $result = $this->controller->getApiClient();

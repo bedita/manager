@@ -241,11 +241,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:save']
     );
     $routes->connect(
-        '/:object_type/saveJson',
-        ['controller' => 'Modules', 'action' => 'saveJson'],
-        ['_name' => 'modules:saveJson']
-    );
-    $routes->connect(
         '/:object_type/clone/:id',
         ['controller' => 'Modules', 'action' => 'clone'],
         ['pass' => ['id'], '_name' => 'modules:clone']
