@@ -101,10 +101,8 @@ class TranslationsController extends ModulesController
 
     /**
      * Create or edit single translation.
-     *
-     * @return \Cake\Http\Response|null
      */
-    public function save(): ?Response
+    public function save(): void
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
@@ -121,22 +119,24 @@ class TranslationsController extends ModulesController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             if ($this->request->getData('id')) {
-                return $this->redirect([
+                $this->redirect([
                     '_name' => 'translations:edit',
                     'object_type' => $this->objectType,
                     'id' => $objectId,
                     'lang' => $lang,
                 ]);
+                return;
             }
 
-            return $this->redirect([
+            $this->redirect([
                 '_name' => 'translations:add',
                 'object_type' => $this->objectType,
                 'id' => $objectId,
             ]);
+            return;
         }
 
-        return $this->redirect([
+        $this->redirect([
             '_name' => 'translations:edit',
             'object_type' => $this->objectType,
             'id' => $objectId,
