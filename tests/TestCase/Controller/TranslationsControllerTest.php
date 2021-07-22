@@ -14,7 +14,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
-use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -116,6 +115,12 @@ class TranslationsControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
+
+        // on error
+        $result = $this->controller->add(123456789);
+        $expected = get_class(new \Cake\Http\Response());
+        $actual = get_class($result);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -144,6 +149,12 @@ class TranslationsControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
+
+        // on error
+        $result = $this->controller->edit(123456789, $lang);
+        $expected = get_class(new \Cake\Http\Response());
+        $actual = get_class($result);
+        static::assertEquals($expected, $actual);
     }
 
     /**
