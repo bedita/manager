@@ -48,11 +48,7 @@ export default {
             event.stopPropagation();
             const form = new FormData(event.target);
             const action = event.target.getAttribute('action');
-            let endpoint = action;
-            if (!endpoint.endsWith('/save')) {
-                endpoint = `${action}Json`;
-            }
-            const response = await fetch(`${endpoint}`, {
+            const response = await fetch(action, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
