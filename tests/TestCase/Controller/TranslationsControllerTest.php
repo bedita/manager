@@ -170,19 +170,39 @@ class TranslationsControllerTest extends TestCase
         // Setup controller for test
         $this->setupController();
 
-        // get object for test
+        // delete translation before starting test
         $lang = 'it';
-        $o = $this->getTestObject();
+        $objectId = $this->getTestId();
+        $id = $this->getTestTranslationId($objectId, 'documents', $lang);
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                [
+                    'id' => $id,
+                    'object_id' => $objectId,
+                ],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        $this->controller->delete();
+
+        // get object for test
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
                 'lang' => $lang,
-                'object_id' => $o['id'],
+                'object_id' => $objectId,
                 'status' => 'draft',
                 'translated_fields' => [
-                    'title' => sprintf('Titolo in italiano', $o['attributes']['title']),
+                    'title' => 'Titolo in italiano',
                 ],
             ],
             'params' => [
@@ -208,10 +228,10 @@ class TranslationsControllerTest extends TestCase
             ],
             'post' => [ // missing required 'status'
                 'lang' => $lang,
-                'id' => $o['id'],
-                'object_id' => $o['id'],
+                'id' => $id,
+                'object_id' => $objectId,
                 'translated_fields' => [
-                    'title' => sprintf('Una traduzione di esempio per "%s"', $o['attributes']['title']),
+                    'title' => 'Titolo in italiano',
                 ],
             ],
             'params' => [
@@ -237,9 +257,9 @@ class TranslationsControllerTest extends TestCase
             ],
             'post' => [ // missing required 'status'
                 'lang' => $lang,
-                'object_id' => $o['id'],
+                'object_id' => $objectId,
                 'translated_fields' => [
-                    'title' => sprintf('Una traduzione di esempio per "%s"', $o['attributes']['title']),
+                    'title' => 'Titolo in italiano',
                 ],
             ],
             'params' => [
