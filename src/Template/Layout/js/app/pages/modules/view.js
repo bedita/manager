@@ -69,7 +69,7 @@ export default {
 
                 // clear form dirty state, to avoid alert message about unsaved changes before changing page
                 window._vueInstance.dataChanged.clear();
-                window.location = this.$helpers.buildViewUrl(json.data[0].id);
+                window.location = this.$helpers.buildViewUrlType(json.data[0].type, json.data[0].id);
 
                 return;
             }
