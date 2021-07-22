@@ -180,11 +180,13 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
 
         // do controller call
-        $result = $this->controller->save();
+        $this->controller->save();
+
+        $response = $this->controller->getResponse();
 
         // verify response status code and type
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
     }
 
     /**
