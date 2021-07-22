@@ -279,6 +279,9 @@ class ModulesController extends AppController
             $this->set(compact('error'));
             $this->set('_serialize', ['error']);
 
+            // set session data to recover form
+            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
+
             return;
         }
         if ($response['data']) {
