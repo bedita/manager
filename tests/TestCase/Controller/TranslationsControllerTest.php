@@ -180,6 +180,64 @@ class TranslationsControllerTest extends TestCase
             'post' => [
                 'lang' => $lang,
                 'object_id' => $o['id'],
+                'status' => 'draft',
+                'translated_fields' => [
+                    'title' => sprintf('Titolo in italiano', $o['attributes']['title']),
+                ],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+
+        // do controller call
+        $this->controller->save();
+
+        $response = $this->controller->getResponse();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+
+        // error, with not empty request id
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [ // missing required 'status'
+                'lang' => $lang,
+                'id' => $o['id'],
+                'object_id' => $o['id'],
+                'translated_fields' => [
+                    'title' => sprintf('Una traduzione di esempio per "%s"', $o['attributes']['title']),
+                ],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+
+        // do controller call
+        $this->controller->save();
+
+        $response = $this->controller->getResponse();
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+
+        // error, with empty request id
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [ // missing required 'status'
+                'lang' => $lang,
+                'object_id' => $o['id'],
                 'translated_fields' => [
                     'title' => sprintf('Una traduzione di esempio per "%s"', $o['attributes']['title']),
                 ],
