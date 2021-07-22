@@ -531,7 +531,6 @@ class ModulesControllerTest extends TestCase
         $actual = get_class($error);
         $expected = get_class(new BEditaClientException(''));
         static::assertEquals($expected, $actual);
-
     }
 
     /**
