@@ -346,7 +346,7 @@ class TranslationsControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                [],
+                ['object_id' => 1234567789],
             ],
             'params' => [
                 'object_type' => 'documents',
