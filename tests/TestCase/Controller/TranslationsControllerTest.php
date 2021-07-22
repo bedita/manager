@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -240,6 +241,89 @@ class TranslationsControllerTest extends TestCase
 
         // restore test object
         $this->restoreTestObject($objectId, 'documents');
+
+        // on missing post data
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        try {
+            $this->controller->delete();
+        } catch (\Exception $e) {
+            $expected = get_class(new BadRequestException());
+            $actual = get_class($e);
+            static::assertEquals($expected, $actual);
+        }
+
+        // on missing post data id
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                [],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        try {
+            $this->controller->delete();
+        } catch (\Exception $e) {
+            $expected = get_class(new BadRequestException());
+            $actual = get_class($e);
+            static::assertEquals($expected, $actual);
+        }
+
+        // on missing post data object_id
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                ['id' => 1234567789],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        try {
+            $this->controller->delete();
+        } catch (\Exception $e) {
+            $expected = get_class(new BadRequestException());
+            $actual = get_class($e);
+            static::assertEquals($expected, $actual);
+        }
+
+        // on missing wrong payload
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                ['id' => 1234567789, 'object_id' => 9999999999],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        $response = $this->controller->delete();
+        $expected = get_class(new \Cake\Http\Response());
+        $actual = get_class($response);
+        static::assertEquals($expected, $actual);
     }
 
     /**
