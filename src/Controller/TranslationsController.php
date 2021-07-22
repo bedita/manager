@@ -125,6 +125,7 @@ class TranslationsController extends ModulesController
                     'id' => $objectId,
                     'lang' => $lang,
                 ]);
+
                 return;
             }
 
@@ -133,6 +134,7 @@ class TranslationsController extends ModulesController
                 'object_type' => $this->objectType,
                 'id' => $objectId,
             ]);
+
             return;
         }
 
