@@ -722,18 +722,6 @@ export default {
         },
 
         /**
-         * helper function: build open view url
-         *
-         * @param {String} objectType
-         * @param {Number} objectId
-         *
-         * @return {String} url
-         */
-        buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
-        },
-
-        /**
          * Object type available to view.
          *
          * @param {String} type
