@@ -321,8 +321,9 @@ class ModulesController extends AppController
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
+            $this->Flash->error($error->getMessage(), ['params' => $error]);
 
-            $this->set(compact('error'));
+            $this->set(['error' => $error->getMessage()]);
             $this->set('_serialize', ['error']);
 
             return;

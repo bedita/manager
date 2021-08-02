@@ -75,6 +75,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Dashboard', 'action' => 'index'],
         ['_name' => 'dashboard']
     );
+    $routes->connect(
+        '/dashboard/messages',
+        ['controller' => 'Dashboard', 'action' => 'messages'],
+        ['_name' => 'dashboard:messages']
+    );
 
     // Profile.
     $routes->connect(
