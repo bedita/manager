@@ -29,7 +29,7 @@ export default {
 
     data() {
         return {
-            method: 'relatedJson',                      // define AppController method to be used
+            method: 'related',                      // define AppController method to be used
             loading: false,
             count: 0,                                   // count number of related objects, on change triggers an event
         }

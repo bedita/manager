@@ -61,7 +61,7 @@ class ModulesController extends AppController
             $this->Schema->setConfig('type', $this->objectType);
         }
 
-        $this->Security->setConfig('unlockedActions', ['saveJson']);
+        $this->Security->setConfig('unlockedActions', ['save']);
     }
 
     /**
@@ -252,57 +252,11 @@ class ModulesController extends AppController
     }
 
     /**
-     * Create or edit single resource.
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function save(): ?Response
-    {
-        $this->request->allowMethod(['post']);
-        $requestData = $this->prepareRequest($this->objectType);
-        // extract related objects data
-        $relatedData = (array)Hash::get($requestData, '_api');
-        unset($requestData['_api']);
-
-        try {
-            // upload file (if available)
-            $this->Modules->upload($requestData);
-
-            // save data
-            $response = $this->apiClient->save($this->objectType, $requestData);
-            $objectId = (string)Hash::get($response, 'data.id');
-            $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
-        } catch (InternalErrorException | BEditaClientException | UploadException $e) {
-            // Error! Back to object view or index.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            // set session data to recover form
-            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
-
-            if ($this->request->getData('id')) {
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
-            }
-
-            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
-        }
-
-        // annoying message removed, restore with https://github.com/bedita/manager/issues/71
-        // $this->Flash->success(__('Object saved'));
-
-        return $this->redirect([
-            '_name' => 'modules:view',
-            'object_type' => $this->objectType,
-            'id' => $objectId,
-        ]);
-    }
-
-    /**
      * Create new object from ajax request.
      *
      * @return void
      */
-    public function saveJson(): void
+    public function save(): void
     {
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
@@ -324,6 +278,9 @@ class ModulesController extends AppController
 
             $this->set(compact('error'));
             $this->set('_serialize', ['error']);
+
+            // set session data to recover form
+            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
 
             return;
         }
@@ -420,7 +377,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relatedJson($id, string $relation): void
+    public function related($id, string $relation): void
     {
         if ($id === 'new') {
             $this->set('data', []);
@@ -457,7 +414,7 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resourcesJson($id, string $type): void
+    public function resources($id, string $type): void
     {
         $this->request->allowMethod(['get']);
         $query = $this->Query->prepare($this->request->getQueryParams());
@@ -484,7 +441,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relationshipsJson($id, string $relation): void
+    public function relationships($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
