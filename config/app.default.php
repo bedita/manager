@@ -469,6 +469,20 @@ return [
     ],
 
     /**
+     * Modules accesses per role(s)
+     */
+    // 'AccessControl' => [
+    //     'manager' => [
+    //         'hidden' => ['objects'],
+    //         'readonly' => ['documents'],
+    //     ],
+    //     'guest' => [
+    //         'hidden' => ['objects', 'users'],
+    //         'readonly' => ['documents'],
+    //     ],
+    // ],
+
+    /**
      * Properties display configuration settings.
      *
      * Every key in this array is a module name, for each one we may have:
@@ -741,5 +755,13 @@ return [
     //             ],
     //         ],
     //     ],
+    // ],
+
+    /**
+     * Editors configuration.
+     * concurrentCheckTime: the time in milliseconds that a concurrent access is considered still active
+     */
+    // 'Editors' => [
+    //     'concurrentCheckTime' => 30000, // 30 seconds
     // ],
 ];
