@@ -764,4 +764,11 @@ return [
     // 'Editors' => [
     //     'concurrentCheckTime' => 30000, // 30 seconds
     // ],
+
+    /**
+     * The under work config. When set, a courtesy page is shown with `Maintenance.message` on it.
+     */
+    // 'Maintenance' => [
+    //     'message' => 'This page won\'t be available for some time. Try later',
+    // ]
 ];

@@ -18,6 +18,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Core\Configure;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
@@ -42,6 +43,16 @@ use Cake\Utility\Inflector;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
+
+if (Configure::read('Maintenance')) {
+    $routes->connect(
+        '/*',
+        ['controller' => 'CourtesyPage', 'action' => 'index'],
+        ['_name' => 'courtesypage']
+    );
+
+    return;
+}
 
 Router::scope('/', function (RouteBuilder $routes) {
 
