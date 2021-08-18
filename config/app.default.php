@@ -766,9 +766,9 @@ return [
     // ],
 
     /**
-     * The under work config. When set, a courtesy page is shown with `UnderWork.message` on it.
+     * The under work config. When set, a courtesy page is shown with `Maintenance.message` on it.
      */
-    // 'UnderWork' => [
+    // 'Maintenance' => [
     //     'message' => 'This page won\'t be available for some time. Try later',
     // ]
 ];

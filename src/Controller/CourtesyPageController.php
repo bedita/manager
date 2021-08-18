@@ -28,7 +28,7 @@ class CourtesyPageController extends Controller
      */
     public function index(): ?Response
     {
-        $message = Configure::read('UnderWork.message');
+        $message = Configure::read('Maintenance.message');
         $this->set(compact('message'));
 
         return null;

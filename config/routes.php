@@ -44,7 +44,7 @@ use Cake\Utility\Inflector;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
-if (Configure::read('UnderWork')) {
+if (Configure::read('Maintenance')) {
     $routes->connect(
         '/*',
         ['controller' => 'CourtesyPage', 'action' => 'index'],

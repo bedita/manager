@@ -21,7 +21,7 @@ class CourtesyPageControllerTest extends TestCase
     public function testIndex(): void
     {
         $expected = 'this page is under work';
-        Configure::write('UnderWork', ['message' => $expected]);
+        Configure::write('Maintenance', ['message' => $expected]);
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
