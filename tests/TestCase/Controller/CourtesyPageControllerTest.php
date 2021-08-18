@@ -13,13 +13,12 @@ use Cake\TestSuite\TestCase;
  */
 class CourtesyPageControllerTest extends TestCase
 {
-
     /**
      * Test `index` method
      *
      * @return void
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $expected = 'this page is under work';
         Configure::write('UnderWork', ['message' => $expected]);
