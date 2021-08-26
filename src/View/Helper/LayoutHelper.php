@@ -135,7 +135,8 @@ class LayoutHelper extends Helper
     public function typeLabel(string $type): ?string
     {
         $res = __($type);
-        $pluginName = Hash::get((array)Configure::read('Plugins'), '0');
+        $plugins = (array)Configure::read('Plugins');
+        $pluginName = Hash::get(array_keys($plugins), 0);
         // if we have no actual translation and a plugin let's try with plugin's gettext
         if ($pluginName && $res === $type) {
             return __d($pluginName, $type);

@@ -263,7 +263,7 @@ class LayoutHelperTest extends TestCase
         $actual = $layout->typeLabel('Objects');
         static::assertSame($expected, $actual);
 
-        Configure::write('Plugins', ['DummyPlugin' => []]);
+        Configure::write('Plugins', ['DummyPlugin' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true]]);
         $expected = __d('DummyPlugin', 'Objects');
         $actual = $layout->typeLabel('Objects');
         static::assertSame($expected, $actual);
