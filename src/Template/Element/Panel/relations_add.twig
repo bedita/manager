@@ -7,7 +7,7 @@
             :class="showCreateObjectForm ? 'open' : ''"
             :disabled="saving"
             @click="showCreateObjectForm = !showCreateObjectForm">
-            <h2><span v-show="relationName">{{ __('create new') }} "<: relationName | humanize :></span>"&nbsp;</h2>
+            <h2><span v-show="relationName"><strong>{{ __('create new') }}</strong> "<: relationName | humanize :></span>" {{ __('related object') }}&nbsp;</h2>
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
@@ -69,7 +69,7 @@
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName">{{ __('add to') }}&nbsp;"<: relationName | humanize :>"</span> &nbsp;</h2>
+            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationName | humanize :></strong>"</span> relation</h2>
         </header>
 
         <div class="px-1 my-1">

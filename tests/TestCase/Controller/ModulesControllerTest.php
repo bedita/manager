@@ -84,9 +84,9 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function saveJson(): void
+    public function save(): void
     {
-        parent::saveJson();
+        parent::save();
     }
 }
 
@@ -185,7 +185,6 @@ class ModulesControllerTest extends TestCase
      * Test `index` method
      *
      * @covers ::index()
-     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -211,7 +210,6 @@ class ModulesControllerTest extends TestCase
      * Session filter data must be empty
      *
      * @covers ::index()
-     * @covers ::indexQuery()
      *
      * @return void
      */
@@ -262,6 +260,26 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
+     * Test `view` method on error
+     *
+     * @covers ::view()
+     *
+     * @return void
+     */
+    public function testViewError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->view(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
      * Test `uname` method
      *
      * @covers ::uname()
@@ -296,7 +314,6 @@ class ModulesControllerTest extends TestCase
     public function testUname404(): void
     {
         // Setup controller for test
-        $exception = new BEditaClientException('Not Found', 404);
         $this->setupController();
 
         // do controller call
@@ -426,48 +443,96 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `save` method
+     * Test `clone` method, on error
+     *
+     * @covers ::clone()
+     *
+     * @return void
+     */
+    public function testCloneError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $response = $this->controller->clone(123456789);
+
+        // verify response status code and type
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
+     * Test `save` method, on error
      *
      * @covers ::save()
      *
      * @return void
      */
-    public function testSave(): void
+    public function testSaveErrorNoPost(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // get object for test
-        $o = $this->getTestObject();
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                'id' => $o['id'],
-                'title' => $o['attributes']['title'],
-            ],
             'params' => [
-                'object_type' => 'documents',
+                'object_type' => 'dummies',
             ],
         ];
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $result = $this->controller->save();
+        $this->controller->save();
 
-        // verify response status code and type
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
+        // verify page has error key
+        static::assertArrayHasKey('error', $this->controller->viewVars);
+    }
+
+    /**
+     * Test `save` method, on error
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveErrorPostId(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $this->controller->save();
+
+        // verify page has error key
+        static::assertArrayHasKey('error', $this->controller->viewVars);
     }
 
     /**
      *
-     * Data provider for `testSaveJson` test case.
+     * Data provider for `testSave` test case.
      *
      */
-    public function saveJsonProvider()
+    public function saveProvider()
     {
         return [
             'save' => [
@@ -502,14 +567,14 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `saveJson` method
+     * Test `save` method
      *
-     * @dataProvider saveJsonProvider()
-     * @covers ::saveJson()
+     * @dataProvider saveProvider()
+     * @covers ::save()
      *
      * @return void
      */
-    public function testSaveJson($expected, $data): void
+    public function testSave($expected, $data): void
     {
         // Setup controller for test
         $this->setupController();
@@ -526,7 +591,7 @@ class ModulesControllerTest extends TestCase
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $this->controller->saveJson();
+        $this->controller->save();
 
         // verify response status code and type
         $result = $this->controller->getApiClient();
@@ -574,13 +639,109 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `relatedJson` method
+     * Test `delete` method, ids
      *
-     * @covers ::relatedJson()
+     * @covers ::delete()
      *
      * @return void
      */
-    public function testRelatedJson(): void
+    public function testDeleteIds(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $o = $this->getTestObject();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => $o['id'],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // restore test object
+        $this->restoreTestObject($o['id'], 'documents');
+    }
+
+    /**
+     * Test `delete` method, on error
+     *
+     * @covers ::delete()
+     *
+     * @return void
+     */
+    public function testDeleteError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+
+        // test by ids
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '123456789',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->delete();
+
+        // verify response status code and type
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
+    }
+
+    /**
+     * Test `related` method
+     *
+     * @covers ::related()
+     *
+     * @return void
+     */
+    public function testRelated(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -589,36 +750,96 @@ class ModulesControllerTest extends TestCase
         $id = $this->getTestId();
 
         // do controller call
-        $this->controller->relatedJson($id, 'translations');
+        $this->controller->related($id, 'translations');
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize', 'data']);
     }
 
     /**
-     * Test `relatedJson` method on `new` object
+     * Test `related` method on `new` object
      *
-     * @covers ::relatedJson()
+     * @covers ::related()
      *
      * @return void
      */
-    public function testRelatedJsonNew(): void
+    public function testRelatedNew(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // do controller call
-        $this->controller->relatedJson('new', 'has_media');
+        $this->controller->related('new', 'has_media');
 
         static::assertEquals([], $this->controller->viewVars['data']);
     }
 
     /**
-     * Data provider for `testRelationshipsJson` test case.
+     * Test `related` method, on error
+     *
+     * @covers ::related()
+     *
+     * @return void
+     */
+    public function testRelatedError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->related(12346789, 'translations');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
+    }
+
+    /**
+     * Test `resources` method
+     *
+     * @covers ::resources()
+     *
+     * @return void
+     */
+    public function testResources(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object ID for test
+        $id = $this->getTestId();
+
+        // do controller call
+        $this->controller->resources($id, 'documents');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'data']);
+    }
+
+    /**
+     * Test `resources` method
+     *
+     * @covers ::resources()
+     *
+     * @return void
+     */
+    public function testResourcesError(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $this->controller->resources(123456789, 'dummies');
+
+        // verify expected vars in view
+        $this->assertExpectedViewVars(['_serialize', 'error']);
+    }
+
+    /**
+     * Data provider for `testRelationships` test case.
      *
      * @return array
      */
-    public function relationshipsJsonProvider(): array
+    public function relationshipsProvider(): array
     {
         return [
             'children' => [
@@ -641,17 +862,17 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `relationshipsJson` method
+     * Test `relationships` method
      *
      * @param string $relation The relation to test
      * @param string $objectType The object type / endpoint
      * @param array $expected The expected data
      *
-     * @covers ::relationshipsJson()
-     * @dataProvider relationshipsJsonProvider()
+     * @covers ::relationships()
+     * @dataProvider relationshipsProvider()
      * @return void
      */
-    public function testRelationshipsJson(string $relation, string $objectType): void
+    public function testRelationships(string $relation, string $objectType): void
     {
         // Setup controller for test
         $this->setupController([
@@ -668,121 +889,10 @@ class ModulesControllerTest extends TestCase
         $id = $this->getTestId();
 
         // do controller call
-        $this->controller->relationshipsJson($id, $relation);
+        $this->controller->relationships($id, $relation);
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize']);
-    }
-
-    /**
-     * Data provider for `testGetThumbsUrls` test case.
-     *
-     * @return array
-     */
-    public function getThumbsUrlsProvider(): array
-    {
-        return [
-            // test with empty object
-            'emptyResponse' => [
-                [],
-                [],
-            ],
-            // test with objct without ids
-            'responseWithoutIds' => [
-                ['data' => []],
-                ['data' => []],
-            ],
-            // test with objct without ids
-            'responseWithoutIds' => [
-                ['data' => [
-                    'ids' => [],
-                ]],
-                ['data' => [
-                    'ids' => [],
-                ]],
-            ],
-            // correct result
-            'correctResponseMock' => [
-                [ // expected
-                    'data' => [
-                        [
-                            'id' => '43',
-                            'type' => 'images',
-                            'meta' =>
-                                [
-                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
-                                ],
-                        ],
-                        [
-                            'id' => '45',
-                            'type' => 'images',
-                            'meta' =>
-                                [
-                                    'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
-                                ],
-                        ],
-                    ],
-                ],
-                [ // data
-                    'data' => [
-                        [
-                            'id' => '43',
-                            'type' => 'images',
-                            'meta' => [],
-                        ],
-                        [
-                            'id' => '45',
-                            'type' => 'images',
-                            'meta' => [],
-                        ],
-                    ],
-                ],
-                [ // mock response for api
-                    'meta' => [
-                        'thumbnails' => [
-                            [
-                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb1.png',
-                                'id' => 43,
-                            ],
-                            [
-                                'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
-                                'id' => 45,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `getThumbsUrls` method
-     *
-     * @dataProvider getThumbsUrlsProvider()
-     * @covers ::getThumbsUrls()
-     *
-     * @return void
-     */
-    public function testGetThumbsUrls($expected, $data, $mockResponse = null): void
-    {
-        $this->setupController();
-
-        if (!empty($mockResponse)) {
-            $expectedException = new BEditaClientException('error');
-
-            $apiClient = $this->getMockBuilder(BEditaClient::class)
-                ->setConstructorArgs(['https://media.example.com'])
-                ->getMock();
-
-            $apiClient->method('get')
-                ->with('/media/thumbs?ids=43,45&options[w]=400')
-                ->willReturn($mockResponse);
-
-            $this->controller->apiClient = $apiClient;
-        }
-
-        $this->controller->getThumbsUrls($data);
-        static::assertEquals($expected, $data);
     }
 
     /**

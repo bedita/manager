@@ -42,6 +42,18 @@ class DashboardController extends AppController
     }
 
     /**
+     * Render flash messages without layout for fetch requests.
+     *
+     * @return void
+     */
+    public function messages(): void
+    {
+        $this->request->allowMethod(['get']);
+        $this->viewBuilder()->disableAutoLayout();
+        $this->render('/Element/Dashboard/messages');
+    }
+
+    /**
      * Load 20 most recent items modified by authenticated user.
      *
      * @return array

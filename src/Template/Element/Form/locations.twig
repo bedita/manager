@@ -1,8 +1,7 @@
 {# Locations: show add relation form if the relation is set #}
 <locations-view
-    apikey="{{ config('Location.google.key') }}"
-    apiurl="{{ config('Location.google.url') }}"
+    api-key="{{ config('Location.google.key') }}"
+    api-url="{{ config('Location.google.url') }}"
     relation-name="{{ relationName }}"
-    :object="{{ object|json_encode }}"
 ></locations-view>
 {{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}

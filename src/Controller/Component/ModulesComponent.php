@@ -145,8 +145,46 @@ class ModulesComponent extends Component
             array_diff_key($metaModules, $modules),
             $pluginModules
         );
+        $this->modulesByAccessControl();
 
         return $this->modules;
+    }
+
+    /**
+     * This filters modules and apply 'AccessControl' config by user role, if any.
+     * Module can be "hidden": remove from modules.
+     * Module can be "readonly": adjust "hints.allow" for module.
+     *
+     * @return void
+     */
+    protected function modulesByAccessControl(): void
+    {
+        $accessControl = (array)Configure::read('AccessControl');
+        if (empty($accessControl)) {
+            return;
+        }
+        $user = $this->getController()->Auth->user();
+        $roles = (array)Hash::get($user, 'roles');
+        $hidden = [];
+        $readonly = [];
+        foreach ($roles as $role) {
+            $h = (array)Hash::get($accessControl, sprintf('%s.hidden', $role));
+            $hidden = empty($hidden) ? $h : array_intersect($hidden, $h);
+            $r = (array)Hash::get($accessControl, sprintf('%s.readonly', $role));
+            $readonly = empty($readonly) ? $r : array_intersect($readonly, $r);
+        }
+        if (empty($hidden) && empty($readonly)) {
+            return;
+        }
+        // remove "hidden"
+        $this->modules = array_diff_key($this->modules, array_flip($hidden));
+        // make sure $readonly contains valid module names
+        $readonly = array_intersect($readonly, array_keys($this->modules));
+        foreach ($readonly as $key) {
+            $path = sprintf('%s.hints.allow', $key);
+            $allow = (array)Hash::get($this->modules, $path);
+            $this->modules[$key]['hints']['allow'] = array_diff($allow, ['POST', 'PATCH', 'DELETE']);
+        }
     }
 
     /**
@@ -184,7 +222,6 @@ class ModulesComponent extends Component
         $project = [
             'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
             'version' => Hash::get($meta, 'version', ''),
-            'colophon' => '', // TODO: populate this value.
         ];
 
         return $project;
@@ -437,25 +474,6 @@ class ModulesComponent extends Component
         // remove session data
         $session->delete($key);
         $session->delete($timestampKey);
-    }
-
-    /**
-     * Prepare query string to make BE4 API call
-     *
-     * @param array $query Input query string
-     * @return array
-     */
-    public function prepareQuery(array $query): array
-    {
-        // cleanup `filter`, remove empty keys
-        $filter = array_filter((array)Hash::get($query, 'filter'));
-        $remove = array_flip(['count', 'page_items', 'page_count', 'filter']);
-        $query = array_diff_key($query, $remove);
-        if (!empty($filter)) {
-            $query += compact('filter');
-        }
-
-        return $query;
     }
 
     /**

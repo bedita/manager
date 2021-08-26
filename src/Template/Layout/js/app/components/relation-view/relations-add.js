@@ -55,7 +55,7 @@ export default {
 
     data() {
         return {
-            method: 'relationshipsJson',
+            method: 'relationships',
             endpoint: '',
             loading: false,
             selectedObjects: [],
@@ -218,7 +218,7 @@ export default {
 
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${this.object.type}/saveJson`;
+            const postUrl = `${baseUrl}/${this.object.type}/save`;
 
             const formData = new FormData();
             formData.append('model-type', this.object.type);
@@ -401,18 +401,6 @@ export default {
             this.loading = false;
 
             return response;
-        },
-
-        /**
-         * helper function: build open view url
-         *
-         * @param {String} objectType
-         * @param {Number} objectId
-         *
-         * @return {String} url
-         */
-        buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
         },
 
         /**

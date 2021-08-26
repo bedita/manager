@@ -3,16 +3,28 @@ import Vue from 'vue';
 export default {
     install (Vue, options) {
         Vue.prototype.$helpers = {
+
             /**
-            * helper function: build open view url
+            * Build view url using object ID
             *
-            * @param {String} objectType
             * @param {Number} objectId
             *
             * @return {String} url
             */
             buildViewUrl(objectId) {
                 return `${BEDITA.base}/view/${objectId}`;
+            },
+
+            /**
+            * Build view url usiong object type and ID
+            *
+            * @param {String} objectType
+            * @param {Number} objectId
+            *
+            * @return {String} url
+            */
+            buildViewUrlType(objectType, objectId) {
+                return `${BEDITA.base}/${objectType}/view/${objectId}`;
             },
 
             /**

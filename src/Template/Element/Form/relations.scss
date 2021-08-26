@@ -38,6 +38,11 @@
 
                         .uname {
                             display: block;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 120px;
+                            background-color: peru;
                         }
 
                         .priority {
@@ -156,7 +161,7 @@
             position: absolute;
             top: $gutter * .5;
             left: $gutter * .5;
-            z-index: 10;
+            z-index: 2;
         }
 
         .thumbnail {
@@ -204,7 +209,7 @@
                 position: absolute;
                 top: $gutter * .5;
                 right: -$gutter * .5;
-                z-index: 10;
+                z-index: 2;
                 display: block;
                 color: #fff;
                 background-color: #000;
@@ -231,10 +236,10 @@
 
     footer {
         position: sticky;
+        background-color: $gray-800;
         bottom: 0;
         left: 0;
         display: flex;
-        background: $black;
     }
 
     form[disabled] {
@@ -278,6 +283,11 @@
 
     .related-item-column article {
         cursor: pointer;
+
+        footer {
+            position: static;
+            background: transparent;
+        }
 
         .uname {
             display: none;

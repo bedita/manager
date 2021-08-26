@@ -24,8 +24,11 @@ use Psr\Log\LogLevel;
  * Modules controller: list, add, edit, remove objects
  *
  * @property \App\Controller\Component\HistoryComponent $History
+ * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \App\Controller\Component\QueryComponent $Query
+ * @property \App\Controller\Component\ThumbsComponent $Thumbs
  * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class ModulesController extends AppController
@@ -45,8 +48,11 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('History');
+        $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('Query');
+        $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         if (!empty($this->request)) {
@@ -55,7 +61,7 @@ class ModulesController extends AppController
             $this->Schema->setConfig('type', $this->objectType);
         }
 
-        $this->Security->setConfig('unlockedActions', ['saveJson']);
+        $this->Security->setConfig('unlockedActions', ['save']);
     }
 
     /**
@@ -85,7 +91,7 @@ class ModulesController extends AppController
         }
 
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->indexQuery());
+            $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -120,26 +126,6 @@ class ModulesController extends AppController
         $this->setObjectNav($objects);
 
         return null;
-    }
-
-    /**
-     * Retrieve `index` module query string
-     *
-     * @return array
-     */
-    protected function indexQuery()
-    {
-        $query = $this->request->getQueryParams();
-        // return URL query string if `filter`, `sort`, or `q` are set
-        $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
-        if (!empty($subQuery)) {
-            return $query;
-        }
-
-        // set sort order: use `currentModule.sort` or default '-id'
-        $query['sort'] = (string)Hash::get($this->viewVars, 'currentModule.sort', '-id');
-
-        return $query;
     }
 
     /**
@@ -190,6 +176,8 @@ class ModulesController extends AppController
         $objectNav = $this->getObjectNav((string)$id);
         $this->set('objectNav', $objectNav);
 
+        $this->ObjectsEditors->update((string)$id);
+
         return null;
     }
 
@@ -205,11 +193,10 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
         } catch (BEditaClientException $e) {
-            if ($e->getCode() === 404) {
-                $error = sprintf(__('Resource "%s" not found', true), $id);
-            } else {
-                $error = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $e->getMessage());
-            }
+            $msg = $e->getMessage();
+            $error = $e->getCode() === 404 ?
+                sprintf(__('Resource "%s" not found', true), $id) :
+                sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
             $this->Flash->error($error);
 
             return $this->redirect($this->referer());
@@ -265,12 +252,13 @@ class ModulesController extends AppController
     }
 
     /**
-     * Create or edit single resource.
+     * Create new object from ajax request.
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
-    public function save(): ?Response
+    public function save(): void
     {
+        $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
         // extract related objects data
@@ -285,53 +273,15 @@ class ModulesController extends AppController
             $response = $this->apiClient->save($this->objectType, $requestData);
             $objectId = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
-        } catch (InternalErrorException | BEditaClientException | UploadException $e) {
-            // Error! Back to object view or index.
-            $this->log($e, LogLevel::ERROR);
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        } catch (BEditaClientException $error) {
+            $this->log($error->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($error->getMessage(), ['params' => $error]);
+
+            $this->set(['error' => $error->getAttributes()]);
+            $this->set('_serialize', ['error']);
 
             // set session data to recover form
             $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
-
-            if ($this->request->getData('id')) {
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
-            }
-
-            return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
-        }
-
-        // annoying message removed, restore with https://github.com/bedita/manager/issues/71
-        // $this->Flash->success(__('Object saved'));
-
-        return $this->redirect([
-            '_name' => 'modules:view',
-            'object_type' => $this->objectType,
-            'id' => $objectId,
-        ]);
-    }
-
-    /**
-     * Create new object from ajax request.
-     *
-     * @return void
-     */
-    public function saveJson(): void
-    {
-        $this->viewBuilder()->setClassName('Json'); // force json response
-        $this->request->allowMethod(['post']);
-        $requestData = $this->prepareRequest($this->objectType);
-
-        try {
-            // upload file (if available)
-            $this->Modules->upload($requestData);
-
-            // save data
-            $response = $this->apiClient->save($this->objectType, $requestData);
-        } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
 
             return;
         }
@@ -339,7 +289,7 @@ class ModulesController extends AppController
             $response['data'] = [ $response['data'] ];
         }
 
-        $this->getThumbsUrls($response);
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -410,7 +360,7 @@ class ModulesController extends AppController
                     return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
                 }
 
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType]);
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
             }
         }
         $this->Flash->success(__('Object(s) deleted'));
@@ -428,7 +378,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relatedJson($id, string $relation): void
+    public function related($id, string $relation): void
     {
         if ($id === 'new') {
             $this->set('data', []);
@@ -438,7 +388,7 @@ class ModulesController extends AppController
         }
 
         $this->request->allowMethod(['get']);
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $query = $this->Query->prepare($this->request->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
@@ -451,7 +401,7 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->getThumbsUrls($response);
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->set('_serialize', array_keys($response));
@@ -465,10 +415,10 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resourcesJson($id, string $type): void
+    public function resources($id, string $type): void
     {
         $this->request->allowMethod(['get']);
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+        $query = $this->Query->prepare($this->request->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
@@ -492,16 +442,16 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relationshipsJson($id, string $relation): void
+    public function relationships($id, string $relation): void
     {
         $this->request->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
-            $query = $this->Modules->prepareQuery($this->request->getQueryParams());
+            $query = $this->Query->prepare($this->request->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
-            $this->getThumbsUrls($response);
+            $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
             $this->log($ex, LogLevel::ERROR);
 
@@ -542,46 +492,6 @@ class ModulesController extends AppController
         }
 
         return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
-    }
-
-    /**
-     * Retrieve thumbnails URL of related objects in `meta.url` if present.
-     *
-     * @param array $response Related objects response.
-     * @return void
-     */
-    public function getThumbsUrls(array &$response): void
-    {
-        if (empty($response['data'])) {
-            return;
-        }
-
-        // extract ids of objects
-        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
-        if (empty($ids)) {
-            return;
-        }
-
-        $thumbs = '/media/thumbs?ids=' . implode(',', $ids) . '&options[w]=400'; // TO-DO this hardcoded 400 should be in param/conf of some sort
-
-        $query = $this->Modules->prepareQuery($this->request->getQueryParams());
-        $thumbsResponse = $this->apiClient->get($thumbs, $query);
-
-        $thumbsUrl = $thumbsResponse['meta']['thumbnails'];
-
-        foreach ($response['data'] as &$object) {
-            $thumbnail = Hash::get($object, 'attributes.provider_thumbnail');
-            if ($thumbnail) {
-                $object['meta']['thumb_url'] = $thumbnail;
-                continue; // if provider_thumbnail is found there's no need to extract it from thumbsResponse
-            }
-
-            // extract url of the matching objectid's thumb
-            $thumbnail = (array)Hash::extract($thumbsUrl, sprintf('{*}[id=%s].url', $object['id']));
-            if (count($thumbnail)) {
-                $object['meta']['thumb_url'] = $thumbnail[0];
-            }
-        }
     }
 
     /**

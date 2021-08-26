@@ -18,9 +18,9 @@ export default {
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
                     <div class="is-flex"><: t('by') :> <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
                     <div class="is-flex">
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item)">info</button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
-                        <button class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('Clone') :></button>
+                        <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item, canSave)">info</button>
+                        <button v-if="canSave" class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)"><: t('Restore') :></button>
+                        <button v-if="canSave" class="button button-text-white is-width-auto" @click.stop.prevent="onClone(item.id)"><: t('Clone') :></button>
                     </div>
                 </li>
             </ul>
@@ -35,11 +35,13 @@ export default {
             history: [],
             rawHistory: [],
             isLoading: false,
+            canSave: true,
         };
     },
 
     props: {
         object: Object,
+        cansave: Boolean,
     },
 
     methods: {
@@ -65,12 +67,14 @@ export default {
         /**
          * Open panel to show changes.
          * @param {Object} item History item changes
+         * @param {Boolean} cansave Can save toggle
          */
-        showChanges(item) {
+        showChanges(item, cansave) {
+            const data = {...item, cansave};
             PanelEvents.requestPanel({
                 action: 'history-info',
                 from: this,
-                data: item,
+                data,
             });
             PanelEvents.listen('history-info:restore', this, this.onRestore);
         },
@@ -129,6 +133,7 @@ export default {
         };
 
         this.isLoading = true;
+        this.canSave = this.cansave;
         const historyRes = await fetch(`${baseUrl}${this.object.type}/history/${this.object.id}`, options);
         const historyJson = await historyRes.json();
         this.rawHistory = historyJson.data;
