@@ -15,7 +15,7 @@
             <input type="checkbox" value="{{ type }}" id="{{ type }}" v-model="selectedTypes">
             <div>
                 <i class="bullet has-background-module-{{ type }}"></i>
-                <span>{{ __(type|humanize) }}</span>
+                <span>{{ Layout.typeLabel(type|humanize) }}</span>
             </div>
         </label>
         {% endfor %}

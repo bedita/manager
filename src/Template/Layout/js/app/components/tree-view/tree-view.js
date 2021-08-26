@@ -62,7 +62,7 @@ export default {
                     }"
                     @click="toggle"
                 ></button>
-                <a :href="url"><: t('edit') :></a>
+                <a :href="url">${t`edit`}</a>
                 <div class="tree-params">
                     <div
                         v-if="relationName && isParent"
@@ -75,7 +75,7 @@ export default {
                             @change="toggleFolderRelationMenu"
                         />
                         <label :for="'tree-menu-' + node.id">
-                            <: t('Menu') :>
+                            ${t`Menu`}
                         </label>
                     </div>
                     <div
@@ -90,7 +90,7 @@ export default {
                             @change="toggleFolderRelationCanonical"
                         />
                         <label :for="'tree-canonical-' + node.id">
-                            <: t('Canonical') :>
+                            ${`Canonical`}
                         </label>
                     </div>
                 </div>
