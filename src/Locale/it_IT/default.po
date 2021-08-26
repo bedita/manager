@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-08-26 12:25:44 \n"
+"POT-Creation-Date: 2021-08-26 15:22:01 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -708,13 +708,13 @@ msgid "warning"
 msgstr "attenzione"
 
 #: src/Template/Layout/js/app/app.js:157
-#: src/Template/Layout/js/app/components/history/history.js:108
+#: src/Template/Layout/js/app/components/history/history.js:99
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
 #: src/Template/Layout/js/app/app.js:158
-#: src/Template/Layout/js/app/components/history/history.js:109
+#: src/Template/Layout/js/app/components/history/history.js:100
 msgid "copy"
 msgstr "copia"
 
@@ -727,7 +727,7 @@ msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #: src/Template/Layout/js/app/app.js:487
-#: src/Template/Layout/js/app/components/history/history.js:98
+#: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
 #: src/Template/Layout/js/app/pages/modules/index.js:144
 #: src/Template/Layout/js/app/pages/trash/index.js:43
@@ -753,31 +753,31 @@ msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
-#: src/Template/Layout/js/app/components/drop-upload.js:72
+#: src/Template/Layout/js/app/components/drop-upload.js:36
 msgid "stop"
 msgstr "interrompi"
 
-#: src/Template/Layout/js/app/components/drop-upload.js:74
+#: src/Template/Layout/js/app/components/drop-upload.js:50
 msgid "done"
 msgstr "fatto"
 
-#: src/Template/Layout/js/app/components/drop-upload.js:75
+#: src/Template/Layout/js/app/components/drop-upload.js:53
 msgid "Cancelled"
 msgstr "Annullato"
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:86
-msgid "Priority"
-msgstr "Priorità"
-
-#: src/Template/Layout/js/app/components/edit-relation-params.js:87
+#: src/Template/Layout/js/app/components/edit-relation-params.js:20
 msgid "Relation parameters"
 msgstr "Parametri della relazione"
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:88
+#: src/Template/Layout/js/app/components/edit-relation-params.js:30
 msgid "In relation with"
 msgstr "In relazione con"
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:90
+#: src/Template/Layout/js/app/components/edit-relation-params.js:39
+msgid "Priority"
+msgstr "Priorità"
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:57
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -793,8 +793,8 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:134
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr "Titolo"
 
@@ -802,8 +802,8 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:135
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr "Indirizzo"
 
@@ -811,8 +811,8 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:137
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
 
@@ -823,28 +823,34 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
-#: src/Template/Layout/js/app/components/locations-view/locations-view.js:41
+#.  
+#: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr "aggiungi nuovo"
 
-#: src/Template/Layout/js/app/components/history/history-info.js:32
+#: src/Template/Layout/js/app/components/history/history-info.js:10
 msgid "version by"
 msgstr "versione di"
 
-#: src/Template/Layout/js/app/components/history/history-info.js:33
+#: src/Template/Layout/js/app/components/history/history-info.js:12
 msgid "on"
 msgstr "del"
 
-#: src/Template/Layout/js/app/components/history/history.js:42
+#. *
+#.  * Component to fetch and display changes' history.
+#.  
+#: src/Template/Layout/js/app/components/history/history.js:19
 msgid "by"
 msgstr "di"
 
-#: src/Template/Layout/js/app/components/history/history.js:45
+#. *
+#.  * Component to fetch and display changes' history.
+#.  
+#: src/Template/Layout/js/app/components/history/history.js:29
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
 
-#: src/Template/Layout/js/app/components/history/history.js:97
+#: src/Template/Layout/js/app/components/history/history.js:88
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"

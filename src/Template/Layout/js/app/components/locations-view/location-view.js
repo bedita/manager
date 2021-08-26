@@ -48,7 +48,7 @@ export default {
             <div class="is-flex">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: i18n.title :>
+                        ${t`Title`}
                         <autocomplete
                             autocomplete="none"
                             ref="title"
@@ -67,7 +67,7 @@ export default {
                 </div>
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: i18n.address :>
+                        ${t`Address`}
                         <autocomplete
                             autocomplete="none"
                             ref="address"
@@ -88,11 +88,11 @@ export default {
             <div class="is-flex mt-1">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: i18n.longLatCoords :>
+                        ${t`Long Lat Coordinates`}
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <: i18n.get :>
+                                ${t`GET`}
                             </button>
                         </div>
                     </label>
@@ -117,7 +117,7 @@ export default {
                 </div>
             </div>
             <div class="location-buttons">
-                <button @click.prevent="onRemove" class="icon-unlink remove"><: t("remove") :></button>
+                <button @click.prevent="onRemove" class="icon-unlink remove">${t`remove`}</button>
             </div>
         </div>
     </div>`,
@@ -128,15 +128,6 @@ export default {
         apiUrl: String,
         locationData: Object,
         relationName: String,
-        i18n: {
-            type: Object,
-            default: {
-                title: t`Title`,
-                address: t`Address`,
-                longLatCoords: t`Long Lat Coordinates`,
-                get: t`GET`,
-            },
-        },
     },
 
     data() {
