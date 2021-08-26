@@ -138,7 +138,7 @@ class LayoutHelper extends Helper
         $pluginName = Hash::get((array)Configure::read('Plugins'), '0');
         // if we have no actual translation and a plugin let's try with plugin's gettext
         if ($pluginName && $res === $type) {
-           return __d($pluginName, $type);
+            return __d($pluginName, $type);
         }
 
         return $res;
