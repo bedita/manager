@@ -109,7 +109,6 @@ class ModelBaseControllerTest extends TestCase
                 false,
                 [
                     'username' => 'dummy',
-                    'password' => 'dummy',
                     'roles' => [ 'useless' ],
                 ],
                 new UnauthorizedException(__('Module access not authorized')),
@@ -118,7 +117,6 @@ class ModelBaseControllerTest extends TestCase
                 true,
                 [
                     'username' => 'bedita',
-                    'password' => 'bedita',
                     'roles' => [ 'admin' ],
                 ],
                 null,
@@ -142,6 +140,7 @@ class ModelBaseControllerTest extends TestCase
     {
         $this->setupController();
 
+        $data['tokens'] = $this->client->getTokens();
         $this->ModelController->Auth->setUser($data);
 
         if (!empty($exception)) {
