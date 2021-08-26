@@ -76,13 +76,6 @@
     </div>
     {# end list-objects #}
 
-<<<<<<< HEAD
     {% element 'Model/sidebar_links' %}
-=======
-    {# append links to sidebar #}
-    {% do _view.append('module-links', Html.link(__('Object Types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Properties'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
->>>>>>> master
 
 </div> {# end module-index #}
