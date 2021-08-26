@@ -130,9 +130,9 @@ class LayoutHelper extends Helper
      * Get translated model by type, using plugins (if any) translations.
      *
      * @param string $type The type
-     * @return string
+     * @return string|null
      */
-    public function typeLabel(string $type): string
+    public function typeLabel(string $type): ?string
     {
         $plugins = Configure::read('Plugins');
         if (empty($plugins)) {
