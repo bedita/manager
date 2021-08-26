@@ -42,7 +42,7 @@ class CategoriesControllerTest extends TestCase
             'REQUEST_METHOD' => 'GET',
         ],
         'query' => [
-            'filter' => ['type' => 'documents']
+            'filter' => ['type' => 'documents'],
         ],
         'params' => [
             'resource_type' => 'categories',
