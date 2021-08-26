@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-07-16 07:10:30 \n"
+"POT-Creation-Date: 2021-08-26 15:22:01 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1); \n"
 
 msgid " in Trashcan"
-msgstr ""
+msgstr " nel Cestino"
 
 msgid "&"
 msgstr ""
@@ -72,7 +72,7 @@ msgid "Back to login"
 msgstr "Torna al login"
 
 msgid "Bad related data method"
-msgstr ""
+msgstr "Dati di relazione non corretti"
 
 msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
@@ -129,7 +129,7 @@ msgid "Custom properties"
 msgstr "Proprietà personalizzate"
 
 msgid "Dashboard"
-msgstr ""
+msgstr "Scrivania"
 
 msgid "Data Import"
 msgstr "Importazione dati"
@@ -276,7 +276,7 @@ msgid "Language and translations"
 msgstr "Lingua e traduzioni"
 
 msgid "Left types"
-msgstr ""
+msgstr "Tipi di sinistra"
 
 msgid "Locations"
 msgstr "Posizioni"
@@ -291,7 +291,7 @@ msgid "Login required"
 msgstr "È richiesto il login"
 
 msgid "Long Lat Coordinates"
-msgstr ""
+msgstr "Coordinate Long Lat"
 
 msgid "Map"
 msgstr "Mappa"
@@ -321,7 +321,7 @@ msgid "Move to trash"
 msgstr "Sposta nel cestino"
 
 msgid "NEW"
-msgstr ""
+msgstr "NUOVO"
 
 msgid "New entry in"
 msgstr "Nuova voce in"
@@ -359,6 +359,9 @@ msgstr "Numero di oggetti aggiornati"
 msgid "Number of updated resources"
 msgstr "Numero di risorse aggiornate"
 
+msgid "Object Types"
+msgstr "Tipi di Oggetto"
+
 msgid "Object saved"
 msgstr "Oggetto salvato"
 
@@ -395,6 +398,9 @@ msgstr "Opzioni"
 msgid "Other"
 msgstr "Altro"
 
+msgid "Password"
+msgstr ""
+
 msgid "Password reset"
 msgstr "Reimposta password"
 
@@ -416,7 +422,7 @@ msgstr ""
 "in configurazione"
 
 msgid "Position"
-msgstr ""
+msgstr "Posizione"
 
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
@@ -473,7 +479,7 @@ msgid "Retype password"
 msgstr "Ridigita password"
 
 msgid "Right types"
-msgstr ""
+msgstr "Tipi di destra"
 
 msgid "Save"
 msgstr "Salva"
@@ -482,7 +488,7 @@ msgid "Search"
 msgstr "Cerca"
 
 msgid "Select a project"
-msgstr ""
+msgstr "Seleziona un progetto"
 
 msgid "Set selected"
 msgstr "Applica a selezione"
@@ -521,9 +527,6 @@ msgstr "Miniatura non pronta: in lavorazione"
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
 
-msgid "Title"
-msgstr "Titolo"
-
 msgid "To"
 msgstr "A"
 
@@ -552,7 +555,7 @@ msgid "Trashd"
 msgstr "Cancellato"
 
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 msgid "Uname"
 msgstr "Nome univoco"
@@ -581,6 +584,9 @@ msgstr "Profilo Utente"
 msgid "User profile saved"
 msgstr "Profilo utente salvato"
 
+msgid "Username"
+msgstr "Nome utente"
+
 msgid "Users"
 msgstr "Utenti"
 
@@ -606,7 +612,7 @@ msgid "Your recent items"
 msgstr "I tuoi elementi più recenti"
 
 msgid "add"
-msgstr ""
+msgstr "aggiungi"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
@@ -633,7 +639,7 @@ msgid "current password"
 msgstr "password corrente"
 
 msgid "elements to"
-msgstr ""
+msgstr "elementi a"
 
 msgid "empty"
 msgstr "vuoto"
@@ -660,7 +666,7 @@ msgid "original"
 msgstr "originale"
 
 msgid "related object"
-msgstr ""
+msgstr "oggetto relazionato"
 
 msgid "remove"
 msgstr "rimuovi"
@@ -693,16 +699,13 @@ msgid "undo remove"
 msgstr "annulla rimozione"
 
 msgid "untitled"
-msgstr ""
+msgstr "senza titolo"
 
 msgid "view parent"
 msgstr "visualizza genitore"
 
 msgid "warning"
 msgstr "attenzione"
-
-msgid "www.bedita.com"
-msgstr ""
 
 #: src/Template/Layout/js/app/app.js:157
 #: src/Template/Layout/js/app/components/history/history.js:99
@@ -750,13 +753,102 @@ msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
+#: src/Template/Layout/js/app/components/drop-upload.js:36
+msgid "stop"
+msgstr "interrompi"
+
+#: src/Template/Layout/js/app/components/drop-upload.js:50
+msgid "done"
+msgstr "fatto"
+
+#: src/Template/Layout/js/app/components/drop-upload.js:53
+msgid "Cancelled"
+msgstr "Annullato"
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:20
+msgid "Relation parameters"
+msgstr "Parametri della relazione"
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:30
+msgid "In relation with"
+msgstr "In relazione con"
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:39
+msgid "Priority"
+msgstr "Priorità"
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:57
+msgid "Cancel"
+msgstr "Annulla"
+
 #: src/Template/Layout/js/app/components/filter-box.js:214
 msgid "Search text too short. Minimum length is 3. Retry"
-msgstr ""
+msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 
 #: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:51
+msgid "Title"
+msgstr "Titolo"
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:70
+msgid "Address"
+msgstr "Indirizzo"
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:95
+msgid "GET"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  ...
+#.  *
+#.  * <locations-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
+msgid "add new"
+msgstr "aggiungi nuovo"
+
+#: src/Template/Layout/js/app/components/history/history-info.js:10
+msgid "version by"
+msgstr "versione di"
+
+#: src/Template/Layout/js/app/components/history/history-info.js:12
+msgid "on"
+msgstr "del"
+
+#. *
+#.  * Component to fetch and display changes' history.
+#.  
+#: src/Template/Layout/js/app/components/history/history.js:19
+msgid "by"
+msgstr "di"
+
+#. *
+#.  * Component to fetch and display changes' history.
+#.  
+#: src/Template/Layout/js/app/components/history/history.js:29
+msgid "No History data found"
+msgstr "Nessun dato di Cronologia"
 
 #: src/Template/Layout/js/app/components/history/history.js:88
 msgid ""
@@ -765,144 +857,3 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
-
-#~ msgid "Competition Notices"
-#~ msgstr "Bandi"
-
-#~ msgid "Places"
-#~ msgstr "Luoghi"
-
-#~ msgid "Libraries"
-#~ msgstr "Biblioteche"
-
-#~ msgid "Bibliographies"
-#~ msgstr "Bibliografie"
-
-#~ msgid "Books"
-#~ msgstr "Libri"
-
-#~ msgid "Lecture Groups"
-#~ msgstr "Gruppi di lettura"
-
-#~ msgid "Galleries"
-#~ msgstr "Gallerie"
-
-#~ msgid "Settings"
-#~ msgstr "Impostazioni"
-
-#~ msgid "Username"
-#~ msgstr "Nome utente"
-
-#~ msgid "add to"
-#~ msgstr "aggiungi a"
-
-#~ msgid "Coordinates"
-#~ msgstr "Coordinate"
-
-#~ msgid "Insert password twice"
-#~ msgstr "Inserisci nuovamente la password"
-
-#~ msgid "Long lat Coordinates"
-#~ msgstr "Coordinate Long Lat"
-
-#~ msgid "by"
-#~ msgstr "di"
-
-#~ msgid "version by"
-#~ msgstr "versione di"
-
-#~ msgid "on"
-#~ msgstr "del"
-
-#~ msgid "Download"
-#~ msgstr "Scarica"
-
-#~ msgid "New relations (save to keep)"
-#~ msgstr "Nuove relazioni (salvare per mantenerle)"
-
-#~ msgid "Add objects to"
-#~ msgstr "Aggiungi oggetti a"
-
-#~ msgid "Edit Params"
-#~ msgstr "Modifica Parametri"
-
-#~ msgid "Priority"
-#~ msgstr "Priorità"
-
-#~ msgid "Search in BEdita"
-#~ msgstr "Cerca in BEdita"
-
-#~ msgid "Show more"
-#~ msgstr "Mostra di più"
-
-#~ msgid "click to remove"
-#~ msgstr "clicca per rimuovere"
-
-#~ msgid "close"
-#~ msgstr "chiudi"
-
-#~ msgid "last modified"
-#~ msgstr "ultima modifica"
-
-#~ msgid "move to"
-#~ msgstr "sposta in"
-
-#~ msgid "of"
-#~ msgstr "di"
-
-#~ msgid "position"
-#~ msgstr "posizione"
-
-#~ msgid "reload"
-#~ msgstr "ricarica"
-
-#~ msgid "view file"
-#~ msgstr "mostra file"
-
-#~ msgid "Apply"
-#~ msgstr "Applica"
-
-#~ msgid "Empty"
-#~ msgstr "Vuoto"
-
-#~ msgid "Page size"
-#~ msgstr "Dimensione pagina"
-
-#~ msgid "Exit"
-#~ msgstr "Esci"
-
-#~ msgid "Model"
-#~ msgstr "Modello"
-
-#~ msgid "User: {0}"
-#~ msgstr "Utente: {0}"
-
-#~ msgid "log out"
-#~ msgstr "esci"
-
-#~ msgid "Error"
-#~ msgstr "Errore"
-
-#~ msgid "Info"
-#~ msgstr "Informazione"
-
-#~ msgid "Message"
-#~ msgstr "Messaggio"
-
-#~ msgid "Object(s) restored"
-#~ msgstr "Oggetto(i) ripristinato(i)"
-
-#~ msgid "Preferences"
-#~ msgstr "Preferenze"
-
-#~ msgid "Show details"
-#~ msgstr "Mostra dettagli"
-
-#~ msgid "Success"
-#~ msgstr "Risultato"
-
-#~ msgid "Username and/or password do not match"
-#~ msgstr "Il nome utente e/o la password non corrispondono"
-
-#~ msgid "Warning"
-#~ msgstr "Avviso"

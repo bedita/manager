@@ -74,7 +74,7 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
 
             return $this->Html->link(
-                __(Inflector::humanize($label)),
+                $this->typeLabel(Inflector::humanize($label)),
                 ['_name' => 'modules:list', 'object_type' => $name],
                 ['class' => sprintf('has-background-module-%s', $name)]
             );
@@ -82,7 +82,7 @@ class LayoutHelper extends Helper
 
         // if no `currentModule` has been set a `moduleLink` must be set in controller otherwise current link is displayed
         return $this->Html->link(
-            __(Inflector::humanize($this->getView()->getName())),
+            $this->typeLabel(Inflector::humanize($this->getView()->getName())),
             (array)$this->getView()->get('moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
@@ -126,5 +126,24 @@ class LayoutHelper extends Helper
         }
 
         return (string)Configure::read($path);
+    }
+
+    /**
+     * Get translated model by type, using plugins (if any) translations.
+     *
+     * @param string $type The type
+     * @return string|null
+     */
+    public function typeLabel(string $type): ?string
+    {
+        $res = __($type);
+        $plugins = (array)Configure::read('Plugins');
+        $pluginName = Hash::get(array_keys($plugins), 0);
+        // if we have no actual translation and a plugin let's try with plugin's gettext
+        if ($pluginName && $res === $type) {
+            return __d($pluginName, $type);
+        }
+
+        return $res;
     }
 }

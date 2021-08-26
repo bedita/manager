@@ -48,7 +48,7 @@ export default {
             <div class="is-flex">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Title') :>
+                        ${t`Title`}
                         <autocomplete
                             autocomplete="none"
                             ref="title"
@@ -67,7 +67,7 @@ export default {
                 </div>
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Address') :>
+                        ${t`Address`}
                         <autocomplete
                             autocomplete="none"
                             ref="address"
@@ -88,11 +88,11 @@ export default {
             <div class="is-flex mt-1">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Long Lat Coordinates') :>
+                        ${t`Long Lat Coordinates`}
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <: t('GET') :>
+                                ${t`GET`}
                             </button>
                         </div>
                     </label>
@@ -117,7 +117,7 @@ export default {
                 </div>
             </div>
             <div class="location-buttons">
-                <button @click.prevent="onRemove" class="icon-unlink remove"><: t("remove") :></button>
+                <button @click.prevent="onRemove" class="icon-unlink remove">${t`remove`}</button>
             </div>
         </div>
     </div>`,
