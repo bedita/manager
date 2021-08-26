@@ -100,9 +100,6 @@
                         </div>
                     {% endfor %}
                     <div class="narrow"> {{ resource.id }}</div>
-                    {{ Form.hidden('id', {'value': resource.id})|raw }}
-                {{ Form.end()|raw }}
-
                     <div class="buttons-cell narrow">
                         {% set buttonClasses = 'button button-text-white is-width-auto' %}
 
@@ -120,6 +117,9 @@
                                 'class': buttonClasses,
                             })|raw }}
                     </div>
+
+                {{ Form.hidden('id', {'value': resource.id})|raw }}
+                {{ Form.end()|raw }}
 
             {% endfor %}
 
