@@ -7,16 +7,16 @@ export default {
         <section class="fieldset shrinks">
             <header class="mx-1 tab tab-static unselectable">
                 <h2>
-                    <span><: t('version by') :></span>
+                    <span><: i18n.versionBy :></span>
                     <span class="has-font-weight-bold"><: authorName :></span>
-                    <span><: t('on') :> <: formattedDate :></span>
+                    <span><: i18n.on :> <: formattedDate :></span>
                 </h2>
             </header>
             <div class="px-1 shrinks">
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
                     <div v-for="(value, key) in changed" v-html="value"></div>
-                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()"><: t('Restore') :></button>
+                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()"><: i18n.restore :></button>
                 </div>
             </div>
         </section>
@@ -26,6 +26,14 @@ export default {
         meta: Object,
         id: String,
         cansave: Boolean,
+        i18n: {
+            type: Object,
+            default: {
+                versionBy: t`version by`,
+                on: t`on`,
+                restore: t`Restore`,
+            },
+        },
     },
 
     data() {

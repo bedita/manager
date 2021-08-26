@@ -62,7 +62,7 @@ export default {
                     }"
                     @click="toggle"
                 ></button>
-                <a :href="url"><: t('edit') :></a>
+                <a :href="url"><: i18n.edit :></a>
                 <div class="tree-params">
                     <div
                         v-if="relationName && isParent"
@@ -75,7 +75,7 @@ export default {
                             @change="toggleFolderRelationMenu"
                         />
                         <label :for="'tree-menu-' + node.id">
-                            <: t('Menu') :>
+                            <: i18n.menu :>
                         </label>
                     </div>
                     <div
@@ -90,7 +90,7 @@ export default {
                             @change="toggleFolderRelationCanonical"
                         />
                         <label :for="'tree-canonical-' + node.id">
-                            <: t('Canonical') :>
+                            <: i18n.canonical :>
                         </label>
                     </div>
                 </div>
@@ -135,6 +135,14 @@ export default {
         multipleChoice: {
             type: Boolean,
             default: true,
+        },
+        i18n: {
+            type: Object,
+            default: {
+                edit: t`edit`,
+                menu: t`Menu`,
+                canonical: t`Canonical`,
+            },
         },
     },
 

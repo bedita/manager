@@ -33,11 +33,11 @@ export default {
 
                         <button v-show="!info.error && !info.cancelled && !info.done && !info.pending"
                             class="button-outlined icon-stop"
-                            @click.stop.prevent="abortUpload(info.file)"><: t('stop') :></button>
+                            @click.stop.prevent="abortUpload(info.file)"><: i18n.stop :></button>
 
                         <button v-show="(info.error || info.cancelled) && !info.done"
                             class="button-outlined icon-cancel"
-                            @click.stop.prevent="removeProgressItem(info.file)"><: t('remove') :> </button>
+                            @click.stop.prevent="removeProgressItem(info.file)"><: i18n.remove :> </button>
 
                         <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
                     </div>
@@ -47,10 +47,10 @@ export default {
                     </div>
 
                     <div class="message">
-                        <span v-show="!info.error && !info.cancelled && info.done"><: t('Done') :></span>
+                        <span v-show="!info.error && !info.cancelled && info.done"><: i18n.done :></span>
                         <span v-show="!info.error && !info.cancelled && !info.done"><: info.progress :>%</span>
                         <span v-show="info.error && !info.cancelled && !info.done"><: info.errorMsg :></span>
-                        <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500"><: t('Cancelled') :></span>
+                        <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500"><: i18n.cancelled :></span>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,16 @@ export default {
         knownTypes: {
             type: Array,
             default: () => ['audio', 'video', 'image'],
-        }
+        },
+        i18n: {
+            type: Object,
+            default: {
+                stop: t`stop`,
+                remove: t`remove`,
+                done: t`done`,
+                cancelled: t`Cancelled`,
+            },
+        },
     },
 
     data() {

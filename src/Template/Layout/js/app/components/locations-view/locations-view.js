@@ -27,7 +27,7 @@ export default {
             <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" />
         </div>
         <div v-if="locations" class="is-flex mt-1">
-            <button @click.prevent @click="onAddNew"><: t('add new') :></button>
+            <button @click.prevent @click="onAddNew"><: i18n.addNew :></button>
         </div>
     </div>`,
 
@@ -35,6 +35,12 @@ export default {
         apiKey: String,
         apiUrl: String,
         relationName: String,
+        i18n: {
+            type: Object,
+            default: {
+                addNew: t`add new`,
+            },
+        },
     },
 
     data() {

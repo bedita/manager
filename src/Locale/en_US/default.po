@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-07-16 07:10:30 \n"
+"POT-Creation-Date: 2021-08-26 09:27:57 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -395,6 +395,9 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+msgid "Password"
+msgstr ""
+
 msgid "Password reset"
 msgstr ""
 
@@ -578,6 +581,9 @@ msgstr ""
 msgid "User profile saved"
 msgstr ""
 
+msgid "Username"
+msgstr ""
+
 msgid "Users"
 msgstr ""
 
@@ -698,17 +704,14 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-msgid "www.bedita.com"
-msgstr ""
-
 #: src/Template/Layout/js/app/app.js:157
-#: src/Template/Layout/js/app/components/history/history.js:99
+#: src/Template/Layout/js/app/components/history/history.js:108
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:158
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/components/history/history.js:109
 msgid "copy"
 msgstr ""
 
@@ -721,7 +724,7 @@ msgid "Do you really want to trash the object?"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:487
-#: src/Template/Layout/js/app/components/history/history.js:89
+#: src/Template/Layout/js/app/components/history/history.js:98
 #: src/Template/Layout/js/app/pages/model/index.js:262
 #: src/Template/Layout/js/app/pages/modules/index.js:144
 #: src/Template/Layout/js/app/pages/trash/index.js:43
@@ -747,6 +750,34 @@ msgstr ""
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
+#: src/Template/Layout/js/app/components/drop-upload.js:72
+msgid "stop"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/drop-upload.js:74
+msgid "done"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/drop-upload.js:75
+msgid "Cancelled"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:86
+msgid "Priority"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:87
+msgid "Relation parameters"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:88
+msgid "In relation with"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/edit-relation-params.js:90
+msgid "Cancel"
+msgstr ""
+
 #: src/Template/Layout/js/app/components/filter-box.js:214
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
@@ -755,7 +786,53 @@ msgstr ""
 msgid "Error while creating new object."
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:88
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:135
+msgid "Address"
+msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/location-view.js:137
+msgid "GET"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  ...
+#.  *
+#.  * <locations-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.  
+#: src/Template/Layout/js/app/components/locations-view/locations-view.js:41
+msgid "add new"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history-info.js:32
+msgid "version by"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history-info.js:33
+msgid "on"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:42
+msgid "by"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:45
+msgid "No History data found"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:97
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"

@@ -247,4 +247,25 @@ class LayoutHelperTest extends TestCase
         $result = $layout->customElement($item, $type);
         static::assertSame($expected, $result);
     }
+
+    /**
+     * Test `typeLabel` method
+     *
+     * @return void
+     * @covers ::typeLabel()
+     */
+    public function testTypeLabel(): void
+    {
+        $view = new View();
+        $view->set('currentModule', ['name' => 'documents']);
+        $layout = new LayoutHelper($view);
+        $expected = __('Objects');
+        $actual = $layout->typeLabel('Objects');
+        static::assertSame($expected, $actual);
+
+        Configure::write('Plugins', ['DummyPlugin' => []]);
+        $expected = __d('DummyPlugin', 'Objects');
+        $actual = $layout->typeLabel('Objects');
+        static::assertSame($expected, $actual);
+    }
 }

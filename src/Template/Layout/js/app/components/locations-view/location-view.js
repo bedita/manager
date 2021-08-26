@@ -48,7 +48,7 @@ export default {
             <div class="is-flex">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Title') :>
+                        <: i18n.title :>
                         <autocomplete
                             autocomplete="none"
                             ref="title"
@@ -67,7 +67,7 @@ export default {
                 </div>
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Address') :>
+                        <: i18n.address :>
                         <autocomplete
                             autocomplete="none"
                             ref="address"
@@ -88,11 +88,11 @@ export default {
             <div class="is-flex mt-1">
                 <div class="is-flex-column is-expanded">
                     <label>
-                        <: t('Long Lat Coordinates') :>
+                        <: i18n.longLatCoords :>
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <: t('GET') :>
+                                <: i18n.get :>
                             </button>
                         </div>
                     </label>
@@ -128,6 +128,15 @@ export default {
         apiUrl: String,
         locationData: Object,
         relationName: String,
+        i18n: {
+            type: Object,
+            default: {
+                title: t`Title`,
+                address: t`Address`,
+                longLatCoords: t`Long Lat Coordinates`,
+                get: t`GET`,
+            },
+        },
     },
 
     data() {
