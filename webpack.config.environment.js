@@ -1,6 +1,6 @@
 // default values
 const DEFAULT_PROXY_HOST = 'localhost';
-const DEFAULT_PROXY_POR = '8080';
+const DEFAULT_PROXY_PORT = '8080';
 const DEFAULT_HOST = 'localhost';
 const DEFAULT_PORT = '3000';
 
@@ -32,31 +32,21 @@ if (index !== -1) {
  * setting up local server with proxy
  */
 let proxy_host = DEFAULT_PROXY_HOST;
-let proxy_port = DEFAULT_PROXY_POR;
+let proxy_port = DEFAULT_PROXY_PORT;
 
-index = args.indexOf('--proxy');
-let proxy;
-if (index !== -1) {
-    let paramIndex = ++index;
-    if (paramIndex <= args.length) {
-        proxy = args[paramIndex];
-    }
+if ('WEBPACK_PROXY_HOST' in process.env) {
+    proxy_host = process.env.WEBPACK_PROXY_HOST;
+} else if (dotenv.parsed && 'WEBPACK_PROXY_HOST' in dotenv.parsed) {
+    proxy_host = dotenv.parsed.WEBPACK_PROXY_HOST;
 }
-if (!proxy) {
-    if ('WEBPACK_PROXY_HOST' in process.env) {
-        proxy_host = process.env.WEBPACK_PROXY_HOST;
-    } else if (dotenv.parsed && 'WEBPACK_PROXY_HOST' in dotenv.parsed) {
-        proxy_host = dotenv.parsed.WEBPACK_PROXY_HOST;
-    }
 
-    if ('WEBPACK_PROXY_PORT' in process.env) {
-        proxy_port = process.env.WEBPACK_PROXY_PORT;
-    } else if (dotenv.parsed && 'WEBPACK_PROXY_PORT' in dotenv.parsed) {
-        proxy_port = dotenv.parsed.WEBPACK_PROXY_PORT;
-    }
-
-    proxy = `${proxy_host}:${proxy_port}`;
+if ('WEBPACK_PROXY_PORT' in process.env) {
+    proxy_port = process.env.WEBPACK_PROXY_PORT;
+} else if (dotenv.parsed && 'WEBPACK_PROXY_PORT' in dotenv.parsed) {
+    proxy_port = dotenv.parsed.WEBPACK_PROXY_PORT;
 }
+
+proxy = `${proxy_host}:${proxy_port}`;
 
 let server_host = DEFAULT_HOST;
 let server_port = DEFAULT_PORT;
@@ -88,7 +78,7 @@ if (index) {
 
 // Environment Config Object
 const ENVIRONMENT = {
-    mode: devMode ? 'develop' : 'production',
+    mode: devMode ? JSON.stringify("development") : JSON.stringify("production"),
     proxy: proxy,
     host: server_host,
     port: server_port,
