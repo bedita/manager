@@ -134,6 +134,13 @@ Router::scope('/', function (RouteBuilder $routes) {
                 'remove:' . $controller
             )->setPass(['id']);
         }
+
+        // export project model
+        $routes->get(
+            '/export',
+            ['controller' => 'Export', 'action' => 'model'],
+            'export'
+        );
     });
 
     // Import.
