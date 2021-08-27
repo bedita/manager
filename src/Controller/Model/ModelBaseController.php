@@ -181,9 +181,9 @@ abstract class ModelBaseController extends AppController
      *
      * @param string $id Resource ID.
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function remove(string $id): Response
+    public function remove(string $id): ?Response
     {
         try {
             $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $id));
