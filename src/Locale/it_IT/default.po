@@ -383,6 +383,9 @@ msgstr ""
 msgid "On"
 msgstr ""
 
+msgid "Only my contents"
+msgstr "Solo i miei contenuti"
+
 msgid "Open"
 msgstr "Apri"
 

@@ -176,6 +176,11 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         onFilterObjects(filter) {
+            // remove from query string ilter mine if it is false
+            if (!filter.filter.mine) {
+                delete filter.filter.mine;
+            }
+
             this.urlFilterQuery = filter;
             this.page = '';
 

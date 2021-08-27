@@ -94,6 +94,14 @@
         <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="applyFilter()">{{ __('Search') }}</button>
         <button v-show="showFilterButtons" class="button button-secondary" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
     </div>
+
+
+    {# Checkbox my contents #}
+    <div class="filter-container radio">
+        <label>
+            <input type="checkbox" v-model="queryFilter.filter['mine']">{{ __('Only my contents') }}</input>
+        </label>
+    </div>
 </div>
 
 {% if filterActive %}
