@@ -30,8 +30,8 @@
 //  __('title');
 //  __('All media');
 //  __('Created');
-//..__('Updated');
-//..__('Trashd');
-//..__('Restored');
-//..__('Title');
-//..__('warning');
+//  __('Updated');
+//  __('Trashd');
+//  __('Restored');
+//  __('warning');
+//  __('Object saved');

@@ -274,9 +274,10 @@ class ModulesController extends AppController
             $objectId = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($error->getMessage(), ['params' => $error]);
 
-            $this->set(compact('error'));
+            $this->set(['error' => $error->getAttributes()]);
             $this->set('_serialize', ['error']);
 
             // set session data to recover form

@@ -17,7 +17,7 @@ export default {
     `<div v-if="relationName" class="edit-relation">
         <section>
             <header class="mx-1 mt-1 mb-1 tab unselectable">
-                <h2><span><: t('Relation parameters') :> - <: relationName | humanize :></span></h2>
+                <h2><span>${t`Relation parameters`} - <: relationName | humanize :></span></h2>
             </header>
 
             <div class="mx-1">
@@ -27,7 +27,7 @@ export default {
                     <span class="tag"><: relatedStatus :></span>
                 </div>
 
-                <p class="mt-1 mb-05"><: t('In relation with') :> “<: object.attributes.title :>”</p>
+                <p class="mt-1 mb-05">${t`In relation with`} “<: object.attributes.title :>”</p>
                 <div>
                     <span class="tag" :class="objectColorClass"><: object.type :></span>
                     <span class="tag"><: object.attributes.status :></span>
@@ -36,7 +36,7 @@ export default {
 
             <form class="mt-2 mx-1" ref="paramsForm" @change="checkParams()" @keyup="checkParams()">
                 <div class="mb-1">
-                    <label><: t('Priority') :>
+                    <label>${t`Priority`}
                         <input class="input-narrow" type="number" step="1" v-model.number="priority" />
                     </label>
                 </div>
@@ -52,9 +52,9 @@ export default {
             <footer class="p-1">
                 <button :disabled="!isModified"
                     class="has-background-info has-text-white"
-                    @click.prevent="saveParams()"><: t('Save ') :></button>
+                    @click.prevent="saveParams()">${t`Save`}</button>
 
-                    <button class="mx-1" href="#" @click="closeParamsView()"><: t('Cancel') :></button>
+                    <button class="mx-1" href="#" @click="closeParamsView()">${t`Cancel`}</button>
             </footer>
         </section>
     </div>`,

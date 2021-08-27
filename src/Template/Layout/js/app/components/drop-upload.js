@@ -33,11 +33,11 @@ export default {
 
                         <button v-show="!info.error && !info.cancelled && !info.done && !info.pending"
                             class="button-outlined icon-stop"
-                            @click.stop.prevent="abortUpload(info.file)"><: t('stop') :></button>
+                            @click.stop.prevent="abortUpload(info.file)">${t`stop`}</button>
 
                         <button v-show="(info.error || info.cancelled) && !info.done"
                             class="button-outlined icon-cancel"
-                            @click.stop.prevent="removeProgressItem(info.file)"><: t('remove') :> </button>
+                            @click.stop.prevent="removeProgressItem(info.file)">${t`remove`}</button>
 
                         <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
                     </div>
@@ -47,10 +47,10 @@ export default {
                     </div>
 
                     <div class="message">
-                        <span v-show="!info.error && !info.cancelled && info.done"><: t('Done') :></span>
+                        <span v-show="!info.error && !info.cancelled && info.done">${t`done`}</span>
                         <span v-show="!info.error && !info.cancelled && !info.done"><: info.progress :>%</span>
                         <span v-show="info.error && !info.cancelled && !info.done"><: info.errorMsg :></span>
-                        <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500"><: t('Cancelled') :></span>
+                        <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500">${t`Cancelled`}</span>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@ export default {
         knownTypes: {
             type: Array,
             default: () => ['audio', 'video', 'image'],
-        }
+        },
     },
 
     data() {
