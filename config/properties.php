@@ -141,6 +141,7 @@ return [
                 'name',
                 'params',
             ],
+            'filter' => [],
         ],
 
         // model/object_types
@@ -164,6 +165,7 @@ return [
                 'is_abstract',
                 'core_type',
             ],
+            'filter' => [],
         ],
 
         // model/relations
@@ -182,6 +184,7 @@ return [
                 'name',
                 'inverse_name',
             ],
+            'filter' => [],
         ],
 
         // model/categories
