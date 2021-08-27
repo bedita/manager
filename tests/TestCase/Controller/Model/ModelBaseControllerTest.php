@@ -39,6 +39,17 @@ class ModelController extends ModelBaseController
     {
         $this->resourceType = $type;
     }
+
+    /**
+     * Set single view
+     *
+     * @param bool $view Single view flag
+     * @return void
+     */
+    public function setSingleView(bool $view): void
+    {
+        $this->singleView = $view;
+    }
 }
 
 /**
@@ -234,5 +245,116 @@ class ModelBaseControllerTest extends TestCase
     {
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Data provider for `testSave`
+     *
+     * @return array
+     */
+    public function saveProvider(): array
+    {
+        return [
+            'post' => [
+                '/model/object_types',
+                [
+                    'name' => 'animals',
+                    'singular' => 'animal',
+                ],
+                false,
+            ],
+            'patch' => [
+                '/model/object_types/view/1',
+                [
+                    'id' => '1',
+                    'description' => 'new description',
+                ],
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @param string $expected Expected result
+     * @param array $data Request data
+     * @param bool $singleView Single view
+     *
+     * @covers ::save()
+     * @dataProvider saveProvider()
+     *
+     * @return void
+     */
+    public function testSave(string $expected, array $data, bool $singleView): void
+    {
+        $this->ModelController->setSingleView($singleView);
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+
+        static::assertInstanceOf(Response::class, $result);
+        $location = $result->getHeaderLine('Location');
+        static::assertStringEndsWith($expected, $location);
+    }
+
+    /**
+     * Test `save` failure method
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveFail(): void
+    {
+        $data = [
+            'id' => 99999,
+        ];
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $flash);
+    }
+
+    /**
+     * Test `remove` method
+     *
+     * @covers ::remove()
+     *
+     * @return void
+     */
+    public function testRemove(): void
+    {
+        $data = [
+            'name' => 'foos',
+            'singular' => 'foo',
+        ];
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+
+        $result = $this->ModelController->remove('foos');
+        static::assertInstanceOf(Response::class, $result);
+    }
+
+    /**
+     * Test `remove` failure method
+     *
+     * @covers ::remove()
+     *
+     * @return void
+     */
+    public function testRemoveFail(): void
+    {
+        $result = $this->ModelController->remove(99999);
+        static::assertInstanceOf(Response::class, $result);
+        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $flash);
     }
 }
