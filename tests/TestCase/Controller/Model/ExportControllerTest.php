@@ -35,6 +35,22 @@ class ExportControllerTest extends TestCase
     public $Export;
 
     /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
+    {
+        $this->apiClient = ApiClientProvider::getApiClient();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        ApiClientProvider::setApiClient($this->apiClient);
+    }
+
+    /**
      * Test `model` method
      *
      * @covers ::model()
