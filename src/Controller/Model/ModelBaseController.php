@@ -154,7 +154,7 @@ abstract class ModelBaseController extends AppController
         try {
             if (empty($id)) {
                 $response = $this->apiClient->post($endpoint, json_encode($body));
-                $id = Hash::get($response, '$data.id');
+                $id = Hash::get($response, 'data.id');
             } else {
                 $body['data']['id'] = $id;
                 $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
