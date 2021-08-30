@@ -13,6 +13,14 @@
  *
  */
 
+ const API_URL = new URL(BEDITA.base).pathname;
+ const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+ 
 const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
 
 export default {
@@ -51,6 +59,10 @@ export default {
             type: String,
             default: '0',
         },
+        object: {
+            type: Object,
+            default: {}
+        }
     },
 
     data() {
@@ -62,7 +74,8 @@ export default {
         }
     },
 
-    mounted() {
+    async mounted() {
+
         if (this.tabOpenAtStart !== null) {
             this.isOpen = this.tabOpenAtStart;
             return;
@@ -70,6 +83,11 @@ export default {
         this.isOpen = this.checkTabOpen();
         if (this.preCount >= 0) {
             this.totalObjects = this.preCount;
+        }
+
+        // load user info in meta fields (created_by and modified_by )
+        if (this.tabName === 'meta') {
+            await this.loadInfoUsers();
         }
     },
 
@@ -131,5 +149,28 @@ export default {
                 this.$refs.relation.loadRelatedObjects();
             }
         },
+        async loadInfoUsers() {
+            const creatorId = this.object?.meta?.created_by;
+            const modifierId = this.object?.meta?.modified_by;
+            let usersId = [creatorId, modifierId];
+            const userRes = await fetch(`${API_URL}api/objects?filter[id]=${usersId.join(',')}`, API_OPTIONS);
+            const userJson = await userRes.json();
+            const users = userJson.data;
+
+            users.map((user) => {
+                const href = `${BEDITA.base}/${user.type}/view/${user.id}`;
+                const userInfo = (user.attributes.name  != undefined || user.attributes.surname != undefined) 
+                        ? user.attributes.name + ' ' + user.attributes.surname
+                        : user.attributes.uname;
+
+                if(user.id == creatorId) {
+                    document.querySelector(`td[id='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                }
+                
+                if (user.id == modifierId) {
+                    document.querySelector(`td[id='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                }
+            });
+        }
     }
 }
