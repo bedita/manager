@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-08-26 15:22:01 \n"
+"POT-Creation-Date: 2021-08-30 10:19:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -89,6 +89,9 @@ msgstr "Impossibile produrre una miniatura per questo file"
 msgid "Categories"
 msgstr "Categorie"
 
+msgid "Categories not available"
+msgstr "Categorie non disponibili"
+
 msgid "Change File"
 msgstr "Cambia File"
 
@@ -115,6 +118,9 @@ msgstr "Conferma nuova password"
 
 msgid "Core properties"
 msgstr "Proprietà principali"
+
+msgid "Create"
+msgstr "Crea"
 
 msgid "Create new"
 msgstr "Crea nuovo"
@@ -359,9 +365,6 @@ msgstr "Numero di oggetti aggiornati"
 msgid "Number of updated resources"
 msgstr "Numero di risorse aggiornate"
 
-msgid "Object Types"
-msgstr "Tipi di Oggetto"
-
 msgid "Object saved"
 msgstr "Oggetto salvato"
 
@@ -429,9 +432,6 @@ msgstr "Preferenze e Strumenti"
 
 msgid "Profiles"
 msgstr "Profili"
-
-msgid "Properties"
-msgstr "Proprietà"
 
 msgid "Property types"
 msgstr "Tipi di proprietà"
@@ -793,7 +793,7 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr "Titolo"
@@ -802,7 +802,7 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr "Indirizzo"
@@ -811,7 +811,7 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -823,7 +823,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr "aggiungi nuovo"
@@ -833,19 +833,19 @@ msgid "version by"
 msgstr "versione di"
 
 #: src/Template/Layout/js/app/components/history/history-info.js:12
-msgid "on"
-msgstr "del"
+msgid "date"
+msgstr "data"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:19
 msgid "by"
 msgstr "di"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:29
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
@@ -857,3 +857,12 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
+
+#~ msgid "Object Types"
+#~ msgstr "Tipi di Oggetto"
+
+#~ msgid "Properties"
+#~ msgstr "Proprietà"
+
+#~ msgid "on"
+#~ msgstr "del"
