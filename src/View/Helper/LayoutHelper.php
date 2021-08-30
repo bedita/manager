@@ -100,6 +100,8 @@ class LayoutHelper extends Helper
             'Import' => 'has-background-black icon-download-alt',
             'ObjectTypes' => 'has-background-black',
             'Relations' => 'has-background-black',
+            'PropertyTypes' => 'has-background-black',
+            'Categories' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

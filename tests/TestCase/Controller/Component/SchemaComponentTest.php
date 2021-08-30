@@ -492,7 +492,7 @@ class SchemaComponentTest extends TestCase
                         'name' => 'images',
                         'is_abstract' => false,
                         'parent_name' => 'media',
-                        'associations' => ['Streams'],
+                        'associations' => ['Streams', 'Categories'],
                     ],
                 ],
             ],
@@ -523,6 +523,9 @@ class SchemaComponentTest extends TestCase
                 ],
             ],
             'uploadable' => [
+                'images',
+            ],
+            'categorized' => [
                 'images',
             ],
         ];
