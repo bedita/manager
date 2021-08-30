@@ -20,7 +20,7 @@
                     {% for key, val in meta %}
                         <tr>
                             <th>{{ key }}:</th>
-                            <td id="{{ key }}">{{ Schema.format(val, schema.properties[key]) }}</td>
+                            <td name="{{ key }}">{{ Schema.format(val, schema.properties[key]) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -152,7 +152,7 @@ export default {
         async loadInfoUsers() {
             const creatorId = this.object?.meta?.created_by;
             const modifierId = this.object?.meta?.modified_by;
-            let usersId = [creatorId, modifierId];
+            const usersId = [creatorId, modifierId];
             const userRes = await fetch(`${API_URL}api/objects?filter[id]=${usersId.join(',')}`, API_OPTIONS);
             const userJson = await userRes.json();
             const users = userJson.data;
@@ -164,11 +164,11 @@ export default {
                         : user.attributes.uname;
 
                 if(user.id == creatorId) {
-                    document.querySelector(`td[id='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                    document.querySelector(`td[name='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                 }
                 
                 if (user.id == modifierId) {
-                    document.querySelector(`td[id='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                    document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                 }
             });
         }
