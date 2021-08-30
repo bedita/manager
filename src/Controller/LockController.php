@@ -42,7 +42,7 @@ class LockController extends Controller
     /**
      * Perform lock/unlock on an object.
      *
-     * @param bool $val
+     * @param bool $val The value, true or false
      * @return void
      */
     protected function lock(bool $val): void
