@@ -51,6 +51,18 @@ class PermsHelper extends Helper
     }
 
     /**
+     * Check lock/unlock permission.
+     *
+     * @return bool
+     */
+    public function canLock(): bool
+    {
+        $roles = (array)Hash::get((array)$this->_View->get('user'), 'roles');
+
+        return in_array('admin', $roles);
+    }
+
+    /**
      * Check create permission.
      *
      * @param string $module Module name
@@ -64,12 +76,15 @@ class PermsHelper extends Helper
     /**
      * Check delete permission.
      *
-     * @param string $module Module name
+     * @param array $object The object
      * @return bool
      */
-    public function canDelete(string $module = null): bool
+    public function canDelete(array $object): bool
     {
-        return $this->isAllowed('DELETE', $module);
+        $locked = (bool)Hash::get($object, 'meta.locked');
+        $module = (string)Hash::get($object, 'type');
+
+        return !$locked && $this->isAllowed('DELETE', $module);
     }
 
     /**

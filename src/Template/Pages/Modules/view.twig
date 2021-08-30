@@ -115,8 +115,26 @@
                 )) %}
             {% endif %}
 
+            {# Append "Lock/Unlock" #}
+            {% if object.id and Perms.canLock() %}
+                {% if object.meta.locked %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Unlock'),
+                        {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                    {{ Form.hidden('locked', {'value': object.meta.locked})|raw }}
+                {% else %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Lock'),
+                        {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                {% endif %}
+            {% endif %}
+
             {# Append "Trash (move to)" #}
-            {% if object.id and Perms.canDelete() %}
+            {% if object.id and Perms.canDelete(object) %}
                 {% do _view.append('module-buttons',
                     Form.postButton(
                         __('Trash-verb'),

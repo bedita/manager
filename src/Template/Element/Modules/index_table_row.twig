@@ -36,7 +36,7 @@
         {% endif %}
 
         {% if object.attributes.status %}
-            <div class="narrow">{{ __(object.attributes.status) }}</div>
+            <div class="narrow">{{ object.attributes.status }}</div>
         {% endif %}
 
         {% if object.meta.modified %}
@@ -60,7 +60,7 @@
                 )|raw }}
             {% endif %}
 
-            {% if Perms.canDelete(object.type) %}
+            {% if Perms.canDelete(object) %}
                 {{ Form.postButton(__('Delete'),
                     {'_name': 'trash:delete'},
                     {
@@ -70,6 +70,8 @@
                         'onclick': confirm,
                     }
                 )|raw }}
+            {% elseif object.meta.locked %}
+                {{ __('Locked') }}
             {% endif %}
 
         {% else %}
@@ -80,7 +82,7 @@
                 class="{{ buttonClasses }}">{{ __('Edit') }}</button>
             {% endif %}
 
-            {% if Perms.canDelete(object.type) %}
+            {% if Perms.canDelete(object) %}
                 {{ Form.postButton(__('Trash-verb'),
                     {'_name': 'modules:delete', 'object_type': object.type},
                     {
@@ -89,6 +91,8 @@
                         'class': buttonClasses,
                     }
                 )|raw}}
+            {% elseif object.meta.locked %}
+                [ {{ __('Locked') }} ]
             {% endif %}
 
         {% endif %}

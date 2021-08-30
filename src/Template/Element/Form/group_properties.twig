@@ -5,9 +5,13 @@
     {% else %}
 
         {% for key, value in properties %}
-
-            {{ Property.control(key, value)|raw }}
-
+            {% if object.meta.locked and key == 'uname' %}
+                {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
+            {% elseif object.meta.locked and key == 'status' %}
+                {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
+            {% else %}
+                {{ Property.control(key, value)|raw }}
+            {% endif %}
         {% endfor %}
 
     {% endif %}

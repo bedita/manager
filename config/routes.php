@@ -309,4 +309,16 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Translator', 'action' => 'translate'],
         ['_name' => 'translator:translate']
     );
+
+    // lock and unlock objects
+    $routes->connect(
+        '/:object_type/:id/lock',
+        ['controller' => 'Lock', 'action' => 'add'],
+        ['_name' => 'lock:add'],
+    );
+    $routes->connect(
+        '/:object_type/:id/unlock',
+        ['controller' => 'Lock', 'action' => 'remove'],
+        ['_name' => 'lock:remove'],
+    );
 });

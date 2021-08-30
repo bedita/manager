@@ -44,7 +44,7 @@
         {{ Form.end()|raw }}
 
         {# trash #}
-        {% if (objects) and Perms.canDelete() %}
+        {% if (objects) and Perms.canDelete({type: objectType, meta: {locked: false}}) %}
             {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
                 <input type="hidden" name="ids" v-bind:value="selectedRows">
                 {{ Form.unlockField('ids') }}
