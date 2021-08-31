@@ -244,6 +244,13 @@ class AppController extends Controller
                 return ['name' => $category];
             }, $data['categories']);
         }
+
+        // locked
+        if ($data['locked'] === '1') {
+            unset($data['status']);
+            unset($data['uname']);
+        }
+        unset($data['locked']);
     }
 
     /**

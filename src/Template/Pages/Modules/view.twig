@@ -25,6 +25,7 @@
             })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+            {{ Form.hidden('locked', {'value': (object) ? object.meta.locked : false})|raw }}
             {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
                 {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
             {% endif %}
