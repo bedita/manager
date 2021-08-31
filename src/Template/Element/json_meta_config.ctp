@@ -16,7 +16,7 @@
     }
 
     $conf = [
-        'base' => \Cake\Routing\Router::fullBaseUrl(),
+        'base' => $this->Link->baseUrl(),
         'currentModule' => $currentModule,
         'template' => $this->template,
         'modules' => array_keys($modules),
