@@ -293,6 +293,9 @@ class AppControllerTest extends TestCase
                     '_jsonKeys' => 'jsonKey1,jsonKey2',
                     'jsonKey1' => '{"a":1,"b":2,"c":3}',
                     'jsonKey2' => '{"gin":"vodka","fritz":"kola"}',
+                    'locked' => '1',
+                    'uname' => 'my-dummy-uname',
+                    'status' => 'on',
                 ],
             ],
             'actual attrs' => [ // test '_actualAttributes'
