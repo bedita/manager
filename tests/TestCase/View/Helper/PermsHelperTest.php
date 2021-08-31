@@ -66,7 +66,7 @@ class PermsHelperTest extends TestCase
             [
                 false,
                 'canDelete',
-                ['type' => 'documents', 'meta' => ['locked' => true]]
+                ['type' => 'documents', 'meta' => ['locked' => true]],
             ],
             [
                 true,
