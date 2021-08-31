@@ -39,7 +39,7 @@
                             <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                         {{ Form.end()|raw }}
                     {% endif %}
-                    {% if (objects) and Perms.canDelete({type: objectType, meta: {locked: false}}) %}
+                    {% if (objects) and Perms.canDelete({type: objectType}) %}
                         {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                             <input type="hidden" name="ids" v-bind:value="selectedRows">
                             {{ Form.unlockField('ids') }}

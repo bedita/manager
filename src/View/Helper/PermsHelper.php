@@ -81,7 +81,7 @@ class PermsHelper extends Helper
      */
     public function canDelete(array $object): bool
     {
-        $locked = (bool)Hash::get($object, 'meta.locked');
+        $locked = (bool)Hash::get($object, 'meta.locked', false);
         $module = (string)Hash::get($object, 'type');
 
         return !$locked && $this->isAllowed('DELETE', $module);
