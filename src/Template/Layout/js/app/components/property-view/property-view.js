@@ -20,7 +20,7 @@
         'accept': 'application/json',
     }
 };
- 
+
 const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
 
 export default {
@@ -61,7 +61,9 @@ export default {
         },
         object: {
             type: Object,
-            default: {}
+            default: function() {
+                return {};
+            },
         }
     },
 
@@ -167,7 +169,7 @@ export default {
 
             users.map((user) => {
                 const href = `${BEDITA.base}/view/${user.id}`;
-                const userInfo = (user.attributes.name  != undefined || user.attributes.surname != undefined) 
+                const userInfo = (user.attributes.name  != undefined || user.attributes.surname != undefined)
                         ? user.attributes.name + ' ' + user.attributes.surname
                         : user.attributes.username;
 
@@ -175,7 +177,7 @@ export default {
                 if(user.id == creatorId && userInfo!= undefined) {
                     document.querySelector(`td[name='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                 }
-                
+
                 if (user.id == modifierId != undefined) {
                     document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                 }
