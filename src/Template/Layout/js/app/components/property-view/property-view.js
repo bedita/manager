@@ -97,7 +97,7 @@ export default {
             this.isOpen = this.tabOpen;
         },
         isOpen() {
-            if (this.isOpen && !this.userInfoLoaded) {
+            if (this.tabName === 'meta' && this.isOpen && !this.userInfoLoaded) {
                 this.loadInfoUsers();
             }
         }
