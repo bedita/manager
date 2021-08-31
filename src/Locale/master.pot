@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-08-26 15:22:01 \n"
+"POT-Creation-Date: 2021-08-30 10:19:25 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -86,6 +86,9 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
+msgid "Categories not available"
+msgstr ""
+
 msgid "Change File"
 msgstr ""
 
@@ -111,6 +114,9 @@ msgid "Confirm new password"
 msgstr ""
 
 msgid "Core properties"
+msgstr ""
+
+msgid "Create"
 msgstr ""
 
 msgid "Create new"
@@ -356,9 +362,6 @@ msgstr ""
 msgid "Number of updated resources"
 msgstr ""
 
-msgid "Object Types"
-msgstr ""
-
 msgid "Object saved"
 msgstr ""
 
@@ -423,9 +426,6 @@ msgid "Preferences and Tools"
 msgstr ""
 
 msgid "Profiles"
-msgstr ""
-
-msgid "Properties"
 msgstr ""
 
 msgid "Property types"
@@ -827,7 +827,7 @@ msgid "version by"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/history/history-info.js:12
-msgid "on"
+msgid "date"
 msgstr ""
 
 #. *
