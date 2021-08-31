@@ -244,14 +244,6 @@ class AppController extends Controller
                 return ['name' => $category];
             }, $data['categories']);
         }
-
-        // locked
-        $locked = (string)Hash::get($data, 'locked');
-        if ($locked === '1') {
-            unset($data['status']);
-            unset($data['uname']);
-            unset($data['locked']);
-        }
     }
 
     /**

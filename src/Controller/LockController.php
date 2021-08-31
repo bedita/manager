@@ -1,8 +1,19 @@
 <?php
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2021 ChannelWeb Srl, Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
+use Psr\Log\LogLevel;
 
 /**
  * Lock Controller
@@ -45,14 +56,13 @@ class LockController extends AppController
         $data = compact('id', 'type', 'meta');
         $payload = json_encode(compact('data'));
         try {
-            $this->apiClient = ApiClientProvider::getApiClient();
             $this->apiClient->patch(
                 sprintf('/%s/%s', $type, $id),
                 $payload,
                 ['Content-Type' => 'application/json']
             );
         } catch (BEditaClientException $ex) {
-            $this->loadComponent('App.Flash', ['clear' => true]);
+            $this->log($ex, LogLevel::ERROR);
             $this->Flash->error(__($ex->getMessage()));
         }
     }
