@@ -66,6 +66,7 @@ class PermsHelperTest extends TestCase
             [
                 false,
                 'canDelete',
+                ['type' => 'documents', 'meta' => ['locked' => true]]
             ],
             [
                 true,
@@ -89,16 +90,20 @@ class PermsHelperTest extends TestCase
      *
      * @param bool $expected Expected result
      * @param string $method Helper method
-     * @param string $module Module tested
+     * @param array|string $arg The argument for function
      * @return void
      *
      * @dataProvider isAllowedProvider()
      * @covers ::isAllowed()
      * @covers ::initialize()
+     * @covers ::canDelete()
+     * @covers ::canRead()
+     * @covers ::canCreate()
+     * @covers ::canSave()
      */
-    public function testIsAllowed(bool $expected, string $method, string $module = null): void
+    public function testIsAllowed(bool $expected, string $method, $arg = null): void
     {
-        $result = $this->Perms->{$method}($module);
+        $result = $this->Perms->{$method}($arg);
         static::assertEquals($expected, $result);
     }
 
@@ -156,7 +161,11 @@ class PermsHelperTest extends TestCase
      */
     public function testCanDelete(): void
     {
-        $result = $this->Perms->canDelete();
+        $document = [
+            'type' => 'documents',
+            'meta' => ['locked' => true],
+        ];
+        $result = $this->Perms->canDelete($document);
         static::assertFalse($result);
     }
 }
