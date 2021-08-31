@@ -3,20 +3,12 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Controller\Controller;
 
 /**
  * Lock Controller
  */
-class LockController extends Controller
+class LockController extends AppController
 {
-    /**
-     * BEdita4 API client
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    protected $apiClient = null;
-
     /**
      * Add lock
      *
@@ -42,20 +34,21 @@ class LockController extends Controller
     /**
      * Perform lock/unlock on an object.
      *
-     * @param bool $val The value, true or false
+     * @param bool $locked The value, true or false
      * @return void
      */
-    protected function lock(bool $val): void
+    protected function lock(bool $locked): void
     {
         $type = $this->request->getParam('object_type');
         $id = $this->request->getParam('id');
-        $meta = ['locked' => $val];
+        $meta = compact('locked');
         $data = compact('id', 'type', 'meta');
+        $payload = json_encode(compact('data'));
         try {
             $this->apiClient = ApiClientProvider::getApiClient();
             $this->apiClient->patch(
                 sprintf('/%s/%s', $type, $id),
-                json_encode($data),
+                $payload,
                 ['Content-Type' => 'application/json']
             );
         } catch (BEditaClientException $ex) {
