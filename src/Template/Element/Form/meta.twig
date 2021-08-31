@@ -10,7 +10,7 @@
             <h2>{{ __('Metadata') }}</h2>
         </header>
 
-        <div v-show="isOpen" class="tab-container">
+        <div v-show="isOpen && !isLoading" class="tab-container">
             <table>
                 <tbody>
                     <tr>

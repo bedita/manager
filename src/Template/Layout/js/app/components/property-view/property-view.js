@@ -71,6 +71,7 @@ export default {
             isLoading: false,
             totalObjects: 0,
             dataList: parseInt(this.uploadableNum) == 0,
+            userInfoLoaded: false,
         }
     },
 
@@ -86,7 +87,7 @@ export default {
         }
 
         // load user info in meta fields (created_by and modified_by )
-        if (this.tabName === 'meta') {
+        if (this.tabName === 'meta' && this.isOpen) {
             await this.loadInfoUsers();
         }
     },
@@ -95,6 +96,11 @@ export default {
         tabOpen() {
             this.isOpen = this.tabOpen;
         },
+        isOpen() {
+            if (this.isOpen && !this.userInfoLoaded) {
+                this.loadInfoUsers();
+            }
+        }
     },
 
     methods: {
@@ -150,10 +156,12 @@ export default {
             }
         },
         async loadInfoUsers() {
+            this.isLoading = true;
+
             const creatorId = this.object?.meta?.created_by;
             const modifierId = this.object?.meta?.modified_by;
             const usersId = [creatorId, modifierId];
-            const userRes = await fetch(`${API_URL}api/users?filter[id]=${usersId.join(',')}`, API_OPTIONS);
+            const userRes = await fetch(`${API_URL}api/users?filter[id]=${usersId.join(',')}&fields[users]=name,surname,username`, API_OPTIONS);
             const userJson = await userRes.json();
             const users = userJson.data;
 
@@ -161,7 +169,7 @@ export default {
                 const href = `${BEDITA.base}/view/${user.id}`;
                 const userInfo = (user.attributes.name  != undefined || user.attributes.surname != undefined) 
                         ? user.attributes.name + ' ' + user.attributes.surname
-                        : user.attributes.uname;
+                        : user.attributes.username;
 
                 // using == because user.id String and creatorById Number
                 if(user.id == creatorId && userInfo!= undefined) {
@@ -172,6 +180,9 @@ export default {
                     document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                 }
             });
+
+            this.isLoading = false;
+            this.userInfoLoaded = true;
         }
     }
 }
