@@ -18,6 +18,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Core\Configure;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
@@ -42,6 +43,16 @@ use Cake\Utility\Inflector;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
+
+if (Configure::read('Maintenance')) {
+    $routes->connect(
+        '/*',
+        ['controller' => 'CourtesyPage', 'action' => 'index'],
+        ['_name' => 'courtesypage']
+    );
+
+    return;
+}
 
 Router::scope('/', function (RouteBuilder $routes) {
 
@@ -75,6 +86,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Dashboard', 'action' => 'index'],
         ['_name' => 'dashboard']
     );
+    $routes->connect(
+        '/dashboard/messages',
+        ['controller' => 'Dashboard', 'action' => 'messages'],
+        ['_name' => 'dashboard:messages']
+    );
 
     // Profile.
     $routes->connect(
@@ -91,25 +107,40 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Model.
     Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
-        foreach (['object_types', 'property_types', 'relations'] as $controller) {
+        foreach (['object_types', 'property_types', 'relations', 'categories'] as $controller) {
             // Routes connected here are prefixed with '/model'
             $name = Inflector::camelize($controller);
-            $routes->connect(
+            $routes->get(
                 "/$controller",
                 ['controller' => $name, 'action' => 'index'],
-                ['_name' => 'list:' . $controller]
+                'list:' . $controller
             );
-            $routes->connect(
-                "/$controller/:id",
+
+            $routes->get(
+                "/$controller/view/:id",
                 ['controller' => $name, 'action' => 'view'],
-                ['_name' => 'view:' . $controller, 'pass' => ['id']]
-            );
-            $routes->connect(
+                'view:' . $controller
+            )->setPass(['id']);
+
+            $routes->post(
                 "/$controller/save",
                 ['controller' => $name, 'action' => 'save'],
-                ['_name' => 'save:' . $controller, 'pass' => ['id']]
+                'save:' . $controller
             );
+
+            $routes->post(
+                "/$controller/remove/:id",
+                ['controller' => $name, 'action' => 'remove'],
+                'remove:' . $controller
+            )->setPass(['id']);
         }
+
+        // export project model
+        $routes->get(
+            '/export',
+            ['controller' => 'Export', 'action' => 'model'],
+            'export'
+        );
     });
 
     // Import.
@@ -216,19 +247,19 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     // Relations ...
     $routes->connect(
-        '/:object_type/view/:id/relatedJson/:relation',
-        ['controller' => 'Modules', 'action' => 'relatedJson'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:relatedJson']
+        '/:object_type/view/:id/related/:relation',
+        ['controller' => 'Modules', 'action' => 'related'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:related']
     );
     $routes->connect(
-        '/:object_type/view/:id/relationshipsJson/:relation',
-        ['controller' => 'Modules', 'action' => 'relationshipsJson'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:relationshipsJson']
+        '/:object_type/view/:id/relationships/:relation',
+        ['controller' => 'Modules', 'action' => 'relationships'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:relationships']
     );
     $routes->connect(
-        '/:object_type/view/:id/resourcesJson/:relation',
-        ['controller' => 'Modules', 'action' => 'resourcesJson'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:resourcesJson']
+        '/:object_type/view/:id/resources/:relation',
+        ['controller' => 'Modules', 'action' => 'resources'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:resources']
     );
     $routes->connect(
         '/:object_type/view/:id/relationData/:relation',
@@ -239,11 +270,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/save',
         ['controller' => 'Modules', 'action' => 'save'],
         ['_name' => 'modules:save']
-    );
-    $routes->connect(
-        '/:object_type/saveJson',
-        ['controller' => 'Modules', 'action' => 'saveJson'],
-        ['_name' => 'modules:saveJson']
     );
     $routes->connect(
         '/:object_type/clone/:id',

@@ -27,7 +27,7 @@ export default {
             <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" />
         </div>
         <div v-if="locations" class="is-flex mt-1">
-            <button @click.prevent @click="onAddNew"><: t('add new') :></button>
+            <button @click.prevent @click="onAddNew">${t`add new`}</button>
         </div>
     </div>`,
 
@@ -44,7 +44,7 @@ export default {
     },
 
     async created() {
-        const requestUrl = `${window.location.href}/relatedJson/${this.relationName}`;
+        const requestUrl = `${window.location.href}/related/${this.relationName}`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
         // add params for location that does not have them

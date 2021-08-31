@@ -44,6 +44,7 @@ export default {
             this.isVisible = !this.isVisible;
             setTimeout(() => {
                 this.$refs.flashMessagesContainer.remove();
+                window._vueInstance.$emit('flash-message:closed');
             }, this.waitPanelAnimation * 1000);
         },
     },

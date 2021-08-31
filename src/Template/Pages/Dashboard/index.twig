@@ -6,7 +6,7 @@
         <section class="dashboard-section">
             <div class="dashboard-items">
             {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders', 'publications']) %}
-                {% set title = __(module.label|default(name)|humanize) %}
+                {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
                 {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
                 {% if module.hints.multiple_types %}
                     {% set class = class ~ ' icon-th-large-1' %}
@@ -26,7 +26,7 @@
         </section>
 
         <section class="dashboard-section">
-        
+
             {# <header>
                 <h2>{{ __('Preferences and Tools') }}</h2>
             </header> #}
@@ -49,9 +49,9 @@
                     { '_name': 'modules:list', 'object_type': 'objects' },
                     { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
 
-                {# 
+                {#
                 <a href="#" class="dashboard-item has-background-module-categories icon-list-1">{{ __('All categories') }}</a>
-                <a href="#" class="dashboard-item has-background-module-tags icon-tag" disabled>{{ __('All tags') }}</a> 
+                <a href="#" class="dashboard-item has-background-module-tags icon-tag" disabled>{{ __('All tags') }}</a>
                 #}
 
             </div>
@@ -59,7 +59,7 @@
         </section>
 
         <section class="dashboard-section">
-        
+
             <header>
                 <h2>{{ __('Preferences and Tools') }}</h2>
             </header>
@@ -77,7 +77,7 @@
                         {'_name': 'modules:list', 'object_type': 'users'},
                         {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
                 {% endif %}
-                
+
                 {{ Html.link(__('User Profile'),
                     { '_name': 'user_profile:view' },
                     { 'title': __('User Profile'), 'class': 'dashboard-item has-background-black icon-user' } )|raw }}
@@ -130,7 +130,7 @@
                 </nav>
 
             </section>
-            
+
         </div>
 
     </div>
