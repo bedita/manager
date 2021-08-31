@@ -246,11 +246,12 @@ class AppController extends Controller
         }
 
         // locked
-        if ($data['locked'] === '1') {
+        $locked = (string)Hash::get($data, 'locked');
+        if ($locked === '1') {
             unset($data['status']);
             unset($data['uname']);
+            unset($data['locked']);
         }
-        unset($data['locked']);
     }
 
     /**
