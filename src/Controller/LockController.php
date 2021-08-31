@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
 /**
@@ -23,23 +24,25 @@ class LockController extends AppController
     /**
      * Add lock
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
-    public function add(): void
+    public function add(): ?Response
     {
         $this->lock(true);
-        $this->redirect($this->referer());
+
+        return $this->redirect($this->referer());
     }
 
     /**
      * Remove lock
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
-    public function remove(): void
+    public function remove(): ?Response
     {
         $this->lock(false);
-        $this->redirect($this->referer());
+
+        return $this->redirect($this->referer());
     }
 
     /**
