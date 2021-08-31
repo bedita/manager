@@ -28,6 +28,25 @@ use Cake\View\View;
  */
 class LinkHelperTest extends TestCase
 {
+    /**
+     * Test `baseUrl`
+     *
+     * @return void
+     * @covers ::baseUrl()
+     */
+    public function testBaseUrl(): void
+    {
+        $expected = 'http://localhost';
+        $link = new LinkHelper(new View(null, null, null, []));
+        $link->webBaseUrl = 'http://localhost:80';
+        $actual = $link->baseUrl();
+        static::assertEquals($expected, $actual);
+
+        $expected = 'http://something';
+        $link->webBaseUrl = $expected;
+        $actual = $link->baseUrl();
+        static::assertEquals($expected, $actual);
+    }
 
     /**
      * Data provider for `testFromAPI` test case.
