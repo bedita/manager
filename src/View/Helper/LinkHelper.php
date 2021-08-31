@@ -79,6 +79,7 @@ class LinkHelper extends Helper
         if (str_ends_with($this->webBaseUrl, ':80')) {
             return substr($this->webBaseUrl, 0, strpos($this->webBaseUrl, ':80'));
         }
+
         return $this->webBaseUrl;
     }
 
