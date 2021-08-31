@@ -123,7 +123,6 @@
                         {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
                         {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                     )) %}
-                    {{ Form.hidden('locked', {'value': object.meta.locked})|raw }}
                 {% else %}
                     {% do _view.append('module-buttons', Html.link(
                         __('Lock'),
