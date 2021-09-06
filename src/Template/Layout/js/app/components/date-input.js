@@ -109,7 +109,7 @@ export default {
                         const date = new Date(dateObj.getTime());
                         date.setHours(12);
 
-                        return date.toISOString();
+                        return date.toISOString().split('T')[0];
                     }
 
                     return dateObj.toISOString();
