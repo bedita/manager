@@ -1,4 +1,5 @@
 {% do _view.assign('title', __('Translations')) %}
+{% set languages = config('I18n.languages') %}
 
 {% element 'Modules/index_header' { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hideFilter': true } %}
 
@@ -15,8 +16,11 @@
                     <nav class="table-header has-border-module-translations">
                         <div>{{ __('Translation') }}</div>
                         <div>{{ __('Translated object') }}</div>
+                        <div>{{ __('From') }}</div>
+                        <div>{{ __('To') }}</div>
                         <div>{{ __('Status') }}</div>
                         <div>{{ __('Modified') }}</div>
+                        <div>{{ __('Id') }}</div>
                         <div></div>
                     </nav>
                 {% endif %}
@@ -31,13 +35,24 @@
                     <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}
                         class="table-row object-status-{{ object.attributes.status }}">
                         <div class="narrow">
-                            {{ object.id }} [{{ object.attributes.lang }}]
+                            {{ object.translated_object.attributes.title }}
                         </div>
                         <div class="narrow">
-                            {{ object.translated_object.attributes.title }} [{{ object.translated_object.attributes.lang }}]
+                            {{ object.translated_object.attributes.title }}
+                        </div>
+                        <div class="narrow">
+                            {% if object.translated_object.attributes.lang %}
+                                {{ languages[object.translated_object.attributes.lang] }}
+                            {% endif %}
+                        </div>
+                        <div class="narrow">
+                            {% if object.attributes.lang %}
+                                {{ languages[object.attributes.lang] }}
+                            {% endif %}
                         </div>
                         <div class="narrow">{{ __(object.attributes.status) }}</div>
                         <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+                        <div class="narrow">{{ object.id }}</div>
                         <div class="buttons-cell narrow">
                             {% if Perms.canRead(object.type) %}
                                 <button
