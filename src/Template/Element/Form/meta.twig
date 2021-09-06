@@ -1,7 +1,7 @@
 {% set meta = (object) ? object.meta : resource.meta %}
 
 {% if meta %}
-<property-view inline-template :tab-open="tabsOpen" tab-name="meta">
+<property-view inline-template :tab-open="tabsOpen" tab-name="meta" :object="object">
     <section class="fieldset">
 
         <header @click.prevent="toggleVisibility()"
@@ -10,7 +10,7 @@
             <h2>{{ __('Metadata') }}</h2>
         </header>
 
-        <div v-show="isOpen" class="tab-container">
+        <div v-show="isOpen && !isLoading" class="tab-container">
             <table>
                 <tbody>
                     <tr>
@@ -20,7 +20,7 @@
                     {% for key, val in meta %}
                         <tr>
                             <th>{{ key }}:</th>
-                            <td>{{ Schema.format(val, schema.properties[key]) }}</td>
+                            <td name="{{ key }}">{{ Schema.format(val, schema.properties[key]) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
