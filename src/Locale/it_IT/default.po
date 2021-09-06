@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-08-30 10:19:25 \n"
+"POT-Creation-Date: 2021-09-06 14:15:26 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -721,15 +721,15 @@ msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 msgid "copy"
 msgstr "copia"
 
-#: src/Template/Layout/js/app/app.js:477
+#: src/Template/Layout/js/app/app.js:482
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
 
-#: src/Template/Layout/js/app/app.js:479
+#: src/Template/Layout/js/app/app.js:484
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/app.js:487
+#: src/Template/Layout/js/app/app.js:492
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
 #: src/Template/Layout/js/app/pages/modules/index.js:144
@@ -737,7 +737,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 msgid "yes, proceed"
 msgstr "sì, prosegui"
 
-#: src/Template/Layout/js/app/app.js:496
+#: src/Template/Layout/js/app/app.js:501
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
@@ -788,6 +788,14 @@ msgstr "Annulla"
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:68
+msgid "edit"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:81
+msgid "Menu"
+msgstr ""
+
 #: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
@@ -796,7 +804,7 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr "Titolo"
@@ -805,7 +813,7 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr "Indirizzo"
@@ -814,7 +822,7 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -826,7 +834,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr "aggiungi nuovo"
@@ -841,14 +849,14 @@ msgstr "data"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 #: src/Template/Layout/js/app/components/history/history.js:19
 msgid "by"
 msgstr "di"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 #: src/Template/Layout/js/app/components/history/history.js:29
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
