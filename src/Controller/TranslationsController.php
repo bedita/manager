@@ -34,7 +34,7 @@ class TranslationsController extends ModulesController
 
         parent::index();
         $objects = (array)$this->viewVars['objects'];
-        $ids = Hash::extract($objects, '{n}.attributes.object_id');
+        $ids = (array)Hash::extract($objects, '{n}.attributes.object_id');
         if (empty($ids)) {
             return null;
         }
