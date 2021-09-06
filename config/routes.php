@@ -231,11 +231,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'translations:list']
     );
     $routes->connect(
-        '/translations/view/:id',
-        ['controller' => 'Translations', 'action' => 'view'],
-        ['pass' => ['id'], '_name' => 'translations:view']
-    );
-    $routes->connect(
         '/:object_type/translation/save',
         ['controller' => 'Translations', 'action' => 'save'],
         ['_name' => 'translations:save']
