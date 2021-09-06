@@ -1,11 +1,3 @@
-const API_URL = new URL(BEDITA.base).pathname;
-const API_OPTIONS = {
-    credentials: 'same-origin',
-    headers: {
-        'accept': 'application/json',
-    }
-};
-
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
@@ -20,6 +12,17 @@ const API_OPTIONS = {
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
+
+import { t } from 'ttag';
+
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
 export default {
     name: 'tree-view',
 
