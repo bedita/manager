@@ -18,6 +18,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
@@ -94,8 +95,24 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `add` method
      *
-     * @covers ::add()
+     * @covers ::index()
+     * @return void
+     */
+    public function testIndex(): void
+    {
+        $this->setupController();
+        $this->controller->index();
+        $objects = $this->controller->viewVars['objects'];
+        static::assertNotEmpty($objects);
+        // check objects contain translated_object key and data
+        $translated = Hash::extract($objects, '{n}.translated_object');
+        static::assertNotEmpty($translated);
+    }
+
+    /**
+     * Test `add` method
      *
+     * @covers ::add()
      * @return void
      */
     public function testAdd(): void
@@ -128,7 +145,6 @@ class TranslationsControllerTest extends TestCase
      * Test `edit` method
      *
      * @covers ::edit()
-     *
      * @return void
      */
     public function testEdit(): void
@@ -162,7 +178,6 @@ class TranslationsControllerTest extends TestCase
      * Test `save` method
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSave(): void
@@ -283,7 +298,6 @@ class TranslationsControllerTest extends TestCase
      * Test `delete` method
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDelete(): void
@@ -407,7 +421,7 @@ class TranslationsControllerTest extends TestCase
     /**
      * Get test object id
      *
-     * @return void
+     * @return string|int
      */
     private function getTestId()
     {
@@ -420,7 +434,7 @@ class TranslationsControllerTest extends TestCase
     /**
      * Get an object for test purposes
      *
-     * @return array
+     * @return array|null
      */
     private function getTestObject()
     {

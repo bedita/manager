@@ -1,0 +1,56 @@
+{% do _view.assign('title', __('Translations')) %}
+
+{% set ids = Array.extract(objects, '{*}.id') %}
+<modules-index inline-template ids='{{ ids|json_encode }}'>
+
+    <div class="module-index">
+
+        <div class="table-container">
+
+            <div class="list-objects">
+
+                {% if objects %}
+                    <nav class="table-header has-border-module-translations">
+                        <div>{{ __('Translation') }}</div>
+                        <div>{{ __('Translated object') }}</div>
+                        <div>{{ __('Status') }}</div>
+                        <div>{{ __('Modified') }}</div>
+                        <div></div>
+                    </nav>
+                {% endif %}
+
+                {% for object in objects %}
+                    {% set url = Url.build({
+                        '_name': 'translations:edit',
+                        'object_type': object.translated_object.type,
+                        'id': object.attributes.object_id,
+                        'lang': object.attributes.lang
+                    }, true) %}
+                    <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}
+                        class="table-row object-status-{{ object.attributes.status }}">
+                        <div class="narrow">
+                            {{ object.id }} [{{ object.attributes.lang }}]
+                        </div>
+                        <div class="narrow">
+                            {{ object.translated_object.attributes.title }} [{{ object.translated_object.attributes.lang }}]
+                        </div>
+                        <div class="narrow">{{ __(object.attributes.status) }}</div>
+                        <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
+                        <div class="buttons-cell narrow">
+                            {% if Perms.canRead(object.type) %}
+                                <button
+                                    title="{{ __('Edit') }} {{ object.attributes.title }}"
+                                    class="button button-text-white is-width-auto">{{ __('Edit') }}</button>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% else %}
+                    {{ __('No items found') }}
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+</modules-index>

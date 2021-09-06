@@ -203,7 +203,7 @@ class ModulesComponent extends Component
                 return $data + compact('name');
             })
             ->reject(function (array $data) {
-                return Hash::get($data, 'hints.object_type') !== true && Hash::get($data, 'name') !== 'trash';
+                return Hash::get($data, 'hints.object_type') !== true && !in_array(Hash::get($data, 'name'), ['trash', 'translations']);
             })
             ->toList();
 
