@@ -39,6 +39,9 @@ export const RelationSchemaMixin = {
                 left: this.relationData.left,
                 right: this.relationData.right,
             }
+            if (this.relationData.attributes.name === 'children') {
+                this.relationTypes.right = this.relationTypes.right.filter((type) => type !== 'folders');
+            }
 
             this.isRelationWithMedia = this.checkForMediaTypes(this.relationTypes.right);
             return this.relationData;
