@@ -93,7 +93,23 @@ class TranslationsControllerTest extends TestCase
     }
 
     /**
-     * Test `add` method
+     * Test `index` method, no objects
+     *
+     * @covers ::index()
+     * @return void
+     */
+    public function testIndexNoObjects(): void
+    {
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
+        $this->setupApi();
+        $this->controller->index();
+        $objects = $this->controller->viewVars['objects'];
+        static::assertEmpty($objects);
+    }
+
+    /**
+     * Test `index` method
      *
      * @covers ::index()
      * @return void
