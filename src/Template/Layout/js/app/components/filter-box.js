@@ -169,7 +169,7 @@ export default {
             }
             const label = this.ucfirst(this.objectsLabel);
 
-            return t`${label}`;
+            return label;
         },
 
         /**
