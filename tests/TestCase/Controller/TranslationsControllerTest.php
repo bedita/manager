@@ -87,6 +87,7 @@ class TranslationsControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new TranslationsController($request);
+        $this->controller->objectType = 'documents';
         $this->setupApi();
         $this->createTestObject();
     }
