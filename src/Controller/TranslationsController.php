@@ -44,6 +44,7 @@ class TranslationsController extends ModulesController
     public function add($id): ?Response
     {
         $this->request->allowMethod(['get']);
+        $this->objectType = substr($this->request->here, 1, strpos(substr($this->request->here, 1), '/'));
 
         try {
             $response = $this->apiClient->getObject($id, $this->objectType);
@@ -75,6 +76,7 @@ class TranslationsController extends ModulesController
     public function edit($id, $lang): ?Response
     {
         $this->request->allowMethod(['get']);
+        $this->objectType = substr($this->request->here, 1, strpos(substr($this->request->here, 1), '/'));
 
         $translation = [];
         try {
