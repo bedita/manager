@@ -417,6 +417,35 @@ class TranslationsControllerTest extends TestCase
     }
 
     /**
+     * Test `typeFromUrl` method.
+     *
+     * @return void
+     * @covers ::typeFromUrl()
+     */
+    public function testTypeFromUrl(): void
+    {
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $request = $request->withAttribute('here', '/documents/1/translation/lang');
+        $this->controller = new TranslationsController($request);
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('typeFromUrl');
+        $method->setAccessible(true);
+        $expected = 'documents';
+        $actual = $method->invokeArgs($this->controller, []);
+        static::assertEquals($expected, $actual);
+
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
+        $this->controller->objectType = 'dummies';
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('typeFromUrl');
+        $method->setAccessible(true);
+        $expected = 'dummies';
+        $actual = $method->invokeArgs($this->controller, []);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Get test object id
      *
      * @return string|int

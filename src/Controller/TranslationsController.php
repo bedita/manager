@@ -44,7 +44,7 @@ class TranslationsController extends ModulesController
     public function add($id): ?Response
     {
         $this->request->allowMethod(['get']);
-        $this->objectType = substr($this->request->here, 1, strpos(substr($this->request->here, 1), '/'));
+        $this->objectType = $this->typeFromUrl();
 
         try {
             $response = $this->apiClient->getObject($id, $this->objectType);
@@ -76,7 +76,7 @@ class TranslationsController extends ModulesController
     public function edit($id, $lang): ?Response
     {
         $this->request->allowMethod(['get']);
-        $this->objectType = substr($this->request->here, 1, strpos(substr($this->request->here, 1), '/'));
+        $this->objectType = $this->typeFromUrl();
 
         $translation = [];
         try {
@@ -198,5 +198,20 @@ class TranslationsController extends ModulesController
 
         // redir to main object view
         return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
+    }
+
+    /**
+     * Get type from url, if objectType is 'translations'
+     *
+     * @return string
+     */
+    protected function typeFromUrl(): string
+    {
+        if ($this->objectType !== 'translations') {
+            return $this->objectType;
+        }
+        $here = (string)$this->request->getAttribute('here');
+
+        return substr($here, 1, strpos(substr($here, 1), '/'));
     }
 }
