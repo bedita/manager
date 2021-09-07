@@ -117,6 +117,7 @@ class TranslationsController extends ModulesController
     public function save(): void
     {
         $this->request->allowMethod(['post']);
+        $this->objectType = $this->typeFromUrl();
         $requestData = $this->prepareRequest($this->objectType);
         $objectId = $requestData['object_id'];
         if (!empty($requestData['id'])) {
@@ -173,6 +174,7 @@ class TranslationsController extends ModulesController
     public function delete(): Response
     {
         $this->request->allowMethod(['post']);
+        $this->objectType = $this->typeFromUrl();
         $requestData = $this->request->getData();
         try {
             if (empty($requestData[0])) {
