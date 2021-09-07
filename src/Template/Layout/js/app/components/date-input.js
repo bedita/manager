@@ -102,16 +102,17 @@ export default {
                 });
             }
             options.formatDate = (dateObj, format) => {
-                // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
+                // this value goes to the hidden input which will be saved,
+                // needs to be a correct ISO 8601 string if a datetime, or a string
+                // in "YYYY-MM-DD" format in case of simple date
+                if (!element.attributes.time && !element.attributes.daterange) {
+                    const date = new Date(dateObj.getTime());
+                    // force hours to 12 to avoid date change
+                    date.setHours(12);
+
+                    return date.toISOString().split('T')[0];
+                }
                 if (format === 'Z') {
-                    // date? force hours to 12. datetime handles hours directly
-                    if (!element.attributes.time && !element.attributes.daterange) {
-                        const date = new Date(dateObj.getTime());
-                        date.setHours(12);
-
-                        return date.toISOString().split('T')[0];
-                    }
-
                     return dateObj.toISOString();
                 }
                 return Intl.DateTimeFormat(LOCALE, dateFormatOptions).format(dateObj);
