@@ -99,7 +99,8 @@ class TranslationsControllerTest extends TestCase
      */
     public function testInitialize(): void
     {
-        $this->setupController();
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
         $actual = (string)$this->controller->request->getParam('object_type');
         $expected = 'translations';
         static::assertEquals($expected, $actual);
