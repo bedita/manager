@@ -29,6 +29,11 @@ class QueryComponent extends Component
     {
         $query = (array)$this->getController()->getRequest()->getQueryParams();
 
+        // set include, if set in config
+        if ($this->getConfig('include') != null) {
+            $query['include'] = (string)$this->getConfig('include');
+        }
+
         // return URL query string if `filter`, `sort`, or `q` are set
         $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
         if (!empty($subQuery)) {
@@ -37,11 +42,6 @@ class QueryComponent extends Component
 
         // set sort order: use `currentModule.sort` or default '-id'
         $query['sort'] = (string)Hash::get($this->getController()->viewVars, 'currentModule.sort', '-id');
-
-        // set include, if set in config
-        if ($this->getConfig('include') != null) {
-            $query['include'] = (string)$this->getConfig('include');
-        }
 
         return $query;
     }

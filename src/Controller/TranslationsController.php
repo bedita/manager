@@ -30,7 +30,7 @@ class TranslationsController extends ModulesController
      */
     public function initialize(): void
     {
-        $this->request = $this->request->withParam('object_type', 'translations'); //currentModule
+        $this->request = $this->request->withParam('object_type', 'translations');
         parent::initialize();
         $this->Query->setConfig('include', 'object');
     }
