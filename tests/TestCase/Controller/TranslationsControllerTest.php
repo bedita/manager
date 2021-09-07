@@ -18,7 +18,6 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
@@ -93,36 +92,17 @@ class TranslationsControllerTest extends TestCase
     }
 
     /**
-     * Test `index` method, no objects
+     * Test `initialize` method
      *
-     * @covers ::index()
+     * @covers ::initialize()
      * @return void
      */
-    public function testIndexNoObjects(): void
-    {
-        $request = new ServerRequest($this->defaultRequestConfig);
-        $this->controller = new TranslationsController($request);
-        $this->setupApi();
-        $this->controller->index();
-        $objects = $this->controller->viewVars['objects'];
-        static::assertEmpty($objects);
-    }
-
-    /**
-     * Test `index` method
-     *
-     * @covers ::index()
-     * @return void
-     */
-    public function testIndex(): void
+    public function testInitialize(): void
     {
         $this->setupController();
-        $this->controller->index();
-        $objects = $this->controller->viewVars['objects'];
-        static::assertNotEmpty($objects);
-        // check objects contain translated_object key and data
-        $translated = Hash::extract($objects, '{n}.translated_object');
-        static::assertNotEmpty($translated);
+        $actual = (string)$this->controller->request->getParam('object_type');
+        $expected = 'translations';
+        static::assertEquals($expected, $actual);
     }
 
     /**

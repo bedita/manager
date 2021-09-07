@@ -25,16 +25,17 @@
                     </nav>
                 {% endif %}
                 {% for object in objects %}
+                    {% set translated = object.relationships.object.data %}
                     {% set url = Url.build({
                         '_name': 'translations:edit',
-                        'object_type': object.translated_object.type,
+                        'object_type': translated.type,
                         'id': object.attributes.object_id,
                         'lang': object.attributes.lang
                     }, true) %}
                     {% set objectUrl = Url.build({
                             '_name': 'modules:view',
-                            'id': object.translated_object.id,
-                            'object_type': object.translated_object.type,
+                            'id': translated.id,
+                            'object_type': translated.type,
                     }, true) %}
                     <div class="table-row object-status-{{ object.attributes.status }}">
                         <div class="narrow">
@@ -43,14 +44,14 @@
                             </a>
                         </div>
                         <div class="narrow">
-                            <span class="tag has-background-module-{{ object.translated_object.type }}">{{ object.translated_object.type }}</span>
-                            <a {% if Perms.canRead(object.translated_object.type) %}href="{{ objectUrl }}"{% endif %}>
-                                    {{ object.translated_object.id }}
+                            <span class="tag has-background-module-{{ translated.type }}">{{ translated.type }}</span>
+                            <a {% if Perms.canRead(translated.type) %}href="{{ objectUrl }}"{% endif %}>
+                                    {{ translated.id }}
                             </a>
                         </div>
                         <div class="narrow">
-                            {% if object.translated_object.attributes.lang %}
-                                {{ languages[object.translated_object.attributes.lang] }}
+                            {% if translated.attributes.lang %}
+                                {{ languages[translated.attributes.lang] }}
                             {% endif %}
                         </div>
                         <div class="narrow">

@@ -38,6 +38,11 @@ class QueryComponent extends Component
         // set sort order: use `currentModule.sort` or default '-id'
         $query['sort'] = (string)Hash::get($this->getController()->viewVars, 'currentModule.sort', '-id');
 
+        // set include, if set in config
+        if ($this->getConfig('include') != null) {
+            $query['include'] = (string)$this->getConfig('include');
+        }
+
         return $query;
     }
 

@@ -28,27 +28,11 @@ class TranslationsController extends ModulesController
     /**
      * @inheritDoc
      */
-    public function index(): ?Response
+    public function initialize(): void
     {
-        $this->objectType = 'translations'; // not an object type, but this works as endpoint
-
-        parent::index();
-        $objects = (array)$this->viewVars['objects'];
-        $ids = (array)Hash::extract($objects, '{n}.attributes.object_id');
-        if (empty($ids)) {
-            return null;
-        }
-        $filter = ['id' => implode(',', $ids)];
-        $response = $this->apiClient->getObjects('objects', compact('filter'));
-        $map = Hash::combine($response['data'], '{n}.id', '{n}');
-        foreach ($objects as &$obj) {
-            $key = (string)Hash::get($obj, 'attributes.object_id');
-            $obj['translated_object'] = $map[$key];
-        }
-        $this->set('objects', $objects);
-        $this->set('currentModule', 'translations');
-
-        return null;
+        $this->request = $this->request->withParam('object_type', 'translations'); //currentModule
+        parent::initialize();
+        $this->Query->setConfig('include', 'object');
     }
 
     /**
