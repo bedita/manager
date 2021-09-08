@@ -54,12 +54,19 @@ class QueryComponentTest extends TestCase
     {
         return [
             'query filter' => [
-                ['filter' => ['gustavo' => true]],
-                ['filter' => ['gustavo' => true]],
+                ['filter' => ['gustavo' => true]], // query params
+                [], // config
+                ['filter' => ['gustavo' => true]], // expected
             ],
             'no query' => [
                 ['some' => ['thing' => 'else']],
+                [],
                 ['some' => ['thing' => 'else'], 'sort' => '-id'],
+            ],
+            'config include object' => [
+                [],
+                ['include' => 'object'],
+                ['sort' => '-id', 'include' => 'object'],
             ],
         ];
     }
@@ -71,7 +78,7 @@ class QueryComponentTest extends TestCase
      * @covers ::index()
      * @dataProvider indexProvider()
      */
-    public function testIndex(array $queryParams, array $expected): void
+    public function testIndex(array $queryParams, array $config, array $expected): void
     {
         $controller = new Controller(
             new ServerRequest(
@@ -85,6 +92,9 @@ class QueryComponentTest extends TestCase
         );
         $registry = $controller->components();
         $this->Query = $registry->load(QueryComponent::class);
+        foreach ($config as $key => $val) {
+            $this->Query->setConfig($key, $val);
+        }
         $actual = $this->Query->index();
         static::assertEquals($expected, $actual);
     }

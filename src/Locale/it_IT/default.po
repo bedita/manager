@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-08-30 10:19:25 \n"
+"POT-Creation-Date: 2021-09-06 12:53:28 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -314,6 +314,9 @@ msgstr "File di importazione mancante"
 msgid "Missing thumb url"
 msgstr "Url miniatura mancante"
 
+msgid "Modified"
+msgstr "Modificato"
+
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
@@ -532,6 +535,12 @@ msgstr "A"
 
 msgid "To date"
 msgstr "Alla data"
+
+msgid "Translated object"
+msgstr "Oggetto tradotto"
+
+msgid "Translation"
+msgstr "Traduzione"
 
 msgid "Translation(s) deleted"
 msgstr "Traduzione(i) rimossa(e)"
@@ -781,9 +790,21 @@ msgstr "Priorità"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: src/Template/Layout/js/app/components/filter-box.js:214
+#: src/Template/Layout/js/app/components/filter-box.js:168
+msgid "Items"
+msgstr "Elementi"
+
+#: src/Template/Layout/js/app/components/filter-box.js:228
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
+
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:68
+msgid "edit"
+msgstr "modifica"
+
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:81
+msgid "Menu"
+msgstr "Menù"
 
 #: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
 msgid "Error while creating new object."
