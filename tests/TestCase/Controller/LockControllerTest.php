@@ -142,7 +142,8 @@ class LockControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
         $method->setAccessible(true);
-        $method->invokeArgs($this->LockController, [true]);
-        $this->expectException('BEditaClientException');
+        $actual = $method->invokeArgs($this->LockController, [true]);
+        $expected = false;
+        static::assertEquals($expected, $actual);
     }
 }

@@ -49,9 +49,9 @@ class LockController extends AppController
      * Perform lock/unlock on an object.
      *
      * @param bool $locked The value, true or false
-     * @return void
+     * @return bool
      */
-    protected function lock(bool $locked): void
+    protected function lock(bool $locked): bool
     {
         $type = $this->request->getParam('object_type');
         $id = $this->request->getParam('id');
@@ -66,7 +66,11 @@ class LockController extends AppController
             );
         } catch (BEditaClientException $ex) {
             $this->log($ex, LogLevel::ERROR);
-            $this->Flash->error(__($ex->getMessage()));
+            $this->Flash->error(__('Error: %s', $ex->getMessage()));
+
+            return false;
         }
+
+        return true;
     }
 }
