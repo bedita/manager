@@ -108,20 +108,6 @@ class PermsHelperTest extends TestCase
     }
 
     /**
-     * Test `canLock` method.
-     *
-     * @return void
-     * @covers ::canLock()
-     */
-    public function testCanLock(): void
-    {
-        $actual = $this->Perms->canLock();
-        $expected = false;
-
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
      * Test `isAllowed` method with no current module perms.
      *
      * @return void
@@ -136,9 +122,24 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Test `canLock` method.
+     *
+     * @return void
+     * @covers ::canLock()
+     */
+    public function testCanLock(): void
+    {
+        $actual = $this->Perms->canLock();
+        $expected = false;
+
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `canCreate` method
      *
      * @return void
+     * @covers ::canCreate()
      */
     public function testCanCreate(): void
     {
@@ -150,6 +151,7 @@ class PermsHelperTest extends TestCase
      * Test `canRead` method
      *
      * @return void
+     * @covers ::canRead()
      */
     public function testCanRead(): void
     {
@@ -161,6 +163,7 @@ class PermsHelperTest extends TestCase
      * Test `canSave` method
      *
      * @return void
+     * @covers ::canSave()
      */
     public function testCanSave(): void
     {
@@ -172,6 +175,7 @@ class PermsHelperTest extends TestCase
      * Test `canDelete` method
      *
      * @return void
+     * @covers ::canDelete()
      */
     public function testCanDelete(): void
     {
