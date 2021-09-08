@@ -314,11 +314,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect(
         '/:object_type/:id/lock',
         ['controller' => 'Lock', 'action' => 'add'],
-        ['_name' => 'lock:add'],
+        ['_name' => 'lock:add']
     );
     $routes->connect(
         '/:object_type/:id/unlock',
         ['controller' => 'Lock', 'action' => 'remove'],
-        ['_name' => 'lock:remove'],
+        ['_name' => 'lock:remove']
     );
 });
