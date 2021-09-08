@@ -226,6 +226,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     // Translations
     $routes->connect(
+        '/translations',
+        ['controller' => 'Translations', 'action' => 'index'],
+        ['_name' => 'translations:list']
+    );
+    $routes->connect(
         '/:object_type/translation/save',
         ['controller' => 'Translations', 'action' => 'save'],
         ['_name' => 'translations:save']
