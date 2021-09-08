@@ -25,6 +25,14 @@
     }
 }
 
+.locked a {
+    position: relative;
+    display: flex;
+    height: $dashboard-item-height;
+    background-image: url('/img/iconLocked.png');
+    background-repeat:no-repeat;
+    background-position: center center;
+}
 
 .module-box-concurrent-editors a {
     position: relative;
@@ -59,7 +67,7 @@ ul.concurrent-editors {
     margin:0; padding:0;
     li {
         padding: .5rem 0 .5rem 0;
-        border-bottom: 1px solid $gray-600; 
+        border-bottom: 1px solid $gray-600;
     }
 }
 
