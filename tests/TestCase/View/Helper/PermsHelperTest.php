@@ -108,6 +108,20 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Test `canLock` method.
+     *
+     * @return void
+     * @covers ::canLock()
+     */
+    public function testCanLock(): void
+    {
+        $actual = $this->Perms->canLock();
+        $expected = false;
+
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `isAllowed` method with no current module perms.
      *
      * @return void
