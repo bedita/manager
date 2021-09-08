@@ -159,6 +159,20 @@ export default {
 
     methods: {
         /**
+         * Return translation of ucfirst label objectsLabel.
+         *
+         * @returns {String}
+         */
+        label() {
+            if (!this.objectsLabel) {
+                return t`Items`;
+            }
+            const label = this.ucfirst(this.objectsLabel);
+
+            return label;
+        },
+
+        /**
          * First char upper case for string.
          * @param {String} str The string
          * @returns

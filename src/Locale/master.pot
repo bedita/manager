@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-06 14:15:26 \n"
+"POT-Creation-Date: 2021-09-06 12:53:28 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -311,6 +311,9 @@ msgstr ""
 msgid "Missing thumb url"
 msgstr ""
 
+msgid "Modified"
+msgstr ""
+
 msgid "Module access not authorized"
 msgstr ""
 
@@ -528,6 +531,12 @@ msgid "To"
 msgstr ""
 
 msgid "To date"
+msgstr ""
+
+msgid "Translated object"
+msgstr ""
+
+msgid "Translation"
 msgstr ""
 
 msgid "Translation(s) deleted"
@@ -778,7 +787,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:214
+#: src/Template/Layout/js/app/components/filter-box.js:168
+msgid "Items"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/filter-box.js:228
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -798,7 +811,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr ""
@@ -807,7 +820,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr ""
@@ -816,7 +829,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -828,7 +841,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr ""
@@ -843,14 +856,14 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:19
 msgid "by"
 msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:29
 msgid "No History data found"
 msgstr ""

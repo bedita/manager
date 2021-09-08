@@ -377,6 +377,43 @@ class ModulesComponentTest extends TestCase
                     'supporto' => [],
                 ],
             ],
+            'ok translations' => [
+                [
+                    'bedita',
+                    'supporto',
+                    'gustavo',
+                    'translations',
+                ],
+                [
+                    'resources' => [
+                        [
+                            'name' => 'gustavo',
+                            'hints' => [
+                                'object_type' => true,
+                            ],
+                        ],
+                        [
+                            'name' => 'supporto',
+                            'hints' => [
+                                'object_type' => true,
+                            ],
+                        ],
+                        [
+                            'name' => 'bedita',
+                            'hints' => [
+                                'object_type' => true,
+                            ],
+                        ],
+                        [
+                            'name' => 'translations',
+                        ],
+                    ],
+                ],
+                [
+                    'bedita' => [],
+                    'supporto' => [],
+                ],
+            ],
             'client exception' => [
                 [],
                 new BEditaClientException('I am a client exception'),

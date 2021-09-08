@@ -685,7 +685,6 @@ return [
     //     ],
     // ],
 
-
     /**
      * Project data that can override data from `/home` API call
      * Currently only `name` is used

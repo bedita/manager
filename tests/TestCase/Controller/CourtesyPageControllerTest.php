@@ -17,6 +17,7 @@ class CourtesyPageControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
+     * @covers ::index()
      */
     public function testIndex(): void
     {

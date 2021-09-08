@@ -133,6 +133,10 @@
                 {'_name': 'translations:delete', 'object_type': objectType},
                 {'data': [{'id': translation.id, 'object_id': object.id, 'lang': translation.attributes.lang}]})) %}
         {% endif %}
+
+        {% set url = Url.build({'_name': 'translations:list'}, true) %}
+        {% set link = '<a href="' ~ url ~ '">' ~ __('Translations') ~ '</a>' %}
+        {% do _view.append('module-buttons', link) %}
         {{ Form.end()|raw }}
     </div>
 
