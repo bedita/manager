@@ -26,7 +26,7 @@
         "@trevoreyre/autocomplete-vue": "^2.2.0",
         "abortcontroller-polyfill": "^1.7.1",
         "autosize": "^4.0.2",
-        "axios": "^0.21.1",
+        "axios": "^0.21.2",
         "codemirror": "^5.62.3",
         "deepmerge": "^2.2.1",
         "flatpickr": "^4.6.9",
