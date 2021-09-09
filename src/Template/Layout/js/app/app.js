@@ -176,6 +176,11 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         onFilterObjects(filter) {
+            // remove from query string filter `history_editor` if false
+            if (!filter.filter.history_editor) {
+                delete filter.filter.history_editor;
+            }
+
             this.urlFilterQuery = filter;
             this.page = '';
 
