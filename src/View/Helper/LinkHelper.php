@@ -76,7 +76,7 @@ class LinkHelper extends Helper
      */
     public function baseUrl(): string
     {
-        if (str_ends_with($this->webBaseUrl, ':80')) {
+        if (substr_compare($this->webBaseUrl, ':80', -strlen(':80')) === 0) {
             return substr($this->webBaseUrl, 0, strpos($this->webBaseUrl, ':80'));
         }
 
