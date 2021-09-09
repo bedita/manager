@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-06 12:53:28 \n"
+"POT-Creation-Date: 2021-09-09 13:39:14 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -194,6 +194,9 @@ msgstr "Errore "
 msgid "Error retrieving the requested content"
 msgstr "Errore nel caricamento del contenuto richiesto"
 
+msgid "Error: %s"
+msgstr "Errore: %s"
+
 msgid "Events"
 msgstr "Eventi"
 
@@ -286,6 +289,9 @@ msgstr "Tipi di sinistra"
 
 msgid "Locations"
 msgstr "Posizioni"
+
+msgid "Lock"
+msgstr "Blocca"
 
 msgid "Log out"
 msgstr "Esci"
@@ -574,6 +580,9 @@ msgstr "Nome univoco"
 
 msgid "Unknown upload error"
 msgstr "Errore sconosciuto durante caricamento"
+
+msgid "Unlock"
+msgstr "Sblocca"
 
 msgid "Untitled"
 msgstr "Senza titolo"
