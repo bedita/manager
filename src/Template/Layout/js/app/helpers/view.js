@@ -1,28 +1,16 @@
 export default {
     install (Vue) {
         Vue.prototype.$helpers = {
-
             /**
-            * Build view url using object ID
-            *
-            * @param {Number} objectId
-            *
-            * @return {String} url
-            */
-            buildViewUrl(objectId) {
-                return `${BEDITA.base}/view/${objectId}`;
-            },
-
-            /**
-            * Build view url usiong object type and ID
+            * helper function: build open view url
             *
             * @param {String} objectType
             * @param {Number} objectId
             *
             * @return {String} url
             */
-            buildViewUrlType(objectType, objectId) {
-                return `${BEDITA.base}/${objectType}/view/${objectId}`;
+            buildViewUrl(objectId) {
+                return `${BEDITA.base}/view/${objectId}`;
             },
 
             /**

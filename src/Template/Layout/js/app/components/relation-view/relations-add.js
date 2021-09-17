@@ -450,6 +450,18 @@ export default {
         },
 
         /**
+         * helper function: build open view url
+         *
+         * @param {String} objectType
+         * @param {Number} objectId
+         *
+         * @return {String} url
+         */
+        buildViewUrl(objectType, objectId) {
+            return `${window.location.protocol}/${window.location.host}/${objectType}/view/${objectId}`;
+        },
+
+        /**
          * set file, object type and placeholder
          *
          * @param {Event} event input file change event
