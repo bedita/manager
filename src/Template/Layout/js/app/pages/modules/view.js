@@ -1,4 +1,5 @@
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
+import parse_str from 'locutus/php/strings/parse_str.js';
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -47,13 +48,19 @@ export default {
             event.preventDefault();
             event.stopPropagation();
             const form = new FormData(event.target);
+            const data = {};
+            for (const entry of form.entries()) {
+                parse_str(entry.join('='), data);
+            }
+
             const action = event.target.getAttribute('action');
             const response = await fetch(`${action}Json`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 },
-                body: form,
+                body: JSON.stringify(data),
                 mode: 'same-origin',
                 credentials: 'same-origin',
                 redirect: 'manual',
