@@ -171,7 +171,7 @@ class AppController extends Controller
         if ($user) {
             $tokens = $this->apiClient->getTokens();
             if ($tokens && $user->get('tokens') !== $tokens) {
-                $data = compact('tokens') + $user->getOriginalData();
+                $data = compact('tokens') + (array)$user->getOriginalData();
                 $user = new Identity($data);
                 $this->Authentication->setIdentity($user);
             }
