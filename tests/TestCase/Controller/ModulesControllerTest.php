@@ -476,8 +476,11 @@ class ModulesControllerTest extends BaseControllerTest
         // do controller call
         $this->controller->save();
 
-        // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        // verify BEditaClientException
+        $error = $this->controller->viewVars['error'];
+        $actual = get_class($error);
+        $expected = get_class(new BEditaClientException(''));
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -510,8 +513,11 @@ class ModulesControllerTest extends BaseControllerTest
         // do controller call
         $this->controller->save();
 
-        // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        // verify BEditaClientException
+        $error = $this->controller->viewVars['error'];
+        $actual = get_class($error);
+        $expected = get_class(new BEditaClientException(''));
+        static::assertEquals($expected, $actual);
     }
 
     /**

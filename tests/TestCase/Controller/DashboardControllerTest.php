@@ -128,46 +128,6 @@ class DashboardControllerTest extends TestCase
     }
 
     /**
-     * Test `messages` method
-     *
-     * @covers ::messages()
-     *
-     * @return void
-     */
-    public function testMessages(): void
-    {
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-        ]);
-        $this->Dashboard->messages();
-        $response = $this->Dashboard->response;
-        static::assertEquals(200, $response->getStatusCode());
-    }
-
-    /**
-     * Test `messages` method for "MethodNotAllowed" case
-     *
-     * @covers ::messages()
-     *
-     * @return void
-     */
-    public function testMessagesMethodNotAllowed(): void
-    {
-        $notallowed = ['POST', 'DELETE', 'PATCH'];
-        foreach ($notallowed as $method) {
-            static::expectException('Cake\Http\Exception\MethodNotAllowedException');
-            $this->setupController([
-                'environment' => [
-                    'REQUEST_METHOD' => $method,
-                ],
-            ]);
-            $this->Dashboard->messages();
-        }
-    }
-
-    /**
      * Test `recentItems` method
      *
      * @covers ::recentItems()
