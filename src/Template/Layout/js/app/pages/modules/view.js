@@ -61,15 +61,10 @@ export default {
 
             if (response.ok) {
                 const json = await response.json();
-                if (json.error) {
-                    console.error('server responded with an error', json.error);
-
-                    return;
-                }
-
-                // clear form dirty state, to avoid alert message about unsaved changes before changing page
+                // clear form dirty state, to avoid alert message about unsaved changes when changing page
                 window._vueInstance.dataChanged.clear();
-                window.location = this.$helpers.buildViewUrl(json.data[0].id);
+                window.location.pathname = window.location.pathname.replace('/new', `/${json.data[0].id}`);
+                window.location.pathname = window.location.pathname.replace('/clone', `/view`);
 
                 return;
             }
