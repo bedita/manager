@@ -60,7 +60,7 @@ class DashboardController extends AppController
      */
     protected function recentItems(): array
     {
-        $user = $this->Auth->user();
+        $user = $this->Authentication->getIdentity();
         if (empty($user)) {
             return [];
         }

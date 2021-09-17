@@ -54,6 +54,11 @@
             'style': 'display: none'
         })|raw }}
 
+        {{ Form.control('remember_me', {
+            'type': 'checkbox',
+            'label': __('Remember me')
+        })|raw }}
+
         {{ Form.submit(__('Sign in'))|raw }}
 
         <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>

@@ -12,21 +12,31 @@
  */
 namespace App;
 
+use App\Authentication\Authenticator\CookieAuthenticator;
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
+use Cake\I18n\FrozenTime;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Routing\Router;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application class.
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Default plugin options
@@ -48,6 +58,7 @@ class Application extends BaseApplication
     {
         parent::bootstrap();
         $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
+        $this->addPlugin('Authentication');
     }
 
     /**
@@ -126,7 +137,13 @@ class Application extends BaseApplication
             ->add(new RoutingMiddleware($this))
 
             // Csrf Middleware
-            ->add($this->csrfMiddleware());
+            ->add($this->csrfMiddleware())
+
+            // Authentication middleware.
+            ->add(new AuthenticationMiddleware($this, [
+                'unauthenticatedRedirect' => '/login',
+                'queryParam' => 'redirect',
+            ]));
 
         return $middlewareQueue;
     }
@@ -169,5 +186,51 @@ class Application extends BaseApplication
             Configure::config('projects', new PhpConfig($projectsPath));
             Configure::load($project, 'projects');
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $service = new AuthenticationService([
+            'unauthenticatedRedirect' => '/login',
+            'queryParam' => 'redirect',
+        ]);
+
+        $service->loadIdentifier(ApiIdentifier::class, [
+            'timezoneField' => 'timezone',
+        ]);
+
+        $service->loadAuthenticator('Authentication.Session', [
+            'sessionKey' => 'BEditaManagerAuth',
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_TOKEN => 'token',
+            ],
+        ]);
+        $service->loadAuthenticator(CookieAuthenticator::class, [
+            'cookie' => [
+                'name' => 'BEditaManagerAuth',
+                'expire' => FrozenTime::now()->addMonth(),
+                'path' => '/',
+                'domain' => parse_url(Router::url('/', true), PHP_URL_HOST),
+                'secure' => true,
+                'httpOnly' => true,
+            ],
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'token',
+            ],
+        ]);
+        $service->loadAuthenticator('Authentication.Form', [
+            'loginUrl' => '/login',
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                'timezone' => 'timezone_offset',
+            ],
+        ]);
+
+        return $service;
     }
 }

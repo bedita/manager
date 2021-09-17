@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Controller\Exception\SecurityException;
@@ -26,6 +27,7 @@ use Cake\Utility\Hash;
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\FlashComponent $Flash
  */
 class AppController extends Controller
@@ -54,15 +56,9 @@ class AppController extends Controller
             $this->apiClient = ApiClientProvider::getApiClient();
         }
 
-        $this->loadComponent('Auth', [
-            'authenticate' => [
-                'BEdita/WebTools.Api' => [],
-            ],
-            'loginAction' => ['_name' => 'login'],
-            'loginRedirect' => ['_name' => 'dashboard'],
+        $this->loadComponent('Authentication.Authentication', [
+            'logoutRedirect' => '/login',
         ]);
-
-        $this->Auth->deny();
 
         $this->loadComponent('Modules', [
             'currentModuleName' => $this->name,
@@ -75,10 +71,14 @@ class AppController extends Controller
      */
     public function beforeFilter(Event $event): ?Response
     {
-        $tokens = $this->Auth->user('tokens');
-        if (!empty($tokens)) {
-            $this->apiClient->setupTokens($tokens);
-        } elseif (!in_array($this->request->getPath(), ['/login'])) {
+        $this->Authentication->allowUnauthenticated(['login']);
+        $identity = $this->Authentication->getIdentity();
+        if ($identity && $identity->get('tokens')) {
+            $tokens = $identity->get('tokens');
+            if (!empty($tokens)) {
+                $this->apiClient->setupTokens($tokens);
+            }
+        } elseif ($this->request->getPath() !== '/login') {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
@@ -93,7 +93,7 @@ class AppController extends Controller
     /**
      * Handle security blackhole with logs for now
      *
-     * @param string $type Excepion type
+     * @param string $type Exception type
      * @param SecurityException $exception Raised exception
      * @return void
      * @throws \Cake\Http\Exception\BadRequestException
@@ -151,9 +151,12 @@ class AppController extends Controller
      */
     protected function setupOutputTimezone(): void
     {
-        $timezone = $this->Auth->user('timezone');
-        if ($timezone) {
-            Configure::write('I18n.timezone', $timezone);
+        $identity = $this->Authentication->getIdentity();
+        if ($identity) {
+            $timezone = $identity->get('timezone');
+            if ($timezone) {
+                Configure::write('I18n.timezone', $timezone);
+            }
         }
     }
 
@@ -164,13 +167,13 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event): ?Response
     {
-        if ($this->Auth && $this->Auth->user()) {
-            $user = $this->Auth->user();
+        $user = $this->Authentication->getIdentity();
+        if ($user) {
             $tokens = $this->apiClient->getTokens();
-            if ($tokens && $user['tokens'] !== $tokens) {
-                // Update tokens in session.
-                $user['tokens'] = $tokens;
-                $this->Auth->setUser($user);
+            if ($tokens && $user->get('tokens') !== $tokens) {
+                $data = compact('tokens') + $user->getOriginalData();
+                $user = new Identity($data);
+                $this->Authentication->setIdentity($user);
             }
 
             $this->set(compact('user'));

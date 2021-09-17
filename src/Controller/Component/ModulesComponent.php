@@ -28,7 +28,7 @@ use Psr\Log\LogLevel;
 /**
  * Component to load available modules.
  *
- * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
@@ -45,7 +45,7 @@ class ModulesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public $components = ['Auth', 'Schema'];
+    public $components = ['Authentication', 'Schema'];
 
     /**
      * {@inheritDoc}
@@ -69,14 +69,15 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
-        if (empty($this->Auth->user('id'))) {
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
 
             return;
         }
 
         if ($this->getConfig('clearHomeCache')) {
-            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+            Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
         $modules = $this->getModules();
@@ -102,8 +103,13 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
+            $user = $this->Authentication->getIdentity();
+            if (empty($user)) {
+                return [];
+            }
+
             $home = Cache::remember(
-                sprintf('home_%d', $this->Auth->user('id')),
+                sprintf('home_%d', $user->get('id')),
                 function () {
                     return ApiClientProvider::getApiClient()->get('/home');
                 }
@@ -163,8 +169,12 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
-        $user = $this->getController()->Auth->user();
-        $roles = (array)Hash::get($user, 'roles');
+        $user = $this->Authentication->getIdentity();
+        if (empty($user)) {
+            return;
+        }
+
+        $roles = (array)$user->get('roles');
         $hidden = [];
         $readonly = [];
         foreach ($roles as $role) {

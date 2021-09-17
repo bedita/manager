@@ -82,7 +82,7 @@ class ObjectsEditorsComponent extends Component
      */
     public function editorName(): ?string
     {
-        $user = $this->getController()->Auth->user();
+        $user = $this->getController()->Authentication->getIdentity();
         if (empty($user)) {
             return null;
         }

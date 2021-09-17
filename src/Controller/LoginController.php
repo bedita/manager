@@ -69,24 +69,14 @@ class LoginController extends AppController
             (string)$this->request->getData('project'),
             (string)$this->getConfig('projectsPath')
         );
-        try {
-            $user = $this->Auth->identify();
-        } catch (BEditaClientException $e) {
-            $this->log('Login failed - ' . $e->getMessage(), LogLevel::INFO);
-            $attributes = $e->getAttributes();
-            if (!empty($attributes['reason'])) {
-                $reason = $attributes['reason'];
-            }
-        }
-        if (!empty($user) && is_array($user)) {
-            // setup timezone from request
-            $user['timezone'] = $this->userTimezone();
-            // Successful login. Redirect.
-            $this->Auth->setUser($user);
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
             // Setup current project name.
             $this->setupCurrentProject();
+            // Redirect.
+            $target = $this->Authentication->getLoginRedirect() ?? ['_name' => 'dashboard'];
 
-            return $this->redirect($this->Auth->redirectUrl());
+            return $this->redirect($target);
         }
 
         // Failed login.
@@ -134,25 +124,6 @@ class LoginController extends AppController
     }
 
     /**
-     * Retrieve user timezone from request data.
-     *
-     * @return string User timezone
-     */
-    protected function userTimezone(): string
-    {
-        // 'timezone_offset' must contain UTC offset in seconds
-        // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
-        $offset = $this->request->getData('timezone_offset');
-        if (empty($offset)) {
-            return 'UTC';
-        }
-        $data = explode(' ', (string)$offset);
-        $dst = empty($data[1]) ? 0 : 1;
-
-        return timezone_name_from_abbr('', intval($data[0]), $dst);
-    }
-
-    /**
      * Logout and redirect to login page.
      *
      * @return \Cake\Http\Response|null
@@ -160,7 +131,7 @@ class LoginController extends AppController
     public function logout(): ?Response
     {
         $this->request->allowMethod(['get']);
-        $redirect = $this->redirect($this->Auth->logout());
+        $redirect = $this->redirect($this->Authentication->logout());
         $this->request->getSession()->destroy();
 
         return $redirect;
