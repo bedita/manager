@@ -44,7 +44,7 @@ export default {
 
     data() {
         return {
-            method: 'relationships',    // define AppController method to be used
+            method: 'relationshipsJson',    // define AppController method to be used
             loading: false,
             pendingRelations: [],           // pending elements to be added
             relationsData: [],              // hidden field containing serialized json passed on form submit

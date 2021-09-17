@@ -56,7 +56,7 @@ export default {
 
     data() {
         return {
-            method: 'relationships',
+            method: 'relationshipsJson',
             endpoint: '',
             loading: false,
             selectedObjects: [],
@@ -248,7 +248,7 @@ export default {
 
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${type}/save`;
+            const postUrl = `${baseUrl}/${this.object.type}/saveJson`;
 
             // set form data
             const formData = new FormData(document.getElementById(`${type}-form`));

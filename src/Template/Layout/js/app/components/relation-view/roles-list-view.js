@@ -20,7 +20,7 @@ export default {
 
     data() {
         return {
-            method: 'resources',
+            method: 'resourcesJson',
             removedRelations: [],
         }
     },

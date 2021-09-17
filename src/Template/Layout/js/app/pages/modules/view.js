@@ -48,7 +48,7 @@ export default {
             event.stopPropagation();
             const form = new FormData(event.target);
             const action = event.target.getAttribute('action');
-            const response = await fetch(action, {
+            const response = await fetch(`${action}Json`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

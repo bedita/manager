@@ -44,7 +44,7 @@ export default {
     },
 
     async created() {
-        const requestUrl = `${window.location.href}/related/${this.relationName}`;
+        const requestUrl = `${window.location.href}/relatedJson/${this.relationName}`;
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
         // add params for location that does not have them

@@ -279,19 +279,19 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     // Relations ...
     $routes->connect(
-        '/:object_type/view/:id/related/:relation',
-        ['controller' => 'Modules', 'action' => 'related'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:related']
+        '/:object_type/view/:id/relatedJson/:relation',
+        ['controller' => 'Modules', 'action' => 'relatedJson'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:relatedJson']
     );
     $routes->connect(
-        '/:object_type/view/:id/relationships/:relation',
-        ['controller' => 'Modules', 'action' => 'relationships'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:relationships']
+        '/:object_type/view/:id/relationshipsJson/:relation',
+        ['controller' => 'Modules', 'action' => 'relationshipsJson'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:relationshipsJson']
     );
     $routes->connect(
-        '/:object_type/view/:id/resources/:relation',
-        ['controller' => 'Modules', 'action' => 'resources'],
-        ['pass' => ['id', 'relation'], '_name' => 'modules:resources']
+        '/:object_type/view/:id/resourcesJson/:relation',
+        ['controller' => 'Modules', 'action' => 'resourcesJson'],
+        ['pass' => ['id', 'relation'], '_name' => 'modules:resourcesJson']
     );
     $routes->connect(
         '/:object_type/view/:id/relationData/:relation',
@@ -302,6 +302,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/:object_type/save',
         ['controller' => 'Modules', 'action' => 'save'],
         ['_name' => 'modules:save']
+    );
+    $routes->connect(
+        '/:object_type/saveJson',
+        ['controller' => 'Modules', 'action' => 'saveJson'],
+        ['_name' => 'modules:saveJson']
     );
     $routes->connect(
         '/:object_type/clone/:id',

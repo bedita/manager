@@ -14,8 +14,8 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -132,12 +132,6 @@ class TranslationsControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
-
-        // on error
-        $result = $this->controller->add(123456789);
-        $expected = get_class(new \Cake\Http\Response());
-        $actual = get_class($result);
-        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -165,12 +159,6 @@ class TranslationsControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
-
-        // on error
-        $result = $this->controller->edit(123456789, $lang);
-        $expected = get_class(new \Cake\Http\Response());
-        $actual = get_class($result);
-        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -184,39 +172,18 @@ class TranslationsControllerTest extends TestCase
         // Setup controller for test
         $this->setupController();
 
-        // delete translation before starting test
-        $lang = 'it';
-        $objectId = $this->getTestId();
-        $id = $this->getTestTranslationId($objectId, 'documents', $lang);
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                [
-                    'id' => $id,
-                    'object_id' => $objectId,
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-        $this->controller->delete();
-
         // get object for test
+        $lang = 'it';
+        $o = $this->getTestObject();
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
                 'lang' => $lang,
-                'object_id' => $objectId,
-                'status' => 'draft',
+                'object_id' => $o['id'],
                 'translated_fields' => [
-                    'title' => 'Titolo in italiano',
+                    'title' => sprintf('Una traduzione di esempio per "%s"', $o['attributes']['title']),
                 ],
             ],
             'params' => [
@@ -227,70 +194,11 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
 
         // do controller call
-        $this->controller->save();
-
-        $response = $this->controller->getResponse();
+        $result = $this->controller->save();
 
         // verify response status code and type
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('text/html', $response->getType());
-
-        // error, with not empty request id
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [ // missing required 'status'
-                'lang' => $lang,
-                'id' => $id,
-                'object_id' => $objectId,
-                'translated_fields' => [
-                    'title' => 'Titolo in italiano',
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-
-        // do controller call
-        $this->controller->save();
-
-        $response = $this->controller->getResponse();
-
-        // verify response status code and type
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('text/html', $response->getType());
-
-        // error, with empty request id
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [ // missing required 'status'
-                'lang' => $lang,
-                'object_id' => $objectId,
-                'translated_fields' => [
-                    'title' => 'Titolo in italiano',
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-
-        // do controller call
-        $this->controller->save();
-
-        $response = $this->controller->getResponse();
-
-        // verify response status code and type
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('text/html', $response->getType());
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals('text/html', $result->getType());
     }
 
     /**
@@ -332,89 +240,6 @@ class TranslationsControllerTest extends TestCase
 
         // restore test object
         $this->restoreTestObject($objectId, 'documents');
-
-        // on missing post data
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-        try {
-            $this->controller->delete();
-        } catch (\Exception $e) {
-            $expected = get_class(new BadRequestException());
-            $actual = get_class($e);
-            static::assertEquals($expected, $actual);
-        }
-
-        // on missing post data id
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                ['object_id' => 1234567789],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-        try {
-            $this->controller->delete();
-        } catch (\Exception $e) {
-            $expected = get_class(new BadRequestException());
-            $actual = get_class($e);
-            static::assertEquals($expected, $actual);
-        }
-
-        // on missing post data object_id
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                ['id' => 1234567789],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-        try {
-            $this->controller->delete();
-        } catch (\Exception $e) {
-            $expected = get_class(new BadRequestException());
-            $actual = get_class($e);
-            static::assertEquals($expected, $actual);
-        }
-
-        // on missing wrong payload
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                ['id' => 1234567789, 'object_id' => 9999999999],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new TranslationsController($request);
-        $response = $this->controller->delete();
-        $expected = get_class(new \Cake\Http\Response());
-        $actual = get_class($response);
-        static::assertEquals($expected, $actual);
     }
 
     /**

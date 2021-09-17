@@ -75,8 +75,10 @@ class UserProfileController extends AppController
 
     /**
      * Save user profile data
+     *
+     * @return \Cake\Http\Response|null
      */
-    public function save(): void
+    public function save(): ?Response
     {
         $data = $this->request->getData();
         try {
@@ -87,6 +89,6 @@ class UserProfileController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        $this->redirect(['_name' => 'user_profile:view']);
+        return $this->redirect(['_name' => 'user_profile:view']);
     }
 }

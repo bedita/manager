@@ -65,7 +65,7 @@ export default {
 
     data() {
         return {
-            method: 'related',      // define AppController method to be used
+            method: 'relatedJson',      // define AppController method to be used
             loading: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations

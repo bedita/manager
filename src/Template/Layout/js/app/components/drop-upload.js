@@ -128,7 +128,7 @@ export default {
             formData.append('file', file);
             formData.append('model-type', objectType);
 
-            const url = `/${objectType}/save`;
+            const url = `/${objectType}/saveJson`;
 
             const CancelToken = this.getAxios().CancelToken;
             const source = CancelToken.source();
