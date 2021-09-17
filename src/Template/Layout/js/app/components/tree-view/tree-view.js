@@ -1,11 +1,3 @@
-const API_URL = new URL(BEDITA.base).pathname;
-const API_OPTIONS = {
-    credentials: 'same-origin',
-    headers: {
-        'accept': 'application/json',
-    }
-};
-
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
@@ -20,6 +12,17 @@ const API_OPTIONS = {
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
+
+import { t } from 'ttag';
+
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
 export default {
     name: 'tree-view',
 
@@ -62,7 +65,7 @@ export default {
                     }"
                     @click="toggle"
                 ></button>
-                <a :href="url"><: t('edit') :></a>
+                <a :href="url">${t`edit`}</a>
                 <div class="tree-params">
                     <div
                         v-if="relationName && isParent"
@@ -75,7 +78,7 @@ export default {
                             @change="toggleFolderRelationMenu"
                         />
                         <label :for="'tree-menu-' + node.id">
-                            <: t('Menu') :>
+                            ${t`Menu`}
                         </label>
                     </div>
                     <div
@@ -90,7 +93,7 @@ export default {
                             @change="toggleFolderRelationCanonical"
                         />
                         <label :for="'tree-canonical-' + node.id">
-                            <: t('Canonical') :>
+                            ${`Canonical`}
                         </label>
                     </div>
                 </div>

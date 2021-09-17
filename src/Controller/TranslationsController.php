@@ -26,6 +26,16 @@ use Psr\Log\LogLevel;
 class TranslationsController extends ModulesController
 {
     /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        $this->request = $this->request->withParam('object_type', 'translations');
+        parent::initialize();
+        $this->Query->setConfig('include', 'object');
+    }
+
+    /**
      * Display data to add a translation.
      *
      * @param string|int $id Object ID.
@@ -34,6 +44,7 @@ class TranslationsController extends ModulesController
     public function add($id): ?Response
     {
         $this->request->allowMethod(['get']);
+        $this->objectType = $this->typeFromUrl();
 
         try {
             $response = $this->apiClient->getObject($id, $this->objectType);
@@ -65,6 +76,7 @@ class TranslationsController extends ModulesController
     public function edit($id, $lang): ?Response
     {
         $this->request->allowMethod(['get']);
+        $this->objectType = $this->typeFromUrl();
 
         $translation = [];
         try {
@@ -101,12 +113,11 @@ class TranslationsController extends ModulesController
 
     /**
      * Create or edit single translation.
-     *
-     * @return \Cake\Http\Response|null
      */
-    public function save(): ?Response
+    public function save(): void
     {
         $this->request->allowMethod(['post']);
+        $this->objectType = $this->typeFromUrl();
         $requestData = $this->prepareRequest($this->objectType);
         $objectId = $requestData['object_id'];
         if (!empty($requestData['id'])) {
@@ -121,22 +132,26 @@ class TranslationsController extends ModulesController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             if ($this->request->getData('id')) {
-                return $this->redirect([
+                $this->redirect([
                     '_name' => 'translations:edit',
                     'object_type' => $this->objectType,
                     'id' => $objectId,
                     'lang' => $lang,
                 ]);
+
+                return;
             }
 
-            return $this->redirect([
+            $this->redirect([
                 '_name' => 'translations:add',
                 'object_type' => $this->objectType,
                 'id' => $objectId,
             ]);
+
+            return;
         }
 
-        return $this->redirect([
+        $this->redirect([
             '_name' => 'translations:edit',
             'object_type' => $this->objectType,
             'id' => $objectId,
@@ -159,6 +174,7 @@ class TranslationsController extends ModulesController
     public function delete(): Response
     {
         $this->request->allowMethod(['post']);
+        $this->objectType = $this->typeFromUrl();
         $requestData = $this->request->getData();
         try {
             if (empty($requestData[0])) {
@@ -184,5 +200,20 @@ class TranslationsController extends ModulesController
 
         // redir to main object view
         return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
+    }
+
+    /**
+     * Get type from url, if objectType is 'translations'
+     *
+     * @return string
+     */
+    protected function typeFromUrl(): string
+    {
+        if ($this->objectType !== 'translations') {
+            return $this->objectType;
+        }
+        $here = (string)$this->request->getAttribute('here');
+
+        return substr($here, 1, strpos(substr($here, 1), '/'));
     }
 }

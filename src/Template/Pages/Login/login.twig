@@ -39,13 +39,13 @@
             'autocapitalize': 'off',
             'spellcheck': 'false',
             'placeholder': 'e.g. john@example.com',
-            'label': 'Username',
+            'label': __('Username'),
         })|raw }}
-        
+
         {{ Form.control('password', {
             'required':'required',
             'autocomplete': 'current-password',
-            'label': 'Password',
+            'label': __('Password'),
         })|raw }}
 
         {{ Form.control('timezone_offset', {
@@ -58,6 +58,10 @@
 
         <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
 
+
+        {# Temp hidden to check session id #}
+        {{ Form.hidden('_session_id', {'value': _view.getRequest().getSession() ? _view.getRequest().getSession().id() : null})|raw }}
+
         {{ Form.end()|raw }}
 
     </div>
@@ -65,7 +69,7 @@
         <div class="sidebar-footer">
             <div class="sidebar-bedita-logo white">{# css logo #}</div>
             {% element 'Menu/colophon' %}
-        </div>  
+        </div>
     </footer>
 </div>
 

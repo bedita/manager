@@ -19,6 +19,10 @@ export default {
         };
     },
     created() {
+        if (document.referrer.endsWith('/login') && window.top !== window) {
+            window.top.postMessage('login', BEDITA.base);
+        }
+
         this.searchString = this.q;
     },
     methods: {

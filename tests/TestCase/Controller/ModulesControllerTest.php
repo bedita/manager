@@ -84,9 +84,9 @@ class ModulesControllerSample extends ModulesController
      *
      * @return void
      */
-    public function saveJson(): void
+    public function save(): void
     {
-        parent::saveJson();
+        parent::save();
     }
 }
 
@@ -463,43 +463,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `save` method
-     *
-     * @covers ::save()
-     *
-     * @return void
-     */
-    public function testSave(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object for test
-        $o = $this->getTestObject();
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'id' => $o['id'],
-                'title' => $o['attributes']['title'],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->controller = new ModulesControllerSample($request);
-
-        // do controller call
-        $result = $this->controller->save();
-
-        // verify response status code and type
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
-    }
-
-    /**
      * Test `save` method, on error
      *
      * @covers ::save()
@@ -524,11 +487,10 @@ class ModulesControllerTest extends TestCase
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $response = $this->controller->save();
+        $this->controller->save();
 
-        // verify response status code and type
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('text/html', $response->getType());
+        // verify page has error key
+        static::assertArrayHasKey('error', $this->controller->viewVars);
     }
 
     /**
@@ -559,19 +521,18 @@ class ModulesControllerTest extends TestCase
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $response = $this->controller->save();
+        $this->controller->save();
 
-        // verify response status code and type
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('text/html', $response->getType());
+        // verify page has error key
+        static::assertArrayHasKey('error', $this->controller->viewVars);
     }
 
     /**
      *
-     * Data provider for `testSaveJson` test case.
+     * Data provider for `testSave` test case.
      *
      */
-    public function saveJsonProvider()
+    public function saveProvider()
     {
         return [
             'save' => [
@@ -606,14 +567,14 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `saveJson` method
+     * Test `save` method
      *
-     * @dataProvider saveJsonProvider()
-     * @covers ::saveJson()
+     * @dataProvider saveProvider()
+     * @covers ::save()
      *
      * @return void
      */
-    public function testSaveJson($expected, $data): void
+    public function testSave($expected, $data): void
     {
         // Setup controller for test
         $this->setupController();
@@ -630,7 +591,7 @@ class ModulesControllerTest extends TestCase
         $this->controller = new ModulesControllerSample($request);
 
         // do controller call
-        $this->controller->saveJson();
+        $this->controller->save();
 
         // verify response status code and type
         $result = $this->controller->getApiClient();
@@ -774,13 +735,13 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `relatedJson` method
+     * Test `related` method
      *
-     * @covers ::relatedJson()
+     * @covers ::related()
      *
      * @return void
      */
-    public function testRelatedJson(): void
+    public function testRelated(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -789,57 +750,57 @@ class ModulesControllerTest extends TestCase
         $id = $this->getTestId();
 
         // do controller call
-        $this->controller->relatedJson($id, 'translations');
+        $this->controller->related($id, 'translations');
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize', 'data']);
     }
 
     /**
-     * Test `relatedJson` method on `new` object
+     * Test `related` method on `new` object
      *
-     * @covers ::relatedJson()
+     * @covers ::related()
      *
      * @return void
      */
-    public function testRelatedJsonNew(): void
+    public function testRelatedNew(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // do controller call
-        $this->controller->relatedJson('new', 'has_media');
+        $this->controller->related('new', 'has_media');
 
         static::assertEquals([], $this->controller->viewVars['data']);
     }
 
     /**
-     * Test `relatedJson` method, on error
+     * Test `related` method, on error
      *
-     * @covers ::relatedJson()
+     * @covers ::related()
      *
      * @return void
      */
-    public function testRelatedJsonError(): void
+    public function testRelatedError(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // do controller call
-        $this->controller->relatedJson(12346789, 'translations');
+        $this->controller->related(12346789, 'translations');
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize', 'error']);
     }
 
     /**
-     * Test `resourcesJson method
+     * Test `resources` method
      *
-     * @covers ::resourcesJson)
+     * @covers ::resources()
      *
      * @return void
      */
-    public function testResourcesJson(): void
+    public function testResources(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -848,37 +809,37 @@ class ModulesControllerTest extends TestCase
         $id = $this->getTestId();
 
         // do controller call
-        $this->controller->resourcesJson($id, 'documents');
+        $this->controller->resources($id, 'documents');
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize', 'data']);
     }
 
     /**
-     * Test `resourcesJson method
+     * Test `resources` method
      *
-     * @covers ::resourcesJson)
+     * @covers ::resources()
      *
      * @return void
      */
-    public function testResourcesJsonError(): void
+    public function testResourcesError(): void
     {
         // Setup controller for test
         $this->setupController();
 
         // do controller call
-        $this->controller->resourcesJson(123456789, 'dummies');
+        $this->controller->resources(123456789, 'dummies');
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize', 'error']);
     }
 
     /**
-     * Data provider for `testRelationshipsJson` test case.
+     * Data provider for `testRelationships` test case.
      *
      * @return array
      */
-    public function relationshipsJsonProvider(): array
+    public function relationshipsProvider(): array
     {
         return [
             'children' => [
@@ -901,17 +862,17 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `relationshipsJson` method
+     * Test `relationships` method
      *
      * @param string $relation The relation to test
      * @param string $objectType The object type / endpoint
      * @param array $expected The expected data
      *
-     * @covers ::relationshipsJson()
-     * @dataProvider relationshipsJsonProvider()
+     * @covers ::relationships()
+     * @dataProvider relationshipsProvider()
      * @return void
      */
-    public function testRelationshipsJson(string $relation, string $objectType): void
+    public function testRelationships(string $relation, string $objectType): void
     {
         // Setup controller for test
         $this->setupController([
@@ -928,7 +889,7 @@ class ModulesControllerTest extends TestCase
         $id = $this->getTestId();
 
         // do controller call
-        $this->controller->relationshipsJson($id, $relation);
+        $this->controller->relationships($id, $relation);
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['_serialize']);

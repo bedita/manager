@@ -685,7 +685,6 @@ return [
     //     ],
     // ],
 
-
     /**
      * Project data that can override data from `/home` API call
      * Currently only `name` is used
@@ -756,4 +755,19 @@ return [
     //         ],
     //     ],
     // ],
+
+    /**
+     * Editors configuration.
+     * concurrentCheckTime: the time in milliseconds that a concurrent access is considered still active
+     */
+    // 'Editors' => [
+    //     'concurrentCheckTime' => 30000, // 30 seconds
+    // ],
+
+    /**
+     * The under work config. When set, a courtesy page is shown with `Maintenance.message` on it.
+     */
+    // 'Maintenance' => [
+    //     'message' => 'This page won\'t be available for some time. Try later',
+    // ]
 ];
