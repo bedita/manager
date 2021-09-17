@@ -31,7 +31,7 @@ class PasswordController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Auth->allow(['reset', 'change']);
+        $this->Authentication->allowUnauthenticated(['reset', 'change']);
     }
 
     /**
@@ -41,8 +41,8 @@ class PasswordController extends AppController
     public function beforeFilter(Event $event): ?Response
     {
         // if authenticated, redirect to dashboard
-        $tokens = $this->Auth->user('tokens');
-        if (!empty($tokens)) {
+        $user = $this->Authentication->getIdentity();
+        if (!empty($user) && !empty($user->get('tokens'))) {
             return $this->redirect('/dashboard');
         }
 

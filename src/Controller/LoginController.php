@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Application;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\InstanceConfigTrait;
+use Cake\Event\Event;
 use Cake\Http\Response;
 use Psr\Log\LogLevel;
 
@@ -32,6 +33,15 @@ class LoginController extends AppController
         // Projects configuration files base path
         'projectsPath' => CONFIG . 'projects' . DS,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
 
     /**
      * Display login page or perform login via API.

@@ -71,7 +71,6 @@ class AppController extends Controller
      */
     public function beforeFilter(Event $event): ?Response
     {
-        $this->Authentication->allowUnauthenticated(['login']);
         $identity = $this->Authentication->getIdentity();
         if ($identity && $identity->get('tokens')) {
             $tokens = $identity->get('tokens');
