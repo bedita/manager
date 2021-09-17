@@ -43,7 +43,7 @@ class PasswordController extends AppController
         // if authenticated, redirect to dashboard
         $user = $this->Authentication->getIdentity();
         if (!empty($user) && !empty($user->get('tokens'))) {
-            return $this->redirect('/dashboard');
+            return $this->redirect(['_name' => 'dashboard']);
         }
 
         return null;
