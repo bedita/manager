@@ -27,15 +27,15 @@
 
             > input[type='checkbox'],
             > input[type='radio'] {
-                margin-top: -$gutter / 8;
-                margin-right: $gutter / 2;
+                margin-top: -$gutter * .125;
+                margin-right: $gutter * .5;
                 vertical-align: middle;
             }
         }
 
         > a {
             display: inline-block;
-            padding: $gutter / 2 $gutter * 1.5;
+            padding: $gutter * .5 $gutter * 1.5;
             margin-left: $gutter;
             vertical-align: middle;
             text-transform: uppercase;
@@ -58,7 +58,7 @@
 
         .tree-param {
             position: relative;
-            margin: $gutter / 4 $gutter / 2 $gutter / 4 0;
+            margin: $gutter * .25 $gutter * .5 $gutter * .25 0;
 
             input {
                 position: absolute;
@@ -116,9 +116,9 @@
     .node-element ~ .node-children {
         &:not(:empty) {
             margin-top: -$gutter;
-            margin-left: 3 * $gutter / 8;
+            margin-left: 3 * $gutter * .125;
             padding-top: $gutter;
-            padding-left: $gutter / 2;
+            padding-left: $gutter * .5;
             border-left: solid 1px rgba(255, 255, 255, 0.25);
         }
     }

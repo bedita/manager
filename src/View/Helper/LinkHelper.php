@@ -69,6 +69,21 @@ class LinkHelper extends Helper
     }
 
     /**
+     * Return base url.
+     * If it ends with ':80' (proxy case), remove it.
+     *
+     * @return string
+     */
+    public function baseUrl(): string
+    {
+        if (substr_compare($this->webBaseUrl, ':80', -strlen(':80')) === 0) {
+            return substr($this->webBaseUrl, 0, strpos($this->webBaseUrl, ':80'));
+        }
+
+        return $this->webBaseUrl;
+    }
+
+    /**
      * Transform API url in web app URL, preserving path part.
      * Extremely simple for now
      *

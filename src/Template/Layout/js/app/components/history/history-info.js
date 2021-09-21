@@ -7,16 +7,16 @@ export default {
         <section class="fieldset shrinks">
             <header class="mx-1 tab tab-static unselectable">
                 <h2>
-                    <span><: t('version by') :></span>
+                    <span>${t`version by`}</span>
                     <span class="has-font-weight-bold"><: authorName :></span>
-                    <span><: t('on') :> <: formattedDate :></span>
+                    <span>${t`date`} <: formattedDate :></span>
                 </h2>
             </header>
             <div class="px-1 shrinks">
                 <h4><: actionLabel :></h4>
                 <div class="is-flex-column">
                     <div v-for="(value, key) in changed" v-html="value"></div>
-                    <button class="mt-2" @click.stop.prevent="restore()"><: t('Restore') :></button>
+                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()">${`Restore`}</button>
                 </div>
             </div>
         </section>
@@ -25,6 +25,7 @@ export default {
     props: {
         meta: Object,
         id: String,
+        cansave: Boolean,
     },
 
     data() {
@@ -33,6 +34,7 @@ export default {
             created: this.meta.created,
             user: this.meta.user,
             user_action: this.meta.user_action,
+            canSave: true,
         }
     },
 
@@ -71,6 +73,10 @@ export default {
 
             return label;
         },
+    },
+
+    async created() {
+        this.canSave = this.cansave;
     },
 
     methods: {

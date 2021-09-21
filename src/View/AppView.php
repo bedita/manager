@@ -40,6 +40,7 @@ class AppView extends TwigView
             ],
         ]);
         $this->Form->addWidget('richtext', ['Richtextarea']);
+        $this->loadHelper('Editors');
         $this->loadHelper('Layout');
         $this->loadHelper('Array');
         $this->loadHelper('Html');

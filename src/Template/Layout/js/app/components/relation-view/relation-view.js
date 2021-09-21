@@ -69,7 +69,7 @@ export default {
 
     data() {
         return {
-            method: 'relatedJson',      // define AppController method to be used
+            method: 'related',      // define AppController method to be used
             loading: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations
@@ -511,9 +511,9 @@ export default {
         },
 
         /**
-         * remove related object: adding it to removedRelated Array
+         * remove related object adding it to removedRelated Array
          *
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -531,8 +531,7 @@ export default {
         /**
          * re-add removed related object: removing it from removedRelated Array
          *
-         * @param {Number} id
-         * @param {String} type
+         * @param {Object} related Related object
          *
          * @returns {void}
          */
@@ -723,19 +722,7 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return relations.filter((rel) => rel.id === id).length;
-        },
-
-        /**
-         * helper function: build open view url
-         *
-         * @param {String} objectType
-         * @param {Number} objectId
-         *
-         * @return {String} url
-         */
-        buildViewUrl(objectType, objectId) {
-            return `${window.location.protocol}//${window.location.host}/${objectType}/view/${objectId}`;
+            return !!relations.find((rel) => rel.id === id);
         },
 
         /**

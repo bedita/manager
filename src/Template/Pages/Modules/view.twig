@@ -2,7 +2,7 @@
 
 <modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
     <div class="modules-view">
-        <header>
+        {# <header>
             {% if object.id %}
                 <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}</h1>
                 {% for obj in included %}
@@ -13,7 +13,7 @@
             {% else %}
                 <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
             {% endif %}
-        </header>
+        </header> #}
 
         <div class="module-form">
             {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
@@ -21,6 +21,7 @@
                 'url': {'_name': 'modules:save', 'object_type': objectType},
                 'id': 'form-main',
                 'check-changes': 'true',
+                'ref': 'formMain',
             })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
@@ -56,7 +57,9 @@
             <div class="side-view-column is-flex is-flex-column">
                 {% element 'Form/publish_properties' %}
 
-                {% element 'Form/meta' %}
+                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
+                    {% element 'Form/trees' %}
+                {% endif %}
 
                 {% element 'Form/custom_right' %}
 
@@ -65,11 +68,9 @@
                     {% element 'Form/roles' %}
                 {% endif %}
 
-                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
-                    {% element 'Form/trees' %}
-                {% endif %}
-
                 {% element 'Form/related_translations' {'resourceName': 'translations'} %}
+
+                {% element 'Form/meta' %}
 
                 {% element 'Form/advanced_properties' %}
 
@@ -88,6 +89,9 @@
 
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+
+            {# Temp hidden to check session id #}
+            {{ Form.hidden('_session_id', {'value': _view.getRequest().getSession().id()})|raw }}
 
             {{ Form.end()|raw }}
 
@@ -111,8 +115,25 @@
                 )) %}
             {% endif %}
 
+            {# Append "Lock/Unlock" #}
+            {% if object.id and Perms.canLock() %}
+                {% if object.meta.locked %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Unlock'),
+                        {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                {% else %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Lock'),
+                        {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                {% endif %}
+            {% endif %}
+
             {# Append "Trash (move to)" #}
-            {% if Perms.canDelete() %}
+            {% if object.id and Perms.canDelete(object) %}
                 {% do _view.append('module-buttons',
                     Form.postButton(
                         __('Trash-verb'),
@@ -126,6 +147,17 @@
             {% if object.id and objectNav %}
                 {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
             {% endif %}
+
+            {# Append "new" button #}
+            {# {% if object.id and Perms.canCreate() %}
+                {% do _view.append('module-buttons',
+                    Html.link(__('Create new'),
+                        {'_name': 'modules:create', 'object_type': objectType},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                    )|raw
+                ) %}
+            {% endif %} #}
+
         </div>
     </div>
 </modules-view>

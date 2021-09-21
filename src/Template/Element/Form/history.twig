@@ -3,10 +3,12 @@
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen ? 'open has-border-module-{{ currentModule.name }}' : ''">
                 <h2>{{ __('History') }}</h2>
-                <span class="has-text-size-smallest" v-show="!isLoading && totalObjects"><: totalObjects :></span>
+                <span class="tag is-smallest is-black mx-05" v-show="!isLoading && totalObjects">
+                    <: totalObjects :>
+                </span>
             </header>
             <div v-show="isOpen" class="tab-container">
-                <keep-alive><history v-if="isOpen" :object="{{ object|json_encode }}" @count="onCount"></history></keep-alive>
+                <keep-alive><history v-if="isOpen" :object="{{ object|json_encode }}" @count="onCount" :cansave="{{ Perms.canSave()|json_encode }}"></history></keep-alive>
             </div>
         </section>
     </section>

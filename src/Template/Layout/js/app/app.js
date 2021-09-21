@@ -153,16 +153,16 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         clone() {
-            let title = document.getElementById('title').value || t('Untitled');
-            let msg = t`Please insert a new title on "${title}" clone`;
-            let defaultTitle = title + '-' + t`copy`;
+            const title = document.getElementById('title').value || t('Untitled');
+            const msg = t`Please insert a new title on "${title}" clone`;
+            const defaultTitle = title + '-' + t`copy`;
 
             prompt(msg, defaultTitle, (cloneTitle, dialog) => {
-                let query = `?title=${cloneTitle || defaultTitle}`;
-                let origin = window.location.origin;
-                let path = window.location.pathname.replace('/view/', '/clone/');
-                let url = `${origin}${path}${query}`;
-                let newTab = window.open(url, '_blank');
+                const query = `?title=${cloneTitle || defaultTitle}`;
+                const origin = window.location.origin;
+                const path = window.location.pathname.replace('/view/', '/clone/');
+                const url = `${origin}${path}${query}`;
+                const newTab = window.open(url, '_blank');
                 newTab.focus();
                 dialog.hide(true);
             });
@@ -176,6 +176,11 @@ const _vueInstance = new Vue({
          * @return {void}
          */
         onFilterObjects(filter) {
+            // remove from query string filter `history_editor` if false
+            if (!filter.filter.history_editor) {
+                delete filter.filter.history_editor;
+            }
+
             this.urlFilterQuery = filter;
             this.page = '';
 

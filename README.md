@@ -112,12 +112,6 @@ To start develop mode run
 yarn develop
 ```
 
-### Using command parameters
-
-```bash
-yarn run develop --proxy localhost:8888 --server localhost:9000
-```
-
 ### Production build with Bundle Report
 
 ```bash

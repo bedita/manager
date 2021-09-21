@@ -33,6 +33,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Element/Form/relations';
 @import '../Element/Form/map';
 @import '../Element/Form/history';
+@import '../Element/Form/categories';
 @import '../Element/Flash/flash';
 @import '../Element/Menu/colophon';
 @import '../Element/Menu/menu';
@@ -44,6 +45,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
 // components
 @import './js/app/components/dialog/dialog.scss';
+@import './js/app/components/ajax-login/ajax-login.scss';
 
 // Pages
 @import '../Pages/Error/error';
@@ -54,6 +56,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import '../Pages/Modules/modules-view';
 @import '../Pages/Model/model-index';
 @import '../Pages/Model/model-view';
+@import '../Pages/Translations/index';
 
 @import './styles/non-production';
 

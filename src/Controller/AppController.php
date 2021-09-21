@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
+use Cake\Controller\Exception\SecurityException;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
@@ -83,8 +84,37 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
+        $this->Security->setConfig('blackHoleCallback', 'blackhole');
 
         return null;
+    }
+
+    /**
+     * Handle security blackhole with logs for now
+     *
+     * @param string $type Excepion type
+     * @param SecurityException $exception Raised exception
+     * @return void
+     * @throws \Cake\Http\Exception\BadRequestException
+     * @codeCoverageIgnore
+     */
+    public function blackhole(string $type, SecurityException $exception): void
+    {
+        // Log original exception
+        $this->log($exception, 'error');
+
+        // Log form data & session id
+        $token = (array)$this->request->getData('_Token');
+        unset($token['debug']);
+        $this->log('[Blackhole] type: ' . $type, 'debug');
+        $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
+        $this->log('[Blackhole] form fields: ' . json_encode(array_keys((array)$this->request->getData())), 'debug');
+        $this->log('[Blackhole] form session id: ' . (string)$this->request->getData('_session_id'), 'debug');
+        $sessionId = $this->request->getSession() ? $this->request->getSession()->id() : null;
+        $this->log('[Blackhole] current session id: ' . $sessionId, 'debug');
+
+        // Throw a generic bad request exception.
+        throw new BadRequestException();
     }
 
     /**
@@ -181,6 +211,9 @@ class AppController extends Controller
      */
     protected function specialAttributes(array &$data): void
     {
+        // remove temporary session id
+        unset($data['_session_id']);
+
         // if password is empty, unset it
         if (array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);
@@ -284,6 +317,10 @@ class AppController extends Controller
     {
         if (!empty($data['_actualAttributes'])) {
             $attributes = json_decode($data['_actualAttributes'], true);
+            if ($attributes === null) {
+                $this->log(sprintf('Wrong _actualAttributes, not a json string: %s', $data['_actualAttributes']), 'error');
+                $attributes = [];
+            }
             foreach ($attributes as $key => $value) {
                 // remove unchanged attributes from $data
                 if (array_key_exists($key, $data) && !$this->hasFieldChanged($value, $data[$key])) {

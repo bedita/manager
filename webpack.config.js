@@ -41,7 +41,8 @@ let webpackPlugins = [
         exclude: ['be-icons-codes.css', 'be-icons-font.css', 'libs'],
     }),
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `'${ENVIRONMENT.mode}'`
+        'process.env.NODE_ENV': `${ENVIRONMENT.mode}`,
+        debug: true,
     }),
 
     new MiniCssExtractPlugin({
@@ -83,10 +84,12 @@ if (devMode) {
             },
             cors: true,
             notify: false,
-            open: false,
+            open: true,
             reloadOnRestart: true,
             host: ENVIRONMENT.host,
             port: ENVIRONMENT.port,
+            watch: true,
+            logLevel: "debug",
         })
     );
 
@@ -313,8 +316,9 @@ module.exports = {
         entrypoints: false,
         modules: false,
         warnings: devMode,
-        children: false,
+        children: true,
         assets: true,
         excludeAssets: /(.map)/,
+        errorDetails: true,
     },
 }

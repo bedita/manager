@@ -39,6 +39,17 @@ class ModelController extends ModelBaseController
     {
         $this->resourceType = $type;
     }
+
+    /**
+     * Set single view
+     *
+     * @param bool $view Single view flag
+     * @return void
+     */
+    public function setSingleView(bool $view): void
+    {
+        $this->singleView = $view;
+    }
 }
 
 /**
@@ -70,31 +81,28 @@ class ModelBaseControllerTest extends TestCase
     ];
 
     /**
-     * Setup api client and auth
+     * API client
      *
-     * @return void
+     * @var BEditaClient
      */
-    private function setupApi(): void
+    protected $client;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
     {
+        parent::setUp();
+
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $this->ModelController = new ModelController($request);
+
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
-    }
-
-    /**
-     * Setup controller to test with request config
-     *
-     * @param array $requestConfig
-     * @return void
-     */
-    protected function setupController(array $requestConfig = []): void
-    {
-        $config = array_merge($this->defaultRequestConfig, $requestConfig);
-        $request = new ServerRequest($config);
-        $this->ModelController = new ModelController($request);
-        $this->setupApi();
     }
 
     /**
@@ -106,22 +114,27 @@ class ModelBaseControllerTest extends TestCase
     {
         return [
             'not authorized' => [
-                false,
+                new UnauthorizedException(__('Module access not authorized')),
                 [
                     'username' => 'dummy',
-                    'password' => 'dummy',
                     'roles' => [ 'useless' ],
+                    'tokens' => [],
                 ],
-                new UnauthorizedException(__('Module access not authorized')),
             ],
             'authorized' => [
-                true,
+                null,
                 [
                     'username' => 'bedita',
-                    'password' => 'bedita',
+                    'roles' => [ 'admin' ],
+                    'tokens' => [],
+                ],
+            ],
+            'expired' => [
+                Response::class,
+                [
+                    'username' => 'bedita',
                     'roles' => [ 'admin' ],
                 ],
-                null,
             ],
         ];
     }
@@ -129,29 +142,33 @@ class ModelBaseControllerTest extends TestCase
     /**
      * Test `beforeFilter` method
      *
-     * @param array $expected expected results from test
-     * @param boolean|null $data setup data for test
-     * @param \Exception|null $expection expected exception from test
+     * @param \Exception|string|null $expected Expected result
+     * @param array $data setup data for test
      *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
      *
      * @return void
      */
-    public function testBeforeFilter($expected, $data, $exception): void
+    public function testBeforeFilter($expected, array $data): void
     {
-        $this->setupController();
-
+        if (isset($data['tokens'])) {
+            $data['tokens'] = $this->client->getTokens();
+        }
         $this->ModelController->Auth->setUser($data);
 
-        if (!empty($exception)) {
-            $this->expectException(get_class($exception));
+        if ($expected instanceof \Exception) {
+            $this->expectException(get_class($expected));
         }
 
         $event = $this->ModelController->dispatchEvent('Controller.beforeFilter');
-        $this->ModelController->beforeFilter($event);
+        $result = $this->ModelController->beforeFilter($event);
 
-        static::assertTrue($expected);
+        if (is_string($expected)) {
+            static::assertInstanceOf($expected, $result);
+        } else {
+            static::assertNull($result);
+        }
     }
 
     /**
@@ -163,7 +180,6 @@ class ModelBaseControllerTest extends TestCase
      */
     public function testBeforeRender(): void
     {
-        $this->setupController();
         $this->ModelController->dispatchEvent('Controller.beforeRender');
 
         static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
@@ -181,7 +197,6 @@ class ModelBaseControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->setupController();
         $this->ModelController->index();
         $vars = ['resources', 'meta', 'links', 'properties'];
         foreach ($vars as $var) {
@@ -198,7 +213,6 @@ class ModelBaseControllerTest extends TestCase
      */
     public function testIndexFail(): void
     {
-        $this->setupController();
         $this->ModelController->setResourceType('elements');
         $result = $this->ModelController->index();
         static::assertTrue(($result instanceof Response));
@@ -213,7 +227,6 @@ class ModelBaseControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->setupController();
         $this->ModelController->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
@@ -230,8 +243,118 @@ class ModelBaseControllerTest extends TestCase
      */
     public function testViewFail(): void
     {
-        $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Data provider for `testSave`
+     *
+     * @return array
+     */
+    public function saveProvider(): array
+    {
+        return [
+            'post' => [
+                '/model/object_types',
+                [
+                    'name' => 'animals',
+                    'singular' => 'animal',
+                ],
+                false,
+            ],
+            'patch' => [
+                '/model/object_types/view/1',
+                [
+                    'id' => '1',
+                    'description' => 'new description',
+                ],
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @param string $expected Expected result
+     * @param array $data Request data
+     * @param bool $singleView Single view
+     *
+     * @covers ::save()
+     * @dataProvider saveProvider()
+     *
+     * @return void
+     */
+    public function testSave(string $expected, array $data, bool $singleView): void
+    {
+        $this->ModelController->setSingleView($singleView);
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+
+        static::assertInstanceOf(Response::class, $result);
+        $location = $result->getHeaderLine('Location');
+        static::assertStringEndsWith($expected, $location);
+    }
+
+    /**
+     * Test `save` failure method
+     *
+     * @covers ::save()
+     *
+     * @return void
+     */
+    public function testSaveFail(): void
+    {
+        $data = [
+            'id' => 99999,
+        ];
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $flash);
+    }
+
+    /**
+     * Test `remove` method
+     *
+     * @covers ::remove()
+     *
+     * @return void
+     */
+    public function testRemove(): void
+    {
+        $data = [
+            'name' => 'foos',
+            'singular' => 'foo',
+        ];
+        foreach ($data as $name => $value) {
+            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+        }
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+
+        $result = $this->ModelController->remove('foos');
+        static::assertInstanceOf(Response::class, $result);
+    }
+
+    /**
+     * Test `remove` failure method
+     *
+     * @covers ::remove()
+     *
+     * @return void
+     */
+    public function testRemoveFail(): void
+    {
+        $result = $this->ModelController->remove(99999);
+        static::assertInstanceOf(Response::class, $result);
+        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('[404] Not Found', $flash);
     }
 }
