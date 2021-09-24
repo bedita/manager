@@ -60,15 +60,21 @@
                     {% set attributes = stream.attributes|merge(stream.meta) %}
                     <table>
                         <tbody>
-                            {% for akey, val in attributes %}
-                            {% if val %}
+                            {% for k, val in attributes %}
+                            {% if val and k != 'file_metadata' %}
                                 <tr>
-                                    <th class="nowrap">{{ akey }} :</th>
+                                    <th class="nowrap">{{ k|humanize }} :</th>
                                     <td>
-                                        {% if akey == 'url' %}
+                                        {% if k == 'url' %}
                                             <a href={{ val }} target="_blank">{{ val }}</a>
+                                        {% elseif in_array(k, ['created', 'modified']) %}
+                                            {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
+                                        {% elseif k == 'file_size' %}
+                                            {{ Schema.format(val, {'type': 'byte'}) }}
+                                        {% elseif k == 'duration' %}
+                                            {{ val|date('H:i:s', '+00:00 GMT') }}
                                         {% else %}
-                                            {% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}
+                                            {{ val }}
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -76,7 +82,21 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
+                    <a href="{{ attributes.url }}" target="_blank"
+                        class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                        {{ __('Open file') }}
+                    </a>
+
                 </div>
+                {% if attributes.file_metadata %}
+                <div class="grid-span-full mt-1">
+                    <h3>{{ __('Metadata') }}</h3>
+                    <div>
+                        <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                    </div>
+                </div>
+                {% endif %}
 
                 <div class="grid-span-full mt-1">
                     <h3>{{ __('Change File') }}</h3>
