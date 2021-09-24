@@ -255,36 +255,24 @@ export default {
         // common relations priorities
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
-            let priority = this.objects[newIndex].meta.relation.priority;
+            let priority = (oldIndex - newIndex > 0) ? this.objects[newIndex].meta.relation.priority : this.objects[oldIndex].meta.relation.priority;
+            const startIndex = Math.min(oldIndex, newIndex);
+            const endIndex = Math.max(oldIndex, newIndex);
 
             // moves the object in the objects array from the old index to the new index
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
             // update priorities
-            if (oldIndex - newIndex > 0) {
-                for (let i = newIndex; i <= oldIndex; i++) {
-                    if (i === newIndex || this.objects[i].meta.relation.priority < priority) {
-                        this.objects[i].meta.relation.priority = priority;
-                        this.modifyRelation(this.objects[i]);
-                        priority++;
+            for (let i = startIndex; i <= endIndex; i++) {
+                if (i === startIndex || this.objects[i].meta.relation.priority < priority || this.objects[i].meta.relation.priority >= this.objects[endIndex].meta.relation.priority) {
+                    this.objects[i].meta.relation.priority = priority;
+                    this.modifyRelation(this.objects[i]);
+                    priority++;
 
-                        continue;
-                    }
-
-                    priority = this.objects[i].meta.relation.priority;
+                    continue;
                 }
-            } else {
-                for (let i = newIndex; i >= oldIndex; i--) {
-                    if (i === newIndex || this.objects[i].meta.relation.priority > priority) {
-                        this.objects[i].meta.relation.priority = priority;
-                        this.modifyRelation(this.objects[i]);
-                        priority--;
 
-                        continue;
-                    }
-
-                    priority = this.objects[i].meta.relation.priority;
-                }
+                priority = this.objects[i].meta.relation.priority;
             }
         },
 
