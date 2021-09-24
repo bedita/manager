@@ -708,6 +708,17 @@ export default {
                     this.loading = false;
                     return objs;
                 })
+                .then(() => {
+                    // restore previously modified priorities
+                    this.objects.forEach((object) => {
+                        const modifiedObject = this.modifiedRelations.find((modified) => modified.id === object.id);
+                        if (modifiedObject) {
+                            object.meta.relation.priority = modifiedObject.meta.relation.priority;
+                        }
+                    });
+                    // sort by restored priorities
+                    this.objects.sort((a, b) => a.meta.relation.priority - b.meta.relation.priority);
+                })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
