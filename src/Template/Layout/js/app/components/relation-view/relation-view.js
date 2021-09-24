@@ -255,15 +255,37 @@ export default {
         // common relations priorities
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+            let priority = this.objects[newIndex].meta.relation.priority;
 
             // moves the object in the objects array from the old index to the new index
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
-            this.objects = this.objects.map((object, index) => {
-                object.meta.relation.priority = index + 1;
-                this.modifyRelation(object);
-                return object;
-            });
+            // update priorities
+            if (oldIndex - newIndex > 0) {
+                for (let i = newIndex; i <= oldIndex; i++) {
+                    if (i === newIndex || this.objects[i].meta.relation.priority < priority) {
+                        this.objects[i].meta.relation.priority = priority;
+                        this.modifyRelation(this.objects[i]);
+                        priority++;
+
+                        continue;
+                    }
+
+                    priority = this.objects[i].meta.relation.priority;
+                }
+            } else {
+                for (let i = newIndex; i >= oldIndex; i--) {
+                    if (i === newIndex || this.objects[i].meta.relation.priority > priority) {
+                        this.objects[i].meta.relation.priority = priority;
+                        this.modifyRelation(this.objects[i]);
+                        priority--;
+
+                        continue;
+                    }
+
+                    priority = this.objects[i].meta.relation.priority;
+                }
+            }
         },
 
         // children position
