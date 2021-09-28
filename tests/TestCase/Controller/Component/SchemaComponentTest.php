@@ -325,6 +325,7 @@ class SchemaComponentTest extends TestCase
                     'attributes' => [
                         'name' => 'cat-1',
                         'label' => 'Category 1',
+                        'id' => '1',
                     ],
                 ],
                 [
@@ -332,6 +333,7 @@ class SchemaComponentTest extends TestCase
                     'attributes' => [
                         'name' => 'cat-2',
                         'label' => 'Category 2',
+                        'id' => '2',
                     ],
                 ],
             ],
