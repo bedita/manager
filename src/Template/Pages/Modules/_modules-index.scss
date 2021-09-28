@@ -132,7 +132,7 @@ body.view-module {
 
 
         .bulk-actions {
-            margin-top: $gutter * 2;
+            margin-top: $gutter * .5;
 
             header {
                 margin: $gutter 0 $gutter * .5;
@@ -146,23 +146,41 @@ body.view-module {
 
             nav {
                 display: flex;
+                flex-wrap: wrap;
                 form {
+                    flex-basis: 100%;
                     margin-right: $gutter;
                     &:last-of-type {
                         margin-right: 0;
                         margin-left: auto;
                     }
 
-                    &#bulk-actions {
-                        flex-grow: 1;
+                    .fieldset {
+                        input, .input {
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                        .vue-treeselect__control {
+                            width: auto;
+                            color: #000;
+                        }
+                        .vue-treeselect__menu-container {
+                            color: #000;
+                        }
+                        .vue-treeselect__input-container {
+                            color: #000;
+                        }
+                        .vue-treeselect__placeholder {
+                            color: #000;
+                        }
                     }
 
-                    fieldset[disabled] {
+                    .fieldset[disabled] {
                         .clear-button {
                             display: none;
                         }
 
-                        label {
+                        button, h2, input, label, select, .vue-treeselect__control {
                             opacity: .3;
                         }
 
@@ -170,7 +188,6 @@ body.view-module {
                             border-color: #adb5bd !important;
                         }
                     }
-
 
                     .input {
                         margin: $gutter * .5;

@@ -26,6 +26,8 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
+        CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),

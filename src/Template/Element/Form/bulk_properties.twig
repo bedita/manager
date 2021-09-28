@@ -1,0 +1,49 @@
+{# bulkActions set in config Properties.<type>.bulk #}
+{% for label, key in bulkActions %}
+    {{ Form.create(null, {
+        'id': 'bulk-' ~ key,
+        'class': 'bulk-actions',
+        'url': {'_name': 'modules:bulkAttribute', 'object_type': objectType, '?': _view.request.getQuery()},
+    })|raw }}
+
+        <div class="fieldset" :disabled="!selectedRows.length">
+
+            <input type="hidden" name="ids" v-bind:value="selectedRows">
+            {{ Form.unlockField('ids') }}
+
+            {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
+            {% set options = options|merge({ 'name': 'attributes[' ~ key ~ ']' }) %}
+            {% set options = options|merge({ 'v-model': 'bulkValue' }) %}
+            {% if label %}
+                {% set options = options|merge({'label': __(label)}) %}
+            {% endif %}
+
+            {% if options.type == 'checkbox' %}
+                {# custom radio input for type checkbox #}
+                {% set radio =  {
+                    "type":"radio",
+                    "options":
+                        [
+                            { "value": 1, "text": __("Yes") },
+                            { "value": 0, "text": __("No") }
+                        ],
+                    "name": "attributes[" ~ key ~ "]"
+                } %}
+                {{ Form.control(key, radio)|raw }}
+
+            {% else %}
+                {{ Form.control(key, options)|raw }}
+            {% endif %}
+
+            {% if options.class == 'json' %}
+                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
+            {% endif %}
+
+            <div class="input">
+                <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
+            </div>
+
+        </div>
+
+    {{ Form.end()|raw }}
+{% endfor %}

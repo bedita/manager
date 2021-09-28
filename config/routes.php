@@ -303,9 +303,21 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     $routes->connect(
-        '/:object_type/bulkActions',
-        ['controller' => 'Modules', 'action' => 'bulkActions'],
-        ['_name' => 'modules:bulkActions']
+        '/:object_type/bulkAttribute',
+        ['controller' => 'Bulk', 'action' => 'attribute'],
+        ['_name' => 'modules:bulkAttribute']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkCategories',
+        ['controller' => 'Bulk', 'action' => 'categories'],
+        ['_name' => 'modules:bulkCategories']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkPosition',
+        ['controller' => 'Bulk', 'action' => 'position'],
+        ['_name' => 'modules:bulkPosition']
     );
 
     // translator service

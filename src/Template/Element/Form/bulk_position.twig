@@ -1,0 +1,31 @@
+{{ Form.create(null, {
+    'id': 'bulk-folder',
+    'class': 'bulk-actions',
+    'url': {'_name': 'modules:bulkPosition', 'object_type': objectType, '?': _view.request.getQuery()},
+})|raw }}
+
+    <div class="fieldset" :disabled="!selectedRows.length">
+
+        <div class="input select">
+            <select name="action" v-model="bulkAction">
+                <option value="copy">{{ __('Copy to') }}</option>
+                <option value="move">{{ __('Move to') }}</option>
+            </select>
+            {{ Form.unlockField('action') }}
+        </div>
+
+        <div class="input">
+            <folder-picker />
+            {{ Form.unlockField('folderSelected') }}
+        </div>
+
+        <input type="hidden" name="ids" v-bind:value="selectedRows">
+        {{ Form.unlockField('ids') }}
+
+        <div class="input">
+            <button class="button button-outlined" @click.prevent="bulkActions('bulk-folder')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
+        </div>
+
+    </div>
+
+{{ Form.end()|raw }}
