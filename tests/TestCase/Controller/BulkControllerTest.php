@@ -122,6 +122,29 @@ class BulkControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `remapCategories` method
+     *
+     * @return void
+     * @covers ::remapCategories()
+     */
+    public function testRemapCategories(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('remapCategories');
+        $method->setAccessible(true);
+        $input = ['Category 1', 'Category 2'];
+        $actual = $method->invokeArgs($this->controller, [$input]);
+        $expected = [
+            ['name' => 'Category 1'],
+            ['name' => 'Category 2'],
+        ];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `position` method
      *
      * @return void

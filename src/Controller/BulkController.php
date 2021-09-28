@@ -163,15 +163,26 @@ class BulkController extends AppController
                 $objectCategories = (array)Hash::extract($object, 'data.attributes.categories.{n}.name');
                 $this->categories = !empty($objectCategories) ? array_unique(array_merge((array)$this->categories, $objectCategories)) : $this->categories;
                 $payload = compact('id');
-                $payload['categories'] = array_map(function ($category) {
-
-                    return ['name' => $category];
-                }, (array)$this->categories);
+                $payload['categories'] = $this->remapCategories((array)$this->categories);
                 $this->apiClient->save($this->objectType, $payload);
             } catch (BEditaClientException $e) {
                 $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
             }
         }
+    }
+
+    /**
+     * Remap categories, returning an array of items 'name':<category>
+     *
+     * @param array $input The input categories
+     * @return array
+     */
+    protected function remapCategories(array $input): array
+    {
+        return array_map(function ($category) {
+
+            return ['name' => $category];
+        }, $input);
     }
 
     /**
