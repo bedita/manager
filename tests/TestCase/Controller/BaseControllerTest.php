@@ -4,6 +4,11 @@ namespace App\Test\TestCase\Controller;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
+/**
+ * Base controller test class, with utils
+ *
+ * @codeCoverageIgnore
+ */
 class BaseControllerTest extends TestCase
 {
     /**
@@ -152,5 +157,10 @@ class BaseControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    public function testDummy(): void
+    {
+        static::assertEquals(1, 1); // dummy test to avoid warning
     }
 }
