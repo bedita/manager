@@ -189,7 +189,7 @@ class BulkController extends AppController
         try {
             $this->apiClient->addRelated($position, 'folders', 'children', $payload);
         } catch (BEditaClientException $e) {
-            $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
+            $this->errors[] = ['message' => $e->getAttributes()];
         }
     }
 
