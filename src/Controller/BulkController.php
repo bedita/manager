@@ -40,7 +40,7 @@ class BulkController extends AppController
     /**
      * Selected categories
      *
-     * @var array
+     * @var array|string
      */
     protected $categories = [];
 
