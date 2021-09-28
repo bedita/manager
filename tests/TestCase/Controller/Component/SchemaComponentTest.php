@@ -325,7 +325,6 @@ class SchemaComponentTest extends TestCase
                     'attributes' => [
                         'name' => 'cat-1',
                         'label' => 'Category 1',
-                        'id' => '1',
                     ],
                 ],
                 [
@@ -333,7 +332,6 @@ class SchemaComponentTest extends TestCase
                     'attributes' => [
                         'name' => 'cat-2',
                         'label' => 'Category 2',
-                        'id' => '2',
                     ],
                 ],
             ],
@@ -358,10 +356,12 @@ class SchemaComponentTest extends TestCase
             [
                 'name' => 'cat-1',
                 'label' => 'Category 1',
+                'id' => '1',
             ],
             [
                 'name' => 'cat-2',
                 'label' => 'Category 2',
+                'id' => '2',
             ],
         ];
         static::assertEquals($expected, $result['categories']);
