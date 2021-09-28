@@ -5,9 +5,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
 /**
- * Base controller test class, with utils
- *
- * @codeCoverageIgnore
+ * Base controller test class, with utils.
  */
 class BaseControllerTest extends TestCase
 {
