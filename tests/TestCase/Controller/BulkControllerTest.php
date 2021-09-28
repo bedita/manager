@@ -154,7 +154,7 @@ class BulkControllerTest extends BaseControllerTest
         ]);
 
         // do controller call
-        $result = $this->controller->categories();
+        $result = $this->controller->position();
 
         // verify response status code and type
         static::assertEquals(302, $result->getStatusCode());
@@ -179,7 +179,7 @@ class BulkControllerTest extends BaseControllerTest
         ]);
 
         // do controller call
-        $result = $this->controller->categories();
+        $result = $this->controller->position();
 
         // verify response status code and type
         static::assertEquals(302, $result->getStatusCode());
