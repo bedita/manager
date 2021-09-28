@@ -141,7 +141,7 @@ class BulkController extends AppController
      */
     protected function loadCategories(): void
     {
-        $url = sprintf('/model/categories?filter[type]=%s&filter[id]=%s', $this->objectType, $this->categories);
+        $url = sprintf('/model/categories?filter[type]=%s&filter[id]=%s', $this->objectType, (string)$this->categories);
         try {
             $response = $this->apiClient->get($url, ['page_size' => 100]);
             $this->categories = (array)Hash::extract($response, 'data.{n}.attributes.name');
@@ -161,12 +161,12 @@ class BulkController extends AppController
             try {
                 $object = $this->apiClient->getObject($id, $this->objectType);
                 $objectCategories = (array)Hash::extract($object, 'data.attributes.categories.{n}.name');
-                $this->categories = !empty($objectCategories) ? array_unique(array_merge($this->categories, $objectCategories)) : $this->categories;
+                $this->categories = !empty($objectCategories) ? array_unique(array_merge((array)$this->categories, $objectCategories)) : $this->categories;
                 $payload = compact('id');
                 $payload['categories'] = array_map(function ($category) {
 
                     return ['name' => $category];
-                }, $this->categories);
+                }, (array)$this->categories);
                 $this->apiClient->save($this->objectType, $payload);
             } catch (BEditaClientException $e) {
                 $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
