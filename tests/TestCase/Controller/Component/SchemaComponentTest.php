@@ -146,6 +146,46 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Test `loadWithRevision`
+     *
+     * @return void
+     * @covers ::loadWithRevision()
+     */
+    public function testLoadWithRevision(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // false
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertFalse($actual);
+
+        // from cache
+        Cache::enable();
+
+        // by type and revision
+        $method = $reflectionClass->getMethod('cacheKey');
+        $method->setAccessible(true);
+        $key = $method->invokeArgs($this->Schema, [$type]);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+
+        // wrong revision
+        $actual = $method->invokeArgs($this->Schema, [$type, '123456789']);
+        static::assertFalse($actual);
+
+        // disable cache
+        Cache::disable();
+    }
+
+    /**
      * Test load internal schema from configuration.
      *
      * @return void
