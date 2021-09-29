@@ -8,7 +8,8 @@
     <div class="fieldset" :disabled="!selectedRows.length">
 
         <div class="input select">
-            <select name="action" v-model="bulkAction">
+            <select name="action" v-model="bulkAction" @click="folderPickerInit()" :disabled="!selectedRows.length">
+                <option value="choose">{{ __('Choose') }}</option>
                 <option value="copy">{{ __('Copy to') }}</option>
                 <option value="move">{{ __('Move to') }}</option>
             </select>

@@ -1,5 +1,6 @@
 import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
+import { EventBus } from 'app/directives/eventbus.js';
 
 /**
  * Templates that uses this component (directly or indirectly)
@@ -39,7 +40,7 @@ export default {
             selectedRows: [],
             bulkField: null,
             bulkValue: null,
-            bulkAction: 'copy',
+            bulkAction: 'choose',
             selectedIds: null,
         };
     },
@@ -167,6 +168,13 @@ export default {
                     this.selectedRows.push(cb.value);
                 }
             }
+        },
+
+        /**
+         * Emit event to init folder picker
+         */
+        folderPickerInit() {
+            EventBus.$emit('folder-picker-init', true);
         },
     }
 }

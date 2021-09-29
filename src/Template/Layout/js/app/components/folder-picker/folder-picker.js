@@ -1,6 +1,7 @@
 import { Treeselect, LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { t } from 'ttag';
+import { EventBus } from '../../directives/eventbus.js';
 
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
@@ -35,6 +36,14 @@ export default {
         };
     },
 
+    mounted() {
+        EventBus.$on('folder-picker-init', this.initOptions);
+    },
+
+    beforeDestroy() {
+        EventBus.$off('folder-picker-init', this.initOptions);
+    },
+
     methods: {
 
         async fetchFolders(parent) {
@@ -63,10 +72,17 @@ export default {
 
         async loadOptions({ action, parentNode, callback }) {
             if (action === LOAD_ROOT_OPTIONS) {
-                this.options = await this.fetchFolders();
+                this.options = [];
             } else if (action === LOAD_CHILDREN_OPTIONS) {
                 parentNode.children = await this.fetchFolders(parentNode);
             }
+        },
+
+        async initOptions() {
+            if (this.options.length > 0) {
+                return;
+            }
+            this.options = await this.fetchFolders();
         },
     },
 }
