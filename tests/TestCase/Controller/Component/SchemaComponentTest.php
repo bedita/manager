@@ -146,6 +146,32 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Test `getSchema`, cache case.
+     *
+     * @return void
+     * @covers ::getSchema()
+     */
+    public function testGetSchemaFromCache(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // from cache
+        Cache::enable();
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('cacheKey');
+        $method->setAccessible(true);
+        $key = $method->invokeArgs($this->Schema, [$type]);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+
+        $method = $reflectionClass->getMethod('getSchema');
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+        Cache::disable();
+    }
+
+    /**
      * Test `loadWithRevision`
      *
      * @return void
