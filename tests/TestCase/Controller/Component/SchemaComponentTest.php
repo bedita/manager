@@ -304,6 +304,51 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Data provider for `concreteTypes()`.
+     *
+     * @return array
+     */
+    public function concreteTypesProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+                [],
+            ],
+            'empty descendants' => [
+                ['documents', 'events'],
+                [],
+                ['documents', 'events'],
+            ],
+            'types + descendants' => [
+                ['documents', 'events'],
+                ['documents' => ['dummy_docs', 'serious_docs']],
+                ['dummy_docs', 'events', 'serious_docs'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `concreteTypes`.
+     *
+     * @param array $types The types
+     * @param array $descendants The descendants
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider concreteTypesProvider()
+     * @covers ::concreteTypes()
+     */
+    public function testConcreteTypes(array $types, array $descendants, array $expected): void
+    {
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('concreteTypes');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$types, $descendants]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `fetchSchema` for `users`.
      *
      * @return void
