@@ -140,9 +140,8 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `index` method
      *
-     * @covers ::index()
-     *
      * @return void
+     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -159,6 +158,36 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['objects', 'meta', 'links', 'types', 'properties']);
+    }
+
+    /**
+     * Test `index` method
+     *
+     * @return void
+     * @covers ::index()
+     */
+    public function testIndexResetRequest(): void
+    {
+        // Setup controller for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $request = $request->withQueryParams(['reset' => '1']);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->index();
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
     }
 
     /**
