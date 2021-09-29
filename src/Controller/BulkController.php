@@ -141,9 +141,9 @@ class BulkController extends AppController
      */
     protected function loadCategories(): void
     {
-        $schema = $this->Schema->getSchema($this->objectType);
+        $schema = (array)$this->Schema->getSchema($this->objectType);
         $schemaCategories = (array)Hash::extract($schema, 'categories');
-        $ids = explode(',', $this->categories);
+        $ids = explode(',', (string)$this->categories);
         $this->categories = [];
         foreach ($schemaCategories as $schemaCategory) {
             if (in_array($schemaCategory['id'], $ids)) {
