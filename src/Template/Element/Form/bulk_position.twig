@@ -1,3 +1,4 @@
+{% if modules.folders %}
 {{ Form.create(null, {
     'id': 'bulk-folder',
     'class': 'bulk-actions',
@@ -29,3 +30,4 @@
     </div>
 
 {{ Form.end()|raw }}
+{% endif %}
