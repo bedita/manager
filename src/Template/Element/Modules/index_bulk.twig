@@ -1,4 +1,7 @@
 <div class="bulk-actions" :class="!selectedRows.length? '' : 'enabled'">
+    <nav>
+        {% element 'Form/bulk_export' %}
+    </nav>
     <header>
         <h1>{{ __('Actions on selected items') }}</h1>
     </header>
@@ -8,8 +11,6 @@
         {% element 'Form/bulk_category' %}
 
         {% element 'Form/bulk_position' %}
-
-        {% element 'Form/bulk_export' %}
 
         {% element 'Form/bulk_trash' %}
     </nav>
