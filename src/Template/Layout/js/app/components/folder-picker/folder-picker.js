@@ -18,21 +18,15 @@ export default {
     },
 
     template: `<div>
-        <Treeselect placeholder="${t`Folder`}" :options="options" :load-options="loadOptions" v-model="value" />
+        <Treeselect placeholder="${t`Folder`}" :options="options" :load-options="loadOptions" v-model="value" :disabled="disabled" />
         <input type="hidden" name="folderSelected" :value="value" />
     </div>`,
-
-    props: {
-        disabled: {
-            type: Boolean,
-            default: true,
-        },
-    },
 
     data() {
         return {
             options: null,
             value: null,
+            disabled: true,
         };
     },
 
@@ -83,6 +77,7 @@ export default {
                 return;
             }
             this.options = await this.fetchFolders();
+            this.disabled = false;
         },
     },
 }
