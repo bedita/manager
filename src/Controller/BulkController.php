@@ -141,12 +141,14 @@ class BulkController extends AppController
      */
     protected function loadCategories(): void
     {
-        $url = sprintf('/model/categories?filter[type]=%s&filter[id]=%s', $this->objectType, (string)$this->categories);
-        try {
-            $response = $this->apiClient->get($url, ['page_size' => 100]);
-            $this->categories = (array)Hash::extract($response, 'data.{n}.attributes.name');
-        } catch (BEditaClientException $ex) {
-            $this->errors[] = ['message' => $ex->getAttributes()];
+        $schema = $this->Schema->getSchema($this->objectType);
+        $schemaCategories = (array)Hash::extract($schema, 'categories');
+        $ids = explode(',', $this->categories);
+        $this->categories = [];
+        foreach ($schemaCategories as $schemaCategory) {
+            if (in_array($schemaCategory['id'], $ids)) {
+                $this->categories[] = $schemaCategory['name'];
+            }
         }
     }
 
@@ -159,9 +161,9 @@ class BulkController extends AppController
     {
         foreach ($this->ids as $id) {
             try {
-                $object = $this->apiClient->getObject($id, $this->objectType);
+                $object = $this->apiClient->getObject($id, $this->objectType, ['fields' => 'categories']);
                 $objectCategories = (array)Hash::extract($object, 'data.attributes.categories.{n}.name');
-                $this->categories = !empty($objectCategories) ? array_unique(array_merge((array)$this->categories, $objectCategories)) : $this->categories;
+                $this->categories = array_unique(array_merge((array)$this->categories, $objectCategories));
                 $payload = compact('id');
                 $payload['categories'] = $this->remapCategories((array)$this->categories);
                 $this->apiClient->save($this->objectType, $payload);
@@ -232,7 +234,7 @@ class BulkController extends AppController
         if (empty($this->errors)) {
             return;
         }
-        $this->log($this->errors, LogLevel::ERROR);
+        $this->log('Error: ' . json_encode($this->errors), LogLevel::ERROR);
         $this->Flash->error(__('Bulk Action failed on: '), ['params' => $this->errors]);
     }
 
