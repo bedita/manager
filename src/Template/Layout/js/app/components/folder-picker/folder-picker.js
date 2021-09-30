@@ -40,7 +40,6 @@ export default {
     },
 
     methods: {
-
         async fetchFolders(parent) {
             const folders = [];
             let filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;

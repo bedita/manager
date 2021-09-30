@@ -194,6 +194,7 @@ body.view-module {
                         .vue-treeselect__control {
                             width: auto;
                             color: #000;
+                            border-radius: 2px !important;
                         }
                         .vue-treeselect__menu-container {
                             color: #000;
@@ -205,6 +206,9 @@ body.view-module {
                                 min-width: 20vw !important;
                                 height: 100%;
                             }
+                        }
+                        .vue-treeselect--disabled {
+                            opacity: .6;
                         }
                         .vue-treeselect__placeholder {
                             color: #000;
