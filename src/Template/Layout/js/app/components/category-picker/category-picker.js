@@ -8,9 +8,11 @@ export default {
         Treeselect,
     },
 
-    template: `<div>
-        <Treeselect placeholder="${t`Categories`}" :options="categoriesOptions" :disable-branch-nodes="true" :multiple="true" v-model="value" />
-        <input type="hidden" name="categoriesSelected" :value="value" />
+    template: `
+    <div>
+        <label for="bulk-categories">${t`Categories`}</label>
+        <Treeselect placeholder :options="categoriesOptions" :disable-branch-nodes="true" :multiple="true" v-model="value" />
+        <input type="hidden" id="bulk-categories" name="categoriesSelected" :value="value" />
     </div>`,
 
     props: {

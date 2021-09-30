@@ -18,8 +18,9 @@ export default {
     },
 
     template: `<div>
-        <Treeselect placeholder="${t`Folder`}" :options="options" :load-options="loadOptions" v-model="value" :disabled="disabled" />
-        <input type="hidden" name="folderSelected" :value="value" />
+        <label for="bulk-folders">${t`Folder`}</label>
+        <Treeselect :options="options" :load-options="loadOptions" v-model="value" :disabled="disabled" />
+        <input id="bulk-folders" type="hidden" name="folderSelected" :value="value" />
     </div>`,
 
     data() {
