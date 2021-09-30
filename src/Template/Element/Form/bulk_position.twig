@@ -9,9 +9,9 @@
 
         <div class="input select">
             <label for="bulk-copy">{{ __('Copy to') }}</label>
-            <input id="bulk-move" @click="folderPickerInit()" :disabled="!selectedRows.length" type="radio" value="copy"/>
+            <input id="bulk-move" @click="folderPickerInit()" :disabled="!selectedRows.length" v-model="bulkAction" type="radio" value="copy"/>
             <label for="bulk-move">{{ __('Move to') }}</label>
-            <input id="bulk-copy" @click="folderPickerInit()" :disabled="!selectedRows.length" type="radio" value="move"/>
+            <input id="bulk-copy" @click="folderPickerInit()" :disabled="!selectedRows.length" v-model="bulkAction" type="radio" value="move"/>
             {{ Form.unlockField('action') }}
         </div>
 
