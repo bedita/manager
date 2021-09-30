@@ -5,14 +5,13 @@
     'url': {'_name': 'modules:bulkPosition', 'object_type': objectType, '?': _view.request.getQuery()},
 })|raw }}
 
-    <div class="fieldset" :disabled="!selectedRows.length">
+    <div class="fieldset bulk-folders" :disabled="!selectedRows.length">
 
         <div class="input select">
-            <select name="action" v-model="bulkAction" @click="folderPickerInit()" :disabled="!selectedRows.length">
-                <option value="choose">{{ __('Choose') }}</option>
-                <option value="copy">{{ __('Copy to') }}</option>
-                <option value="move">{{ __('Move to') }}</option>
-            </select>
+            <label for="bulk-copy">{{ __('Copy to') }}</label>
+            <input id="bulk-move" @click="folderPickerInit()" :disabled="!selectedRows.length" type="radio" value="copy"/>
+            <label for="bulk-move">{{ __('Move to') }}</label>
+            <input id="bulk-copy" @click="folderPickerInit()" :disabled="!selectedRows.length" type="radio" value="move"/>
             {{ Form.unlockField('action') }}
         </div>
 

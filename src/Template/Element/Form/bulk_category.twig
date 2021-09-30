@@ -5,7 +5,7 @@
     'url': {'_name': 'modules:bulkCategories', 'object_type': objectType, '?': _view.request.getQuery()},
 })|raw }}
 
-    <div class="fieldset" :disabled="!selectedRows.length">
+    <div class="fieldset bulk-categories" :disabled="!selectedRows.length">
 
         <div class="input">
             <category-picker :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length" />

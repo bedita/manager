@@ -144,6 +144,34 @@ body.view-module {
                 header { opacity: 1; }
             }
 
+            .bulk-categories, .bulk-folders {
+                display: flex;
+
+                .input > div {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            .bulk-folders {
+                .input {
+                    display: flex !important;
+                    align-items: center;
+
+                    label {
+                        margin-right: calc($gutter * 0.5);
+                    }
+
+                    input[type='radio'] {
+                        margin-right: $gutter;
+                    }
+                }
+            }
+
+            .vue-treeselect__input {
+                background-color: transparent;
+            }
+
             nav {
                 display: flex;
                 flex-wrap: wrap;
@@ -160,6 +188,9 @@ body.view-module {
                             display: inline-block;
                             vertical-align: middle;
                         }
+                        .vue-treeselect {
+                            min-width: 20vw;
+                        }
                         .vue-treeselect__control {
                             width: auto;
                             color: #000;
@@ -169,9 +200,27 @@ body.view-module {
                         }
                         .vue-treeselect__input-container {
                             color: #000;
+
+                            input {
+                                min-width: 20vw !important;
+                                height: 100%;
+                            }
                         }
                         .vue-treeselect__placeholder {
                             color: #000;
+                        }
+                        .vue-treeselect__multi-value-item {
+                            background: transparent;
+                            border: 1px solid black;
+
+                            .vue-treeselect__multi-value-label {
+                                background: transparent;
+                                color: #000;
+                            }
+
+                            .vue-treeselect__icon.vue-treeselect__value-remove {
+                                color: #000;
+                            }
                         }
                     }
 
