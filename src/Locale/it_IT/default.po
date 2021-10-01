@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-09 13:39:14 \n"
+"POT-Creation-Date: 2021-09-30 06:28:47 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -101,6 +101,9 @@ msgstr "Cambia password"
 msgid "Children"
 msgstr "Contenuti"
 
+msgid "Choose"
+msgstr "Seleziona"
+
 msgid "Click or drop new files here"
 msgstr "Clicca o trascina qui i nuovi file"
 
@@ -115,6 +118,9 @@ msgstr "Redattori concorrenti"
 
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
+
+msgid "Copy to"
+msgstr "Copia in"
 
 msgid "Core properties"
 msgstr "Proprietà principali"
@@ -329,6 +335,9 @@ msgstr "Accesso al modulo non autorizzato"
 msgid "More"
 msgstr "Altro"
 
+msgid "Move to"
+msgstr "Sposta in"
+
 msgid "Move to position"
 msgstr "Sposta alla posizione"
 
@@ -390,6 +399,9 @@ msgid "Objects"
 msgstr "Oggetti"
 
 msgid "Off"
+msgstr ""
+
+msgid "Ok"
 msgstr ""
 
 msgid "On"
@@ -501,9 +513,6 @@ msgstr "Cerca"
 
 msgid "Select a project"
 msgstr "Seleziona un progetto"
-
-msgid "Set selected"
-msgstr "Applica a selezione"
 
 msgid "Sign in"
 msgstr "Accedi"
@@ -728,34 +737,34 @@ msgstr "visualizza genitore"
 msgid "warning"
 msgstr "attenzione"
 
-#: src/Template/Layout/js/app/app.js:157
+#: src/Template/Layout/js/app/app.js:159
 #: src/Template/Layout/js/app/components/history/history.js:99
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#: src/Template/Layout/js/app/app.js:158
+#: src/Template/Layout/js/app/app.js:160
 #: src/Template/Layout/js/app/components/history/history.js:100
 msgid "copy"
 msgstr "copia"
 
-#: src/Template/Layout/js/app/app.js:482
+#: src/Template/Layout/js/app/app.js:484
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:486
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/app.js:492
+#: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:144
+#: src/Template/Layout/js/app/pages/modules/index.js:152
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr "sì, prosegui"
 
-#: src/Template/Layout/js/app/app.js:501
+#: src/Template/Layout/js/app/app.js:503
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
@@ -764,7 +773,7 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 
-#: src/Template/Layout/js/app/pages/modules/index.js:142
+#: src/Template/Layout/js/app/pages/modules/index.js:150
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
@@ -890,6 +899,13 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
+
+#: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
+msgid "Folder"
+msgstr "Cartella"
+
+#~ msgid "Set selected"
+#~ msgstr "Applica a selezione"
 
 #~ msgid "Object Types"
 #~ msgstr "Tipi di Oggetto"

@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\HistoryComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
-use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
@@ -207,17 +206,14 @@ class HistoryComponentTest extends TestCase
         return [
             'a document history' => [
                 [
-                    $this->documentId,
-                    [
-                        'properties' => [
-                            'title' => [
-                                'oneOf' => [
-                                    ['type' => null],
-                                    ['type' => 'string'],
-                                ],
-                                '$id' => '/properties/title',
-                                'title' => 'Title',
+                    'properties' => [
+                        'title' => [
+                            'oneOf' => [
+                                ['type' => null],
+                                ['type' => 'string'],
                             ],
+                            '$id' => '/properties/title',
+                            'title' => 'Title',
                         ],
                     ],
                 ],
@@ -239,7 +235,7 @@ class HistoryComponentTest extends TestCase
      */
     public function testFetch(array $data, $expected): void
     {
-        $response = $this->HistoryComponent->fetch($data[0], $data[1]);
+        $response = $this->HistoryComponent->fetch($this->documentId, $data);
         $actual = $response['data'][0]['meta']['changed'];
         static::assertEquals($expected, $actual);
     }

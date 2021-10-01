@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-09 13:39:14 \n"
+"POT-Creation-Date: 2021-09-30 06:28:47 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -101,6 +101,9 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
+msgid "Choose"
+msgstr ""
+
 msgid "Click or drop new files here"
 msgstr ""
 
@@ -114,6 +117,9 @@ msgid "Concurrent users"
 msgstr ""
 
 msgid "Confirm new password"
+msgstr ""
+
+msgid "Copy to"
 msgstr ""
 
 msgid "Core properties"
@@ -329,6 +335,9 @@ msgstr ""
 msgid "More"
 msgstr ""
 
+msgid "Move to"
+msgstr ""
+
 msgid "Move to position"
 msgstr ""
 
@@ -390,6 +399,9 @@ msgid "Objects"
 msgstr ""
 
 msgid "Off"
+msgstr ""
+
+msgid "Ok"
 msgstr ""
 
 msgid "On"
@@ -498,9 +510,6 @@ msgid "Search"
 msgstr ""
 
 msgid "Select a project"
-msgstr ""
-
-msgid "Set selected"
 msgstr ""
 
 msgid "Sign in"
@@ -725,34 +734,34 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:157
+#: src/Template/Layout/js/app/app.js:159
 #: src/Template/Layout/js/app/components/history/history.js:99
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:158
+#: src/Template/Layout/js/app/app.js:160
 #: src/Template/Layout/js/app/components/history/history.js:100
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:482
+#: src/Template/Layout/js/app/app.js:484
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:486
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:492
+#: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:144
+#: src/Template/Layout/js/app/pages/modules/index.js:152
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:501
+#: src/Template/Layout/js/app/app.js:503
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -761,7 +770,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:142
+#: src/Template/Layout/js/app/pages/modules/index.js:150
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -884,4 +893,8 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
+msgid "Folder"
 msgstr ""
