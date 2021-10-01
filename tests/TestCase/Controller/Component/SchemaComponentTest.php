@@ -146,6 +146,72 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Test `getSchema`, cache case.
+     *
+     * @return void
+     * @covers ::getSchema()
+     */
+    public function testGetSchemaFromCache(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // from cache
+        Cache::enable();
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('cacheKey');
+        $method->setAccessible(true);
+        $key = $method->invokeArgs($this->Schema, [$type]);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+
+        $method = $reflectionClass->getMethod('getSchema');
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+        Cache::disable();
+    }
+
+    /**
+     * Test `loadWithRevision`
+     *
+     * @return void
+     * @covers ::loadWithRevision()
+     */
+    public function testLoadWithRevision(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // false
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertFalse($actual);
+
+        // from cache
+        Cache::enable();
+
+        // by type and revision
+        $method = $reflectionClass->getMethod('cacheKey');
+        $method->setAccessible(true);
+        $key = $method->invokeArgs($this->Schema, [$type]);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+
+        // wrong revision
+        $actual = $method->invokeArgs($this->Schema, [$type, '123456789']);
+        static::assertFalse($actual);
+
+        // disable cache
+        Cache::disable();
+    }
+
+    /**
      * Test load internal schema from configuration.
      *
      * @return void
@@ -264,6 +330,51 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Data provider for `concreteTypes()`.
+     *
+     * @return array
+     */
+    public function concreteTypesProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+                [],
+            ],
+            'empty descendants' => [
+                ['documents', 'events'],
+                [],
+                ['documents', 'events'],
+            ],
+            'types + descendants' => [
+                ['documents', 'events'],
+                ['documents' => ['dummy_docs', 'serious_docs']],
+                ['dummy_docs', 'events', 'serious_docs'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `concreteTypes`.
+     *
+     * @param array $types The types
+     * @param array $descendants The descendants
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider concreteTypesProvider()
+     * @covers ::concreteTypes()
+     */
+    public function testConcreteTypes(array $types, array $descendants, array $expected): void
+    {
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('concreteTypes');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$types, $descendants]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `fetchSchema` for `users`.
      *
      * @return void
@@ -356,10 +467,12 @@ class SchemaComponentTest extends TestCase
             [
                 'name' => 'cat-1',
                 'label' => 'Category 1',
+                'id' => '1',
             ],
             [
                 'name' => 'cat-2',
                 'label' => 'Category 2',
+                'id' => '2',
             ],
         ];
         static::assertEquals($expected, $result['categories']);

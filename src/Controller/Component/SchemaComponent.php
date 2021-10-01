@@ -202,6 +202,7 @@ class SchemaComponent extends Component
         return array_map(
             function ($item) {
                 return [
+                    'id' => Hash::get((array)$item, 'id'),
                     'name' => Hash::get((array)$item, 'attributes.name'),
                     'label' => Hash::get((array)$item, 'attributes.label'),
                 ];

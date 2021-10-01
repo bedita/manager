@@ -12,10 +12,8 @@
  */
 namespace App\Controller;
 
-use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
-use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -492,52 +490,6 @@ class ModulesController extends AppController
         }
 
         return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
-    }
-
-    /**
-     * Bulk change actions for objects
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function bulkActions(): ?Response
-    {
-        $requestData = $this->request->getData();
-        $this->request->allowMethod(['post']);
-
-        if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
-            $ids = $requestData['ids'];
-            $errors = [];
-
-            // extract valid attributes to change
-            $attributes = array_filter(
-                $requestData['attributes'],
-                function ($value) {
-                    return ($value !== null && $value !== '');
-                }
-            );
-
-            // export selected (filter by id)
-            $ids = explode(',', $ids);
-            foreach ($ids as $id) {
-                $data = array_merge($attributes, ['id' => $id]);
-                try {
-                    $this->apiClient->save($this->objectType, $data);
-                } catch (BEditaClientException $e) {
-                    $errors[] = [
-                        'id' => $id,
-                        'message' => $e->getAttributes(),
-                    ];
-                }
-            }
-
-            // if errors occured on any single save show error message
-            if (!empty($errors)) {
-                $this->log($errors, LogLevel::ERROR);
-                $this->Flash->error(__('Bulk Action failed on: '), ['params' => $errors]);
-            }
-        }
-
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
     }
 
     /**
