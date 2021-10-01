@@ -44,6 +44,7 @@ export default {
             const folders = [];
             let filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
             let page = 1;
+            let done = false;
             do {
                 let response = await fetch(`${API_URL}api/folders?${filter}&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
@@ -51,13 +52,11 @@ export default {
                     const newFolders = json.data.map((folder) => ({id: folder.id, label: folder.attributes.title, children: null}));
                     folders.push(...newFolders);
                 }
-                if (!json.meta ||
-                    !json.meta.pagination ||
-                    json.meta.pagination.page_count === json.meta.pagination.page) {
-                    break;
+                done = (!json.meta || !json.meta.pagination || json.meta.pagination.page_count === json.meta.pagination.page);
+                if (!done) {
+                    page = json.meta.pagination.page + 1;
                 }
-                page = json.meta.pagination.page + 1;
-            } while (true);
+            } while (!done);
 
             return folders;
         },
