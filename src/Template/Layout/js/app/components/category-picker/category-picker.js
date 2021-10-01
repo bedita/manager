@@ -33,14 +33,7 @@ export default {
 
     methods: {
         loadCategories() {
-            this.categoriesOptions = [];
-            let i = 0;
-            this.categories.forEach(category => {
-                this.categoriesOptions[i++] = {
-                    id: category.id,
-                    label: category.label
-                };
-            });
+            this.categoriesOptions = this.categories.map((category) => ({ id: category.id, label: category.label }));
         },
     },
 }

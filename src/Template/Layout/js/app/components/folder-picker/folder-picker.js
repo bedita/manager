@@ -44,14 +44,12 @@ export default {
             const folders = [];
             let filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
             let page = 1;
-            let i = 0;
             do {
                 let response = await fetch(`${API_URL}api/folders?${filter}&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 if (json.data) {
-                    json.data.forEach(folder => {
-                        folders[i++] = {id: folder.id, label: folder.attributes.title, children: null};
-                    });
+                    const newFolders = json.data.map((folder) => ({id: folder.id, label: folder.attributes.title, children: null}));
+                    folders.push(...newFolders);
                 }
                 if (!json.meta ||
                     !json.meta.pagination ||
