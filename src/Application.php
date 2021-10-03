@@ -140,10 +140,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add($this->csrfMiddleware())
 
             // Authentication middleware.
-            ->add(new AuthenticationMiddleware($this, [
-                'unauthenticatedRedirect' => '/login',
-                'queryParam' => 'redirect',
-            ]));
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
