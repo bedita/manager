@@ -77,7 +77,7 @@ class AppController extends Controller
             if (!empty($tokens)) {
                 $this->apiClient->setupTokens($tokens);
             }
-        } elseif ($this->request->getPath() !== '/login') {
+        } elseif (rtrim($this->request->getPath(), '/') !== '/login') {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
