@@ -12,26 +12,35 @@ const API_OPTIONS = {
 };
 
 export default {
-
     components: {
         Treeselect,
     },
 
     template: `<div class="folder-picker">
         <label for="bulk-folders">${t`Folder`}</label>
-        <Treeselect placeholder="" :options="options" :load-options="loadOptions" v-model="value" :disabled="disabled" />
+        <Treeselect
+            placeholder=""
+            :options="options"
+            :load-options="loadOptions"
+            :auto-load-root-options="false"
+            v-model="value"
+            :disabled="disabled"
+        />
         <input id="bulk-folders" type="hidden" name="folderSelected" :value="value" />
     </div>`,
+
+    props: {
+        disabled: Boolean,
+    },
 
     data() {
         return {
             options: null,
             value: null,
-            disabled: true,
         };
     },
 
-    mounted() {
+    created() {
         EventBus.$on('folder-picker-init', this.initOptions);
     },
 
@@ -43,7 +52,7 @@ export default {
         async fetchFolders(parent) {
             const pageSize = 100;
             const folders = [];
-            let filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
+            const filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
             const firstResponse = await fetch(`${API_URL}api/folders?${filter}&page=1&page_size=${pageSize}`, API_OPTIONS);
             const pageCount = await this.updateFolders(firstResponse, folders);
             const deferred = [];
@@ -70,7 +79,7 @@ export default {
 
         async loadOptions({ action, parentNode, callback }) {
             if (action === LOAD_ROOT_OPTIONS) {
-                this.options = [];
+                this.options = await this.fetchFolders(parentNode);
             } else if (action === LOAD_CHILDREN_OPTIONS) {
                 parentNode.children = await this.fetchFolders(parentNode);
             }
@@ -81,7 +90,6 @@ export default {
                 return;
             }
             this.options = await this.fetchFolders();
-            this.disabled = false;
         },
     },
 }

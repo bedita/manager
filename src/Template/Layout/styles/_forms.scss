@@ -278,13 +278,20 @@ form {
 
 .vue-treeselect__menu {
     border: none !important;
+}
+
+.vue-treeselect--open-below .vue-treeselect__menu {
+    margin-top: -2px !important;
     border-top: 1px solid $gray-200 !important;
     border-bottom-left-radius: 2px !important;
     border-bottom-right-radius: 2px !important;
 }
 
-.vue-treeselect--open-below .vue-treeselect__menu {
-    margin-top: -2px !important;
+.vue-treeselect--open-above .vue-treeselect__menu {
+    margin-bottom: -2px !important;
+    border-bottom: 1px solid $gray-200 !important;
+    border-top-left-radius: 2px !important;
+    border-top-right-radius: 2px !important;
 }
 
 .vue-treeselect__checkbox {

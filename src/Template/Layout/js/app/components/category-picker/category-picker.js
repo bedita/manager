@@ -11,7 +11,7 @@ export default {
         <div class="category-picker">
             <label :for="id">${t`Categories`}</label>
             <Treeselect placeholder :options="categoriesOptions" :disabled="disabled" :disable-branch-nodes="true" :multiple="true" v-model="value" />
-            <input type="hidden" :id="id" name="categoriesSelected" :value="value" />
+            <input type="hidden" :id="id" name="categories" :value="value" />
         </div>
     `,
 

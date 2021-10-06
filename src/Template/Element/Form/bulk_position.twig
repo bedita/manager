@@ -16,7 +16,7 @@
         </div>
 
         <div class="input">
-            <folder-picker/>
+            <folder-picker :disabled="!selectedRows.length" />
             {{ Form.unlockField('folderSelected') }}
         </div>
 

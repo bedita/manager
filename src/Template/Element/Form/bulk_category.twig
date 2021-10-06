@@ -7,7 +7,7 @@
     <div class="fieldset bulk-categories">
         <div class="input">
             <category-picker :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length" />
-            {{ Form.unlockField('categoriesSelected') }}
+            {{ Form.unlockField('categories') }}
         </div>
 
         <input type="hidden" name="ids" :value="selectedRows">

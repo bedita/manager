@@ -20,6 +20,10 @@ import merge from 'deepmerge';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
 
+/**
+ * Filters that are rendered with custom forms.
+ * Needed to skip generic form controls.
+ */
 const CUSTOM_RENDER_FILTERS = ['status', 'categories'];
 
 export default {
@@ -92,6 +96,7 @@ export default {
             this.initFilter
         ]);
 
+        // remove default filters with custom render from the list of dynamic filters
         this.dynamicFilters = this.filterList.filter(f => {
             if (CUSTOM_RENDER_FILTERS.includes(f.name)) {
                 if (f.name == 'status') {
@@ -125,10 +130,7 @@ export default {
          * @return {void}
          */
         isFullPaginationLayout() {
-            return (
-                this.pagination.page_count > 1 &&
-                this.pagination.page_count <= 7
-            );
+            return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
         }
     },
 
