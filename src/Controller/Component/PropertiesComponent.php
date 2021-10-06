@@ -60,9 +60,7 @@ class PropertiesComponent extends Component
         ],
 
         'filter' => [
-            'status',
-            'lang',
-            'categories'
+            'status'
         ],
         'bulk' => [
             'status',
