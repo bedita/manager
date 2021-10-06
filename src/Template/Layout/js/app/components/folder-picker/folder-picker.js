@@ -1,5 +1,5 @@
-import { Treeselect, LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { Treeselect, LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect';
+import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 import { t } from 'ttag';
 import { EventBus } from '../../directives/eventbus.js';
 
@@ -17,7 +17,7 @@ export default {
         Treeselect,
     },
 
-    template: `<div>
+    template: `<div class="folder-picker">
         <label for="bulk-folders">${t`Folder`}</label>
         <Treeselect placeholder="" :options="options" :load-options="loadOptions" v-model="value" :disabled="disabled" />
         <input id="bulk-folders" type="hidden" name="folderSelected" :value="value" />

@@ -3,21 +3,22 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { t } from 'ttag';
 
 export default {
-
     components: {
         Treeselect,
     },
 
     template: `
-    <div>
-        <label for="bulk-categories">${t`Categories`}</label>
-        <Treeselect placeholder :options="categoriesOptions" :disable-branch-nodes="true" :multiple="true" v-model="value" />
-        <input type="hidden" id="bulk-categories" name="categoriesSelected" :value="value" />
-    </div>`,
+        <div class="category-picker">
+            <label :for="id">${t`Categories`}</label>
+            <Treeselect placeholder :options="categoriesOptions" :disabled="disabled" :disable-branch-nodes="true" :multiple="true" v-model="value" />
+            <input type="hidden" :id="id" name="categoriesSelected" :value="value" />
+        </div>
+    `,
 
     props: {
         id: String,
         categories: Array,
+        disabled: Boolean,
     },
 
     data() {
@@ -33,7 +34,7 @@ export default {
 
     methods: {
         loadCategories() {
-            this.categoriesOptions = this.categories.map((category) => ({ id: category.id, label: category.label }));
+            this.categoriesOptions = this.categories?.map((category) => ({ id: category.id, label: category.label }));
         },
     },
 }

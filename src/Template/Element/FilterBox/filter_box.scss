@@ -21,9 +21,26 @@
     }
 }
 
-
 .filters-container {
-    .filter-container, .filter-buttons {
+    display: flex;
+    flex-direction: column;
+
+    .basic-filters,
+    .more-filters {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        > * {
+            margin-bottom: $gutter * .5;
+        }
+
+        > *:not(:last-child) {
+            margin-right: $gutter;
+        }
+    }
+
+    .more-filters {
         margin-top: $gutter;
     }
 
@@ -32,51 +49,41 @@
         flex-wrap: wrap;
         align-items: center;
 
-        &:first-child { margin-top: 0; }
         &.filter-search {
             display: flex;
-            input[type="text"] { 
+            input[type="text"] {
                 width: 100%;
-                min-width: $gutter * 12; 
+                min-width: $gutter * 12;
             }
         }
+
         // TODO: non mi piace, da rivedere il componente input date picker
         &.date {
             > span {
                 display: flex;
-                input { margin: 0; width: 100%; }
+
+                input {
+                    margin: 0;
+                    width: 100%;
+                }
             }
         }
 
-        .filter-status-select { margin-left: $gutter * .5; }
-        .filter-label:first-letter { text-transform: uppercase; }
+        & > label {
+            &:first-letter {
+                text-transform: uppercase;
+            }
 
-        label, .filter-label {
-            cursor: pointer;
-            display: inline-block;
-            // flex-grow: 1;
-            &:not(:last-child) { margin-right: $gutter; }
+            &:not(:last-child) {
+                margin-right: $gutter * .5;
+            }
         }
-    }
 
-    .filter-buttons {
-        display: flex;
-        > *:not(:last-child) { margin-right: $gutter * .5; }
-    }
-}
-
-
-.filters-container.basic-filters-only {
-    display: flex;
-    .filter-container {
-        margin-top: 0;
-        margin-right: $gutter * .5;
-        .filter-label { display: none; }
-    }
-    .filter-buttons {
-        margin-top: 0;
-        margin-left: $gutter * .5;
-        margin-right: $gutter * .5;
+        .category-picker,
+        .folder-picker {
+            display: flex;
+            align-items: center;
+        }
     }
 }
 

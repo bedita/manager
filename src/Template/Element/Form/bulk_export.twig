@@ -11,7 +11,7 @@
             {% set defaultFormat = config('Export.default', 'xslx') %}
 
             <div class="input select">
-                <select name="format" id="exportformat">
+                <select name="format" id="exportformat" :disabled="!selectedRows.length">
                 {% for label,format in formats %}
                     <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
                 {% endfor %}
@@ -40,7 +40,7 @@
             {% endif %}
 
             <div class="input">
-                <button class="button button-outlined" @click.prevent="exportAll">{{ exportLabel }}</button>
+                <button class="button button-outlined" @click.prevent="exportAll" :disabled="!selectedRows.length">{{ exportLabel }}</button>
             </div>
 
         </div>

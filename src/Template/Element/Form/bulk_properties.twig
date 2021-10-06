@@ -12,25 +12,27 @@
             {{ Form.unlockField('ids') }}
 
             {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
-            {% set options = options|merge({ 'name': 'attributes[' ~ key ~ ']' }) %}
-            {% set options = options|merge({ 'v-model': 'bulkValue' }) %}
+            {% set options = options|merge({
+                'name': 'attributes[' ~ key ~ ']',
+                'v-model': 'bulkValue',
+                ':disabled': '!selectedRows.length'
+            }) %}
             {% if label %}
                 {% set options = options|merge({'label': __(label)}) %}
             {% endif %}
 
             {% if options.type == 'checkbox' %}
                 {# custom radio input for type checkbox #}
-                {% set radio =  {
+                {% set radio = {
                     "type":"radio",
-                    "options":
-                        [
-                            { "value": 1, "text": __("Yes") },
-                            { "value": 0, "text": __("No") }
-                        ],
+                    "options": [
+                        { "value": 1, "text": __("Yes") },
+                        { "value": 0, "text": __("No") },
+                        { ':disabled': '!selectedRows.length' }
+                    ],
                     "name": "attributes[" ~ key ~ "]"
                 } %}
                 {{ Form.control(key, radio)|raw }}
-
             {% else %}
                 {{ Form.control(key, options)|raw }}
             {% endif %}

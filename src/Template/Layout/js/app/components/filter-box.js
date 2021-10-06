@@ -5,14 +5,14 @@
  *
  * <filter-box-view> component
  *
- * @prop {String} objectsLabel
- * @prop {String} placeholder
- * @prop {Boolean} showFilterButtons
- * @prop {Object} initFilter
- * @prop {Object} relationTypes relation types available for relation (left/right)
- * @prop {Array} filterList custom filters to show
- * @prop {Object} pagination
  * @prop {String} configPaginateSizes
+ * @prop {Array} filterList custom filters to show
+ * @prop {Object} initFilter
+ * @prop {String} objectsLabel
+ * @prop {Object} pagination
+ * @prop {String} placeholder
+ * @prop {Object} relationTypes relation types available for relation (left/right)
+ * @prop {Array} selectedTypes Types selected
  */
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
@@ -20,23 +20,23 @@ import merge from 'deepmerge';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
 
+const CUSTOM_RENDER_FILTERS = ['status', 'categories'];
+
 export default {
     components: {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
+        CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
     },
 
     props: {
-        objectsLabel: {
+        configPaginateSizes: {
             type: String,
-            default: t`Objects`
+            default: "[10]"
         },
-        placeholder: {
-            type: String,
-            default: t`Search`
-        },
-        showFilterButtons: {
-            type: Boolean,
-            default: true
+        filterList: {
+            type: Array,
+            default: () => [],
         },
         initFilter: {
             type: Object,
@@ -49,6 +49,18 @@ export default {
                 };
             }
         },
+        objectsLabel: {
+            type: String,
+            default: t`Objects`
+        },
+        pagination: {
+            type: Object,
+            default: () => DEFAULT_PAGINATION
+        },
+        placeholder: {
+            type: String,
+            default: t`Search`
+        },
         relationTypes: {
             type: Object
         },
@@ -56,18 +68,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        filterList: {
-            type: Array,
-            default: () => [],
-        },
-        pagination: {
-            type: Object,
-            default: () => DEFAULT_PAGINATION
-        },
-        configPaginateSizes: {
-            type: String,
-            default: "[10]"
-        }
     },
 
     data() {
@@ -76,7 +76,9 @@ export default {
             timer: null,
             pageSize: this.pagination.page_size, // pageSize value for pagination page size
             dynamicFilters: {},
+            moreFilters: false,
             statusFilter: {},
+            selectedStatuses: [],
         };
     },
 
@@ -91,12 +93,15 @@ export default {
         ]);
 
         this.dynamicFilters = this.filterList.filter(f => {
-            if(f.name == 'status') {
-                this.statusFilter = f;
+            if (CUSTOM_RENDER_FILTERS.includes(f.name)) {
+                if (f.name == 'status') {
+                    this.statusFilter = f;
+                }
+
                 return false;
-            } else {
-                return true;
             }
+
+            return true;
         });
     },
 
@@ -142,18 +147,24 @@ export default {
         /**
          * watcher for pageSize variable, change pageSize and reload relations
          *
-         * @param {Number} value
-         *
          * @emits Event#filter-update-page-size
          *
          * @returns {void}
          */
-        pageSize(value) {
+        pageSize() {
             this.$emit("filter-update-page-size", this.pageSize);
         },
 
         selectedTypes(value) {
             this.queryFilter.filter.type = value;
+        },
+
+        /**
+         * Add selected statuses to the query filters.
+         * @param {String[]} value Selected statuses list
+         */
+        selectedStatuses(value) {
+            this.queryFilter.filter.status = value;
         }
     },
 
@@ -243,7 +254,7 @@ export default {
                 f => (filter[f.name] = f.date ? {} : "")
             );
 
-            return { filter: filter };
+            return { filter };
         },
 
         /**

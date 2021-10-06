@@ -130,18 +130,15 @@ body.view-module {
             }
         }
 
-
         .bulk-actions {
             margin-top: $gutter * .5;
 
-            header {
-                margin: $gutter 0 $gutter * .5;
-                width: 100%;
+            &.disabled {
                 opacity: .3;
             }
 
-            &.enabled {
-                header { opacity: 1; }
+            header {
+                margin: $gutter 0 $gutter * .5;
             }
 
             .bulk-categories, .bulk-folders {
@@ -168,73 +165,21 @@ body.view-module {
                 }
             }
 
-            .vue-treeselect__input {
-                background-color: transparent;
-            }
-
             nav {
                 display: flex;
-                flex-wrap: wrap;
-                form {
-                    flex-basis: 100%;
-                    margin-right: $gutter;
-                    &:last-of-type {
-                        margin-right: 0;
-                        margin-left: auto;
-                    }
+                flex-direction: column;
 
+                form {
                     .fieldset {
                         input, .input {
                             display: inline-block;
                             vertical-align: middle;
-                        }
-                        .vue-treeselect {
-                            min-width: 20vw;
-                        }
-                        .vue-treeselect__control {
-                            width: auto;
-                            color: #000;
-                            border-radius: 2px !important;
-                        }
-                        .vue-treeselect__menu-container {
-                            color: #000;
-                        }
-                        .vue-treeselect__input-container {
-                            color: #000;
-
-                            input {
-                                min-width: 20vw !important;
-                                height: 100%;
-                            }
-                        }
-                        .vue-treeselect--disabled {
-                            opacity: .6;
-                        }
-                        .vue-treeselect__placeholder {
-                            color: #000;
-                        }
-                        .vue-treeselect__multi-value-item {
-                            background: transparent;
-                            border: 1px solid black;
-
-                            .vue-treeselect__multi-value-label {
-                                background: transparent;
-                                color: #000;
-                            }
-
-                            .vue-treeselect__icon.vue-treeselect__value-remove {
-                                color: #000;
-                            }
                         }
                     }
 
                     .fieldset[disabled] {
                         .clear-button {
                             display: none;
-                        }
-
-                        button, h2, input, label, select, .vue-treeselect__control {
-                            opacity: .3;
                         }
 
                         .input.textarea {
@@ -244,6 +189,7 @@ body.view-module {
 
                     .input {
                         margin: $gutter * .5;
+                        margin-left: 0;
 
                         label {
                             margin-right: $gutter * .5;
@@ -256,8 +202,8 @@ body.view-module {
 
     // TODO: da fare meglio
     &.module-media, &.module-images, &.module-video, &.module-audio, &.module-objects {
-       .module-index .list-objects > a div.title-cell {
-           max-width: 210px;
-       }
+        .module-index .list-objects > a div.title-cell {
+            max-width: 210px;
+        }
     }
 }

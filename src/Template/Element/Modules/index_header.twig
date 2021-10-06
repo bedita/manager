@@ -3,7 +3,7 @@
     {% for f in filter %}
         {% set options = Schema.controlOptions(f, null, schema.properties[f]) %}
         {% set options = options|merge({ 'name': f }) %}
-        {% set list = list|merge({ (loop.index0): options}) %}
+        {% set list = list|merge({ (loop.index0): options }) %}
     {% endfor %}
 
     <filter-box-view

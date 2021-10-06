@@ -36,6 +36,9 @@ textarea {
 
 select {
     height: $gutter * 2;
+    border-radius: 2px;
+    border: none;
+    font-family: $font-family-sans-serif;
 }
 
 label {
@@ -210,4 +213,84 @@ form {
             color: $gray-900;
         }
     }
+}
+
+// Treeselect
+.vue-treeselect {
+    min-width: 4rem !important;
+}
+
+.vue-treeselect--disabled {
+    opacity: .6;
+}
+
+.vue-treeselect__control {
+    height: $gutter * 2 !important;
+    padding: 0 .5em !important;
+    width: auto !important;
+    color: #000 !important;
+    border-radius: 2px !important;
+    border: none !important;
+
+    .vue-treeselect__value-container {
+        max-width: 100%;
+    }
+}
+
+.vue-treeselect__input {
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.vue-treeselect__menu-container,
+.vue-treeselect__input-container,
+.vue-treeselect__placeholder {
+    color: #000 !important;
+}
+
+.vue-treeselect__placeholder {
+    padding: 0 !important;
+}
+
+.vue-treeselect__input-container input {
+    height: 100%;
+}
+
+.vue-treeselect__multi-value-item {
+    background: transparent !important;
+    border: 1px solid #000 !important;
+
+    .vue-treeselect__multi-value-label {
+        background: transparent !important;
+        color: #000 !important;
+    }
+
+    .vue-treeselect__icon.vue-treeselect__value-remove {
+        color: #000 !important;
+    }
+}
+
+.vue-treeselect__x-container,
+.vue-treeselect__control-arrow-container {
+    width: auto !important;
+    padding: 0 4px;
+}
+
+.vue-treeselect__menu {
+    border: none !important;
+    border-top: 1px solid $gray-200 !important;
+    border-bottom-left-radius: 2px !important;
+    border-bottom-right-radius: 2px !important;
+}
+
+.vue-treeselect--open-below .vue-treeselect__menu {
+    margin-top: -2px !important;
+}
+
+.vue-treeselect__checkbox {
+    border-color: $gray-600 !important;
+}
+
+.vue-treeselect__checkbox--checked {
+    background-color: $gray-600 !important;
 }

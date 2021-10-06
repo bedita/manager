@@ -173,17 +173,17 @@ const _vueInstance = new Vue({
         /**
          * listen to FilterBoxView event filter-objects
          *
-         * @param {Object} filter
+         * @param {Object} query
          *
          * @return {void}
          */
-        onFilterObjects(filter) {
+        onFilterObjects(query) {
             // remove from query string filter `history_editor` if false
-            if (!filter.filter.history_editor) {
-                delete filter.filter.history_editor;
+            if (!query.filter.history_editor) {
+                delete query.filter.history_editor;
             }
 
-            this.urlFilterQuery = filter;
+            this.urlFilterQuery = query;
             this.page = '';
 
             this.applyFilters(this.urlFilterQuery);
