@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-30 06:28:47 \n"
+"POT-Creation-Date: 2021-10-06 09:51:37 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -100,9 +100,6 @@ msgstr "Cambia password"
 
 msgid "Children"
 msgstr "Contenuti"
-
-msgid "Choose"
-msgstr "Seleziona"
 
 msgid "Click or drop new files here"
 msgstr "Clicca o trascina qui i nuovi file"
@@ -293,6 +290,9 @@ msgstr "Lingua e traduzioni"
 msgid "Left types"
 msgstr "Tipi di sinistra"
 
+msgid "Less filters"
+msgstr "Meno filtri"
+
 msgid "Locations"
 msgstr "Posizioni"
 
@@ -334,6 +334,9 @@ msgstr "Accesso al modulo non autorizzato"
 
 msgid "More"
 msgstr "Altro"
+
+msgid "More filters"
+msgstr "Più filtri"
 
 msgid "Move to"
 msgstr "Sposta in"
@@ -811,11 +814,11 @@ msgstr "Priorità"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: src/Template/Layout/js/app/components/filter-box.js:168
+#: src/Template/Layout/js/app/components/filter-box.js:177
 msgid "Items"
 msgstr "Elementi"
 
-#: src/Template/Layout/js/app/components/filter-box.js:228
+#: src/Template/Layout/js/app/components/filter-box.js:237
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 
@@ -903,6 +906,9 @@ msgstr ""
 #: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
 msgid "Folder"
 msgstr "Cartella"
+
+#~ msgid "Choose"
+#~ msgstr "Seleziona"
 
 #~ msgid "Set selected"
 #~ msgstr "Applica a selezione"

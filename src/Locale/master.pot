@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-30 06:28:47 \n"
+"POT-Creation-Date: 2021-10-06 09:51:37 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -96,9 +96,6 @@ msgid "Change password"
 msgstr ""
 
 msgid "Children"
-msgstr ""
-
-msgid "Choose"
 msgstr ""
 
 msgid "Click or drop new files here"
@@ -290,6 +287,9 @@ msgstr ""
 msgid "Left types"
 msgstr ""
 
+msgid "Less filters"
+msgstr ""
+
 msgid "Locations"
 msgstr ""
 
@@ -330,6 +330,9 @@ msgid "Module access not authorized"
 msgstr ""
 
 msgid "More"
+msgstr ""
+
+msgid "More filters"
 msgstr ""
 
 msgid "Move to"
@@ -805,11 +808,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:168
+#: src/Template/Layout/js/app/components/filter-box.js:177
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:228
+#: src/Template/Layout/js/app/components/filter-box.js:237
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
