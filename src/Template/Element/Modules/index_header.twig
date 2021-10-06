@@ -1,4 +1,5 @@
 <div class="module-header">
+    {% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
     {% set list = [] %}
     {% for f in filter %}
         {% set options = Schema.controlOptions(f, null, schema.properties[f]) %}
@@ -10,7 +11,8 @@
         :pagination={{ meta.pagination|json_encode|raw }}
         :init-filter="urlFilterQuery"
         :selected-types='selectedTypes'
-        :filter-list='{{ list|json_encode|raw}}'
+        :filter-list='{{ list|json_encode|raw }}'
+        :filter-active="{{ filterActive|json_encode }}"
 
         config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
         placeholder="{{ __('Search') }}"

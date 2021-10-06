@@ -9,8 +9,16 @@ export default {
     template: `
         <div class="category-picker">
             <label v-if="label" :for="id"><: label :></label>
-            <Treeselect placeholder :options="categoriesOptions" :disabled="disabled" :disable-branch-nodes="true" :multiple="true" v-model="value" />
-            <input type="hidden" :id="id" name="categories" :value="value" />
+            <Treeselect
+                placeholder
+                :options="categoriesOptions"
+                :disabled="disabled"
+                :disable-branch-nodes="true"
+                :multiple="true"
+                v-model="selectedIds"
+                @input="onChange"
+            />
+            <input type="hidden" :id="id" name="categories" :value="selectedIds" />
         </div>
     `,
 
@@ -19,22 +27,28 @@ export default {
         categories: Array,
         disabled: Boolean,
         label: String,
+        selectedCategories: Array,
     },
 
     data() {
         return {
             categoriesOptions: [],
-            value: null,
+            selectedIds: null,
         };
     },
 
     mounted() {
-        this.loadCategories();
+        this.categoriesOptions = this.categories?.map((category) => ({ id: category.id, label: category.label }));
+        this.selectedIds = this.selectedCategories?.map(selected => this.categories.find(cat => cat.name == selected)?.id);
     },
 
     methods: {
-        loadCategories() {
-            this.categoriesOptions = this.categories?.map((category) => ({ id: category.id, label: category.label }));
-        },
+        /**
+         * Emits currently selected categories on selection change.
+         */
+        onChange() {
+            const selectedCategories = this.categories.filter((cat) => this.selectedIds.includes(cat.id));
+            this.$emit('change', selectedCategories);
+        }
     },
 }

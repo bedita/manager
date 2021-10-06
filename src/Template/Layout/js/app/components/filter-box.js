@@ -6,6 +6,7 @@
  * <filter-box-view> component
  *
  * @prop {String} configPaginateSizes
+ * @prop {Boolean} filterActive Some filter is active on currently displayed data
  * @prop {Array} filterList custom filters to show
  * @prop {Object} initFilter
  * @prop {String} objectsLabel
@@ -20,12 +21,6 @@ import merge from 'deepmerge';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
 
-/**
- * Filters that are rendered with custom forms.
- * Needed to skip generic form controls.
- */
-const CUSTOM_RENDER_FILTERS = [];
-
 export default {
     components: {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
@@ -38,20 +33,14 @@ export default {
             type: String,
             default: "[10]"
         },
+        filterActive: Boolean,
         filterList: {
             type: Array,
             default: () => [],
         },
         initFilter: {
             type: Object,
-            default: () => {
-                return {
-                    q: "",
-                    filter: {
-                        type: ""
-                    }
-                };
-            }
+            default: DEFAULT_FILTER,
         },
         objectsLabel: {
             type: String,
@@ -78,9 +67,9 @@ export default {
         return {
             queryFilter: {},
             timer: null,
-            pageSize: this.pagination.page_size, // pageSize value for pagination page size
+            pageSize: this.pagination.page_size,
             dynamicFilters: {},
-            moreFilters: false,
+            moreFilters: this.filterActive,
             statusFilter: {},
             selectedStatuses: [],
         };
@@ -98,16 +87,16 @@ export default {
 
         // remove default filters with custom render from the list of dynamic filters
         this.dynamicFilters = this.filterList.filter(f => {
-            if (CUSTOM_RENDER_FILTERS.includes(f.name)) {
-                if (f.name == 'status') {
-                    this.statusFilter = f;
-                }
+            if (f.name == 'status') {
+                this.statusFilter = f;
 
                 return false;
             }
 
             return true;
         });
+
+        this.selectedStatuses = Object.values(this.initFilter?.filter?.status || []);
     },
 
     computed: {
@@ -131,7 +120,7 @@ export default {
          */
         isFullPaginationLayout() {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
-        }
+        },
     },
 
     watch: {
@@ -161,13 +150,13 @@ export default {
             this.queryFilter.filter.type = value;
         },
 
-        /**
-         * Add selected statuses to the query filters.
-         * @param {String[]} value Selected statuses list
-         */
-        selectedStatuses(value) {
-            this.queryFilter.filter.status = value;
-        }
+        // /**
+        //  * Add selected statuses to the query filters.
+        //  * @param {String[]} value Selected statuses list
+        //  */
+        // selectedStatuses(value) {
+        //     this.queryFilter.filter.status = value;
+        // }
     },
 
     methods: {
@@ -291,6 +280,10 @@ export default {
          */
         onChangePage(index) {
             this.$emit("filter-update-current-page", index);
-        }
+        },
+
+        onCategoryChange(categories) {
+            this.queryFilter.filter.categories = categories?.map((cat) => cat.name);
+        },
     }
 };

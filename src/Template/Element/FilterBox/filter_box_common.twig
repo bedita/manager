@@ -1,6 +1,4 @@
-{% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
-
-<div class="filters-container{{ filterActive ? ' filters-container-active' : '' }}">
+<div class="filters-container" :class="{ 'filters-container-active': filterActive }">
     <div class="basic-filters">
         {# search #}
         <div class="filter-container filter-search input">
@@ -58,8 +56,10 @@
             <span v-if="filter.name === 'categories'">
                 <category-picker
                     :categories="{{ schema.categories|json_encode }}"
+                    :selected-categories="Object.values(initFilter.filter.categories)"
                     id="category-filter"
                     label=""
+                    @change="onCategoryChange"
                 />
                 {{ Form.unlockField('categories') }}
             </span>
@@ -120,10 +120,8 @@
     </div>
 </div>
 
-{% if filterActive %}
-<div>
+<div v-if="filterActive">
     <p class="is-expanded tag mt-1">
         {{ __('Data is filtered') }}
     </p>
 </div>
-{% endif %}
