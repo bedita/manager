@@ -55,7 +55,30 @@
             <input type="hidden" :name="filter.name" :value="filter.value">
             <label><: filter.name | humanize :></label>
 
-            <span v-if="filter.type === 'select' || filter.type === 'radio'">
+            <span v-if="filter.name === 'categories'">
+                <category-picker
+                    :categories="{{ schema.categories|json_encode }}"
+                    id="category-filter"
+                    label=""
+                />
+                {{ Form.unlockField('categories') }}
+            </span>
+
+            <span v-else-if="filter.name === 'parent'">
+                <folder-picker label="" />
+                {{ Form.unlockField('folderSelected') }}
+            </span>
+
+            <span v-else-if="filter.name === 'date_ranges'">
+                <label>{{ __('From date') }}
+                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
+                </label>
+                <label>{{ __('To date') }}
+                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
+                </label>
+            </span>
+
+            <span v-else-if="filter.type === 'select' || filter.type === 'radio'">
                 <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
                     <option value="">
                         {{ __('All') }}
@@ -81,15 +104,6 @@
                 </label>
             </span>
 
-            <span v-if="filter.name === 'date_ranges'">
-                <label>{{ __('From date') }}
-                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
-                </label>
-                <label>{{ __('To date') }}
-                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
-                </label>
-            </span>
-
             <span v-else-if="filter.date">
                 <label>{{ __('From') }}
                     <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" />
@@ -102,21 +116,6 @@
             <span v-else-if="filter.type === 'text' || filter.type === 'number'">
                 <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
             </span>
-        </div>
-
-        {% if schema.categories|length > 0 %}
-        <div class="filter-container" v-if="filterList.some(f => f.name === 'categories')">
-            <category-picker
-                :categories="{{ schema.categories|json_encode }}"
-                id="category-filter"
-            />
-            {{ Form.unlockField('categories') }}
-        </div>
-        {% endif %}
-
-        <div class="filter-container">
-            <folder-picker />
-            {{ Form.unlockField('folderSelected') }}
         </div>
     </div>
 </div>

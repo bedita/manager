@@ -24,7 +24,7 @@ import { warning } from 'app/components/dialog/dialog';
  * Filters that are rendered with custom forms.
  * Needed to skip generic form controls.
  */
-const CUSTOM_RENDER_FILTERS = ['status', 'categories'];
+const CUSTOM_RENDER_FILTERS = [];
 
 export default {
     components: {

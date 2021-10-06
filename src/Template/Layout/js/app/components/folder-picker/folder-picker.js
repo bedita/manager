@@ -17,7 +17,7 @@ export default {
     },
 
     template: `<div class="folder-picker">
-        <label for="bulk-folders">${t`Folder`}</label>
+        <label v-if="label" for="bulk-folders"><: label :></label>
         <Treeselect
             placeholder=""
             :options="options"
@@ -31,6 +31,7 @@ export default {
 
     props: {
         disabled: Boolean,
+        label: String,
     },
 
     data() {

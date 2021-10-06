@@ -6,7 +6,7 @@
 })|raw }}
     <div class="fieldset bulk-categories">
         <div class="input">
-            <category-picker :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length" />
+            <category-picker label="{{ __('Categories') }}" :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length" />
             {{ Form.unlockField('categories') }}
         </div>
 
