@@ -41,6 +41,11 @@ export default {
             bulkValue: null,
             bulkAction: null,
             selectedIds: null,
+            /**
+             * Selected folder for bulk copy or move.
+             * Used to enable/disable confirmation button.
+             */
+            bulkFolder: null,
         };
     },
 

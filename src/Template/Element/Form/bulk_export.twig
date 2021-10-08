@@ -36,7 +36,7 @@
                 {% set exportLabel = __('Export Filtered') %}
             {% endif %}
 
-            <button class="button button-outlined" @click.prevent="exportAll" :disabled="!selectedRows.length">{{ exportLabel }}</button>
+            <button class="button button-outlined" @click.prevent="exportAll">{{ exportLabel }}</button>
         </div>
     {{ Form.end()|raw }}
 {% endif %}

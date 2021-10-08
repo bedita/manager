@@ -16,13 +16,23 @@
         </div>
         {{ Form.unlockField('action') }}
 
-        <folder-picker label="{{ __('Folder') }}" :disabled="!selectedRows.length || !bulkAction"></folder-picker>
+        <folder-picker
+            label="{{ __('Folder') }}"
+            :disabled="!selectedRows.length || !bulkAction"
+            @change="bulkFolder = $event?.id"
+        ></folder-picker>
         {{ Form.unlockField('folderSelected') }}
 
         <input type="hidden" name="ids" :value="selectedRows"/>
         {{ Form.unlockField('ids') }}
 
-        <button class="button button-outlined" @click.prevent="bulkActions('bulk-folder')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
+        <button
+            class="button button-outlined"
+            @click.prevent="bulkActions('bulk-folder')"
+            :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
+        >
+            {{ __('Ok') }}
+        </button>
     </div>
 {{ Form.end()|raw }}
 {% endif %}

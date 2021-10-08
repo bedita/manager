@@ -1,11 +1,11 @@
-<div class="bulk-actions" :class="{ disabled: !selectedRows.length }">
+<div class="bulk-actions">
     <div>
         {% element 'Form/bulk_export' %}
     </div>
 
     <h3 class="bulk-header">{{ __('Actions on selected items') }}</h3>
 
-    <div>
+    <div :class="{ disabled: !selectedRows.length }">
         {% element 'Form/bulk_properties' %}
 
         {% element 'Form/bulk_category' %}

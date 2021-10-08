@@ -1,23 +1,15 @@
 .filter-box {
-    > div {
-        flex: 1 1 0;
-        &:first-child {
-            flex: none;
-            // flex-grow: 1;
-            max-width: 100%;
-        }
-        &:last-child {
-            margin-top: $gutter;
-        }
-    }
+    display: flex;
+    flex-direction: column;
 
     @media screen and (min-width: 1024px) {
+        flex-direction: row;
+    }
+
+    .pagination {
         display: flex;
-        > div:last-child {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0;
-        }
+        justify-content: flex-end;
+        margin-left: auto;
     }
 }
 
@@ -32,7 +24,7 @@
         flex-wrap: wrap;
 
         > * {
-            margin-bottom: $gutter * .5;
+            margin-bottom: $gutter;
         }
 
         > *:not(:last-child) {
