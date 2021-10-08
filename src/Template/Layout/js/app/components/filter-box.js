@@ -65,13 +65,19 @@ export default {
 
     data() {
         return {
-            queryFilter: {},
-            timer: null,
-            pageSize: this.pagination.page_size,
             dynamicFilters: {},
+            /**
+             * Enable position filter by descendants.
+             * When disabled, only direct children are fetched.
+             * This will switch the filter between `parent` and `ancestor`.
+             */
+            filterByDescendants: false,
             moreFilters: this.filterActive,
-            statusFilter: {},
+            pageSize: this.pagination.page_size,
+            queryFilter: {},
             selectedStatuses: [],
+            statusFilter: {},
+            timer: null,
         };
     },
 
@@ -85,7 +91,7 @@ export default {
             this.initFilter
         ]);
 
-        // remove default filters with custom render from the list of dynamic filters
+        // remove custom filters from the list of dynamic filters
         this.dynamicFilters = this.filterList.filter(f => {
             if (f.name == 'status') {
                 this.statusFilter = f;
@@ -96,7 +102,8 @@ export default {
             return true;
         });
 
-        this.selectedStatuses = Object.values(this.initFilter?.filter?.status || []);
+        this.selectedStatuses = Object.values(this.initFilter?.filter?.status || {});
+        this.filterByDescendants = !!this.initFilter.filter?.ancestor;
     },
 
     computed: {
@@ -121,6 +128,23 @@ export default {
         isFullPaginationLayout() {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
         },
+
+        /**
+         * Returns the list of categories used to filter data
+         * converted by object to array.
+         * @returns {Array}
+         */
+        initCategories() {
+            return Object.values(this.initFilter?.filter?.categories || {});
+        },
+
+        initFolder() {
+            return this.initFilter.filter[this.positionFilterName];
+        },
+
+        positionFilterName() {
+            return this.filterByDescendants ? 'ancestor' : 'parent';
+        }
     },
 
     watch: {
@@ -150,13 +174,13 @@ export default {
             this.queryFilter.filter.type = value;
         },
 
-        // /**
-        //  * Add selected statuses to the query filters.
-        //  * @param {String[]} value Selected statuses list
-        //  */
-        // selectedStatuses(value) {
-        //     this.queryFilter.filter.status = value;
-        // }
+        /**
+         * Add selected statuses to the query filters.
+         * @param {String[]} value Selected statuses list
+         */
+        selectedStatuses(value) {
+            this.queryFilter.filter.status = value;
+        },
     },
 
     methods: {
@@ -169,15 +193,14 @@ export default {
             if (!this.objectsLabel) {
                 return t`Items`;
             }
-            const label = this.ucfirst(this.objectsLabel);
 
-            return label;
+            return this.ucfirst(this.objectsLabel);
         },
 
         /**
          * First char upper case for string.
          * @param {String} str The string
-         * @returns
+         * @return {String}
          */
         ucfirst(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -285,5 +308,22 @@ export default {
         onCategoryChange(categories) {
             this.queryFilter.filter.categories = categories?.map((cat) => cat.name);
         },
+
+        onFolderChange(folder) {
+            this.queryFilter.filter[this.positionFilterName] = folder?.id;
+        },
+
+        /**
+         * Switch between descendants and children filter.
+         * @param {Event} event Change event of the switch input.
+         */
+        onPositionFilterChange(event) {
+            const value = event.target.checked;
+            const newFilter = value ? 'ancestor' : 'parent';
+            const oldFilter = value ? 'parent' : 'ancestor';
+
+            this.queryFilter.filter[newFilter] = this.queryFilter.filter[oldFilter];
+            delete this.queryFilter.filter[oldFilter];
+        }
     }
 };

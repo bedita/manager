@@ -56,20 +56,25 @@
             <span v-if="filter.name === 'categories'">
                 <category-picker
                     :categories="{{ schema.categories|json_encode }}"
-                    :selected-categories="Object.values(initFilter.filter.categories)"
+                    :initial-categories="initCategories"
                     id="category-filter"
                     label=""
                     @change="onCategoryChange"
-                />
+                ></category-picker>
                 {{ Form.unlockField('categories') }}
             </span>
 
-            <span v-else-if="filter.name === 'parent'">
-                <folder-picker label="" />
+            <span v-else-if="filter.name === 'parent'" class="position-filter">
+                <folder-picker label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
                 {{ Form.unlockField('folderSelected') }}
+
+                <span class="position-filter">
+                    <label for="descendants">{{ __('Descendants') }}</label>
+                    <input id="descendants" type="checkbox" v-model="filterByDescendants" @change="onPositionFilterChange" />
+                </span>
             </span>
 
-            <span v-else-if="filter.name === 'date_ranges'">
+            <span v-else-if="filter.name === 'date_ranges'" class="date-filter">
                 <label>{{ __('From date') }}
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
                 </label>

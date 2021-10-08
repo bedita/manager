@@ -27,7 +27,7 @@ export default {
         categories: Array,
         disabled: Boolean,
         label: String,
-        selectedCategories: Array,
+        initialCategories: Array,
     },
 
     data() {
@@ -39,7 +39,7 @@ export default {
 
     mounted() {
         this.categoriesOptions = this.categories?.map((category) => ({ id: category.id, label: category.label }));
-        this.selectedIds = this.selectedCategories?.map(selected => this.categories.find(cat => cat.name == selected)?.id);
+        this.selectedIds = this.initialCategories?.map(selected => this.categories.find(cat => cat.name == selected)?.id);
     },
 
     methods: {

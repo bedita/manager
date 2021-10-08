@@ -12,7 +12,7 @@
         :init-filter="urlFilterQuery"
         :selected-types='selectedTypes'
         :filter-list='{{ list|json_encode|raw }}'
-        :filter-active="{{ filterActive|json_encode }}"
+        :filter-active="{{ filterActive|json_encode|raw }}"
 
         config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
         placeholder="{{ __('Search') }}"

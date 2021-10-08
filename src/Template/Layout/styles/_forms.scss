@@ -217,7 +217,7 @@ form {
 
 // Treeselect
 .vue-treeselect {
-    min-width: 4rem !important;
+    min-width: 6rem !important;
 }
 
 .vue-treeselect--disabled {
@@ -225,9 +225,13 @@ form {
 }
 
 .vue-treeselect__control {
-    height: $gutter * 2 !important;
-    padding: 0 .5em !important;
+    display: inline-flex;
+    align-items: center;
     width: auto !important;
+    height: auto !important;
+    max-width: 15rem;
+    min-height: $gutter * 2;
+    padding: 0 .5em !important;
     color: #000 !important;
     border-radius: 2px !important;
     border: none !important;
@@ -254,6 +258,11 @@ form {
 
 .vue-treeselect__input-container input {
     height: 100%;
+}
+
+.vue-treeselect__multi-value {
+    max-height: 5rem;
+    overflow: auto;
 }
 
 .vue-treeselect__multi-value-item {

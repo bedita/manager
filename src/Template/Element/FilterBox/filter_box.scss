@@ -57,19 +57,7 @@
             }
         }
 
-        // TODO: non mi piace, da rivedere il componente input date picker
-        &.date {
-            > span {
-                display: flex;
-
-                input {
-                    margin: 0;
-                    width: 100%;
-                }
-            }
-        }
-
-        & > label {
+        label {
             &:first-letter {
                 text-transform: uppercase;
             }
@@ -79,10 +67,30 @@
             }
         }
 
+        .date-filter {
+            display: flex;
+
+            input {
+                margin: 0;
+                width: 100%;
+            }
+        }
+
         .category-picker,
         .folder-picker {
             display: flex;
             align-items: center;
+        }
+
+        .position-filter {
+            display: flex;
+            align-items: center;
+
+            .position-filter {
+                display: flex;
+                align-items: center;
+                margin-left: $gutter;
+            }
         }
     }
 }

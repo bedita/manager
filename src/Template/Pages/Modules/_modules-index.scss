@@ -1,12 +1,10 @@
 body.view-module {
-
     .module-header {
         min-height: $dashboard-item-height - ($gutter * 3.25) - $gutter; // minus table header and margin
         margin-bottom: $gutter;
     }
 
     .module-index {
-
         .list-objects {
             display: table;
             border-collapse: collapse;
@@ -131,69 +129,65 @@ body.view-module {
         }
 
         .bulk-actions {
-            margin-top: $gutter * .5;
+            margin-top: $gutter;
 
             &.disabled {
                 opacity: .3;
             }
 
-            header {
-                margin: $gutter 0 $gutter * .5;
+            .bulk-header {
+                margin-top: $gutter;
             }
 
-            .bulk-categories, .bulk-folders {
-                display: flex;
-
-                .input > div {
-                    display: flex;
-                    align-items: center;
-                }
-            }
-
-            .bulk-folders {
-                .input {
-                    display: flex !important;
-                    align-items: center;
-
-                    label {
-                        margin-right: calc($gutter * 0.5);
-                    }
-
-                    input[type='radio'] {
-                        margin-right: $gutter;
-                    }
-                }
-            }
-
-            nav {
+            > * {
                 display: flex;
                 flex-direction: column;
 
                 form {
                     .fieldset {
-                        input, .input {
-                            display: inline-block;
-                            vertical-align: middle;
-                        }
-                    }
+                        display: inline-flex;
+                        align-items: center;
+                        margin-bottom: $gutter;
 
-                    .fieldset[disabled] {
-                        .clear-button {
-                            display: none;
+                        & > *:not([type='hidden']) ~ *:not([type='hidden']) {
+                            margin-left: $gutter * .5;
                         }
 
-                        .input.textarea {
-                            border-color: #adb5bd !important;
-                        }
-                    }
+                        &[disabled] {
+                            .clear-button {
+                                display: none;
+                            }
 
-                    .input {
-                        margin: $gutter * .5;
-                        margin-left: 0;
+                            .input.textarea {
+                                border-color: #adb5bd !important;
+                            }
+                        }
+
+                        .input,
+                        .input > * {
+                            display: inline-flex;
+                            align-items: center;
+                        }
+
+                        .input label:first-of-type {
+                            margin-right: $gutter;
+                        }
 
                         label {
                             margin-right: $gutter * .5;
                         }
+                    }
+
+                    .bulk-categories,
+                    .bulk-folders {
+                        & > * {
+                            display: inline-flex;
+                            align-items: center;
+                        }
+                    }
+
+                    .bulk-folders .folder-picker {
+                        margin-left: $gutter !important;
                     }
                 }
             }

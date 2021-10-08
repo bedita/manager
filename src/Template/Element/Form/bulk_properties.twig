@@ -2,12 +2,9 @@
 {% for label, key in bulkActions %}
     {{ Form.create(null, {
         'id': 'bulk-' ~ key,
-        'class': 'bulk-actions',
         'url': {'_name': 'modules:bulkAttribute', 'object_type': objectType, '?': _view.request.getQuery()},
     })|raw }}
-
         <div class="fieldset" :disabled="!selectedRows.length">
-
             <input type="hidden" name="ids" v-bind:value="selectedRows">
             {{ Form.unlockField('ids') }}
 
@@ -41,11 +38,7 @@
                 {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
             {% endif %}
 
-            <div class="input">
-                <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
-            </div>
-
+            <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
         </div>
-
     {{ Form.end()|raw }}
 {% endfor %}
