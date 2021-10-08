@@ -60,7 +60,7 @@ class PropertiesComponent extends Component
         ],
 
         'filter' => [
-            'status'
+            'status',
         ],
         'bulk' => [
             'status',

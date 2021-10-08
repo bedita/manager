@@ -65,7 +65,6 @@ class Options
      */
     public static function lang($value): array
     {
-        // $languages = Configure::read('I18n.languages');
         $languages = Configure::read('Project.config.I18n.languages');
         if (empty($languages)) {
             return compact('value') + ['type' => 'text'];
