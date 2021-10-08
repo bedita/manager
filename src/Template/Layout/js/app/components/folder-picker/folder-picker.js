@@ -88,7 +88,7 @@ export default {
                 folders.push(...(json.data || []));
             });
 
-            return folders.map((folder) => ({ id: folder.id, label: folder.attributes.title }));
+            return folders.map((folder) => ({ id: folder.id, label: folder.attributes.title, children: null }));
         },
 
         async loadOptions({ action, parentNode, callback }) {
