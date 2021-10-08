@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-06 09:51:37 \n"
+"POT-Creation-Date: 2021-10-08 10:23:50 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -152,6 +152,9 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Descendants"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -231,6 +234,9 @@ msgid "File type"
 msgstr ""
 
 msgid "Files"
+msgstr ""
+
+msgid "Folder"
 msgstr ""
 
 msgid "Folders"
@@ -759,7 +765,7 @@ msgstr ""
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:152
+#: src/Template/Layout/js/app/pages/modules/index.js:151
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
@@ -773,7 +779,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:150
+#: src/Template/Layout/js/app/pages/modules/index.js:149
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -811,11 +817,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:177
+#: src/Template/Layout/js/app/components/filter-box.js:194
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:237
+#: src/Template/Layout/js/app/components/filter-box.js:253
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -896,8 +902,4 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
-msgid "Folder"
 msgstr ""

@@ -57,13 +57,22 @@
             }
         }
 
+        > * {
+            display: inline-flex;
+            align-items: center;
+        }
+
         label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: $gutter * .5;
+
             &:first-letter {
                 text-transform: uppercase;
             }
 
-            &:not(:last-child) {
-                margin-right: $gutter * .5;
+            &:last-child {
+                margin-right: 0;
             }
         }
 
@@ -76,21 +85,21 @@
             }
         }
 
+        &.parent .filter-label,
+        &.categories .filter-label {
+            display: none;
+        }
+
         .category-picker,
         .folder-picker {
             display: flex;
             align-items: center;
         }
 
-        .position-filter {
+        .descendants-filter {
             display: flex;
             align-items: center;
-
-            .position-filter {
-                display: flex;
-                align-items: center;
-                margin-left: $gutter;
-            }
+            margin-left: $gutter;
         }
     }
 }
