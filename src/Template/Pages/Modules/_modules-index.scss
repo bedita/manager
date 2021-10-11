@@ -1,12 +1,10 @@
 body.view-module {
-
     .module-header {
         min-height: $dashboard-item-height - ($gutter * 3.25) - $gutter; // minus table header and margin
         margin-bottom: $gutter;
     }
 
     .module-index {
-
         .list-objects {
             display: table;
             border-collapse: collapse;
@@ -130,124 +128,66 @@ body.view-module {
             }
         }
 
-
         .bulk-actions {
-            margin-top: $gutter * .5;
+            margin-top: $gutter;
 
-            header {
-                margin: $gutter 0 $gutter * .5;
-                width: 100%;
+            .bulk-header {
+                margin-top: $gutter;
+            }
+
+            > .disabled {
                 opacity: .3;
             }
 
-            &.enabled {
-                header { opacity: 1; }
-            }
-
-            .bulk-categories, .bulk-folders {
+            > * {
                 display: flex;
+                flex-direction: column;
 
-                .input > div {
-                    display: flex;
-                    align-items: center;
-                }
-            }
-
-            .bulk-folders {
-                .input {
-                    display: flex !important;
-                    align-items: center;
-
-                    label {
-                        margin-right: calc($gutter * 0.5);
-                    }
-
-                    input[type='radio'] {
-                        margin-right: $gutter;
-                    }
-                }
-            }
-
-            .vue-treeselect__input {
-                background-color: transparent;
-            }
-
-            nav {
-                display: flex;
-                flex-wrap: wrap;
                 form {
-                    flex-basis: 100%;
-                    margin-right: $gutter;
-                    &:last-of-type {
-                        margin-right: 0;
-                        margin-left: auto;
-                    }
-
                     .fieldset {
-                        input, .input {
-                            display: inline-block;
-                            vertical-align: middle;
-                        }
-                        .vue-treeselect {
-                            min-width: 20vw;
-                        }
-                        .vue-treeselect__control {
-                            width: auto;
-                            color: #000;
-                            border-radius: 2px !important;
-                        }
-                        .vue-treeselect__menu-container {
-                            color: #000;
-                        }
-                        .vue-treeselect__input-container {
-                            color: #000;
+                        display: inline-flex;
+                        align-items: center;
+                        margin-bottom: $gutter;
 
-                            input {
-                                min-width: 20vw !important;
-                                height: 100%;
-                            }
+                        & > *:not([type='hidden']) ~ *:not([type='hidden']) {
+                            margin-left: $gutter * .5;
                         }
-                        .vue-treeselect--disabled {
-                            opacity: .6;
-                        }
-                        .vue-treeselect__placeholder {
-                            color: #000;
-                        }
-                        .vue-treeselect__multi-value-item {
-                            background: transparent;
-                            border: 1px solid black;
 
-                            .vue-treeselect__multi-value-label {
-                                background: transparent;
-                                color: #000;
+                        &[disabled] {
+                            .clear-button {
+                                display: none;
                             }
 
-                            .vue-treeselect__icon.vue-treeselect__value-remove {
-                                color: #000;
+                            .input.textarea {
+                                border-color: #adb5bd !important;
                             }
                         }
-                    }
 
-                    .fieldset[disabled] {
-                        .clear-button {
-                            display: none;
+                        .input,
+                        .input > * {
+                            display: inline-flex;
+                            align-items: center;
                         }
 
-                        button, h2, input, label, select, .vue-treeselect__control {
-                            opacity: .3;
+                        .input label:first-of-type {
+                            margin-right: $gutter;
                         }
-
-                        .input.textarea {
-                            border-color: #adb5bd !important;
-                        }
-                    }
-
-                    .input {
-                        margin: $gutter * .5;
 
                         label {
                             margin-right: $gutter * .5;
                         }
+                    }
+
+                    .bulk-categories,
+                    .bulk-folders {
+                        & > * {
+                            display: inline-flex;
+                            align-items: center;
+                        }
+                    }
+
+                    .bulk-folders .folder-picker {
+                        margin-left: $gutter !important;
                     }
                 }
             }
@@ -256,8 +196,8 @@ body.view-module {
 
     // TODO: da fare meglio
     &.module-media, &.module-images, &.module-video, &.module-audio, &.module-objects {
-       .module-index .list-objects > a div.title-cell {
-           max-width: 210px;
-       }
+        .module-index .list-objects > a div.title-cell {
+            max-width: 210px;
+        }
     }
 }

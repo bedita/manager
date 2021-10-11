@@ -12,7 +12,6 @@ main.layout {
         grid-template-areas: "sidebar content-header"
                              "sidebar content-body"
                              "sidebar footer";
-        grid-template-rows: ($dashboard-item-height + $gutter) auto;
         grid-template-columns: $dashboard-item-width auto;
 
         .view-dashboard & {
@@ -20,6 +19,10 @@ main.layout {
         }
 
         > .layout-footer { display: none; }
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-rows: ($dashboard-item-height + $gutter) auto;
     }
 
     > .layout-sidebar { grid-area: sidebar; }
@@ -32,6 +35,13 @@ main.layout {
 
     > .layout-sidebar, > .layout-footer { max-width: 100%; overflow-x: hidden; }
     > .layout-content { max-width: 100%; overflow-x: hidden; }
+    > .layout-header + .layout-content {
+        margin-top: $gutter;
+
+        @media screen and (min-width: 1024px) {
+            margin-top: 0;
+        }
+    }
 }
 
 

@@ -1,6 +1,5 @@
 import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
-import { EventBus } from 'app/directives/eventbus.js';
 
 /**
  * Templates that uses this component (directly or indirectly)
@@ -40,8 +39,13 @@ export default {
             selectedRows: [],
             bulkField: null,
             bulkValue: null,
-            bulkAction: 'choose',
+            bulkAction: null,
             selectedIds: null,
+            /**
+             * Selected folder for bulk copy or move.
+             * Used to enable/disable confirmation button.
+             */
+            bulkFolder: null,
         };
     },
 
@@ -168,13 +172,6 @@ export default {
                     this.selectedRows.push(cb.value);
                 }
             }
-        },
-
-        /**
-         * Emit event to init folder picker
-         */
-        folderPickerInit() {
-            EventBus.$emit('folder-picker-init', true);
         },
     }
 }

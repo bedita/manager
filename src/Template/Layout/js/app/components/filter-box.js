@@ -5,14 +5,15 @@
  *
  * <filter-box-view> component
  *
- * @prop {String} objectsLabel
- * @prop {String} placeholder
- * @prop {Boolean} showFilterButtons
- * @prop {Object} initFilter
- * @prop {Object} relationTypes relation types available for relation (left/right)
- * @prop {Array} filterList custom filters to show
- * @prop {Object} pagination
  * @prop {String} configPaginateSizes
+ * @prop {Boolean} filterActive Some filter is active on currently displayed data
+ * @prop {Array} filterList custom filters to show
+ * @prop {Object} initFilter
+ * @prop {String} objectsLabel
+ * @prop {Object} pagination
+ * @prop {String} placeholder
+ * @prop {Object} relationTypes relation types available for relation (left/right)
+ * @prop {Array} selectedTypes Types selected
  */
 
 import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
@@ -23,31 +24,35 @@ import { warning } from 'app/components/dialog/dialog';
 export default {
     components: {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
+        CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
     },
 
     props: {
+        configPaginateSizes: {
+            type: String,
+            default: "[10]"
+        },
+        filterActive: Boolean,
+        filterList: {
+            type: Array,
+            default: () => [],
+        },
+        initFilter: {
+            type: Object,
+            default: DEFAULT_FILTER,
+        },
         objectsLabel: {
             type: String,
             default: t`Objects`
         },
+        pagination: {
+            type: Object,
+            default: () => DEFAULT_PAGINATION
+        },
         placeholder: {
             type: String,
             default: t`Search`
-        },
-        showFilterButtons: {
-            type: Boolean,
-            default: true
-        },
-        initFilter: {
-            type: Object,
-            default: () => {
-                return {
-                    q: "",
-                    filter: {
-                        type: ""
-                    }
-                };
-            }
         },
         relationTypes: {
             type: Object
@@ -56,27 +61,23 @@ export default {
             type: Array,
             default: () => [],
         },
-        filterList: {
-            type: Array,
-            default: () => [],
-        },
-        pagination: {
-            type: Object,
-            default: () => DEFAULT_PAGINATION
-        },
-        configPaginateSizes: {
-            type: String,
-            default: "[10]"
-        }
     },
 
     data() {
         return {
-            queryFilter: {},
-            timer: null,
-            pageSize: this.pagination.page_size, // pageSize value for pagination page size
             dynamicFilters: {},
+            /**
+             * Enable position filter by descendants.
+             * When disabled, only direct children are fetched.
+             * This will switch the filter between `parent` and `ancestor`.
+             */
+            filterByDescendants: false,
+            moreFilters: this.filterActive,
+            pageSize: this.pagination.page_size,
+            queryFilter: {},
+            selectedStatuses: [],
             statusFilter: {},
+            timer: null,
         };
     },
 
@@ -90,14 +91,19 @@ export default {
             this.initFilter
         ]);
 
+        // remove custom filters from the list of dynamic filters
         this.dynamicFilters = this.filterList.filter(f => {
-            if(f.name == 'status') {
+            if (f.name == 'status') {
                 this.statusFilter = f;
+
                 return false;
-            } else {
-                return true;
             }
+
+            return true;
         });
+
+        this.selectedStatuses = Object.values(this.initFilter?.filter?.status || {});
+        this.filterByDescendants = !!this.initFilter.filter?.ancestor;
     },
 
     computed: {
@@ -120,10 +126,24 @@ export default {
          * @return {void}
          */
         isFullPaginationLayout() {
-            return (
-                this.pagination.page_count > 1 &&
-                this.pagination.page_count <= 7
-            );
+            return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
+        },
+
+        /**
+         * Returns the list of categories used to filter data
+         * converted by object to array.
+         * @returns {Array}
+         */
+        initCategories() {
+            return Object.values(this.initFilter?.filter?.categories || {});
+        },
+
+        initFolder() {
+            return this.initFilter.filter[this.positionFilterName];
+        },
+
+        positionFilterName() {
+            return this.filterByDescendants ? 'ancestor' : 'parent';
         }
     },
 
@@ -142,19 +162,25 @@ export default {
         /**
          * watcher for pageSize variable, change pageSize and reload relations
          *
-         * @param {Number} value
-         *
          * @emits Event#filter-update-page-size
          *
          * @returns {void}
          */
-        pageSize(value) {
+        pageSize() {
             this.$emit("filter-update-page-size", this.pageSize);
         },
 
         selectedTypes(value) {
             this.queryFilter.filter.type = value;
-        }
+        },
+
+        /**
+         * Add selected statuses to the query filters.
+         * @param {String[]} value Selected statuses list
+         */
+        selectedStatuses(value) {
+            this.queryFilter.filter.status = value;
+        },
     },
 
     methods: {
@@ -167,15 +193,14 @@ export default {
             if (!this.objectsLabel) {
                 return t`Items`;
             }
-            const label = this.ucfirst(this.objectsLabel);
 
-            return label;
+            return this.ucfirst(this.objectsLabel);
         },
 
         /**
          * First char upper case for string.
          * @param {String} str The string
-         * @returns
+         * @return {String}
          */
         ucfirst(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -243,7 +268,7 @@ export default {
                 f => (filter[f.name] = f.date ? {} : "")
             );
 
-            return { filter: filter };
+            return { filter };
         },
 
         /**
@@ -278,6 +303,27 @@ export default {
          */
         onChangePage(index) {
             this.$emit("filter-update-current-page", index);
+        },
+
+        onCategoryChange(categories) {
+            this.queryFilter.filter.categories = categories?.map((cat) => cat.name);
+        },
+
+        onFolderChange(folder) {
+            this.queryFilter.filter[this.positionFilterName] = folder?.id;
+        },
+
+        /**
+         * Switch between descendants and children filter.
+         * @param {Event} event Change event of the switch input.
+         */
+        onPositionFilterChange(event) {
+            const value = event.target.checked;
+            const newFilter = value ? 'ancestor' : 'parent';
+            const oldFilter = value ? 'parent' : 'ancestor';
+
+            this.queryFilter.filter[newFilter] = this.queryFilter.filter[oldFilter];
+            delete this.queryFilter.filter[oldFilter];
         }
     }
 };

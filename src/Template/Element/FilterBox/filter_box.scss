@@ -1,29 +1,38 @@
 .filter-box {
-    > div {
-        flex: 1 1 0;
-        &:first-child {
-            flex: none;
-            // flex-grow: 1;
-            max-width: 100%;
-        }
-        &:last-child {
-            margin-top: $gutter;
-        }
-    }
+    display: flex;
+    flex-direction: column;
 
     @media screen and (min-width: 1024px) {
+        flex-direction: row;
+    }
+
+    .pagination {
         display: flex;
-        > div:last-child {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0;
-        }
+        justify-content: flex-end;
+        margin-left: auto;
     }
 }
 
-
 .filters-container {
-    .filter-container, .filter-buttons {
+    display: flex;
+    flex-direction: column;
+
+    .basic-filters,
+    .more-filters {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        > * {
+            margin-bottom: $gutter;
+        }
+
+        > *:not(:last-child) {
+            margin-right: $gutter;
+        }
+    }
+
+    .more-filters {
         margin-top: $gutter;
     }
 
@@ -32,51 +41,58 @@
         flex-wrap: wrap;
         align-items: center;
 
-        &:first-child { margin-top: 0; }
         &.filter-search {
             display: flex;
-            input[type="text"] { 
+            input[type="text"] {
                 width: 100%;
-                min-width: $gutter * 12; 
-            }
-        }
-        // TODO: non mi piace, da rivedere il componente input date picker
-        &.date {
-            > span {
-                display: flex;
-                input { margin: 0; width: 100%; }
+                min-width: $gutter * 12;
             }
         }
 
-        .filter-status-select { margin-left: $gutter * .5; }
-        .filter-label:first-letter { text-transform: uppercase; }
-
-        label, .filter-label {
-            cursor: pointer;
-            display: inline-block;
-            // flex-grow: 1;
-            &:not(:last-child) { margin-right: $gutter; }
+        > * {
+            display: inline-flex;
+            align-items: center;
         }
-    }
 
-    .filter-buttons {
-        display: flex;
-        > *:not(:last-child) { margin-right: $gutter * .5; }
-    }
-}
+        label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: $gutter * .5;
 
+            &:first-letter {
+                text-transform: uppercase;
+            }
 
-.filters-container.basic-filters-only {
-    display: flex;
-    .filter-container {
-        margin-top: 0;
-        margin-right: $gutter * .5;
-        .filter-label { display: none; }
-    }
-    .filter-buttons {
-        margin-top: 0;
-        margin-left: $gutter * .5;
-        margin-right: $gutter * .5;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .date-filter {
+            display: flex;
+
+            input {
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        &.parent .filter-label,
+        &.categories .filter-label {
+            display: none;
+        }
+
+        .category-picker,
+        .folder-picker {
+            display: flex;
+            align-items: center;
+        }
+
+        .descendants-filter {
+            display: flex;
+            align-items: center;
+            margin-left: $gutter;
+        }
     }
 }
 

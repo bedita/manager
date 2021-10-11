@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-30 06:28:47 \n"
+"POT-Creation-Date: 2021-10-08 10:40:02 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -98,9 +98,6 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
-msgid "Choose"
-msgstr ""
-
 msgid "Click or drop new files here"
 msgstr ""
 
@@ -150,6 +147,9 @@ msgid "Data modeling"
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Descendants"
 msgstr ""
 
 msgid "Description"
@@ -233,6 +233,9 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+msgid "Folder"
+msgstr ""
+
 msgid "Folders"
 msgstr ""
 
@@ -290,6 +293,9 @@ msgstr ""
 msgid "Left types"
 msgstr ""
 
+msgid "Less filters"
+msgstr ""
+
 msgid "Locations"
 msgstr ""
 
@@ -330,6 +336,9 @@ msgid "Module access not authorized"
 msgstr ""
 
 msgid "More"
+msgstr ""
+
+msgid "More filters"
 msgstr ""
 
 msgid "Move to"
@@ -753,7 +762,7 @@ msgstr ""
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:152
+#: src/Template/Layout/js/app/pages/modules/index.js:151
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
@@ -767,7 +776,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:150
+#: src/Template/Layout/js/app/pages/modules/index.js:149
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -805,11 +814,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:168
+#: src/Template/Layout/js/app/components/filter-box.js:194
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:228
+#: src/Template/Layout/js/app/components/filter-box.js:253
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -890,8 +899,4 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
-msgid "Folder"
 msgstr ""

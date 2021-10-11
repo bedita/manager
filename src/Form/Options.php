@@ -58,7 +58,7 @@ class Options
 
     /**
      * Options for lang, using configuration loaded from API
-     * If available, use config `Project.config.I18n.languages`
+     * If available, use config `Project.config.I18n.languages`.
      *
      * @param mixed|null $value The field value.
      * @return array
