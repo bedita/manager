@@ -11,7 +11,7 @@
             }) %}
             {% set defaultFormat = config('Export.default', 'xslx') %}
 
-            <select name="format" id="exportformat" :disabled="!selectedRows.length">
+            <select name="format" id="exportformat">
             {% for label,format in formats %}
                 <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
             {% endfor %}
