@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-08 10:40:02 \n"
+"POT-Creation-Date: 2021-10-12 07:11:46 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -96,6 +96,9 @@ msgid "Change password"
 msgstr ""
 
 msgid "Children"
+msgstr ""
+
+msgid "Choose a type"
 msgstr ""
 
 msgid "Click or drop new files here"
@@ -762,7 +765,7 @@ msgstr ""
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:151
+#: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
@@ -776,7 +779,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:149
+#: src/Template/Layout/js/app/pages/modules/index.js:154
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -830,7 +833,7 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:298
 msgid "Error while creating new object."
 msgstr ""
 

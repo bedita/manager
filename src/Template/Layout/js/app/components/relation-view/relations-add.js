@@ -67,7 +67,7 @@ export default {
             file: null,
             url: null,
             showCreateObjectForm: false,
-            object: createData(),
+            object: createData('_choose'),
         };
     },
 
@@ -200,6 +200,34 @@ export default {
             PanelEvents.closePanel();
         },
 
+        resetForms() {
+            this.showCreateObjectForm = !this.showCreateObjectForm;
+            this.updateForms();
+            this.object.type = '_choose';
+        },
+
+        updateForms() {
+            const forms = document.getElementsByClassName('fast-create');
+            for (let i = 0; i < forms.length; i++) {
+                if (forms[i].id === `${this.object.type}-form`) {
+                    forms[i].style.display = 'block';
+                } else {
+                    forms[i].style.display = 'none';
+                }
+            };
+        },
+
+        formCheck() {
+            const fields = document.getElementById(`${this.object.type}-form-fields`).querySelectorAll('.required');
+            for (let i = 0; i < fields.length; i++) {
+                if (fields[i].value == '') {
+                    return fields[i].dataset.name;
+                }
+            }
+
+            return true;
+        },
+
         /**
          * create new object
          *
@@ -212,6 +240,12 @@ export default {
                 // form element might be tempered
                 return;
             }
+            const check = this.formCheck();
+            if (check !== true) {
+                alert(`Fill required data: "${check}"`);
+
+                return;
+            }
 
             this.saving = true;
             this.loading = true;
@@ -220,10 +254,12 @@ export default {
             const baseUrl = window.location.origin;
             const postUrl = `${baseUrl}/${this.object.type}/save`;
 
+            // only desired form fields
+            const fields = document.getElementById(`${this.object.type}-form-fields`).querySelectorAll('.fastCreateField');
             const formData = new FormData();
             formData.append('model-type', this.object.type);
-            for (let attr in this.object.attributes) {
-                formData.set(attr, this.object.attributes[attr]);
+            for (let i = 0; i < fields.length; i++) {
+                formData.set(fields[i].dataset.name, fields[i].value);
             }
 
             if (this.file) {
