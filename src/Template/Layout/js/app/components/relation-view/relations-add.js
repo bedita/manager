@@ -18,6 +18,7 @@ import { DragdropMixin } from 'app/mixins/dragdrop';
 import { error as showError } from 'app/components/dialog/dialog';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
 
 const createData = (type = '') => ({
     type,
@@ -240,9 +241,10 @@ export default {
                 // form element might be tempered
                 return;
             }
-            const check = this.formCheck();
-            if (check !== true) {
-                alert(`Fill required data: "${check}"`);
+            const required = this.formCheck();
+            if (required !== true) {
+                const msg = t`Missing required data "${required}". Retry`;
+                warning(msg);
 
                 return;
             }
