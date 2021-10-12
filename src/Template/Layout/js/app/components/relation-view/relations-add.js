@@ -23,6 +23,7 @@ import { warning } from 'app/components/dialog/dialog';
 const createData = (type = '') => ({
     type,
     attributes: {
+
         status: 'draft',
     },
 });
@@ -203,19 +204,7 @@ export default {
 
         resetForms() {
             this.showCreateObjectForm = !this.showCreateObjectForm;
-            this.updateForms();
             this.object.type = '_choose';
-        },
-
-        updateForms() {
-            const forms = document.getElementsByClassName('fast-create');
-            for (let i = 0; i < forms.length; i++) {
-                if (forms[i].id === `${this.object.type}-form`) {
-                    forms[i].style.display = 'block';
-                } else {
-                    forms[i].style.display = 'none';
-                }
-            };
         },
 
         formCheck() {

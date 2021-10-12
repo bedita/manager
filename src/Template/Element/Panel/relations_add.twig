@@ -10,72 +10,74 @@
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
+
             <div class="select">
                 <label for="related_object_type">{{ __('Type') }}</label>
                 <select id="related_object_type"
                     name="related_object_type"
                     class="{{ selectBaseClasses }}"
-                    @click="updateForms"
                     v-if="relationTypes"
                     v-model="object.type">
                     <option value="_choose">{{ __('Choose a type') }}</option>
                     <option v-for="type in relationTypes.right"><: t(type) :></option>
                 </select>
             </div>
-        {% for type in Schema.rightTypes() %}
-            {% set prefix = '_fast_create_' ~ type ~ '_' %}
-            <form name="create-object" class="object-form fast-create" :disabled="saving" id="{{ type }}-form" style="display:none">
-                {{ Form.control('upload_behavior', {
-                    'id': 'url_behavior',
-                    'type': 'hidden',
-                    'v-bind:value': 'url'
-                }) | raw }}
-                {{ Form.control('upload_behavior', {
-                    'id': 'file_behavior',
-                    'type': 'hidden',
-                    'v-bind:value': 'file'
-                }) | raw }}
-                {{ Form.unlockField('upload_behavior')}}
 
-                <section class="fieldset mb-1">
-                    <div class="container">
+            {% for type in Schema.rightTypes() %}
+                {% set prefix = '_fast_create_' ~ type ~ '_' %}
+                <form name="create-object" class="object-form fast-create" :disabled="saving" id="{{ type }}-form" v-if="object.type == '{{ type }}'">
+                    {{ Form.control('upload_behavior', {
+                        'id': 'url_behavior',
+                        'type': 'hidden',
+                        'v-bind:value': 'url'
+                    }) | raw }}
+                    {{ Form.control('upload_behavior', {
+                        'id': 'file_behavior',
+                        'type': 'hidden',
+                        'v-bind:value': 'file'
+                    }) | raw }}
+                    {{ Form.unlockField('upload_behavior')}}
 
-                        <fieldset id="{{ type }}-form-fields">
-                            {% set fields = config('Properties.' ~ type ~ '.fast_create.all')|default(['status', 'title', 'description']) %}
-                            {% set required = config('Properties.' ~ type ~ '.fast_create.required')|default(['status', 'title']) %}
-                            {% for field in fields %}
-                                {% set fieldClass = field not in required ? 'fastCreateField' : 'fastCreateField required' %}
-                                {{ Property.control(field, '', {
-                                    'id': prefix ~ field,
-                                    'class': fieldClass,
-                                    'data-name': field
-                                })|raw }}
-                            {% endfor %}
-                        </fieldset>
+                    <section class="fieldset mb-1">
+                        <div class="container">
 
-                        <div class="input text" v-if="isMedia">
-                            <label for="{{ prefix }}file">{{ __('File') }}</label>
-                            <input type="file" name="file" v-on:change="processFile" id="{{ prefix }}file" class="drop-file" />
+                            <fieldset id="{{ type }}-form-fields">
+                                {% set fields = config('Properties.' ~ type ~ '.fast_create.all')|default(['status', 'title', 'description']) %}
+                                {% set required = config('Properties.' ~ type ~ '.fast_create.required')|default(['status', 'title']) %}
+                                {% for field in fields %}
+                                    {% set fieldClass = field not in required ? 'fastCreateField' : 'fastCreateField required' %}
+                                    {{ Property.control(field, '', {
+                                        'id': prefix ~ field,
+                                        'class': fieldClass,
+                                        'data-name': field
+                                    })|raw }}
+                                {% endfor %}
+                            </fieldset>
+
+                            <div class="input text" v-if="isMedia">
+                                <label for="{{ prefix }}file">{{ __('File') }}</label>
+                                <input type="file" name="file" v-on:change="processFile" id="{{ prefix }}file" class="drop-file" />
+                            </div>
+
+                            <div class="input text" v-if="isMedia">
+                                <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
+                                {{ Form.text('remote_url', {
+                                    'id': prefix ~ 'remote_url',
+                                    'v-model': 'url',
+                                    'type': 'text',
+                                    'autocomplete': 'off',
+                                    'autocorrect': 'off',
+                                    'autocapitalize': 'off',
+                                    'spellcheck': 'false',
+                                    'placeholder': __('Remote URL') }) | raw
+                                }}
+                            </div>
                         </div>
-
-                        <div class="input text" v-if="isMedia">
-                            <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
-                            {{ Form.text('remote_url', {
-                                'id': prefix ~ 'remote_url',
-                                'v-model': 'url',
-                                'type': 'text',
-                                'autocomplete': 'off',
-                                'autocorrect': 'off',
-                                'autocapitalize': 'off',
-                                'spellcheck': 'false',
-                                'placeholder': __('Remote URL') }) | raw }}
-                        </div>
-                    </div>
-                </section>
-                <button @click="createObject" type="button">{{ __('create') }}</button>
-                <button @click="resetForm">{{ __('reset') }}</button>
-            </form>
-        {% endfor %}
+                    </section>
+                    <button @click="createObject" type="button">{{ __('create') }}</button>
+                    <button @click="resetForm">{{ __('reset') }}</button>
+                </form>
+            {% endfor %}
         </div>
     </section>
 
