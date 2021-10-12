@@ -210,7 +210,11 @@ export default {
         formCheck() {
             const fields = document.getElementById(`${this.object.type}-form-fields`).querySelectorAll('.required');
             for (let i = 0; i < fields.length; i++) {
-                if (fields[i].value == '') {
+                if (fields[i].dataset.name === 'status') {
+                    if (this.object.attributes.status == '') {
+                        return fields[i].dataset.name;
+                    }
+                } else if (fields[i].value == '') {
                     return fields[i].dataset.name;
                 }
             }
@@ -247,13 +251,9 @@ export default {
             const baseUrl = window.location.origin;
             const postUrl = `${baseUrl}/${type}/save`;
 
-            // only desired form fields
-            const fields = document.getElementById(`${type}-form-fields`).querySelectorAll('.fastCreateField');
-            const formData = new FormData();
-            formData.append('model-type', type);
-            for (let i = 0; i < fields.length; i++) {
-                formData.set(fields[i].dataset.name, fields[i].value);
-            }
+            // set form data
+            const formData = new FormData(document.getElementById(`${type}-form`));
+            formData.set('status', this.object.attributes.status);
 
             if (this.file) {
                 formData.set('file', this.file);

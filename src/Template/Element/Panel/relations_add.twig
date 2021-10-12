@@ -46,11 +46,15 @@
                                 {% set required = config('Properties.' ~ type ~ '.fast_create.required')|default(['status', 'title']) %}
                                 {% for field in fields %}
                                     {% set fieldClass = field not in required ? 'fastCreateField' : 'fastCreateField required' %}
-                                    {{ Property.control(field, '', {
+                                    {% set fieldOptions = {
                                         'id': prefix ~ field,
                                         'class': fieldClass,
                                         'data-name': field
-                                    })|raw }}
+                                    } %}
+                                    {% if field == 'status' %}
+                                        {% set fieldOptions =  fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
+                                    {% endif %}
+                                    {{ Property.control(field, '', fieldOptions)|raw }}
                                 {% endfor %}
                             </fieldset>
 
