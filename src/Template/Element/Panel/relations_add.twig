@@ -49,7 +49,8 @@
                                     {% set fieldOptions = {
                                         'id': prefix ~ field,
                                         'class': fieldClass,
-                                        'data-name': field
+                                        'data-name': field,
+                                        'key': type ~ '-' ~ field
                                     } %}
                                     {% if field == 'status' %}
                                         {% set fieldOptions =  fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
