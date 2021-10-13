@@ -55,7 +55,7 @@
                                     {% if field == 'status' %}
                                         {% set fieldOptions =  fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
                                     {% endif %}
-                                    {{ Property.control(field, '', fieldOptions)|raw }}
+                                    {{ Property.control(field, '', fieldOptions, type)|raw }}
                                 {% endfor %}
                             </fieldset>
 
