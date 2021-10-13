@@ -218,7 +218,6 @@ class SchemaComponentTest extends TestCase
                 static::assertEquals($actual, $keys);
             }
         }
-
     }
 
     /**
