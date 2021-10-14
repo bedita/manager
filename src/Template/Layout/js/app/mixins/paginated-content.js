@@ -189,28 +189,34 @@ export const PaginatedContentMixin = {
             Object.keys(this.query).forEach((key, index) => {
                 const query = this.query[key];
 
+                if (key !== 'filter') {
+                    if (query) {
+                        urlSearchParams.append(key, query);
+                    }
+
+                    return;
+                }
+
                 // parse filter property
-                if (key === 'filter') {
-                    Object.keys(query).forEach((filterKey) => {
-                        let filterVal = query[filterKey];
-                        if (filterVal) {
-                            if (typeof filterVal === 'object' || typeof filterVal === 'array') {
-                                if (filterVal.length > 0) {
-                                    filterVal = filterVal.join(',');
-                                    urlSearchParams.append(`filter[${filterKey}]`, filterVal);
-                                }
-                            } else {
+                Object.keys(query).forEach((filterKey) => {
+                    let filterVal = query[filterKey];
+                    if (filterVal) {
+                        if (typeof filterVal === 'object') {
+                            return;
+                        }
+                        if (typeof filterVal === 'array') {
+                            if (filterVal.length > 0) {
+                                filterVal = filterVal.join(',');
                                 urlSearchParams.append(`filter[${filterKey}]`, filterVal);
                             }
+                            return;
                         }
-                    });
-                } else {
-                    urlSearchParams.append(key, query);
-                }
+                        urlSearchParams.append(`filter[${filterKey}]`, filterVal);
+                    }
+                });
             });
 
-            let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
+            if (url.indexOf(qi) > 0) {
                 qi = '&';
             }
 
