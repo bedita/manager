@@ -200,10 +200,7 @@ export const PaginatedContentMixin = {
                 // parse filter property
                 Object.keys(query).forEach((filterKey) => {
                     let filterVal = query[filterKey];
-                    if (filterVal) {
-                        if (typeof filterVal === 'object') {
-                            return;
-                        }
+                    if (filterVal && typeof filterVal !== 'object') {
                         urlSearchParams.append(`filter[${filterKey}]`, filterVal);
                     }
                 });
