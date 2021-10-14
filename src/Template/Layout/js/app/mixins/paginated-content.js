@@ -204,12 +204,6 @@ export const PaginatedContentMixin = {
                         if (typeof filterVal === 'object') {
                             return;
                         }
-                        if (typeof filterVal === 'array') {
-                            if (filterVal.length > 0) {
-                                urlSearchParams.append(`filter[${filterKey}]`, filterVal);
-                            }
-                            return;
-                        }
                         urlSearchParams.append(`filter[${filterKey}]`, filterVal);
                     }
                 });
