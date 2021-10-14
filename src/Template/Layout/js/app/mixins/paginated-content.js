@@ -180,50 +180,41 @@ export const PaginatedContentMixin = {
          * @return {String} The formatted url
          */
         getUrlWithPaginationAndQuery(url) {
-            let queryString = '';
+            const urlSearchParams = new URLSearchParams('');
             let qi = '?';
-            const separator = '&';
 
             Object.keys(this.pagination).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.pagination[key]}`;
+                urlSearchParams.append(key, this.pagination[key]);
             });
-            if (queryString.length > 1) {
-                queryString += separator;
-            }
             Object.keys(this.query).forEach((key, index) => {
                 const query = this.query[key];
-                let entry = `${key}=${query}`;
 
                 // parse filter property
                 if (key === 'filter') {
-                    let filter = '';
-                    let i = 0;
                     Object.keys(query).forEach((filterKey) => {
-                        if (query[filterKey] !== '') {
-                            if (i > 0) {
-                                filter += separator;
-                            }
-                            let filterVal = query[filterKey];
+                        let filterVal = query[filterKey];
+                        if (filterVal) {
                             if (typeof filterVal === 'object' || typeof filterVal === 'array') {
                                 if (filterVal.length > 0) {
                                     filterVal = filterVal.join(',');
+                                    urlSearchParams.append(`filter[${filterKey}]`, filterVal);
                                 }
+                            } else {
+                                urlSearchParams.append(`filter[${filterKey}]`, filterVal);
                             }
-                            filter += `filter[${filterKey}]=${filterVal}`;
                         }
-                        i++;
                     });
-
-                    entry = filter;
+                } else {
+                    urlSearchParams.append(key, query);
                 }
-                queryString += `${index ? separator : ''}${entry}`;
             });
 
             let hasQueryIdentifier = url.indexOf(qi) === -1;
             if (!hasQueryIdentifier) {
                 qi = '&';
             }
-            return `${url}${qi}${queryString}`;
+
+            return `${url}${qi}${urlSearchParams.toString()}`;
         },
 
         /**
