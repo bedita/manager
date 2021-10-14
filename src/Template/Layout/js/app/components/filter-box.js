@@ -40,7 +40,7 @@ export default {
         },
         initFilter: {
             type: Object,
-            default: DEFAULT_FILTER,
+            default: () => DEFAULT_FILTER,
         },
         objectsLabel: {
             type: String,

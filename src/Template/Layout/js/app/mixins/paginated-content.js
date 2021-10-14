@@ -197,10 +197,21 @@ export const PaginatedContentMixin = {
                 // parse filter property
                 if (key === 'filter') {
                     let filter = '';
+                    let i = 0;
                     Object.keys(query).forEach((filterKey) => {
                         if (query[filterKey] !== '') {
-                            filter += `filter[${filterKey}]=${query[filterKey]}`;
+                            if (i > 0) {
+                                filter += separator;
+                            }
+                            let filterVal = query[filterKey];
+                            if (typeof filterVal === 'object' || typeof filterVal === 'array') {
+                                if (filterVal.length > 0) {
+                                    filterVal = filterVal.join(',');
+                                }
+                            }
+                            filter += `filter[${filterKey}]=${filterVal}`;
                         }
+                        i++;
                     });
 
                     entry = filter;
