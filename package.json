@@ -61,7 +61,7 @@
         "sass": "^1.43.2",
         "sass-loader": "^7.0.1",
         "style-loader": "^1.2.1",
-        "svg-url-loader": "^2.3.2",
+        "svg-url-loader": "^7.1.1",
         "ttag-cli": "^1.9.2",
         "vue-loader": "^15.9.8",
         "vue-template-compiler": "^2.5.16",
