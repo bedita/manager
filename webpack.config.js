@@ -287,6 +287,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: devMode,
+                            url:false,
                         }
                     },
                     {
@@ -308,6 +309,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: devMode,
+                            url:false,
                         }
                     },
                     {
