@@ -6,7 +6,6 @@ const DEFAULT_PORT = '3000';
 
 // node dependencies
 const path = require('path');
-const chalk = require('chalk');
 const dotenv = require('dotenv').config({path: __dirname + '/config/.env'});
 
 const { readdirSync, statSync } = require('fs')
@@ -106,9 +105,9 @@ const BUNDLE = {
 // util
 const bundler = {
     printMessage(message, separator) {
-        console.log(chalk.red.bold(separator));
-        console.log(chalk.blue.bold(message));
-        console.log(chalk.red.bold(separator));
+        console.log(separator);
+        console.log(message);
+        console.log(separator);
     }
 }
 
