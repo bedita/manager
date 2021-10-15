@@ -5260,10 +5260,10 @@ sirv@^1.0.7:
     mime "^2.3.1"
     totalist "^1.0.0"
 
-sleep-promise@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/sleep-promise/-/sleep-promise-6.0.0.tgz#a80b4c3c26ed553c73c9db7234bc0304f7d42d4a"
-  integrity sha1-qAtMPCbtVTxzydtyNLwDBPfULUo=
+sleep-promise@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.npmjs.org/sleep-promise/-/sleep-promise-9.1.0.tgz#101ebe65700bcd184709da95d960967b02b79d03"
+  integrity sha512-UHYzVpz9Xn8b+jikYSD6bqvf754xL2uBUzDFwiU6NcdZeifPr6UfgU43xpkPu67VMS88+TI2PSI7Eohgqf2fKA==
 
 socket.io-adapter@~1.1.0:
   version "1.1.2"
