@@ -10,7 +10,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -32,14 +31,6 @@ bundler.printMessage(message, separator);
 // Create webpack plugins list
 // Common Plugins
 let webpackPlugins = [
-    new CleanWebpackPlugin([
-        BUNDLE.jsDir,
-        BUNDLE.cssDir,
-    ], {
-        root: path.resolve(__dirname, BUNDLE.webroot),
-        verbose: false,
-        exclude: ['be-icons-codes.css', 'be-icons-font.css', 'libs'],
-    }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `${ENVIRONMENT.mode}`,
         debug: true,
@@ -116,6 +107,34 @@ module.exports = {
         path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
         filename: `${BUNDLE.jsDir}/[name].bundle${ !devMode ? '.[chunkhash:6]' : ''}.js`,
         publicPath: '/',
+        clean: {
+            keep: (asset) => {
+                const preserve =  [
+                    '.htaccess',
+                    'favicon.ico',
+                    'index.php',
+                    'robots.txt',
+                    'be-icons-codes.css',
+                    'be-icons-font.css',
+                    'be-icons.eot',
+                    'be-icons.svg',
+                    'be-icons.ttf',
+                    'be-icons.woff',
+                    'be-icons.woff2',
+                    'iconLocked.png',
+                    'README',
+                    'timezone.js',
+                    'concurrent-editors.svg'
+                ];
+                for (let i = 0; i < preserve.length; i++) {
+                    if (asset.includes(preserve[i])) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+        },
 
         devtoolModuleFilenameTemplate: info => {
             if (info.identifier.indexOf('webpack') === -1 && info.identifier.indexOf('.scss') === -1) {
