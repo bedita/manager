@@ -190,7 +190,7 @@ export const PaginatedContentMixin = {
                 const query = this.query[key];
 
                 if (key !== 'filter') {
-                    if (query) {
+                    if (query && typeof query !== 'object') {
                         urlSearchParams.append(key, query);
                     }
 
