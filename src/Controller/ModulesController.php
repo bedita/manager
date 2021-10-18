@@ -259,6 +259,7 @@ class ModulesController extends AppController
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        unset($requestData['_csrfToken']);
         // extract related objects data
         $relatedData = (array)Hash::get($requestData, '_api');
         unset($requestData['_api']);
