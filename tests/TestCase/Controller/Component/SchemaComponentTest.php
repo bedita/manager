@@ -172,6 +172,55 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Data provider for `testGetSchemasByType`.
+     *
+     * @return array
+     */
+    public function getSchemasByTypeProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+            ],
+            'documents' => [
+                [
+                    'documents',
+                    'users',
+                ],
+                [
+                    'documents' => [
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                    ],
+                    'users' => [
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `getSchemasByType`.
+     *
+     * @return void
+     * @dataProvider getSchemasByTypeProvider()
+     * @covers ::getSchemasByType()
+     */
+    public function testGetSchemasByType(array $types, array $expected): void
+    {
+        $schemasByType = $this->Schema->getSchemasByType($types);
+        if (empty($expected)) {
+            static::assertEquals($expected, $schemasByType);
+        } else {
+            foreach ($expected as $type => $keys) {
+                $actual = array_keys($schemasByType[$type]);
+                static::assertEquals($actual, $keys);
+            }
+        }
+    }
+
+    /**
      * Test `loadWithRevision`
      *
      * @return void
