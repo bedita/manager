@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-08 10:40:02 \n"
+"POT-Creation-Date: 2021-10-12 07:30:56 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -100,6 +100,9 @@ msgstr "Cambia password"
 
 msgid "Children"
 msgstr "Contenuti"
+
+msgid "Choose a type"
+msgstr "Selezionare un tipo"
 
 msgid "Click or drop new files here"
 msgstr "Clicca o trascina qui i nuovi file"
@@ -768,7 +771,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:151
+#: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr "sì, prosegui"
@@ -782,7 +785,7 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 
-#: src/Template/Layout/js/app/pages/modules/index.js:149
+#: src/Template/Layout/js/app/pages/modules/index.js:154
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
@@ -836,7 +839,12 @@ msgstr "modifica"
 msgid "Menu"
 msgstr "Menù"
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:246
+#, javascript-format
+msgid "Missing required data \"${ required }\". Retry"
+msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
+
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:300
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
@@ -844,7 +852,7 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr "Titolo"
@@ -853,7 +861,7 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr "Indirizzo"
@@ -862,7 +870,7 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -874,7 +882,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr "aggiungi nuovo"
@@ -889,14 +897,14 @@ msgstr "data"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:19
 msgid "by"
 msgstr "di"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:29
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"

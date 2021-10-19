@@ -92,6 +92,22 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Get schemas by types and return them group by type
+     *
+     * @param array $types The types
+     * @return array
+     */
+    public function getSchemasByType(array $types): array
+    {
+        $schemas = [];
+        foreach ($types as $type) {
+            $schemas[$type] = $this->getSchema($type);
+        }
+
+        return $schemas;
+    }
+
+    /**
      * Load schema from cache with revision check.
      * If cached revision don't match cache is removed.
      *

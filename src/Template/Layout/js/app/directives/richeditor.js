@@ -58,6 +58,10 @@ export default {
                 });
             },
 
+            unbind(element) {
+                tinymce.remove();
+            },
+
             /**
              * dynamic load richtext-editor-input component and mount it
              *
