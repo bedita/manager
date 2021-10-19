@@ -27,7 +27,9 @@
                     {% if object.type == 'images' %}
                         {# TODO process below #}
                         {% set thumb = Thumb.url(object.id, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
-                        {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
+                        {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
+                            <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
+                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
                             <p>{{ __('The thumbnail is not available') }}</p>
                             <p>
                                 <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
@@ -36,8 +38,6 @@
                             </p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
                             <p>{{ __('Thumbnail is not ready') }}</p>
-                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
-                            <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
                             <p>
                                 <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
@@ -73,6 +73,8 @@
                                             {{ Schema.format(val, {'type': 'byte'}) }}
                                         {% elseif k == 'duration' %}
                                             {{ val|date('H:i:s', '+00:00 GMT') }}
+                                        {% elseif k == 'private_url' %}
+                                            {{ Schema.format(val, {'type': 'boolean'}) }}
                                         {% else %}
                                             {{ val }}
                                         {% endif %}
@@ -83,9 +85,20 @@
                         </tbody>
                     </table>
 
+                </div>
+
+                <div class="grid-span-full mt-1">
+
+                    {% if attributes.url %}
                     <a href="{{ attributes.url }}" target="_blank"
-                        class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                        {{ __('Open file') }}
+                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('View file') }}
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
+                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('Download file') }}
                     </a>
 
                 </div>
