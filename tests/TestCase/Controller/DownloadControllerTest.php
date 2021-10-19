@@ -17,6 +17,29 @@ use Cake\TestSuite\TestCase;
 class DownloadControllerTest extends TestCase
 {
     /**
+     * The original API client (not mocked).
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    protected $apiClient = null;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        $this->apiClient = ApiClientProvider::getApiClient();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown()
+    {
+        ApiClientProvider::setApiClient($this->apiClient);
+    }
+
+    /**
      * Test download from URL
      *
      * @return void
