@@ -349,6 +349,12 @@ class AppController extends Controller
         if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
         }
+        if (is_numeric($value1) && is_string($value2)) {
+            return (string)$value1 !== $value2;
+        }
+        if (is_string($value1) && is_numeric($value2)) {
+            return $value1 !== (string)$value2;
+        }
 
         return $value1 !== $value2;
     }

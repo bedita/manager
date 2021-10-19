@@ -180,39 +180,34 @@ export const PaginatedContentMixin = {
          * @return {String} The formatted url
          */
         getUrlWithPaginationAndQuery(url) {
-            let queryString = '';
+            const urlSearchParams = new URLSearchParams('');
             let qi = '?';
-            const separator = '&';
 
-            Object.keys(this.pagination).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.pagination[key]}`;
+            Object.keys(this.pagination).forEach((key) => {
+                urlSearchParams.append(key, this.pagination[key]);
             });
-            if (queryString.length > 1) {
-                queryString += separator;
-            }
-            Object.keys(this.query).forEach((key, index) => {
-                const query = this.query[key];
-                let entry = `${key}=${query}`;
+            Object.entries(this.query).forEach(([key, query]) => {
+                if (key !== 'filter') {
+                    if (query && typeof query !== 'object') {
+                        urlSearchParams.append(key, query);
+                    }
+
+                    return;
+                }
 
                 // parse filter property
-                if (key === 'filter') {
-                    let filter = '';
-                    Object.keys(query).forEach((filterKey) => {
-                        if (query[filterKey] !== '') {
-                            filter += `filter[${filterKey}]=${query[filterKey]}`;
-                        }
-                    });
-
-                    entry = filter;
-                }
-                queryString += `${index ? separator : ''}${entry}`;
+                Object.entries(query).forEach(([filterKey, filterVal]) => {
+                    if (filterVal && typeof filterVal !== 'object') {
+                        urlSearchParams.append(`filter[${filterKey}]`, filterVal);
+                    }
+                });
             });
 
-            let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
+            if (url.indexOf(qi) > 0) {
                 qi = '&';
             }
-            return `${url}${qi}${queryString}`;
+
+            return `${url}${qi}${urlSearchParams.toString()}`;
         },
 
         /**

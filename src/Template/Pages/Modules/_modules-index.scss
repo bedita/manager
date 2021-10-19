@@ -1,12 +1,10 @@
 body.view-module {
-
     .module-header {
         min-height: $dashboard-item-height - ($gutter * 3.25) - $gutter; // minus table header and margin
         margin-bottom: $gutter;
     }
 
     .module-index {
-
         .list-objects {
             display: table;
             border-collapse: collapse;
@@ -130,54 +128,66 @@ body.view-module {
             }
         }
 
-
         .bulk-actions {
-            margin-top: $gutter * 2;
+            margin-top: $gutter;
 
-            header {
-                margin: $gutter 0 $gutter * .5;
-                width: 100%;
+            .bulk-header {
+                margin-top: $gutter;
+            }
+
+            > .disabled {
                 opacity: .3;
             }
 
-            &.enabled {
-                header { opacity: 1; }
-            }
-
-            nav {
+            > * {
                 display: flex;
+                flex-direction: column;
+
                 form {
-                    margin-right: $gutter;
-                    &:last-of-type {
-                        margin-right: 0;
-                        margin-left: auto;
-                    }
+                    .fieldset {
+                        display: inline-flex;
+                        align-items: center;
+                        margin-bottom: $gutter;
 
-                    &#bulk-actions {
-                        flex-grow: 1;
-                    }
-
-                    fieldset[disabled] {
-                        .clear-button {
-                            display: none;
+                        & > *:not([type='hidden']) ~ *:not([type='hidden']) {
+                            margin-left: $gutter * .5;
                         }
 
-                        label {
-                            opacity: .3;
+                        &[disabled] {
+                            .clear-button {
+                                display: none;
+                            }
+
+                            .input.textarea {
+                                border-color: #adb5bd !important;
+                            }
                         }
 
-                        .input.textarea {
-                            border-color: #adb5bd !important;
+                        .input,
+                        .input > * {
+                            display: inline-flex;
+                            align-items: center;
                         }
-                    }
 
-
-                    .input {
-                        margin: $gutter * .5;
+                        .input label:first-of-type {
+                            margin-right: $gutter;
+                        }
 
                         label {
                             margin-right: $gutter * .5;
                         }
+                    }
+
+                    .bulk-categories,
+                    .bulk-folders {
+                        & > * {
+                            display: inline-flex;
+                            align-items: center;
+                        }
+                    }
+
+                    .bulk-folders .folder-picker {
+                        margin-left: $gutter !important;
                     }
                 }
             }
@@ -186,8 +196,8 @@ body.view-module {
 
     // TODO: da fare meglio
     &.module-media, &.module-images, &.module-video, &.module-audio, &.module-objects {
-       .module-index .list-objects > a div.title-cell {
-           max-width: 210px;
-       }
+        .module-index .list-objects > a div.title-cell {
+            max-width: 210px;
+        }
     }
 }

@@ -82,7 +82,7 @@
 
                 @filter-update-current-page="onUpdateCurrentPage"
                 @filter-update-page-size="onUpdatePageSize"
-                @filter-objects="onFilterObjects"
+                @filter-objects-submit="onFilterObjects"
                 inline-template>
 
                     {% element 'FilterBox/filter_box' %}
@@ -92,7 +92,7 @@
 
         <div class="px-1 shrinks">
             <div class="columns">
-                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects">
+                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
                     {% element 'Form/related_item' { 'add': true } %}
                 </div>
             </div>

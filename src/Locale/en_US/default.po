@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-09 13:39:14 \n"
+"POT-Creation-Date: 2021-10-08 10:23:50 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -116,6 +116,9 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
+msgid "Copy to"
+msgstr ""
+
 msgid "Core properties"
 msgstr ""
 
@@ -147,6 +150,9 @@ msgid "Data modeling"
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Descendants"
 msgstr ""
 
 msgid "Description"
@@ -230,6 +236,9 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+msgid "Folder"
+msgstr ""
+
 msgid "Folders"
 msgstr ""
 
@@ -287,6 +296,9 @@ msgstr ""
 msgid "Left types"
 msgstr ""
 
+msgid "Less filters"
+msgstr ""
+
 msgid "Locations"
 msgstr ""
 
@@ -327,6 +339,12 @@ msgid "Module access not authorized"
 msgstr ""
 
 msgid "More"
+msgstr ""
+
+msgid "More filters"
+msgstr ""
+
+msgid "Move to"
 msgstr ""
 
 msgid "Move to position"
@@ -390,6 +408,9 @@ msgid "Objects"
 msgstr ""
 
 msgid "Off"
+msgstr ""
+
+msgid "Ok"
 msgstr ""
 
 msgid "On"
@@ -498,9 +519,6 @@ msgid "Search"
 msgstr ""
 
 msgid "Select a project"
-msgstr ""
-
-msgid "Set selected"
 msgstr ""
 
 msgid "Sign in"
@@ -725,34 +743,34 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:157
+#: src/Template/Layout/js/app/app.js:159
 #: src/Template/Layout/js/app/components/history/history.js:99
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:158
+#: src/Template/Layout/js/app/app.js:160
 #: src/Template/Layout/js/app/components/history/history.js:100
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:482
+#: src/Template/Layout/js/app/app.js:484
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:486
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:492
+#: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
 #: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:144
+#: src/Template/Layout/js/app/pages/modules/index.js:151
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:501
+#: src/Template/Layout/js/app/app.js:503
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -761,7 +779,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:142
+#: src/Template/Layout/js/app/pages/modules/index.js:149
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -799,11 +817,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:168
+#: src/Template/Layout/js/app/components/filter-box.js:194
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:228
+#: src/Template/Layout/js/app/components/filter-box.js:253
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 

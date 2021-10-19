@@ -1,92 +1,17 @@
-<div class="bulk-actions" :class="!selectedRows.length? '' : 'enabled'">
-    <header>
-        <p>{{ __('Actions on selected items') }}</p>
-    </header>
-    <nav>
-        {{ Form.create(null, {
-            'id': 'bulk-actions',
-            'url': {'_name': 'modules:bulkActions', 'object_type': objectType, '?': _view.request.getQuery()},
-        })|raw }}
+<div class="bulk-actions">
+    <div>
+        {% element 'Form/bulk_export' %}
+    </div>
 
-            <section class="fieldset" :disabled="!selectedRows.length">
-                <input type="submit" @click="bulkActions" value="{{ __('Set selected') }}">
-                <input type="hidden" name="ids" v-bind:value="selectedRows">
-                {{ Form.unlockField('ids') }}
+    <h3 class="bulk-header">{{ __('Actions on selected items') }}</h3>
 
-                {% for key in bulkActions %}
-                    {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
-                    {% set options = options|merge({ 'name': 'attributes[' ~ key ~ ']' }) %}
+    <div :class="{ disabled: !selectedRows.length }">
+        {% element 'Form/bulk_properties' %}
 
-                    {% if options.type == 'checkbox' %}
-                        {# custom radio input for type checkbox #}
-                        {% set radio =  {
-                            "type":"radio",
-                            "options":
-                                [
-                                    { "value": 1, "text": "Yes" },
-                                    { "value": 0, "text": "No" }
-                                ],
-                            "name": "attributes[" ~ key ~ "]"
-                        } %}
-                        {{ Form.control(key, radio)|raw }}
+        {% element 'Form/bulk_category' %}
 
-                    {% else %}
-                        {{ Form.control(key, options)|raw }}
-                    {% endif %}
+        {% element 'Form/bulk_position' %}
 
-
-                    {% if options.class == 'json' %}
-                        {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
-                    {% endif %}
-                {% endfor %}
-
-            </section>
-        {{ Form.end()|raw }}
-
-        {# trash #}
-        {% if (objects) and Perms.canDelete({type: objectType}) %}
-            {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
-                <input type="hidden" name="ids" v-bind:value="selectedRows">
-                {{ Form.unlockField('ids') }}
-                <button @click.prevent="trash" :disabled="!selectedRows.length">{{ __('Move to trash') }}</button>
-            {{ Form.end()|raw }}
-        {% endif %}
-
-        {# export #}
-        {% if not currentModule.hints.multiple_types %}
-            {{ Form.create(null, {'id': 'form-export', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-
-                {% set formats = config('Export.formats', {
-                    'CSV': 'csv',
-                    'Open Document': 'ods',
-                    'MS Excel': 'xlsx'
-                }) %}
-                {% set defaultFormat = config('Export.default', 'xslx') %}
-                <select name="format" id="exportformat">
-                {% for label,format in formats %}
-                    <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
-                {% endfor %}
-                </select>
-                {{ Form.unlockField('format') }}
-
-                <input type="hidden" name="ids" v-model="selectedRows">
-                {{ Form.unlockField('ids') }}
-                {{ Form.hidden('objectType', {'value': objectType})|raw }}
-                <button @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
-
-                {# Export all or filtered #}
-                {% if _view.request.getQuery('filter') %}
-                    {{ Form.hidden('filter', {'value': _view.request.getQuery('filter')|json_encode})|raw }}
-                {% endif %}
-                {{ Form.hidden('q', {'value': _view.request.getQuery('q')})|raw }}
-
-                {% set exportLabel = __('Export All') %}
-                {% if _view.request.getQuery('filter') or _view.request.getQuery('q') %}
-                    {% set exportLabel = __('Export Filtered') %}
-                {% endif %}
-                <button @click.prevent="exportAll">{{ exportLabel }}</button>
-
-            {{ Form.end()|raw }}
-        {% endif %}
-    </nav>
+        {% element 'Form/bulk_trash' %}
+    </div>
 </div>
