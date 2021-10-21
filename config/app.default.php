@@ -398,6 +398,9 @@ return [
         'log' => [
             //'log_file' => LOGS . 'api.log',
         ],
+        // 'guzzleConfig' => [ // Optional custom configuration for underlying GuzzleHTTP client.
+        //     'timeout' => 3,
+        // ],
     ],
 
     /**
