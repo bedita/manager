@@ -175,17 +175,14 @@ export default {
          *
          * @return {boolean}
          */
-         isMenu() {
+        isMenu() {
             if (!this.isParent) {
                 return false;
             }
-            if (!this.node.meta.relation) {
-                return true;
-            }
-            return !!this.node.meta.relation.menu;
+            return !!this.node.meta?.relation?.menu;
         },
 
-         /**
+        /**
          * Check if this is the primary position.
          *
          * @return {boolean}
@@ -194,10 +191,7 @@ export default {
             if (!this.isParent) {
                 return false;
             }
-            if (!this.node.meta.relation) {
-                return false;
-            }
-            return !!this.node.meta.relation.canonical;
+            return !!this.node.meta?.relation?.canonical;
         },
 
         /**

@@ -2,7 +2,7 @@
 
 <nav class="pagination has-text-size-smallest">
     <div class="count-items " v-if="pagination.count">
-        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: t(ucfirst(objectsLabel)) :></span>
+        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: label() :></span>
     </div>
 
     <div class="page-size" v-show="pagination.count > paginateSizes[0]">

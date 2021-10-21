@@ -226,6 +226,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
     // Translations
     $routes->connect(
+        '/translations',
+        ['controller' => 'Translations', 'action' => 'index'],
+        ['_name' => 'translations:list']
+    );
+    $routes->connect(
         '/:object_type/translation/save',
         ['controller' => 'Translations', 'action' => 'save'],
         ['_name' => 'translations:save']
@@ -298,9 +303,21 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     $routes->connect(
-        '/:object_type/bulkActions',
-        ['controller' => 'Modules', 'action' => 'bulkActions'],
-        ['_name' => 'modules:bulkActions']
+        '/:object_type/bulkAttribute',
+        ['controller' => 'Bulk', 'action' => 'attribute'],
+        ['_name' => 'modules:bulkAttribute']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkCategories',
+        ['controller' => 'Bulk', 'action' => 'categories'],
+        ['_name' => 'modules:bulkCategories']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkPosition',
+        ['controller' => 'Bulk', 'action' => 'position'],
+        ['_name' => 'modules:bulkPosition']
     );
 
     // translator service
@@ -308,5 +325,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/translate',
         ['controller' => 'Translator', 'action' => 'translate'],
         ['_name' => 'translator:translate']
+    );
+
+    // lock and unlock objects
+    $routes->connect(
+        '/:object_type/:id/lock',
+        ['controller' => 'Lock', 'action' => 'add'],
+        ['_name' => 'lock:add']
+    );
+    $routes->connect(
+        '/:object_type/:id/unlock',
+        ['controller' => 'Lock', 'action' => 'remove'],
+        ['_name' => 'lock:remove']
     );
 });

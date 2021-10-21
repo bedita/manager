@@ -277,4 +277,16 @@ class SchemaHelper extends Helper
 
         return true;
     }
+
+    /**
+     * Return unique right types from schema "relationsSchema".
+     *
+     * @return array
+     */
+    public function rightTypes(): array
+    {
+        $relationsSchema = (array)$this->_View->get('relationsSchema');
+
+        return \App\Utility\Schema::rightTypes($relationsSchema);
+    }
 }

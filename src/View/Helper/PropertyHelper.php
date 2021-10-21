@@ -62,11 +62,12 @@ class PropertyHelper extends Helper
      * @param string $name The property name
      * @param mixed|null $value The property value
      * @param array $options The form element options, if any
+     * @param string|null $type The type, for others schemas
      * @return string
      */
-    public function control(string $name, $value, array $options = []): string
+    public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
-        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name));
+        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
@@ -82,11 +83,16 @@ class PropertyHelper extends Helper
      * JSON Schema array of property name
      *
      * @param string $name The property name
+     * @param string|null $type The type, for others schemas
      * @return array
      */
-    public function schema(string $name): array
+    public function schema(string $name, ?string $type = null): array
     {
         $schema = (array)$this->_View->get('schema');
+        if (!empty($type)) {
+            $schemas = (array)$this->_View->get('schemasByType');
+            $schema = (array)$schemas[$type];
+        }
         $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
         $default = array_filter([
             'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),

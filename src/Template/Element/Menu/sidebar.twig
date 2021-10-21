@@ -12,7 +12,7 @@
 
         {% if not Layout.isDashboard() %}
             {% set editors = Editors.list() %}
-            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %}">
+            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {% if object.meta.locked %}locked{% endif %}">
                 {{ Layout.moduleLink()|raw }}
             </div>
             {% if editors|length > 1 %}

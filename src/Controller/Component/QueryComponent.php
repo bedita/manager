@@ -29,6 +29,16 @@ class QueryComponent extends Component
     {
         $query = (array)$this->getController()->getRequest()->getQueryParams();
 
+        // set include, if set in config
+        if ($this->getConfig('include') != null) {
+            $query['include'] = (string)$this->getConfig('include');
+        }
+
+        // make sure `filter[history_editor]` is empty in order to use logged user id
+        if (isset($query['filter']['history_editor'])) {
+            $query['filter']['history_editor'] = '';
+        }
+
         // return URL query string if `filter`, `sort`, or `q` are set
         $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
         if (!empty($subQuery)) {

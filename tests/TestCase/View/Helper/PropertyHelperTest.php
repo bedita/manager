@@ -166,6 +166,43 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Test `control` with parameter type, for "other" types schema controls
+     *
+     * @return void
+     *
+     * @covers ::control()
+     * @covers ::schema()
+     */
+    public function testControlOtherType(): void
+    {
+        $key = 'title';
+        $value = 'something';
+        $options = [];
+        $type = 'documents';
+        $schema = [];
+        $schemasByType = [
+            'documents' => [
+                'oneOf' => [
+                    ['type' => null],
+                    ['type' => 'string', 'contentMediaType' => 'text/html'],
+                ],
+                '$id' => '/properties/title',
+                'title' => 'Title',
+                'description' => null,
+            ],
+        ];
+        $expected = '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="something"/></div>';
+        $view = new View(null, null, null, []);
+        $schema = ['properties' => [$key => $schema]];
+        $view->set('schema', $schema);
+        $view->set('schemasByType', $schemasByType);
+        $view->set('objectType', 'dummies');
+        $property = new PropertyHelper($view);
+        $actual = $property->control($key, $value, $options, $type);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testValue` test case.
      *
      * @return array

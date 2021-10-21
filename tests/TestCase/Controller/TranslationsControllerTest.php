@@ -87,15 +87,30 @@ class TranslationsControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new TranslationsController($request);
+        $this->controller->objectType = 'documents';
         $this->setupApi();
         $this->createTestObject();
+    }
+
+    /**
+     * Test `initialize` method
+     *
+     * @covers ::initialize()
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
+        $actual = (string)$this->controller->request->getParam('object_type');
+        $expected = 'translations';
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `add` method
      *
      * @covers ::add()
-     *
      * @return void
      */
     public function testAdd(): void
@@ -128,7 +143,6 @@ class TranslationsControllerTest extends TestCase
      * Test `edit` method
      *
      * @covers ::edit()
-     *
      * @return void
      */
     public function testEdit(): void
@@ -162,7 +176,6 @@ class TranslationsControllerTest extends TestCase
      * Test `save` method
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSave(): void
@@ -283,7 +296,6 @@ class TranslationsControllerTest extends TestCase
      * Test `delete` method
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDelete(): void
@@ -405,9 +417,38 @@ class TranslationsControllerTest extends TestCase
     }
 
     /**
-     * Get test object id
+     * Test `typeFromUrl` method.
      *
      * @return void
+     * @covers ::typeFromUrl()
+     */
+    public function testTypeFromUrl(): void
+    {
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $request = $request->withAttribute('here', '/documents/1/translation/lang');
+        $this->controller = new TranslationsController($request);
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('typeFromUrl');
+        $method->setAccessible(true);
+        $expected = 'documents';
+        $actual = $method->invokeArgs($this->controller, []);
+        static::assertEquals($expected, $actual);
+
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
+        $this->controller->objectType = 'dummies';
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('typeFromUrl');
+        $method->setAccessible(true);
+        $expected = 'dummies';
+        $actual = $method->invokeArgs($this->controller, []);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Get test object id
+     *
+     * @return string|int
      */
     private function getTestId()
     {
@@ -420,7 +461,7 @@ class TranslationsControllerTest extends TestCase
     /**
      * Get an object for test purposes
      *
-     * @return array
+     * @return array|null
      */
     private function getTestObject()
     {
