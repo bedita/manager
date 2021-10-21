@@ -296,11 +296,21 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
     );
+
+    // Export
     $routes->connect(
         '/:object_type/export',
         ['controller' => 'Export', 'action' => 'export'],
         ['_name' => 'export:export']
     );
+
+    // Download stream
+    $routes->get(
+        '/download/:id',
+        ['controller' => 'Download', 'action' => 'download'],
+        'stream:download'
+    )
+    ->setPass(['id']);
 
     $routes->connect(
         '/:object_type/bulkAttribute',
