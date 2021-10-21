@@ -93,6 +93,7 @@ export default {
                 month: 'long',
                 day: 'numeric',
             };
+
             if (this.attrs.time) {
                 options.enableTime = true;
                 Object.assign(dateFormatOptions, {
@@ -100,7 +101,10 @@ export default {
                     minute: 'numeric',
                     second: 'numeric',
                 });
+            } else if (!this.attrs.daterange) {
+                options.dateFormat = 'Y-m-d';
             }
+
             options.formatDate = (dateObj, format) => {
                 // this value goes to the hidden input which will be saved,
                 // needs to be a correct ISO 8601 string if a datetime, or a string
