@@ -17,7 +17,6 @@ use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -57,12 +56,26 @@ class Application extends BaseApplication
     protected function bootstrapCli()
     {
         parent::bootstrapCli();
-        try {
-            $this->addPlugin('IdeHelper');
-        } catch (MissingPluginException $e) {
-            // do nothing, it's a require-dev lib
-        }
+        $this->addPluginDev('IdeHelper');
         $this->addPlugin('BEdita/I18n');
+    }
+
+    /**
+     * Add plugin considered as a dev dependency.
+     * It could be missing in production env.
+     *
+     * @param string $name The plugin name
+     * @return boolean
+     */
+    public function addPluginDev(string $name): bool
+    {
+        try {
+            $this->addPlugin($name);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
