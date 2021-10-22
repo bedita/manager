@@ -98,6 +98,9 @@ class ApplicationTest extends TestCase
      */
     public function testLoadProjectConfig()
     {
+        Application::loadProjectConfig(null, '');
+        static::assertEmpty(Configure::read('Project'));
+
         $projectsPath = TESTS . 'files' . DS . 'projects' . DS;
         Configure::write('Project.name', null);
         Application::loadProjectConfig('none', $projectsPath);
