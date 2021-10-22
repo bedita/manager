@@ -23,8 +23,7 @@
     "require": {
         "php": ">=7.1",
         "bedita/i18n": "^1.6",
-        "bedita/php-sdk": "dev-feat/guzzlehttp-config as 1.2.0",
-        "bedita/web-tools": "dev-feat/guzzlehttp-config",
+        "bedita/web-tools": "^1.7.1",
         "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
