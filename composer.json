@@ -32,10 +32,11 @@
     },
     "require-dev": {
         "cakephp/bake": "^1.11",
-        "cakephp/debug_kit": "^3.19.0",
         "cakephp/cakephp-codesniffer": "~3.3.0",
-        "psy/psysh": "@stable",
-        "phpunit/phpunit": "^6.5"
+        "cakephp/debug_kit": "^3.19.0",
+        "dereuromark/cakephp-ide-helper": "0.14.10",
+        "phpunit/phpunit": "^6.5",
+        "psy/psysh": "@stable"
     },
     "autoload": {
         "psr-4": {
