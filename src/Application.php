@@ -59,7 +59,7 @@ class Application extends BaseApplication
         parent::bootstrapCli();
         try {
             $this->addPlugin('IdeHelper');
-        } catch(MissingPluginException $e) {
+        } catch (MissingPluginException $e) {
             // do nothing, it's a require-dev lib
         }
         $this->addPlugin('BEdita/I18n');
