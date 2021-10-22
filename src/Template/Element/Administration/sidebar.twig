@@ -1,0 +1,9 @@
+{# Append urls to sidebar #}
+{% set actions = ['applications', 'endpoints', 'config', 'async_jobs'] %}
+{% for action in actions %}
+    {% if action == _view.request.action %}
+    {% do _view.append('module-links', '<span class="active-action">' ~ __(action|underscore|humanize) ~ '</span>') %}
+    {% else %}
+    {% do _view.append('module-links', Html.link(__(action|underscore|humanize), {'_name': 'administration:list:' ~ action}, {})|raw) %}
+    {% endif %}
+{% endfor %}

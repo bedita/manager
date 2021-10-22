@@ -92,6 +92,38 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard:messages']
     );
 
+    // Admin.
+    Router::prefix('administration', ['_namePrefix' => 'administration:'], function (RouteBuilder $routes) {
+
+        foreach (['applications', 'config', 'endpoints', 'async_jobs'] as $controller) {
+            // Routes connected here are prefixed with '/administration'
+            $name = Inflector::camelize($controller);
+            $routes->get(
+                "/$controller",
+                ['controller' => $name, 'action' => 'index'],
+                'list:' . $controller
+            );
+
+            $routes->get(
+                "/$controller/view/:id",
+                ['controller' => $name, 'action' => 'view'],
+                'view:' . $controller
+            )->setPass(['id']);
+
+            $routes->post(
+                "/$controller/save",
+                ['controller' => $name, 'action' => 'save'],
+                'save:' . $controller
+            );
+
+            $routes->post(
+                "/$controller/remove/:id",
+                ['controller' => $name, 'action' => 'remove'],
+                'remove:' . $controller
+            )->setPass(['id']);
+        }
+    });
+
     // Profile.
     $routes->connect(
         '/user_profile',
