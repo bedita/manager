@@ -65,7 +65,7 @@ class Application extends BaseApplication
      * It could be missing in production env.
      *
      * @param string $name The plugin name
-     * @return boolean
+     * @return bool
      */
     public function addPluginDev(string $name): bool
     {
