@@ -11,6 +11,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\HistoryController} Test Case
  *
  * @coversDefaultClass \App\Controller\HistoryController
+ * @uses \App\Controller\HistoryController
  */
 class HistoryControllerTest extends TestCase
 {

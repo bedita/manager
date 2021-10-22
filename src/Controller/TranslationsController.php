@@ -22,6 +22,14 @@ use Psr\Log\LogLevel;
 
 /**
  * Translations controller: create, edit, remove translations
+ *
+ * @property \App\Controller\Component\HistoryComponent $History
+ * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
+ * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
+ * @property \App\Controller\Component\QueryComponent $Query
+ * @property \App\Controller\Component\ThumbsComponent $Thumbs
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 class TranslationsController extends ModulesController
 {

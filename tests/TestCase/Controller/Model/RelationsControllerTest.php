@@ -22,6 +22,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\RelationsController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\RelationsController
+ * @uses \App\Controller\Model\RelationsController
  */
 class RelationsControllerTest extends TestCase
 {

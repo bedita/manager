@@ -23,6 +23,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\TranslationsController} Test Case
  *
  * @coversDefaultClass \App\Controller\TranslationsController
+ * @uses \App\Controller\TranslationsController
  */
 class TranslationsControllerTest extends TestCase
 {

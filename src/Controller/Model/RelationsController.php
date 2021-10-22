@@ -18,6 +18,8 @@ use Cake\Utility\Hash;
 /**
  * Relations Model Controller: list, add, edit, remove relations
  *
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class RelationsController extends ModelBaseController
 {

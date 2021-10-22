@@ -27,6 +27,7 @@ use Cake\Utility\Text;
  * {@see \App\Controller\PasswordController} Test Case
  *
  * @coversDefaultClass \App\Controller\PasswordController
+ * @uses \App\Controller\PasswordController
  */
 class PasswordControllerTest extends TestCase
 {

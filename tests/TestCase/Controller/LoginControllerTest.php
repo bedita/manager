@@ -21,6 +21,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\LoginController} Test Case
  *
  * @coversDefaultClass \App\Controller\LoginController
+ * @uses \App\Controller\LoginController
  */
 class LoginControllerTest extends TestCase
 {
