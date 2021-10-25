@@ -95,7 +95,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Admin.
     Router::prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
 
-        foreach (['applications', 'config', 'endpoints', 'async_jobs'] as $controller) {
+        foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles'] as $controller) {
             // Routes connected here are prefixed with '/admin'
             $name = Inflector::camelize($controller);
             $routes->get(

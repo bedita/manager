@@ -2,18 +2,25 @@
 namespace App\Controller\Admin;
 
 /**
- * Endpoints Controller
+ * Roles Controller
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
-class EndpointsController extends AdministrationBaseController
+class RolesController extends AdministrationBaseController
 {
+    /**
+     * Endpoint
+     *
+     * @var string
+     */
+    protected $endpoint = '/roles';
+
     /**
      * Resource type in use
      *
      * @var string
      */
-    protected $resourceType = 'endpoints';
+    protected $resourceType = 'roles';
 
     /**
      * {@inheritDoc}

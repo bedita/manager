@@ -13,6 +13,13 @@ use Cake\Http\Response;
 abstract class AdministrationBaseController extends AppController
 {
     /**
+     * Endpoint
+     *
+     * @var string
+     */
+    protected $endpoint = '/admin';
+
+    /**
      * Resource type in use
      *
      * @var string
@@ -81,7 +88,8 @@ abstract class AdministrationBaseController extends AppController
         $query = $this->request->getQueryParams();
 
         try {
-            $response = $this->apiClient->get(sprintf('/admin/%s', $this->resourceType), $query);
+            $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
+            $response = $this->apiClient->get($endpoint, $query);
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
