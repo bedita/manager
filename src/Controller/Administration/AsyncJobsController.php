@@ -3,6 +3,8 @@ namespace App\Controller\Administration;
 
 /**
  * Async Jobs Controller
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class AsyncJobsController extends AdministrationBaseController
 {

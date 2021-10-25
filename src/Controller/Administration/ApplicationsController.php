@@ -3,6 +3,8 @@ namespace App\Controller\Administration;
 
 /**
  * Applications Controller
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class ApplicationsController extends AdministrationBaseController
 {

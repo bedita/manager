@@ -8,6 +8,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Test class
+ *
+ * @uses \App\Controller\Administration\AsyncJobsController
  */
 class JobsController extends AsyncJobsController
 {

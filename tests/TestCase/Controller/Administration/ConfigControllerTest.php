@@ -8,6 +8,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Test class
+ *
+ * @uses \App\Controller\Administration\ConfigController
  */
 class CfgController extends ConfigController
 {

@@ -3,6 +3,8 @@ namespace App\Controller\Administration;
 
 /**
  * Config Controller
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class ConfigController extends AdministrationBaseController
 {

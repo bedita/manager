@@ -5,6 +5,8 @@ use Cake\Http\Response;
 
 /**
  * Endpoints Controller
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class EndpointsController extends AdministrationBaseController
 {
