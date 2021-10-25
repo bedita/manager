@@ -10,7 +10,7 @@ use Cake\Http\Response;
 /**
  * Administration Controller
  */
-class AdministrationBaseController extends AppController
+abstract class AdministrationBaseController extends AppController
 {
     /**
      * Resource type in use
