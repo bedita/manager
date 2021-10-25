@@ -36,7 +36,7 @@
         {% for resource in resources %}
 
             {{ Form.create(null, {
-                'url': {'_name': 'administration:save:' ~ resourceType},
+                'url': {'_name': 'admin:save:' ~ resourceType},
                 'id': 'form-' ~ resource.id,
                 'class': 'table-row',
             })|raw }}
@@ -68,7 +68,7 @@
                             })|raw }}
 
                         {{ Form.postButton(__('Remove'),
-                            {'_name': 'administration:remove:' ~ resource.type, 'id': resource.id},
+                            {'_name': 'admin:remove:' ~ resource.type, 'id': resource.id},
                             {
                                 'title': __('Remove') ~ resource.attributes.name,
                                 'class': 'button button-text-white is-width-auto',

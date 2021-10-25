@@ -90,7 +90,7 @@
 
                 {% if in_array('admin', user.roles) %}
                     {{ Html.link(__('Administration'),
-                        { '_name': 'administration:list:applications' },
+                        { '_name': 'admin:list:applications' },
                         { 'title': __('Administration'), 'class': 'dashboard-item has-background-black icon-wrench' } )|raw }}
                     {{ Html.link(__('Data modeling'),
                         { '_name': 'model:list:object_types' },
