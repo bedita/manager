@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Administration;
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;

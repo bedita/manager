@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Administration;
+namespace App\Controller\Admin;
 
 use Cake\Http\Response;
 

@@ -1,7 +1,7 @@
 <?php
-namespace App\Test\TestCase\Controller\Administration;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Administration\AdministrationBaseController;
+use App\Controller\Admin\AdministrationBaseController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -11,7 +11,7 @@ use Cake\TestSuite\TestCase;
 /**
  * Test class
  *
- * @uses \App\Controller\Administration\AdministrationBaseController
+ * @uses \App\Controller\Admin\AdministrationBaseController
  */
 class AdminBaseController extends AdministrationBaseController
 {
