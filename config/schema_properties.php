@@ -305,7 +305,7 @@ return [
                 'title' => 'Expires',
                 'description' => 'Expiration date',
             ],
-            'max_attempts'  => [
+            'max_attempts' => [
                 'oneOf' => [
                     [
                         'type' => 'null',
@@ -355,7 +355,7 @@ return [
                 'title' => 'Content',
                 'description' => 'Config content',
             ],
-            'application_id'  => [
+            'application_id' => [
                 'oneOf' => [
                     [
                         'type' => 'null',
@@ -400,7 +400,7 @@ return [
                 'description' => 'Endpoint enabled',
                 'default' => true,
             ],
-            'object_type_id'  => [
+            'object_type_id' => [
                 'oneOf' => [
                     [
                         'type' => 'null',
