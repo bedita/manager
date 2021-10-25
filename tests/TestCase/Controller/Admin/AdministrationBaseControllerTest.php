@@ -39,9 +39,9 @@ class WrongAdminBaseController extends AdministrationBaseController
 }
 
 /**
- * {@see \App\Controller\Administration\AdministrationBaseController} Test Case
+ * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
  *
- * @coversDefaultClass \App\Controller\Administration\AdministrationBaseController
+ * @coversDefaultClass \App\Controller\Admin\AdministrationBaseController
  */
 class AdministrationBaseControllerTest extends TestCase
 {
