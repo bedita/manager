@@ -20,6 +20,13 @@ class AdministrationBaseController extends AppController
     protected $resourceType = null;
 
     /**
+     * Readonly flag view.
+     *
+     * @var bool
+     */
+    protected $readonly = true;
+
+    /**
      * Properties to show in index columns
      *
      * @var array
@@ -94,6 +101,8 @@ class AdministrationBaseController extends AppController
         $this->set('properties', $this->properties);
         $this->set('metaColumns', $this->meta);
         $this->set('filter', []);
+        $this->set('schema', (array)$this->Schema->getSchema($this->resourceType));
+        $this->set('readonly', $this->readonly);
 
         return null;
     }

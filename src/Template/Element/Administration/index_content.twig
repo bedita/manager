@@ -17,17 +17,16 @@
         {# list resources : table header #}
         <nav class="table-header has-border-black">
             <div>{{ __('Id') }}</div>
-            {% for prop in properties %}
-                {% set label = prop %}
-                {% if prop == 'object_type_name' %}
-                    {% set label = 'type' %}
-                {% endif %}
-                <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
+            {% for key in properties %}
+                {% set label = key %}
+                <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
             {% endfor %}
-            {% for prop in metaColumns %}
-                <div>{{ prop }}</div>
+            {% for key in metaColumns %}
+                <div>{{ key }}</div>
             {% endfor %}
-            <div></div>
+            {% if not readonly %}
+                <div></div>
+            {% endif %}
         </nav>
         {% if resources|count == 0 %}
             <p>{{ __('Resources not available') }}</p>
@@ -44,33 +43,38 @@
                 <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
                     {{ resource.id }}
                 </div>
-                {% for prop in properties %}
-                    {% set propVal = resource.attributes[prop] %}
-
-                    <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {{ Schema.format(propVal, schema.properties[prop]) }}
+                {% for key in properties %}
+                    {% set val = resource.attributes[key] %}
+                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
+                        {% if readonly %}
+                            {{ Schema.format(val, schema.properties[key]) }}
+                        {% else %}
+                            {{ Property.control(key, val, {'label': ''})|raw }}
+                        {% endif %}
                     </div>
                 {% endfor %}
-                {% for prop in metaColumns %}
-                    <div>{{ resource.meta[prop] }}</div>
+                {% for key in metaColumns %}
+                    <div class="narrow">
+                        {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
+                    </div>
                 {% endfor %}
-                <div class="buttons-cell narrow">
-                    {# {% set buttonClasses = 'button button-text-white is-width-auto' %}
+                {% if not readonly %}
+                    <div class="buttons-cell narrow">
+                        {{ Form.button( __('Save'),
+                            {
+                                'form': 'form-' ~ resource.id,
+                                'title': __('Save') ~ resource.attributes.name,
+                                'class': 'button button-text-white is-width-auto',
+                            })|raw }}
 
-                    {{ Form.button( __('Save'),
-                        {
-                            'form': 'form-' ~ resource.id,
-                            'title': __('Save') ~ resource.attributes.name,
-                            'class': buttonClasses,
-                        })|raw }}
-
-                    {{ Form.postButton(__('Remove'),
-                        {'_name': 'administration:remove:' ~ resource.type, 'id': resource.id},
-                        {
-                            'title': __('Remove') ~ resource.attributes.name,
-                            'class': buttonClasses,
-                        })|raw }} #}
-                </div>
+                        {{ Form.postButton(__('Remove'),
+                            {'_name': 'administration:remove:' ~ resource.type, 'id': resource.id},
+                            {
+                                'title': __('Remove') ~ resource.attributes.name,
+                                'class': 'button button-text-white is-width-auto',
+                            })|raw }}
+                    </div>
+                {% endif %}
 
             {{ Form.hidden('id', {'value': resource.id})|raw }}
             {{ Form.end()|raw }}
