@@ -48,11 +48,6 @@ class AdministrationBaseController extends AppController
         parent::initialize();
 
         $this->loadComponent('Properties');
-
-        $this->Schema->setConfig([
-            'type' => $this->resourceType,
-            'internalSchema' => true,
-        ]);
     }
 
     /**
