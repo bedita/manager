@@ -1,7 +1,7 @@
 <?php
-namespace App\Test\TestCase\Controller\Administration;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Administration\ConfigController;
+use App\Controller\Admin\ApplicationsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -9,27 +9,27 @@ use Cake\TestSuite\TestCase;
 /**
  * Test class
  *
- * @uses \App\Controller\Administration\ConfigController
+ * @uses \App\Controller\Admin\ApplicationsController
  */
-class CfgController extends ConfigController
+class AppsController extends ApplicationsController
 {
-    protected $resourceType = 'config';
+    protected $resourceType = 'applications';
     protected $properties = ['name'];
 }
 
 /**
- * {@see \App\Controller\Administration\ConfigController} Test Case
+ * {@see \App\Controller\Admin\ApplicationsController} Test Case
  *
- * @coversDefaultClass \App\Controller\Administration\ConfigController
+ * @coversDefaultClass \App\Controller\Admin\ApplicationsController
  */
-class ConfigControllerTest extends TestCase
+class ApplicationsControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Test\TestCase\Controller\CfgController
+     * @var \App\Test\TestCase\Controller\Admin\AppsController
      */
-    public $CfgController;
+    public $AppsController;
 
     /**
      * Test request config
@@ -41,7 +41,7 @@ class ConfigControllerTest extends TestCase
             'REQUEST_METHOD' => 'GET',
         ],
         'params' => [
-            'resource_type' => 'config',
+            'resource_type' => 'applications',
         ],
     ];
 
@@ -61,7 +61,7 @@ class ConfigControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->CfgController = new CfgController($request);
+        $this->AppsController = new AppsController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -76,7 +76,7 @@ class ConfigControllerTest extends TestCase
      */
     public function testBase(): void
     {
-        $this->CfgController->index();
+        $this->AppsController->index();
         $keys = [
             'resources',
             'meta',
@@ -88,11 +88,11 @@ class ConfigControllerTest extends TestCase
             'schema',
             'readonly',
         ];
-        $viewVars = (array)$this->CfgController->viewVars;
+        $viewVars = (array)$this->AppsController->viewVars;
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
-        static::assertEquals('config', $viewVars['resourceType']);
+        static::assertEquals('applications', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
     }
 }

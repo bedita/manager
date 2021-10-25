@@ -1,7 +1,7 @@
 <?php
-namespace App\Test\TestCase\Controller\Administration;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Administration\AsyncJobsController;
+use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -9,27 +9,27 @@ use Cake\TestSuite\TestCase;
 /**
  * Test class
  *
- * @uses \App\Controller\Administration\AsyncJobsController
+ * @uses \App\Controller\Admin\RolesController
  */
-class JobsController extends AsyncJobsController
+class RlsController extends RolesController
 {
-    protected $resourceType = 'async_jobs';
+    protected $resourceType = 'roles';
     protected $properties = ['name'];
 }
 
 /**
- * {@see \App\Controller\Administration\AsyncJobsController} Test Case
+ * {@see \App\Controller\Admin\RolesController} Test Case
  *
- * @coversDefaultClass \App\Controller\Administration\AsyncJobsController
+ * @coversDefaultClass \App\Controller\Admin\RolesController
  */
-class AsyncJobsControllerTest extends TestCase
+class RolesControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Test\TestCase\Controller\AsyncJobsController
+     * @var \App\Test\TestCase\Controller\Admin\RlsController
      */
-    public $AsyncJobsController;
+    public $RlsController;
 
     /**
      * Test request config
@@ -41,7 +41,7 @@ class AsyncJobsControllerTest extends TestCase
             'REQUEST_METHOD' => 'GET',
         ],
         'params' => [
-            'resource_type' => 'async_jobs',
+            'resource_type' => 'roles',
         ],
     ];
 
@@ -61,7 +61,7 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new JobsController($request);
+        $this->RlsController = new RlsController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -76,7 +76,7 @@ class AsyncJobsControllerTest extends TestCase
      */
     public function testBase(): void
     {
-        $this->AsyncJobsController->index();
+        $this->RlsController->index();
         $keys = [
             'resources',
             'meta',
@@ -88,11 +88,11 @@ class AsyncJobsControllerTest extends TestCase
             'schema',
             'readonly',
         ];
-        $viewVars = (array)$this->AsyncJobsController->viewVars;
+        $viewVars = (array)$this->RlsController->viewVars;
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
-        static::assertEquals('async_jobs', $viewVars['resourceType']);
+        static::assertEquals('roles', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
     }
 }

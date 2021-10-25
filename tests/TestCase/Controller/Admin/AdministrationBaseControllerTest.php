@@ -25,6 +25,8 @@ class AdminBaseController extends AdministrationBaseController
 
 /**
  * Test class
+ *
+ * @uses \App\Controller\Admin\AdministrationBaseController
  */
 class WrongAdminBaseController extends AdministrationBaseController
 {
@@ -46,7 +48,7 @@ class AdministrationBaseControllerTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Test\TestCase\Controller\AdminBaseController
+     * @var \App\Test\TestCase\Controller\Admin\AdminBaseController
      */
     public $AdministrationBaseController;
 

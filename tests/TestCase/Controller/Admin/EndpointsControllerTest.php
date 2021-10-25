@@ -1,7 +1,7 @@
 <?php
-namespace App\Test\TestCase\Controller\Administration;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Administration\ApplicationsController;
+use App\Controller\Admin\EndpointsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -9,27 +9,27 @@ use Cake\TestSuite\TestCase;
 /**
  * Test class
  *
- * @uses \App\Controller\Administration\ApplicationsController
+ * @uses \App\Controller\Admin\EndpointsController
  */
-class AppsController extends ApplicationsController
+class EndsController extends EndpointsController
 {
-    protected $resourceType = 'applications';
+    protected $resourceType = 'endpoints';
     protected $properties = ['name'];
 }
 
 /**
- * {@see \App\Controller\Administration\ApplicationsController} Test Case
+ * {@see \App\Controller\Admin\EndpointsController} Test Case
  *
- * @coversDefaultClass \App\Controller\Administration\ApplicationsController
+ * @coversDefaultClass \App\Controller\Admin\EndpointsController
  */
-class ApplicationsControllerTest extends TestCase
+class EndpointsControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Test\TestCase\Controller\AppsController
+     * @var \App\Test\TestCase\Controller\Admin\EndsController
      */
-    public $AppsController;
+    public $EndsController;
 
     /**
      * Test request config
@@ -61,7 +61,7 @@ class ApplicationsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AppsController = new AppsController($request);
+        $this->EndsController = new EndsController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -76,7 +76,7 @@ class ApplicationsControllerTest extends TestCase
      */
     public function testBase(): void
     {
-        $this->AppsController->index();
+        $this->EndsController->index();
         $keys = [
             'resources',
             'meta',
@@ -88,11 +88,11 @@ class ApplicationsControllerTest extends TestCase
             'schema',
             'readonly',
         ];
-        $viewVars = (array)$this->AppsController->viewVars;
+        $viewVars = (array)$this->EndsController->viewVars;
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
-        static::assertEquals('applications', $viewVars['resourceType']);
+        static::assertEquals('endpoints', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
     }
 }
