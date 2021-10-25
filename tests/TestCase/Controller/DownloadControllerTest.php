@@ -13,6 +13,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\DownloadController} Test Case
  *
  * @coversDefaultClass \App\Controller\DownloadController
+ * @uses \App\Controller\DownloadController
  */
 class DownloadControllerTest extends TestCase
 {

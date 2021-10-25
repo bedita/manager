@@ -26,6 +26,7 @@ use Cake\Utility\Hash;
  *
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
+ * @property \App\Controller\Component\FlashComponent $Flash
  */
 class AppController extends Controller
 {

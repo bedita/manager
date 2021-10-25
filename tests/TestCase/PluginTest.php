@@ -32,10 +32,10 @@ class PluginTest extends TestCase
      */
     public function testLoadedAppPlugins()
     {
-        $appPlugins = Configure::read('Plugins', []);
-        $appPlugins = array_keys($appPlugins);
-        sort($appPlugins);
+        $expected = Configure::read('Plugins', []);
+        $expected = array_keys($expected) + ['IdeHelper'];
+        sort($expected);
         $loaded = Plugin::loadedAppPlugins();
-        static::assertEquals($appPlugins, $loaded);
+        static::assertEquals($expected, $loaded);
     }
 }
