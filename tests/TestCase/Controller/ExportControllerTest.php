@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\ExportController} Test Case
  *
  * @coversDefaultClass \App\Controller\ExportController
+ * @uses \App\Controller\ExportController
  */
 class ExportControllerTest extends TestCase
 {

@@ -19,6 +19,8 @@ use Cake\Utility\Hash;
 /**
  * Categories Model Controller: list, add, edit, remove categories
  *
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class CategoriesController extends ModelBaseController
 {

@@ -22,6 +22,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\CategoriesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\CategoriesController
+ * @uses \App\Controller\Model\CategoriesController
  */
 class CategoriesControllerTest extends TestCase
 {

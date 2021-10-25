@@ -21,6 +21,9 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
+/**
+ * @uses \App\Controller\ImportController
+ */
 class ImportControllerSample extends ImportController
 {
     /**

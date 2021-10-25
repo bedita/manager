@@ -24,6 +24,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\ExportController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\ExportController
+ * @uses \App\Controller\Model\ExportController
  */
 class ExportControllerTest extends TestCase
 {

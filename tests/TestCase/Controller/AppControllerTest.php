@@ -25,6 +25,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\AppController} Test Case
  *
  * @coversDefaultClass \App\Controller\AppController
+ * @uses \App\Controller\AppController
  */
 class AppControllerTest extends TestCase
 {

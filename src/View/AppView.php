@@ -19,6 +19,16 @@ use Cake\Utility\Hash;
 /**
  * Application View default class
  *
+ *
+ * @property \App\View\Helper\EditorsHelper $Editors
+ * @property \App\View\Helper\LayoutHelper $Layout
+ * @property \App\View\Helper\ArrayHelper $Array
+ * @property \App\View\Helper\LinkHelper $Link
+ * @property \App\View\Helper\PropertyHelper $Property
+ * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\SchemaHelper $Schema
+ * @property \BEdita\WebTools\View\Helper\ThumbHelper $Thumb
+ * @property \BEdita\I18n\View\Helper\I18nHelper $I18n
  */
 class AppView extends TwigView
 {

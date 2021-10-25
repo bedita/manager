@@ -25,6 +25,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\TrashController} Test Case
  *
  * @coversDefaultClass \App\Controller\TrashController
+ * @uses \App\Controller\TrashController
  */
 class TrashControllerTest extends TestCase
 {
