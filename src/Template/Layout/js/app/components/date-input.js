@@ -114,13 +114,16 @@ export default {
                     // force hours to 12 to avoid date change
                     date.setHours(12);
 
-                    return date.toISOString().split('T')[0];
+                    return flatpickr.formatDate(date, format);
                 }
+
                 if (format === 'Z') {
                     return dateObj.toISOString();
                 }
+
                 return Intl.DateTimeFormat(LOCALE, dateFormatOptions).format(dateObj);
             };
+
             this.instance = flatpickr(element, options);
             element.dataset.originalValue = element.value;
         },
