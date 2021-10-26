@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-12 07:30:56 \n"
+"POT-Creation-Date: 2021-10-26 07:15:49 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -25,6 +25,9 @@ msgstr "Aggiungi"
 
 msgid "Add translation"
 msgstr "Aggiungi traduzione"
+
+msgid "Administration"
+msgstr "Amministrazione"
 
 msgid "Advanced"
 msgstr "Avanzate"
@@ -170,6 +173,9 @@ msgstr "Scarta"
 msgid "Documents"
 msgstr "Documenti"
 
+msgid "Download file"
+msgstr "Scarica file"
+
 msgid "Draft"
 msgstr "Bozza"
 
@@ -259,6 +265,9 @@ msgstr "Dalla data"
 
 msgid "History"
 msgstr "Cronologia modifiche"
+
+msgid "Id"
+msgstr ""
 
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
@@ -502,6 +511,9 @@ msgstr "Risorsa \"%s\" non disponibile. Error: %s"
 msgid "Resource \"%s\" not found"
 msgstr "Risorsa \"%s\" non trovata"
 
+msgid "Resources not available"
+msgstr "Risorse non disponibili"
+
 msgid "Restore"
 msgstr "Ripristina"
 
@@ -638,6 +650,9 @@ msgstr "Video"
 msgid "View"
 msgstr "Visualizza"
 
+msgid "View file"
+msgstr "Vedi file"
+
 msgid "View original"
 msgstr "Vedi originale"
 
@@ -770,7 +785,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
@@ -790,7 +805,7 @@ msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
@@ -839,12 +854,12 @@ msgstr "modifica"
 msgid "Menu"
 msgstr "Menù"
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:246
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:239
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:300
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:290
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
