@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-26 07:15:49 \n"
+"POT-Creation-Date: 2021-10-26 07:58:29 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -62,6 +62,12 @@ msgstr "Un'estensione ha fermato il caricamento del file"
 msgid "Any"
 msgstr "Qualsiasi"
 
+msgid "Applications"
+msgstr "Applicazioni"
+
+msgid "Async Jobs"
+msgstr "Processi asincroni"
+
 msgid "Auto-translate"
 msgstr "Traduci automaticamente"
 
@@ -118,6 +124,9 @@ msgstr "Chiudi"
 
 msgid "Concurrent users"
 msgstr "Redattori concorrenti"
+
+msgid "Config"
+msgstr "Configurazioni"
 
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
@@ -202,6 +211,9 @@ msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
 
 msgid "Empty-verb"
 msgstr "Svuota"
+
+msgid "Endpoints"
+msgstr "Endpoint"
 
 msgid "Error "
 msgstr "Errore "
@@ -317,6 +329,9 @@ msgstr "Posizioni"
 msgid "Lock"
 msgstr "Blocca"
 
+msgid "Locked_until"
+msgstr "Termine blocco"
+
 msgid "Log out"
 msgstr "Esci"
 
@@ -331,6 +346,9 @@ msgstr "Coordinate Long Lat"
 
 msgid "Map"
 msgstr "Mappa"
+
+msgid "Max_attempts"
+msgstr "Tentativi massimi"
 
 msgid "Media"
 msgstr ""
@@ -529,8 +547,14 @@ msgstr "Ridigita password"
 msgid "Right types"
 msgstr "Tipi di destra"
 
+msgid "Roles"
+msgstr "Ruoli"
+
 msgid "Save"
 msgstr "Salva"
+
+msgid "Scheduled_from"
+msgstr "Partenza"
 
 msgid "Search"
 msgstr "Cerca"
@@ -674,11 +698,17 @@ msgstr "aggiungi"
 msgid "add objects"
 msgstr "aggiungi oggetti"
 
+msgid "application id"
+msgstr "id applicazione"
+
 msgid "cancel"
 msgstr "annulla"
 
 msgid "code"
 msgstr "codice"
+
+msgid "completed"
+msgstr "completato"
 
 msgid "completed on"
 msgstr "completato il"
@@ -686,20 +716,38 @@ msgstr "completato il"
 msgid "confirm password"
 msgstr "conferma password"
 
+msgid "content"
+msgstr "contenuto"
+
+msgid "context"
+msgstr "contesto"
+
 msgid "create"
 msgstr "crea"
 
 msgid "create new"
 msgstr "crea nuovo"
 
+msgid "created"
+msgstr "creato"
+
 msgid "current password"
 msgstr "password corrente"
+
+msgid "description"
+msgstr "descrizione"
 
 msgid "elements to"
 msgstr "elementi a"
 
 msgid "empty"
 msgstr "vuoto"
+
+msgid "enabled"
+msgstr "abilitato"
+
+msgid "expires"
+msgstr "scade"
 
 msgid "file name"
 msgstr "nome del file"
@@ -709,6 +757,9 @@ msgstr ""
 
 msgid "modified"
 msgstr "modificato"
+
+msgid "name"
+msgstr "nome"
 
 msgid "new password"
 msgstr "nuova password"
@@ -733,6 +784,9 @@ msgstr ""
 
 msgid "scheduled from"
 msgstr "programmato da"
+
+msgid "service"
+msgstr "servizio"
 
 msgid "service name"
 msgstr "nome del servizio"

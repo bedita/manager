@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-26 07:15:49 \n"
+"POT-Creation-Date: 2021-10-26 07:58:29 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -62,6 +62,12 @@ msgstr ""
 msgid "Any"
 msgstr ""
 
+msgid "Applications"
+msgstr ""
+
+msgid "Async Jobs"
+msgstr ""
+
 msgid "Auto-translate"
 msgstr ""
 
@@ -117,6 +123,9 @@ msgid "Close"
 msgstr ""
 
 msgid "Concurrent users"
+msgstr ""
+
+msgid "Config"
 msgstr ""
 
 msgid "Confirm new password"
@@ -202,6 +211,9 @@ msgstr ""
 
 msgid "Empty-verb"
 msgstr "Empty"
+
+msgid "Endpoints"
+msgstr ""
 
 msgid "Error "
 msgstr ""
@@ -317,6 +329,9 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
+msgid "Locked_until"
+msgstr ""
+
 msgid "Log out"
 msgstr ""
 
@@ -330,6 +345,9 @@ msgid "Long Lat Coordinates"
 msgstr ""
 
 msgid "Map"
+msgstr ""
+
+msgid "Max_attempts"
 msgstr ""
 
 msgid "Media"
@@ -527,7 +545,13 @@ msgstr ""
 msgid "Right types"
 msgstr ""
 
+msgid "Roles"
+msgstr ""
+
 msgid "Save"
+msgstr ""
+
+msgid "Scheduled_from"
 msgstr ""
 
 msgid "Search"
@@ -671,10 +695,16 @@ msgstr ""
 msgid "add objects"
 msgstr ""
 
+msgid "application id"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
 msgid "code"
+msgstr ""
+
+msgid "completed"
 msgstr ""
 
 msgid "completed on"
@@ -683,19 +713,37 @@ msgstr ""
 msgid "confirm password"
 msgstr ""
 
+msgid "content"
+msgstr ""
+
+msgid "context"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
 msgid "create new"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
 msgid "current password"
+msgstr ""
+
+msgid "description"
 msgstr ""
 
 msgid "elements to"
 msgstr ""
 
 msgid "empty"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "expires"
 msgstr ""
 
 msgid "file name"
@@ -705,6 +753,9 @@ msgid "id"
 msgstr ""
 
 msgid "modified"
+msgstr ""
+
+msgid "name"
 msgstr ""
 
 msgid "new password"
@@ -729,6 +780,9 @@ msgid "reset"
 msgstr ""
 
 msgid "scheduled from"
+msgstr ""
+
+msgid "service"
 msgstr ""
 
 msgid "service name"

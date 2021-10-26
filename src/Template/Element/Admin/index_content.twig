@@ -1,11 +1,11 @@
 {% element ('Admin/sidebar') %}
 
-{% do _view.assign('title', 'Administration ' ~ resourceType|humanize) %}
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 
 <div class="module-header">
     <header>
-        <h1>{{ title }}</h1>
+        <h1>{{ __(title) }}</h1>
     </header>
 </div>
 
@@ -22,7 +22,7 @@
                 <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
             {% endfor %}
             {% for key in metaColumns %}
-                <div>{{ key }}</div>
+                <div>{{ __(key) }}</div>
             {% endfor %}
             {% if not readonly %}
                 <div></div>
