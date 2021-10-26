@@ -24,7 +24,7 @@ use Psr\Log\LogLevel;
 /**
  * Handles model schema of objects and resources.
  *
- * @property \Cake\Controller\Component\FlashComponent $Flash
+ * @property \App\Controller\Component\FlashComponent $Flash
  */
 class SchemaComponent extends Component
 {

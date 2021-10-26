@@ -24,6 +24,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\DashboardController} Test Case
  *
  * @coversDefaultClass \App\Controller\DashboardController
+ * @uses \App\Controller\DashboardController
  */
 class DashboardControllerTest extends TestCase
 {

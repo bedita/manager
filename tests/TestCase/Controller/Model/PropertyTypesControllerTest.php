@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\Model\PropertyTypesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\PropertyTypesController
+ * @uses \App\Controller\Model\PropertyTypesController
  */
 class PropertyTypesControllerTest extends TestCase
 {

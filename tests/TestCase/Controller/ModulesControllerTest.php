@@ -24,6 +24,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Sample controller wrapper, to add useful methods for test
+ *
+ * @uses \App\Controller\ModulesController
  */
 class ModulesControllerSample extends ModulesController
 {

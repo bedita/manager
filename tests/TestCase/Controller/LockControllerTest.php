@@ -11,6 +11,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\LockController} Test Case
  *
  * @coversDefaultClass \App\Controller\LockController
+ * @uses \App\Controller\LockController
  */
 class LockControllerTest extends TestCase
 {

@@ -10,6 +10,7 @@ use ReflectionProperty;
  * {@see \App\Controller\BulkController} Test Case
  *
  * @coversDefaultClass \App\Controller\BulkController
+ * @uses \App\Controller\BulkController
  */
 class BulkControllerTest extends BaseControllerTest
 {

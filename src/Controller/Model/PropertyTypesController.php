@@ -20,6 +20,8 @@ use Psr\Log\LogLevel;
 /**
  * Property Types Model Controller: list, add, edit, remove property types
  *
+ *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class PropertyTypesController extends ModelBaseController
 {
