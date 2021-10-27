@@ -13,7 +13,9 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ApiComponent;
-use Cake\Controller\ComponentRegistry;
+use App\Controller\Component\ModulesComponent;
+use Cake\Controller\Component\AuthComponent;
+use Cake\Controller\Controller;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -31,23 +33,26 @@ class ApiComponentTest extends TestCase
     public $Api;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $registry = new ComponentRegistry();
-        $this->Api = new ApiComponent($registry);
+
+        $controller = new Controller();
+        $registry = $controller->components();
+        $registry->load('Auth');
+        $this->Modules = $registry->load(ModulesComponent::class);
+        $this->Auth = $registry->load(AuthComponent::class);
+        $this->Api = $registry->load(ApiComponent::class);
+        $controller->Auth = $this->Auth;
+        $controller->Modules = $this->Modules;
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Api);
 
@@ -55,12 +60,35 @@ class ApiComponentTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Data provider for `testGetObjects` method
      *
-     * @return void
+     * @return array
      */
-    public function testInitialization()
+    public function getObjectsProvider(): array
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        return [
+            'objects, empty query' => [
+                'objects',
+                [],
+                ['data', 'links', 'meta'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `getObjects()` method.
+     *
+     * @param string $objectType The object type
+     * @param array $query The query
+     * @return void
+     * @covers ::getObjects()
+     * @dataProvider getObjectsProvider()
+     */
+    public function testGetObjects(string $objectType, array $query, array $expectedKeys): void
+    {
+        $response = $this->Api->getObjects($objectType, $query);
+        foreach ($expectedKeys as $key) {
+            static::assertArrayHasKey($key, $response);
+        }
     }
 }
