@@ -26,6 +26,6 @@ class ApiComponent extends Component
         $roles = (array)Hash::get($user, 'roles');
         $query = AccessControl::filteredQuery($moduleName, $roles) + $query;
 
-        return ApiClientProvider::getApiClient()->getObjects($objectType, $query);
+        return (array)ApiClientProvider::getApiClient()->getObjects($objectType, $query);
     }
 }
