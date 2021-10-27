@@ -17,7 +17,9 @@ use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\Component\ApiComponent Test Case
+ * {@see App\Controller\Component\ApiComponent} Test Case
+ *
+ * @coversDefaultClass App\Controller\Component\ApiComponent
  */
 class ApiComponentTest extends TestCase
 {
