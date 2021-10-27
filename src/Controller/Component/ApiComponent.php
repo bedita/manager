@@ -25,7 +25,10 @@ class ApiComponent extends Component
         $user = (array)$this->getController()->Auth->user();
         $roles = (array)Hash::get($user, 'roles');
         $query = AccessControl::filteredQuery($moduleName, $roles) + $query;
+        $classMethod = AccessControl::filteredClassMethod($objectType, $roles);
+        $class = empty($classMethod['class']) ? ApiClientProvider::getApiClient() : $classMethod['class']();
+        $method = empty($classMethod['method']) ? 'getObjects' : $classMethod['method'];
 
-        return (array)ApiClientProvider::getApiClient()->getObjects($objectType, $query);
+        return (array)$class->$method($objectType, $query);
     }
 }
