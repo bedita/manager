@@ -27,6 +27,7 @@ use Cake\Utility\Hash;
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
  * @property \App\Controller\Component\FlashComponent $Flash
+ * @property \App\Controller\Component\ApiComponent $Api
  */
 class AppController extends Controller
 {
@@ -68,6 +69,7 @@ class AppController extends Controller
             'currentModuleName' => $this->name,
         ]);
         $this->loadComponent('Schema');
+        $this->loadComponent('Api');
     }
 
     /**

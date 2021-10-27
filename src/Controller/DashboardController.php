@@ -67,7 +67,7 @@ class DashboardController extends AppController
         $filter = ['modified_by' => $user['id']];
         $limit = 20;
         $sort = '-modified';
-        $response = $this->apiClient->getObjects('objects', compact('filter', 'limit', 'sort'));
+        $response = $this->Api->getObjects('objects', compact('filter', 'limit', 'sort'));
 
         return (array)Hash::extract($response, 'data.{n}');
     }

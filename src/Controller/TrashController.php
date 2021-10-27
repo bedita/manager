@@ -62,7 +62,7 @@ class TrashController extends AppController
         $this->request->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
+            $response = $this->Api->getObjects('trash', $this->request->getQueryParams());
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
@@ -213,7 +213,7 @@ class TrashController extends AppController
 
         $query = array_filter(array_intersect_key($this->listQuery(), ['filter' => '']));
         // cycle over trash results
-        $response = $this->apiClient->getObjects('trash', $query);
+        $response = $this->Api->getObjects('trash', $query);
         $counter = 0;
         while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
             foreach ($response['data'] as $index => $data) {
@@ -228,7 +228,7 @@ class TrashController extends AppController
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
             }
-            $response = $this->apiClient->getObjects('trash', $query);
+            $response = $this->Api->getObjects('trash', $query);
         }
         $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
 

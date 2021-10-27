@@ -96,6 +96,7 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'Auth'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
+        static::assertNotEmpty($this->AppController->{'Api'});
     }
 
     /**

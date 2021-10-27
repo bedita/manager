@@ -89,7 +89,7 @@ class ModulesController extends AppController
         }
 
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
+            $response = $this->Api->getObjects($this->objectType, $this->Query->index());
         } catch (BEditaClientException $e) {
             $this->log($e, LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
