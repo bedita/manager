@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-12 07:30:56 \n"
+"POT-Creation-Date: 2021-10-26 07:58:29 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -24,6 +24,9 @@ msgid "Add"
 msgstr ""
 
 msgid "Add translation"
+msgstr ""
+
+msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
@@ -57,6 +60,12 @@ msgid "An extension stopped the file upload"
 msgstr ""
 
 msgid "Any"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Async Jobs"
 msgstr ""
 
 msgid "Auto-translate"
@@ -116,6 +125,9 @@ msgstr ""
 msgid "Concurrent users"
 msgstr ""
 
+msgid "Config"
+msgstr ""
+
 msgid "Confirm new password"
 msgstr ""
 
@@ -170,6 +182,9 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
+msgid "Download file"
+msgstr ""
+
 msgid "Draft"
 msgstr ""
 
@@ -196,6 +211,9 @@ msgstr ""
 
 msgid "Empty-verb"
 msgstr "Empty"
+
+msgid "Endpoints"
+msgstr ""
 
 msgid "Error "
 msgstr ""
@@ -260,6 +278,9 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+msgid "Id"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr ""
 
@@ -308,6 +329,9 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
+msgid "Locked_until"
+msgstr ""
+
 msgid "Log out"
 msgstr ""
 
@@ -321,6 +345,9 @@ msgid "Long Lat Coordinates"
 msgstr ""
 
 msgid "Map"
+msgstr ""
+
+msgid "Max_attempts"
 msgstr ""
 
 msgid "Media"
@@ -500,6 +527,9 @@ msgstr ""
 msgid "Resource \"%s\" not found"
 msgstr ""
 
+msgid "Resources not available"
+msgstr ""
+
 msgid "Restore"
 msgstr ""
 
@@ -515,7 +545,13 @@ msgstr ""
 msgid "Right types"
 msgstr ""
 
+msgid "Roles"
+msgstr ""
+
 msgid "Save"
+msgstr ""
+
+msgid "Scheduled_from"
 msgstr ""
 
 msgid "Search"
@@ -635,6 +671,9 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+msgid "View file"
+msgstr ""
+
 msgid "View original"
 msgstr ""
 
@@ -656,10 +695,16 @@ msgstr ""
 msgid "add objects"
 msgstr ""
 
+msgid "application id"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
 msgid "code"
+msgstr ""
+
+msgid "completed"
 msgstr ""
 
 msgid "completed on"
@@ -668,19 +713,37 @@ msgstr ""
 msgid "confirm password"
 msgstr ""
 
+msgid "content"
+msgstr ""
+
+msgid "context"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
 msgid "create new"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
 msgid "current password"
+msgstr ""
+
+msgid "description"
 msgstr ""
 
 msgid "elements to"
 msgstr ""
 
 msgid "empty"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "expires"
 msgstr ""
 
 msgid "file name"
@@ -690,6 +753,9 @@ msgid "id"
 msgstr ""
 
 msgid "modified"
+msgstr ""
+
+msgid "name"
 msgstr ""
 
 msgid "new password"
@@ -714,6 +780,9 @@ msgid "reset"
 msgstr ""
 
 msgid "scheduled from"
+msgstr ""
+
+msgid "service"
 msgstr ""
 
 msgid "service name"
@@ -767,7 +836,7 @@ msgstr ""
 
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
@@ -787,7 +856,7 @@ msgstr ""
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
@@ -836,12 +905,12 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:246
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:239
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:300
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:290
 msgid "Error while creating new object."
 msgstr ""
 

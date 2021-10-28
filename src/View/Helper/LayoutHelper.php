@@ -102,6 +102,11 @@ class LayoutHelper extends Helper
             'Relations' => 'has-background-black',
             'PropertyTypes' => 'has-background-black',
             'Categories' => 'has-background-black',
+            'Applications' => 'has-background-black',
+            'AsyncJobs' => 'has-background-black',
+            'Config' => 'has-background-black',
+            'Endpoints' => 'has-background-black',
+            'Roles' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

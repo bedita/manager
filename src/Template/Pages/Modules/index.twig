@@ -1,9 +1,5 @@
 {% do _view.assign('title', __(currentModule.name|humanize)) %}
 
-{% if _view.request.getQuery('filter.type') is not iterable and _view.request.getQuery('filter.type') != 'objects' %}
-    {% set elementClass = "has-background-module-" ~ _view.request.getQuery('filter.type') %}
-{% endif %}
-
 {% set query = _view.getRequest().getQueryParams() %}
 {% set treeView = currentModule.name == 'folders' and query is empty %}
 

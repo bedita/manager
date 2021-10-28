@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-12 07:30:56 \n"
+"POT-Creation-Date: 2021-10-26 07:58:29 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -25,6 +25,9 @@ msgstr "Aggiungi"
 
 msgid "Add translation"
 msgstr "Aggiungi traduzione"
+
+msgid "Administration"
+msgstr "Amministrazione"
 
 msgid "Advanced"
 msgstr "Avanzate"
@@ -58,6 +61,12 @@ msgstr "Un'estensione ha fermato il caricamento del file"
 
 msgid "Any"
 msgstr "Qualsiasi"
+
+msgid "Applications"
+msgstr "Applicazioni"
+
+msgid "Async Jobs"
+msgstr "Processi asincroni"
 
 msgid "Auto-translate"
 msgstr "Traduci automaticamente"
@@ -116,6 +125,9 @@ msgstr "Chiudi"
 msgid "Concurrent users"
 msgstr "Redattori concorrenti"
 
+msgid "Config"
+msgstr "Configurazioni"
+
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
 
@@ -170,6 +182,9 @@ msgstr "Scarta"
 msgid "Documents"
 msgstr "Documenti"
 
+msgid "Download file"
+msgstr "Scarica file"
+
 msgid "Draft"
 msgstr "Bozza"
 
@@ -196,6 +211,9 @@ msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
 
 msgid "Empty-verb"
 msgstr "Svuota"
+
+msgid "Endpoints"
+msgstr "Endpoint"
 
 msgid "Error "
 msgstr "Errore "
@@ -260,6 +278,9 @@ msgstr "Dalla data"
 msgid "History"
 msgstr "Cronologia modifiche"
 
+msgid "Id"
+msgstr ""
+
 msgid "Image not acceptable for thumb"
 msgstr "Immagine non valida per miniatura"
 
@@ -308,6 +329,9 @@ msgstr "Posizioni"
 msgid "Lock"
 msgstr "Blocca"
 
+msgid "Locked_until"
+msgstr "Termine blocco"
+
 msgid "Log out"
 msgstr "Esci"
 
@@ -322,6 +346,9 @@ msgstr "Coordinate Long Lat"
 
 msgid "Map"
 msgstr "Mappa"
+
+msgid "Max_attempts"
+msgstr "Tentativi massimi"
 
 msgid "Media"
 msgstr ""
@@ -502,6 +529,9 @@ msgstr "Risorsa \"%s\" non disponibile. Error: %s"
 msgid "Resource \"%s\" not found"
 msgstr "Risorsa \"%s\" non trovata"
 
+msgid "Resources not available"
+msgstr "Risorse non disponibili"
+
 msgid "Restore"
 msgstr "Ripristina"
 
@@ -517,8 +547,14 @@ msgstr "Ridigita password"
 msgid "Right types"
 msgstr "Tipi di destra"
 
+msgid "Roles"
+msgstr "Ruoli"
+
 msgid "Save"
 msgstr "Salva"
+
+msgid "Scheduled_from"
+msgstr "Partenza"
 
 msgid "Search"
 msgstr "Cerca"
@@ -638,6 +674,9 @@ msgstr "Video"
 msgid "View"
 msgstr "Visualizza"
 
+msgid "View file"
+msgstr "Vedi file"
+
 msgid "View original"
 msgstr "Vedi originale"
 
@@ -659,11 +698,17 @@ msgstr "aggiungi"
 msgid "add objects"
 msgstr "aggiungi oggetti"
 
+msgid "application id"
+msgstr "id applicazione"
+
 msgid "cancel"
 msgstr "annulla"
 
 msgid "code"
 msgstr "codice"
+
+msgid "completed"
+msgstr "completato"
 
 msgid "completed on"
 msgstr "completato il"
@@ -671,20 +716,38 @@ msgstr "completato il"
 msgid "confirm password"
 msgstr "conferma password"
 
+msgid "content"
+msgstr "contenuto"
+
+msgid "context"
+msgstr "contesto"
+
 msgid "create"
 msgstr "crea"
 
 msgid "create new"
 msgstr "crea nuovo"
 
+msgid "created"
+msgstr "creato"
+
 msgid "current password"
 msgstr "password corrente"
+
+msgid "description"
+msgstr "descrizione"
 
 msgid "elements to"
 msgstr "elementi a"
 
 msgid "empty"
 msgstr "vuoto"
+
+msgid "enabled"
+msgstr "abilitato"
+
+msgid "expires"
+msgstr "scade"
 
 msgid "file name"
 msgstr "nome del file"
@@ -694,6 +757,9 @@ msgstr ""
 
 msgid "modified"
 msgstr "modificato"
+
+msgid "name"
+msgstr "nome"
 
 msgid "new password"
 msgstr "nuova password"
@@ -718,6 +784,9 @@ msgstr ""
 
 msgid "scheduled from"
 msgstr "programmato da"
+
+msgid "service"
+msgstr "servizio"
 
 msgid "service name"
 msgstr "nome del servizio"
@@ -770,7 +839,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 #: src/Template/Layout/js/app/app.js:494
 #: src/Template/Layout/js/app/components/history/history.js:89
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
@@ -790,7 +859,7 @@ msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
@@ -839,12 +908,12 @@ msgstr "modifica"
 msgid "Menu"
 msgstr "Menù"
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:246
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:239
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:300
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:290
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
