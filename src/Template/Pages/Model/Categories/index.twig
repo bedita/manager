@@ -110,15 +110,20 @@
                                 'class': buttonClasses,
                             })|raw }}
 
-                        {{ Form.postButton(__('Remove'),
-                            {'_name': 'model:remove:' ~ resource.type, 'id': resource.id},
-                            {
-                                'title': __('Remove') ~ resource.attributes.name,
-                                'class': buttonClasses,
-                            })|raw }}
+                        {{ Form.button( __('Remove'), {
+                            'form': 'form-remove-' ~ resource.id,
+                            'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                            'class': buttonClasses,
+                        })|raw }}
                     </div>
 
                 {{ Form.hidden('id', {'value': resource.id})|raw }}
+                {{ Form.end()|raw }}
+
+                {{ Form.create(null, {
+                    'id': 'form-remove-' ~ resource.id,
+                    'url': {'_name': 'model:remove:' ~ resource.type, 'id': resource.id},
+                })|raw }}
                 {{ Form.end()|raw }}
 
             {% endfor %}
