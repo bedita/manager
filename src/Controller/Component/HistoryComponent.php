@@ -179,7 +179,8 @@ class HistoryComponent extends Component
                 $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
             }
             $history['meta']['changed'] = $formatted;
-            $history['meta']['application_name'] = \App\Utility\Applications::getName($history['meta']['application_id']);
+            $applicationId = (string)Hash::get($history, 'meta.application_id');
+            $history['meta']['application_name'] = \App\Utility\Applications::getName($applicationId);
         }
         $response['data'] = $data;
     }

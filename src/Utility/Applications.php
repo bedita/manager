@@ -31,12 +31,7 @@ class Applications
      */
     public static function getName(string $applicationId): string
     {
-        $applications = self::list();
-        if (empty($applications)) {
-            return '';
-        }
-
-        return (string)Hash::get($applications, $applicationId);
+        return (string)Hash::get(self::list(), $applicationId);
     }
 
     /**
