@@ -13,6 +13,9 @@
 namespace App\Test\TestCase;
 
 use App\Utility\Applications;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -24,29 +27,83 @@ class ApplicationsTest extends TestCase
 {
     /**
      * Test `list` method.
-     * No applications, for test data.
      *
      * @return void
      * @covers ::list()
      */
     public function testList(): void
     {
-        $expected = [];
+        $response = [
+            'data' => [
+                [
+                    'id' => 1,
+                    'attributes' => [
+                        'name' => 'dummy',
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'attributes' => [
+                        'name' => 'test',
+                    ],
+                ],
+            ],
+        ];
+        $expected = [1 => 'dummy', 2 => 'test'];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($response);
+        ApiClientProvider::setApiClient($apiClient);
         $actual = Applications::list();
         static::assertEquals($expected, $actual);
     }
 
     /**
+     * Test `list` method, exception case.
+     *
+     * @return void
+     * @covers ::list()
+     */
+    public function testListExpection(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException());
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = Applications::list();
+        static::assertEquals([], $actual);
+    }
+
+    /**
      * Test `getName` method
-     * No applications, for test data.
      *
      * @return void
      * @covers ::getName()
      */
     public function testGetName(): void
     {
-        $expected = "";
-        $actual = Applications::getName('1');
+        $response = [
+            'data' => [
+                [
+                    'id' => 3,
+                    'attributes' => [
+                        'name' => 'dummy test',
+                    ],
+                ],
+            ],
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($response);
+        ApiClientProvider::setApiClient($apiClient);
+        $expected = "dummy test";
+        $actual = Applications::getName('3');
         static::assertEquals($expected, $actual);
     }
 }
