@@ -59,7 +59,18 @@ class RolesControllerTest extends TestCase
     {
         parent::setUp();
 
-        $config = array_merge($this->defaultRequestConfig, []);
+        $this->init([]);
+    }
+
+    /**
+     * Init request, controller, etc.
+     *
+     * @param array $requestConfig The request config
+     * @return void
+     */
+    private function init(array $requestConfig): void
+    {
+        $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->RlsController = new RlsController($request);
         $this->client = ApiClientProvider::getApiClient();
@@ -94,5 +105,55 @@ class RolesControllerTest extends TestCase
         }
         static::assertEquals('roles', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSave(): void
+    {
+        $this->init([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'roles',
+            ],
+        ]);
+        $response = $this->RlsController->save();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
+        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $expected = __('[400] Invalid data');
+        $message = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $message);
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @return void
+     * @covers ::remove()
+     */
+    public function testRemove(): void
+    {
+        $this->init([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'roles',
+            ],
+        ]);
+        $response = $this->RlsController->remove('9999999999');
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
+        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $expected = __('[404] Not Found');
+        $message = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $message);
     }
 }
