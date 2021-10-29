@@ -57,7 +57,6 @@ class Applications
                 }
             );
         } catch (BEditaClientException $e) {
-
             return [];
         }
 
