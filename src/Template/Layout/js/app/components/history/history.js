@@ -16,7 +16,10 @@ export default {
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
-                    <div class="is-flex">${t`by`} <a class="ml-05"><: getAuthorName(item.meta.user) :></a></div>
+                    <div class="is-flex">
+                        ${t`modified by`} <span class="has-font-weight-bold ml-05 mr-05"><: getAuthorName(item.meta.user) :></span>
+                        ${t`with application`} <span class="has-font-weight-bold ml-05"><: item.meta.application_name :></span>
+                    </div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item, canSave)">info</button>
                         <button v-if="canSave" class="button button-text-white is-width-auto" @click.stop.prevent="onRestore(item.id)">${t`Restore`}</button>
