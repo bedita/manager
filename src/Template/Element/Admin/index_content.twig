@@ -32,58 +32,6 @@
             <p>{{ __('Resources not available') }}</p>
         {% endif %}
 
-        {# list resources : rows #}
-        {% for resource in resources %}
-
-            {{ Form.create(null, {
-                'id': 'form-' ~ resource.id,
-                'url': {'_name': 'admin:save:' ~ resourceType},
-                'class': 'table-row',
-            })|raw }}
-                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                    {{ resource.id }}
-                </div>
-                {% for key in properties %}
-                    {% set val = resource.attributes[key] %}
-                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {% if readonly %}
-                            {{ Schema.format(val, schema.properties[key]) }}
-                        {% else %}
-                            {{ Property.control(key, val, {'label': ''})|raw }}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                {% for key in metaColumns %}
-                    <div class="narrow">
-                        {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
-                    </div>
-                {% endfor %}
-                {% if not readonly %}
-                    <div class="buttons-cell narrow">
-                        {{ Form.button( __('Save'), {
-                            'form': 'form-' ~ resource.id,
-                            'title': __('Save') ~ ' ' ~ resource.attributes.name,
-                            'class': 'button button-text-white is-width-auto',
-                        })|raw }}
-
-                        {{ Form.button( __('Remove'), {
-                            'form': 'form-remove-' ~ resource.id,
-                            'title': __('Remove') ~ ' ' ~ resource.attributes.name,
-                            'class': 'button button-text-white is-width-auto',
-                        })|raw }}
-                    </div>
-                {% endif %}
-
-            {{ Form.hidden('id', {'value': resource.id})|raw }}
-            {{ Form.end()|raw }}
-
-            {{ Form.create(null, {
-                'id': 'form-remove-' ~ resource.id,
-                'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
-            })|raw }}
-            {{ Form.end()|raw }}
-
-        {% endfor %}
         {# form to create a new record #}
         {% if not readonly %}
             {{ Form.create(null, {
@@ -109,6 +57,59 @@
                 </div>
             {{ Form.end()|raw }}
         {% endif %}
+
+        {# list resources : rows #}
+        {% for resource in resources %}
+
+            {{ Form.create(null, {
+                'id': 'form-' ~ resource.id,
+                'url': {'_name': 'admin:save:' ~ resourceType},
+                'class': 'table-row',
+            })|raw }}
+                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                    {{ resource.id }}
+                </div>
+                {% for key in properties %}
+                    {% set val = resource.attributes[key] %}
+                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
+                        {% if readonly or resource.meta.unchangeable %}
+                            {{ Schema.format(val, schema.properties[key]) }}
+                        {% else %}
+                            {{ Property.control(key, val, {'label': ''})|raw }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% for key in metaColumns %}
+                    <div class="narrow">
+                        {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
+                    </div>
+                {% endfor %}
+                {% if not readonly and not resource.meta.unchangeable %}
+                    <div class="buttons-cell narrow">
+                        {{ Form.button( __('Save'), {
+                            'form': 'form-' ~ resource.id,
+                            'title': __('Save') ~ ' ' ~ resource.attributes.name,
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
+
+                        {{ Form.button( __('Remove'), {
+                            'form': 'form-remove-' ~ resource.id,
+                            'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
+                    </div>
+                {% endif %}
+
+            {{ Form.hidden('id', {'value': resource.id})|raw }}
+            {{ Form.end()|raw }}
+
+            {{ Form.create(null, {
+                'id': 'form-remove-' ~ resource.id,
+                'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
+            })|raw }}
+            {{ Form.end()|raw }}
+
+        {% endfor %}
 
     </div>
 
