@@ -227,8 +227,6 @@ class AdministrationBaseControllerTest extends TestCase
         }
     }
 
-
-
     /**
      * Test `save` method
      *
