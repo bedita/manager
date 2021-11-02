@@ -185,8 +185,9 @@ class PropertiesComponent extends Component
         return array_filter(
             array_reduce(
                 $types,
-                function(array $accumulator, string $type) {
+                function (array $accumulator, string $type) {
                     $accumulator[$type] = $this->filterList($type);
+
                     return $accumulator;
                 },
                 []
