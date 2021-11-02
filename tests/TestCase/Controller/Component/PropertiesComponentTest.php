@@ -93,6 +93,31 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `filtersByType()` method.
+     *
+     * @return void
+     *
+     * @covers ::filtersByType()
+     */
+    public function testfiltersByType(): void
+    {
+        $documentsFilters = ['lang', 'categories'];
+        $profilesFilters = ['modified', 'status'];
+        Configure::write('Properties.documents.filter', $documentsFilters);
+        Configure::write('Properties.profiles.filter', $profilesFilters);
+
+        $this->createComponent();
+
+        $expected = [
+            'documents' => $documentsFilters,
+            'profiles' => $profilesFilters,
+        ];
+
+        $filters = $this->Properties->filtersByType(['documents', 'profiles']);
+        static::assertEquals($expected, $filters);
+    }
+
+    /**
      * Test `relationsList()` method.
      *
      * @return void
