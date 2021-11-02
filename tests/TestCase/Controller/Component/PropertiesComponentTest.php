@@ -99,7 +99,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @covers ::filtersByType()
      */
-    public function testfiltersByType(): void
+    public function testFiltersByType(): void
     {
         $documentsFilters = ['lang', 'categories'];
         $profilesFilters = ['modified', 'status'];
@@ -112,6 +112,9 @@ class PropertiesComponentTest extends TestCase
             'documents' => $documentsFilters,
             'profiles' => $profilesFilters,
         ];
+
+        $filters = $this->Properties->filtersByType([]);
+        static::assertEquals([], $filters);
 
         $filters = $this->Properties->filtersByType(['documents', 'profiles']);
         static::assertEquals($expected, $filters);
