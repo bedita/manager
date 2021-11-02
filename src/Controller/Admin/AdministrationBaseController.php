@@ -109,4 +109,42 @@ abstract class AdministrationBaseController extends AppController
 
         return null;
     }
+
+    /**
+     * Save data
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        $this->request->allowMethod(['post']);
+        try {
+            $this->apiClient->save($this->resourceType, (array)$this->request->getData());
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect(['_name' => sprintf('admin:list:%s', $this->resourceType)]);
+    }
+
+    /**
+     * Remove roles by ID
+     *
+     * @param string $id The role ID
+     * @return Response|null
+     */
+    public function remove(string $id): ?Response
+    {
+        $this->request->allowMethod(['post']);
+        try {
+            $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
+            $this->apiClient->delete(sprintf('%s/%s', $endpoint, $id));
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect(['_name' => sprintf('admin:list:%s', $this->resourceType)]);
+    }
 }

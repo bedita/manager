@@ -32,12 +32,38 @@
             <p>{{ __('Resources not available') }}</p>
         {% endif %}
 
+        {# form to create a new record #}
+        {% if not readonly %}
+            {{ Form.create(null, {
+                'id': 'form-create',
+                'url': {'_name': 'admin:save:' ~ resourceType},
+                'class': 'table-row',
+            })|raw }}
+                <div>{{ __('NEW') }}</div>
+                {% for key in properties %}
+                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
+                        {{ Property.control(key, '', {'label': ''})|raw }}
+                    </div>
+                {% endfor %}
+                {% for key in metaColumns %}
+                    <div class="narrow">-</div>
+                {% endfor %}
+                <div class="buttons-cell narrow">
+                    {{ Form.button( __('Create'), {
+                        'form': 'form-create',
+                        'title': __('Create' ~ ' ' ~ resourceType),
+                        'class': 'button button-text-white is-width-auto',
+                    })|raw }}
+                </div>
+            {{ Form.end()|raw }}
+        {% endif %}
+
         {# list resources : rows #}
         {% for resource in resources %}
 
             {{ Form.create(null, {
-                'url': {'_name': 'admin:save:' ~ resourceType},
                 'id': 'form-' ~ resource.id,
+                'url': {'_name': 'admin:save:' ~ resourceType},
                 'class': 'table-row',
             })|raw }}
                 <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
@@ -46,7 +72,7 @@
                 {% for key in properties %}
                     {% set val = resource.attributes[key] %}
                     <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {% if readonly %}
+                        {% if readonly or resource.meta.unchangeable %}
                             {{ Schema.format(val, schema.properties[key]) }}
                         {% else %}
                             {{ Property.control(key, val, {'label': ''})|raw }}
@@ -58,25 +84,29 @@
                         {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
                     </div>
                 {% endfor %}
-                {% if not readonly %}
+                {% if not readonly and not resource.meta.unchangeable %}
                     <div class="buttons-cell narrow">
-                        {{ Form.button( __('Save'),
-                            {
-                                'form': 'form-' ~ resource.id,
-                                'title': __('Save') ~ resource.attributes.name,
-                                'class': 'button button-text-white is-width-auto',
-                            })|raw }}
+                        {{ Form.button( __('Save'), {
+                            'form': 'form-' ~ resource.id,
+                            'title': __('Save') ~ ' ' ~ resource.attributes.name,
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
 
-                        {{ Form.postButton(__('Remove'),
-                            {'_name': 'admin:remove:' ~ resource.type, 'id': resource.id},
-                            {
-                                'title': __('Remove') ~ resource.attributes.name,
-                                'class': 'button button-text-white is-width-auto',
-                            })|raw }}
+                        {{ Form.button( __('Remove'), {
+                            'form': 'form-remove-' ~ resource.id,
+                            'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
                     </div>
                 {% endif %}
 
             {{ Form.hidden('id', {'value': resource.id})|raw }}
+            {{ Form.end()|raw }}
+
+            {{ Form.create(null, {
+                'id': 'form-remove-' ~ resource.id,
+                'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
+            })|raw }}
             {{ Form.end()|raw }}
 
         {% endfor %}

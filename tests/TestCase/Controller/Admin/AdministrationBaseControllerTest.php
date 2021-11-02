@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AdministrationBaseController;
+use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -53,6 +54,13 @@ class AdministrationBaseControllerTest extends TestCase
     public $AdministrationBaseController;
 
     /**
+     * Test subject
+     *
+     * @var \App\Controller\Admin\RolesController
+     */
+    public $RlsController;
+
+    /**
      * Test request config
      *
      * @var array
@@ -83,6 +91,24 @@ class AdministrationBaseControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
         $this->AdministrationBaseController = new AdminBaseController($request);
+        $this->client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $this->client->authenticate($adminUser, $adminPassword);
+        $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Init data.
+     *
+     * @param array $cfg The config array for request
+     * @return void
+     */
+    private function initRolesController(array $cfg): void
+    {
+        $config = array_merge($this->defaultRequestConfig, $cfg);
+        $request = new ServerRequest($config);
+        $this->RlsController = new RolesController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -199,5 +225,55 @@ class AdministrationBaseControllerTest extends TestCase
         foreach ($keys as $expectedKey) {
             static::assertArrayNotHasKey($expectedKey, $viewVars);
         }
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSave(): void
+    {
+        $this->initRolesController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'roles',
+            ],
+        ]);
+        $response = $this->RlsController->save();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
+        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $expected = __('[400] Invalid data');
+        $message = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $message);
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @return void
+     * @covers ::remove()
+     */
+    public function testRemove(): void
+    {
+        $this->initRolesController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'roles',
+            ],
+        ]);
+        $response = $this->RlsController->remove('9999999999');
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
+        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $expected = __('[404] Not Found');
+        $message = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $message);
     }
 }
