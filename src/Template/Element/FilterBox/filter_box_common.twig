@@ -4,34 +4,47 @@
         <div class="filter-container filter-search input">
             <input type="text"
                 :placeholder="placeholder"
-                v-model="queryFilter.q"
-                @keyup.prevent.stop="onQueryStringKeyup"
-                @change="onQueryStringChange"
-                @keyup.enter.prevent.stop="applyFilter" />
+                v-model.trim="queryFilter.q"
+            />
         </div>
 
         <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }}"
-            @click.prevent="applyFilter()"
+            @click.prevent="applyFilter"
         >
             {{ __('Search') }}
         </button>
 
-        <button class="toggle-filters button button-outlined" @click="moreFilters = !moreFilters">
-            <span v-if="!moreFilters">{{ __('More filters') }}</span>
-            <span v-else>{{ __('Less filters') }}</span>
+        <button class="toggle-filters button button-outlined"
+            type="button"
+            @click="moreFilters = !moreFilters"
+            v-if="canShowAdvanced"
+        >
+            <span v-show="!moreFilters">{{ __('More filters') }}</span>
+            <span v-show="moreFilters">{{ __('Less filters') }}</span>
         </button>
 
         {# Checkbox my contents #}
-        <div class="filter-container checkbox">
+        <div class="filter-container checkbox" v-if="showAdvanced">
             <label>
                 <input type="checkbox" v-model="queryFilter.filter['history_editor']">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
-        <button class="button button-outlined" @click.prevent="resetFilter()">{{ __('Reset filters') }}</button>
+        <button class="button button-outlined" type="button" @click="resetFilter">{{ __('Reset filters') }}</button>
     </div>
 
     <div class="more-filters" v-show="moreFilters">
+        {# object type filter #}
+        <div class="filter-container search-types" v-if="rightTypes.length > 1">
+            <label>{{ __('Type') }}</label>
+            <select v-model="selectedType"
+                class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
+            >
+                <option selected value="" label="{{ __('All Types') }}"></option>
+                <option v-for="type in rightTypes" :value="type"><: type | capitalize | translate :></option>
+            </select>
+        </div>
+
         {# status filter #}
         <div class="filter-container" v-if="statusFilter.options">
             <label>{{ __('Status') }}</label>
@@ -39,14 +52,6 @@
                 <input type="checkbox" :id="s.value" :name="statusFilter.name" :value="s.value" v-model="selectedStatuses">
                 <: s.text :>
             </label>
-        </div>
-
-        {# dynamic filter object types #}
-        <div class="filter-container search-types" v-if="rightTypes.length > 1">
-            <select v-model="queryFilter.filter.type" @change="onOtherFiltersChange">
-                <option value="" label="{{ __('All Types') }}"></option>
-                <option v-for="type in rightTypes"><: t(type) :></option>
-            </select>
         </div>
 
         {# other dynamic filters #}
@@ -57,14 +62,28 @@
             <span v-if="filter.name === 'categories'">
                 <label>{{ __('Categories') }}</label>
 
-                <category-picker
-                    :categories="{{ schema.categories|json_encode }}"
-                    :initial-categories="initCategories"
-                    id="category-filter"
-                    label=""
-                    @change="onCategoryChange"
-                ></category-picker>
-                {{ Form.unlockField('categories') }}
+                {% if schemasByType %}
+                    {% for type, typeSchema in schemasByType %}
+                        <category-picker
+                            v-if="queryFilter.filter.type == '{{ type }}'"
+                            :categories="{{ typeSchema.categories|json_encode }}"
+                            :initial-categories="initCategories"
+                            id="category-filter"
+                            label=""
+                            @change="onCategoryChange"
+                        ></category-picker>
+                        {{ Form.unlockField('categories') }}
+                    {% endfor %}
+                {% elseif schema %}
+                    <category-picker
+                        :categories="{{ schema.categories|json_encode }}"
+                        :initial-categories="initCategories"
+                        id="category-filter"
+                        label=""
+                        @change="onCategoryChange"
+                    ></category-picker>
+                    {{ Form.unlockField('categories') }}
+                {% endif %}
             </span>
 
             <span v-else-if="filter.name === 'parent'" class="position-filter">
@@ -75,17 +94,24 @@
 
                 <span class="descendants-filter">
                     <label for="descendants">{{ __('Descendants') }}</label>
-                    <input id="descendants" type="checkbox" v-model="filterByDescendants" @change="onPositionFilterChange" />
+                    <input
+                        id="descendants"
+                        type="checkbox"
+                        v-model="filterByDescendants"
+                        @change="onPositionFilterChange"
+                    />
                 </span>
             </span>
 
-            <span v-else-if="filter.name === 'date_ranges'" class="date-filter">
-                <label>{{ __('From date') }}
+            <span v-else-if="filter.name === 'date_ranges'" class="date-filter date-ranges-item">
+                <div>
+                    <label>{{ __('From date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
-                </label>
-                <label>{{ __('To date') }}
+                </div>
+                <div>
+                    <label>{{ __('To date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
-                </label>
+                </div>
             </span>
 
             <span v-else-if="filter.type === 'select' || filter.type === 'radio'">
@@ -94,7 +120,7 @@
                         {{ __('All') }}
                     </option>
                     <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
-                        <: option.text :>
+                        <: option.text | translate :>
                     </option>
                 </select>
             </span>

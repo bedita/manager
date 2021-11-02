@@ -1,26 +1,28 @@
-/**
- * Mixins: PaginatedContentMixin
- *
- *
- */
+import { buildSearchParams } from '../../libs/urlUtils.js';
 
+/**
+ * Default pagination object
+ */
 export const DEFAULT_PAGINATION = {
     count: 0,
     page: 1,
     page_size: 20,
     page_count: 1,
-}
+};
 
 /**
- * default filter object
+ * Default filter object
  */
-export const DEFAULT_FILTER = {
+export const getDefaultFilter = () => ({
     q: '',
     filter: {
-        type: [],
+        type: "",
     }
-}
+});
 
+/**
+ * Mixins: PaginatedContentMixin
+ */
 export const PaginatedContentMixin = {
     data() {
         return {
@@ -32,7 +34,7 @@ export const PaginatedContentMixin = {
 
             pagination: DEFAULT_PAGINATION,
             query: {},
-            formatObjetsFilter: ['params', 'priority', 'position', 'url'],
+            formatObjectsFilter: ['params', 'priority', 'position', 'url'],
         }
     },
 
@@ -134,7 +136,7 @@ export const PaginatedContentMixin = {
                 const metaRelation = obj.meta.relation;
                 if (metaRelation) {
                     let formattedMeta = {};
-                    this.formatObjetsFilter.forEach((filter) => {
+                    this.formatObjectsFilter.forEach((filter) => {
                         if (metaRelation[filter]) {
                             formattedMeta[filter] = metaRelation[filter];
                         }
@@ -151,78 +153,16 @@ export const PaginatedContentMixin = {
         },
 
         /**
-         * Add pagination info to endpoint url
-         *
-         * @param {String} url
-         *
-         * @return {String} formatted url
-         */
-        setPagination(url) {
-            let pagination = '';
-            let qi = '?';
-            const separator = '&';
-
-            Object.keys(this.pagination).forEach((key, index) => {
-                pagination += `${index ? separator : ''}${key}=${this.pagination[key]}`;
-            });
-
-            let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
-                qi = '&';
-            }
-            return `${url}${qi}${pagination}`;
-        },
-
-        /**
          * Get formatted url with query filter
          *
          * @param {String} url The endpoint url
          * @return {String} The formatted url
          */
         getUrlWithPaginationAndQuery(url) {
-            const urlSearchParams = new URLSearchParams('');
-            let qi = '?';
+            const parsed = new URL(url);
+            parsed.search = buildSearchParams({ ...this.pagination, ...this.query }, parsed.searchParams).toString();
 
-            Object.keys(this.pagination).forEach((key) => {
-                urlSearchParams.append(key, this.pagination[key]);
-            });
-            Object.entries(this.query).forEach(([key, query]) => {
-                if (key !== 'filter') {
-                    if (query && typeof query !== 'object') {
-                        urlSearchParams.append(key, query);
-                    }
-
-                    return;
-                }
-
-                // parse filter property
-                Object.entries(query).forEach(([filterKey, filterVal]) => {
-                    if (filterVal && typeof filterVal !== 'object') {
-                        urlSearchParams.append(`filter[${filterKey}]`, filterVal);
-                    }
-                });
-            });
-
-            if (url.indexOf(qi) > 0) {
-                qi = '&';
-            }
-
-            return `${url}${qi}${urlSearchParams.toString()}`;
-        },
-
-        /**
-         * find object with specific id
-         *
-         * @param {Number} id
-         *
-         * @return {Object}
-         */
-        findObjectById(id) {
-            let obj = this.objects.filter(o => o.id === id);
-            if (!obj.length) {
-                return null;
-            }
-            return obj[0];
+            return parsed.href;
         },
 
         /**

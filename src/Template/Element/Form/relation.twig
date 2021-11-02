@@ -1,17 +1,17 @@
 <relation-view inline-template
-    :relation-data='{{ relationSchema|json_encode|raw }}'
-    :data-list=dataList
-    relation-name={{ relationName }}
-    :pre-count={{ preCount }}
-    config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+    :relation-data="{{ relationSchema|json_encode|escape('html_attr') }}"
+    :data-list="dataList"
+    relation-name="{{ relationName }}"
+    :pre-count="{{ preCount }}"
+    config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
     ref="relation"
-    @loading="onToggleLoading" @count="onCount">
-
+    @loading="onToggleLoading"
+    @count="onCount"
+>
     <div class="relation-view">
-
         {# Lookup in properties configuration if a custom element for this relation is set
-           in `Properties.{moduleName}.relations._element.{relationName}`.
-           Then load custom element or use default relation view #}
+        in `Properties.{moduleName}.relations._element.{relationName}`.
+        Then load custom element or use default relation view #}
         {% set customElement = Layout.customElement(relationName) %}
         {% if customElement %}
             {% element customElement {
@@ -21,23 +21,22 @@
         {% else %}
 
         <div class="related-list-container">
-
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
-                    :show-filter-buttons="false"
+                    :show-advanced="false"
                     :relation-types="relationTypes"
                     :init-filter="activeFilter"
                     objects-label="{{ __('objects') }}"
                     @filter-update-current-page="onUpdateCurrentPage"
                     @filter-update-page-size="onUpdatePageSize"
-                    @filter-objects-submit="onFilterObjects"
-                    inline-template>
-
-                        {% element 'FilterBox/filter_box' %}
-
+                    @filter-objects="onFilterObjects"
+                    @filter-reset="reloadObjects"
+                    inline-template
+                >
+                    {% element 'FilterBox/filter_box' %}
                 </filter-box-view>
             </div>
 
@@ -53,7 +52,7 @@
                         :drag-data="JSON.stringify(related)">
 
                         {% if relationName == 'children' %}
-                            {% element 'Form/related_item' { 'children': true  } %}
+                            {% element 'Form/related_item' { 'children': true } %}
                         {% else %}
                             {% element 'Form/related_item' { 'common': true } %}
                         {% endif %}
@@ -85,7 +84,7 @@
             {% endif %}
 
             <div>
-                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-coffee"
+                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-cancel"
                     @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
 
                 <button v-else
