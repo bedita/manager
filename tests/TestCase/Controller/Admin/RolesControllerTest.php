@@ -59,7 +59,18 @@ class RolesControllerTest extends TestCase
     {
         parent::setUp();
 
-        $config = array_merge($this->defaultRequestConfig, []);
+        $this->init([]);
+    }
+
+    /**
+     * Init request, controller, etc.
+     *
+     * @param array $requestConfig The request config
+     * @return void
+     */
+    private function init(array $requestConfig): void
+    {
+        $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->RlsController = new RlsController($request);
         $this->client = ApiClientProvider::getApiClient();
