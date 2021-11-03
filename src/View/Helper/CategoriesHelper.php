@@ -111,9 +111,8 @@ class CategoriesHelper extends Helper
 
             return $controlOptions;
         }
-        $key = 0;
-        foreach ($node['children'] as $child) {
-            $controlOptions['options'][$key++] = ['value' => $child['name'], 'text' => $child['label']];
+        foreach ($node['children'] as $key => $child) {
+            $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label']];
         }
 
         return $controlOptions;
