@@ -331,6 +331,48 @@ class CategoriesHelperTest extends TestCase
                 false,
                 [],
             ],
+            'order 1' => [
+                [
+                    'categories' => [
+                        ['id' => 1, 'name' => 'dummy1', 'parent_id' => null],
+                        ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                        ['id' => 3, 'name' => 'dummy3', 'parent_id' => 10],
+                        ['id' => 4, 'name' => 'dummy4', 'parent_id' => 1],
+                        ['id' => 5, 'name' => 'dummy5', 'parent_id' => 1],
+                        ['id' => 6, 'name' => 'dummy6', 'parent_id' => null],
+                        ['id' => 7, 'name' => 'dummy7', 'parent_id' => 10],
+                        ['id' => 8, 'name' => 'dummy8', 'parent_id' => 10],
+                        ['id' => 9, 'name' => 'dummy9', 'parent_id' => 1],
+                        ['id' => 10, 'name' => 'dummy10', 'parent_id' => null],
+                    ],
+                ],
+                true,
+                [
+                    [
+                        'id' => '0', 'name' => 'Global', 'label' => 'Global', 'parent_id' => null,
+                        'children' => [
+                            ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                            ['id' => 6, 'name' => 'dummy6', 'parent_id' => null],
+                        ],
+                    ],
+                    [
+                        'id' => 1, 'name' => 'dummy1', 'parent_id' => null,
+                        'children' => [
+                            ['id' => 4, 'name' => 'dummy4', 'parent_id' => 1],
+                            ['id' => 5, 'name' => 'dummy5', 'parent_id' => 1],
+                            ['id' => 9, 'name' => 'dummy9', 'parent_id' => 1],
+                        ],
+                    ],
+                    [
+                        'id' => 10, 'name' => 'dummy10', 'parent_id' => null,
+                        'children' => [
+                            ['id' => 3, 'name' => 'dummy3', 'parent_id' => 10],
+                            ['id' => 7, 'name' => 'dummy7', 'parent_id' => 10],
+                            ['id' => 8, 'name' => 'dummy8', 'parent_id' => 10],
+                        ],
+                    ],
+                ],
+            ],
             'schema categories with all parent_id null' => [
                 [
                     'categories' => [
@@ -342,7 +384,7 @@ class CategoriesHelperTest extends TestCase
                 false,
                 [
                     [
-                        'id' => '-1',
+                        'id' => '0',
                         'name' => 'Global',
                         'label' => 'Global',
                         'children' => [
@@ -351,7 +393,7 @@ class CategoriesHelperTest extends TestCase
                             ['id' => 3, 'name' => 'dummy3', 'parent_id' => null],
                         ],
                         'parent_id' => null,
-                    ]
+                    ],
                 ],
             ],
             'schema categories with a parent_id not null' => [
@@ -365,7 +407,7 @@ class CategoriesHelperTest extends TestCase
                 true,
                 [
                     [
-                        'id' => '-1',
+                        'id' => '0',
                         'name' => 'Global',
                         'label' => 'Global',
                         'children' => [

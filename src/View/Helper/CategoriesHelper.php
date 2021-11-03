@@ -135,7 +135,7 @@ class CategoriesHelper extends Helper
         $roots = [];
         foreach ($categories as $category) {
             if (empty($category['parent_id'])) { // root
-                $roots[$category['id']] = $category;
+                $roots[$category['id']] = array_merge($category, (array)Hash::get($roots, $category['id']));
             } else { // child
                 $roots[$category['parent_id']]['children'][] = $category;
             }
@@ -143,14 +143,10 @@ class CategoriesHelper extends Helper
 
         foreach ($roots as $key => $root) {
             if (empty($root['parent_id']) && empty($root['children'])) {
-                $roots[-1]['children'][] = $root;
+                $roots[0]['children'][] = $root;
                 unset($roots[$key]);
             }
         }
-        $roots[-1]['id'] = '-1';
-        $roots[-1]['name'] = __('Global');
-        $roots[-1]['label'] = __('Global');
-        $roots[-1]['parent_id'] = null;
 
         usort($roots, function ($a, $b) {
             $aChildren = (array)Hash::get($a, 'children');
@@ -159,21 +155,19 @@ class CategoriesHelper extends Helper
             $bCount = count($bChildren);
 
             if ($aCount === $bCount) {
-                if ($a['name'] === 'Global') {
-                    return -1;
-                }
-                if ($b['name'] === 'Global') {
-                    return 1;
-                }
-
-                return strcmp(strtolower($a['name']), strtolower($b['name']));
-            }
-            if ($aCount > $bCount) {
-                return 1;
+                return strcmp(
+                    strtolower((string)Hash::get($a, 'name')),
+                    strtolower((string)Hash::get($b, 'name')),
+                );
             }
 
-            return -1;
+            return $aCount > $bCount;
         });
+
+        $roots[0]['id'] = '0';
+        $roots[0]['name'] = __('Global');
+        $roots[0]['label'] = __('Global');
+        $roots[0]['parent_id'] = null;
 
         return $roots;
     }
