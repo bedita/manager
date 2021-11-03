@@ -17,8 +17,7 @@ export default {
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time"><: getFormattedTime(item.meta.created) :></div>
                     <div class="is-flex">
-                        ${t`modified by`} <span class="has-font-weight-bold ml-05 mr-05"><: getAuthorName(item.meta.user) :></span>
-                        ${t`with application`} <span class="has-font-weight-bold ml-05"><: item.meta.application_name :></span>
+                        <: getAuthor(item.meta.user, item.meta.application_name) :>
                     </div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item, canSave)">info</button>
@@ -50,6 +49,14 @@ export default {
     methods: {
         getFormattedTime: function (date) {
             return moment(date).format('kk:mm');
+        },
+        getAuthor(user, application) {
+            const name = this.getAuthorName(user);
+            if (application) {
+                return t`by ${name} via ${application}`;
+            }
+            return t`by ${name}`;
+
         },
         /**
          * Get formatted user name.
