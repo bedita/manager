@@ -1,5 +1,12 @@
-.categories {
-    .select {
-        columns: 2 auto;
+.categories-container {
+    .categories {
+        margin-top: 15px;
+        .select {
+            columns: 2 auto;
+        }
+        h3 {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
     }
 }
