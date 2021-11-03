@@ -175,7 +175,7 @@ class CategoriesHelper extends Helper
         if ($aCount === $bCount) {
             return strcmp(
                 strtolower((string)Hash::get($a, 'name')),
-                strtolower((string)Hash::get($b, 'name')),
+                strtolower((string)Hash::get($b, 'name'))
             );
         }
 
