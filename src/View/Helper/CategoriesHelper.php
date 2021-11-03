@@ -141,9 +141,17 @@ class CategoriesHelper extends Helper
             }
         }
 
-        foreach ($roots as $key => $root) {
+        foreach ($roots as $key => &$root) {
+            if (!empty($root['children'])) {
+                $children = $root['children'];
+                usort($children, [$this, 'sortRoots']);
+                $root['children'] = $children;
+            }
             if (empty($root['parent_id']) && empty($root['children'])) {
                 $roots[0]['children'][] = $root;
+                $children = $roots[0]['children'];
+                usort($children, [$this, 'sortRoots']);
+                $roots[0]['children'] = $children;
                 unset($roots[$key]);
             }
         }
@@ -167,19 +175,10 @@ class CategoriesHelper extends Helper
      */
     public function sortRoots(array $a, array $b): int
     {
-        $aChildren = (array)Hash::get($a, 'children');
-        $bChildren = (array)Hash::get($b, 'children');
-        $aCount = count($aChildren);
-        $bCount = count($bChildren);
-
-        if ($aCount === $bCount) {
-            return strcmp(
-                strtolower((string)Hash::get($a, 'name')),
-                strtolower((string)Hash::get($b, 'name'))
-            );
-        }
-
-        return $aCount > $bCount;
+        return strcmp(
+            strtolower((string)Hash::get($a, 'name')),
+            strtolower((string)Hash::get($b, 'name'))
+        );
     }
 
     /**
