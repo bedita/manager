@@ -523,4 +523,99 @@ class ModulesController extends AppController
 
         return $schema;
     }
+
+    /**
+     * List categories for the object type.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function listCategories()
+    {
+        $this->viewBuilder()->setTemplate('categories');
+
+        $this->request->allowMethod(['get']);
+        $query = $this->request->getQueryParams() + [
+            'filter' => [
+                'type' => $this->objectType,
+            ],
+            'page_size' => 500,
+        ];
+
+        try {
+            $response = $this->apiClient->get('/model/categories', $query);
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'dashboard']);
+        }
+
+        $this->set('resources', (array)$response['data']);
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->indexList('categories'));
+        $this->set('filter', $this->Properties->filterList('categories'));
+        $this->set('object_types', [$this->objectType]);
+
+        return null;
+    }
+
+    /**
+     * Save category.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function saveCategory(): ?Response
+    {
+        $data = $this->request->getData();
+        $id = Hash::get($data, 'id');
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => 'categories',
+                'attributes' => $data,
+            ],
+        ];
+
+        try {
+            if (empty($id)) {
+                $response = $this->apiClient->post('/model/categories', json_encode($body));
+                $id = Hash::get($response, 'data.id');
+            } else {
+                $body['data']['id'] = $id;
+                $this->apiClient->patch(sprintf('/model/categories/%s', $id), json_encode($body));
+            }
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
+    }
+
+    /**
+     * Remove single category.
+     *
+     * @param string $id Category ID.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function remove(string $id): ?Response
+    {
+        try {
+            $this->apiClient->delete(sprintf('/model/categories/%s', $id));
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
+    }
 }

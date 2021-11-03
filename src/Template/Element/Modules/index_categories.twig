@@ -1,0 +1,117 @@
+<div class="list-objects">
+    {# list resources : table header #}
+    <nav class="table-header has-border-black">
+        {% for prop in properties %}
+            {% set label = prop %}
+            {% if prop == 'object_type_name' %}
+                {% set label = 'type' %}
+            {% endif %}
+            <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
+        {% endfor %}
+        <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+        <div></div>
+    </nav>
+
+    {# Create new category #}
+    {{ Form.create(null, {
+        'id': 'form-create',
+        'url': saveAction,
+        'class': 'table-row',
+    })|raw }}
+
+    {% for prop in properties %}
+
+    <div class="{{ prop }}-cell">
+        {% if prop == 'object_type_name' %}
+
+            {% if object_types|count > 1 %}
+                {{ Form.select('object_type_name', object_types)|raw }}
+            {% else %}
+                {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
+            {% endif %}
+
+        {% elseif prop == 'name' or prop == 'label' %}
+            {{ Form.text(prop, {
+                'type': 'text',
+                'autocomplete': 'off',
+                'autocorrect': 'off',
+                'autocapitalize': 'off',
+            }) | raw }}
+
+        {% endif %}
+    </div>
+    {% endfor %}
+    <div class="narrow"></div>
+    <div class="buttons-cell narrow">
+        {% set buttonClasses = 'button button-text-white is-width-auto' %}
+        <button
+            title="{{ __('Create') }} {{ resource.attributes.name }}"
+            class="{{ buttonClasses }}">{{ __('Create') }}</button>
+    </div>
+
+    {{ Form.end()|raw }}
+
+    {# list resources : rows #}
+    {% for resource in resources %}
+        {{ Form.create(null, {
+            'url': saveAction,
+            'id': 'form-' ~ resource.id,
+            'class': 'table-row',
+        })|raw }}
+
+            {% for prop in properties %}
+                {% set propVal = resource.attributes[prop] %}
+
+                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                    {% if prop == 'object_type_name' %}
+                        <span class="tag has-background-module-{{ propVal }}">{{ propVal }}</span>
+
+                    {% elseif prop == 'name' or prop == 'label' %}
+
+                        {{ Form.text(prop, {
+                            'type': 'text',
+                            'autocomplete': 'off',
+                            'autocorrect': 'off',
+                            'autocapitalize': 'off',
+                            'value': propVal,
+                        }) | raw }}
+
+                    {% elseif prop == 'enabled' %}
+
+                        {{ Form.checkbox(prop, {
+                            'checked': propVal,
+                        })|raw }}
+
+                    {% else %}
+                        {{ Schema.format(propVal, schema.properties[prop]) }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="narrow"> {{ resource.id }}</div>
+            <div class="buttons-cell narrow">
+                {% set buttonClasses = 'button button-text-white is-width-auto' %}
+
+                {{ Form.button( __('Save'),
+                    {
+                        'form': 'form-' ~ resource.id,
+                        'title': __('Save') ~ resource.attributes.name,
+                        'class': buttonClasses,
+                    })|raw }}
+
+                {{ Form.postButton(__('Remove'), removeAction + { 'id': reosurce.id }, {
+                    'title': __('Remove') ~ resource.attributes.name,
+                    'class': buttonClasses,
+                })|raw }}
+            </div>
+
+        {{ Form.hidden('id', {'value': resource.id})|raw }}
+        {{ Form.end()|raw }}
+
+        {{ Form.create(null, {
+            'id': 'form-remove-' ~ resource.id,
+            'url': {'_name': 'model:remove:' ~ resource.type, 'id': resource.id},
+        })|raw }}
+        {{ Form.end()|raw }}
+
+    {% endfor %}
+</div>
