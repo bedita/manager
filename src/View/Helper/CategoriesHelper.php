@@ -143,15 +143,11 @@ class CategoriesHelper extends Helper
 
         foreach ($roots as $key => &$root) {
             if (!empty($root['children'])) {
-                $children = $root['children'];
-                usort($children, [$this, 'sortRoots']);
-                $root['children'] = $children;
+                usort($root['children'], [$this, 'sortRoots']);
             }
             if (empty($root['parent_id']) && empty($root['children'])) {
                 $roots[0]['children'][] = $root;
-                $children = $roots[0]['children'];
-                usort($children, [$this, 'sortRoots']);
-                $roots[0]['children'] = $children;
+                usort($roots[0]['children'], [$this, 'sortRoots']);
                 unset($roots[$key]);
             }
         }
