@@ -78,11 +78,11 @@ class CategoriesHelper extends Helper
      */
     public function node(array $node, string $name, $value, array $options, bool &$hiddenField): string
     {
+        $title = sprintf('<h3>%s</h3>', $node['label']);
         $controlOptions = $this->controlOptions($node, $value, $options, $hiddenField);
-        $title = count(array_keys($controlOptions['options'])) === 1 ? __('Global') : $node['label'];
 
         return sprintf(
-            '<div class="categories"><h3>%s</h3>%s</div>',
+            '<div class="categories">%s%s</div>',
             $title,
             $this->Form->control($name, $controlOptions)
         );
@@ -140,6 +140,40 @@ class CategoriesHelper extends Helper
                 $roots[$category['parent_id']]['children'][] = $category;
             }
         }
+
+        foreach ($roots as $key => $root) {
+            if (empty($root['parent_id']) && empty($root['children'])) {
+                $roots[-1]['children'][] = $root;
+                unset($roots[$key]);
+            }
+        }
+        $roots[-1]['id'] = '-1';
+        $roots[-1]['name'] = __('Global');
+        $roots[-1]['label'] = __('Global');
+        $roots[-1]['parent_id'] = null;
+
+        usort($roots, function ($a, $b) {
+            $aChildren = (array)Hash::get($a, 'children');
+            $bChildren = (array)Hash::get($b, 'children');
+            $aCount = count($aChildren);
+            $bCount = count($bChildren);
+
+            if ($aCount === $bCount) {
+                if ($a['name'] === 'Global') {
+                    return -1;
+                }
+                if ($b['name'] === 'Global') {
+                    return 1;
+                }
+
+                return strcmp(strtolower($a['name']), strtolower($b['name']));
+            }
+            if ($aCount > $bCount) {
+                return 1;
+            }
+
+            return -1;
+        });
 
         return $roots;
     }

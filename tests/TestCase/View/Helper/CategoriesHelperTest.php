@@ -176,7 +176,7 @@ class CategoriesHelperTest extends TestCase
     public function nodeProvider(): array
     {
         return [
-            'global' => [
+            'no children' => [
                 [
                     'name' => 'dummy1',
                     'label' => 'Dummy 1',
@@ -184,9 +184,9 @@ class CategoriesHelperTest extends TestCase
                 'categories',
                 [['name' => 'dummy1', 'label' => 'Dummy 1'], ['name' => 'dummy2', 'label' => 'Dummy 2']],
                 [],
-                '<div class="categories"><h3>Global</h3><div class="input select"><label for="categories">Categories</label><div class="checkbox"><label for="categories-dummy1" class="selected"><input type="checkbox" name="categories[]" value="dummy1" checked="checked" id="categories-dummy1">Dummy 1</label></div></div></div>',
+                '<div class="categories"><h3>Dummy 1</h3><div class="input select"><label for="categories">Categories</label><div class="checkbox"><label for="categories-dummy1" class="selected"><input type="checkbox" name="categories[]" value="dummy1" checked="checked" id="categories-dummy1">Dummy 1</label></div></div></div>',
             ],
-            'non global' => [
+            'children' => [
                 [
                     'name' => 'dummy1',
                     'label' => 'Dummy 1',
@@ -334,30 +334,53 @@ class CategoriesHelperTest extends TestCase
             'schema categories with all parent_id null' => [
                 [
                     'categories' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => null],
-                        ['id' => 3, 'parent_id' => null],
+                        ['id' => 1, 'name' => 'dummy1', 'parent_id' => null],
+                        ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                        ['id' => 3, 'name' => 'dummy3', 'parent_id' => null],
                     ],
                 ],
                 false,
                 [
-                    1 => ['id' => 1, 'parent_id' => null],
-                    2 => ['id' => 2, 'parent_id' => null],
-                    3 => ['id' => 3, 'parent_id' => null],
+                    [
+                        'id' => '-1',
+                        'name' => 'Global',
+                        'label' => 'Global',
+                        'children' => [
+                            ['id' => 1, 'name' => 'dummy1', 'parent_id' => null],
+                            ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                            ['id' => 3, 'name' => 'dummy3', 'parent_id' => null],
+                        ],
+                        'parent_id' => null,
+                    ]
                 ],
             ],
             'schema categories with a parent_id not null' => [
                 [
                     'categories' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => null],
-                        ['id' => 3, 'parent_id' => 1],
+                        ['id' => 1, 'name' => 'dummy1', 'parent_id' => null],
+                        ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                        ['id' => 3, 'name' => 'dummy3', 'parent_id' => 1],
                     ],
                 ],
                 true,
                 [
-                    1 => ['id' => 1, 'parent_id' => null, 'children' => [['id' => 3, 'parent_id' => 1]]],
-                    2 => ['id' => 2, 'parent_id' => null],
+                    [
+                        'id' => '-1',
+                        'name' => 'Global',
+                        'label' => 'Global',
+                        'children' => [
+                            ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
+                        ],
+                        'parent_id' => null,
+                    ],
+                    [
+                        'id' => 1,
+                        'name' => 'dummy1',
+                        'children' => [
+                            ['id' => 3, 'name' => 'dummy3', 'parent_id' => 1],
+                        ],
+                        'parent_id' => null,
+                    ],
                 ],
             ],
         ];
