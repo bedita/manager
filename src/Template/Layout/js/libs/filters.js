@@ -30,6 +30,9 @@ Vue.filter('capitalize', function(str) {
 
 /**
  * Translate a string.
+ * Only use this filter with dynamic strings.
+ * For static strings use the `t` function (template literal tag).
+ * @see https://ttag.js.org/docs/tag-gettext.html
  *
  * @param {String} str The string to translate
  */

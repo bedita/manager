@@ -154,7 +154,7 @@ export default {
         },
 
         /**
-         * Capitalize `objectsLabel` and translate it.
+         * Capitalize `objectsLabel`.
          * Fallback to the translation of "Items".
          *
          * @returns {String}
@@ -164,7 +164,7 @@ export default {
                 return t`Items`;
             }
 
-            return t`${(this.objectsLabel.charAt(0) + this.objectsLabel.slice(1))}`;
+            return this.objectsLabel.charAt(0) + this.objectsLabel.slice(1);
         },
 
         positionFilterName() {

@@ -307,7 +307,7 @@ const _vueInstance = new Vue({
          * @returns {String} url
          */
         buildUrlWithParams(params) {
-            let url = new URL(`${window.location.origin}${window.location.pathname}`);
+            const url = new URL(`${window.location.origin}${window.location.pathname}`);
             url.search = buildSearchParams(params, url.searchParams).toString();
 
             return url.href;
