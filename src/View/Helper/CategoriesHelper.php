@@ -148,21 +148,7 @@ class CategoriesHelper extends Helper
             }
         }
 
-        usort($roots, function ($a, $b) {
-            $aChildren = (array)Hash::get($a, 'children');
-            $bChildren = (array)Hash::get($b, 'children');
-            $aCount = count($aChildren);
-            $bCount = count($bChildren);
-
-            if ($aCount === $bCount) {
-                return strcmp(
-                    strtolower((string)Hash::get($a, 'name')),
-                    strtolower((string)Hash::get($b, 'name')),
-                );
-            }
-
-            return $aCount > $bCount;
-        });
+        usort($roots, [$this, 'sortRoots']);
 
         $roots[0]['id'] = '0';
         $roots[0]['name'] = __('Global');
@@ -170,6 +156,30 @@ class CategoriesHelper extends Helper
         $roots[0]['parent_id'] = null;
 
         return $roots;
+    }
+
+    /**
+     * Sort roots. Global first.
+     *
+     * @param array $a The first node
+     * @param array $b The second node
+     * @return int
+     */
+    public function sortRoots(array $a, array $b): int
+    {
+        $aChildren = (array)Hash::get($a, 'children');
+        $bChildren = (array)Hash::get($b, 'children');
+        $aCount = count($aChildren);
+        $bCount = count($bChildren);
+
+        if ($aCount === $bCount) {
+            return strcmp(
+                strtolower((string)Hash::get($a, 'name')),
+                strtolower((string)Hash::get($b, 'name')),
+            );
+        }
+
+        return $aCount > $bCount;
     }
 
     /**

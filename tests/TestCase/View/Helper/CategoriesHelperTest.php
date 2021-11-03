@@ -436,6 +436,7 @@ class CategoriesHelperTest extends TestCase
      * @param array $expectedTree The expected for Tree
      * @return void
      * @dataProvider treeProvider()
+     * @covers ::sortRoots()
      * @covers ::tree()
      * @covers ::isTree()
      */
