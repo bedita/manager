@@ -30,7 +30,7 @@ class Applications
      *
      * @var array
      */
-    protected static $applications = null;
+    public static $applications = null;
 
     /**
      * Get application name by application ID
@@ -51,6 +51,9 @@ class Applications
      */
     public static function list(): array
     {
+        if (!empty(static::$applications)) {
+            return static::$applications;
+        }
         try {
             static::$applications = Cache::remember(
                 self::cacheKey('applications'),

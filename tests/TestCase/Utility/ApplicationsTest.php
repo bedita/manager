@@ -33,6 +33,12 @@ class ApplicationsTest extends TestCase
      */
     public function testList(): void
     {
+        $expected = [['id' => 1, 'name' => 'sample']];
+        Applications::$applications = $expected;
+        $actual = Applications::list();
+        static::assertEquals($expected, $actual);
+        Applications::$applications = null;
+
         $response = [
             'data' => [
                 [
@@ -66,7 +72,7 @@ class ApplicationsTest extends TestCase
      * @return void
      * @covers ::list()
      */
-    public function testListExpection(): void
+    public function testListException(): void
     {
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -74,6 +80,7 @@ class ApplicationsTest extends TestCase
         $apiClient->method('get')
             ->willThrowException(new BEditaClientException());
         ApiClientProvider::setApiClient($apiClient);
+        Applications::$applications = null;
         $actual = Applications::list();
         static::assertEquals([], $actual);
     }
@@ -103,6 +110,7 @@ class ApplicationsTest extends TestCase
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
         $expected = "dummy test";
+        Applications::$applications = null;
         $actual = Applications::getName('3');
         static::assertEquals($expected, $actual);
     }
