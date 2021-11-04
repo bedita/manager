@@ -23,6 +23,15 @@ use Cake\Utility\Hash;
  */
 class Applications
 {
+    use CacheTrait;
+
+    /**
+     * Applications
+     *
+     * @var array
+     */
+    protected static $applications = null;
+
     /**
      * Get application name by application ID
      *
@@ -43,8 +52,8 @@ class Applications
     public static function list(): array
     {
         try {
-            $applications = Cache::remember(
-                'applications',
+            static::$applications = Cache::remember(
+                self::cacheKey('applications'),
                 function () {
                     $response = (array)ApiClientProvider::getApiClient()->get('applications');
 
@@ -55,6 +64,6 @@ class Applications
             return [];
         }
 
-        return $applications;
+        return static::$applications;
     }
 }

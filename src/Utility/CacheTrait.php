@@ -26,7 +26,7 @@ trait CacheTrait
      * @param string $name Cache item name.
      * @return string
      */
-    protected function cacheKey(string $name): string
+    protected static function cacheKey(string $name): string
     {
         $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
 
