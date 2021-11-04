@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\SchemaComponent;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -159,9 +160,7 @@ class SchemaComponentTest extends TestCase
         // from cache
         Cache::enable();
         $reflectionClass = new \ReflectionClass($this->Schema);
-        $method = $reflectionClass->getMethod('cacheKey');
-        $method->setAccessible(true);
-        $key = $method->invokeArgs($this->Schema, [$type]);
+        $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
 
         $method = $reflectionClass->getMethod('getSchema');
@@ -242,9 +241,7 @@ class SchemaComponentTest extends TestCase
         Cache::enable();
 
         // by type and revision
-        $method = $reflectionClass->getMethod('cacheKey');
-        $method->setAccessible(true);
-        $key = $method->invokeArgs($this->Schema, [$type]);
+        $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
         $method = $reflectionClass->getMethod('loadWithRevision');
         $method->setAccessible(true);
