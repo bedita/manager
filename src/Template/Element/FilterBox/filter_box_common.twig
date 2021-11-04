@@ -41,7 +41,7 @@
                 class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
             >
                 <option selected value="" label="{{ __('All Types') }}"></option>
-                <option v-for="type in rightTypes" :value="type"><: type | capitalize | translate :></option>
+                <option v-for="type in rightTypes" :value="type"><: t(capitalize(type)) :></option>
             </select>
         </div>
 
@@ -120,7 +120,7 @@
                         {{ __('All') }}
                     </option>
                     <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
-                        <: option.text | translate :>
+                        <: t(option.text) :>
                     </option>
                 </select>
             </span>
