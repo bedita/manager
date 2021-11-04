@@ -23,8 +23,6 @@ use Cake\Utility\Hash;
  */
 class Applications
 {
-    use CacheTrait;
-
     /**
      * Applications
      *
@@ -56,7 +54,7 @@ class Applications
         }
         try {
             static::$applications = Cache::remember(
-                self::cacheKey('applications'),
+                CacheTools::cacheKey('applications'),
                 function () {
                     $response = (array)ApiClientProvider::getApiClient()->get('applications');
 
