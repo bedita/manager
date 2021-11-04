@@ -3,7 +3,7 @@
 <div class="relations-add">
     <section class="fieldset mb-1">
         <header class="mx-1 tab unselectable"
-            :class="showCreateObjectForm ? 'open' : ''"
+            :class="{ open: showCreateObjectForm }"
             :disabled="saving"
             @click="resetForms">
             <h2><span v-show="relationName"><strong>{{ __('create new') }}</strong> "<: relationName | humanize :></span>" {{ __('related object') }}&nbsp;</h2>
@@ -18,7 +18,7 @@
                     v-if="relationTypes"
                     v-model="object.type">
                     <option value="_choose">{{ __('Choose a type') }}</option>
-                    <option v-for="type in relationTypes.right"><: type | capitalize | translate :></option>
+                    <option v-for="type in relationTypes.right"><: t(capitalize(type)) :></option>
                 </select>
             </div>
 
@@ -94,7 +94,7 @@
             {% for type, filters in filtersByType %}
                 {% set options = [] %}
                 {% for f in filters %}
-                    {% set o = Schema.controlOptions(f, null, schema.properties[f]) %}
+                    {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
                     {% set options = options|merge([o|merge({ 'name': f })]) %}
                 {% endfor %}
                 {% set list = list|merge({ (type): options }) %}
