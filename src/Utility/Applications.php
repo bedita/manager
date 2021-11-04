@@ -46,7 +46,7 @@ class Applications
             $applications = Cache::remember(
                 'applications',
                 function () {
-                    $response = (array)ApiClientProvider::getApiClient()->get('/admin/applications');
+                    $response = (array)ApiClientProvider::getApiClient()->get('applications');
 
                     return (array)Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.name');
                 }
