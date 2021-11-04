@@ -12,7 +12,7 @@
  */
 namespace App\Controller\Component;
 
-use App\Utility\CacheTrait;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -28,8 +28,6 @@ use Psr\Log\LogLevel;
  */
 class SchemaComponent extends Component
 {
-    use CacheTrait;
-
     /**
      * {@inheritDoc}
      */
@@ -74,7 +72,7 @@ class SchemaComponent extends Component
 
         try {
             $schema = Cache::remember(
-                $this->cacheKey($type),
+                CacheTools::cacheKey($type),
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
@@ -117,7 +115,7 @@ class SchemaComponent extends Component
      */
     protected function loadWithRevision(string $type, string $revision = null)
     {
-        $key = $this->cacheKey($type);
+        $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
         if ($schema === false) {
             return false;
@@ -250,7 +248,7 @@ class SchemaComponent extends Component
     {
         try {
             $schema = (array)Cache::remember(
-                $this->cacheKey('relations'),
+                CacheTools::cacheKey('relations'),
                 function () {
                     return $this->fetchRelationData();
                 },
@@ -349,7 +347,7 @@ class SchemaComponent extends Component
     {
         try {
             $features = (array)Cache::remember(
-                $this->cacheKey('types_features'),
+                CacheTools::cacheKey('types_features'),
                 function () {
                     return $this->fetchObjectTypesFeatures();
                 },
