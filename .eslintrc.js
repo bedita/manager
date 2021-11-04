@@ -2,10 +2,26 @@ module.exports = {
     root: true,
     env: {
         'node': true,
-        'es6': true
+        'es6': true,
+        'browser': true,
+    },
+    globals: {
+        'BEDITA': true,
+        'tinymce': true,
+        'vue': true
     },
     rules: {
-        'quotes': [1, 'single'],
+        // 'quotes': [1, 'single'],
+        // 'comma-dangle': 'off',
+        // 'indent': ['error', 4],
+        // 'no-extra-semi': 'off',
+        // 'no-console': 'off',
+        // 'semi': 'off',
+        // 'space-before-function-paren': [1, {
+        //     anonymous: 'never',
+        //     named: 'never',
+        //     asyncArrow: 'never',
+        // }],
         // 'semi': [1, 'always'],
         // 'indent': [1, 4, {
         //     ignoredNodes: ['TemplateLiteral'],
