@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
  * Application View default class
  *
  *
+ * @property \App\View\Helper\CategoriesHelper $Categories
  * @property \App\View\Helper\EditorsHelper $Editors
  * @property \App\View\Helper\LayoutHelper $Layout
  * @property \App\View\Helper\ArrayHelper $Array
@@ -48,6 +49,7 @@ class AppView extends TwigView
                 'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
+        $this->loadHelper('Categories');
         $this->loadHelper('Editors');
         $this->loadHelper('Layout');
         $this->loadHelper('Array');
