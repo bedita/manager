@@ -160,7 +160,9 @@ export default {
             }
 
             return this.$helpers.autoTranslate(object.content, object.from, object.to)
-                .catch(r => {
+                .catch(error => {
+                    console.error(error);
+
                     throw new Error(`Unable to translate field ${object.field}`);
                 })
                 .then(r => {

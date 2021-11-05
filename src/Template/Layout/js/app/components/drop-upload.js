@@ -111,11 +111,11 @@ export default {
             });
         },
 
-        onDragOver(e) {
+        onDragOver() {
             this.$el.classList.add('dragover');
         },
 
-        onDragLeave(e) {
+        onDragLeave() {
             this.$el.classList.remove('dragover');
         },
 

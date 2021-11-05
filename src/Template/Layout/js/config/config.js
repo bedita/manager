@@ -17,13 +17,13 @@ import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 
 // merge vue options and configs
 for (let property in VueConfig) {
-    if (VueConfig.hasOwnProperty(property)) {
+    if (Object.prototype.hasOwnProperty.call(VueConfig, property)) {
         Vue.config[property] = VueConfig[property];
     }
 }
 
 for (let property in VueOptions) {
-    if (VueOptions.hasOwnProperty(property)) {
+    if (Object.prototype.hasOwnProperty.call(VueOptions, property)) {
         Vue.options[property] = VueOptions[property];
     }
 }

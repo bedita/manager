@@ -203,7 +203,7 @@ export default {
          *
          * @return {String} string version of relations
          */
-        relationFormatterHelper(relations, objectType) {
+        relationFormatterHelper(relations) {
             let jsonString = '';
             try {
                 jsonString = JSON.stringify(relations);

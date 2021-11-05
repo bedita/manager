@@ -119,7 +119,7 @@ export default {
 
         relationName: {
             immediate: true,
-            handler(newVal, oldVal) {
+            handler(newVal) {
                 if (newVal) {
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
@@ -409,6 +409,7 @@ export default {
             } else {
                 this.selectedObjects.push(object);
             }
+            console.debug(evt);
         },
 
         /**

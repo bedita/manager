@@ -22,6 +22,7 @@ export default {
             this.dateRanges = ranges;
             this.dateRanges.forEach((range, index) => {
                 range.params = range.params || { all_day: false };
+                console.debug(index);
             });
         }
         if (!this.dateRanges.length) {
