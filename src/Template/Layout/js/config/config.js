@@ -50,5 +50,21 @@ Vue.mixin({
             // call ttag t method
             return t([value]);
         },
+
+        /**
+         * Capitalize a string.
+         *
+         * @param {String} str The string to capitalize
+         *
+         * @return {string}
+         */
+        capitalize: (str) => {
+            if (!str) {
+                return '';
+            }
+
+            str = str.toString();
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
     }
 });

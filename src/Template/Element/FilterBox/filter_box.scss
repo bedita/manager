@@ -68,8 +68,16 @@
             }
         }
 
+        &.date_ranges .filter-label {
+            margin-top: 1rem;
+        }
+
         .date-filter {
             display: flex;
+
+            > * + * {
+                margin-left: $gutter * .5;
+            }
 
             input {
                 margin: 0;
