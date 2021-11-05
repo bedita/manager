@@ -290,6 +290,7 @@ class HistoryComponentTest extends TestCase
                                 'changed' => [
                                     'lang' => 'Lang: en',
                                 ],
+                                'application_name' => '',
                             ],
                         ],
                     ],

@@ -19,6 +19,7 @@ import Autocomplete from '@trevoreyre/autocomplete-vue';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
+import { buildSearchParams } from '../libs/urlUtils.js';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -296,7 +297,6 @@ const _vueInstance = new Vue({
             }
         },
 
-
         /**
          * build coherent url based on these params:
          * - q=_string_
@@ -306,47 +306,11 @@ const _vueInstance = new Vue({
          * @param {Object} params
          * @returns {String} url
          */
-        buildUrlParams(params) {
-            let url = `${window.location.origin}${window.location.pathname}`;
-            const queryId = '?';
-            const separator = '&';
-            const paramsKeys = Object.keys(params);
+        buildUrlWithParams(params) {
+            const url = new URL(`${window.location.origin}${window.location.pathname}`);
+            url.search = buildSearchParams(params, url.searchParams).toString();
 
-            if (paramsKeys && paramsKeys.length) {
-                let fields = [];
-
-                paramsKeys.forEach((key) =>  {
-                    if (params[key]) {
-                        const query = params[key];
-
-                        // parse filter property
-                        if (key === 'filter') {
-                            Object.keys(query).forEach((filterKey) => {
-                                if (typeof query[filterKey] === 'object') {
-                                    const filter = query[filterKey];
-                                    Object.keys(filter).forEach((modifier) => {
-                                        if (filter[modifier] !== '') {
-                                            // look up for param modifier (i.e dates)
-                                            const encoded = encodeURIComponent(filter[modifier]);
-                                            fields.push(`filter[${filterKey}][${modifier}]=${encoded}`);
-                                        }
-                                    });
-                                } else if (query[filterKey] !== '') {
-                                    const encoded = encodeURIComponent(query[filterKey]);
-                                    fields.push(`filter[${filterKey}]=${encoded}`);
-                                }
-                            });
-                        } else {
-                            const encoded = encodeURIComponent(query);
-                            fields.push(`${key}=${encoded}`);
-                        }
-                    }
-                });
-                url += fields.length ? queryId : '';
-                url += fields.join(separator);
-            }
-
-            return url;
+            return url.href;
         },
 
         /**
@@ -355,7 +319,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         resetFilters() {
-            window.location.replace(this.buildUrlParams({ reset: 1 }));
+            window.location.replace(this.buildUrlWithParams({ reset: 1 }));
         },
 
         /**
@@ -366,7 +330,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
-            let url = this.buildUrlParams({
+            const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,
                 page_size: this.pageSize,
