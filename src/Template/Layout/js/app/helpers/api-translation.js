@@ -15,7 +15,7 @@ const methods = {
     *     ]
     * }
     */
-   autoTranslate(text, from, to) {
+    autoTranslate(text, from, to) {
         if (!text) {
             return;
         }

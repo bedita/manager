@@ -101,8 +101,8 @@ export default {
             });
 
             const marker = new mapbox.Marker({
-                    color: '#d22551',
-                })
+                color: '#d22551',
+            })
                 .setLngLat(point)
                 .addTo(overMap);
 

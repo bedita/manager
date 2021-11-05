@@ -458,7 +458,7 @@ export default {
          * @param {Event} event The input change event.
          * @return {void}
          */
-         toggleFolderRelationCanonical(event) {
+        toggleFolderRelationCanonical(event) {
             if (this.isParent) {
                 document.getElementById('changedParents').value = 1;
             }
