@@ -170,6 +170,32 @@ class PropertiesComponent extends Component
     }
 
     /**
+     * List of all filters, grouped by type, for passed `$types` list
+     *
+     * @param string[] $types List of types to get filters of
+     *
+     * @return array
+     */
+    public function filtersByType(array $types): array
+    {
+        if (empty($types)) {
+            return [];
+        }
+
+        return array_filter(
+            array_reduce(
+                $types,
+                function (array $accumulator, string $type) {
+                    $accumulator[$type] = $this->filterList($type);
+
+                    return $accumulator;
+                },
+                []
+            )
+        );
+    }
+
+    /**
      * List of bulk actions to display in `index` view
      *
      * @param string $type Object type name

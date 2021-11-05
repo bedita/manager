@@ -170,13 +170,13 @@ class ModulesController extends AppController
             $this->Properties->relationsList($this->objectType)
         );
 
+        $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
+
         // set schemas for relations right types
-        $schemasByType = $this->Schema->getSchemasByType(
-            \App\Utility\Schema::rightTypes(
-                $this->viewVars['relationsSchema']
-            )
-        );
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
         $this->set('schemasByType', $schemasByType);
+
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);

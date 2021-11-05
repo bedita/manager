@@ -23,7 +23,6 @@ import { warning } from 'app/components/dialog/dialog';
 const createData = (type = '') => ({
     type,
     attributes: {
-
         status: 'draft',
     },
 });
