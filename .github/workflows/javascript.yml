@@ -34,3 +34,6 @@ jobs:
 
       - name: 'Yarn build'
         run: 'yarn build'
+
+      - name: 'Run ESLint'
+        run: 'yarn eslint src/Template/Layout/js/**/*.js'
