@@ -13,7 +13,9 @@ module.exports = {
     rules: {
         'quotes': [1, 'single'],
         'comma-dangle': 'off',
-        'indent': ['error', 4],
+        'indent': [1, 4, {
+            SwitchCase: 1,
+        }],
         'no-extra-semi': 'off',
         'no-console': 'off',
         'semi': 'off'
