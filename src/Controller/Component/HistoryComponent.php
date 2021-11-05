@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Component;
 
+use App\Utility\Applications;
 use App\View\Helper\SchemaHelper;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
@@ -179,6 +180,8 @@ class HistoryComponent extends Component
                 $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
             }
             $history['meta']['changed'] = $formatted;
+            $applicationId = (string)Hash::get($history, 'meta.application_id');
+            $history['meta']['application_name'] = Applications::getName($applicationId);
         }
         $response['data'] = $data;
     }

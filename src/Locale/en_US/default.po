@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-10-26 07:58:29 \n"
+"POT-Creation-Date: 2021-11-03 10:34:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -816,13 +816,13 @@ msgid "warning"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:159
-#: src/Template/Layout/js/app/components/history/history.js:99
+#: src/Template/Layout/js/app/components/history/history.js:109
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:160
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/components/history/history.js:110
 msgid "copy"
 msgstr ""
 
@@ -835,7 +835,7 @@ msgid "Do you really want to trash the object?"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:494
-#: src/Template/Layout/js/app/components/history/history.js:89
+#: src/Template/Layout/js/app/components/history/history.js:99
 #: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
@@ -964,18 +964,20 @@ msgstr ""
 #. *
 #.  * Component to fetch and display changes' history.
 #.  
-#: src/Template/Layout/js/app/components/history/history.js:19
-msgid "by"
-msgstr ""
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.  
-#: src/Template/Layout/js/app/components/history/history.js:29
+#: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:88
+#: src/Template/Layout/js/app/components/history/history.js:56
+#, javascript-format
+msgid "by ${ name } via ${ application }"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:58
+msgid "by ${ name }"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:98
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
