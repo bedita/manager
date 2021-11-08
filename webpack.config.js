@@ -12,6 +12,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -96,7 +97,13 @@ if (devMode) {
 
 module.exports = {
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new ESLintPlugin({
+            extensions: ['js'],
+            emitError: true,
+            emitWarning: true,
+            outputReport: true
+        })
     ],
 
     entry: {
@@ -239,7 +246,7 @@ module.exports = {
                     plugins: [
                         '@babel/plugin-syntax-dynamic-import',
                     ],
-                }
+                },
             },
             {
                 test: /\.po$/,

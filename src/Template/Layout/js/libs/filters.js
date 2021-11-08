@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { t } from 'ttag';
 
 /**
  * Converts a snake case string to title case.

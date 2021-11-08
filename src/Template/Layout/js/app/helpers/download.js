@@ -1,7 +1,5 @@
-import Vue from 'vue';
-
 export default {
-    install (Vue, options) {
+    install (Vue) {
         Vue.prototype.$helpers = {
             /**
             * Force download using a syntetic element

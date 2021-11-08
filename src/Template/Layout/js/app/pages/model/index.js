@@ -285,7 +285,7 @@ export default {
                             id: type.id,
                             attributes: {...propertyType.attributes, ...type.attributes}
                         };
-                    };
+                    }
                     return propertyType;
                 });
             } else {

@@ -175,8 +175,6 @@ export const PanelView = {
 
         // used to request panel
         PanelEvents.listen('panel:request', null, (request) => {
-            let { data, from } = request;
-
             this.isOpen = true;
             this.stack.push(request);
 

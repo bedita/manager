@@ -83,7 +83,7 @@ export default {
                 this.instance.clear();
             }
         },
-        setupDatepicker(date) {
+        setupDatepicker() {
             // set locale
             flatpickr.localize(LOCALES_AVAILABLE[LOCALE] || 'en');
             let element = this.el;

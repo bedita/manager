@@ -13,8 +13,8 @@
  *
  */
 
- const API_URL = new URL(BEDITA.base).pathname;
- const API_OPTIONS = {
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
     credentials: 'same-origin',
     headers: {
         'accept': 'application/json',
@@ -170,8 +170,8 @@ export default {
             users.map((user) => {
                 const href = `${BEDITA.base}/view/${user.id}`;
                 const userInfo = (user.attributes.name  != undefined || user.attributes.surname != undefined)
-                        ? user.attributes.name + ' ' + user.attributes.surname
-                        : user.attributes.username;
+                    ? user.attributes.name + ' ' + user.attributes.surname
+                    : user.attributes.username;
 
                 // using == because user.id String and creatorById Number
                 if(user.id == creatorId && userInfo!= undefined) {

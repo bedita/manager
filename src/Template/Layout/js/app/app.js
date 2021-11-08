@@ -78,7 +78,7 @@ const _vueInstance = new Vue({
     */
     provide() {
         return {
-            getCSFRToken: (...args) => BEDITA.csrfToken,
+            getCSFRToken: () => BEDITA.csrfToken,
         }
     },
 
@@ -245,7 +245,7 @@ const _vueInstance = new Vue({
                 const keysExp = /\[(.*?)\]/g; // extract single property from the properties group
 
                 let filter = {};
-                while (matches = filterExp.exec(urlParams)) {
+                while ((matches = filterExp.exec(urlParams))) {
                     if (matches && matches.length === 3) {
                         const filterGroup = matches[1]; // keys group (ex. [status], [modified][lte])
                         const filterValue = matches[2]; // param value
@@ -254,7 +254,7 @@ const _vueInstance = new Vue({
                         let keysMatches = [];
 
                         // extract keys from keys group and put it in paramKeys
-                        while (keysMatches = keysExp.exec(filterGroup)) {
+                        while ((keysMatches = keysExp.exec(filterGroup))) {
                             paramKeys.push(keysMatches[1]);
                         }
 
@@ -466,6 +466,7 @@ const _vueInstance = new Vue({
                     if (value.changed) {
                         return t`There are unsaved changes, are you sure you want to leave page?`;
                     }
+                    console.debug(key);
                 }
             }
         },

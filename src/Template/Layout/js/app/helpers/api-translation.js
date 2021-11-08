@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 const methods = {
     /**
     * autoTranslate text(s) from a language to another.
@@ -17,7 +15,7 @@ const methods = {
     *     ]
     * }
     */
-   autoTranslate(text, from, to) {
+    autoTranslate(text, from, to) {
         if (!text) {
             return;
         }
@@ -44,7 +42,7 @@ const methods = {
 }
 
 export default {
-    install (Vue, options) {
+    install (Vue) {
         Vue.prototype.$helpers.autoTranslate = methods.autoTranslate;
     }
 };
