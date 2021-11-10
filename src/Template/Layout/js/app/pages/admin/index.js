@@ -14,7 +14,7 @@ export default {
     },
 
     methods: {
-        trash(e) {
+        remove(e) {
             const message = t`Remove item. Are you sure?`;
             const form = document.getElementById(e.target.getAttribute('form'));
             confirm(message, t`yes, proceed`, form.submit.bind(form));
