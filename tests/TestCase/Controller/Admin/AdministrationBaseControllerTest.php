@@ -228,6 +228,11 @@ class AdministrationBaseControllerTest extends TestCase
         }
     }
 
+    /**
+     * Data provider for `testSave`
+     *
+     * @return array
+     */
     public function saveProvider(): array
     {
         return [
