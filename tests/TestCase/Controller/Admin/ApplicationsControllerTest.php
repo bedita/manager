@@ -15,6 +15,7 @@ class AppsController extends ApplicationsController
 {
     protected $resourceType = 'applications';
     protected $properties = ['name'];
+    protected $propertiesSecrets = ['api_key'];
 }
 
 /**
@@ -83,6 +84,7 @@ class ApplicationsControllerTest extends TestCase
             'links',
             'resourceType',
             'properties',
+            'propertiesSecrets',
             'metaColumns',
             'filter',
             'schema',
