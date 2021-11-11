@@ -18,7 +18,7 @@
                     v-if="relationTypes"
                     v-model="object.type">
                     <option value="_choose">{{ __('Choose a type') }}</option>
-                    <option v-for="type in relationTypes.right" v-bind:value="type"><: t(capitalize(type)) :></option>
+                    <option v-for="type in relationTypes.right" :value="type"><: t(capitalize(type)) :></option>
                 </select>
             </div>
 
