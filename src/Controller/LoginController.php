@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -32,6 +32,15 @@ class LoginController extends AppController
         // Projects configuration files base path
         'projectsPath' => CONFIG . 'projects' . DS,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
 
     /**
      * Display login page or perform login via API.
@@ -69,24 +78,15 @@ class LoginController extends AppController
             (string)$this->getRequest()->getData('project'),
             (string)$this->getConfig('projectsPath')
         );
-        try {
-            $user = $this->Auth->identify();
-        } catch (BEditaClientException $e) {
-            $this->log('Login failed - ' . $e->getMessage(), LogLevel::INFO);
-            $attributes = $e->getAttributes();
-            if (!empty($attributes['reason'])) {
-                $reason = $attributes['reason'];
-            }
-        }
-        if (!empty($user) && is_array($user)) {
-            // setup timezone from request
-            $user['timezone'] = $this->userTimezone();
-            // Successful login. Redirect.
-            $this->Auth->setUser($user);
+        $this->Authentication->getResult();
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
             // Setup current project name.
             $this->setupCurrentProject();
+            // Redirect.
+            $target = $this->Authentication->getLoginRedirect() ?? ['_name' => 'dashboard'];
 
-            return $this->redirect($this->Auth->redirectUrl());
+            return $this->redirect($target);
         }
 
         // Failed login.
@@ -134,25 +134,6 @@ class LoginController extends AppController
     }
 
     /**
-     * Retrieve user timezone from request data.
-     *
-     * @return string User timezone
-     */
-    protected function userTimezone(): string
-    {
-        // 'timezone_offset' must contain UTC offset in seconds
-        // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
-        $offset = $this->getRequest()->getData('timezone_offset');
-        if (empty($offset)) {
-            return 'UTC';
-        }
-        $data = explode(' ', (string)$offset);
-        $dst = empty($data[1]) ? 0 : 1;
-
-        return timezone_name_from_abbr('', intval($data[0]), $dst);
-    }
-
-    /**
      * Logout and redirect to login page.
      *
      * @return \Cake\Http\Response|null
@@ -160,7 +141,7 @@ class LoginController extends AppController
     public function logout(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $redirect = $this->redirect($this->Auth->logout());
+        $redirect = $this->redirect($this->Authentication->logout());
         $this->getRequest()->getSession()->destroy();
 
         return $redirect;

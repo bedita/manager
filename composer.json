@@ -24,6 +24,7 @@
         "php": ">=7.1",
         "bedita/i18n": "^1.7",
         "bedita/web-tools": "^1.9",
+        "cakephp/authentication": "^1.0",
         "cakephp/cakephp": "^3.10",
         "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
