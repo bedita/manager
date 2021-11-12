@@ -12,8 +12,10 @@
  */
 namespace App\Controller;
 
+use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -266,6 +268,7 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        unset($requestData['_csrfToken']);
         // extract related objects data
         $relatedData = (array)Hash::get($requestData, '_api');
         unset($requestData['_api']);
@@ -313,10 +316,6 @@ class ModulesController extends AppController
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
-        unset($requestData['_csrfToken']);
-        // extract related objects data
-        $relatedData = (array)Hash::get($requestData, '_api');
-        unset($requestData['_api']);
 
         try {
             // upload file (if available)
@@ -324,8 +323,6 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-            $objectId = (string)Hash::get($response, 'data.id');
-            $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
