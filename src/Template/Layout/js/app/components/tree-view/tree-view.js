@@ -213,7 +213,7 @@ export default {
          * @return {string}
          */
         value() {
-            let menu = true;
+            let menu = false;
             if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
                 menu = !!this.node.meta.relation.menu;
             }
