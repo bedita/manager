@@ -40,9 +40,9 @@
                         @filter-update-page-size="onUpdatePageSize"
                         @filter-update-current-page="onUpdateCurrentPage"
                     >
-                        <div v-if="pagination.count">
+                        <template v-if="pagination.count">
                             {% element 'FilterBox/filter_box_page_toolbar' %}
-                        </div>
+                        </template>
                     </filter-box-view>
                 {% endif %}
             </div>

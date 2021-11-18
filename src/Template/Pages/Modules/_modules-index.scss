@@ -130,9 +130,19 @@ body.view-module {
 
         .module-footer {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            flex-wrap: wrap-reverse;
             margin: $gutter 0;
+            align-items: flex-end;
+
+            @media screen and (max-width: 1023px) {
+                > * {
+                    margin-bottom: $gutter;
+                }
+            }
+
+            .pagination {
+                margin-left: auto;
+            }
         }
 
         .bulk-actions {
