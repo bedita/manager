@@ -262,6 +262,10 @@ export default {
                 formData.set('url', this.url);
             }
 
+            if (this.file || this.url) {
+                formData.append('model-type', type);
+            }
+
             const options = {
                 method: 'POST',
                 credentials: 'same-origin',
