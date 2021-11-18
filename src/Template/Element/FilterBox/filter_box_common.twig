@@ -5,6 +5,7 @@
             <input type="text"
                 :placeholder="placeholder"
                 v-model.trim="queryFilter.q"
+                @keyup.enter="applyFilter"
             />
         </div>
 
