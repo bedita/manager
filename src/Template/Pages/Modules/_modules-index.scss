@@ -132,7 +132,7 @@ body.view-module {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            margin-top: $gutter;
+            margin: $gutter 0;
         }
 
         .bulk-actions {
