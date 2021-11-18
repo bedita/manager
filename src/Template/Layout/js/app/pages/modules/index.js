@@ -1,4 +1,3 @@
-import { AppEventBus } from 'app/app';
 import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
