@@ -119,6 +119,10 @@ const _vueInstance = new Vue({
             bodyEl.classList.remove('panel-is-open');
             rootEl.classList.remove('is-clipped');
         });
+
+        // listen events emitted on this vue instance
+        this.$on('filter-update-page-size', this.onUpdatePageSize);
+        this.$on('filter-update-current-page', this.onUpdateCurrentPage);
     },
 
     watch: {

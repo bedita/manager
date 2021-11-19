@@ -8,35 +8,45 @@
 {% set ids = Array.extract(objects, '{*}.id') %}
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
-
         {% if treeView %}
-
             <tree-view></tree-view>
-
         {% else %}
+            <div class="table-container">
+                <div class="list-objects">
+                    {% if objects %}
+                        {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
+                    {% endif %}
 
-        <div class="table-container">
+                    {% for object in objects %}
+                        {% element 'Modules/index_table_row' { 'object': object } %}
+                    {% else %}
+                        {{ __('No items found') }}
+                    {% endfor %}
+                </div>
+            </div>
 
-            <div class="list-objects">
+            <div class="module-footer">
+                {# bulk actions #}
                 {% if objects %}
-                    {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
+                    {% element 'Modules/index_bulk' {} %}
                 {% endif %}
 
-                {% for object in objects %}
-                    {% element 'Modules/index_table_row' { 'object': object } %}
-                {% else %}
-                    {{ __('No items found') }}
-                {% endfor %}
+                {% if not treeView %}
+                    <filter-box-view
+                        inline-template
+                        :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
+                        config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+                        page-size="{{ meta.pagination.page_size }}"
+                        @filter-update-page-size="onUpdatePageSize"
+                        @filter-update-current-page="onUpdateCurrentPage"
+                    >
+                        <template v-if="pagination.count">
+                            {% element 'FilterBox/filter_box_page_toolbar' %}
+                        </template>
+                    </filter-box-view>
+                {% endif %}
             </div>
-        </div>
-
-            {# bulk actions #}
-            {% if objects %}
-                {% element 'Modules/index_bulk' {} %}
-            {% endif %}
-
         {% endif %}
-
 
         {# commands to append in side bar (commands menu) #}
         {% if Perms.canCreate() %}
@@ -47,6 +57,5 @@
                 )|raw
             ) %}
         {% endif %}
-
     </div> {# end module-content #}
 </modules-index>

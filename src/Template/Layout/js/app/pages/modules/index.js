@@ -14,6 +14,7 @@ export default {
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
     },
 
     /**
@@ -172,6 +173,14 @@ export default {
                     this.selectedRows.push(cb.value);
                 }
             }
+        },
+
+        onUpdatePageSize(event) {
+            window._vueInstance.$emit('filter-update-page-size', event);
+        },
+
+        onUpdateCurrentPage(event) {
+            window._vueInstance.$emit('filter-update-current-page', event);
         },
     }
 }

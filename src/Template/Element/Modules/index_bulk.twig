@@ -3,9 +3,9 @@
         {% element 'Form/bulk_export' %}
     </div>
 
-    <h3 class="bulk-header">{{ __('Actions on selected items') }}</h3>
+    <div class="bulk-header">{{ __('Actions on selected items') }}</div>
 
-    <div :class="{ disabled: !selectedRows.length }">
+    <div :class="[!selectedRows.length ? 'disabled' : '', 'is-flex', 'is-flex-column']">
         {% element 'Form/bulk_properties' %}
 
         {% element 'Form/bulk_category' %}
