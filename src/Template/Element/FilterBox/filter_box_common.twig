@@ -5,12 +5,13 @@
             <input type="text"
                 :placeholder="placeholder"
                 v-model.trim="queryFilter.q"
-                @keyup.enter="applyFilter"
+                @keydown.enter.prevent="applyFilter"
             />
         </div>
 
         <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }}"
             @click.prevent="applyFilter"
+            type="button"
         >
             {{ __('Search') }}
         </button>
