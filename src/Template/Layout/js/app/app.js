@@ -48,7 +48,6 @@ const _vueInstance = new Vue({
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
-        Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
     },
 
     data() {

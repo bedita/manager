@@ -207,7 +207,6 @@ class AdministrationBaseControllerTest extends TestCase
             'links',
             'resourceType',
             'properties',
-            'propertiesSecrets',
             'metaColumns',
             'filter',
             'schema',

@@ -2,7 +2,6 @@
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
-{% set allProperties = properties|merge(propertiesSecrets) %}
 {% set txtOptions = {'label': '', 'size': 40} %}
 {% set boolOptions = {
     'label': '',
@@ -29,7 +28,7 @@
             {# list resources : table header #}
             <nav class="table-header has-border-black">
                 <div>{{ __('Id') }}</div>
-                {% for key in allProperties %}
+                {% for key in properties %}
                     {% set label = key %}
                     <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
                 {% endfor %}
@@ -56,11 +55,6 @@
                         {% set options = type is same as ('bool') ? boolOptions|merge({'value': 1}) : txtOptions %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
                             {{ Property.control(property, '', options)|raw }}
-                        </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            ---
                         </div>
                     {% endfor %}
                     {% for key in metaColumns %}
@@ -96,12 +90,6 @@
                             {% else %}
                                 {{ Property.control(property, val, options)|raw }}
                             {% endif %}
-                        </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        {% set val = resource.attributes[property] %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            <secret val="{{ resource.meta[property] }}" />
                         </div>
                     {% endfor %}
                     {% for key in metaColumns %}

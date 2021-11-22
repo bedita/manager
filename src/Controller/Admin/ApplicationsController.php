@@ -24,9 +24,4 @@ class ApplicationsController extends AdministrationBaseController
      * {@inheritDoc}
      */
     protected $properties = ['name', 'description', 'bool' => 'enabled'];
-
-    /**
-     * {@inheritDoc}
-     */
-    protected $propertiesSecrets = ['api_key'];
 }
