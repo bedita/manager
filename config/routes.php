@@ -256,9 +256,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:categories:save']
     );
     $routes->connect(
-        '/:object_type/categories/remove',
+        '/:object_type/categories/remove/:id',
         ['controller' => 'Modules', 'action' => 'removeCategory'],
-        ['_name' => 'modules:categories:remove']
+        ['_name' => 'modules:categories:remove', 'pass' => ['id']]
     );
 
     $routes->connect(

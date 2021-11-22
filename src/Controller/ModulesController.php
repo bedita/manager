@@ -622,7 +622,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function remove(string $id): ?Response
+    public function removeCategory(string $id): ?Response
     {
         try {
             $this->apiClient->delete(sprintf('/model/categories/%s', $id));

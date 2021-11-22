@@ -73,6 +73,7 @@ class CategoriesController extends ModelBaseController
         }
 
         $object_types = $this->Schema->objectTypesFeatures()['categorized'];
+        $object_types = array_combine($object_types, $object_types);
 
         $this->set(compact('resources', 'grouped', 'object_types'));
         $this->set('meta', (array)$response['meta']);
