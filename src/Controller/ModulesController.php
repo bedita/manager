@@ -550,7 +550,23 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $this->set('resources', (array)$response['data']);
+        $resources = [];
+        foreach ((array)$response['data'] as $category) {
+            $resources[$category['id']] = $category;
+        }
+
+        $grouped = [
+            '_' => [],
+        ];
+        foreach ($resources as $category) {
+            if (empty($category['attributes']['parent_id'])) {
+                $grouped['_'][] = $category['id'];
+            } else {
+                $grouped[$category['attributes']['parent_id']][] = $category['id'];
+            }
+        }
+
+        $this->set(compact('resources', 'grouped'));
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('schema', $this->Schema->getSchema());
@@ -568,6 +584,8 @@ class ModulesController extends AppController
      */
     public function saveCategory(): ?Response
     {
+        $this->request->allowMethod(['post']);
+
         $data = $this->request->getData();
         $id = Hash::get($data, 'id');
         unset($data['id']);

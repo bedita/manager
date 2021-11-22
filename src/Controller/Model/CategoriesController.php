@@ -12,9 +12,8 @@
  */
 namespace App\Controller\Model;
 
-use Cake\Event\Event;
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * Categories Model Controller: list, add, edit, remove categories
@@ -39,19 +38,49 @@ class CategoriesController extends ModelBaseController
     protected $singleView = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function beforeRender(Event $event): ?Response
+    public function index(): ?Response
     {
-        $features = $this->Schema->objectTypesFeatures();
-        $categorized = (array)Hash::get($features, 'categorized');
-        $filter = (array)$this->request->getQuery('filter');
-        if (!empty($filter['type'])) {
-            $categorized = [$filter['type']];
+        $this->request->allowMethod(['get']);
+        $query = $this->request->getQueryParams() + [
+            'page_size' => 500,
+        ];
+
+        try {
+            $response = $this->apiClient->get('/model/categories', $query);
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $this->set('object_types', array_values($categorized));
+        $resources = [];
+        foreach ((array)$response['data'] as $category) {
+            $resources[$category['id']] = $category;
+        }
 
-        return parent::beforeRender($event);
+        $grouped = [
+            '_' => [],
+        ];
+        foreach ($resources as $category) {
+            if (empty($category['attributes']['parent_id'])) {
+                $grouped['_'][] = $category['id'];
+            } else {
+                $grouped[$category['attributes']['parent_id']][] = $category['id'];
+            }
+        }
+
+        $object_types = $this->Schema->objectTypesFeatures()['categorized'];
+
+        $this->set(compact('resources', 'grouped', 'object_types'));
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->indexList('categories'));
+        $this->set('filter', $this->Properties->filterList('categories'));
+
+        return null;
     }
 }
