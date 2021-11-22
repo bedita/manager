@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-11-03 10:34:25 \n"
+"POT-Creation-Date: 2021-11-22 09:33:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -273,6 +273,9 @@ msgid "From"
 msgstr ""
 
 msgid "From date"
+msgstr ""
+
+msgid "Global"
 msgstr ""
 
 msgid "History"
@@ -815,34 +818,35 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:159
-#: src/Template/Layout/js/app/components/history/history.js:109
+#: src/Template/Layout/js/app/app.js:161
+#: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:160
-#: src/Template/Layout/js/app/components/history/history.js:110
+#: src/Template/Layout/js/app/app.js:162
+#: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:449
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:486
+#: src/Template/Layout/js/app/app.js:451
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:494
-#: src/Template/Layout/js/app/components/history/history.js:99
+#: src/Template/Layout/js/app/app.js:459
+#: src/Template/Layout/js/app/components/history/history.js:101
+#: src/Template/Layout/js/app/pages/admin/index.js:16
 #: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:156
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:503
+#: src/Template/Layout/js/app/app.js:468
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -859,6 +863,10 @@ msgstr ""
 #: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
+msgstr ""
+
+#: src/Template/Layout/js/app/pages/admin/index.js:14
+msgid "Remove item. Are you sure?"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/drop-upload.js:36
@@ -889,11 +897,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:194
+#: src/Template/Layout/js/app/components/filter-box.js:164
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:253
+#: src/Template/Layout/js/app/components/filter-box.js:317
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -905,12 +913,12 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:239
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:238
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:290
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:289
 msgid "Error while creating new object."
 msgstr ""
 
@@ -968,16 +976,16 @@ msgstr ""
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:56
+#: src/Template/Layout/js/app/components/history/history.js:58
 #, javascript-format
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:58
+#: src/Template/Layout/js/app/components/history/history.js:60
 msgid "by ${ name }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:98
+#: src/Template/Layout/js/app/components/history/history.js:100
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"

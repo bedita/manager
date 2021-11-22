@@ -39,6 +39,7 @@ const _vueInstance = new Vue({
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),

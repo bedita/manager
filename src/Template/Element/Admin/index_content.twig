@@ -2,6 +2,15 @@
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+{% set txtOptions = {'label': '', 'size': 40} %}
+{% set boolOptions = {
+    'label': '',
+    'type':'radio',
+    'options': [
+        { 'value': 1, 'text': __('Yes') },
+        { 'value': 0, 'text': __('No') }
+    ]
+} %}
 
 <div class="module-header">
     <header>
@@ -11,106 +20,112 @@
 
 {% element 'Modules/index_header' { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView} %}
 
-<div class="module-index">
-    <div class="list-objects">
+<admin-index inline-template>
 
-        {# list resources : table header #}
-        <nav class="table-header has-border-black">
-            <div>{{ __('Id') }}</div>
-            {% for key in properties %}
-                {% set label = key %}
-                <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
-            {% endfor %}
-            {% for key in metaColumns %}
-                <div>{{ __(key) }}</div>
-            {% endfor %}
-            {% if not readonly %}
-                <div></div>
-            {% endif %}
-        </nav>
-        {% if resources|count == 0 %}
-            <p>{{ __('Resources not available') }}</p>
-        {% endif %}
+    <div class="module-index">
+        <div class="list-objects">
 
-        {# form to create a new record #}
-        {% if not readonly %}
-            {{ Form.create(null, {
-                'id': 'form-create',
-                'url': {'_name': 'admin:save:' ~ resourceType},
-                'class': 'table-row',
-            })|raw }}
-                <div>{{ __('NEW') }}</div>
+            {# list resources : table header #}
+            <nav class="table-header has-border-black">
+                <div>{{ __('Id') }}</div>
                 {% for key in properties %}
-                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {{ Property.control(key, '', {'label': ''})|raw }}
-                    </div>
+                    {% set label = key %}
+                    <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
                 {% endfor %}
                 {% for key in metaColumns %}
-                    <div class="narrow">-</div>
+                    <div>{{ __(key) }}</div>
                 {% endfor %}
-                <div class="buttons-cell narrow">
-                    {{ Form.button( __('Create'), {
-                        'form': 'form-create',
-                        'title': __('Create' ~ ' ' ~ resourceType),
-                        'class': 'button button-text-white is-width-auto',
-                    })|raw }}
-                </div>
-            {{ Form.end()|raw }}
-        {% endif %}
-
-        {# list resources : rows #}
-        {% for resource in resources %}
-
-            {{ Form.create(null, {
-                'id': 'form-' ~ resource.id,
-                'url': {'_name': 'admin:save:' ~ resourceType},
-                'class': 'table-row',
-            })|raw }}
-                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                    {{ resource.id }}
-                </div>
-                {% for key in properties %}
-                    {% set val = resource.attributes[key] %}
-                    <div class="{{ key }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {% if readonly or resource.meta.unchangeable %}
-                            {{ Schema.format(val, schema.properties[key]) }}
-                        {% else %}
-                            {{ Property.control(key, val, {'label': ''})|raw }}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                {% for key in metaColumns %}
-                    <div class="narrow">
-                        {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
-                    </div>
-                {% endfor %}
-                {% if not readonly and not resource.meta.unchangeable %}
-                    <div class="buttons-cell narrow">
-                        {{ Form.button( __('Save'), {
-                            'form': 'form-' ~ resource.id,
-                            'title': __('Save') ~ ' ' ~ resource.attributes.name,
-                            'class': 'button button-text-white is-width-auto',
-                        })|raw }}
-
-                        {{ Form.button( __('Remove'), {
-                            'form': 'form-remove-' ~ resource.id,
-                            'title': __('Remove') ~ ' ' ~ resource.attributes.name,
-                            'class': 'button button-text-white is-width-auto',
-                        })|raw }}
-                    </div>
+                {% if not readonly %}
+                    <div></div>
                 {% endif %}
+            </nav>
+            {% if resources|count == 0 %}
+                <p>{{ __('Resources not available') }}</p>
+            {% endif %}
 
-            {{ Form.hidden('id', {'value': resource.id})|raw }}
-            {{ Form.end()|raw }}
+            {# form to create a new record #}
+            {% if not readonly %}
+                {{ Form.create(null, {
+                    'id': 'form-create',
+                    'url': {'_name': 'admin:save:' ~ resourceType},
+                    'class': 'table-row',
+                })|raw }}
+                    <div>{{ __('NEW') }}</div>
+                    {% for type, property in properties %}
+                        {% set options = type is same as ('bool') ? boolOptions|merge({'value': 1}) : txtOptions %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {{ Property.control(property, '', options)|raw }}
+                        </div>
+                    {% endfor %}
+                    {% for key in metaColumns %}
+                        <div class="narrow">-</div>
+                    {% endfor %}
+                    <div class="buttons-cell narrow">
+                        {{ Form.button( __('Create'), {
+                            'form': 'form-create',
+                            'title': __('Create' ~ ' ' ~ resourceType),
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
+                    </div>
+                {{ Form.end()|raw }}
+            {% endif %}
 
-            {{ Form.create(null, {
-                'id': 'form-remove-' ~ resource.id,
-                'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
-            })|raw }}
-            {{ Form.end()|raw }}
+            {# list resources : rows #}
+            {% for resource in resources %}
 
-        {% endfor %}
+                {{ Form.create(null, {
+                    'id': 'form-' ~ resource.id,
+                    'url': {'_name': 'admin:save:' ~ resourceType},
+                    'class': 'table-row',
+                })|raw }}
+                    <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                        {{ resource.id }}
+                    </div>
+                    {% for type,property in properties %}
+                        {% set val = resource.attributes[property] %}
+                        {% set options = type is same as ('bool') ? boolOptions|merge({'value': val}) : txtOptions %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {% if readonly or resource.meta.unchangeable %}
+                                {{ Schema.format(val, schema.properties[property]) }}
+                            {% else %}
+                                {{ Property.control(property, val, options)|raw }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% for key in metaColumns %}
+                        <div class="narrow">
+                            {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
+                        </div>
+                    {% endfor %}
+                    {% if not readonly and not resource.meta.unchangeable %}
+                        <div class="buttons-cell narrow">
+                            {{ Form.button( __('Save'), {
+                                'form': 'form-' ~ resource.id,
+                                'title': __('Save') ~ ' ' ~ resource.attributes.name,
+                                'class': 'button button-text-white is-width-auto',
+                            })|raw }}
+
+                            {{ Form.button( __('Remove'), {
+                                'form': 'form-remove-' ~ resource.id,
+                                'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                                'class': 'button button-text-white is-width-auto',
+                                '@click.prevent': 'remove',
+                            })|raw }}
+                        </div>
+                    {% endif %}
+
+                {{ Form.hidden('id', {'value': resource.id})|raw }}
+                {{ Form.end()|raw }}
+
+                {{ Form.create(null, {
+                    'id': 'form-remove-' ~ resource.id,
+                    'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
+                })|raw }}
+                {{ Form.end()|raw }}
+
+            {% endfor %}
+
+        </div>
 
     </div>
-
-</div>
+</admin-index>

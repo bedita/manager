@@ -228,46 +228,77 @@ class AdministrationBaseControllerTest extends TestCase
     }
 
     /**
-     * Test `save` method
+     * Data provider for `testSave`
      *
-     * @return void
-     * @covers ::save()
+     * @return array
      */
-    public function testSave(): void
+    public function saveProvider(): array
     {
-        $this->initRolesController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
+        return [
+            'post 400' => [
+                [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'POST',
+                    ],
+                    'params' => [
+                        'resource_type' => 'roles',
+                    ],
+                ],
+                '[400] Invalid data',
             ],
-            'params' => [
-                'resource_type' => 'roles',
+            'patch 404' => [
+                [
+                    'environment' => [
+                        'REQUEST_METHOD' => 'POST',
+                    ],
+                    'params' => [
+                        'resource_type' => 'roles',
+                    ],
+                    'post' => [
+                        'id' => 999,
+                    ],
+                ],
+                '[404] Not Found',
             ],
-        ]);
-        $response = $this->RlsController->save();
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
-        $flash = $this->RlsController->request->getSession()->read('Flash');
-        $expected = __('[400] Invalid data');
-        $message = $flash['flash'][0]['message'];
-        static::assertEquals($expected, $message);
+        ];
     }
 
     /**
      * Test `save` method
      *
      * @return void
+     * @covers ::save()
+     * @dataProvider saveProvider()
+     */
+    public function testSave(array $config, string $expected): void
+    {
+        $this->initRolesController($config);
+        $response = $this->RlsController->save();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
+        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `remove` method
+     *
+     * @return void
      * @covers ::remove()
      */
     public function testRemove(): void
     {
-        $this->initRolesController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'params' => [
-                'resource_type' => 'roles',
-            ],
-        ]);
+        $this->initRolesController(
+            [
+                'environment' => [
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'params' => [
+                    'resource_type' => 'roles',
+                ],
+            ]
+        );
         $response = $this->RlsController->remove('9999999999');
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
@@ -275,5 +306,36 @@ class AdministrationBaseControllerTest extends TestCase
         $expected = __('[404] Not Found');
         $message = $flash['flash'][0]['message'];
         static::assertEquals($expected, $message);
+    }
+
+    /**
+     * Test `endpoint` method
+     *
+     * @return void
+     * @covers ::endpoint()
+     */
+    public function testEndpoint(): void
+    {
+        $this->initRolesController(
+            [
+                'environment' => [
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'params' => [
+                    'resource_type' => 'roles',
+                ],
+            ]
+        );
+        $reflectionClass = new \ReflectionClass($this->RlsController);
+        $method = $reflectionClass->getMethod('endpoint');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->RlsController, []);
+        static::assertEquals('/roles', $actual);
+
+        $reflectionClass = new \ReflectionClass($this->AdministrationBaseController);
+        $method = $reflectionClass->getMethod('endpoint');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AdministrationBaseController, []);
+        static::assertEquals('/admin/applications', $actual);
     }
 }

@@ -6,6 +6,7 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * Administration Controller
@@ -118,8 +119,23 @@ abstract class AdministrationBaseController extends AppController
     public function save(): ?Response
     {
         $this->request->allowMethod(['post']);
+        $data = (array)$this->request->getData();
+        $id = (string)Hash::get($data, 'id');
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => $this->resourceType,
+                'attributes' => $data,
+            ],
+        ];
+        $endpoint = $this->endpoint();
         try {
-            $this->apiClient->save($this->resourceType, (array)$this->request->getData());
+            if (empty($id)) {
+                $this->apiClient->post($endpoint, json_encode($body));
+            } else {
+                $body['data']['id'] = $id;
+                $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
+            }
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -138,13 +154,28 @@ abstract class AdministrationBaseController extends AppController
     {
         $this->request->allowMethod(['post']);
         try {
-            $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
-            $this->apiClient->delete(sprintf('%s/%s', $endpoint, $id));
+            $this->apiClient->delete(sprintf('%s/%s', $this->endpoint(), $id));
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return $this->redirect(['_name' => sprintf('admin:list:%s', $this->resourceType)]);
+    }
+
+    /**
+     * Get endpoint by resource type and endpoint.
+     * Roles => /roles
+     * Other => /admin/:endpoint
+     *
+     * @return string
+     */
+    protected function endpoint(): string
+    {
+        if ($this->resourceType === 'roles') {
+            return $this->endpoint;
+        }
+
+        return sprintf('%s/%s', $this->endpoint, $this->resourceType);
     }
 }
