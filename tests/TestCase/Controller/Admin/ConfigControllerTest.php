@@ -87,6 +87,7 @@ class ConfigControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->CfgController->viewVars;
         foreach ($keys as $expectedKey) {

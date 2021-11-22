@@ -87,6 +87,7 @@ class ApplicationsControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->AppsController->viewVars;
         foreach ($keys as $expectedKey) {

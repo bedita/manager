@@ -87,6 +87,7 @@ class EndpointsControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->EndsController->viewVars;
         foreach ($keys as $expectedKey) {

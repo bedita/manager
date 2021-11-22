@@ -98,6 +98,7 @@ class RolesControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->RlsController->viewVars;
         foreach ($keys as $expectedKey) {
