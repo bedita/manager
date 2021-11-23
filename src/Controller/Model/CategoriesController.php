@@ -14,6 +14,7 @@ namespace App\Controller\Model;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * Categories Model Controller: list, add, edit, remove categories
@@ -44,7 +45,7 @@ class CategoriesController extends ModelBaseController
     {
         $this->request->allowMethod(['get']);
         $query = $this->request->getQueryParams() + [
-            'page_size' => 500,
+            'page_size' => 100,
         ];
 
         try {
@@ -53,13 +54,10 @@ class CategoriesController extends ModelBaseController
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-            return $this->redirect(['_name' => 'dashboard']);
+            return $this->redirect($this->referer());
         }
 
-        $resources = [];
-        foreach ((array)$response['data'] as $category) {
-            $resources[$category['id']] = $category;
-        }
+        $resources = (array)Hash::combine((array)$response['data'], '{n}.id', '{n}');
 
         $grouped = [
             '_' => [],
@@ -72,10 +70,11 @@ class CategoriesController extends ModelBaseController
             }
         }
 
-        $object_types = $this->Schema->objectTypesFeatures()['categorized'];
-        $object_types = array_combine($object_types, $object_types);
+        $objectTypes = $this->Schema->objectTypesFeatures()['categorized'];
+        $objectTypes = array_combine($objectTypes, $objectTypes);
 
-        $this->set(compact('resources', 'grouped', 'object_types'));
+        $this->set(compact('resources', 'grouped'));
+        $this->set('object_types', $objectTypes);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('schema', $this->Schema->getSchema());

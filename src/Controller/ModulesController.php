@@ -538,7 +538,7 @@ class ModulesController extends AppController
             'filter' => [
                 'type' => $this->objectType,
             ],
-            'page_size' => 500,
+            'page_size' => 100,
         ];
 
         try {
@@ -547,13 +547,10 @@ class ModulesController extends AppController
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-            return $this->redirect(['_name' => 'dashboard']);
+            return $this->redirect($this->referer());
         }
 
-        $resources = [];
-        foreach ((array)$response['data'] as $category) {
-            $resources[$category['id']] = $category;
-        }
+        $resources = (array)Hash::combine((array)$response['data'], '{n}.id', '{n}');
 
         $grouped = [
             '_' => [],
