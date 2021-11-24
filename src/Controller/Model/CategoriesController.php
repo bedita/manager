@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
  * Categories Model Controller: list, add, edit, remove categories
  *
  *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class CategoriesController extends ModelBaseController
@@ -39,41 +40,29 @@ class CategoriesController extends ModelBaseController
     protected $singleView = false;
 
     /**
+     * {@inheritDoc}
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Categories');
+    }
+
+    /**
      * @inheritDoc
      */
     public function index(): ?Response
     {
         $this->request->allowMethod(['get']);
-        $query = $this->request->getQueryParams() + [
-            'page_size' => 100,
-        ];
-
-        try {
-            $response = $this->apiClient->get('/model/categories', $query);
-        } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect($this->referer());
-        }
-
-        $resources = (array)Hash::combine((array)$response['data'], '{n}.id', '{n}');
-
-        $grouped = [
-            '_' => [],
-        ];
-        foreach ($resources as $category) {
-            if (empty($category['attributes']['parent_id'])) {
-                $grouped['_'][] = $category['id'];
-            } else {
-                $grouped[$category['attributes']['parent_id']][] = $category['id'];
-            }
-        }
 
         $objectTypes = $this->Schema->objectTypesFeatures()['categorized'];
         $objectTypes = array_combine($objectTypes, $objectTypes);
+        $response = $this->Categories->index(null, $this->request->getQueryParams());
+        $resources = $this->Categories->map($response);
+        $categoriesTree = $this->Categories->tree($resources);
 
-        $this->set(compact('resources', 'grouped'));
+        $this->set(compact('resources', 'categoriesTree'));
         $this->set('object_types', $objectTypes);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);

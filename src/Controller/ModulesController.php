@@ -21,6 +21,7 @@ use Psr\Log\LogLevel;
 /**
  * Modules controller: list, add, edit, remove objects
  *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
@@ -45,6 +46,7 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Categories');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -534,36 +536,11 @@ class ModulesController extends AppController
         $this->viewBuilder()->setTemplate('categories');
 
         $this->request->allowMethod(['get']);
-        $query = $this->request->getQueryParams() + [
-            'filter' => [
-                'type' => $this->objectType,
-            ],
-            'page_size' => 100,
-        ];
+        $response = $this->Categories->index($this->objectType, $this->request->getQueryParams());
+        $resources = $this->Categories->map($response);
+        $categoriesTree = $this->Categories->tree($resources);
 
-        try {
-            $response = $this->apiClient->get('/model/categories', $query);
-        } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect($this->referer());
-        }
-
-        $resources = (array)Hash::combine((array)$response['data'], '{n}.id', '{n}');
-
-        $grouped = [
-            '_' => [],
-        ];
-        foreach ($resources as $category) {
-            if (empty($category['attributes']['parent_id'])) {
-                $grouped['_'][] = $category['id'];
-            } else {
-                $grouped[$category['attributes']['parent_id']][] = $category['id'];
-            }
-        }
-
-        $this->set(compact('resources', 'grouped'));
+        $this->set(compact('resources', 'categoriesTree'));
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('schema', $this->Schema->getSchema());
@@ -583,24 +560,8 @@ class ModulesController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $data = $this->request->getData();
-        $id = Hash::get($data, 'id');
-        unset($data['id']);
-        $body = [
-            'data' => [
-                'type' => 'categories',
-                'attributes' => $data,
-            ],
-        ];
-
         try {
-            if (empty($id)) {
-                $response = $this->apiClient->post('/model/categories', json_encode($body));
-                $id = Hash::get($response, 'data.id');
-            } else {
-                $body['data']['id'] = $id;
-                $this->apiClient->patch(sprintf('/model/categories/%s', $id), json_encode($body));
-            }
+            $this->Categories->save($this->request->getData());
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -622,7 +583,7 @@ class ModulesController extends AppController
     public function removeCategory(string $id): ?Response
     {
         try {
-            $this->apiClient->delete(sprintf('/model/categories/%s', $id));
+            $this->Categories->delete($id);
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);

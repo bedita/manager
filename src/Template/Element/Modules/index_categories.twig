@@ -1,6 +1,6 @@
 <div class="categories-container">
     {# list resources : rows #}
-    {% for parent_id, categories in grouped %}
+    {% for parent_id, categories in categoriesTree %}
         <div class="categories">
             <h3>{{ parent_id == '_' ? __('Global') : resources[parent_id].attributes.label|default(resources[parent_id].attributes.name) }}</h3>
 
