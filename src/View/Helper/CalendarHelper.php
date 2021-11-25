@@ -53,6 +53,9 @@ class CalendarHelper extends Helper
      */
     public function dateRange(array $dateRange): string
     {
+        if (empty($dateRange)) {
+            return '';
+        }
         $allDay = (string)Hash::get($dateRange, 'params.all_day');
         $start = (string)Hash::get($dateRange, 'start_date');
         $end = (string)Hash::get($dateRange, 'end_date');
