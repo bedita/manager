@@ -61,28 +61,28 @@ class CalendarHelper extends Helper
         $end = (string)Hash::get($dateRange, 'end_date');
         $isInterval = $end && !$allDay;
         $html = '<div class="date-range">';
-        $html.= '<div class="date-item">';
-        $html.= $isInterval ? __('from') : __('on');
-        $html.= '<span class="date">';
-        $html.= $this->Time->format($start, 'd MMM YYYY');
+        $html .= '<div class="date-item">';
+        $html .= $isInterval ? __('from') : __('on');
+        $html .= '<span class="date">';
+        $html .= $this->Time->format($start, 'd MMM YYYY');
         if (!$allDay) {
-            $html.= '&nbsp;';
-            $html.= $this->Time->format($start, 'HH:mm');
+            $html .= '&nbsp;';
+            $html .= $this->Time->format($start, 'HH:mm');
         }
-        $html.= '</span>';
-        $html.= '</div>';
+        $html .= '</span>';
+        $html .= '</div>';
         if ($isInterval) {
-            $html.= '<div class="date-item">';
-            $html.= __('to');
-            $html.= '&nbsp;';
-            $html.= '<span class="date">';
-            $html.= $this->Time->format($end, 'd MMM YYYY');
-            $html.= '&nbsp;';
-            $html.= $this->Time->format($end, 'HH:mm');
-            $html.= '</span>';
-            $html.= '</div>';
+            $html .= '<div class="date-item">';
+            $html .= __('to');
+            $html .= '&nbsp;';
+            $html .= '<span class="date">';
+            $html .= $this->Time->format($end, 'd MMM YYYY');
+            $html .= '&nbsp;';
+            $html .= $this->Time->format($end, 'HH:mm');
+            $html .= '</span>';
+            $html .= '</div>';
         }
-        $html.= '</div>';
+        $html .= '</div>';
 
         return $html;
     }
