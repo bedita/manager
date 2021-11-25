@@ -11,6 +11,15 @@
             }
         }
 
+        .history-field {
+            border: dashed gray 1px;
+            padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+        }
+
+        .history-field > label {
+            text-decoration: underline dotted;
+        }
+
         .input.title {
             input[type=text] {
                 font-size: $font-size-llg;
