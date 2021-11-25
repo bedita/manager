@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-11-22 09:33:33 \n"
+"POT-Creation-Date: 2021-11-25 14:35:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -752,6 +752,9 @@ msgstr ""
 msgid "file name"
 msgstr ""
 
+msgid "from"
+msgstr ""
+
 msgid "id"
 msgstr ""
 
@@ -768,6 +771,9 @@ msgid "objects"
 msgstr ""
 
 msgid "objects to"
+msgstr ""
+
+msgid "on"
 msgstr ""
 
 msgid "original"
@@ -797,6 +803,9 @@ msgstr ""
 msgid "title"
 msgstr ""
 
+msgid "to"
+msgstr ""
+
 msgid "translation of"
 msgstr ""
 
@@ -818,35 +827,35 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:161
+#: src/Template/Layout/js/app/app.js:165
 #: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:162
+#: src/Template/Layout/js/app/app.js:166
 #: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:449
+#: src/Template/Layout/js/app/app.js:453
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:451
+#: src/Template/Layout/js/app/app.js:455
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:459
+#: src/Template/Layout/js/app/app.js:463
 #: src/Template/Layout/js/app/components/history/history.js:101
 #: src/Template/Layout/js/app/pages/admin/index.js:16
 #: src/Template/Layout/js/app/pages/model/index.js:261
-#: src/Template/Layout/js/app/pages/modules/index.js:156
+#: src/Template/Layout/js/app/pages/modules/index.js:157
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:468
+#: src/Template/Layout/js/app/app.js:472
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -855,7 +864,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:154
+#: src/Template/Layout/js/app/pages/modules/index.js:155
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -918,7 +927,7 @@ msgstr ""
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:289
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:293
 msgid "Error while creating new object."
 msgstr ""
 
@@ -967,6 +976,10 @@ msgstr ""
 
 #: src/Template/Layout/js/app/components/history/history-info.js:12
 msgid "date"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history-info.js:18
+msgid "Trashed"
 msgstr ""
 
 #. *
