@@ -188,10 +188,10 @@ class HistoryComponent extends Component
     public function label(string $field): string
     {
         if ($field === 'date_ranges') {
-            return __('Calendar');
+            return (string)__('Calendar');
         }
 
-        return __(Inflector::humanize($field));
+        return (string)__(Inflector::humanize($field));
     }
 
     /**
