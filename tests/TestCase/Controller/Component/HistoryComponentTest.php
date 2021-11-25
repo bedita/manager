@@ -316,4 +316,117 @@ class HistoryComponentTest extends TestCase
         $actual = $data[0];
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Data provider for `testContent`.
+     *
+     * @return array
+     */
+    public function contentDataProvider(): array
+    {
+        return [
+            'empty content' => [
+                '',
+                [],
+                null,
+                '-',
+            ],
+            'title' => [
+                'title',
+                [
+                    'properties' => [
+                        'title' => [
+                            'oneOf' => [
+                                ['type' => null],
+                                ['type' => 'string'],
+                            ],
+                            '$id' => '/properties/title',
+                            'title' => 'Title',
+                        ],
+                    ],
+                ],
+                'Dummy',
+                'Dummy',
+            ],
+            'date_ranges' => [
+                'date_ranges',
+                [],
+                [
+                    ['start_date' => '2020-10-14 12:45:00'], // start date only
+                    ['start_date' => '2020-10-14 14:15:22', 'end_date' => '2020-10-15 08:42:57'], // start + end date
+                    ['start_date' => '2020-10-14 14:15:22', 'end_date' => '2020-10-15 08:42:57', 'params' => ['all_day' => true]], // all day
+                ],
+                '<date-ranges-list inline-template><div class="index-date-ranges" :class="show-all"><div><div class="date-range"><div class="date-item">on<span class="date">14 Oct 2020&nbsp;12:45</span></div></div><div class="date-range"><div class="date-item">from<span class="date">14 Oct 2020&nbsp;14:15</span></div><div class="date-item">to&nbsp;<span class="date">15 Oct 2020&nbsp;08:42</span></div></div><div class="date-range"><div class="date-item">on<span class="date">14 Oct 2020</span></div></div></div></date-ranges-list>',
+            ],
+            'categories' => [
+                'categories',
+                [
+                    'categories' => [
+                        ['name' => 'Red'],
+                        ['name' => 'Green'],
+                        ['name' => 'Blue'],
+                    ],
+                ],
+                [
+                  ['name' => 'Green'],
+                ],
+                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" value=""/><div class="checkbox"><label for="categories-0"><input type="checkbox" name="categories[]" value="0" id="categories-0">Red</label></div><div class="checkbox"><label for="categories-1"><input type="checkbox" name="categories[]" value="1" id="categories-1">Green</label></div><div class="checkbox"><label for="categories-2"><input type="checkbox" name="categories[]" value="2" id="categories-2">Blue</label></div></div></div>',
+            ],
+        ];
+    }
+
+    /**
+     * Test `content`
+     *
+     * @param string $field The field
+     * @param array $schema The schema
+     * @param mixed $value The value
+     * @param string $expected The expected content
+     * @return void
+     * @covers ::content()
+     * @dataProvider contentDataProvider()
+     */
+    public function testContent(string $field, array $schema, $value, string $expected): void
+    {
+        $actual = $this->HistoryComponent->content($field, $schema, $value);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testLabel`.
+     *
+     * @return array
+     */
+    public function labelDataProvider(): array
+    {
+        return [
+            'empty label' => [
+                '',
+                '',
+            ],
+            'date ranges / calendar' => [
+                'date_ranges',
+                __('Calendar'),
+            ],
+            'title' => [
+                'title',
+                __('Title'),
+            ],
+        ];
+    }
+
+    /**
+     * Test `label`
+     *
+     * @param string $field The field
+     * @param string $expected The expected label
+     * @return void
+     * @covers ::label()
+     * @dataProvider labelDataProvider()
+     */
+    public function testLabel(string $field, string $expected): void
+    {
+        $actual = $this->HistoryComponent->label($field);
+        static::assertSame($expected, $actual);
+    }
 }
