@@ -218,7 +218,7 @@ class HistoryComponentTest extends TestCase
                     ],
                 ],
                 [
-                    'title' => 'Title: test history controller',
+                    'title' => '<div class="history-field"><label>Title</label>test history controller</div>',
                 ],
             ],
         ];
@@ -288,7 +288,7 @@ class HistoryComponentTest extends TestCase
                         [
                             'meta' => [
                                 'changed' => [
-                                    'lang' => 'Lang: en',
+                                    'lang' => '<div class="history-field"><label>Lang</label>en</div>',
                                 ],
                                 'application_name' => '',
                             ],
@@ -314,54 +314,6 @@ class HistoryComponentTest extends TestCase
         $test = new AppControllerTest(new ServerRequest());
         $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
         $actual = $data[0];
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Provider for `testFieldSchema` method
-     *
-     * @return array
-     */
-    public function fieldSchemaProvider(): array
-    {
-        return [
-            'first level' => [
-                ['dummy', ['dummy' => ['dummy-expected']]],
-                ['dummy-expected'],
-            ],
-            'title' => [
-                ['title', ['properties' => ['title' => ['title-expected']]]],
-                ['title-expected'],
-            ],
-            'relations' => [
-                ['relationName', ['relations' => ['relationName' => ['relationName-expected']]]],
-                ['relationName-expected'],
-            ],
-            'associations' => [
-                ['associationName', ['associations' => ['associationName' => ['associationName-expected']]]],
-                ['associationName-expected'],
-            ],
-            'not existing field' => [
-                ['not-existing', ['dummy' => ['dummy-expected']]],
-                [],
-            ],
-        ];
-    }
-
-    /**
-     * Test `fieldSchema` method
-     *
-     * @covers ::fieldSchema()
-     * @dataProvider fieldSchemaProvider()
-     * @param array $data The data for test
-     * @param mixed $expected The expected value
-     * @return void
-     */
-    public function testFieldSchema(array $data, $expected): void
-    {
-        // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
-        $actual = $test->invokeMethod($this->HistoryComponent, 'fieldSchema', [$data[0], $data[1]]);
         static::assertEquals($expected, $actual);
     }
 }
