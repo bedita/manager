@@ -81,9 +81,11 @@ class CategoriesControllerTest extends TestCase
     public function testBeforeRender(): void
     {
         $this->Categories->beforeRender(new Event('test'));
-        $categorized = $this->Categories->viewVars['categorized'];
+        $resources = $this->Categories->viewVars['resources'];
+        $categoriesTree = $this->Categories->viewVars['categoriesTree'];
         $schema = $this->Categories->viewVars['schema'];
-        static::assertTrue(is_array($categorized));
+        static::assertTrue(is_array($resources));
+        static::assertTrue(is_array($categoriesTree));
         static::assertTrue(is_array($schema));
     }
 }
