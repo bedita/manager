@@ -13,7 +13,7 @@
 
         .history-field {
             border: dashed gray 1px;
-            padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+            padding: $gutter * .5;
         }
 
         .history-field > label {
