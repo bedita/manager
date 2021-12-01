@@ -75,6 +75,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testInit(): void
     {
+        Cache::clear();
+
         // test 1: read properties and write to cache
         Configure::write('Properties.users.fastCreate', [
             'required' => ['status', 'username'],
@@ -106,6 +108,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testIndexList(): void
     {
+        Cache::clear();
+
         $index = ['legs', 'pet_name'];
         Configure::write('Properties.cats.index', $index);
 
@@ -124,6 +128,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testFilterList(): void
     {
+        Cache::clear();
+
         $filter = ['modified'];
         Configure::write('Properties.documents.filter', $filter);
 
@@ -144,6 +150,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testFiltersByType(): void
     {
+        Cache::clear();
+
         $documentsFilters = ['lang', 'categories'];
         $profilesFilters = ['modified', 'status'];
         Configure::write('Properties.documents.filter', $documentsFilters);
@@ -172,6 +180,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testRelationsList(): void
     {
+        Cache::clear();
+
         $index = ['has_food', 'is_tired', 'sleeps_with'];
         Configure::write('Properties.cats.relations', $index);
 
@@ -422,6 +432,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testViewGroups($expected, $object, string $type, array $config = []): void
     {
+        Cache::clear();
+
         if (!empty($config)) {
             Configure::write(sprintf('Properties.%s.view', $type), $config);
         }
