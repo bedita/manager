@@ -13,6 +13,8 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\PropertiesComponent;
+use App\Utility\CacheTools;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -35,8 +37,19 @@ class PropertiesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
+    public function setUp(): void
+    {
+        Cache::enable();
+
+        parent::setUp();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown(): void
     {
+        Cache::disable();
         unset($this->Properties);
 
         parent::tearDown();
@@ -52,6 +65,36 @@ class PropertiesComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $this->Properties = $registry->load(PropertiesComponent::class);
+    }
+
+    /**
+     * Test `init()` method.
+     *
+     * @return void
+     * @covers ::init()
+     */
+    public function testInit(): void
+    {
+        // test 1: read properties and write to cache
+        Configure::write('Properties.users.fastCreate', [
+            'required' => ['status', 'username'],
+            'all' => ['status', 'username', 'email'],
+        ]);
+        $this->createComponent();
+        $cacheKey = CacheTools::cacheKey('properties');
+        $config = Cache::read($cacheKey, 'default');
+        foreach (['index', 'view', 'filter', 'fastCreate'] as $key) {
+            static::assertArrayHasKey($key, $config['users']);
+        }
+
+        // test 2: changing config won't change properties, because it's cached from previous call
+        Configure::write('Properties.users.dummy', ['whatever']);
+        $this->createComponent();
+        $config = Cache::read($cacheKey, 'default');
+        foreach (['index', 'view', 'filter', 'fastCreate'] as $key) {
+            static::assertArrayHasKey($key, $config['users']);
+        }
+        static::assertArrayNotHasKey('whatever', $config['users']);
     }
 
     /**
