@@ -118,6 +118,7 @@ class CategoriesComponent extends Component
         if (!empty($type)) {
             $this->invalidateSchemaCache($type);
         }
+
         return $response;
     }
 
