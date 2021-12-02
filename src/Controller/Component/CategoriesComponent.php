@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller\Component;
 
+use App\Utility\CacheTools;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 
@@ -74,6 +76,7 @@ class CategoriesComponent extends Component
     public function save(array $data)
     {
         $id = Hash::get($data, 'id');
+        $type = Hash::get($data, 'object_type_name');
         unset($data['id']);
         $body = [
             'data' => [
@@ -84,25 +87,49 @@ class CategoriesComponent extends Component
 
         $apiClient = ApiClientProvider::getApiClient();
         $endpoint = sprintf('/model/%s', 'categories');
+        $response = null;
         if (empty($id)) {
-            return $apiClient->post($endpoint, json_encode($body));
+            $response = $apiClient->post($endpoint, json_encode($body));
+        } else {
+            $body['data']['id'] = $id;
+
+            $response = $apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
         }
 
-        $body['data']['id'] = $id;
+        if (!empty($type)) {
+            $this->invalidateSchemaCache($type);
+        }
 
-        return $apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
+        return $response;
     }
 
     /**
      * Delete a category using the `/model/` API.
      *
      * @param string|int $id The category id to delete.
+     * @param string $type The object type name of the category.
      * @return array The BEdita API response for the deleted category.
      */
-    public function delete(string $id)
+    public function delete(string $id, $type = null)
     {
         $apiClient = ApiClientProvider::getApiClient();
 
-        return $apiClient->delete(sprintf('/model/%s/%s', 'categories', $id));
+        $response = $apiClient->delete(sprintf('/model/%s/%s', 'categories', $id));
+        if (!empty($type)) {
+            $this->invalidateSchemaCache($type);
+        }
+        return $response;
+    }
+
+    /**
+     * Invalidate schema cache for forms.
+     *
+     * @param string $type The object type name of the category.
+     * @return void
+     */
+    private function invalidateSchemaCache(string $type): void
+    {
+        $key = CacheTools::cacheKey($type);
+        Cache::delete($key, SchemaComponent::CACHE_CONFIG);
     }
 }

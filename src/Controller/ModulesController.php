@@ -583,7 +583,8 @@ class ModulesController extends AppController
     public function removeCategory(string $id): ?Response
     {
         try {
-            $this->Categories->delete($id);
+            $type = $this->request->getData('object_type_name');
+            $this->Categories->delete($id, $type);
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
