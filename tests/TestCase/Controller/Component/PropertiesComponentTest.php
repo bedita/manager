@@ -13,6 +13,8 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\PropertiesComponent;
+use App\Utility\CacheTools;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -35,8 +37,19 @@ class PropertiesComponentTest extends TestCase
     /**
      * {@inheritDoc}
      */
+    public function setUp(): void
+    {
+        Cache::enable();
+
+        parent::setUp();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown(): void
     {
+        Cache::disable();
         unset($this->Properties);
 
         parent::tearDown();
@@ -55,6 +68,38 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `init()` method.
+     *
+     * @return void
+     * @covers ::init()
+     */
+    public function testInit(): void
+    {
+        Cache::clear();
+
+        // test 1: read properties and write to cache
+        Configure::write('Properties.users.fastCreate', [
+            'required' => ['status', 'username'],
+            'all' => ['status', 'username', 'email'],
+        ]);
+        $this->createComponent();
+        $cacheKey = CacheTools::cacheKey('properties');
+        $config = Cache::read($cacheKey, 'default');
+        foreach (['index', 'view', 'filter', 'fastCreate'] as $key) {
+            static::assertArrayHasKey($key, $config['users']);
+        }
+
+        // test 2: changing config won't change properties, because it's cached from previous call
+        Configure::write('Properties.users.dummy', ['whatever']);
+        $this->createComponent();
+        $config = Cache::read($cacheKey, 'default');
+        foreach (['index', 'view', 'filter', 'fastCreate'] as $key) {
+            static::assertArrayHasKey($key, $config['users']);
+        }
+        static::assertArrayNotHasKey('whatever', $config['users']);
+    }
+
+    /**
      * Test `indexList()` method.
      *
      * @return void
@@ -63,6 +108,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testIndexList(): void
     {
+        Cache::clear();
+
         $index = ['legs', 'pet_name'];
         Configure::write('Properties.cats.index', $index);
 
@@ -81,6 +128,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testFilterList(): void
     {
+        Cache::clear();
+
         $filter = ['modified'];
         Configure::write('Properties.documents.filter', $filter);
 
@@ -101,6 +150,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testFiltersByType(): void
     {
+        Cache::clear();
+
         $documentsFilters = ['lang', 'categories'];
         $profilesFilters = ['modified', 'status'];
         Configure::write('Properties.documents.filter', $documentsFilters);
@@ -129,6 +180,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testRelationsList(): void
     {
+        Cache::clear();
+
         $index = ['has_food', 'is_tired', 'sleeps_with'];
         Configure::write('Properties.cats.relations', $index);
 
@@ -379,6 +432,8 @@ class PropertiesComponentTest extends TestCase
      */
     public function testViewGroups($expected, $object, string $type, array $config = []): void
     {
+        Cache::clear();
+
         if (!empty($config)) {
             Configure::write(sprintf('Properties.%s.view', $type), $config);
         }
