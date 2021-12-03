@@ -22,6 +22,26 @@ class CacheControllerTest extends TestCase
     public $Cache;
 
     /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
+    {
+        Cache::enable();
+        parent::setUp();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        unset($this->Cache);
+        Cache::disable();
+
+        parent::tearDown();
+    }
+
+    /**
      * Test clear
      *
      * @return void
