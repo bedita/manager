@@ -531,7 +531,7 @@ class ModulesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function listCategories()
+    public function listCategories(): ?Response
     {
         $this->viewBuilder()->setTemplate('categories');
 

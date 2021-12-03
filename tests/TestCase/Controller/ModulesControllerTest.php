@@ -18,9 +18,7 @@ use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
 
 /**
  * Sample controller wrapper, to add useful methods for test
@@ -968,5 +966,93 @@ class ModulesControllerTest extends BaseControllerTest
         foreach ($expected as $varName) {
             static::assertArrayHasKey($varName, $this->controller->viewVars);
         }
+    }
+
+    /**
+     * Test `listCategories`.
+     *
+     * @return void
+     * @covers ::listCategories()
+     */
+    public function testListCategories(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $result = $this->controller->listCategories();
+
+        // verify response status code and type
+        static::assertNull($result);
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+
+        // verify expected vars in view
+        $expected = ['resources', 'roots', 'categoriesTree', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
+        $this->assertExpectedViewVars($expected);
+    }
+
+    /**
+     * Test `saveCategory`.
+     *
+     * @return void
+     * @covers ::saveCategory()
+     */
+    public function testSaveCategory(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // exception, flash message
+        $result = $this->controller->saveCategory([]);
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+        $flash = $this->controller->request->getSession()->read('Flash');
+        $expected = '[400] Invalid data';
+        $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `removeCategory`.
+     *
+     * @return void
+     * @covers ::removeCategory()
+     */
+    public function testRemoveCategory(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // exception, flash message
+        $result = $this->controller->removeCategory('999');
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+        $flash = $this->controller->request->getSession()->read('Flash');
+        $expected = '[404] Not Found';
+        $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
     }
 }
