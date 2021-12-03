@@ -102,6 +102,7 @@ class PropertiesComponent extends Component
         $properties = Cache::read($cacheKey, 'default');
         if (!empty($properties)) {
             $this->setConfig('Properties', $properties);
+
             return;
         }
 
