@@ -77,9 +77,8 @@ class CategoriesComponent extends Component
     {
         $roots = ['' => '-'];
         foreach ($map as $category) {
-            $label = empty($category['attributes']['label']) ? $category['attributes']['name'] : $category['attributes']['label'];
             if (empty($category['attributes']['parent_id'])) {
-                $roots[$category['id']] = $label;
+                $roots[$category['id']] = empty($category['attributes']['label']) ? $category['attributes']['name'] : $category['attributes']['label'];
             }
         }
 
