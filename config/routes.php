@@ -122,6 +122,11 @@ Router::scope('/', function (RouteBuilder $routes) {
                 'remove:' . $controller
             )->setPass(['id']);
         }
+        $routes->get(
+            "/cache",
+            ['controller' => 'Cache', 'action' => 'clear'],
+            'cache:clear'
+        );
     });
 
     // Profile.
