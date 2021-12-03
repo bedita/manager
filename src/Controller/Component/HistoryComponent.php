@@ -2,15 +2,20 @@
 namespace App\Controller\Component;
 
 use App\Utility\Applications;
+use App\View\Helper\CalendarHelper;
+use App\View\Helper\CategoriesHelper;
 use App\View\Helper\SchemaHelper;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
-use Cake\View\Helper\FormHelper;
 
 /**
  * History component
+ *
+ * @property \App\View\Helper\CalendarHelper $Calendar
+ * @property \App\View\Helper\CategoriesHelper $Categories
+ * @property \App\View\Helper\SchemaHelper $Schema
  */
 class HistoryComponent extends Component
 {
@@ -22,28 +27,15 @@ class HistoryComponent extends Component
     protected $key = 'history.%s.attributes';
 
     /**
-     * Form Helper
-     *
-     * @var \Cake\View\Helper\FormHelper
-     */
-    protected $FormHelper = null;
-
-    /**
-     * Schema Helper
-     *
-     * @var \App\View\Helper\SchemaHelper
-     */
-    protected $SchemaHelper = null;
-
-    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
     public function initialize(array $config)
     {
         $view = new \Cake\View\View();
-        $this->SchemaHelper = new SchemaHelper($view);
-        $this->FormHelper = new FormHelper($view);
+        $this->Calendar = new CalendarHelper($view);
+        $this->Categories = new CategoriesHelper($view);
+        $this->Schema = new SchemaHelper($view);
 
         parent::initialize($config);
     }
@@ -176,8 +168,9 @@ class HistoryComponent extends Component
             $changed = Hash::get($history, 'meta.changed');
             $formatted = [];
             foreach ($changed as $field => $value) {
-                $fieldSchema = $this->fieldSchema($field, $schema);
-                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
+                $label = $this->label($field);
+                $content = $this->content($field, $schema, $value);
+                $formatted[$field] = sprintf('<div class="history-field"><label>%s</label>%s</div>', $label, $content);
             }
             $history['meta']['changed'] = $formatted;
             $applicationId = (string)Hash::get($history, 'meta.application_id');
@@ -187,23 +180,48 @@ class HistoryComponent extends Component
     }
 
     /**
-     * Schema by field
+     * Get label by field
      *
      * @param string $field The field
-     * @param array $schema The schema
-     * @return array
+     * @return string
      */
-    private function fieldSchema(string $field, array $schema): array
+    public function label(string $field): string
     {
-        if (array_key_exists($field, $schema)) {
-            return (array)$schema[$field];
-        }
-        foreach (['properties', 'relations', 'associations'] as $key) {
-            if (Hash::check($schema, sprintf('%s.%s', $key, $field))) {
-                return (array)Hash::get($schema, sprintf('%s.%s', $key, $field));
-            }
+        if ($field === 'date_ranges') {
+            return (string)__('Calendar');
         }
 
-        return [];
+        return (string)__(Inflector::humanize($field));
+    }
+
+    /**
+     * Get content by field, schema and value
+     *
+     * @param string $field The field
+     * @param array $schema The object schema
+     * @param mixed $value The value
+     * @return string
+     */
+    public function content(string $field, array $schema, $value): string
+    {
+        if ($field === 'date_ranges') {
+            return sprintf(
+                '<date-ranges-list inline-template><div class="index-date-ranges" :class="show-all"><div>%s</div></date-ranges-list>',
+                $this->Calendar->list($value)
+            );
+        }
+        if ($field === 'categories') {
+            $this->Categories->getView()->set('schema', $schema);
+
+            return $this->Categories->control('categories', $value);
+        }
+        $fieldSchema = (array)Hash::get($schema, sprintf('properties.%s', $field));
+
+        $content = $this->Schema->format($value, $fieldSchema);
+        if (empty($content)) {
+            return '-';
+        }
+
+        return $content;
     }
 }

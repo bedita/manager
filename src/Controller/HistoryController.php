@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * History Controller
