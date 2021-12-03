@@ -19,7 +19,7 @@ class CategoriesComponent extends Component
      * @param array|null $options Query options.
      * @return array The BEdita API response for the categories list.
      */
-    public function index(?string $objectType = null, ?array $options = [])
+    public function index(?string $objectType = null, ?array $options = []): array
     {
         $apiClient = ApiClientProvider::getApiClient();
 
@@ -40,9 +40,9 @@ class CategoriesComponent extends Component
      * @param array $response The BEdita API response for the categories list.
      * @return array A map with the category ids as keys and the category attributes as values.
      */
-    public function map(?array $response)
+    public function map(?array $response): array
     {
-        return (array)Hash::combine((array)$response['data'], '{n}.id', '{n}');
+        return (array)Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoriesComponent extends Component
      * @param array $map The categories map returned by the map function.
      * @return array The categories tree.
      */
-    public function tree(?array $map)
+    public function tree(?array $map): array
     {
         $tree = [
             '_' => [],
@@ -73,7 +73,7 @@ class CategoriesComponent extends Component
      * @param array $map The categories map returned by the map function.
      * @return array The list of available roots.
      */
-    public function getAvailableRoots(?array $map)
+    public function getAvailableRoots(?array $map): array
     {
         $roots = ['' => '-'];
         foreach ($map as $category) {
@@ -89,9 +89,9 @@ class CategoriesComponent extends Component
      * Save a category using the `/model/` API.
      *
      * @param array $data Data to save.
-     * @return array The BEdita API response for the saved category.
+     * @return array|null The BEdita API response for the saved category.
      */
-    public function save(array $data)
+    public function save(array $data): ?array
     {
         $id = Hash::get($data, 'id');
         $type = Hash::get($data, 'object_type_name');
@@ -104,7 +104,7 @@ class CategoriesComponent extends Component
         ];
 
         $apiClient = ApiClientProvider::getApiClient();
-        $endpoint = sprintf('/model/%s', 'categories');
+        $endpoint = '/model/categories';
         $response = null;
         if (empty($id)) {
             $response = $apiClient->post($endpoint, json_encode($body));
@@ -126,9 +126,9 @@ class CategoriesComponent extends Component
      *
      * @param string|int $id The category id to delete.
      * @param string $type The object type name of the category.
-     * @return array The BEdita API response for the deleted category.
+     * @return array|null The BEdita API response for the deleted category.
      */
-    public function delete(string $id, $type = null)
+    public function delete(string $id, $type = null): ?array
     {
         $apiClient = ApiClientProvider::getApiClient();
 
