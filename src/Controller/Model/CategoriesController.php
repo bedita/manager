@@ -60,9 +60,10 @@ class CategoriesController extends ModelBaseController
         $objectTypes = array_combine($objectTypes, $objectTypes);
         $response = $this->Categories->index(null, $this->request->getQueryParams());
         $resources = $this->Categories->map($response);
+        $roots = $this->Categories->getAvailableRoots($resources);
         $categoriesTree = $this->Categories->tree($resources);
 
-        $this->set(compact('resources', 'categoriesTree'));
+        $this->set(compact('resources', 'roots', 'categoriesTree'));
         $this->set('object_types', $objectTypes);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);

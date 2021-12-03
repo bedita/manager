@@ -538,9 +538,10 @@ class ModulesController extends AppController
         $this->request->allowMethod(['get']);
         $response = $this->Categories->index($this->objectType, $this->request->getQueryParams());
         $resources = $this->Categories->map($response);
+        $roots = $this->Categories->getAvailableRoots($resources);
         $categoriesTree = $this->Categories->tree($resources);
 
-        $this->set(compact('resources', 'categoriesTree'));
+        $this->set(compact('resources', 'roots', 'categoriesTree'));
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('schema', $this->Schema->getSchema());

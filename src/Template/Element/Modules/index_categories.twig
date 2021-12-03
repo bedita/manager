@@ -8,11 +8,13 @@
                 {# list resources : table header #}
                 <nav class="table-header has-border-black">
                     {% for prop in properties %}
-                        {% set label = prop %}
-                        {% if prop == 'object_type_name' %}
-                            {% set label = 'type' %}
+                        {% if prop != 'parent_id' %}
+                            {% set label = prop %}
+                            {% if prop == 'object_type_name' %}
+                                {% set label = 'type' %}
+                            {% endif %}
+                            <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
                         {% endif %}
-                        <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
                     {% endfor %}
                     <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
                     <div></div>
@@ -97,7 +99,9 @@
             <nav class="table-header has-border-black">
                 {% for prop in properties %}
                     {% set label = prop %}
-                    {% if prop == 'object_type_name' %}
+                    {% if prop == 'parent_id' %}
+                        {% set label = 'parent' %}
+                    {% elseif prop == 'object_type_name' %}
                         {% set label = 'type' %}
                     {% endif %}
                     <div>{{ __(label)|humanize }}</div>
@@ -113,14 +117,16 @@
 
             {% for prop in properties %}
                 <div class="{{ prop }}-cell">
-                    {% if prop == 'object_type_name' %}
+                    {% if prop == 'parent_id' %}
+                        {# categoriesTree #}
+                        {{ Form.select('parent_id', roots)|raw }}
+                    {% elseif prop == 'object_type_name' %}
                         {% if object_types|count > 1 %}
                             {{ Form.select('object_type_name', object_types)|raw }}
                         {% else %}
                             {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
                             {{ object_types.0 }}
                         {% endif %}
-
                     {% elseif prop == 'name' or prop == 'label' %}
                         {{ Form.text(prop, {
                             'type': 'text',

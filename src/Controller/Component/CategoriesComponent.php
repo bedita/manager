@@ -68,6 +68,25 @@ class CategoriesComponent extends Component
     }
 
     /**
+     * Get an id/label map of available category roots.
+     *
+     * @param array $map The categories map returned by the map function.
+     * @return array The list of available roots.
+     */
+    public function getAvailableRoots(?array $map)
+    {
+        $roots = ['' => '-'];
+        foreach ($map as $category) {
+            $label = empty($category['attributes']['label']) ? $category['attributes']['name'] : $category['attributes']['label'];
+            if (empty($category['attributes']['parent_id'])) {
+                $roots[$category['id']] = $label;
+            }
+        }
+
+        return $roots;
+    }
+
+    /**
      * Save a category using the `/model/` API.
      *
      * @param array $data Data to save.
