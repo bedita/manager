@@ -7,3 +7,5 @@
         {% do _view.append('module-links', Html.link(__(action|underscore|humanize), {'_name': 'admin:list:' ~ action}, {})|raw) %}
     {% endif %}
 {% endfor %}
+
+{% do _view.append('module-links', '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-outlined">' ~ __('Clear cache') ~ '</a>') %}
