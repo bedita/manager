@@ -68,6 +68,8 @@ class CategoriesComponentTest extends TestCase
      */
     public function testIndex(): void
     {
+        $safeClient = ApiClientProvider::getApiClient();
+
         // mock api /model/categories
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -91,6 +93,9 @@ class CategoriesComponentTest extends TestCase
         $expected = ['page_size' => 100] + $options;
         $actual = $this->Categories->index('documents', $options);
         static::assertEquals($expected, $actual);
+
+        // restore api client
+        ApiClientProvider::setApiClient($safeClient);
     }
 
     /**
@@ -188,6 +193,8 @@ class CategoriesComponentTest extends TestCase
      */
     public function testSave(): void
     {
+        $safeClient = ApiClientProvider::getApiClient();
+
         Cache::enable();
 
         // test invalidate schema too
@@ -225,6 +232,9 @@ class CategoriesComponentTest extends TestCase
         static::assertEmpty($cached);
 
         Cache::disable();
+
+        // restore api client
+        ApiClientProvider::setApiClient($safeClient);
     }
 
     /**
@@ -235,6 +245,8 @@ class CategoriesComponentTest extends TestCase
      */
     public function testDelete(): void
     {
+        $safeClient = ApiClientProvider::getApiClient();
+
         Cache::enable();
 
         // test invalidate schema too
@@ -256,5 +268,8 @@ class CategoriesComponentTest extends TestCase
         static::assertEmpty($cached);
 
         Cache::disable();
+
+        // restore api client
+        ApiClientProvider::setApiClient($safeClient);
     }
 }

@@ -12,13 +12,10 @@
  */
 namespace App\Controller\Model;
 
-use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * Categories Model Controller: list, add, edit, remove categories
- *
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\PropertiesComponent $Properties

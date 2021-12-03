@@ -89,12 +89,13 @@ class CategoriesControllerTest extends TestCase
     }
 
     /**
-     * Test `beforeRender` method
+     * Test `index` method
      *
-     * @covers ::beforeRender()
+     * @covers ::initialize()
+     * @covers ::index()
      * @return void
      */
-    public function testView(): void
+    public function testIndex(): void
     {
         $this->setupController();
         $this->Categories->index();
