@@ -30,33 +30,35 @@
                         })|raw }}
 
                             {% for prop in properties %}
-                                {% set propVal = resource.attributes[prop] %}
+                                {% if prop != 'parent_id' %}
+                                    {% set propVal = resource.attributes[prop] %}
 
-                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                                    {% if prop == 'object_type_name' %}
-                                        <span class="tag has-background-module-{{ propVal }}">{{ propVal }}</span>
-                                        {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
+                                    <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                        {% if prop == 'object_type_name' %}
+                                            <span class="tag has-background-module-{{ propVal }}">{{ propVal }}</span>
+                                            {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
 
-                                    {% elseif prop == 'name' or prop == 'label' %}
+                                        {% elseif prop == 'name' or prop == 'label' %}
 
-                                        {{ Form.text(prop, {
-                                            'type': 'text',
-                                            'autocomplete': 'off',
-                                            'autocorrect': 'off',
-                                            'autocapitalize': 'off',
-                                            'value': propVal,
-                                        }) | raw }}
+                                            {{ Form.text(prop, {
+                                                'type': 'text',
+                                                'autocomplete': 'off',
+                                                'autocorrect': 'off',
+                                                'autocapitalize': 'off',
+                                                'value': propVal,
+                                            }) | raw }}
 
-                                    {% elseif prop == 'enabled' %}
+                                        {% elseif prop == 'enabled' %}
 
-                                        {{ Form.checkbox(prop, {
-                                            'checked': propVal,
-                                        })|raw }}
+                                            {{ Form.checkbox(prop, {
+                                                'checked': propVal,
+                                            })|raw }}
 
-                                    {% else %}
-                                        {{ Schema.format(propVal, schema.properties[prop]) }}
-                                    {% endif %}
-                                </div>
+                                        {% else %}
+                                            {{ Schema.format(propVal, schema.properties[prop]) }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                             <div class="narrow"> {{ resource.id }}</div>
                             <div class="buttons-cell narrow">
