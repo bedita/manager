@@ -164,7 +164,6 @@ class CategoriesComponentTest extends TestCase
         $actual = $this->Categories->getAvailableRoots($map);
         static::assertEquals($expected, $actual);
 
-
         // not empty map
         $map = [
             ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
