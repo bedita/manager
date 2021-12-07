@@ -53,9 +53,17 @@
             {% do _view.append('module-buttons',
                 Html.link(__('Create new'),
                     {'_name': 'modules:create', 'object_type': objectType},
-                    {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                    {'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name}
                 )|raw
             ) %}
         {% endif %}
+
+        {% do _view.append('module-buttons',
+            Html.link(__('Categories'),
+                {'_name': 'modules:categories:index', 'object_type': objectType},
+                {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+            )|raw
+        ) %}
+
     </div> {# end module-content #}
 </modules-index>

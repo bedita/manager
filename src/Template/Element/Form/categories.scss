@@ -1,12 +1,23 @@
 .categories-container {
     .categories {
-        margin-top: $gutter;
+        margin: $gutter 0;
+
         .select {
             columns: 2 auto;
         }
+
         h3 {
             font-weight: bold;
             text-transform: uppercase;
+            margin: 0;
+        }
+
+        + .categories {
+            margin-top: $gutter * 2;
+
+            &:last-child {
+                margin-bottom: $gutter * 4;
+            }
         }
     }
 }

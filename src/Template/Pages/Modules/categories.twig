@@ -1,0 +1,26 @@
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+<div class="module-header">
+    <header>
+        <h1>{{ __('Categories') }}</h1>
+    </header>
+</div>
+
+{% element 'Modules/index_header' %}
+
+<div class="module-index">
+    {% element 'Modules/index_categories' {
+        'saveAction': { '_name': 'modules:categories:save', 'object_type': objectType },
+        'removeAction': { '_name': 'modules:categories:remove', 'object_type': objectType },
+    } %}
+
+    {% do _view.append('module-buttons',
+        Html.link(__('List'),
+            {
+                '_name': 'modules:list',
+                'object_type': objectType
+            },
+            {'class': 'button button-outlined'}
+        )
+    ) %}
+</div>

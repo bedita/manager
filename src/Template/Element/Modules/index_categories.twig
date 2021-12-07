@@ -1,0 +1,159 @@
+<div class="categories-container">
+    {# list resources : rows #}
+    {% for parent_id, categories in categoriesTree %}
+        <div class="categories">
+            <h3>{{ parent_id == '_' ? __('Global') : resources[parent_id].attributes.label|default(resources[parent_id].attributes.name) }}</h3>
+
+            <div class="list-objects">
+                {# list resources : table header #}
+                <nav class="table-header has-border-black">
+                    {% for prop in properties %}
+                        {% set label = prop %}
+                        {% if prop == 'parent_id' %}
+                            {% set label = 'parent' %}
+                        {% elseif prop == 'object_type_name' %}
+                            {% set label = 'type' %}
+                        {% endif %}
+                        <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
+                    {% endfor %}
+                    <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+                    <div></div>
+                </nav>
+                {% for category_id in categories %}
+                    {% if (parent_id == '_' or categories[category_id] is empty) %}
+                        {% set resource = resources[category_id] %}
+
+                        {{ Form.create(null, {
+                            'url': saveAction,
+                            'id': 'form-' ~ resource.id,
+                            'class': 'table-row',
+                        })|raw }}
+
+                            {% for prop in properties %}
+                                {% set propVal = resource.attributes[prop] %}
+
+                                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                    {% if prop == 'parent_id' %}
+
+                                        {{ Form.select('parent_id', roots|filter((label, id) => id != resource.id), { value: propVal })|raw }}
+
+                                    {% elseif prop == 'object_type_name' %}
+
+                                        <span class="tag has-background-module-{{ propVal }}">{{ propVal }}</span>
+                                        {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
+
+                                    {% elseif prop == 'name' or prop == 'label' %}
+
+                                        {{ Form.text(prop, {
+                                            'type': 'text',
+                                            'autocomplete': 'off',
+                                            'autocorrect': 'off',
+                                            'autocapitalize': 'off',
+                                            'value': propVal,
+                                        }) | raw }}
+
+                                    {% elseif prop == 'enabled' %}
+
+                                        {{ Form.checkbox(prop, {
+                                            'checked': propVal,
+                                        })|raw }}
+
+                                    {% else %}
+                                        {{ Schema.format(propVal, schema.properties[prop]) }}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <div class="narrow"> {{ resource.id }}</div>
+                            <div class="buttons-cell narrow">
+                                {% set buttonClasses = 'button button-text-white is-width-auto' %}
+
+                                {{ Form.button( __('Save'),
+                                    {
+                                        'form': 'form-' ~ resource.id,
+                                        'title': __('Save') ~ resource.attributes.name,
+                                        'class': buttonClasses,
+                                    })|raw }}
+
+                                {{ Form.button(__('Remove'), {
+                                    'form': 'form-remove-' ~ resource.id,
+                                    'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                                    'class': buttonClasses,
+                                })|raw }}
+                            </div>
+
+                        {{ Form.hidden('id', {'value': resource.id})|raw }}
+                        {{ Form.end()|raw }}
+
+                        {{ Form.create(null, {
+                            'id': 'form-remove-' ~ resource.id,
+                            'url': removeAction + { 'id': resource.id },
+                        })|raw }}
+                            {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
+                        {{ Form.end()|raw }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {# Create new category #}
+    <div class="categories">
+        <h3>{{ __('Create a new category') }}</h3>
+
+        <div class="list-objects">
+            <nav class="table-header has-border-black">
+                {% for prop in properties %}
+                    {% set label = prop %}
+                    {% if prop == 'parent_id' %}
+                        {% set label = 'parent' %}
+                    {% elseif prop == 'object_type_name' %}
+                        {% set label = 'type' %}
+                    {% endif %}
+                    <div>{{ __(label)|humanize }}</div>
+                {% endfor %}
+                <div></div>
+            </nav>
+
+            {{ Form.create(null, {
+                'id': 'form-create',
+                'url': saveAction,
+                'class': 'table-row',
+            })|raw }}
+
+            {% for prop in properties %}
+                <div class="{{ prop }}-cell">
+                    {% if prop == 'parent_id' %}
+                        {{ Form.select('parent_id', roots)|raw }}
+                    {% elseif prop == 'object_type_name' %}
+                        {% if object_types|count > 1 %}
+                            {{ Form.select('object_type_name', object_types)|raw }}
+                        {% else %}
+                            {{ Form.hidden('object_type_name', { value: object_types.0 })|raw }}
+                            {{ object_types.0 }}
+                        {% endif %}
+                    {% elseif prop == 'name' or prop == 'label' %}
+                        {{ Form.text(prop, {
+                            'type': 'text',
+                            'autocomplete': 'off',
+                            'autocorrect': 'off',
+                            'autocapitalize': 'off',
+                        }) | raw }}
+                     {% elseif prop == 'enabled' %}
+                        {{ Form.checkbox(prop, {
+                            'checked': 1,
+                        })|raw }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="buttons-cell narrow">
+                {% set buttonClasses = 'button button-text-white is-width-auto' %}
+                <button
+                    title="{{ __('Create') }} {{ resource.attributes.name }}"
+                    class="{{ buttonClasses }}">{{ __('Create') }}</button>
+            </div>
+
+            {{ Form.end()|raw }}
+        </div>
+    </div>
+</div>

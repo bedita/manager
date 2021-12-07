@@ -250,6 +250,21 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
     );
+    $routes->connect(
+        '/:object_type/categories',
+        ['controller' => 'Modules', 'action' => 'listCategories'],
+        ['_name' => 'modules:categories:index']
+    );
+    $routes->connect(
+        '/:object_type/categories/save',
+        ['controller' => 'Modules', 'action' => 'saveCategory'],
+        ['_name' => 'modules:categories:save']
+    );
+    $routes->connect(
+        '/:object_type/categories/remove/:id',
+        ['controller' => 'Modules', 'action' => 'removeCategory'],
+        ['_name' => 'modules:categories:remove', 'pass' => ['id']]
+    );
 
     $routes->connect(
         '/:object_type/view/:id',

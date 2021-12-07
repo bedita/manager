@@ -143,7 +143,7 @@ class Control
             function ($category) {
                 return [
                     'value' => $category['name'],
-                    'text' => $category['label'],
+                    'text' => empty($category['label']) ? $category['name'] : $category['label'],
                 ];
             },
             $categories

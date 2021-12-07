@@ -12,14 +12,12 @@
  */
 namespace App\Controller\Model;
 
-use Cake\Event\Event;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * Categories Model Controller: list, add, edit, remove categories
  *
- *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class CategoriesController extends ModelBaseController
@@ -41,19 +39,35 @@ class CategoriesController extends ModelBaseController
     /**
      * {@inheritDoc}
      */
-    public function beforeRender(Event $event): ?Response
+    public function initialize(): void
     {
-        $features = $this->Schema->objectTypesFeatures();
-        $categorized = (array)Hash::get($features, 'categorized');
-        $schema = $this->Schema->getSchema();
-        $schema['properties']['type']['enum'] = $categorized;
-        $filter = (array)$this->request->getQuery('filter');
-        if (!empty($filter['type'])) {
-            $categorized = [$filter['type']];
-        }
-        $categorized = array_combine($categorized, $categorized);
-        $this->set(compact('categorized', 'schema'));
+        parent::initialize();
 
-        return parent::beforeRender($event);
+        $this->loadComponent('Categories');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function index(): ?Response
+    {
+        $this->request->allowMethod(['get']);
+
+        $objectTypes = $this->Schema->objectTypesFeatures()['categorized'];
+        $objectTypes = array_combine($objectTypes, $objectTypes);
+        $response = $this->Categories->index(null, $this->request->getQueryParams());
+        $resources = $this->Categories->map($response);
+        $roots = $this->Categories->getAvailableRoots($resources);
+        $categoriesTree = $this->Categories->tree($resources);
+
+        $this->set(compact('resources', 'roots', 'categoriesTree'));
+        $this->set('object_types', $objectTypes);
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->indexList('categories'));
+        $this->set('filter', $this->Properties->filterList('categories'));
+
+        return null;
     }
 }
