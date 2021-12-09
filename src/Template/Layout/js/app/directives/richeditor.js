@@ -98,6 +98,7 @@ export default {
                         'code',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
+                    relative_urls : false,
                 });
 
                 element.editor = editor;
