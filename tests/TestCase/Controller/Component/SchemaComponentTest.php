@@ -17,7 +17,6 @@ use Cake\TestSuite\TestCase;
  */
 class SchemaComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *

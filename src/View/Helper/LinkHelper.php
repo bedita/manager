@@ -26,7 +26,6 @@ use Cake\View\Helper;
  */
 class LinkHelper extends Helper
 {
-
     /**
      * List of helpers used by this helper
      *

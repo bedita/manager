@@ -30,7 +30,6 @@ use Cake\Utility\Hash;
  */
 class AppController extends Controller
 {
-
     /**
      * BEdita4 API client
      *

@@ -24,7 +24,6 @@ use Cake\View\View;
  */
 class CalendarHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *
