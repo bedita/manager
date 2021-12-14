@@ -80,6 +80,12 @@ class AdminHelperTest extends TestCase
                 '1',
                 '<div class="input select"><select name="applications" id="applications"><option value="">No application</option><option value="1" selected="selected">Dummy app</option><option value="2">Another dummy app</option></select></div>',
             ],
+            'applications value not null' => [
+                'default',
+                'dummy',
+                'something',
+                '<div class="input text"><input type="text" name="dummy" size="40" id="dummy" value="something"/></div>',
+            ],
         ];
     }
 
@@ -94,6 +100,7 @@ class AdminHelperTest extends TestCase
      *
      * @dataProvider controlProvider()
      * @covers ::control()
+     * @covers ::initialize()
      */
     public function testControl(string $type, string $property, $value, string $expected = ''): void
     {
