@@ -56,7 +56,7 @@ class AdminHelper extends Helper
                 'options' => [
                     ['value' => 1, 'text' => __('Yes')],
                     ['value' => 0, 'text' => __('No')],
-                ]
+                ],
             ],
             'json' => [
                 'label' => false,
