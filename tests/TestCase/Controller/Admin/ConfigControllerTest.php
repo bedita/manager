@@ -108,6 +108,6 @@ class ConfigControllerTest extends TestCase
         $event = $this->CfgController->dispatchEvent('Controller.beforeFilter');
         $this->CfgController->beforeFilter($event);
         $viewVars = (array)$this->CfgController->viewVars;
-        static::assertEquals(['' => __('No application'), 0 => 'default-app', 1 => 'manager'], $viewVars['applications']);
+        static::assertEquals(['' => __('No application'), 1 => 'default-app', 2 => 'manager'], $viewVars['applications']);
     }
 }
