@@ -36,7 +36,7 @@ class ConfigController extends AdministrationBaseController
     {
         parent::beforeFilter($event);
         $response = $this->apiClient->get('/admin/applications', ['filter' => ['enabled' => 1]]);
-        $applications = array_merge(
+        $applications = ['' => __('No application')] + Hash::combine($response['data'], '{n}.id', '{n}.attributes.name');
             ['' => __('No application')],
             (array)Hash::combine($response['data'], '{n}.id', '{n}.attributes.name')
         );
