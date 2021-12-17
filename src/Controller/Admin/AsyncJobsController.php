@@ -18,6 +18,11 @@ class AsyncJobsController extends AdministrationBaseController
     /**
      * {@inheritDoc}
      */
+    protected $deleteonly = true;
+
+    /**
+     * {@inheritDoc}
+     */
     protected $properties = ['service', 'scheduled_from', 'expires', 'max_attempts', 'locked_until'];
 
     /**

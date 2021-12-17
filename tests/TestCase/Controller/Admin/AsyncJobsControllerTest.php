@@ -87,6 +87,7 @@ class AsyncJobsControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->AsyncJobsController->viewVars;
         foreach ($keys as $expectedKey) {

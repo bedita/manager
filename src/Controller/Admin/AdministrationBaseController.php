@@ -35,6 +35,13 @@ abstract class AdministrationBaseController extends AppController
     protected $readonly = true;
 
     /**
+     * Deleteonly flag view.
+     *
+     * @var bool
+     */
+    protected $deleteonly = false;
+
+    /**
      * Properties to show in index columns
      *
      * @var array
@@ -107,6 +114,7 @@ abstract class AdministrationBaseController extends AppController
         $this->set('filter', []);
         $this->set('schema', (array)$this->Schema->getSchema($this->resourceType));
         $this->set('readonly', $this->readonly);
+        $this->set('deleteonly', $this->deleteonly);
 
         return null;
     }

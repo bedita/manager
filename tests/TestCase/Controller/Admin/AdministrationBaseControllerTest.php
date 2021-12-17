@@ -211,6 +211,7 @@ class AdministrationBaseControllerTest extends TestCase
             'filter',
             'schema',
             'readonly',
+            'deleteonly',
         ];
         $viewVars = (array)$this->AdministrationBaseController->viewVars;
         foreach ($keys as $expectedKey) {

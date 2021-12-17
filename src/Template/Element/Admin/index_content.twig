@@ -26,7 +26,7 @@
                 {% for key in metaColumns %}
                     <div>{{ __(key) }}</div>
                 {% endfor %}
-                {% if not readonly %}
+                {% if not readonly or deleteonly %}
                     <div></div>
                 {% endif %}
             </nav>
@@ -69,7 +69,7 @@
                     'class': 'table-row',
                 })|raw }}
                     <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {{ resource.id }}
+                        {{ resource.id|truncate(10) }}
                     </div>
                     {% for type,property in properties %}
                         {% set val = resource.attributes[property] %}
@@ -90,6 +90,15 @@
                                 'class': 'button button-text-white is-width-auto',
                             })|raw }}
 
+                            {{ Form.button( __('Remove'), {
+                                'form': 'form-remove-' ~ resource.id,
+                                'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                                'class': 'button button-text-white is-width-auto',
+                                '@click.prevent': 'remove',
+                            })|raw }}
+                        </div>
+                    {% elseif deleteonly %}
+                        <div class="buttons-cell narrow">
                             {{ Form.button( __('Remove'), {
                                 'form': 'form-remove-' ~ resource.id,
                                 'title': __('Remove') ~ ' ' ~ resource.attributes.name,
