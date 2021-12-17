@@ -27,7 +27,6 @@ use Cake\View\View;
  */
 class SchemaHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *

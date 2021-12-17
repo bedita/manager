@@ -2,15 +2,6 @@
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
-{% set txtOptions = {'label': '', 'size': 40} %}
-{% set boolOptions = {
-    'label': '',
-    'type':'radio',
-    'options': [
-        { 'value': 1, 'text': __('Yes') },
-        { 'value': 0, 'text': __('No') }
-    ]
-} %}
 
 <div class="module-header">
     <header>
@@ -52,9 +43,8 @@
                 })|raw }}
                     <div>{{ __('NEW') }}</div>
                     {% for type, property in properties %}
-                        {% set options = type is same as ('bool') ? boolOptions|merge({'value': 1}) : txtOptions %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {{ Property.control(property, '', options)|raw }}
+                            {{ Admin.control(type, property, null)|raw }}
                         </div>
                     {% endfor %}
                     {% for key in metaColumns %}
@@ -83,13 +73,8 @@
                     </div>
                     {% for type,property in properties %}
                         {% set val = resource.attributes[property] %}
-                        {% set options = type is same as ('bool') ? boolOptions|merge({'value': val}) : txtOptions %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {% if readonly or resource.meta.unchangeable %}
-                                {{ Schema.format(val, schema.properties[property]) }}
-                            {% else %}
-                                {{ Property.control(property, val, options)|raw }}
-                            {% endif %}
+                            {{ Admin.control(type, property, val)|raw }}
                         </div>
                     {% endfor %}
                     {% for key in metaColumns %}

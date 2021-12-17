@@ -56,7 +56,6 @@ class MyModulesComponent extends ModulesComponent
  */
 class ModulesComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *

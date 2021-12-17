@@ -26,7 +26,6 @@ use Cake\TestSuite\TestCase;
  */
 class PropertiesComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *
