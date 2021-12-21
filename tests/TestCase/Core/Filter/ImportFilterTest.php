@@ -78,7 +78,6 @@ class MyDummyImportFilter extends DummyImportFilter
  */
 class ImportFilterTest extends TestCase
 {
-
     /**
      * Test client class
      *
