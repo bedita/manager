@@ -1,11 +1,11 @@
-<div class="bulk-actions" :class="!selectedRows.length? '' : 'enabled'">
-    <nav>
+<div class="bulk-actions">
+    <div>
         {% element 'Form/bulk_export' %}
-    </nav>
-    <header>
-        <h3>{{ __('Actions on selected items') }}</h3>
-    </header>
-    <nav>
+    </div>
+
+    <div class="bulk-header">{{ __('Actions on selected items') }}</div>
+
+    <div :class="[!selectedRows.length ? 'disabled' : '', 'is-flex', 'is-flex-column']">
         {% element 'Form/bulk_properties' %}
 
         {% element 'Form/bulk_category' %}
@@ -13,5 +13,5 @@
         {% element 'Form/bulk_position' %}
 
         {% element 'Form/bulk_trash' %}
-    </nav>
+    </div>
 </div>

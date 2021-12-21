@@ -398,6 +398,9 @@ return [
         'log' => [
             //'log_file' => LOGS . 'api.log',
         ],
+        // 'guzzleConfig' => [ // Optional custom configuration for underlying GuzzleHTTP client.
+        //     'timeout' => 3,
+        // ],
     ],
 
     /**
@@ -507,6 +510,7 @@ return [
      *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
+     *  - 'fastCreate' fields for fast creation forms, by type
      *
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
@@ -554,6 +558,10 @@ return [
         //     'bulk' => [
         //         'status',
         //         'other_field',
+        //     ],
+        //     'fastCreate' => [
+        //         'required' => ['status', 'title'],
+        //         'all' => ['status', 'title', 'description'],
         //     ],
         // ],
     // ],

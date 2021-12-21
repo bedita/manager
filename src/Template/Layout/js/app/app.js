@@ -19,6 +19,7 @@ import Autocomplete from '@trevoreyre/autocomplete-vue';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
+import { buildSearchParams } from '../libs/urlUtils.js';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -38,6 +39,7 @@ const _vueInstance = new Vue({
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
@@ -77,7 +79,7 @@ const _vueInstance = new Vue({
     */
     provide() {
         return {
-            getCSFRToken: (...args) => BEDITA.csrfToken,
+            getCSFRToken: () => BEDITA.csrfToken,
         }
     },
 
@@ -118,6 +120,10 @@ const _vueInstance = new Vue({
             bodyEl.classList.remove('panel-is-open');
             rootEl.classList.remove('is-clipped');
         });
+
+        // listen events emitted on this vue instance
+        this.$on('filter-update-page-size', this.onUpdatePageSize);
+        this.$on('filter-update-current-page', this.onUpdateCurrentPage);
     },
 
     watch: {
@@ -173,17 +179,17 @@ const _vueInstance = new Vue({
         /**
          * listen to FilterBoxView event filter-objects
          *
-         * @param {Object} filter
+         * @param {Object} query
          *
          * @return {void}
          */
-        onFilterObjects(filter) {
+        onFilterObjects(query) {
             // remove from query string filter `history_editor` if false
-            if (!filter.filter.history_editor) {
-                delete filter.filter.history_editor;
+            if (!query.filter.history_editor) {
+                delete query.filter.history_editor;
             }
 
-            this.urlFilterQuery = filter;
+            this.urlFilterQuery = query;
             this.page = '';
 
             this.applyFilters(this.urlFilterQuery);
@@ -244,7 +250,7 @@ const _vueInstance = new Vue({
                 const keysExp = /\[(.*?)\]/g; // extract single property from the properties group
 
                 let filter = {};
-                while (matches = filterExp.exec(urlParams)) {
+                while ((matches = filterExp.exec(urlParams))) {
                     if (matches && matches.length === 3) {
                         const filterGroup = matches[1]; // keys group (ex. [status], [modified][lte])
                         const filterValue = matches[2]; // param value
@@ -253,7 +259,7 @@ const _vueInstance = new Vue({
                         let keysMatches = [];
 
                         // extract keys from keys group and put it in paramKeys
-                        while (keysMatches = keysExp.exec(filterGroup)) {
+                        while ((keysMatches = keysExp.exec(filterGroup))) {
                             paramKeys.push(keysMatches[1]);
                         }
 
@@ -296,7 +302,6 @@ const _vueInstance = new Vue({
             }
         },
 
-
         /**
          * build coherent url based on these params:
          * - q=_string_
@@ -306,47 +311,11 @@ const _vueInstance = new Vue({
          * @param {Object} params
          * @returns {String} url
          */
-        buildUrlParams(params) {
-            let url = `${window.location.origin}${window.location.pathname}`;
-            const queryId = '?';
-            const separator = '&';
-            const paramsKeys = Object.keys(params);
+        buildUrlWithParams(params) {
+            const url = new URL(`${window.location.origin}${window.location.pathname}`);
+            url.search = buildSearchParams(params, url.searchParams).toString();
 
-            if (paramsKeys && paramsKeys.length) {
-                let fields = [];
-
-                paramsKeys.forEach((key) =>  {
-                    if (params[key]) {
-                        const query = params[key];
-
-                        // parse filter property
-                        if (key === 'filter') {
-                            Object.keys(query).forEach((filterKey) => {
-                                if (typeof query[filterKey] === 'object') {
-                                    const filter = query[filterKey];
-                                    Object.keys(filter).forEach((modifier) => {
-                                        if (filter[modifier] !== '') {
-                                            // look up for param modifier (i.e dates)
-                                            const encoded = encodeURIComponent(filter[modifier]);
-                                            fields.push(`filter[${filterKey}][${modifier}]=${encoded}`);
-                                        }
-                                    });
-                                } else if (query[filterKey] !== '') {
-                                    const encoded = encodeURIComponent(query[filterKey]);
-                                    fields.push(`filter[${filterKey}]=${encoded}`);
-                                }
-                            });
-                        } else {
-                            const encoded = encodeURIComponent(query);
-                            fields.push(`${key}=${encoded}`);
-                        }
-                    }
-                });
-                url += fields.length ? queryId : '';
-                url += fields.join(separator);
-            }
-
-            return url;
+            return url.href;
         },
 
         /**
@@ -355,7 +324,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         resetFilters() {
-            window.location.replace(this.buildUrlParams({ reset: 1 }));
+            window.location.replace(this.buildUrlWithParams({ reset: 1 }));
         },
 
         /**
@@ -366,7 +335,7 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
-            let url = this.buildUrlParams({
+            const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,
                 page_size: this.pageSize,
@@ -502,6 +471,7 @@ const _vueInstance = new Vue({
                     if (value.changed) {
                         return t`There are unsaved changes, are you sure you want to leave page?`;
                     }
+                    console.debug(key);
                 }
             }
         },

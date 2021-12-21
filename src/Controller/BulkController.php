@@ -87,7 +87,7 @@ class BulkController extends AppController
         $this->request->allowMethod(['post']);
         $requestData = $this->request->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
-        $this->categories = (string)Hash::get($requestData, 'categoriesSelected');
+        $this->categories = (string)Hash::get($requestData, 'categories');
         $this->loadCategories();
         $this->saveCategories();
         $this->errors();

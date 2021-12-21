@@ -56,7 +56,26 @@ class Application extends BaseApplication
     protected function bootstrapCli()
     {
         parent::bootstrapCli();
+        $this->addPluginDev('IdeHelper');
         $this->addPlugin('BEdita/I18n');
+    }
+
+    /**
+     * Add plugin considered as a dev dependency.
+     * It could be missing in production env.
+     *
+     * @param string $name The plugin name
+     * @return bool
+     */
+    public function addPluginDev(string $name): bool
+    {
+        try {
+            $this->addPlugin($name);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -19,10 +19,21 @@ use Cake\Utility\Hash;
 /**
  * Application View default class
  *
+ * @property \App\View\Helper\AdminHelper $Admin
+ * @property \App\View\Helper\CalendarHelper $Calendar
+ * @property \App\View\Helper\CategoriesHelper $Categories
+ * @property \App\View\Helper\EditorsHelper $Editors
+ * @property \App\View\Helper\LayoutHelper $Layout
+ * @property \App\View\Helper\ArrayHelper $Array
+ * @property \App\View\Helper\LinkHelper $Link
+ * @property \App\View\Helper\PropertyHelper $Property
+ * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\SchemaHelper $Schema
+ * @property \BEdita\WebTools\View\Helper\ThumbHelper $Thumb
+ * @property \BEdita\I18n\View\Helper\I18nHelper $I18n
  */
 class AppView extends TwigView
 {
-
     /**
      * {@inheritDoc}
      */
@@ -38,6 +49,9 @@ class AppView extends TwigView
                 'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
+        $this->loadHelper('Admin');
+        $this->loadHelper('Calendar');
+        $this->loadHelper('Categories');
         $this->loadHelper('Editors');
         $this->loadHelper('Layout');
         $this->loadHelper('Array');

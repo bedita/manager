@@ -89,11 +89,26 @@
                 {% endif %}
 
                 {% if in_array('admin', user.roles) %}
+                    {{ Html.link(__('Administration'),
+                        { '_name': 'admin:list:applications' },
+                        { 'title': __('Administration'), 'class': 'dashboard-item has-background-black icon-wrench' } )|raw }}
                     {{ Html.link(__('Data modeling'),
                         { '_name': 'model:list:object_types' },
                         { 'title': __('Data modeling'), 'class': 'dashboard-item has-background-black icon-database' } )|raw }}
                 {% endif %}
             </div>
+        </section>
+
+        <section class="dashboard-section">
+            <header>
+                <h2>{{ __('Search') }}</h2>
+            </header>
+
+            <nav role="search">
+                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
+            </nav>
+
         </section>
 
         <div class="dashboard-area">
@@ -117,18 +132,6 @@
                         {{ __('No items found') }}
                     {% endfor %}
                 </div>
-            </section>
-
-            <section class="dashboard-section">
-                <header>
-                    <h2>{{ __('Search') }}</h2>
-                </header>
-
-                <nav role="search">
-                    <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                    <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
-                </nav>
-
             </section>
 
         </div>

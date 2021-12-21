@@ -7,11 +7,8 @@
 {% set q = _view.request.getQuery()|serialize|escape %}
 
 <trash-index inline-template ids='{{ ids|json_encode }}'>
-    <div>
-        <div class="module-index">
-
-          <div class="table-container">
-
+    <div class="module-index">
+        <div class="table-container">
             <div class="list-objects">
                 {% if objects %}
                     {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
@@ -23,40 +20,43 @@
                     {{ __('No items found') }}
                 {% endfor %}
             </div>
-
-          </div>
-
-            {% if objects %}
-            <div class="bulk-actions has-border-module-{{ currentModule.name }}">
-                <header>
-                    <p>{{ __('Actions on selected items') }}</p>
-                </header>
-                <nav>
-                    {% if (objects) and Perms.canSave() %}
-                        {{ Form.create(null, {'id': 'form-restore', 'url': {'_name': 'trash:restore', 'object_type': objectType}})|raw }}
-                            <input type="hidden" name="ids" v-bind:value="selectedRows">
-                            {{ Form.unlockField('ids') }}
-                            <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
-                        {{ Form.end()|raw }}
-                    {% endif %}
-                    {% if (objects) and Perms.canDelete({type: objectType}) %}
-                        {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
-                            <input type="hidden" name="ids" v-bind:value="selectedRows">
-                            {{ Form.unlockField('ids') }}
-                            <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
-                        {{ Form.end()|raw }}
-                    {% endif %}
-                </nav>
-            </div>
-            {% endif %}
-
-            {# Append "Empty" button in commands menu. #}
-            {% do _view.append('module-buttons',
-                Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
-                    'data': {'query': q},
-                    'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
-                })|raw
-            )%}
         </div>
+
+        {% if objects %}
+        <div class="bulk-actions mt-1 has-border-module-{{ currentModule.name }}">
+            <header class="bulk-header">
+                {{ __('Actions on selected items') }}
+            </header>
+
+            <div class="is-flex">
+                {% if (objects) and Perms.canSave() %}
+                    {{ Form.create(null, {
+                        'id': 'form-restore',
+                        'url': {'_name': 'trash:restore', 'object_type': objectType},
+                        'class': 'mr-1'
+                    })|raw }}
+                        <input type="hidden" name="ids" v-bind:value="selectedRows">
+                        {{ Form.unlockField('ids') }}
+                        <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
+                    {{ Form.end()|raw }}
+                {% endif %}
+                {% if (objects) and Perms.canDelete({type: objectType}) %}
+                    {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
+                        <input type="hidden" name="ids" v-bind:value="selectedRows">
+                        {{ Form.unlockField('ids') }}
+                        <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
+                    {{ Form.end()|raw }}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# Append "Empty" button in commands menu. #}
+        {% do _view.append('module-buttons',
+            Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
+                'data': {'query': q},
+                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+            })|raw
+        )%}
     </div>
 </trash-index>

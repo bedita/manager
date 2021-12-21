@@ -13,7 +13,6 @@
  */
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
-import sleep from 'sleep-promise';
 
 export default {
     mixins: [
@@ -85,11 +84,10 @@ export default {
          * @emits Event#count count objects event
          *
          * @param {Object} filter object containing filters
-         * @param {Boolean} force force recount of related objects
          *
          * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}, force = false) {
+        async loadRelatedObjects(filter = {}) {
             this.loading = true;
 
             return this.getPaginatedObjects(true, filter)

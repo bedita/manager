@@ -20,6 +20,9 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
+/**
+ * @uses \App\Controller\Model\ModelBaseController
+ */
 class ModelController extends ModelBaseController
 {
     /**

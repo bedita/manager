@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-09-30 06:28:47 \n"
+"POT-Creation-Date: 2021-11-25 14:35:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -24,6 +24,9 @@ msgid "Add"
 msgstr ""
 
 msgid "Add translation"
+msgstr ""
+
+msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
@@ -57,6 +60,12 @@ msgid "An extension stopped the file upload"
 msgstr ""
 
 msgid "Any"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Async Jobs"
 msgstr ""
 
 msgid "Auto-translate"
@@ -101,7 +110,7 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
-msgid "Choose"
+msgid "Choose a type"
 msgstr ""
 
 msgid "Click or drop new files here"
@@ -114,6 +123,9 @@ msgid "Close"
 msgstr ""
 
 msgid "Concurrent users"
+msgstr ""
+
+msgid "Config"
 msgstr ""
 
 msgid "Confirm new password"
@@ -155,6 +167,9 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Descendants"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -165,6 +180,9 @@ msgid "Discard"
 msgstr ""
 
 msgid "Documents"
+msgstr ""
+
+msgid "Download file"
 msgstr ""
 
 msgid "Draft"
@@ -193,6 +211,9 @@ msgstr ""
 
 msgid "Empty-verb"
 msgstr "Empty"
+
+msgid "Endpoints"
+msgstr ""
 
 msgid "Error "
 msgstr ""
@@ -236,6 +257,9 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+msgid "Folder"
+msgstr ""
+
 msgid "Folders"
 msgstr ""
 
@@ -251,7 +275,13 @@ msgstr ""
 msgid "From date"
 msgstr ""
 
+msgid "Global"
+msgstr ""
+
 msgid "History"
+msgstr ""
+
+msgid "Id"
 msgstr ""
 
 msgid "Image not acceptable for thumb"
@@ -293,10 +323,16 @@ msgstr ""
 msgid "Left types"
 msgstr ""
 
+msgid "Less filters"
+msgstr ""
+
 msgid "Locations"
 msgstr ""
 
 msgid "Lock"
+msgstr ""
+
+msgid "Locked_until"
 msgstr ""
 
 msgid "Log out"
@@ -312,6 +348,9 @@ msgid "Long Lat Coordinates"
 msgstr ""
 
 msgid "Map"
+msgstr ""
+
+msgid "Max_attempts"
 msgstr ""
 
 msgid "Media"
@@ -333,6 +372,9 @@ msgid "Module access not authorized"
 msgstr ""
 
 msgid "More"
+msgstr ""
+
+msgid "More filters"
 msgstr ""
 
 msgid "Move to"
@@ -488,6 +530,9 @@ msgstr ""
 msgid "Resource \"%s\" not found"
 msgstr ""
 
+msgid "Resources not available"
+msgstr ""
+
 msgid "Restore"
 msgstr ""
 
@@ -503,7 +548,13 @@ msgstr ""
 msgid "Right types"
 msgstr ""
 
+msgid "Roles"
+msgstr ""
+
 msgid "Save"
+msgstr ""
+
+msgid "Scheduled_from"
 msgstr ""
 
 msgid "Search"
@@ -623,6 +674,9 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+msgid "View file"
+msgstr ""
+
 msgid "View original"
 msgstr ""
 
@@ -644,10 +698,16 @@ msgstr ""
 msgid "add objects"
 msgstr ""
 
+msgid "application id"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
 msgid "code"
+msgstr ""
+
+msgid "completed"
 msgstr ""
 
 msgid "completed on"
@@ -656,13 +716,25 @@ msgstr ""
 msgid "confirm password"
 msgstr ""
 
+msgid "content"
+msgstr ""
+
+msgid "context"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
 msgid "create new"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
 msgid "current password"
+msgstr ""
+
+msgid "description"
 msgstr ""
 
 msgid "elements to"
@@ -671,13 +743,25 @@ msgstr ""
 msgid "empty"
 msgstr ""
 
+msgid "enabled"
+msgstr ""
+
+msgid "expires"
+msgstr ""
+
 msgid "file name"
+msgstr ""
+
+msgid "from"
 msgstr ""
 
 msgid "id"
 msgstr ""
 
 msgid "modified"
+msgstr ""
+
+msgid "name"
 msgstr ""
 
 msgid "new password"
@@ -687,6 +771,9 @@ msgid "objects"
 msgstr ""
 
 msgid "objects to"
+msgstr ""
+
+msgid "on"
 msgstr ""
 
 msgid "original"
@@ -704,6 +791,9 @@ msgstr ""
 msgid "scheduled from"
 msgstr ""
 
+msgid "service"
+msgstr ""
+
 msgid "service name"
 msgstr ""
 
@@ -711,6 +801,9 @@ msgid "status"
 msgstr ""
 
 msgid "title"
+msgstr ""
+
+msgid "to"
 msgstr ""
 
 msgid "translation of"
@@ -734,34 +827,35 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:159
-#: src/Template/Layout/js/app/components/history/history.js:99
+#: src/Template/Layout/js/app/app.js:165
+#: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:160
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/app.js:166
+#: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:453
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:486
+#: src/Template/Layout/js/app/app.js:455
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:494
-#: src/Template/Layout/js/app/components/history/history.js:89
-#: src/Template/Layout/js/app/pages/model/index.js:262
-#: src/Template/Layout/js/app/pages/modules/index.js:152
+#: src/Template/Layout/js/app/app.js:463
+#: src/Template/Layout/js/app/components/history/history.js:101
+#: src/Template/Layout/js/app/pages/admin/index.js:16
+#: src/Template/Layout/js/app/pages/model/index.js:261
+#: src/Template/Layout/js/app/pages/modules/index.js:157
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:503
+#: src/Template/Layout/js/app/app.js:472
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -770,14 +864,18 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:150
+#: src/Template/Layout/js/app/pages/modules/index.js:155
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/model/index.js:262
+#: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
+msgstr ""
+
+#: src/Template/Layout/js/app/pages/admin/index.js:14
+msgid "Remove item. Are you sure?"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/drop-upload.js:36
@@ -808,11 +906,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:168
+#: src/Template/Layout/js/app/components/filter-box.js:164
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:228
+#: src/Template/Layout/js/app/components/filter-box.js:317
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -824,7 +922,12 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:262
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:238
+#, javascript-format
+msgid "Missing required data \"${ required }\". Retry"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:293
 msgid "Error while creating new object."
 msgstr ""
 
@@ -875,26 +978,28 @@ msgstr ""
 msgid "date"
 msgstr ""
 
-#. *
-#.  * Component to fetch and display changes' history.
-#.  
-#: src/Template/Layout/js/app/components/history/history.js:19
-msgid "by"
+#: src/Template/Layout/js/app/components/history/history-info.js:18
+msgid "Trashed"
 msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
 #.  
-#: src/Template/Layout/js/app/components/history/history.js:29
+#: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:88
+#: src/Template/Layout/js/app/components/history/history.js:58
+#, javascript-format
+msgid "by ${ name } via ${ application }"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:60
+msgid "by ${ name }"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/history/history.js:100
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/folder-picker/folder-picker.js:21
-msgid "Folder"
 msgstr ""

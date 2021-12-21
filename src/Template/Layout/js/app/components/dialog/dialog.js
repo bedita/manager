@@ -67,29 +67,29 @@ export const Dialog = Vue.extend({
         },
         warning(message, root = document.body) {
             this.dialogType = 'warning';
-            this.show(message);
+            this.show(message, this.dialogType, root);
         },
         error(message, root = document.body) {
             this.dialogType = 'error';
-            this.show(message);
+            this.show(message, this.dialogType, root);
         },
         info(message, root = document.body) {
             this.dialogType = 'info';
             this.icon = 'icon-info-1';
-            this.show(message, '');
+            this.show(message, '', root);
         },
         confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
             this.dialogType = type;
             this.confirmMessage = confirmMessage;
             this.confirmCallback = confirmCallback;
-            this.show(message);
+            this.show(message, this.dialogType, root);
         },
         prompt(message, defaultValue, confirmCallback, root = document.body) {
             this.dialogType = 'prompt';
             this.icon = 'icon-info-1';
             this.inputValue = defaultValue || '';
             this.confirmCallback = confirmCallback;
-            this.show(message, '');
+            this.show(message, '', root);
         },
     },
 });

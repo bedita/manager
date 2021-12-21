@@ -35,10 +35,10 @@ class ApplicationTest extends TestCase
      *
      * @return void
      *
-     * @covers ::middleware
-     * @covers ::csrfMiddleware
-     * @covers ::bootstrap
-     * @covers ::bootstrapcli
+     * @covers ::middleware()
+     * @covers ::csrfMiddleware()
+     * @covers ::bootstrap()
+     * @covers ::bootstrapCli()
      */
     public function testMiddleware(): void
     {
@@ -54,6 +54,19 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
         static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));
+    }
+
+    /**
+     * Test `addPluginDev` method
+     *
+     * @return void
+     * @covers ::addPluginDev()
+     */
+    public function testAddPluginDev(): void
+    {
+        $app = new Application(CONFIG);
+        static::assertEquals(true, $app->addPluginDev('IdeHelper'));
+        static::assertEquals(false, $app->addPluginDev('NotExisting'));
     }
 
     /**
@@ -98,6 +111,9 @@ class ApplicationTest extends TestCase
      */
     public function testLoadProjectConfig()
     {
+        Application::loadProjectConfig(null, '');
+        static::assertEmpty(Configure::read('Project'));
+
         $projectsPath = TESTS . 'files' . DS . 'projects' . DS;
         Configure::write('Project.name', null);
         Application::loadProjectConfig('none', $projectsPath);

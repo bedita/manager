@@ -1,8 +1,9 @@
 {% if not currentModule.hints.multiple_types %}
-    {{ Form.create(null, {'id': 'form-export', 'class': 'bulk-actions', 'url': {'_name': 'export:export', 'object_type': objectType}})|raw }}
-
+    {{ Form.create(null, {
+        'id': 'form-export',
+        'url': {'_name': 'export:export', 'object_type': objectType}
+    })|raw }}
         <div class="fieldset">
-
             {% set formats = config('Export.formats', {
                 'CSV': 'csv',
                 'Open Document': 'ods',
@@ -10,13 +11,11 @@
             }) %}
             {% set defaultFormat = config('Export.default', 'xslx') %}
 
-            <div class="input select">
-                <select name="format" id="exportformat">
-                {% for label,format in formats %}
-                    <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
-                {% endfor %}
-                </select>
-            </div>
+            <select name="format" id="exportformat">
+            {% for label,format in formats %}
+                <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+            {% endfor %}
+            </select>
 
             {{ Form.unlockField('format') }}
 
@@ -24,9 +23,7 @@
             {{ Form.unlockField('ids') }}
             {{ Form.hidden('objectType', {'value': objectType})|raw }}
 
-            <div class="input">
-                <button class="button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
-            </div>
+            <button class="button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
 
             {# Export all or filtered #}
             {% if _view.request.getQuery('filter') %}
@@ -39,11 +36,7 @@
                 {% set exportLabel = __('Export Filtered') %}
             {% endif %}
 
-            <div class="input">
-                <button class="button button-outlined" @click.prevent="exportAll">{{ exportLabel }}</button>
-            </div>
-
+            <button class="button button-outlined" @click.prevent="exportAll">{{ exportLabel }}</button>
         </div>
-
     {{ Form.end()|raw }}
 {% endif %}

@@ -1,33 +1,38 @@
 {% if modules.folders %}
 {{ Form.create(null, {
     'id': 'bulk-folder',
-    'class': 'bulk-actions',
     'url': {'_name': 'modules:bulkPosition', 'object_type': objectType, '?': _view.request.getQuery()},
 })|raw }}
 
-    <div class="fieldset bulk-folders" :disabled="!selectedRows.length">
-
-        <div class="input select">
+    <div class="fieldset bulk-folders">
+        <div>
             <label for="bulk-copy">{{ __('Copy to') }}</label>
-            <input id="bulk-move" @click="folderPickerInit()" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="copy"/>
+            <input id="bulk-move" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="copy"/>
+        </div>
+
+        <div>
             <label for="bulk-move">{{ __('Move to') }}</label>
-            <input id="bulk-copy" @click="folderPickerInit()" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
-            {{ Form.unlockField('action') }}
+            <input id="bulk-copy" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
         </div>
+        {{ Form.unlockField('action') }}
 
-        <div class="input">
-            <folder-picker/>
-            {{ Form.unlockField('folderSelected') }}
-        </div>
+        <folder-picker
+            label="{{ __('Folder') }}"
+            :disabled="!selectedRows.length || !bulkAction"
+            @change="bulkFolder = $event?.id"
+        ></folder-picker>
+        {{ Form.unlockField('folderSelected') }}
 
-        <input type="hidden" name="ids" v-bind:value="selectedRows">
+        <input type="hidden" name="ids" :value="selectedRows"/>
         {{ Form.unlockField('ids') }}
 
-        <div class="input">
-            <button class="button button-outlined" @click.prevent="bulkActions('bulk-folder')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
-        </div>
-
+        <button
+            class="button button-outlined"
+            @click.prevent="bulkActions('bulk-folder')"
+            :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
+        >
+            {{ __('Ok') }}
+        </button>
     </div>
-
 {{ Form.end()|raw }}
 {% endif %}

@@ -1,6 +1,5 @@
 import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
-import { EventBus } from 'app/directives/eventbus.js';
 
 /**
  * Templates that uses this component (directly or indirectly)
@@ -15,6 +14,7 @@ export default {
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
     },
 
     /**
@@ -40,8 +40,13 @@ export default {
             selectedRows: [],
             bulkField: null,
             bulkValue: null,
-            bulkAction: 'choose',
+            bulkAction: null,
             selectedIds: null,
+            /**
+             * Selected folder for bulk copy or move.
+             * Used to enable/disable confirmation button.
+             */
+            bulkFolder: null,
         };
     },
 
@@ -170,11 +175,12 @@ export default {
             }
         },
 
-        /**
-         * Emit event to init folder picker
-         */
-        folderPickerInit() {
-            EventBus.$emit('folder-picker-init', true);
+        onUpdatePageSize(event) {
+            window._vueInstance.$emit('filter-update-page-size', event);
+        },
+
+        onUpdateCurrentPage(event) {
+            window._vueInstance.$emit('filter-update-current-page', event);
         },
     }
 }

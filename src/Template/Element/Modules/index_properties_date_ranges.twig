@@ -1,26 +1,7 @@
 <date-ranges-list inline-template>
     <div class="index-date-ranges" :class="showAll? 'show-all' : ''">
         <div>
-            {% for dateRange in dateRanges %}
-                <div class="date-range">
-                    <div class="date-item">
-                        {% if dateRange.end_date and not dateRange.params.all_day %} from {% else %} on {% endif %}
-                        <span class="date">
-                            {{ Time.format(dateRange.start_date, 'd MMM YYYY') }}
-                        {% if not dateRange.params.all_day %}
-                            &nbsp;
-                            {{ Time.format(dateRange.start_date, 'HH:mm') }}
-                        {% endif %}
-                        </span>
-                    </div>
-
-                    {% if dateRange.end_date and not dateRange.params.all_day %}
-                        <div class="date-item">
-                            to <span class="date">{{ Time.format(dateRange.end_date, 'd MMM YYYY') }} &nbsp; {{ Time.format(dateRange.end_date, 'HH:mm')}}</span>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            {{ Calendar.list(dateRanges)|raw }}
         </div>
 
         {% if dateRanges|length > 1 %}
