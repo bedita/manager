@@ -58,7 +58,7 @@ export default {
                 });
             },
 
-            unbind(element) {
+            unbind() {
                 tinymce.remove();
             },
 
@@ -67,7 +67,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            async inserted(element, binding, vnode) {
+            async inserted(element, binding) {
                 let changing = false;
                 let items = JSON.parse(binding.expression || '');
                 if (!items) {
@@ -98,6 +98,7 @@ export default {
                         'code',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
+                    relative_urls : false,
                 });
 
                 element.editor = editor;
@@ -149,7 +150,7 @@ function format(html) {
 
         result += indent + '<' + element + '>\r\n';
 
-        if (element.match( /^<?\w[^>]*[^\/]$/ )) {
+        if (element.match( /^<?\w[^>]*[^/]$/ )) {
             indent += tab;
         }
     });
@@ -170,7 +171,7 @@ const getContent = (editor) => editor.getContent({ source_view: true });
 
 const open = async (editor) => {
     const editorContent = getContent(editor);
-    const dialog = editor.windowManager.open({
+    editor.windowManager.open({
         title: 'Source Code',
         size: 'large',
         body: {

@@ -23,7 +23,6 @@ use Cake\Utility\Hash;
  */
 class FlashComponent extends CakeFlashComponent
 {
-
     /**
      * {@inheritDoc}
      */

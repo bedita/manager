@@ -213,7 +213,7 @@ export default {
          * @return {string}
          */
         value() {
-            let menu = true;
+            let menu = false;
             if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
                 menu = !!this.node.meta.relation.menu;
             }
@@ -256,23 +256,24 @@ export default {
 
             let page = 1;
             let roots = [];
+            let done = false;
             do {
                 let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 if (json.data) {
                     roots.push(
                         ...json.data.map((object) =>
-                            this.store[object.id] || (this.store[object.id] = object)
+                            this.store[object.id] || (this.store[object.id] = object)
                         )
                     )
                 }
                 if (!json.meta ||
                     !json.meta.pagination ||
                     json.meta.pagination.page_count === json.meta.pagination.page) {
-                    break;
+                    done = true;
                 }
                 page = json.meta.pagination.page + 1;
-            } while (true);
+            } while (!done);
 
             this.node.children.push(...roots);
         },
@@ -340,19 +341,20 @@ export default {
         async loadChildren(folder) {
             let page = 1;
             let children = [];
+            let done = false;
             do {
                 let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
                 let childrenJson = await childrenRes.json();
                 children.push(
                     ...childrenJson.data.map((object) =>
-                        this.store[object.id] || (this.store[object.id] = object)
+                        this.store[object.id] || (this.store[object.id] = object)
                     )
                 );
                 if (childrenJson.meta.pagination.page_count == page) {
-                    break;
+                    done = true;
                 }
                 page++;
-            } while (true);
+            } while (!done);
             folder.children = children;
         },
 
@@ -392,16 +394,17 @@ export default {
 
             let page = 1;
             let children = [];
+            let done = false;
             this.isLoading = true;
             do {
                 let response = await fetch(`${API_URL}api/folders?filter[parent]=${this.node.id}&page=${page}`, API_OPTIONS);
                 let json = await response.json();
                 children.push(...json.data);
                 if (json.meta.pagination.page_count == page) {
-                    break;
+                    done = true;
                 }
                 page++;
-            } while (true);
+            } while (!done);
 
             this.node.children = children;
             this.isLoading = false;
@@ -455,7 +458,7 @@ export default {
          * @param {Event} event The input change event.
          * @return {void}
          */
-         toggleFolderRelationCanonical(event) {
+        toggleFolderRelationCanonical(event) {
             if (this.isParent) {
                 document.getElementById('changedParents').value = 1;
             }

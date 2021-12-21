@@ -17,13 +17,13 @@ import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 
 // merge vue options and configs
 for (let property in VueConfig) {
-    if (VueConfig.hasOwnProperty(property)) {
+    if (Object.prototype.hasOwnProperty.call(VueConfig, property)) {
         Vue.config[property] = VueConfig[property];
     }
 }
 
 for (let property in VueOptions) {
-    if (VueOptions.hasOwnProperty(property)) {
+    if (Object.prototype.hasOwnProperty.call(VueOptions, property)) {
         Vue.options[property] = VueOptions[property];
     }
 }
@@ -49,6 +49,22 @@ Vue.mixin({
         t: (value) => {
             // call ttag t method
             return t([value]);
+        },
+
+        /**
+         * Capitalize a string.
+         *
+         * @param {String} str The string to capitalize
+         *
+         * @return {string}
+         */
+        capitalize: (str) => {
+            if (!str) {
+                return '';
+            }
+
+            str = str.toString();
+            return str.charAt(0).toUpperCase() + str.slice(1);
         },
     }
 });

@@ -8,24 +8,23 @@
     {% endfor %}
 
     <filter-box-view
-        :pagination={{ meta.pagination|json_encode|raw }}
+        :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
         :init-filter="urlFilterQuery"
         :selected-types='selectedTypes'
-        :filter-list='{{ list|json_encode|raw }}'
-        :filter-active="{{ filterActive|json_encode|raw }}"
+        :filter-list="{{ list|json_encode|escape('html_attr') }}"
+        :filter-active="{{ filterActive|json_encode|escape('html_attr') }}"
 
-        config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+        config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
         placeholder="{{ __('Search') }}"
         objects-label="{{ resourceType ?? __(currentModule.name) }}"
-        page-size={{ meta.pagination.page_size }}
+        page-size="{{ meta.pagination.page_size }}"
 
-        @filter-objects-submit="onFilterObjects"
+        @filter-objects="onFilterObjects"
         @filter-reset="resetFilters"
         @filter-update-current-page="onUpdateCurrentPage"
         @filter-update-page-size="onUpdatePageSize"
-        inline-template>
-
-            {% element 'FilterBox/filter_box' { 'meta': meta, 'hideFilter': hideFilter, 'hidePagination': hidePagination } %}
-
+        inline-template
+    >
+        {% element 'FilterBox/filter_box' { 'meta': meta, 'hideFilter': hideFilter, 'hidePagination': hidePagination } %}
     </filter-box-view>
 </div>

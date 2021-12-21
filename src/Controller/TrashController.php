@@ -25,7 +25,6 @@ use Psr\Log\LogLevel;
  */
 class TrashController extends AppController
 {
-
     /**
      * {@inheritDoc}
      * @codeCoverageIgnore

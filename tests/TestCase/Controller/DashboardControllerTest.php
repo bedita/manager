@@ -28,7 +28,6 @@ use Cake\TestSuite\TestCase;
  */
 class DashboardControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *

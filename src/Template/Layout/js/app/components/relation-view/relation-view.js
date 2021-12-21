@@ -98,9 +98,8 @@ export default {
          */
         showFilter() {
             return this.activeFilter.q ||
-                this.pagination.page > 1 ||
-                this.objects.length >= this.pagination.page_size ||
-                this.addedRelations.length >= this.pagination.page_size;
+                this.pagination.page_count > 1 ||
+                this.alreadyInView.length > this.pagination.page_size;
         },
     },
 
@@ -127,7 +126,7 @@ export default {
 
         // if preCount is '-1' => no object count from API, force load
         if (this.preCount === -1 || this.$parent.isOpen) {
-            await this.loadOnMounted();
+            await this.loadRelatedObjects();
         }
 
         // check if relation is related to media objects
@@ -442,16 +441,6 @@ export default {
         },
 
         /**
-         * load content if flag set to true
-         *
-         * @return {void}
-         */
-        async loadOnMounted() {
-            await this.loadRelatedObjects();
-            return Promise.resolve();
-        },
-
-        /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
          * @emits Event#count count objects event
@@ -484,8 +473,7 @@ export default {
         },
 
         /**
-         * reload all related objects
-         * UNUSED
+         * Reset the filter and reload all related objects.
          *
          * @return {Array} objs objects retrieved
          */

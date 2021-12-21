@@ -14,7 +14,7 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\CategoriesController;
-use Cake\Event\Event;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -51,15 +51,31 @@ class CategoriesControllerTest extends TestCase
     ];
 
     /**
-     * {@inheritDoc}
+     * Setup api client and auth
+     *
+     * @return void
      */
-    public function setUp(): void
+    private function setupApi(): void
     {
-        parent::setUp();
+        $this->client = ApiClientProvider::getApiClient();
+        $adminUser = getenv('BEDITA_ADMIN_USR');
+        $adminPassword = getenv('BEDITA_ADMIN_PWD');
+        $response = $this->client->authenticate($adminUser, $adminPassword);
+        $this->client->setupTokens($response['meta']);
+    }
 
-        $this->Categories = new CategoriesController(
-            new ServerRequest($this->defaultRequestConfig)
-        );
+    /**
+     * Setup controller to test with request config
+     *
+     * @param array $requestConfig
+     * @return void
+     */
+    protected function setupController(array $requestConfig = []): void
+    {
+        $config = array_merge($this->defaultRequestConfig, $requestConfig);
+        $request = new ServerRequest($config);
+        $this->Categories = new CategoriesController($request);
+        $this->setupApi();
     }
 
     /**
@@ -73,17 +89,21 @@ class CategoriesControllerTest extends TestCase
     }
 
     /**
-     * Test `beforeRender` method
+     * Test `index` method
      *
-     * @covers ::beforeRender()
+     * @covers ::initialize()
+     * @covers ::index()
      * @return void
      */
-    public function testBeforeRender(): void
+    public function testIndex(): void
     {
-        $this->Categories->beforeRender(new Event('test'));
-        $categorized = $this->Categories->viewVars['categorized'];
+        $this->setupController();
+        $this->Categories->index();
+        $resources = $this->Categories->viewVars['resources'];
+        $categoriesTree = $this->Categories->viewVars['categoriesTree'];
         $schema = $this->Categories->viewVars['schema'];
-        static::assertTrue(is_array($categorized));
+        static::assertTrue(is_array($resources));
+        static::assertTrue(is_array($categoriesTree));
         static::assertTrue(is_array($schema));
     }
 }

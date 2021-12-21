@@ -29,7 +29,6 @@ use Cake\TestSuite\TestCase;
  */
 class AppControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *

@@ -23,7 +23,6 @@ import { warning } from 'app/components/dialog/dialog';
 const createData = (type = '') => ({
     type,
     attributes: {
-
         status: 'draft',
     },
 });
@@ -119,7 +118,7 @@ export default {
 
         relationName: {
             immediate: true,
-            handler(newVal, oldVal) {
+            handler(newVal) {
                 if (newVal) {
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
@@ -261,6 +260,10 @@ export default {
 
             if (this.url) {
                 formData.set('url', this.url);
+            }
+
+            if (this.file || this.url) {
+                formData.append('model-type', type);
             }
 
             const options = {
@@ -409,6 +412,7 @@ export default {
             } else {
                 this.selectedObjects.push(object);
             }
+            console.debug(evt);
         },
 
         /**

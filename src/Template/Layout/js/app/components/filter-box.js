@@ -8,15 +8,16 @@
  * @prop {String} configPaginateSizes
  * @prop {Boolean} filterActive Some filter is active on currently displayed data
  * @prop {Array} filterList custom filters to show
- * @prop {Object} initFilter
+ * @prop {Array} filtersByType Map of available filters grouped by object type
+ * @prop {Object} initFilter Initial filter
  * @prop {String} objectsLabel
  * @prop {Object} pagination
  * @prop {String} placeholder
  * @prop {Object} relationTypes relation types available for relation (left/right)
- * @prop {Array} selectedTypes Types selected
+ * @prop {Boolean} showAdvanced Flag to enable advanced filters. default: true
  */
 
-import { DEFAULT_PAGINATION, DEFAULT_FILTER } from 'app/mixins/paginated-content';
+import { DEFAULT_PAGINATION, getDefaultFilter } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
@@ -38,9 +39,12 @@ export default {
             type: Array,
             default: () => [],
         },
+        filtersByType: {
+            type: Object,
+        },
         initFilter: {
             type: Object,
-            default: () => DEFAULT_FILTER,
+            default: getDefaultFilter,
         },
         objectsLabel: {
             type: String,
@@ -57,53 +61,45 @@ export default {
         relationTypes: {
             type: Object
         },
-        selectedTypes: {
-            type: Array,
-            default: () => [],
+        showAdvanced: {
+            type: Boolean,
+            default: true
         },
     },
 
     data() {
         return {
-            dynamicFilters: {},
+            availableFilters: [],
+            dynamicFilters: [],
             /**
              * Enable position filter by descendants.
              * When disabled, only direct children are fetched.
-             * This will switch the filter between `parent` and `ancestor`.
+             * This will switch the API filter between `parent` and `ancestor`.
              */
             filterByDescendants: false,
             moreFilters: this.filterActive,
             pageSize: this.pagination.page_size,
             queryFilter: {},
             selectedStatuses: [],
+            selectedType: '',
             statusFilter: {},
             timer: null,
         };
     },
 
     created() {
-        // merge default filters with initFilter
-        let mergeFilters = this.formatFilters();
         this.queryFilter = merge.all([
-            DEFAULT_FILTER,
-            this.queryFilter,
-            mergeFilters,
-            this.initFilter
+            this.getCleanQuery(this.filterList),
+            this.initFilter,
         ]);
 
-        // remove custom filters from the list of dynamic filters
-        this.dynamicFilters = this.filterList.filter(f => {
-            if (f.name == 'status') {
-                this.statusFilter = f;
-
-                return false;
-            }
-
-            return true;
-        });
-
+        if (this.filterList.length) {
+            this.availableFilters = this.filterList;
+        } else if (this.rightTypes.length == 1 && this.filtersByType) {
+            this.availableFilters = this.filtersByType[this.rightTypes[0]];
+        }
         this.selectedStatuses = Object.values(this.initFilter?.filter?.status || {});
-        this.filterByDescendants = !!this.initFilter.filter?.ancestor;
+        this.filterByDescendants = !!this.initFilter?.filter?.ancestor;
     },
 
     computed: {
@@ -117,7 +113,22 @@ export default {
          * @returns {Array} array of object types
          */
         rightTypes() {
-            return (this.relationTypes && this.relationTypes.right) || [];
+            return this.relationTypes?.right || [];
+        },
+
+        canShowAdvanced() {
+            return (this.availableFilters?.length && this.showAdvanced) || this.rightTypes.length > 1;
+        },
+
+        /**
+         * Check if the value of the search input is valid to perform a search.
+         * It has to be empty or longer than 2 characters.
+         *
+         * @returns {boolean}
+         */
+        isSearchFieldValid() {
+            const length = this.queryFilter?.q?.length;
+            return length === 0 || length > 2;
         },
 
         /**
@@ -139,7 +150,21 @@ export default {
         },
 
         initFolder() {
-            return this.initFilter.filter[this.positionFilterName];
+            return this.initFilter?.filter[this.positionFilterName];
+        },
+
+        /**
+         * Capitalize `objectsLabel`.
+         * Fallback to the translation of "Items".
+         *
+         * @returns {String}
+         */
+        label() {
+            if (!this.objectsLabel) {
+                return t`Items`;
+            }
+
+            return this.objectsLabel.charAt(0) + this.objectsLabel.slice(1);
         },
 
         positionFilterName() {
@@ -149,14 +174,19 @@ export default {
 
     watch: {
         /**
-         * watch initFilter and assign it to queryFilter
-         *
-         * @param {Object} value filter object
-         *
-         * @returns {void}
+         * Normalize query filter and remove custom filters from the list of dynamic filters when `availableFilters` is updated.
          */
-        initFilter(value) {
-            this.queryFilter = merge(this.queryFilter, value);
+        availableFilters() {
+            this.normalizeQueryFilter();
+            this.dynamicFilters = this.availableFilters.filter(f => {
+                if (f.name == 'status') {
+                    this.statusFilter = f;
+
+                    return false;
+                }
+
+                return true;
+            });
         },
 
         /**
@@ -170,10 +200,6 @@ export default {
             this.$emit("filter-update-page-size", this.pageSize);
         },
 
-        selectedTypes(value) {
-            this.queryFilter.filter.type = value;
-        },
-
         /**
          * Add selected statuses to the query filters.
          * @param {String[]} value Selected statuses list
@@ -181,116 +207,129 @@ export default {
         selectedStatuses(value) {
             this.queryFilter.filter.status = value;
         },
+
+        /**
+         * Process dynamic filters list when selected object type changes.
+         * Then apply the current filter.
+         * @param {String} type Selected object type
+         */
+        selectedType(type) {
+            this.availableFilters = this.filtersByType[type] || [];
+            const query = this.getCleanQuery();
+            // persist old compatible filter values
+            query.q = this.queryFilter.q;
+            Object.keys(query.filter).forEach(f => {
+                const oldFilter = this.queryFilter.filter[f];
+                if (oldFilter) {
+                    query.filter[f] = oldFilter;
+                }
+            });
+            query.filter.type = type;
+            this.queryFilter = query;
+            this.applyFilter();
+        }
     },
 
     methods: {
         /**
-         * Return translation of ucfirst label objectsLabel.
+         * Build clean query filter object initializing all filters from `availableFilters`.
          *
-         * @returns {String}
+         * @returns {Object} clean query object
          */
-        label() {
-            if (!this.objectsLabel) {
-                return t`Items`;
+        getCleanQuery() {
+            const query = getDefaultFilter();
+            this.availableFilters.forEach(f => {
+                const defaultValue = f.date ? {} : '';
+                query.filter[f.name] = defaultValue;
+            });
+
+            return query;
+        },
+
+        /**
+         * Normalize query filter object initializing all filters from `availableFilters` and persisting already set values.
+         */
+        normalizeQueryFilter() {
+            const filterObj = this.getCleanQuery().filter;
+            this.availableFilters.forEach(f => {
+                const defaultValue = f.date ? {} : '';
+                const currentValue = this.queryFilter.filter[f.name];
+                filterObj[f.name] = currentValue || defaultValue;
+            });
+            this.queryFilter.filter = filterObj;
+        },
+
+        /**
+         * Check if filter value is empty.
+         * @param {*} filterVal Value to check
+         * @returns {Boolean}
+         */
+        isFilterValueEmpty(filterVal) {
+            if (typeof filterVal === 'object') {
+                return Object.values(filterVal).every((prop) => !prop);
             }
 
-            return this.ucfirst(this.objectsLabel);
-        },
-
-        /**
-         * First char upper case for string.
-         * @param {String} str The string
-         * @return {String}
-         */
-        ucfirst(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        },
-
-        /**
-         * trigger filter-objects event when query string has 3 or more carachter
-         *
-         * @emits Event#filter-objects
-         */
-        onQueryStringKeyup() {
-            const queryString = this.queryFilter.q || "";
-
-            clearTimeout(this.timer);
-            if (queryString.trim().length >= 3 || queryString.trim().length === 0) {
-                this.timer = setTimeout(() => {
-                    this.$emit("filter-objects", this.queryFilter);
-                }, 300);
+            if (Array.isArray(filterVal)) {
+                return !filterVal.length;
             }
+
+            return !filterVal;
         },
 
         /**
-         * Handle Search input when value changes
-         * If search text is empty or at least 3 characters long, ok.
-         * Otherwise, warn that search text is too short.
-         */
-        onQueryStringChange() {
-            if (!this.searchFieldValid()) {
-                this.searchFieldDialog();
-            }
-        },
-
-        /**
-         * Verify search text.
-         * If is empty or more than 2 characters long, return true.
-         * Return false otherwise.
-         */
-        searchFieldValid() {
-            this.queryFilter.q = this.queryFilter.q.trim();
-
-            return (this.queryFilter.q.length === 0 || this.queryFilter.q.length > 2);
-        },
-
-        /**
-         * Verify search text.
-         * If is empty or more than 2 characters long, ok.
-         * Show prompt dialog otherwise.
-         */
-        searchFieldDialog() {
-            warning(t`Search text too short. Minimum length is 3. Retry`);
-        },
-
-        onOtherFiltersChange() {
-            this.$emit("filter-objects", this.queryFilter);
-        },
-
-        /**
-         * load custom filters property names
+         * Prepare filter object to perform a filter action.
+         * Clean the filter object removing empty properties and
+         * filters not available for the current object type.
          *
-         * @returns {Object} filters' name
+         * @returns {Object} filter object ready for the search
          */
-        formatFilters() {
-            let filter = {};
-            this.filterList.forEach (
-                f => (filter[f.name] = f.date ? {} : "")
-            );
+        prepareFilters() {
+            const filter = { ...this.queryFilter.filter };
 
-            return { filter };
+            Object.entries(filter).forEach(([key, filterValue]) => {
+                // do nothing for status or type filter, if value is set
+                if ((key === 'status' || key === 'type') && filterValue) {
+                    return;
+                }
+
+                // remove the filter if it doesn't appear in the list of available filters
+                if (!this.dynamicFilters.find(f => f.name == key)) {
+                    delete filter[key];
+                    return;
+                }
+
+                // reset the filter if it's an object or array and it only contains empty properties
+                if (this.isFilterValueEmpty(filterValue)) {
+                    delete filter[key];
+                }
+            });
+
+            return filter;
         },
 
         /**
          * apply filters
          *
-         * @emits Event#filter-objects-submit
+         * @emits Event#filter-objects
          */
         applyFilter() {
-            if (this.searchFieldValid()) {
-                this.$emit("filter-objects-submit", this.queryFilter);
-
-                return;
+            if (!this.isSearchFieldValid) {
+                return warning(t`Search text too short. Minimum length is 3. Retry`);
             }
-            this.searchFieldDialog();
+
+            const filter = this.prepareFilters();
+            this.$emit("filter-objects", { ...this.queryFilter, filter });
         },
 
         /**
-         * reset filters
+         * Reset filters
          *
          * @emits Event#filter-reset
          */
         resetFilter() {
+            this.selectedStatuses = [];
+            this.selectedType = '';
+            this.queryFilter = this.getCleanQuery();
             this.$emit("filter-reset");
         },
 
@@ -324,6 +363,6 @@ export default {
 
             this.queryFilter.filter[newFilter] = this.queryFilter.filter[oldFilter];
             delete this.queryFilter.filter[oldFilter];
-        }
+        },
     }
 };

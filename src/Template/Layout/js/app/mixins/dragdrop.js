@@ -88,7 +88,7 @@ export const DragdropMixin = {
          * @return {void}
          */
         onAttributeChanges(mutationsList, observer) {
-            for(var mutation of mutationsList) {
+            for (var mutation of mutationsList) {
                 if (mutation.type == 'attributes') {
                     if (mutation.attributeName === 'droppable') {
                         this.enableDrop();
@@ -103,6 +103,7 @@ export const DragdropMixin = {
                     }
                 }
             }
+            console.debug(observer);
         },
 
         /**
@@ -290,7 +291,7 @@ export const DragdropMixin = {
             }, 25);
         },
 
-        onDragend(ev) {
+        onDragend() {
             dragdropPayload = {};
             draggedData = {};
             draggedElement = null;

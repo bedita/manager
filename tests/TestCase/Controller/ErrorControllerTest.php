@@ -24,7 +24,6 @@ use Cake\TestSuite\TestCase;
  */
 class ErrorControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *

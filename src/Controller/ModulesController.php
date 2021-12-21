@@ -21,6 +21,7 @@ use Psr\Log\LogLevel;
 /**
  * Modules controller: list, add, edit, remove objects
  *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
@@ -45,6 +46,7 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Categories');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -170,13 +172,13 @@ class ModulesController extends AppController
             $this->Properties->relationsList($this->objectType)
         );
 
+        $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
+
         // set schemas for relations right types
-        $schemasByType = $this->Schema->getSchemasByType(
-            \App\Utility\Schema::rightTypes(
-                $this->viewVars['relationsSchema']
-            )
-        );
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
         $this->set('schemasByType', $schemasByType);
+
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
@@ -522,5 +524,76 @@ class ModulesController extends AppController
         }
 
         return $schema;
+    }
+
+    /**
+     * List categories for the object type.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function listCategories(): ?Response
+    {
+        $this->viewBuilder()->setTemplate('categories');
+
+        $this->request->allowMethod(['get']);
+        $response = $this->Categories->index($this->objectType, $this->request->getQueryParams());
+        $resources = $this->Categories->map($response);
+        $roots = $this->Categories->getAvailableRoots($resources);
+        $categoriesTree = $this->Categories->tree($resources);
+
+        $this->set(compact('resources', 'roots', 'categoriesTree'));
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->indexList('categories'));
+        $this->set('filter', $this->Properties->filterList('categories'));
+        $this->set('object_types', [$this->objectType]);
+
+        return null;
+    }
+
+    /**
+     * Save category.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function saveCategory(): ?Response
+    {
+        $this->request->allowMethod(['post']);
+
+        try {
+            $this->Categories->save($this->request->getData());
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
+    }
+
+    /**
+     * Remove single category.
+     *
+     * @param string $id Category ID.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function removeCategory(string $id): ?Response
+    {
+        try {
+            $type = $this->request->getData('object_type_name');
+            $this->Categories->delete($id, $type);
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
     }
 }

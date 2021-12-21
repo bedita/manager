@@ -56,6 +56,9 @@ export const ObservableMixin = {
          * @param {Array} mutationsList
          * @param {Object} observer
          */
-        onAttributeChanges(mutationsList, observer) { },
+        onAttributeChanges(mutationsList, observer) {
+            console.debug(mutationsList);
+            console.debug(observer);
+        },
     }
 }

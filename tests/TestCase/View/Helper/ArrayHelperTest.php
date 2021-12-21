@@ -24,7 +24,6 @@ use Cake\View\View;
  */
 class ArrayHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *

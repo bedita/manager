@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\SchemaComponent;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -16,7 +17,6 @@ use Cake\TestSuite\TestCase;
  */
 class SchemaComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -113,7 +113,6 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::getSchema()
      * @covers ::loadWithRevision()
-     * @covers ::cacheKey()
      */
     public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
     {
@@ -160,9 +159,7 @@ class SchemaComponentTest extends TestCase
         // from cache
         Cache::enable();
         $reflectionClass = new \ReflectionClass($this->Schema);
-        $method = $reflectionClass->getMethod('cacheKey');
-        $method->setAccessible(true);
-        $key = $method->invokeArgs($this->Schema, [$type]);
+        $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
 
         $method = $reflectionClass->getMethod('getSchema');
@@ -243,9 +240,7 @@ class SchemaComponentTest extends TestCase
         Cache::enable();
 
         // by type and revision
-        $method = $reflectionClass->getMethod('cacheKey');
-        $method->setAccessible(true);
-        $key = $method->invokeArgs($this->Schema, [$type]);
+        $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
         $method = $reflectionClass->getMethod('loadWithRevision');
         $method->setAccessible(true);
@@ -517,11 +512,13 @@ class SchemaComponentTest extends TestCase
                 'name' => 'cat-1',
                 'label' => 'Category 1',
                 'id' => '1',
+                'parent_id' => null,
             ],
             [
                 'name' => 'cat-2',
                 'label' => 'Category 2',
                 'id' => '2',
+                'parent_id' => null,
             ],
         ];
         static::assertEquals($expected, $result['categories']);

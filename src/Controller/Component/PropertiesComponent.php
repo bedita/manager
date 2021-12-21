@@ -13,6 +13,8 @@
 
 namespace App\Controller\Component;
 
+use App\Utility\CacheTools;
+use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -84,10 +86,45 @@ class PropertiesComponent extends Component
      */
     public function initialize(array $config)
     {
-        Configure::load('properties');
-        $propConfig = array_merge(Configure::read('DefaultProperties'), (array)Configure::read('Properties'));
-        $this->setConfig('Properties', $propConfig);
+        $this->init();
+
         parent::initialize($config);
+    }
+
+    /**
+     * Init properties
+     *
+     * @return void
+     */
+    protected function init(): void
+    {
+        $cacheKey = CacheTools::cacheKey('properties');
+        $properties = Cache::read($cacheKey, 'default');
+        if (!empty($properties)) {
+            $this->setConfig('Properties', $properties);
+
+            return;
+        }
+
+        Configure::load('properties');
+        $properties = (array)Configure::read('Properties');
+        $defaultProperties = (array)Configure::read('DefaultProperties');
+        $keys = array_unique(
+            array_merge(
+                array_keys($properties),
+                array_keys($defaultProperties)
+            )
+        );
+        sort($keys);
+        $config = [];
+        foreach ($keys as $key) {
+            $config[$key] = array_merge(
+                (array)Hash::get($defaultProperties, $key),
+                (array)Hash::get($properties, $key)
+            );
+        }
+        $this->setConfig('Properties', $config);
+        Cache::write($cacheKey, $config);
     }
 
     /**
@@ -167,6 +204,32 @@ class PropertiesComponent extends Component
     public function filterList(string $type): array
     {
         return $this->getConfig(sprintf('Properties.%s.filter', $type), $this->defaultGroups['filter']);
+    }
+
+    /**
+     * List of all filters, grouped by type, for passed `$types` list
+     *
+     * @param string[] $types List of types to get filters of
+     *
+     * @return array
+     */
+    public function filtersByType(array $types): array
+    {
+        if (empty($types)) {
+            return [];
+        }
+
+        return array_filter(
+            array_reduce(
+                $types,
+                function (array $accumulator, string $type) {
+                    $accumulator[$type] = $this->filterList($type);
+
+                    return $accumulator;
+                },
+                []
+            )
+        );
     }
 
     /**

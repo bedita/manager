@@ -28,12 +28,12 @@ export default {
         captureKeys(e) {
             let key = e.which || e.keyCode || 0;
             switch (key) {
-                case 13:
-                    this.go();
-                    break;
-                case 27:
-                    this.popUpAction = '';
-                    break;
+            case 13:
+                this.go();
+                break;
+            case 27:
+                this.popUpAction = '';
+                break;
             }
         },
 
