@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-11-25 14:35:25 \n"
+"POT-Creation-Date: 2021-12-22 09:11:33 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -80,6 +80,9 @@ msgstr ""
 msgid "Bad related data method"
 msgstr ""
 
+msgid "Birthdate"
+msgstr ""
+
 msgid "Bulk Action failed on: "
 msgstr ""
 
@@ -95,9 +98,6 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-msgid "Categories not available"
-msgstr ""
-
 msgid "Change File"
 msgstr ""
 
@@ -110,6 +110,12 @@ msgstr ""
 msgid "Choose a type"
 msgstr ""
 
+msgid "City"
+msgstr ""
+
+msgid "Clear cache"
+msgstr ""
+
 msgid "Click or drop new files here"
 msgstr ""
 
@@ -117,6 +123,15 @@ msgid "Clone"
 msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "Company Kind"
+msgstr ""
+
+msgid "Company Name"
 msgstr ""
 
 msgid "Concurrent users"
@@ -131,10 +146,19 @@ msgstr ""
 msgid "Copy to"
 msgstr ""
 
+msgid "Core Type"
+msgstr ""
+
 msgid "Core properties"
 msgstr ""
 
+msgid "Country"
+msgstr ""
+
 msgid "Create"
+msgstr ""
+
+msgid "Create a new category"
 msgstr ""
 
 msgid "Create new"
@@ -161,6 +185,9 @@ msgstr ""
 msgid "Data modeling"
 msgstr ""
 
+msgid "Deathdate"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -168,6 +195,9 @@ msgid "Descendants"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid "Details"
 msgstr ""
 
 msgid "Direct access by id or unique name"
@@ -207,6 +237,9 @@ msgid "Empty translation \"object_id\""
 msgstr ""
 
 msgid "Empty-verb"
+msgstr ""
+
+msgid "Enabled"
 msgstr ""
 
 msgid "Endpoints"
@@ -272,6 +305,9 @@ msgstr ""
 msgid "From date"
 msgstr ""
 
+msgid "Gender"
+msgstr ""
+
 msgid "Global"
 msgstr ""
 
@@ -305,6 +341,12 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
+msgid "Inverse Name"
+msgstr ""
+
+msgid "Is Abstract"
+msgstr ""
+
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr ""
 
@@ -321,6 +363,9 @@ msgid "Left types"
 msgstr ""
 
 msgid "Less filters"
+msgstr ""
+
+msgid "List"
 msgstr ""
 
 msgid "Locations"
@@ -386,6 +431,12 @@ msgstr ""
 msgid "NEW"
 msgstr ""
 
+msgid "Name"
+msgstr ""
+
+msgid "National Id Number"
+msgstr ""
+
 msgid "New entry in"
 msgstr ""
 
@@ -399,6 +450,9 @@ msgid "News"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No application"
 msgstr ""
 
 msgid "No items found"
@@ -422,6 +476,9 @@ msgstr ""
 msgid "Number of updated resources"
 msgstr ""
 
+msgid "Object Types"
+msgstr ""
+
 msgid "Object saved"
 msgstr ""
 
@@ -432,6 +489,9 @@ msgid "Object(s) deleted"
 msgstr ""
 
 msgid "Object(s) deleted from trash"
+msgstr ""
+
+msgid "ObjectTypes"
 msgstr ""
 
 msgid "Objects"
@@ -467,6 +527,9 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+msgid "Password Modified"
+msgstr ""
+
 msgid "Password reset"
 msgstr ""
 
@@ -474,6 +537,12 @@ msgid "Password reset request sent"
 msgstr ""
 
 msgid "Permanently delete"
+msgstr ""
+
+msgid "Person Title"
+msgstr ""
+
+msgid "Phone"
 msgstr ""
 
 msgid "Pick"
@@ -494,7 +563,16 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Property Types"
+msgstr ""
+
 msgid "Property types"
+msgstr ""
+
+msgid "PropertyTypes"
+msgstr ""
+
+msgid "Pseudonym"
 msgstr ""
 
 msgid "Publications"
@@ -566,10 +644,22 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
+msgid "State Name"
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
+msgid "Street Address"
+msgstr ""
+
 msgid "Submit your email address and follow the instructions sent by email."
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Surname"
 msgstr ""
 
 msgid "System users"
@@ -665,6 +755,9 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+msgid "Vat Number"
+msgstr ""
+
 msgid "Videos"
 msgstr ""
 
@@ -675,6 +768,9 @@ msgid "View file"
 msgstr ""
 
 msgid "View original"
+msgstr ""
+
+msgid "Website"
 msgstr ""
 
 msgid "Yes"
@@ -689,6 +785,9 @@ msgstr ""
 msgid "Your recent items"
 msgstr ""
 
+msgid "Zipcode"
+msgstr ""
+
 msgid "add"
 msgstr ""
 
@@ -696,6 +795,9 @@ msgid "add objects"
 msgstr ""
 
 msgid "application id"
+msgstr ""
+
+msgid "application_id"
 msgstr ""
 
 msgid "cancel"
@@ -737,6 +839,9 @@ msgstr ""
 msgid "elements to"
 msgstr ""
 
+msgid "email"
+msgstr ""
+
 msgid "empty"
 msgstr ""
 
@@ -755,6 +860,15 @@ msgstr ""
 msgid "id"
 msgstr ""
 
+msgid "label"
+msgstr ""
+
+msgid "locked_until"
+msgstr ""
+
+msgid "max_attempts"
+msgstr ""
+
 msgid "modified"
 msgstr ""
 
@@ -762,6 +876,9 @@ msgid "name"
 msgstr ""
 
 msgid "new password"
+msgstr ""
+
+msgid "object_types"
 msgstr ""
 
 msgid "objects"
@@ -776,6 +893,15 @@ msgstr ""
 msgid "original"
 msgstr ""
 
+msgid "params"
+msgstr ""
+
+msgid "parent"
+msgstr ""
+
+msgid "phone"
+msgstr ""
+
 msgid "related object"
 msgstr ""
 
@@ -788,6 +914,9 @@ msgstr ""
 msgid "scheduled from"
 msgstr ""
 
+msgid "scheduled_from"
+msgstr ""
+
 msgid "service"
 msgstr ""
 
@@ -795,6 +924,9 @@ msgid "service name"
 msgstr ""
 
 msgid "status"
+msgstr ""
+
+msgid "surname"
 msgstr ""
 
 msgid "title"
@@ -809,6 +941,9 @@ msgstr ""
 msgid "type"
 msgstr ""
 
+msgid "uname"
+msgstr ""
+
 msgid "undo"
 msgstr ""
 
@@ -816,6 +951,12 @@ msgid "undo remove"
 msgstr ""
 
 msgid "untitled"
+msgstr ""
+
+msgid "username"
+msgstr ""
+
+msgid "users"
 msgstr ""
 
 msgid "view parent"
