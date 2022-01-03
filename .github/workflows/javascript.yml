@@ -5,10 +5,12 @@ on:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - 'package.json'
   push:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - 'package.json'
 
 jobs:
   javascript-build:
