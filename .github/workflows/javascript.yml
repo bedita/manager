@@ -5,11 +5,13 @@ on:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - '.github/workflows/javascript.yml'
       - 'package.json'
   push:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - '.github/workflows/javascript.yml'
       - 'package.json'
 
 jobs:
