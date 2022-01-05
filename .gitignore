@@ -1,6 +1,7 @@
 # User specific & automatically generated files #
 #################################################
 /.vagrant/*
+/composer.lock
 /composer.local.json
 /config/app.php
 /config/.env
