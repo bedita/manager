@@ -4,9 +4,13 @@ on:
   pull_request:
     paths:
       - '**/*.php'
+      - '.github/workflows/php.yml'
+      - 'composer.json'
   push:
     paths:
       - '**/*.php'
+      - '.github/workflows/php.yml'
+      - 'composer.json'
 
 jobs:
   cs:
