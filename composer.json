@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "bedita/i18n": "^1.7",
         "bedita/web-tools": "^1.8",
         "cakephp/cakephp": "^3.10",
