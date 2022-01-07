@@ -9,7 +9,7 @@ use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
- * Administration Controller.
+ * Administration Controller
  */
 abstract class AdministrationBaseController extends AppController
 {
