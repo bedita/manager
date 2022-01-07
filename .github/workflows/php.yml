@@ -18,44 +18,6 @@ jobs:
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
     runs-on: 'ubuntu-20.04'
 
-    strategy:
-      matrix:
-        php-version: [7.2]
-
-    steps:
-      - name: 'Checkout current revision'
-        uses: 'actions/checkout@v2'
-
-      - name: 'Setup PHP'
-        uses: 'shivammathur/setup-php@v2'
-        with:
-          php-version: '${{ matrix.php-version }}'
-          tools: 'composer:v2'
-          extensions: 'mbstring, intl'
-          coverage: 'none'
-
-      - name: 'Discover Composer cache directory'
-        id: 'cachedir'
-        run: 'echo "::set-output name=path::$(composer global config cache-dir)"'
-
-      - name: 'Share Composer cache across runs'
-        uses: 'actions/cache@v2'
-        with:
-          path: '${{ steps.cachedir.outputs.path }}'
-          key: "composer-${{ github.job }}-${{ hashFiles('**/composer.json') }}"
-          restore-keys: |
-            composer-${{ github.job }}-
-            composer-
-
-      - name: 'Install dependencies with Composer'
-        run: 'composer install --prefer-dist --no-interaction'
-
-      - name: 'Run PHP CodeSniffer'
-        run: |
-          vendor/bin/phpcs -n -p --extensions=php \
-            --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=/Migrations/,/Seeds/ \
-            ./config ./src ./tests ./config
-
   stan:
     name: 'Static code analyzer'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
@@ -64,7 +26,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: [7.2, 7.3, 7.4]
+        php-version: [7.4]
 
     steps:
       - name: 'Checkout current revision'
@@ -111,7 +73,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: [7.2, 7.3, 7.4]
+        php-version: [7.4]
 
     steps:
       - name: 'Checkout current revision'
