@@ -31,7 +31,7 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test Translations controller
      *
-     * @var App\Test\TestCase\Controller\TranslationsController
+     * @var App\Controller\TranslationsController
      */
     public $controller;
 
