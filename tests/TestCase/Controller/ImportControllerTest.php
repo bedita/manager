@@ -193,7 +193,7 @@ class ImportControllerTest extends TestCase
             UPLOAD_ERR_CANT_WRITE => __('Failed to write file to disk'),
             UPLOAD_ERR_EXTENSION => __('An extension stopped the file upload'),
         ];
-        foreach($errors as $code => $expected) {
+        foreach ($errors as $code => $expected) {
             $actual = $method->invokeArgs($this->Import, [$code]);
             static::assertEquals($expected, $actual);
         }
