@@ -173,6 +173,36 @@ class ImportControllerTest extends TestCase
     }
 
     /**
+     * Test `uploadErrorMessage`.
+     *
+     * @covers:: uploadErrorMessage()
+     * @return void
+     */
+    public function testUploadErrorMessage(): void
+    {
+        $this->setupController();
+        $reflectionClass = new \ReflectionClass($this->Import);
+        $method = $reflectionClass->getMethod('uploadErrorMessage');
+        $method->setAccessible(true);
+        $errors = [
+            UPLOAD_ERR_INI_SIZE => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
+            UPLOAD_ERR_FORM_SIZE => __('File is too big, form MAX_FILE_SIZE exceeded'),
+            UPLOAD_ERR_PARTIAL => __('File only partially uploaded'),
+            UPLOAD_ERR_NO_FILE => __('Missing import file'),
+            UPLOAD_ERR_NO_TMP_DIR => __('Temporary folder missing'),
+            UPLOAD_ERR_CANT_WRITE => __('Failed to write file to disk'),
+            UPLOAD_ERR_EXTENSION => __('An extension stopped the file upload'),
+        ];
+        foreach($errors as $code => $expected) {
+            $actual = $method->invokeArgs($this->Import, [$code]);
+            static::assertEquals($expected, $actual);
+        }
+        $expected = __('Unknown upload error');
+        $actual = $method->invokeArgs($this->Import, [123456789]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `file` fail method, internal error
      *
      * @covers ::file()
