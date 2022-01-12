@@ -21,11 +21,9 @@ class QueryComponentTest extends TestCase
     public $Query;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $controller = new Controller();
@@ -34,11 +32,9 @@ class QueryComponentTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Query);
 
@@ -107,9 +103,9 @@ class QueryComponentTest extends TestCase
     /**
      * Data provider for `testPrepare`
      *
-     * @return void
+     * @return array
      */
-    public function prepareProvider()
+    public function prepareProvider(): array
     {
         return [
             'simple' => [

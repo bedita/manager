@@ -262,7 +262,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getSchema()
      * @covers ::loadInternalSchema
      */
-    public function testInternalSchema()
+    public function testInternalSchema(): void
     {
         $this->Schema->setConfig([
             'type' => 'object_types',
@@ -282,7 +282,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchRelationData()
      * @covers ::concreteTypes()
      */
-    public function testRelationMethods()
+    public function testRelationMethods(): void
     {
         $relations = [
             'data' => [
@@ -355,7 +355,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getRelationsSchema()
      * @covers ::fetchRelationData()
      */
-    public function testFailRelationsSchema()
+    public function testFailRelationsSchema(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -425,7 +425,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::fetchRoles()
      */
-    public function testFetchRoles()
+    public function testFetchRoles(): void
     {
         $roles = [
             'data' => [
@@ -471,7 +471,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::fetchCategories()
      */
-    public function testFetchCategories()
+    public function testFetchCategories(): void
     {
         $categories = [
             'data' => [
@@ -530,7 +530,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::fetchCategories()
      */
-    public function testFetchCategoriesFail()
+    public function testFetchCategoriesFail(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -573,7 +573,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::fetchObjectTypeMeta()
      */
-    public function testFetchObjectTypeMeta()
+    public function testFetchObjectTypeMeta(): void
     {
         $objectType = [
             'data' => [
@@ -625,7 +625,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchObjectTypesFeatures()
      * @covers ::setDescendant()
      */
-    public function testObjectTypesFeatures()
+    public function testObjectTypesFeatures(): void
     {
         $objectTypes = [
             'data' => [
@@ -697,7 +697,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::objectTypesFeatures()
      */
-    public function testObjectTypesFeaturesFail()
+    public function testObjectTypesFeaturesFail(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)

@@ -256,7 +256,7 @@ class ExportController extends AppController
      * @param mixed $value The value
      * @return mixed
      */
-    protected function getValue($value)
+    protected function getValue($value): mixed
     {
         if (is_array($value)) {
             return json_encode($value);

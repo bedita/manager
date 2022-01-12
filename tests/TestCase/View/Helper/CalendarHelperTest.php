@@ -84,7 +84,7 @@ class CalendarHelperTest extends TestCase
      * @dataProvider listProvider()
      * @covers ::list()
      */
-    public function testList(array $dateRanges, string $expected)
+    public function testList(array $dateRanges, string $expected): void
     {
         $actual = $this->Calendar->list($dateRanges);
         static::assertSame($expected, $actual);
@@ -126,7 +126,7 @@ class CalendarHelperTest extends TestCase
      * @dataProvider dateRangeProvider()
      * @covers ::dateRange()
      */
-    public function testDateRange(array $dateRange, string $expected)
+    public function testDateRange(array $dateRange, string $expected): void
     {
         $actual = $this->Calendar->dateRange($dateRange);
         static::assertSame($expected, $actual);

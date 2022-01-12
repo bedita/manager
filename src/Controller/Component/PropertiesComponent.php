@@ -84,7 +84,7 @@ class PropertiesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->init();
 

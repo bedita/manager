@@ -516,8 +516,9 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * Data provider for `testSave` test case.
      *
+     * @return array
      */
-    public function saveProvider()
+    public function saveProvider(): array
     {
         return [
             'save' => [
@@ -934,7 +935,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @return void
      */
-    public function testAvailableRelationshipsUrl()
+    public function testAvailableRelationshipsUrl(): void
     {
         $this->setupController();
         $url = $this->controller->availableRelationshipsUrl('children');
@@ -961,7 +962,7 @@ class ModulesControllerTest extends BaseControllerTest
      * @param array $expected The expected vars in view
      * @return void
      */
-    private function assertExpectedViewVars($expected)
+    private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
             static::assertArrayHasKey($varName, $this->controller->viewVars);

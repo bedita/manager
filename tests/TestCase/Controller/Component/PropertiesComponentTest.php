@@ -59,7 +59,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @return void
      */
-    protected function createComponent()
+    protected function createComponent(): void
     {
         $controller = new Controller();
         $registry = $controller->components();

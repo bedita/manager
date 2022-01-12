@@ -29,7 +29,7 @@ class ImportControllerSample extends ImportController
     /**
      * {@inheritDoc}
      */
-    public function render($view = null, $layout = null)
+    public function render($view = null, $layout = null): void
     {
         // do nothing
     }

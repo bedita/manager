@@ -655,7 +655,7 @@ class AppControllerTest extends TestCase
      *
      * @return mixed Method return.
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    public function invokeMethod(&$object, $methodName, array $parameters = []): mixed
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -672,7 +672,7 @@ class AppControllerTest extends TestCase
      *
      * @return mixed Method return.
      */
-    public function accessProperty(&$object, $propertyName)
+    public function accessProperty(&$object, $propertyName): mixed
     {
         $reflection = new \ReflectionClass(get_class($object));
         $property = $reflection->getProperty($propertyName);

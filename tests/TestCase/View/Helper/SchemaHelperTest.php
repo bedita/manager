@@ -382,7 +382,7 @@ class SchemaHelperTest extends TestCase
      *
      * @covers ::controlOptions()
      */
-    public function testLang()
+    public function testLang(): void
     {
         Configure::write('Project.config.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
@@ -497,7 +497,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::translatableFields()
      * @covers ::translatableType()
      */
-    public function testTranslatableFields(array $properties, array $expected)
+    public function testTranslatableFields(array $properties, array $expected): void
     {
         $actual = $this->Schema->translatableFields($properties);
         static::assertSame($expected, $actual);
@@ -607,7 +607,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::formatDateTime()
      * @covers ::typeFromSchema()
      */
-    public function testFormat($expected, $value, array $schema)
+    public function testFormat($expected, $value, array $schema): void
     {
         $actual = $this->Schema->format($value, $schema);
         static::assertSame($expected, $actual);

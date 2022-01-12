@@ -30,7 +30,7 @@ class PluginTest extends TestCase
      *
      * @covers ::loadedAppPlugins()
      */
-    public function testLoadedAppPlugins()
+    public function testLoadedAppPlugins(): void
     {
         $expected = Configure::read('Plugins', []);
         $expected = array_keys($expected) + ['IdeHelper'];
