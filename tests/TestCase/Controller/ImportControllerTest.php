@@ -136,6 +136,23 @@ class ImportControllerTest extends TestCase
     }
 
     /**
+     * Test `loadFilters`
+     *
+     * @return void
+     * @covers ::loadFilters()
+     */
+    public function testLoadFilters(): void
+    {
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $reflectionClass = new \ReflectionClass($this->Import);
+        $method = $reflectionClass->getMethod('loadFilters');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->Import, []);
+        static::assertTrue(is_array($this->Import->viewVars['filters']));
+        static::assertTrue(is_array($this->Import->viewVars['services']));
+    }
+
+    /**
      * Test `file` fail method, missing filter
      *
      * @covers ::file()
