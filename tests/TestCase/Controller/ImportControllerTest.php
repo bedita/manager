@@ -16,6 +16,8 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
+use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -100,6 +102,29 @@ class ImportControllerTest extends TestCase
     protected $fileError = 0;
 
     /**
+     * The original API client (not mocked).
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    protected $apiClient = null;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        $this->apiClient = ApiClientProvider::getApiClient();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown()
+    {
+        ApiClientProvider::setApiClient($this->apiClient);
+    }
+
+    /**
      * Setup import controller for test
      *
      * @param string $filter The filter class full path.
@@ -177,6 +202,46 @@ class ImportControllerTest extends TestCase
         $property->setAccessible(true);
         $actual = $property->getValue($this->Import);
         $expected = ['ImportFilterSampleService'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `loadAsyncJobs`
+     *
+     * @return void
+     * @covers ::loadAsyncJobs()
+     */
+    public function testLoadAsyncJobs(): void
+    {
+        // empty jobs
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $reflectionClass = new \ReflectionClass($this->Import);
+        $method = $reflectionClass->getMethod('loadAsyncJobs');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->Import, []);
+        $actual = $this->Import->viewVars['jobs'];
+        $expected = [];
+        static::assertEquals($expected, $actual);
+
+        // api call with exception
+        $property = $reflectionClass->getProperty('services');
+        $property->setAccessible(true);
+        $actual = $property->setValue($this->Import, ['dummy']);
+        $actual = $this->Import->viewVars['jobs'];
+        $expected = [];
+        static::assertEquals($expected, $actual);
+
+        // mock api get /admin/async_jobs
+        $expected = [['id' => 1], ['id' => 2], ['id' => 3]];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/admin/async_jobs')
+            ->willReturn(['data' => $expected]);
+        $this->Import->apiClient = $apiClient;
+        $method->invokeArgs($this->Import, []);
+        $actual = $this->Import->viewVars['jobs'];
         static::assertEquals($expected, $actual);
     }
 
