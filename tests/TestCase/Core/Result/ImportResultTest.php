@@ -40,6 +40,7 @@ class ImportResultTest extends TestCase
         static::assertEquals(0, $result->updated);
         static::assertEquals(0, $result->errors);
     }
+
     /**
      * Test `reset` method
      *
