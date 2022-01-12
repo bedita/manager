@@ -450,14 +450,14 @@ class TranslationsControllerTest extends TestCase
     /**
      * Get test object id
      *
-     * @return string|int
+     * @return int
      */
-    private function getTestId(): string|int
+    private function getTestId(): int
     {
         // call index and get first available object, for test view
         $o = $this->getTestObject();
 
-        return $o['id'];
+        return (int)Hash::get($o, 'id');
     }
 
     /**
