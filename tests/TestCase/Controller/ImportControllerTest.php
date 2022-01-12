@@ -47,6 +47,14 @@ class ImportFilterSample extends ImportFilter
     {
         return new ImportResult($filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getServiceName(): ?string
+    {
+        return 'ImportFilterSampleService';
+    }
 }
 
 /**
@@ -150,6 +158,26 @@ class ImportControllerTest extends TestCase
         $method->invokeArgs($this->Import, []);
         static::assertTrue(is_array($this->Import->viewVars['filters']));
         static::assertTrue(is_array($this->Import->viewVars['services']));
+    }
+
+    /**
+     * Test `updateServiceList`
+     *
+     * @return void
+     * @covers ::updateServiceList()
+     */
+    public function testUpdateServiceList(): void
+    {
+        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $reflectionClass = new \ReflectionClass($this->Import);
+        $method = $reflectionClass->getMethod('updateServiceList');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->Import, ['App\Test\TestCase\Controller\ImportFilterSample']);
+        $property = $reflectionClass->getProperty('services');
+        $property->setAccessible(true);
+        $actual = $property->getValue($this->Import);
+        $expected = ['ImportFilterSampleService'];
+        static::assertEquals($expected, $actual);
     }
 
     /**
