@@ -57,7 +57,6 @@ export default {
         },
 
         update(value) {
-            console.log(value);
             this.value = value;
         }
     },
