@@ -7,12 +7,14 @@ on:
       - '**/*.scss'
       - '.github/workflows/javascript.yml'
       - 'package.json'
+      - 'yarn.lock'
   push:
     paths:
       - '**/*.js'
       - '**/*.scss'
       - '.github/workflows/javascript.yml'
       - 'package.json'
+      - 'yarn.lock'
 
 jobs:
   javascript-build:
