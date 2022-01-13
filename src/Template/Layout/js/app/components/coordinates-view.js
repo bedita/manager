@@ -28,7 +28,14 @@ export default {
         },
     },
 
+    async mounted() {
+        this.$eventBus.$on('updatecoords', (point) => {
+            this.value = `${point.lng}, ${point.lat}`;
+        });
+    },
+
     methods: {
+
         convertFromPoint(input) {
             if (!input) {
                 return;
@@ -45,10 +52,12 @@ export default {
                 return;
             }
             let [lon, lat] = input.split(/\s*,\s*/);
+
             return `POINT(${lon} ${lat})`;
         },
 
         update(value) {
+            console.log(value);
             this.value = value;
         }
     },

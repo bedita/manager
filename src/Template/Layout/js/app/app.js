@@ -124,6 +124,8 @@ const _vueInstance = new Vue({
         // listen events emitted on this vue instance
         this.$on('filter-update-page-size', this.onUpdatePageSize);
         this.$on('filter-update-current-page', this.onUpdateCurrentPage);
+
+        Vue.prototype.$eventBus = new Vue();
     },
 
     watch: {
