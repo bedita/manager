@@ -5,57 +5,51 @@
     <div class="dashboard">
         <section class="dashboard-section">
             <div class="dashboard-items">
-            {% for name, module in modules if not in_array(name, ['trash', 'objects', 'users', 'folders', 'publications']) %}
-                {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
-                {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
-                {% if module.hints.multiple_types %}
-                    {% set class = class ~ ' icon-th-large-1' %}
-                {% endif %}
+            {% for name, module in modules if not in_array(name, ['trash', 'users']) %}
 
-                {% if module.route %}
-                    {% set url = Url.build(module.route) %}
-                {% else %}
-                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
-                {% endif %}
-                <a href="{{ url }}" class="{{ class }}">
-                    <span>{{ title }}</span>
-                </a>
-            {% endfor %}
+                {% if name == 'objects' %}
 
-            </div>
-        </section>
-
-        <section class="dashboard-section">
-
-            {# <header>
-                <h2>{{ __('Preferences and Tools') }}</h2>
-            </header> #}
-
-            <div class="dashboard-items">
-
-                {% if modules.publications %}
-                    {{ Html.link(__('Publications'),
-                        { '_name': 'modules:list', 'object_type': 'publications' },
-                        { 'title': __('Publications'), 'class': 'dashboard-item has-background-module-publications icon-globe-1', } )|raw }}
-                {% endif %}
-
-                {% if modules.folders %}
-                    {{ Html.link(__('Folders'),
-                        { '_name': 'modules:list', 'object_type': 'folders' },
-                        { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
-                {% endif %}
-
-                {{ Html.link(__('All objects'),
+                    {{ Html.link(__('All objects'),
                     { '_name': 'modules:list', 'object_type': 'objects' },
                     { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
 
-                {#
-                <a href="#" class="dashboard-item has-background-module-categories icon-list-1">{{ __('All categories') }}</a>
-                <a href="#" class="dashboard-item has-background-module-tags icon-tag" disabled>{{ __('All tags') }}</a>
-                #}
+                {% elseif name == 'publications' %}
 
+                    {% if modules.publications %}
+                        {{ Html.link(__('Publications'),
+                            { '_name': 'modules:list', 'object_type': 'publications' },
+                            { 'title': __('Publications'), 'class': 'dashboard-item has-background-module-publications icon-globe-1', } )|raw }}
+                    {% endif %}
+
+                {% elseif name == 'folders' %}
+
+                    {% if modules.folders %}
+                        {{ Html.link(__('Folders'),
+                            { '_name': 'modules:list', 'object_type': 'folders' },
+                            { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
+                    {% endif %}
+
+                {% else %}
+
+                    {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
+                    {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
+                    {% if module.hints.multiple_types %}
+                        {% set class = class ~ ' icon-th-large-1' %}
+                    {% endif %}
+
+                    {% if module.route %}
+                        {% set url = Url.build(module.route) %}
+                    {% else %}
+                        {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                    {% endif %}
+                    <a href="{{ url }}" class="{{ class }}">
+                        <span>{{ title }}</span>
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
             </div>
-
         </section>
 
         <section class="dashboard-section">
