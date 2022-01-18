@@ -492,6 +492,7 @@ return [
      *
      *  - 'view' properties groups to present in object view, where groups are:
      *      + '_keep' special group of properties to keep and display even if not found in object
+     *      + '_hide' special group of properties to not display
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
@@ -519,6 +520,9 @@ return [
         //     'view' => [
         //         '_keep' => [
         //             'some_field',
+        //         ],
+        //         '_hide' => [
+        //             'some_other_field',
         //         ],
         //         'core' => [
         //              'some_field',
