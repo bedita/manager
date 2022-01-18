@@ -143,6 +143,8 @@ class PropertiesComponent extends Component
      * Properties not present in $object will not be set in any group unless they're listed
      * under `_keep` in the above configuration.
      *
+     * Properties in `Properties.{type}.view._hide` will be removed from groups.
+     *
      * Properties in internal `$excluded` array will be removed from groups.
      *
      * @param array  $object Object data to view
@@ -153,9 +155,11 @@ class PropertiesComponent extends Component
     public function viewGroups(array $object, string $type): array
     {
         $properties = $used = [];
-        $keep = $this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
+        $keep = (array)$this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
+        $hide = (array)$this->getConfig(sprintf('Properties.%s.view._hide', $type), []);
         $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
+        $attributes = array_diff_key($attributes, array_flip($hide));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
         unset($defaults['_keep']);
 
