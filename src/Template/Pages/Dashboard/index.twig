@@ -7,46 +7,30 @@
             <div class="dashboard-items">
             {% for name, module in modules if not in_array(name, ['trash', 'users']) %}
 
+                {# Special cases - set defaults on objects, publications, folders #}
                 {% if name == 'objects' %}
-
-                    {{ Html.link(__('All objects'),
-                    { '_name': 'modules:list', 'object_type': 'objects' },
-                    { 'title': __('All objects'), 'class': 'dashboard-item has-background-module-objects icon-th-large-1', } )|raw }}
-
+                    {% set module = {'label': __('All objects')}|merge(module) %}
                 {% elseif name == 'publications' %}
-
-                    {% if modules.publications %}
-                        {{ Html.link(__('Publications'),
-                            { '_name': 'modules:list', 'object_type': 'publications' },
-                            { 'title': __('Publications'), 'class': 'dashboard-item has-background-module-publications icon-globe-1', } )|raw }}
-                    {% endif %}
-
+                    {% set module = {'class': 'icon-globe-1'}|merge(module) %}
                 {% elseif name == 'folders' %}
-
-                    {% if modules.folders %}
-                        {{ Html.link(__('Folders'),
-                            { '_name': 'modules:list', 'object_type': 'folders' },
-                            { 'title': __('Folders'), 'class': 'dashboard-item has-background-module-folders icon-folder', } )|raw }}
-                    {% endif %}
-
-                {% else %}
-
-                    {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
-                    {% set class = 'dashboard-item has-background-module-%s'|format(name) %}
-                    {% if module.hints.multiple_types %}
-                        {% set class = class ~ ' icon-th-large-1' %}
-                    {% endif %}
-
-                    {% if module.route %}
-                        {% set url = Url.build(module.route) %}
-                    {% else %}
-                        {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
-                    {% endif %}
-                    <a href="{{ url }}" class="{{ class }}">
-                        <span>{{ title }}</span>
-                    </a>
-
+                    {% set module = {'class': 'icon-folder'}|merge(module) %}
                 {% endif %}
+
+                {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
+
+                {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
+                {% if module.hints.multiple_types and not module.class %}
+                    {% set class = class ~ ' icon-th-large-1' %}
+                {% endif %}
+
+                {% if module.route %}
+                    {% set url = Url.build(module.route) %}
+                {% else %}
+                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                {% endif %}
+                <a href="{{ url }}" class="{{ class }}">
+                    <span>{{ title }}</span>
+                </a>
 
             {% endfor %}
             </div>
