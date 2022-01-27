@@ -10,7 +10,7 @@
 {% element 'Modules/index_header' %}
 
 <div class="module-index">
-    {% if schema.categories %}
+    {% if schema.properties.categories %}
     {% element 'Modules/index_categories' {
         'saveAction': { '_name': 'model:save:categories' },
         'removeAction': { '_name': 'model:remove:categories' }
