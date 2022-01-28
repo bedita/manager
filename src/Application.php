@@ -58,6 +58,7 @@ class Application extends BaseApplication
         parent::bootstrapCli();
         $this->addPluginDev('IdeHelper');
         $this->addPlugin('BEdita/I18n');
+        $this->loadPluginsFromConfig();
     }
 
     /**

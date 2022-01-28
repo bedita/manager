@@ -58,12 +58,14 @@
             ) %}
         {% endif %}
 
+        {% if schema.properties.categories %}
         {% do _view.append('module-buttons',
             Html.link(__('Categories'),
                 {'_name': 'modules:categories:index', 'object_type': objectType},
                 {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
             )|raw
         ) %}
+        {% endif %}
 
     </div> {# end module-content #}
 </modules-index>

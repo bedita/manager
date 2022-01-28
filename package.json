@@ -35,7 +35,7 @@
         "eslint-webpack-plugin": "^3.1.0",
         "flatpickr": "^4.6.9",
         "jsoneditor": "^9.5.6",
-        "mapbox-gl": "^2.5.1",
+        "mapbox-gl": "^2.6.1",
         "mapbox-gl-compare": "^0.4.0",
         "moment": "^2.22.2",
         "sleep-promise": "^9.1.0",
