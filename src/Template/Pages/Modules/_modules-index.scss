@@ -95,19 +95,19 @@ body.view-module {
                 &.future {
                     .select-cell:after {
                         display: inline-block;
-                        background-image: url('/img/iconFuture.svg');
+                        background-image: url('/svg/iconFuture.svg');
                     }
                 }
                 &.expired {
                     .select-cell:after {
                         display: inline-block;
-                        background-image: url('/img/iconExpired.svg');
+                        background-image: url('/svg/iconExpired.svg');
                     }
                 }
                 &.locked {
                     .select-cell:after {
                         display: inline-block;
-                        background-image: url('/img/iconLocked.svg');
+                        background-image: url('/svg/iconLocked.svg');
                     }
                 }
 

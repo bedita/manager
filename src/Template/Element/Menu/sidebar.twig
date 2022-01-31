@@ -16,7 +16,7 @@
             {% set pubstatus = 'future'%}
         {% elseif object.meta.locked %}
              {% set pubstatus = 'locked'%}
-        {% elseif  object.attributes.status != 'on' %}
+        {% elseif  object.attributes.status == 'draft' %}
             {% set pubstatus = 'draft'%}
         {% endif %}
 
