@@ -10,11 +10,18 @@
     {% if not Layout.isLogin() %}
         <div class="sidebar-module-commands">
 
+        {% if object.attributes.publish_start and (object.attributes.publish_start|date('U') > 'now'|date('U')) %}
+            {% set pubstatus = 'future'%}
+        {% elseif  object.attributes.publish_end and (object.attributes.publish_end|date('U') <= 'now'|date('U')) %}
+            {% set pubstatus = 'expired'%}
+        {% endif %}
+
         {% if not Layout.isDashboard() %}
             {% set editors = Editors.list() %}
-            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {% if object.meta.locked %}locked{% endif %}">
+            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {% if object.meta.locked %}locked{% endif %} {{ pubstatus }}">
                 {{ Layout.moduleLink()|raw }}
             </div>
+
             {% if editors|length > 1 %}
             <ul class="concurrent-editors">
                 <strong>{{ __('Alert!') }}</strong>

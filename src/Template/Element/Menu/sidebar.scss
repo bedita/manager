@@ -25,13 +25,26 @@
     }
 }
 
-.locked a {
+.locked a,
+.expired a,
+.future a {
     position: relative;
     display: flex;
     height: $dashboard-item-height;
-    background-image: url('/img/iconLocked.png');
     background-repeat:no-repeat;
     background-position: center center;
+}
+
+.locked a {
+    background-image: url('/img/iconLocked.png');
+}
+
+.expired a {
+    background-image: url('/img/iconExpired.png');
+}
+
+.future a {
+    background-image: url('/img/iconFuture.png');
 }
 
 .module-box-concurrent-editors a {
