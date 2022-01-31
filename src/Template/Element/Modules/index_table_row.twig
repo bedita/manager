@@ -9,6 +9,8 @@
     {% set pubstatus = 'future'%}
 {% elseif  object.attributes.publish_end and (object.attributes.publish_end|date('U') <= 'now'|date('U')) %}
     {% set pubstatus = 'expired'%}
+{% elseif object.meta.locked %}
+    {% set pubstatus = 'locked'%}
 {% endif %}
 
 <a {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
