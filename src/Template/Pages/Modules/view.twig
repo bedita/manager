@@ -34,7 +34,7 @@
 
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
-                {% if object.id is empty and objectType in uploadable %}
+                {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
                     {% element 'Form/upload' %}
                 {% endif %}
 
