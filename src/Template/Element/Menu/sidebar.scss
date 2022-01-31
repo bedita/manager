@@ -25,26 +25,31 @@
     }
 }
 
-.locked a,
-.expired a,
-.future a {
-    position: relative;
-    display: flex;
-    height: $dashboard-item-height;
-    background-repeat:no-repeat;
-    background-position: center center;
-}
+.module-box {
 
-.locked a {
-    background-image: url('/img/iconLocked.svg');
-}
+    a {
+        position: relative;
+        display: flex;
+        height: $dashboard-item-height;
+        background-repeat:no-repeat;
+        background-position: center center;
+    }
 
-.expired a {
-    background-image: url('/img/iconExpired.svg');
-}
+    &.locked a {
+        background-image: url('/svgimg/iconLocked.svg');
+    }
 
-.future a {
-    background-image: url('/img/iconFuture.svg');
+    &.expired a {
+        background-image: url('/svg/iconExpired.svg');
+    }
+
+    &.future a {
+        background-image: url('/svg/iconFuture.svg');
+    }
+
+    &.draft a {
+        background-image: url('/svg/iconDraft.svg');
+    }
 }
 
 .module-box-concurrent-editors a {
