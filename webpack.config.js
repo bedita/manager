@@ -134,7 +134,9 @@ module.exports = {
                     'concurrent-editors.svg',
                     'iconDraft.svg',
                     'iconExpired.svg',
+                    'iconExpired.png',
                     'iconFuture.svg',
+                    'iconFuture.png',
                     'iconLocked.svg'
                 ];
                 for (let i = 0; i < preserve.length; i++) {
