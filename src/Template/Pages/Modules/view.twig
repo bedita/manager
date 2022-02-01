@@ -149,7 +149,7 @@
             {% endif %}
 
             {# Append "new" button #}
-            {% if object.id and Perms.canCreate() %}
+            {% if Perms.canCreate() %}
                 {% do _view.append('module-buttons',
                     Html.link(__('Create new'),
                         {'_name': 'modules:create', 'object_type': objectType},
