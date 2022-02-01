@@ -81,6 +81,36 @@ body.view-module {
                     background-color: $gray-800;
                 }
 
+                .select-cell:after {
+                    display: none;
+                    vertical-align: bottom;
+                    content: "";
+                    width: $gutter * 1.5;
+                    height: $gutter * 1.5;
+                    margin-left: $gutter * 0.5;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: 100%;
+                }
+                &.future {
+                    .select-cell:after {
+                        display: inline-block;
+                        background-image: url('/svg/iconFuture.svg');
+                    }
+                }
+                &.expired {
+                    .select-cell:after {
+                        display: inline-block;
+                        background-image: url('/svg/iconExpired.svg');
+                    }
+                }
+                &.locked {
+                    .select-cell:after {
+                        display: inline-block;
+                        background-image: url('/svg/iconLocked.svg');
+                    }
+                }
+
                 // table cells
                 > div {
                     padding: $gutter * 1.5 $gutter $gutter * .375;
