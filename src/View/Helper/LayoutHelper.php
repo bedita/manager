@@ -59,7 +59,6 @@ class LayoutHelper extends Helper
      */
     public function publishStatus(array $object = []): string
     {
-
         if (empty($object)) {
             return '';
         }
