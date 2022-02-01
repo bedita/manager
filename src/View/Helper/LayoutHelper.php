@@ -54,35 +54,33 @@ class LayoutHelper extends Helper
     /**
      * Properties for various publication status
      *
+     * @param array $object The object
      * @return string pubstatus
      */
-    public function publishStatus($object): string
+    public function publishStatus(array $object = []): string
     {
 
         if (empty($object)) {
-            return false;
+            return '';
         }
 
-        $publish_end = $object['attributes']['publish_end'];
-        $publish_start = $object['attributes']['publish_start'];
+        $end = (string)Hash::get($object, 'attributes.publish_end');
+        $start = (string)Hash::get($object, 'attributes.publish_start');
 
-        if ( !empty($publish_end) && strtotime($publish_end) <= time() ) {
-            $pubstatus = 'expired';
+        if (!empty($end) && strtotime($end) <= time()) {
+            return 'expired';
         }
-        elseif ( !empty($publish_start) && strtotime($publish_start) > time() ) {
-            $pubstatus = 'future';
+        if (!empty($start) && strtotime($start) > time()) {
+            return 'future';
         }
-        elseif ( !empty($object['meta']['locked']) ) {
-            $pubstatus = 'locked';
+        if (!empty((string)Hash::get($object, 'meta.locked'))) {
+            return 'locked';
         }
-        elseif ( $object['attributes']['status'] == 'draft' )  {
-            $pubstatus = 'draft';
-        }
-        else {
-            $pubstatus = '';
+        if ((string)Hash::get($object, 'attributes.status') === 'draft') {
+            return 'draft';
         }
 
-        return $pubstatus;
+        return '';
     }
 
     /**
