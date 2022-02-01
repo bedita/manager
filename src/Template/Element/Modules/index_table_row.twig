@@ -6,7 +6,7 @@
 {% set buttonClasses = 'button button-text-white is-width-auto' %}
 
 <a {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
-    class="table-row object-status-{{ object.attributes.status }}">
+    class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}">
 
         <div class="select-cell narrow" @click="selectRow">
             {{ Form.unlockField('oneItem') }}

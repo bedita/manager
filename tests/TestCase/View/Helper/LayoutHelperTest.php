@@ -268,4 +268,49 @@ class LayoutHelperTest extends TestCase
         $actual = $layout->typeLabel('Objects');
         static::assertSame($expected, $actual);
     }
+
+    public function publishStatusProvider(): array
+    {
+        return [
+            'empty object' => [
+                [],
+                '',
+            ],
+            'expired' => [
+                ['attributes' => ['publish_end' => '2022-01-01 00:00:00']],
+                'expired',
+            ],
+            'future' => [
+                ['attributes' => ['publish_start' => '2222-01-01 00:00:00']],
+                'future',
+            ],
+            'locked' => [
+                ['meta' => ['locked' => true]],
+                'locked',
+            ],
+            'draft' => [
+                ['attributes' => ['status' => 'draft']],
+                'draft',
+            ],
+            'none of above' => [
+                ['attributes' => ['title' => 'dummy']],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Test `publishStatus` method
+     *
+     * @return void
+     * @dataProvider publishStatusProvider()
+     * @covers ::publishStatus()
+     */
+    public function testPublishStatus(array $object, string $expected): void
+    {
+        $view = new View();
+        $layout = new LayoutHelper($view);
+        $actual = $layout->publishStatus($object);
+        static::assertSame($expected, $actual);
+    }
 }

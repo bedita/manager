@@ -131,7 +131,13 @@ module.exports = {
                     'iconLocked.png',
                     'README',
                     'timezone.js',
-                    'concurrent-editors.svg'
+                    'concurrent-editors.svg',
+                    'iconDraft.svg',
+                    'iconExpired.svg',
+                    'iconExpired.png',
+                    'iconFuture.svg',
+                    'iconFuture.png',
+                    'iconLocked.svg'
                 ];
                 for (let i = 0; i < preserve.length; i++) {
                     if (asset.includes(preserve[i])) {

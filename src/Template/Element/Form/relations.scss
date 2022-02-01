@@ -198,26 +198,26 @@
 
     &.added {
         article {
-            box-shadow: 0 0 0 3px var(--box-shadow-color);
+            //box-shadow: 0 0 0 3px var(--box-shadow-color);
             .badge {
                 padding: $gutter * .5;
                 border: none;
                 letter-spacing: 1px;
             }
-
-            .ribbon {
-                position: absolute;
-                top: $gutter * .5;
-                right: -$gutter * .5;
-                z-index: 2;
-                display: block;
-                color: #fff;
-                background-color: #000;
-                font-size: $font-size-sssm;
-                font-weight: $font-weight-black;
-                padding: $gutter * .25 $gutter * 3 $gutter * .25 $gutter * .5;
-            }
         }
+    }
+    .ribbon {
+        position: absolute;
+        top: $gutter * .5;
+        right: -$gutter * .5;
+        z-index: 2;
+        display: block;
+        color: #fff;
+        background-color: #000;
+        font-size: $font-size-sssm;
+        font-weight: $font-weight-black;
+        text-transform: uppercase;
+        padding: $gutter * 0.25 $gutter $gutter * 0.25 $gutter;
     }
 }
 
@@ -275,6 +275,7 @@
 
     .input-narrow {
         width: 3rem;
+        background-color: red;
     }
 }
 
