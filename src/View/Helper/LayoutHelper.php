@@ -72,7 +72,7 @@ class LayoutHelper extends Helper
         elseif ( !empty($publish_start) && strtotime($publish_start) > time() ) {
             $pubstatus = 'future';
         }
-        elseif ( $object['meta']['locked'] ) {
+        elseif ( !empty($object['meta']['locked']) ) {
             $pubstatus = 'locked';
         }
         elseif ( $object['attributes']['status'] == 'draft' )  {
