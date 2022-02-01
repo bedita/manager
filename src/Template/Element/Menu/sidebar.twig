@@ -10,19 +10,9 @@
     {% if not Layout.isLogin() %}
         <div class="sidebar-module-commands">
 
-        {% if  object.attributes.publish_end and (object.attributes.publish_end|date('U') <= 'now'|date('U')) %}
-            {% set pubstatus = 'expired'%}
-        {% elseif object.attributes.publish_start and (object.attributes.publish_start|date('U') > 'now'|date('U')) %}
-            {% set pubstatus = 'future'%}
-        {% elseif object.meta.locked %}
-             {% set pubstatus = 'locked'%}
-        {% elseif  object.attributes.status == 'draft' %}
-            {% set pubstatus = 'draft'%}
-        {% endif %}
-
         {% if not Layout.isDashboard() %}
             {% set editors = Editors.list() %}
-            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ pubstatus }}">
+            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ Layout.publishStatus(object) }}">
                 {{ Layout.moduleLink()|raw }}
             </div>
 

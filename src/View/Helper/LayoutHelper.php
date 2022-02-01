@@ -52,6 +52,40 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Properties for various publication status
+     *
+     * @return string pubstatus
+     */
+    public function publishStatus($object): string
+    {
+
+        if (empty($object)) {
+            return false;
+        }
+
+        $publish_end = $object['attributes']['publish_end'];
+        $publish_start = $object['attributes']['publish_start'];
+
+        if ( !empty($publish_end) && strtotime($publish_end) <= time() ) {
+            $pubstatus = 'expired';
+        }
+        elseif ( !empty($publish_start) && strtotime($publish_start) > time() ) {
+            $pubstatus = 'future';
+        }
+        elseif ( $object['meta']['locked'] ) {
+            $pubstatus = 'locked';
+        }
+        elseif ( $object['attributes']['status'] == 'draft' )  {
+            $pubstatus = 'draft';
+        }
+        else {
+            $pubstatus = '';
+        }
+
+        return $pubstatus;
+    }
+
+    /**
      * Messages visibility
      *
      * @return bool True if visible for view
