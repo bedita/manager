@@ -82,21 +82,11 @@ class PropertiesComponent extends Component
     ];
 
     /**
-     * {@inheritDoc}
-     */
-    public function initialize(array $config): void
-    {
-        $this->init();
-
-        parent::initialize($config);
-    }
-
-    /**
      * Init properties
      *
      * @return void
      */
-    protected function init(): void
+    public function startup(): void
     {
         $cacheKey = CacheTools::cacheKey('properties');
         $properties = Cache::read($cacheKey, 'default');
