@@ -73,7 +73,7 @@ class PropertiesComponentTest extends TestCase
      * @return void
      * @covers ::startup()
      */
-    public function testInit(): void
+    public function testStartup(): void
     {
         Cache::clear();
 
