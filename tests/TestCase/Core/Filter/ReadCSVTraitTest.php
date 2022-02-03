@@ -25,7 +25,12 @@ class ReadCSVTraitTest extends TestCase
 {
     use ReadCSVTrait;
 
-    public function readCSVFileProvider()
+    /**
+     * Provider for testReadCSVFile
+     *
+     * @return array
+     */
+    public function readCSVFileProvider(): array
     {
         return [
             'empty' => [
@@ -56,7 +61,7 @@ class ReadCSVTraitTest extends TestCase
      * @covers ::readCSVFile()
      * @return void
      */
-    public function testReadCSVFile(array $keys, array $data, string $filepath, array $options = [])
+    public function testReadCSVFile(array $keys, array $data, string $filepath, array $options = []): void
     {
         $this->readCSVFile($filepath, $options);
         static::assertEquals($keys, $this->csvKeys);

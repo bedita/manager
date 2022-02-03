@@ -30,7 +30,7 @@ class HistoryComponent extends Component
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $view = new \Cake\View\View();
         $this->Calendar = new CalendarHelper($view);

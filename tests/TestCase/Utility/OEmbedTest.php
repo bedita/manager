@@ -37,7 +37,12 @@ class MyOEmbed extends OEmbed
  */
 class OEmbedTest extends TestCase
 {
-    public function readMetadataProvider()
+    /**
+     * Data provider for `testReadMetadata`
+     *
+     * @return array
+     */
+    public function readMetadataProvider(): array
     {
         return [
             'not found' => [
@@ -89,7 +94,7 @@ class OEmbedTest extends TestCase
      * @covers ::findProvider()
      * @dataProvider readMetadataProvider
      */
-    public function testReadMetadata(array $expected, string $url, array $oembedResponse)
+    public function testReadMetadata(array $expected, string $url, array $oembedResponse): void
     {
         $oembed = new MyOEmbed();
         $oembed->json = $oembedResponse;

@@ -31,9 +31,7 @@ class CategoriesHelperTest extends TestCase
     public $Categories;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function setUp(): void
     {
@@ -42,9 +40,7 @@ class CategoriesHelperTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function tearDown(): void
     {

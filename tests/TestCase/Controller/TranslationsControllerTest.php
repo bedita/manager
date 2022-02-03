@@ -18,6 +18,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
@@ -30,7 +31,7 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test Translations controller
      *
-     * @var App\Test\TestCase\Controller\TranslationsController
+     * @var App\Controller\TranslationsController
      */
     public $controller;
 
@@ -449,14 +450,14 @@ class TranslationsControllerTest extends TestCase
     /**
      * Get test object id
      *
-     * @return string|int
+     * @return int
      */
-    private function getTestId()
+    private function getTestId(): int
     {
         // call index and get first available object, for test view
         $o = $this->getTestObject();
 
-        return $o['id'];
+        return (int)Hash::get($o, 'id');
     }
 
     /**
@@ -464,7 +465,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return array|null
      */
-    private function getTestObject()
+    private function getTestObject(): ?array
     {
         $response = $this->client->getObjects('documents', ['filter' => ['uname' => $this->uname]]);
 
@@ -481,20 +482,20 @@ class TranslationsControllerTest extends TestCase
      * @param string|int $id The object ID
      * @param string $objectType The object type
      * @param string $lang The lang code
-     * @return string|int|null The translation ID
+     * @return int|null The translation ID
      */
-    private function getTestTranslationId($id, $objectType, $lang)
+    private function getTestTranslationId($id, $objectType, $lang): ?int
     {
         $response = $this->client->getObject($id, $objectType, compact('lang'));
 
         if (empty($response['included'])) { // if not found, create dummy translation
             $response = $this->client->save('translations', ['object_id' => $id, 'status' => 'draft', 'lang' => 'it', 'translated_fields' => [ 'title' => 'Titolo di test' ]]);
 
-            return $response['data']['id'];
+            return (int)Hash::get($response, 'data.id');
         } else {
             foreach ($response['included'] as $included) {
                 if ($included['type'] === 'translations' && $included['attributes']['object_id'] == $id && $included['attributes']['lang'] === $lang) {
-                    return $included['id'];
+                    return (int)Hash::get($included, 'id');
                 }
             }
         }
@@ -507,7 +508,7 @@ class TranslationsControllerTest extends TestCase
      *
      * @return array
      */
-    private function createTestObject()
+    private function createTestObject(): array
     {
         $o = $this->getTestObject();
         if ($o == null) {
@@ -529,7 +530,7 @@ class TranslationsControllerTest extends TestCase
      * @param string $type The object type
      * @return void
      */
-    private function restoreTestObject($id, $type)
+    private function restoreTestObject($id, $type): void
     {
         $o = $this->getTestObject();
         if ($o == null) {
@@ -543,7 +544,7 @@ class TranslationsControllerTest extends TestCase
      * @param array $expected The expected vars in view
      * @return void
      */
-    private function assertExpectedViewVars($expected)
+    private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
             static::assertArrayHasKey($varName, $this->controller->viewVars);

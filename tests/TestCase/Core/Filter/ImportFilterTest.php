@@ -98,7 +98,7 @@ class ImportFilterTest extends TestCase
      *
      * @return array
      */
-    public function createAsyncJobProvider()
+    public function createAsyncJobProvider(): array
     {
         $result = new ImportResult();
         $filename = 'import.csv';
@@ -135,7 +135,7 @@ class ImportFilterTest extends TestCase
      * @dataProvider createAsyncJobProvider
      * @covers ::createAsyncJob()
      */
-    public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected)
+    public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected): void
     {
         if ($expected instanceof \LogicException) {
             $this->expectException(get_class($expected));

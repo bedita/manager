@@ -65,6 +65,7 @@ class Result
      * @param string $info the info message
      * @param string $warn the warn message
      * @param string $error the error message
+     * @return void
      */
     public function __construct(
         $created = 0,
@@ -89,7 +90,7 @@ class Result
      * @param string $msg Message string
      * @return void
      */
-    public function addMessage(string $name, string $msg)
+    public function addMessage(string $name, string $msg): void
     {
         if (property_exists($this, $name) && is_string($this->{$name})) {
             $this->{$name} .= $msg . static::MSG_SEPARATOR;
@@ -102,7 +103,7 @@ class Result
      * @param string $name Counter name: `created` or `updated`
      * @return void
      */
-    public function increment(string $name)
+    public function increment(string $name): void
     {
         if (property_exists($this, $name) && is_int($this->{$name})) {
             $this->{$name}++;
