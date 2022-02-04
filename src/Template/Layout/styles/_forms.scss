@@ -42,7 +42,9 @@ select {
 }
 
 label {
-    margin-right: $gutter;
+    &:not(:empty) {
+        margin-right: $gutter;
+    }
     > input {
         margin-right: $gutter * .5;
     }
