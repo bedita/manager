@@ -3,16 +3,15 @@
     'id': 'bulk-folder',
     'url': {'_name': 'modules:bulkPosition', 'object_type': objectType, '?': _view.request.getQuery()},
 })|raw }}
-
     <div class="fieldset bulk-folders">
         <div>
             <label for="bulk-copy">{{ __('Copy to') }}</label>
-            <input id="bulk-move" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="copy"/>
+            <input id="bulk-copy" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="copy"/>
         </div>
 
         <div>
             <label for="bulk-move">{{ __('Move to') }}</label>
-            <input id="bulk-copy" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
+            <input id="bulk-move" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
         </div>
         {{ Form.unlockField('action') }}
 
