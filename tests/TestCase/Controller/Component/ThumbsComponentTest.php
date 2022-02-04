@@ -32,11 +32,9 @@ class ThumbsComponentTest extends TestCase
     public $client;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $controller = new Controller();
@@ -46,11 +44,9 @@ class ThumbsComponentTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Thumbs);
         ApiClientProvider::setApiClient($this->client);

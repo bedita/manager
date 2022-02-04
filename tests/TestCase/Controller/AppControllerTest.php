@@ -25,10 +25,10 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\AppController} Test Case
  *
  * @coversDefaultClass \App\Controller\AppController
+ * @uses \App\Controller\AppController
  */
 class AppControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -545,6 +545,10 @@ class AppControllerTest extends TestCase
             'bool and string | unchanged' => [ true, '1', false ],
             'string and string | changed' => [ 'one', 'two', true ],
             'string and string | unchanged' => [ 'three', 'three', false ],
+            'int and string | changed' => [ 1, '2', true ],
+            'int and string | unchanged' => [ 1, '1', false ],
+            'string and int | changed' => [ '1', 2, true ],
+            'string and int | unchanged' => [ '1', 1, false ],
             'object and object | changed' => [ ['four'], ['five'], true ],
             'object and object | unchanged' => [ ['six'], ['six'], false ],
             'date and date | changed' => [ $d1, $d2, true ],

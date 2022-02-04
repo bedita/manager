@@ -20,10 +20,10 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\ErrorController} Test Case
  *
  * @coversDefaultClass \App\Controller\ErrorController
+ * @uses \App\Controller\ErrorController
  */
 class ErrorControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *

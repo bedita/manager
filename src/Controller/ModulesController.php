@@ -12,10 +12,8 @@
  */
 namespace App\Controller;
 
-use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\Event;
-use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -23,6 +21,7 @@ use Psr\Log\LogLevel;
 /**
  * Modules controller: list, add, edit, remove objects
  *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
@@ -47,6 +46,7 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Categories');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -172,6 +172,14 @@ class ModulesController extends AppController
             $this->Properties->relationsList($this->objectType)
         );
 
+        $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
+
+        // set schemas for relations right types
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
+        $this->set('schemasByType', $schemasByType);
+
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
+
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
         $this->set('objectNav', $objectNav);
@@ -261,6 +269,7 @@ class ModulesController extends AppController
         $this->viewBuilder()->setClassName('Json'); // force json response
         $this->request->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        unset($requestData['_csrfToken']);
         // extract related objects data
         $relatedData = (array)Hash::get($requestData, '_api');
         unset($requestData['_api']);
@@ -495,52 +504,6 @@ class ModulesController extends AppController
     }
 
     /**
-     * Bulk change actions for objects
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function bulkActions(): ?Response
-    {
-        $requestData = $this->request->getData();
-        $this->request->allowMethod(['post']);
-
-        if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
-            $ids = $requestData['ids'];
-            $errors = [];
-
-            // extract valid attributes to change
-            $attributes = array_filter(
-                $requestData['attributes'],
-                function ($value) {
-                    return ($value !== null && $value !== '');
-                }
-            );
-
-            // export selected (filter by id)
-            $ids = explode(',', $ids);
-            foreach ($ids as $id) {
-                $data = array_merge($attributes, ['id' => $id]);
-                try {
-                    $this->apiClient->save($this->objectType, $data);
-                } catch (BEditaClientException $e) {
-                    $errors[] = [
-                        'id' => $id,
-                        'message' => $e->getAttributes(),
-                    ];
-                }
-            }
-
-            // if errors occured on any single save show error message
-            if (!empty($errors)) {
-                $this->log($errors, LogLevel::ERROR);
-                $this->Flash->error(__('Bulk Action failed on: '), ['params' => $errors]);
-            }
-        }
-
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
-    }
-
-    /**
      * get object properties and format them for index
      *
      * @param string $objectType objecte type name
@@ -561,5 +524,76 @@ class ModulesController extends AppController
         }
 
         return $schema;
+    }
+
+    /**
+     * List categories for the object type.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function listCategories(): ?Response
+    {
+        $this->viewBuilder()->setTemplate('categories');
+
+        $this->request->allowMethod(['get']);
+        $response = $this->Categories->index($this->objectType, $this->request->getQueryParams());
+        $resources = $this->Categories->map($response);
+        $roots = $this->Categories->getAvailableRoots($resources);
+        $categoriesTree = $this->Categories->tree($resources);
+
+        $this->set(compact('resources', 'roots', 'categoriesTree'));
+        $this->set('meta', (array)$response['meta']);
+        $this->set('links', (array)$response['links']);
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->indexList('categories'));
+        $this->set('filter', $this->Properties->filterList('categories'));
+        $this->set('object_types', [$this->objectType]);
+
+        return null;
+    }
+
+    /**
+     * Save category.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function saveCategory(): ?Response
+    {
+        $this->request->allowMethod(['post']);
+
+        try {
+            $this->Categories->save($this->request->getData());
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
+    }
+
+    /**
+     * Remove single category.
+     *
+     * @param string $id Category ID.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function removeCategory(string $id): ?Response
+    {
+        try {
+            $type = $this->request->getData('object_type_name');
+            $this->Categories->delete($id, $type);
+        } catch (BEditaClientException $e) {
+            $this->log($e, 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->redirect([
+            '_name' => 'modules:categories:index',
+            'object_type' => $this->objectType,
+        ]);
     }
 }

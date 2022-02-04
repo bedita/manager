@@ -12,7 +12,7 @@
  */
 namespace App\Controller\Component;
 
-use App\Utility\CacheTrait;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -26,8 +26,6 @@ use Psr\Log\LogLevel;
  */
 class ProjectConfigurationComponent extends Component
 {
-    use CacheTrait;
-
     /**
      * Cache config name for project configuration.
      *
@@ -48,7 +46,7 @@ class ProjectConfigurationComponent extends Component
         }
         try {
             $config = Cache::remember(
-                $this->cacheKey('project'),
+                CacheTools::cacheKey('project'),
                 function () {
                     return $this->fetchConfig();
                 },

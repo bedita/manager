@@ -10,9 +10,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -32,14 +32,6 @@ bundler.printMessage(message, separator);
 // Create webpack plugins list
 // Common Plugins
 let webpackPlugins = [
-    new CleanWebpackPlugin([
-        BUNDLE.jsDir,
-        BUNDLE.cssDir,
-    ], {
-        root: path.resolve(__dirname, BUNDLE.webroot),
-        verbose: false,
-        exclude: ['be-icons-codes.css', 'be-icons-font.css', 'libs'],
-    }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': `${ENVIRONMENT.mode}`,
         debug: true,
@@ -105,7 +97,13 @@ if (devMode) {
 
 module.exports = {
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new ESLintPlugin({
+            extensions: ['js'],
+            emitError: true,
+            emitWarning: true,
+            outputReport: true
+        })
     ],
 
     entry: {
@@ -116,6 +114,40 @@ module.exports = {
         path: path.resolve(__dirname, `${BUNDLE.webroot}/`),
         filename: `${BUNDLE.jsDir}/[name].bundle${ !devMode ? '.[chunkhash:6]' : ''}.js`,
         publicPath: '/',
+        clean: {
+            keep: (asset) => {
+                const preserve =  [
+                    '.htaccess',
+                    'favicon.ico',
+                    'index.php',
+                    'robots.txt',
+                    'be-icons-codes.css',
+                    'be-icons-font.css',
+                    'be-icons.eot',
+                    'be-icons.svg',
+                    'be-icons.ttf',
+                    'be-icons.woff',
+                    'be-icons.woff2',
+                    'iconLocked.png',
+                    'README',
+                    'timezone.js',
+                    'concurrent-editors.svg',
+                    'iconDraft.svg',
+                    'iconExpired.svg',
+                    'iconExpired.png',
+                    'iconFuture.svg',
+                    'iconFuture.png',
+                    'iconLocked.svg'
+                ];
+                for (let i = 0; i < preserve.length; i++) {
+                    if (asset.includes(preserve[i])) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+        },
 
         devtoolModuleFilenameTemplate: info => {
             if (info.identifier.indexOf('webpack') === -1 && info.identifier.indexOf('.scss') === -1) {
@@ -156,14 +188,19 @@ module.exports = {
                 },
                 vendors: {
                     /**
-                     * split dynamically imported vendors and put them in async directior
+                     * split dynamically imported vendors and put them in async directory
                      */
                     test: /[\\/]node_modules[\\/]/,
                     priority: 1,
                     chunks: 'async',
                     enforce: true,
                     name(module) {
-                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        const match = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
+                        if (!match) {
+                            return;
+                        }
+                        const packageName = match[1];
+
                         return `vendors/async/${packageName.replace('@', '')}`;
                     },
                 },
@@ -215,7 +252,7 @@ module.exports = {
                     plugins: [
                         '@babel/plugin-syntax-dynamic-import',
                     ],
-                }
+                },
             },
             {
                 test: /\.po$/,
@@ -264,6 +301,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: devMode,
+                            url: false,
                         },
                     },
                     {
@@ -285,6 +323,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: devMode,
+                            url:false,
                         }
                     },
                     {

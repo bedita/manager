@@ -26,7 +26,6 @@ use Cake\View\Helper;
  */
 class LinkHelper extends Helper
 {
-
     /**
      * List of helpers used by this helper
      *
@@ -61,7 +60,7 @@ class LinkHelper extends Helper
      * Init API and WebAPP base URL
      * @codeCoverageIgnore
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->apiBaseUrl = Configure::read('API.apiBaseUrl');
         $this->webBaseUrl = Router::fullBaseUrl();

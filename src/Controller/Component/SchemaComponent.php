@@ -12,7 +12,7 @@
  */
 namespace App\Controller\Component;
 
-use App\Utility\CacheTrait;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -24,12 +24,10 @@ use Psr\Log\LogLevel;
 /**
  * Handles model schema of objects and resources.
  *
- * @property \Cake\Controller\Component\FlashComponent $Flash
+ * @property \App\Controller\Component\FlashComponent $Flash
  */
 class SchemaComponent extends Component
 {
-    use CacheTrait;
-
     /**
      * {@inheritDoc}
      */
@@ -74,7 +72,7 @@ class SchemaComponent extends Component
 
         try {
             $schema = Cache::remember(
-                $this->cacheKey($type),
+                CacheTools::cacheKey($type),
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
@@ -92,6 +90,22 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Get schemas by types and return them group by type
+     *
+     * @param array $types The types
+     * @return array
+     */
+    public function getSchemasByType(array $types): array
+    {
+        $schemas = [];
+        foreach ($types as $type) {
+            $schemas[$type] = $this->getSchema($type);
+        }
+
+        return $schemas;
+    }
+
+    /**
      * Load schema from cache with revision check.
      * If cached revision don't match cache is removed.
      *
@@ -101,7 +115,7 @@ class SchemaComponent extends Component
      */
     protected function loadWithRevision(string $type, string $revision = null)
     {
-        $key = $this->cacheKey($type);
+        $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
         if ($schema === false) {
             return false;
@@ -202,8 +216,10 @@ class SchemaComponent extends Component
         return array_map(
             function ($item) {
                 return [
+                    'id' => Hash::get((array)$item, 'id'),
                     'name' => Hash::get((array)$item, 'attributes.name'),
                     'label' => Hash::get((array)$item, 'attributes.label'),
+                    'parent_id' => Hash::get((array)$item, 'attributes.parent_id'),
                 ];
             },
             (array)Hash::get((array)$response, 'data')
@@ -229,11 +245,11 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    public function getRelationsSchema()
+    public function getRelationsSchema(): array
     {
         try {
             $schema = (array)Cache::remember(
-                $this->cacheKey('relations'),
+                CacheTools::cacheKey('relations'),
                 function () {
                     return $this->fetchRelationData();
                 },
@@ -254,7 +270,7 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    protected function fetchRelationData()
+    protected function fetchRelationData(): array
     {
         $query = [
             'include' => 'left_object_types,right_object_types',
@@ -332,7 +348,7 @@ class SchemaComponent extends Component
     {
         try {
             $features = (array)Cache::remember(
-                $this->cacheKey('types_features'),
+                CacheTools::cacheKey('types_features'),
                 function () {
                     return $this->fetchObjectTypesFeatures();
                 },

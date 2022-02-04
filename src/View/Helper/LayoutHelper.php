@@ -52,6 +52,37 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Properties for various publication status
+     *
+     * @param array $object The object
+     * @return string pubstatus
+     */
+    public function publishStatus(array $object = []): string
+    {
+        if (empty($object)) {
+            return '';
+        }
+
+        $end = (string)Hash::get($object, 'attributes.publish_end');
+        $start = (string)Hash::get($object, 'attributes.publish_start');
+
+        if (!empty($end) && strtotime($end) <= time()) {
+            return 'expired';
+        }
+        if (!empty($start) && strtotime($start) > time()) {
+            return 'future';
+        }
+        if (!empty((string)Hash::get($object, 'meta.locked'))) {
+            return 'locked';
+        }
+        if ((string)Hash::get($object, 'attributes.status') === 'draft') {
+            return 'draft';
+        }
+
+        return '';
+    }
+
+    /**
      * Messages visibility
      *
      * @return bool True if visible for view
@@ -102,6 +133,11 @@ class LayoutHelper extends Helper
             'Relations' => 'has-background-black',
             'PropertyTypes' => 'has-background-black',
             'Categories' => 'has-background-black',
+            'Applications' => 'has-background-black',
+            'AsyncJobs' => 'has-background-black',
+            'Config' => 'has-background-black',
+            'Endpoints' => 'has-background-black',
+            'Roles' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

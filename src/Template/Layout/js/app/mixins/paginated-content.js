@@ -1,26 +1,28 @@
-/**
- * Mixins: PaginatedContentMixin
- *
- *
- */
+import { buildSearchParams } from '../../libs/urlUtils.js';
 
+/**
+ * Default pagination object
+ */
 export const DEFAULT_PAGINATION = {
     count: 0,
     page: 1,
     page_size: 20,
     page_count: 1,
-}
+};
 
 /**
- * default filter object
+ * Default filter object
  */
-export const DEFAULT_FILTER = {
+export const getDefaultFilter = () => ({
     q: '',
     filter: {
-        type: [],
+        type: "",
     }
-}
+});
 
+/**
+ * Mixins: PaginatedContentMixin
+ */
 export const PaginatedContentMixin = {
     data() {
         return {
@@ -32,7 +34,7 @@ export const PaginatedContentMixin = {
 
             pagination: DEFAULT_PAGINATION,
             query: {},
-            formatObjetsFilter: ['params', 'priority', 'position', 'url'],
+            formatObjectsFilter: ['params', 'priority', 'position', 'url'],
         }
     },
 
@@ -134,7 +136,7 @@ export const PaginatedContentMixin = {
                 const metaRelation = obj.meta.relation;
                 if (metaRelation) {
                     let formattedMeta = {};
-                    this.formatObjetsFilter.forEach((filter) => {
+                    this.formatObjectsFilter.forEach((filter) => {
                         if (metaRelation[filter]) {
                             formattedMeta[filter] = metaRelation[filter];
                         }
@@ -151,83 +153,16 @@ export const PaginatedContentMixin = {
         },
 
         /**
-         * Add pagination info to endpoint url
-         *
-         * @param {String} url
-         *
-         * @return {String} formatted url
-         */
-        setPagination(url) {
-            let pagination = '';
-            let qi = '?';
-            const separator = '&';
-
-            Object.keys(this.pagination).forEach((key, index) => {
-                pagination += `${index ? separator : ''}${key}=${this.pagination[key]}`;
-            });
-
-            let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
-                qi = '&';
-            }
-            return `${url}${qi}${pagination}`;
-        },
-
-        /**
          * Get formatted url with query filter
          *
          * @param {String} url The endpoint url
          * @return {String} The formatted url
          */
         getUrlWithPaginationAndQuery(url) {
-            let queryString = '';
-            let qi = '?';
-            const separator = '&';
+            const parsed = new URL(url);
+            parsed.search = buildSearchParams({ ...this.pagination, ...this.query }, parsed.searchParams).toString();
 
-            Object.keys(this.pagination).forEach((key, index) => {
-                queryString += `${index ? separator : ''}${key}=${this.pagination[key]}`;
-            });
-            if (queryString.length > 1) {
-                queryString += separator;
-            }
-            Object.keys(this.query).forEach((key, index) => {
-                const query = this.query[key];
-                let entry = `${key}=${query}`;
-
-                // parse filter property
-                if (key === 'filter') {
-                    let filter = '';
-                    Object.keys(query).forEach((filterKey) => {
-                        if (query[filterKey] !== '') {
-                            filter += `filter[${filterKey}]=${query[filterKey]}`;
-                        }
-                    });
-
-                    entry = filter;
-                }
-                queryString += `${index ? separator : ''}${entry}`;
-            });
-
-            let hasQueryIdentifier = url.indexOf(qi) === -1;
-            if (!hasQueryIdentifier) {
-                qi = '&';
-            }
-            return `${url}${qi}${queryString}`;
-        },
-
-        /**
-         * find object with specific id
-         *
-         * @param {Number} id
-         *
-         * @return {Object}
-         */
-        findObjectById(id) {
-            let obj = this.objects.filter(o => o.id === id);
-            if (!obj.length) {
-                return null;
-            }
-            return obj[0];
+            return parsed.href;
         },
 
         /**

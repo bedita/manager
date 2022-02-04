@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\Model\PropertyTypesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\PropertyTypesController
+ * @uses \App\Controller\Model\PropertyTypesController
  */
 class PropertyTypesControllerTest extends TestCase
 {
@@ -181,7 +182,7 @@ class PropertyTypesControllerTest extends TestCase
      * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSave($expectedResponse, $data, $action)
+    public function testSave($expectedResponse, $data, $action): void
     {
         $config = [
             'environment' => [

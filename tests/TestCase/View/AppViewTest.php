@@ -24,7 +24,6 @@ use Cake\TestSuite\TestCase;
  */
 class AppViewTest extends TestCase
 {
-
     /**
      * Test `initialize` method
      *

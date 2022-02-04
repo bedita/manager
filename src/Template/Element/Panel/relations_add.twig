@@ -1,69 +1,86 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
-{% set prefix = '_fast_create_' %}
 
 <div class="relations-add">
     <section class="fieldset mb-1">
         <header class="mx-1 tab unselectable"
-            :class="showCreateObjectForm ? 'open' : ''"
+            :class="{ open: showCreateObjectForm }"
             :disabled="saving"
-            @click="showCreateObjectForm = !showCreateObjectForm">
+            @click="resetForms">
             <h2><span v-show="relationName"><strong>{{ __('create new') }}</strong> "<: relationName | humanize :></span>" {{ __('related object') }}&nbsp;</h2>
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <form name="create-object" class="object-form" :disabled="saving">
-                {{ Form.control('upload_behavior', {
-                    'id': 'url_behavior',
-                    'type': 'hidden',
-                    'v-bind:value': 'url'
-                }) | raw }}
-                {{ Form.control('upload_behavior', {
-                    'id': 'file_behavior',
-                    'type': 'hidden',
-                    'v-bind:value': 'file'
-                }) | raw }}
-                {{ Form.unlockField('upload_behavior')}}
+            <div class="select">
+                <label for="related_object_type">{{ __('Type') }}</label>
+                <select id="related_object_type"
+                    name="related_object_type"
+                    class="{{ selectBaseClasses }}"
+                    v-if="relationTypes"
+                    v-model="object.type">
+                    <option value="_choose">{{ __('Choose a type') }}</option>
+                    <option v-for="type in relationTypes.right" :value="type"><: t(capitalize(type)) :></option>
+                </select>
+            </div>
 
-                <section class="fieldset mb-1">
-                    <div class="container">
-                        <div class="select">
-                            <label for="related_object_type">{{ __('Type') }}</label>
-                            <select id="related_object_type"
-                                name="related_object_type"
-                                class="{{ selectBaseClasses }}"
-                                v-if="relationTypes"
-                                v-model="object.type">
-                                <option v-for="type in relationTypes.right"><: t(type) :></option>
-                            </select>
+            {% for type in Schema.rightTypes() %}
+                {% set prefix = '_fast_create_' ~ type ~ '_' %}
+                <form name="create-object" class="object-form fast-create" :disabled="saving" id="{{ type }}-form" v-if="object.type == '{{ type }}'">
+                    {{ Form.control('upload_behavior', {
+                        'id': 'url_behavior',
+                        'type': 'hidden',
+                        'v-bind:value': 'url'
+                    }) | raw }}
+                    {{ Form.control('upload_behavior', {
+                        'id': 'file_behavior',
+                        'type': 'hidden',
+                        'v-bind:value': 'file'
+                    }) | raw }}
+                    {{ Form.unlockField('upload_behavior')}}
+
+                    <section class="fieldset mb-1">
+                        <div class="container">
+                            <fieldset id="{{ type }}-form-fields">
+                                {% set fields = config('Properties.' ~ type ~ '.fastCreate.all')|default(['status', 'title', 'description']) %}
+                                {% set required = config('Properties.' ~ type ~ '.fastCreate.required')|default(['status', 'title']) %}
+                                {% for field in fields %}
+                                    {% set fieldClass = field not in required ? 'fastCreateField' : 'fastCreateField required' %}
+                                    {% set fieldOptions = {
+                                        'id': prefix ~ field,
+                                        'class': fieldClass,
+                                        'data-name': field,
+                                        'key': type ~ '-' ~ field
+                                    } %}
+                                    {% if field == 'status' %}
+                                        {% set fieldOptions = fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
+                                    {% endif %}
+                                    {{ Property.control(field, '', fieldOptions, type)|raw }}
+                                {% endfor %}
+                            </fieldset>
+
+                            <div class="input text" v-if="isMedia">
+                                <label for="{{ prefix }}file">{{ __('File') }}</label>
+                                <input type="file" name="file" v-on:change="processFile" id="{{ prefix }}file" class="drop-file" />
+                            </div>
+
+                            <div class="input text" v-if="isMedia">
+                                <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
+                                {{ Form.text('remote_url', {
+                                    'id': prefix ~ 'remote_url',
+                                    'v-model': 'url',
+                                    'type': 'text',
+                                    'autocomplete': 'off',
+                                    'autocorrect': 'off',
+                                    'autocapitalize': 'off',
+                                    'spellcheck': 'false',
+                                    'placeholder': __('Remote URL') }) | raw
+                                }}
+                            </div>
                         </div>
-
-                        {{ Property.control('status', object.attributes.status|default('draft'), {'id': prefix ~ 'status' , 'v-model': 'object.attributes.status'})|raw }}
-
-                        {{ Property.control('title', '', {'id': prefix ~ 'title' ,'v-model': 'object.attributes.title'})|raw }}
-
-                        {{ Property.control('description', '', {'id': prefix ~ 'description' ,'v-model': 'object.attributes.description'})|raw }}
-
-                        <div class="input text" v-if="isMedia">
-                            <label for="{{ prefix }}file">{{ __('File') }}</label>
-                            <input type="file" name="file" v-on:change="processFile" id="{{ prefix }}file" class="drop-file" />
-                        </div>
-                        <div class="input text" v-if="isMedia">
-                            <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
-                            {{ Form.text('remote_url', {
-                                'id': prefix ~ 'remote_url',
-                                'v-model': 'url',
-                                'type': 'text',
-                                'autocomplete': 'off',
-                                'autocorrect': 'off',
-                                'autocapitalize': 'off',
-                                'spellcheck': 'false',
-                                'placeholder': __('Remote URL') }) | raw }}
-                        </div>
-                    </div>
-                </section>
-                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="createObject" type="button">{{ __('create') }}</button>
-                <button :disabled="!object.attributes.title && !object.attributes.description && !file && !url" @click="resetForm">{{ __('reset') }}</button>
-            </form>
+                    </section>
+                    <button @click="createObject" type="button">{{ __('create') }}</button>
+                    <button @click="resetForm">{{ __('reset') }}</button>
+                </form>
+            {% endfor %}
         </div>
     </section>
 
@@ -73,40 +90,52 @@
         </header>
 
         <div class="px-1 my-1">
+            {% set list = {} %}
+            {% for type, filters in filtersByType %}
+                {% set options = [] %}
+                {% for f in filters %}
+                    {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
+                    {% set options = options|merge([o|merge({ 'name': f })]) %}
+                {% endfor %}
+                {% set list = list|merge({ (type): options }) %}
+            {% endfor %}
             <filter-box-view
-                config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+                config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}
                 :pagination.sync="pagination"
-                :show-filter-buttons="false"
                 :relation-types="relationTypes"
+                :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
                 objects-label="{{ __('objects') }}"
 
                 @filter-update-current-page="onUpdateCurrentPage"
                 @filter-update-page-size="onUpdatePageSize"
                 @filter-objects="onFilterObjects"
-                inline-template>
+                @filter-reset="onFilterObjects"
 
-                    {% element 'FilterBox/filter_box' %}
-
+                inline-template
+            >
+                {% element 'FilterBox/filter_box' %}
             </filter-box-view>
         </div>
 
         <div class="px-1 shrinks">
             <div class="columns">
-                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects">
+                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
                     {% element 'Form/related_item' { 'add': true } %}
                 </div>
             </div>
         </div>
 
         <footer class="p-1">
-            <button class="has-background-info has-text-white" :disabled="!selectedObjects.length"
+            <button class="has-background-info has-text-white"
+                :disabled="!selectedObjects.length"
                 @click.prevent="addRelationsToObject({
                     relationName: relationName,
                     objects: selectedObjects,
-                })">
-                    {{ __('Add') }}
-                    <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
-                    {{ __('objects to') }} <: relationName | humanize :>
+                })"
+            >
+                {{ __('Add') }}
+                <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
+                {{ __('objects to') }} <: relationName | humanize :>
             </button>
 
             <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('Close') }}</button>

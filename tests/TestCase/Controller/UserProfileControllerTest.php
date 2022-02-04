@@ -18,6 +18,9 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
+/**
+ * @uses \App\Controller\UserProfileController
+ */
 class UserProfileControllerSample extends UserProfileController
 {
 }

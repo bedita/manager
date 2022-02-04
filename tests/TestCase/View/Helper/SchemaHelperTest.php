@@ -27,7 +27,6 @@ use Cake\View\View;
  */
 class SchemaHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -383,7 +382,7 @@ class SchemaHelperTest extends TestCase
      *
      * @covers ::controlOptions()
      */
-    public function testLang()
+    public function testLang(): void
     {
         Configure::write('Project.config.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
@@ -498,7 +497,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::translatableFields()
      * @covers ::translatableType()
      */
-    public function testTranslatableFields(array $properties, array $expected)
+    public function testTranslatableFields(array $properties, array $expected): void
     {
         $actual = $this->Schema->translatableFields($properties);
         static::assertSame($expected, $actual);
@@ -608,7 +607,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::formatDateTime()
      * @covers ::typeFromSchema()
      */
-    public function testFormat($expected, $value, array $schema)
+    public function testFormat($expected, $value, array $schema): void
     {
         $actual = $this->Schema->format($value, $schema);
         static::assertSame($expected, $actual);
@@ -735,6 +734,67 @@ class SchemaHelperTest extends TestCase
             ],
         ]);
         $actual = $this->Schema->sortable($field);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `rightTypes`
+     *
+     * @return array
+     */
+    public function rightTypesProvider(): array
+    {
+        return [
+            'empty relationsSchema' => [
+                [],
+                [],
+            ],
+            'some right types' => [
+                [
+                    'dummyRelation1' => [
+                        'left' => [
+                            'l1dummies',
+                        ],
+                        'right' => [
+                            'r1dummies',
+                            'r2dummies',
+                            'r3dummies',
+                        ],
+                    ],
+                    'dummyRelation2' => [
+                        'left' => [
+                            'l2dummies',
+                        ],
+                        'right' => [
+                            'r1dummies',
+                            'r4dummies',
+                            'r5dummies',
+                        ],
+                    ],
+                ],
+                [
+                    'r1dummies',
+                    'r2dummies',
+                    'r3dummies',
+                    'r4dummies',
+                    'r5dummies',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `rightTypes`
+     *
+     * @return void
+     * @dataProvider rightTypesProvider()
+     * @covers ::rightTypes()
+     */
+    public function testRightTypes($relationsSchema, $expected): void
+    {
+        $view = $this->Schema->getView();
+        $view->set('relationsSchema', $relationsSchema);
+        $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }
 }

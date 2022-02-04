@@ -11,6 +11,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\LockController} Test Case
  *
  * @coversDefaultClass \App\Controller\LockController
+ * @uses \App\Controller\LockController
  */
 class LockControllerTest extends TestCase
 {
@@ -78,7 +79,7 @@ class LockControllerTest extends TestCase
      * @return void
      * @covers ::add()
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $this->LockController->add();
         $response = $this->ApiClient->getObject($this->documentId);
@@ -93,7 +94,7 @@ class LockControllerTest extends TestCase
      * @return void
      * @covers ::remove()
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $this->LockController->remove();
         $response = $this->ApiClient->getObject($this->documentId);
@@ -108,7 +109,7 @@ class LockControllerTest extends TestCase
      * @return void
      * @covers ::lock()
      */
-    public function testLock()
+    public function testLock(): void
     {
         $reflectionClass = new \ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
@@ -126,7 +127,7 @@ class LockControllerTest extends TestCase
      * @return void
      * @covers ::lock()
      */
-    public function testLockException()
+    public function testLockException(): void
     {
         $this->LockController = new LockController(
             new ServerRequest([

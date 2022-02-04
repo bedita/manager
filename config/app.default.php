@@ -398,6 +398,9 @@ return [
         'log' => [
             //'log_file' => LOGS . 'api.log',
         ],
+        // 'guzzleConfig' => [ // Optional custom configuration for underlying GuzzleHTTP client.
+        //     'timeout' => 3,
+        // ],
     ],
 
     /**
@@ -489,6 +492,7 @@ return [
      *
      *  - 'view' properties groups to present in object view, where groups are:
      *      + '_keep' special group of properties to keep and display even if not found in object
+     *      + '_hide' special group of properties to not display
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
@@ -507,6 +511,7 @@ return [
      *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
+     *  - 'fastCreate' fields for fast creation forms, by type
      *
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
@@ -515,6 +520,9 @@ return [
         //     'view' => [
         //         '_keep' => [
         //             'some_field',
+        //         ],
+        //         '_hide' => [
+        //             'some_other_field',
         //         ],
         //         'core' => [
         //              'some_field',
@@ -554,6 +562,10 @@ return [
         //     'bulk' => [
         //         'status',
         //         'other_field',
+        //     ],
+        //     'fastCreate' => [
+        //         'required' => ['status', 'title'],
+        //         'all' => ['status', 'title', 'description'],
         //     ],
         // ],
     // ],

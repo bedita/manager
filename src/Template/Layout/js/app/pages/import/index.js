@@ -6,7 +6,7 @@
  *
  */
 
- export default {
+export default {
     props: {
         jobs: {
             type: Array,

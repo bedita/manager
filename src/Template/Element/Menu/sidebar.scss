@@ -25,13 +25,31 @@
     }
 }
 
-.locked a {
-    position: relative;
-    display: flex;
-    height: $dashboard-item-height;
-    background-image: url('/img/iconLocked.png');
-    background-repeat:no-repeat;
-    background-position: center center;
+.module-box {
+
+    a {
+        position: relative;
+        display: flex;
+        height: $dashboard-item-height;
+        background-repeat:no-repeat;
+        background-position: center center;
+    }
+
+    &.locked a {
+        background-image: url('/svg/iconLocked.svg');
+    }
+
+    &.expired a {
+        background-image: url('/svg/iconExpired.svg');
+    }
+
+    &.future a {
+        background-image: url('/svg/iconFuture.svg');
+    }
+
+    &.draft a {
+        background-image: url('/svg/iconDraft.svg');
+    }
 }
 
 .module-box-concurrent-editors a {

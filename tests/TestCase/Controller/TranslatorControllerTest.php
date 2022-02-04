@@ -24,13 +24,14 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\TranslatorController} Test Case
  *
  * @coversDefaultClass \App\Controller\TranslatorController
+ * @uses \App\Controller\TranslatorController
  */
 class TranslatorControllerTest extends TestCase
 {
     /**
      * Test Translator controller
      *
-     * @var App\Test\TestCase\Controller\TranslatorController
+     * @var App\Controller\TranslatorController
      */
     public $controller;
 

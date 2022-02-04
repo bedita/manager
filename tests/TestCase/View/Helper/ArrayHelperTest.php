@@ -24,7 +24,6 @@ use Cake\View\View;
  */
 class ArrayHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -84,7 +83,7 @@ class ArrayHelperTest extends TestCase
      * @param array $arr The array.
      * @return void
      */
-    public function testCombine(array $expected, array $arr)
+    public function testCombine(array $expected, array $arr): void
     {
         $actual = $this->Array->combine($arr);
 
@@ -130,7 +129,7 @@ class ArrayHelperTest extends TestCase
      * @param array $keys The keys to remove.
      * @return void
      */
-    public function testRemoveKeys(array $expected, array $arr, array $keys)
+    public function testRemoveKeys(array $expected, array $arr, array $keys): void
     {
         $actual = $this->Array->removeKeys($arr, $keys);
 
@@ -175,7 +174,7 @@ class ArrayHelperTest extends TestCase
      * @param array $keys The keys to keep.
      * @return void
      */
-    public function testOnlyKeys(array $expected, array $arr, array $keys)
+    public function testOnlyKeys(array $expected, array $arr, array $keys): void
     {
         $actual = $this->Array->onlyKeys($arr, $keys);
 
@@ -188,7 +187,7 @@ class ArrayHelperTest extends TestCase
      * @covers ::extract()
      * @return void
      */
-    public function testExtract()
+    public function testExtract(): void
     {
         $data = [
             [ 'id' => 1, 'title' => 'one', ],

@@ -10,6 +10,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\CourtesyPageController} Test Case
  *
  * @coversDefaultClass \App\Controller\CourtesyPageController
+ * @uses \App\Controller\CourtesyPageController
  */
 class CourtesyPageControllerTest extends TestCase
 {

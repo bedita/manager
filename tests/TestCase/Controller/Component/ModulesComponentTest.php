@@ -56,7 +56,6 @@ class MyModulesComponent extends ModulesComponent
  */
 class ModulesComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -104,7 +103,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getProjectProvider()
+    public function getProjectProvider(): array
     {
         return [
             'ok' => [
@@ -940,7 +939,7 @@ class ModulesComponentTest extends TestCase
      *
      * @covers ::removeStream()
      */
-    public function testRemoveStreamWhenThereIsNoStream()
+    public function testRemoveStreamWhenThereIsNoStream(): void
     {
         $mockId = '99';
         $requestData = [
@@ -1027,9 +1026,9 @@ class ModulesComponentTest extends TestCase
     /**
      * Data provider for `testSetupRelationsMeta`
      *
-     * @return void
+     * @return array
      */
-    public function setupRelationsProvider()
+    public function setupRelationsProvider(): array
     {
         return [
             'simple' => [
@@ -1178,7 +1177,7 @@ class ModulesComponentTest extends TestCase
      * @param array $relationships Relationships array.
      * @param array $order Order array.
      */
-    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [])
+    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = []): void
     {
         $this->Modules->setupRelationsMeta($schema, $relationships, $order);
 
@@ -1197,7 +1196,7 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @covers ::relatedTypes()
      */
-    public function testRelatedTypes()
+    public function testRelatedTypes(): void
     {
         $schema = [
             'has_media' => [

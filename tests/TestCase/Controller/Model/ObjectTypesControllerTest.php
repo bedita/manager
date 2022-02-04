@@ -23,6 +23,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\ObjectTypesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\ObjectTypesController
+ * @uses \App\Controller\Model\ObjectTypesController
  */
 class ObjectTypesControllerTest extends TestCase
 {

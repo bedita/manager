@@ -16,7 +16,6 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\PasswordController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -27,6 +26,7 @@ use Cake\Utility\Text;
  * {@see \App\Controller\PasswordController} Test Case
  *
  * @coversDefaultClass \App\Controller\PasswordController
+ * @uses \App\Controller\PasswordController
  */
 class PasswordControllerTest extends TestCase
 {

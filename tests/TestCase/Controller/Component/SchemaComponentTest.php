@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\SchemaComponent;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -16,7 +17,6 @@ use Cake\TestSuite\TestCase;
  */
 class SchemaComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -113,7 +113,6 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::getSchema()
      * @covers ::loadWithRevision()
-     * @covers ::cacheKey()
      */
     public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
     {
@@ -146,13 +145,124 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Test `getSchema`, cache case.
+     *
+     * @return void
+     * @covers ::getSchema()
+     */
+    public function testGetSchemaFromCache(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // from cache
+        Cache::enable();
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $key = CacheTools::cacheKey($type);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+
+        $method = $reflectionClass->getMethod('getSchema');
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+        Cache::disable();
+    }
+
+    /**
+     * Data provider for `testGetSchemasByType`.
+     *
+     * @return array
+     */
+    public function getSchemasByTypeProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+            ],
+            'documents' => [
+                [
+                    'documents',
+                    'users',
+                ],
+                [
+                    'documents' => [
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                    ],
+                    'users' => [
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `getSchemasByType`.
+     *
+     * @return void
+     * @dataProvider getSchemasByTypeProvider()
+     * @covers ::getSchemasByType()
+     */
+    public function testGetSchemasByType(array $types, array $expected): void
+    {
+        $schemasByType = $this->Schema->getSchemasByType($types);
+        if (empty($expected)) {
+            static::assertEquals($expected, $schemasByType);
+        } else {
+            foreach ($expected as $type => $keys) {
+                $actual = array_keys($schemasByType[$type]);
+                static::assertEquals($actual, $keys);
+            }
+        }
+    }
+
+    /**
+     * Test `loadWithRevision`
+     *
+     * @return void
+     * @covers ::loadWithRevision()
+     */
+    public function testLoadWithRevision(): void
+    {
+        $type = 'documents';
+        $schema = $this->Schema->getSchema($type);
+        $revision = $schema['revision'];
+
+        // false
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertFalse($actual);
+
+        // from cache
+        Cache::enable();
+
+        // by type and revision
+        $key = CacheTools::cacheKey($type);
+        Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
+        $method = $reflectionClass->getMethod('loadWithRevision');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
+        static::assertEquals($schema, $actual);
+
+        // wrong revision
+        $actual = $method->invokeArgs($this->Schema, [$type, '123456789']);
+        static::assertFalse($actual);
+
+        // disable cache
+        Cache::disable();
+    }
+
+    /**
      * Test load internal schema from configuration.
      *
      * @return void
      * @covers ::getSchema()
      * @covers ::loadInternalSchema
      */
-    public function testInternalSchema()
+    public function testInternalSchema(): void
     {
         $this->Schema->setConfig([
             'type' => 'object_types',
@@ -172,7 +282,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchRelationData()
      * @covers ::concreteTypes()
      */
-    public function testRelationMethods()
+    public function testRelationMethods(): void
     {
         $relations = [
             'data' => [
@@ -245,7 +355,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::getRelationsSchema()
      * @covers ::fetchRelationData()
      */
-    public function testFailRelationsSchema()
+    public function testFailRelationsSchema(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -264,13 +374,58 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Data provider for `concreteTypes()`.
+     *
+     * @return array
+     */
+    public function concreteTypesProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+                [],
+            ],
+            'empty descendants' => [
+                ['documents', 'events'],
+                [],
+                ['documents', 'events'],
+            ],
+            'types + descendants' => [
+                ['documents', 'events'],
+                ['documents' => ['dummy_docs', 'serious_docs']],
+                ['dummy_docs', 'events', 'serious_docs'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `concreteTypes`.
+     *
+     * @param array $types The types
+     * @param array $descendants The descendants
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider concreteTypesProvider()
+     * @covers ::concreteTypes()
+     */
+    public function testConcreteTypes(array $types, array $descendants, array $expected): void
+    {
+        $reflectionClass = new \ReflectionClass($this->Schema);
+        $method = $reflectionClass->getMethod('concreteTypes');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Schema, [$types, $descendants]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `fetchSchema` for `users`.
      *
      * @return void
      * @covers ::fetchSchema()
      * @covers ::fetchRoles()
      */
-    public function testFetchRoles()
+    public function testFetchRoles(): void
     {
         $roles = [
             'data' => [
@@ -316,7 +471,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchSchema()
      * @covers ::fetchCategories()
      */
-    public function testFetchCategories()
+    public function testFetchCategories(): void
     {
         $categories = [
             'data' => [
@@ -356,10 +511,14 @@ class SchemaComponentTest extends TestCase
             [
                 'name' => 'cat-1',
                 'label' => 'Category 1',
+                'id' => '1',
+                'parent_id' => null,
             ],
             [
                 'name' => 'cat-2',
                 'label' => 'Category 2',
+                'id' => '2',
+                'parent_id' => null,
             ],
         ];
         static::assertEquals($expected, $result['categories']);
@@ -371,7 +530,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::fetchCategories()
      */
-    public function testFetchCategoriesFail()
+    public function testFetchCategoriesFail(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -414,7 +573,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::fetchObjectTypeMeta()
      */
-    public function testFetchObjectTypeMeta()
+    public function testFetchObjectTypeMeta(): void
     {
         $objectType = [
             'data' => [
@@ -466,7 +625,7 @@ class SchemaComponentTest extends TestCase
      * @covers ::fetchObjectTypesFeatures()
      * @covers ::setDescendant()
      */
-    public function testObjectTypesFeatures()
+    public function testObjectTypesFeatures(): void
     {
         $objectTypes = [
             'data' => [
@@ -538,7 +697,7 @@ class SchemaComponentTest extends TestCase
      * @return void
      * @covers ::objectTypesFeatures()
      */
-    public function testObjectTypesFeaturesFail()
+    public function testObjectTypesFeaturesFail(): void
     {
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)

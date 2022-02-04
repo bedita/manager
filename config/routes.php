@@ -92,6 +92,43 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['_name' => 'dashboard:messages']
     );
 
+    // Admin.
+    Router::prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
+
+        foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles'] as $controller) {
+            // Routes connected here are prefixed with '/admin'
+            $name = Inflector::camelize($controller);
+            $routes->get(
+                "/$controller",
+                ['controller' => $name, 'action' => 'index'],
+                'list:' . $controller
+            );
+
+            $routes->get(
+                "/$controller/view/:id",
+                ['controller' => $name, 'action' => 'view'],
+                'view:' . $controller
+            )->setPass(['id']);
+
+            $routes->post(
+                "/$controller/save",
+                ['controller' => $name, 'action' => 'save'],
+                'save:' . $controller
+            );
+
+            $routes->post(
+                "/$controller/remove/:id",
+                ['controller' => $name, 'action' => 'remove'],
+                'remove:' . $controller
+            )->setPass(['id']);
+        }
+        $routes->get(
+            "/cache",
+            ['controller' => 'Cache', 'action' => 'clear'],
+            'cache:clear'
+        );
+    });
+
     // Profile.
     $routes->connect(
         '/user_profile',
@@ -213,6 +250,21 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
     );
+    $routes->connect(
+        '/:object_type/categories',
+        ['controller' => 'Modules', 'action' => 'listCategories'],
+        ['_name' => 'modules:categories:index']
+    );
+    $routes->connect(
+        '/:object_type/categories/save',
+        ['controller' => 'Modules', 'action' => 'saveCategory'],
+        ['_name' => 'modules:categories:save']
+    );
+    $routes->connect(
+        '/:object_type/categories/remove/:id',
+        ['controller' => 'Modules', 'action' => 'removeCategory'],
+        ['_name' => 'modules:categories:remove', 'pass' => ['id']]
+    );
 
     $routes->connect(
         '/:object_type/view/:id',
@@ -296,16 +348,38 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
     );
+
+    // Export
     $routes->connect(
         '/:object_type/export',
         ['controller' => 'Export', 'action' => 'export'],
         ['_name' => 'export:export']
     );
 
+    // Download stream
+    $routes->get(
+        '/download/:id',
+        ['controller' => 'Download', 'action' => 'download'],
+        'stream:download'
+    )
+    ->setPass(['id']);
+
     $routes->connect(
-        '/:object_type/bulkActions',
-        ['controller' => 'Modules', 'action' => 'bulkActions'],
-        ['_name' => 'modules:bulkActions']
+        '/:object_type/bulkAttribute',
+        ['controller' => 'Bulk', 'action' => 'attribute'],
+        ['_name' => 'modules:bulkAttribute']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkCategories',
+        ['controller' => 'Bulk', 'action' => 'categories'],
+        ['_name' => 'modules:bulkCategories']
+    );
+
+    $routes->connect(
+        '/:object_type/bulkPosition',
+        ['controller' => 'Bulk', 'action' => 'position'],
+        ['_name' => 'modules:bulkPosition']
     );
 
     // translator service

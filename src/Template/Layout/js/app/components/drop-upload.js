@@ -111,11 +111,11 @@ export default {
             });
         },
 
-        onDragOver(e) {
+        onDragOver() {
             this.$el.classList.add('dragover');
         },
 
-        onDragLeave(e) {
+        onDragLeave() {
             this.$el.classList.remove('dragover');
         },
 
@@ -123,10 +123,10 @@ export default {
         upload(file) {
             const objectType = this.getObjectType(file);
             const formData = new FormData();
-                formData.append('title', file.name);
-                formData.append('status', 'on');
-                formData.append('file', file);
-                formData.append('model-type', objectType);
+            formData.append('title', file.name);
+            formData.append('status', 'on');
+            formData.append('file', file);
+            formData.append('model-type', objectType);
 
             const url = `/${objectType}/save`;
 

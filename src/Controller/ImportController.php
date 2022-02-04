@@ -111,7 +111,7 @@ class ImportController extends AppController
      * @param int $code Upload error code
      * @return string
      */
-    protected function uploadErrorMessage(int $code)
+    protected function uploadErrorMessage(int $code): string
     {
         $errors = [
             UPLOAD_ERR_INI_SIZE => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
@@ -131,7 +131,7 @@ class ImportController extends AppController
      *
      * @return void
      */
-    private function loadFilters()
+    private function loadFilters(): void
     {
         $filters = [];
         $importFilters = Configure::read('Filters.import', []);
@@ -153,7 +153,7 @@ class ImportController extends AppController
      * @param string $filterClass Filter class
      * @return void
      */
-    protected function updateServiceList($filterClass)
+    protected function updateServiceList($filterClass): void
     {
         $service = call_user_func([$filterClass, 'getServiceName']);
         if (!empty($service) && !in_array($service, $this->services)) {
@@ -166,7 +166,7 @@ class ImportController extends AppController
      *
      * @return void
      */
-    protected function loadAsyncJobs()
+    protected function loadAsyncJobs(): void
     {
         if (empty($this->services)) {
             $this->set('jobs', []);

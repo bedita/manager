@@ -18,13 +18,12 @@ use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
 
 /**
  * Sample controller wrapper, to add useful methods for test
+ *
+ * @uses \App\Controller\ModulesController
  */
 class ModulesControllerSample extends ModulesController
 {
@@ -95,7 +94,7 @@ class ModulesControllerSample extends ModulesController
  *
  * @coversDefaultClass \App\Controller\ModulesController
  */
-class ModulesControllerTest extends TestCase
+class ModulesControllerTest extends BaseControllerTest
 {
     /**
      * Test Modules controller
@@ -103,49 +102,6 @@ class ModulesControllerTest extends TestCase
      * @var App\Test\TestCase\Controller\ModulesControllerSample
      */
     public $controller;
-
-    /**
-     * Test api client
-     *
-     * @var BEdita\SDK\BEditaClient
-     */
-    public $client;
-
-    /**
-     * Uname for test object
-     *
-     * @var string
-     */
-    protected $uname = 'modules-controller-test-document';
-
-    /**
-     * Test request config
-     *
-     * @var array
-     */
-    public $defaultRequestConfig = [
-        'environment' => [
-            'REQUEST_METHOD' => 'GET',
-        ],
-        'get' => [],
-        'params' => [
-            'object_type' => 'documents',
-        ],
-    ];
-
-    /**
-     * Setup api client and auth
-     *
-     * @return void
-     */
-    private function setupApi(): void
-    {
-        $this->client = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $this->client->authenticate($adminUser, $adminPassword);
-        $this->client->setupTokens($response['meta']);
-    }
 
     /**
      * Setup controller to test with request config
@@ -184,9 +140,8 @@ class ModulesControllerTest extends TestCase
     /**
      * Test `index` method
      *
-     * @covers ::index()
-     *
      * @return void
+     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -203,6 +158,36 @@ class ModulesControllerTest extends TestCase
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['objects', 'meta', 'links', 'types', 'properties']);
+    }
+
+    /**
+     * Test `index` method
+     *
+     * @return void
+     * @covers ::index()
+     */
+    public function testIndexResetRequest(): void
+    {
+        // Setup controller for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $request = $request->withQueryParams(['reset' => '1']);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $result = $this->controller->index();
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
     }
 
     /**
@@ -531,8 +516,9 @@ class ModulesControllerTest extends TestCase
      *
      * Data provider for `testSave` test case.
      *
+     * @return array
      */
-    public function saveProvider()
+    public function saveProvider(): array
     {
         return [
             'save' => [
@@ -896,110 +882,6 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Test `bulkActions` method
-     *
-     * @covers ::bulkActions()
-     *
-     * @return void
-     */
-    public function testBulkActions(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object for test
-        $o = $this->getTestObject();
-
-        // Setup again for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'ids' => $o['id'],
-                'attributes' => [
-                    'status' => $o['attributes']['status'],
-                ],
-            ],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-
-        // do controller call
-        $result = $this->controller->bulkActions();
-
-        // verify response status code and type
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
-    }
-
-    /**
-     * Test `bulkActions` method with errors
-     *
-     * @covers ::bulkActions()
-     *
-     * @return void
-     */
-    public function testBulkActionsWithErrors(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // get object for test
-        $o = $this->getTestObject();
-
-        // Setup again for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'ids' => $o['id'],
-                'attributes' => [
-                    'status' => $o['attributes']['status'],
-                ],
-            ],
-            'params' => [
-                'object_type' => $o['type'],
-            ],
-        ]);
-
-        // Setup mock API client.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://media.example.org'])
-            ->getMock();
-
-        $requestBody = [
-            'id' => $o['id'],
-            'status' => $o['attributes']['status'],
-        ];
-
-        $exception = new BEditaClientException([
-            'id' => $o['id'],
-            'message' => 'Not Found',
-        ], 404);
-
-        $apiClient->method('save')
-            ->with($o['type'], $requestBody)
-            ->willThrowException($exception);
-
-        $this->controller->apiClient = $apiClient;
-
-        // do controller call
-        $result = $this->controller->bulkActions();
-
-        $flash = $this->controller->request->getSession()->read('Flash.flash');
-        $message = $flash[0]['message'];
-        $expected = 'Bulk Action failed on: ';
-        // verify response status code and type
-
-        static::assertEquals(302, $result->getStatusCode());
-        static::assertEquals('text/html', $result->getType());
-        static::assertEquals($expected, $message);
-    }
-
-    /**
      * Test `getSchemaForIndex` method with errors
      *
      * @covers ::getSchemaForIndex()
@@ -1053,7 +935,7 @@ class ModulesControllerTest extends TestCase
      *
      * @return void
      */
-    public function testAvailableRelationshipsUrl()
+    public function testAvailableRelationshipsUrl(): void
     {
         $this->setupController();
         $url = $this->controller->availableRelationshipsUrl('children');
@@ -1075,78 +957,103 @@ class ModulesControllerTest extends TestCase
     }
 
     /**
-     * Get test object id
-     *
-     * @return void
-     */
-    private function getTestId()
-    {
-        // call index and get first available object, for test view
-        $o = $this->getTestObject();
-
-        return $o['id'];
-    }
-
-    /**
-     * Get an object for test purposes
-     *
-     * @return array
-     */
-    private function getTestObject()
-    {
-        $response = $this->client->getObjects('documents', ['filter' => ['uname' => $this->uname]]);
-
-        if (!empty($response['data'][0])) {
-            return $response['data'][0];
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a object for test purposes (if not available already)
-     *
-     * @return array
-     */
-    private function createTestObject()
-    {
-        $o = $this->getTestObject();
-        if ($o == null) {
-            $response = $this->client->save('documents', [
-                'title' => 'modules controller test document',
-                'uname' => $this->uname,
-            ]);
-            $o = $response['data'];
-        }
-
-        return $o;
-    }
-
-    /**
-     * Restore object by id
-     *
-     * @param string|int $id The object ID
-     * @param string $type The object type
-     * @return void
-     */
-    private function restoreTestObject($id, $type)
-    {
-        $o = $this->getTestObject();
-        if ($o == null) {
-            $response = $this->client->restoreObject($id, $type);
-        }
-    }
-
-    /**
      * Verify existence of vars in controller view
      *
      * @param array $expected The expected vars in view
      * @return void
      */
-    private function assertExpectedViewVars($expected)
+    private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
             static::assertArrayHasKey($varName, $this->controller->viewVars);
         }
+    }
+
+    /**
+     * Test `listCategories`.
+     *
+     * @return void
+     * @covers ::listCategories()
+     */
+    public function testListCategories(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // do controller call
+        $result = $this->controller->listCategories();
+
+        // verify response status code and type
+        static::assertNull($result);
+        static::assertEquals(200, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+
+        // verify expected vars in view
+        $expected = ['resources', 'roots', 'categoriesTree', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
+        $this->assertExpectedViewVars($expected);
+    }
+
+    /**
+     * Test `saveCategory`.
+     *
+     * @return void
+     * @covers ::saveCategory()
+     */
+    public function testSaveCategory(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // exception, flash message
+        $result = $this->controller->saveCategory([]);
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+        $flash = $this->controller->request->getSession()->read('Flash');
+        $expected = '[400] Invalid data';
+        $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `removeCategory`.
+     *
+     * @return void
+     * @covers ::removeCategory()
+     */
+    public function testRemoveCategory(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // exception, flash message
+        $result = $this->controller->removeCategory('999');
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals('text/html', $this->controller->response->getType());
+        $flash = $this->controller->request->getSession()->read('Flash');
+        $expected = '[404] Not Found';
+        $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
     }
 }

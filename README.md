@@ -12,7 +12,7 @@ Official Backend Admin WebApp for [BEdita4 API](https://gihub.com/bedita/bedita)
 
 * [PHP](https://www.php.net/) >= 7.1
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-* [Node](https://nodejs.org) 10 or 12
+* [Node](https://nodejs.org) 14 or 16
 * [Yarn](https://yarnpkg.com) >= 1.15
 
 ## Install
@@ -117,6 +117,13 @@ yarn develop
 ```bash
 yarn run bundle-report
 ```
+### ESlint
+
+* Run ESlint via `yarn`, to check linting on js files
+
+```bash
+yarn run eslint src/Template/Layout/js/app/pages/admin/index.js
+```
 
 ## Run unit tests
 
@@ -128,12 +135,12 @@ vendors/bin/phpunit [test folder or file, default '/tests']
 ```
 
 To run those tests you may want to use a Docker image as BEdita4 API endpoint.
-For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.0.0```
+For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.6.1```
 
 Then you may run the image with
 
 ```bash
-docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.0.0
+docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.6.1
 ```
 
 You can then set env vars accordingly like this:

@@ -188,7 +188,6 @@ export default {
                 });
 
                 let payload = {
-                    _csrfToken: this.csrfToken,
                     addPropertyTypes: [...this.newPropertyTypes],
                     removePropertyTypes: [...this.removePropertyTypes],
                     editPropertyTypes: [...this.editPropertyTypes],
@@ -286,7 +285,7 @@ export default {
                             id: type.id,
                             attributes: {...propertyType.attributes, ...type.attributes}
                         };
-                    };
+                    }
                     return propertyType;
                 });
             } else {

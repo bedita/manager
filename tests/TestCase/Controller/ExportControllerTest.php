@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\ExportController} Test Case
  *
  * @coversDefaultClass \App\Controller\ExportController
+ * @uses \App\Controller\ExportController
  */
 class ExportControllerTest extends TestCase
 {
@@ -80,7 +81,7 @@ class ExportControllerTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->Export = new ExportController(
             new ServerRequest([
@@ -95,7 +96,7 @@ class ExportControllerTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         ApiClientProvider::setApiClient($this->apiClient);
     }

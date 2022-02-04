@@ -82,7 +82,6 @@ class ProjectConfigurationComponentTest extends TestCase
      *
      * @dataProvider readProvider()
      * @covers ::read()
-     * @covers ::cacheKey()
      * @covers ::fetchConfig()
      */
     public function testRead($expected, $config): void

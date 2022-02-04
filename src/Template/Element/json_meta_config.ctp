@@ -1,4 +1,7 @@
 <?php
+/**
+ * @var \App\View\AppView $this
+ */
     $csrfToken = null;
     if (!empty($this->request->getParam('_csrfToken'))) {
         $csrfToken = $this->request->getParam('_csrfToken');

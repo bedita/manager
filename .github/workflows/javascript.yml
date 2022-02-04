@@ -5,10 +5,16 @@ on:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - '.github/workflows/javascript.yml'
+      - 'package.json'
+      - 'yarn.lock'
   push:
     paths:
       - '**/*.js'
       - '**/*.scss'
+      - '.github/workflows/javascript.yml'
+      - 'package.json'
+      - 'yarn.lock'
 
 jobs:
   javascript-build:
@@ -18,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
       - name: 'Checkout current revision'
@@ -34,3 +40,6 @@ jobs:
 
       - name: 'Yarn build'
         run: 'yarn build'
+
+      - name: 'Run ESLint'
+        run: 'yarn eslint src/Template/Layout/js/**/*.js'
