@@ -33,7 +33,7 @@ class RichtextareaWidgetTest extends TestCase
     {
         $View = new AppView();
         $actual = $View->Form->control('test', ['type' => 'richtext']);
-        $expected = '"<div class="input richtext "><label for="test">Test</label><div name="test" contenteditable type="richtext" id="test"></div></div>"';
+        $expected = '<div class="input richtext "><label for="test">Test</label><div name="test" contenteditable type="richtext" id="test"></div></div>';
         static::assertSame($expected, $actual);
     }
 }
