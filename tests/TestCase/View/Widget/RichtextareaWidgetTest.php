@@ -21,7 +21,7 @@ use Cake\TestSuite\TestCase;
  *
  * @coversDefaultClass \App\View\Widget\RichtestareaWidget
  */
-class AppViewTest extends TestCase
+class RichtextareaWidgetTest extends TestCase
 {
     /**
      * Test `render`.
