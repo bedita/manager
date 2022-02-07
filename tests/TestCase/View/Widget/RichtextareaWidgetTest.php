@@ -17,9 +17,9 @@ use App\View\AppView;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\View\Widget\RichtestareaWidget} Test Case
+ * {@see \App\View\Widget\RichtextareaWidget} Test Case
  *
- * @coversDefaultClass \App\View\Widget\RichtestareaWidget
+ * @coversDefaultClass \App\View\Widget\RichtextareaWidget
  */
 class RichtextareaWidgetTest extends TestCase
 {
