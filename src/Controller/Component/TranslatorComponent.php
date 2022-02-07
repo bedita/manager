@@ -34,7 +34,7 @@ class TranslatorComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $translator = (array)Configure::read('Translator');
         if (!empty($translator) && !empty($translator['class']) && !empty($translator['options'])) {

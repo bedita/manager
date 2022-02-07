@@ -37,11 +37,9 @@ class CategoriesComponentTest extends TestCase
     public $Categories;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $registry = new ComponentRegistry();
@@ -49,11 +47,9 @@ class CategoriesComponentTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Categories);
 

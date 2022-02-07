@@ -182,7 +182,7 @@ class PropertyTypesControllerTest extends TestCase
      * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSave($expectedResponse, $data, $action)
+    public function testSave($expectedResponse, $data, $action): void
     {
         $config = [
             'environment' => [

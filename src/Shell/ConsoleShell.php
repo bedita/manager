@@ -29,7 +29,7 @@ class ConsoleShell extends Shell
      *
      * @return int|null
      */
-    public function main()
+    public function main(): ?int
     {
         if (!class_exists('Psy\Shell')) {
             $this->err('<error>Unable to load Psy\Shell.</error>');
@@ -56,6 +56,8 @@ class ConsoleShell extends Shell
 
         $psy = new PsyShell();
         $psy->run();
+
+        return null;
     }
 
     /**
@@ -63,7 +65,7 @@ class ConsoleShell extends Shell
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = new ConsoleOptionParser('console');
         $parser->setDescription(

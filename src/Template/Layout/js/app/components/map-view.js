@@ -10,7 +10,6 @@
  * @prop {String} lng
  * @prop {String} popupHtml
  * @prop {String} mapToken (mapBox accessToken)
- *
  */
 
 import mapbox from 'mapbox-gl';
@@ -47,17 +46,10 @@ export default {
         this.$nextTick(() => {
             this.renderMapboxCompareMap();
         });
-
-        // alternative simple map with no comparison
-        // var map = new mapboxgl.Map({
-        //     container: this.$el,
-        //     style: 'mapbox://styles/mapbox/streets-v9',
-        //     center: center,
-        //     zoom: 13,
-        // });
     },
 
     methods: {
+
         renderMapboxCompareMap() {
             Object.getOwnPropertyDescriptor(mapbox, "accessToken").set(this.mapToken);
 
@@ -102,6 +94,7 @@ export default {
 
             const marker = new mapbox.Marker({
                 color: '#d22551',
+                draggable: true,
             })
                 .setLngLat(point)
                 .addTo(overMap);
@@ -109,6 +102,10 @@ export default {
             if (this.popupHtml) {
                 marker.setPopup(popup);
             }
+
+            marker.on('dragend', () => {
+                this.$eventBus.$emit('updatecoords', marker.getLngLat());
+            });
         }
     }
 }

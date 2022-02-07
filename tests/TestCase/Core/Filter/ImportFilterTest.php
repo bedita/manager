@@ -104,7 +104,7 @@ class ImportFilterTest extends TestCase
      *
      * @return array
      */
-    public function createAsyncJobProvider()
+    public function createAsyncJobProvider(): array
     {
         $result = new ImportResult();
         $filename = 'import.csv';
@@ -142,14 +142,14 @@ class ImportFilterTest extends TestCase
      * @dataProvider createAsyncJobProvider
      * @covers ::createAsyncJob()
      */
-    public function testCreateAsyncJob($importFilter, $filename, $filepath, $options, $expected)
+    public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected): void
     {
         if ($expected instanceof \LogicException) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
         }
-        $actual = $importFilter->createAsyncJob($filename, $filepath, $options);
+        $actual = $filterClassName->createAsyncJob($filename, $filepath, $options);
         static::assertEquals(get_class($expected), get_class($actual));
         static::assertNotEmpty($actual->info);
     }

@@ -675,7 +675,7 @@ class ModulesComponent extends Component
      * @param array $relatedIds Related objects as id/type pairs.
      * @return void
      */
-    protected function folderChildrenRelated(string $id, array $relatedIds)
+    protected function folderChildrenRelated(string $id, array $relatedIds): void
     {
         $notFolders = [];
         $apiClient = ApiClientProvider::getApiClient();

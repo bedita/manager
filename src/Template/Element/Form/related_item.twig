@@ -37,6 +37,12 @@
         </div>
     {% endif %}
 
+    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
+         {{ __('Future') }}
+    </div>
+    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
+         {{ __('Expired') }}
+    </div>
 
     {# THUMBNAIL #}
     {% if not translation %}
@@ -51,6 +57,7 @@
 
     {# BODY #}
     <div class="box-body p-05">
+
         <div class="is-flex space-between align-center">
             {% if translation %}
                 <span class="tag is-dark"><: related.attributes.lang :></span>

@@ -44,7 +44,7 @@ class Application extends BaseApplication
     /**
      * {@inheritDoc}
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
         parent::bootstrap();
         $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
@@ -53,11 +53,12 @@ class Application extends BaseApplication
     /**
      * @return void
      */
-    protected function bootstrapCli()
+    protected function bootstrapCli(): void
     {
         parent::bootstrapCli();
         $this->addPluginDev('IdeHelper');
         $this->addPlugin('BEdita/I18n');
+        $this->loadPluginsFromConfig();
     }
 
     /**

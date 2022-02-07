@@ -34,7 +34,7 @@
 
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
-                {% if object.id is empty and objectType in uploadable %}
+                {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
                     {% element 'Form/upload' %}
                 {% endif %}
 
@@ -149,14 +149,14 @@
             {% endif %}
 
             {# Append "new" button #}
-            {# {% if object.id and Perms.canCreate() %}
+            {% if object.id and Perms.canCreate() %}
                 {% do _view.append('module-buttons',
                     Html.link(__('Create new'),
                         {'_name': 'modules:create', 'object_type': objectType},
                         {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
                     )|raw
                 ) %}
-            {% endif %} #}
+            {% endif %}
 
         </div>
     </div>

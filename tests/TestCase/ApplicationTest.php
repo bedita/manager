@@ -76,7 +76,7 @@ class ApplicationTest extends TestCase
      *
      * @covers ::loadPluginsFromConfig()
      */
-    public function testLoadPlugins()
+    public function testLoadPlugins(): void
     {
         $app = new Application(CONFIG);
         $app->bootstrap();
@@ -109,7 +109,7 @@ class ApplicationTest extends TestCase
      *
      * @covers ::loadProjectConfig()
      */
-    public function testLoadProjectConfig()
+    public function testLoadProjectConfig(): void
     {
         Application::loadProjectConfig(null, '');
         static::assertEmpty(Configure::read('Project'));

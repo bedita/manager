@@ -338,7 +338,7 @@ class AppController extends Controller
      * @param mixed $value2 The second value | field value from form
      * @return bool
      */
-    protected function hasFieldChanged($value1, $value2)
+    protected function hasFieldChanged($value1, $value2): bool
     {
         if ($value1 === $value2) {
             return false; // not changed

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-11-25 14:35:25 \n"
+"POT-Creation-Date: 2021-12-22 09:11:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -83,6 +83,9 @@ msgstr "Torna al login"
 msgid "Bad related data method"
 msgstr "Dati di relazione non corretti"
 
+msgid "Birthdate"
+msgstr "Data di nascita"
+
 msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
 
@@ -98,9 +101,6 @@ msgstr "Impossibile produrre una miniatura per questo file"
 msgid "Categories"
 msgstr "Categorie"
 
-msgid "Categories not available"
-msgstr "Categorie non disponibili"
-
 msgid "Change File"
 msgstr "Cambia File"
 
@@ -113,6 +113,12 @@ msgstr "Contenuti"
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
 
+msgid "City"
+msgstr "Città"
+
+msgid "Clear cache"
+msgstr "Pulisci cache"
+
 msgid "Click or drop new files here"
 msgstr "Clicca o trascina qui i nuovi file"
 
@@ -121,6 +127,15 @@ msgstr "Clona"
 
 msgid "Close"
 msgstr "Chiudi"
+
+msgid "Company"
+msgstr "Azienda"
+
+msgid "Company Kind"
+msgstr "Tipo di Azienda"
+
+msgid "Company Name"
+msgstr "Nome Azienda"
 
 msgid "Concurrent users"
 msgstr "Redattori concorrenti"
@@ -134,11 +149,20 @@ msgstr "Conferma nuova password"
 msgid "Copy to"
 msgstr "Copia in"
 
+msgid "Core Type"
+msgstr "Tipo di sistema"
+
 msgid "Core properties"
 msgstr "Proprietà principali"
 
+msgid "Country"
+msgstr "Paese"
+
 msgid "Create"
 msgstr "Crea"
+
+msgid "Create a new category"
+msgstr "Crea nuova categoria"
 
 msgid "Create new"
 msgstr "Crea nuovo"
@@ -164,6 +188,9 @@ msgstr "Filtri attivi"
 msgid "Data modeling"
 msgstr "Modellazione"
 
+msgid "Deathdate"
+msgstr "Data di morte"
+
 msgid "Delete"
 msgstr "Elimina"
 
@@ -172,6 +199,9 @@ msgstr "Discendenti"
 
 msgid "Description"
 msgstr "Descrizione"
+
+msgid "Details"
+msgstr "Dettagli"
 
 msgid "Direct access by id or unique name"
 msgstr "Link diretto per ID o nome univoco"
@@ -211,6 +241,9 @@ msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
 
 msgid "Empty-verb"
 msgstr "Svuota"
+
+msgid "Enabled"
+msgstr "Abilitato"
 
 msgid "Endpoints"
 msgstr "Endpoint"
@@ -275,6 +308,9 @@ msgstr "Da"
 msgid "From date"
 msgstr "Dalla data"
 
+msgid "Gender"
+msgstr "Genere"
+
 msgid "Global"
 msgstr ""
 
@@ -308,6 +344,12 @@ msgstr "Proprietà ereditate"
 msgid "Invalid username or password"
 msgstr "Username o password non validi"
 
+msgid "Inverse Name"
+msgstr "Nome Inversa"
+
+msgid "Is Abstract"
+msgstr "Astratto"
+
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
 
@@ -325,6 +367,9 @@ msgstr "Tipi di sinistra"
 
 msgid "Less filters"
 msgstr "Meno filtri"
+
+msgid "List"
+msgstr "Lista"
 
 msgid "Locations"
 msgstr "Posizioni"
@@ -389,6 +434,12 @@ msgstr "Sposta nel cestino"
 msgid "NEW"
 msgstr "NUOVO"
 
+msgid "Name"
+msgstr "Nome"
+
+msgid "National Id Number"
+msgstr "Numero Id. Nazionale"
+
 msgid "New entry in"
 msgstr "Nuova voce in"
 
@@ -403,6 +454,9 @@ msgstr "Notizie"
 
 msgid "No"
 msgstr "No"
+
+msgid "No application"
+msgstr "Nessuna applicazione"
 
 msgid "No items found"
 msgstr "Nessun elemento trovato"
@@ -425,6 +479,9 @@ msgstr "Numero di oggetti aggiornati"
 msgid "Number of updated resources"
 msgstr "Numero di risorse aggiornate"
 
+msgid "Object Types"
+msgstr "Tipi di Oggetto"
+
 msgid "Object saved"
 msgstr "Oggetto salvato"
 
@@ -436,6 +493,9 @@ msgstr "Oggetto(i) rimosso(i)"
 
 msgid "Object(s) deleted from trash"
 msgstr "Oggetto(i) rimosso(i) dal cestino"
+
+msgid "ObjectTypes"
+msgstr "Tipi di Oggetto"
 
 msgid "Objects"
 msgstr "Oggetti"
@@ -470,6 +530,9 @@ msgstr "Altro"
 msgid "Password"
 msgstr ""
 
+msgid "Password Modified"
+msgstr "Password modificata il"
+
 msgid "Password reset"
 msgstr "Reimposta password"
 
@@ -478,6 +541,12 @@ msgstr "Richiesta di reimpostazione password inviata"
 
 msgid "Permanently delete"
 msgstr "Elimina definitivamente"
+
+msgid "Person Title"
+msgstr "Titolo Persona"
+
+msgid "Phone"
+msgstr "Telefono"
 
 msgid "Pick"
 msgstr "Scegli"
@@ -499,8 +568,17 @@ msgstr "Preferenze e Strumenti"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Property Types"
+msgstr "Tipi di Proprietà"
+
 msgid "Property types"
 msgstr "Tipi di proprietà"
+
+msgid "PropertyTypes"
+msgstr "Tipi di Proprietà"
+
+msgid "Pseudonym"
+msgstr "Pseudonimo"
 
 msgid "Publications"
 msgstr "Pubblicazioni"
@@ -571,12 +649,24 @@ msgstr "Accedi"
 msgid "Size"
 msgstr "Dimensione"
 
+msgid "State Name"
+msgstr "Provincia"
+
 msgid "Status"
 msgstr "Stato"
+
+msgid "Street Address"
+msgstr "Indirizzo"
 
 msgid "Submit your email address and follow the instructions sent by email."
 msgstr ""
 "Invia il tuo indirizzo e-mail e segui le istruzioni inviate tramite e-mail."
+
+msgid "Subtitle"
+msgstr "Sottotitolo"
+
+msgid "Surname"
+msgstr "Cognome"
 
 msgid "System users"
 msgstr "Utenti di sistema"
@@ -671,6 +761,9 @@ msgstr "Nome utente"
 msgid "Users"
 msgstr "Utenti"
 
+msgid "Vat Number"
+msgstr "Partita Iva"
+
 msgid "Videos"
 msgstr "Video"
 
@@ -682,6 +775,9 @@ msgstr "Vedi file"
 
 msgid "View original"
 msgstr "Vedi originale"
+
+msgid "Website"
+msgstr "Sito Web"
 
 msgid "Yes"
 msgstr "Sì"
@@ -695,6 +791,9 @@ msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 msgid "Your recent items"
 msgstr "I tuoi elementi più recenti"
 
+msgid "Zipcode"
+msgstr "Cap"
+
 msgid "add"
 msgstr "aggiungi"
 
@@ -702,6 +801,9 @@ msgid "add objects"
 msgstr "aggiungi oggetti"
 
 msgid "application id"
+msgstr "id applicazione"
+
+msgid "application_id"
 msgstr "id applicazione"
 
 msgid "cancel"
@@ -743,6 +845,9 @@ msgstr "descrizione"
 msgid "elements to"
 msgstr "elementi a"
 
+msgid "email"
+msgstr "e-mail"
+
 msgid "empty"
 msgstr "vuoto"
 
@@ -761,6 +866,15 @@ msgstr "da"
 msgid "id"
 msgstr ""
 
+msgid "label"
+msgstr "etichetta"
+
+msgid "locked_until"
+msgstr "bloccato fino a"
+
+msgid "max_attempts"
+msgstr "massimo numero tentativi"
+
 msgid "modified"
 msgstr "modificato"
 
@@ -769,6 +883,9 @@ msgstr "nome"
 
 msgid "new password"
 msgstr "nuova password"
+
+msgid "object_types"
+msgstr "tipi di oggetto"
 
 msgid "objects"
 msgstr "oggetti"
@@ -782,6 +899,15 @@ msgstr "del"
 msgid "original"
 msgstr "originale"
 
+msgid "params"
+msgstr "parametri"
+
+msgid "parent"
+msgstr "genitore"
+
+msgid "phone"
+msgstr "telefono"
+
 msgid "related object"
 msgstr "oggetto relazionato"
 
@@ -794,6 +920,9 @@ msgstr ""
 msgid "scheduled from"
 msgstr "programmato da"
 
+msgid "scheduled_from"
+msgstr "programmato da"
+
 msgid "service"
 msgstr "servizio"
 
@@ -802,6 +931,9 @@ msgstr "nome del servizio"
 
 msgid "status"
 msgstr "stato"
+
+msgid "surname"
+msgstr "cognome"
 
 msgid "title"
 msgstr "titolo"
@@ -815,6 +947,9 @@ msgstr "traduzione di"
 msgid "type"
 msgstr "tipo"
 
+msgid "uname"
+msgstr "nome univoco"
+
 msgid "undo"
 msgstr "annulla"
 
@@ -823,6 +958,12 @@ msgstr "annulla rimozione"
 
 msgid "untitled"
 msgstr "senza titolo"
+
+msgid "username"
+msgstr "nome utente"
+
+msgid "users"
+msgstr "utenti"
 
 msgid "view parent"
 msgstr "visualizza genitore"
@@ -1008,15 +1149,3 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
-
-#~ msgid "Choose"
-#~ msgstr "Seleziona"
-
-#~ msgid "Set selected"
-#~ msgstr "Applica a selezione"
-
-#~ msgid "Object Types"
-#~ msgstr "Tipi di Oggetto"
-
-#~ msgid "Properties"
-#~ msgstr "Proprietà"

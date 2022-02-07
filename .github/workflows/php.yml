@@ -4,9 +4,13 @@ on:
   pull_request:
     paths:
       - '**/*.php'
+      - '.github/workflows/php.yml'
+      - 'composer.json'
   push:
     paths:
       - '**/*.php'
+      - '.github/workflows/php.yml'
+      - 'composer.json'
 
 jobs:
   cs:
@@ -103,7 +107,7 @@ jobs:
       BEDITA_API: http://127.0.0.1:8080
       BEDITA_ADMIN_USR: admin
       BEDITA_ADMIN_PWD: admin
-      BEDITA_DOCKER_IMG: bedita/bedita:4.5.0
+      BEDITA_DOCKER_IMG: bedita/bedita:4.6.1
 
     strategy:
       matrix:

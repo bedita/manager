@@ -53,3 +53,59 @@
 //  __('Max_attempts');
 //  __('Locked_until');
 //  __('completed');
+//  __('uname');
+//  __('Subtitle');
+
+// Admin
+// __('application_id');
+// __('scheduled_from');
+// __('max_attempts');
+// __('locked_until');
+
+// Modelling
+// __('ObjectTypes');
+// __('Object Types');
+// __('Name');
+// __('Enabled');
+// __('Is Abstract');
+// __('Core Type');
+// __('object_types');
+// __('Inverse Name');
+// __('PropertyTypes');
+// __('Property Types');
+// __('params');
+// __('Global');
+// __('label');
+// __('parent');
+
+// UserProfile
+//  __('Details');
+//  __('Name');
+//  __('Surname');
+//  __('Phone');
+//  __('Website');
+//  __('Street Address');
+//  __('City');
+//  __('Zipcode');
+//  __('Country');
+//  __('State Name');
+
+// Users
+//  __('username');
+//  __('surname');
+//  __('email');
+//  __('phone');
+//  __('users');
+//  __('Password Modified');
+//  __('Person Title');
+//  __('Gender');
+//  __('Birthdate');
+//  __('Deathdate');
+//  __('Company');
+//  __('Company Name');
+//  __('Company Kind');
+//  __('Street Address');
+//  __('State Name');
+//  __('National Id Number');
+//  __('Vat Number');
+//  __('Pseudonym');

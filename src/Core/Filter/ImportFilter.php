@@ -13,7 +13,6 @@
 namespace App\Core\Filter;
 
 use App\Core\Result\ImportResult;
-use BEdita\SDK\BEditaApiClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Filesystem\File;
 use Cake\Log\LogTrait;

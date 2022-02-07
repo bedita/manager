@@ -74,7 +74,7 @@ class AppView extends TwigView
      *
      * If `Elements.{module_name}.{element_name}` exists in configuration a custom element is loaded
      */
-    protected function _getElementFileName($name, $pluginCheck = true)
+    protected function _getElementFileName($name, $pluginCheck = true): string
     {
         $module = (array)$this->get('currentModule', []);
         $custom = Configure::read(sprintf('Elements.%s', Hash::get($module, 'name', '')));

@@ -245,7 +245,7 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    public function getRelationsSchema()
+    public function getRelationsSchema(): array
     {
         try {
             $schema = (array)Cache::remember(
@@ -270,7 +270,7 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    protected function fetchRelationData()
+    protected function fetchRelationData(): array
     {
         $query = [
             'include' => 'left_object_types,right_object_types',

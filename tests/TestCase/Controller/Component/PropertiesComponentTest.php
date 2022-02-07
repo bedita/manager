@@ -59,20 +59,21 @@ class PropertiesComponentTest extends TestCase
      *
      * @return void
      */
-    protected function createComponent()
+    protected function createComponent(): void
     {
         $controller = new Controller();
         $registry = $controller->components();
         $this->Properties = $registry->load(PropertiesComponent::class);
+        $this->Properties->startup();
     }
 
     /**
-     * Test `init()` method.
+     * Test `startup()` method.
      *
      * @return void
-     * @covers ::init()
+     * @covers ::startup()
      */
-    public function testInit(): void
+    public function testStartup(): void
     {
         Cache::clear();
 
