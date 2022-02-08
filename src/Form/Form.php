@@ -40,25 +40,4 @@ class Form
 
         throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
     }
-
-    /**
-     * Return label by field name.
-     * Use `__` and `__d` to try to translate it.
-     *
-     * @param string $name The field name
-     * @return string|null
-     */
-    public static function label(string $name): ?string
-    {
-        $text = Inflector::humanize(Inflector::underscore($name));
-        $label = __($text);
-        $plugins = (array)Configure::read('Plugins');
-        $pluginName = Hash::get(array_keys($plugins), 0);
-        // if we have no actual translation and a plugin let's try with plugin's gettext
-        if ($pluginName && $label === $text) {
-            return __d($pluginName, $text);
-        }
-
-        return $label;
-    }
 }

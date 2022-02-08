@@ -141,7 +141,7 @@ class LayoutHelperTest extends TestCase
     {
         return [
             'user profile' => [
-                '<a href="/user_profile" class="has-background-black icon-user">UserProfile</a>',
+                '<a href="/user_profile" class="has-background-black icon-user">User Profile</a>',
                 'UserProfile',
                 [
                     'moduleLink' => ['_name' => 'user_profile:view'],
@@ -249,23 +249,23 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
-     * Test `typeLabel` method
+     * Test `__` method
      *
      * @return void
-     * @covers ::typeLabel()
+     * @covers ::__()
      */
-    public function testTypeLabel(): void
+    public function testTranslation(): void
     {
         $view = new View();
         $view->set('currentModule', ['name' => 'documents']);
         $layout = new LayoutHelper($view);
         $expected = __('Objects');
-        $actual = $layout->typeLabel('Objects');
+        $actual = $layout->__('Objects');
         static::assertSame($expected, $actual);
 
         Configure::write('Plugins', ['DummyPlugin' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true]]);
         $expected = __d('DummyPlugin', 'Objects');
-        $actual = $layout->typeLabel('Objects');
+        $actual = $layout->__('Objects');
         static::assertSame($expected, $actual);
     }
 
