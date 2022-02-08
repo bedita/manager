@@ -249,10 +249,10 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
-     * Test `__` method
+     * Test `tr` method
      *
      * @return void
-     * @covers ::__()
+     * @covers ::tr()
      */
     public function testTranslation(): void
     {
@@ -260,12 +260,12 @@ class LayoutHelperTest extends TestCase
         $view->set('currentModule', ['name' => 'documents']);
         $layout = new LayoutHelper($view);
         $expected = __('Objects');
-        $actual = $layout->__('Objects');
+        $actual = $layout->tr('Objects');
         static::assertSame($expected, $actual);
 
         Configure::write('Plugins', ['DummyPlugin' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true]]);
         $expected = __d('DummyPlugin', 'Objects');
-        $actual = $layout->__('Objects');
+        $actual = $layout->tr('Objects');
         static::assertSame($expected, $actual);
     }
 
