@@ -43,30 +43,30 @@ class TranslateTest extends TestCase
     }
 
     /**
-     * Test `__` method
+     * Test `get` method
      *
      * @param string $name The field name
-     * @param string|null $expected The expected __
+     * @param string|null $expected The expected result
      * @return void
      * @dataProvider translateProvider()
-     * @covers ::__()
+     * @covers ::get()
      */
     public function testTranslate(string $name, string $expected): void
     {
-        $actual = Translate::__($name);
+        $actual = Translate::get($name);
         static::assertSame($expected, $actual);
     }
 
     /**
-     * Test `__` method, plugin case
+     * Test `get` method, plugin case
      *
      * @return void
-     * @covers ::__()
+     * @covers ::get()
      */
     public function testPlugin(): void
     {
         Configure::write('Plugins', ['DummyPlugin' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true]]);
-        $actual = Translate::__('dummy');
+        $actual = Translate::get('dummy');
         static::assertSame('Dummy', $actual);
     }
 }

@@ -170,10 +170,9 @@ class LayoutHelper extends Helper
      *
      * @param string $input The input string
      * @return string|null
-     * phpcs:ignore
      */
-    public function __(string $input): ?string
+    public function tr(string $input): ?string
     {
-        return Translate::__($input);
+        return Translate::get($input);
     }
 }

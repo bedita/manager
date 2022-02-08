@@ -28,9 +28,8 @@ class Translate
      *
      * @param string $input The input string
      * @return string|null
-     * phpcs:ignore
      */
-    public static function __(string $input): ?string
+    public static function get(string $input): ?string
     {
         $text = Inflector::humanize(Inflector::underscore($input));
         $translation = __($text);
