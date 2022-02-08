@@ -28,6 +28,7 @@ class Translate
      *
      * @param string $input The input string
      * @return string|null
+     * phpcs:ignore
      */
     public static function __(string $input): ?string
     {

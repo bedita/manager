@@ -170,6 +170,7 @@ class LayoutHelper extends Helper
      *
      * @param string $input The input string
      * @return string|null
+     * phpcs:ignore
      */
     public function __(string $input): ?string
     {
