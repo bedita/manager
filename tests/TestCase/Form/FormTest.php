@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Form;
 
 use App\Form\Form;
 use App\Form\Options;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -76,5 +77,52 @@ class FormTest extends TestCase
         static::expectException(get_class($expected));
         static::expectExceptionMessage($expected->getMessage());
         Form::getMethod(Form::class, $methodName);
+    }
+
+    /**
+     * Data provider for `testLabel`.
+     *
+     * @return array
+     */
+    public function labelProvider(): array
+    {
+        return [
+            'empty' => [
+                '',
+                '',
+            ],
+            'dummy' => [
+                'dummy',
+                'Dummy',
+            ],
+        ];
+    }
+
+    /**
+     * Test `label` method
+     *
+     * @param string $name The field name
+     * @param string|null $expected The expected label
+     * @return void
+     * @dataProvider labelProvider()
+     * @covers ::label()
+     */
+    public function testLabel(string $name, string $expected): void
+    {
+        $actual = Form::label($name);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `label` method, plugin case
+     *
+     * @return void
+     * @covers ::label()
+     */
+    public function testLabelPlugin(): void
+    {
+        Configure::write('Plugins', ['DummyPlugin' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true]]);
+        $actual = Form::label('dummy');
+        static::assertSame('Dummy', $actual);
     }
 }
