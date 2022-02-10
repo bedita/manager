@@ -26,7 +26,7 @@
 
         <nav role="group" class="pt-05">
             <a class="button icon icon-trash icon-only-icon has-text-module-{{ currentModule.name }}"
-                title="{{ Layout.tr(currentModule.name) ~ __(' in Trashcan') }}"
+                title="{{ Layout.tr(currentModule.name|default('')) ~ __(' in Trashcan') }}"
                 href="{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}"><span class="is-sr-only">{{ __('Trash') }}</span></a>
 
             <button role="search" class="icon icon-search icon-only-icon ml-05" title="{{ __('Search') }}"

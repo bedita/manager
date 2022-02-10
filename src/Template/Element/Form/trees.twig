@@ -20,6 +20,7 @@
 
             <tree-view
                 relation-name={{ relationName }}
+                relation-label="{{ Layout.tr(relationName) }}"
                 :object='{{ { id: object.id, type: object.type }|json_encode }}'
                 :multiple-choice={{ options.multiple }}>
             </tree-view>

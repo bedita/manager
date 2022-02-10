@@ -28,6 +28,7 @@
                 <div v-show="isOpen" class="tab-container">
                     {% element 'Form/relation' {
                         'relationName': relationName,
+                        'relationLabel': Layout.tr(relationLabel),
                         'relationSchema': relationsSchema[relationName],
                         'dataList': dataList,
                         'preCount': preCount,

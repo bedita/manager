@@ -26,6 +26,7 @@
             <relation-view
                 inline-template
                 relation-name={{ relationName }}
+                relation-label="{{ Layout.tr(relationName) }}"
 
                 @loading="onToggleLoading"
                 @count="onCount">
@@ -34,6 +35,7 @@
                     <roles-list-view
                         inline-template
                         relation-name={{ relationName }}
+                        relation-label="{{ Layout.tr(relationName) }}"
                         :related-objects="objects"
                         @remove-relations="setRemovedRelated">
 

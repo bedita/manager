@@ -128,6 +128,7 @@ export default {
         apiUrl: String,
         locationData: Object,
         relationName: String,
+        relationLabel: String,
     },
 
     data() {
