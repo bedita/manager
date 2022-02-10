@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2021-12-22 09:11:33 \n"
+"POT-Creation-Date: 2022-02-10 16:52:39 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -38,9 +38,6 @@ msgstr ""
 msgid "All Types"
 msgstr ""
 
-msgid "All categories"
-msgstr ""
-
 msgid "All day"
 msgstr ""
 
@@ -48,9 +45,6 @@ msgid "All media"
 msgstr ""
 
 msgid "All objects"
-msgstr ""
-
-msgid "All tags"
 msgstr ""
 
 msgid "An extension stopped the file upload"
@@ -257,6 +251,9 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
+msgid "Expired"
+msgstr ""
+
 msgid "Export"
 msgstr ""
 
@@ -303,6 +300,9 @@ msgid "From"
 msgstr ""
 
 msgid "From date"
+msgstr ""
+
+msgid "Future"
 msgstr ""
 
 msgid "Gender"
@@ -824,7 +824,7 @@ msgstr ""
 msgid "create"
 msgstr ""
 
-msgid "create new"
+msgid "create new for"
 msgstr ""
 
 msgid "created"
@@ -902,9 +902,6 @@ msgstr ""
 msgid "phone"
 msgstr ""
 
-msgid "related object"
-msgstr ""
-
 msgid "remove"
 msgstr ""
 
@@ -965,26 +962,26 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:165
+#: src/Template/Layout/js/app/app.js:167
 #: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:166
+#: src/Template/Layout/js/app/app.js:168
 #: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:453
+#: src/Template/Layout/js/app/app.js:455
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:455
+#: src/Template/Layout/js/app/app.js:457
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:463
+#: src/Template/Layout/js/app/app.js:465
 #: src/Template/Layout/js/app/components/history/history.js:101
 #: src/Template/Layout/js/app/pages/admin/index.js:16
 #: src/Template/Layout/js/app/pages/model/index.js:261
@@ -993,7 +990,7 @@ msgstr ""
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:472
+#: src/Template/Layout/js/app/app.js:474
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -1028,19 +1025,19 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:20
+#: src/Template/Layout/js/app/components/edit-relation-params.js:21
 msgid "Relation parameters"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:30
+#: src/Template/Layout/js/app/components/edit-relation-params.js:31
 msgid "In relation with"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:39
+#: src/Template/Layout/js/app/components/edit-relation-params.js:40
 msgid "Priority"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:57
+#: src/Template/Layout/js/app/components/edit-relation-params.js:58
 msgid "Cancel"
 msgstr ""
 
@@ -1052,20 +1049,20 @@ msgstr ""
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tree-view/tree-view.js:68
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:69
 msgid "edit"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tree-view/tree-view.js:81
+#: src/Template/Layout/js/app/components/tree-view/tree-view.js:82
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:238
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:243
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:293
+#: src/Template/Layout/js/app/components/relation-view/relations-add.js:298
 msgid "Error while creating new object."
 msgstr ""
 
