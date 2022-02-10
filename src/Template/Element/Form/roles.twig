@@ -15,7 +15,7 @@
                 isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
                 isLoading? 'is-loading-spinner' : ''
             ]">
-                <h2>{{ __(relationName|humanize)|lower }}</h2>
+                <h2>{{ Layout.tr(relationName)|lower }}</h2>
                 <span class="tag is-smallest is-black mx-05" v-show="!isLoading">
                     <: totalObjects :>
                 </span>
