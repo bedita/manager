@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Form;
 
 use App\Form\Form;
 use App\Form\Options;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -76,5 +77,24 @@ class FormTest extends TestCase
         static::expectException(get_class($expected));
         static::expectExceptionMessage($expected->getMessage());
         Form::getMethod(Form::class, $methodName);
+    }
+
+    /**
+     * Data provider for `testLabel`.
+     *
+     * @return array
+     */
+    public function labelProvider(): array
+    {
+        return [
+            'empty' => [
+                '',
+                '',
+            ],
+            'dummy' => [
+                'dummy',
+                'Dummy',
+            ],
+        ];
     }
 }

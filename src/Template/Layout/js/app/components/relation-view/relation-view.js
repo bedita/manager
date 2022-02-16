@@ -7,6 +7,7 @@
  * <relation-view> component used for ModulesPage -> View
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
+ * @property {String} relationLabel label of the relation
  * @property {Boolean} multipleChoice set view for multiple choice
  * @property {String} configPaginateSizes set pagination
  *
@@ -38,6 +39,10 @@ export default {
 
     props: {
         relationName: {
+            type: String,
+            required: true,
+        },
+        relationLabel: {
             type: String,
             required: true,
         },

@@ -5,6 +5,7 @@
  * <relations-add> component used for Panel
  *
  * @prop {String} relationName relation name
+ * @prop {String} relationLabel relation label
  * @prop {Array} alreadyInView array of objects already added
  * @prop {Object} relationTypes list of available object types
  * @prop {String} configPaginateSizes list of sizes for pagination
@@ -38,6 +39,10 @@ export default {
 
     props: {
         relationName: {
+            type: String,
+            default: '',
+        },
+        relationLabel: {
             type: String,
             default: '',
         },

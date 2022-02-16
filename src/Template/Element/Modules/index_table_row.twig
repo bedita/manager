@@ -32,7 +32,7 @@
         {% endfor %}
 
         {% if currentModule.hints.multiple_types %}
-            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ Layout.typeLabel(object.type) }}</span></div>
+            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ Layout.tr(object.type) }}</span></div>
         {% endif %}
 
         {% if object.attributes.status %}

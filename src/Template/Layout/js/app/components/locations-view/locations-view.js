@@ -24,7 +24,7 @@ export default {
         <input type="hidden" :name="'relations[' + relationName + '][replaceRelated]'" :value="locationsData" />
         <div v-if="!locations" class="is-loading-spinner"></div>
         <div v-else v-for="(location, index) in locations">
-            <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" />
+            <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" :relation-label="relationLabel" />
         </div>
         <div v-if="locations" class="is-flex mt-1">
             <button @click.prevent @click="onAddNew">${t`add new`}</button>
@@ -35,6 +35,7 @@ export default {
         apiKey: String,
         apiUrl: String,
         relationName: String,
+        relationLabel: String,
     },
 
     data() {

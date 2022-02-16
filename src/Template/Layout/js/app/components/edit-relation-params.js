@@ -2,6 +2,7 @@
 * View component used for editing relations param
 *
 * @property {String} relationName
+* @property {String} relationLabel
 * @property {Object} object
 * @property {Object} related
 * @property {Object} schema
@@ -17,7 +18,7 @@ export default {
     `<div v-if="relationName" class="edit-relation">
         <section>
             <header class="mx-1 mt-1 mb-1 tab unselectable">
-                <h2><span>${t`Relation parameters`} - <: relationName | humanize :></span></h2>
+                <h2><span>${t`Relation parameters`} - <: relationLabel :></span></h2>
             </header>
 
             <div class="mx-1">
@@ -65,6 +66,10 @@ export default {
 
     props: {
         relationName: {
+            type: String,
+            default: '',
+        },
+        relationLabel: {
             type: String,
             default: '',
         },
