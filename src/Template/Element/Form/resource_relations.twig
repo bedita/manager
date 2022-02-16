@@ -3,7 +3,7 @@
         <section class="fieldset">
             <header class="tab tab-static unselectable" v-bind:class="isLoading? 'is-loading-spinner' : ''">
                 <h2>
-                    {{ __(resourceName|humanize)|lower }}
+                    {{ Layout.tr(resourceName)|lower }}
                     <span class="tag is-smallest is-black mx-05"
                         :class="!totalObjects? 'empty' : ''"><: totalObjects :>
                     </span>
@@ -14,6 +14,7 @@
             {# <div v-show="false" class="tab-container">
                 <resource-relation-view inline-template
                     relation-name={{ resourceName }}
+                    relation-label="{{ Layout.tr(resourceName) }}"
                     ref="relation"
 
                     @loading="onToggleLoading"

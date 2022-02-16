@@ -16,7 +16,7 @@
                     {% set module = {'class': 'icon-folder'}|merge(module) %}
                 {% endif %}
 
-                {% set title = Layout.typeLabel(module.label|default(name)|humanize) %}
+                {% set title = Layout.tr(module.label|default(name)) %}
 
                 {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
                 {% if module.hints.multiple_types and not module.class %}

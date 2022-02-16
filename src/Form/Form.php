@@ -13,6 +13,8 @@
 
 namespace App\Form;
 
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**

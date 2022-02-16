@@ -17,6 +17,10 @@ export default {
             type: String,
             required: true,
         },
+        relationLabel: {
+            type: String,
+            required: true,
+        },
         viewVisibility: {
             type: Boolean,
             default: () => false,
