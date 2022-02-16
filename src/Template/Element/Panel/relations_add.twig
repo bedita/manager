@@ -53,7 +53,20 @@
                                     {% if field == 'status' %}
                                         {% set fieldOptions = fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
                                     {% endif %}
-                                    {{ Property.control(field, '', fieldOptions, type)|raw }}
+                                    {% if field == 'date_ranges' %}
+                                        {% set fieldOptionsFrom = fieldOptions|merge({'id': 'start_date_0', 'name': 'date_ranges[0][start_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
+                                        {% set fieldOptionsTo = fieldOptions|merge({'id': 'end_date_0', 'name': 'date_ranges[0][end_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
+                                        {% set fieldOptionsAllDay = fieldOptions|merge({'id': 'all_day_0', 'name': 'date_ranges[0][params][all_day]', 'type': 'checkbox'}) %}
+                                        <div class="date-ranges-item mb-1">
+                                            <div>
+                                                {{ Property.control(__('From'), '', fieldOptionsFrom, type)|raw }}
+                                                {{ Property.control(__('To'), '', fieldOptionsTo, type)|raw }}
+                                                {{ Property.control(__('All day'), '', fieldOptionsAllDay, type)|raw }}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                       {{ Property.control(field, '', fieldOptions, type)|raw }}
+                                    {% endif %}
                                 {% endfor %}
                             </fieldset>
 
