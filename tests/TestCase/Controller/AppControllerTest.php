@@ -77,10 +77,12 @@ class AppControllerTest extends TestCase
         ];
         $this->setupController($config);
 
-        $user = $this->AppController->Auth->identify();
-        $this->AppController->Auth->setUser($user);
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $user = $this->AppController->Authentication->getIdentity();
+        $this->AppController->Authentication->setIdentity($user);
 
-        return $user;
+        return $user->getOriginalData();
     }
 
     /**
@@ -159,7 +161,7 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        $expectedtokens = $this->AppController->Auth->user('tokens');
+        $expectedtokens = $this->AppController->Authentication->getIdentity()->get('tokens');
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
@@ -224,8 +226,7 @@ class AppControllerTest extends TestCase
 
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $identity = new Identity(['timezone' => $expected]);
-        $this->AppController->Authentication->setIdentity($identity);
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
 
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
 
@@ -274,7 +275,7 @@ class AppControllerTest extends TestCase
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
 
-            // mocked getTokens method returns fake tokens
+        // mocked getTokens method returns fake tokens
         $apiClient->method('getTokens')
             ->willReturn($updatedToken);
 

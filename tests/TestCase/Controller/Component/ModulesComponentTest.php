@@ -72,7 +72,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -194,6 +194,10 @@ class ModulesComponentTest extends TestCase
      */
     public function testGetProject($expected, $meta, $config = []): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity([]));
+
         Configure::write('Project', $config);
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -215,11 +219,6 @@ class ModulesComponentTest extends TestCase
                 ->willReturn(compact('meta'));
         }
         ApiClientProvider::setApiClient($apiClient);
-
-        // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $identity = new Identity([]);
-        $this->Modules->Authentication->setIdentity($identity);
 
         $actual = $this->Modules->getProject();
 
@@ -260,8 +259,7 @@ class ModulesComponentTest extends TestCase
     {
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
-        $this->Modules->Authentication->setIdentity($identity);
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
@@ -325,8 +323,7 @@ class ModulesComponentTest extends TestCase
 
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
-        $this->Modules->Authentication->setIdentity($identity);
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
@@ -482,6 +479,10 @@ class ModulesComponentTest extends TestCase
      */
     public function testGetModules($expected, $meta, array $modules = []): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+
         Configure::write('Modules', $modules);
 
         if ($expected instanceof \Exception) {
@@ -504,11 +505,6 @@ class ModulesComponentTest extends TestCase
                 ->willReturn(compact('meta'));
         }
         ApiClientProvider::setApiClient($apiClient);
-
-        // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
-        $this->Modules->Authentication->setIdentity($identity);
 
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
