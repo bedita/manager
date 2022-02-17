@@ -64,15 +64,19 @@ class ObjectsEditorsComponentTest extends TestCase
         $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
             ->getMock();
         $authenticationService->method('clearIdentity')
-            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response): array => [
-                'request' => $request->withoutAttribute('identity'),
-                'response' => $response,
-            ]);
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
         $authenticationService->method('persistIdentity')
-            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array => [
-                'request' => $request->withAttribute('identity', $identity),
-                'response' => $response,
-            ]);
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
 
         return $authenticationService;
     }
