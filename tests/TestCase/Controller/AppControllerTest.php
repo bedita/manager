@@ -14,12 +14,17 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -79,6 +84,29 @@ class AppControllerTest extends TestCase
     }
 
     /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response): array => [
+                'request' => $request->withoutAttribute('identity'),
+                'response' => $response,
+            ]);
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array => [
+                'request' => $request->withAttribute('identity', $identity),
+                'response' => $response,
+            ]);
+
+        return $authenticationService;
+    }
+
+    /**
      * test `initialize` function
      *
      * @covers ::initialize()
@@ -92,7 +120,7 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
         static::assertNotEmpty($this->AppController->{'Security'});
-        static::assertNotEmpty($this->AppController->{'Auth'});
+        static::assertNotEmpty($this->AppController->{'Authentication'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
     }
@@ -194,17 +222,10 @@ class AppControllerTest extends TestCase
         $this->setupController();
         $expected = 'GMT';
 
-        // mock for AuthComponent
-        $mockedAuthComponent = $this->getMockBuilder('AuthComponent')
-            ->setMethods(['user'])
-            ->getMock();
-
-        // moch for user method
-        $mockedAuthComponent->method('user')
-            ->with('timezone')
-            ->willReturn($expected);
-
-        $this->AppController->Auth = $mockedAuthComponent;
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $identity = new Identity(['timezone' => $expected]);
+        $this->AppController->Authentication->setIdentity($identity);
 
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
 

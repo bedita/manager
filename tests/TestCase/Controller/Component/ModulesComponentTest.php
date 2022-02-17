@@ -17,6 +17,10 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Controller\Component\AuthenticationComponent;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -28,6 +32,8 @@ use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class MyModulesComponent extends ModulesComponent
 {
@@ -79,11 +85,11 @@ class ModulesComponentTest extends TestCase
 
         $controller = new Controller();
         $registry = $controller->components();
-        $registry->load('Auth');
+        $registry->load('Authentication.Authentication');
         $this->Modules = $registry->load(ModulesComponent::class);
-        $this->Auth = $registry->load(AuthComponent::class);
+        $this->Authentication = $registry->load(AuthenticationComponent::class);
         $this->MyModules = $registry->load(MyModulesComponent::class);
-        $controller->Auth = $this->Auth;
+        $controller->Authentication = $this->Authentication;
     }
 
     /**
@@ -96,6 +102,29 @@ class ModulesComponentTest extends TestCase
         // reset client, force new client creation
         ApiClientProvider::setApiClient(null);
         parent::tearDown();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response): array => [
+                'request' => $request->withoutAttribute('identity'),
+                'response' => $response,
+            ]);
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(fn (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array => [
+                'request' => $request->withAttribute('identity', $identity),
+                'response' => $response,
+            ]);
+
+        return $authenticationService;
     }
 
     /**
@@ -187,6 +216,11 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $identity = new Identity([]);
+        $this->Modules->Authentication->setIdentity($identity);
+
         $actual = $this->Modules->getProject();
 
         static::assertEquals($expected, $actual);
@@ -224,7 +258,11 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
-        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
+        $this->Modules->Authentication->setIdentity($identity);
+
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
 
@@ -284,7 +322,12 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
-        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
+        $this->Modules->Authentication->setIdentity($identity);
+
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
@@ -462,7 +505,11 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
-        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $identity = new Identity(['id' => 1, 'roles' => ['guest']]);
+        $this->Modules->Authentication->setIdentity($identity);
+
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
         static::assertSame($expected, $actual);
