@@ -79,7 +79,7 @@ class AppControllerTest extends TestCase
 
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $user = $this->AppController->Authentication->getIdentity();
+        $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
 
         return $user->getOriginalData();
@@ -140,6 +140,9 @@ class AppControllerTest extends TestCase
      */
     public function testBeforeFilterLoginError(): void
     {
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         $this->setupController();
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
