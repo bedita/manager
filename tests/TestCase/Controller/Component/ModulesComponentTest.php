@@ -324,7 +324,6 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
-
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
