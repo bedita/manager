@@ -592,6 +592,9 @@ class ModulesComponentTest extends TestCase
      */
     public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         // set $this->Modules->modules
         $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
@@ -602,7 +605,7 @@ class ModulesComponentTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
         $method->setAccessible(true);
-        $this->Modules->getController()->Auth->setUser($user);
+        $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
         $actual = $this->Modules->modules;
         static::assertEquals($expected, $actual);
@@ -716,10 +719,13 @@ class ModulesComponentTest extends TestCase
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         Configure::write('Modules', $config);
 
         if ($userId) {
-            $this->Auth->setUser(['id' => $userId, 'roles' => ['guest']]);
+            $this->Authentication->setIdentity(new Identity(['id' => $userId, 'roles' => ['guest']]));
         }
 
         // Setup mock API client.
