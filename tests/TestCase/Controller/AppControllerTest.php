@@ -13,14 +13,14 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\AppController;
+use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Authenticator\Result;
-use Authentication\Authenticator\ResultInterface;
+use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
@@ -81,9 +81,17 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
 
         // Mock Authentication component
-        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
         $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
-        $this->AppController->setRequest($result['request']->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AppController->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData())));
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
 
@@ -109,19 +117,6 @@ class AppControllerTest extends TestCase
         $authenticationService->method('persistIdentity')
             ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
                 return [
-                    'request' => $request->withAttribute('identity', $identity),
-                    'response' => $response,
-                ];
-            });
-        $authenticationService->method('authenticate')
-            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
-                $tokens = ['jwt' => 'asdfghjkl123', 'renew' => '321lkjhgfdsa'];
-                $apiClient = ApiClientProvider::getApiClient();
-                $apiClient->setupTokens($tokens);
-                $identity = new Identity(['id' => 1, 'username' => 'dummy', 'tokens' => $tokens]);
-
-                return [
-                    'result' => new Result($identity, ResultInterface::SUCCESS),
                     'request' => $request->withAttribute('identity', $identity),
                     'response' => $response,
                 ];
@@ -158,10 +153,10 @@ class AppControllerTest extends TestCase
      */
     public function testBeforeFilterLoginError(): void
     {
+        $this->setupController();
+
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-
-        $this->setupController();
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
