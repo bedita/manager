@@ -207,14 +207,15 @@ class DashboardControllerTest extends TestCase
      */
     public function testRecentItems(): void
     {
-        // Mock Authentication component
-        $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-
         $this->setupController([
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
         ]);
+
+        // Mock Authentication component
+        $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         // setup api
         $client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
