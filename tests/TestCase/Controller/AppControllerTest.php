@@ -15,9 +15,12 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
 use Authentication\AuthenticationServiceInterface;
+use Authentication\Authenticator\Result;
+use Authentication\Authenticator\ResultInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
@@ -79,6 +82,8 @@ class AppControllerTest extends TestCase
 
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
+        $this->AppController->setRequest($result['request']->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
 
@@ -104,6 +109,19 @@ class AppControllerTest extends TestCase
         $authenticationService->method('persistIdentity')
             ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
                 return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('authenticate')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                $tokens = ['jwt' => 'asdfghjkl123', 'renew' => '321lkjhgfdsa'];
+                $apiClient = ApiClientProvider::getApiClient();
+                $apiClient->setupTokens($tokens);
+                $identity = new Identity(['id' => 1, 'username' => 'dummy', 'tokens' => $tokens]);
+
+                return [
+                    'result' => new Result($identity, ResultInterface::SUCCESS),
                     'request' => $request->withAttribute('identity', $identity),
                     'response' => $response,
                 ];
