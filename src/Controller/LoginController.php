@@ -78,7 +78,7 @@ class LoginController extends AppController
             (string)$this->getRequest()->getData('project'),
             (string)$this->getConfig('projectsPath')
         );
-        $this->Authentication->getResult();
+
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             // Setup current project name.
