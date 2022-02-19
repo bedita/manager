@@ -38,7 +38,7 @@ class SchemaComponent extends Component
      *
      * @var string
      */
-    const CACHE_CONFIG = '_schema_types_';
+    public const CACHE_CONFIG = '_schema_types_';
 
     /**
      * {@inheritDoc}
@@ -81,7 +81,7 @@ class SchemaComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return false;
         }
@@ -257,7 +257,7 @@ class SchemaComponent extends Component
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $schema = [];
         }
@@ -355,7 +355,7 @@ class SchemaComponent extends Component
                 self::CACHE_CONFIG
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

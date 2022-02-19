@@ -175,7 +175,8 @@ class AppController extends Controller
             $this->set(compact('user'));
         }
 
-        $this->viewBuilder()->setTemplatePath('Pages/' . $this->_viewPath());
+        $path = $this->viewBuilder()->getTemplatePath();
+        $this->viewBuilder()->setTemplatePath('Pages/' . $path);
 
         return null;
     }
@@ -491,5 +492,19 @@ class AppController extends Controller
         $objectNavModule = (string)$session->read('objectNavModule');
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
+    }
+
+    /**
+     * Cake 4 compatibility wrapper method: set items to serialize for the view
+     *
+     * In Cake 3 => $this->set('_serialize', ['data']);
+     * In Cake 4 => $this->setSerialize(['data'])
+     *
+     * @param array $items Items to serialize
+     * @return void
+     */
+    protected function setSerialize(array $items): void
+    {
+        $this->set('_serialize', $items);
     }
 }

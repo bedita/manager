@@ -31,7 +31,7 @@ class Installer
     /**
      * An array of directories to be made writable
      */
-    const WRITABLE_DIRS = [
+    public const WRITABLE_DIRS = [
         'logs',
         'tmp',
         'tmp/cache',

@@ -14,12 +14,14 @@ namespace App;
 
 use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
-use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
+use Cake\Http\BaseApplication;
+use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
@@ -33,7 +35,7 @@ class Application extends BaseApplication
      *
      * @var array
      */
-    const PLUGIN_DEFAULTS = [
+    protected const PLUGIN_DEFAULTS = [
         'debugOnly' => false,
         'autoload' => false,
         'bootstrap' => true,
@@ -42,12 +44,35 @@ class Application extends BaseApplication
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function bootstrap(): void
     {
         parent::bootstrap();
-        $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
+        if (PHP_SAPI === 'cli') {
+            $this->bootstrapCli();
+        }
+        /*
+         * Only try to load DebugKit in development mode
+         * Debug Kit should not be installed on a production system
+         */
+        if (Configure::read('debug')) {
+            $this->addOptionalPlugin('DebugKit');
+        }
+
+        // Load 'BEdita/WebTools' and other plugins here
+        $this->addPlugin('BEdita/WebTools');
+        // To activate I18nMiddleware use $this->addPlugin('BEdita/I18n', ['middleware' => true]);
+        $this->addPlugin('BEdita/I18n');
+
+        /*
+         * Uncomment to setup AssetsRevisions with an appropriate strategy.
+         *
+         * @see https://github.com/bedita/web-tools#load-assets-with-assetrevisions
+         */
+        // \BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
+        //     new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
+        // );
     }
 
     /**
@@ -56,27 +81,29 @@ class Application extends BaseApplication
     protected function bootstrapCli(): void
     {
         parent::bootstrapCli();
-        $this->addPluginDev('IdeHelper');
-        $this->addPlugin('BEdita/I18n');
+        $this->addOptionalPlugin('Bake');
+        $this->addOptionalPlugin('IdeHelper');
         $this->loadPluginsFromConfig();
     }
 
     /**
-     * Add plugin considered as a dev dependency.
-     * It could be missing in production env.
+     * Add an optional plugin
      *
-     * @param string $name The plugin name
-     * @return bool
+     * If it isn't available, ignore it.
+     *
+     * @param string|\Cake\Core\PluginInterface $name The plugin name or plugin object.
+     * @param array $config The configuration data for the plugin if using a string for $name
+     * @return $this
      */
-    public function addPluginDev(string $name): bool
+    public function addOptionalPlugin($name, array $config = [])
     {
         try {
-            $this->addPlugin($name);
-        } catch (\Exception $e) {
-            return false;
+            $this->addPlugin($name, $config);
+        } catch (MissingPluginException $e) {
+            // Do not halt if the plugin is missing
         }
 
-        return true;
+        return $this;
     }
 
     /**
@@ -90,7 +117,7 @@ class Application extends BaseApplication
     {
         $plugins = (array)Configure::read('Plugins');
         foreach ($plugins as $plugin => $options) {
-            $options = array_merge(self::PLUGIN_DEFAULTS, $options);
+            $options = array_merge(static::PLUGIN_DEFAULTS, $options);
             if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
                 $this->addPlugin($plugin, $options);
                 $this->plugins->get($plugin)->bootstrap($this);
@@ -99,7 +126,7 @@ class Application extends BaseApplication
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function middleware($middlewareQueue): MiddlewareQueue
     {
@@ -135,12 +162,12 @@ class Application extends BaseApplication
     /**
      * Get internal Csrf Middleware
      *
-     * @return CsrfProtectionMiddleware
+     * @return \Cake\Http\Middleware\CsrfProtectionMiddleware
      */
     protected function csrfMiddleware(): CsrfProtectionMiddleware
     {
         // Csrf Middleware
-        $csrf = new CsrfProtectionMiddleware();
+        $csrf = new CsrfProtectionMiddleware(['httponly' => true]);
         // Token check will be skipped when callback returns `true`.
         $csrf->whitelistCallback(function ($request) {
             $actions = (array)Configure::read(sprintf('CsrfExceptions.%s', $request->getParam('controller')));

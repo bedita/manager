@@ -91,7 +91,7 @@ abstract class ModelBaseController extends AppController
                 $query
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);

@@ -65,7 +65,7 @@ class LockController extends AppController
                 ['Content-Type' => 'application/json']
             );
         } catch (BEditaClientException $ex) {
-            $this->log($ex, LogLevel::ERROR);
+            $this->log($ex->getMessage(), LogLevel::ERROR);
             $this->Flash->error(__('Error: %s', $ex->getMessage()));
 
             return false;

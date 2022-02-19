@@ -111,7 +111,7 @@ class ModulesComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Returning an empty array instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

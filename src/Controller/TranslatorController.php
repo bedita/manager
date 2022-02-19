@@ -52,6 +52,6 @@ class TranslatorController extends AppController
             $error = $e->getMessage();
             $this->set(compact('error'));
         }
-        $this->set('_serialize', ['translation', 'error']);
+        $this->setSerialize(['translation', 'error']);
     }
 }

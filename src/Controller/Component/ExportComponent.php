@@ -16,7 +16,7 @@ class ExportComponent extends Component
      *
      * @var array
      */
-    const ALLOWED_FORMATS = ['csv', 'ods', 'xlsx'];
+    public const ALLOWED_FORMATS = ['csv', 'ods', 'xlsx'];
 
     /**
      * Spreadsheet columns int/letter mapping.

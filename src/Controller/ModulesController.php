@@ -93,7 +93,7 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             // remove session filter to avoid error repetition
             $session = $this->request->getSession();
@@ -143,7 +143,7 @@ class ModulesController extends AppController
             $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error(__('Error retrieving the requested content'), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
@@ -283,7 +283,7 @@ class ModulesController extends AppController
             $objectId = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), LogLevel::ERROR);
+            $this->log($error->getMessage(), 'error');
             $this->Flash->error($error->getMessage(), ['params' => $error]);
 
             $this->set(['error' => $error->getAttributes()]);
@@ -301,7 +301,7 @@ class ModulesController extends AppController
         $this->Thumbs->urls($response);
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -327,7 +327,7 @@ class ModulesController extends AppController
             unset($attributes['relationships']);
             $attributes['title'] = $this->request->getQuery('title');
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
@@ -363,7 +363,7 @@ class ModulesController extends AppController
             try {
                 $this->apiClient->deleteObject($id, $this->objectType);
             } catch (BEditaClientException $e) {
-                $this->log($e, LogLevel::ERROR);
+                $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
                 if (!empty($this->request->getData('id'))) {
                     return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
@@ -391,7 +391,7 @@ class ModulesController extends AppController
     {
         if ($id === 'new') {
             $this->set('data', []);
-            $this->set('_serialize', ['data']);
+            $this->setSerialize(['data']);
 
             return;
         }
@@ -402,10 +402,10 @@ class ModulesController extends AppController
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error->getMessage(), 'error');
 
             $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             return;
         }
@@ -413,7 +413,7 @@ class ModulesController extends AppController
         $this->Thumbs->urls($response);
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -431,16 +431,16 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error, 'error');
 
             $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             return;
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -462,7 +462,7 @@ class ModulesController extends AppController
 
             $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
-            $this->log($ex, LogLevel::ERROR);
+            $this->log($ex->getMessage(), 'error');
 
             $this->set([
                 'error' => $ex->getMessage(),
@@ -473,7 +473,7 @@ class ModulesController extends AppController
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
