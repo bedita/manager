@@ -65,8 +65,10 @@ class ApplicationTest extends TestCase
     public function testAddOptionalPlugin(): void
     {
         $app = new Application(CONFIG);
-        static::assertEquals(true, $app->addOptionalPlugin('IdeHelper'));
-        static::assertEquals(false, $app->addOptionalPlugin('NotExisting'));
+        $app->addOptionalPlugin('IdeHelper');
+        static::assertEquals(true, $app->getPlugins()->has('IdeHelper'));
+        $app->addOptionalPlugin('NotExisting');
+        static::assertEquals(false, $app->getPlugins()->has('NotExisting'));
     }
 
     /**
