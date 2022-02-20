@@ -121,6 +121,8 @@ class TranslationsController extends ModulesController
 
     /**
      * Create or edit single translation.
+     *
+     * @return void
      */
     public function save(): void
     {

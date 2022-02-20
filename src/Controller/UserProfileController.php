@@ -74,6 +74,8 @@ class UserProfileController extends AppController
 
     /**
      * Save user profile data
+     *
+     * @return void
      */
     public function save(): void
     {
