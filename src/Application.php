@@ -16,7 +16,6 @@ use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
@@ -84,26 +83,6 @@ class Application extends BaseApplication
         $this->addOptionalPlugin('Bake');
         $this->addOptionalPlugin('IdeHelper');
         $this->loadPluginsFromConfig();
-    }
-
-    /**
-     * Add an optional plugin
-     *
-     * If it isn't available, ignore it.
-     *
-     * @param string|\Cake\Core\PluginInterface $name The plugin name or plugin object.
-     * @param array $config The configuration data for the plugin if using a string for $name
-     * @return $this
-     */
-    public function addOptionalPlugin($name, array $config = [])
-    {
-        try {
-            $this->addPlugin($name, $config);
-        } catch (MissingPluginException $e) {
-            // Do not halt if the plugin is missing
-        }
-
-        return $this;
     }
 
     /**

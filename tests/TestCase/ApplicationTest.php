@@ -57,21 +57,6 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * Test `addOptionalPlugin` method
-     *
-     * @return void
-     * @covers ::addOptionalPlugin()
-     */
-    public function testAddOptionalPlugin(): void
-    {
-        $app = new Application(CONFIG);
-        $app->addOptionalPlugin('IdeHelper');
-        static::assertEquals(true, $app->getPlugins()->has('IdeHelper'));
-        $app->addOptionalPlugin('NotExisting');
-        static::assertEquals(false, $app->getPlugins()->has('NotExisting'));
-    }
-
-    /**
      * Test `loadPluginsFromConfig` method
      *
      * @return void
