@@ -101,7 +101,7 @@ class AppController extends Controller
     public function blackhole(string $type, SecurityException $exception): void
     {
         // Log original exception
-        $this->log($exception, 'error');
+        $this->log($exception->getMessage(), 'error');
 
         // Log form data & session id
         $token = (array)$this->request->getData('_Token');
@@ -498,7 +498,7 @@ class AppController extends Controller
      * Cake 4 compatibility wrapper method: set items to serialize for the view
      *
      * In Cake 3 => $this->set('_serialize', ['data']);
-     * In Cake 4 => $this->setSerialize(['data'])
+     * In Cake 4 => $this->viewBuilder()->setOption('serialize', ['data'])
      *
      * @param array $items Items to serialize
      * @return void

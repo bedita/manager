@@ -283,7 +283,7 @@ class ModulesController extends AppController
             $objectId = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), 'error');
+            $this->log($error->getMessage(), LogLevel::ERROR);
             $this->Flash->error($error->getMessage(), ['params' => $error]);
 
             $this->set(['error' => $error->getAttributes()]);
@@ -402,7 +402,7 @@ class ModulesController extends AppController
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), 'error');
+            $this->log($error->getMessage(), LogLevel::ERROR);
 
             $this->set(compact('error'));
             $this->setSerialize(['error']);
@@ -431,7 +431,7 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
-            $this->log($error, 'error');
+            $this->log($error, LogLevel::ERROR);
 
             $this->set(compact('error'));
             $this->setSerialize(['error']);
@@ -462,7 +462,7 @@ class ModulesController extends AppController
 
             $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
-            $this->log($ex->getMessage(), 'error');
+            $this->log($ex->getMessage(), LogLevel::ERROR);
 
             $this->set([
                 'error' => $ex->getMessage(),
@@ -564,7 +564,7 @@ class ModulesController extends AppController
         try {
             $this->Categories->save($this->request->getData());
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
@@ -587,7 +587,7 @@ class ModulesController extends AppController
             $type = $this->request->getData('object_type_name');
             $this->Categories->delete($id, $type);
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 

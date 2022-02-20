@@ -119,7 +119,7 @@ abstract class ModelBaseController extends AppController
         try {
             $response = $this->apiClient->get(sprintf('/model/%s/%s', $this->resourceType, $id));
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
@@ -160,7 +160,7 @@ abstract class ModelBaseController extends AppController
                 $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
             }
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
@@ -188,7 +188,7 @@ abstract class ModelBaseController extends AppController
         try {
             $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $id));
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 

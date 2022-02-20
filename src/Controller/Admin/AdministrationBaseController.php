@@ -99,7 +99,7 @@ abstract class AdministrationBaseController extends AppController
             $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
             $response = $this->apiClient->get($endpoint, $query);
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
@@ -145,7 +145,7 @@ abstract class AdministrationBaseController extends AppController
                 $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
             }
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
@@ -164,7 +164,7 @@ abstract class AdministrationBaseController extends AppController
         try {
             $this->apiClient->delete(sprintf('%s/%s', $this->endpoint(), $id));
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
