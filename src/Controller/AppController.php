@@ -371,11 +371,6 @@ class AppController extends Controller
      */
     protected function checkRequest(array $options = []): array
     {
-        // check request
-        if (empty($this->getRequest())) {
-            throw new BadRequestException('Empty request');
-        }
-
         // check allowed methods
         if (!empty($options['allowedMethods'])) {
             $this->getRequest()->allowMethod($options['allowedMethods']);

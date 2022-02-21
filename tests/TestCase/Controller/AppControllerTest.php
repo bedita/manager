@@ -583,11 +583,6 @@ class AppControllerTest extends TestCase
     public function checkRequestProvider(): array
     {
         return [
-            'badRequest' => [
-                new BadRequestException('Empty request'),
-                [],
-                null,
-            ],
             'methodNotAllowed' => [
                 new MethodNotAllowedException(),
                 ['allowedMethods' => 'POST'],
