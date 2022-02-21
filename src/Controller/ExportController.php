@@ -68,7 +68,7 @@ class ExportController extends AppController
             return $this->redirect($this->referer());
         }
 
-        $ids = $this->getRequest()->getData('ids');
+        $ids = (string)$this->getRequest()->getData('ids');
 
         // load data for objects by object type and ids
         $rows = $this->rows($data['objectType'], $ids);

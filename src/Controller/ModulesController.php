@@ -562,7 +562,7 @@ class ModulesController extends AppController
         $this->getRequest()->allowMethod(['post']);
 
         try {
-            $this->Categories->save($this->getRequest()->getData());
+            $this->Categories->save((array)$this->getRequest()->getData());
         } catch (BEditaClientException $e) {
             $this->log($e, 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
