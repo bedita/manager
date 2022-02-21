@@ -80,10 +80,10 @@ class ApiIdentifier extends AbstractIdentifier
     /**
      * Get user's timezone from offset.
      *
-     * @param string|null $offset Must contain UTC offset in seconds, plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'. Defaults to UTC.
+     * @param string $offset Must contain UTC offset in seconds, plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'. Defaults to UTC.
      * @return string The timezone name.
      */
-    protected function userTimezone(?string $offset = '0'): string
+    protected function userTimezone(string $offset = '0'): string
     {
         $data = explode(' ', $offset);
         $dst = empty($data[1]) ? 0 : 1;
