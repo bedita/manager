@@ -725,6 +725,8 @@ class ModulesComponentTest extends TestCase
 
         if ($userId) {
             $this->Authentication->setIdentity(new Identity(['id' => $userId, 'roles' => ['guest']]));
+        } else {
+            $this->Authentication->setIdentity(new Identity([]));
         }
 
         // Setup mock API client.
