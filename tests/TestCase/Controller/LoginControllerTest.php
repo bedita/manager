@@ -109,6 +109,23 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `initialize` method.
+     *
+     * @covers ::initialize()
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+
+        static::assertEquals(['login'], $this->Login->Authentication->getUnauthenticatedActions());
+    }
+
+    /**
      * Test `authRequest` method, no user timezone set
      *
      * @covers ::authRequest()
