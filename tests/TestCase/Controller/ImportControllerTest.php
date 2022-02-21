@@ -334,6 +334,7 @@ class ImportControllerTest extends TestCase
      *
      * @return void
      * @covers ::index()
+     * @covers ::beforeRender()
      */
     public function testIndex(): void
     {
@@ -343,6 +344,8 @@ class ImportControllerTest extends TestCase
         static::assertEmpty($this->Import->viewVars['services']);
         static::assertEmpty($this->Import->viewVars['filters']);
         static::assertEmpty($this->Import->viewVars['result']);
+        $this->Import->dispatchEvent('Controller.beforeRender');
+        static::assertEquals(['_name' => 'import:index'], $this->Import->viewVars['moduleLink']);
     }
 
     /**
