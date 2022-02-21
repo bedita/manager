@@ -118,7 +118,7 @@ class DashboardControllerTest extends TestCase
 
         $this->setupController($requestConfig);
         $this->Dashboard->index();
-        $response = $this->Dashboard->response;
+        $response = $this->Dashboard->getResponse();
 
         static::assertEquals(200, $response->getStatusCode());
         // recent items
@@ -141,7 +141,7 @@ class DashboardControllerTest extends TestCase
             ],
         ]);
         $this->Dashboard->messages();
-        $response = $this->Dashboard->response;
+        $response = $this->Dashboard->getResponse();
         static::assertEquals(200, $response->getStatusCode());
     }
 

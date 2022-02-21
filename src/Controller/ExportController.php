@@ -78,7 +78,7 @@ class ExportController extends AppController
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
-        $response = $this->response->withStringBody(Hash::get($data, 'content'));
+        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
         $response = $response->withType(Hash::get($data, 'contentType'));
 
         return $response->withDownload($filename);
