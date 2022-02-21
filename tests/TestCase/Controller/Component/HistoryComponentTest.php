@@ -131,7 +131,7 @@ class HistoryComponentTest extends TestCase
      */
     public function testLoad(array $object, string $expected): void
     {
-        $session = $this->HistoryComponent->getController()->request->getSession();
+        $session = $this->HistoryComponent->getController()->getRequest()->getSession();
         if ($expected != '') {
             $key = sprintf('history.%s.attributes', $this->documentId);
             $session->write($key, $expected);
@@ -191,7 +191,7 @@ class HistoryComponentTest extends TestCase
             'Request' => $this->Request,
         ];
         $this->HistoryComponent->write($options);
-        $session = $this->HistoryComponent->getController()->request->getSession();
+        $session = $this->HistoryComponent->getController()->getRequest()->getSession();
         $actual = $session->read(sprintf('history.%s.attributes', $options['id']));
         static::assertEquals($expected, $actual);
     }

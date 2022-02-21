@@ -82,8 +82,8 @@ abstract class ModelBaseController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
-        $query = $this->request->getQueryParams() + ['page_size' => 500];
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->getRequest()->getQueryParams() + ['page_size' => 500];
 
         try {
             $response = $this->apiClient->get(
@@ -140,7 +140,7 @@ abstract class ModelBaseController extends AppController
      */
     public function save(): ?Response
     {
-        $data = $this->request->getData();
+        $data = $this->getRequest()->getData();
         $id = Hash::get($data, 'id');
         unset($data['id']);
         $body = [

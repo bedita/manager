@@ -58,10 +58,10 @@ class TrashController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObjects('trash', $this->request->getQueryParams());
+            $response = $this->apiClient->getObjects('trash', $this->getRequest()->getQueryParams());
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e, LogLevel::ERROR);
@@ -89,7 +89,7 @@ class TrashController extends AppController
      */
     public function view($id): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
             $response = $this->apiClient->getObject($id, 'trash');
@@ -117,15 +117,15 @@ class TrashController extends AppController
      */
     public function restore(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $ids = [];
-        if (!empty($this->request->getData('ids'))) {
-            $ids = $this->request->getData('ids');
+        if (!empty($this->getRequest()->getData('ids'))) {
+            $ids = $this->getRequest()->getData('ids');
             if (is_string($ids)) {
-                $ids = explode(',', $this->request->getData('ids'));
+                $ids = explode(',', $this->getRequest()->getData('ids'));
             }
         } else {
-            $ids = [$this->request->getData('id')];
+            $ids = [$this->getRequest()->getData('id')];
         }
         foreach ($ids as $id) {
             try {
@@ -135,7 +135,7 @@ class TrashController extends AppController
                 $this->log($e, LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-                if (!empty($this->request->getData('ids'))) {
+                if (!empty($this->getRequest()->getData('ids'))) {
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
 
@@ -153,15 +153,15 @@ class TrashController extends AppController
      */
     public function delete(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $ids = [];
-        if (!empty($this->request->getData('ids'))) {
-            $ids = $this->request->getData('ids');
+        if (!empty($this->getRequest()->getData('ids'))) {
+            $ids = $this->getRequest()->getData('ids');
             if (is_string($ids)) {
-                $ids = explode(',', $this->request->getData('ids'));
+                $ids = explode(',', $this->getRequest()->getData('ids'));
             }
         } else {
-            $ids = [$this->request->getData('id')];
+            $ids = [$this->getRequest()->getData('id')];
         }
         foreach ($ids as $id) {
             try {
@@ -171,7 +171,7 @@ class TrashController extends AppController
                 $this->log($e, LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-                if (!empty($this->request->getData('ids'))) {
+                if (!empty($this->getRequest()->getData('ids'))) {
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
                 }
 
@@ -191,7 +191,7 @@ class TrashController extends AppController
      */
     protected function listQuery(): array
     {
-        $query = $this->request->getData('query');
+        $query = $this->getRequest()->getData('query');
         if (empty($query)) {
             return [];
         }
@@ -208,7 +208,7 @@ class TrashController extends AppController
      */
     public function empty(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
 
         $query = array_filter(array_intersect_key($this->listQuery(), ['filter' => '']));
         // cycle over trash results

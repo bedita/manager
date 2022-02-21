@@ -110,7 +110,7 @@ class AppControllerTest extends TestCase
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
-        $flash = $this->AppController->request->getSession()->read('Flash');
+        $flash = $this->AppController->getRequest()->getSession()->read('Flash');
 
         $expected = __('Login required');
         $message = $flash['flash'][0]['message'];
@@ -634,7 +634,7 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
 
         if ($config == null) {
-            $this->AppController->request = $config;
+            $this->AppController->getRequest() = $config;
         }
 
         if ($expected instanceof \Exception) {
@@ -760,7 +760,7 @@ class AppControllerTest extends TestCase
         $this->setupController($requestConfig);
 
         // get session and write data on it
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $session->write($sessionKey, $sessionValue);
 
         // do controller call
@@ -886,7 +886,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // verify session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         static::assertEquals($session->read('objectNav'), $expectedObjectNav);
         static::assertEquals($session->read('objectNavModule'), $expectedObjectNavModule);
     }
@@ -946,7 +946,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // get session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $objectNav = $session->read('objectNav');
 
         foreach ($objects as $object) {

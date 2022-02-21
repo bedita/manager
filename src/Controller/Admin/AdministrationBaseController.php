@@ -92,8 +92,8 @@ abstract class AdministrationBaseController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
-        $query = $this->request->getQueryParams();
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->getRequest()->getQueryParams();
 
         try {
             $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
@@ -126,8 +126,8 @@ abstract class AdministrationBaseController extends AppController
      */
     public function save(): ?Response
     {
-        $this->request->allowMethod(['post']);
-        $data = (array)$this->request->getData();
+        $this->getRequest()->allowMethod(['post']);
+        $data = (array)$this->getRequest()->getData();
         $id = (string)Hash::get($data, 'id');
         unset($data['id']);
         $body = [
@@ -160,7 +160,7 @@ abstract class AdministrationBaseController extends AppController
      */
     public function remove(string $id): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         try {
             $this->apiClient->delete(sprintf('%s/%s', $this->endpoint(), $id));
         } catch (BEditaClientException $e) {

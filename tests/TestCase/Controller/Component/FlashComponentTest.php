@@ -71,14 +71,14 @@ class FlashComponentTest extends TestCase
         // message without params
         $expected = 'debug';
         $this->Flash->set($expected, []);
-        $flash = $this->controller->request->getSession()->read('Flash');
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         static::assertEquals($expected, $flash['flash'][0]['message']);
 
         // message with params exception
         $expected = 'debug';
         $expectedExceptionMessage = 'something went wrong';
         $this->Flash->set('debug', ['params' => new BEditaClientException($expectedExceptionMessage)]);
-        $flash = $this->controller->request->getSession()->read('Flash');
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         $message = $flash['flash'][0]['message'];
         static::assertEquals($expected, $flash['flash'][0]['message']);
         static::assertEquals($expected, $flash['flash'][1]['message']);

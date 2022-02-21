@@ -54,14 +54,14 @@ class PasswordController extends AppController
      */
     public function reset(): ?Response
     {
-        $this->request->allowMethod(['get', 'post']);
+        $this->getRequest()->allowMethod(['get', 'post']);
 
-        if ($this->request->is('get')) {
+        if ($this->getRequest()->is('get')) {
             return null;
         }
 
         $data = [
-            'contact' => $this->request->getData('email'),
+            'contact' => $this->getRequest()->getData('email'),
             'change_url' => Router::url(['_name' => 'password:change'], true),
         ];
         try {
@@ -88,17 +88,17 @@ class PasswordController extends AppController
      */
     public function change(): ?Response
     {
-        $this->request->allowMethod(['get', 'post']);
+        $this->getRequest()->allowMethod(['get', 'post']);
 
-        if ($this->request->is('get')) {
-            $this->set('uuid', $this->request->getQuery('uuid'));
+        if ($this->getRequest()->is('get')) {
+            $this->set('uuid', $this->getRequest()->getQuery('uuid'));
 
             return null;
         }
 
         $data = [
-            'uuid' => $this->request->getData('uuid'),
-            'password' => $this->request->getData('password'),
+            'uuid' => $this->getRequest()->getData('uuid'),
+            'password' => $this->getRequest()->getData('password'),
             'login' => true,
         ];
         try {

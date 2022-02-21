@@ -54,7 +54,7 @@ class HistoryComponent extends Component
             return;
         }
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $data = (string)$session->read($key);
         if (empty($data)) {
             return;
@@ -131,7 +131,7 @@ class HistoryComponent extends Component
 
         // write attributes into session
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $session->write($key, json_encode($attributes));
     }
 

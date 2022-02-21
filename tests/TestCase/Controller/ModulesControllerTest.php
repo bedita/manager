@@ -213,7 +213,7 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertEquals(302, $this->controller->response->getStatusCode());
 
         // verify session filter is empty
-        $filter = $this->controller->request->getSession()->read('documents.filter');
+        $filter = $this->controller->getRequest()->getSession()->read('documents.filter');
         static::assertNull($filter);
     }
 
@@ -1019,7 +1019,7 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertNotNull($result);
         static::assertEquals(302, $this->controller->response->getStatusCode());
         static::assertEquals('text/html', $this->controller->response->getType());
-        $flash = $this->controller->request->getSession()->read('Flash');
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         $expected = '[400] Invalid data';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
@@ -1051,7 +1051,7 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertNotNull($result);
         static::assertEquals(302, $this->controller->response->getStatusCode());
         static::assertEquals('text/html', $this->controller->response->getType());
-        $flash = $this->controller->request->getSession()->read('Flash');
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         $expected = '[404] Not Found';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);

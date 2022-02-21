@@ -293,7 +293,7 @@ class ModelBaseControllerTest extends TestCase
     {
         $this->ModelController->setSingleView($singleView);
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
 
@@ -315,11 +315,11 @@ class ModelBaseControllerTest extends TestCase
             'id' => 99999,
         ];
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 
@@ -337,7 +337,7 @@ class ModelBaseControllerTest extends TestCase
             'singular' => 'foo',
         ];
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
         static::assertInstanceOf(Response::class, $result);
@@ -357,7 +357,7 @@ class ModelBaseControllerTest extends TestCase
     {
         $result = $this->ModelController->remove(99999);
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 }

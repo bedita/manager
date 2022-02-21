@@ -58,7 +58,7 @@ class BulkController extends AppController
     {
         parent::initialize();
 
-        $this->objectType = $this->request->getParam('object_type');
+        $this->objectType = $this->getRequest()->getParam('object_type');
     }
 
     /**
@@ -68,13 +68,13 @@ class BulkController extends AppController
      */
     public function attribute(): ?Response
     {
-        $this->request->allowMethod(['post']);
-        $requestData = $this->request->getData();
+        $this->getRequest()->allowMethod(['post']);
+        $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->saveAttribute($requestData['attributes']);
         $this->errors();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
     }
 
     /**
@@ -84,15 +84,15 @@ class BulkController extends AppController
      */
     public function categories(): ?Response
     {
-        $this->request->allowMethod(['post']);
-        $requestData = $this->request->getData();
+        $this->getRequest()->allowMethod(['post']);
+        $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->categories = (string)Hash::get($requestData, 'categories');
         $this->loadCategories();
         $this->saveCategories();
         $this->errors();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
     }
 
     /**
@@ -102,8 +102,8 @@ class BulkController extends AppController
      */
     public function position(): ?Response
     {
-        $this->request->allowMethod(['post']);
-        $requestData = $this->request->getData();
+        $this->getRequest()->allowMethod(['post']);
+        $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $folder = (string)Hash::get($requestData, 'folderSelected');
         $action = (string)Hash::get($requestData, 'action');
@@ -114,7 +114,7 @@ class BulkController extends AppController
         }
         $this->errors();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
+        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
     }
 
     /**

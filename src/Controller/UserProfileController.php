@@ -54,7 +54,7 @@ class UserProfileController extends AppController
      */
     public function view(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
             $response = $this->apiClient->get('/auth/user');
@@ -77,7 +77,7 @@ class UserProfileController extends AppController
      */
     public function save(): void
     {
-        $data = $this->request->getData();
+        $data = $this->getRequest()->getData();
         try {
             $this->apiClient->patch('/auth/user', json_encode($data));
             $this->Flash->success(__('User profile saved'));

@@ -277,7 +277,7 @@ class AdministrationBaseControllerTest extends TestCase
         $response = $this->RlsController->save();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
-        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $flash = $this->RlsController->getRequest()->getSession()->read('Flash');
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
     }
@@ -303,7 +303,7 @@ class AdministrationBaseControllerTest extends TestCase
         $response = $this->RlsController->remove('9999999999');
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
-        $flash = $this->RlsController->request->getSession()->read('Flash');
+        $flash = $this->RlsController->getRequest()->getSession()->read('Flash');
         $expected = __('[404] Not Found');
         $message = $flash['flash'][0]['message'];
         static::assertEquals($expected, $message);

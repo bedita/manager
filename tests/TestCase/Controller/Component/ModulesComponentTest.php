@@ -990,7 +990,7 @@ class ModulesComponentTest extends TestCase
 
         // verify data
         $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->getController()->request->getSession()->read($key);
+        $actual = $this->Modules->getController()->getRequest()->getSession()->read($key);
         unset($expected['id']);
         static::assertEquals($expected, $actual);
     }

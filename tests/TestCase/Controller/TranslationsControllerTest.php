@@ -104,7 +104,7 @@ class TranslationsControllerTest extends TestCase
     {
         $request = new ServerRequest($this->defaultRequestConfig);
         $this->controller = new TranslationsController($request);
-        $actual = (string)$this->controller->request->getParam('object_type');
+        $actual = (string)$this->controller->getRequest()->getParam('object_type');
         $expected = 'translations';
         static::assertEquals($expected, $actual);
     }
