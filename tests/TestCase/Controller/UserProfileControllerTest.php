@@ -14,9 +14,12 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\UserProfileController;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * @uses \App\Controller\UserProfileController
@@ -80,11 +83,22 @@ class UserProfileControllerTest extends TestCase
     }
 
     /**
-     * Test `view` method
-     *
-     * @covers ::view()
+     * test `initialize` function
      *
      * @return void
+     * @covers ::initialize()
+     */
+    public function testInitialize(): void
+    {
+        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+        static::assertNotEmpty($this->UserProfileController->{'Properties'});
+    }
+
+    /**
+     * Test `view` method
+     *
+     * @return void
+     * @covers ::view()
      */
     public function testView(): void
     {
@@ -94,5 +108,53 @@ class UserProfileControllerTest extends TestCase
         foreach ($vars as $var) {
             static::assertNotEmpty($this->UserProfileController->viewVars[$var]);
         }
+    }
+
+    /**
+     * Test `view` method on exception
+     *
+     * @return void
+     * @covers ::view()
+     */
+    public function testViewOnException(): void
+    {
+        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+
+        // mock api get /auth/user
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/auth/user')
+            ->willThrowException(new BEditaClientException('test'));
+        $this->UserProfileController->apiClient = $apiClient;
+        $this->UserProfileController->view();
+
+        static::assertNotEmpty($this->UserProfileController->viewVars['schema']);
+        static::assertEmpty($this->UserProfileController->viewVars['object']);
+        static::assertNotEmpty($this->UserProfileController->viewVars['properties']);
+    }
+
+    /**
+     * Test `save` method on exception
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSave(): void
+    {
+        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+
+        // mock api patch /auth/user
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('patch')
+            ->with('/auth/user')
+            ->willThrowException(new BEditaClientException('some error, whatever'));
+        $this->UserProfileController->apiClient = $apiClient;
+        $this->UserProfileController->save();
+        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('some error, whatever', (string)Hash::get($flash, '0.message'));
     }
 }
