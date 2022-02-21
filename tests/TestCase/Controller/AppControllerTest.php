@@ -712,6 +712,22 @@ class AppControllerTest extends TestCase
                 null, // expected http status code
                 null, // result type
             ],
+            'empty params' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                null, // expected session value
+                null, // expected http status code
+                null, // result type
+            ],
             'data from session' => [ // expected read session filter and redirect
                 [ // request config
                     'environment' => [
