@@ -11,35 +11,36 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Authentication\Identifier;
+namespace App\Test\TestCase\Authentication\Identifier\Resolver;
 
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Authentication\Identifier\Resolver\ApiResolver;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Authentication\Identifier\ApiIdentifier} Test Case
+ * {@see \App\Authentication\Identifier\Resolver\ApiResolver} Test Case
  *
- * @coversDefaultClass \App\Authentication\Identifier\ApiIdentifier
+ * @coversDefaultClass \App\Authentication\Identifier\Resolver\ApiResolver
  */
-class ApiIdentifierTest extends TestCase
+class ApiResolverTest extends TestCase
 {
-    /**
-     * Data provider for `testIdentify` test case.
-     *
-     * @return array
-     */
-    public function identifyProvider(): array
+    public function findProvider(): array
     {
         return [
             'missing-credentials' => [
                 [],
                 null,
             ],
-            'wrong' => [
+            'wrong-credentials' => [
                 [
                     'username' => 'fake-user',
                     'password' => 'fake-password',
+                ],
+                null,
+            ],
+            'wrong-token' => [
+                [
+                    'token' => 'asd123',
                 ],
                 null,
             ],
@@ -49,49 +50,34 @@ class ApiIdentifierTest extends TestCase
                     'password' => env('BEDITA_ADMIN_PWD'),
                 ],
                 [
-                    'username' => env('BEDITA_ADMIN_USR'),
-                    'id' => 1,
+                    'attributes' => [
+                        'username' => env('BEDITA_ADMIN_USR'),
+                    ],
+                    'id' => '1',
                     'tokens' => [],
-                    'token' => '',
-                ],
-            ],
-            'timezone' => [
-                [
-                    'username' => env('BEDITA_ADMIN_USR'),
-                    'password' => env('BEDITA_ADMIN_PWD'),
-                    'timezone' => '7200 1',
-                ],
-                [
-                    'username' => env('BEDITA_ADMIN_USR'),
-                    'timezone' => 'Europe/Paris',
-                    'tokens' => [],
-                    'token' => '',
                 ],
             ],
         ];
     }
 
     /**
-     * Test user identification.
+     * Test identity resolution.
      *
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
      *
-     * @covers ::identify()
-     * @covers ::findIdentity()
-     * @covers ::userTimezone()
-     * @dataProvider identifyProvider()
+     * @covers ::find()
+     * @dataProvider findProvider()
      */
-    public function testIdentify(array $credentials, ?array $expected): void
+    public function testFind(array $credentials, ?array $expected): void
     {
-        $identifier = new ApiIdentifier(['timezoneField' => 'timezone']);
-        $identity = $identifier->identify($credentials);
+        $resolver = new ApiResolver();
+        $identity = $resolver->find($credentials);
 
         if (isset($expected['tokens'])) {
             $client = ApiClientProvider::getApiClient();
             $expected['tokens'] = $client->getTokens();
-            $expected['token'] = $expected['tokens']['renew'];
         }
 
         if ($expected === null) {
@@ -99,6 +85,12 @@ class ApiIdentifierTest extends TestCase
 
             return;
         }
+
+        static::assertArraySubset($expected, $identity);
+
+        // test renew token for successful cases
+        $token = $identity['tokens']['renew'];
+        $identity = $resolver->find(compact('token'));
 
         static::assertArraySubset($expected, $identity);
     }
