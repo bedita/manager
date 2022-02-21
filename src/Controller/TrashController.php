@@ -122,7 +122,7 @@ class TrashController extends AppController
         if (!empty($this->getRequest()->getData('ids'))) {
             $ids = $this->getRequest()->getData('ids');
             if (is_string($ids)) {
-                $ids = explode(',', $this->getRequest()->getData('ids'));
+                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
             }
         } else {
             $ids = [$this->getRequest()->getData('id')];
@@ -158,7 +158,7 @@ class TrashController extends AppController
         if (!empty($this->getRequest()->getData('ids'))) {
             $ids = $this->getRequest()->getData('ids');
             if (is_string($ids)) {
-                $ids = explode(',', $this->getRequest()->getData('ids'));
+                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
             }
         } else {
             $ids = [$this->getRequest()->getData('id')];

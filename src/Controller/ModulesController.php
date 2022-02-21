@@ -354,9 +354,9 @@ class ModulesController extends AppController
         $ids = [];
         if (!empty($this->getRequest()->getData('ids'))) {
             if (is_string($this->getRequest()->getData('ids'))) {
-                $ids = explode(',', $this->getRequest()->getData('ids'));
+                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
             }
-        } else {
+        } else if (!empty($this->getRequest()->getData('id'))) {
             $ids = [$this->getRequest()->getData('id')];
         }
         foreach ($ids as $id) {

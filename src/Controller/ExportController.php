@@ -115,7 +115,7 @@ class ExportController extends AppController
      */
     protected function apiPath(): string
     {
-        return sprintf('/%s', $this->getRequest()->getData('objectType'));
+        return sprintf('/%s', (string)$this->getRequest()->getData('objectType'));
     }
 
     /**
