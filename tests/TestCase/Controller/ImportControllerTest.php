@@ -328,4 +328,36 @@ class ImportControllerTest extends TestCase
         static::assertEquals('An expected exception', Hash::get($flash, '0.message'));
         static::assertEquals(500, Hash::get($flash, '0.params.status'));
     }
+
+    /**
+     * Test `index`
+     *
+     * @return void
+     * @covers ::index()
+     */
+    public function testIndex(): void
+    {
+        $this->setupController();
+        $this->Import->index();
+        static::assertEmpty($this->Import->viewVars['jobs']);
+        static::assertEmpty($this->Import->viewVars['services']);
+        static::assertEmpty($this->Import->viewVars['filters']);
+        static::assertEmpty($this->Import->viewVars['result']);
+    }
+
+    /**
+     * Test `jobs`
+     *
+     * @return void
+     * @covers ::jobs()
+     */
+    public function testJobs(): void
+    {
+        $this->setupController();
+        $this->Import->jobs();
+        static::assertNotEmpty($this->Import->viewVars['_serialize']);
+        static::assertEmpty($this->Import->viewVars['jobs']);
+        static::assertEmpty($this->Import->viewVars['services']);
+        static::assertEmpty($this->Import->viewVars['filters']);
+    }
 }

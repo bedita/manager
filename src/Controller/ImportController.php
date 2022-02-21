@@ -48,7 +48,6 @@ class ImportController extends AppController
      * Display import page.
      *
      * @return void
-     * @codeCoverageIgnore
      */
     public function index(): void
     {
