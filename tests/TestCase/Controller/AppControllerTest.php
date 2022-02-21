@@ -634,7 +634,7 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
 
         if ($config == null) {
-            $this->AppController->getRequest() = $config;
+            $this->AppController->setRequest(new ServerRequest($config));
         }
 
         if ($expected instanceof \Exception) {
