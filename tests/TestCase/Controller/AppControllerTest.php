@@ -1013,5 +1013,4 @@ class AppControllerTest extends TestCase
 
         static::assertSame($expected, $actual);
     }
-
 }
