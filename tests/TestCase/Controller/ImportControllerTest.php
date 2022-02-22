@@ -197,7 +197,7 @@ class ImportControllerTest extends TestCase
                 'value' => 'App\Test\TestCase\Controller\ImportFilterSample',
                 'text' => 'Dummy Filter',
                 'options' => [],
-            ]
+            ],
         ];
         static::assertEquals($expected, $this->Import->viewVars['filters']);
         static::assertTrue(is_array($this->Import->viewVars['services']));
