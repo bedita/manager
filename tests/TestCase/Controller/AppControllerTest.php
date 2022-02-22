@@ -503,6 +503,26 @@ class AppControllerTest extends TestCase
                     'categories' => ['Blu', 'Red', 'Green'],
                 ],
             ],
+            'types' => [
+                'documents',
+                [
+                    'id' => '3',
+                    'a' => ['a' => 1],
+                    'b' => ['b' => 2],
+                    'c' => 'c',
+                ],
+                [
+                    'id' => '3',
+                    'a' => '{"a": 1}',
+                    'b' => '{"b": 2}',
+                    'c' => 'c',
+                    '_types' => [
+                        'a' => 'json',
+                        'b' => 'json',
+                        'c' => 'other',
+                    ],
+                ],
+            ],
         ];
     }
 

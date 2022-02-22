@@ -244,6 +244,17 @@ class AppController extends Controller
                 return ['name' => $category];
             }, $data['categories']);
         }
+
+        // decode json fields
+        $types = (array)Hash::get($data, '_types');
+        if (!empty($types)) {
+            foreach ($types as $field => $type) {
+                if ($type === 'json') {
+                    $data[$field] = json_decode($data[$field], true);
+                }
+            }
+            unset($data['_types']);
+        }
     }
 
     /**
