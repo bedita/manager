@@ -72,6 +72,7 @@ class ApiResolverTest extends TestCase
      */
     public function testFind(array $credentials, ?array $expected): void
     {
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $resolver = new ApiResolver();
         $identity = $resolver->find($credentials);
 

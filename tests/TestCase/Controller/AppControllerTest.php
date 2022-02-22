@@ -21,6 +21,7 @@ use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
@@ -81,6 +82,7 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
 
         // Mock Authentication component
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [

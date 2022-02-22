@@ -85,6 +85,7 @@ class ApiIdentifierTest extends TestCase
      */
     public function testIdentify(array $credentials, ?array $expected): void
     {
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $identifier = new ApiIdentifier(['timezoneField' => 'timezone']);
         $identity = $identifier->identify($credentials);
 
