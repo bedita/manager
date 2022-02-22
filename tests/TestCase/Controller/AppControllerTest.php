@@ -488,6 +488,21 @@ class AppControllerTest extends TestCase
                     '_changedParents' => true,
                 ],
             ],
+            'categories' => [
+                'documents',
+                [
+                    'id' => '2',
+                    'categories' => [
+                        ['name' => 'Blu'],
+                        ['name' => 'Red'],
+                        ['name' => 'Green'],
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'categories' => ['Blu', 'Red', 'Green'],
+                ],
+            ],
         ];
     }
 
