@@ -77,7 +77,7 @@ class AppController extends Controller
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
             $this->apiClient->setupTokens($tokens);
-        } elseif (!in_array($this->request->getPath(), ['/login'])) {
+        } elseif (!in_array($this->getRequest()->getPath(), ['/login'])) {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
@@ -104,13 +104,13 @@ class AppController extends Controller
         $this->log($exception, 'error');
 
         // Log form data & session id
-        $token = (array)$this->request->getData('_Token');
+        $token = (array)$this->getRequest()->getData('_Token');
         unset($token['debug']);
         $this->log('[Blackhole] type: ' . $type, 'debug');
         $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
-        $this->log('[Blackhole] form fields: ' . json_encode(array_keys((array)$this->request->getData())), 'debug');
-        $this->log('[Blackhole] form session id: ' . (string)$this->request->getData('_session_id'), 'debug');
-        $sessionId = $this->request->getSession() ? $this->request->getSession()->id() : null;
+        $this->log('[Blackhole] form fields: ' . json_encode(array_keys((array)$this->getRequest()->getData())), 'debug');
+        $this->log('[Blackhole] form session id: ' . (string)$this->getRequest()->getData('_session_id'), 'debug');
+        $sessionId = $this->getRequest()->getSession() ? $this->getRequest()->getSession()->id() : null;
         $this->log('[Blackhole] current session id: ' . $sessionId, 'debug');
 
         // Throw a generic bad request exception.
@@ -130,13 +130,13 @@ class AppController extends Controller
         $route = ['_name' => 'login'];
 
         // if request is not a get, return route without redirect.
-        if (!$this->request->is('get')) {
+        if (!$this->getRequest()->is('get')) {
             return $route;
         }
 
         // if redirect is app webroot, return route without redirect.
-        $redirect = $this->request->getUri()->getPath();
-        if ($redirect === $this->request->getAttribute('webroot')) {
+        $redirect = $this->getRequest()->getUri()->getPath();
+        if ($redirect === $this->getRequest()->getAttribute('webroot')) {
             return $route;
         }
 
@@ -188,7 +188,7 @@ class AppController extends Controller
      */
     protected function prepareRequest($type): array
     {
-        $data = (array)$this->request->getData();
+        $data = (array)$this->getRequest()->getData();
 
         $this->specialAttributes($data);
         $this->setupParentsRelation($type, $data);
@@ -371,21 +371,16 @@ class AppController extends Controller
      */
     protected function checkRequest(array $options = []): array
     {
-        // check request
-        if (empty($this->request)) {
-            throw new BadRequestException('Empty request');
-        }
-
         // check allowed methods
         if (!empty($options['allowedMethods'])) {
-            $this->request->allowMethod($options['allowedMethods']);
+            $this->getRequest()->allowMethod($options['allowedMethods']);
         }
 
         // check request required parameters, if any
         $data = [];
         if (!empty($options['requiredParameters'])) {
             foreach ($options['requiredParameters'] as $param) {
-                $val = $this->request->getData($param);
+                $val = $this->getRequest()->getData($param);
                 if (empty($val)) {
                     throw new BadRequestException(sprintf('Empty %s', $param));
                 }
@@ -409,18 +404,18 @@ class AppController extends Controller
      */
     protected function applySessionFilter(): ?Response
     {
-        $session = $this->request->getSession();
+        $session = $this->getRequest()->getSession();
         $sessionKey = sprintf('%s.filter', $this->Modules->getConfig('currentModuleName'));
 
         // if reset request, delete session data by key and redirect to proper uri
-        if ($this->request->getQuery('reset') === '1') {
+        if ($this->getRequest()->getQuery('reset') === '1') {
             $session->delete($sessionKey);
 
-            return $this->redirect((string)$this->request->getUri()->withQuery(''));
+            return $this->redirect((string)$this->getRequest()->getUri()->withQuery(''));
         }
 
         // write request query parameters (if any) in session
-        $params = $this->request->getQueryParams();
+        $params = $this->getRequest()->getQueryParams();
         if (!empty($params)) {
             unset($params['_search']);
             $session->write($sessionKey, $params);
@@ -433,7 +428,7 @@ class AppController extends Controller
         if (!empty($params)) {
             $query = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
-            return $this->redirect((string)$this->request->getUri()->withQuery($query));
+            return $this->redirect((string)$this->getRequest()->getUri()->withQuery($query));
         }
 
         return null;
@@ -467,7 +462,7 @@ class AppController extends Controller
                 'object_type' => Hash::get($objects, sprintf('%d.object_type', $i)),
             ];
         }
-        $session = $this->request->getSession();
+        $session = $this->getRequest()->getSession();
         $session->write('objectNav', $objectNav);
         $session->write('objectNavModule', $moduleName);
     }
@@ -481,7 +476,7 @@ class AppController extends Controller
     protected function getObjectNav($id): array
     {
         // get objectNav from session
-        $session = $this->request->getSession();
+        $session = $this->getRequest()->getSession();
         $objectNav = (array)$session->read('objectNav');
         if (empty($objectNav)) {
             return [];

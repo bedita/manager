@@ -54,7 +54,7 @@ class HistoryComponent extends Component
             return;
         }
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $data = (string)$session->read($key);
         if (empty($data)) {
             return;
@@ -126,12 +126,12 @@ class HistoryComponent extends Component
         // if keep uname, recover it from object
         if ($keepUname) {
             $response = $ApiClient->getObject($id, $objectType);
-            $attributes['uname'] = Hash::get($response, 'data.attributes.uname');
+            $attributes['uname'] = Hash::get((array)$response, 'data.attributes.uname');
         }
 
         // write attributes into session
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $session->write($key, json_encode($attributes));
     }
 

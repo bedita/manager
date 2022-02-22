@@ -42,7 +42,7 @@ class BulkControllerTest extends BaseControllerTest
     {
         // Setup controller for test
         $this->setupController();
-        $actual = (string)$this->controller->request->getParam('object_type');
+        $actual = (string)$this->controller->getRequest()->getParam('object_type');
         $expected = 'documents';
         static::assertEquals($expected, $actual);
     }
@@ -400,13 +400,13 @@ class BulkControllerTest extends BaseControllerTest
         $method = $reflectionClass->getMethod('errors');
         $method->setAccessible(true);
         $method->invokeArgs($this->controller, []);
-        $message = $this->controller->request->getSession()->read('Flash');
+        $message = $this->controller->getRequest()->getSession()->read('Flash');
         static::assertEmpty($message);
 
         // not empty
         $this->controller->errors = ['something bad happened'];
         $method->invokeArgs($this->controller, []);
-        $message = $this->controller->request->getSession()->read('Flash');
+        $message = $this->controller->getRequest()->getSession()->read('Flash');
         static::assertNotEmpty($message);
     }
 }

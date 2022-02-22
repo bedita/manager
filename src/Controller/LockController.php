@@ -53,8 +53,8 @@ class LockController extends AppController
      */
     protected function lock(bool $locked): bool
     {
-        $type = $this->request->getParam('object_type');
-        $id = $this->request->getParam('id');
+        $type = $this->getRequest()->getParam('object_type');
+        $id = $this->getRequest()->getParam('id');
         $meta = compact('locked');
         $data = compact('id', 'type', 'meta');
         $payload = json_encode(compact('data'));

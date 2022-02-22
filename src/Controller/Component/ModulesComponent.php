@@ -418,7 +418,7 @@ class ModulesComponent extends Component
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         unset($data['id']); // remove 'id', avoid future merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
@@ -450,7 +450,7 @@ class ModulesComponent extends Component
     protected function updateFromFailedSave(array &$object): void
     {
         // check session data for object id => use `failedSave.{type}.{id}` as key
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $key = sprintf(
             'failedSave.%s.%s',
             Hash::get($object, 'type'),
