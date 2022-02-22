@@ -126,7 +126,7 @@ class HistoryComponent extends Component
         // if keep uname, recover it from object
         if ($keepUname) {
             $response = $ApiClient->getObject($id, $objectType);
-            $attributes['uname'] = Hash::get($response, 'data.attributes.uname');
+            $attributes['uname'] = Hash::get((array)$response, 'data.attributes.uname');
         }
 
         // write attributes into session

@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\HistoryComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
@@ -160,7 +161,7 @@ class HistoryComponentTest extends TestCase
                     'historyId' => 1,
                     'keepUname' => false,
                 ],
-                '{"status":"","uname":"","title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+                '{"status":"","uname":"","title":"a new title","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":"","field":"a new value for field"}',
             ],
             'test document, keepUname true' => [
                 [
@@ -169,7 +170,7 @@ class HistoryComponentTest extends TestCase
                     'historyId' => 1,
                     'keepUname' => true,
                 ],
-                '{"status":"","uname":null,"title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+                '{"status":"","uname":null,"title":"a new title","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":"","field":"a new value for field"}',
             ],
         ];
     }
@@ -177,18 +178,37 @@ class HistoryComponentTest extends TestCase
     /**
      * Test `write` method
      *
-     * @covers ::write()
-     * @dataProvider writeProvider()
      * @param array $options The options for test
      * @param string $expected The expected serialized data
      * @return void
+     * @covers ::write()
+     * @dataProvider writeProvider()
      */
     public function testWrite(array $options, string $expected): void
     {
+        // mock api /history
+        $response = [
+            'data' => [
+                [
+                    'meta' => [
+                        'changed' => [
+                            'field' => 'a new value for field',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/history')
+            ->willReturn($response);
+        // set options
         $options += [
-            'ApiClient' => $this->ApiClient,
+            'ApiClient' => $apiClient,
             'Schema' => $this->SchemaComponent,
-            'Request' => $this->Request,
+            'Request' => $this->Request->withQueryParams(['title' => 'a new title']),
         ];
         $this->HistoryComponent->write($options);
         $session = $this->HistoryComponent->getController()->getRequest()->getSession();
