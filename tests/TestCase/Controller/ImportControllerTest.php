@@ -19,6 +19,7 @@ use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -177,13 +178,31 @@ class ImportControllerTest extends TestCase
      */
     public function testLoadFilters(): void
     {
+        $filters = [
+            [
+                'class' => 'App\Test\TestCase\Controller\ImportFilterSample',
+                'label' => 'Dummy Filter',
+                'options' => [],
+            ],
+        ];
+        Configure::write('Filters.import', $filters);
         $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
         $reflectionClass = new \ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('loadFilters');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, []);
         static::assertTrue(is_array($this->Import->viewVars['filters']));
+        $expected = [
+            [
+                'value' => 'App\Test\TestCase\Controller\ImportFilterSample',
+                'text' => 'Dummy Filter',
+                'options' => [],
+            ]
+        ];
+        static::assertEquals($expected, $this->Import->viewVars['filters']);
         static::assertTrue(is_array($this->Import->viewVars['services']));
+        static::assertSame(['ImportFilterSampleService'], $this->Import->viewVars['services']);
+        Configure::write('Filters.import', []);
     }
 
     /**
