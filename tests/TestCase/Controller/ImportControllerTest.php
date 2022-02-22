@@ -17,6 +17,7 @@ use App\Controller\ImportController;
 use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
@@ -227,9 +228,19 @@ class ImportControllerTest extends TestCase
         $property = $reflectionClass->getProperty('services');
         $property->setAccessible(true);
         $actual = $property->setValue($this->Import, ['dummy']);
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/admin/async_jobs')
+            ->willThrowException(new BEditaClientException('My test exception'));
+        $this->Import->apiClient = $apiClient;
+        $method->invokeArgs($this->Import, []);
         $actual = $this->Import->viewVars['jobs'];
         $expected = [];
         static::assertEquals($expected, $actual);
+        $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('My test exception', Hash::get($flash, '0.message'));
 
         // mock api get /admin/async_jobs
         $expected = [['id' => 1], ['id' => 2], ['id' => 3]];
