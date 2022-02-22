@@ -984,4 +984,34 @@ class AppControllerTest extends TestCase
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
     }
+
+    /**
+     * Test `getObjectNav`, when empty
+     *
+     * @return void
+     * @covers ::getObjectNav()
+     */
+    public function testGetObjectNavEmpty(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // set objectNav data to empty array
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setObjectNav');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->AppController, [ [] ]);
+
+        // get session data
+        $session = $this->AppController->getRequest()->getSession();
+        $expected = $session->read('objectNav');
+
+        // do controller call
+        $method = $reflectionClass->getMethod('getObjectNav');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, [ '' ]);
+
+        static::assertSame($expected, $actual);
+    }
+
 }
