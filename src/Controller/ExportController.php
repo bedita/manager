@@ -61,14 +61,14 @@ class ExportController extends AppController
             'requiredParameters' => ['objectType'],
         ]);
 
-        $format = (string)$this->request->getData('format');
+        $format = (string)$this->getRequest()->getData('format');
         if (!$this->Export->checkFormat($format)) {
             $this->Flash->error(__('Format choosen is not available'));
 
             return $this->redirect($this->referer());
         }
 
-        $ids = $this->request->getData('ids');
+        $ids = (string)$this->getRequest()->getData('ids');
 
         // load data for objects by object type and ids
         $rows = $this->rows($data['objectType'], $ids);
@@ -78,7 +78,7 @@ class ExportController extends AppController
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
-        $response = $this->response->withStringBody(Hash::get($data, 'content'));
+        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
         $response = $response->withType(Hash::get($data, 'contentType'));
 
         return $response->withDownload($filename);
@@ -115,7 +115,7 @@ class ExportController extends AppController
      */
     protected function apiPath(): string
     {
-        return sprintf('/%s', $this->request->getData('objectType'));
+        return sprintf('/%s', (string)$this->getRequest()->getData('objectType'));
     }
 
     /**
@@ -168,7 +168,7 @@ class ExportController extends AppController
     protected function prepareQuery(): array
     {
         $res = [];
-        $f = (array)$this->request->getData('filter');
+        $f = (array)$this->getRequest()->getData('filter');
         if (!empty($f)) {
             $filter = [];
             foreach ($f as $v) {
@@ -176,7 +176,7 @@ class ExportController extends AppController
             }
             $res = compact('filter');
         }
-        $q = (string)$this->request->getData('q');
+        $q = (string)$this->getRequest()->getData('q');
         if (!empty($q)) {
             $res += compact('q');
         }

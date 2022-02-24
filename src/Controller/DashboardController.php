@@ -37,7 +37,7 @@ class DashboardController extends AppController
      */
     public function index(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->set('recentItems', $this->recentItems());
     }
 
@@ -48,7 +48,7 @@ class DashboardController extends AppController
      */
     public function messages(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->viewBuilder()->disableAutoLayout();
         $this->render('/Element/Dashboard/messages');
     }

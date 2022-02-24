@@ -37,7 +37,7 @@ class ExportController extends AppController
     {
         $content = $this->apiClient->get('/model/project', [], ['Accept' => 'application/json']);
 
-        $response = $this->response->withStringBody(json_encode($content));
+        $response = $this->getResponse()->withStringBody(json_encode($content));
         $response = $response->withType('application/json');
 
         return $response->withDownload(self::FILENAME);

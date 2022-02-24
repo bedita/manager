@@ -109,3 +109,9 @@
 //  __('National Id Number');
 //  __('Vat Number');
 //  __('Pseudonym');
+
+// Folders
+// __('Folders')
+
+// Publications
+// __('Publications')

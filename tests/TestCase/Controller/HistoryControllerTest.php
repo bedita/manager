@@ -210,7 +210,7 @@ class HistoryControllerTest extends TestCase
         // call protected method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
         $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId, $keepUname]);
-        $actual = $this->HistoryController->request->getSession()->read(sprintf('history.%s.attributes', $id));
+        $actual = $this->HistoryController->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
         static::assertEquals($actual, $expected);
     }
 }

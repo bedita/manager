@@ -49,7 +49,7 @@ class DownloadController extends AppController
         $contentType = Hash::get($stream, 'attributes.mime_type');
 
         // output
-        $response = $this->response->withStringBody($this->content($stream));
+        $response = $this->getResponse()->withStringBody($this->content($stream));
         $response = $response->withType($contentType);
 
         return $response->withDownload($filename);

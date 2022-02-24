@@ -6,7 +6,7 @@
             :class="{ open: showCreateObjectForm }"
             :disabled="saving"
             @click="resetForms">
-            <h2><span v-show="relationName"><strong>{{ __('create new') }}</strong> "<: relationName | humanize :></span>" {{ __('related object') }}&nbsp;</h2>
+            <h2><span v-show="relationName"><strong>{{ __('create new for') }}</strong> "<: relationLabel :></span>"</h2>
         </header>
 
         <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
@@ -53,7 +53,20 @@
                                     {% if field == 'status' %}
                                         {% set fieldOptions = fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
                                     {% endif %}
-                                    {{ Property.control(field, '', fieldOptions, type)|raw }}
+                                    {% if field == 'date_ranges' %}
+                                        {% set fieldOptionsFrom = fieldOptions|merge({'id': 'start_date_0', 'name': 'date_ranges[0][start_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
+                                        {% set fieldOptionsTo = fieldOptions|merge({'id': 'end_date_0', 'name': 'date_ranges[0][end_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
+                                        {% set fieldOptionsAllDay = fieldOptions|merge({'id': 'all_day_0', 'name': 'date_ranges[0][params][all_day]', 'type': 'checkbox'}) %}
+                                        <div class="date-ranges-item mb-1">
+                                            <div>
+                                                {{ Property.control(__('From'), '', fieldOptionsFrom, type)|raw }}
+                                                {{ Property.control(__('To'), '', fieldOptionsTo, type)|raw }}
+                                                {{ Property.control(__('All day'), '', fieldOptionsAllDay, type)|raw }}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                       {{ Property.control(field, '', fieldOptions, type)|raw }}
+                                    {% endif %}
                                 {% endfor %}
                             </fieldset>
 
@@ -86,7 +99,7 @@
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationName | humanize :></strong>"</span> relation</h2>
+            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationLabel :></strong>"</span></h2>
         </header>
 
         <div class="px-1 my-1">

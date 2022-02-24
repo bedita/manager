@@ -9,6 +9,7 @@
  * @property {Object} node The model of the tree item.
  * @property {Object} object The current item to place in the tree.
  * @property {string} relationName The name of the relation to save.
+ * @property {string} relationLabel The label of the relation to save.
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
@@ -108,6 +109,7 @@ export default {
                     :node="child"
                     :object="object"
                     :relation-name="relationName"
+                    :relation-label="relationLabel"
                     :multiple-choice="multipleChoice"
                 ></tree-view>
             </div>
@@ -135,6 +137,7 @@ export default {
         },
         object: Object,
         relationName: String,
+        relationLabel: String,
         multipleChoice: {
             type: Boolean,
             default: true,

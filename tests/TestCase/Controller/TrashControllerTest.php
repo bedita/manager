@@ -191,7 +191,7 @@ class TrashControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/trash', $response->getHeaderLine('Location'));
 
-        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Trash->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $message);
     }
 
@@ -274,7 +274,7 @@ class TrashControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/trash', $response->getHeaderLine('Location'));
 
-        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Trash->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $message);
     }
 

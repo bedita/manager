@@ -110,7 +110,7 @@ class AppControllerTest extends TestCase
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
-        $flash = $this->AppController->request->getSession()->read('Flash');
+        $flash = $this->AppController->getRequest()->getSession()->read('Flash');
 
         $expected = __('Login required');
         $message = $flash['flash'][0]['message'];
@@ -488,6 +488,41 @@ class AppControllerTest extends TestCase
                     '_changedParents' => true,
                 ],
             ],
+            'categories' => [
+                'documents',
+                [
+                    'id' => '2',
+                    'categories' => [
+                        ['name' => 'Blu'],
+                        ['name' => 'Red'],
+                        ['name' => 'Green'],
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'categories' => ['Blu', 'Red', 'Green'],
+                ],
+            ],
+            'types' => [
+                'documents',
+                [
+                    'id' => '3',
+                    'a' => ['a' => 1],
+                    'b' => ['b' => 2],
+                    'c' => 'c',
+                ],
+                [
+                    'id' => '3',
+                    'a' => '{"a": 1}',
+                    'b' => '{"b": 2}',
+                    'c' => 'c',
+                    '_types' => [
+                        'a' => 'json',
+                        'b' => 'json',
+                        'c' => 'other',
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -583,11 +618,6 @@ class AppControllerTest extends TestCase
     public function checkRequestProvider(): array
     {
         return [
-            'badRequest' => [
-                new BadRequestException('Empty request'),
-                [],
-                null,
-            ],
             'methodNotAllowed' => [
                 new MethodNotAllowedException(),
                 ['allowedMethods' => 'POST'],
@@ -632,10 +662,6 @@ class AppControllerTest extends TestCase
     public function testCheckRequest($expected, $params, $config): void
     {
         $this->setupController($config);
-
-        if ($config == null) {
-            $this->AppController->request = $config;
-        }
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -721,6 +747,22 @@ class AppControllerTest extends TestCase
                 null, // expected http status code
                 null, // result type
             ],
+            'empty params' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                null, // expected session value
+                null, // expected http status code
+                null, // result type
+            ],
             'data from session' => [ // expected read session filter and redirect
                 [ // request config
                     'environment' => [
@@ -760,7 +802,7 @@ class AppControllerTest extends TestCase
         $this->setupController($requestConfig);
 
         // get session and write data on it
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $session->write($sessionKey, $sessionValue);
 
         // do controller call
@@ -886,7 +928,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // verify session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         static::assertEquals($session->read('objectNav'), $expectedObjectNav);
         static::assertEquals($session->read('objectNavModule'), $expectedObjectNavModule);
     }
@@ -946,7 +988,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // get session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $objectNav = $session->read('objectNav');
 
         foreach ($objects as $object) {
@@ -961,5 +1003,34 @@ class AppControllerTest extends TestCase
 
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
+    }
+
+    /**
+     * Test `getObjectNav`, when empty
+     *
+     * @return void
+     * @covers ::getObjectNav()
+     */
+    public function testGetObjectNavEmpty(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // set objectNav data to empty array
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setObjectNav');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->AppController, [ [] ]);
+
+        // get session data
+        $session = $this->AppController->getRequest()->getSession();
+        $expected = $session->read('objectNav');
+
+        // do controller call
+        $method = $reflectionClass->getMethod('getObjectNav');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, [ '' ]);
+
+        static::assertSame($expected, $actual);
     }
 }

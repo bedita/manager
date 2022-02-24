@@ -37,14 +37,14 @@ class TranslatorController extends AppController
     public function translate(): void
     {
         $this->viewBuilder()->setClassName('Json');
-        $this->request->allowMethod(['post']);
-        $text = $this->request->getData('text', '');
+        $this->getRequest()->allowMethod(['post']);
+        $text = $this->getRequest()->getData('text', '');
         $texts = (is_array($text)) ? $text : [$text];
         try {
             $json = $this->Translator->translate(
                 $texts,
-                (string)$this->request->getData('from'),
-                (string)$this->request->getData('to')
+                (string)$this->getRequest()->getData('from'),
+                (string)$this->getRequest()->getData('to')
             );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);

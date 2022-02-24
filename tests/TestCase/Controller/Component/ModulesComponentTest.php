@@ -982,6 +982,11 @@ class ModulesComponentTest extends TestCase
      */
     public function testSetDataFromFailedSave(): void
     {
+        // empty case
+        $this->Modules->setDataFromFailedSave('', ['id' => 123]);
+        $actual = $this->Modules->getController()->request->getSession()->read('failedSave.123');
+        static::assertEmpty($actual);
+
         // data and expected
         $expected = [ 'id' => 999, 'name' => 'gustavo' ];
         $type = 'documents';
@@ -990,7 +995,7 @@ class ModulesComponentTest extends TestCase
 
         // verify data
         $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->getController()->request->getSession()->read($key);
+        $actual = $this->Modules->getController()->getRequest()->getSession()->read($key);
         unset($expected['id']);
         static::assertEquals($expected, $actual);
     }
@@ -1005,6 +1010,12 @@ class ModulesComponentTest extends TestCase
      */
     public function testUpdateFromFailedSave(): void
     {
+        // empty case
+        $this->Modules->setDataFromFailedSave('', ['id' => 123]); // wrong data, missing type
+        $object = ['id' => 123, 'type' => 'documents'];
+        $this->Modules->setupAttributes($object);
+        static::assertArrayNotHasKey('attributes', $object);
+
         // write to session data, to simulate recover from session.
         $object = [
             'id' => 999,

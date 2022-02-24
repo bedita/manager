@@ -2,6 +2,7 @@
     :relation-data="{{ relationSchema|json_encode|escape('html_attr') }}"
     :data-list="dataList"
     relation-name="{{ relationName }}"
+    relation-label="{{ Layout.tr(relationName) }}"
     :pre-count="{{ preCount }}"
     config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
     ref="relation"
@@ -16,6 +17,7 @@
         {% if customElement %}
             {% element customElement {
                 'relationName': relationName,
+                'relationLabel': Layout.tr(relationName),
                 'relationSchema': relationsSchema,
             } %}
         {% else %}
@@ -92,6 +94,7 @@
                     @click.prevent.stop="addRelatedObjects({
                         object: {{object|json_encode}},
                         relationName: relationName,
+                        relationLabel: relationLabel,
                         alreadyInView: alreadyInView,
                         relationTypes: relationTypes,
                     })">{{ __('add objects') }}</button>

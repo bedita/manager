@@ -153,8 +153,8 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['objects', 'meta', 'links', 'types', 'properties']);
@@ -186,8 +186,8 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
     }
 
     /**
@@ -210,10 +210,10 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->response->getStatusCode());
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
 
         // verify session filter is empty
-        $filter = $this->controller->request->getSession()->read('documents.filter');
+        $filter = $this->controller->getRequest()->getSession()->read('documents.filter');
         static::assertNull($filter);
     }
 
@@ -237,8 +237,8 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['object', 'included', 'schema', 'properties', 'objectRelations']);
@@ -377,8 +377,8 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['object', 'schema', 'properties']);
@@ -985,8 +985,8 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $expected = ['resources', 'roots', 'categoriesTree', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
@@ -1017,9 +1017,9 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
-        $flash = $this->controller->request->getSession()->read('Flash');
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         $expected = '[400] Invalid data';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
@@ -1049,9 +1049,9 @@ class ModulesControllerTest extends BaseControllerTest
 
         // verify response status code and type
         static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
-        $flash = $this->controller->request->getSession()->read('Flash');
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
+        $flash = $this->controller->getRequest()->getSession()->read('Flash');
         $expected = '[404] Not Found';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
