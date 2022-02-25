@@ -442,7 +442,7 @@ const _vueInstance = new Vue({
             });
 
             /**
-            * Listen for submit: if action is /delete it shows warning dialog
+            * Listen for submit: if action is "delete" it shows warning dialog
             */
             this.$el.addEventListener('submit', (ev) => {
                 ev.preventDefault();
@@ -451,11 +451,31 @@ const _vueInstance = new Vue({
                     return;
                 }
 
+                const trashActions = [
+                    '/trash/delete',
+                    '/trash/empty',
+                ];
+
                 let msg = '';
-                if (form.action.endsWith('/trash/delete') || form.action.endsWith('/trash/empty')) {
-                    msg = t`If you confirm, this data will be gone forever. Are you sure?`;
-                } else if (form.action.endsWith('/delete')) {
-                    msg = t`Do you really want to trash the object?`;
+                let done = false;
+                for (const action of trashActions) {
+                    if (!done && form.action.includes(action)) {
+                        msg = t`If you confirm, this data will be gone forever. Are you sure?`;
+                        done = true;
+                    }
+                }
+                if (!done) {
+                    const hardDeleteActions = [
+                        '/delete',
+                        '/model/tags/remove',
+                        '/model/categories/remove',
+                    ];
+                    for (const action of hardDeleteActions) {
+                        if (!done && form.action.includes(action)) {
+                            msg = t`Do you really want to trash the object?`;
+                            done = true;
+                        }
+                    }
                 }
 
                 _vueInstance.dataChanged.clear();

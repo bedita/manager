@@ -209,9 +209,6 @@ return [
                 'label',
                 'enabled',
             ],
-            'filter' => [
-                'enabled',
-            ],
         ],
     ],
 ];
