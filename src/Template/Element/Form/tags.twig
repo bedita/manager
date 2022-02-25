@@ -1,6 +1,5 @@
 
-{# {% if schema.tags is defined %} #}
-{# TODO understand why this does not work #}
+{% if schema.tags is defined %}
     <property-view inline-template :tab-open="tabsOpen" tab-name="tags">
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()"
@@ -16,4 +15,4 @@
             </div>
         </section>
     </property-view>
-{# {% endif %} #}
+{% endif %}

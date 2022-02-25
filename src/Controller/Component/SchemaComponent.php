@@ -150,9 +150,10 @@ class SchemaComponent extends Component
             ];
         }
         $categories = $this->fetchCategories($type);
+        $tags = $this->fetchTags();
         $objectTypeMeta = $this->fetchObjectTypeMeta($type);
 
-        return $schema + $objectTypeMeta + array_filter(compact('categories'));
+        return $schema + $objectTypeMeta + array_filter(compact('categories')) + array_filter(compact('tags'));
     }
 
     /**
@@ -206,6 +207,37 @@ class SchemaComponent extends Component
             'page_size' => 100,
         ];
         $url = sprintf('/model/categories?filter[type]=%s', $type);
+        try {
+            $response = ApiClientProvider::getApiClient()->get($url, $query);
+        } catch (BEditaClientException $ex) {
+            // we ignore filter errors for now
+            $response = [];
+        }
+
+        return array_map(
+            function ($item) {
+                return [
+                    'id' => Hash::get((array)$item, 'id'),
+                    'name' => Hash::get((array)$item, 'attributes.name'),
+                    'label' => Hash::get((array)$item, 'attributes.label'),
+                    'parent_id' => Hash::get((array)$item, 'attributes.parent_id'),
+                ];
+            },
+            (array)Hash::get((array)$response, 'data')
+        );
+    }
+
+    /**
+     * Fetch `tags`
+     *
+     * @return array
+     */
+    protected function fetchTags(): array
+    {
+        $query = [
+            'page_size' => 100,
+        ];
+        $url = '/model/tags';
         try {
             $response = ApiClientProvider::getApiClient()->get($url, $query);
         } catch (BEditaClientException $ex) {
