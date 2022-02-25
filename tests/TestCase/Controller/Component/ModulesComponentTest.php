@@ -1386,6 +1386,35 @@ class ModulesComponentTest extends TestCase
                     ],
                 ], // expected
             ],
+            'readonly' => [
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['objects'],
+                    ],
+                ], // schema
+                [
+                    'hates' => [
+                        'readonly' => true
+                    ],
+                    'loves' => [],
+                ], // relationships
+                [
+                    'hates' => [
+                        'left' => ['elefants'],
+                        'right' => ['mices'],
+                        'readonly' => true,
+                    ],
+                    'loves' => [
+                        'left' => ['robots'],
+                        'right' => ['cats', 'dogs', 'elefants', 'mices'],
+                    ],
+                ], // expected
+            ]
         ];
     }
 
