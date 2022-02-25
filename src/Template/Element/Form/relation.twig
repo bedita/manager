@@ -1,6 +1,7 @@
 <relation-view inline-template
     :relation-data="{{ relationSchema|json_encode|escape('html_attr') }}"
     :data-list="dataList"
+    :readonly={{ readonly ? 'true' : 'false' }}
     relation-name="{{ relationName }}"
     relation-label="{{ Layout.tr(relationName) }}"
     :pre-count="{{ preCount }}"
@@ -56,10 +57,11 @@
                         {% if relationName == 'children' %}
                             {% element 'Form/related_item' { 'children': true } %}
                         {% else %}
-                            {% element 'Form/related_item' { 'common': true } %}
+                            {% element 'Form/related_item' { 'common': true, 'readonly': readonly } %}
                         {% endif %}
                     </div>
 
+                    {% if not readonly %}
                     {# STAGED OBJECTS (new relations) #}
                     <div v-if="addedRelations.length"
                         class="related-item-column column added is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
@@ -68,12 +70,13 @@
 
                         {% element 'Form/related_item' { 'stage': true } %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
 
         </div>
 
-        {% if Perms.canSave() %}
+        {% if Perms.canSave() and not readonly %}
         <div class="mt-5">
             {# DROP FILES #}
             {% if uploadableNum %}
@@ -105,6 +108,7 @@
         {# End relation custom or default view #}
         {% endif %}
 
+        {% if not readonly %}
         {# hidden field - relations serialized json #}
         {{ Form.control(relationName ~ 'removeRelated', {
             'type': 'hidden',
@@ -120,6 +124,7 @@
             'v-model': 'addedRelationsData'
         })|raw }}
         {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+        {% endif %}
 
     </div>
 </relation-view>
