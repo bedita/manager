@@ -49,7 +49,7 @@ export default {
     },
 
     mounted() {
-        // TODO settare initialTags fetchandoli
+        // TODO prendere initialTags da fuori, come props
 
         this.selectedIds = this.initialTags?.map((tag) => tag.id);
         this.tagsOptions = this.initialTags || [];
