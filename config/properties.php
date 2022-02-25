@@ -201,5 +201,17 @@ return [
                 'type',
             ],
         ],
+
+        // model/tags
+        'tags' => [
+            'index' => [
+                'name',
+                'label',
+                'enabled',
+            ],
+            'filter' => [
+                'enabled',
+            ],
+        ],
     ],
 ];

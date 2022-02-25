@@ -1,0 +1,21 @@
+
+{# {% if schema.tags is defined %} #}
+{# TODO understand why this does not work #}
+    <property-view inline-template :tab-open="tabsOpen" tab-name="tags">
+
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Tags') }}</h2>
+            </header>
+
+            <div v-show="isOpen" class="tab-container">
+                <div class="tags-container">
+                    <tag-picker label="{{ __('Tags') }}" :tags="{{ schema.categories|json_encode }}"></tag-picker>
+                </div>
+            </div>
+        </section>
+
+    </property-view>
+{# {% endif %} #}
