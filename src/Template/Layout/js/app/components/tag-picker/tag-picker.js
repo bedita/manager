@@ -1,7 +1,6 @@
 import { Treeselect, ASYNC_SEARCH } from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
     credentials: 'same-origin',
     headers: {
@@ -57,10 +56,8 @@ export default {
     },
 
     mounted() {
-        // TODO prendere initialTags da fuori, come props
-
-        this.selectedIds = this.initialTags?.map((tag) => tag.id);
-        this.tagsOptions = this.initialTags || [];
+        this.selectedIds = this.initialTags?.map((tag) => tag.id); // <= qui da sistemare | non si ha id
+        this.tagsOptions = this.initialTags?.map((tag) => tag.label) || []; // <= qui da sistemare
     },
 
     methods: {
@@ -69,10 +66,32 @@ export default {
         },
         addNewTag() {
             // TODO
-            // - chiamata API per aggiungere il tag
+            // - aggiungere il valore alla lista dei tag da salvare (it was: chiamata API per aggiungere il tag)
             // - svuotare l'input
             // - aggiungere il tag fra quelli che ha l'oggetto
             // - refresh lista dei tag esistenti
+            // nota: il salvataggio è per tutto l'oggetto, con payload tipo
+//             PATCH /galleries/84862
+//             {
+//                 "data": {
+//                     "id": "84862",
+//                     "type": "galleries",
+//                     "attributes": {
+//                         "tags": [
+//                         	{
+//                         		"name": "abitare"
+//                         	},
+//                         	{
+//                         		"name": "abitare nuovo che non esiste già"
+//                         	},
+//                         	{
+//                         		"name": "tag nuovo a caso",
+//                                 "label": "TAG NUOVO A CASO"
+//                         	}
+//                         ]
+//                     }
+//                 }
+//             }
         },
         onChange() {
             const selectedTags = this.initialTags.filter((tag) => this.selectedIds.includes(tag.id));
@@ -83,6 +102,10 @@ export default {
                 return;
             }
 
+            // TODO: da rivedere le righe seguenti, si può semplificare: non serve chiamata api.
+            // l'utente inserisce quello che gli pare, il sistema salva:
+            // se è nuovo, salva come nuovo, altrimenti usa tag esistente
+            // del resto "/api/model/tags" non è accessibile a tutti gli utenti, per cui questa parte non funzionerebbe in alcuni casi
             const res = await fetch(`${BEDITA.base}/api/model/tags?filter[query]=${searchQuery}&page_size=100`, API_OPTIONS);
             const json = await res.json();
             const tags = [...(json.data || [])];

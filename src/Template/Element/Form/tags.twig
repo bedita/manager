@@ -8,8 +8,7 @@
         </header>
         <div v-show="isOpen" class="tab-container">
             <div class="tags-container">
-                {# TODO qui passare initialTags, cioè i tag che ha l'oggetto  #}
-                <tag-picker></tag-picker>
+                <tag-picker :initialTags="{{ object.attributes.tags|json_encode }}"></tag-picker>
             </div>
         </div>
     </section>
