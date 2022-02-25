@@ -1,18 +1,15 @@
 
-{% if schema.tags is defined %}
-    <property-view inline-template :tab-open="tabsOpen" tab-name="tags">
-        <section class="fieldset">
-            <header @click.prevent="toggleVisibility()"
-                class="tab unselectable"
-                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-                <h2>{{ __('Tags') }}</h2>
-            </header>
-
-            <div v-show="isOpen" class="tab-container">
-                <div class="tags-container">
-                    <tag-picker label="{{ __('Tags') }}" :tags="{{ schema.tags|json_encode }}"></tag-picker>
-                </div>
+<property-view inline-template :tab-open="tabsOpen" tab-name="tags">
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Tags') }}</h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            <div class="tags-container">
+                <tag-picker></tag-picker>
             </div>
-        </section>
+        </div>
+    </section>
     </property-view>
-{% endif %}

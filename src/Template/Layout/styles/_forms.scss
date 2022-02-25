@@ -243,6 +243,10 @@ form {
     }
 }
 
+.tag-picker .vue-treeselect__control {
+    max-width: none;
+}
+
 .vue-treeselect__input {
     box-shadow: none !important;
     background: transparent !important;

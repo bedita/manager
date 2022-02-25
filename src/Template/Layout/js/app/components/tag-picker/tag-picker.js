@@ -1,5 +1,14 @@
-import { Treeselect } from '@riophae/vue-treeselect'
+import { Treeselect, ASYNC_SEARCH } from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+const QUERY_MIN_LENGTH = 4;
 
 export default {
     components: {
@@ -12,6 +21,9 @@ export default {
             <Treeselect
                 placeholder
                 :options="tagsOptions"
+                :async="true"
+                :clearable="false"
+                :load-options="fetchTags"
                 :disabled="disabled"
                 :disable-branch-nodes="true"
                 :multiple="true"
@@ -24,7 +36,6 @@ export default {
 
     props: {
         id: String,
-        tags: Array,
         disabled: Boolean,
         label: String,
         initialTags: Array,
@@ -33,22 +44,34 @@ export default {
     data() {
         return {
             tagsOptions: [],
-            selectedIds: null,
+            selectedIds: [],
         };
     },
 
     mounted() {
-        this.tagsOptions = this.tags?.map((tag) => ({ id: tag.id, label: tag.label }));
-        this.selectedIds = this.initialTags?.map(selected => this.tags.find(cat => cat.name == selected)?.id);
+        // TODO settare initialTags fetchandoli
+
+        this.selectedIds = this.initialTags?.map((tag) => tag.id);
+        this.tagsOptions = this.initialTags || [];
     },
 
     methods: {
-        /**
-         * Emits currently selected tags on selection change.
-         */
         onChange() {
-            const selectedTags = this.tags.filter((cat) => this.selectedIds.includes(cat.id));
+            const selectedTags = this.initialTags.filter((tag) => this.selectedIds.includes(tag.id));
             this.$emit('change', selectedTags);
-        }
+        },
+        async fetchTags({ action, searchQuery, callback }) {
+            if (action !== ASYNC_SEARCH || searchQuery?.length < QUERY_MIN_LENGTH) {
+                return;
+            }
+
+            const res = await fetch(`${BEDITA.base}/api/model/tags?filter[query]=${searchQuery}&page_size=100`, API_OPTIONS);
+            const json = await res.json();
+            const tags = [...(json.data || [])];
+
+            const tagsOptions = tags?.map((tag) => ({ id: tag.id, label: tag.attributes.label })) || [];
+
+            callback(null, tagsOptions);
+        },
     },
 }
