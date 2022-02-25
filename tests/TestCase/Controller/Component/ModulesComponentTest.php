@@ -1075,6 +1075,8 @@ class ModulesComponentTest extends TestCase
                 [
                     'has_media' => [],
                 ],
+                [],
+                [],
             ],
             'inverse' => [
                 [
@@ -1109,6 +1111,8 @@ class ModulesComponentTest extends TestCase
                 [
                     'media_of' => [],
                 ],
+                [],
+                [],
             ],
             'ordered' => [
                 [
@@ -1169,8 +1173,99 @@ class ModulesComponentTest extends TestCase
                     'aside' => [
                     ],
                 ],
+                [],
+                [],
             ],
-
+            'hidden' => [
+                [
+                    'relationsSchema' => [
+                        'has_media' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => [
+                        'main' => [
+                            'has_media' => 'Has Media',
+                        ],
+                        'aside' => [
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                    'attach' => [
+                        'attributes' => [
+                            'name' => 'attach',
+                            'label' => 'Attach',
+                            'inverse_name' => 'attached_to',
+                            'inverse_label' => 'Attached To',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [],
+                    'attach' => [],
+                ],
+                [
+                    'main' => [
+                        'attach',
+                    ],
+                    'aside' => [
+                    ],
+                ],
+                ['attach'],
+                [],
+            ],
+            'readonly' => [
+                [
+                    'relationsSchema' => [
+                        'has_media' => [
+                            'attributes' => [
+                                'name' => 'has_media',
+                                'label' => 'Has Media',
+                                'inverse_name' => 'media_of',
+                                'inverse_label' => 'Media Of',
+                            ],
+                            'readonly' => true,
+                        ],
+                    ],
+                    'resourceRelations' => [],
+                    'objectRelations' => [
+                        'main' => [
+                            'has_media' => 'Has Media',
+                        ],
+                        'aside' => [],
+                    ],
+                ],
+                [
+                    'has_media' => [
+                        'attributes' => [
+                            'name' => 'has_media',
+                            'label' => 'Has Media',
+                            'inverse_name' => 'media_of',
+                            'inverse_label' => 'Media Of',
+                        ],
+                    ],
+                ],
+                [
+                    'has_media' => [],
+                ],
+                [],
+                ['has_media'],
+            ],
         ];
     }
 
@@ -1187,10 +1282,12 @@ class ModulesComponentTest extends TestCase
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
      * @param array $order Order array.
+     * @param array $hidden Hidden array.
+     * @param array $readonly Readonly array.
      */
-    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = []): void
+    public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
-        $this->Modules->setupRelationsMeta($schema, $relationships, $order);
+        $this->Modules->setupRelationsMeta($schema, $relationships, $order, $hidden, $readonly);
 
         $viewVars = $this->Modules->getController()->viewVars;
 
