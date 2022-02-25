@@ -1075,8 +1075,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'has_media' => [],
                 ],
-                [],
-                [],
             ],
             'inverse' => [
                 [
@@ -1111,8 +1109,6 @@ class ModulesComponentTest extends TestCase
                 [
                     'media_of' => [],
                 ],
-                [],
-                [],
             ],
             'ordered' => [
                 [
@@ -1173,8 +1169,6 @@ class ModulesComponentTest extends TestCase
                     'aside' => [
                     ],
                 ],
-                [],
-                [],
             ],
             'hidden' => [
                 [
@@ -1227,7 +1221,6 @@ class ModulesComponentTest extends TestCase
                     ],
                 ],
                 ['attach'],
-                [],
             ],
             'readonly' => [
                 [
@@ -1263,6 +1256,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'has_media' => [],
                 ],
+                [],
                 [],
                 ['has_media'],
             ],

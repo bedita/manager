@@ -489,11 +489,11 @@ class ModulesComponent extends Component
     public function setupRelationsMeta(array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
         // relations between objects
-        $relationsSchema = $this->relationsSchema($schema, $relationships, $readonly);
+        $relationsSchema = $this->relationsSchema($schema, $relationships, $hidden, $readonly);
         // relations between objects and resources
-        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), $hidden, self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
-        $relationNames = array_diff(array_keys($relationsSchema), $hidden);
+        $relationNames = array_keys($relationsSchema);
 
         // define 'main' and 'aside' relation groups
         $aside = array_intersect((array)Hash::get($order, 'aside'), $relationNames);
@@ -514,14 +514,15 @@ class ModulesComponent extends Component
      *
      * @param array $schema The schema
      * @param array $relationships The relationships
+     * @param array $hidden Hidden relationships
      * @param array $readonly Readonly relationships
      * @return array
      */
-    protected function relationsSchema(array $schema, array $relationships, array $readonly = []): array
+    protected function relationsSchema(array $schema, array $relationships, array $hidden = [], array $readonly = []): array
     {
         $types = $this->objectTypes(false);
         sort($types);
-        $relationsSchema = array_intersect_key($schema, $relationships);
+        $relationsSchema = array_diff_key(array_intersect_key($schema, $relationships), array_flip($hidden));
 
         foreach ($relationsSchema as $relName => &$relSchema) {
             if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {

@@ -203,7 +203,7 @@ class PropertiesComponentTest extends TestCase
         Cache::clear();
 
         $index = ['has_food', 'is_tired', 'sleeps_with'];
-        Configure::write('Properties.cats.relations._hidden', $index);
+        Configure::write('Properties.cats.relations._hide', $index);
 
         $this->createComponent();
 
