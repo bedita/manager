@@ -192,6 +192,46 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `hiddenRelationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::hiddenRelationsList()
+     */
+    public function testHiddenRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._hidden', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->hiddenRelationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
+     * Test `readonlyRelationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::readonlyRelationsList()
+     */
+    public function testReadonlyRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._readonly', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->readonlyRelationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
      * Data provider for `testViewGroups` test case.
      *
      * @return array
