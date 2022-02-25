@@ -1399,7 +1399,7 @@ class ModulesComponentTest extends TestCase
                 ], // schema
                 [
                     'hates' => [
-                        'readonly' => true
+                        'readonly' => true,
                     ],
                     'loves' => [],
                 ], // relationships
@@ -1414,7 +1414,7 @@ class ModulesComponentTest extends TestCase
                         'right' => ['cats', 'dogs', 'elefants', 'mices'],
                     ],
                 ], // expected
-            ]
+            ],
         ];
     }
 
