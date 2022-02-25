@@ -144,7 +144,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     // Model.
     Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
-        foreach (['object_types', 'property_types', 'relations', 'categories'] as $controller) {
+        foreach (['object_types', 'property_types', 'relations', 'categories', 'tags'] as $controller) {
             // Routes connected here are prefixed with '/model'
             $name = Inflector::camelize($controller);
             $routes->get(
