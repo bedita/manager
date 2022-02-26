@@ -14,12 +14,12 @@ namespace App;
 
 use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
+use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\BaseApplication;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
@@ -47,30 +47,8 @@ class Application extends BaseApplication
     public function bootstrap(): void
     {
         parent::bootstrap();
-        if (PHP_SAPI === 'cli') {
-            $this->bootstrapCli();
-        }
-        /*
-         * Only try to load DebugKit in development mode
-         * Debug Kit should not be installed on a production system
-         */
-        if (Configure::read('debug')) {
-            $this->addOptionalPlugin('DebugKit');
-        }
-
-        // Load 'BEdita/WebTools' and other plugins here
         $this->addPlugin('BEdita/WebTools');
-        // To activate I18nMiddleware use $this->addPlugin('BEdita/I18n', ['middleware' => true]);
         $this->addPlugin('BEdita/I18n');
-
-        /*
-         * Uncomment to setup AssetsRevisions with an appropriate strategy.
-         *
-         * @see https://github.com/bedita/web-tools#load-assets-with-assetrevisions
-         */
-        // \BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
-        //     new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
-        // );
     }
 
     /**
