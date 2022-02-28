@@ -172,6 +172,22 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `bulkList()` method.
+     *
+     * @return void
+     * @covers ::bulkList()
+     */
+    public function testBulkList(): void
+    {
+        Cache::clear();
+        $expected = ['cat', 'dog', 'horse'];
+        Configure::write('Properties.animals.bulk', $expected);
+        $this->createComponent();
+        $actual = $this->Properties->bulkList('animals');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `relationsList()` method.
      *
      * @return void
