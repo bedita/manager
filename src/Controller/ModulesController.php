@@ -168,8 +168,10 @@ class ModulesController extends AppController
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
             $this->Schema->getRelationsSchema(),
-            $object['relationships'],
-            $this->Properties->relationsList($this->objectType)
+            $schema['relations'],
+            $this->Properties->relationsList($this->objectType),
+            $this->Properties->hiddenRelationsList($this->objectType),
+            $this->Properties->readonlyRelationsList($this->objectType)
         );
 
         $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);

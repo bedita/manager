@@ -735,6 +735,7 @@ return [
     //             '|',
     //             'alignment',
     //             '|',
+    //             'placeholders',
     //             'specialCharacters',
     //             'link',
     //             'bulletedList',

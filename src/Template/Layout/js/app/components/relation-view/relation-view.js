@@ -66,6 +66,10 @@ export default {
             type: Number,
             default: -1,
         },
+        readonly: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
