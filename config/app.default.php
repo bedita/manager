@@ -508,6 +508,8 @@ return [
      *      + 'aside' relations to show on right aside column
      *      + '_element' associative array with custom view element to use for a relation, defined like
      *          '{relation_name}' => '{MyPlugin.template_path}'
+     *      + '_hidden' array of relations to hide, not viewable in view(s)
+     *      + '_readonly' array of readonly relations, to show in readonly mode in view(s)
      *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
@@ -553,6 +555,13 @@ return [
         //         '_element' => [
         //             // use custom element in `MyPlugin` for `fooed_by`
         //             'fooed_by' => 'MyPlugin.fooed_by',
+        //         ],
+        //         '_hidden' => [
+        //             'download',
+        //             'downloadable_by',
+        //         ],
+        //         '_readonly' => [
+        //             'seealso',
         //         ],
         //     ],
         //     'filter' => [
