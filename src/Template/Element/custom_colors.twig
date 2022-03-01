@@ -1,15 +1,17 @@
 <style type="text/css">
 
     {# module colors #}
-    {% for name, module in modules if module.color %}
-        {% set color = module.color %}
-        :root { --color-{{ name }}: {{ color }}; {% if currentModule is not empty and currentModule.name == name %}--color-module: {{ color }};{% endif %} }
-        .has-background-module-{{ name }} { background-color: {{ color }} !important; }
-        .has-border-module-{{ name }} { border-color: {{ color }} !important; }
-        .has-text-module-{{ name }} { color: {{ color }} !important; }
-        .button-primary-hover-module-{{ name }}:hover { background-color: {{ color }}; border-color: {{ color }}; color: #fff; }
-        .button-outlined-hover-module-{{ name }}:hover { background-color: transparent !important; border-color: {{ color }}; }
-        .has-shadow-color-{{ name }} { --box-shadow-color: {{ color }}; }
+    {% for name, module in modules %}
+        {% if module.color %}
+            {% set color = module.color %}
+            :root { --color-{{ name }}: {{ color }}; {% if currentModule is not empty and currentModule.name == name %}--color-module: {{ color }};{% endif %} }
+            .has-background-module-{{ name }} { background-color: {{ color }} !important; }
+            .has-border-module-{{ name }} { border-color: {{ color }} !important; }
+            .has-text-module-{{ name }} { color: {{ color }} !important; }
+            .button-primary-hover-module-{{ name }}:hover { background-color: {{ color }}; border-color: {{ color }}; color: #fff; }
+            .button-outlined-hover-module-{{ name }}:hover { background-color: transparent !important; border-color: {{ color }}; }
+            .has-shadow-color-{{ name }} { --box-shadow-color: {{ color }}; }
+        {% endif %}
     {%- endfor -%}
 
     {# override alert message color if in config #}
