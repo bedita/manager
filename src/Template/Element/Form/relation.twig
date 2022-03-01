@@ -115,7 +115,7 @@
             'name': 'relations[' ~ relationName ~ '][removeRelated]',
             'v-model': 'removedRelationsData'
         })|raw }}
-        {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+        {% do Form.unlockField('relations.' ~ relationName ~ '.removeRelated') %}
 
         {# Relations serialized json form element #}
         {{ Form.control(relationName ~ 'addRelated', {
@@ -123,7 +123,7 @@
             'name': 'relations[' ~ relationName ~ '][addRelated]',
             'v-model': 'addedRelationsData'
         })|raw }}
-        {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+        {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
         {% endif %}
 
     </div>

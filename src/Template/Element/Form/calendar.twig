@@ -53,7 +53,7 @@
                 <button @click.prevent="add">{{ __('Add') }}</button>
             </div>
         </date-ranges-view>
-        {{ Form.unlockField('date_ranges')}}
+        {% do Form.unlockField('date_ranges') %}
     </div>
 </section>
 </property-view>

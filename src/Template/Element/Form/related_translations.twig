@@ -63,7 +63,7 @@
                             'name': 'relations[' ~ resourceName ~ '][removeRelated]',
                             'v-model': 'removedRelationsData'
                         })|raw }}
-                        {{ Form.unlockField('relations.' ~ resourceName ~ '.removeRelated')}}
+                        {% do Form.unlockField('relations.' ~ resourceName ~ '.removeRelated') %}
 
                     </div>
                 </relation-view>

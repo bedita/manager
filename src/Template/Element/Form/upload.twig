@@ -44,7 +44,7 @@
                         'type': 'hidden',
                         'v-bind:value': 'activeIndex == 0? `file` : `embed`'
                     }) | raw }}
-                    {{ Form.unlockField('upload_behavior')}}
+                    {% do Form.unlockField('upload_behavior') %}
 
                 </div>
 

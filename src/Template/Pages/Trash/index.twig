@@ -36,14 +36,14 @@
                         'class': 'mr-1'
                     })|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {{ Form.unlockField('ids') }}
+                        {% do Form.unlockField('ids') %}
                         <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}
                 {% if (objects) and Perms.canDelete({type: objectType}) %}
                     {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {{ Form.unlockField('ids') }}
+                        {% do Form.unlockField('ids') %}
                         <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}

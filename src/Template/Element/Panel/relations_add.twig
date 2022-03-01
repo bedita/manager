@@ -35,7 +35,7 @@
                         'type': 'hidden',
                         'v-bind:value': 'file'
                     }) | raw }}
-                    {{ Form.unlockField('upload_behavior')}}
+                    {% do Form.unlockField('upload_behavior') %}
 
                     <section class="fieldset mb-1">
                         <div class="container">
