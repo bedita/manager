@@ -29,7 +29,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap" rel="stylesheet">
-    
+
     {% element 'json_meta_config' %}
 </head>
 
@@ -86,7 +86,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {{ Link.pluginsBundle()|raw }}
     {% else %}
         {# timezone-offset used in controller and TWIG #}
-        {{ Html.script('libs/timezone.js')|raw }}
+        {{ Html.script('libs/timezone')|raw }}
     {% endif %}
 
     {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
