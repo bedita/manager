@@ -20,9 +20,8 @@ export default {
         const ranges = JSON.parse(this.ranges);
         if (ranges) {
             this.dateRanges = ranges;
-            this.dateRanges.forEach((range, index) => {
+            this.dateRanges.forEach((range) => {
                 range.params = range.params || { all_day: false };
-                console.debug(index);
             });
         }
         if (!this.dateRanges.length) {
