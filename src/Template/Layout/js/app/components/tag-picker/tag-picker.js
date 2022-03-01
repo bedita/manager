@@ -83,6 +83,12 @@ export default {
             this.text = str;
         },
         addNewTag() {
+            for (const tag of this.selectedTags) {
+                if (this.text === tag.label) {
+                    this.text = '';
+                    return;
+                }
+            }
             this.selectedTags.push({
                 'id': this.text,
                 'label': this.text,
