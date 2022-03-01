@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-02-10 16:52:39 \n"
+"POT-Creation-Date: 2022-03-01 09:30:14 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -92,9 +92,6 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-msgid "Tags"
-msgstr ""
-
 msgid "Change File"
 msgstr ""
 
@@ -156,6 +153,9 @@ msgid "Create"
 msgstr ""
 
 msgid "Create a new category"
+msgstr ""
+
+msgid "Create a new tag"
 msgstr ""
 
 msgid "Create new"
@@ -668,6 +668,9 @@ msgstr ""
 msgid "System users"
 msgstr ""
 
+msgid "Tags"
+msgstr ""
+
 msgid "Temporary folder missing"
 msgstr ""
 
@@ -965,26 +968,26 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:167
+#: src/Template/Layout/js/app/app.js:168
 #: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:168
+#: src/Template/Layout/js/app/app.js:169
 #: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:455
+#: src/Template/Layout/js/app/app.js:463
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:457
+#: src/Template/Layout/js/app/app.js:475
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:465
+#: src/Template/Layout/js/app/app.js:486
 #: src/Template/Layout/js/app/components/history/history.js:101
 #: src/Template/Layout/js/app/pages/admin/index.js:16
 #: src/Template/Layout/js/app/pages/model/index.js:261
@@ -993,7 +996,7 @@ msgstr ""
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:474
+#: src/Template/Layout/js/app/app.js:495
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -1073,7 +1076,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr ""
@@ -1082,7 +1085,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr ""
@@ -1091,7 +1094,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -1103,7 +1106,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr ""
@@ -1122,7 +1125,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 #: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
