@@ -104,7 +104,7 @@ class TranslationsControllerTest extends TestCase
     {
         $request = new ServerRequest($this->defaultRequestConfig);
         $this->controller = new TranslationsController($request);
-        $actual = (string)$this->controller->request->getParam('object_type');
+        $actual = (string)$this->controller->getRequest()->getParam('object_type');
         $expected = 'translations';
         static::assertEquals($expected, $actual);
     }
@@ -128,8 +128,8 @@ class TranslationsControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);
@@ -161,8 +161,8 @@ class TranslationsControllerTest extends TestCase
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->controller->response->getStatusCode());
-        static::assertEquals('text/html', $this->controller->response->getType());
+        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
         $this->assertExpectedViewVars(['schema', 'object', 'translation']);

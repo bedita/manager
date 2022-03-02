@@ -20,40 +20,44 @@
             <div class="main-view-column">
 
                 {% set jsonKeys = [] %}
-                {% for group, attributes in properties if group != 'other' and group != 'password_change' and attributes %}
-                    <section class="fieldset">
-                        {% if group|trim  %}
-                            <header>
-                                <h2 class="m-0">{{ __(group|humanize) }}</h2>
-                            </header>
-                        {% endif %}
+                {% for group, attributes in properties %}
+                    {% if group != 'other' and group != 'password_change' and attributes %}
+                        <section class="fieldset">
+                            {% if group|trim  %}
+                                <header>
+                                    <h2 class="m-0">{{ __(group|humanize) }}</h2>
+                                </header>
+                            {% endif %}
 
-                        <div class="tab-container">
-                            {% for key, value in attributes %}
-                                {% set options = {} %}
-                                {% if key == 'email' or key == 'username' %}
-                                    {% set options = options|merge({'readonly': 'true'}) %}
-                                {% endif %}
-                                {{ Property.control(key, value, options)|raw }}
-                            {% endfor %}
-                        </div>
-                    </section>
+                            <div class="tab-container">
+                                {% for key, value in attributes %}
+                                    {% set options = {} %}
+                                    {% if key == 'email' or key == 'username' %}
+                                        {% set options = options|merge({'readonly': 'true'}) %}
+                                    {% endif %}
+                                    {{ Property.control(key, value, options)|raw }}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
                 {% endfor %}
             </div>
 
             <div class="side-view-column">
-                {% for group, attributes in properties if group == 'password_change' and attributes %}
-                    <section class="fieldset">
-                        <header class="mt-25">
-                            <h3 class="is-uppercase">{{ __('Change password') }}</h3>
-                        </header>
+                {% for group, attributes in properties %}
+                    {% if group == 'password_change' and attributes %}
+                        <section class="fieldset">
+                            <header class="mt-25">
+                                <h3 class="is-uppercase">{{ __('Change password') }}</h3>
+                            </header>
 
-                        <div class="tab-container">
-                            {% for key, value in attributes %}
-                                {{ Property.control(key, value)|raw }}
-                            {% endfor %}
-                        </div>
-                    </section>
+                            <div class="tab-container">
+                                {% for key, value in attributes %}
+                                    {{ Property.control(key, value)|raw }}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
                 {% endfor %}
             </div>
 

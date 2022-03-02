@@ -1,7 +1,7 @@
 
     {% set customElement = Layout.customElement(group, 'group') %}
     {% if customElement %}
-        {% element customElement {'properties' : properties} %}
+        {{ element(customElement, {'properties' : properties}) }}
     {% else %}
 
         {% for key, value in properties %}

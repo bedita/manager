@@ -41,11 +41,11 @@ class LoginController extends AppController
     public function login(): ?Response
     {
         // Add `head` to avoid errors on http `HEAD /` calls since they are redirected to `HEAD /login`
-        $this->request->allowMethod(['get', 'head', 'post']);
+        $this->getRequest()->allowMethod(['get', 'head', 'post']);
 
-        if (!$this->request->is('post')) {
+        if (!$this->getRequest()->is('post')) {
             // Handle flash messages
-            $this->handleFlashMessages($this->request->getQueryParams());
+            $this->handleFlashMessages($this->getRequest()->getQueryParams());
             // Load available projects info
             $this->loadAvailableProjects();
 
@@ -66,7 +66,7 @@ class LoginController extends AppController
         $reason = __('Invalid username or password');
         // Load project config if `multi project` setup
         Application::loadProjectConfig(
-            (string)$this->request->getData('project'),
+            (string)$this->getRequest()->getData('project'),
             (string)$this->getConfig('projectsPath')
         );
         try {
@@ -126,11 +126,11 @@ class LoginController extends AppController
      */
     protected function setupCurrentProject(): void
     {
-        $project = $this->request->getData('project');
+        $project = $this->getRequest()->getData('project');
         if (empty($project)) {
             return;
         }
-        $this->request->getSession()->write('_project', $project);
+        $this->getRequest()->getSession()->write('_project', $project);
     }
 
     /**
@@ -142,7 +142,7 @@ class LoginController extends AppController
     {
         // 'timezone_offset' must contain UTC offset in seconds
         // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
-        $offset = $this->request->getData('timezone_offset');
+        $offset = $this->getRequest()->getData('timezone_offset');
         if (empty($offset)) {
             return 'UTC';
         }
@@ -159,9 +159,9 @@ class LoginController extends AppController
      */
     public function logout(): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $redirect = $this->redirect($this->Auth->logout());
-        $this->request->getSession()->destroy();
+        $this->getRequest()->getSession()->destroy();
 
         return $redirect;
     }
@@ -177,7 +177,7 @@ class LoginController extends AppController
     {
         if (!isset($query['redirect'])) {
             // Remove flash messages
-            $this->request->getSession()->delete('Flash');
+            $this->getRequest()->getSession()->delete('Flash');
         }
     }
 }

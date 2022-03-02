@@ -214,7 +214,7 @@ class LoginControllerTest extends TestCase
 
         $response = $this->Login->login();
         static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('test', $this->Login->request->getSession()->read('_project'));
+        static::assertEquals('test', $this->Login->getRequest()->getSession()->read('_project'));
     }
 
     /**
@@ -235,8 +235,8 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->logout();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/login', $response->getHeaderLine('Location'));
-        static::assertNull($this->Login->request->getSession()->read('Auth'));
-        static::assertNull($this->Login->request->getSession()->read('_project'));
+        static::assertNull($this->Login->getRequest()->getSession()->read('Auth'));
+        static::assertNull($this->Login->getRequest()->getSession()->read('_project'));
     }
 
     /**
@@ -256,15 +256,15 @@ class LoginControllerTest extends TestCase
         ]);
 
         // case 1: remove message
-        $this->Login->request->getSession()->write('Flash', 'something');
+        $this->Login->getRequest()->getSession()->write('Flash', 'something');
         $this->Login->handleFlashMessages([]);
-        $message = $this->Login->request->getSession()->read('Flash');
+        $message = $this->Login->getRequest()->getSession()->read('Flash');
         static::assertEmpty($message);
 
         // case 2: do not remove message
-        $this->Login->request->getSession()->write('Flash', 'something');
+        $this->Login->getRequest()->getSession()->write('Flash', 'something');
         $this->Login->handleFlashMessages(['redirect' => 'dummy']);
-        $message = $this->Login->request->getSession()->read('Flash');
+        $message = $this->Login->getRequest()->getSession()->read('Flash');
         static::assertEquals('something', $message);
     }
 }

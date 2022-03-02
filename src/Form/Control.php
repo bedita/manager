@@ -81,11 +81,13 @@ class Control
      * @param mixed|null $value Property value.
      * @return array
      */
-    public static function richtext($value): array
+    public static function richtext($value, $schema): array
     {
+        $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
+
         return [
             'type' => 'textarea',
-            'v-richeditor' => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
+            $key => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
             'value' => $value,
         ];
     }

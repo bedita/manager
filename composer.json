@@ -23,7 +23,7 @@
     "require": {
         "php": ">=7.2",
         "bedita/i18n": "^1.7",
-        "bedita/web-tools": "^1.8",
+        "bedita/web-tools": "^1.9",
         "cakephp/cakephp": "^3.10",
         "cakephp/plugin-installer": "^1.1",
         "josegonzalez/dotenv": "2.*",
@@ -75,7 +75,11 @@
     },
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "wikimedia/composer-merge-plugin": true
+        }
     },
     "extra": {
         "merge-plugin": {

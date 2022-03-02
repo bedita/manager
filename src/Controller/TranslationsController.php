@@ -38,7 +38,7 @@ class TranslationsController extends ModulesController
      */
     public function initialize(): void
     {
-        $this->request = $this->request->withParam('object_type', 'translations');
+        $this->setRequest($this->getRequest()->withParam('object_type', 'translations'));
         parent::initialize();
         $this->Query->setConfig('include', 'object');
     }
@@ -51,7 +51,7 @@ class TranslationsController extends ModulesController
      */
     public function add($id): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
 
         try {
@@ -83,7 +83,7 @@ class TranslationsController extends ModulesController
      */
     public function edit($id, $lang): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
 
         $translation = [];
@@ -126,7 +126,7 @@ class TranslationsController extends ModulesController
      */
     public function save(): void
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $this->objectType = $this->typeFromUrl();
         $requestData = $this->prepareRequest($this->objectType);
         $objectId = $requestData['object_id'];
@@ -141,7 +141,7 @@ class TranslationsController extends ModulesController
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-            if ($this->request->getData('id')) {
+            if ($this->getRequest()->getData('id')) {
                 $this->redirect([
                     '_name' => 'translations:edit',
                     'object_type' => $this->objectType,
@@ -183,9 +183,9 @@ class TranslationsController extends ModulesController
      */
     public function delete(): Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $this->objectType = $this->typeFromUrl();
-        $requestData = $this->request->getData();
+        $requestData = $this->getRequest()->getData();
         try {
             if (empty($requestData[0])) {
                 throw new BadRequestException(__('Empty request data'));
@@ -222,7 +222,7 @@ class TranslationsController extends ModulesController
         if ($this->objectType !== 'translations') {
             return $this->objectType;
         }
-        $here = (string)$this->request->getAttribute('here');
+        $here = (string)$this->getRequest()->getAttribute('here');
 
         return substr($here, 1, strpos(substr($here, 1), '/'));
     }

@@ -1,14 +1,14 @@
 <div class="filter-box">
     {% if not hideFilter %}
     <div>
-        {% element 'FilterBox/filter_box_common' %}
+        {{ element('FilterBox/filter_box_common') }}
     </div>
     {% endif %}
 
     <div class="pagination">
     {% if not hidePagination %}
         <div v-if="pagination.count">
-            {% element 'FilterBox/filter_box_page_toolbar' %}
+            {{ element('FilterBox/filter_box_page_toolbar') }}
         </div>
     {% endif %}
     </div>

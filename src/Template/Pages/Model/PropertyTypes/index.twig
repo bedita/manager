@@ -6,7 +6,7 @@
 {# {% set resourceType = _view.request.params.resource_type %} #}
 {% set _csrfToken = _view.request.params['_csrfToken']|json_encode %}
 
-{% element 'Modules/index_header' { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView} %}
+{{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView}) }}
 
 <model-index inline-template ids='{{ ids|json_encode }}' resources='{{ resources|json_encode }}' :csrf-token='{{ _csrfToken }}'>
     <div class="model-index">
@@ -126,7 +126,7 @@
         </div>
         {# end list-objects #}
 
-    {% element 'Model/sidebar_links' %}
+    {{ element('Model/sidebar_links') }}
 
     </div> {# end module-content #}
 </model-index>

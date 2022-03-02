@@ -123,6 +123,7 @@
         <button v-if="isPanelOpen(related.id)" class="is-small icon-coffee"
                 @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
 
+        {% if not readonly %}
         <button v-else class="is-small icon-th-list-1"
             :disabled="isPanelOpen()"
             @click.prevent.stop="editRelationParams({
@@ -132,6 +133,7 @@
                 relationLabel: relationLabel,
                 schema: relationSchema,
             })">{{ __('Edit params') }}</button>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -155,7 +157,9 @@
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+            {% if not readonly %}
             <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
+            {% endif %}
 
         {% elseif add %}
             <button class="is-small has-font-weight-bold mr-1"
@@ -171,9 +175,11 @@
 
         {% else %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">{{ __('Edit') }}</a>
+            {% if not readonly %}
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">
             </a>
+            {% endif %}
         {% endif %}
     </footer>
     {% endif %}

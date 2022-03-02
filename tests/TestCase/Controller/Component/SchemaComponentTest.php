@@ -369,7 +369,7 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->getRelationsSchema();
         static::assertEmpty($result);
 
-        $message = $this->Schema->getController()->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Schema->getController()->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('Client Exception', $message);
     }
 

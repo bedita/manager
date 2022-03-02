@@ -235,7 +235,7 @@ class PropertiesComponent extends Component
      */
     public function bulkList(string $type): array
     {
-        return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
+        return (array)$this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
     }
 
     /**
@@ -248,6 +248,30 @@ class PropertiesComponent extends Component
      */
     public function relationsList(string $type): array
     {
-        return $this->getConfig(sprintf('Properties.%s.relations', $type), []);
+        return (array)$this->getConfig(sprintf('Properties.%s.relations', $type), []);
+    }
+
+    /**
+     * List of hidden relations.
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function hiddenRelationsList(string $type): array
+    {
+        return (array)$this->getConfig(sprintf('Properties.%s.relations._hide', $type), []);
+    }
+
+    /**
+     * List of readonly relations.
+     *
+     * @param string $type Object type name
+     *
+     * @return array
+     */
+    public function readonlyRelationsList(string $type): array
+    {
+        return (array)$this->getConfig(sprintf('Properties.%s.relations._readonly', $type), []);
     }
 }

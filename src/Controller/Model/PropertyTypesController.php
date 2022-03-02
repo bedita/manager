@@ -50,9 +50,9 @@ class PropertyTypesController extends ModelBaseController
      */
     public function save(): ?Response
     {
-        $payload = $this->request->getData();
+        $payload = $this->getRequest()->getData();
 
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $response = [];
 
         try {

@@ -26,7 +26,7 @@
 
                 <div class="h-tabs-contents">
                     <div class="h-tab" v-show="activeIndex == 0">
-                        {% element 'Form/form_file_upload' %}
+                        {{ element('Form/form_file_upload') }}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
 
@@ -44,7 +44,7 @@
                         'type': 'hidden',
                         'v-bind:value': 'activeIndex == 0? `file` : `embed`'
                     }) | raw }}
-                    {{ Form.unlockField('upload_behavior')}}
+                    {% do Form.unlockField('upload_behavior') %}
 
                 </div>
 

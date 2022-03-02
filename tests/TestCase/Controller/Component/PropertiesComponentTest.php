@@ -172,6 +172,22 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `bulkList()` method.
+     *
+     * @return void
+     * @covers ::bulkList()
+     */
+    public function testBulkList(): void
+    {
+        Cache::clear();
+        $expected = ['cat', 'dog', 'horse'];
+        Configure::write('Properties.animals.bulk', $expected);
+        $this->createComponent();
+        $actual = $this->Properties->bulkList('animals');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `relationsList()` method.
      *
      * @return void
@@ -188,6 +204,46 @@ class PropertiesComponentTest extends TestCase
         $this->createComponent();
 
         $list = $this->Properties->relationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
+     * Test `hiddenRelationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::hiddenRelationsList()
+     */
+    public function testHiddenRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._hide', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->hiddenRelationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
+     * Test `readonlyRelationsList()` method.
+     *
+     * @return void
+     *
+     * @covers ::readonlyRelationsList()
+     */
+    public function testReadonlyRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._readonly', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->readonlyRelationsList('cats');
         static::assertEquals($index, $list);
     }
 

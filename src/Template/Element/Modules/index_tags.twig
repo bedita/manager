@@ -1,0 +1,125 @@
+<div class="tags-container">
+    {# list resources : rows #}
+    {% for parent_id, tags in tagsTree %}
+        <div class="tags">
+            <div class="list-objects">
+                {# list resources : table header #}
+                <nav class="table-header has-border-black">
+                    {% for prop in properties %}
+                        {% set label = prop %}
+                        <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
+                    {% endfor %}
+                    <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+                    <div></div>
+                </nav>
+                {% for tag_id in tags %}
+                    {% set resource = resources[tag_id] %}
+
+                    {{ Form.create(null, {
+                        'url': saveAction,
+                        'id': 'form-' ~ resource.id,
+                        'class': 'table-row',
+                    })|raw }}
+
+                        {% for prop in properties %}
+                            {% set propVal = resource.attributes[prop] %}
+
+                            <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                                {% if prop == 'name' or prop == 'label' %}
+
+                                    {{ Form.text(prop, {
+                                        'type': 'text',
+                                        'autocomplete': 'off',
+                                        'autocorrect': 'off',
+                                        'autocapitalize': 'off',
+                                        'value': propVal,
+                                    }) | raw }}
+
+                                {% elseif prop == 'enabled' %}
+
+                                    {{ Form.checkbox(prop, {
+                                        'checked': propVal,
+                                    })|raw }}
+
+                                {% else %}
+                                    {{ Schema.format(propVal, schema.properties[prop]) }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="narrow"> {{ resource.id }}</div>
+                        <div class="buttons-cell narrow">
+                            {% set buttonClasses = 'button button-text-white is-width-auto' %}
+
+                            {{ Form.button( __('Save'),
+                                {
+                                    'form': 'form-' ~ resource.id,
+                                    'title': __('Save') ~ resource.attributes.name,
+                                    'class': buttonClasses,
+                                })|raw }}
+
+                            {{ Form.button(__('Remove'), {
+                                'form': 'form-remove-' ~ resource.id,
+                                'title': __('Remove') ~ ' ' ~ resource.attributes.name,
+                                'class': buttonClasses,
+                            })|raw }}
+                        </div>
+
+                    {{ Form.hidden('id', {'value': resource.id})|raw }}
+                    {{ Form.end()|raw }}
+
+                    {{ Form.create(null, {
+                        'id': 'form-remove-' ~ resource.id,
+                        'url': removeAction + { 'id': resource.id },
+                    })|raw }}
+                    {{ Form.end()|raw }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {# Create new tag #}
+    <div class="tags">
+        <h3>{{ __('Create a new tag') }}</h3>
+
+        <div class="list-objects">
+            <nav class="table-header has-border-black">
+                {% for prop in properties %}
+                    {% set label = prop %}
+                    <div>{{ __(label)|humanize }}</div>
+                {% endfor %}
+                <div></div>
+            </nav>
+
+            {{ Form.create(null, {
+                'id': 'form-create',
+                'url': saveAction,
+                'class': 'table-row',
+            })|raw }}
+
+            {% for prop in properties %}
+                <div class="{{ prop }}-cell">
+                    {% if prop == 'name' or prop == 'label' %}
+                        {{ Form.text(prop, {
+                            'type': 'text',
+                            'autocomplete': 'off',
+                            'autocorrect': 'off',
+                            'autocapitalize': 'off',
+                        }) | raw }}
+                     {% elseif prop == 'enabled' %}
+                        {{ Form.checkbox(prop, {
+                            'checked': 1,
+                        })|raw }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="buttons-cell narrow">
+                <button
+                    title="{{ __('Create') }} {{ resource.attributes.name }}"
+                    class="button button-text-white is-width-auto">{{ __('Create') }}</button>
+            </div>
+
+            {{ Form.end()|raw }}
+        </div>
+    </div>
+</div>

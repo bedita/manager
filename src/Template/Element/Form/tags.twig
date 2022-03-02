@@ -1,0 +1,16 @@
+{% if 'Tags' in schema.associations %}
+    <property-view inline-template :tab-open="tabsOpen" tab-name="tags">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Tags') }}</h2>
+            </header>
+            <div v-show="isOpen" class="tab-container">
+                <div class="tags-container">
+                    <tag-picker :initial-tags="{{ object.attributes.tags|json_encode }}"></tag-picker>
+                </div>
+            </div>
+        </section>
+    </property-view>
+{% endif %}

@@ -55,8 +55,8 @@ class ModulesController extends AppController
         $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
-        if (!empty($this->request)) {
-            $this->objectType = $this->request->getParam('object_type');
+        if (!empty($this->getRequest())) {
+            $this->objectType = $this->getRequest()->getParam('object_type');
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
@@ -82,7 +82,7 @@ class ModulesController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         // handle filter and query parameters using session
         $result = $this->applySessionFilter();
@@ -96,7 +96,7 @@ class ModulesController extends AppController
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             // remove session filter to avoid error repetition
-            $session = $this->request->getSession();
+            $session = $this->getRequest()->getSession();
             $session->delete(sprintf('%s.filter', $this->Modules->getConfig('currentModuleName')));
 
             return $this->redirect(['_name' => 'dashboard']);
@@ -136,7 +136,7 @@ class ModulesController extends AppController
      */
     public function view($id): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
             $query = ['count' => 'all'];
@@ -165,11 +165,23 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
+        $computedRelations = array_reduce(
+            array_keys($object['relationships']),
+            function ($acc, $relName) use ($schema) {
+                $acc[$relName] = (array)Hash::get($schema, sprintf('relations.%s', $relName), []);
+
+                return $acc;
+            },
+            []
+        );
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
             $this->Schema->getRelationsSchema(),
-            $object['relationships'],
-            $this->Properties->relationsList($this->objectType)
+            $computedRelations,
+            $this->Properties->relationsList($this->objectType),
+            $this->Properties->hiddenRelationsList($this->objectType),
+            $this->Properties->readonlyRelationsList($this->objectType)
         );
 
         $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
@@ -267,7 +279,7 @@ class ModulesController extends AppController
     public function save(): void
     {
         $this->viewBuilder()->setClassName('Json'); // force json response
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
         unset($requestData['_csrfToken']);
         // extract related objects data
@@ -325,7 +337,7 @@ class ModulesController extends AppController
             $attributes = $response['data']['attributes'];
             $attributes['uname'] = '';
             unset($attributes['relationships']);
-            $attributes['title'] = $this->request->getQuery('title');
+            $attributes['title'] = $this->getRequest()->getQuery('title');
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -350,14 +362,14 @@ class ModulesController extends AppController
      */
     public function delete(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $ids = [];
-        if (!empty($this->request->getData('ids'))) {
-            if (is_string($this->request->getData('ids'))) {
-                $ids = explode(',', $this->request->getData('ids'));
+        if (!empty($this->getRequest()->getData('ids'))) {
+            if (is_string($this->getRequest()->getData('ids'))) {
+                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
             }
-        } else {
-            $ids = [$this->request->getData('id')];
+        } elseif (!empty($this->getRequest()->getData('id'))) {
+            $ids = [$this->getRequest()->getData('id')];
         }
         foreach ($ids as $id) {
             try {
@@ -365,8 +377,8 @@ class ModulesController extends AppController
             } catch (BEditaClientException $e) {
                 $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
-                if (!empty($this->request->getData('id'))) {
-                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+                if (!empty($this->getRequest()->getData('id'))) {
+                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
                 }
 
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
@@ -396,8 +408,8 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->request->allowMethod(['get']);
-        $query = $this->Query->prepare($this->request->getQueryParams());
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
@@ -426,8 +438,8 @@ class ModulesController extends AppController
      */
     public function resources($id, string $type): void
     {
-        $this->request->allowMethod(['get']);
-        $query = $this->Query->prepare($this->request->getQueryParams());
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
@@ -453,11 +465,11 @@ class ModulesController extends AppController
      */
     public function relationships($id, string $relation): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
-            $query = $this->Query->prepare($this->request->getQueryParams());
+            $query = $this->Query->prepare($this->getRequest()->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
             $this->Thumbs->urls($response);
@@ -535,8 +547,8 @@ class ModulesController extends AppController
     {
         $this->viewBuilder()->setTemplate('categories');
 
-        $this->request->allowMethod(['get']);
-        $response = $this->Categories->index($this->objectType, $this->request->getQueryParams());
+        $this->getRequest()->allowMethod(['get']);
+        $response = $this->Categories->index($this->objectType, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
         $roots = $this->Categories->getAvailableRoots($resources);
         $categoriesTree = $this->Categories->tree($resources);
@@ -559,10 +571,10 @@ class ModulesController extends AppController
      */
     public function saveCategory(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
 
         try {
-            $this->Categories->save($this->request->getData());
+            $this->Categories->save((array)$this->getRequest()->getData());
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -584,7 +596,7 @@ class ModulesController extends AppController
     public function removeCategory(string $id): ?Response
     {
         try {
-            $type = $this->request->getData('object_type_name');
+            $type = $this->getRequest()->getData('object_type_name');
             $this->Categories->delete($id, $type);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');

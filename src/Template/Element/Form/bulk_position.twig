@@ -13,17 +13,17 @@
             <label for="bulk-move">{{ __('Move to') }}</label>
             <input id="bulk-move" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
         </div>
-        {{ Form.unlockField('action') }}
+        {% do Form.unlockField('action') %}
 
         <folder-picker
             label="{{ __('Folder') }}"
             :disabled="!selectedRows.length || !bulkAction"
             @change="bulkFolder = $event?.id"
         ></folder-picker>
-        {{ Form.unlockField('folderSelected') }}
+        {% do Form.unlockField('folderSelected') %}
 
         <input type="hidden" name="ids" :value="selectedRows"/>
-        {{ Form.unlockField('ids') }}
+        {% do Form.unlockField('ids') %}
 
         <button
             class="button button-outlined"

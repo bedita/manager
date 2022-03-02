@@ -34,8 +34,6 @@ class ImportController extends AppController
 
     /**
      * {@inheritDoc}
-     *
-     * @codeCoverageIgnore
      */
     public function beforeRender(Event $event): ?Response
     {
@@ -48,11 +46,10 @@ class ImportController extends AppController
      * Display import page.
      *
      * @return void
-     * @codeCoverageIgnore
      */
     public function index(): void
     {
-        $result = $this->request->getSession()->consume('Import.result');
+        $result = $this->getRequest()->getSession()->consume('Import.result');
         $this->set(compact('result'));
         $this->loadFilters();
     }
@@ -65,7 +62,7 @@ class ImportController extends AppController
     public function jobs(): void
     {
         $this->viewBuilder()->setClassName('Json');
-        $this->request->allowMethod('get');
+        $this->getRequest()->allowMethod('get');
         $this->loadFilters();
         $this->loadAsyncJobs();
         $this->setSerialize(['jobs']);
@@ -79,24 +76,24 @@ class ImportController extends AppController
     public function file(): ?Response
     {
         try {
-            $filter = $this->request->getData('filter');
+            $filter = $this->getRequest()->getData('filter');
             if (empty($filter)) {
                 throw new BadRequestException(__('Import filter not selected'));
             }
             $importFilter = new $filter($this->apiClient);
 
             // see http://php.net/manual/en/features.file-upload.errors.php
-            $fileError = (int)$this->request->getData('file.error', UPLOAD_ERR_NO_FILE);
+            $fileError = (int)$this->getRequest()->getData('file.error', UPLOAD_ERR_NO_FILE);
             if ($fileError > UPLOAD_ERR_OK) {
                 throw new BadRequestException($this->uploadErrorMessage($fileError));
             }
 
             $result = $importFilter->import(
-                $this->request->getData('file.name'),
-                $this->request->getData('file.tmp_name'),
-                $this->request->getData('filter_options')
+                $this->getRequest()->getData('file.name'),
+                $this->getRequest()->getData('file.tmp_name'),
+                $this->getRequest()->getData('filter_options')
             );
-            $this->request->getSession()->write(['Import.result' => $result]);
+            $this->getRequest()->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }

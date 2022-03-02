@@ -12,6 +12,7 @@ import Vue from 'vue';
 export default {
     components: {
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
+        TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
     },
