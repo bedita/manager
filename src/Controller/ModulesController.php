@@ -165,10 +165,20 @@ class ModulesController extends AppController
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
+        $computedRelations = array_reduce(
+            array_keys($object['relationships']),
+            function ($acc, $relName) use ($schema) {
+                $acc[$relName] = Hash::get($schema, sprintf('relations.%s', $relName), []);
+
+                return $acc;
+            },
+            []
+        );
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
             $this->Schema->getRelationsSchema(),
-            $schema['relations'],
+            $computedRelations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
             $this->Properties->readonlyRelationsList($this->objectType)
