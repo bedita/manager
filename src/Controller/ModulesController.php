@@ -167,7 +167,7 @@ class ModulesController extends AppController
 
         $computedRelations = array_reduce(
             array_keys($object['relationships']),
-            function($acc, $relName) use ($schema) {
+            function ($acc, $relName) use ($schema) {
                 $acc[$relName] = Hash::get($schema, sprintf('relations.%s', $relName), []);
 
                 return $acc;
