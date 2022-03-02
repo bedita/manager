@@ -2,7 +2,7 @@
 
 {% set customElement = Layout.customElement(relationName) %}
 {% if customElement %}
-   {% element customElement %}
+   {{ element(customElement) }}
 {% else %}
 
 <property-view inline-template :tab-open="tabsOpen" tab-name="roles">

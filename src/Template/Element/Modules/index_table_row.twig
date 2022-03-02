@@ -15,14 +15,14 @@
 
         <div class="thumb-cell narrow">
             {%- if not isTrash %}
-                {% element 'Modules/thumb' { 'object': object } %}
+                {{ element('Modules/thumb', { 'object': object }) }}
             {% endif -%}
         </div>
 
         {% for prop in properties %}
             {% if (prop == 'date_ranges') %}
                 <div class="{{ prop }}-cell">
-                    {% element 'Modules/index_properties_date_ranges' { dateRanges: object.attributes[prop] } %}
+                    {{ element('Modules/index_properties_date_ranges', { dateRanges: object.attributes[prop] }) }}
                 </div>
             {% else %}
                 <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">

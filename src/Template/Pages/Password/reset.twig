@@ -17,7 +17,7 @@
      </div>
 
     <div class="login-form">
-    
+
         <div class="mb-1">
             <h1>{{ __('Password reset') }}</h1>
             <p>{{ __('Submit your email address and follow the instructions sent by email.') }}</p>
@@ -48,14 +48,14 @@
         {{ Form.end()|raw }}
 
          <p class="mt-1">{{ Html.link( __('Back to login'), '/' ) | raw }}</p>
-    
+
     </div>
 
     <footer>
         <div class="sidebar-footer">
             <div class="sidebar-bedita-logo white">{# css logo #}</div>
-            {% element 'Menu/colophon' %}
-        </div>  
+            {{ element('Menu/colophon') }}
+        </div>
     </footer>
 
 </div>

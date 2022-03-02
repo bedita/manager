@@ -1,4 +1,4 @@
-{% element ('Admin/sidebar') %}
+{{ element('Admin/sidebar') }}
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
@@ -9,7 +9,7 @@
     </header>
 </div>
 
-{% element 'Modules/index_header' { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView} %}
+{{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }}
 
 <admin-index inline-template>
 

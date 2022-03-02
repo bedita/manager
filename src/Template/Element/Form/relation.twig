@@ -16,11 +16,11 @@
         Then load custom element or use default relation view #}
         {% set customElement = Layout.customElement(relationName) %}
         {% if customElement %}
-            {% element customElement {
+            {{ element(customElement, {
                 'relationName': relationName,
                 'relationLabel': Layout.tr(relationName),
                 'relationSchema': relationsSchema,
-            } %}
+            }) }}
         {% else %}
 
         <div class="related-list-container">
@@ -39,7 +39,7 @@
                     @filter-reset="reloadObjects"
                     inline-template
                 >
-                    {% element 'FilterBox/filter_box' %}
+                    {{ element('FilterBox/filter_box') }}
                 </filter-box-view>
             </div>
 
@@ -55,9 +55,9 @@
                         :drag-data="JSON.stringify(related)">
 
                         {% if relationName == 'children' %}
-                            {% element 'Form/related_item' { 'children': true } %}
+                            {{ element('Form/related_item', { 'children': true }) }}
                         {% else %}
-                            {% element 'Form/related_item' { 'common': true, 'readonly': readonly } %}
+                            {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
                         {% endif %}
                     </div>
 
@@ -68,7 +68,7 @@
                         v-for="related in addedRelations"
                         :key="related.id">
 
-                        {% element 'Form/related_item' { 'stage': true } %}
+                        {{ element('Form/related_item', { 'stage': true }) }}
                     </div>
                     {% endif %}
                 </div>

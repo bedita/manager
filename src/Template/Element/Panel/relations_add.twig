@@ -126,14 +126,14 @@
 
                 inline-template
             >
-                {% element 'FilterBox/filter_box' %}
+                {{ element('FilterBox/filter_box') }}
             </filter-box-view>
         </div>
 
         <div class="px-1 shrinks">
             <div class="columns">
                 <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
-                    {% element 'Form/related_item' { 'add': true } %}
+                    {{ element('Form/related_item', { 'add': true }) }}
                 </div>
             </div>
         </div>

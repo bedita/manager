@@ -50,7 +50,7 @@
                                     :key="related.id"
                                     :class="containsId(removedRelated, related.id)? 'removed' : ''">
 
-                                    {% element 'Form/related_item' { 'translation': true } %}
+                                    {{ element('Form/related_item', { 'translation': true }) }}
 
                                 </div>
                             </div>

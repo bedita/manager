@@ -35,58 +35,58 @@
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
                 {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
-                    {% element 'Form/upload' %}
+                    {{ element('Form/upload') }}
                 {% endif %}
 
-                {% element 'Form/core_properties' %}
+                {{ element('Form/core_properties') }}
 
-                {% element 'Form/custom_left' %}
+                {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {% element 'Form/calendar' %}
+                {{ element('Form/calendar') }}
 
-                {% element 'Form/categories' %}
+                {{ element('Form/categories') }}
 
-                {% element 'Form/tags' %}
+                {{ element('Form/tags') }}
 
-                {% element 'Form/media' %}
+                {{ element('Form/media') }}
 
-                {% element 'Form/map' %}
+                {{ element('Form/map') }}
 
-                {% element 'Form/other_properties' %}
+                {{ element('Form/other_properties') }}
             </div>
 
             <div class="side-view-column is-flex is-flex-column">
-                {% element 'Form/publish_properties' %}
+                {{ element('Form/publish_properties') }}
 
                 {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
-                    {% element 'Form/trees' %}
+                    {{ element('Form/trees') }}
                 {% endif %}
 
-                {% element 'Form/custom_right' %}
+                {{ element('Form/custom_right') }}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
                 {% if object.relationships.roles %}
-                    {% element 'Form/roles' %}
+                    {{ element('Form/roles') }}
                 {% endif %}
 
-                {% element 'Form/related_translations' {'resourceName': 'translations'} %}
+                {{ element('Form/related_translations', {'resourceName': 'translations'}) }}
 
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
 
-                {% element 'Form/advanced_properties' %}
+                {{ element('Form/advanced_properties') }}
 
-                {% element 'Form/resource_relations' %}
+                {{ element('Form/resource_relations') }}
 
                 {# aside relations view #}
-                {% element 'Form/relations' {'relations': objectRelations.aside} %}
+                {{ element('Form/relations', {'relations': objectRelations.aside}) }}
             </div>
 
             {# main relations view #}
-            {% element 'Form/relations' {'relations': objectRelations.main} %}
+            {{ element('Form/relations', {'relations': objectRelations.main}) }}
 
             {% if object.id %}
-                {% element 'Form/history' %}
+                {{ element('Form/history') }}
             {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}
