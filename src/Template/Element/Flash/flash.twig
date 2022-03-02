@@ -34,13 +34,15 @@
                 <a @click="isDumpVisible = true" v-show="!isDumpVisible">{{ __('code') }}: {{ params.status }} {{ params.code }}<i class="icon-down-dir"></i></a>
                 <div class="dump" v-show="isDumpVisible">
                     <code>
-                    {% for key, value in params if value %}
-                        {% if value is not iterable %}
-                            {{ key }}: {{ value|nl2br|raw }}<br>
-                        {% else %}
-                            {{ key }}:<br>
-                            <pre>{{ value|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
-                            <br>
+                    {% for key, value in params %}
+                        {% if value %}
+                            {% if value is not iterable %}
+                                {{ key }}: {{ value|nl2br|raw }}<br>
+                            {% else %}
+                                {{ key }}:<br>
+                                <pre>{{ value|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                                <br>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     </code>

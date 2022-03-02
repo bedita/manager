@@ -1,17 +1,17 @@
 <div class="bulk-actions">
     <div>
-        {% element 'Form/bulk_export' %}
+        {{ element('Form/bulk_export') }}
     </div>
 
     <div class="bulk-header">{{ __('Actions on selected items') }}</div>
 
     <div :class="[!selectedRows.length ? 'disabled' : '', 'is-flex', 'is-flex-column']">
-        {% element 'Form/bulk_properties' %}
+        {{ element('Form/bulk_properties') }}
 
-        {% element 'Form/bulk_category' %}
+        {{ element('Form/bulk_category') }}
 
-        {% element 'Form/bulk_position' %}
+        {{ element('Form/bulk_position') }}
 
-        {% element 'Form/bulk_trash' %}
+        {{ element('Form/bulk_trash') }}
     </div>
 </div>

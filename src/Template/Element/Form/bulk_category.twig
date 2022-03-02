@@ -5,10 +5,10 @@
 })|raw }}
     <div class="fieldset bulk-categories">
         <category-picker label="{{ __('Categories') }}" :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length"></category-picker>
-        {{ Form.unlockField('categories') }}
+        {% do Form.unlockField('categories') %}
 
         <input type="hidden" name="ids" :value="selectedRows"/>
-        {{ Form.unlockField('ids') }}
+        {% do Form.unlockField('ids') %}
 
         <button class="button button-outlined" @click.prevent="bulkActions('bulk-categories')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
     </div>

@@ -15,27 +15,27 @@
         })|raw }}
 
             <div class="main-view-column">
-                {% element 'Form/core_properties' %}
-                {% element 'Form/custom_left' %}
+                {{ element('Form/core_properties') }}
+                {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {% element 'Form/calendar' %}
+                {{ element('Form/calendar') }}
 
-                {% element 'Form/categories' %}
+                {{ element('Form/categories') }}
 
-                {% element 'Form/media' %}
+                {{ element('Form/media') }}
 
-                {% element 'Form/map' %}
+                {{ element('Form/map') }}
 
-                {% element 'Form/other_properties' %}
+                {{ element('Form/other_properties') }}
             </div>
 
             <div class="side-view-column">
-                {% element 'Form/publish_properties' %}
+                {{ element('Form/publish_properties') }}
 
-                {% element 'Form/advanced_properties' %}
+                {{ element('Form/advanced_properties') }}
 
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
             </div>
 
         {{ Form.end()|raw }}

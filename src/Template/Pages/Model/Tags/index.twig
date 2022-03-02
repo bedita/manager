@@ -7,13 +7,13 @@
     </header>
 </div>
 
-{% element 'Modules/index_header' {'hideFilter': 1} %}
+{{ element('Modules/index_header', {'hideFilter': 1}) }}
 
 <div class="module-index">
-    {% element 'Modules/index_tags' {
+    {{ element('Modules/index_tags', {
         'saveAction': { '_name': 'model:save:tags' },
         'removeAction': { '_name': 'model:remove:tags' }
-    } %}
+    }) }}
 
-    {% element 'Model/sidebar_links' %}
+    {{ element('Model/sidebar_links') }}
 </div>

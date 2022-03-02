@@ -17,10 +17,10 @@
             {% endfor %}
             </select>
 
-            {{ Form.unlockField('format') }}
+            {% do Form.unlockField('format') %}
 
             <input type="hidden" name="ids" v-model="selectedRows">
-            {{ Form.unlockField('ids') }}
+            {% do Form.unlockField('ids') %}
             {{ Form.hidden('objectType', {'value': objectType})|raw }}
 
             <button class="button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
