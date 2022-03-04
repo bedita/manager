@@ -141,7 +141,7 @@ class LayoutHelperTest extends TestCase
     {
         return [
             'user profile' => [
-                '<a href="/user_profile" class="has-background-black icon-user">User Profile</a>',
+                '<a href="/user_profile" class="has-background-black icon-user">UserProfile</a>',
                 'UserProfile',
                 [
                     'moduleLink' => ['_name' => 'user_profile:view'],
