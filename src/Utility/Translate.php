@@ -31,7 +31,7 @@ class Translate
      */
     public static function get(string $input): ?string
     {
-        $text = Inflector::humanize(Inflector::underscore($input));
+        $text = Inflector::humanize($input);
         $translation = __($text);
         $plugins = (array)Configure::read('Plugins');
         $pluginName = Hash::get(array_keys($plugins), 0);
