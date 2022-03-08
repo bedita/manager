@@ -33,7 +33,7 @@ class Application extends BaseApplication
      *
      * @var array
      */
-    const PLUGIN_DEFAULTS = [
+    protected const PLUGIN_DEFAULTS = [
         'debugOnly' => false,
         'autoload' => false,
         'bootstrap' => true,
@@ -42,41 +42,25 @@ class Application extends BaseApplication
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function bootstrap(): void
     {
         parent::bootstrap();
-        $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
+        $this->addPlugin('BEdita/WebTools');
+        $this->addPlugin('BEdita/I18n');
     }
 
     /**
+     * Load CLI plugins
+     *
      * @return void
      */
     protected function bootstrapCli(): void
     {
-        parent::bootstrapCli();
-        $this->addPluginDev('IdeHelper');
-        $this->addPlugin('BEdita/I18n');
+        $this->addOptionalPlugin('Bake');
+        $this->addOptionalPlugin('IdeHelper');
         $this->loadPluginsFromConfig();
-    }
-
-    /**
-     * Add plugin considered as a dev dependency.
-     * It could be missing in production env.
-     *
-     * @param string $name The plugin name
-     * @return bool
-     */
-    public function addPluginDev(string $name): bool
-    {
-        try {
-            $this->addPlugin($name);
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -90,7 +74,7 @@ class Application extends BaseApplication
     {
         $plugins = (array)Configure::read('Plugins');
         foreach ($plugins as $plugin => $options) {
-            $options = array_merge(self::PLUGIN_DEFAULTS, $options);
+            $options = array_merge(static::PLUGIN_DEFAULTS, $options);
             if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
                 $this->addPlugin($plugin, $options);
                 $this->plugins->get($plugin)->bootstrap($this);
@@ -99,7 +83,7 @@ class Application extends BaseApplication
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function middleware($middlewareQueue): MiddlewareQueue
     {
@@ -135,12 +119,12 @@ class Application extends BaseApplication
     /**
      * Get internal Csrf Middleware
      *
-     * @return CsrfProtectionMiddleware
+     * @return \Cake\Http\Middleware\CsrfProtectionMiddleware
      */
     protected function csrfMiddleware(): CsrfProtectionMiddleware
     {
         // Csrf Middleware
-        $csrf = new CsrfProtectionMiddleware();
+        $csrf = new CsrfProtectionMiddleware(['httponly' => true]);
         // Token check will be skipped when callback returns `true`.
         $csrf->whitelistCallback(function ($request) {
             $actions = (array)Configure::read(sprintf('CsrfExceptions.%s', $request->getParam('controller')));

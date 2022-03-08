@@ -12,7 +12,7 @@ class Result
      *
      * @var string
      */
-    const MSG_SEPARATOR = '<br/>';
+    public const MSG_SEPARATOR = '<br/>';
 
     /**
      * Counter of created resources

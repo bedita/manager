@@ -75,7 +75,7 @@ class PropertyTypesController extends ModelBaseController
                 $response['removed'] = $this->removePropertyTypes($payload['removePropertyTypes']);
             }
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error->getMessage(), LogLevel::ERROR);
 
             $this->set([
                 'error' => $error->getMessage(),
@@ -86,7 +86,7 @@ class PropertyTypesController extends ModelBaseController
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', true);
+        $this->setSerialize([]);
 
         return null;
     }

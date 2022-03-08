@@ -65,7 +65,7 @@ class ImportController extends AppController
         $this->getRequest()->allowMethod('get');
         $this->loadFilters();
         $this->loadAsyncJobs();
-        $this->set('_serialize', ['jobs']);
+        $this->setSerialize(['jobs']);
     }
 
     /**
@@ -177,7 +177,7 @@ class ImportController extends AppController
         try {
             $response = $this->apiClient->get('/admin/async_jobs', $query);
         } catch (BEditaClientException $e) {
-            $this->log($e, 'error');
+            $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $response = [];
         }
