@@ -3,10 +3,10 @@
  * @var \App\View\AppView $this
  */
     $csrfToken = null;
-    if (!empty($this->request->getParam('_csrfToken'))) {
-        $csrfToken = $this->request->getParam('_csrfToken');
-    } elseif (!empty($this->request->getData('_csrfToken'))) {
-        $csrfToken = $this->request->getData('_csrfToken');
+    if (!empty($this->getRequest()->getParam('_csrfToken'))) {
+        $csrfToken = $this->getRequest()->getParam('_csrfToken');
+    } elseif (!empty($this->getRequest()->getData('_csrfToken'))) {
+        $csrfToken = $this->getRequest()->getData('_csrfToken');
     }
     if (!isset($modules)) {
         $modules = [];
