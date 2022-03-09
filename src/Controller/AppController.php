@@ -16,7 +16,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Controller\Exception\SecurityException;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -72,7 +72,7 @@ class AppController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         $tokens = $this->Auth->user('tokens');
         if (!empty($tokens)) {
@@ -161,7 +161,7 @@ class AppController extends Controller
      *
      * Update session tokens if updated/refreshed by client
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         if ($this->Auth && $this->Auth->user()) {
             $user = $this->Auth->user();
