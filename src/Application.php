@@ -14,10 +14,10 @@ namespace App;
 
 use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
-use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -90,7 +90,7 @@ class Application extends BaseApplication
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(null, Configure::read('Error')))
+            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
 
             // Load current project configuration if `multiproject` instance
             // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
@@ -126,7 +126,7 @@ class Application extends BaseApplication
         // Csrf Middleware
         $csrf = new CsrfProtectionMiddleware(['httponly' => true]);
         // Token check will be skipped when callback returns `true`.
-        $csrf->whitelistCallback(function ($request) {
+        $csrf->skipCheckCallback(function ($request) {
             $actions = (array)Configure::read(sprintf('CsrfExceptions.%s', $request->getParam('controller')));
             // Skip token check for API URLs.
             if (in_array($request->getParam('action'), $actions)) {
