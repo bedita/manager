@@ -30,7 +30,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html'];
+    public $helpers = ['Html', 'Link'];
 
     /**
      * Is Dashboard
@@ -174,5 +174,40 @@ class LayoutHelper extends Helper
     public function tr(string $input): ?string
     {
         return Translate::get($input);
+    }
+
+    /**
+     * Return configuration items to create JSON BEDITA object
+     *
+     * @return array
+     */
+    public function metaConfig(): array
+    {
+        $csrfToken = null;
+        if (!empty($this->getView()->getRequest()->getParam('_csrfToken'))) {
+            $csrfToken = $this->getView()->getRequest()->getParam('_csrfToken');
+        } elseif (!empty($this->getView()->getRequest()->getData('_csrfToken'))) {
+            $csrfToken = $this->getView()->getRequest()->getData('_csrfToken');
+        }
+        if (!isset($modules)) {
+            $modules = [];
+        }
+        if (!isset($uploadable)) {
+            $uploadable = [];
+        }
+        if (!isset($currentModule)) {
+            $currentModule = ['name' => 'home'];
+        }
+
+        return [
+            'base' => $this->Link->baseUrl(),
+            'currentModule' => $currentModule,
+            'template' => $this->getView()->getTemplate(),
+            'modules' => array_keys($modules),
+            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'uploadable' => $uploadable,
+            'locale' => \Cake\I18n\I18n::getLocale(),
+            'csrfToken' => $csrfToken,
+        ];
     }
 }

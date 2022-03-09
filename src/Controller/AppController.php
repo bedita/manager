@@ -55,7 +55,7 @@ class AppController extends Controller
 
         $this->loadComponent('Auth', [
             'authenticate' => [
-                'BEdita/WebTools.Api' => [],
+                'Api' => [],
             ],
             'loginAction' => ['_name' => 'login'],
             'loginRedirect' => ['_name' => 'dashboard'],
