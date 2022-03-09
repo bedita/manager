@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller\Admin;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
@@ -32,7 +32,7 @@ class ConfigController extends AdministrationBaseController
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         parent::beforeFilter($event);
         $response = $this->apiClient->get('/admin/applications', ['filter' => ['enabled' => 1]]);

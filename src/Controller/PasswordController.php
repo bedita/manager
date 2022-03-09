@@ -13,7 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 
@@ -36,7 +36,7 @@ class PasswordController extends AppController
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         // if authenticated, redirect to dashboard
         $tokens = $this->Auth->user('tokens');

@@ -14,7 +14,7 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -35,7 +35,7 @@ class ImportController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'import:index']);
 
