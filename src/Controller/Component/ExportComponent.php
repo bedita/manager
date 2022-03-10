@@ -181,7 +181,7 @@ class ExportComponent extends Component
      */
     protected function download(Spreadsheet $spreadsheet, string $extension, array $options): array
     {
-        $tmpfilename = tempnam('/tmp', Hash::get($options, 'filename'));
+        $tmpfilename = tempnam('/tmp', (string)Hash::get($options, 'filename'));
         $writer = IOFactory::createWriter($spreadsheet, $extension);
         $writer->save($tmpfilename);
         $content = file_get_contents($tmpfilename);

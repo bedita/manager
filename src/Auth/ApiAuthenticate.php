@@ -50,8 +50,8 @@ class ApiAuthenticate extends BaseAuthenticate
         /** @var \BEdita\SDK\BEditaClient $apiClient */
         $apiClient = ApiClientProvider::getApiClient();
 
-        $usernameField = $this->getConfig('fields.username', 'username');
-        $passwordField = $this->getConfig('fields.password', 'password');
+        $usernameField = (string)$this->getConfig('fields.username', 'username');
+        $passwordField = (string)$this->getConfig('fields.password', 'password');
 
         $result = $apiClient->authenticate($request->getData($usernameField), $request->getData($passwordField));
         if (empty($result['meta'])) {
@@ -61,8 +61,7 @@ class ApiAuthenticate extends BaseAuthenticate
         $tokens = $result['meta'];
         $result = $apiClient->get('/auth/user', null, ['Authorization' => sprintf('Bearer %s', $tokens['jwt'])]);
         $roles = Hash::extract($result, 'included.{n}.attributes.name');
-        $user = $result['data'] + compact('tokens') + compact('roles');
 
-        return $user;
+        return $result['data'] + compact('tokens') + compact('roles');
     }
 }
