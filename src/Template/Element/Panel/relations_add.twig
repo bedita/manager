@@ -24,7 +24,13 @@
 
             {% for type in Schema.rightTypes() %}
                 {% set prefix = '_fast_create_' ~ type ~ '_' %}
-                <form name="create-object" class="object-form fast-create" :disabled="saving" id="{{ type }}-form" v-if="object.type == '{{ type }}'">
+                {{ Form.create(null, {
+                    'name': 'create-object',
+                    'class': 'object-form fast-create',
+                    ':disable': 'saving',
+                    'id': type ~ '-form',
+                    'v-if': "object.type == '" ~ type ~ "'"
+                })|raw }}
                     {{ Form.control('upload_behavior', {
                         'id': 'url_behavior',
                         'type': 'hidden',
@@ -35,8 +41,7 @@
                         'type': 'hidden',
                         'v-bind:value': 'file'
                     }) | raw }}
-                    {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
-                    {# {% do Form.unlockField('upload_behavior') %} #}
+                    {% do Form.unlockField('upload_behavior') %}
 
                     <section class="fieldset mb-1">
                         <div class="container">
@@ -93,7 +98,7 @@
                     </section>
                     <button @click="createObject" type="button">{{ __('create') }}</button>
                     <button @click="resetForm">{{ __('reset') }}</button>
-                </form>
+                {{ Form.end()|raw }}
             {% endfor %}
         </div>
     </section>
