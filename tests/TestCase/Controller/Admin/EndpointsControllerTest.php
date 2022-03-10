@@ -1,21 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\EndpointsController;
+use App\Test\Utils\EndsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\EndpointsController
- */
-class EndsController extends EndpointsController
-{
-    protected $resourceType = 'endpoints';
-    protected $properties = ['name'];
-}
 
 /**
  * {@see \App\Controller\Admin\EndpointsController} Test Case

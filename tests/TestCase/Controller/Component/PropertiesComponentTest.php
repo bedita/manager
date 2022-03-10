@@ -103,7 +103,6 @@ class PropertiesComponentTest extends TestCase
      * Test `indexList()` method.
      *
      * @return void
-     *
      * @covers ::indexList()
      */
     public function testIndexList(): void
@@ -123,7 +122,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filterList()` method.
      *
      * @return void
-     *
      * @covers ::filterList()
      */
     public function testFilterList(): void
@@ -145,7 +143,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filtersByType()` method.
      *
      * @return void
-     *
      * @covers ::filtersByType()
      */
     public function testFiltersByType(): void
@@ -191,7 +188,6 @@ class PropertiesComponentTest extends TestCase
      * Test `relationsList()` method.
      *
      * @return void
-     *
      * @covers ::relationsList()
      */
     public function testRelationsList(): void
@@ -211,7 +207,6 @@ class PropertiesComponentTest extends TestCase
      * Test `hiddenRelationsList()` method.
      *
      * @return void
-     *
      * @covers ::hiddenRelationsList()
      */
     public function testHiddenRelationsList(): void
@@ -231,7 +226,6 @@ class PropertiesComponentTest extends TestCase
      * Test `readonlyRelationsList()` method.
      *
      * @return void
-     *
      * @covers ::readonlyRelationsList()
      */
     public function testReadonlyRelationsList(): void
@@ -481,7 +475,6 @@ class PropertiesComponentTest extends TestCase
      * @param string $type Object type.
      * @param array $config Properties configuration to write for $type
      * @return void
-     *
      * @dataProvider viewGroupsProvider()
      * @covers ::viewGroups()
      * @covers ::initialize()

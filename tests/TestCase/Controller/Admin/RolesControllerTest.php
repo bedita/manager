@@ -1,21 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\RolesController;
+use App\Test\Utils\RlsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\RolesController
- */
-class RlsController extends RolesController
-{
-    protected $resourceType = 'roles';
-    protected $properties = ['name'];
-}
 
 /**
  * {@see \App\Controller\Admin\RolesController} Test Case

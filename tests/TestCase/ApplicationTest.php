@@ -17,8 +17,8 @@ use App\Middleware\ProjectMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
@@ -34,7 +34,6 @@ class ApplicationTest extends TestCase
      * Test `middleware` method
      *
      * @return void
-     *
      * @covers ::middleware()
      * @covers ::csrfMiddleware()
      * @covers ::bootstrap()
@@ -60,7 +59,6 @@ class ApplicationTest extends TestCase
      * Test `loadPluginsFromConfig` method
      *
      * @return void
-     *
      * @covers ::loadPluginsFromConfig()
      */
     public function testLoadPlugins(): void
@@ -93,7 +91,6 @@ class ApplicationTest extends TestCase
      * Test `loadProjectConfig` method
      *
      * @return void
-     *
      * @covers ::loadProjectConfig()
      */
     public function testLoadProjectConfig(): void

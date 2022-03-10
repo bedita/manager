@@ -13,47 +13,12 @@
 
 namespace App\Test\TestCase\Controller\Model;
 
-use App\Controller\Model\ModelBaseController;
+use App\Test\Utils\ModelController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * @uses \App\Controller\Model\ModelBaseController
- */
-class ModelController extends ModelBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'object_types';
-
-    /**
-     * Set resource type
-     *
-     * @param string $type Resource type
-     * @return void
-     */
-    public function setResourceType(string $type): void
-    {
-        $this->resourceType = $type;
-    }
-
-    /**
-     * Set single view
-     *
-     * @param bool $view Single view flag
-     * @return void
-     */
-    public function setSingleView(bool $view): void
-    {
-        $this->singleView = $view;
-    }
-}
 
 /**
  * {@see \App\Controller\Model\ModelBaseController} Test Case
@@ -86,7 +51,7 @@ class ModelBaseControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 
@@ -150,7 +115,6 @@ class ModelBaseControllerTest extends TestCase
      *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
-     *
      * @return void
      */
     public function testBeforeFilter($expected, array $data): void
@@ -178,7 +142,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `beforeRender` method
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRender(): void
@@ -195,7 +158,6 @@ class ModelBaseControllerTest extends TestCase
      * @covers ::index()
      * @covers ::initialize()
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testIndex(): void
@@ -211,7 +173,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `index` failure method
      *
      * @covers ::index()
-     *
      * @return void
      */
     public function testIndexFail(): void
@@ -225,7 +186,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `view` method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testView(): void
@@ -241,7 +201,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `view` failure method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testViewFail(): void
@@ -283,10 +242,8 @@ class ModelBaseControllerTest extends TestCase
      * @param string $expected Expected result
      * @param array $data Request data
      * @param bool $singleView Single view
-     *
      * @covers ::save()
      * @dataProvider saveProvider()
-     *
      * @return void
      */
     public function testSave(string $expected, array $data, bool $singleView): void
@@ -306,7 +263,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `save` failure method
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSaveFail(): void
@@ -327,7 +283,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `remove` method
      *
      * @covers ::remove()
-     *
      * @return void
      */
     public function testRemove(): void
@@ -350,7 +305,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `remove` failure method
      *
      * @covers ::remove()
-     *
      * @return void
      */
     public function testRemoveFail(): void

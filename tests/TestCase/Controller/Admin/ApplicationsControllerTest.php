@@ -1,21 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\ApplicationsController;
+use App\Test\Utils\AppsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\ApplicationsController
- */
-class AppsController extends ApplicationsController
-{
-    protected $resourceType = 'applications';
-    protected $properties = ['name'];
-}
 
 /**
  * {@see \App\Controller\Admin\ApplicationsController} Test Case

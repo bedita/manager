@@ -1,22 +1,10 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\ConfigController;
-use BEdita\SDK\BEditaClient;
+use App\Test\Utils\CfgController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\ConfigController
- */
-class CfgController extends ConfigController
-{
-    protected $resourceType = 'config';
-    protected $properties = ['name'];
-}
 
 /**
  * {@see \App\Controller\Admin\ConfigController} Test Case
@@ -49,7 +37,7 @@ class ConfigControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 

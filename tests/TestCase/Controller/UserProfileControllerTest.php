@@ -13,20 +13,13 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\UserProfileController;
+use App\Test\Utils\UserProfileControllerSample;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
-
-/**
- * @uses \App\Controller\UserProfileController
- */
-class UserProfileControllerSample extends UserProfileController
-{
-}
 
 /**
  * {@see \App\Controller\UserProfileController} Test Case
@@ -66,10 +59,10 @@ class UserProfileControllerTest extends TestCase
     /**
      * Setup user profile controller for test
      *
-     * @param string $filter The filter class full path.
+     * @param string|null $filter The filter class full path.
      * @return void
      */
-    public function setupController(string $filter = null): void
+    public function setupController(?string $filter = null): void
     {
         $this->setupApi();
         $config = [

@@ -17,6 +17,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
+use App\Test\Utils\MyModulesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -28,26 +29,6 @@ use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
-
-class MyModulesComponent extends ModulesComponent
-{
-    /**
-     * Mock oEmbed meta
-     *
-     * @var array
-     */
-    public $meta = [];
-
-    protected function oEmbedMeta(string $url): ?array
-    {
-        return $this->meta;
-    }
-
-    public function objectTypes(?bool $abstract = null): array
-    {
-        return ['mices', 'elefants', 'cats', 'dogs'];
-    }
-}
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
@@ -158,7 +139,6 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $config Project config to set.
      * @return void
-     *
      * @dataProvider getProjectProvider()
      * @covers ::getMeta()
      * @covers ::getProject()
@@ -216,10 +196,8 @@ class ModulesComponentTest extends TestCase
      *
      * @param boolean $expected expected results from test
      * @param string $data setup data for test, object type
-     *
      * @dataProvider isAbstractProvider()
      * @covers ::isAbstract()
-     *
      * @return void
      */
     public function testIsAbstract($expected, $data): void
@@ -276,10 +254,8 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $expected expected results from test
      * @param boolean|null $data setup data for test
-     *
      * @dataProvider objectTypesProvider()
      * @covers ::objectTypes()
-     *
      * @return void
      */
     public function testObjectTypes($expected, $data): void
@@ -431,7 +407,6 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $modules Modules configuration.
      * @return void
-     *
      * @dataProvider getModulesProvider()
      * @covers ::modulesFromMeta()
      * @covers ::getMeta()
@@ -663,7 +638,6 @@ class ModulesComponentTest extends TestCase
      * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
-     *
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
@@ -870,7 +844,6 @@ class ModulesComponentTest extends TestCase
      * @param Expection|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
-     *
      * @covers ::upload()
      * @covers ::removeStream()
      * @covers ::assocStreamToMedia()
@@ -936,7 +909,6 @@ class ModulesComponentTest extends TestCase
      * Test `removeStream` method
      *
      * @return void
-     *
      * @covers ::removeStream()
      */
     public function testRemoveStreamWhenThereIsNoStream(): void
@@ -977,7 +949,6 @@ class ModulesComponentTest extends TestCase
      * Test `setDataFromFailedSave`.
      *
      * @covers ::setDataFromFailedSave()
-     *
      * @return void
      */
     public function testSetDataFromFailedSave(): void
@@ -1004,7 +975,6 @@ class ModulesComponentTest extends TestCase
      * Test `updateFromFailedSave` method.
      *
      * @return void
-     *
      * @covers ::setupAttributes()
      * @covers ::updateFromFailedSave()
      */
@@ -1266,18 +1236,16 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `setupRelationsMeta` method
      *
-     * @return void
-     *
      * @dataProvider setupRelationsProvider
      * @covers ::setupRelationsMeta()
      * @covers ::relationLabels()
-     *
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
      * @param array $order Order array.
      * @param array $hidden Hidden array.
      * @param array $readonly Readonly array.
+     * @return void
      */
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {

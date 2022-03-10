@@ -14,7 +14,6 @@
 namespace App\Form;
 
 use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 
 /**
  * ControlType class provides methods to get control types per type, according to schema property data.

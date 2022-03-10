@@ -141,7 +141,6 @@ class ThumbsComponentTest extends TestCase
      * @dataProvider urlsProvider()
      * @covers ::urls()
      * @covers ::getThumbs()
-     *
      * @return void
      */
     public function testUrls(array $expected, array $data, $mockResponse = null): void
@@ -168,7 +167,6 @@ class ThumbsComponentTest extends TestCase
      *
      * @covers ::urls()
      * @covers ::getThumbs()
-     *
      * @return void
      */
     public function testUrlsException(): void

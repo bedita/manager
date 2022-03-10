@@ -125,7 +125,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestore(): void
@@ -147,7 +146,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method when unauthorized
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreUnauthorized(): void
@@ -164,7 +162,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method with multiple items
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreMulti(): void
@@ -180,7 +177,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method failure with multiple items
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreMultiFailure(): void
@@ -199,7 +195,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDelete(): void
@@ -226,7 +221,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method when unauthorized
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteUnauthorized(): void
@@ -245,7 +239,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method with multiple items
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteMulti(): void
@@ -263,7 +256,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method failure with multiple items
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteMultiFailure(): void
@@ -283,7 +275,6 @@ class TrashControllerTest extends TestCase
      *
      * @covers ::empty()
      * @covers ::listQuery()
-     *
      * @return void
      */
     public function testEmpty(): void
@@ -303,7 +294,6 @@ class TrashControllerTest extends TestCase
      *
      * @covers ::empty()
      * @covers ::listQuery()
-     *
      * @return void
      */
     public function testEmptyFilter(): void
@@ -319,7 +309,6 @@ class TrashControllerTest extends TestCase
      * Test `empty` method when unauthorized
      *
      * @covers ::empty()
-     *
      * @return void
      */
     public function testEmptyUnauthorized(): void

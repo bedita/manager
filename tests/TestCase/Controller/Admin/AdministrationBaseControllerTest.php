@@ -1,43 +1,14 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\AdministrationBaseController;
+use App\Test\Utils\AdminBaseController;
+use App\Test\Utils\WrongAdminBaseController;
 use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\AdministrationBaseController
- */
-class AdminBaseController extends AdministrationBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'applications';
-}
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\AdministrationBaseController
- */
-class WrongAdminBaseController extends AdministrationBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'wrongtype';
-}
 
 /**
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case

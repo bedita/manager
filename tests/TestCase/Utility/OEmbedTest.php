@@ -12,23 +12,8 @@
  */
 namespace App\Test\TestCase;
 
-use App\Utility\OEmbed;
+use App\Test\Utils\MyOEmbed;
 use Cake\TestSuite\TestCase;
-
-class MyOEmbed extends OEmbed
-{
-    /**
-     * Mock JSON response
-     *
-     * @var array
-     */
-    public $json = [];
-
-    protected function fetchJson(string $oembedUrl): array
-    {
-        return $this->json;
-    }
-}
 
 /**
  * App\Utility\OEmbed Test Case
@@ -89,7 +74,6 @@ class OEmbedTest extends TestCase
      * Test `readMetadata` method
      *
      * @return void
-     *
      * @covers ::readMetadata()
      * @covers ::findProvider()
      * @dataProvider readMetadataProvider
