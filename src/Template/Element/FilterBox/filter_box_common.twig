@@ -1,3 +1,9 @@
+{{ Form.create(null, {
+    'name': 'filter-box-form',
+    'id': 'filter-box-form',
+    'v-if': "object.type == '" ~ type ~ "'"
+})|raw }}
+
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
     <div class="basic-filters">
         {# search #}
@@ -163,3 +169,5 @@
         {{ __('Data is filtered') }}
     </p>
 </div>
+
+{{ Form.end() }}

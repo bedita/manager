@@ -9,8 +9,10 @@
     class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}">
 
         <div class="select-cell narrow" @click="selectRow">
-            {% do Form.unlockField('oneItem') %}
-            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
+            {{ Form.create(null, {'name': 'index-table-form', 'id': 'index-table-form'})|raw }}
+                {% do Form.unlockField('oneItem') %}
+                <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
+            {{ Form.end()|raw }}
         </div>
 
         <div class="thumb-cell narrow">
