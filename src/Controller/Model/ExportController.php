@@ -17,7 +17,6 @@ use Cake\Http\Response;
 
 /**
  * Export cotroller: download project model in JSON format
- *
  */
 class ExportController extends AppController
 {

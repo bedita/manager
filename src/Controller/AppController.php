@@ -93,7 +93,7 @@ class AppController extends Controller
      * Handle security blackhole with logs for now
      *
      * @param string $type Excepion type
-     * @param SecurityException $exception Raised exception
+     * @param \Cake\Controller\Exception\SecurityException $exception Raised exception
      * @return void
      * @throws \Cake\Http\Exception\BadRequestException
      * @codeCoverageIgnore
@@ -379,7 +379,7 @@ class AppController extends Controller
      *
      * @param array $options The options for request check(s)
      * @return array The request data for required parameters, if any
-     * @throws Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
+     * @throws \Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
      */
     protected function checkRequest(array $options = []): array
     {
@@ -467,8 +467,8 @@ class AppController extends Controller
         $objectNav = [];
         foreach ($objects as $i => $object) {
             $objectNav[$moduleName][$object['id']] = [
-                'prev' => ($i > 0) ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
-                'next' => ($i + 1 < $total) ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
+                'prev' => $i > 0 ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
+                'next' => $i + 1 < $total ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
                 'index' => $i + 1,
                 'total' => $total,
                 'object_type' => Hash::get($objects, sprintf('%d.object_type', $i)),

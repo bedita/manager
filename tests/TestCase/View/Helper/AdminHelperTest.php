@@ -97,7 +97,6 @@ class AdminHelperTest extends TestCase
      * @param mixed $value The value
      * @param string $expected The expected result
      * @return void
-     *
      * @dataProvider controlProvider()
      * @covers ::control()
      * @covers ::initialize()
@@ -145,7 +144,6 @@ class AdminHelperTest extends TestCase
      * @param mixed $value The value
      * @param string $expected The expected result
      * @return void
-     *
      * @dataProvider controlProviderReadonly()
      * @covers ::control()
      */

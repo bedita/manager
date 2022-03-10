@@ -111,7 +111,6 @@ abstract class ModelBaseController extends AppController
      * View single resource.
      *
      * @param string|int $id Resource ID.
-     *
      * @return \Cake\Http\Response|null
      */
     public function view($id): ?Response
@@ -180,7 +179,6 @@ abstract class ModelBaseController extends AppController
      * Remove single resource.
      *
      * @param string $id Resource ID.
-     *
      * @return \Cake\Http\Response|null
      */
     public function remove(string $id): ?Response

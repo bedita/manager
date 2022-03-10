@@ -108,7 +108,6 @@ class SchemaComponentTest extends TestCase
      * @param string|null $type Type to get schema for.
      * @param array $config Component configuration.
      * @return void
-     *
      * @dataProvider getSchemaProvider()
      * @covers ::fetchSchema()
      * @covers ::getSchema()
@@ -605,7 +604,6 @@ class SchemaComponentTest extends TestCase
      * Test `descendants` method on abstract type
      *
      * @covers ::descendants()
-     *
      * @return void
      */
     public function testDescendants(): void

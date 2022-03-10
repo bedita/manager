@@ -66,6 +66,7 @@ class ModulesController extends AppController
 
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function beforeRender(EventInterface $event): ?Response

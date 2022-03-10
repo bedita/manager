@@ -15,7 +15,6 @@ namespace App\View\Helper;
 use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**

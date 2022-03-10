@@ -46,7 +46,6 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     *
      * @dataProvider isDashboardProvider()
      * @covers ::isDashboard()
      */
@@ -83,7 +82,6 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     *
      * @dataProvider isLoginProvider()
      * @covers ::isLogin()
      */
@@ -120,7 +118,6 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     *
      * @dataProvider messagesProvider()
      * @covers ::messages()
      */
@@ -171,7 +168,6 @@ class LayoutHelperTest extends TestCase
      * @param string $expected The expected link
      * @param string $name The view name
      * @param array $viewVars The view vars
-     *
      * @dataProvider moduleLinkProvider()
      * @covers ::moduleLink()
      * @covers ::commandLinkClass()
@@ -234,7 +230,6 @@ class LayoutHelperTest extends TestCase
      * @param string $type The item type
      * @param array $conf Configuration to use
      * @return void
-     *
      * @dataProvider customElementProvider()
      * @covers ::customElement()
      */
@@ -335,7 +330,7 @@ class LayoutHelperTest extends TestCase
         $expected = [
             'base' => '',
             'currentModule' => ['name' => 'home'],
-            'template' => '',
+            'template' => null,
             'modules' => ['documents', 'images'],
             'plugins' => \App\Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],

@@ -27,7 +27,6 @@ class PluginTest extends TestCase
      * Test loaded app plugins
      *
      * @return void
-     *
      * @covers ::loadedAppPlugins()
      */
     public function testLoadedAppPlugins(): void

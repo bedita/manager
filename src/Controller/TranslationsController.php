@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;

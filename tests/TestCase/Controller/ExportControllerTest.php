@@ -106,7 +106,6 @@ class ExportControllerTest extends TestCase
      *
      * @covers ::export()
      * @covers ::getFileName()
-     *
      * @return void
      */
     public function testExport(): void
@@ -266,7 +265,6 @@ class ExportControllerTest extends TestCase
      * @param array $response API response.
      * @param array $post Post data.
      * @return void
-     *
      * @covers ::rows()
      * @covers ::rowsAll()
      * @covers ::apiPath()

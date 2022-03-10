@@ -85,7 +85,6 @@ class ProjectMiddlewareTest extends TestCase
      * @param array $data Request session data
      * @param array $server The server vars
      * @return void
-     *
      * @dataProvider invokeProvider
      * @covers ::__construct()
      * @covers ::__invoke()

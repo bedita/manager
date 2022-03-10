@@ -13,11 +13,9 @@
 
 namespace App\Controller\Component;
 
-use App\Core\I18n\TranslatorInterface;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
-use Cake\Utility\Hash;
 
 /**
  * Translator component. Provide utilities to translate texts.
@@ -27,7 +25,7 @@ class TranslatorComponent extends Component
     /**
      * Translator engine
      *
-     * @var TranslatorInterface
+     * @var \App\Core\I18n\TranslatorInterface
      */
     protected $Translator = null;
 
@@ -52,7 +50,7 @@ class TranslatorComponent extends Component
      * @param string $from The source language
      * @param string $to The target language
      * @return string The translation
-     * @throws Cake\Http\Exception\InternalErrorException when no translator engine is set in configuration
+     * @throws \Cake\Http\Exception\InternalErrorException when no translator engine is set in configuration
      */
     public function translate(array $texts, string $from, string $to): string
     {

@@ -7,28 +7,12 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * Test class
- *
- * @uses \App\Controller\Admin\EndpointsController
- */
-class EndsController extends EndpointsController
-{
-    protected $resourceType = 'endpoints';
-    protected $properties = ['name'];
-}
-
-/**
  * {@see \App\Controller\Admin\EndpointsController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\EndpointsController
  */
 class EndpointsControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\EndsController
-     */
     public $EndsController;
 
     /**
@@ -61,7 +45,11 @@ class EndpointsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->EndsController = new EndsController($request);
+        $this->EndsController = new class ($request) extends EndpointsController
+        {
+            protected $resourceType = 'endpoints';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

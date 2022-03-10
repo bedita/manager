@@ -7,28 +7,12 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * Test class
- *
- * @uses \App\Controller\Admin\RolesController
- */
-class RlsController extends RolesController
-{
-    protected $resourceType = 'roles';
-    protected $properties = ['name'];
-}
-
-/**
  * {@see \App\Controller\Admin\RolesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\RolesController
  */
 class RolesControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\RlsController
-     */
     public $RlsController;
 
     /**
@@ -72,7 +56,11 @@ class RolesControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->RlsController = new RlsController($request);
+        $this->RlsController = new class ($request) extends RolesController
+        {
+            protected $resourceType = 'roles';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

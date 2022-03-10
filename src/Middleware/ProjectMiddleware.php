@@ -30,7 +30,7 @@ class ProjectMiddleware implements MiddlewareInterface
     /**
      * Application instance
      *
-     * @var Application
+     * @var \App\Application
      */
     protected $Application;
 
@@ -44,10 +44,10 @@ class ProjectMiddleware implements MiddlewareInterface
     /**
      * Constructor
      *
-     * @param Application $app The application instance.
-     * @param string $configPath Projects config path.
+     * @param \App\Application $app The application instance.
+     * @param string|null $configPath Projects config path.
      */
-    public function __construct(Application $app, string $configPath = null)
+    public function __construct(Application $app, ?string $configPath = null)
     {
         $this->Application = $app;
         if (!empty($configPath)) {
@@ -68,7 +68,7 @@ class ProjectMiddleware implements MiddlewareInterface
      * Detect project in use from session, if any
      * On empty session or missing project name `null` is returned
      *
-     * @param ServerRequest $request The request.
+     * @param \Cake\Http\ServerRequest $request The request.
      * @return string|null
      */
     protected function detectProject(ServerRequest $request): ?string
