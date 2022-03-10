@@ -53,7 +53,7 @@ class ApiAuthenticate extends BaseAuthenticate
         $usernameField = (string)$this->getConfig('fields.username', 'username');
         $passwordField = (string)$this->getConfig('fields.password', 'password');
 
-        $result = $apiClient->authenticate($request->getData($usernameField), $request->getData($passwordField));
+        $result = $apiClient->authenticate((string)$request->getData($usernameField), (string)$request->getData($passwordField));
         if (empty($result['meta'])) {
             return false;
         }
