@@ -189,23 +189,14 @@ class LayoutHelper extends Helper
         } elseif (!empty($this->getView()->getRequest()->getData('_csrfToken'))) {
             $csrfToken = $this->getView()->getRequest()->getData('_csrfToken');
         }
-        if (!isset($modules)) {
-            $modules = [];
-        }
-        if (!isset($uploadable)) {
-            $uploadable = [];
-        }
-        if (!isset($currentModule)) {
-            $currentModule = ['name' => 'home'];
-        }
 
         return [
             'base' => $this->Link->baseUrl(),
-            'currentModule' => $currentModule,
+            'currentModule' => $this->getView()->get('currentModule', ['name' => 'home']),
             'template' => $this->getView()->getTemplate(),
-            'modules' => array_keys($modules),
+            'modules' => array_keys($this->getView()->get('modules', [])),
             'plugins' => \App\Plugin::loadedAppPlugins(),
-            'uploadable' => $uploadable,
+            'uploadable' => $this->getView()->get('uploadable', []),
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => $csrfToken,
         ];
