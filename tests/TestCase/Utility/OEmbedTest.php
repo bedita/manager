@@ -12,7 +12,7 @@
  */
 namespace App\Test\TestCase;
 
-use App\Test\Utils\MyOEmbed;
+use App\Utility\OEmbed;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -80,7 +80,14 @@ class OEmbedTest extends TestCase
      */
     public function testReadMetadata(array $expected, string $url, array $oembedResponse): void
     {
-        $oembed = new MyOEmbed();
+        $oembed = new class() extends OEmbed
+        {
+            public $json = [];
+            protected function fetchJson(string $oembedUrl): array
+            {
+                return $this->json;
+            }
+        };
         $oembed->json = $oembedResponse;
         $result = $oembed->readMetadata($url);
         static::assertEquals($expected, $result);

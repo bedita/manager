@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Test\Utils\CfgController;
+use App\Controller\Admin\ConfigController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -13,11 +13,6 @@ use Cake\TestSuite\TestCase;
  */
 class ConfigControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\CfgController
-     */
     public $CfgController;
 
     /**
@@ -50,7 +45,11 @@ class ConfigControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->CfgController = new CfgController($request);
+        $this->CfgController = new class($request) extends ConfigController
+        {
+            protected $resourceType = 'config';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

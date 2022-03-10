@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Test\Utils\AppsController;
+use App\Controller\Admin\ApplicationsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -13,11 +13,6 @@ use Cake\TestSuite\TestCase;
  */
 class ApplicationsControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\AppsController
-     */
     public $AppsController;
 
     /**
@@ -50,7 +45,11 @@ class ApplicationsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AppsController = new AppsController($request);
+        $this->AppsController = new class($request) extends ApplicationsController
+        {
+            protected $resourceType = 'applications';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

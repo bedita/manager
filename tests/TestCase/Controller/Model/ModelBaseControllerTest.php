@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller\Model;
 
+use App\Controller\Model\ModelBaseController;
 use App\Test\Utils\ModelController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
@@ -27,11 +28,6 @@ use Cake\TestSuite\TestCase;
  */
 class ModelBaseControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\ModelController
-     */
     public $ModelController;
 
     /**
@@ -64,7 +60,20 @@ class ModelBaseControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->ModelController = new ModelController($request);
+        $this->ModelController = new class($request) extends ModelBaseController
+        {
+            protected $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
 
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

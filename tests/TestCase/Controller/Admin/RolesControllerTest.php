@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Test\Utils\RlsController;
+use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -13,11 +13,6 @@ use Cake\TestSuite\TestCase;
  */
 class RolesControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\RlsController
-     */
     public $RlsController;
 
     /**
@@ -61,7 +56,11 @@ class RolesControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->RlsController = new RlsController($request);
+        $this->RlsController = new class($request) extends RolesController
+        {
+            protected $resourceType = 'roles';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

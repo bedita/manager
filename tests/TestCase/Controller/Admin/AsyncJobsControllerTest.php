@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Test\Utils\JobsController;
+use App\Controller\Admin\AsyncJobsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -50,7 +50,11 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new JobsController($request);
+        $this->AsyncJobsController = new class($request) extends AsyncJobsController
+        {
+            protected $resourceType = 'async_jobs';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

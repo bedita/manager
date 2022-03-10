@@ -17,7 +17,6 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
-use App\Test\Utils\MyModulesComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -44,6 +43,8 @@ class ModulesComponentTest extends TestCase
      */
     public $Modules;
 
+    public $MyModules;
+
     /**
      * Test api client
      *
@@ -63,7 +64,20 @@ class ModulesComponentTest extends TestCase
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
-        $this->MyModules = $registry->load(MyModulesComponent::class);
+        $this->MyModules = new class($registry) extends ModulesComponent
+        {
+            public $meta = [];
+
+            protected function oEmbedMeta(string $url): ?array
+            {
+                return $this->meta;
+            }
+
+            public function objectTypes(?bool $abstract = null): array
+            {
+                return ['mices', 'elefants', 'cats', 'dogs'];
+            }
+        };
         $controller->Auth = $this->Auth;
     }
 
@@ -869,7 +883,20 @@ class ModulesComponentTest extends TestCase
             // mock for ModulesComponent
             $controller = new Controller();
             $registry = $controller->components();
-            $myModules = new MyModulesComponent($registry);
+            $myModules = new class($registry) extends ModulesComponent
+            {
+                public $meta = [];
+
+                protected function oEmbedMeta(string $url): ?array
+                {
+                    return $this->meta;
+                }
+
+                public function objectTypes(?bool $abstract = null): array
+                {
+                    return ['mices', 'elefants', 'cats', 'dogs'];
+                }
+            };
             $myModules->meta = $uploaded;
 
             $myModules->upload($requestData);

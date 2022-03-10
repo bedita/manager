@@ -13,7 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\Utils\UserProfileControllerSample;
+use App\Controller\UserProfileController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -28,11 +28,6 @@ use Cake\Utility\Hash;
  */
 class UserProfileControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var App\Test\TestCase\Controller\UserProfileControllerSample
-     */
     public $UserProfileController;
 
     /**
@@ -59,10 +54,9 @@ class UserProfileControllerTest extends TestCase
     /**
      * Setup user profile controller for test
      *
-     * @param string|null $filter The filter class full path.
      * @return void
      */
-    public function setupController(?string $filter = null): void
+    public function setupController(): void
     {
         $this->setupApi();
         $config = [
@@ -72,7 +66,7 @@ class UserProfileControllerTest extends TestCase
             'get' => [],
         ];
         $request = new ServerRequest($config);
-        $this->UserProfileController = new UserProfileControllerSample($request);
+        $this->UserProfileController = new class($request) extends UserProfileController {};
     }
 
     /**
@@ -83,7 +77,7 @@ class UserProfileControllerTest extends TestCase
      */
     public function testInitialize(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+        $this->setupController();
         static::assertNotEmpty($this->UserProfileController->{'Properties'});
     }
 
@@ -95,7 +89,7 @@ class UserProfileControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+        $this->setupController();
         $this->UserProfileController->view();
         $vars = ['schema', 'object', 'properties'];
         foreach ($vars as $var) {
@@ -111,7 +105,7 @@ class UserProfileControllerTest extends TestCase
      */
     public function testViewOnException(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+        $this->setupController();
 
         // mock api get /auth/user
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -136,7 +130,7 @@ class UserProfileControllerTest extends TestCase
      */
     public function testSave(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\UserProfileControllerSample');
+        $this->setupController();
 
         // mock api patch /auth/user
         $apiClient = $this->getMockBuilder(BEditaClient::class)

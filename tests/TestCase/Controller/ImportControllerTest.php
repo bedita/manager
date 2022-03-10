@@ -13,8 +13,8 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\ImportController;
 use App\Core\Result\ImportResult;
-use App\Test\Utils\ImportControllerSample;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -30,11 +30,6 @@ use Cake\Utility\Hash;
  */
 class ImportControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var App\Test\TestCase\Controller\ImportControllerSample
-     */
     public $Import;
 
     /**
@@ -96,7 +91,13 @@ class ImportControllerTest extends TestCase
             ],
         ];
         $request = new ServerRequest($config);
-        $this->Import = new ImportControllerSample($request);
+        $this->Import = new class($request) extends ImportController
+        {
+            public function render($view = null, $layout = null): void
+            {
+                // do nothing
+            }
+        };
     }
 
     /**
