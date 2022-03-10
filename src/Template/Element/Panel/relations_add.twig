@@ -24,7 +24,7 @@
 
             {% for type in Schema.rightTypes() %}
                 {% set prefix = '_fast_create_' ~ type ~ '_' %}
-                {{ Form.create({
+                {{ Form.create(null, {
                     'name': 'create-object',
                     'class': 'object-form fast-create',
                     ':disable': 'saving',
