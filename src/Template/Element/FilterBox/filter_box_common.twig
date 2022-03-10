@@ -1,11 +1,8 @@
-{{ Form.create(null, {
-    'name': 'filter-box-form',
-    'id': 'filter-box-form',
-    'v-if': "object.type == '" ~ type ~ "'"
-})|raw }}
-
+{{ Form.create(null, {'id': 'filter-box-form', 'name': 'filter-box-form'})|raw }}
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
+
     <div class="basic-filters">
+
         {# search #}
         <div class="filter-container filter-search input">
             <input type="text"
@@ -161,7 +158,9 @@
                 <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
             </span>
         </div>
+
     </div>
+
 </div>
 
 <div v-if="filterActive">
@@ -170,4 +169,4 @@
     </p>
 </div>
 
-{{ Form.end() }}
+{{ Form.end()|raw }}
