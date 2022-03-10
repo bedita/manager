@@ -36,7 +36,7 @@ class RelationsController extends ModelBaseController
     public function index(): ?Response
     {
         parent::index();
-        $resources = $this->viewVars['resources'];
+        $resources = (array)$this->viewBuilder()->getVar('resources');
         foreach ($resources as &$resource) {
             $resource['left_object_types'] = $this->relatedTypes($resource['id'], 'left');
             $resource['right_object_types'] = $this->relatedTypes($resource['id'], 'right');
