@@ -15,6 +15,7 @@ namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\LayoutHelper;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -307,5 +308,51 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $actual = $layout->publishStatus($object);
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `metaConfig` method
+     *
+     * @return void
+     * @covers ::metaConfig()
+     */
+    public function testMetaConfig(): void
+    {
+        $params = ['_csrfToken' => 'my-token'];
+        $request = new ServerRequest(compact('params'));
+        $viewVars = [
+            'modules' => ['documents' => [], 'images' => []],
+            'uploadable' => ['images'],
+        ];
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $conf = $layout->metaConfig();
+        $expected = [
+            'base' => '',
+            'currentModule' => ['name' => 'home'],
+            'template' => null,
+            'modules' => ['documents', 'images'],
+            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'uploadable' => ['images'],
+            'locale' => \Cake\I18n\I18n::getLocale(),
+            'csrfToken' => 'my-token',
+        ];
+        static::assertSame($expected, $conf);
+    }
+
+    /**
+     * Test `metaConfig` method
+     *
+     * @return void
+     * @covers ::metaConfig()
+     */
+    public function testMetaConfigToken(): void
+    {
+        $post = ['_csrfToken' => 'some-token'];
+        $request = new ServerRequest(compact('post'));
+        $view = new View($request);
+        $layout = new LayoutHelper($view);
+        $conf = $layout->metaConfig();
+        static::assertSame('some-token', $conf['csrfToken']);
     }
 }
