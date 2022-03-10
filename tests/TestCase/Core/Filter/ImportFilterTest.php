@@ -52,7 +52,7 @@ class ImportFilterTest extends TestCase
 
         return [
             'logic exception: service name not defined' => [
-                'App\Test\TestCase\Core\Filter\DummyImportFilter',
+                'App\Test\Utils\DummyImportFilter',
                 '',
                 '',
                 [],
