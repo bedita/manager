@@ -64,7 +64,7 @@ class ModulesComponentTest extends TestCase
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
-        $this->MyModules = new class($registry) extends ModulesComponent
+        $this->MyModules = new class ($registry) extends ModulesComponent
         {
             public $meta = [];
 
@@ -883,7 +883,7 @@ class ModulesComponentTest extends TestCase
             // mock for ModulesComponent
             $controller = new Controller();
             $registry = $controller->components();
-            $myModules = new class($registry) extends ModulesComponent
+            $myModules = new class ($registry) extends ModulesComponent
             {
                 public $meta = [];
 

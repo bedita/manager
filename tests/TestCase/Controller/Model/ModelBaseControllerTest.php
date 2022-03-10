@@ -60,7 +60,7 @@ class ModelBaseControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->ModelController = new class($request) extends ModelBaseController
+        $this->ModelController = new class ($request) extends ModelBaseController
         {
             protected $resourceType = 'object_types';
 

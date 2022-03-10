@@ -45,7 +45,7 @@ class ApplicationsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AppsController = new class($request) extends ApplicationsController
+        $this->AppsController = new class ($request) extends ApplicationsController
         {
             protected $resourceType = 'applications';
             protected $properties = ['name'];

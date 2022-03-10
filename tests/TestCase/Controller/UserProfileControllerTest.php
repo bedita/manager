@@ -66,7 +66,7 @@ class UserProfileControllerTest extends TestCase
             'get' => [],
         ];
         $request = new ServerRequest($config);
-        $this->UserProfileController = new class($request) extends UserProfileController {};
+        $this->UserProfileController = new class ($request) extends UserProfileController {};
     }
 
     /**

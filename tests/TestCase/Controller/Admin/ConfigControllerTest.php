@@ -45,7 +45,7 @@ class ConfigControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->CfgController = new class($request) extends ConfigController
+        $this->CfgController = new class ($request) extends ConfigController
         {
             protected $resourceType = 'config';
             protected $properties = ['name'];

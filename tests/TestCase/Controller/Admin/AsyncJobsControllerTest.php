@@ -50,7 +50,7 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new class($request) extends AsyncJobsController
+        $this->AsyncJobsController = new class ($request) extends AsyncJobsController
         {
             protected $resourceType = 'async_jobs';
             protected $properties = ['name'];

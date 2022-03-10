@@ -71,7 +71,7 @@ class AdministrationBaseControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $cfg);
         $request = new ServerRequest($config);
-        $this->RlsController = new class($request) extends RolesController
+        $this->RlsController = new class ($request) extends RolesController
         {
             protected $resourceType = 'roles';
             protected $properties = ['name'];

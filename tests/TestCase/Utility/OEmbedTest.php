@@ -80,7 +80,7 @@ class OEmbedTest extends TestCase
      */
     public function testReadMetadata(array $expected, string $url, array $oembedResponse): void
     {
-        $oembed = new class() extends OEmbed
+        $oembed = new class () extends OEmbed
         {
             public $json = [];
             protected function fetchJson(string $oembedUrl): array

@@ -45,7 +45,7 @@ class EndpointsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->EndsController = new class($request) extends EndpointsController
+        $this->EndsController = new class ($request) extends EndpointsController
         {
             protected $resourceType = 'endpoints';
             protected $properties = ['name'];

@@ -91,7 +91,7 @@ class ImportControllerTest extends TestCase
             ],
         ];
         $request = new ServerRequest($config);
-        $this->Import = new class($request) extends ImportController
+        $this->Import = new class ($request) extends ImportController
         {
             public function render($view = null, $layout = null): void
             {
