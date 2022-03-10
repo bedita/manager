@@ -35,6 +35,20 @@ use Cake\Utility\Hash;
 class AppView extends TwigView
 {
     /**
+     * Constant for view file type 'element'
+     *
+     * @var string
+     */
+    public const TYPE_ELEMENT = 'Element';
+
+    /**
+     * Constant for view file type 'layout'
+     *
+     * @var string
+     */
+    public const TYPE_LAYOUT = 'Layout';
+
+    /**
      * {@inheritDoc}
      */
     public function initialize(): void
