@@ -74,7 +74,8 @@
                             label=""
                             @change="onCategoryChange"
                         ></category-picker>
-                        {% do Form.unlockField('categories') %}
+                        {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
+                        {# {% do Form.unlockField('categories') %} #}
                     {% endfor %}
                 {% elseif schema %}
                     <category-picker
@@ -84,7 +85,8 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
-                    {% do Form.unlockField('categories') %}
+                    {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
+                    {# {% do Form.unlockField('categories') %} #}
                 {% endif %}
             </span>
 
@@ -92,7 +94,8 @@
                 <label>{{ __('Folder') }}</label>
 
                 <folder-picker label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
-                {% do Form.unlockField('folderSelected') %}
+                {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
+                {# {% do Form.unlockField('folderSelected') %} #}
 
                 <span class="descendants-filter">
                     <label for="descendants">{{ __('Descendants') }}</label>

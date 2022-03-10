@@ -9,7 +9,8 @@
     class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}">
 
         <div class="select-cell narrow" @click="selectRow">
-            {% do Form.unlockField('oneItem') %}
+            {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
+            {# {% do Form.unlockField('oneItem') %} #}
             <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
         </div>
 

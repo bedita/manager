@@ -35,7 +35,8 @@
                         'type': 'hidden',
                         'v-bind:value': 'file'
                     }) | raw }}
-                    {% do Form.unlockField('upload_behavior') %}
+                    {# ERROR: `FormProtector` instance has not been created. Ensure you have loaded the `FormProtectionComponent` in your controller and called `FormHelper::create()` before calling `FormHelper::unlockField()`. #}
+                    {# {% do Form.unlockField('upload_behavior') %} #}
 
                     <section class="fieldset mb-1">
                         <div class="container">
