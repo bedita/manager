@@ -1,9 +1,9 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
+use App\Controller\Admin\RolesController;
 use App\Test\Utils\AdminBaseController;
 use App\Test\Utils\WrongAdminBaseController;
-use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;

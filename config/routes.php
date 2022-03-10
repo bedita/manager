@@ -19,8 +19,8 @@
  */
 
 use Cake\Core\Configure;
-use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
