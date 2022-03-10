@@ -55,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(string $type = null, string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null)
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -110,10 +110,10 @@ class SchemaComponent extends Component
      * If cached revision don't match cache is removed.
      *
      * @param string $type Type to get schema for. By default, configured type is used.
-     * @param string $revision Schema revision.
+     * @param string|null $revision Schema revision.
      * @return array|bool Cached schema if revision match, otherwise false
      */
-    protected function loadWithRevision(string $type, string $revision = null)
+    protected function loadWithRevision(string $type, ?string $revision = null)
     {
         $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);

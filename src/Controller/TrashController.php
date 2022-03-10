@@ -27,6 +27,7 @@ class TrashController extends AppController
 {
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function initialize(): void

@@ -29,26 +29,6 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
-class MyModulesComponent extends ModulesComponent
-{
-    /**
-     * Mock oEmbed meta
-     *
-     * @var array
-     */
-    public $meta = [];
-
-    protected function oEmbedMeta(string $url): ?array
-    {
-        return $this->meta;
-    }
-
-    public function objectTypes(?bool $abstract = null): array
-    {
-        return ['mices', 'elefants', 'cats', 'dogs'];
-    }
-}
-
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
  *
@@ -62,6 +42,8 @@ class ModulesComponentTest extends TestCase
      * @var \App\Controller\Component\ModulesComponent
      */
     public $Modules;
+
+    public $MyModules;
 
     /**
      * Test api client
@@ -82,7 +64,20 @@ class ModulesComponentTest extends TestCase
         $registry->load('Auth');
         $this->Modules = $registry->load(ModulesComponent::class);
         $this->Auth = $registry->load(AuthComponent::class);
-        $this->MyModules = $registry->load(MyModulesComponent::class);
+        $this->MyModules = new class ($registry) extends ModulesComponent
+        {
+            public $meta = [];
+
+            protected function oEmbedMeta(string $url): ?array
+            {
+                return $this->meta;
+            }
+
+            public function objectTypes(?bool $abstract = null): array
+            {
+                return ['mices', 'elefants', 'cats', 'dogs'];
+            }
+        };
         $controller->Auth = $this->Auth;
     }
 
@@ -158,7 +153,6 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $config Project config to set.
      * @return void
-     *
      * @dataProvider getProjectProvider()
      * @covers ::getMeta()
      * @covers ::getProject()
@@ -216,10 +210,8 @@ class ModulesComponentTest extends TestCase
      *
      * @param boolean $expected expected results from test
      * @param string $data setup data for test, object type
-     *
      * @dataProvider isAbstractProvider()
      * @covers ::isAbstract()
-     *
      * @return void
      */
     public function testIsAbstract($expected, $data): void
@@ -276,10 +268,8 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $expected expected results from test
      * @param boolean|null $data setup data for test
-     *
      * @dataProvider objectTypesProvider()
      * @covers ::objectTypes()
-     *
      * @return void
      */
     public function testObjectTypes($expected, $data): void
@@ -431,7 +421,6 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $modules Modules configuration.
      * @return void
-     *
      * @dataProvider getModulesProvider()
      * @covers ::modulesFromMeta()
      * @covers ::getMeta()
@@ -663,7 +652,6 @@ class ModulesComponentTest extends TestCase
      * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
-     *
      * @dataProvider startupProvider()
      * @covers ::startup()
      */
@@ -870,7 +858,6 @@ class ModulesComponentTest extends TestCase
      * @param Expection|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
-     *
      * @covers ::upload()
      * @covers ::removeStream()
      * @covers ::assocStreamToMedia()
@@ -896,7 +883,20 @@ class ModulesComponentTest extends TestCase
             // mock for ModulesComponent
             $controller = new Controller();
             $registry = $controller->components();
-            $myModules = new MyModulesComponent($registry);
+            $myModules = new class ($registry) extends ModulesComponent
+            {
+                public $meta = [];
+
+                protected function oEmbedMeta(string $url): ?array
+                {
+                    return $this->meta;
+                }
+
+                public function objectTypes(?bool $abstract = null): array
+                {
+                    return ['mices', 'elefants', 'cats', 'dogs'];
+                }
+            };
             $myModules->meta = $uploaded;
 
             $myModules->upload($requestData);
@@ -936,7 +936,6 @@ class ModulesComponentTest extends TestCase
      * Test `removeStream` method
      *
      * @return void
-     *
      * @covers ::removeStream()
      */
     public function testRemoveStreamWhenThereIsNoStream(): void
@@ -977,7 +976,6 @@ class ModulesComponentTest extends TestCase
      * Test `setDataFromFailedSave`.
      *
      * @covers ::setDataFromFailedSave()
-     *
      * @return void
      */
     public function testSetDataFromFailedSave(): void
@@ -1004,7 +1002,6 @@ class ModulesComponentTest extends TestCase
      * Test `updateFromFailedSave` method.
      *
      * @return void
-     *
      * @covers ::setupAttributes()
      * @covers ::updateFromFailedSave()
      */
@@ -1266,18 +1263,16 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `setupRelationsMeta` method
      *
-     * @return void
-     *
      * @dataProvider setupRelationsProvider
      * @covers ::setupRelationsMeta()
      * @covers ::relationLabels()
-     *
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
      * @param array $order Order array.
      * @param array $hidden Hidden array.
      * @param array $readonly Readonly array.
+     * @return void
      */
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {

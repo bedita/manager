@@ -39,7 +39,6 @@ class TranslatorControllerTest extends TestCase
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslateMethodNotAllowedException(): void
@@ -59,7 +58,6 @@ class TranslatorControllerTest extends TestCase
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslateNoTranslatorEngine(): void
@@ -85,7 +83,6 @@ class TranslatorControllerTest extends TestCase
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslate(): void

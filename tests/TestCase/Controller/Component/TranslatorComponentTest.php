@@ -59,7 +59,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     *
      * @covers ::translate()
      * @covers ::initialize()
      */
@@ -74,7 +73,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     *
      * @covers ::translate()
      * @covers ::initialize()
      */

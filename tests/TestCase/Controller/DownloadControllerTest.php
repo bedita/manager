@@ -44,7 +44,6 @@ class DownloadControllerTest extends TestCase
      * Test download from URL
      *
      * @return void
-     *
      * @covers ::download()
      * @covers ::content()
      */
@@ -95,7 +94,6 @@ class DownloadControllerTest extends TestCase
      * Test download from stream
      *
      * @return void
-     *
      * @covers ::download()
      * @covers ::content()
      * @covers ::streamDownload()

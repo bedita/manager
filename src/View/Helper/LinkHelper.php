@@ -58,6 +58,7 @@ class LinkHelper extends Helper
      * {@inheritDoc}
      *
      * Init API and WebAPP base URL
+     *
      * @codeCoverageIgnore
      */
     public function initialize(array $config): void
@@ -163,7 +164,7 @@ class LinkHelper extends Helper
         if ($sort === $sortField) { // it was ascendant sort
             return 'sort down';
         }
-        if ($sort === ('-' . $sortField)) { // it was descendant sort
+        if ($sort === '-' . $sortField) { // it was descendant sort
             return 'sort up';
         }
 
@@ -258,7 +259,7 @@ class LinkHelper extends Helper
         if (!file_exists($path)) {
             return '';
         }
-        $method = ($extension === 'js') ? 'script' : 'css';
+        $method = $extension === 'js' ? 'script' : 'css';
 
         return $this->Html->{$method}(sprintf('%s.%s.plugin.%s', $plugin, $plugin, $extension));
     }
@@ -297,7 +298,6 @@ class LinkHelper extends Helper
      *
      * @param array $filter list of file name filters
      * @param string $type file type (js/css)
-
      * @return array files found
      */
     protected function findFiles(array $filter, string $type): array

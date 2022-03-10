@@ -2,7 +2,6 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\CacheController;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;

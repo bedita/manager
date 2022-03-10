@@ -142,7 +142,7 @@ class ExportComponentTest extends TestCase
     /**
      * Test `column` method
      *
-     * @param integer $number The column number
+     * @param int $number The column number
      * @param string $expected The column string
      * @return void
      * @covers ::column()

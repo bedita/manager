@@ -172,9 +172,8 @@ class PropertyTypesControllerTest extends TestCase
      * Test `save` method
      *
      * @param array|\Exception $expectedResponse expected results from test
-     * @param boolean|null $data setup data for test
+     * @param bool|null $data setup data for test
      * @param string $action tested action
-     *
      * @dataProvider saveProvider()
      * @covers ::save()
      * @covers ::addPropertyTypes()

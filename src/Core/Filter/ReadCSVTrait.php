@@ -26,7 +26,7 @@ trait ReadCSVTrait
     protected $csvOptions = [
         'delimiter' => ',',
         'enclosure' => '"',
-        'escape' => "\\",
+        'escape' => '\\',
     ];
 
     /**

@@ -14,66 +14,14 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ImportController;
-use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
-use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
-
-/**
- * @uses \App\Controller\ImportController
- */
-class ImportControllerSample extends ImportController
-{
-    /**
-     * {@inheritDoc}
-     */
-    public function render($view = null, $layout = null): void
-    {
-        // do nothing
-    }
-}
-
-/**
- * Test sample filter
- */
-class ImportFilterSample extends ImportFilter
-{
-    /**
-     * @inheritDoc
-     */
-    public function import($filename, $filepath, ?array $options = []): ImportResult
-    {
-        return new ImportResult($filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getServiceName(): ?string
-    {
-        return 'ImportFilterSampleService';
-    }
-}
-
-/**
- * Test sample filter
- */
-class ImportFilterSampleError extends ImportFilter
-{
-    /**
-     * @inheritDoc
-     */
-    public function import($filename, $filepath, ?array $options = []): ImportResult
-    {
-        throw new InternalErrorException('An expected exception');
-    }
-}
 
 /**
  * {@see \App\Controller\ImportController} Test Case
@@ -82,11 +30,6 @@ class ImportFilterSampleError extends ImportFilter
  */
 class ImportControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var App\Test\TestCase\Controller\ImportControllerSample
-     */
     public $Import;
 
     /**
@@ -129,10 +72,10 @@ class ImportControllerTest extends TestCase
     /**
      * Setup import controller for test
      *
-     * @param string $filter The filter class full path.
+     * @param string|null $filter The filter class full path.
      * @return void
      */
-    public function setupController(string $filter = null): void
+    public function setupController(?string $filter = null): void
     {
         $config = [
             'environment' => [
@@ -148,7 +91,13 @@ class ImportControllerTest extends TestCase
             ],
         ];
         $request = new ServerRequest($config);
-        $this->Import = new ImportControllerSample($request);
+        $this->Import = new class ($request) extends ImportController
+        {
+            public function render($view = null, $layout = null): void
+            {
+                // do nothing
+            }
+        };
     }
 
     /**
@@ -156,12 +105,11 @@ class ImportControllerTest extends TestCase
      *
      * @covers ::file()
      * @covers ::loadFilters()
-     *
      * @return void
      */
     public function testFile(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\Utils\ImportFilterSample');
 
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
@@ -180,13 +128,13 @@ class ImportControllerTest extends TestCase
     {
         $filters = [
             [
-                'class' => 'App\Test\TestCase\Controller\ImportFilterSample',
+                'class' => 'App\Test\Utils\ImportFilterSample',
                 'label' => 'Dummy Filter',
                 'options' => [],
             ],
         ];
         Configure::write('Filters.import', $filters);
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\Utils\ImportFilterSample');
         $reflectionClass = new \ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('loadFilters');
         $method->setAccessible(true);
@@ -194,7 +142,7 @@ class ImportControllerTest extends TestCase
         static::assertTrue(is_array($this->Import->viewVars['filters']));
         $expected = [
             [
-                'value' => 'App\Test\TestCase\Controller\ImportFilterSample',
+                'value' => 'App\Test\Utils\ImportFilterSample',
                 'text' => 'Dummy Filter',
                 'options' => [],
             ],
@@ -213,11 +161,11 @@ class ImportControllerTest extends TestCase
      */
     public function testUpdateServiceList(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\Utils\ImportFilterSample');
         $reflectionClass = new \ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('updateServiceList');
         $method->setAccessible(true);
-        $method->invokeArgs($this->Import, ['App\Test\TestCase\Controller\ImportFilterSample']);
+        $method->invokeArgs($this->Import, ['App\Test\Utils\ImportFilterSample']);
         $property = $reflectionClass->getProperty('services');
         $property->setAccessible(true);
         $actual = $property->getValue($this->Import);
@@ -234,7 +182,7 @@ class ImportControllerTest extends TestCase
     public function testLoadAsyncJobs(): void
     {
         // empty jobs
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\Utils\ImportFilterSample');
         $reflectionClass = new \ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('loadAsyncJobs');
         $method->setAccessible(true);
@@ -279,7 +227,6 @@ class ImportControllerTest extends TestCase
      * Test `file` fail method, missing filter
      *
      * @covers ::file()
-     *
      * @return void
      */
     public function testFileBadRequestFilter(): void
@@ -297,13 +244,12 @@ class ImportControllerTest extends TestCase
      *
      * @covers ::file()
      * @covers:: uploadErrorMessage()
-     *
      * @return void
      */
     public function testFileBadRequestFile(): void
     {
         $this->fileError = 4;
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSample');
+        $this->setupController('App\Test\Utils\ImportFilterSample');
 
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
@@ -346,12 +292,11 @@ class ImportControllerTest extends TestCase
      * Test `file` fail method, internal error
      *
      * @covers ::file()
-     *
      * @return void
      */
     public function testFileError(): void
     {
-        $this->setupController('App\Test\TestCase\Controller\ImportFilterSampleError');
+        $this->setupController('App\Test\Utils\ImportFilterSampleError');
         $response = $this->Import->file();
         static::assertEquals(302, $response->getStatusCode());
         $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');

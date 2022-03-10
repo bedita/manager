@@ -40,7 +40,6 @@ use Cake\Utility\Inflector;
  * Note that `Route` does not do any inflections on URLs which will result in
  * inconsistently cased URLs when used with `:plugin`, `:controller` and
  * `:action` markers.
- *
  */
 Router::defaultRouteClass(DashedRoute::class);
 
@@ -123,7 +122,7 @@ Router::scope('/', function (RouteBuilder $routes) {
             )->setPass(['id']);
         }
         $routes->get(
-            "/cache",
+            '/cache',
             ['controller' => 'Cache', 'action' => 'clear'],
             'cache:clear'
         );

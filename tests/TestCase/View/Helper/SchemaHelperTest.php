@@ -364,7 +364,6 @@ class SchemaHelperTest extends TestCase
      * @param string $name The field name.
      * @param string|null $value The field value.
      * @return void
-     *
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
      */
@@ -379,7 +378,6 @@ class SchemaHelperTest extends TestCase
      * Test `lang` property
      *
      * @return void
-     *
      * @covers ::controlOptions()
      */
     public function testLang(): void
@@ -492,7 +490,6 @@ class SchemaHelperTest extends TestCase
      * @param array $properties The properties
      * @param array $expected Expected result
      * @return void
-     *
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
      * @covers ::translatableType()
@@ -598,7 +595,6 @@ class SchemaHelperTest extends TestCase
      * @param array $properties The properties
      * @param array $expected Expected result
      * @return void
-     *
      * @dataProvider formatProvider()
      * @covers ::format()
      * @covers ::formatByte()
@@ -721,7 +717,6 @@ class SchemaHelperTest extends TestCase
      * @param array $schema The property schema
      * @param bool $expected Expected result
      * @return void
-     *
      * @dataProvider sortableProvider()
      * @covers ::sortable()
      */

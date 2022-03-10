@@ -34,7 +34,6 @@ class ApplicationTest extends TestCase
      * Test `middleware` method
      *
      * @return void
-     *
      * @covers ::middleware()
      * @covers ::csrfMiddleware()
      * @covers ::bootstrap()
@@ -60,7 +59,6 @@ class ApplicationTest extends TestCase
      * Test `loadPluginsFromConfig` method
      *
      * @return void
-     *
      * @covers ::loadPluginsFromConfig()
      */
     public function testLoadPlugins(): void
@@ -93,7 +91,6 @@ class ApplicationTest extends TestCase
      * Test `loadProjectConfig` method
      *
      * @return void
-     *
      * @covers ::loadProjectConfig()
      */
     public function testLoadProjectConfig(): void
