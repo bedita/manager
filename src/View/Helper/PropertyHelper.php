@@ -93,7 +93,7 @@ class PropertyHelper extends Helper
         $schema = (array)$this->_View->get('schema');
         if (!empty($type)) {
             $schemas = (array)$this->_View->get('schemasByType');
-            $schema = (array)$schemas[$type];
+            $schema = (array)Hash::get($schemas, $type);
         }
         $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
         $default = array_filter([
