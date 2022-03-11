@@ -30,7 +30,7 @@ class CacheController extends AdministrationBaseController
     {
         $prefixes = Cache::configured();
         foreach ($prefixes as $prefix) {
-            Cache::clear(false, $prefix);
+            Cache::clear($prefix);
         }
         $twigCachePath = CACHE . 'twigView';
         $folder = new Folder($twigCachePath);
