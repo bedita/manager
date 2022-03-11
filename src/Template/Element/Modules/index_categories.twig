@@ -77,6 +77,7 @@
                                 'form': 'form-remove-' ~ resource.id,
                                 'title': __('Remove') ~ ' ' ~ resource.attributes.name,
                                 'class': buttonClasses,
+                                'confirm': __('Do you really want to delete the category "{0}"?', resource.attributes.label|default(resource.attributes.name)),
                             })|raw }}
                         </div>
 

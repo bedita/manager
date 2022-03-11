@@ -345,7 +345,7 @@ class CategoriesHelperTest extends TestCase
                 true,
                 [
                     [
-                        'id' => '0', 'name' => 'Global', 'label' => 'Global', 'parent_id' => null,
+                        'id' => '0', 'name' => '_', 'label' => 'Global', 'parent_id' => null,
                         'children' => [
                             ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
                             ['id' => 6, 'name' => 'dummy6', 'parent_id' => null],
@@ -381,7 +381,7 @@ class CategoriesHelperTest extends TestCase
                 [
                     [
                         'id' => '0',
-                        'name' => 'Global',
+                        'name' => '_',
                         'label' => 'Global',
                         'children' => [
                             ['id' => 1, 'name' => 'dummy1', 'parent_id' => null],
@@ -404,7 +404,7 @@ class CategoriesHelperTest extends TestCase
                 [
                     [
                         'id' => '0',
-                        'name' => 'Global',
+                        'name' => '_',
                         'label' => 'Global',
                         'children' => [
                             ['id' => 2, 'name' => 'dummy2', 'parent_id' => null],
