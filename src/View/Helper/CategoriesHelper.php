@@ -78,7 +78,7 @@ class CategoriesHelper extends Helper
      */
     public function node(array $node, string $name, $value, array $options, bool &$hiddenField): string
     {
-        $title = sprintf('<h3>%s</h3>', $node['label']);
+        $title = sprintf('<h3>%s</h3>', $node['label'] = $node['label'] ?: $node['name']);
         $controlOptions = $this->controlOptions($node, $value, $options, $hiddenField);
 
         return sprintf(
@@ -107,12 +107,12 @@ class CategoriesHelper extends Helper
         ];
         $hiddenField = false;
         if (empty($node['children'])) {
-            $controlOptions['options'][0] = ['value' => $node['name'], 'text' => $node['label']];
+            $controlOptions['options'][0] = ['value' => $node['name'], 'text' => $node['label'] = $node['label'] ?: $node['name']];
 
             return $controlOptions;
         }
         foreach ($node['children'] as $key => $child) {
-            $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label']];
+            $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label'] = $child['label'] ?: $child['name']];
         }
 
         return $controlOptions;
