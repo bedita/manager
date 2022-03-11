@@ -301,7 +301,7 @@ class ModulesController extends AppController
             $this->Flash->error($error->getMessage(), ['params' => $error]);
 
             $this->set(['error' => $error->getAttributes()]);
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             // set session data to recover form
             $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
@@ -478,10 +478,8 @@ class ModulesController extends AppController
         } catch (BEditaClientException $ex) {
             $this->log($ex->getMessage(), LogLevel::ERROR);
 
-            $this->set([
-                'error' => $ex->getMessage(),
-                '_serialize' => ['error'],
-            ]);
+            $this->set('error', $ex->getMessage());
+            $this->setSerialize(['error']);
 
             return;
         }

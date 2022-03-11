@@ -76,10 +76,8 @@ class PropertyTypesController extends ModelBaseController
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
 
-            $this->set([
-                'error' => $error->getMessage(),
-                '_serialize' => ['error'],
-            ]);
+            $this->set('error', $error->getMessage());
+            $this->setSerialize(['error']);
 
             return null;
         }

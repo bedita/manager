@@ -512,6 +512,6 @@ class AppController extends Controller
      */
     protected function setSerialize(array $items): void
     {
-        $this->set('_serialize', $items);
+        $this->viewBuilder()->setOption('serialize', $items);
     }
 }
