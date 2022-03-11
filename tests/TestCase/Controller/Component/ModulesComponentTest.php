@@ -516,6 +516,12 @@ class ModulesComponentTest extends TestCase
                 [],
                 ['documents' => [], 'events' => [], 'news' => []],
             ],
+            'no user' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                ['guest'],
+                [],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
             'empty roles' => [
                 ['documents' => [], 'events' => [], 'news' => []],
                 ['guest'],

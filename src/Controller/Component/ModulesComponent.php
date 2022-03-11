@@ -103,10 +103,6 @@ class ModulesComponent extends Component
     {
         try {
             $user = $this->Authentication->getIdentity();
-            if (empty($user)) {
-                return [];
-            }
-
             $home = Cache::remember(
                 sprintf('home_%d', $user->get('id')),
                 function () {
@@ -169,7 +165,7 @@ class ModulesComponent extends Component
             return;
         }
         $user = $this->Authentication->getIdentity();
-        if (empty($user)) {
+        if (empty($user) || empty($user->getOriginalData())) {
             return;
         }
 
