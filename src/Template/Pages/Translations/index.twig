@@ -31,12 +31,12 @@
                         'object_type': translated.type,
                         'id': object.attributes.object_id,
                         'lang': object.attributes.lang
-                    }, true) %}
+                    }, {'fullBase': true}) %}
                     {% set objectUrl = Url.build({
                             '_name': 'modules:view',
                             'id': translated.id,
                             'object_type': translated.type,
-                    }, true) %}
+                    }, {'fullBase': true}) %}
                     <div class="table-row object-status-{{ object.attributes.status }}">
                         <div class="narrow">
                             <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}>
