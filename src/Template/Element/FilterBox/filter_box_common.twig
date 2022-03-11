@@ -1,4 +1,3 @@
-{{ Form.create(null, {'id': 'filter-box-form', 'name': 'filter-box-form'})|raw }}
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
     <div class="basic-filters">
         {# search #}
@@ -75,7 +74,6 @@
                             label=""
                             @change="onCategoryChange"
                         ></category-picker>
-                        {% do Form.unlockField('categories') %}
                     {% endfor %}
                 {% elseif schema %}
                     <category-picker
@@ -85,7 +83,6 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
-                    {% do Form.unlockField('categories') %}
                 {% endif %}
             </span>
 
@@ -93,7 +90,6 @@
                 <label>{{ __('Folder') }}</label>
 
                 <folder-picker label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
-                {% do Form.unlockField('folderSelected') %}
 
                 <span class="descendants-filter">
                     <label for="descendants">{{ __('Descendants') }}</label>
@@ -164,4 +160,3 @@
         {{ __('Data is filtered') }}
     </p>
 </div>
-{{ Form.end()|raw }}
