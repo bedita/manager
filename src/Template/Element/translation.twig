@@ -1,6 +1,6 @@
 {% do _view.assign('title', __('Translations')) %}
 {% do _view.assign('bodyViewClass', 'translation-module') %}
-{% set translatable = Schema.translatableFields(schema.properties) %}
+{% set translatable = Schema.translatableFields(schema.properties|default([])) %}
 
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
@@ -134,7 +134,7 @@
                 {'data': [{'id': translation.id, 'object_id': object.id, 'lang': translation.attributes.lang}]})) %}
         {% endif %}
 
-        {% set url = Url.build({'_name': 'translations:list'}, true) %}
+        {% set url = Url.build({'_name': 'translations:list'}, {'fullBase': true}) %}
         {% set link = '<a href="' ~ url ~ '">' ~ __('Translations') ~ '</a>' %}
         {% do _view.append('module-buttons', link) %}
         {{ Form.end()|raw }}
