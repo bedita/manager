@@ -79,7 +79,6 @@ class LinkHelperTest extends TestCase
      * @param string $apiUrl The api url
      * @param string $expected The url expected
      * @return void
-     *
      * @dataProvider fromAPIProvider()
      * @covers ::fromAPI()
      */

@@ -23,6 +23,7 @@ class Schema
     /**
      * Return unique alphabetically ordered right types from schema $schema
      *
+     * @param array $schema Schema data.
      * @return array
      */
     public static function rightTypes(array $schema): array

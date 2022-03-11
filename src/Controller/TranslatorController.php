@@ -39,7 +39,7 @@ class TranslatorController extends AppController
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod(['post']);
         $text = $this->getRequest()->getData('text', '');
-        $texts = (is_array($text)) ? $text : [$text];
+        $texts = is_array($text) ? $text : [$text];
         try {
             $json = $this->Translator->translate(
                 $texts,
@@ -52,6 +52,6 @@ class TranslatorController extends AppController
             $error = $e->getMessage();
             $this->set(compact('error'));
         }
-        $this->set('_serialize', ['translation', 'error']);
+        $this->setSerialize(['translation', 'error']);
     }
 }

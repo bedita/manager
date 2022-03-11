@@ -131,7 +131,6 @@ class AppControllerTest extends TestCase
      * test `initialize` function
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void
@@ -150,7 +149,6 @@ class AppControllerTest extends TestCase
      * test `beforeFilter` not logged error
      *
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testBeforeFilterLoginError(): void
@@ -174,7 +172,6 @@ class AppControllerTest extends TestCase
      * test 'beforeFilter' for correct apiClient token setup
      *
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testBeforeFilterCorrectTokens(): void
@@ -221,7 +218,6 @@ class AppControllerTest extends TestCase
      *
      * @covers ::loginRedirectRoute()
      * @dataProvider loginRedirectRouteProvider()
-     *
      * @return void
      */
     public function testLoginRedirectRoute($config, $expected): void
@@ -238,7 +234,6 @@ class AppControllerTest extends TestCase
      * test `setupOutputTimezone`
      *
      * @covers ::setupOutputTimezone
-     *
      * @return void
      */
     public function testSetupOutputTimezone(): void
@@ -261,7 +256,6 @@ class AppControllerTest extends TestCase
      * Test `beforeRender` method for correct user object in Controller viewVars
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRender(): void
@@ -280,7 +274,6 @@ class AppControllerTest extends TestCase
      * Test `beforeRender` method, when updating tokens in session
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRenderUpdateTokens(): void
@@ -576,14 +569,12 @@ class AppControllerTest extends TestCase
      * @param string $objectType The object type
      * @param array $expected The expected request data
      * @param array $data The payload data
-     *
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
      * @dataProvider prepareRequestProvider()
-     *
      * @return void
      */
     public function testPrepareRequest($objectType, $expected, $data): void
@@ -641,10 +632,8 @@ class AppControllerTest extends TestCase
      * @param mixed $val1 The first value
      * @param mixed $val2 The second value
      * @param bool $expected The expected result from function hasFieldChanged
-     *
      * @covers ::hasFieldChanged()
      * @dataProvider hasFieldChangedProvider()
-     *
      * @return void
      */
     public function testHasFieldChanged($val1, $val2, $expected): void
@@ -700,7 +689,6 @@ class AppControllerTest extends TestCase
      *
      * @covers ::checkRequest()
      * @dataProvider checkRequestProvider()
-     *
      * @return void
      */
     public function testCheckRequest($expected, $params, $config): void
@@ -722,7 +710,6 @@ class AppControllerTest extends TestCase
      * @param object &$object Instantiated object that we will run method on.
      * @param string $methodName Method name to call
      * @param array  $parameters Array of parameters to pass into method.
-     *
      * @return mixed Method return.
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
@@ -739,7 +726,6 @@ class AppControllerTest extends TestCase
      *
      * @param object &$object Instantiated object that we will run method on.
      * @param string $propertyName Property name to access
-     *
      * @return mixed Method return.
      */
     public function accessProperty(&$object, $propertyName)
@@ -830,14 +816,12 @@ class AppControllerTest extends TestCase
      *
      * @covers ::applySessionFilter()
      * @dataProvider applySessionFilterProvider()
-     *
      * @param array $requestConfig
      * @param string $sessionKey
      * @param mixed|null $sessionValue
      * @param mixed|null $expectedSessionValue
      * @param string|null $expectedHttpStatusCode
      * @param string|null $expectedResultType
-     *
      * @return void
      */
     public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType): void
@@ -953,10 +937,8 @@ class AppControllerTest extends TestCase
      * @param array $objects The objects to filter to set object nav
      * @param array $expectedObjectNav The object nav array expected
      * @param string $expectedObjectNavModule The object type string type expected
-     *
      * @covers ::setObjectNav()
      * @dataProvider setObjectNavProvider()
-     *
      * @return void
      */
     public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule): void
@@ -1013,10 +995,8 @@ class AppControllerTest extends TestCase
      *
      * @param string $moduleName The module name for the test
      * @param array $objects The objects to filter to set object nav
-     *
      * @covers ::getObjectNav()
      * @dataProvider getObjectNavProvider()
-     *
      * @return void
      */
     public function testGetObjectNav(string $moduleName, array $objects): void

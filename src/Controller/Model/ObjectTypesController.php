@@ -48,7 +48,7 @@ class ObjectTypesController extends ModelBaseController
                 compact('filter') + ['page_size' => 100]
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);

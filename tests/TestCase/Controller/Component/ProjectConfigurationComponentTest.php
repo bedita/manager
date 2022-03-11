@@ -79,7 +79,6 @@ class ProjectConfigurationComponentTest extends TestCase
      * @param array $expected Expected result.
      * @param array $config Response from `/config` endpoint.
      * @return void
-     *
      * @dataProvider readProvider()
      * @covers ::read()
      * @covers ::fetchConfig()

@@ -1,4 +1,4 @@
-{{ _view.assign('title', __('Dashboard')) }}
+{% do _view.assign('title', __('Dashboard')) %}
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
 <dashboard q="{{ _view.getRequest().getSession().read('objects.filter.q') }}" inline-template>

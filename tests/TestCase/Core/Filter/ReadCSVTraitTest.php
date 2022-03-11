@@ -56,7 +56,6 @@ class ReadCSVTraitTest extends TestCase
      * @param array $data Expected data
      * @param string $filepath CSV File path
      * @param array $options CSV options
-     *
      * @dataProvider readCSVFileProvider
      * @covers ::readCSVFile()
      * @return void

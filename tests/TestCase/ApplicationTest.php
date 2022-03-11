@@ -42,7 +42,6 @@ class ApplicationTest extends TestCase
      * Test `middleware` method
      *
      * @return void
-     *
      * @covers ::middleware()
      * @covers ::csrfMiddleware()
      * @covers ::bootstrap()
@@ -66,23 +65,9 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * Test `addPluginDev` method
-     *
-     * @return void
-     * @covers ::addPluginDev()
-     */
-    public function testAddPluginDev(): void
-    {
-        $app = new Application(CONFIG);
-        static::assertEquals(true, $app->addPluginDev('IdeHelper'));
-        static::assertEquals(false, $app->addPluginDev('NotExisting'));
-    }
-
-    /**
      * Test `loadPluginsFromConfig` method
      *
      * @return void
-     *
      * @covers ::loadPluginsFromConfig()
      */
     public function testLoadPlugins(): void
@@ -115,7 +100,6 @@ class ApplicationTest extends TestCase
      * Test `loadProjectConfig` method
      *
      * @return void
-     *
      * @covers ::loadProjectConfig()
      */
     public function testLoadProjectConfig(): void

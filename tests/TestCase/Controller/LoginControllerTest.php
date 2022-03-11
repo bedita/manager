@@ -150,7 +150,6 @@ class LoginControllerTest extends TestCase
      * Test `login` with HTTP HEAD method
      *
      * @coversNothing
-     *
      * @return void
      */
     public function testHeadLogin(): void
@@ -169,7 +168,6 @@ class LoginControllerTest extends TestCase
      * Test `login` fail method
      *
      * @covers ::authRequest()
-     *
      * @return void
      */
     public function testLoginFailed(): void
@@ -189,7 +187,6 @@ class LoginControllerTest extends TestCase
      * Test `login` method with GET
      *
      * @covers ::login()
-     *
      * @return void
      */
     public function testLoginForm(): void
@@ -208,7 +205,6 @@ class LoginControllerTest extends TestCase
      * Test `loadAvailableProjects` method with GET
      *
      * @covers ::loadAvailableProjects()
-     *
      * @return void
      */
     public function testLoadAvailableProjects(): void
@@ -238,7 +234,6 @@ class LoginControllerTest extends TestCase
      * Test `setupCurrentProject` method
      *
      * @covers ::setupCurrentProject()
-     *
      * @return void
      */
     public function testSetupCurrentProject(): void
@@ -260,7 +255,6 @@ class LoginControllerTest extends TestCase
      * Test `logout` method
      *
      * @covers ::logout()
-     *
      * @return void
      */
     public function testLogout(): void
@@ -282,7 +276,6 @@ class LoginControllerTest extends TestCase
      * Test `handleFlashMessages` method
      *
      * @covers ::handleFlashMessages()
-     *
      * @return void
      */
     public function testHandleFlashMessages(): void

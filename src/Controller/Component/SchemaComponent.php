@@ -38,7 +38,7 @@ class SchemaComponent extends Component
      *
      * @var string
      */
-    const CACHE_CONFIG = '_schema_types_';
+    public const CACHE_CONFIG = '_schema_types_';
 
     /**
      * {@inheritDoc}
@@ -55,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(string $type = null, string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null)
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -81,7 +81,7 @@ class SchemaComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return false;
         }
@@ -110,10 +110,10 @@ class SchemaComponent extends Component
      * If cached revision don't match cache is removed.
      *
      * @param string $type Type to get schema for. By default, configured type is used.
-     * @param string $revision Schema revision.
+     * @param string|null $revision Schema revision.
      * @return array|bool Cached schema if revision match, otherwise false
      */
-    protected function loadWithRevision(string $type, string $revision = null)
+    protected function loadWithRevision(string $type, ?string $revision = null)
     {
         $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
@@ -257,7 +257,7 @@ class SchemaComponent extends Component
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $schema = [];
         }
@@ -355,7 +355,7 @@ class SchemaComponent extends Component
                 self::CACHE_CONFIG
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

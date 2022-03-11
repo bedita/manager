@@ -45,7 +45,6 @@ class ErrorControllerTest extends TestCase
      * test `initialize` function
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void

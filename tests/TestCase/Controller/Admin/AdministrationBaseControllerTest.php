@@ -15,54 +15,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Test class
- *
- * @uses \App\Controller\Admin\AdministrationBaseController
- */
-class AdminBaseController extends AdministrationBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'applications';
-}
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\AdministrationBaseController
- */
-class WrongAdminBaseController extends AdministrationBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'wrongtype';
-}
-
-/**
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\AdministrationBaseController
  */
 class AdministrationBaseControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\AdminBaseController
-     */
     public $AdministrationBaseController;
 
-    /**
-     * Test subject
-     *
-     * @var \App\Controller\Admin\RolesController
-     */
     public $RlsController;
 
     /**
@@ -95,7 +55,10 @@ class AdministrationBaseControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AdministrationBaseController = new AdminBaseController($request);
+        $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
+        {
+            protected $resourceType = 'applications';
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -113,7 +76,11 @@ class AdministrationBaseControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $cfg);
         $request = new ServerRequest($config);
-        $this->RlsController = new RolesController($request);
+        $this->RlsController = new class ($request) extends RolesController
+        {
+            protected $resourceType = 'roles';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -255,7 +222,11 @@ class AdministrationBaseControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AdministrationBaseController = new WrongAdminBaseController($request);
+        $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
+        {
+            protected $resourceType = 'wrongtype';
+        };
+
         $this->AdministrationBaseController->index();
         $viewVars = (array)$this->AdministrationBaseController->viewVars;
         foreach ($keys as $expectedKey) {

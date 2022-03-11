@@ -151,7 +151,6 @@ class QueryComponentTest extends TestCase
      * Test `prepare` method.
      *
      * @return void
-     *
      * @dataProvider prepareProvider
      * @covers ::prepare()
      */

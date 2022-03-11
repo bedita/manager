@@ -59,7 +59,7 @@ class UserProfileController extends AppController
         try {
             $response = $this->apiClient->get('/auth/user');
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $response = [];
         }
@@ -74,6 +74,8 @@ class UserProfileController extends AppController
 
     /**
      * Save user profile data
+     *
+     * @return void
      */
     public function save(): void
     {
@@ -82,7 +84,7 @@ class UserProfileController extends AppController
             $this->apiClient->patch('/auth/user', json_encode($data));
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 

@@ -13,64 +13,10 @@
 
 namespace App\Test\TestCase\Core\Filter;
 
-use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
-
-/**
- * Dummy filter for test
- *
- * @codeCoverageIgnore
- */
-class DummyImportFilter extends ImportFilter
-{
-    /**
-     * {@inheritDoc}
-     */
-    protected static $serviceName = '';
-
-    /**
-     * @inheritDoc
-     *
-     * @param string $filename The file name
-     * @param string $filepath The file path
-     * @param array $options The import options
-     * @return App\Core\Result\ImportResult The result
-     */
-    public function import($filename, $filepath, ?array $options = []): ImportResult
-    {
-        return $this->createAsyncJob($filename, $filepath, $options);
-    }
-
-    /**
-     * Call parent, to bypass method protection, for test purpose
-     *
-     * @param string $filename The file name
-     * @param string $filepath The file path
-     * @param array $options The options
-     * @return \App\Core\Result\ImportResult
-     * @throws \LogicException When method is called but missing the async job service name.
-     */
-    public function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
-    {
-        return parent::createAsyncJob($filename, $filepath, $options);
-    }
-}
-
-/**
- * MyDummy import filter for test
- *
- * @codeCoverageIgnore
- */
-class MyDummyImportFilter extends DummyImportFilter
-{
-    /**
-     * {@inheritDoc}
-     */
-    protected static $serviceName = 'My.Dummy.Import.Service.Class';
-}
 
 /**
  * {@see \App\Core\Filter\ImportFilter} Test Case
@@ -89,7 +35,7 @@ class ImportFilterTest extends TestCase
     /**
      * The stream ID (mock)
      *
-     * @var integer
+     * @var int
      */
     protected $streamId = 99999;
 
@@ -106,14 +52,14 @@ class ImportFilterTest extends TestCase
 
         return [
             'logic exception: service name not defined' => [
-                'App\Test\TestCase\Core\Filter\DummyImportFilter',
+                'App\Test\Utils\DummyImportFilter',
                 '',
                 '',
                 [],
                 new \LogicException('Cannot create async job without service name defined.'),
             ],
             'job to import file scheduled' => [
-                'App\Test\TestCase\Core\Filter\MyDummyImportFilter',
+                'App\Test\Utils\MyDummyImportFilter',
                 $filename,
                 sprintf('%s/tests/files/%s', getcwd(), $filename),
                 [],
@@ -131,7 +77,6 @@ class ImportFilterTest extends TestCase
      * @param array $options The async job options
      * @param \LogicException|\App\Core\Result\ImportResult $expected The result expected
      * @return void
-     *
      * @dataProvider createAsyncJobProvider
      * @covers ::createAsyncJob()
      */

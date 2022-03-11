@@ -28,14 +28,14 @@ class ExportController extends AppController
      *
      * @var int
      */
-    const DEFAULT_EXPORT_LIMIT = 10000;
+    public const DEFAULT_EXPORT_LIMIT = 10000;
 
     /**
      * Default page size
      *
      * @var int
      */
-    const DEFAULT_PAGE_SIZE = 500;
+    public const DEFAULT_PAGE_SIZE = 500;
 
     /**
      * {@inheritDoc}

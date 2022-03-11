@@ -17,7 +17,6 @@ use Cake\View\Helper;
 
 /**
  * Helper class to handle permissions on modules.
- *
  */
 class PermsHelper extends Helper
 {
@@ -65,10 +64,10 @@ class PermsHelper extends Helper
     /**
      * Check create permission.
      *
-     * @param string $module Module name
+     * @param string|null $module Module name
      * @return bool
      */
-    public function canCreate(string $module = null): bool
+    public function canCreate(?string $module = null): bool
     {
         return $this->isAllowed('POST', $module);
     }
@@ -90,10 +89,10 @@ class PermsHelper extends Helper
     /**
      * Check save permission.
      *
-     * @param string $module Module name
+     * @param string|null $module Module name
      * @return bool
      */
-    public function canSave(string $module = null): bool
+    public function canSave(?string $module = null): bool
     {
         return $this->isAllowed('PATCH', $module);
     }
@@ -101,10 +100,10 @@ class PermsHelper extends Helper
     /**
      * Check read permission.
      *
-     * @param string $module Module name
+     * @param string|null $module Module name
      * @return bool
      */
-    public function canRead(string $module = null): bool
+    public function canRead(?string $module = null): bool
     {
         return $this->isAllowed('GET', $module);
     }
@@ -113,10 +112,10 @@ class PermsHelper extends Helper
      * Check if a method is allowed on a module.
      *
      * @param string $method Method to check
-     * @param string $module Module name, if missing or null current module is used.
+     * @param string|null $module Module name, if missing or null current module is used.
      * @return bool
      */
-    protected function isAllowed(string $method, string $module = null): bool
+    protected function isAllowed(string $method, ?string $module = null): bool
     {
         if (empty($module)) {
             if (empty($this->current)) {

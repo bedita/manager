@@ -3,7 +3,6 @@ return [
     /**
      * Default properties schema for internal resources.
      * Schema properties are described using JSON Schema.
-     *
      */
     'SchemaProperties' => [
 

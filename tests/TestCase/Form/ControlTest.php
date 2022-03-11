@@ -241,7 +241,6 @@ class ControlTest extends TestCase
      * @param mixed|null $value Property value.
      * @param array $expected The expected control.
      * @return void
-     *
      * @dataProvider controlProvider()
      * @covers ::control
      * @covers ::json

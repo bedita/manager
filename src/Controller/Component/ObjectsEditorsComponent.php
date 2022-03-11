@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2022 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 Atlas Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -31,7 +31,7 @@ class ObjectsEditorsComponent extends Component
     /**
      * Concurrent check time.
      *
-     * @var integer
+     * @var int
      */
     public $concurrentCheckTime = 20000;
 

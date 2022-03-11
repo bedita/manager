@@ -86,7 +86,6 @@ class DashboardControllerTest extends TestCase
      * Test `initialize` method
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void
@@ -129,11 +128,9 @@ class DashboardControllerTest extends TestCase
      *
      * @param MethodNotAllowedException|null $expected The expected exception or null
      * @param string $method The request method, can be 'GET', 'PATCH', 'POST', 'DELETE'
-     *
      * @covers ::index()
      * @covers ::recentItems()
      * @dataProvider indexProvider()
-     *
      * @return void
      */
     public function testIndex($expected, $method): void
@@ -162,7 +159,6 @@ class DashboardControllerTest extends TestCase
      * Test `messages` method
      *
      * @covers ::messages()
-     *
      * @return void
      */
     public function testMessages(): void
@@ -181,7 +177,6 @@ class DashboardControllerTest extends TestCase
      * Test `messages` method for "MethodNotAllowed" case
      *
      * @covers ::messages()
-     *
      * @return void
      */
     public function testMessagesMethodNotAllowed(): void
@@ -202,7 +197,6 @@ class DashboardControllerTest extends TestCase
      * Test `recentItems` method
      *
      * @covers ::recentItems()
-     *
      * @return void
      */
     public function testRecentItems(): void

@@ -92,7 +92,7 @@ class AppController extends Controller
      * Handle security blackhole with logs for now
      *
      * @param string $type Exception type
-     * @param SecurityException $exception Raised exception
+     * @param \Cake\Controller\Exception\SecurityException $exception Raised exception
      * @return void
      * @throws \Cake\Http\Exception\BadRequestException
      * @codeCoverageIgnore
@@ -100,7 +100,7 @@ class AppController extends Controller
     public function blackhole(string $type, SecurityException $exception): void
     {
         // Log original exception
-        $this->log($exception, 'error');
+        $this->log($exception->getMessage(), 'error');
 
         // Log form data & session id
         $token = (array)$this->getRequest()->getData('_Token');
@@ -177,7 +177,8 @@ class AppController extends Controller
             $this->set(compact('user'));
         }
 
-        $this->viewBuilder()->setTemplatePath('Pages/' . $this->_viewPath());
+        $path = $this->viewBuilder()->getTemplatePath();
+        $this->viewBuilder()->setTemplatePath('Pages/' . $path);
 
         return null;
     }
@@ -380,7 +381,7 @@ class AppController extends Controller
      *
      * @param array $options The options for request check(s)
      * @return array The request data for required parameters, if any
-     * @throws Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
+     * @throws \Cake\Http\Exception\BadRequestException on empty request or empty data by parameter
      */
     protected function checkRequest(array $options = []): array
     {
@@ -468,8 +469,8 @@ class AppController extends Controller
         $objectNav = [];
         foreach ($objects as $i => $object) {
             $objectNav[$moduleName][$object['id']] = [
-                'prev' => ($i > 0) ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
-                'next' => ($i + 1 < $total) ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
+                'prev' => $i > 0 ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
+                'next' => $i + 1 < $total ? Hash::get($objects, sprintf('%d.id', $i + 1)) : null,
                 'index' => $i + 1,
                 'total' => $total,
                 'object_type' => Hash::get($objects, sprintf('%d.object_type', $i)),
@@ -499,5 +500,20 @@ class AppController extends Controller
         $objectNavModule = (string)$session->read('objectNavModule');
 
         return (array)Hash::get($objectNav, sprintf('%s.%s', $objectNavModule, $id), []);
+    }
+
+    /**
+     * Cake 4 compatibility wrapper method: set items to serialize for the view
+     *
+     * In Cake 3 => $this->set('_serialize', ['data']);
+     * In Cake 4 => $this->viewBuilder()->setOption('serialize', ['data'])
+     *
+     * @param array $items Items to serialize
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function setSerialize(array $items): void
+    {
+        $this->set('_serialize', $items);
     }
 }

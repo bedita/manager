@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
@@ -58,7 +57,7 @@ class TranslationsController extends ModulesController
             $response = $this->apiClient->getObject($id, $this->objectType);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
@@ -103,7 +102,7 @@ class TranslationsController extends ModulesController
             }
         } catch (\Exception $e) {
             // Error! Back to index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
@@ -121,6 +120,8 @@ class TranslationsController extends ModulesController
 
     /**
      * Create or edit single translation.
+     *
+     * @return void
      */
     public function save(): void
     {
@@ -136,7 +137,7 @@ class TranslationsController extends ModulesController
             $this->apiClient->save('translations', $requestData);
         } catch (BEditaClientException $e) {
             // Error! Back to object view or index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             if ($this->getRequest()->getData('id')) {
@@ -198,7 +199,7 @@ class TranslationsController extends ModulesController
             // remove completely the translation
             $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             // redir to main object view

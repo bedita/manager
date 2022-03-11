@@ -39,6 +39,10 @@ class TranslateTest extends TestCase
                 'dummy',
                 'Dummy',
             ],
+            'label' => [
+                'PR expert',
+                'PR Expert',
+            ],
         ];
     }
 

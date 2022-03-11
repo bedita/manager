@@ -78,7 +78,7 @@ class CategoriesHelper extends Helper
      */
     public function node(array $node, string $name, $value, array $options, bool &$hiddenField): string
     {
-        $title = sprintf('<h3>%s</h3>', $node['label']);
+        $title = sprintf('<h3>%s</h3>', $node['label'] = $node['label'] ?: $node['name']);
         $controlOptions = $this->controlOptions($node, $value, $options, $hiddenField);
 
         return sprintf(
@@ -107,12 +107,12 @@ class CategoriesHelper extends Helper
         ];
         $hiddenField = false;
         if (empty($node['children'])) {
-            $controlOptions['options'][0] = ['value' => $node['name'], 'text' => $node['label']];
+            $controlOptions['options'][0] = ['value' => $node['name'], 'text' => $node['label'] = $node['label'] ?: $node['name']];
 
             return $controlOptions;
         }
         foreach ($node['children'] as $key => $child) {
-            $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label']];
+            $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label'] = $child['label'] ?: $child['name']];
         }
 
         return $controlOptions;
@@ -132,6 +132,7 @@ class CategoriesHelper extends Helper
             return [];
         }
 
+        $globalCategories = [];
         $roots = [];
         foreach ($categories as $category) {
             if (empty($category['parent_id'])) { // root
@@ -146,18 +147,22 @@ class CategoriesHelper extends Helper
                 usort($root['children'], [$this, 'sortRoots']);
             }
             if (empty($root['parent_id']) && empty($root['children'])) {
-                $roots[0]['children'][] = $root;
-                usort($roots[0]['children'], [$this, 'sortRoots']);
+                $globalCategories[] = $root;
                 unset($roots[$key]);
             }
         }
 
-        usort($roots, [$this, 'sortRoots']);
+        if (!empty($globalCategories)) {
+            array_unshift($roots, [
+                'id' => '0',
+                'name' => '_',
+                'label' => __('Global'),
+                'parent_id' => null,
+                'children' => $globalCategories,
+            ]);
+        }
 
-        $roots[0]['id'] = '0';
-        $roots[0]['name'] = __('Global');
-        $roots[0]['label'] = __('Global');
-        $roots[0]['parent_id'] = null;
+        usort($roots, [$this, 'sortRoots']);
 
         return $roots;
     }

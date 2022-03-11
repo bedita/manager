@@ -16,7 +16,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
-use App\Controller\ModulesController;
+use App\Test\Utils\ModulesControllerSample;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
@@ -24,75 +24,6 @@ use BEdita\SDK\BEditaClient;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
-/**
- * Sample controller wrapper, to add useful methods for test
- *
- * @uses \App\Controller\ModulesController
- */
-class ModulesControllerSample extends ModulesController
-{
-    /**
-     * Getter for objectType protected var
-     *
-     * @return string
-     */
-    public function getObjectType(): string
-    {
-        return $this->objectType;
-    }
-
-    /**
-     * Public version of parent function (protected) descendants
-     *
-     * @return void
-     */
-    public function descendants(): array
-    {
-        return parent::descendants();
-    }
-
-    /**
-     * Public version of parent function (protected)
-     *
-     * @return void
-     */
-    public function availableRelationshipsUrl(string $relation): string
-    {
-        return parent::availableRelationshipsUrl($relation);
-    }
-
-    /**
-     * Update media urls, public for testing
-     *
-     * @param array $response The response
-     * @return void
-     */
-    public function updateMediaUrls(array &$response): void
-    {
-        parent::updateMediaUrls($response);
-    }
-
-    /**
-     * Create new object from ajax request.
-     *
-     * @return void
-     */
-    public function getApiClient(): BEditaClient
-    {
-        return $this->apiClient;
-    }
-
-    /**
-     * Create new object from ajax request.
-     *
-     * @return void
-     */
-    public function save(): void
-    {
-        parent::save();
-    }
-}
 
 /**
  * {@see \App\Controller\ModulesController} Test Case
@@ -104,7 +35,7 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test Modules controller
      *
-     * @var \App\Test\TestCase\Controller\ModulesControllerSample
+     * @var \App\Test\Utils\ModulesControllerSample
      */
     public $controller;
 
@@ -159,7 +90,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `initialize` method
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void
@@ -229,7 +159,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Session filter data must be empty
      *
      * @covers ::index()
-     *
      * @return void
      */
     public function testQueryErrorSession(): void
@@ -255,7 +184,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `view` method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testView(): void
@@ -282,7 +210,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `view` method on error
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testViewError(): void
@@ -302,7 +229,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `uname` method
      *
      * @covers ::uname()
-     *
      * @return void
      */
     public function testUname(): void
@@ -327,7 +253,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `uname` method, case 404 Not Found
      *
      * @covers ::uname()
-     *
      * @return void
      */
     public function testUname404(): void
@@ -348,7 +273,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `create` method
      *
      * @covers ::create()
-     *
      * @return void
      */
     public function testCreate(): void
@@ -367,7 +291,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `create` method
      *
      * @covers ::create()
-     *
      * @return void
      */
     public function testCreate302(): void
@@ -395,7 +318,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `clone` method
      *
      * @covers ::clone()
-     *
      * @return void
      */
     public function testClone(): void
@@ -422,7 +344,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `clone` method
      *
      * @covers ::clone()
-     *
      * @return void
      */
     public function testClone302(): void
@@ -465,7 +386,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `clone` method, on error
      *
      * @covers ::clone()
-     *
      * @return void
      */
     public function testCloneError(): void
@@ -485,7 +405,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `save` method, on error
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSaveErrorNoPost(): void
@@ -516,7 +435,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `save` method, on error
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSaveErrorPostId(): void
@@ -591,7 +509,6 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @dataProvider saveProvider()
      * @covers ::save()
-     *
      * @return void
      */
     public function testSave($expected, $data): void
@@ -623,7 +540,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `delete` method
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDelete(): void
@@ -662,7 +578,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `delete` method, ids
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteIds(): void
@@ -701,7 +616,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `delete` method, on error
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteError(): void
@@ -758,7 +672,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `related` method
      *
      * @covers ::related()
-     *
      * @return void
      */
     public function testRelated(): void
@@ -780,7 +693,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `related` method on `new` object
      *
      * @covers ::related()
-     *
      * @return void
      */
     public function testRelatedNew(): void
@@ -798,7 +710,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `related` method, on error
      *
      * @covers ::related()
-     *
      * @return void
      */
     public function testRelatedError(): void
@@ -817,7 +728,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `resources` method
      *
      * @covers ::resources()
-     *
      * @return void
      */
     public function testResources(): void
@@ -839,7 +749,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `resources` method
      *
      * @covers ::resources()
-     *
      * @return void
      */
     public function testResourcesError(): void
@@ -887,7 +796,6 @@ class ModulesControllerTest extends BaseControllerTest
      * @param string $relation The relation to test
      * @param string $objectType The object type / endpoint
      * @param array $expected The expected data
-     *
      * @covers ::relationships()
      * @dataProvider relationshipsProvider()
      * @return void
@@ -919,7 +827,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `getSchemaForIndex` method with errors
      *
      * @covers ::getSchemaForIndex()
-     *
      * @return void
      */
     public function testGetSchemaForIndex(): void
@@ -966,7 +873,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `availableRelationshipsUrl` method
      *
      * @covers ::availableRelationshipsUrl()
-     *
      * @return void
      */
     public function testAvailableRelationshipsUrl(): void
