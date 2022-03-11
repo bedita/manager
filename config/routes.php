@@ -54,46 +54,46 @@ if (Configure::read('Maintenance')) {
     return;
 }
 
-$routes->scope('/', function (RouteBuilder $builder) {
+$routes->scope('/', function (RouteBuilder $routes) {
 
     // Reset & change password
-    $builder->connect(
+    $routes->connect(
         '/login/reset',
         ['controller' => 'Password', 'action' => 'reset'],
         ['_name' => 'password:reset']
     );
-    $builder->connect(
+    $routes->connect(
         '/login/change',
         ['controller' => 'Password', 'action' => 'change'],
         ['_name' => 'password:change']
     );
 
     // Login.
-    $builder->connect(
+    $routes->connect(
         '/login',
         ['controller' => 'Login', 'action' => 'login'],
         ['_name' => 'login']
     );
-    $builder->connect(
+    $routes->connect(
         '/logout',
         ['controller' => 'Login', 'action' => 'logout'],
         ['_name' => 'logout']
     );
 
     // Dashboard.
-    $builder->connect(
+    $routes->connect(
         '/',
         ['controller' => 'Dashboard', 'action' => 'index'],
         ['_name' => 'dashboard']
     );
-    $builder->connect(
+    $routes->connect(
         '/dashboard/messages',
         ['controller' => 'Dashboard', 'action' => 'messages'],
         ['_name' => 'dashboard:messages']
     );
 
     // Admin.
-    $builder->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
+    $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
 
         foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles'] as $controller) {
             // Routes connected here are prefixed with '/admin'
@@ -130,19 +130,19 @@ $routes->scope('/', function (RouteBuilder $builder) {
     });
 
     // Profile.
-    $builder->connect(
+    $routes->connect(
         '/user_profile',
         ['controller' => 'UserProfile', 'action' => 'view'],
         ['_name' => 'user_profile:view']
     );
-    $builder->connect(
+    $routes->connect(
         '/user_profile/save',
         ['controller' => 'UserProfile', 'action' => 'save'],
         ['_name' => 'user_profile:save']
     );
 
     // Model.
-    $builder->prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
+    $routes->prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
         foreach (['object_types', 'property_types', 'relations', 'categories', 'tags'] as $controller) {
             // Routes connected here are prefixed with '/model'
@@ -181,58 +181,58 @@ $routes->scope('/', function (RouteBuilder $builder) {
     });
 
     // Import.
-    $builder->connect(
+    $routes->connect(
         '/import',
         ['controller' => 'Import', 'action' => 'index'],
         ['_name' => 'import:index']
     );
-    $builder->connect(
+    $routes->connect(
         '/import/file',
         ['controller' => 'Import', 'action' => 'file', '_method' => 'POST'],
         ['_name' => 'import:file']
     );
-    $builder->connect(
+    $routes->connect(
         '/import/jobs',
         ['controller' => 'Import', 'action' => 'jobs'],
         ['_name' => 'import:jobs']
     );
 
     // Trash.
-    $builder->connect(
+    $routes->connect(
         '/trash',
         ['controller' => 'Trash', 'action' => 'index', '_method' => 'GET'],
         ['_name' => 'trash:list']
     );
-    $builder->connect(
+    $routes->connect(
         '/trash/view/{id}',
         ['controller' => 'Trash', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'trash:view']
     );
-    $builder->connect(
+    $routes->connect(
         '/trash/restore',
         ['controller' => 'Trash', 'action' => 'restore'],
         ['_name' => 'trash:restore']
     );
-    $builder->connect(
+    $routes->connect(
         '/trash/delete',
         ['controller' => 'Trash', 'action' => 'delete'],
         ['_name' => 'trash:delete']
     );
-    $builder->connect(
+    $routes->connect(
         '/trash/empty',
         ['controller' => 'Trash', 'action' => 'empty'],
         ['_name' => 'trash:empty']
     );
 
     // view resource by id / uname
-    $builder->connect(
+    $routes->connect(
         '/view/{id}',
         ['controller' => 'Modules', 'action' => 'uname'],
         ['pass' => ['id'], '_name' => 'modules:uname']
     );
 
     // API proxy
-    $builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
+    $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
         $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
         $routes->post('/**', ['controller' => 'Api', 'action' => 'post'], 'post');
         $routes->patch('/**', ['controller' => 'Api', 'action' => 'patch'], 'patch');
@@ -240,162 +240,162 @@ $routes->scope('/', function (RouteBuilder $builder) {
     });
 
     // Modules.
-    $builder->connect(
+    $routes->connect(
         '/{object_type}',
         ['controller' => 'Modules', 'action' => 'index'],
         ['_name' => 'modules:list']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/new',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/categories',
         ['controller' => 'Modules', 'action' => 'listCategories'],
         ['_name' => 'modules:categories:index']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/categories/save',
         ['controller' => 'Modules', 'action' => 'saveCategory'],
         ['_name' => 'modules:categories:save']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/categories/remove/{id}',
         ['controller' => 'Modules', 'action' => 'removeCategory'],
         ['_name' => 'modules:categories:remove', 'pass' => ['id']]
     );
 
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}',
         ['controller' => 'Modules', 'action' => 'view'],
         ['pass' => ['id'], '_name' => 'modules:view']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}/history/{historyId}',
         ['controller' => 'History', 'action' => 'restore'],
         ['pass' => ['id', 'historyId'], '_name' => 'history:restore']
     );
     // Translations
-    $builder->connect(
+    $routes->connect(
         '/translations',
         ['controller' => 'Translations', 'action' => 'index'],
         ['_name' => 'translations:list']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/translation/save',
         ['controller' => 'Translations', 'action' => 'save'],
         ['_name' => 'translations:save']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/translation/delete',
         ['controller' => 'Translations', 'action' => 'delete'],
         ['_name' => 'translations:delete']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/translation/{id}/add',
         ['controller' => 'Translations', 'action' => 'add'],
         ['pass' => ['id'], '_name' => 'translations:add']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/translation/{id}/{lang}',
         ['controller' => 'Translations', 'action' => 'edit'],
         ['pass' => ['id', 'lang'], '_name' => 'translations:edit']
     );
     // Relations ...
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}/related/{relation}',
         ['controller' => 'Modules', 'action' => 'related'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:related']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}/relationships/{relation}',
         ['controller' => 'Modules', 'action' => 'relationships'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationships']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}/resources/{relation}',
         ['controller' => 'Modules', 'action' => 'resources'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:resources']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/view/{id}/relationData/{relation}',
         ['controller' => 'Modules', 'action' => 'relationData'],
         ['pass' => ['id', 'relation'], '_name' => 'modules:relationData']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/save',
         ['controller' => 'Modules', 'action' => 'save'],
         ['_name' => 'modules:save']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/clone/{id}',
         ['controller' => 'Modules', 'action' => 'clone'],
         ['pass' => ['id'], '_name' => 'modules:clone']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/clone/{id}/history/{historyId}',
         ['controller' => 'History', 'action' => 'clone'],
         ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/history/{id}',
         ['controller' => 'History', 'action' => 'info'],
         ['pass' => ['id'], '_name' => 'history:info']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/delete',
         ['controller' => 'Modules', 'action' => 'delete'],
         ['_name' => 'modules:delete']
     );
 
     // Export
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/export',
         ['controller' => 'Export', 'action' => 'export'],
         ['_name' => 'export:export']
     );
 
     // Download stream
-    $builder->get(
+    $routes->get(
         '/download/{id}',
         ['controller' => 'Download', 'action' => 'download'],
         'stream:download'
     )
     ->setPass(['id']);
 
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/bulkAttribute',
         ['controller' => 'Bulk', 'action' => 'attribute'],
         ['_name' => 'modules:bulkAttribute']
     );
 
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/bulkCategories',
         ['controller' => 'Bulk', 'action' => 'categories'],
         ['_name' => 'modules:bulkCategories']
     );
 
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/bulkPosition',
         ['controller' => 'Bulk', 'action' => 'position'],
         ['_name' => 'modules:bulkPosition']
     );
 
     // translator service
-    $builder->connect(
+    $routes->connect(
         '/translate',
         ['controller' => 'Translator', 'action' => 'translate'],
         ['_name' => 'translator:translate']
     );
 
     // lock and unlock objects
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/{id}/lock',
         ['controller' => 'Lock', 'action' => 'add'],
         ['_name' => 'lock:add']
     );
-    $builder->connect(
+    $routes->connect(
         '/{object_type}/{id}/unlock',
         ['controller' => 'Lock', 'action' => 'remove'],
         ['_name' => 'lock:remove']
