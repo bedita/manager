@@ -91,7 +91,7 @@ class ObjectTypesControllerTest extends TestCase
         foreach ($vars as $var) {
             static::assertNotEmpty($this->ModelController->viewVars[$var]);
         }
-        $objectTypeProperties = $this->ModelController->viewVars['objectTypeProperties'];
+        $objectTypeProperties = $this->ModelController->viewBuilder()->getVar('objectTypeProperties');
         static::assertNotEmpty($objectTypeProperties);
         static::assertArrayHasKey('inherited', $objectTypeProperties);
         static::assertArrayHasKey('core', $objectTypeProperties);

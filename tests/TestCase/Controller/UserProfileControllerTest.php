@@ -119,9 +119,9 @@ class UserProfileControllerTest extends TestCase
         $this->UserProfileController->apiClient = $apiClient;
         $this->UserProfileController->view();
 
-        static::assertNotEmpty($this->UserProfileController->viewVars['schema']);
-        static::assertEmpty($this->UserProfileController->viewVars['object']);
-        static::assertNotEmpty($this->UserProfileController->viewVars['properties']);
+        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('schema'));
+        static::assertEmpty($this->UserProfileController->viewBuilder()->getVar('object'));
+        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('properties'));
     }
 
     /**

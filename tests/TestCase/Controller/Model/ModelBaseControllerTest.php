@@ -157,8 +157,8 @@ class ModelBaseControllerTest extends TestCase
     {
         $this->ModelController->dispatchEvent('Controller.beforeRender');
 
-        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
-        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('resourceType'));
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('moduleLink'));
     }
 
     /**

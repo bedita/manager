@@ -180,7 +180,7 @@ class AdministrationBaseControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
@@ -193,7 +193,7 @@ class AdministrationBaseControllerTest extends TestCase
         };
 
         $this->AdministrationBaseController->index();
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayNotHasKey($expectedKey, $viewVars);
         }

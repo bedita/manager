@@ -76,7 +76,7 @@ class TranslatorControllerTest extends TestCase
         );
         $this->controller->translate();
 
-        static::assertEquals('No translator engine is set in configuration', $this->controller->viewVars['error']);
+        static::assertEquals('No translator engine is set in configuration', $this->controller->viewBuilder()->getVar('error'));
     }
 
     /**
@@ -108,7 +108,7 @@ class TranslatorControllerTest extends TestCase
             ])
         );
         $this->controller->translate();
-        $actual = $this->controller->viewVars['translation'];
+        $actual = $this->controller->viewBuilder()->getVar('translation');
         $translator = new DummyTranslator();
         $expected = json_decode($translator->translate($texts, 'en', 'it'));
         static::assertEquals($actual, $expected->translation);

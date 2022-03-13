@@ -47,7 +47,7 @@ class AppViewTest extends TestCase
     public function testCustomElement(): void
     {
         $View = new AppView();
-        $View->viewVars['currentModule'] = ['name' => 'cats'];
+        $View->set('currentModule', ['name' => 'cats']);
         $result = $View->elementExists('Form/meta');
         static::assertTrue($result);
 

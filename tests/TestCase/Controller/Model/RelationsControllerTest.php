@@ -89,7 +89,7 @@ class RelationsControllerTest extends TestCase
     public function testIndex(): void
     {
         $this->Relations->index();
-        $actual = $this->Relations->viewVars['resources'];
+        $actual = $this->Relations->viewBuilder()->getVar('resources');
         static::assertTrue(is_array($actual));
     }
 

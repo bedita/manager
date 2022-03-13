@@ -393,7 +393,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->save();
 
         // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        static::assertArrayHasKey('error', $this->controller->viewBuilder()->getVars());
     }
 
     /**
@@ -426,7 +426,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->save();
 
         // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        static::assertArrayHasKey('error', $this->controller->viewBuilder()->getVars());
     }
 
     /**
@@ -668,7 +668,7 @@ class ModulesControllerTest extends BaseControllerTest
         // do controller call
         $this->controller->related('new', 'has_media');
 
-        static::assertEquals([], $this->controller->viewVars['data']);
+        static::assertEquals([], $this->controller->viewBuilder()->getVar('data'));
     }
 
     /**
@@ -870,7 +870,7 @@ class ModulesControllerTest extends BaseControllerTest
     private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
-            static::assertArrayHasKey($varName, $this->controller->viewVars);
+            static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
     }
 

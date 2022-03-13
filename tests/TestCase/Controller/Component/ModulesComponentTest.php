@@ -678,7 +678,7 @@ class ModulesComponentTest extends TestCase
         $controller = $this->Modules->getController();
         $controller->dispatchEvent('Controller.startup');
 
-        $viewVars = $controller->viewVars;
+        $viewVars = $controller->viewBuilder()->getVars();
         static::assertArrayHasKey('project', $viewVars);
         static::assertEquals($project, $viewVars['project']);
         static::assertArrayHasKey('modules', $viewVars);
@@ -1278,7 +1278,7 @@ class ModulesComponentTest extends TestCase
     {
         $this->Modules->setupRelationsMeta($schema, $relationships, $order, $hidden, $readonly);
 
-        $viewVars = $this->Modules->getController()->viewVars;
+        $viewVars = $this->Modules->getController()->viewBuilder()->getVars();
 
         static::assertEquals(array_keys($expected), array_keys($viewVars));
 

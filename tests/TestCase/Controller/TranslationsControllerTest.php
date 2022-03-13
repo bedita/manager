@@ -547,7 +547,7 @@ class TranslationsControllerTest extends TestCase
     private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
-            static::assertArrayHasKey($varName, $this->controller->viewVars);
+            static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
     }
 }

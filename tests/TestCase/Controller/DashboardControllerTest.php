@@ -118,8 +118,8 @@ class DashboardControllerTest extends TestCase
 
         static::assertEquals(200, $response->getStatusCode());
         // recent items
-        static::assertArrayHasKey('recentItems', $this->Dashboard->viewVars);
-        static::assertEmpty($this->Dashboard->viewVars['recentItems']);
+        static::assertArrayHasKey('recentItems', $this->Dashboard->viewBuilder()->getVars());
+        static::assertEmpty($this->Dashboard->viewBuilder()->getVar('recentItems'));
     }
 
     /**

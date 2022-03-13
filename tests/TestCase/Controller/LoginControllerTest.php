@@ -179,7 +179,7 @@ class LoginControllerTest extends TestCase
 
         $response = $this->Login->login();
         static::assertNull($response);
-        $viewVars = $this->Login->viewVars;
+        $viewVars = $this->Login->viewBuilder()->getVars();
         static::assertArrayHasKey('projects', $viewVars);
         $expected = [
             [
