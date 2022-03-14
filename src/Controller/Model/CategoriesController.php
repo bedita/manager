@@ -37,7 +37,7 @@ class CategoriesController extends ModelBaseController
     protected $singleView = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

@@ -37,7 +37,7 @@ class RolesControllerTest extends TestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {

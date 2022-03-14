@@ -30,7 +30,7 @@ class TranslatorComponent extends Component
     protected $Translator = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(array $config): void
     {

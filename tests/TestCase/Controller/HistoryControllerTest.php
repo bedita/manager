@@ -37,7 +37,7 @@ class HistoryControllerTest extends TestCase
     private $documentId = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -64,7 +64,7 @@ class HistoryControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

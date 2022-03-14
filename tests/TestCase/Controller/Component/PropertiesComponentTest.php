@@ -34,7 +34,7 @@ class PropertiesComponentTest extends TestCase
     public $Properties;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -44,7 +44,7 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

@@ -32,7 +32,7 @@ class PermsHelperTest extends TestCase
     public $Perms;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {

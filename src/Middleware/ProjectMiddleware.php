@@ -55,6 +55,9 @@ class ProjectMiddleware implements MiddlewareInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $project = $this->detectProject($request);

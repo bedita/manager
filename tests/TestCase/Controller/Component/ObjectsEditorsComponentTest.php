@@ -23,7 +23,7 @@ class ObjectsEditorsComponentTest extends TestCase
     public $ObjectsEditors;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -38,7 +38,7 @@ class ObjectsEditorsComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

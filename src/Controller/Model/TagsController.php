@@ -38,7 +38,7 @@ class TagsController extends ModelBaseController
     protected $singleView = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -47,7 +47,7 @@ class TagsController extends ModelBaseController
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function index(): ?Response
     {

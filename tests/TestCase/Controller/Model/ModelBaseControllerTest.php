@@ -14,7 +14,6 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ModelBaseController;
-use App\Test\Utils\ModelController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -52,7 +51,7 @@ class ModelBaseControllerTest extends TestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -121,7 +120,6 @@ class ModelBaseControllerTest extends TestCase
      *
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
-     *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
      * @return void

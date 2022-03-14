@@ -38,7 +38,7 @@ class AppController extends Controller
     protected $apiClient = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -70,7 +70,7 @@ class AppController extends Controller
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeFilter(EventInterface $event): ?Response
     {

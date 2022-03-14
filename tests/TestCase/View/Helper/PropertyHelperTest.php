@@ -26,7 +26,7 @@ use Cake\View\View;
 class PropertyHelperTest extends TestCase
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {

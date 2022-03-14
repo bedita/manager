@@ -27,12 +27,12 @@ class ApplicationsController extends AdministrationBaseController
     protected $resourceType = 'applications';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $readonly = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $properties = ['name', 'text' => 'description', 'bool' => 'enabled'];
 }

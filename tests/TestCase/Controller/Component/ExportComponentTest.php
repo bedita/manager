@@ -22,7 +22,7 @@ class ExportComponentTest extends TestCase
     public $Export;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -32,7 +32,7 @@ class ExportComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

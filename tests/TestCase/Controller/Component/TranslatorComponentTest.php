@@ -34,7 +34,7 @@ class TranslatorComponentTest extends TestCase
     public $Translator;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

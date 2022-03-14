@@ -20,7 +20,7 @@ use Cake\Utility\Hash;
 class DashboardController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

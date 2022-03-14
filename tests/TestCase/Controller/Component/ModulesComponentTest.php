@@ -53,7 +53,7 @@ class ModulesComponentTest extends TestCase
     public $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -82,7 +82,7 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -208,7 +208,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `isAbstract()` method.
      *
-     * @param boolean $expected expected results from test
+     * @param bool $expected expected results from test
      * @param string $data setup data for test, object type
      * @dataProvider isAbstractProvider()
      * @covers ::isAbstract()
@@ -267,7 +267,7 @@ class ModulesComponentTest extends TestCase
      * Test `objectTypes()` method.
      *
      * @param array $expected expected results from test
-     * @param boolean|null $data setup data for test
+     * @param bool|null $data setup data for test
      * @dataProvider objectTypesProvider()
      * @covers ::objectTypes()
      * @return void

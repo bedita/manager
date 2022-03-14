@@ -26,7 +26,7 @@ class LoginController extends AppController
     use InstanceConfigTrait;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         // Projects configuration files base path
