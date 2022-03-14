@@ -170,7 +170,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     /**
      * @inheritDoc
      */
-    public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response)
+    public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response): AuthenticationService
     {
         $service = new AuthenticationService([
             'unauthenticatedRedirect' => '/login',
