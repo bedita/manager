@@ -52,9 +52,9 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "BEdita\\App\\Console\\Installer::postInstall",
-        "post-update-cmd": "BEdita\\App\\Console\\Installer::postInstall",
-        "post-create-project-cmd": "BEdita\\App\\Console\\Installer::postInstall",
+        "post-install-cmd": "App\\Console\\Installer::postInstall",
+        "post-create-project-cmd": "App\\Console\\Installer::postInstall",
+        "post-update-cmd": "App\\Console\\Installer::postInstall",
         "check": [
             "@test",
             "@cs-check"
