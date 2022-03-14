@@ -150,12 +150,16 @@ class AppController extends Controller
     protected function setupOutputTimezone(): void
     {
         $identity = $this->Authentication->getIdentity();
-        if ($identity) {
-            $timezone = $identity->get('timezone');
-            if ($timezone) {
-                Configure::write('I18n.timezone', $timezone);
-            }
+        if (!$identity) {
+            return;
         }
+
+        $timezone = $identity->get('timezone');
+        if (!$timezone) {
+            return;
+        }
+
+        Configure::write('I18n.timezone', $timezone);
     }
 
     /**
