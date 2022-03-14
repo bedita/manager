@@ -95,7 +95,7 @@ class UserProfileControllerTest extends TestCase
         $this->UserProfileController->view();
         $vars = ['schema', 'object', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->UserProfileController->viewVars[$var]);
+            static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar($var));
         }
     }
 

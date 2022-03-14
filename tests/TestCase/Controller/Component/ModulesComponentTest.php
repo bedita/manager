@@ -982,7 +982,7 @@ class ModulesComponentTest extends TestCase
     {
         // empty case
         $this->Modules->setDataFromFailedSave('', ['id' => 123]);
-        $actual = $this->Modules->getController()->request->getSession()->read('failedSave.123');
+        $actual = $this->Modules->getController()->getRequest()->getSession()->read('failedSave.123');
         static::assertEmpty($actual);
 
         // data and expected

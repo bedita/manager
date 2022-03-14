@@ -256,8 +256,9 @@ class AppControllerTest extends TestCase
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
 
         // assert user objects has been updated
-        static::assertArrayHasKey('user', $this->AppController->viewBuilder()->getVars());
-        static::assertEquals($updatedToken, $this->AppController->viewBuilder()->getVar('user']['tokens']);
+        $user = $this->AppController->viewBuilder()->getVar('user');
+        static::assertNotEmpty($user);
+        static::assertEquals($updatedToken, $user['tokens']);
     }
 
     /**

@@ -18,6 +18,7 @@ use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\Utils\ModulesControllerSample;
 use Cake\Http\ServerRequest;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\ModulesController} Test Case
@@ -557,7 +558,7 @@ class ModulesControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'ids' => $o['id'],
+                'ids' => (string)Hash::get($o, 'id'),
             ],
             'params' => [
                 'object_type' => 'documents',
