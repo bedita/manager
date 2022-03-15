@@ -9,7 +9,7 @@ namespace App\Test\Utils;
 class MyDummyImportFilter extends DummyImportFilter
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected static $serviceName = 'My.Dummy.Import.Service.Class';
 }

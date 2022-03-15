@@ -36,7 +36,7 @@ class ObjectsEditorsComponent extends Component
     public $concurrentCheckTime = 20000;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(array $config): void
     {

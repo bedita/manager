@@ -32,7 +32,7 @@ class CalendarHelperTest extends TestCase
     public $Calendar;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -43,7 +43,7 @@ class CalendarHelperTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

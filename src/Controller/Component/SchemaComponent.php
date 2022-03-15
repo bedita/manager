@@ -29,7 +29,7 @@ use Psr\Log\LogLevel;
 class SchemaComponent extends Component
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public $components = ['Flash'];
 
@@ -41,7 +41,7 @@ class SchemaComponent extends Component
     public const CACHE_CONFIG = '_schema_types_';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'type' => null, // resource or object type name

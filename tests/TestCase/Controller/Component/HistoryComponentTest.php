@@ -54,7 +54,7 @@ class HistoryComponentTest extends TestCase
     private $documentId = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -81,7 +81,7 @@ class HistoryComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

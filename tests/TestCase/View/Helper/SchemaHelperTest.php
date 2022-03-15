@@ -35,7 +35,7 @@ class SchemaHelperTest extends TestCase
     public $Schema;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -66,7 +66,7 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

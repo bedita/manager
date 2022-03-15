@@ -42,12 +42,12 @@ class ModulesComponent extends Component
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public $components = ['Authentication', 'Schema'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'currentModuleName' => null,

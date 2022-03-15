@@ -25,7 +25,7 @@ class ProjectConfigurationComponentTest extends TestCase
     public $ProjectConfiguration;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -38,7 +38,7 @@ class ProjectConfigurationComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

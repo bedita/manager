@@ -34,7 +34,7 @@ class ProjectMiddlewareTest extends TestCase
     protected $nextMiddleware;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -45,7 +45,7 @@ class ProjectMiddlewareTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

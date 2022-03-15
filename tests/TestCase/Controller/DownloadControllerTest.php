@@ -25,7 +25,7 @@ class DownloadControllerTest extends TestCase
     protected $apiClient = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -33,7 +33,7 @@ class DownloadControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
