@@ -14,7 +14,6 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ModelBaseController;
-use App\Test\Utils\ModelController;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
@@ -153,7 +152,6 @@ class ModelBaseControllerTest extends TestCase
      *
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
-     *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
      * @return void

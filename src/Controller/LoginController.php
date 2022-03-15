@@ -13,10 +13,8 @@
 namespace App\Controller;
 
 use App\Application;
-use BEdita\SDK\BEditaClientException;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
-use Psr\Log\LogLevel;
 
 /**
  * Perform basic login and logout operations.
