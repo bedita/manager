@@ -464,7 +464,6 @@ class ModulesControllerTest extends BaseControllerTest
     }
 
     /**
-     *
      * Data provider for `testSave` test case.
      *
      * @return array

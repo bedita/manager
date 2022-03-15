@@ -7,7 +7,6 @@ use Authentication\Controller\Component\AuthenticationComponent;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use Cake\Cache\Cache;
-use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
