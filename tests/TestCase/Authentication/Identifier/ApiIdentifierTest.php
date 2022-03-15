@@ -77,7 +77,6 @@ class ApiIdentifierTest extends TestCase
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
-     *
      * @covers ::identify()
      * @covers ::findIdentity()
      * @covers ::userTimezone()

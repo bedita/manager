@@ -59,7 +59,6 @@ class ProjectMiddleware
      * @param \Cake\Http\ServerRequest $request The request.
      * @param \Psr\Http\Message\ResponseInterface $response The response.
      * @param callable $next Callback to invoke the next middleware.
-     *
      * @return \Psr\Http\Message\ResponseInterface A response
      */
     public function __invoke(ServerRequest $request, ResponseInterface $response, $next): ResponseInterface
