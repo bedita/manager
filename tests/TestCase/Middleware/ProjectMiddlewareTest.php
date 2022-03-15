@@ -61,12 +61,20 @@ class ProjectMiddlewareTest extends TestCase
     public function invokeProvider(): array
     {
         return [
-            'test project' => [
+            'test session' => [
                 [
                     'name' => 'Test',
                 ],
                 [
                     '_project' => 'test',
+                ],
+            ],
+            'test request' => [
+                [
+                    'name' => 'Test',
+                ],
+                [
+                    'project' => 'test',
                 ],
             ],
             'no project' => [
@@ -94,6 +102,9 @@ class ProjectMiddlewareTest extends TestCase
     {
         $request = ServerRequestFactory::fromGlobals();
         $request->getSession()->write($data);
+        foreach ($data as $key => $value) {
+            $request = $request->withData($key, $value);
+        }
         $response = new Response();
         $app = new Application(CONFIG);
         $middleware = new ProjectMiddleware($app, TESTS . 'files' . DS . 'projects' . DS);

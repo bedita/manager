@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -10,7 +10,6 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
@@ -28,7 +27,7 @@ use Psr\Log\LogLevel;
 /**
  * Component to load available modules.
  *
- * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
@@ -45,7 +44,7 @@ class ModulesComponent extends Component
     /**
      * {@inheritDoc}
      */
-    public $components = ['Auth', 'Schema'];
+    public $components = ['Authentication', 'Schema'];
 
     /**
      * {@inheritDoc}
@@ -69,14 +68,15 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
-        if (empty($this->Auth->user('id'))) {
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
 
             return;
         }
 
         if ($this->getConfig('clearHomeCache')) {
-            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+            Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
         $modules = $this->getModules();
@@ -102,8 +102,9 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
+            $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
-                sprintf('home_%d', $this->Auth->user('id')),
+                sprintf('home_%d', $user->get('id')),
                 function () {
                     return ApiClientProvider::getApiClient()->get('/home');
                 }
@@ -163,8 +164,12 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
-        $user = $this->getController()->Auth->user();
-        $roles = (array)Hash::get($user, 'roles');
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || empty($user->getOriginalData())) {
+            return;
+        }
+
+        $roles = (array)$user->get('roles');
         $hidden = [];
         $readonly = [];
         foreach ($roles as $role) {

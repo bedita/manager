@@ -72,8 +72,8 @@ class ProjectMiddleware
     }
 
     /**
-     * Detect project in use from session, if any
-     * On empty session or missing project name `null` is returned
+     * Detect project in use from session or request, if any.
+     * On empty session or request, or missing project name, `null` is returned.
      *
      * @param \Cake\Http\ServerRequest $request The request.
      * @return string|null
@@ -82,6 +82,11 @@ class ProjectMiddleware
     {
         $session = $request->getSession();
         if (empty($session) || !$session->check('_project')) {
+            $project = $request->getData('project');
+            if (!empty($project)) {
+                return $project;
+            }
+
             return null;
         }
 

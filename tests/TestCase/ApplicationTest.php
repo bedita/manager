@@ -13,12 +13,20 @@
 namespace App\Test\TestCase;
 
 use App\Application;
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use Authentication\AuthenticationService;
+use Authentication\Authenticator\AuthenticatorInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\Resolver\ResolverInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
@@ -53,6 +61,7 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
         static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));
+        static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->get(6));
     }
 
     /**
@@ -105,5 +114,25 @@ class ApplicationTest extends TestCase
 
         Application::loadProjectConfig('test', $projectsPath);
         static::assertEquals('Test', Configure::read('Project.name'));
+    }
+
+    /**
+     * Test `getAuthenticationService` method.
+     *
+     * @return void
+     *
+     * @covers ::getAuthenticationService()
+     */
+    public function testGetAuthenticationService(): void
+    {
+        $app = new Application(CONFIG);
+        $authService = $app->getAuthenticationService(new ServerRequest(), new Response());
+        /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
+        $identifier = $authService->identifiers()->get(ApiIdentifier::class);
+        static::assertInstanceOf(AuthenticationService::class, $authService);
+        static::assertInstanceOf(IdentifierInterface::class, $identifier);
+        static::assertInstanceOf(ResolverInterface::class, $identifier->getResolver());
+        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Session'));
+        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Form'));
     }
 }
