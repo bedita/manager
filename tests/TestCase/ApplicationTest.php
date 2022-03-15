@@ -23,8 +23,8 @@ use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -120,7 +120,6 @@ class ApplicationTest extends TestCase
      * Test `getAuthenticationService` method.
      *
      * @return void
-     *
      * @covers ::getAuthenticationService()
      */
     public function testGetAuthenticationService(): void
