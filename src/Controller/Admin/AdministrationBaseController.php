@@ -67,7 +67,7 @@ abstract class AdministrationBaseController extends AppController
     protected $meta = ['created', 'modified'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

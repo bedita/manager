@@ -12,13 +12,12 @@ use App\Core\Result\ImportResult;
 class DummyImportFilter extends ImportFilter
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected static $serviceName = '';
 
     /**
      * @inheritDoc
-     *
      * @param string $filename The file name
      * @param string $filepath The file path
      * @param array $options The import options

@@ -33,7 +33,7 @@ class ImportController extends AppController
     protected $services = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeRender(Event $event): ?Response
     {

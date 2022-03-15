@@ -41,7 +41,7 @@ abstract class ModelBaseController extends AppController
     protected $singleView = true;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -194,7 +194,7 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeRender(Event $event): ?Response
     {

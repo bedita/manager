@@ -20,7 +20,7 @@ namespace App\Controller;
 class TranslatorController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

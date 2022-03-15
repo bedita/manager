@@ -27,7 +27,7 @@ class EndpointsController extends AdministrationBaseController
     protected $resourceType = 'endpoints';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $properties = ['name', 'description'];
 }

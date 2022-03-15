@@ -32,7 +32,7 @@ class ObjectTypesController extends ModelBaseController
     protected $resourceType = 'object_types';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function view($id): ?Response
     {

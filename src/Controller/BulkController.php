@@ -52,7 +52,7 @@ class BulkController extends AppController
     protected $errors = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
