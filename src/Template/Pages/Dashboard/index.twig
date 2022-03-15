@@ -1,37 +1,37 @@
-{{ _view.assign('title', __('Dashboard')) }}
+{% do _view.assign('title', __('Dashboard')) %}
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
 <dashboard q="{{ _view.getRequest().getSession().read('objects.filter.q') }}" inline-template>
     <div class="dashboard">
         <section class="dashboard-section">
             <div class="dashboard-items">
-            {% for name, module in modules if not in_array(name, ['trash', 'users']) %}
+            {% for name, module in modules %}
+                {% if not in_array(name, ['trash', 'users']) %}
+                    {# Special cases - set defaults on objects, publications, folders #}
+                    {% if name == 'objects' %}
+                        {% set module = {'label': __('All objects')}|merge(module) %}
+                    {% elseif name == 'publications' %}
+                        {% set module = {'class': 'icon-globe-1'}|merge(module) %}
+                    {% elseif name == 'folders' %}
+                        {% set module = {'class': 'icon-folder'}|merge(module) %}
+                    {% endif %}
 
-                {# Special cases - set defaults on objects, publications, folders #}
-                {% if name == 'objects' %}
-                    {% set module = {'label': __('All objects')}|merge(module) %}
-                {% elseif name == 'publications' %}
-                    {% set module = {'class': 'icon-globe-1'}|merge(module) %}
-                {% elseif name == 'folders' %}
-                    {% set module = {'class': 'icon-folder'}|merge(module) %}
+                    {% set title = Layout.tr(module.label|default(name)) %}
+
+                    {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
+                    {% if module.hints.multiple_types and not module.class %}
+                        {% set class = class ~ ' icon-th-large-1' %}
+                    {% endif %}
+
+                    {% if module.route %}
+                        {% set url = Url.build(module.route) %}
+                    {% else %}
+                        {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                    {% endif %}
+                    <a href="{{ url }}" class="{{ class }}">
+                        <span>{{ title }}</span>
+                    </a>
                 {% endif %}
-
-                {% set title = Layout.tr(module.label|default(name)) %}
-
-                {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
-                {% if module.hints.multiple_types and not module.class %}
-                    {% set class = class ~ ' icon-th-large-1' %}
-                {% endif %}
-
-                {% if module.route %}
-                    {% set url = Url.build(module.route) %}
-                {% else %}
-                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
-                {% endif %}
-                <a href="{{ url }}" class="{{ class }}">
-                    <span>{{ title }}</span>
-                </a>
-
             {% endfor %}
             </div>
         </section>

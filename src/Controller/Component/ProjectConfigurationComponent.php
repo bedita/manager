@@ -55,7 +55,7 @@ class ProjectConfigurationComponent extends Component
             Configure::write('Project.config', $config);
         } catch (BEditaClientException $e) {
             // Something bad happened
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

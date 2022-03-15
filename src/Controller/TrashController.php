@@ -27,6 +27,7 @@ class TrashController extends AppController
 {
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function initialize(): void
@@ -64,7 +65,7 @@ class TrashController extends AppController
             $response = $this->apiClient->getObjects('trash', $this->getRequest()->getQueryParams());
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'dashboard']);
@@ -95,7 +96,7 @@ class TrashController extends AppController
             $response = $this->apiClient->getObject($id, 'trash');
         } catch (BEditaClientException $e) {
             // Error! Back to index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
 
             return $this->redirect(['_name' => 'trash:list']);
@@ -132,7 +133,7 @@ class TrashController extends AppController
                 $this->apiClient->restoreObject($id, 'objects');
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
-                $this->log($e, LogLevel::ERROR);
+                $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                 if (!empty($this->getRequest()->getData('ids'))) {
@@ -168,7 +169,7 @@ class TrashController extends AppController
                 $this->apiClient->remove($id);
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
-                $this->log($e, LogLevel::ERROR);
+                $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                 if (!empty($this->getRequest()->getData('ids'))) {
@@ -221,7 +222,7 @@ class TrashController extends AppController
                     $counter++;
                 } catch (BEditaClientException $e) {
                     // Error! Back to trash index.
-                    $this->log($e, LogLevel::ERROR);
+                    $this->log($e->getMessage(), LogLevel::ERROR);
                     $this->Flash->error($e->getMessage(), ['params' => $e]);
 
                     return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());

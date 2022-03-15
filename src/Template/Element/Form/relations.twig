@@ -26,14 +26,15 @@
                         </span>
                 </header>
                 <div v-show="isOpen" class="tab-container">
-                    {% element 'Form/relation' {
+                    {{ element('Form/relation', {
                         'relationName': relationName,
                         'relationLabel': Layout.tr(relationLabel),
                         'relationSchema': relationsSchema[relationName],
                         'dataList': dataList,
+                        'readonly': relationsSchema[relationName].readonly,
                         'preCount': preCount,
                         'uploadableNum': uploadableNum,
-                    } %}
+                    }) }}
                 </div>
 
             </section>

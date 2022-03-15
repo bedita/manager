@@ -70,7 +70,6 @@ class UploadExceptionTest extends TestCase
      * Test `codeToMessage` method.
      *
      * @return void
-     *
      * @dataProvider codeToMessageProvider()
      * @covers ::codeToMessage()
      */

@@ -103,7 +103,6 @@ class PropertiesComponentTest extends TestCase
      * Test `indexList()` method.
      *
      * @return void
-     *
      * @covers ::indexList()
      */
     public function testIndexList(): void
@@ -123,7 +122,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filterList()` method.
      *
      * @return void
-     *
      * @covers ::filterList()
      */
     public function testFilterList(): void
@@ -145,7 +143,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filtersByType()` method.
      *
      * @return void
-     *
      * @covers ::filtersByType()
      */
     public function testFiltersByType(): void
@@ -172,10 +169,25 @@ class PropertiesComponentTest extends TestCase
     }
 
     /**
+     * Test `bulkList()` method.
+     *
+     * @return void
+     * @covers ::bulkList()
+     */
+    public function testBulkList(): void
+    {
+        Cache::clear();
+        $expected = ['cat', 'dog', 'horse'];
+        Configure::write('Properties.animals.bulk', $expected);
+        $this->createComponent();
+        $actual = $this->Properties->bulkList('animals');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `relationsList()` method.
      *
      * @return void
-     *
      * @covers ::relationsList()
      */
     public function testRelationsList(): void
@@ -188,6 +200,44 @@ class PropertiesComponentTest extends TestCase
         $this->createComponent();
 
         $list = $this->Properties->relationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
+     * Test `hiddenRelationsList()` method.
+     *
+     * @return void
+     * @covers ::hiddenRelationsList()
+     */
+    public function testHiddenRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._hide', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->hiddenRelationsList('cats');
+        static::assertEquals($index, $list);
+    }
+
+    /**
+     * Test `readonlyRelationsList()` method.
+     *
+     * @return void
+     * @covers ::readonlyRelationsList()
+     */
+    public function testReadonlyRelationsList(): void
+    {
+        Cache::clear();
+
+        $index = ['has_food', 'is_tired', 'sleeps_with'];
+        Configure::write('Properties.cats.relations._readonly', $index);
+
+        $this->createComponent();
+
+        $list = $this->Properties->readonlyRelationsList('cats');
         static::assertEquals($index, $list);
     }
 
@@ -425,7 +475,6 @@ class PropertiesComponentTest extends TestCase
      * @param string $type Object type.
      * @param array $config Properties configuration to write for $type
      * @return void
-     *
      * @dataProvider viewGroupsProvider()
      * @covers ::viewGroups()
      * @covers ::initialize()

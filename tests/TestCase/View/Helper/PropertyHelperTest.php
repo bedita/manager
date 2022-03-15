@@ -145,7 +145,6 @@ class PropertyHelperTest extends TestCase
      * @param array $schema The schema
      * @param string $expected The expected result
      * @return void
-     *
      * @dataProvider controlProvider()
      * @covers ::control()
      * @covers ::schema()
@@ -169,7 +168,6 @@ class PropertyHelperTest extends TestCase
      * Test `control` with parameter type, for "other" types schema controls
      *
      * @return void
-     *
      * @covers ::control()
      * @covers ::schema()
      */
@@ -261,7 +259,6 @@ class PropertyHelperTest extends TestCase
      * @param string $property The property
      * @param string $expected The expected value
      * @return void
-     *
      * @dataProvider valueProvider()
      * @covers ::value()
      */

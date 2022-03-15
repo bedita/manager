@@ -3,7 +3,6 @@ return [
     /**
      * Default properties schema for internal resources.
      * Schema properties are described using JSON Schema.
-     *
      */
     'SchemaProperties' => [
 
@@ -222,6 +221,36 @@ return [
                 'title' => 'Type',
                 'description' => '',
                 'enum' => [],
+            ],
+        ],
+
+        // model/tags
+        'tags' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Tag name',
+            ],
+            'label' => [
+                'type' => 'string',
+                '$id' => '/properties/label',
+                'title' => 'Label',
+                'description' => 'Tag label',
+            ],
+            'enabled' => [
+                'type' => 'boolean',
+                '$id' => '/properties/enabled',
+                'title' => 'Enabled',
+                'description' => '',
+                'default' => true,
             ],
         ],
 

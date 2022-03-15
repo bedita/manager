@@ -1,6 +1,6 @@
 {% do _view.assign('title', currentModule.name|humanize) %}
 
-{% element 'Modules/index_header' %}
+{{ element('Modules/index_header') }}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
 
@@ -11,11 +11,11 @@
         <div class="table-container">
             <div class="list-objects">
                 {% if objects %}
-                    {% element 'Modules/index_table_header' { 'refObject': objects[0] } %}
+                    {{ element('Modules/index_table_header', { 'refObject': objects[0] }) }}
                 {% endif %}
 
                 {% for object in objects %}
-                    {% element 'Modules/index_table_row' { 'object': object, 'isTrash': true } %}
+                    {{ element('Modules/index_table_row', { 'object': object, 'isTrash': true }) }}
                 {% else %}
                     {{ __('No items found') }}
                 {% endfor %}
@@ -36,14 +36,14 @@
                         'class': 'mr-1'
                     })|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {{ Form.unlockField('ids') }}
+                        {% do Form.unlockField('ids') %}
                         <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}
                 {% if (objects) and Perms.canDelete({type: objectType}) %}
                     {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {{ Form.unlockField('ids') }}
+                        {% do Form.unlockField('ids') %}
                         <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}

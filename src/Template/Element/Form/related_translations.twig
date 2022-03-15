@@ -50,7 +50,7 @@
                                     :key="related.id"
                                     :class="containsId(removedRelated, related.id)? 'removed' : ''">
 
-                                    {% element 'Form/related_item' { 'translation': true } %}
+                                    {{ element('Form/related_item', { 'translation': true }) }}
 
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                             'name': 'relations[' ~ resourceName ~ '][removeRelated]',
                             'v-model': 'removedRelationsData'
                         })|raw }}
-                        {{ Form.unlockField('relations.' ~ resourceName ~ '.removeRelated')}}
+                        {% do Form.unlockField('relations.' ~ resourceName ~ '.removeRelated') %}
 
                     </div>
                 </relation-view>

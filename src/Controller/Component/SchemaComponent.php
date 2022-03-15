@@ -38,7 +38,7 @@ class SchemaComponent extends Component
      *
      * @var string
      */
-    const CACHE_CONFIG = '_schema_types_';
+    public const CACHE_CONFIG = '_schema_types_';
 
     /**
      * {@inheritDoc}
@@ -55,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(string $type = null, string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null)
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -66,7 +66,7 @@ class SchemaComponent extends Component
         }
 
         $schema = $this->loadWithRevision($type, $revision);
-        if ($schema !== false) {
+        if (!empty($schema)) {
             return $schema;
         }
 
@@ -81,7 +81,7 @@ class SchemaComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return false;
         }
@@ -110,15 +110,15 @@ class SchemaComponent extends Component
      * If cached revision don't match cache is removed.
      *
      * @param string $type Type to get schema for. By default, configured type is used.
-     * @param string $revision Schema revision.
-     * @return array|bool Cached schema if revision match, otherwise false
+     * @param string|null $revision Schema revision.
+     * @return array|null Cached schema if revision match, null otherwise
      */
-    protected function loadWithRevision(string $type, string $revision = null)
+    protected function loadWithRevision(string $type, ?string $revision = null): ?array
     {
         $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
-        if ($schema === false) {
-            return false;
+        if (empty($schema)) {
+            return null;
         }
         $cacheRevision = empty($schema['revision']) ? null : $schema['revision'];
         if ($revision === null || $cacheRevision === $revision) {
@@ -127,7 +127,7 @@ class SchemaComponent extends Component
         // remove from cache if revision don't match
         Cache::delete($key, self::CACHE_CONFIG);
 
-        return false;
+        return null;
     }
 
     /**
@@ -257,7 +257,7 @@ class SchemaComponent extends Component
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $schema = [];
         }
@@ -355,7 +355,7 @@ class SchemaComponent extends Component
                 self::CACHE_CONFIG
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

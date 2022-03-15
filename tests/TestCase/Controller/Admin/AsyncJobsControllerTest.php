@@ -7,17 +7,6 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * Test class
- *
- * @uses \App\Controller\Admin\AsyncJobsController
- */
-class JobsController extends AsyncJobsController
-{
-    protected $resourceType = 'async_jobs';
-    protected $properties = ['name'];
-}
-
-/**
  * {@see \App\Controller\Admin\AsyncJobsController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\AsyncJobsController
@@ -61,7 +50,11 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new JobsController($request);
+        $this->AsyncJobsController = new class ($request) extends AsyncJobsController
+        {
+            protected $resourceType = 'async_jobs';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

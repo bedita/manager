@@ -243,6 +243,24 @@ form {
     }
 }
 
+.tag-picker .vue-treeselect__control {
+    max-width: none;
+}
+
+.tag-picker .new-tag {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+
+    .input-container {
+        display: flex;
+
+        > input {
+            margin-right: 1rem;
+        }
+    }
+}
+
 .vue-treeselect__input {
     box-shadow: none !important;
     background: transparent !important;

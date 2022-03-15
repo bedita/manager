@@ -102,7 +102,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `view` failure method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testViewFail(): void

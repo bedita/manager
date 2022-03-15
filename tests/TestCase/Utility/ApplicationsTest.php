@@ -109,7 +109,7 @@ class ApplicationsTest extends TestCase
         $apiClient->method('get')
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
-        $expected = "dummy test";
+        $expected = 'dummy test';
         Applications::$applications = null;
         $actual = Applications::getName('3');
         static::assertEquals($expected, $actual);

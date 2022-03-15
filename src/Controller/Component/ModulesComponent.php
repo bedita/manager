@@ -111,7 +111,7 @@ class ModulesComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Returning an empty array instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }
@@ -375,7 +375,6 @@ class ModulesComponent extends Component
     /**
      * Check request data for upload and return true if upload is boht possible and needed
      *
-     *
      * @param array $requestData The request data
      * @return bool true if upload is possible and needed
      */
@@ -466,7 +465,7 @@ class ModulesComponent extends Component
         $timestamp = $session->read($timestampKey);
 
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if ($timestamp > strtotime("-5 minutes")) {
+        if ($timestamp > strtotime('-5 minutes')) {
             //  => merge with $object['attributes']
             $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
@@ -481,15 +480,17 @@ class ModulesComponent extends Component
      *
      * @param array $schema Relations schema.
      * @param array $relationships Object relationships.
-     * @param array $order order Ordered names inside 'main' and 'aside' keys.
+     * @param array $order Ordered names inside 'main' and 'aside' keys.
+     * @param array $hidden List of hidden relations.
+     * @param array $readonly List of readonly relations.
      * @return void
      */
-    public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
+    public function setupRelationsMeta(array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
         // relations between objects
-        $relationsSchema = $this->relationsSchema($schema, $relationships);
+        $relationsSchema = $this->relationsSchema($schema, $relationships, $hidden, $readonly);
         // relations between objects and resources
-        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), $hidden, self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
         $relationNames = array_keys($relationsSchema);
 
@@ -512,16 +513,22 @@ class ModulesComponent extends Component
      *
      * @param array $schema The schema
      * @param array $relationships The relationships
+     * @param array $hidden Hidden relationships
+     * @param array $readonly Readonly relationships
      * @return array
      */
-    protected function relationsSchema(array $schema, array $relationships): array
+    protected function relationsSchema(array $schema, array $relationships, array $hidden = [], array $readonly = []): array
     {
         $types = $this->objectTypes(false);
         sort($types);
-        $relationsSchema = array_intersect_key($schema, $relationships);
-        foreach ($relationsSchema as &$relSchema) {
+        $relationsSchema = array_diff_key(array_intersect_key($schema, $relationships), array_flip($hidden));
+
+        foreach ($relationsSchema as $relName => &$relSchema) {
             if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {
                 $relSchema['right'] = $types;
+            }
+            if (!empty($relationships[$relName]['readonly']) || in_array($relName, $readonly)) {
+                $relSchema['readonly'] = true;
             }
         }
 

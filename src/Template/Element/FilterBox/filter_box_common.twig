@@ -74,7 +74,6 @@
                             label=""
                             @change="onCategoryChange"
                         ></category-picker>
-                        {{ Form.unlockField('categories') }}
                     {% endfor %}
                 {% elseif schema %}
                     <category-picker
@@ -84,7 +83,6 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
-                    {{ Form.unlockField('categories') }}
                 {% endif %}
             </span>
 
@@ -92,7 +90,6 @@
                 <label>{{ __('Folder') }}</label>
 
                 <folder-picker label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
-                {{ Form.unlockField('folderSelected') }}
 
                 <span class="descendants-filter">
                     <label for="descendants">{{ __('Descendants') }}</label>

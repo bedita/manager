@@ -50,7 +50,6 @@ class ResultTest extends TestCase
      * @param mixed $expected Expected value
      * @param string $name Message name
      * @param string $msg Message string
-     *
      * @return void
      * @dataProvider addMessageProvider
      * @covers ::addMessage()
@@ -88,7 +87,6 @@ class ResultTest extends TestCase
      *
      * @param mixed $expected Expected value
      * @param string $name Counter name
-     *
      * @return void
      * @dataProvider incrementProvider
      * @covers ::increment()

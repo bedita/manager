@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-02-10 16:52:39 \n"
+"POT-Creation-Date: 2022-03-11 09:22:57 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -158,6 +158,9 @@ msgstr "Crea"
 msgid "Create a new category"
 msgstr "Crea nuova categoria"
 
+msgid "Create a new tag"
+msgstr "Crea nuovo tag"
+
 msgid "Create new"
 msgstr "Crea nuovo"
 
@@ -202,6 +205,9 @@ msgstr "Link diretto per ID o nome univoco"
 
 msgid "Discard"
 msgstr "Scarta"
+
+msgid "Do you really want to delete the category \"{0}\"?"
+msgstr "Vuoi davvero eliminare la categoria \"{0}\"?"
 
 msgid "Documents"
 msgstr "Documenti"
@@ -671,6 +677,9 @@ msgstr "Cognome"
 msgid "System users"
 msgstr "Utenti di sistema"
 
+msgid "Tags"
+msgstr "Tag"
+
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
@@ -968,26 +977,26 @@ msgstr "visualizza genitore"
 msgid "warning"
 msgstr "attenzione"
 
-#: src/Template/Layout/js/app/app.js:167
+#: src/Template/Layout/js/app/app.js:168
 #: src/Template/Layout/js/app/components/history/history.js:111
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
 
-#: src/Template/Layout/js/app/app.js:168
+#: src/Template/Layout/js/app/app.js:169
 #: src/Template/Layout/js/app/components/history/history.js:112
 msgid "copy"
 msgstr "copia"
 
-#: src/Template/Layout/js/app/app.js:455
+#: src/Template/Layout/js/app/app.js:463
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
 
-#: src/Template/Layout/js/app/app.js:457
+#: src/Template/Layout/js/app/app.js:475
 msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
-#: src/Template/Layout/js/app/app.js:465
+#: src/Template/Layout/js/app/app.js:486
 #: src/Template/Layout/js/app/components/history/history.js:101
 #: src/Template/Layout/js/app/pages/admin/index.js:16
 #: src/Template/Layout/js/app/pages/model/index.js:261
@@ -996,7 +1005,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 msgid "yes, proceed"
 msgstr "sì, prosegui"
 
-#: src/Template/Layout/js/app/app.js:474
+#: src/Template/Layout/js/app/app.js:495
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
@@ -1076,7 +1085,7 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr "Titolo"
@@ -1085,7 +1094,7 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr "Indirizzo"
@@ -1094,7 +1103,7 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -1106,7 +1115,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr "aggiungi nuovo"
@@ -1125,7 +1134,7 @@ msgstr "Rimosso"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"

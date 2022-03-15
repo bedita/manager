@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use Cake\Http\Response;
 
 /**
@@ -39,7 +38,7 @@ class HistoryController extends AppController
         $data = $response['data'];
         $meta = $response['meta'];
         $this->set(compact('data', 'meta'));
-        $this->set('_serialize', ['data', 'meta']);
+        $this->setSerialize(['data', 'meta']);
     }
 
     /**

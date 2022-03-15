@@ -32,6 +32,7 @@ export default {
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         History: () => import(/* webpackChunkName: "history" */'app/components/history/history'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
+        TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
     },
 
     props: {

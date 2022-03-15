@@ -2,21 +2,9 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\ConfigController;
-use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-/**
- * Test class
- *
- * @uses \App\Controller\Admin\ConfigController
- */
-class CfgController extends ConfigController
-{
-    protected $resourceType = 'config';
-    protected $properties = ['name'];
-}
 
 /**
  * {@see \App\Controller\Admin\ConfigController} Test Case
@@ -25,11 +13,6 @@ class CfgController extends ConfigController
  */
 class ConfigControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\Admin\CfgController
-     */
     public $CfgController;
 
     /**
@@ -49,7 +32,7 @@ class ConfigControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 
@@ -62,7 +45,11 @@ class ConfigControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->CfgController = new CfgController($request);
+        $this->CfgController = new class ($request) extends ConfigController
+        {
+            protected $resourceType = 'config';
+            protected $properties = ['name'];
+        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');

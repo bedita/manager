@@ -108,7 +108,6 @@ class SchemaComponentTest extends TestCase
      * @param string|null $type Type to get schema for.
      * @param array $config Component configuration.
      * @return void
-     *
      * @dataProvider getSchemaProvider()
      * @covers ::fetchSchema()
      * @covers ::getSchema()
@@ -229,12 +228,12 @@ class SchemaComponentTest extends TestCase
         $schema = $this->Schema->getSchema($type);
         $revision = $schema['revision'];
 
-        // false
+        // null
         $reflectionClass = new \ReflectionClass($this->Schema);
         $method = $reflectionClass->getMethod('loadWithRevision');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
-        static::assertFalse($actual);
+        static::assertNull($actual);
 
         // from cache
         Cache::enable();
@@ -249,7 +248,7 @@ class SchemaComponentTest extends TestCase
 
         // wrong revision
         $actual = $method->invokeArgs($this->Schema, [$type, '123456789']);
-        static::assertFalse($actual);
+        static::assertNull($actual);
 
         // disable cache
         Cache::disable();
@@ -605,7 +604,6 @@ class SchemaComponentTest extends TestCase
      * Test `descendants` method on abstract type
      *
      * @covers ::descendants()
-     *
      * @return void
      */
     public function testDescendants(): void

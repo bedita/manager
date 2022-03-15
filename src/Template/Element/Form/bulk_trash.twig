@@ -4,7 +4,7 @@
     'url': {'_name': 'modules:delete', 'object_type': objectType}
 })|raw}}
     <input type="hidden" name="ids" v-bind:value="selectedRows">
-    {{ Form.unlockField('ids') }}
+    {% do Form.unlockField('ids') %}
 
     <div class="fieldset">
         <button

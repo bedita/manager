@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Client;
@@ -21,7 +20,6 @@ use Cake\Utility\Hash;
 
 /**
  * Download Controller
- *
  */
 class DownloadController extends AppController
 {

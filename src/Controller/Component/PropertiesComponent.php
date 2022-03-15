@@ -139,7 +139,6 @@ class PropertiesComponent extends Component
      *
      * @param array  $object Object data to view
      * @param string $type   Object type
-     *
      * @return array
      */
     public function viewGroups(array $object, string $type): array
@@ -178,7 +177,6 @@ class PropertiesComponent extends Component
      * List properties to display in `index` view
      *
      * @param string $type Object type name
-     *
      * @return array
      */
     public function indexList(string $type): array
@@ -192,7 +190,6 @@ class PropertiesComponent extends Component
      * List of filter to display in `filter` view
      *
      * @param string $type Object type name
-     *
      * @return array
      */
     public function filterList(string $type): array
@@ -204,7 +201,6 @@ class PropertiesComponent extends Component
      * List of all filters, grouped by type, for passed `$types` list
      *
      * @param string[] $types List of types to get filters of
-     *
      * @return array
      */
     public function filtersByType(array $types): array
@@ -230,12 +226,11 @@ class PropertiesComponent extends Component
      * List of bulk actions to display in `index` view
      *
      * @param string $type Object type name
-     *
      * @return array
      */
     public function bulkList(string $type): array
     {
-        return $this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
+        return (array)$this->getConfig(sprintf('Properties.%s.bulk', $type), $this->defaultGroups['bulk']);
     }
 
     /**
@@ -243,11 +238,32 @@ class PropertiesComponent extends Component
      * Relations not included will be displayed after these.
      *
      * @param string $type Object type name
-     *
      * @return array
      */
     public function relationsList(string $type): array
     {
-        return $this->getConfig(sprintf('Properties.%s.relations', $type), []);
+        return (array)$this->getConfig(sprintf('Properties.%s.relations', $type), []);
+    }
+
+    /**
+     * List of hidden relations.
+     *
+     * @param string $type Object type name
+     * @return array
+     */
+    public function hiddenRelationsList(string $type): array
+    {
+        return (array)$this->getConfig(sprintf('Properties.%s.relations._hide', $type), []);
+    }
+
+    /**
+     * List of readonly relations.
+     *
+     * @param string $type Object type name
+     * @return array
+     */
+    public function readonlyRelationsList(string $type): array
+    {
+        return (array)$this->getConfig(sprintf('Properties.%s.relations._readonly', $type), []);
     }
 }

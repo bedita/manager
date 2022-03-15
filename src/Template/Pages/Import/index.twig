@@ -40,7 +40,7 @@
                                 {% for optionName,optionData in datum.options %}
                                 <div>
                                     <label>{{ optionData.label }}</label>
-                                    {{ Form.unlockField(optionName) }}
+                                    {% do Form.unlockField(optionName) %}
                                     {% if optionData.dataType == 'boolean' %}
                                         {{ Form.control(optionName, {
                                             'type': 'checkbox',

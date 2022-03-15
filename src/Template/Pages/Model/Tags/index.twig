@@ -1,0 +1,19 @@
+{% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+<div class="module-header">
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+</div>
+
+{{ element('Modules/index_header', {'hideFilter': 1}) }}
+
+<div class="module-index">
+    {{ element('Modules/index_tags', {
+        'saveAction': { '_name': 'model:save:tags' },
+        'removeAction': { '_name': 'model:remove:tags' }
+    }) }}
+
+    {{ element('Model/sidebar_links') }}
+</div>

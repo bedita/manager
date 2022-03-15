@@ -37,6 +37,7 @@ class UploadException extends Exception
 
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function __construct(?string $message, int $code, $previous = null)
@@ -47,8 +48,8 @@ class UploadException extends Exception
 
     /**
      * Php code to message for exception
-     * @see http://php.net/manual/en/features.file-upload.errors.php for details
      *
+     * @see http://php.net/manual/en/features.file-upload.errors.php for details
      * @param int $code The php code
      * @return string|null
      */

@@ -15,7 +15,6 @@ namespace App\Test\TestCase\Form;
 
 use App\Form\Form;
 use App\Form\Options;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -67,7 +66,6 @@ class FormTest extends TestCase
      * Test `getMethod` method exception 'not callable'
      *
      * @return void
-     *
      * @covers ::getMethod
      */
     public function testGetMethodNotCallable(): void

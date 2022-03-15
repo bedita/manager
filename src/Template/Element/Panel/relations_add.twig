@@ -24,7 +24,13 @@
 
             {% for type in Schema.rightTypes() %}
                 {% set prefix = '_fast_create_' ~ type ~ '_' %}
-                <form name="create-object" class="object-form fast-create" :disabled="saving" id="{{ type }}-form" v-if="object.type == '{{ type }}'">
+                {{ Form.create(null, {
+                    'name': 'create-object',
+                    'class': 'object-form fast-create',
+                    ':disable': 'saving',
+                    'id': type ~ '-form',
+                    'v-if': "object.type == '" ~ type ~ "'"
+                })|raw }}
                     {{ Form.control('upload_behavior', {
                         'id': 'url_behavior',
                         'type': 'hidden',
@@ -35,7 +41,7 @@
                         'type': 'hidden',
                         'v-bind:value': 'file'
                     }) | raw }}
-                    {{ Form.unlockField('upload_behavior')}}
+                    {% do Form.unlockField('upload_behavior') %}
 
                     <section class="fieldset mb-1">
                         <div class="container">
@@ -92,7 +98,7 @@
                     </section>
                     <button @click="createObject" type="button">{{ __('create') }}</button>
                     <button @click="resetForm">{{ __('reset') }}</button>
-                </form>
+                {{ Form.end()|raw }}
             {% endfor %}
         </div>
     </section>
@@ -126,14 +132,14 @@
 
                 inline-template
             >
-                {% element 'FilterBox/filter_box' %}
+                {{ element('FilterBox/filter_box') }}
             </filter-box-view>
         </div>
 
         <div class="px-1 shrinks">
             <div class="columns">
                 <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
-                    {% element 'Form/related_item' { 'add': true } %}
+                    {{ element('Form/related_item', { 'add': true }) }}
                 </div>
             </div>
         </div>
