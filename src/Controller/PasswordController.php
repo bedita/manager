@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2020 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -29,7 +29,7 @@ class PasswordController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Auth->allow(['reset', 'change']);
+        $this->Authentication->allowUnauthenticated(['reset', 'change']);
     }
 
     /**
@@ -39,9 +39,9 @@ class PasswordController extends AppController
     public function beforeFilter(EventInterface $event): ?Response
     {
         // if authenticated, redirect to dashboard
-        $tokens = $this->Auth->user('tokens');
-        if (!empty($tokens)) {
-            return $this->redirect('/dashboard');
+        $user = $this->Authentication->getIdentity();
+        if (!empty($user) && !empty($user->get('tokens'))) {
+            return $this->redirect(['_name' => 'dashboard']);
         }
 
         return null;
