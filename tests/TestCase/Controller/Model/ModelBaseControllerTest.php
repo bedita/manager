@@ -32,15 +32,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ModelBaseControllerTest extends TestCase
 {
-    /**
-     * @inheritDoc
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->loadRoutes();
-    }
-
     public $ModelController;
 
     /**
@@ -70,6 +61,7 @@ class ModelBaseControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
