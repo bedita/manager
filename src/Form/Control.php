@@ -79,6 +79,7 @@ class Control
      * Control for richtext
      *
      * @param mixed|null $value Property value.
+     * @param array $schema The schema.
      * @return array
      */
     public static function richtext($value, $schema): array
