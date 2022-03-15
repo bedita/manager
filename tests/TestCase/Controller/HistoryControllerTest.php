@@ -16,6 +16,15 @@ use Cake\Utility\Hash;
 class HistoryControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\HistoryController

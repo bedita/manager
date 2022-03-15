@@ -59,7 +59,9 @@ class ImportControllerTest extends TestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
         $this->apiClient = ApiClientProvider::getApiClient();
+        $this->loadRoutes();
     }
 
     /**

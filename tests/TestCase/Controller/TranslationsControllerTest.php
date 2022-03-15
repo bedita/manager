@@ -29,6 +29,15 @@ use Cake\Utility\Hash;
 class TranslationsControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test Translations controller
      *
      * @var App\Controller\TranslationsController

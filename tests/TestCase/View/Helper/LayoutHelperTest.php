@@ -27,6 +27,15 @@ use Cake\View\View;
 class LayoutHelperTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Data provider for `testIsDashboard` test case.
      *
      * @return array

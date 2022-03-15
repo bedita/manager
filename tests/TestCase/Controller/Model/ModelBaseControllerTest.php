@@ -32,6 +32,15 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ModelBaseControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     public $ModelController;
 
     /**

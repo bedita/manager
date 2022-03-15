@@ -28,6 +28,15 @@ use Cake\Utility\Hash;
  */
 class UserProfileControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     public $UserProfileController;
 
     /**

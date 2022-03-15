@@ -33,6 +33,15 @@ use Psr\Http\Message\ServerRequestInterface;
 class ModulesControllerTest extends BaseControllerTest
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test Modules controller
      *
      * @var \App\Test\Utils\ModulesControllerSample

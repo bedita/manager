@@ -28,6 +28,15 @@ use Cake\TestSuite\TestCase;
 class ObjectTypesControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\ModelController
