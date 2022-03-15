@@ -66,7 +66,7 @@ class SchemaComponent extends Component
         }
 
         $schema = $this->loadWithRevision($type, $revision);
-        if ($schema !== false) {
+        if (!empty($schema)) {
             return $schema;
         }
 
@@ -111,14 +111,14 @@ class SchemaComponent extends Component
      *
      * @param string $type Type to get schema for. By default, configured type is used.
      * @param string|null $revision Schema revision.
-     * @return array|bool Cached schema if revision match, otherwise false
+     * @return array|null Cached schema if revision match, null otherwise
      */
-    protected function loadWithRevision(string $type, ?string $revision = null)
+    protected function loadWithRevision(string $type, ?string $revision = null): ?array
     {
         $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
-        if ($schema === false) {
-            return false;
+        if (empty($schema)) {
+            return null;
         }
         $cacheRevision = empty($schema['revision']) ? null : $schema['revision'];
         if ($revision === null || $cacheRevision === $revision) {
@@ -127,7 +127,7 @@ class SchemaComponent extends Component
         // remove from cache if revision don't match
         Cache::delete($key, self::CACHE_CONFIG);
 
-        return false;
+        return null;
     }
 
     /**
