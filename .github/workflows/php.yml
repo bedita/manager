@@ -50,18 +50,6 @@ jobs:
       - name: 'Install dependencies with Composer'
         run: 'composer install --prefer-dist --no-interaction'
 
-      - name: 'Setup PHP CodeSniffer - installed_paths'
-        run: |
-          vendor/bin/phpcs --config-set installed_paths vendor/cakephp/cakephp-codesniffer
-
-      - name: 'Setup PHP CodeSniffer - default_standard CakePHP'
-        run: |
-          vendor/bin/phpcs --config-set default_standard CakePHP
-
-      - name: 'Setup PHP CodeSniffer - colors'
-        run: |
-          vendor/bin/phpcs --config-set colors 1
-
       - name: 'Run PHP CodeSniffer'
         run: |
           vendor/bin/phpcs -n -p --extensions=php ./config ./src ./tests
