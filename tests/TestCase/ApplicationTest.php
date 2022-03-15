@@ -19,7 +19,6 @@ use Authentication\AuthenticationService;
 use Authentication\Authenticator\AuthenticatorInterface;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identifier\Resolver\ResolverInterface;
-use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
