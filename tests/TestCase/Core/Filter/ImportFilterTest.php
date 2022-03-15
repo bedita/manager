@@ -78,7 +78,7 @@ class ImportFilterTest extends TestCase
     /**
      * Test create async job
      *
-     * @param \App\Core\Filter\ImportFilter $importFilter The import filter
+     * @param string $filterClassName The import filter class name
      * @param string $filename The file name
      * @param string $filepath The file path
      * @param array $options The async job options
@@ -94,7 +94,8 @@ class ImportFilterTest extends TestCase
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
         }
-        $actual = $filterClassName->createAsyncJob($filename, $filepath, $options);
+        $filter = new $filterClassName();
+        $actual =  $filter->createAsyncJob($filename, $filepath, $options);
         static::assertEquals(get_class($expected), get_class($actual));
         static::assertNotEmpty($actual->info);
     }
