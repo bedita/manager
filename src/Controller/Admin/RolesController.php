@@ -20,22 +20,22 @@ namespace App\Controller\Admin;
 class RolesController extends AdministrationBaseController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $endpoint = '/roles';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $resourceType = 'roles';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $readonly = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $properties = ['name', 'text' => 'description'];
 }

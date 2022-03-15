@@ -31,17 +31,17 @@ class ConfigController extends AdministrationBaseController
     protected $resourceType = 'config';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $readonly = false;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $properties = ['name', 'context', 'json' => 'content', 'applications' => 'application_id'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeFilter(Event $event): ?Response
     {

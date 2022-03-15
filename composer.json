@@ -60,19 +60,16 @@
             "@test",
             "@cs-check"
         ],
+        "analyze": "vendor/bin/phpstan analyse src plugins/*/*/src",
         "cs-setup": [
             "vendor/bin/phpcs --config-set installed_paths vendor/cakephp/cakephp-codesniffer",
             "vendor/bin/phpcs --config-set default_standard CakePHP",
             "vendor/bin/phpcs --config-set colors 1"
         ],
-        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
-        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config",
+        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p ./src ./tests ./config",
+        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors ./src ./tests ./config",
         "test": "vendor/bin/phpunit --colors=always",
-        "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage",
-        "update-dev": [
-            "@composer update",
-            "@cs-setup"
-        ]
+        "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage"
     },
     "prefer-stable": true,
     "config": {

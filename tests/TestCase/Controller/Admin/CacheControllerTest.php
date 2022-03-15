@@ -21,7 +21,7 @@ class CacheControllerTest extends TestCase
     public $Cache;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class CacheControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

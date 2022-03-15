@@ -35,7 +35,7 @@ use Cake\Utility\Hash;
 class AppView extends TwigView
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

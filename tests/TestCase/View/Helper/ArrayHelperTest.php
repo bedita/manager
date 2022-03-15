@@ -32,7 +32,7 @@ class ArrayHelperTest extends TestCase
     public $Array;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -43,7 +43,7 @@ class ArrayHelperTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

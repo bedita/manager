@@ -26,7 +26,7 @@ use Psr\Log\LogLevel;
 class UserProfileController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
