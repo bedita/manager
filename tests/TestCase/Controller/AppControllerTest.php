@@ -39,6 +39,15 @@ use Psr\Http\Message\ServerRequestInterface;
 class AppControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\AppController

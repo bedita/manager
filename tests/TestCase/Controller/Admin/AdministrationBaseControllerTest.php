@@ -52,6 +52,7 @@ class AdministrationBaseControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);

@@ -20,6 +20,15 @@ use ReflectionProperty;
 class BulkControllerTest extends BaseControllerTest
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Setup controller to test with request config
      *
      * @param array|null $requestConfig
