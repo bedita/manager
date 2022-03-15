@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2019 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -12,21 +12,28 @@
  */
 namespace App;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application class.
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Default plugin options
@@ -49,6 +56,7 @@ class Application extends BaseApplication
         parent::bootstrap();
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
+        $this->addPlugin('Authentication');
     }
 
     /**
@@ -111,7 +119,10 @@ class Application extends BaseApplication
             ->add(new RoutingMiddleware($this))
 
             // Csrf Middleware
-            ->add($this->csrfMiddleware());
+            ->add($this->csrfMiddleware())
+
+            // Authentication middleware.
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -154,5 +165,37 @@ class Application extends BaseApplication
             Configure::config('projects', new PhpConfig($projectsPath));
             Configure::load($project, 'projects');
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService([
+            'unauthenticatedRedirect' => '/login',
+            'queryParam' => 'redirect',
+        ]);
+
+        $service->loadIdentifier(ApiIdentifier::class, [
+            'timezoneField' => 'timezone',
+        ]);
+
+        $service->loadAuthenticator('Authentication.Session', [
+            'sessionKey' => 'BEditaManagerAuth',
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_TOKEN => 'token',
+            ],
+        ]);
+        $service->loadAuthenticator('Authentication.Form', [
+            'loginUrl' => '/login',
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                'timezone' => 'timezone_offset',
+            ],
+        ]);
+
+        return $service;
     }
 }

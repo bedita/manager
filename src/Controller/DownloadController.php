@@ -26,7 +26,7 @@ class DownloadController extends AppController
     use InstanceConfigTrait;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         // HTTP client configuration

@@ -14,10 +14,15 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\DashboardController;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\DashboardController} Test Case
@@ -47,6 +52,33 @@ class DashboardControllerTest extends TestCase
             $request = new ServerRequest($config);
         }
         $this->Dashboard = new DashboardController($request);
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -173,6 +205,10 @@ class DashboardControllerTest extends TestCase
                 'REQUEST_METHOD' => 'GET',
             ],
         ]);
+
+        // Mock Authentication component
+        $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         // setup api
         $client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -180,7 +216,7 @@ class DashboardControllerTest extends TestCase
         $response = $client->authenticate($adminUser, $adminPassword);
         $client->setupTokens($response['meta']);
         // set auth user admin
-        $this->Dashboard->Auth->setUser(['id' => 1]);
+        $this->Dashboard->Authentication->setIdentity(new Identity(['id' => 1]));
         // call private method using AppControllerTest->invokeMethod
         $test = new AppControllerTest(new ServerRequest());
         $recentItems = $test->invokeMethod($this->Dashboard, 'recentItems', []);

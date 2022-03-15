@@ -13,13 +13,22 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\AppController;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -72,10 +81,50 @@ class AppControllerTest extends TestCase
         ];
         $this->setupController($config);
 
-        $user = $this->AppController->Auth->identify();
-        $this->AppController->Auth->setUser($user);
+        // Mock Authentication component
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
+        $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
+        $this->AppController->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData())));
+        $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
+        $this->AppController->Authentication->setIdentity($user);
 
-        return $user;
+        return $user->getOriginalData();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -91,7 +140,7 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
         static::assertNotEmpty($this->AppController->{'Security'});
-        static::assertNotEmpty($this->AppController->{'Auth'});
+        static::assertNotEmpty($this->AppController->{'Authentication'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
     }
@@ -105,6 +154,9 @@ class AppControllerTest extends TestCase
     public function testBeforeFilterLoginError(): void
     {
         $this->setupController();
+
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
@@ -128,7 +180,7 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        $expectedtokens = $this->AppController->Auth->user('tokens');
+        $expectedtokens = $this->AppController->Authentication->getIdentity()->get('tokens');
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
@@ -189,17 +241,9 @@ class AppControllerTest extends TestCase
         $this->setupController();
         $expected = 'GMT';
 
-        // mock for AuthComponent
-        $mockedAuthComponent = $this->getMockBuilder('AuthComponent')
-            ->setMethods(['user'])
-            ->getMock();
-
-        // moch for user method
-        $mockedAuthComponent->method('user')
-            ->with('timezone')
-            ->willReturn($expected);
-
-        $this->AppController->Auth = $mockedAuthComponent;
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
 
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
 
@@ -247,7 +291,7 @@ class AppControllerTest extends TestCase
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
 
-            // mocked getTokens method returns fake tokens
+        // mocked getTokens method returns fake tokens
         $apiClient->method('getTokens')
             ->willReturn($updatedToken);
 

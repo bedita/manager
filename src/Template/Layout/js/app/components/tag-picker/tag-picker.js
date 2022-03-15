@@ -106,7 +106,7 @@ export default {
             const json = await res.json();
             const tags = [...(json.data || [])];
 
-            const tagsOptions = tags?.map((tag) => ({ id: tag.id, label: tag.attributes.label })) || [];
+            const tagsOptions = tags?.map((tag) => ({ id: tag.attributes.name, label: tag.attributes.label })) || [];
 
             callback(null, tagsOptions);
         },

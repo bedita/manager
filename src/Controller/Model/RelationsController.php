@@ -30,7 +30,7 @@ class RelationsController extends ModelBaseController
     protected $resourceType = 'relations';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function index(): ?Response
     {
@@ -46,7 +46,7 @@ class RelationsController extends ModelBaseController
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function view($id): ?Response
     {

@@ -13,9 +13,17 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\LoginController;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\LoginController} Test Case
@@ -58,13 +66,69 @@ class LoginControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->Login = new LoginController($request);
+
+        // Mock Authentication component and prepare for "real" login
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));
+        $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest(), $this->Login->getResponse());
+        $this->Login->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData() ?: [])));
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
+    }
+
+    /**
+     * Test `initialize` method.
+     *
+     * @covers ::initialize()
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+
+        static::assertEquals(['login'], $this->Login->Authentication->getUnauthenticatedActions());
     }
 
     /**
      * Test `authRequest` method, no user timezone set
      *
      * @covers ::authRequest()
-     * @covers ::userTimezone()
      * @covers ::setupCurrentProject()
      * @return void
      */
@@ -98,30 +162,6 @@ class LoginControllerTest extends TestCase
 
         $response = $this->Login->login();
         static::assertNull($response);
-    }
-
-    /**
-     * Test `userTimezone` method
-     *
-     * @covers ::userTimezone()
-     * @return void
-     */
-    public function testLoginTimezone(): void
-    {
-        $this->setupController([
-            'post' => [
-                'username' => env('BEDITA_ADMIN_USR'),
-                'password' => env('BEDITA_ADMIN_PWD'),
-                'timezone_offset' => '7200 0',
-            ],
-        ]);
-
-        $response = $this->Login->login();
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('/', $response->getHeaderLine('Location'));
-
-        $tz = $this->Login->Auth->user('timezone');
-        static::assertNotEquals('UTC', $tz);
     }
 
     /**

@@ -17,8 +17,13 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\Utils\ModulesControllerSample;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\ModulesController} Test Case
@@ -45,11 +50,40 @@ class ModulesControllerTest extends BaseControllerTest
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
+        // Mock Authentication component
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // force modules load
-        $this->controller->Auth->setUser(['id' => 'dummy']);
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -431,7 +465,6 @@ class ModulesControllerTest extends BaseControllerTest
     }
 
     /**
-     *
      * Data provider for `testSave` test case.
      *
      * @return array

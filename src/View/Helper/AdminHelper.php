@@ -39,7 +39,7 @@ class AdminHelper extends Helper
     protected $options = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(array $config): void
     {

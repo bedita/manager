@@ -49,7 +49,7 @@ class AppView extends TwigView
     public const TYPE_LAYOUT = 'Layout';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

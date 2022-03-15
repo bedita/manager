@@ -52,9 +52,7 @@ jobs:
 
       - name: 'Run PHP CodeSniffer'
         run: |
-          vendor/bin/phpcs -n -p --extensions=php \
-            --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=/Migrations/,/Seeds/ \
-            ./config ./src ./tests ./config
+          vendor/bin/phpcs -n -p --extensions=php ./config ./src ./tests
 
   stan:
     name: 'Static code analyzer'

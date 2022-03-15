@@ -67,7 +67,7 @@ abstract class AdministrationBaseController extends AppController
     protected $meta = ['created', 'modified'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -88,7 +88,8 @@ abstract class AdministrationBaseController extends AppController
             return $res;
         }
 
-        $roles = $this->Auth->user('roles');
+        $user = $this->Authentication->getIdentity();
+        $roles = (array)$user->get('roles');
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }

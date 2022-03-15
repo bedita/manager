@@ -36,7 +36,7 @@ class ExportControllerTest extends TestCase
     public $Export;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -44,7 +44,7 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

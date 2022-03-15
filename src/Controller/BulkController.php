@@ -12,7 +12,6 @@
  */
 namespace App\Controller;
 
-use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -52,7 +51,7 @@ class BulkController extends AppController
     protected $errors = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

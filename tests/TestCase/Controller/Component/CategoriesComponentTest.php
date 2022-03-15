@@ -37,7 +37,7 @@ class CategoriesComponentTest extends TestCase
     public $Categories;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -47,7 +47,7 @@ class CategoriesComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
