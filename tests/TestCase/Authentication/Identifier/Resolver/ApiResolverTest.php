@@ -66,7 +66,6 @@ class ApiResolverTest extends TestCase
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
-     *
      * @covers ::find()
      * @dataProvider findProvider()
      */

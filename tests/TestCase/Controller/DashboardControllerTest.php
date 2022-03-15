@@ -14,7 +14,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\DashboardController;
-use App\Test\TestCase\Controller\AppControllerTest;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;

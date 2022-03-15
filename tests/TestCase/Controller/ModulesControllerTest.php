@@ -20,7 +20,6 @@ use App\Test\Utils\ModulesControllerSample;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
-use BEdita\SDK\BEditaClient;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
