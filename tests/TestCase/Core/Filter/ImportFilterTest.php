@@ -59,14 +59,14 @@ class ImportFilterTest extends TestCase
 
         return [
             'logic exception: service name not defined' => [
-                new DummyImportFilter(),
+                'App\Test\Utils\DummyImportFilter',
                 '',
                 '',
                 [],
                 new \LogicException('Cannot create async job without service name defined.'),
             ],
             'job to import file scheduled' => [
-                new MyDummyImportFilter(),
+                'App\Test\Utils\MyDummyImportFilter',
                 $filename,
                 sprintf('%s/tests/files/%s', getcwd(), $filename),
                 [],
