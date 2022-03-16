@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ExportComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
 use Cake\Controller\ComponentRegistry;
-use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**

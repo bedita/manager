@@ -16,7 +16,6 @@ use App\Application;
 use App\Middleware\ProjectMiddleware;
 use Cake\Core\Configure;
 use Cake\Http\MiddlewareQueue;
-use Cake\Http\Response;
 use Cake\Http\Runner;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;

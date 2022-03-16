@@ -28,7 +28,6 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
-use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
