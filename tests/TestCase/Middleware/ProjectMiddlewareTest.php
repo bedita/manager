@@ -96,7 +96,7 @@ class ProjectMiddlewareTest extends TestCase
      * @return void
      * @dataProvider invokeProvider
      * @covers ::__construct()
-     * @covers ::__invoke()
+     * @covers ::process()
      * @covers ::detectProject()
      */
     public function testInvoke($expected, $data): void
