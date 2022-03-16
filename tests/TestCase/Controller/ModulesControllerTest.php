@@ -694,7 +694,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->related($id, 'translations');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'data']);
+        $this->assertExpectedViewVars(['data']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -729,7 +730,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->related(12346789, 'translations');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'error']);
+        $this->assertExpectedViewVars(['error']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -750,7 +752,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->resources($id, 'documents');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'data']);
+        $this->assertExpectedViewVars(['data']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -768,7 +771,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->resources(123456789, 'dummies');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'error']);
+        $this->assertExpectedViewVars(['error']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -828,7 +832,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->relationships($id, $relation);
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**

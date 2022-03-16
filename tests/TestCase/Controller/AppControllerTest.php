@@ -102,7 +102,9 @@ class AppControllerTest extends TestCase
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
         $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
-        $this->AppController->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData())));
+        $identity = new Identity($result->getData());
+        $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
+        $this->AppController->setRequest($request);
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
 

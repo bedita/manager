@@ -1485,7 +1485,7 @@ class ModulesComponentTest extends TestCase
     public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
         static::assertEquals($expected, $actual);
     }
@@ -1757,7 +1757,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `saveRelated`
      *
-     * @param string $id Object ID
+     * @param int $id Object ID
      * @param string $type Object type
      * @param array $relatedData Related objects data
      * @param mixed $expected The expected result
@@ -1767,7 +1767,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::folderChildrenRelated()
      * @covers ::folderChildrenRemove()
      */
-    public function testSaveRelated(string $id, string $type, array $relatedData, $expected): void
+    public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));

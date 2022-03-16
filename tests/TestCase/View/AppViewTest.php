@@ -35,7 +35,7 @@ class AppViewTest extends TestCase
         $View = new AppView();
         $extensions = $View->getTwig()->getExtensions();
         static::assertNotEmpty($extensions);
-        static::assertArrayHasKey('bedita', $extensions);
+        static::assertArrayHasKey('BEdita\WebTools\View\Twig\BeditaTwigExtension', $extensions);
     }
 
     /**

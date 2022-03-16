@@ -339,7 +339,7 @@ class LayoutHelperTest extends TestCase
         $expected = [
             'base' => '',
             'currentModule' => ['name' => 'home'],
-            'template' => null,
+            'template' => '',
             'modules' => ['documents', 'images'],
             'plugins' => \App\Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],

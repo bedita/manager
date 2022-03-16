@@ -295,7 +295,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'boolean',
                 ],
                 'company',
-                true,
+                'true',
             ],
             'array multiple checkbox' => [
                 // expected result

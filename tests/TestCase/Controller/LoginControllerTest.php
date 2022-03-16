@@ -56,6 +56,15 @@ class LoginControllerTest extends TestCase
     ];
 
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Setup controller to test with request config
      *
      * @param array $requestConfig
@@ -78,7 +87,8 @@ class LoginControllerTest extends TestCase
         ]);
         $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));
         $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest(), $this->Login->getResponse());
-        $this->Login->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData() ?: [])));
+        $identity = new Identity($result->getData() ?: []);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('identity', $identity));
     }
 
     /**

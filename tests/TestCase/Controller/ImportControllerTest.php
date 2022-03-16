@@ -336,7 +336,7 @@ class ImportControllerTest extends TestCase
     {
         $this->setupController();
         $this->Import->jobs();
-        static::assertNotEmpty($this->Import->viewBuilder()->getVar('_serialize'));
+        static::assertNotEmpty($this->Import->viewBuilder()->getOption('serialize'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));

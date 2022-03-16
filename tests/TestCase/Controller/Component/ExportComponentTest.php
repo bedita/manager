@@ -151,7 +151,7 @@ class ExportComponentTest extends TestCase
     public function testColumn(int $number, string $expected): void
     {
         // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($this->Export, 'column', [$number]);
         static::assertEquals($expected, $actual);
     }
