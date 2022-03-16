@@ -27,6 +27,15 @@ use Cake\View\View;
 class LayoutHelperTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Data provider for `testIsDashboard` test case.
      *
      * @return array
@@ -330,7 +339,7 @@ class LayoutHelperTest extends TestCase
         $expected = [
             'base' => '',
             'currentModule' => ['name' => 'home'],
-            'template' => null,
+            'template' => '',
             'modules' => ['documents', 'images'],
             'plugins' => \App\Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],

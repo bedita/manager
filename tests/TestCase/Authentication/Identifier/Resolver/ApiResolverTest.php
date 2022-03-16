@@ -52,6 +52,35 @@ class ApiResolverTest extends TestCase
                 [
                     'attributes' => [
                         'username' => env('BEDITA_ADMIN_USR'),
+                        'name' => null,
+                        'surname' => null,
+                        'email' => null,
+                        'person_title' => null,
+                        'gender' => null,
+                        'birthdate' => null,
+                        'deathdate' => null,
+                        'company' => false,
+                        'company_name' => null,
+                        'company_kind' => null,
+                        'street_address' => null,
+                        'city' => null,
+                        'zipcode' => null,
+                        'country' => null,
+                        'state_name' => null,
+                        'phone' => null,
+                        'website' => null,
+                        'national_id_number' => null,
+                        'vat_number' => null,
+                        'pseudonym' => null,
+                        'status' => 'on',
+                        'uname' => 'bedita',
+                        'title' => null,
+                        'description' => null,
+                        'body' => null,
+                        'extra' => null,
+                        'lang' => 'eng',
+                        'publish_start' => null,
+                        'publish_end' => null,
                     ],
                     'id' => '1',
                     'tokens' => [],
@@ -86,12 +115,16 @@ class ApiResolverTest extends TestCase
             return;
         }
 
-        static::assertArraySubset($expected, $identity);
+        foreach ($expected as $key => $val) {
+            $this->assertEquals($val, $identity[$key]);
+        }
 
         // test renew token for successful cases
         $token = $identity['tokens']['renew'];
         $identity = $resolver->find(compact('token'));
 
-        static::assertArraySubset($expected, $identity);
+        foreach ($expected as $key => $val) {
+            $this->assertEquals($val, $identity[$key]);
+        }
     }
 }

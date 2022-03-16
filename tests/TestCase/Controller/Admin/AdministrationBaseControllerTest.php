@@ -52,6 +52,7 @@ class AdministrationBaseControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
@@ -215,7 +216,7 @@ class AdministrationBaseControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
@@ -228,7 +229,7 @@ class AdministrationBaseControllerTest extends TestCase
         };
 
         $this->AdministrationBaseController->index();
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayNotHasKey($expectedKey, $viewVars);
         }

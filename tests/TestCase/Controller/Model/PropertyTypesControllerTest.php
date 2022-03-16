@@ -201,7 +201,7 @@ class PropertyTypesControllerTest extends TestCase
 
         $this->ModelController->save();
 
-        $actualResponse = (array)Hash::get($this->ModelController->viewVars, $action);
+        $actualResponse = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), $action);
 
         if ($action == 'saved') {
             foreach ($actualResponse as &$element) {
@@ -211,7 +211,7 @@ class PropertyTypesControllerTest extends TestCase
         if (is_array($expectedResponse)) {
             $actualResponse = Hash::remove($actualResponse, '{n}.meta');
             if (!empty($expectedResponse['error'])) {
-                $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
+                $actualResponse = Hash::get($this->ModelController->viewBuilder()->getVars(), 'error');
                 $expectedResponse = $expectedResponse['error'];
             }
         }

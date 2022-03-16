@@ -39,6 +39,15 @@ use Psr\Http\Message\ServerRequestInterface;
 class AppControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\AppController
@@ -93,7 +102,9 @@ class AppControllerTest extends TestCase
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
         $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
-        $this->AppController->setRequest($result['request']->withAttribute('authentication', $service)->withAttribute('identity', new Identity($result['result']->getData())));
+        $identity = new Identity($result->getData());
+        $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
+        $this->AppController->setRequest($request);
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
 
@@ -264,10 +275,11 @@ class AppControllerTest extends TestCase
 
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
 
-        static::assertArrayHasKey('user', $this->AppController->viewVars);
-        static::assertArrayHasKey('tokens', $this->AppController->viewVars['user']);
-        static::assertArrayHasKey('jwt', $this->AppController->viewVars['user']['tokens']);
-        static::assertArrayHasKey('renew', $this->AppController->viewVars['user']['tokens']);
+        static::assertArrayHasKey('user', $this->AppController->viewBuilder()->getVars());
+        $user = $this->AppController->viewBuilder()->getVar('user');
+        static::assertArrayHasKey('tokens', $user);
+        static::assertArrayHasKey('jwt', $user['tokens']);
+        static::assertArrayHasKey('renew', $user['tokens']);
     }
 
     /**
@@ -299,8 +311,9 @@ class AppControllerTest extends TestCase
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
 
         // assert user objects has been updated
-        static::assertArrayHasKey('user', $this->AppController->viewVars);
-        static::assertEquals($updatedToken, $this->AppController->viewVars['user']['tokens']);
+        $user = $this->AppController->viewBuilder()->getVar('user');
+        static::assertNotEmpty($user);
+        static::assertEquals($updatedToken, $user['tokens']);
     }
 
     /**

@@ -99,9 +99,9 @@ class CategoriesControllerTest extends TestCase
     {
         $this->setupController();
         $this->Categories->index();
-        $resources = $this->Categories->viewVars['resources'];
-        $categoriesTree = $this->Categories->viewVars['categoriesTree'];
-        $schema = $this->Categories->viewVars['schema'];
+        $resources = $this->Categories->viewBuilder()->getVar('resources');
+        $categoriesTree = $this->Categories->viewBuilder()->getVar('categoriesTree');
+        $schema = $this->Categories->viewBuilder()->getVar('schema');
         static::assertTrue(is_array($resources));
         static::assertTrue(is_array($categoriesTree));
         static::assertTrue(is_array($schema));

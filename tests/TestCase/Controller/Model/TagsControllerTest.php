@@ -85,9 +85,9 @@ class TagsControllerTest extends TestCase
     {
         $this->setupController();
         $this->Tags->index();
-        $resources = $this->Tags->viewVars['resources'];
-        $tagsTree = $this->Tags->viewVars['tagsTree'];
-        $schema = $this->Tags->viewVars['schema'];
+        $resources = $this->Tags->viewBuilder()->getVar('resources');
+        $tagsTree = $this->Tags->viewBuilder()->getVar('tagsTree');
+        $schema = $this->Tags->viewBuilder()->getVar('schema');
         static::assertTrue(is_array($resources));
         static::assertTrue(is_array($tagsTree));
         static::assertTrue(is_array($schema));
