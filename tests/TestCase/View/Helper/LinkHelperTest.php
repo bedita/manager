@@ -38,12 +38,12 @@ class LinkHelperTest extends TestCase
     {
         $expected = 'http://localhost';
         $link = new LinkHelper(new View(null, null, null, []));
-        $link->webBaseUrl = 'http://localhost:80';
+        $link->setConfig('webBaseUrl', 'http://localhost:80');
         $actual = $link->baseUrl();
         static::assertEquals($expected, $actual);
 
         $expected = 'http://something';
-        $link->webBaseUrl = $expected;
+        $link->setConfig('webBaseUrl', $expected);
         $actual = $link->baseUrl();
         static::assertEquals($expected, $actual);
     }
@@ -85,8 +85,8 @@ class LinkHelperTest extends TestCase
     public function testFromAPI($apiBaseUrl, $webBaseUrl, $apiUrl, $expected): void
     {
         $link = new LinkHelper(new View(null, null, null, []));
-        $link->apiBaseUrl = $apiBaseUrl;
-        $link->webBaseUrl = $webBaseUrl;
+        $link->setConfig('apiBaseUrl', $apiBaseUrl);
+        $link->setConfig('webBaseUrl', $webBaseUrl);
         $result = $link->fromAPI($apiUrl);
         $this->expectOutputString($expected);
     }
@@ -253,7 +253,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [compact('page')]);
         $this->expectOutputString($expected);
         // call page method
@@ -296,7 +296,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [['page_size' => $pageSize]]);
         $this->expectOutputString($expected);
         // call page method
@@ -404,7 +404,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($link, 'replaceQueryParams', [$queryParams]);
         static::assertEquals($expected, $actual);
     }
@@ -590,7 +590,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
         // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($link, 'findFiles', [$filter, $extension]);
         if (empty($expected)) {
             static::assertEmpty($actual);
