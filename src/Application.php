@@ -54,6 +54,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function bootstrap(): void
     {
         parent::bootstrap();
+
+        if (PHP_SAPI === 'cli') {
+            $this->bootstrapCli();
+        }
+
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
         $this->addPlugin('Authentication');

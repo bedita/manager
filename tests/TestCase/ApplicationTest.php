@@ -69,6 +69,25 @@ class ApplicationTest extends TestCase
     }
 
     /**
+     * Test `bootstrap` method
+     *
+     * @return void
+     * @covers ::bootstrap()
+     * @covers ::bootstrapCli()
+     */
+    public function testBootstrap(): void
+    {
+        $app = new Application(CONFIG);
+        $app->bootstrap();
+
+        static::assertTrue($app->getPlugins()->has('Bake'));
+        static::assertTrue($app->getPlugins()->has('IdeHelper'));
+        static::assertTrue($app->getPlugins()->has('BEdita/WebTools'));
+        static::assertTrue($app->getPlugins()->has('BEdita/I18n'));
+        static::assertTrue($app->getPlugins()->has('Authentication'));
+    }
+
+    /**
      * Test `loadPluginsFromConfig` method
      *
      * @return void
