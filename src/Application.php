@@ -28,6 +28,7 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -170,7 +171,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     /**
      * @inheritDoc
      */
-    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    public function getAuthenticationService(ServerRequestInterface $request, ResponseInterface $response): AuthenticationServiceInterface
     {
         $service = new AuthenticationService([
             'unauthenticatedRedirect' => '/login',
