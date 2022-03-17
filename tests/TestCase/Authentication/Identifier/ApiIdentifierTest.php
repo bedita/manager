@@ -99,7 +99,8 @@ class ApiIdentifierTest extends TestCase
 
             return;
         }
-
-        static::assertArraySubset($expected, $identity);
+        foreach ($expected as $key => $val) {
+            $this->assertEquals($val, $identity[$key]);
+        }
     }
 }

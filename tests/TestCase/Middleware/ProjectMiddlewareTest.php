@@ -15,7 +15,8 @@ namespace App\Test\Middleware;
 use App\Application;
 use App\Middleware\ProjectMiddleware;
 use Cake\Core\Configure;
-use Cake\Http\Response;
+use Cake\Http\MiddlewareQueue;
+use Cake\Http\Runner;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
 
@@ -95,7 +96,7 @@ class ProjectMiddlewareTest extends TestCase
      * @return void
      * @dataProvider invokeProvider
      * @covers ::__construct()
-     * @covers ::__invoke()
+     * @covers ::process()
      * @covers ::detectProject()
      */
     public function testInvoke($expected, $data): void
@@ -105,10 +106,10 @@ class ProjectMiddlewareTest extends TestCase
         foreach ($data as $key => $value) {
             $request = $request->withData($key, $value);
         }
-        $response = new Response();
         $app = new Application(CONFIG);
         $middleware = new ProjectMiddleware($app, TESTS . 'files' . DS . 'projects' . DS);
-        $response = $middleware($request, $response, $this->nextMiddleware);
+        $runner = new Runner();
+        $runner->run(new MiddlewareQueue([$middleware]), $request);
 
         $project = Configure::read('Project');
         static::assertEquals($expected, $project);

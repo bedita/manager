@@ -77,7 +77,7 @@ class EndpointsControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->EndsController->viewVars;
+        $viewVars = (array)$this->EndsController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }

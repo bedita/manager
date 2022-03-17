@@ -14,7 +14,7 @@ namespace App\Controller\Model;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -60,7 +60,7 @@ abstract class ModelBaseController extends AppController
      *
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         $res = parent::beforeFilter($event);
         if ($res !== null) {
@@ -196,7 +196,7 @@ abstract class ModelBaseController extends AppController
     /**
      * @inheritDoc
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('resourceType', $this->resourceType);
         $this->set('moduleLink', ['_name' => 'model:list:' . $this->resourceType]);

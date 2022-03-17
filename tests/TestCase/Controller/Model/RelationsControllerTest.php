@@ -89,7 +89,7 @@ class RelationsControllerTest extends TestCase
     public function testIndex(): void
     {
         $this->Relations->index();
-        $actual = $this->Relations->viewVars['resources'];
+        $actual = $this->Relations->viewBuilder()->getVar('resources');
         static::assertTrue(is_array($actual));
     }
 
@@ -103,7 +103,7 @@ class RelationsControllerTest extends TestCase
     {
         $this->Relations->view(1);
         foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->viewVars[sprintf('%s_object_types', $side)];
+            $actual = $this->Relations->viewBuilder()->getVar(sprintf('%s_object_types', $side));
             static::assertTrue(is_array($actual));
         }
     }

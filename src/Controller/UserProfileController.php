@@ -13,7 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -40,7 +40,7 @@ class UserProfileController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'user_profile:view']);
 

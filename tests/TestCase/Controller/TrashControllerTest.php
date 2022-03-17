@@ -28,6 +28,15 @@ use Cake\TestSuite\TestCase;
 class TrashControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test controller
      *
      * @var App\Controller\TrashController

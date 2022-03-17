@@ -28,6 +28,15 @@ use Cake\Utility\Hash;
  */
 class UserProfileControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     public $UserProfileController;
 
     /**
@@ -95,7 +104,7 @@ class UserProfileControllerTest extends TestCase
         $this->UserProfileController->view();
         $vars = ['schema', 'object', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->UserProfileController->viewVars[$var]);
+            static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar($var));
         }
     }
 
@@ -119,9 +128,9 @@ class UserProfileControllerTest extends TestCase
         $this->UserProfileController->apiClient = $apiClient;
         $this->UserProfileController->view();
 
-        static::assertNotEmpty($this->UserProfileController->viewVars['schema']);
-        static::assertEmpty($this->UserProfileController->viewVars['object']);
-        static::assertNotEmpty($this->UserProfileController->viewVars['properties']);
+        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('schema'));
+        static::assertEmpty($this->UserProfileController->viewBuilder()->getVar('object'));
+        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('properties'));
     }
 
     /**

@@ -31,6 +31,15 @@ use Cake\Utility\Text;
 class PasswordControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\PasswordController

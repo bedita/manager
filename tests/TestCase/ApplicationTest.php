@@ -19,12 +19,11 @@ use Authentication\AuthenticationService;
 use Authentication\Authenticator\AuthenticatorInterface;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identifier\Resolver\ResolverInterface;
-use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -54,14 +53,19 @@ class ApplicationTest extends TestCase
 
         $middleware = new MiddlewareQueue();
         $middleware = $app->middleware($middleware);
+        $middleware->rewind();
 
-        static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
-        static::assertInstanceOf(ProjectMiddleware::class, $middleware->get(1));
-        static::assertInstanceOf(AssetMiddleware::class, $middleware->get(2));
-        static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
-        static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
-        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));
-        static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->get(6));
+        static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(ProjectMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(AssetMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(I18nMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(RoutingMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
     }
 
     /**
@@ -120,7 +124,6 @@ class ApplicationTest extends TestCase
      * Test `getAuthenticationService` method.
      *
      * @return void
-     *
      * @covers ::getAuthenticationService()
      */
     public function testGetAuthenticationService(): void

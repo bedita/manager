@@ -32,7 +32,7 @@ class CourtesyPageControllerTest extends TestCase
         $request = new ServerRequest($config);
         $controller = new CourtesyPageController($request);
         $controller->index();
-        $actual = $controller->viewVars['message'];
+        $actual = $controller->viewBuilder()->getVar('message');
         static::assertEquals($expected, $actual);
     }
 }

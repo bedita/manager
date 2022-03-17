@@ -19,9 +19,8 @@
  */
 
 use Cake\Core\Configure;
-use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
+use Cake\Routing\RouteBuilder;
 use Cake\Utility\Inflector;
 
 /**
@@ -41,7 +40,9 @@ use Cake\Utility\Inflector;
  * inconsistently cased URLs when used with `:plugin`, `:controller` and
  * `:action` markers.
  */
-Router::defaultRouteClass(DashedRoute::class);
+
+/** @var \Cake\Routing\RouteBuilder $routes */
+$routes->setRouteClass(DashedRoute::class);
 
 if (Configure::read('Maintenance')) {
     $routes->connect(
@@ -53,7 +54,7 @@ if (Configure::read('Maintenance')) {
     return;
 }
 
-Router::scope('/', function (RouteBuilder $routes) {
+$routes->scope('/', function (RouteBuilder $routes) {
 
     // Reset & change password
     $routes->connect(
@@ -92,7 +93,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     // Admin.
-    Router::prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
+    $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
 
         foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles'] as $controller) {
             // Routes connected here are prefixed with '/admin'
@@ -141,7 +142,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     // Model.
-    Router::prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
+    $routes->prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
 
         foreach (['object_types', 'property_types', 'relations', 'categories', 'tags'] as $controller) {
             // Routes connected here are prefixed with '/model'

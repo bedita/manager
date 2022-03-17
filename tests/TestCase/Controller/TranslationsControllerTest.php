@@ -19,6 +19,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\Uri;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
@@ -28,6 +29,15 @@ use Cake\Utility\Hash;
  */
 class TranslationsControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     /**
      * Test Translations controller
      *
@@ -426,8 +436,8 @@ class TranslationsControllerTest extends TestCase
      */
     public function testTypeFromUrl(): void
     {
-        $request = new ServerRequest($this->defaultRequestConfig);
-        $request = $request->withAttribute('here', '/documents/1/translation/lang');
+        $uri = new Uri('/documents/1/translation/lang');
+        $request = new ServerRequest($this->defaultRequestConfig + compact('uri'));
         $this->controller = new TranslationsController($request);
         $reflectionClass = new \ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
@@ -547,7 +557,7 @@ class TranslationsControllerTest extends TestCase
     private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
-            static::assertArrayHasKey($varName, $this->controller->viewVars);
+            static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
     }
 }

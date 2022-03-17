@@ -150,8 +150,8 @@ class DashboardControllerTest extends TestCase
 
         static::assertEquals(200, $response->getStatusCode());
         // recent items
-        static::assertArrayHasKey('recentItems', $this->Dashboard->viewVars);
-        static::assertEmpty($this->Dashboard->viewVars['recentItems']);
+        static::assertArrayHasKey('recentItems', $this->Dashboard->viewBuilder()->getVars());
+        static::assertEmpty($this->Dashboard->viewBuilder()->getVar('recentItems'));
     }
 
     /**
@@ -218,7 +218,7 @@ class DashboardControllerTest extends TestCase
         // set auth user admin
         $this->Dashboard->Authentication->setIdentity(new Identity(['id' => 1]));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $recentItems = $test->invokeMethod($this->Dashboard, 'recentItems', []);
         // at least 1 element (the admin user itself)
         static::assertGreaterThanOrEqual(1, count($recentItems));

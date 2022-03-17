@@ -82,7 +82,7 @@ class AsyncJobsControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AsyncJobsController->viewVars;
+        $viewVars = (array)$this->AsyncJobsController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }

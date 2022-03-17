@@ -24,13 +24,22 @@ class Plugin extends CakePlugin
 {
     /**
      * Loaded BE4Web application plugins
-     * Auxiliary system plugins like `DebugKit` and `TwigView` are exluded
+     * Auxiliary & internally loaded plugins like `DebugKit`, `Bake` and `TwigView` are exluded
      *
      * @return array
      */
     public static function loadedAppPlugins(): array
     {
-        $sysPlugins = ['Bake', 'DebugKit', 'BEdita/WebTools', 'BEdita/I18n', 'Migrations', 'WyriHaximus/TwigView'];
+        $sysPlugins = [
+            'Authentication',
+            'Bake',
+            'DebugKit',
+            'IdeHelper',
+            'BEdita/WebTools',
+            'BEdita/I18n',
+            'Migrations',
+            'Cake/TwigView',
+        ];
 
         return array_values(array_diff((array)static::loaded(), $sysPlugins));
     }

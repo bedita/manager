@@ -13,7 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -69,7 +69,7 @@ class ModulesController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('objectType', $this->objectType);
 
@@ -185,7 +185,8 @@ class ModulesController extends AppController
             $this->Properties->readonlyRelationsList($this->objectType)
         );
 
-        $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
+        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
+        $rightTypes = \App\Utility\Schema::rightTypes($rel);
 
         // set schemas for relations right types
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);

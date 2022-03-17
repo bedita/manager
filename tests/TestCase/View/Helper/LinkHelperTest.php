@@ -29,6 +29,15 @@ use Cake\View\View;
 class LinkHelperTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test `baseUrl`
      *
      * @return void

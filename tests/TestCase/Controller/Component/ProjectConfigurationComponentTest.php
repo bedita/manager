@@ -125,7 +125,7 @@ class ProjectConfigurationComponentTest extends TestCase
     public function testReadError(): void
     {
         Configure::write('Project.config', null);
-        Cache::clear(false, ProjectConfigurationComponent::CACHE_CONFIG);
+        Cache::clear(ProjectConfigurationComponent::CACHE_CONFIG);
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])

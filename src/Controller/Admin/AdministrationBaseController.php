@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -81,7 +81,7 @@ abstract class AdministrationBaseController extends AppController
      *
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         $res = parent::beforeFilter($event);
         if ($res !== null) {
