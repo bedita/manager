@@ -30,6 +30,8 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\Stream;
+use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -756,85 +758,23 @@ class ModulesComponentTest extends TestCase
      */
     public function uploadProvider(): array
     {
-        $name = 'test.png';
-        $file = getcwd() . sprintf('/tests/files/%s', $name);
-        $type = mime_content_type($file);
-        $error = UPLOAD_ERR_OK;
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
+        $file = new UploadedFile($filename, filesize($filename), 0, $filename);
+        $fileErr = new UploadedFile($filename, filesize($filename), 1, $filename);
+        $fileEmpty = new UploadedFile($filename, filesize($filename), 4, $filename);
 
         return [
             'no file' => [
                 [
-                    'file' => [],
+                    'file' => null,
                     'upload_behavior' => 'file',
                 ],
                 null,
                 false,
             ],
-            'file.name empty' => [
-                [
-                    'file' => ['a'] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.name'),
-                false,
-            ],
-            'file.name not a string' => [
-                [
-                    'file' => ['name' => 12345] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.name'),
-                false,
-            ],
-            'file.tmp_name (filepath) empty' => [
-                [
-                    'file' => ['name' => 'dummy.txt'] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.tmp_name'),
-                false,
-            ],
-            'file.tmp_name (filepath) not a string' => [
-                [
-                    'file' => [
-                        'name' => 'dummy.txt',
-                        'tmp_name' => 12345,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.tmp_name'),
-                false,
-            ],
-            'file.type empty' => [
-                [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.type'),
-                false,
-            ],
-            'file.type not a string' => [
-                [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => 12345,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.type'),
-                false,
-            ],
             'model-type empty' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
@@ -842,11 +782,7 @@ class ModulesComponentTest extends TestCase
             ],
             'model-type not a string' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'model-type' => 12345,
                     'upload_behavior' => 'file',
                 ],
@@ -855,11 +791,7 @@ class ModulesComponentTest extends TestCase
             ],
             'upload ok' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'model-type' => 'images',
                     'upload_behavior' => 'file',
                 ],
@@ -868,12 +800,7 @@ class ModulesComponentTest extends TestCase
             ],
             'generic upload error' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                        'error' => !UPLOAD_ERR_OK,
-                    ],
+                    'file' => $fileErr,
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
@@ -882,12 +809,7 @@ class ModulesComponentTest extends TestCase
             ],
             'save with empty file' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                        'error' => UPLOAD_ERR_NO_FILE,
-                    ],
+                    'file' => $fileEmpty,
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
@@ -969,16 +891,10 @@ class ModulesComponentTest extends TestCase
             static::assertArrayHasKey('id', $requestData);
 
             // test upload of another file to change stream
-            $name = 'test2.png';
-            $file = getcwd() . sprintf('/tests/files/%s', $name);
-            $type = mime_content_type($file);
+            $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+            $file = new UploadedFile($filename, filesize($filename), 0, $filename);
             $requestData = [
-                'file' => [
-                    'name' => $name,
-                    'tmp_name' => $file,
-                    'type' => $type,
-                    'error' => UPLOAD_ERR_OK,
-                ],
+                'file' => $file,
                 'model-type' => 'images',
                 'id' => $requestData['id'],
                 'upload_behavior' => 'file',
@@ -988,6 +904,68 @@ class ModulesComponentTest extends TestCase
         } else {
             static::assertFalse(isset($requestData['id']));
         }
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.name'
+     *
+     * @return void
+     * @covers ::upload()
+     * @covers ::checkRequestForUpload()
+     */
+    public function testUploadInvalidFormDataFileName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn(null);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.tmp_name'
+     *
+     * @return void
+     * @covers ::upload()
+     * @covers ::checkRequestForUpload()
+     */
+    public function testUploadInvalidFormDataFileTmpName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.tmp_name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $stream = $this->getMockBuilder(Stream::class)
+            ->setConstructorArgs([$filename])
+            ->getMock();
+        $stream->method('getMetadata')
+            ->with('uri')
+            ->willReturn(null);
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn($filename);
+        $uploadedFile->method('getStream')
+            ->willReturn($stream);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
     }
 
     /**

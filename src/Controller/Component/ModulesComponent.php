@@ -304,10 +304,13 @@ class ModulesComponent extends Component
             // has another stream? drop it
             $this->removeStream($requestData);
 
+            /** @var \Laminas\Diactoros\UploadedFile $file */
+            $file = $requestData['file'];
+
             // upload file
-            $filename = $requestData['file']['name'];
-            $filepath = $requestData['file']['tmp_name'];
-            $headers = ['Content-Type' => $requestData['file']['type']];
+            $filename = basename($file->getClientFileName());
+            $filepath = $file->getStream()->getMetadata('uri');
+            $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->upload($filename, $filepath, $headers);
 
@@ -385,22 +388,29 @@ class ModulesComponent extends Component
      */
     public function checkRequestForUpload(array $requestData): bool
     {
+        /** @var \Laminas\Diactoros\UploadedFile $file */
+        $file = $requestData['file'];
+        $error = $file->getError();
         // check if change file is empty
-        if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
+        if ($error === UPLOAD_ERR_NO_FILE) {
             return false;
         }
 
         // if upload error, throw exception
-        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
-            throw new UploadException(null, $requestData['file']['error']);
+        if ($error !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $error);
         }
 
         // verify presence and value of 'name', 'tmp_name', 'type'
-        foreach (['name', 'tmp_name', 'type'] as $field) {
-            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
-            }
+        $name = $file->getClientFileName();
+        if (empty($name)) {
+            throw new InternalErrorException('Invalid form data: file.name');
         }
+        $uri = $file->getStream()->getMetadata('uri');
+        if (empty($uri)) {
+            throw new InternalErrorException('Invalid form data: file.tmp_name');
+        }
+
         // verify 'model-type'
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new InternalErrorException('Invalid form data: model-type');
