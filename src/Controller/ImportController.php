@@ -83,14 +83,16 @@ class ImportController extends AppController
             $importFilter = new $filter($this->apiClient);
 
             // see http://php.net/manual/en/features.file-upload.errors.php
-            $fileError = (int)$this->getRequest()->getData('file.error', UPLOAD_ERR_NO_FILE);
+            /** @var \Laminas\Diactoros\UploadedFile $file */
+            $file = $this->getRequest()->getData('file');
+            $fileError = $file->getError();
             if ($fileError > UPLOAD_ERR_OK) {
                 throw new BadRequestException($this->uploadErrorMessage($fileError));
             }
 
             $result = $importFilter->import(
-                $this->getRequest()->getData('file.name'),
-                $this->getRequest()->getData('file.tmp_name'),
+                $file->getClientFileName(),
+                $file->getStream()->getMetadata('uri'),
                 $this->getRequest()->getData('filter_options')
             );
             $this->getRequest()->getSession()->write(['Import.result' => $result]);
