@@ -308,7 +308,7 @@ class ModulesComponent extends Component
             $file = $requestData['file'];
 
             // upload file
-            $filename = $file->getClientFileName();
+            $filename = basename($file->getClientFileName());
             $filepath = $file->getStream()->getMetadata('uri');
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();

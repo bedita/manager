@@ -890,16 +890,10 @@ class ModulesComponentTest extends TestCase
             static::assertArrayHasKey('id', $requestData);
 
             // test upload of another file to change stream
-            $name = 'test2.png';
-            $file = getcwd() . sprintf('/tests/files/%s', $name);
-            $type = mime_content_type($file);
+            $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+            $file = new UploadedFile($filename, filesize($filename), 0, $filename);
             $requestData = [
-                'file' => [
-                    'name' => $name,
-                    'tmp_name' => $file,
-                    'type' => $type,
-                    'error' => UPLOAD_ERR_OK,
-                ],
+                'file' => $file,
                 'model-type' => 'images',
                 'id' => $requestData['id'],
                 'upload_behavior' => 'file',
