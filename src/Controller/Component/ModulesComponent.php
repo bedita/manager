@@ -410,10 +410,6 @@ class ModulesComponent extends Component
         if (empty($uri)) {
             throw new InternalErrorException('Invalid form data: file.tmp_name');
         }
-        $type = $file->getClientMediaType();
-        if (empty($type)) {
-            throw new InternalErrorException('Invalid form data: file.type');
-        }
 
         // verify 'model-type'
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
