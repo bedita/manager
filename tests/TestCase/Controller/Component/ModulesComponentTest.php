@@ -30,6 +30,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -903,6 +904,66 @@ class ModulesComponentTest extends TestCase
         } else {
             static::assertFalse(isset($requestData['id']));
         }
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.name'
+     *
+     * @return void
+     * @covers ::upload()
+     */
+    public function testUploadInvalidFormDataFileName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn(null);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.tmp_name'
+     *
+     * @return void
+     * @covers ::upload()
+     */
+    public function testUploadInvalidFormDataFileTmpName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.tmp_name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $stream = $this->getMockBuilder(Stream::class)
+            ->setConstructorArgs([$filename])
+            ->getMock();
+        $stream->method('getMetadata')
+            ->with('uri')
+            ->willReturn(null);
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn($filename);
+        $uploadedFile->method('getStream')
+            ->willReturn($stream);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
     }
 
     /**
