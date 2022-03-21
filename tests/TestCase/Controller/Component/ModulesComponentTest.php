@@ -911,6 +911,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      * @covers ::upload()
+     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileName(): void
     {
@@ -937,6 +938,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return void
      * @covers ::upload()
+     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileTmpName(): void
     {
