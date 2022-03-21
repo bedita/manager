@@ -23,6 +23,7 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * {@see \App\Controller\ImportController} Test Case
@@ -80,16 +81,14 @@ class ImportControllerTest extends TestCase
      */
     public function setupController(?string $filter = null): void
     {
+        $filename = sprintf('%s/tests/files/%s', getcwd(), $this->filename);
+        $file = new UploadedFile($filename, filesize($filename), $this->fileError, $this->filename);
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
             'post' => [
-                'file' => [
-                    'name' => $this->filename,
-                    'tmp_name' => sprintf('%s/tests/files/%s', getcwd(), $this->filename),
-                    'error' => $this->fileError,
-                ],
+                'file' => $file,
                 'filter' => $filter,
             ],
         ];
