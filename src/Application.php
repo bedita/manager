@@ -62,6 +62,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
         $this->addPlugin('Authentication');
+        $this->addOptionalPlugin('DebugKit');
     }
 
     /**
