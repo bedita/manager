@@ -29,7 +29,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Link'];
+    public $helpers = ['Html', 'Link', 'System'];
 
     /**
      * Is Dashboard
@@ -191,6 +191,7 @@ class LayoutHelper extends Helper
             'uploadable' => $this->getView()->get('uploadable', []),
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => $this->getCsrfToken(),
+            'maxFileSize' => $this->System->getMaxFileSize(),
         ];
     }
 

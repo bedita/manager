@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\LayoutHelper;
+use App\View\Helper\SystemHelper;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
@@ -337,6 +338,7 @@ class LayoutHelperTest extends TestCase
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
+        $system = new SystemHelper($view);
         $conf = $layout->metaConfig();
         $expected = [
             'base' => '',
@@ -347,6 +349,7 @@ class LayoutHelperTest extends TestCase
             'uploadable' => ['images'],
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => 'my-token',
+            'maxFileSize' => $system->getMaxFileSize(),
         ];
         static::assertSame($expected, $conf);
     }

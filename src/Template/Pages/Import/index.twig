@@ -12,6 +12,7 @@
         'type': 'file',
         'url': {'_name': 'import:file'},
     })|raw }}
+        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
         <div class="columns">
             <div class="column">
                 <section class="fieldset">
@@ -107,6 +108,7 @@
             {{ Form.button(__('Import'), {
                 'class': 'submit',
                 'onclick': 'this.classList.add(\'is-loading-spinner\')',
+                'v-if': 'fileName',
             }) | raw }}
         </section>
 

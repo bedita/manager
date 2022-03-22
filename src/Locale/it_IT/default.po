@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-03-11 09:22:57 \n"
+"POT-Creation-Date: 2022-03-22 15:36:44 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -628,6 +628,9 @@ msgstr "Recuperato"
 msgid "Result"
 msgstr "Risultato"
 
+msgid "Return to Dashboard"
+msgstr "Torna alla Scrivania"
+
 msgid "Retype password"
 msgstr "Ridigita password"
 
@@ -1023,6 +1026,15 @@ msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
+
+#: src/Template/Layout/js/app/pages/import/index.js:56
+#, javascript-format
+msgid ""
+"File too big (${ fileSizeMb } MB), please select a file less than max file "
+"size (${ maxFileSizeMb } MB)"
+msgstr ""
+"File troppo grande (${ fileSizeMb } MB), selezionare un file che non superi "
+"la dimensione massima (${ maxFileSizeMb } MB)"
 
 #: src/Template/Layout/js/app/pages/admin/index.js:14
 msgid "Remove item. Are you sure?"
