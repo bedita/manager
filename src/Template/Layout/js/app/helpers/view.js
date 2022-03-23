@@ -1,3 +1,6 @@
+import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
+
 export default {
     install (Vue) {
         Vue.prototype.$helpers = {
@@ -63,6 +66,30 @@ export default {
                         this.forceDownload(blobUrl, filename);
                     })
                     .catch(e => console.error(e));
+            },
+
+            /**
+             * Check if file is bigger than max file size.
+             * Open a warning dialog and return false, if too big.
+             * Return true otherwise.
+             *
+             * @param {Object} file The file to check
+             * @returns {Boolean}
+             */
+            checkMaxFileSize(file) {
+                const fileSize = Math.round(file.size);
+                const maxFileSize = BEDITA.maxFileSize;
+                if (fileSize >= maxFileSize) {
+                    const filename = file.name;
+                    const fileSizeMb = Math.round(fileSize / 1024 / 1024);
+                    const maxFileSizeMb = Math.round(BEDITA.maxFileSize / 1024 / 1024);
+                    const message = t`File "${filename}" too big (${fileSizeMb} MB), please select a file less than max file size (${maxFileSizeMb} MB)`;
+                    warning(message);
+
+                    return false;
+                }
+
+                return true;
             }
         }
     }

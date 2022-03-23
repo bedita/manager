@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-03-22 15:36:44 \n"
+"POT-Creation-Date: 2022-03-23 11:27:03 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1024,15 +1024,15 @@ msgstr ""
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/import/index.js:56
-#, javascript-format
-msgid ""
-"File too big (${ fileSizeMb } MB), please select a file less than max file "
-"size (${ maxFileSizeMb } MB)"
-msgstr ""
-
 #: src/Template/Layout/js/app/pages/admin/index.js:14
 msgid "Remove item. Are you sure?"
+msgstr ""
+
+#: src/Template/Layout/js/app/helpers/view.js:86
+#, javascript-format
+msgid ""
+"File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
+"less than max file size (${ maxFileSizeMb } MB)"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/drop-upload.js:36

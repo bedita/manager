@@ -75,26 +75,21 @@ export default {
         }
     },
 
-    mounted() {
-    },
-
-    destroyed() {
-    },
-
-    watch: {
-    },
-
     methods: {
         inputFiles(e) {
             const files = e.target.files || null;
-            if(!files) return;
+            if (!files) {
+                return;
+            }
 
             this.uploadFiles(files);
         },
 
         dropFiles(e) {
             const files = e.dataTransfer.files || null;
-            if(!files) return;
+            if (!files) {
+                return;
+            }
 
             this.uploadFiles(files);
         },
@@ -102,6 +97,9 @@ export default {
         uploadFiles(files) {
             this.$el.classList.remove('dragover');
             ([...files]).forEach(f => {
+                if (this.$helpers.checkMaxFileSize(f) === false) {
+                    return;
+                }
                 this.upload(f)
                     .then((object) => {
                         this.$emit('new-relations', [object]);
