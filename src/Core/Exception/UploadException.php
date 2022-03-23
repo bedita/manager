@@ -13,12 +13,12 @@
 
 namespace App\Core\Exception;
 
-use Cake\Core\Exception\Exception;
+use Cake\Core\Exception\CakeException;
 
 /**
  * Exception raised when uploading from form fails
  */
-class UploadException extends Exception
+class UploadException extends CakeException
 {
     /**
      * Array to map upload error codes with proper message string
