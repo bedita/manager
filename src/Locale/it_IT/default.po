@@ -1037,9 +1037,8 @@ msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
 "less than max file size (${ maxFileSizeMb } MB)"
 msgstr ""
-#~ msgstr ""
-#~ "File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un file che non "
-#~ "superi la dimensione massima (${ maxFileSizeMb } MB)"
+"File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un file che non "
+"superi la dimensione massima (${ maxFileSizeMb } MB)"
 
 #: src/Template/Layout/js/app/components/drop-upload.js:36
 msgid "stop"
