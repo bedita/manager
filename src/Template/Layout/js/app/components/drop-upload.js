@@ -97,7 +97,6 @@ export default {
         uploadFiles(files) {
             this.$el.classList.remove('dragover');
             ([...files]).forEach(f => {
-                console.log(this.$helpers);
                 if (this.$helpers.checkMaxFileSize(f) === false) {
                     return;
                 }
