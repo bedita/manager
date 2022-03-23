@@ -68,9 +68,9 @@ class OEmbed
      */
     protected function fetchJson(string $oemBedurl): array
     {
-        $json = (new Client())->get($oemBedurl)->json;
+        $o = (new Client())->get($oemBedurl, [], ['type' => 'json']);
 
-        return empty($json) ? [] : $json;
+        return $o->getJson() ?? [];
     }
 
     /**
