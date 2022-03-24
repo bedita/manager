@@ -161,6 +161,9 @@ jobs:
       - name: 'Install dependencies with Composer'
         run: 'composer install --prefer-dist --no-interaction'
 
+      - name: 'Dump Composer autoloader'
+        run: 'composer dump-autoload --classmap-authoritative --no-cache'
+
       - name: 'Run PHPUnit with coverage'
         run: 'vendor/bin/phpunit --coverage-clover=clover.xml'
 

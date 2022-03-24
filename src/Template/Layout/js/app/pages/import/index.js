@@ -3,7 +3,6 @@
  *  Template/Import/index.twig
  *
  * <modules-view> component used for ModulesPage -> View
- *
  */
 
 export default {
@@ -45,6 +44,11 @@ export default {
 
     methods: {
         onFileChanged(e) {
+            this.fileName = '';
+            if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {
+                return;
+            }
+
             this.fileName = e.target.files[0].name;
         },
 
