@@ -74,13 +74,13 @@ class AdminHelperTest extends TestCase
                 null,
                 '<div class="input select"><select name="applications" id="applications"><option value="">No application</option><option value="1">Dummy app</option><option value="2">Another dummy app</option></select></div>',
             ],
-            'applications value not null' => [
+            'applications value not null 1' => [
                 'applications',
                 'applications',
                 '1',
                 '<div class="input select"><select name="applications" id="applications"><option value="">No application</option><option value="1" selected="selected">Dummy app</option><option value="2">Another dummy app</option></select></div>',
             ],
-            'applications value not null' => [
+            'applications value not null 2' => [
                 'default',
                 'dummy',
                 'something',

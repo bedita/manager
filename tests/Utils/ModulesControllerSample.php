@@ -28,7 +28,7 @@ class ModulesControllerSample extends ModulesController
      */
     public function descendants(): array
     {
-        return parent::descendants();
+        return $this->Schema->descendants($this->objectType);
     }
 
     /**
@@ -39,17 +39,6 @@ class ModulesControllerSample extends ModulesController
     public function availableRelationshipsUrl(string $relation): string
     {
         return parent::availableRelationshipsUrl($relation);
-    }
-
-    /**
-     * Update media urls, public for testing
-     *
-     * @param array $response The response
-     * @return void
-     */
-    public function updateMediaUrls(array &$response): void
-    {
-        parent::updateMediaUrls($response);
     }
 
     /**

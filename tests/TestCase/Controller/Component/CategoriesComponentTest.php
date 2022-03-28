@@ -72,7 +72,7 @@ class CategoriesComponentTest extends TestCase
             ->getMock();
         $apiClient->method('get')
             ->with('/model/categories')
-            ->will($this->returnCallback(function () use (&$expected) {
+            ->will($this->returnCallback(function () {
                 $args = func_get_args();
 
                 return $args[1]; // options

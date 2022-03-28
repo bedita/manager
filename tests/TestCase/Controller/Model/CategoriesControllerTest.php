@@ -34,6 +34,13 @@ class CategoriesControllerTest extends TestCase
     public $Categories;
 
     /**
+     * Client API
+     *
+     * @var \BEdita\WebTools\ApiClientProvider
+     */
+    public $client;
+
+    /**
      * Test request config
      *
      * @var array
