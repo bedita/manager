@@ -37,7 +37,7 @@
         "cakephp/cakephp-codesniffer": "~4.5.1",
         "cakephp/debug_kit": "^4.7.1",
         "dereuromark/cakephp-ide-helper": "~1.17.0",
-        "phpstan/phpstan": "^1.4",
+        "phpstan/phpstan": "^1.5",
         "phpunit/phpunit": "^9",
         "psy/psysh": "@stable"
     },
