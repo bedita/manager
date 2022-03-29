@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller;
 
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * Base controller test class, with utils.
@@ -12,7 +13,7 @@ class BaseControllerTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -55,7 +56,7 @@ class BaseControllerTest extends TestCase
         $response = $this->client->getObjects('documents', ['filter' => ['uname' => $this->uname]]);
 
         if (!empty($response['data'][0])) {
-            return $response['data'][0];
+            return (array)$response['data'][0];
         }
 
         return null;
@@ -87,7 +88,7 @@ class BaseControllerTest extends TestCase
         // call index and get first available object, for test view
         $o = $this->getTestObject();
 
-        return $o['id'];
+        return (string)Hash::get($o, 'id');
     }
 
     /**

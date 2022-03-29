@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -10,7 +10,6 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
@@ -28,7 +27,7 @@ use Psr\Log\LogLevel;
 /**
  * Component to load available modules.
  *
- * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
@@ -43,12 +42,12 @@ class ModulesComponent extends Component
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public $components = ['Auth', 'Schema'];
+    public $components = ['Authentication', 'Schema'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'currentModuleName' => null,
@@ -69,14 +68,15 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
-        if (empty($this->Auth->user('id'))) {
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
 
             return;
         }
 
         if ($this->getConfig('clearHomeCache')) {
-            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+            Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
         $modules = $this->getModules();
@@ -102,8 +102,9 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
+            $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
-                sprintf('home_%d', $this->Auth->user('id')),
+                sprintf('home_%d', $user->get('id')),
                 function () {
                     return ApiClientProvider::getApiClient()->get('/home');
                 }
@@ -163,8 +164,12 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
-        $user = $this->getController()->Auth->user();
-        $roles = (array)Hash::get($user, 'roles');
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || empty($user->getOriginalData())) {
+            return;
+        }
+
+        $roles = (array)$user->get('roles');
         $hidden = [];
         $readonly = [];
         foreach ($roles as $role) {
@@ -299,10 +304,13 @@ class ModulesComponent extends Component
             // has another stream? drop it
             $this->removeStream($requestData);
 
+            /** @var \Laminas\Diactoros\UploadedFile $file */
+            $file = $requestData['file'];
+
             // upload file
-            $filename = $requestData['file']['name'];
-            $filepath = $requestData['file']['tmp_name'];
-            $headers = ['Content-Type' => $requestData['file']['type']];
+            $filename = basename($file->getClientFileName());
+            $filepath = $file->getStream()->getMetadata('uri');
+            $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->upload($filename, $filepath, $headers);
 
@@ -380,22 +388,29 @@ class ModulesComponent extends Component
      */
     public function checkRequestForUpload(array $requestData): bool
     {
+        /** @var \Laminas\Diactoros\UploadedFile $file */
+        $file = $requestData['file'];
+        $error = $file->getError();
         // check if change file is empty
-        if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
+        if ($error === UPLOAD_ERR_NO_FILE) {
             return false;
         }
 
         // if upload error, throw exception
-        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
-            throw new UploadException(null, $requestData['file']['error']);
+        if ($error !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $error);
         }
 
         // verify presence and value of 'name', 'tmp_name', 'type'
-        foreach (['name', 'tmp_name', 'type'] as $field) {
-            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
-            }
+        $name = $file->getClientFileName();
+        if (empty($name)) {
+            throw new InternalErrorException('Invalid form data: file.name');
         }
+        $uri = $file->getStream()->getMetadata('uri');
+        if (empty($uri)) {
+            throw new InternalErrorException('Invalid form data: file.tmp_name');
+        }
+
         // verify 'model-type'
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new InternalErrorException('Invalid form data: model-type');

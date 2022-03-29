@@ -17,6 +17,7 @@
 !/tmp/.gitkeep
 /vendor/*
 !/vendor/.gitkeep
+/.phpunit.result.cache
 
 # plugins folders #
 ##########################

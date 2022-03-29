@@ -19,9 +19,11 @@ use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * {@see \App\Controller\ImportController} Test Case
@@ -54,15 +56,17 @@ class ImportControllerTest extends TestCase
     protected $apiClient = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
+        parent::setUp();
         $this->apiClient = ApiClientProvider::getApiClient();
+        $this->loadRoutes();
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -77,25 +81,23 @@ class ImportControllerTest extends TestCase
      */
     public function setupController(?string $filter = null): void
     {
+        $filename = sprintf('%s/tests/files/%s', getcwd(), $this->filename);
+        $file = new UploadedFile($filename, filesize($filename), $this->fileError, $this->filename);
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
             'post' => [
-                'file' => [
-                    'name' => $this->filename,
-                    'tmp_name' => sprintf('%s/tests/files/%s', getcwd(), $this->filename),
-                    'error' => $this->fileError,
-                ],
+                'file' => $file,
                 'filter' => $filter,
             ],
         ];
         $request = new ServerRequest($config);
         $this->Import = new class ($request) extends ImportController
         {
-            public function render($view = null, $layout = null): void
+            public function render($view = null, $layout = null): Response
             {
-                // do nothing
+                return $this->getResponse();
             }
         };
     }
@@ -139,7 +141,7 @@ class ImportControllerTest extends TestCase
         $method = $reflectionClass->getMethod('loadFilters');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, []);
-        static::assertTrue(is_array($this->Import->viewVars['filters']));
+        static::assertTrue(is_array($this->Import->viewBuilder()->getVar('filters')));
         $expected = [
             [
                 'value' => 'App\Test\Utils\ImportFilterSample',
@@ -147,9 +149,9 @@ class ImportControllerTest extends TestCase
                 'options' => [],
             ],
         ];
-        static::assertEquals($expected, $this->Import->viewVars['filters']);
-        static::assertTrue(is_array($this->Import->viewVars['services']));
-        static::assertSame(['ImportFilterSampleService'], $this->Import->viewVars['services']);
+        static::assertEquals($expected, $this->Import->viewBuilder()->getVar('filters'));
+        static::assertTrue(is_array($this->Import->viewBuilder()->getVar('services')));
+        static::assertSame(['ImportFilterSampleService'], $this->Import->viewBuilder()->getVar('services'));
         Configure::write('Filters.import', []);
     }
 
@@ -187,7 +189,7 @@ class ImportControllerTest extends TestCase
         $method = $reflectionClass->getMethod('loadAsyncJobs');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewVars['jobs'];
+        $actual = $this->Import->viewBuilder()->getVar('jobs');
         $expected = [];
         static::assertEquals($expected, $actual);
 
@@ -203,7 +205,7 @@ class ImportControllerTest extends TestCase
             ->willThrowException(new BEditaClientException('My test exception'));
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewVars['jobs'];
+        $actual = $this->Import->viewBuilder()->getVar('jobs');
         $expected = [];
         static::assertEquals($expected, $actual);
         $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
@@ -219,7 +221,7 @@ class ImportControllerTest extends TestCase
             ->willReturn(['data' => $expected]);
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewVars['jobs'];
+        $actual = $this->Import->viewBuilder()->getVar('jobs');
         static::assertEquals($expected, $actual);
     }
 
@@ -315,12 +317,12 @@ class ImportControllerTest extends TestCase
     {
         $this->setupController();
         $this->Import->index();
-        static::assertEmpty($this->Import->viewVars['jobs']);
-        static::assertEmpty($this->Import->viewVars['services']);
-        static::assertEmpty($this->Import->viewVars['filters']);
-        static::assertEmpty($this->Import->viewVars['result']);
+        static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('result'));
         $this->Import->dispatchEvent('Controller.beforeRender');
-        static::assertEquals(['_name' => 'import:index'], $this->Import->viewVars['moduleLink']);
+        static::assertEquals(['_name' => 'import:index'], $this->Import->viewBuilder()->getVar('moduleLink'));
     }
 
     /**
@@ -333,9 +335,9 @@ class ImportControllerTest extends TestCase
     {
         $this->setupController();
         $this->Import->jobs();
-        static::assertNotEmpty($this->Import->viewVars['_serialize']);
-        static::assertEmpty($this->Import->viewVars['jobs']);
-        static::assertEmpty($this->Import->viewVars['services']);
-        static::assertEmpty($this->Import->viewVars['filters']);
+        static::assertNotEmpty($this->Import->viewBuilder()->getOption('serialize'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
+        static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
     }
 }

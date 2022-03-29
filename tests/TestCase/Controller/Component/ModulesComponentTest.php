@@ -17,17 +17,23 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Controller\Component\AuthenticationComponent;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Controller\Component\AuthComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
-use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\Stream;
+use Laminas\Diactoros\UploadedFile;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
@@ -48,12 +54,12 @@ class ModulesComponentTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -61,9 +67,9 @@ class ModulesComponentTest extends TestCase
 
         $controller = new Controller();
         $registry = $controller->components();
-        $registry->load('Auth');
+        $registry->load('Authentication.Authentication');
         $this->Modules = $registry->load(ModulesComponent::class);
-        $this->Auth = $registry->load(AuthComponent::class);
+        $this->Authentication = $registry->load(AuthenticationComponent::class);
         $this->MyModules = new class ($registry) extends ModulesComponent
         {
             public $meta = [];
@@ -78,11 +84,11 @@ class ModulesComponentTest extends TestCase
                 return ['mices', 'elefants', 'cats', 'dogs'];
             }
         };
-        $controller->Auth = $this->Auth;
+        $controller->Authentication = $this->Authentication;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -91,6 +97,33 @@ class ModulesComponentTest extends TestCase
         // reset client, force new client creation
         ApiClientProvider::setApiClient(null);
         parent::tearDown();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -159,6 +192,10 @@ class ModulesComponentTest extends TestCase
      */
     public function testGetProject($expected, $meta, $config = []): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity([]));
+
         Configure::write('Project', $config);
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -208,7 +245,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `isAbstract()` method.
      *
-     * @param boolean $expected expected results from test
+     * @param bool $expected expected results from test
      * @param string $data setup data for test, object type
      * @dataProvider isAbstractProvider()
      * @covers ::isAbstract()
@@ -216,7 +253,10 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
-        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+
         $this->Modules->getController()->dispatchEvent('Controller.startup');
         $actual = $this->Modules->isAbstract($data);
 
@@ -267,14 +307,17 @@ class ModulesComponentTest extends TestCase
      * Test `objectTypes()` method.
      *
      * @param array $expected expected results from test
-     * @param boolean|null $data setup data for test
+     * @param bool|null $data setup data for test
      * @dataProvider objectTypesProvider()
      * @covers ::objectTypes()
      * @return void
      */
     public function testObjectTypes($expected, $data): void
     {
-        $this->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+
         if (!empty($expected)) {
             $this->Modules->getController()->dispatchEvent('Controller.startup');
         }
@@ -428,6 +471,10 @@ class ModulesComponentTest extends TestCase
      */
     public function testGetModules($expected, $meta, array $modules = []): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+
         Configure::write('Modules', $modules);
 
         if ($expected instanceof \Exception) {
@@ -451,7 +498,6 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
-        $this->Modules->getController()->Auth->setUser(['id' => 1, 'roles' => ['guest']]);
         $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
 
         static::assertSame($expected, $actual);
@@ -468,6 +514,12 @@ class ModulesComponentTest extends TestCase
             'empty access control' => [
                 ['documents' => [], 'events' => [], 'news' => []],
                 [],
+                [],
+                ['documents' => [], 'events' => [], 'news' => []],
+            ],
+            'no user' => [
+                ['documents' => [], 'events' => [], 'news' => []],
+                ['guest'],
                 [],
                 ['documents' => [], 'events' => [], 'news' => []],
             ],
@@ -534,6 +586,9 @@ class ModulesComponentTest extends TestCase
      */
     public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         // set $this->Modules->modules
         $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
@@ -544,7 +599,7 @@ class ModulesComponentTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
         $method->setAccessible(true);
-        $this->Modules->getController()->Auth->setUser($user);
+        $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
         $actual = $this->Modules->modules;
         static::assertEquals($expected, $actual);
@@ -657,10 +712,15 @@ class ModulesComponentTest extends TestCase
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
+        // Mock Authentication component
+        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         Configure::write('Modules', $config);
 
         if ($userId) {
-            $this->Auth->setUser(['id' => $userId, 'roles' => ['guest']]);
+            $this->Authentication->setIdentity(new Identity(['id' => $userId, 'roles' => ['guest']]));
+        } else {
+            $this->Authentication->setIdentity(new Identity([]));
         }
 
         // Setup mock API client.
@@ -678,7 +738,7 @@ class ModulesComponentTest extends TestCase
         $controller = $this->Modules->getController();
         $controller->dispatchEvent('Controller.startup');
 
-        $viewVars = $controller->viewVars;
+        $viewVars = $controller->viewBuilder()->getVars();
         static::assertArrayHasKey('project', $viewVars);
         static::assertEquals($project, $viewVars['project']);
         static::assertArrayHasKey('modules', $viewVars);
@@ -698,85 +758,23 @@ class ModulesComponentTest extends TestCase
      */
     public function uploadProvider(): array
     {
-        $name = 'test.png';
-        $file = getcwd() . sprintf('/tests/files/%s', $name);
-        $type = mime_content_type($file);
-        $error = UPLOAD_ERR_OK;
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
+        $file = new UploadedFile($filename, filesize($filename), 0, $filename);
+        $fileErr = new UploadedFile($filename, filesize($filename), 1, $filename);
+        $fileEmpty = new UploadedFile($filename, filesize($filename), 4, $filename);
 
         return [
             'no file' => [
                 [
-                    'file' => [],
+                    'file' => null,
                     'upload_behavior' => 'file',
                 ],
                 null,
                 false,
             ],
-            'file.name empty' => [
-                [
-                    'file' => ['a'] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.name'),
-                false,
-            ],
-            'file.name not a string' => [
-                [
-                    'file' => ['name' => 12345] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.name'),
-                false,
-            ],
-            'file.tmp_name (filepath) empty' => [
-                [
-                    'file' => ['name' => 'dummy.txt'] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.tmp_name'),
-                false,
-            ],
-            'file.tmp_name (filepath) not a string' => [
-                [
-                    'file' => [
-                        'name' => 'dummy.txt',
-                        'tmp_name' => 12345,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.tmp_name'),
-                false,
-            ],
-            'file.type empty' => [
-                [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.type'),
-                false,
-            ],
-            'file.type not a string' => [
-                [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => 12345,
-                    ] + compact('error'),
-                    'upload_behavior' => 'file',
-                ],
-                new InternalErrorException('Invalid form data: file.type'),
-                false,
-            ],
             'model-type empty' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'upload_behavior' => 'file',
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
@@ -784,11 +782,7 @@ class ModulesComponentTest extends TestCase
             ],
             'model-type not a string' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'model-type' => 12345,
                     'upload_behavior' => 'file',
                 ],
@@ -797,11 +791,7 @@ class ModulesComponentTest extends TestCase
             ],
             'upload ok' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                    ] + compact('error'),
+                    'file' => $file,
                     'model-type' => 'images',
                     'upload_behavior' => 'file',
                 ],
@@ -810,12 +800,7 @@ class ModulesComponentTest extends TestCase
             ],
             'generic upload error' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                        'error' => !UPLOAD_ERR_OK,
-                    ],
+                    'file' => $fileErr,
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
@@ -824,12 +809,7 @@ class ModulesComponentTest extends TestCase
             ],
             'save with empty file' => [
                 [
-                    'file' => [
-                        'name' => $name,
-                        'tmp_name' => $file,
-                        'type' => $type,
-                        'error' => UPLOAD_ERR_NO_FILE,
-                    ],
+                    'file' => $fileEmpty,
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
@@ -911,16 +891,10 @@ class ModulesComponentTest extends TestCase
             static::assertArrayHasKey('id', $requestData);
 
             // test upload of another file to change stream
-            $name = 'test2.png';
-            $file = getcwd() . sprintf('/tests/files/%s', $name);
-            $type = mime_content_type($file);
+            $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+            $file = new UploadedFile($filename, filesize($filename), 0, $filename);
             $requestData = [
-                'file' => [
-                    'name' => $name,
-                    'tmp_name' => $file,
-                    'type' => $type,
-                    'error' => UPLOAD_ERR_OK,
-                ],
+                'file' => $file,
                 'model-type' => 'images',
                 'id' => $requestData['id'],
                 'upload_behavior' => 'file',
@@ -930,6 +904,68 @@ class ModulesComponentTest extends TestCase
         } else {
             static::assertFalse(isset($requestData['id']));
         }
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.name'
+     *
+     * @return void
+     * @covers ::upload()
+     * @covers ::checkRequestForUpload()
+     */
+    public function testUploadInvalidFormDataFileName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn(null);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
+    }
+
+    /**
+     * Test `upload` method for InternalErrorException 'Invalid form data: file.tmp_name'
+     *
+     * @return void
+     * @covers ::upload()
+     * @covers ::checkRequestForUpload()
+     */
+    public function testUploadInvalidFormDataFileTmpName(): void
+    {
+        $expectedException = new InternalErrorException('Invalid form data: file.tmp_name');
+        $this->expectException(get_class($expectedException));
+        $this->expectExceptionCode($expectedException->getCode());
+        $this->expectExceptionMessage($expectedException->getMessage());
+        $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
+        $stream = $this->getMockBuilder(Stream::class)
+            ->setConstructorArgs([$filename])
+            ->getMock();
+        $stream->method('getMetadata')
+            ->with('uri')
+            ->willReturn(null);
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->setConstructorArgs([$filename, filesize($filename), 0, $filename])
+            ->getMock();
+        $uploadedFile->method('getClientFileName')
+            ->willReturn($filename);
+        $uploadedFile->method('getStream')
+            ->willReturn($stream);
+        $requestData = [
+            'file' => $uploadedFile,
+            'model-type' => 'images',
+            'upload_behavior' => 'file',
+        ];
+        $this->Modules->upload($requestData);
     }
 
     /**
@@ -982,7 +1018,7 @@ class ModulesComponentTest extends TestCase
     {
         // empty case
         $this->Modules->setDataFromFailedSave('', ['id' => 123]);
-        $actual = $this->Modules->getController()->request->getSession()->read('failedSave.123');
+        $actual = $this->Modules->getController()->getRequest()->getSession()->read('failedSave.123');
         static::assertEmpty($actual);
 
         // data and expected
@@ -1278,7 +1314,7 @@ class ModulesComponentTest extends TestCase
     {
         $this->Modules->setupRelationsMeta($schema, $relationships, $order, $hidden, $readonly);
 
-        $viewVars = $this->Modules->getController()->viewVars;
+        $viewVars = $this->Modules->getController()->viewBuilder()->getVars();
 
         static::assertEquals(array_keys($expected), array_keys($viewVars));
 
@@ -1426,7 +1462,7 @@ class ModulesComponentTest extends TestCase
     public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
         static::assertEquals($expected, $actual);
     }
@@ -1698,7 +1734,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `saveRelated`
      *
-     * @param string $id Object ID
+     * @param int $id Object ID
      * @param string $type Object type
      * @param array $relatedData Related objects data
      * @param mixed $expected The expected result
@@ -1708,7 +1744,7 @@ class ModulesComponentTest extends TestCase
      * @covers ::folderChildrenRelated()
      * @covers ::folderChildrenRemove()
      */
-    public function testSaveRelated(string $id, string $type, array $relatedData, $expected): void
+    public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));

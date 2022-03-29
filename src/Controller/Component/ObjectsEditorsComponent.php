@@ -36,7 +36,7 @@ class ObjectsEditorsComponent extends Component
     public $concurrentCheckTime = 20000;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(array $config): void
     {
@@ -93,7 +93,7 @@ class ObjectsEditorsComponent extends Component
      */
     public function editorName(): ?string
     {
-        $user = $this->getController()->Auth->user();
+        $user = $this->getController()->Authentication->getIdentity();
         if (empty($user)) {
             return null;
         }

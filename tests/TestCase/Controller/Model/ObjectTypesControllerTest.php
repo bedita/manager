@@ -28,6 +28,15 @@ use Cake\TestSuite\TestCase;
 class ObjectTypesControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
      * @var \App\Controller\ModelController
@@ -89,9 +98,9 @@ class ObjectTypesControllerTest extends TestCase
         $this->ModelController->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
-        $objectTypeProperties = $this->ModelController->viewVars['objectTypeProperties'];
+        $objectTypeProperties = $this->ModelController->viewBuilder()->getVar('objectTypeProperties');
         static::assertNotEmpty($objectTypeProperties);
         static::assertArrayHasKey('inherited', $objectTypeProperties);
         static::assertArrayHasKey('core', $objectTypeProperties);

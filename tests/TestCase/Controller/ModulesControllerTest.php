@@ -17,7 +17,13 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\Utils\ModulesControllerSample;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
+use Cake\Utility\Hash;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\ModulesController} Test Case
@@ -26,6 +32,15 @@ use Cake\Http\ServerRequest;
  */
 class ModulesControllerTest extends BaseControllerTest
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     /**
      * Test Modules controller
      *
@@ -44,11 +59,40 @@ class ModulesControllerTest extends BaseControllerTest
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
+        // Mock Authentication component
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // force modules load
-        $this->controller->Auth->setUser(['id' => 'dummy']);
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -393,7 +437,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->save();
 
         // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        static::assertArrayHasKey('error', $this->controller->viewBuilder()->getVars());
     }
 
     /**
@@ -426,11 +470,10 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->save();
 
         // verify page has error key
-        static::assertArrayHasKey('error', $this->controller->viewVars);
+        static::assertArrayHasKey('error', $this->controller->viewBuilder()->getVars());
     }
 
     /**
-     *
      * Data provider for `testSave` test case.
      *
      * @return array
@@ -557,7 +600,7 @@ class ModulesControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'ids' => $o['id'],
+                'ids' => (string)Hash::get($o, 'id'),
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -651,7 +694,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->related($id, 'translations');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'data']);
+        $this->assertExpectedViewVars(['data']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -668,7 +712,7 @@ class ModulesControllerTest extends BaseControllerTest
         // do controller call
         $this->controller->related('new', 'has_media');
 
-        static::assertEquals([], $this->controller->viewVars['data']);
+        static::assertEquals([], $this->controller->viewBuilder()->getVar('data'));
     }
 
     /**
@@ -686,7 +730,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->related(12346789, 'translations');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'error']);
+        $this->assertExpectedViewVars(['error']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -707,7 +752,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->resources($id, 'documents');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'data']);
+        $this->assertExpectedViewVars(['data']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -725,7 +771,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->resources(123456789, 'dummies');
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize', 'error']);
+        $this->assertExpectedViewVars(['error']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -785,7 +832,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->relationships($id, $relation);
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['_serialize']);
+        static::assertNotEmpty($this->controller->viewBuilder()->getOption('serialize'));
     }
 
     /**
@@ -870,7 +917,7 @@ class ModulesControllerTest extends BaseControllerTest
     private function assertExpectedViewVars($expected): void
     {
         foreach ($expected as $varName) {
-            static::assertArrayHasKey($varName, $this->controller->viewVars);
+            static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
     }
 

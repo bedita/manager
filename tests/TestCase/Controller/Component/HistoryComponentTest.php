@@ -54,7 +54,7 @@ class HistoryComponentTest extends TestCase
     private $documentId = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -81,7 +81,7 @@ class HistoryComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -331,7 +331,7 @@ class HistoryComponentTest extends TestCase
     public function testFormatResponseData(array $data, $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
         $actual = $data[0];
         static::assertEquals($expected, $actual);

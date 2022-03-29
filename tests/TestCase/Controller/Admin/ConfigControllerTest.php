@@ -37,11 +37,12 @@ class ConfigControllerTest extends TestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
@@ -77,7 +78,7 @@ class ConfigControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->CfgController->viewVars;
+        $viewVars = (array)$this->CfgController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
@@ -95,7 +96,7 @@ class ConfigControllerTest extends TestCase
     {
         $event = $this->CfgController->dispatchEvent('Controller.beforeFilter');
         $this->CfgController->beforeFilter($event);
-        $viewVars = (array)$this->CfgController->viewVars;
+        $viewVars = (array)$this->CfgController->viewBuilder()->getVars();
         static::assertEquals(['' => __('No application'), 1 => 'default-app', 2 => 'manager'], $viewVars['applications']);
     }
 }

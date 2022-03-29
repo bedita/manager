@@ -37,11 +37,12 @@ class HistoryControllerTest extends TestCase
     private $documentId = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
         $this->HistoryController = new HistoryController(
             new ServerRequest([
                 'environment' => [
@@ -64,7 +65,7 @@ class HistoryControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -103,7 +104,7 @@ class HistoryControllerTest extends TestCase
         $this->HistoryController->info($this->documentId);
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->HistoryController->viewVars[$var]);
+            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
         }
     }
 
@@ -208,7 +209,7 @@ class HistoryControllerTest extends TestCase
         $keepUname = (bool)$data['keepUname'];
 
         // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId, $keepUname]);
         $actual = $this->HistoryController->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
         static::assertEquals($actual, $expected);

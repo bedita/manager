@@ -29,7 +29,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Link'];
+    public $helpers = ['Html', 'Link', 'System'];
 
     /**
      * Is Dashboard
@@ -182,13 +182,6 @@ class LayoutHelper extends Helper
      */
     public function metaConfig(): array
     {
-        $csrfToken = null;
-        if (!empty($this->getView()->getRequest()->getParam('_csrfToken'))) {
-            $csrfToken = $this->getView()->getRequest()->getParam('_csrfToken');
-        } elseif (!empty($this->getView()->getRequest()->getData('_csrfToken'))) {
-            $csrfToken = $this->getView()->getRequest()->getData('_csrfToken');
-        }
-
         return [
             'base' => $this->Link->baseUrl(),
             'currentModule' => $this->getView()->get('currentModule', ['name' => 'home']),
@@ -197,7 +190,31 @@ class LayoutHelper extends Helper
             'plugins' => \App\Plugin::loadedAppPlugins(),
             'uploadable' => $this->getView()->get('uploadable', []),
             'locale' => \Cake\I18n\I18n::getLocale(),
-            'csrfToken' => $csrfToken,
+            'csrfToken' => $this->getCsrfToken(),
+            'maxFileSize' => $this->System->getMaxFileSize(),
         ];
+    }
+
+    /**
+     * Get csrf token, searching in: request params, data, attributes and cookies
+     *
+     * @return string|null
+     */
+    public function getCsrfToken(): ?string
+    {
+        if (!empty($this->getView()->getRequest()->getParam('_csrfToken'))) {
+            return $this->getView()->getRequest()->getParam('_csrfToken');
+        }
+        if (!empty($this->getView()->getRequest()->getData('_csrfToken'))) {
+            return $this->getView()->getRequest()->getData('_csrfToken');
+        }
+        if (!empty($this->getView()->getRequest()->getAttribute('csrfToken'))) {
+            return $this->getView()->getRequest()->getAttribute('csrfToken');
+        }
+        if (!empty($this->getView()->getRequest()->getCookie('csrfToken'))) {
+            return $this->getView()->getRequest()->getCookie('csrfToken');
+        }
+
+        return null;
     }
 }

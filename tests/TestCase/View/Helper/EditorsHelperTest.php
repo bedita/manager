@@ -33,7 +33,7 @@ class EditorsHelperTest extends TestCase
     public $EditorsHelper;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -44,7 +44,7 @@ class EditorsHelperTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

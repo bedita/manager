@@ -115,6 +115,7 @@
                     <h3>{{ __('Change File') }}</h3>
                     <div>
                         {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
+                        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
                 </div>

@@ -14,12 +14,16 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ModelBaseController;
-use App\Test\Utils\ModelController;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Model\ModelBaseController} Test Case
@@ -52,11 +56,12 @@ class ModelBaseControllerTest extends TestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
@@ -80,6 +85,33 @@ class ModelBaseControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -121,17 +153,19 @@ class ModelBaseControllerTest extends TestCase
      *
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
-     *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
      * @return void
      */
     public function testBeforeFilter($expected, array $data): void
     {
+        // Mock Authentication component
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         if (isset($data['tokens'])) {
             $data['tokens'] = $this->client->getTokens();
         }
-        $this->ModelController->Auth->setUser($data);
+        $this->ModelController->Authentication->setIdentity(new Identity($data));
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -157,8 +191,8 @@ class ModelBaseControllerTest extends TestCase
     {
         $this->ModelController->dispatchEvent('Controller.beforeRender');
 
-        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
-        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('resourceType'));
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('moduleLink'));
     }
 
     /**
@@ -174,7 +208,7 @@ class ModelBaseControllerTest extends TestCase
         $this->ModelController->index();
         $vars = ['resources', 'meta', 'links', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
     }
 
@@ -202,7 +236,7 @@ class ModelBaseControllerTest extends TestCase
         $this->ModelController->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
     }
 

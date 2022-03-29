@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2019 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -14,7 +14,7 @@ namespace App\Controller\Model;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -41,7 +41,7 @@ abstract class ModelBaseController extends AppController
     protected $singleView = true;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -60,15 +60,15 @@ abstract class ModelBaseController extends AppController
      *
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         $res = parent::beforeFilter($event);
         if ($res !== null) {
             return $res;
         }
 
-        $roles = $this->Auth->user('roles');
-        if (empty($roles) || !in_array('admin', $roles)) {
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || empty($user->get('roles')) || !in_array('admin', $user->get('roles'))) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
 
@@ -194,9 +194,9 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('resourceType', $this->resourceType);
         $this->set('moduleLink', ['_name' => 'model:list:' . $this->resourceType]);

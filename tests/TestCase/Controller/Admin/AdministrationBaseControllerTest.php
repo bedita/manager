@@ -3,11 +3,16 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AdministrationBaseController;
 use App\Controller\Admin\RolesController;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
@@ -37,16 +42,17 @@ class AdministrationBaseControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
@@ -81,6 +87,33 @@ class AdministrationBaseControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -143,7 +176,10 @@ class AdministrationBaseControllerTest extends TestCase
         if (isset($data['tokens'])) {
             $data['tokens'] = $this->client->getTokens();
         }
-        $this->AdministrationBaseController->Auth->setUser($data);
+
+        // Mock Authentication component
+        $this->AdministrationBaseController->setRequest($this->AdministrationBaseController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AdministrationBaseController->Authentication->setIdentity(new Identity($data));
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -180,7 +216,7 @@ class AdministrationBaseControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
@@ -193,7 +229,7 @@ class AdministrationBaseControllerTest extends TestCase
         };
 
         $this->AdministrationBaseController->index();
-        $viewVars = (array)$this->AdministrationBaseController->viewVars;
+        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayNotHasKey($expectedKey, $viewVars);
         }

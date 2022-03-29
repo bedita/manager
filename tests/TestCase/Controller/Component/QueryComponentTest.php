@@ -21,7 +21,7 @@ class QueryComponentTest extends TestCase
     public $Query;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -32,7 +32,7 @@ class QueryComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

@@ -34,25 +34,19 @@ class LinkHelper extends Helper
     public $helpers = ['Html'];
 
     /**
-     * API base URL
+     * Default configuration
      *
-     * @var string
-     */
-    protected $apiBaseUrl = null;
-
-    /**
-     * WebApp base URL
-     *
-     * @var string
-     */
-    protected $webBaseUrl = null;
-
-    /**
-     * Request Query params
+     *  - 'apiBaseUrl': API base URL
+     *  - 'webBaseUrl': WebApp base URL
+     *  - 'query': Request Query params
      *
      * @var array
      */
-    protected $query = [];
+    protected $_defaultConfig = [
+        'apiBaseUrl' => '',
+        'webBaseUrl' => '',
+        'query' => [],
+    ];
 
     /**
      * {@inheritDoc}
@@ -63,9 +57,12 @@ class LinkHelper extends Helper
      */
     public function initialize(array $config): void
     {
-        $this->apiBaseUrl = Configure::read('API.apiBaseUrl');
-        $this->webBaseUrl = Router::fullBaseUrl();
-        $this->query = $this->getView()->getRequest()->getQueryParams();
+        $default = [
+            'apiBaseUrl' => Configure::read('API.apiBaseUrl'),
+            'webBaseUrl' => Router::fullBaseUrl(),
+            'query' => $this->getView()->getRequest()->getQueryParams(),
+        ];
+        $this->setConfig(array_merge($default, $config));
     }
 
     /**
@@ -76,11 +73,11 @@ class LinkHelper extends Helper
      */
     public function baseUrl(): string
     {
-        if (substr_compare($this->webBaseUrl, ':80', -strlen(':80')) === 0) {
-            return substr($this->webBaseUrl, 0, strpos($this->webBaseUrl, ':80'));
+        if (substr_compare($this->getConfig('webBaseUrl'), ':80', -strlen(':80')) === 0) {
+            return substr($this->getConfig('webBaseUrl'), 0, strpos($this->getConfig('webBaseUrl'), ':80'));
         }
 
-        return $this->webBaseUrl;
+        return $this->getConfig('webBaseUrl');
     }
 
     /**
@@ -92,7 +89,7 @@ class LinkHelper extends Helper
      */
     public function fromAPI($apiUrl): void
     {
-        echo str_replace($this->apiBaseUrl, $this->webBaseUrl, $apiUrl);
+        echo str_replace($this->getConfig('apiBaseUrl'), $this->getConfig('webBaseUrl'), $apiUrl);
     }
 
     /**
@@ -104,10 +101,10 @@ class LinkHelper extends Helper
      */
     public function sortUrl($field, $resetPage = true): string
     {
-        $sort = (string)Hash::get($this->query, 'sort');
+        $sort = (string)Hash::get($this->getConfig('query'), 'sort');
         $sort = $this->sortValue($field, $sort);
         $replace = compact('sort');
-        $currentPage = Hash::get($this->query, 'page');
+        $currentPage = Hash::get($this->getConfig('query'), 'page');
         if (isset($currentPage) && $resetPage) {
             $replace['page'] = 1;
         }
@@ -156,7 +153,7 @@ class LinkHelper extends Helper
      */
     public function sortClass(string $field): string
     {
-        $sort = (string)Hash::get($this->query, 'sort');
+        $sort = (string)Hash::get($this->getConfig('query'), 'sort');
         if (empty($sort)) {
             return '';
         }
@@ -201,15 +198,15 @@ class LinkHelper extends Helper
      */
     public function here($options = []): string
     {
-        $here = $this->webBaseUrl . $this->getView()->getRequest()->getAttribute('here');
-        if (empty($this->query) || !empty($options['no-query'])) {
+        $here = $this->getConfig('webBaseUrl') . $this->getView()->getRequest()->getAttribute('here');
+        if (empty($this->getConfig('query')) || !empty($options['no-query'])) {
             return $here;
         }
 
         if (isset($options['exclude'])) {
-            unset($this->query[$options['exclude']]);
+            $this->setConfig(sprintf('query.%s', $options['exclude']), null);
         }
-        $q = http_build_query($this->query);
+        $q = http_build_query($this->getConfig('query'));
         if (!empty($q)) {
             return $here . '?' . $q;
         }
@@ -226,7 +223,7 @@ class LinkHelper extends Helper
     private function replaceQueryParams(array $queryParams): string
     {
         $request = $this->getView()->getRequest();
-        $query = array_merge($this->query, $queryParams);
+        $query = array_merge($this->getConfig('query'), $queryParams);
 
         return (string)$request->getUri()->withQuery(http_build_query($query));
     }

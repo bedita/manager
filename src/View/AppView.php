@@ -29,13 +29,28 @@ use Cake\Utility\Hash;
  * @property \App\View\Helper\PropertyHelper $Property
  * @property \App\View\Helper\PermsHelper $Perms
  * @property \App\View\Helper\SchemaHelper $Schema
+ * @property \App\View\Helper\SystemHelper $System
  * @property \BEdita\WebTools\View\Helper\ThumbHelper $Thumb
  * @property \BEdita\I18n\View\Helper\I18nHelper $I18n
  */
 class AppView extends TwigView
 {
     /**
-     * {@inheritDoc}
+     * Constant for view file type 'element'
+     *
+     * @var string
+     */
+    public const TYPE_ELEMENT = 'Element';
+
+    /**
+     * Constant for view file type 'layout'
+     *
+     * @var string
+     */
+    public const TYPE_LAYOUT = 'Layout';
+
+    /**
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -61,6 +76,7 @@ class AppView extends TwigView
         $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
         $this->loadHelper('Perms');
         $this->loadHelper('Schema');
+        $this->loadHelper('System');
         $this->loadHelper('Text');
         $this->loadHelper('BEdita/WebTools.Thumb');
         $this->loadHelper('Url');

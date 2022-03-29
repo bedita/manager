@@ -37,7 +37,7 @@ class RolesControllerTest extends TestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -88,7 +88,7 @@ class RolesControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->RlsController->viewVars;
+        $viewVars = (array)$this->RlsController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }

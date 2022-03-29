@@ -13,7 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -40,7 +40,7 @@ class ModulesController extends AppController
     protected $objectType = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -69,7 +69,7 @@ class ModulesController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('objectType', $this->objectType);
 
@@ -159,7 +159,7 @@ class ModulesController extends AppController
         // setup `currentAttributes` and recover failure data from session.
         $this->Modules->setupAttributes($object);
 
-        $included = (!empty($response['included'])) ? $response['included'] : [];
+        $included = !empty($response['included']) ? $response['included'] : [];
         $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
         $streams = Hash::get($typeIncluded, 'streams');
         $this->History->load($id, $object);
@@ -185,7 +185,8 @@ class ModulesController extends AppController
             $this->Properties->readonlyRelationsList($this->objectType)
         );
 
-        $rightTypes = \App\Utility\Schema::rightTypes($this->viewVars['relationsSchema']);
+        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
+        $rightTypes = \App\Utility\Schema::rightTypes($rel);
 
         // set schemas for relations right types
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);
@@ -518,7 +519,6 @@ class ModulesController extends AppController
      * get object properties and format them for index
      *
      * @param string $objectType objecte type name
-     *
      * @return array $schema
      */
     public function getSchemaForIndex($objectType): array
@@ -589,7 +589,6 @@ class ModulesController extends AppController
      * Remove single category.
      *
      * @param string $id Category ID.
-     *
      * @return \Cake\Http\Response|null
      */
     public function removeCategory(string $id): ?Response

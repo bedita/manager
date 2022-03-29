@@ -5,7 +5,7 @@ export default {
 
         <!-- Boolean --->
         <div v-if="propertyType == 'boolean'">
-            <input type="checkbox" :value="value" @change="update($event.target.value)">
+            <input type="checkbox" :checked="!!value" @change="update($event.target.checked)">
         </div>
 
         <!-- String (date, enum, text) --->

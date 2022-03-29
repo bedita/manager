@@ -14,7 +14,10 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\LayoutHelper;
+use App\View\Helper\SystemHelper;
 use Cake\Core\Configure;
+use Cake\Http\Cookie\Cookie;
+use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
@@ -26,6 +29,15 @@ use Cake\View\View;
  */
 class LayoutHelperTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     /**
      * Data provider for `testIsDashboard` test case.
      *
@@ -326,16 +338,18 @@ class LayoutHelperTest extends TestCase
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
+        $system = new SystemHelper($view);
         $conf = $layout->metaConfig();
         $expected = [
             'base' => '',
             'currentModule' => ['name' => 'home'],
-            'template' => null,
+            'template' => '',
             'modules' => ['documents', 'images'],
             'plugins' => \App\Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => 'my-token',
+            'maxFileSize' => $system->getMaxFileSize(),
         ];
         static::assertSame($expected, $conf);
     }
@@ -354,5 +368,53 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $conf = $layout->metaConfig();
         static::assertSame('some-token', $conf['csrfToken']);
+    }
+
+    /**
+     * Data provider for `testGetCsrfToken`
+     *
+     * @return array
+     */
+    public function csrfTokenProvider(): array
+    {
+        $request = new ServerRequest();
+
+        return [
+            [
+                '_csrfToken-from-request-params',
+                new LayoutHelper(new View(new ServerRequest(['params' => ['_csrfToken' => '_csrfToken-from-request-params']]))),
+            ],
+            [
+                '_csrfToken-from-request-data',
+                new LayoutHelper(new View(new ServerRequest(['post' => ['_csrfToken' => '_csrfToken-from-request-data']]))),
+            ],
+            [
+                'csrfToken-from-request-attribute',
+                new LayoutHelper(new View($request->withAttribute('csrfToken', 'csrfToken-from-request-attribute'))),
+            ],
+            [
+                'csrfToken-from-request-cookie',
+                new LayoutHelper(new View($request->withCookieCollection(new CookieCollection([Cookie::create('csrfToken', 'csrfToken-from-request-cookie', [])])))),
+            ],
+            [
+                null,
+                new LayoutHelper(new View($request)),
+            ],
+        ];
+    }
+
+    /**
+     * Test `getCsrfToken` method
+     *
+     * @param string|null $expected The expected result
+     * @param \App\View\Helper\LayoutHelper $layout The layout helper
+     * @return void
+     * @dataProvider csrfTokenProvider()
+     * @covers ::getCsrfToken()
+     */
+    public function testGetCsrfToken(?string $expected, LayoutHelper $layout): void
+    {
+        $actual = $layout->getCsrfToken();
+        static::assertSame($expected, $actual);
     }
 }
