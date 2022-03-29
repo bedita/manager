@@ -59,7 +59,7 @@ class ModulesComponent extends Component
      *
      * @var array
      */
-    public $modules = [];
+    protected $modules = [];
 
     /**
      * Read modules and project info from `/home' endpoint.

@@ -15,6 +15,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
+use App\Controller\ModulesController;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
 use Authentication\AuthenticationServiceInterface;
@@ -609,7 +610,11 @@ class ModulesComponentTest extends TestCase
         $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
-        $actual = $this->Modules->modules;
+
+        // get $this->Modules->modules
+        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property->setAccessible(true);
+        $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
     }
 
