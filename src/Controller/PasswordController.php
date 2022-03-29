@@ -38,7 +38,7 @@ class PasswordController extends AppController
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
-        /** @var \Authentication\Identity $user */
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (empty($user->get('tokens'))) {
             return null;

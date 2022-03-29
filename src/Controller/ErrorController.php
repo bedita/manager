@@ -61,4 +61,15 @@ class ErrorController extends AppController
 
         return null;
     }
+
+    /**
+     * afterFilter callback.
+     *
+     * @param \Cake\Event\EventInterface $event Event.
+     * @return void
+     * @codeCoverageIgnore
+     */
+    public function afterFilter(EventInterface $event): void
+    {
+    }
 }

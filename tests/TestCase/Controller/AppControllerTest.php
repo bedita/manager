@@ -191,7 +191,7 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        /** @var \Authentication\Identity $user */
+        /** @var \Authentication\Identity|null $user */
         $user = $this->AppController->Authentication->getIdentity();
         $expectedtokens = $user->get('tokens');
 

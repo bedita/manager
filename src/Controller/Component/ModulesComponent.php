@@ -68,9 +68,9 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
-        /** @var \Authentication\Identity $user */
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (!$user->get('id')) {
+        if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
 
             return;
@@ -103,7 +103,7 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
-            /** @var \Authentication\Identity $user */
+            /** @var \Authentication\Identity|null $user */
             $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
                 sprintf('home_%d', $user->get('id')),
@@ -166,7 +166,7 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
-        /** @var \Authentication\Identity $user */
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (empty($user->getOriginalData())) {
             return;

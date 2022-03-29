@@ -88,7 +88,7 @@ abstract class AdministrationBaseController extends AppController
             return $res;
         }
 
-        /** @var \Authentication\Identity $user */
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         $roles = (array)$user->get('roles');
         if (empty($roles) || !in_array('admin', $roles)) {
