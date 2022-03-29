@@ -134,7 +134,6 @@ class ObjectsEditorsComponentTest extends TestCase
 
         // id not found in objectsEditors
         $user = ['id' => 123, 'attributes' => ['name' => 'Gustavo', 'surname' => 'Support']];
-        //$controller->Authentication = $this->Authentication;
         $this->Authentication->setIdentity(new Identity($user));
         $this->ObjectsEditors->update('999');
         $expected = 'Gustavo Support';
