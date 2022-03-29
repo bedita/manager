@@ -102,7 +102,11 @@ class ObjectsEditorsComponent extends Component
      */
     public function editorName(): ?string
     {
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
+        if (empty($user)) {
+            return null;
+        }
 
         if (!empty($user['attributes']['name']) && !empty($user['attributes']['surname'])) {
             return sprintf('%s %s', $user['attributes']['name'], $user['attributes']['surname']);
