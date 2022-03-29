@@ -36,7 +36,8 @@ class TranslatorComponent extends Component
     {
         $translator = (array)Configure::read('Translator');
         if (!empty($translator) && !empty($translator['class']) && !empty($translator['options'])) {
-            extract($translator);
+            $class = $translator['class'];
+            $options = $translator['options'];
             $this->Translator = new $class();
             $this->Translator->setup($options);
         }

@@ -77,15 +77,15 @@ class ProjectMiddleware implements MiddlewareInterface
     protected function detectProject(ServerRequest $request): ?string
     {
         $session = $request->getSession();
-        if (empty($session) || !$session->check('_project')) {
-            $project = $request->getData('project');
-            if (!empty($project)) {
-                return $project;
-            }
-
-            return null;
+        if ($session->check('_project')) {
+            return (string)$session->read('_project');
         }
 
-        return (string)$session->read('_project');
+        $project = $request->getData('project');
+        if (!empty($project)) {
+            return $project;
+        }
+
+        return null;
     }
 }
