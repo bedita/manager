@@ -95,7 +95,7 @@ class ImportFilterTest extends TestCase
             $this->expectExceptionMessage($expected->getMessage());
         }
         $filter = new $filterClassName();
-        $actual =  $filter->createAsyncJob($filename, $filepath, $options);
+        $actual = $filter->createAsyncJob($filename, $filepath, $options);
         static::assertEquals(get_class($expected), get_class($actual));
         static::assertNotEmpty($actual->info);
     }
