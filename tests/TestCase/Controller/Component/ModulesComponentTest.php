@@ -15,7 +15,6 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ModulesComponent;
-use App\Controller\ModulesController;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
 use Authentication\AuthenticationServiceInterface;
