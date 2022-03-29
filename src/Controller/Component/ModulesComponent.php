@@ -168,7 +168,7 @@ class ModulesComponent extends Component
         }
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user->getOriginalData())) {
+        if (empty($user) || empty($user->getOriginalData())) {
             return;
         }
 
