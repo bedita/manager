@@ -92,7 +92,6 @@ class ModulesComponentTest extends TestCase
             }
         };
         $controller->loadComponent('Authentication');
-        //$controller->Authentication = $this->Authentication;
     }
 
     /**
