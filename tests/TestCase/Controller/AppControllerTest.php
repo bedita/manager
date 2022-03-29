@@ -101,7 +101,7 @@ class AppControllerTest extends TestCase
             ],
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
-        $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest(), $this->AppController->getResponse());
+        $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest());
         $identity = new Identity($result->getData());
         $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
         $this->AppController->setRequest($request);
@@ -191,7 +191,9 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        $expectedtokens = $this->AppController->Authentication->getIdentity()->get('tokens');
+        /** @var \Authentication\Identity $user */
+        $user = $this->AppController->Authentication->getIdentity();
+        $expectedtokens = $user->get('tokens');
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
@@ -306,9 +308,12 @@ class AppControllerTest extends TestCase
         $apiClient->method('getTokens')
             ->willReturn($updatedToken);
 
-        $this->AppController->apiClient = $apiClient;
+        // set $this->AppController->apiClient
+        $property = new \ReflectionProperty(AppController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->AppController, $apiClient);
 
-        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->dispatchEvent('Controller.beforeRender');
 
         // assert user objects has been updated
         $user = $this->AppController->viewBuilder()->getVar('user');

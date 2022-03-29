@@ -49,7 +49,7 @@ class PasswordControllerTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -78,7 +78,10 @@ class PasswordControllerTest extends TestCase
         } else {
             $this->client->method($method)->with($with[0], $with[1], $with[2])->willThrowException($exception);
         }
-        $this->Password->apiClient = $this->client;
+        // set $this->Password->apiClient
+        $property = new \ReflectionProperty(PasswordController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Password, $this->client);
     }
 
     /**
@@ -242,9 +245,6 @@ class PasswordControllerTest extends TestCase
     /**
      * Test `change` method, exception case
      *
-     * @param array $config The config for controller setup
-     * @param array $mock The parameters to mock api client
-     * @param Response|null $expected The expected result
      * @return void
      * @covers ::change()
      */

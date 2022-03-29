@@ -39,14 +39,14 @@ class TrashControllerTest extends TestCase
     /**
      * Test controller
      *
-     * @var App\Controller\TrashController
+     * @var \App\Controller\TrashController
      */
     public $Trash;
 
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 

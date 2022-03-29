@@ -136,7 +136,10 @@ class ExportControllerTest extends TestCase
                 ],
             ]);
         ApiClientProvider::setApiClient($apiClient);
-        $this->Export->apiClient = $apiClient;
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
 
         // expected csv.
         $fields = '"id","name","skills","category","prop"';
@@ -291,7 +294,10 @@ class ExportControllerTest extends TestCase
             );
         }
 
-        $this->Export->apiClient = $apiClient;
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
 
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rows');
@@ -402,7 +408,7 @@ class ExportControllerTest extends TestCase
     /**
      * Test `getFieldNames` method.
      *
-     * @param string|array $input The input for the function.
+     * @param string|array $response The response.
      * @param string|array $expected The expected value.
      * @return void
      * @covers ::getFieldNames()

@@ -70,10 +70,11 @@ class AppController extends Controller
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
+        /** @var \Authentication\Identity $identity */
         $identity = $this->Authentication->getIdentity();
         if ($identity && $identity->get('tokens')) {
             $tokens = $identity->get('tokens');
-            if (!empty($tokens)) {
+            if ($tokens) {
                 $this->apiClient->setupTokens($tokens);
             }
         } elseif (!in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login'])) {
@@ -149,6 +150,7 @@ class AppController extends Controller
      */
     protected function setupOutputTimezone(): void
     {
+        /** @var \Authentication\Identity $identity */
         $identity = $this->Authentication->getIdentity();
         if (!$identity) {
             return;
@@ -169,6 +171,7 @@ class AppController extends Controller
      */
     public function beforeRender(EventInterface $event): ?Response
     {
+        /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
         if ($user) {
             $tokens = $this->apiClient->getTokens();

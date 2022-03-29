@@ -42,7 +42,7 @@ class UserProfileControllerTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 

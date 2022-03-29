@@ -34,7 +34,7 @@ class FlashComponentTest extends TestCase
     /**
      * Test controller
      *
-     * @var App\Controller\AppController
+     * @var \App\Controller\AppController
      */
     public $controller;
 

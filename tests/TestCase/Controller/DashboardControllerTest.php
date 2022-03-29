@@ -42,7 +42,7 @@ class DashboardControllerTest extends TestCase
     /**
      * Setup controller to test with request config
      *
-     * @param array $requestConfig
+     * @param ?array $config The config
      * @return void
      */
     protected function setupController($config = null): void

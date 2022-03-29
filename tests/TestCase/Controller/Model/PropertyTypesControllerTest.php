@@ -198,7 +198,7 @@ class PropertyTypesControllerTest extends TestCase
         ];
 
         $this->setupController($config);
-        $this->ModelController->resourceType = 'property_types';
+        $this->ModelController->setResourceType('property_types');
 
         if ($expectedResponse instanceof \Exception) {
             $this->expectException(get_class($expectedResponse));

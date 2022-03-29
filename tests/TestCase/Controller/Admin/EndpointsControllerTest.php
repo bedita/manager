@@ -32,7 +32,7 @@ class EndpointsControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 

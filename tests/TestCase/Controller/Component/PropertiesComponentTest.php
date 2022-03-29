@@ -63,8 +63,10 @@ class PropertiesComponentTest extends TestCase
     {
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Properties = $registry->load(PropertiesComponent::class);
-        $this->Properties->startup();
+        /** @var \App\Controller\Component\PropertiesComponent $Properties */
+        $Properties = $registry->load(PropertiesComponent::class);
+        $Properties->startup();
+        $this->Properties = $Properties;
     }
 
     /**

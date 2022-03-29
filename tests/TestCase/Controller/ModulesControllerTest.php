@@ -807,7 +807,6 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @param string $relation The relation to test
      * @param string $objectType The object type / endpoint
-     * @param array $expected The expected data
      * @covers ::relationships()
      * @dataProvider relationshipsProvider()
      * @return void
@@ -965,7 +964,7 @@ class ModulesControllerTest extends BaseControllerTest
         ]);
 
         // exception, flash message
-        $result = $this->controller->saveCategory([]);
+        $result = $this->controller->saveCategory();
 
         // verify response status code and type
         static::assertNotNull($result);
@@ -1007,5 +1006,30 @@ class ModulesControllerTest extends BaseControllerTest
         $expected = '[404] Not Found';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `getObjectType` and `setObjectType`.
+     *
+     * @return void
+     * @covers ::getObjectType()
+     * @covers ::setObjectType()
+     */
+    public function testGetSetObjectType(): void
+    {
+        // Setup controller for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $expected = 'dummies';
+        $this->controller->setObjectType($expected);
+        $actual = $this->controller->getObjectType();
+        static::assertSame($expected, $actual);
     }
 }

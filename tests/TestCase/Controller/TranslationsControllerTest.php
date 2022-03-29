@@ -41,14 +41,14 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test Translations controller
      *
-     * @var App\Controller\TranslationsController
+     * @var \App\Controller\TranslationsController
      */
     public $controller;
 
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -99,7 +99,7 @@ class TranslationsControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->controller = new TranslationsController($request);
-        $this->controller->objectType = 'documents';
+        $this->controller->setObjectType('documents');
         $this->setupApi();
         $this->createTestObject();
     }
@@ -448,7 +448,7 @@ class TranslationsControllerTest extends TestCase
 
         $request = new ServerRequest($this->defaultRequestConfig);
         $this->controller = new TranslationsController($request);
-        $this->controller->objectType = 'dummies';
+        $this->controller->setObjectType('dummies');
         $reflectionClass = new \ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
         $method->setAccessible(true);

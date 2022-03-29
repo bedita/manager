@@ -148,7 +148,8 @@ class ApplicationTest extends TestCase
     public function testGetAuthenticationService(): void
     {
         $app = new Application(CONFIG);
-        $authService = $app->getAuthenticationService(new ServerRequest(), new Response());
+        /** @var \Authentication\AuthenticationService $authService */
+        $authService = $app->getAuthenticationService(new ServerRequest());
         /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
         $identifier = $authService->identifiers()->get(ApiIdentifier::class);
         static::assertInstanceOf(AuthenticationService::class, $authService);

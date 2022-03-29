@@ -92,7 +92,6 @@ class ProjectMiddlewareTest extends TestCase
      *
      * @param int $expected The HTTP status code expected
      * @param array $data Request session data
-     * @param array $server The server vars
      * @return void
      * @dataProvider invokeProvider
      * @covers ::__construct()

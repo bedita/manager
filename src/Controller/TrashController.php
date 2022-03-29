@@ -218,7 +218,7 @@ class TrashController extends AppController
         while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
             foreach ($response['data'] as $index => $data) {
                 try {
-                    $this->apiClient->remove($data['id'], $query);
+                    $this->apiClient->remove($data['id']);
                     $counter++;
                 } catch (BEditaClientException $e) {
                     // Error! Back to trash index.
