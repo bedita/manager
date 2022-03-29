@@ -49,6 +49,13 @@ class ModulesComponentTest extends TestCase
      */
     public $Modules;
 
+    /**
+     * Authentication component
+     *
+     * @var \Authentication\Controller\Component\AuthenticationComponent;
+     */
+    public $Authentication;
+
     public $MyModules;
 
     /**

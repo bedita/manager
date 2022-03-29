@@ -20,6 +20,13 @@ use ReflectionProperty;
 class BulkControllerTest extends BaseControllerTest
 {
     /**
+     * Test Modules controller
+     *
+     * @var \App\Controller\BulkController
+     */
+    public $controller;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void

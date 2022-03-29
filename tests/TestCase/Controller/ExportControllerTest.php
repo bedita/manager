@@ -350,8 +350,9 @@ class ExportControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('fillDataFromResponse');
         $method->setAccessible(true);
-        extract($input); // => $fields, $response
         $data = [];
+        $response = $input['response'];
+        $fields = $input['fields'];
         $method->invokeArgs($this->Export, [&$data, $response, $fields]);
         static::assertEquals($expected, $data);
     }
@@ -477,7 +478,8 @@ class ExportControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rowFields');
         $method->setAccessible(true);
-        extract($input); // => $data, $field
+        $data = $input['data'];
+        $fields = $input['fields'];
         $row = $method->invokeArgs($this->Export, [&$data, $fields]);
         static::assertEquals($expected, $row);
     }

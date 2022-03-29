@@ -28,6 +28,13 @@ class ObjectsEditorsComponentTest extends TestCase
     public $ObjectsEditors;
 
     /**
+     * Authentication component
+     *
+     * @var \Authentication\Controller\Component\AuthenticationComponent;
+     */
+    public $Authentication;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void

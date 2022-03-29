@@ -44,6 +44,13 @@ class ObjectTypesControllerTest extends TestCase
     public $ModelController;
 
     /**
+     * Client API
+     *
+     * @var \BEdita\WebTools\ApiClientProvider
+     */
+    public $client;
+
+    /**
      * Test request config
      *
      * @var array

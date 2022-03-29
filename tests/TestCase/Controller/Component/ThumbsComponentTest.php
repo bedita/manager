@@ -68,12 +68,12 @@ class ThumbsComponentTest extends TestCase
                 [],
             ],
             // test with objct without ids
-            'responseWithoutIds' => [
+            'responseWithoutIds 1' => [
                 ['data' => []],
                 ['data' => []],
             ],
             // test with objct without ids
-            'responseWithoutIds' => [
+            'responseWithoutIds 2' => [
                 ['data' => [
                     'ids' => [],
                 ]],
