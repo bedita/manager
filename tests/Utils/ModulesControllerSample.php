@@ -12,16 +12,6 @@ use BEdita\SDK\BEditaClient;
 class ModulesControllerSample extends ModulesController
 {
     /**
-     * Getter for objectType protected var
-     *
-     * @return string
-     */
-    public function getObjectType(): string
-    {
-        return $this->objectType;
-    }
-
-    /**
      * Public version of parent function (protected) descendants
      *
      * @return array
