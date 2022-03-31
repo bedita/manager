@@ -12,11 +12,17 @@ let entries = {};
 let aliases = {};
 
 pluginsFound.forEach(plugin => {
-    if (dirExists(`${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`)) {
-        entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`);
-    } else {
-        entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.alternateJsRoot}/index.js`);
+    let jsRoot = BUNDLE.jsRoot;
+    if (!fileExists(`${BUNDLE.beditaPluginsRoot}/${plugin}/${jsRoot}`)) {
+        for (let root of BUNDLE.alternateJsRoots) {
+            if (fileExists(`${BUNDLE.beditaPluginsRoot}/${plugin}/${root}`)) {
+                jsRoot = root;
+
+                break;
+            }
+        }
     }
+    entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${jsRoot}/index.js`);
     aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`);
 });
 

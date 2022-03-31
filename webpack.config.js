@@ -18,15 +18,14 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // config
-// jsRoot or alternateJsRoot
 let jsRoot = BUNDLE.jsRoot;
-if (!dirExists(jsRoot)) {
-    console.log(`Javascript root directory "${jsRoot}" not found. Trying alternate javascript root directory.`);
-    jsRoot = BUNDLE.alternateJsRoot;
-    if (!dirExists(jsRoot)) {
-        console.error(`Javascript root directory "${jsRoot}" not found. Bye.`);
+if (!fileExists(jsRoot)) {
+    for (let root of BUNDLE.alternateJsRoots) {
+        if (fileExists(root)) {
+            jsRoot = root;
 
-        return false;
+            break;
+        }
     }
 }
 const appEntry = `${path.resolve(__dirname, jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;

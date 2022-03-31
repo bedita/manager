@@ -12,7 +12,7 @@ const { readdirSync, statSync, existsSync } = require('fs')
 const { join } = require('path')
 
 const readDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
-const dirExists = p => existsSync(p);
+const fileExists = p => existsSync(p);
 
 // Environment: default development
 // from Node env
@@ -95,9 +95,9 @@ const BUNDLE = {
     beditaPluginsRoot: 'plugins',
 
     // alternate folders, cake4 pattern
-    alternateJsRoot: 'templates/Layout/js',
-    alternateTemplateRoot: 'templates',
-    alternateLocaleDir: 'locales',
+    alternateJsRoots: ['templates/Layout/js', 'templates/layout/js', 'resources/js'],
+    alternateTemplateRoots: ['templates/layout', 'templates'],
+    alternateLocaleDirs: ['locales'],
 
     // destination
     webroot: 'webroot',    // destination webroot
@@ -117,15 +117,14 @@ const bundler = {
     }
 }
 
-// jsRoot or alternateJsRoot
 let jsRoot = BUNDLE.jsRoot;
-if (!dirExists(jsRoot)) {
-    console.log(`Javascript root directory "${jsRoot}" not found. Trying alternate javascript root directory.`);
-    jsRoot = BUNDLE.alternateJsRoot;
-    if (!dirExists(jsRoot)) {
-        console.error(`Javascript root directory "${jsRoot}" not found. Bye.`);
+if (!fileExists(jsRoot)) {
+    for (let root of BUNDLE.alternateJsRoots) {
+        if (fileExists(root)) {
+            jsRoot = root;
 
-        return false;
+            break;
+        }
     }
 }
 
@@ -133,27 +132,25 @@ if (!dirExists(jsRoot)) {
 // Add template dir [BUNDLE.templateRoot] alias
 const entries = readDirs(jsRoot);
 
-// templateRoot or alternateTemplateRoot
 let templateRoot = BUNDLE.templateRoot;
-if (!dirExists(templateRoot)) {
-    console.log(`Template directory "${templateRoot}" not found. Trying alternate template directory.`);
-    templateRoot = BUNDLE.alternateTemplateRoot;
-    if (!dirExists(templateRoot)) {
-        console.error(`Template directory "${templateRoot}" not found. Bye.`);
+if (!fileExists(templateRoot)) {
+    for (let root of BUNDLE.alternateTemplateRoots) {
+        if (fileExists(root)) {
+            templateRoot = root;
 
-        return false;
+            break;
+        }
     }
 }
 
-// localeDir or alternateLocaleDir
 let localeDir = BUNDLE.localeDir;
-if (!dirExists(localeDir)) {
-    console.log(`Locale directory "${localeDir}" not found. Trying alternate locale directory.`);
-    localeDir = BUNDLE.alternateLocaleDir;
-    if (!dirExists(localeDir)) {
-        console.error(`Locale directory "${localeDir}" not found. Bye.`);
+if (!fileExists(localeDir)) {
+    for (let root of BUNDLE.alternateLocaleDirs) {
+        if (fileExists(root)) {
+            localeDir = root;
 
-        return false;
+            break;
+        }
     }
 }
 
@@ -178,7 +175,7 @@ if (devMode) {
 
 const locales = require(__dirname + '/' + jsRoot + '/config/locales.js');
 
-global.dirExists = dirExists;
+global.fileExists = fileExists;
 global.readDirs = readDirs;
 global.path = path;
 global.devMode = devMode;
