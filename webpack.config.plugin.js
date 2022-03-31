@@ -3,6 +3,7 @@ require('./webpack.config.environment');
 
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 // auto load installed plugins
 const pluginsFound = readDirs(BUNDLE.beditaPluginsRoot);
@@ -11,7 +12,11 @@ let entries = {};
 let aliases = {};
 
 pluginsFound.forEach(plugin => {
-    entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`);
+    if (dirExists(`${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`)) {
+        entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.jsRoot}/index.js`);
+    } else {
+        entries[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/${BUNDLE.alternateJsRoot}/index.js`);
+    }
     aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`);
 });
 
