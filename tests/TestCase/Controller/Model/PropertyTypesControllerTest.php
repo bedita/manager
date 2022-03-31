@@ -225,4 +225,20 @@ class PropertyTypesControllerTest extends TestCase
 
         static::assertEquals($expectedResponse, $actualResponse);
     }
+
+    /**
+     * Test `getResourceType` and `setResourceType`.
+     *
+     * @return void
+     * @covers ::getResourceType()
+     * @covers ::setResourceType()
+     */
+    public function testGetSetResourceType(): void
+    {
+        $this->setupController();
+        $expected = 'dummies';
+        $this->ModelController->setResourceType($expected);
+        $actual = $this->ModelController->getResourceType();
+        static::assertSame($expected, $actual);
+    }
 }
