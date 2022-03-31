@@ -20,6 +20,7 @@ use Cake\TestSuite\TestCase;
  * Console Command tests.
  *
  * {@see \App\Command\Console} Test Case
+ *
  * @coversDefaultClass \App\Command\Console
  */
 class ConsoleCommandTest extends TestCase
