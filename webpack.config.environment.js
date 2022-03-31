@@ -94,7 +94,7 @@ const BUNDLE = {
     localeDir: 'src/Locale',
     beditaPluginsRoot: 'plugins',
 
-    // alternate folders, cake4 pattern
+    // alternate folders
     alternateJsRoots: ['templates/Layout/js', 'templates/layout/js', 'resources/js'],
     alternateTemplateRoots: ['templates/layout', 'templates'],
     alternateLocaleDirs: ['locales'],
