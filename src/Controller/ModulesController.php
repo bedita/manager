@@ -606,4 +606,25 @@ class ModulesController extends AppController
             'object_type' => $this->objectType,
         ]);
     }
+
+    /**
+     * Get objectType
+     *
+     * @return string|null
+     */
+    public function getObjectType(): ?string
+    {
+        return $this->objectType;
+    }
+
+    /**
+     * Set objectType
+     *
+     * @param string|null $objectType The object type
+     * @return void
+     */
+    public function setObjectType(?string $objectType): void
+    {
+        $this->objectType = $objectType;
+    }
 }

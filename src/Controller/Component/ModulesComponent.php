@@ -68,6 +68,7 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
@@ -102,6 +103,7 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
+            /** @var \Authentication\Identity|null $user */
             $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
                 sprintf('home_%d', $user->get('id')),
@@ -164,6 +166,7 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (empty($user) || empty($user->getOriginalData())) {
             return;
@@ -325,21 +328,23 @@ class ModulesComponent extends Component
      * Remove a stream from a media, if any
      *
      * @param array $requestData The request data from form
-     * @return void
+     * @return bool
      */
-    public function removeStream(array $requestData): void
+    public function removeStream(array $requestData): bool
     {
         if (empty($requestData['id'])) {
-            return;
+            return false;
         }
 
         $apiClient = ApiClientProvider::getApiClient();
         $response = $apiClient->get(sprintf('/%s/%s/streams', $requestData['model-type'], $requestData['id']));
         if (empty($response['data'])) { // no streams for media
-            return;
+            return false;
         }
         $streamId = Hash::get($response, 'data.0.id');
         $apiClient->deleteObject($streamId, 'streams');
+
+        return true;
     }
 
     /**

@@ -91,7 +91,7 @@ class ModulesComponentTest extends TestCase
                 return ['mices', 'elefants', 'cats', 'dogs'];
             }
         };
-        $controller->Authentication = $this->Authentication;
+        $controller->loadComponent('Authentication');
     }
 
     /**
@@ -608,7 +608,11 @@ class ModulesComponentTest extends TestCase
         $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
-        $actual = $this->Modules->modules;
+
+        // get $this->Modules->modules
+        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property->setAccessible(true);
+        $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
     }
 
@@ -842,7 +846,7 @@ class ModulesComponentTest extends TestCase
      * Test `upload` method
      *
      * @param array $requestData The request data
-     * @param Expection|null $expectedException The exception expected
+     * @param \Exception|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
      * @covers ::upload()
@@ -998,7 +1002,8 @@ class ModulesComponentTest extends TestCase
             ->willReturn([]);
 
         ApiClientProvider::setApiClient($apiClient);
-        $this->assertNull($this->Modules->removeStream($requestData));
+        $actual = $this->Modules->removeStream($requestData);
+        static::assertFalse($actual);
     }
 
     /**

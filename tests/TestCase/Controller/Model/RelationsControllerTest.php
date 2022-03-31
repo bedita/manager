@@ -67,7 +67,11 @@ class RelationsControllerTest extends TestCase
         ];
         $apiClient->method('get')
             ->willReturn($response);
-        $this->Relations->apiClient = $apiClient;
+
+        // set $this->Relations->apiClient
+        $property = new \ReflectionProperty(RelationsController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Relations, $apiClient);
     }
 
     /**

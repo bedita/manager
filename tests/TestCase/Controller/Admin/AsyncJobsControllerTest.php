@@ -16,7 +16,7 @@ class AsyncJobsControllerTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Test\TestCase\Controller\Admin\AsyncJobsController
+     * @var \App\Controller\Admin\AsyncJobsController
      */
     public $AsyncJobsController;
 
@@ -37,7 +37,7 @@ class AsyncJobsControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 

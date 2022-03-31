@@ -67,8 +67,9 @@ abstract class ModelBaseController extends AppController
             return $res;
         }
 
+        /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user) || empty($user->get('roles')) || !in_array('admin', $user->get('roles'))) {
+        if (empty($user->get('roles')) || !in_array('admin', $user->get('roles'))) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
 

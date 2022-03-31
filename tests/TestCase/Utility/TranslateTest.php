@@ -55,7 +55,7 @@ class TranslateTest extends TestCase
      * @dataProvider translateProvider()
      * @covers ::get()
      */
-    public function testTranslate(string $name, string $expected): void
+    public function testTranslate(string $name, ?string $expected): void
     {
         $actual = Translate::get($name);
         static::assertSame($expected, $actual);

@@ -86,7 +86,7 @@ class LoginControllerTest extends TestCase
             ],
         ]);
         $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));
-        $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest(), $this->Login->getResponse());
+        $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest());
         $identity = new Identity($result->getData() ?: []);
         $this->Login->setRequest($this->Login->getRequest()->withAttribute('identity', $identity));
     }

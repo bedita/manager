@@ -19,9 +19,18 @@ use Cake\Utility\Hash;
 
 /**
  * Handles thumbs.
+ *
+ * @property-read \App\Controller\Component\QueryComponent $Query
  */
 class ThumbsComponent extends Component
 {
+    /**
+     * Components
+     *
+     * @var array
+     */
+    protected $components = ['Query'];
+
     /**
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
      *
@@ -75,7 +84,7 @@ class ThumbsComponent extends Component
     {
         try {
             $params = $this->getController()->getRequest()->getQueryParams();
-            $query = $this->getController()->Query->prepare($params);
+            $query = $this->Query->prepare($params);
             $url = sprintf('/media/thumbs?%s', http_build_query([
                 'ids' => implode(',', $ids),
                 'options' => ['w' => 400],

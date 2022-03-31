@@ -274,7 +274,10 @@ class BulkControllerTest extends BaseControllerTest
 
         // get object for test
         $o = $this->getTestObject();
-        $this->controller->ids = [$o['id']];
+        // set $this->controller->ids
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, [$o['id']]);
         $attributes = ['status' => 'on'];
 
         // do controller call
@@ -286,8 +289,11 @@ class BulkControllerTest extends BaseControllerTest
         // check empty errors
         static::assertEmpty($this->controller->getErrors());
 
-        // // do controller call
-        $this->controller->ids = ['123456789'];
+        // do controller call
+        // set $this->controller->ids
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, ['123456789']);
         $method->invokeArgs($this->controller, [$attributes]);
 
         // check not empty errors
@@ -305,7 +311,10 @@ class BulkControllerTest extends BaseControllerTest
         // Setup controller for test
         $this->setupController();
 
-        $this->controller->categories = '123,456,789';
+        // set $this->controller->categories
+        $property = new \ReflectionProperty(BulkController::class, 'categories');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, '123,456,789');
 
         // mock schema component
         $mockResponse = [
@@ -346,7 +355,9 @@ class BulkControllerTest extends BaseControllerTest
 
         // get object for test
         $o = $this->getTestObject();
-        $this->controller->ids = [$o['id']];
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, [$o['id']]);
 
         // do controller call
         $reflectionClass = new \ReflectionClass($this->controller);
@@ -358,7 +369,10 @@ class BulkControllerTest extends BaseControllerTest
         static::assertEmpty($this->controller->getErrors());
 
         // do controller call
-        $this->controller->ids = ['123456789'];
+        // set $this->controller->ids
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, ['123456789']);
         $method->invokeArgs($this->controller, []);
 
         // check not empty errors
@@ -378,7 +392,10 @@ class BulkControllerTest extends BaseControllerTest
 
         // get object for test
         $o = $this->getTestObject();
-        $this->controller->ids = [$o['id']];
+        // set $this->controller->ids
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, [$o['id']]);
 
         // get folder for test
         $f = $this->createTestFolder();
@@ -412,7 +429,10 @@ class BulkControllerTest extends BaseControllerTest
 
         // get object for test
         $o = $this->getTestObject();
-        $this->controller->ids = [$o['id']];
+        // set $this->controller->ids
+        $property = new \ReflectionProperty(BulkController::class, 'ids');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, [$o['id']]);
 
         // get folder for test
         $f = $this->createTestFolder();
@@ -445,7 +465,10 @@ class BulkControllerTest extends BaseControllerTest
         $this->setupController();
 
         // empty
-        $this->controller->errors = [];
+        // set $this->controller->errors
+        $property = new \ReflectionProperty(BulkController::class, 'errors');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, []);
         $reflectionClass = new \ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('errors');
         $method->setAccessible(true);
@@ -454,7 +477,10 @@ class BulkControllerTest extends BaseControllerTest
         static::assertEmpty($message);
 
         // not empty
-        $this->controller->errors = ['something bad happened'];
+        // set $this->controller->errors
+        $property = new \ReflectionProperty(BulkController::class, 'errors');
+        $property->setAccessible(true);
+        $property->setValue($this->controller, ['something bad happened']);
         $method->invokeArgs($this->controller, []);
         $message = $this->controller->getRequest()->getSession()->read('Flash');
         static::assertNotEmpty($message);

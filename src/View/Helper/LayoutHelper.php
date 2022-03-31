@@ -21,6 +21,8 @@ use Cake\View\Helper;
  * Helper for site layout
  *
  * @property \Cake\View\Helper\HtmlHelper $Html
+ * @property \App\View\Helper\LinkHelper $Link
+ * @property \App\View\Helper\SystemHelper $System
  */
 class LayoutHelper extends Helper
 {

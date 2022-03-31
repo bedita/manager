@@ -12,19 +12,9 @@ use BEdita\SDK\BEditaClient;
 class ModulesControllerSample extends ModulesController
 {
     /**
-     * Getter for objectType protected var
-     *
-     * @return string
-     */
-    public function getObjectType(): string
-    {
-        return $this->objectType;
-    }
-
-    /**
      * Public version of parent function (protected) descendants
      *
-     * @return void
+     * @return array
      */
     public function descendants(): array
     {
@@ -34,7 +24,7 @@ class ModulesControllerSample extends ModulesController
     /**
      * Public version of parent function (protected)
      *
-     * @return void
+     * @return string
      */
     public function availableRelationshipsUrl(string $relation): string
     {
@@ -44,7 +34,7 @@ class ModulesControllerSample extends ModulesController
     /**
      * Create new object from ajax request.
      *
-     * @return void
+     * @return \BEdita\SDK\BEditaClient
      */
     public function getApiClient(): BEditaClient
     {

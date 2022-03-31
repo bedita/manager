@@ -39,7 +39,7 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Controller\ModelController
+     * @var \App\Controller\Model\ObjectTypesController
      */
     public $ModelController;
 

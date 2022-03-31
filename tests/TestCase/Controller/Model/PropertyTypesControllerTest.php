@@ -198,7 +198,7 @@ class PropertyTypesControllerTest extends TestCase
         ];
 
         $this->setupController($config);
-        $this->ModelController->resourceType = 'property_types';
+        $this->ModelController->setResourceType('property_types');
 
         if ($expectedResponse instanceof \Exception) {
             $this->expectException(get_class($expectedResponse));
@@ -224,5 +224,21 @@ class PropertyTypesControllerTest extends TestCase
         }
 
         static::assertEquals($expectedResponse, $actualResponse);
+    }
+
+    /**
+     * Test `getResourceType` and `setResourceType`.
+     *
+     * @return void
+     * @covers ::getResourceType()
+     * @covers ::setResourceType()
+     */
+    public function testGetSetResourceType(): void
+    {
+        $this->setupController();
+        $expected = 'dummies';
+        $this->ModelController->setResourceType($expected);
+        $actual = $this->ModelController->getResourceType();
+        static::assertSame($expected, $actual);
     }
 }
