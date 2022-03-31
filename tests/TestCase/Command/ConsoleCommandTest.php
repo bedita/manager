@@ -37,14 +37,6 @@ class ConsoleCommandTest extends TestCase
     }
 
     /**
-     * @inheritDoc
-     */
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
-    /**
      * Test help output
      *
      * @return void
