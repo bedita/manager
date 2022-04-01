@@ -39,7 +39,7 @@
         "dereuromark/cakephp-ide-helper": "~1.17.0",
         "phpstan/phpstan": "^1.5",
         "phpunit/phpunit": "^9",
-        "psy/psysh": "@stable"
+        "cakephp/repl": "^0.1"
     },
     "autoload": {
         "psr-4": {
@@ -55,7 +55,6 @@
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
-        "post-update-cmd": "App\\Console\\Installer::postInstall",
         "check": [
             "@test",
             "@cs-check"
