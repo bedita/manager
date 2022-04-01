@@ -34,13 +34,10 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\IniConfig;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Database\TypeFactory;
-use Cake\Datasource\ConnectionManager;
 use Cake\Error\ConsoleErrorHandler;
 use Cake\Error\ErrorHandler;
 use Cake\Http\ServerRequest;
 use Cake\Log\Log;
-use Cake\Mailer\Mailer;
-use Cake\Mailer\TransportFactory;
 use Cake\Utility\Security;
 
 /**
@@ -165,9 +162,6 @@ if (!Configure::read('App.fullBaseUrl')) {
 }
 
 Cache::setConfig(Configure::consume('Cache'));
-ConnectionManager::setConfig(Configure::consume('Datasources'));
-TransportFactory::setConfig(Configure::consume('EmailTransport'));
-Mailer::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
 Security::setSalt(Configure::consume('Security.salt'));
 
