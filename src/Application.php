@@ -73,6 +73,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
         $this->addOptionalPlugin('Bake');
         $this->addOptionalPlugin('IdeHelper');
+        $this->addOptionalPlugin('Cake/Repl');
         $this->loadPluginsFromConfig();
     }
 
