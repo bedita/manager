@@ -59,6 +59,7 @@ class Installer
         $rootDir = dirname(dirname(__DIR__));
 
         static::createAppLocalConfig($rootDir, $io);
+        static::createDotEnvConfig($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
 
         static::setFolderPermissions($rootDir, $io);
@@ -76,7 +77,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function createAppLocalConfig($dir, $io)
+    public static function createAppLocalConfig($dir, $io): void
     {
         $appLocalConfig = $dir . '/config/app_local.php';
         $appLocalConfigTemplate = $dir . '/config/app_local.example.php';
