@@ -19,7 +19,7 @@
     <div class="login-form">
 
         {{ Form.create(null, {
-            'url': {'_name': 'login', 'redirect': _view.request.getQuery('redirect') },
+            'url': {'_name': 'login', '?': {'redirect': _view.request.getQuery('redirect')}},
         })|raw }}
 
         {% if projects %}
