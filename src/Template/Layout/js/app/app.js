@@ -143,6 +143,9 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
+            // register functions in BEDITA to make them reusable in plugins
+            BEDITA.confirm = confirm;
+            BEDITA.prompt = prompt;
         });
     },
 
