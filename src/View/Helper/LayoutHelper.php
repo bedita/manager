@@ -219,4 +219,32 @@ class LayoutHelper extends Helper
 
         return null;
     }
+
+    /**
+     * Trash link by type.
+     *
+     * @param string|null $type The object type, if any.
+     * @return string
+     */
+    public function trashLink(?string $type): string
+    {
+        if (empty($type)) {
+            return '';
+        }
+
+        $modules = (array)$this->_View->get('modules');
+        if (!Hash::check($modules, sprintf('%s.hints.object_type', $type))) {
+            return '';
+        }
+
+        $classes = sprintf('button icon icon-trash icon-only-icon has-text-module-%s', $type);
+        $title = $this->tr($type) . __(' in Trashcan');
+        $filter = ['type' => [$type]];
+
+        return $this->Html->link(
+            sprintf('<span class="is-sr-only">%s</span>', __('Trash')),
+            ['_name' => 'trash:list', '?' => compact('filter')],
+            ['class' => $classes, 'title' => $title, 'escape' => false]
+        );
+    }
 }
