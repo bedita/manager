@@ -83,7 +83,6 @@ class ApiResolverTest extends TestCase
                         'publish_end' => null,
                     ],
                     'id' => '1',
-                    'tokens' => [],
                 ],
             ],
         ];
@@ -104,11 +103,6 @@ class ApiResolverTest extends TestCase
         $resolver = new ApiResolver();
         $identity = $resolver->find($credentials);
 
-        if (isset($expected['tokens'])) {
-            $client = ApiClientProvider::getApiClient();
-            $expected['tokens'] = $client->getTokens();
-        }
-
         if ($expected === null) {
             static::assertNull($identity);
 
@@ -123,7 +117,6 @@ class ApiResolverTest extends TestCase
         $token = $identity['tokens']['renew'];
         $identity = $resolver->find(compact('token'));
 
-        unset($expected['tokens'], $identity['tokens']);
         foreach ($expected as $key => $val) {
             $this->assertEquals($val, $identity[$key]);
         }
