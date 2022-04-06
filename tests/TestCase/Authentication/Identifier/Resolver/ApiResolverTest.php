@@ -123,6 +123,7 @@ class ApiResolverTest extends TestCase
         $token = $identity['tokens']['renew'];
         $identity = $resolver->find(compact('token'));
 
+        unset($expected['tokens'], $identity['tokens']);
         foreach ($expected as $key => $val) {
             $this->assertEquals($val, $identity[$key]);
         }
