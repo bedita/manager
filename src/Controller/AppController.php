@@ -140,7 +140,7 @@ class AppController extends Controller
             return $route;
         }
 
-        return $route + compact('redirect');
+        return $route + ['?' => compact('redirect')];
     }
 
     /**

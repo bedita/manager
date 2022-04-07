@@ -83,7 +83,6 @@ class ApiResolverTest extends TestCase
                         'publish_end' => null,
                     ],
                     'id' => '1',
-                    'tokens' => [],
                 ],
             ],
         ];
@@ -103,11 +102,6 @@ class ApiResolverTest extends TestCase
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $resolver = new ApiResolver();
         $identity = $resolver->find($credentials);
-
-        if (isset($expected['tokens'])) {
-            $client = ApiClientProvider::getApiClient();
-            $expected['tokens'] = $client->getTokens();
-        }
 
         if ($expected === null) {
             static::assertNull($identity);

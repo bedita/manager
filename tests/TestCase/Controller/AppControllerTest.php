@@ -221,7 +221,7 @@ class AppControllerTest extends TestCase
             ],
             'redirect to /' => [
                 ['environment' => ['REQUEST_METHOD' => 'GET'], 'params' => ['object_type' => 'documents']], // config
-                ['_name' => 'login', 'redirect' => '/'], // expected
+                ['_name' => 'login', '?' => ['redirect' => '/']], // expected
             ],
         ];
     }
