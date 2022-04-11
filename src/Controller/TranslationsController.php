@@ -185,6 +185,7 @@ class TranslationsController extends ModulesController
         $this->getRequest()->allowMethod(['post']);
         $this->objectType = $this->typeFromUrl();
         $requestData = $this->getRequest()->getData();
+        $translation = [];
         try {
             if (empty($requestData[0])) {
                 throw new BadRequestException(__('Empty request data'));

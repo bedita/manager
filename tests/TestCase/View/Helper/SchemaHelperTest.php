@@ -592,8 +592,9 @@ class SchemaHelperTest extends TestCase
     /**
      * Test `format` method
      *
-     * @param array $properties The properties
      * @param array $expected Expected result
+     * @param mixed $value The value
+     * @param array $schema The schema
      * @return void
      * @dataProvider formatProvider()
      * @covers ::format()

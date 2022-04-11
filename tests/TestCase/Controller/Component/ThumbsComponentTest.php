@@ -68,12 +68,12 @@ class ThumbsComponentTest extends TestCase
                 [],
             ],
             // test with objct without ids
-            'responseWithoutIds' => [
+            'responseWithoutIds 1' => [
                 ['data' => []],
                 ['data' => []],
             ],
             // test with objct without ids
-            'responseWithoutIds' => [
+            'responseWithoutIds 2' => [
                 ['data' => [
                     'ids' => [],
                 ]],
@@ -138,10 +138,13 @@ class ThumbsComponentTest extends TestCase
     /**
      * Test `urls` method
      *
+     * @param array $expected The expected result
+     * @param array $data The data to process
+     * @param ?mixed $mockResponse The mock response, if any
+     * @return void
      * @dataProvider urlsProvider()
      * @covers ::urls()
      * @covers ::getThumbs()
-     * @return void
      */
     public function testUrls(array $expected, array $data, $mockResponse = null): void
     {
@@ -156,8 +159,8 @@ class ThumbsComponentTest extends TestCase
             ApiClientProvider::setApiClient($apiClient);
         }
         $registry = $controller->components();
-        $controller->Query = $registry->load(QueryComponent::class);
-        $this->Thumbs = $registry->load(ThumbsComponent::class);
+        $registry->load(QueryComponent::class);
+        $registry->load(ThumbsComponent::class);
         $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
     }
@@ -199,8 +202,8 @@ class ThumbsComponentTest extends TestCase
         $expected = $data;
         $expected['data'][0]['meta']['thumb_url'] = 'gustavo';
         $registry = $controller->components();
-        $controller->Query = $registry->load(QueryComponent::class);
-        $this->Thumbs = $registry->load(ThumbsComponent::class);
+        $registry->load(QueryComponent::class);
+        $registry->load(ThumbsComponent::class);
         $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
     }

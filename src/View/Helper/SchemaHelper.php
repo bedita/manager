@@ -165,7 +165,7 @@ class SchemaHelper extends Helper
      *   'date-time'
      *   'date'
      *
-     * @param mixed $schema The property schema
+     * @param array $schema The property schema
      * @return string
      */
     public static function typeFromSchema(array $schema): string

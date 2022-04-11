@@ -12,29 +12,19 @@ use BEdita\SDK\BEditaClient;
 class ModulesControllerSample extends ModulesController
 {
     /**
-     * Getter for objectType protected var
-     *
-     * @return string
-     */
-    public function getObjectType(): string
-    {
-        return $this->objectType;
-    }
-
-    /**
      * Public version of parent function (protected) descendants
      *
-     * @return void
+     * @return array
      */
     public function descendants(): array
     {
-        return parent::descendants();
+        return $this->Schema->descendants($this->objectType);
     }
 
     /**
      * Public version of parent function (protected)
      *
-     * @return void
+     * @return string
      */
     public function availableRelationshipsUrl(string $relation): string
     {
@@ -42,20 +32,9 @@ class ModulesControllerSample extends ModulesController
     }
 
     /**
-     * Update media urls, public for testing
-     *
-     * @param array $response The response
-     * @return void
-     */
-    public function updateMediaUrls(array &$response): void
-    {
-        parent::updateMediaUrls($response);
-    }
-
-    /**
      * Create new object from ajax request.
      *
-     * @return void
+     * @return \BEdita\SDK\BEditaClient
      */
     public function getApiClient(): BEditaClient
     {

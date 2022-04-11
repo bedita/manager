@@ -196,7 +196,7 @@ class ImportControllerTest extends TestCase
         // api call with exception
         $property = $reflectionClass->getProperty('services');
         $property->setAccessible(true);
-        $actual = $property->setValue($this->Import, ['dummy']);
+        $property->setValue($this->Import, ['dummy']);
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();

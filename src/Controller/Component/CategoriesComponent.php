@@ -135,7 +135,7 @@ class CategoriesComponent extends Component
     /**
      * Delete a category using the `/model/` API.
      *
-     * @param string|int $id The category id to delete.
+     * @param string $id The category id to delete.
      * @param string $type The object type name of the category.
      * @return array|null The BEdita API response for the deleted category.
      */

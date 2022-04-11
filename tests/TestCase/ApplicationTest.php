@@ -24,7 +24,6 @@ use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
@@ -148,7 +147,8 @@ class ApplicationTest extends TestCase
     public function testGetAuthenticationService(): void
     {
         $app = new Application(CONFIG);
-        $authService = $app->getAuthenticationService(new ServerRequest(), new Response());
+        /** @var \Authentication\AuthenticationService $authService */
+        $authService = $app->getAuthenticationService(new ServerRequest());
         /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
         $identifier = $authService->identifiers()->get(ApiIdentifier::class);
         static::assertInstanceOf(AuthenticationService::class, $authService);

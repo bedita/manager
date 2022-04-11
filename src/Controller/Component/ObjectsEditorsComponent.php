@@ -18,9 +18,18 @@ use Cake\Core\Configure;
 
 /**
  * ObjectsEditors component
+ *
+ * @property-read \Authentication\Controller\Component\AuthenticationComponent $Authentication
  */
 class ObjectsEditorsComponent extends Component
 {
+    /**
+     * Components
+     *
+     * @var array
+     */
+    protected $components = ['Authentication'];
+
     /**
      * Objects editors.
      *
@@ -93,7 +102,8 @@ class ObjectsEditorsComponent extends Component
      */
     public function editorName(): ?string
     {
-        $user = $this->getController()->Authentication->getIdentity();
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
         if (empty($user)) {
             return null;
         }

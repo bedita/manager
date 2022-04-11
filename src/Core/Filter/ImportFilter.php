@@ -28,7 +28,7 @@ abstract class ImportFilter
     /**
      * BEdita Api client
      *
-     * @var \BEdita\SDK\BEditaApiClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $apiClient = null;
 

@@ -8,10 +8,11 @@ const DEFAULT_PORT = '3000';
 const path = require('path');
 const dotenv = require('dotenv').config({path: __dirname + '/config/.env'});
 
-const { readdirSync, statSync } = require('fs')
+const { readdirSync, statSync, existsSync } = require('fs')
 const { join } = require('path')
 
 const readDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
+const fileExists = p => existsSync(p);
 
 // Environment: default development
 // from Node env
@@ -93,6 +94,11 @@ const BUNDLE = {
     localeDir: 'src/Locale',
     beditaPluginsRoot: 'plugins',
 
+    // alternate folders
+    alternateJsRoots: ['templates/Layout/js', 'templates/layout/js', 'resources/js'],
+    alternateTemplateRoots: ['templates/layout', 'templates'],
+    alternateLocaleDirs: ['locales'],
+
     // destination
     webroot: 'webroot',    // destination webroot
     cssDir: 'css',                                  // destination css dir
@@ -111,17 +117,50 @@ const bundler = {
     }
 }
 
+let jsRoot = BUNDLE.jsRoot;
+if (!fileExists(jsRoot)) {
+    for (let root of BUNDLE.alternateJsRoots) {
+        if (fileExists(root)) {
+            jsRoot = root;
+
+            break;
+        }
+    }
+}
+
 // Read dynamically src dir [BUNDLE.jsRoot] direct subdir and create aliases for import
 // Add template dir [BUNDLE.templateRoot] alias
-const entries = readDirs(BUNDLE.jsRoot);
+const entries = readDirs(jsRoot);
+
+let templateRoot = BUNDLE.templateRoot;
+if (!fileExists(templateRoot)) {
+    for (let root of BUNDLE.alternateTemplateRoots) {
+        if (fileExists(root)) {
+            templateRoot = root;
+
+            break;
+        }
+    }
+}
+
+let localeDir = BUNDLE.localeDir;
+if (!fileExists(localeDir)) {
+    for (let root of BUNDLE.alternateLocaleDirs) {
+        if (fileExists(root)) {
+            localeDir = root;
+
+            break;
+        }
+    }
+}
 
 let SRC_TEMPLATE_ALIAS = {
-    Locale: path.resolve(__dirname, BUNDLE.localeDir),
-    Template: path.resolve(__dirname, BUNDLE.templateRoot),
+    Locale: path.resolve(__dirname, localeDir),
+    Template: path.resolve(__dirname, templateRoot),
 };
 
 for (const dir of entries) {
-    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${BUNDLE.jsRoot}/${dir}`);
+    SRC_TEMPLATE_ALIAS[dir] = path.resolve(__dirname, `${jsRoot}/${dir}`);
 }
 
 // auto aliases for vendors dependencies TO-DO
@@ -134,8 +173,9 @@ if (devMode) {
     SRC_TEMPLATE_ALIAS['vue'] = 'vue/dist/vue.min';
 }
 
-const locales = require(__dirname + '/' + BUNDLE.jsRoot + '/config/locales.js');
+const locales = require(__dirname + '/' + jsRoot + '/config/locales.js');
 
+global.fileExists = fileExists;
 global.readDirs = readDirs;
 global.path = path;
 global.devMode = devMode;

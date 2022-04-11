@@ -16,8 +16,19 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 // vue dependencies
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 // config
-const appEntry = `${path.resolve(__dirname, BUNDLE.jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
+let jsRoot = BUNDLE.jsRoot;
+if (!fileExists(jsRoot)) {
+    for (let root of BUNDLE.alternateJsRoots) {
+        if (fileExists(root)) {
+            jsRoot = root;
+
+            break;
+        }
+    }
+}
+const appEntry = `${path.resolve(__dirname, jsRoot)}/${BUNDLE.appPath}/${BUNDLE.appName}`;
 
 let message = ' Production Bundle';
 let separator = '-------------------';
@@ -33,8 +44,7 @@ bundler.printMessage(message, separator);
 // Common Plugins
 let webpackPlugins = [
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `${ENVIRONMENT.mode}`,
-        debug: true,
+        'process.env.NODE_ENV': `${JSON.stringify(ENVIRONMENT.mode)}`
     }),
 
     new MiniCssExtractPlugin({
@@ -81,7 +91,7 @@ if (devMode) {
             host: ENVIRONMENT.host,
             port: ENVIRONMENT.port,
             watch: true,
-            logLevel: "debug",
+            logLevel: 'debug'
         })
     );
 
@@ -89,7 +99,7 @@ if (devMode) {
     webpackPlugins.push(
         new WatchExternalFilesPlugin.default({
             files: [
-            `./${BUNDLE.templateRoot}/**/*.twig`,
+                `./${BUNDLE.templateRoot}/**/*.twig`,
             ]
         }),
     );
@@ -139,8 +149,8 @@ module.exports = {
                     'iconFuture.png',
                     'iconLocked.svg'
                 ];
-                for (let i = 0; i < preserve.length; i++) {
-                    if (asset.includes(preserve[i])) {
+                for (let p of preserve) {
+                    if (asset.includes(p)) {
                         return true;
                     }
                 }
@@ -252,7 +262,7 @@ module.exports = {
                     plugins: [
                         '@babel/plugin-syntax-dynamic-import',
                     ],
-                },
+                }
             },
             {
                 test: /\.po$/,

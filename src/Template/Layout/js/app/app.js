@@ -8,7 +8,7 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { confirm, prompt } from 'app/components/dialog/dialog';
+import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
 import jsoneditor from 'app/directives/jsoneditor';
@@ -143,6 +143,12 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
+            // register functions in BEDITA to make them reusable in plugins
+            BEDITA.confirm = confirm;
+            BEDITA.error = error;
+            BEDITA.info = info;
+            BEDITA.prompt = prompt;
+            BEDITA.warning = warning;
         });
     },
 

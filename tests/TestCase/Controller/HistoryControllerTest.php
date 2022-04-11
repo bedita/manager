@@ -95,9 +95,8 @@ class HistoryControllerTest extends TestCase
     /**
      * Test `info` method
      *
-     * @covers ::info()
-     * @param array $data The data for test
      * @return void
+     * @covers ::info()
      */
     public function testInfo(): void
     {

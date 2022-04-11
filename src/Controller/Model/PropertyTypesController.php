@@ -163,4 +163,25 @@ class PropertyTypesController extends ModelBaseController
 
         return $result;
     }
+
+    /**
+     * Get resourceType
+     *
+     * @return string|null
+     */
+    public function getResourceType(): ?string
+    {
+        return $this->resourceType;
+    }
+
+    /**
+     * Set resourceType
+     *
+     * @param string|null $resourceType The resource type
+     * @return void
+     */
+    public function setResourceType(?string $resourceType): void
+    {
+        $this->resourceType = $resourceType;
+    }
 }

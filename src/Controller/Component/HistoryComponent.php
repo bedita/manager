@@ -176,7 +176,7 @@ class HistoryComponent extends Component
         }
         $data = Hash::get($response, 'data');
         foreach ($data as &$history) {
-            $changed = Hash::get($history, 'meta.changed');
+            $changed = (array)Hash::get($history, 'meta.changed');
             $formatted = [];
             foreach ($changed as $field => $value) {
                 $label = $this->label($field);

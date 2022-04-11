@@ -96,7 +96,7 @@ class LinkHelperTest extends TestCase
         $link = new LinkHelper(new View(null, null, null, []));
         $link->setConfig('apiBaseUrl', $apiBaseUrl);
         $link->setConfig('webBaseUrl', $webBaseUrl);
-        $result = $link->fromAPI($apiUrl);
+        $link->fromAPI($apiUrl);
         $this->expectOutputString($expected);
     }
 

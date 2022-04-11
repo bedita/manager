@@ -33,6 +33,13 @@ class TagsControllerTest extends TestCase
     public $Tags;
 
     /**
+     * Client API
+     *
+     * @var \BEdita\WebTools\ApiClientProvider
+     */
+    public $client;
+
+    /**
      * Test request config
      *
      * @var array

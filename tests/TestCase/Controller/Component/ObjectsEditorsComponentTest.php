@@ -28,6 +28,13 @@ class ObjectsEditorsComponentTest extends TestCase
     public $ObjectsEditors;
 
     /**
+     * Authentication component
+     *
+     * @var \Authentication\Controller\Component\AuthenticationComponent;
+     */
+    public $Authentication;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -39,7 +46,6 @@ class ObjectsEditorsComponentTest extends TestCase
         $registry->load('Authentication.Authentication');
         $this->ObjectsEditors = $registry->load(ObjectsEditorsComponent::class);
         $this->Authentication = $registry->load(AuthenticationComponent::class);
-        $controller->Authentication = $this->Authentication;
     }
 
     /**
@@ -113,8 +119,9 @@ class ObjectsEditorsComponentTest extends TestCase
      */
     public function testUpdate(): void
     {
+        $controller = $this->ObjectsEditors->getController();
         // Mock Authentication component
-        $this->ObjectsEditors->getController()->setRequest($this->ObjectsEditors->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         $time = time();
         $this->ObjectsEditors->objectsEditors = [
@@ -127,7 +134,7 @@ class ObjectsEditorsComponentTest extends TestCase
 
         // id not found in objectsEditors
         $user = ['id' => 123, 'attributes' => ['name' => 'Gustavo', 'surname' => 'Support']];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $this->ObjectsEditors->update('999');
         $expected = 'Gustavo Support';
         $actual = $this->ObjectsEditors->objectsEditors['999'][0]['name'];
@@ -142,7 +149,7 @@ class ObjectsEditorsComponentTest extends TestCase
 
         // id found in objectsEditors
         $user = ['id' => 12345, 'attributes' => ['name' => 'john', 'surname' => 'doe']];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $this->ObjectsEditors->update('99999');
         $expected = 'gustavo';
         $actual = $this->ObjectsEditors->objectsEditors['99999'][0]['name'];
@@ -160,8 +167,11 @@ class ObjectsEditorsComponentTest extends TestCase
      */
     public function testEditorName(): void
     {
+        $controller = $this->ObjectsEditors->getController();
+        //$controller->Authentication = $this->Authentication;
+
         // Mock Authentication component
-        $this->ObjectsEditors->getController()->setRequest($this->ObjectsEditors->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         // empty user
         $expected = null;
@@ -170,21 +180,21 @@ class ObjectsEditorsComponentTest extends TestCase
 
         // no username, no name, no surname
         $user = ['id' => 123];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $expected = null;
         $actual = $this->ObjectsEditors->editorName();
         static::assertEquals($expected, $actual);
 
         // username
         $user = ['id' => 123, 'attributes' => ['username' => 'gustavo']];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $expected = 'gustavo';
         $actual = $this->ObjectsEditors->editorName();
         static::assertEquals($expected, $actual);
 
         // name + surname
         $user = ['id' => 123, 'attributes' => ['name' => 'Gustavo', 'surname' => 'Support']];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $expected = 'Gustavo Support';
         $actual = $this->ObjectsEditors->editorName();
         static::assertEquals($expected, $actual);
@@ -198,8 +208,11 @@ class ObjectsEditorsComponentTest extends TestCase
      */
     public function testGetEditors(): void
     {
+        $controller = $this->ObjectsEditors->getController();
+        //$controller->Authentication = $this->Authentication;
+
         // Mock Authentication component
-        $this->ObjectsEditors->getController()->setRequest($this->ObjectsEditors->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         // empty cache
         Cache::delete('objects_editors');
@@ -209,7 +222,7 @@ class ObjectsEditorsComponentTest extends TestCase
 
         // not empty cache
         $user = ['id' => 123, 'attributes' => ['username' => 'gustavo']];
-        $this->ObjectsEditors->getController()->Authentication->setIdentity(new Identity($user));
+        $this->Authentication->setIdentity(new Identity($user));
         $expected = $this->ObjectsEditors->update(999);
         $expected = json_decode($expected, true);
         $actual = $this->ObjectsEditors->getEditors();
