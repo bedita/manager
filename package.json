@@ -37,7 +37,7 @@
         "jsoneditor": "^9.5.6",
         "mapbox-gl": "^2.6.1",
         "mapbox-gl-compare": "^0.4.0",
-        "moment": "^2.22.2",
+        "moment": "^2.29.2",
         "sleep-promise": "^9.1.0",
         "tinymce": "^5.10.0",
         "ttag": "^1.7.24",
