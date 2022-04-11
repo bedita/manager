@@ -90,7 +90,7 @@ class ThumbsComponent extends Component
                 'options' => ['w' => 400],
             ]));
             $apiClient = ApiClientProvider::getApiClient();
-            $res = $apiClient->get($url, $query);
+            $res = (array)$apiClient->get($url, $query);
 
             return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
         } catch (BEditaClientException $e) {
