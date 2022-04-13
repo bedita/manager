@@ -119,6 +119,24 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `login` fail method
+     *
+     * @covers ::authRequest()
+     * @return void
+     */
+    public function testLoginFailed(): void
+    {
+        $this->setupController([
+            'post' => [
+                'username' => 'wronguser',
+                'password' => 'wrongpwd',
+            ],
+        ]);
+        $response = $this->Login->login();
+        static::assertNull($response);
+    }
+
+    /**
      * Test `initialize` method.
      *
      * @covers ::initialize()
@@ -167,25 +185,6 @@ class LoginControllerTest extends TestCase
         $this->setupController([
             'environment' => [
                 'REQUEST_METHOD' => 'HEAD',
-            ],
-        ]);
-
-        $response = $this->Login->login();
-        static::assertNull($response);
-    }
-
-    /**
-     * Test `login` fail method
-     *
-     * @covers ::authRequest()
-     * @return void
-     */
-    public function testLoginFailed(): void
-    {
-        $this->setupController([
-            'post' => [
-                'username' => 'wronguser',
-                'password' => 'wrongpwd',
             ],
         ]);
 
