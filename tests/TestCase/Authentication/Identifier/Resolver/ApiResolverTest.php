@@ -81,6 +81,7 @@ class ApiResolverTest extends TestCase
                         'lang' => 'eng',
                         'publish_start' => null,
                         'publish_end' => null,
+                        'user_preferences' => null,
                     ],
                     'id' => '1',
                 ],

@@ -971,7 +971,7 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
         static::assertEquals('text/html', $this->controller->getResponse()->getType());
         $flash = $this->controller->getRequest()->getSession()->read('Flash');
-        $expected = '[400] Invalid data';
+        $expected = '[400] Not Found';
         $actual = $flash['flash'][0]['message'];
         static::assertEquals($expected, $actual);
     }
