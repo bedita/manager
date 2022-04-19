@@ -69,6 +69,9 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
         editor.parser.addAttributeFilter('data-placeholder', function(nodes) {
             nodes.forEach((node) => {
                 let comment = node.firstChild.value;
+                if (!comment) {
+                    return;
+                }
                 let match = comment.match(regex);
                 if (!match) {
                     return;
