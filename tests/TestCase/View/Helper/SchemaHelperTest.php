@@ -244,6 +244,7 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
                     'type' => 'select',
+                    'value' => 'good',
                 ],
                 // schema type
                 [
@@ -265,6 +266,7 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
                     'type' => 'select',
+                    'value' => 'good',
                 ],
                 // schema type
                 [

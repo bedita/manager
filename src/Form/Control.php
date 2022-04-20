@@ -29,61 +29,62 @@ class Control
     public const CONTROL_TYPES = ['json', 'richtext', 'plaintext', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
 
     /**
-     * Get control by schema, control type, and value
+     * Get control by options
      *
-     * @param array $schema Object schema array.
-     * @param string $type Control type.
-     * @param mixed|null $value Property value.
+     * @param array $options The options
      * @return array
      */
-    public static function control(array $schema, string $type, $value): array
+    public static function control(array $options): array
     {
+        $type = $options['propertyType'];
+        $value = $options['value'];
         if (!in_array($type, self::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
 
-        return call_user_func_array(Form::getMethod(self::class, $type), [$value, $schema]);
+        return call_user_func_array(Form::getMethod(self::class, $type), [$options]);
     }
 
     /**
      * Control for json data
      *
-     * @param mixed|null $value Property value.
+     * @param array $options The options
      * @return array
      */
-    public static function json($value): array
+    public static function json(array $options): array
     {
         return [
             'type' => 'textarea',
             'v-jsoneditor' => 'true',
             'class' => 'json',
-            'value' => json_encode($value),
+            'value' => json_encode($options['value']),
         ];
     }
 
     /**
      * Control for plaintext
      *
-     * @param mixed|null $value Property value.
+     * @param array $options The options
      * @return array
      */
-    public static function plaintext($value): array
+    public static function plaintext(array $options): array
     {
         return [
             'type' => 'textarea',
-            'value' => $value,
+            'value' => $options['value'],
         ];
     }
 
     /**
      * Control for richtext
      *
-     * @param mixed|null $value Property value.
-     * @param array $schema The schema.
+     * @param array $options The options
      * @return array
      */
-    public static function richtext($value, $schema): array
+    public static function richtext(array $options): array
     {
+        $schema = $options['schema'];
+        $value = $options['value'];
         $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
 
         return [
@@ -96,17 +97,17 @@ class Control
     /**
      * Control for datetime
      *
-     * @param mixed|null $value Property value.
+     * @param array $options The options
      * @return array
      */
-    public static function datetime($value): array
+    public static function datetime(array $options): array
     {
         return [
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
             'time' => 'true',
-            'value' => $value,
+            'value' => $options['value'],
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -116,16 +117,16 @@ class Control
     /**
      * Control for date
      *
-     * @param mixed|null $value Property value.
+     * @param array $options The options
      * @return array
      */
-    public static function date($value): array
+    public static function date(array $options): array
     {
         return [
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'value' => $value,
+            'value' => $options['value'],
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -135,12 +136,13 @@ class Control
     /**
      * Control for categories
      *
-     * @param array $value Property value.
-     * @param array $schema Object schema array.
+     * @param array $options The options
      * @return array
      */
-    public static function categories($value, array $schema): array
+    public static function categories(array $options): array
     {
+        $schema = $options['schema'];
+        $value = $options['value'];
         $categories = $schema['categories'];
         $options = array_map(
             function ($category) {
@@ -173,12 +175,13 @@ class Control
     /**
      * Control for checkbox
      *
-     * @param mixed|null $value Property value.
-     * @param array $schema Object schema array.
+     * @param array $options The options
      * @return array
      */
-    public static function checkbox($value, array $schema): array
+    public static function checkbox(array $options): array
     {
+        $schema = $options['schema'];
+        $value = $options['value'];
         if (empty($schema['oneOf'])) {
             return [
                 'type' => 'checkbox',
@@ -214,12 +217,16 @@ class Control
     /**
      * Control for enum
      *
-     * @param mixed|null $value Property value.
-     * @param array $schema Object schema array.
+     * @param array $options The options
      * @return array
      */
-    public static function enum($value, array $schema): array
+    public static function enum(array $options): array
     {
+        $schema = $options['schema'];
+        $value = $options['value'];
+        $objectType = $options['objectType'];
+        $property = $options['property'];
+
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $one) {
                 if (!empty($one['enum'])) {
@@ -232,11 +239,38 @@ class Control
         return [
             'type' => 'select',
             'options' => array_map(
-                function ($value) {
-                    return ['value' => $value, 'text' => Inflector::humanize($value)];
+                function (string $value) use ($objectType, $property) {
+                    $text = self::label($objectType, $property, $value);
+
+                    return compact('text', 'value');
                 },
                 $schema['enum']
             ),
+            'value' => $value,
         ];
+    }
+
+    /**
+     * Label for property.
+     * If set in config Properties.<type>.labels.<property>, return it.
+     * Return humanize of value, otherwise.
+     *
+     * @param string $type The object type
+     * @param string $property The property name
+     * @param string $value The value
+     * @return string
+     */
+    public static function label(string $type, string $property, string $value): string
+    {
+        $label = Configure::read(sprintf('Properties.%s.labels.%s', $type, $property));
+        if (empty($label)) {
+            return Inflector::humanize($value);
+        }
+        $labelVal = (string)Configure::read(sprintf('Properties.%s.labels.%s.%s', $type, $property, $value));
+        if (empty($labelVal)) {
+            return (string)$label;
+        }
+
+        return $labelVal;
     }
 }

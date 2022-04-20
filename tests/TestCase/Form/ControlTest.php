@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Form;
 
 use App\Form\Control;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -178,9 +179,10 @@ class ControlTest extends TestCase
                 [
                     'type' => 'select',
                     'options' => [
-                        ['value' => 'good', 'text' => 'Good'],
-                        ['value' => 'bad', 'text' => 'Bad'],
+                        ['text' => 'Good', 'value' => 'good'],
+                        ['text' => 'Bad', 'value' => 'bad'],
                     ],
+                    'value' => 'good',
                 ],
             ],
             'enum nullable' => [
@@ -203,10 +205,11 @@ class ControlTest extends TestCase
                 [
                     'type' => 'select',
                     'options' => [
-                        ['value' => '', 'text' => ''],
-                        ['value' => 'good', 'text' => 'Good'],
-                        ['value' => 'bad', 'text' => 'Bad'],
+                        ['text' => '', 'value' => ''],
+                        ['text' => 'Good', 'value' => 'good'],
+                        ['text' => 'Bad', 'value' => 'bad'],
                     ],
+                    'value' => 'good',
                 ],
             ],
             'categories' => [
@@ -254,8 +257,77 @@ class ControlTest extends TestCase
      */
     public function testControl(array $schema, string $type, $value, array $expected): void
     {
-        $actual = Control::control($schema, $type, $value);
+        $options = [
+            'objectType' => 'documents',
+            'property' => 'dummy',
+            'value' => $value,
+            'schema' => (array)$schema,
+            'propertyType' => $type,
+        ];
+        $actual = Control::control($options);
 
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Provider for testLabel
+     *
+     * @return array
+     */
+    public function labelProvider(): array
+    {
+        return [
+            'no custom config' => [
+                'dummies',
+                'status',
+                'on',
+                null,
+                'On',
+            ],
+            'custom config property' => [
+                'dummies',
+                'status',
+                'off',
+                'OOFF',
+                'OOFF',
+            ],
+            'custom config property value' => [
+                'dummies',
+                'status',
+                'draft',
+                [
+                    'on' => 'OOONNN',
+                    'off' => 'OOOFFF',
+                    'draft' => 'DDDRRRAAAFFFTTT',
+                ],
+                'DDDRRRAAAFFFTTT',
+            ],
+        ];
+    }
+
+    /**
+     * Test `label`
+     *
+     * @param string $type The type
+     * @param string $property The property
+     * @param mixed|null $customConfig The custom configuration
+     * @param string $expected The expected label
+     * @return void
+     * @dataProvider labelProvider()
+     * @covers ::label()
+     */
+    public function testLabel(string $type, string $property, string $value, $customConfig, string $expected): void
+    {
+        if (!empty($customConfig)) {
+            Configure::write(
+                sprintf('Properties.%s.labels', $type),
+                array_merge(
+                    (array)\Cake\Core\Configure::read(sprintf('Properties.%s.labels', $type)),
+                    [$property => $customConfig]
+                )
+            );
+        }
+        $actual = Control::label($type, $property, $value);
         static::assertSame($expected, $actual);
     }
 }
