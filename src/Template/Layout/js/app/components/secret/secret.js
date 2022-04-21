@@ -1,3 +1,5 @@
+import { t } from 'ttag';
+
 export default {
     template: `<div class="secret">
         <div v-if="visible">
@@ -26,7 +28,7 @@ export default {
     methods: {
         copy() {
             navigator.clipboard.writeText(this.val);
-            this.msg = 'copied to clipboard';
+            this.msg = t`copied in the clipboard`;
         },
         reset(v) {
             this.visible = v;
