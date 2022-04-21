@@ -4,8 +4,8 @@ export default {
     template: `<div class="secret">
         <div v-if="visible">
             <div><: val :></div>
-            <button v-if="!msg" class="button button-text-white is-width-auto icon-doc" @click.prevent="copy()"></button>
             <button class="button button-text-white is-width-auto icon-eye-off" @click.prevent="reset(0)"></button>
+            <button v-if="!msg" class="button button-text-white is-width-auto icon-doc" @click.prevent="copy()"></button>
             <div v-if="msg" v-text="msg"></div>
         </div>
         <div v-if="!visible">
