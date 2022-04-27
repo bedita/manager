@@ -254,7 +254,7 @@ class Control
             'type' => 'select',
             'options' => array_map(
                 function (string $value) use ($objectType, $property) {
-                    $text = self::label($objectType, $property, $value);
+                    $text = self::label((string)$objectType, (string)$property, $value);
 
                     return compact('text', 'value');
                 },
