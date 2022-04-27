@@ -57,7 +57,7 @@ class Control
             'type' => 'textarea',
             'v-jsoneditor' => 'true',
             'class' => 'json',
-            'value' => json_encode($options['value']),
+            'value' => json_encode((string)Hash::get($options, 'value')),
         ];
     }
 
@@ -71,7 +71,7 @@ class Control
     {
         return [
             'type' => 'textarea',
-            'value' => $options['value'],
+            'value' => (string)Hash::get($options, 'value'),
         ];
     }
 
@@ -83,8 +83,8 @@ class Control
      */
     public static function richtext(array $options): array
     {
-        $schema = $options['schema'];
-        $value = $options['value'];
+        $schema = (array)Hash::get($options, 'schema');
+        $value = (string)Hash::get($options, 'value');
         $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
 
         return [
@@ -107,7 +107,7 @@ class Control
             'v-datepicker' => 'true',
             'date' => 'true',
             'time' => 'true',
-            'value' => $options['value'],
+            'value' => (string)Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -126,7 +126,7 @@ class Control
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'value' => $options['value'],
+            'value' => (string)Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -141,13 +141,13 @@ class Control
      */
     public static function categories(array $options): array
     {
-        $schema = $options['schema'];
-        $value = $options['value'];
+        $schema = (array)Hash::get($options, 'schema');
+        $value = (string)Hash::get($options, 'value');
         $categories = $schema['categories'];
         $options = array_map(
             function ($category) {
                 return [
-                    'value' => $category['name'],
+                    'value' => (string)Hash::get($category, 'name'),
                     'text' => empty($category['label']) ? $category['name'] : $category['label'],
                 ];
             },
@@ -180,8 +180,8 @@ class Control
      */
     public static function checkbox(array $options): array
     {
-        $schema = $options['schema'];
-        $value = $options['value'];
+        $schema = (array)Hash::get($options, 'schema');
+        $value = (string)Hash::get($options, 'value');
         if (empty($schema['oneOf'])) {
             return [
                 'type' => 'checkbox',
@@ -222,10 +222,10 @@ class Control
      */
     public static function enum(array $options): array
     {
-        $schema = $options['schema'];
-        $value = $options['value'];
-        $objectType = $options['objectType'];
-        $property = $options['property'];
+        $schema = (array)Hash::get($options, 'schema');
+        $value = (string)Hash::get($options, 'value');
+        $objectType = (string)Hash::get($options, 'objectType');
+        $property = (string)Hash::get($options, 'property');
 
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $one) {
