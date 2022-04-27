@@ -57,7 +57,7 @@ class Control
             'type' => 'textarea',
             'v-jsoneditor' => 'true',
             'class' => 'json',
-            'value' => json_encode((string)Hash::get($options, 'value')),
+            'value' => json_encode(Hash::get($options, 'value')),
         ];
     }
 
@@ -71,7 +71,7 @@ class Control
     {
         return [
             'type' => 'textarea',
-            'value' => (string)Hash::get($options, 'value'),
+            'value' => Hash::get($options, 'value'),
         ];
     }
 
@@ -84,7 +84,7 @@ class Control
     public static function richtext(array $options): array
     {
         $schema = (array)Hash::get($options, 'schema');
-        $value = (string)Hash::get($options, 'value');
+        $value = Hash::get($options, 'value');
         $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
 
         return [
@@ -107,7 +107,7 @@ class Control
             'v-datepicker' => 'true',
             'date' => 'true',
             'time' => 'true',
-            'value' => (string)Hash::get($options, 'value'),
+            'value' => Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -126,7 +126,7 @@ class Control
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'value' => (string)Hash::get($options, 'value'),
+            'value' => Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -142,12 +142,12 @@ class Control
     public static function categories(array $options): array
     {
         $schema = (array)Hash::get($options, 'schema');
-        $value = (string)Hash::get($options, 'value');
+        $value = Hash::get($options, 'value');
         $categories = $schema['categories'];
         $options = array_map(
             function ($category) {
                 return [
-                    'value' => (string)Hash::get($category, 'name'),
+                    'value' => Hash::get($category, 'name'),
                     'text' => empty($category['label']) ? $category['name'] : $category['label'],
                 ];
             },
@@ -181,7 +181,7 @@ class Control
     public static function checkbox(array $options): array
     {
         $schema = (array)Hash::get($options, 'schema');
-        $value = (string)Hash::get($options, 'value');
+        $value = Hash::get($options, 'value');
         if (empty($schema['oneOf'])) {
             return [
                 'type' => 'checkbox',
@@ -223,9 +223,9 @@ class Control
     public static function enum(array $options): array
     {
         $schema = (array)Hash::get($options, 'schema');
-        $value = (string)Hash::get($options, 'value');
-        $objectType = (string)Hash::get($options, 'objectType');
-        $property = (string)Hash::get($options, 'property');
+        $value = Hash::get($options, 'value');
+        $objectType = Hash::get($options, 'objectType');
+        $property = Hash::get($options, 'property');
 
         if (!empty($schema['oneOf'])) {
             foreach ($schema['oneOf'] as $one) {
@@ -252,7 +252,7 @@ class Control
 
     /**
      * Label for property.
-     * If set in config Properties.<type>.labels.<property>, return it.
+     * If set in config Properties.<type>.labels.options.<property>, return it.
      * Return humanize of value, otherwise.
      *
      * @param string $type The object type
@@ -262,13 +262,13 @@ class Control
      */
     public static function label(string $type, string $property, string $value): string
     {
-        $label = Configure::read(sprintf('Properties.%s.labels.%s', $type, $property));
+        $label = Configure::read(sprintf('Properties.%s.labels.options.%s', $type, $property));
         if (empty($label)) {
             return Inflector::humanize($value);
         }
-        $labelVal = (string)Configure::read(sprintf('Properties.%s.labels.%s.%s', $type, $property, $value));
+        $labelVal = (string)Configure::read(sprintf('Properties.%s.labels.options.%s.%s', $type, $property, $value));
         if (empty($labelVal)) {
-            return (string)$label;
+            return Inflector::humanize($value);
         }
 
         return $labelVal;

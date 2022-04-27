@@ -515,6 +515,14 @@ return [
      *  - 'bulk' bulk actions list
      *  - 'fastCreate' fields for fast creation forms, by type
      *  - 'labels' to customize labels by properties
+     *    + 'fields'
+     *      + fieldName => string
+     *      + fieldName => string
+     *      + fieldName => string
+     *    + 'options'
+     *      + fieldName => array
+     *      + fieldName => array
+     *      + fieldName => array
      *
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */

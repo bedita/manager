@@ -284,12 +284,16 @@ class ControlTest extends TestCase
                 null,
                 'On',
             ],
-            'custom config property' => [
+            'other value not in config' => [
                 'dummies',
                 'status',
-                'off',
-                'OOFF',
-                'OOFF',
+                'other',
+                [
+                    'on' => 'OOONNN',
+                    'off' => 'OOOFFF',
+                    'draft' => 'DDDRRRAAAFFFTTT',
+                ],
+                'Other',
             ],
             'custom config property value' => [
                 'dummies',
@@ -320,10 +324,10 @@ class ControlTest extends TestCase
     {
         if (!empty($customConfig)) {
             Configure::write(
-                sprintf('Properties.%s.labels', $type),
+                sprintf('Properties.%s', $type),
                 array_merge(
-                    (array)\Cake\Core\Configure::read(sprintf('Properties.%s.labels', $type)),
-                    [$property => $customConfig]
+                    (array)\Cake\Core\Configure::read(sprintf('Properties.%s', $type)),
+                    ['labels' => ['options' => [$property => $customConfig]]]
                 )
             );
         }
