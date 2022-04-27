@@ -245,15 +245,16 @@ class ControlTest extends TestCase
      * @param array $expected The expected control.
      * @return void
      * @dataProvider controlProvider()
-     * @covers ::control
-     * @covers ::json
-     * @covers ::richtext
-     * @covers ::plaintext
-     * @covers ::datetime
-     * @covers ::date
-     * @covers ::checkbox
-     * @covers ::enum
-     * @covers ::categories
+     * @covers ::control()
+     * @covers ::json()
+     * @covers ::richtext()
+     * @covers ::plaintext()
+     * @covers ::datetime()
+     * @covers ::date()
+     * @covers ::checkbox()
+     * @covers ::enum()
+     * @covers ::categories()
+     * @covers ::oneOptions()
      */
     public function testControl(array $schema, string $type, $value, array $expected): void
     {
@@ -332,6 +333,33 @@ class ControlTest extends TestCase
             );
         }
         $actual = Control::label($type, $property, $value);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `oneOptions`
+     *
+     * @return void
+     * @dataProvider labelProvider()
+     * @covers ::oneOptions()
+     */
+    public function testOneOptions(): void
+    {
+        // empty one
+        $expected = [];
+        $actual = [];
+        Control::oneOptions($actual, []);
+        static::assertSame($expected, $actual);
+
+        // empty one
+        $expected = [
+            ['value' => 'on', 'text' => 'On'],
+            ['value' => 'off', 'text' => 'Off'],
+            ['value' => 'draft', 'text' => 'Draft'],
+        ];
+        $actual = [];
+        $one = ['type' => 'array', 'items' => ['enum' => ['on', 'off', 'draft']]];
+        Control::oneOptions($actual, $one);
         static::assertSame($expected, $actual);
     }
 }

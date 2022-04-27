@@ -191,14 +191,7 @@ class Control
 
         $options = [];
         foreach ($schema['oneOf'] as $one) {
-            if (!empty($one['type']) && ($one['type'] === 'array')) {
-                $options = array_map(
-                    function ($item) {
-                        return ['value' => $item, 'text' => Inflector::humanize($item)];
-                    },
-                    (array)Hash::extract($one, 'items.enum')
-                );
-            }
+            self::oneOptions($options, $one);
         }
         if (!empty($options)) {
             return [
@@ -212,6 +205,27 @@ class Control
             'type' => 'checkbox',
             'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
         ];
+    }
+
+    /**
+     * Set options for one of `oneOf` items.
+     *
+     * @param array $options The options to update
+     * @param array $one The one item to check
+     * @return void
+     */
+    public static function oneOptions(array &$options, array $one): void
+    {
+        $type = Hash::get($one, 'type');
+        if ($type !== 'array') {
+            return;
+        }
+        $options = array_map(
+            function ($item) {
+                return ['value' => $item, 'text' => Inflector::humanize($item)];
+            },
+            (array)Hash::extract($one, 'items.enum')
+        );
     }
 
     /**
