@@ -9,6 +9,9 @@ import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 export default {
+    components: {
+        Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+    },
     methods: {
         remove(e) {
             const message = t`Remove item. Are you sure?`;
