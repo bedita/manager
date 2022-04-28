@@ -150,6 +150,10 @@ export default {
         },
 
         initFolder() {
+            if (!this.initFilter?.filter) {
+                return {};
+            }
+
             return this.initFilter?.filter[this.positionFilterName];
         },
 
@@ -214,7 +218,10 @@ export default {
          * @param {String} type Selected object type
          */
         selectedType(type) {
-            this.availableFilters = this.filtersByType[type] || [];
+            this.availableFilters = [];
+            if (this.filtersByType && this.filtersByType[type]) {
+                this.availableFilters = this.filtersByType[type];
+            };
             const query = this.getCleanQuery();
             // persist old compatible filter values
             query.q = this.queryFilter.q;
