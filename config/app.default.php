@@ -579,10 +579,15 @@ return [
         //         'all' => ['status', 'title', 'description'],
         //     ],
         //     'labels' => [
-        //         'status' => [
-        //             'on' => 'O N',
-        //             'off' => 'O F F',
-        //             'draft' => 'D R A F T',
+        //         'fields' => [
+        //             'description' => 'summary',
+        //         ],
+        //         'options' => [
+        //             'status' => [
+        //                 'on' => 'published',
+        //                 'off' => 'archived',
+        //                 'draft' => 'in progress',
+        //             ],
         //         ],
         //     ],
         // ],
