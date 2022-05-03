@@ -771,18 +771,32 @@ export default {
          * @returns {String}
          */
         relatedStreamProp(related, prop, format) {
-            let val = '';
-            const stream = related?.relationships?.streams?.data[0];
-            if (prop in stream.attributes) {
-                val = stream.attributes[prop];
-            } else if (prop in stream.meta) {
-                val = stream.meta[prop];
+            const stream = related?.relationships?.streams?.data[0] || {};
+            const attributes = stream?.attributes || {};
+            if (prop in attributes) {
+                return this.propFormat(attributes[prop], format);
             }
-            if (format === 'bytes') {
-                return this.bytes(val);
+            const meta = stream?.meta || {};
+            if (prop in meta) {
+                return this.propFormat(meta[prop], format);
             }
 
-            return val;
+            return '';
+        },
+
+        /**
+         * Format property value
+         *
+         * @param {String} value
+         * @param {String} format
+         * @returns {String}
+         */
+        propFormat(value, format) {
+            if (format === 'bytes') {
+                return this.bytes(value);
+            }
+
+            return value;
         },
 
         /**

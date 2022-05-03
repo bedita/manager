@@ -71,7 +71,7 @@
         <header class="is-flex space-between mt-05">
             <div>
 
-                <h1 class="title m-0 has-text-size-small has-font-style-italic" style="padding-bottom: 7px;">
+                <h1 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
                         <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
                             <: related.attributes.translated_fields.title :>
@@ -81,10 +81,10 @@
                     {% endif %}
                 </h1>
 
-            {% if not add %}
-                <div v-if="relatedStream(related)" class="has-text-size-smallest">
+            {% if not add and not stage %}
+                {# <div v-if="relatedStream(related)" class="has-text-size-smallest">
                     <: relatedStreamProp(related, 'file_name') :>
-                </div>
+                </div> #}
 
                 <div v-if="relatedStream(related)" class="has-text-size-smallest">
                     <: relatedStreamProp(related, 'mime_type') :>
