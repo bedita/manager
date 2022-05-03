@@ -792,9 +792,9 @@ export default {
          * @returns {String}
          */
         relatedStreamDownloadUrl(related) {
-            const stream = related.relationships?.streams?.data[0] || {};
+            const id = related.relationships?.streams?.data[0]?.id;
 
-            return `${BEDITA.base}/download/${stream?.id}`;
+            return `${BEDITA.base}/download/${id}`;
         },
 
         /**
