@@ -85,7 +85,7 @@
             {# main relations view #}
             {{ element('Form/relations', {'relations': objectRelations.main}) }}
 
-            {% if object.id %}
+            {% if object.id and Perms.canRead('users') %}
                 {{ element('Form/history') }}
             {% endif %}
 
