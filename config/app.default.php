@@ -514,7 +514,9 @@ return [
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
      *  - 'fastCreate' fields for fast creation forms, by type
-     *
+     *  - 'labels' to customize labels of properties names and their options, it can have two keys `fields` and `options`
+     *   + 'fields' contains an associative array with property names as keys and labels as values
+     *   + 'options' contains an associative array with property names as keys and an array containing option items and the custom labels to use
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
     // 'Properties' => [
@@ -575,6 +577,18 @@ return [
         //     'fastCreate' => [
         //         'required' => ['status', 'title'],
         //         'all' => ['status', 'title', 'description'],
+        //     ],
+        //     'labels' => [
+        //         'fields' => [
+        //             'description' => 'summary',
+        //         ],
+        //         'options' => [
+        //             'status' => [
+        //                 'on' => 'published',
+        //                 'off' => 'archived',
+        //                 'draft' => 'in progress',
+        //             ],
+        //         ],
         //     ],
         // ],
     // ],
