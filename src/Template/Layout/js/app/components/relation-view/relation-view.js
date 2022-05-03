@@ -770,9 +770,9 @@ export default {
          * @param {String} format The format required, if any
          * @returns {String}
          */
-         relatedStreamProp(related, prop, format) {
+        relatedStreamProp(related, prop, format) {
             let val = '';
-            const stream = related.relationships.streams.data[0];
+            const stream = related?.relationships?.streams?.data[0];
             if (prop in stream.attributes) {
                 val = stream.attributes[prop];
             } else if (prop in stream.meta) {
@@ -783,6 +783,19 @@ export default {
             }
 
             return val;
+        },
+
+        /**
+         * Return true if title is not filename.
+         *
+         * @param {Object} related The object
+         * @returns
+         */
+        relatedTitleNotEqualsFilename(related) {
+            const title = related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-';
+            const filename = this.relatedStreamProp(related, 'file_name');
+
+            return (title !== filename);
         },
 
         /**
