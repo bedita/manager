@@ -80,17 +80,23 @@
             </h1>
 
             {% if not add %}
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'file_name') :>
-            </span>
+            <div v-if="relatedStream(related)">
+                <span class="other m-0 has-text-size-small">
+                    <: relatedStreamProp(related, 'file_name') :>
+                    <: relatedStreamProp(related, 'mime_type') :>
+                    <: relatedStreamProp(related, 'file_size', 'bytes') :>
+                </span>
 
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'mime_type') :>
-            </span>
+                <a :href="relatedStreamProp(related, 'url')" target="_blank"
+                    class="button button-outlined">
+                        {{ __('View file') }}
+                </a>
 
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'file_size', 'bytes') :>
-            </span>
+                <a :href="relatedStreamDownloadUrl(related)"
+                    class="button button-outlined ">
+                    {{ __('Download file') }}
+                </a>
+            </div>
             {% endif %}
 
             {% if not translation %}

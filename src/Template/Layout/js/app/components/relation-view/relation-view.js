@@ -752,37 +752,49 @@ export default {
          * Return true when related object has streams data.
          *
          * @param {Object} related The object
-         * @returns
+         * @returns {Boolean} true if a stream object is available
          */
         relatedStream(related) {
             if (!related.relationships.streams || !related.relationships.streams.data || related.relationships.streams.data.length === 0) {
                 return false;
             }
 
-            return related.relationships.streams.data[0].attributes;
+            return true;
         },
 
         /**
-         * Get related object attribute.
+         * Get related stream property.
          *
          * @param {Object} related The object
-         * @param {String} attribute The attribute name
+         * @param {String} prop The prop name
          * @param {String} format The format required, if any
          * @returns {String}
          */
-        relatedAttribute(related, attribute, format) {
+         relatedStreamProp(related, prop, format) {
             let val = '';
             const stream = related.relationships.streams.data[0];
-            if (attribute in stream.attributes) {
-                val = stream.attributes[attribute];
-            } else if (attribute in stream.meta) {
-                val = stream.meta[attribute];
+            if (prop in stream.attributes) {
+                val = stream.attributes[prop];
+            } else if (prop in stream.meta) {
+                val = stream.meta[prop];
             }
             if (format === 'bytes') {
                 return this.bytes(val);
             }
 
             return val;
+        },
+
+        /**
+         * Retrieve related stream Download URL
+         *
+         * @param {Object} related The object
+         * @returns {String}
+         */
+        relatedStreamDownloadUrl(related) {
+            const stream = related.relationships?.streams?.data[0] || {};
+
+            return `${BEDITA.base}/download/${stream?.id}`;
         },
 
         /**
