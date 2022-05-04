@@ -12,8 +12,8 @@
  */
 namespace App\Test\TestCase\Controller\Component;
 
-use App\Controller\Component\FlashComponent;
 use App\Controller\AppController;
+use App\Controller\Component\FlashComponent;
 use BEdita\SDK\BEditaClientException;
 use Cake\TestSuite\TestCase;
 
