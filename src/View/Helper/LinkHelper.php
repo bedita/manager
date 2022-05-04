@@ -297,7 +297,7 @@ class LinkHelper extends Helper
      * @param string $type file type (js/css)
      * @return array files found
      */
-    protected function findFiles(array $filter, string $type): array
+    public function findFiles(array $filter, string $type): array
     {
         $files = [];
         $filesPath = WWW_ROOT . $type;

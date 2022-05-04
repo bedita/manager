@@ -19,6 +19,7 @@ use App\View\Helper\LinkHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\View\Helper\HtmlHelper;
 use Cake\View\View;
 
 /**
@@ -497,11 +498,6 @@ class LinkHelperTest extends TestCase
                 ['abcdefg'], // filter
                 '', // expected
             ],
-            // this test case works only locally, where there's a bundle
-            // 'existing js' => [
-            //     ['timezone'], // filter
-            //     sprintf('<script src="js/app.bundle.%s.js"></script>', $this->getBundle()), // expected
-            // ],
         ];
     }
 
@@ -521,6 +517,25 @@ class LinkHelperTest extends TestCase
         $link->jsBundle($filter);
         $actual = $this->getActualOutput();
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `jsBundle`, `cssBundle`
+     *
+     * @return void
+     * @covers ::jsBundle()
+     * @covers ::cssBundle()
+     */
+    public function testBundlesWithMockFindFiles(): void
+    {
+        $mock = $this->createPartialMock(LinkHelper::class, ['findFiles']);
+        $mock->method('findFiles')->willReturn(['app.bundle.js']);
+        $mock->Html = new HtmlHelper(new View(new ServerRequest(), null, null, []));
+        $mock->jsBundle(['timezone']);
+        $mock->method('findFiles')->willReturn(['app.css']);
+        $mock->cssBundle(['timezone']);
+        $actual = $this->getActualOutput();
+        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css"/>', $actual);
     }
 
     /**
