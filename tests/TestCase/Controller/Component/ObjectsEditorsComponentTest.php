@@ -229,7 +229,7 @@ class ObjectsEditorsComponentTest extends TestCase
         // not empty cache
         $user = ['id' => 123, 'attributes' => ['username' => 'gustavo']];
         $this->Authentication->setIdentity(new Identity($user));
-        $expected = $this->ObjectsEditors->update(999);
+        $expected = $this->ObjectsEditors->update('999');
         $expected = json_decode($expected, true);
         $actual = $this->ObjectsEditors->getEditors();
         static::assertEquals($expected, $actual);

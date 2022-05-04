@@ -819,7 +819,7 @@ class ModulesComponentTest extends TestCase
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
-                new UploadException(null, true), // !UPLOAD_ERR_OK
+                new UploadException(null, 1), // !UPLOAD_ERR_OK
                 true,
             ],
             'save with empty file' => [
@@ -1786,7 +1786,7 @@ class ModulesComponentTest extends TestCase
             }));
         ApiClientProvider::setApiClient($apiClient);
 
-        $this->Modules->saveRelated($id, $type, $relatedData);
+        $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);
     }
 }

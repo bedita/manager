@@ -60,7 +60,9 @@ class ProjectMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $project = $this->detectProject($request);
+        /** @var \Cake\Http\ServerRequest $param */
+        $param = $request;
+        $project = $this->detectProject($param);
         Application::loadProjectConfig((string)$project, $this->projectsConfigPath);
         $this->Application->loadPluginsFromConfig();
 
