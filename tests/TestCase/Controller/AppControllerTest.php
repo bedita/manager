@@ -777,7 +777,7 @@ class AppControllerTest extends TestCase
                 'anything', // session value
                 null, // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
             'query parameters' => [ // expected write session filter and return null
                 [ // request config
@@ -824,7 +824,7 @@ class AppControllerTest extends TestCase
                 ['any' => 'thing'], // session value
                 ['any' => 'thing'], // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
         ];
     }
@@ -862,7 +862,8 @@ class AppControllerTest extends TestCase
         if ($result == null) {
             static::assertNull($expectedResultType);
         } else {
-            static::assertTrue($result instanceof $expectedResultType);
+            static::assertNotNull($expectedResultType);
+            static::assertSame(get_class($result), $expectedResultType);
         }
         if ($expectedResultType === '\Cake\Http\Response') {
             static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);

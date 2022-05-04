@@ -819,7 +819,7 @@ class ModulesComponentTest extends TestCase
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
-                new UploadException(null, !UPLOAD_ERR_OK),
+                new UploadException(null, true), // !UPLOAD_ERR_OK
                 true,
             ],
             'save with empty file' => [
