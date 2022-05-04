@@ -7,8 +7,8 @@ export default {
         <section class="fieldset shrinks">
             <header class="mx-1 tab tab-static unselectable">
                 <h2>
-                    <span>${t`version by`}</span>
-                    <span class="has-font-weight-bold"><: authorName :></span>
+                    <span v-if="authorName">${t`version by`}</span>
+                    <span v-if="authorName" class="has-font-weight-bold"><: authorName :></span>
                     <span>${t`date`} <: formattedDate :></span>
                 </h2>
             </header>
@@ -52,7 +52,7 @@ export default {
          * @return {string}
          */
         authorName: function() {
-            if (!this.user) {
+            if (!this.user?.attributes) {
                 return;
             }
             const user = this.user.attributes;
