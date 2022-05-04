@@ -10,6 +10,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -44,8 +45,12 @@ class ObjectsEditorsComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
-        $this->ObjectsEditors = $registry->load(ObjectsEditorsComponent::class);
-        $this->Authentication = $registry->load(AuthenticationComponent::class);
+        /** @var \App\Controller\Component\ObjectsEditorsComponent $objectsEditorsComponent */
+        $objectsEditorsComponent = $registry->load(ObjectsEditorsComponent::class);
+        $this->ObjectsEditors = $objectsEditorsComponent;
+        /** @var \Authentication\Controller\Component\AuthenticationComponent $authenticationComponent */
+        $authenticationComponent = $registry->load(AuthenticationComponent::class);
+        $this->Authentication = $authenticationComponent;
     }
 
     /**
@@ -135,9 +140,10 @@ class ObjectsEditorsComponentTest extends TestCase
         // id not found in objectsEditors
         $user = ['id' => 123, 'attributes' => ['name' => 'Gustavo', 'surname' => 'Support']];
         $this->Authentication->setIdentity(new Identity($user));
-        $this->ObjectsEditors->update('999');
+        $idNotInEditors = '999';
+        $this->ObjectsEditors->update($idNotInEditors);
         $expected = 'Gustavo Support';
-        $actual = $this->ObjectsEditors->objectsEditors['999'][0]['name'];
+        $actual = Hash::get($this->ObjectsEditors->objectsEditors, sprintf('%s.0.name', $idNotInEditors));
         static::assertEquals($expected, $actual);
         $expected = [
             ['name' => 'gustavo', 'timestamp' => $time],

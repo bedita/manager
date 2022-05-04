@@ -34,13 +34,13 @@ class LinkHelper extends Helper
     public $helpers = ['Html'];
 
     /**
+     * {@inheritDoc}
+     *
      * Default configuration
      *
      *  - 'apiBaseUrl': API base URL
      *  - 'webBaseUrl': WebApp base URL
      *  - 'query': Request Query params
-     *
-     * @var array
      */
     protected $_defaultConfig = [
         'apiBaseUrl' => '',

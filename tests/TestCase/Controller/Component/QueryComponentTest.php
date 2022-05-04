@@ -28,7 +28,9 @@ class QueryComponentTest extends TestCase
         parent::setUp();
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Query = $registry->load(QueryComponent::class);
+        /** @var \App\Controller\Component\QueryComponent $queryComponent */
+        $queryComponent = $registry->load(QueryComponent::class);
+        $this->Query = $queryComponent;
     }
 
     /**

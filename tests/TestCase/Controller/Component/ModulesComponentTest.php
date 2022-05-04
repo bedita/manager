@@ -75,8 +75,12 @@ class ModulesComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
-        $this->Modules = $registry->load(ModulesComponent::class);
-        $this->Authentication = $registry->load(AuthenticationComponent::class);
+        /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
+        $modulesComponent = $registry->load(ModulesComponent::class);
+        $this->Modules = $modulesComponent;
+        /** @var \Authentication\Controller\Component\AuthenticationComponent $authenticationComponent */
+        $authenticationComponent = $registry->load(AuthenticationComponent::class);
+        $this->Authentication = $authenticationComponent;
         $this->MyModules = new class ($registry) extends ModulesComponent
         {
             public $meta = [];

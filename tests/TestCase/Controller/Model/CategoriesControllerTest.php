@@ -36,7 +36,7 @@ class CategoriesControllerTest extends TestCase
     /**
      * Client API
      *
-     * @var \BEdita\WebTools\ApiClientProvider
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -64,7 +64,9 @@ class CategoriesControllerTest extends TestCase
      */
     private function setupApi(): void
     {
-        $this->client = ApiClientProvider::getApiClient();
+        /** @var \BEdita\SDK\BEditaClient $apiClient */
+        $apiClient = ApiClientProvider::getApiClient();
+        $this->client = $apiClient;
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);

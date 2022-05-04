@@ -62,8 +62,12 @@ class HistoryComponentTest extends TestCase
 
         $controller = new Controller();
         $registry = $controller->components();
-        $this->HistoryComponent = $registry->load(HistoryComponent::class);
-        $this->SchemaComponent = $registry->load(SchemaComponent::class);
+        /** @var \App\Controller\Component\HistoryComponent $historyComponent */
+        $historyComponent = $registry->load(HistoryComponent::class);
+        $this->HistoryComponent = $historyComponent;
+        /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+        $schemaComponent = $registry->load(SchemaComponent::class);
+        $this->SchemaComponent = $schemaComponent;
         $user = getenv('BEDITA_ADMIN_USR');
         $pass = getenv('BEDITA_ADMIN_PWD');
         $this->ApiClient = ApiClientProvider::getApiClient();
