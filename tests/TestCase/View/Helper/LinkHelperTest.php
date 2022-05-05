@@ -36,6 +36,16 @@ class LinkHelperTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
+        $this->createSampleBundle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        $this->removeSampleBundle();
     }
 
     /**
@@ -454,7 +464,6 @@ class LinkHelperTest extends TestCase
         // load plugins from config for test
         $app = new Application(CONFIG);
         $app->bootstrap();
-        $debug = Configure::read('debug');
         $pluginsConfig = [
             'DebugKit' => ['debugOnly' => true],
         ];
@@ -466,6 +475,20 @@ class LinkHelperTest extends TestCase
         static::assertEquals('', $actual);
         $actual = $link->pluginAsset('DebugKit', 'js');
         static::assertEquals('', $actual);
+
+        // create plugin asset for test, remove folders and file afterwards
+        mkdir(getcwd() . '/plugins/Dummy');
+        mkdir(getcwd() . '/plugins/Dummy/webroot');
+        mkdir(getcwd() . '/plugins/Dummy/webroot/js');
+        file_put_contents(getcwd() . '/plugins/Dummy/webroot/js/Dummy.plugin.js', '');
+        Configure::write('Plugins', ['Dummy' => ['debugOnly' => true]]);
+        $app->loadPluginsFromConfig();
+        $actual = $link->pluginAsset('Dummy', 'js');
+        static::assertEquals('<script src="/dummy/js/Dummy.plugin.js"></script>', $actual);
+        array_map('unlink', glob(getcwd() . '/plugins/Dummy/webroot/js/*.*'));
+        rmdir(getcwd() . '/plugins/Dummy/webroot/js');
+        rmdir(getcwd() . '/plugins/Dummy/webroot');
+        rmdir(getcwd() . '/plugins/Dummy');
     }
 
     /**
@@ -576,6 +599,11 @@ class LinkHelperTest extends TestCase
         static::assertEquals($expected, $actual);
     }
 
+    /**
+     * Provider for testFindFiles
+     *
+     * @return array
+     */
     public function findFilesProvider(): array
     {
         return [
@@ -584,22 +612,21 @@ class LinkHelperTest extends TestCase
                 'hijlm',
                 '', // expected
             ],
-            // these test cases work only locally, where there's a bundle
-            // 'no filter' => [
-            //     [], // filter
-            //     'js',
-            //     'multi', // expected
-            // ],
-            // 'app.bundle js' => [
-            //     ['app.bundle'], // filter
-            //     'js',
-            //     sprintf('app.bundle.%s.js', $this->getBundle()), // expected
-            // ],
-            // 'app css' => [
-            //     ['app'], // filter
-            //     'css',
-            //     sprintf('app.%s.css', $this->getBundle()), // expected
-            // ],
+            'no filter' => [
+                [], // filter
+                'js',
+                'multi', // expected
+            ],
+            'app.bundle js' => [
+                ['app.bundle'], // filter
+                'js',
+                'app.bundle.abcde.js', // expected
+            ],
+            'app css' => [
+                ['app'], // filter
+                'css',
+                'app.css', // expected
+            ],
         ];
     }
 
@@ -613,9 +640,7 @@ class LinkHelperTest extends TestCase
     public function testFindFiles(array $filter, string $extension, string $expected): void
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
-        // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
-        $actual = $test->invokeMethod($link, 'findFiles', [$filter, $extension]);
+        $actual = $link->findFiles($filter, $extension);
         if (empty($expected)) {
             static::assertEmpty($actual);
 
@@ -679,5 +704,33 @@ class LinkHelperTest extends TestCase
         $link = new LinkHelper(new View($request, $response, $events, $data));
         $result = $link->objectNav($data);
         static::assertSame($expected, $result);
+    }
+
+    /**
+     * Create sample files
+     *
+     * @return void
+     */
+    private function createSampleBundle(): void
+    {
+        file_put_contents(getcwd() . '/webroot/css/app.css', '');
+        file_put_contents(getcwd() . '/webroot/js/app.bundle.abcde.js', '');
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js', '');
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js', '');
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js', '');
+    }
+
+    /**
+     * Remove sample files
+     *
+     * @return void
+     */
+    private function removeSampleBundle(): void
+    {
+        unlink(getcwd() . '/webroot/css/app.css');
+        unlink(getcwd() . '/webroot/js/app.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js');
     }
 }
