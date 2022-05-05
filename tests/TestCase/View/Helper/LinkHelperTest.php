@@ -715,6 +715,7 @@ class LinkHelperTest extends TestCase
     {
         file_put_contents(getcwd() . '/webroot/css/app.css', '');
         file_put_contents(getcwd() . '/webroot/js/app.bundle.abcde.js', '');
+        mkdir(getcwd() . '/webroot/js/vendors');
         file_put_contents(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js', '');
         file_put_contents(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js', '');
         file_put_contents(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js', '');
@@ -732,5 +733,6 @@ class LinkHelperTest extends TestCase
         unlink(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js');
         unlink(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js');
         unlink(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js');
+        rmdir(getcwd() . '/webroot/js/vendors');
     }
 }
