@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-04-21 13:11:01 \n"
+"POT-Creation-Date: 2022-05-05 14:58:00 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1003,7 +1003,7 @@ msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 #: src/Template/Layout/js/app/components/history/history.js:101
 #: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
-#: src/Template/Layout/js/app/pages/modules/index.js:157
+#: src/Template/Layout/js/app/pages/modules/index.js:158
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr "sì, prosegui"
@@ -1017,7 +1017,7 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 
-#: src/Template/Layout/js/app/pages/modules/index.js:155
+#: src/Template/Layout/js/app/pages/modules/index.js:156
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
@@ -1068,11 +1068,11 @@ msgstr "Priorità"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: src/Template/Layout/js/app/components/filter-box.js:164
+#: src/Template/Layout/js/app/components/filter-box.js:190
 msgid "Items"
 msgstr "Elementi"
 
-#: src/Template/Layout/js/app/components/filter-box.js:317
+#: src/Template/Layout/js/app/components/filter-box.js:343
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 
@@ -1083,6 +1083,14 @@ msgstr "modifica"
 #: src/Template/Layout/js/app/components/tree-view/tree-view.js:82
 msgid "Menu"
 msgstr "Menù"
+
+#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:22
+msgid "Search existing tags"
+msgstr "Cerca tag esistenti"
+
+#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:37
+msgid "Add new tag"
+msgstr "Aggiungi un nuovo tag"
 
 #: src/Template/Layout/js/app/components/secret/secret.js:31
 msgid "copied in the clipboard"

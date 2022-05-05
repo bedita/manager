@@ -28,7 +28,7 @@
         {# Checkbox my contents #}
         <div class="filter-container checkbox" v-if="showAdvanced">
             <label>
-                <input type="checkbox" v-model="queryFilter.filter['history_editor']">{{ __('Only my contents') }}</input>
+                <input type="checkbox" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
@@ -84,6 +84,14 @@
                         @change="onCategoryChange"
                     ></category-picker>
                 {% endif %}
+            </span>
+
+            <span v-else-if="filter.name === 'tags'">
+                <tag-picker
+                    id="tag-filter"
+                    :initial-tags="initTags"
+                    :searchonly="true"
+                    @change="onTagChange"></tag-picker>
             </span>
 
             <span v-else-if="filter.name === 'parent'" class="position-filter">
