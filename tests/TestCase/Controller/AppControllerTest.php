@@ -252,16 +252,23 @@ class AppControllerTest extends TestCase
     public function testSetupOutputTimezone(): void
     {
         $this->setupController();
-        $expected = 'GMT';
 
-        // Mock Authentication component
+        $expected = Configure::read('I18n.timezone');
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
-
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
-
         $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
 
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => null]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
+
+        $expected = 'GMT';
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
         static::assertEquals($expected, $configTimezone);
     }
 
