@@ -477,6 +477,7 @@ class LinkHelperTest extends TestCase
         static::assertEquals('', $actual);
 
         // create plugin asset for test, remove folders and file afterwards
+        mkdir(getcwd() . '/plugins');
         mkdir(getcwd() . '/plugins/Dummy');
         mkdir(getcwd() . '/plugins/Dummy/webroot');
         mkdir(getcwd() . '/plugins/Dummy/webroot/js');
