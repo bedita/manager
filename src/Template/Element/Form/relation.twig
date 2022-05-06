@@ -26,12 +26,22 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
+                {% set list = {} %}
+                {% for type, filters in filtersByType %}
+                    {% set options = [] %}
+                    {% for f in filters %}
+                        {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
+                        {% set options = options|merge([o|merge({ 'name': f })]) %}
+                    {% endfor %}
+                    {% set list = list|merge({ (type): options }) %}
+                {% endfor %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
                     :show-advanced="false"
                     :relation-types="relationTypes"
                     :init-filter="activeFilter"
+                    :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
                     objects-label="{{ __('objects') }}"
                     @filter-update-current-page="onUpdateCurrentPage"
                     @filter-update-page-size="onUpdatePageSize"
