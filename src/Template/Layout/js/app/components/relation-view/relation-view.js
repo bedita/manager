@@ -107,6 +107,8 @@ export default {
          */
         showFilter() {
             return this.activeFilter.q ||
+                this.activeFilter?.filter?.status ||
+                this.activeFilter?.filter?.type ||
                 this.pagination.page_count > 1 ||
                 this.alreadyInView.length > this.pagination.page_size;
         },
