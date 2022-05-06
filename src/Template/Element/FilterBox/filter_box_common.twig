@@ -28,7 +28,7 @@
         {# Checkbox my contents #}
         <div class="filter-container checkbox" v-if="showAdvanced">
             <label>
-                <input type="checkbox" v-model="queryFilter.filter['history_editor']">{{ __('Only my contents') }}</input>
+                <input type="checkbox" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
@@ -86,6 +86,14 @@
                 {% endif %}
             </span>
 
+            <span v-else-if="filter.name === 'tags'">
+                <tag-picker
+                    id="tag-filter"
+                    :initial-tags="initTags"
+                    :searchonly="true"
+                    @change="onTagChange"></tag-picker>
+            </span>
+
             <span v-else-if="filter.name === 'parent'" class="position-filter">
                 <label>{{ __('Folder') }}</label>
 
@@ -104,11 +112,9 @@
 
             <span v-else-if="filter.name === 'date_ranges'" class="date-filter date-ranges-item">
                 <div>
-                    <label>{{ __('From date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
                 </div>
                 <div>
-                    <label>{{ __('To date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
                 </div>
             </span>
