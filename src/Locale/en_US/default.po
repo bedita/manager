@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-05-05 14:58:00 \n"
+"POT-Creation-Date: 2022-05-06 08:14:16 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -306,9 +306,6 @@ msgid "Format choosen is not available"
 msgstr ""
 
 msgid "From"
-msgstr ""
-
-msgid "From date"
 msgstr ""
 
 msgid "Future"
@@ -701,9 +698,6 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-msgid "To date"
-msgstr ""
-
 msgid "Translated object"
 msgstr ""
 
@@ -1063,11 +1057,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:190
+#: src/Template/Layout/js/app/components/filter-box.js:194
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:343
+#: src/Template/Layout/js/app/components/filter-box.js:350
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 

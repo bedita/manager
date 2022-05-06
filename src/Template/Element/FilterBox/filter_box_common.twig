@@ -112,11 +112,9 @@
 
             <span v-else-if="filter.name === 'date_ranges'" class="date-filter date-ranges-item">
                 <div>
-                    <label>{{ __('From date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
                 </div>
                 <div>
-                    <label>{{ __('To date') }}</label>
                     <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
                 </div>
             </span>
