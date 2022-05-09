@@ -51,9 +51,9 @@ class UploadException extends CakeException
      *
      * @see http://php.net/manual/en/features.file-upload.errors.php for details
      * @param int $code The php code
-     * @return string|null
+     * @return string
      */
-    private function codeToMessage(int $code): ?string
+    private function codeToMessage(int $code): string
     {
         if (in_array($code, array_keys($this->messagesMap))) {
             return __($this->messagesMap[$code], ini_get('upload_max_filesize'));

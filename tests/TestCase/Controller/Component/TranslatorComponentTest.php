@@ -52,7 +52,9 @@ class TranslatorComponentTest extends TestCase
     {
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Translator = $registry->load(TranslatorComponent::class);
+        /** @var \App\Controller\Component\TranslatorComponent $translatorComponent */
+        $translatorComponent = $registry->load(TranslatorComponent::class);
+        $this->Translator = $translatorComponent;
     }
 
     /**

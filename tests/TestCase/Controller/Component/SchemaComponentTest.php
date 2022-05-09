@@ -34,7 +34,9 @@ class SchemaComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Auth');
-        $this->Schema = $registry->load(SchemaComponent::class);
+        /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+        $schemaComponent = $registry->load(SchemaComponent::class);
+        $this->Schema = $schemaComponent;
     }
 
     /**

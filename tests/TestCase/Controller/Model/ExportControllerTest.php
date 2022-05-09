@@ -38,7 +38,7 @@ class ExportControllerTest extends TestCase
     /**
      * Client API
      *
-     * @var \BEdita\WebTools\ApiClientProvider
+     * @var \BEdita\SDK\BEditaClient
      */
     public $apiClient;
 
