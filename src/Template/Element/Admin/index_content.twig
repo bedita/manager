@@ -22,7 +22,7 @@
                 <div>{{ __('Id') }}</div>
                 {% for key in allProperties %}
                     {% set label = key %}
-                    <div class="{{ Link.sortClass(key) }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
+                    <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
                 {% endfor %}
                 {% for key in metaColumns %}
                     <div>{{ __(key) }}</div>
