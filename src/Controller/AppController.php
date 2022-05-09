@@ -259,7 +259,7 @@ class AppController extends Controller
         $types = (array)Hash::get($data, '_types');
         if (!empty($types)) {
             foreach ($types as $field => $type) {
-                if ($type === 'json') {
+                if ($type === 'json' && is_string($data[$field])) {
                     $data[$field] = json_decode($data[$field], true);
                 }
             }
