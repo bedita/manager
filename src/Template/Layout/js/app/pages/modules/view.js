@@ -75,7 +75,7 @@ export default {
                 if (!response.ok) {
                     // a redirect was performed; we assume it was to /login page
                     if (response.status === 0 && response.type === 'opaqueredirect') {
-                        console.warning('session expired');
+                        console.warn('session expired');
                         this.renewSession();
                         throw new Error('Unauthorized');
                     }
