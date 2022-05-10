@@ -393,9 +393,9 @@ class SchemaComponentTest extends TestCase
                 ['documents', 'events'],
             ],
             'types + descendants' => [
-                ['documents', 'events', 'media'],
+                ['documents', 'events', 'media', 'profiles', 'videos'],
                 ['media' => ['audio', 'files', 'images', 'videos']],
-                ['audio', 'documents', 'events', 'files', 'images', 'videos'],
+                ['audio', 'documents', 'events', 'files', 'images', 'profiles', 'videos'],
             ],
         ];
     }
