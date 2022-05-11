@@ -222,7 +222,7 @@ class BulkController extends AppController
             try {
                 $this->apiClient->replaceRelated($id, $this->objectType, 'parents', [
                     'id' => $position,
-                    'type' => 'folders'
+                    'type' => 'folders',
                 ]);
             } catch (BEditaClientException $e) {
                 $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
