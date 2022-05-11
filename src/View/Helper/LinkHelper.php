@@ -34,13 +34,13 @@ class LinkHelper extends Helper
     public $helpers = ['Html'];
 
     /**
+     * {@inheritDoc}
+     *
      * Default configuration
      *
      *  - 'apiBaseUrl': API base URL
      *  - 'webBaseUrl': WebApp base URL
      *  - 'query': Request Query params
-     *
-     * @var array
      */
     protected $_defaultConfig = [
         'apiBaseUrl' => '',
@@ -297,7 +297,7 @@ class LinkHelper extends Helper
      * @param string $type file type (js/css)
      * @return array files found
      */
-    protected function findFiles(array $filter, string $type): array
+    public function findFiles(array $filter, string $type): array
     {
         $files = [];
         $filesPath = WWW_ROOT . $type;

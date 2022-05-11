@@ -54,13 +54,11 @@ class ModulesController extends AppController
         $this->loadComponent('Query');
         $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
-
-        if (!empty($this->getRequest())) {
+        if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-
         $this->Security->setConfig('unlockedActions', ['save']);
     }
 

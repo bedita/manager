@@ -252,16 +252,23 @@ class AppControllerTest extends TestCase
     public function testSetupOutputTimezone(): void
     {
         $this->setupController();
-        $expected = 'GMT';
 
-        // Mock Authentication component
+        $expected = Configure::read('I18n.timezone');
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
-
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
-
         $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
 
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => null]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
+
+        $expected = 'GMT';
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
         static::assertEquals($expected, $configTimezone);
     }
 
@@ -777,7 +784,7 @@ class AppControllerTest extends TestCase
                 'anything', // session value
                 null, // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
             'query parameters' => [ // expected write session filter and return null
                 [ // request config
@@ -824,7 +831,7 @@ class AppControllerTest extends TestCase
                 ['any' => 'thing'], // session value
                 ['any' => 'thing'], // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
         ];
     }
@@ -862,7 +869,8 @@ class AppControllerTest extends TestCase
         if ($result == null) {
             static::assertNull($expectedResultType);
         } else {
-            static::assertTrue($result instanceof $expectedResultType);
+            static::assertNotNull($expectedResultType);
+            static::assertSame(get_class($result), $expectedResultType);
         }
         if ($expectedResultType === '\Cake\Http\Response') {
             static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);

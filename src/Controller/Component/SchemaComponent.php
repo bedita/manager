@@ -316,7 +316,7 @@ class SchemaComponent extends Component
         $res = [];
         foreach ($types as $type) {
             if (!empty($descendants[$type])) {
-                $res += $descendants[$type];
+                $res = array_merge($res, $descendants[$type]);
             } else {
                 $res[] = $type;
             }

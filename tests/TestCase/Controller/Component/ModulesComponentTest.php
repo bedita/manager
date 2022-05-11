@@ -75,8 +75,12 @@ class ModulesComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
-        $this->Modules = $registry->load(ModulesComponent::class);
-        $this->Authentication = $registry->load(AuthenticationComponent::class);
+        /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
+        $modulesComponent = $registry->load(ModulesComponent::class);
+        $this->Modules = $modulesComponent;
+        /** @var \Authentication\Controller\Component\AuthenticationComponent $authenticationComponent */
+        $authenticationComponent = $registry->load(AuthenticationComponent::class);
+        $this->Authentication = $authenticationComponent;
         $this->MyModules = new class ($registry) extends ModulesComponent
         {
             public $meta = [];
@@ -815,7 +819,7 @@ class ModulesComponentTest extends TestCase
                     'upload_behavior' => 'file',
                     'model-type' => 'images',
                 ],
-                new UploadException(null, !UPLOAD_ERR_OK),
+                new UploadException(null, 1), // !UPLOAD_ERR_OK
                 true,
             ],
             'save with empty file' => [
@@ -1782,7 +1786,7 @@ class ModulesComponentTest extends TestCase
             }));
         ApiClientProvider::setApiClient($apiClient);
 
-        $this->Modules->saveRelated($id, $type, $relatedData);
+        $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);
     }
 }
