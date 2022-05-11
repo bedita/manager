@@ -194,14 +194,18 @@ class BulkController extends AppController
      */
     protected function copyToPosition(string $position): void
     {
-        $payload = [];
-        foreach ($this->ids as $id) {
-            $payload[] = compact('id') + ['type' => $this->objectType];
-        }
-        try {
-            $this->apiClient->addRelated($position, 'folders', 'children', $payload);
-        } catch (BEditaClientException $e) {
-            $this->errors[] = ['message' => $e->getAttributes()];
+        $ids = array_reverse($this->ids);
+        foreach ($ids as $id) {
+            try {
+                $this->apiClient->addRelated($position, 'folders', 'children', [
+                    [
+                        'id' => $id,
+                        'type' => $this->objectType,
+                    ],
+                ]);
+            } catch (BEditaClientException $e) {
+                $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
+            }
         }
     }
 
@@ -213,10 +217,13 @@ class BulkController extends AppController
      */
     protected function moveToPosition(string $position): void
     {
-        $payload = ['id' => $position, 'type' => 'folders'];
-        foreach ($this->ids as $id) {
+        $ids = array_reverse($this->ids);
+        foreach ($ids as $id) {
             try {
-                $this->apiClient->replaceRelated($id, $this->objectType, 'parents', $payload);
+                $this->apiClient->replaceRelated($id, $this->objectType, 'parents', [
+                    'id' => $position,
+                    'type' => 'folders'
+                ]);
             } catch (BEditaClientException $e) {
                 $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
             }
