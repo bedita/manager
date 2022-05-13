@@ -202,7 +202,6 @@ export default {
 
         objects(newObjects) {
             this.positions = newObjects.reduce((positions, object, index) => {
-                console.log(object);
                 positions[object.id] = index + 1;
                 return positions;
             }, {});
