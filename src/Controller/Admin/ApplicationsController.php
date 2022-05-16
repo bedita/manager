@@ -32,7 +32,11 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['name', 'text' => 'description', 'bool' => 'enabled'];
+    protected $properties = [
+        'name' => 'string',
+        'description' => 'text',
+        'enabled' => 'bool',
+    ];
 
     /**
      * @inheritDoc

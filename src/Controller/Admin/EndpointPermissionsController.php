@@ -12,23 +12,19 @@
  */
 namespace App\Controller\Admin;
 
-use Cake\Event\EventInterface;
-use Cake\Http\Response;
-use Cake\Utility\Hash;
-
 /**
- * Config Controller
+ * Permissions Controller
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
-class ConfigController extends AdministrationBaseController
+class EndpointPermissionsController extends AdministrationBaseController
 {
     /**
      * Resource type in use
      *
      * @var string
      */
-    protected $resourceType = 'config';
+    protected $resourceType = 'endpoint_permissions';
 
     /**
      * @inheritDoc
@@ -39,22 +35,10 @@ class ConfigController extends AdministrationBaseController
      * @inheritDoc
      */
     protected $properties = [
-        'name' => 'string',
-        'context' => 'string',
-        'content' => 'json',
+        'endpoint_id' => 'endpoints',
         'application_id' => 'applications',
+        'role_id' => 'roles',
+        'read' => 'bool',
+        'write' => 'bool',
     ];
-
-    /**
-     * @inheritDoc
-     */
-    public function beforeFilter(EventInterface $event): ?Response
-    {
-        parent::beforeFilter($event);
-        $response = $this->apiClient->get('/admin/applications', ['filter' => ['enabled' => 1]]);
-        $applications = ['' => __('No application')] + Hash::combine($response['data'], '{n}.id', '{n}.attributes.name');
-        $this->set('applications', $applications);
-
-        return null;
-    }
 }
