@@ -36,13 +36,14 @@ export default {
             value-format="object"
             @input="onChange"
         />
-        <input type="hidden" name="folderSelected" :value="selectedFolder?.id" />
+        <input type="hidden" :form="form" name="folderSelected" :value="selectedFolder?.id" />
     </div>`,
 
     props: {
         disabled: Boolean,
         initialFolder: String,
         label: String,
+        form: String,
     },
 
     /**

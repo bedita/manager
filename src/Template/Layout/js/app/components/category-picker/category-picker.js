@@ -11,6 +11,7 @@ export default {
             <label v-if="label" :for="id"><: label :></label>
             <Treeselect
                 placeholder
+                :form="form"
                 :options="categoriesOptions"
                 :disabled="disabled"
                 :disable-branch-nodes="true"
@@ -18,7 +19,7 @@ export default {
                 v-model="selectedIds"
                 @input="onChange"
             />
-            <input type="hidden" :id="id" name="categories" :value="selectedIds" />
+            <input type="hidden" :form="form" :id="id" name="categories" :value="selectedIds" />
         </div>
     `,
 
@@ -27,6 +28,7 @@ export default {
         categories: Array,
         disabled: Boolean,
         label: String,
+        form: String,
         initialCategories: Array,
     },
 

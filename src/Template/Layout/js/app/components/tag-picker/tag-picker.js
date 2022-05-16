@@ -36,12 +36,12 @@ export default {
             <div class="new-tag" v-show="!searchonly">
                 <label for="new-tag">${t`Add new tag`}</label>
                 <div class="input-container">
-                    <input type="text" :value="text" id="new-tag" @input="update($event.target.value)" />
+                    <input type="text" :form="form" :value="text" id="new-tag" @input="update($event.target.value)" />
                     <button @click.prevent="addNewTag">${t`Add`}</button>
                 </div>
             </div>
-            <input type="hidden" :id="id" name="tags" :value="modifiedTags" />
-            <input type="hidden" name="_types[tags]" value="json" />
+            <input type="hidden" :form="form" :id="id" name="tags" :value="modifiedTags" />
+            <input type="hidden" :form="form" name="_types[tags]" value="json" />
         </div>
     `,
 
@@ -49,6 +49,7 @@ export default {
         id: String,
         disabled: Boolean,
         label: String,
+        form: String,
         initialTags: Array,
         searchonly: false,
     },

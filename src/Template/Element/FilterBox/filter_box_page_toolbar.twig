@@ -7,7 +7,7 @@
 
     <div class="page-size" v-show="pagination.count > paginateSizes[0]">
         <span>{{ __('Size') }}</span>
-        <select class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
+        <select form="_pagination" class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
             <option v-for="size in paginateSizes"><: size :></option>
         </select>
     </div>
