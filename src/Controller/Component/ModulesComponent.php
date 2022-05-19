@@ -691,7 +691,9 @@ class ModulesComponent extends Component
         }
         // children, not folders
         if (!empty($children)) {
-            ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', $children);
+            foreach ($children as $child) {
+                ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', [$child]);
+            }
         }
     }
 
@@ -722,7 +724,9 @@ class ModulesComponent extends Component
         }
 
         if (!empty($notFolders)) {
-            $apiClient->addRelated($id, 'folders', 'children', $notFolders);
+            foreach ($notFolders as $notFolder) {
+                $apiClient->addRelated($id, 'folders', 'children', [$notFolder]);
+            }
         }
     }
 }
