@@ -85,6 +85,45 @@ class CloneComponentTest extends BaseControllerTest
         static::assertSame($expected, $actual);
     }
 
+    /**
+     * Test `relation`
+     *
+     * @return void
+     * @covers ::relation()
+     */
+    public function testRelation(): void
+    {
+        $this->prepareClone(true);
+        $this->setupApi();
+        $type = 'documents';
+        $response = $this->client->save($type, ['title' => 'doc 1']);
+        $doc1 = $response['data'];
+        $sourceId = (string)$doc1['id'];
+        $response = $this->client->save($type, ['title' => 'doc 2']);
+        $doc2 = $response['data'];
+        $destinationId = (string)$doc2['id'];
+        // empty relation case: parents
+        $this->Clone->relation($sourceId, $type, 'parents', $destinationId);
+
+        $expected = array_keys((array)Hash::extract($doc1, 'relationships'));
+        $expected = array_filter(
+            $expected,
+            function ($relationship) {
+                return !in_array($relationship, ['children', 'parents', 'translations']);
+            }
+        );
+
+        $actual = array_keys((array)Hash::extract($doc2, 'relationships'));
+        $actual = array_filter(
+            $actual,
+            function ($relationship) {
+                return !in_array($relationship, ['children', 'parents', 'translations']);
+            }
+        );
+
+        static::assertSame($expected, $actual);
+    }
+
     private function prepareClone(bool $cloneRelations): void
     {
         $config = [

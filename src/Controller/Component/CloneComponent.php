@@ -79,7 +79,7 @@ class CloneComponent extends Component
      * @param string $destinationId The destination ID
      * @return void
      */
-    protected function relation(string $sourceId, string $type, string $relation, string $destinationId): void
+    public function relation(string $sourceId, string $type, string $relation, string $destinationId): void
     {
         $related = $this->apiClient->getRelated($sourceId, $type, $relation);
         if (empty($related['data'])) {
