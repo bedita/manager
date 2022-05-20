@@ -71,11 +71,13 @@ class CloneComponent extends Component
      */
     public function filterRelations(array $relationships): array
     {
-        return array_filter(
-            $relationships,
-            function ($relationship) {
-                return !in_array($relationship, ['children', 'parents', 'translations']);
-            }
+        return array_values(
+            array_filter(
+                $relationships,
+                function ($relationship) {
+                    return !in_array($relationship, ['children', 'parents', 'translations']);
+                }
+            )
         );
     }
 

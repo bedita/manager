@@ -155,7 +155,7 @@ class CloneComponentTest extends BaseControllerTest
     public function testFilterRelations(array $relationships, array $expected): void
     {
         $this->prepareClone(true);
-        $actual = array_values($this->Clone->filterRelations($relationships));
+        $actual = $this->Clone->filterRelations($relationships);
         static::assertSame($expected, $actual);
     }
 
