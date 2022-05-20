@@ -20,8 +20,12 @@ export const Dialog = Vue.extend({
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
                 <input class="mt-1" type="text" v-if="dialogType == 'prompt'" v-model.lazy="inputValue" />
+                <div class="mt-1" v-if="dialogType == 'prompt'" v-show="checkLabel">
+                    <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
+                    <label for="_check"><: checkLabel :></label>
+                </div>
                 <div class="actions mt-2">
-                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, $root)"><: confirmMessage :></button>
+                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, checkValue, $root)"><: confirmMessage :></button>
                     <button class="button-secondary cancel" @click="hide()" v-if="cancelMessage"><: cancelMessage :></button>
                 </div>
             </div>
@@ -40,6 +44,8 @@ export const Dialog = Vue.extend({
             confirmCallback: this.hide,
             cancelMessage: t`cancel`,
             inputValue: '',
+            checkValue: '',
+            checkLabel: ''
         };
     },
     methods: {
@@ -84,10 +90,12 @@ export const Dialog = Vue.extend({
             this.confirmCallback = confirmCallback;
             this.show(message, this.dialogType, root);
         },
-        prompt(message, defaultValue, confirmCallback, root = document.body) {
+        prompt(message, defaultValue, confirmCallback, root = document.body, options = {}) {
             this.dialogType = 'prompt';
             this.icon = 'icon-info-1';
             this.inputValue = defaultValue || '';
+            this.checkValue = options?.checkValue || '';
+            this.checkLabel = options?.checkLabel || '';
             this.confirmCallback = confirmCallback;
             this.show(message, '', root);
         },
@@ -118,8 +126,8 @@ export const confirm = (message, confirmMessage, confirmCallback, type, root) =>
     return dialog;
 };
 
-export const prompt = (message, defaultValue, confirmCallback, root) => {
+export const prompt = (message, defaultValue, confirmCallback, root, options) => {
     let dialog = new Dialog();
-    dialog.prompt(message, defaultValue, confirmCallback, root);
+    dialog.prompt(message, defaultValue, confirmCallback, root, options);
     return dialog;
 };
