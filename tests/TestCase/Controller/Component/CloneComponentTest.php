@@ -6,6 +6,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\CloneComponent;
 use App\Test\TestCase\Controller\BaseControllerTest;
 use Cake\Controller\Controller;
+use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 
 /**
@@ -25,19 +26,6 @@ class CloneComponentTest extends BaseControllerTest
     /**
      * @inheritDoc
      */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $controller = new Controller();
-        $registry = $controller->components();
-        /** @var \App\Controller\Component\CloneComponent $cloneComponent */
-        $cloneComponent = $registry->load(CloneComponent::class);
-        $this->Clone = $cloneComponent;
-    }
-
-    /**
-     * @inheritDoc
-     */
     protected function tearDown(): void
     {
         unset($this->Clone);
@@ -45,14 +33,29 @@ class CloneComponentTest extends BaseControllerTest
     }
 
     /**
+     * Data provider for testRelations.
+     *
+     * @return array
+     */
+    public function relationsProvider(): array
+    {
+        return [
+            'do not clone relations' => [false],
+            'clone relations' => [true],
+        ];
+    }
+
+    /**
      * Test `relations` and `relation`.
      *
      * @return void
+     * @dataProvider relationsProvider()
      * @covers ::relations()
      * @covers ::relation()
      */
-    public function testRelations(): void
+    public function testRelations(bool $cloneRelations): void
     {
+        $this->prepareClone($cloneRelations);
         $this->setupApi();
         $response = $this->client->save('documents', ['title' => 'doc 1']);
         $doc1 = $response['data'];
@@ -80,5 +83,21 @@ class CloneComponentTest extends BaseControllerTest
         );
 
         static::assertSame($expected, $actual);
+    }
+
+    private function prepareClone(bool $cloneRelations): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'query' => compact('cloneRelations'),
+        ];
+        $request = new ServerRequest($config);
+        $controller = new Controller($request);
+        $registry = $controller->components();
+        /** @var \App\Controller\Component\CloneComponent $cloneComponent */
+        $cloneComponent = $registry->load(CloneComponent::class);
+        $this->Clone = $cloneComponent;
     }
 }
