@@ -340,6 +340,7 @@ class ModulesController extends AppController
             $attributes['uname'] = '';
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
+            $attributes['status'] = 'draft';
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);
