@@ -57,15 +57,26 @@ class CloneComponent extends Component
         $sourceId = (string)Hash::get($source, 'data.id');
         $type = (string)Hash::get($source, 'data.type');
         $relationships = array_keys((array)Hash::extract($source, 'data.relationships'));
-        $relationships = array_filter(
+        $relationships = $this->filterRelations($relationships);
+        foreach ($relationships as $relation) {
+            $this->relation($sourceId, $type, $relation, $destinationId);
+        }
+    }
+
+    /**
+     * Filter relationships, remove not allowed 'children', 'parents', 'translations'
+     *
+     * @param array $relationships The relationships
+     * @return array
+     */
+    public function filterRelations(array $relationships): array
+    {
+        return array_filter(
             $relationships,
             function ($relationship) {
                 return !in_array($relationship, ['children', 'parents', 'translations']);
             }
         );
-        foreach ($relationships as $relation) {
-            $this->relation($sourceId, $type, $relation, $destinationId);
-        }
     }
 
     /**

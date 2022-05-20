@@ -124,6 +124,41 @@ class CloneComponentTest extends BaseControllerTest
         static::assertSame($expected, $actual);
     }
 
+    /**
+     * Data provider for testFilterRelations
+     *
+     * @return array
+     */
+    public function filterRelationsProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+            ],
+            'various relations' => [
+                ['a', 'parents', 'b', 'children', 'c', 'd', 'translations', 'e'],
+                ['a', 'b', 'c', 'd', 'e'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `filterRelations`
+     *
+     * @param array $relationships
+     * @param array $expected
+     * @return void
+     * @dataProvider filterRelationsProvider()
+     * @covers ::filterRelations()
+     */
+    public function testFilterRelations(array $relationships, array $expected): void
+    {
+        $this->prepareClone(true);
+        $actual = array_values($this->Clone->filterRelations($relationships));
+        static::assertSame($expected, $actual);
+    }
+
     private function prepareClone(bool $cloneRelations): void
     {
         $config = [
