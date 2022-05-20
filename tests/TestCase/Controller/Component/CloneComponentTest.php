@@ -25,6 +25,13 @@ class CloneComponentTest extends BaseControllerTest
     protected $Clone;
 
     /**
+     * Controller for test
+     *
+     * @var \Cake\Controller\Controller
+     */
+    protected $controller;
+
+    /**
      * @inheritDoc
      */
     protected function tearDown(): void
@@ -156,11 +163,11 @@ class CloneComponentTest extends BaseControllerTest
         $response = $this->client->save('documents', ['title' => 'doc 2']);
         $doc2 = $response['data'];
         $destinationId = (string)$doc2['id'];
-        $this->controller->Clone = $this->createPartialMock(CloneComponent::class, ['filterRelations', 'queryCloneRelations']);
-        $this->controller->Clone
+        $this->Clone = $this->createPartialMock(CloneComponent::class, ['filterRelations', 'queryCloneRelations']);
+        $this->Clone
             ->method('filterRelations')
             ->willReturn(['parents']);
-        $this->controller->Clone
+        $this->Clone
             ->method('queryCloneRelations')
             ->willReturn(true);
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -168,10 +175,10 @@ class CloneComponentTest extends BaseControllerTest
             ->getMock();
         $apiClient->method('getRelated')
             ->willReturn(['data' => []]);
-        $property = new \ReflectionProperty(get_class($this->controller->Clone), 'apiClient');
+        $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
         $property->setAccessible(true);
-        $property->setValue($this->controller->Clone, $apiClient);
-        $result = $this->controller->Clone->relations($doc1, $destinationId);
+        $property->setValue($this->Clone, $apiClient);
+        $result = $this->Clone->relations($doc1, $destinationId);
         static::assertTrue($result);
     }
 
@@ -196,10 +203,10 @@ class CloneComponentTest extends BaseControllerTest
             ]]);
         $apiClient->method('addRelated')
                 ->willReturn([]);
-        $property = new \ReflectionProperty(get_class($this->controller->Clone), 'apiClient');
+        $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
         $property->setAccessible(true);
-        $property->setValue($this->controller->Clone, $apiClient);
-        $result = $this->controller->Clone->relation('123', 'dummies', 'whatever', '456');
+        $property->setValue($this->Clone, $apiClient);
+        $result = $this->Clone->relation('123', 'dummies', 'whatever', '456');
         static::assertTrue($result);
     }
 
@@ -252,6 +259,5 @@ class CloneComponentTest extends BaseControllerTest
         /** @var \App\Controller\Component\CloneComponent $cloneComponent */
         $cloneComponent = $registry->load(CloneComponent::class);
         $this->Clone = $cloneComponent;
-        $this->controller->Clone = $this->Clone;
     }
 }
