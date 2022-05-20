@@ -58,7 +58,7 @@ class CloneComponentTest extends BaseControllerTest
     {
         $this->prepareClone($expected);
         $this->setupApi();
-        $actual = $this->Clone->queryCloneRelations($expected);
+        $actual = $this->Clone->queryCloneRelations();
         static::assertSame($expected, $actual);
     }
 
