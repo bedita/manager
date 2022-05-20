@@ -60,7 +60,7 @@ class CloneComponent extends Component
         $relationships = array_filter(
             $relationships,
             function ($relationship) {
-                return !in_array($relationship, ['children']);
+                return !in_array($relationship, ['children', 'parents', 'translations']);
             }
         );
         foreach ($relationships as $relation) {
