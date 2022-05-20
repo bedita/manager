@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\CloneComponent;
 use App\Test\TestCase\Controller\BaseControllerTest;
+use BEdita\SDK\BEditaClient;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
@@ -33,7 +34,7 @@ class CloneComponentTest extends BaseControllerTest
     }
 
     /**
-     * Data provider for testRelations.
+     * Data provider for testRelations and testQueryCloneRelations.
      *
      * @return array
      */
@@ -46,12 +47,28 @@ class CloneComponentTest extends BaseControllerTest
     }
 
     /**
-     * Test `relations` and `relation`.
+     * Test `queryCloneRelations`
      *
+     * @param bool $expected The expected bool
+     * @return void
+     * @dataProvider relationsProvider()
+     * @covers ::queryCloneRelations()
+     */
+    public function testQueryCloneRelations(bool $expected): void
+    {
+        $this->prepareClone($expected);
+        $this->setupApi();
+        $actual = $this->Clone->queryCloneRelations($expected);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `relations`.
+     *
+     * @param bool $cloneRelations
      * @return void
      * @dataProvider relationsProvider()
      * @covers ::relations()
-     * @covers ::relation()
      */
     public function testRelations(bool $cloneRelations): void
     {
@@ -125,6 +142,68 @@ class CloneComponentTest extends BaseControllerTest
     }
 
     /**
+     * Test `relations` and `relation`.
+     *
+     * @return void
+     * @covers ::relations()
+     */
+    public function testRelationsWithMock(): void
+    {
+        $this->prepareClone(true);
+        $this->setupApi();
+        $response = $this->client->save('documents', ['title' => 'doc 1']);
+        $doc1 = $response['data'];
+        $response = $this->client->save('documents', ['title' => 'doc 2']);
+        $doc2 = $response['data'];
+        $destinationId = (string)$doc2['id'];
+        $this->controller->Clone = $this->createPartialMock(CloneComponent::class, ['filterRelations', 'queryCloneRelations']);
+        $this->controller->Clone
+            ->method('filterRelations')
+            ->willReturn(['parents']);
+        $this->controller->Clone
+            ->method('queryCloneRelations')
+            ->willReturn(true);
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('getRelated')
+            ->willReturn(['data' => []]);
+        $property = new \ReflectionProperty(get_class($this->controller->Clone), 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->controller->Clone, $apiClient);
+        $result = $this->controller->Clone->relations($doc1, $destinationId);
+        static::assertTrue($result);
+    }
+
+    /**
+     * Test `relation`
+     *
+     * @return void
+     * @covers ::relation()
+     */
+    public function testRelationWithMock(): void
+    {
+        $this->prepareClone(true);
+        $this->setupApi();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('getRelated')
+            ->willReturn(['data' => [
+                ['id' => 991, 'type' => 'dummies'],
+                ['id' => 992, 'type' => 'dummies'],
+                ['id' => 993, 'type' => 'dummies'],
+            ]]);
+        $apiClient->method('addRelated')
+                ->willReturn([]);
+        $property = new \ReflectionProperty(get_class($this->controller->Clone), 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->controller->Clone, $apiClient);
+        $result = $this->controller->Clone->relation('123', 'dummies', 'whatever', '456');
+        static::assertTrue($result);
+    }
+
+    /**
      * Data provider for testFilterRelations
      *
      * @return array
@@ -168,10 +247,11 @@ class CloneComponentTest extends BaseControllerTest
             'query' => compact('cloneRelations'),
         ];
         $request = new ServerRequest($config);
-        $controller = new Controller($request);
-        $registry = $controller->components();
+        $this->controller = new Controller($request);
+        $registry = $this->controller->components();
         /** @var \App\Controller\Component\CloneComponent $cloneComponent */
         $cloneComponent = $registry->load(CloneComponent::class);
         $this->Clone = $cloneComponent;
+        $this->controller->Clone = $this->Clone;
     }
 }

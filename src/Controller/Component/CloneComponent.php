@@ -41,18 +41,30 @@ class CloneComponent extends Component
     }
 
     /**
+     * Get the value of query 'cloneRelations'.
+     * Return true when cloneRelations is not false.
+     *
+     * @return bool
+     */
+    public function queryCloneRelations(): bool
+    {
+        $cloneRelations = $this->getController()->getRequest()->getQuery('cloneRelations');
+
+        return filter_var($cloneRelations, FILTER_VALIDATE_BOOLEAN) !== false;
+    }
+
+    /**
      * Clone relation from source object $source to destination object ID $destination.
      * Exclude 'children', if present.
      *
      * @param array $source The source object
      * @param string $destinationId The destination ID
-     * @return void
+     * @return bool
      */
-    public function relations(array $source, string $destinationId): void
+    public function relations(array $source, string $destinationId): bool
     {
-        $cloneRelations = $this->getController()->getRequest()->getQuery('cloneRelations');
-        if (filter_var($cloneRelations, FILTER_VALIDATE_BOOLEAN) === false) {
-            return;
+        if (!$this->queryCloneRelations()) {
+            return false;
         }
         $sourceId = (string)Hash::get($source, 'data.id');
         $type = (string)Hash::get($source, 'data.type');
@@ -61,6 +73,8 @@ class CloneComponent extends Component
         foreach ($relationships as $relation) {
             $this->relation($sourceId, $type, $relation, $destinationId);
         }
+
+        return true;
     }
 
     /**
@@ -90,13 +104,13 @@ class CloneComponent extends Component
      * @param string $type The object type
      * @param string $relation The relation name
      * @param string $destinationId The destination ID
-     * @return void
+     * @return bool
      */
-    public function relation(string $sourceId, string $type, string $relation, string $destinationId): void
+    public function relation(string $sourceId, string $type, string $relation, string $destinationId): bool
     {
         $related = $this->apiClient->getRelated($sourceId, $type, $relation);
         if (empty($related['data'])) {
-            return;
+            return false;
         }
         foreach ($related['data'] as $obj) {
             $this->apiClient->addRelated($destinationId, $type, $relation, [
@@ -106,5 +120,7 @@ class CloneComponent extends Component
                 ],
             ]);
         }
+
+        return true;
     }
 }
