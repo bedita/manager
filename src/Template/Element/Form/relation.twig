@@ -118,6 +118,14 @@
         {# End relation custom or default view #}
         {% endif %}
 
+        <div class="mt-2" v-show="objects.length">
+            <span>{{ __('Export') }}:</span>
+            {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'csv'})) }}">{{ __('csv') }}</a>
+            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'ods'})) }}">{{ __('ods') }}</a>
+            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'xlsx'})) }}">{{ __('xlsx') }}</a>
+        </div>
+
         {% if not readonly %}
         {# hidden field - relations serialized json #}
         {{ Form.control(relationName ~ 'removeRelated', {

@@ -183,6 +183,29 @@ class ExportControllerTest extends TestCase
     }
 
     /**
+     * Test case of related of format not allowed FAIL METHOD
+     *
+     * @covers ::related()
+     * @return void
+     */
+    public function testRelatedFormatNotAllowed(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['objectType' => 'proms'],
+                'get' => ['id' => '655', 'relation' => 'dummy', 'format' => 'abcde'],
+            ])
+        );
+
+        // call export.
+        $response = $this->Export->related('655', 'proms', '');
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
+    }
+
+    /**
      * Data provider for `testCsvRows` test case.
      *
      * @return array
