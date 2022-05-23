@@ -121,9 +121,14 @@
         <div class="mt-2" v-show="objects.length">
             <span>{{ __('Export') }}:</span>
             {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
-            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'csv'})) }}">{{ __('csv') }}</a>
-            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'ods'})) }}">{{ __('ods') }}</a>
-            <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': 'xlsx'})) }}">{{ __('xlsx') }}</a>
+            {% set formats = config('Export.formats', {
+                'CSV': 'csv',
+                'Open Document': 'ods',
+                'MS Excel': 'xlsx'
+            }) %}
+            {% for label, format in formats %}
+               <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ label }}</a>
+            {% endfor %}
         </div>
 
         {% if not readonly %}
