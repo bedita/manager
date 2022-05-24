@@ -199,7 +199,6 @@ class ExportControllerTest extends TestCase
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
 
-
         // expected csv.
         $fields = '"id","name","skills","category","prop"';
         $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer","2"';
