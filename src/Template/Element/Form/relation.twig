@@ -119,15 +119,21 @@
         {% endif %}
 
         <div class="mt-2" v-show="objects.length">
-            <span>{{ __('Export') }}:</span>
             {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
             {% set formats = config('Export.formats', {
                 'CSV': 'csv',
                 'Open Document': 'ods',
                 'MS Excel': 'xlsx'
             }) %}
+
+            <select name="format-{{ relationName }}" v-model="exportFormat">
+            {% for label,format in formats %}
+                <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+            {% endfor %}
+            </select>
+
             {% for label, format in formats %}
-               <a class="button icon-export is-small mr-1" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ label }}</a>
+               <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
             {% endfor %}
         </div>
 
