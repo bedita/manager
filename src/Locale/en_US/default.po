@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-05-06 08:14:16 \n"
+"POT-Creation-Date: 2022-05-27 09:53:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -206,9 +206,6 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-msgid "Do you really want to delete the category \"{0}\"?"
-msgstr ""
-
 msgid "Documents"
 msgstr ""
 
@@ -357,6 +354,9 @@ msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr ""
 
 msgid "Jobs"
+msgstr ""
+
+msgid "Label"
 msgstr ""
 
 msgid "Language"
@@ -528,6 +528,9 @@ msgid "Options"
 msgstr ""
 
 msgid "Other"
+msgstr ""
+
+msgid "Parent"
 msgstr ""
 
 msgid "Password"
@@ -971,27 +974,28 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:175
-#: src/Template/Layout/js/app/components/history/history.js:111
+#: src/Template/Layout/js/app/app.js:176
+#: src/Template/Layout/js/app/components/history/history.js:110
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:176
-#: src/Template/Layout/js/app/components/history/history.js:112
+#: src/Template/Layout/js/app/app.js:177
+#: src/Template/Layout/js/app/components/history/history.js:111
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:470
+#: src/Template/Layout/js/app/app.js:471
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:482
+#: src/Template/Layout/js/app/app.js:483
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:493
-#: src/Template/Layout/js/app/components/history/history.js:101
+#: src/Template/Layout/js/app/app.js:494
+#: src/Template/Layout/js/app/components/category/category.js:143
+#: src/Template/Layout/js/app/components/history/history.js:100
 #: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:158
@@ -999,7 +1003,7 @@ msgstr ""
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:502
+#: src/Template/Layout/js/app/app.js:503
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -1018,6 +1022,7 @@ msgstr ""
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
+#: src/Template/Layout/js/app/components/category/category.js:142
 #: src/Template/Layout/js/app/pages/admin/index.js:17
 msgid "Remove item. Are you sure?"
 msgstr ""
@@ -1152,17 +1157,37 @@ msgstr ""
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:58
+#: src/Template/Layout/js/app/components/history/history.js:61
 #, javascript-format
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:60
+#: src/Template/Layout/js/app/components/history/history.js:64
 msgid "by ${ name }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/components/history/history.js:99
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:38
+msgid "Modify"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:63
+msgid "Name already in use"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:95
+msgid "Error while creating new category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:136
+msgid "Error while saving category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:151
+msgid "Error on deleting category"
 msgstr ""
