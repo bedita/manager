@@ -27,6 +27,7 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
+        Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),

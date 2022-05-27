@@ -33,20 +33,12 @@ use Psr\Log\LogLevel;
 class ModulesController extends AppController
 {
     /**
-     * Object type currently used
-     *
-     * @var string
-     */
-    protected $objectType = null;
-
-    /**
      * @inheritDoc
      */
     public function initialize(): void
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -533,76 +525,6 @@ class ModulesController extends AppController
         }
 
         return $schema;
-    }
-
-    /**
-     * List categories for the object type.
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function listCategories(): ?Response
-    {
-        $this->viewBuilder()->setTemplate('categories');
-
-        $this->getRequest()->allowMethod(['get']);
-        $response = $this->Categories->index($this->objectType, $this->getRequest()->getQueryParams());
-        $resources = $this->Categories->map($response);
-        $roots = $this->Categories->getAvailableRoots($resources);
-        $categoriesTree = $this->Categories->tree($resources);
-
-        $this->set(compact('resources', 'roots', 'categoriesTree'));
-        $this->set('meta', (array)$response['meta']);
-        $this->set('links', (array)$response['links']);
-        $this->set('schema', $this->Schema->getSchema());
-        $this->set('properties', $this->Properties->indexList('categories'));
-        $this->set('filter', $this->Properties->filterList('categories'));
-        $this->set('object_types', [$this->objectType]);
-
-        return null;
-    }
-
-    /**
-     * Save category.
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function saveCategory(): ?Response
-    {
-        $this->getRequest()->allowMethod(['post']);
-
-        try {
-            $this->Categories->save((array)$this->getRequest()->getData());
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-        }
-
-        return $this->redirect([
-            '_name' => 'modules:categories:index',
-            'object_type' => $this->objectType,
-        ]);
-    }
-
-    /**
-     * Remove single category.
-     *
-     * @param string $id Category ID.
-     * @return \Cake\Http\Response|null
-     */
-    public function removeCategory(string $id): ?Response
-    {
-        try {
-            $type = $this->getRequest()->getData('object_type_name');
-            $this->Categories->delete($id, $type);
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-        }
-
-        return $this->redirect([
-            '_name' => 'modules:categories:index',
-            'object_type' => $this->objectType,
-        ]);
     }
 
     /**

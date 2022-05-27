@@ -46,6 +46,27 @@ class CategoriesComponent extends Component
     }
 
     /**
+     * Fetch categories names
+     *
+     * @param string|null $objectType The object type
+     * @return array
+     */
+    public function names(?string $objectType = null): array
+    {
+        $apiClient = ApiClientProvider::getApiClient();
+        $query = [
+            'fields' => 'name',
+            'page_size' => 1000,
+        ];
+        if (!empty($objectType)) {
+            $query['filter']['type'] = $objectType;
+        }
+        $response = $apiClient->get('/model/categories', $query);
+
+        return (array)Hash::extract($response, 'data.{n}.attributes.name');
+    }
+
+    /**
      * Create a key/value map of categories from the BEdita categories list response.
      *
      * @param array $response The BEdita API response for the categories list.
