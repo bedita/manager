@@ -78,7 +78,7 @@ class CategoriesController extends AppController
         $response = $error = null;
         try {
             $data = (array)$this->getRequest()->getData();
-            $data['enabled'] = isset($data['enabled']) ? boolval($data['enabled']) : false;
+            $data['enabled'] = $data['enabled'] === 'true';
             $response = $this->Categories->save($data);
         } catch (BEditaClientException $e) {
             $error = $e->getMessage();
