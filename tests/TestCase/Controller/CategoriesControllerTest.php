@@ -28,7 +28,15 @@ class CategoriesControllerTest extends TestCase
      */
     public function testInitialize(): void
     {
-        $this->CategoriesController = new CategoriesController(new ServerRequest([]));
+        $this->CategoriesController = new CategoriesController(new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]));
         static::assertNotEmpty($this->CategoriesController->{'Categories'});
         static::assertNotEmpty($this->CategoriesController->{'Properties'});
     }

@@ -75,17 +75,19 @@ class CategoriesController extends AppController
     {
         $this->getRequest()->allowMethod(['post']);
         $this->viewBuilder()->setClassName('Json');
+        $response = $error = null;
         try {
             $data = (array)$this->getRequest()->getData();
             $data['enabled'] = isset($data['enabled']) ? boolval($data['enabled']) : false;
             $response = $this->Categories->save($data);
-            $this->set('response', $response);
-            $this->setSerialize(['response']);
         } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->set('error', $e->getMessage());
-            $this->setSerialize(['error']);
+            $error = $e->getMessage();
+            $this->log($error, 'error');
+            $this->set('error', $error);
         }
+        $this->set('response', $response);
+        $this->set('error', $error);
+        $this->setSerialize(['response', 'error']);
 
         return null;
     }
@@ -100,16 +102,18 @@ class CategoriesController extends AppController
     {
         $this->getRequest()->allowMethod(['post']);
         $this->viewBuilder()->setClassName('Json');
+        $response = $error = null;
         try {
             $type = $this->getRequest()->getData('object_type_name');
             $response = $this->Categories->delete($id, $type);
-            $this->set('response', $response);
-            $this->setSerialize(['response']);
         } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->set('error', $e->getMessage());
-            $this->setSerialize(['error']);
+            $error = $e->getMessage();
+            $this->log($error, 'error');
+            $this->set('error', $error);
         }
+        $this->set('response', $response);
+        $this->set('error', $error);
+        $this->setSerialize(['response', 'error']);
 
         return null;
     }
