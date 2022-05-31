@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-05-06 08:14:16 \n"
+"POT-Creation-Date: 2022-05-31 13:41:49 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -969,13 +969,13 @@ msgid "warning"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:175
-#: src/Template/Layout/js/app/components/history/history.js:111
+#: src/Template/Layout/js/app/components/history/history.js:110
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:176
-#: src/Template/Layout/js/app/components/history/history.js:112
+#: src/Template/Layout/js/app/components/history/history.js:111
 msgid "copy"
 msgstr ""
 
@@ -988,7 +988,7 @@ msgid "Do you really want to trash the object?"
 msgstr ""
 
 #: src/Template/Layout/js/app/app.js:493
-#: src/Template/Layout/js/app/components/history/history.js:101
+#: src/Template/Layout/js/app/components/history/history.js:100
 #: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
 #: src/Template/Layout/js/app/pages/modules/index.js:158
@@ -1149,17 +1149,97 @@ msgstr ""
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:58
+#: src/Template/Layout/js/app/components/history/history.js:61
 #, javascript-format
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:60
+#: src/Template/Layout/js/app/components/history/history.js:64
 msgid "by ${ name }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/components/history/history.js:99
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
+msgid "Every day"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
+msgid "Sunday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
+msgid "Monday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
+msgid "Tuesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
+msgid "Wednesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
+msgid "Thursday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
+msgid "Friday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
+msgid "Saturday"
 msgstr ""
