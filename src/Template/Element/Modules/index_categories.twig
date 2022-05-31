@@ -24,7 +24,7 @@
                 <category
                     :source="{{ resource.attributes|merge({'id': resource.id, 'type': type})|json_encode }}"
                     :parents="{{ roots|json_encode }}"
-                    :names="{{ names|json_encode }}">
+                    :names="{{ names[type]|json_encode }}">
                 </category>
 
             {% endfor %}
@@ -44,17 +44,21 @@
                 <div>{{ __('Enabled') }}</div>
                 <div></div>
             </nav>
-            {% set source = {} %}
             {% if object_types.0 %}
                 {% set source = {'type': object_types.0} %}
+                <category
+                    :source="{{ source|json_encode }}"
+                    :parents="{{ roots|json_encode }}"
+                    :names="{{ names[object_types.0]|json_encode }}">
+                </category>
             {% else %}
                 {% set source = {'types': object_types|keys} %}
+                <category
+                    :source="{{ source|json_encode }}"
+                    :parents="{{ roots|json_encode }}"
+                    :allnames="{{ names|json_encode }}">
+                </category>
             {% endif %}
-            <category
-                :source="{{ source|json_encode }}"
-                :parents="{{ roots|json_encode }}"
-                :names="{{ names|json_encode }}">
-            </category>
         </div>
     </div>
 </div>

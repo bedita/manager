@@ -21,7 +21,7 @@ export default {
                 <span :class="typeClass()"><: type :></span>
             </div>
             <div class="object_type_name-cell" v-show="selectTypes">
-                <select v-model="type">
+                <select v-model="type" @change="updateType(type, $event)">
                     <option v-for="t in source.types" :value="t"><: t :></option>
                 </select>
             </div>
@@ -29,13 +29,13 @@ export default {
                 <input type="checkbox" name="enabled" v-model="enabled" checked="!!enabled" />
             </div>
             <div v-show="!id" class="buttons-cell narrow">
-                <button :disabled="name === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
+                <button :disabled="name === '' || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
             </div>
             <div v-show="id">
                 <: id :>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button :disabled="name === '' || unchanged()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
+                <button :disabled="name === '' || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
                 <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
@@ -47,6 +47,7 @@ export default {
         source: Object,
         parents: Object,
         names: Array,
+        allnames: Object,
     },
 
     data() {
@@ -60,6 +61,7 @@ export default {
             enabled: null,
             selectTypes: false,
             types: Array,
+            namesInUse: Array,
             errorAlreadyInUse: t`Name already in use`,
         };
     },
@@ -72,12 +74,18 @@ export default {
         this.type = this.source?.type || '';
         if (!this.type && this.source?.types) {
             this.selectTypes = true;
+            this.namesInUse = [];
+        } else {
+            this.namesInUse = this.names || [];
         }
         this.enabled = this.source?.enabled || false;
         this.parent = this.source?.parent_id || '';
     },
 
     methods: {
+        updateType() {
+            this.namesInUse = this.allnames[this.type] || [];
+        },
         unchanged() {
             const cat = {
                 id: this.id,
@@ -183,8 +191,11 @@ export default {
             if (this.original?.name === this.name) {
                 return false;
             }
+            if (this.namesInUse.length === 0) {
+                return false;
+            }
 
-            return this.names && this.names.includes(this.name);
+            return Array.from(this.namesInUse).includes(this.name);
         },
 
         typeClass() {

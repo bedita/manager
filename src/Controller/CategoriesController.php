@@ -52,7 +52,7 @@ class CategoriesController extends AppController
         $resources = $this->Categories->map($response);
         $roots = $this->Categories->getAvailableRoots($resources);
         $categoriesTree = $this->Categories->tree($resources);
-        $names = $this->Categories->names($this->objectType);
+        $names = [$this->objectType => $this->Categories->names($this->objectType)];
 
         $this->set(compact('resources', 'roots', 'categoriesTree', 'names'));
         $this->set('meta', (array)$response['meta']);
