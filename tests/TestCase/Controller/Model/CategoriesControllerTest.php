@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller\Model;
 
+use App\Controller\Component\SchemaComponent;
 use App\Controller\Model\CategoriesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
@@ -107,12 +108,34 @@ class CategoriesControllerTest extends TestCase
     public function testIndex(): void
     {
         $this->setupController();
+        // mock objectTypesFeatures()
+        // mock schema component
+        $mockResponse = [
+            'categorized' => [
+                'cats',
+                'dogs',
+                'horses',
+            ],
+        ];
+        $this->Categories->Schema = $this->createMock(SchemaComponent::class);
+        $this->Categories->Schema->method('objectTypesFeatures')
+            ->willReturn($mockResponse);
         $this->Categories->index();
-        $resources = $this->Categories->viewBuilder()->getVar('resources');
-        $categoriesTree = $this->Categories->viewBuilder()->getVar('categoriesTree');
-        $schema = $this->Categories->viewBuilder()->getVar('schema');
-        static::assertTrue(is_array($resources));
-        static::assertTrue(is_array($categoriesTree));
-        static::assertTrue(is_array($schema));
+        // verify expected vars in view
+        $expected = ['resources', 'roots', 'categoriesTree', 'names', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
+        $this->assertExpectedViewVars($expected);
+    }
+
+    /**
+     * Verify existence of vars in controller view
+     *
+     * @param array $expected The expected vars in view
+     * @return void
+     */
+    private function assertExpectedViewVars($expected): void
+    {
+        foreach ($expected as $varName) {
+            static::assertArrayHasKey($varName, $this->Categories->viewBuilder()->getVars());
+        }
     }
 }

@@ -53,7 +53,8 @@ class CategoriesController extends ModelBaseController
     {
         $this->getRequest()->allowMethod(['get']);
 
-        $objectTypes = $this->Schema->objectTypesFeatures()['categorized'];
+        $otfeatures = $this->Schema->objectTypesFeatures();
+        $objectTypes = $otfeatures['categorized'];
         $objectTypes = array_combine($objectTypes, $objectTypes);
         $response = $this->Categories->index(null, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
