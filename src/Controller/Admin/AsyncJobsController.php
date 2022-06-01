@@ -34,7 +34,13 @@ class AsyncJobsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['service', 'scheduled_from', 'expires', 'max_attempts', 'locked_until'];
+    protected $properties = [
+        'service' => 'string',
+        'scheduled_from' => 'date',
+        'expires' => 'date',
+        'max_attempts' => 'integer',
+        'locked_until' => 'date',
+    ];
 
     /**
      * @inheritDoc

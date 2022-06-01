@@ -1,6 +1,6 @@
 {# Append urls to sidebar #}
-{% set actions = ['applications', 'endpoints', 'config', 'async_jobs', 'roles'] %}
-{% set controllerAction = _view.request.params['controller']|default('') %}
+{% set actions = ['applications', 'endpoints', 'config', 'async_jobs', 'roles', 'endpoint_permissions'] %}
+{% set controllerAction = _view.request.getparam('controller')|default('') %}
 {% for action in actions %}
     {% if action == controllerAction|underscore %}
         {% do _view.append('module-links', '<span class="active-action">' ~ __(action|underscore|humanize) ~ '</span>') %}
