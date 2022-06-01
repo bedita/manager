@@ -133,7 +133,7 @@ abstract class AdministrationBaseController extends AppController
         $this->set('propertiesSecrets', $this->propertiesSecrets);
         $this->set('metaColumns', $this->meta);
         $this->set('filter', []);
-        $this->set('schema', []);
+        $this->set('schema', (array)$this->Schema->getSchema($this->resourceType));
         $this->set('readonly', $this->readonly);
         $this->set('deleteonly', $this->deleteonly);
 
