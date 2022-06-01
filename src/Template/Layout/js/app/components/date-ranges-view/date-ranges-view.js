@@ -87,7 +87,6 @@ export default {
             this.dateRanges = ranges;
             this.dateRanges.forEach((range) => {
                 if (range.params?.length > 0) {
-                    console.log(range.params);
                     range.params = JSON.parse(range.params) || false;
                 }
                 range.params = range.params || { all_day: false, every_day: true, weekdays: {} };
