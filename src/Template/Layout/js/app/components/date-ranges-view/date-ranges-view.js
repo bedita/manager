@@ -54,14 +54,14 @@ export default {
                     <div>
                         <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">${t`Remove`}</button>
                     </div>
-                    <div v-if="dateRange.params.every_day === false" class="m-0 nowrap has-text-size-smaller" style="grid-column-start: 1; grid-column-end: 4;">
-                        <input type="checkbox" v-model="dateRange.params.weekdays.sunday" />${t`Sunday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.monday" />${t`Monday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.tuesday" />${t`Tuesday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.wednesday" />${t`Wednesday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.thursday" />${t`Thursday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.friday" />${t`Friday`}
-                        <input type="checkbox" v-model="dateRange.params.weekdays.saturday" />${t`Saturday`}
+                    <div v-if="dateRange.params.every_day === false" class="m-0 nowrap has-text-size-smaller weekdays">
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.sunday" />${t`Sunday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.monday" />${t`Monday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.tuesday" />${t`Tuesday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.wednesday" />${t`Wednesday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.thursday" />${t`Thursday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.friday" />${t`Friday`}</label>
+                        <label><input type="checkbox" v-model="dateRange.params.weekdays.saturday" />${t`Saturday`}</label>
                         <input type="hidden" :name="getName(index, 'params')" :value="JSON.stringify(dateRange.params)" />
                     </div>
                 </div>
