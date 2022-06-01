@@ -1107,7 +1107,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr ""
@@ -1116,7 +1116,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr ""
@@ -1125,7 +1125,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -1137,7 +1137,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr ""
@@ -1156,7 +1156,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
@@ -1194,4 +1194,82 @@ msgstr ""
 
 #: src/Template/Layout/js/app/components/category/category.js:159
 msgid "Error on deleting category"
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
+msgid "Every day"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
+msgid "Sunday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
+msgid "Monday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
+msgid "Tuesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
+msgid "Wednesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
+msgid "Thursday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
+msgid "Friday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
+msgid "Saturday"
 msgstr ""

@@ -12,5 +12,16 @@
         gap: $gutter;
         margin-bottom: $gutter * .5;
         align-items: flex-end;
+
+        .weekdays {
+            grid-column-start: 1;
+            grid-column-gap: $gutter * .5;
+            grid-column-end: 5;
+
+            label {
+                display: inline !important;
+            }
+        }
     }
 }
+
