@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-05-20 09:50:22 \n"
+"POT-Creation-Date: 2022-06-01 12:03:17 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1166,4 +1166,84 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
+msgid "Every day"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
+msgid "Sunday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
+msgid "Monday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
+msgid "Tuesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
+msgid "Wednesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
+msgid "Thursday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
+msgid "Friday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
+msgid "Saturday"
 msgstr ""
