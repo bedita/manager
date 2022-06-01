@@ -43,7 +43,7 @@ export default {
                         </label>
                     </div>
                     <div>
-                        <label class="m-0 nowrap has-text-size-smaller">
+                        <label class="m-0 nowrap has-text-size-smaller" v-if="isDaysInterval(dateRange)">
                             <input type="checkbox"
                                 v-model="dateRange.params.every_day"
                                 @change="onEveryDayChanged(dateRange, $event)"
@@ -101,6 +101,19 @@ export default {
     methods: {
         getName(index, field) {
             return `date_ranges[${index}][${field}]`;
+        },
+        isDaysInterval(range) {
+            if (!range.start_date) {
+                return false;
+            }
+            if (!range.end_date) {
+                return false;
+            }
+            const sd = moment(range.start_date);
+            const ed = moment(range.end_date);
+            const diff = moment.duration(ed.diff(sd)).asDays();
+
+            return diff >= 1;
         },
         /**
          * Add an empty date range to list.
