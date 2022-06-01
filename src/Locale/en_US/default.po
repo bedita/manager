@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-06-01 12:03:17 \n"
+"POT-Creation-Date: 2022-06-01 12:28:04 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -206,9 +206,6 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-msgid "Do you really want to delete the category \"{0}\"?"
-msgstr ""
-
 msgid "Documents"
 msgstr ""
 
@@ -357,6 +354,9 @@ msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr ""
 
 msgid "Jobs"
+msgstr ""
+
+msgid "Label"
 msgstr ""
 
 msgid "Language"
@@ -528,6 +528,9 @@ msgid "Options"
 msgstr ""
 
 msgid "Other"
+msgstr ""
+
+msgid "Parent"
 msgstr ""
 
 msgid "Password"
@@ -971,30 +974,31 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:175
+#: src/Template/Layout/js/app/app.js:176
 #: src/Template/Layout/js/app/components/history/history.js:110
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:176
+#: src/Template/Layout/js/app/app.js:177
 #: src/Template/Layout/js/app/components/history/history.js:111
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:186
+#: src/Template/Layout/js/app/app.js:187
 msgid "Clone relations"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:472
+#: src/Template/Layout/js/app/app.js:473
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:484
+#: src/Template/Layout/js/app/app.js:485
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:495
+#: src/Template/Layout/js/app/app.js:496
+#: src/Template/Layout/js/app/components/category/category.js:151
 #: src/Template/Layout/js/app/components/history/history.js:100
 #: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
@@ -1003,7 +1007,7 @@ msgstr ""
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:504
+#: src/Template/Layout/js/app/app.js:505
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -1022,6 +1026,7 @@ msgstr ""
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
+#: src/Template/Layout/js/app/components/category/category.js:150
 #: src/Template/Layout/js/app/pages/admin/index.js:17
 msgid "Remove item. Are you sure?"
 msgstr ""
@@ -1102,7 +1107,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr ""
@@ -1111,7 +1116,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr ""
@@ -1120,7 +1125,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -1132,7 +1137,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr ""
@@ -1151,7 +1156,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 #: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
@@ -1171,12 +1176,30 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
+#: src/Template/Layout/js/app/components/category/category.js:38
+msgid "Modify"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:65
+msgid "Name already in use"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:103
+msgid "Error while creating new category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:144
+msgid "Error while saving category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:159
+msgid "Error on deleting category"
 #. *
 #.  * Templates that uses this component (directly or indirectly):
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
 msgid "Every day"
 msgstr ""
@@ -1186,7 +1209,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
 msgid "Sunday"
 msgstr ""
@@ -1196,7 +1219,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
 msgid "Monday"
 msgstr ""
@@ -1206,7 +1229,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
 msgid "Tuesday"
 msgstr ""
@@ -1216,7 +1239,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
 msgid "Wednesday"
 msgstr ""
@@ -1226,7 +1249,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
 msgid "Thursday"
 msgstr ""
@@ -1236,7 +1259,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
 msgid "Friday"
 msgstr ""
@@ -1246,7 +1269,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
 msgid "Saturday"
 msgstr ""
