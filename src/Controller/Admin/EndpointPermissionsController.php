@@ -12,6 +12,9 @@
  */
 namespace App\Controller\Admin;
 
+use Cake\Http\Response;
+use Cake\Utility\Hash;
+
 /**
  * Permissions Controller
  *
@@ -41,4 +44,22 @@ class EndpointPermissionsController extends AdministrationBaseController
         'read' => 'bool',
         'write' => 'bool',
     ];
+
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function index(): ?Response
+    {
+        parent::index();
+        $applications = $this->apiClient->get('/admin/applications', []);
+        $this->set('applications', (array)Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $endpoints = $this->apiClient->get('/admin/endpoints', []);
+        $this->set('endpoints', (array)Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $roles = $this->apiClient->get('/roles', []);
+        $this->set('roles', (array)Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name'));
+
+        return null;
+    }
 }

@@ -137,15 +137,6 @@ abstract class AdministrationBaseController extends AppController
         $this->set('readonly', $this->readonly);
         $this->set('deleteonly', $this->deleteonly);
 
-        if ($this->resourceType === 'endpoint_permissions') {
-            $applications = $this->apiClient->get('/admin/applications', []);
-            $this->set('applications', (array)Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name'));
-            $endpoints = $this->apiClient->get('/admin/endpoints', []);
-            $this->set('endpoints', (array)Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name'));
-            $roles = $this->apiClient->get('/roles', []);
-            $this->set('roles', (array)Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name'));
-        }
-
         return null;
     }
 
