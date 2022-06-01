@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-05-31 13:41:49 \n"
+"POT-Creation-Date: 2022-06-01 12:03:17 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -991,7 +991,7 @@ msgstr ""
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:493
+#: src/Template/Layout/js/app/app.js:495
 #: src/Template/Layout/js/app/components/history/history.js:100
 #: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
@@ -1099,7 +1099,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:51
 msgid "Title"
 msgstr ""
@@ -1108,7 +1108,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:70
 msgid "Address"
 msgstr ""
@@ -1117,7 +1117,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/location-view.js:95
 msgid "GET"
 msgstr ""
@@ -1129,7 +1129,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 #: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
 msgid "add new"
 msgstr ""
@@ -1148,7 +1148,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 #: src/Template/Layout/js/app/components/history/history.js:31
 msgid "No History data found"
 msgstr ""
@@ -1173,7 +1173,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
 msgid "Every day"
 msgstr ""
@@ -1183,7 +1183,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
 msgid "Sunday"
 msgstr ""
@@ -1193,7 +1193,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
 msgid "Monday"
 msgstr ""
@@ -1203,7 +1203,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
 msgid "Tuesday"
 msgstr ""
@@ -1213,7 +1213,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
 msgid "Wednesday"
 msgstr ""
@@ -1223,7 +1223,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
 msgid "Thursday"
 msgstr ""
@@ -1233,7 +1233,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
 msgid "Friday"
 msgstr ""
@@ -1243,7 +1243,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
 msgid "Saturday"
 msgstr ""
