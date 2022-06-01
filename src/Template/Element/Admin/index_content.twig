@@ -2,7 +2,7 @@
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
-{% set allProperties = properties|merge(propertiesSecrets) %}
+{% set allProperties = properties|keys|merge(propertiesSecrets) %}
 
 <div class="module-header">
     <header>
@@ -43,7 +43,7 @@
                     'class': 'table-row',
                 })|raw }}
                     <div>{{ __('NEW') }}</div>
-                    {% for type, property in properties %}
+                    {% for property,type in properties %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
                             {{ Admin.control(type, property, null)|raw }}
                         </div>
@@ -77,7 +77,7 @@
                     <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
                         {{ resource.id|truncate(10) }}
                     </div>
-                    {% for type,property in properties %}
+                    {% for property,type in properties %}
                         {% set val = resource.attributes[property] %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
                             {{ Admin.control(type, property, val)|raw }}

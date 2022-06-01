@@ -141,6 +141,7 @@ class LayoutHelper extends Helper
             'Config' => 'has-background-black',
             'Endpoints' => 'has-background-black',
             'Roles' => 'has-background-black',
+            'EndpointPermissions' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
