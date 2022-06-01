@@ -29,5 +29,13 @@ class EndpointsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['name', 'description'];
+    protected $readonly = false;
+
+    /**
+     * @inheritDoc
+     */
+    protected $properties = [
+        'name' => 'string',
+        'description' => 'text',
+    ];
 }

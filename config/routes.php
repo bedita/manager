@@ -95,7 +95,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
 
-        foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles'] as $controller) {
+        foreach (['applications', 'async_jobs', 'config', 'endpoints', 'roles', 'endpoint_permissions'] as $controller) {
             // Routes connected here are prefixed with '/admin'
             $name = Inflector::camelize($controller);
             $routes->get(
@@ -354,6 +354,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         '/{object_type}/export',
         ['controller' => 'Export', 'action' => 'export'],
         ['_name' => 'export:export']
+    );
+    $routes->connect(
+        '/{object_type}/export/{id}/{relation}/{format}',
+        ['controller' => 'Export', 'action' => 'related'],
+        ['pass' => ['id', 'relation', 'format'], '_name' => 'export:related']
     );
 
     // Download stream

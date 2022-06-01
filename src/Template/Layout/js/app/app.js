@@ -175,16 +175,18 @@ const _vueInstance = new Vue({
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-
-            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
-                const query = `?title=${cloneTitle || defaultTitle}`;
+            const confirmCallback = (cloneTitle, cloneRelations, dialog) => {
+                const query = `?title=${cloneTitle || defaultTitle}&cloneRelations=${cloneRelations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
                 const newTab = window.open(url, '_blank');
                 newTab.focus();
                 dialog.hide(true);
-            });
+            };
+            const options = { checkLabel: t`Clone relations`, checkValue: false };
+
+            prompt(msg, defaultTitle, confirmCallback, document.body, options);
         },
 
         /**

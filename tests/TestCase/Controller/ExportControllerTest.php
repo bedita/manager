@@ -152,6 +152,64 @@ class ExportControllerTest extends TestCase
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
         static::assertEquals($expected, $content);
+
+        // check 'Content-Disposition' header containing filename
+        $download = $response->getHeader('Content-Disposition');
+        $download = (string)Hash::get($download, '0');
+        static::assertEquals('attachment; filename="users_', substr($download, 0, 28));
+        static::assertEquals('.csv"', substr($download, strlen($download) - 5));
+    }
+
+    /**
+     * Test `related`.
+     *
+     * @return void
+     * @covers ::related()
+     * @covers ::rowsAllRelated()
+     */
+    public function testRelated(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['object_type' => 'users'],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+
+        // mock api getObjects.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn([
+                'data' => [
+                    0 => $this->testdata['input']['gustavo'],
+                ],
+                'meta' => [
+                    'pagination' => [
+                        'page_items' => 1,
+                        'page_count' => 1,
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
+
+        // expected csv.
+        $fields = '"id","name","skills","category","prop"';
+        $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer","2"';
+        $expected = sprintf('%s%s%s%s', $fields, "\n", $row1, "\n");
+
+        // call export.
+        $response = $this->Export->related('999', 'seealso', 'csv');
+        $content = $response->getBody()->__toString();
+        static::assertInstanceOf('Cake\Http\Response', $response);
+        static::assertEquals($expected, $content);
+
         // check 'Content-Disposition' header containing filename
         $download = $response->getHeader('Content-Disposition');
         $download = (string)Hash::get($download, '0');
@@ -177,6 +235,29 @@ class ExportControllerTest extends TestCase
 
         // call export.
         $response = $this->Export->export();
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
+    }
+
+    /**
+     * Test case of related of format not allowed FAIL METHOD
+     *
+     * @covers ::related()
+     * @return void
+     */
+    public function testRelatedFormatNotAllowed(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['objectType' => 'proms'],
+                'get' => ['id' => '655', 'relation' => 'dummy', 'format' => 'abcde'],
+            ])
+        );
+
+        // call export.
+        $response = $this->Export->related('655', 'proms', '');
         static::assertEquals(302, $response->getStatusCode());
         $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));

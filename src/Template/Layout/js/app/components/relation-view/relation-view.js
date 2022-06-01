@@ -89,6 +89,8 @@ export default {
 
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
+
+            exportFormat: 'csv',        // default csv
         }
     },
 

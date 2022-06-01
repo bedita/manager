@@ -341,12 +341,9 @@ class ModulesControllerTest extends BaseControllerTest
         $result = $this->controller->clone($id);
 
         // verify response status code and type
-        static::assertNull($result);
-        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
         static::assertEquals('text/html', $this->controller->getResponse()->getType());
-
-        // verify expected vars in view
-        $this->assertExpectedViewVars(['object', 'schema', 'properties']);
     }
 
     /**

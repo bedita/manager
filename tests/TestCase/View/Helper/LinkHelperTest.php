@@ -477,7 +477,9 @@ class LinkHelperTest extends TestCase
         static::assertEquals('', $actual);
 
         // create plugin asset for test, remove folders and file afterwards
-        mkdir(getcwd() . '/plugins');
+        if (!is_dir(getcwd() . '/plugins')) {
+            mkdir(getcwd() . '/plugins');
+        }
         mkdir(getcwd() . '/plugins/Dummy');
         mkdir(getcwd() . '/plugins/Dummy/webroot');
         mkdir(getcwd() . '/plugins/Dummy/webroot/js');
@@ -716,7 +718,9 @@ class LinkHelperTest extends TestCase
     {
         file_put_contents(getcwd() . '/webroot/css/app.css', '');
         file_put_contents(getcwd() . '/webroot/js/app.bundle.abcde.js', '');
-        mkdir(getcwd() . '/webroot/js/vendors');
+        if (!is_dir(getcwd() . '/webroot/js/vendors')) {
+            mkdir(getcwd() . '/webroot/js/vendors');
+        }
         file_put_contents(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js', '');
         file_put_contents(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js', '');
         file_put_contents(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js', '');
@@ -734,6 +738,8 @@ class LinkHelperTest extends TestCase
         unlink(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js');
         unlink(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js');
         unlink(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js');
-        rmdir(getcwd() . '/webroot/js/vendors');
+        if (scandir(getcwd() . '/webroot/js/vendors') === false) {
+            rmdir(getcwd() . '/webroot/js/vendors');
+        }
     }
 }
