@@ -1,11 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2022-06-01 12:28:04 \n"
-=======
-"POT-Creation-Date: 2022-06-01 12:03:17 \n"
->>>>>>> master
+"POT-Creation-Date: 2022-06-01 12:38:20 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1177,26 +1173,6 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-<<<<<<< HEAD
-#: src/Template/Layout/js/app/components/category/category.js:38
-msgid "Modify"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/category/category.js:65
-msgid "Name already in use"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/category/category.js:103
-msgid "Error while creating new category"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/category/category.js:144
-msgid "Error while saving category"
-msgstr ""
-
-#: src/Template/Layout/js/app/components/category/category.js:159
-msgid "Error on deleting category"
-=======
 #. *
 #.  * Templates that uses this component (directly or indirectly):
 #.  *  Template/Elements/calendar.twig
@@ -1275,5 +1251,24 @@ msgstr ""
 #.  
 #: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
 msgid "Saturday"
->>>>>>> master
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:38
+msgid "Modify"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:65
+msgid "Name already in use"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:103
+msgid "Error while creating new category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:144
+msgid "Error while saving category"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/category/category.js:159
+msgid "Error on deleting category"
 msgstr ""
