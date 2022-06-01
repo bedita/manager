@@ -38,7 +38,12 @@ class ConfigController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['name', 'context', 'json' => 'content', 'applications' => 'application_id'];
+    protected $properties = [
+        'name' => 'string',
+        'context' => 'string',
+        'content' => 'json',
+        'application_id' => 'applications',
+    ];
 
     /**
      * @inheritDoc

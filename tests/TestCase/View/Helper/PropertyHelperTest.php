@@ -280,4 +280,37 @@ class PropertyHelperTest extends TestCase
     {
         return ['html' => sprintf('<dummy>%s</dummy>', $value)];
     }
+
+    /**
+     * Test `fieldLabel`.
+     *
+     * @return void
+     * @covers ::fieldLabel()
+     */
+    public function testFieldLabel(): void
+    {
+        // no type
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->fieldLabel('dummy');
+        $expected = 'Dummy';
+        static::assertEquals($expected, $actual);
+
+        // type without config
+        $actual = $helper->fieldLabel('info', 'dummies');
+        $expected = 'Info';
+        static::assertEquals($expected, $actual);
+
+        // type with config
+        $expected = 'A B O U T';
+        Configure::write(
+            'Properties.dummies',
+            array_merge(
+                (array)\Cake\Core\Configure::read('Properties.dummies'),
+                ['labels' => ['fields' => ['about' => $expected]]]
+            )
+        );
+        $actual = $helper->fieldLabel('about', 'dummies');
+        static::assertEquals($expected, $actual);
+    }
 }

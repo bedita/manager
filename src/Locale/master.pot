@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-03-23 11:28:20 \n"
+"POT-Creation-Date: 2022-06-01 12:03:17 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -303,9 +303,6 @@ msgid "Format choosen is not available"
 msgstr ""
 
 msgid "From"
-msgstr ""
-
-msgid "From date"
 msgstr ""
 
 msgid "Future"
@@ -698,9 +695,6 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-msgid "To date"
-msgstr ""
-
 msgid "Translated object"
 msgstr ""
 
@@ -974,35 +968,39 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:168
-#: src/Template/Layout/js/app/components/history/history.js:111
+#: src/Template/Layout/js/app/app.js:175
+#: src/Template/Layout/js/app/components/history/history.js:110
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:169
-#: src/Template/Layout/js/app/components/history/history.js:112
+#: src/Template/Layout/js/app/app.js:176
+#: src/Template/Layout/js/app/components/history/history.js:111
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:463
+#: src/Template/Layout/js/app/app.js:186
+msgid "Clone relations"
+msgstr ""
+
+#: src/Template/Layout/js/app/app.js:472
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:475
+#: src/Template/Layout/js/app/app.js:484
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:486
-#: src/Template/Layout/js/app/components/history/history.js:101
-#: src/Template/Layout/js/app/pages/admin/index.js:16
+#: src/Template/Layout/js/app/app.js:495
+#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/pages/admin/index.js:19
 #: src/Template/Layout/js/app/pages/model/index.js:261
-#: src/Template/Layout/js/app/pages/modules/index.js:157
+#: src/Template/Layout/js/app/pages/modules/index.js:158
 #: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:495
+#: src/Template/Layout/js/app/app.js:504
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
@@ -1011,7 +1009,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:155
+#: src/Template/Layout/js/app/pages/modules/index.js:156
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
@@ -1021,7 +1019,7 @@ msgstr ""
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/admin/index.js:14
+#: src/Template/Layout/js/app/pages/admin/index.js:17
 msgid "Remove item. Are you sure?"
 msgstr ""
 
@@ -1060,11 +1058,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:164
+#: src/Template/Layout/js/app/components/filter-box.js:194
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:317
+#: src/Template/Layout/js/app/components/filter-box.js:350
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -1074,6 +1072,18 @@ msgstr ""
 
 #: src/Template/Layout/js/app/components/tree-view/tree-view.js:82
 msgid "Menu"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:22
+msgid "Search existing tags"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:37
+msgid "Add new tag"
+msgstr ""
+
+#: src/Template/Layout/js/app/components/secret/secret.js:31
+msgid "copied in the clipboard"
 msgstr ""
 
 #: src/Template/Layout/js/app/components/relation-view/relations-add.js:243
@@ -1143,17 +1153,97 @@ msgstr ""
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:58
+#: src/Template/Layout/js/app/components/history/history.js:61
 #, javascript-format
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:60
+#: src/Template/Layout/js/app/components/history/history.js:64
 msgid "by ${ name }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:100
+#: src/Template/Layout/js/app/components/history/history.js:99
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
+msgid "Every day"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
+msgid "Sunday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
+msgid "Monday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
+msgid "Tuesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
+msgid "Wednesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
+msgid "Thursday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
+msgid "Friday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
+msgid "Saturday"
 msgstr ""

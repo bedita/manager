@@ -350,6 +350,7 @@ class LayoutHelperTest extends TestCase
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
+            'canReadUsers' => false,
         ];
         static::assertSame($expected, $conf);
     }

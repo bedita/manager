@@ -37,5 +37,8 @@ class RolesController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['name', 'text' => 'description'];
+    protected $properties = [
+        'name' => 'string',
+        'description' => 'text',
+    ];
 }

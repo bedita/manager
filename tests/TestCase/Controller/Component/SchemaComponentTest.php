@@ -34,7 +34,9 @@ class SchemaComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Auth');
-        $this->Schema = $registry->load(SchemaComponent::class);
+        /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+        $schemaComponent = $registry->load(SchemaComponent::class);
+        $this->Schema = $schemaComponent;
     }
 
     /**
@@ -391,9 +393,9 @@ class SchemaComponentTest extends TestCase
                 ['documents', 'events'],
             ],
             'types + descendants' => [
-                ['documents', 'events'],
-                ['documents' => ['dummy_docs', 'serious_docs']],
-                ['dummy_docs', 'events', 'serious_docs'],
+                ['documents', 'events', 'media', 'profiles', 'videos'],
+                ['media' => ['audio', 'files', 'images', 'videos']],
+                ['audio', 'documents', 'events', 'files', 'images', 'profiles', 'videos'],
             ],
         ];
     }

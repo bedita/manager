@@ -22,6 +22,7 @@ use Psr\Log\LogLevel;
  * Modules controller: list, add, edit, remove objects
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
@@ -47,6 +48,7 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Categories');
+        $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -54,13 +56,11 @@ class ModulesController extends AppController
         $this->loadComponent('Query');
         $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
-
-        if (!empty($this->getRequest())) {
+        if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-
         $this->Security->setConfig('unlockedActions', ['save']);
     }
 
@@ -335,26 +335,22 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $response['data']['attributes'];
+            $source = $this->apiClient->getObject($id, $this->objectType);
+            $attributes = $source['data']['attributes'];
             $attributes['uname'] = '';
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
+            $attributes['status'] = 'draft';
+            $save = $this->apiClient->save($this->objectType, $attributes);
+            $destination = (string)Hash::get($save, 'data.id');
+            $this->Clone->relations($source, $destination);
+            $id = $destination;
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
-        $object = [
-            'type' => $this->objectType,
-            'attributes' => $attributes,
-        ];
-        $this->History->load($id, $object);
-        $this->set(compact('object', 'schema'));
-        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        return null;
+        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
     }
 
     /**

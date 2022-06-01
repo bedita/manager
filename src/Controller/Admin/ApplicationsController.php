@@ -20,9 +20,7 @@ namespace App\Controller\Admin;
 class ApplicationsController extends AdministrationBaseController
 {
     /**
-     * Resource type in use
-     *
-     * @var string
+     * @inheritDoc
      */
     protected $resourceType = 'applications';
 
@@ -34,5 +32,14 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $properties = ['name', 'text' => 'description', 'bool' => 'enabled'];
+    protected $properties = [
+        'name' => 'string',
+        'description' => 'text',
+        'enabled' => 'bool',
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    protected $propertiesSecrets = ['api_key'];
 }

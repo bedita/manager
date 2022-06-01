@@ -3,6 +3,7 @@
         {# search #}
         <div class="filter-container filter-search input">
             <input type="text"
+                form="_filters"
                 :placeholder="placeholder"
                 v-model.trim="queryFilter.q"
                 @keydown.enter.prevent="applyFilter"
@@ -28,7 +29,7 @@
         {# Checkbox my contents #}
         <div class="filter-container checkbox" v-if="showAdvanced">
             <label>
-                <input type="checkbox" v-model="queryFilter.filter['history_editor']">{{ __('Only my contents') }}</input>
+                <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
@@ -40,6 +41,7 @@
         <div class="filter-container search-types" v-if="rightTypes.length > 1">
             <label>{{ __('Type') }}</label>
             <select v-model="selectedType"
+                form="_filters"
                 class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
             >
                 <option selected value="" label="{{ __('All Types') }}"></option>
@@ -51,14 +53,14 @@
         <div class="filter-container" v-if="statusFilter.options">
             <label>{{ __('Status') }}</label>
             <label v-for="s in statusFilter.options">
-                <input type="checkbox" :id="s.value" :name="statusFilter.name" :value="s.value" v-model="selectedStatuses">
+                <input type="checkbox" form="_filters" :id="s.value" :name="statusFilter.name" :value="s.value" v-model="selectedStatuses">
                 <: s.text :>
             </label>
         </div>
 
         {# other dynamic filters #}
         <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date ? 'date' : '']">
-            <input type="hidden" :name="filter.name" :value="filter.value">
+            <input type="hidden" form="_filters" :name="filter.name" :value="filter.value">
             <label class="filter-label"><: filter.name | humanize :></label>
 
             <span v-if="filter.name === 'categories'">
@@ -71,6 +73,7 @@
                             :categories="{{ typeSchema.categories|json_encode }}"
                             :initial-categories="initCategories"
                             id="category-filter"
+                            form="_filters"
                             label=""
                             @change="onCategoryChange"
                         ></category-picker>
@@ -80,21 +83,32 @@
                         :categories="{{ schema.categories|json_encode }}"
                         :initial-categories="initCategories"
                         id="category-filter"
+                        form="_filters"
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
                 {% endif %}
             </span>
 
+            <span v-else-if="filter.name === 'tags'">
+                <tag-picker
+                    id="tag-filter"
+                    form="_filters"
+                    :initial-tags="initTags"
+                    :searchonly="true"
+                    @change="onTagChange"></tag-picker>
+            </span>
+
             <span v-else-if="filter.name === 'parent'" class="position-filter">
                 <label>{{ __('Folder') }}</label>
 
-                <folder-picker label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
+                <folder-picker form="_filters" label="" :initial-folder="initFolder" @change="onFolderChange"></folder-picker>
 
                 <span class="descendants-filter">
                     <label for="descendants">{{ __('Descendants') }}</label>
                     <input
                         id="descendants"
+                        form="_filters"
                         type="checkbox"
                         v-model="filterByDescendants"
                         @change="onPositionFilterChange"
@@ -104,17 +118,15 @@
 
             <span v-else-if="filter.name === 'date_ranges'" class="date-filter date-ranges-item">
                 <div>
-                    <label>{{ __('From date') }}</label>
-                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
+                    <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter['date_ranges']['from_date']" :attrs="filter" />
                 </div>
                 <div>
-                    <label>{{ __('To date') }}</label>
-                    <input-dynamic-attributes :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
+                    <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter['date_ranges']['to_date']" :attrs="filter" />
                 </div>
             </span>
 
             <span v-else-if="filter.type === 'select' || filter.type === 'radio'">
-                <select v-model="queryFilter.filter[filter.name]" :id="filter.name">
+                <select form="_filters" v-model="queryFilter.filter[filter.name]" :id="filter.name">
                     <option value="">
                         {{ __('All') }}
                     </option>
@@ -126,30 +138,30 @@
 
             <span v-else-if="filter.type === 'checkbox'">
                 <label>
-                    <input type="radio" v-model="queryFilter.filter[filter.name]" value="">
+                    <input type="radio" form="_filters" v-model="queryFilter.filter[filter.name]" value="">
                     {{ __('Any') }}
                 </label>
                 <label>
-                    <input type="radio" v-model="queryFilter.filter[filter.name]" value="true">
+                    <input type="radio" form="_filters" v-model="queryFilter.filter[filter.name]" value="true">
                     {{ __('Yes') }}
                 </label>
                 <label>
-                    <input type="radio" v-model="queryFilter.filter[filter.name]" value="false">
+                    <input type="radio" form="_filters" v-model="queryFilter.filter[filter.name]" value="false">
                     {{ __('No') }}
                 </label>
             </span>
 
             <span v-else-if="filter.date">
                 <label>{{ __('From') }}
-                    <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" />
+                    <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter[filter.name]['gte']" :attrs="filter" />
                 </label>
                 <label>{{ __('To') }}
-                    <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" />
+                    <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter[filter.name]['lte']" :attrs="filter" />
                 </label>
             </span>
 
             <span v-else-if="filter.type === 'text' || filter.type === 'number'">
-                <input-dynamic-attributes :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
+                <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
             </span>
         </div>
     </div>

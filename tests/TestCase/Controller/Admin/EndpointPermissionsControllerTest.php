@@ -1,19 +1,19 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\ApplicationsController;
+use App\Controller\Admin\EndpointPermissionsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Controller\Admin\ApplicationsController} Test Case
+ * {@see \App\Controller\Admin\EndpointPermissionsController} Test Case
  *
- * @coversDefaultClass \App\Controller\Admin\ApplicationsController
+ * @coversDefaultClass \App\Controller\Admin\EndpointPermissionsController
  */
-class ApplicationsControllerTest extends TestCase
+class EndpointPermissionsControllerTest extends TestCase
 {
-    public $AppsController;
+    public $EndPermsController;
 
     /**
      * Test request config
@@ -45,11 +45,10 @@ class ApplicationsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AppsController = new class ($request) extends ApplicationsController
+        $this->EndPermsController = new class ($request) extends EndpointPermissionsController
         {
-            protected $resourceType = 'applications';
-            protected $properties = ['name'];
-            protected $propertiesSecrets = ['api_key'];
+            protected $resourceType = 'endpoint_permissions';
+            protected $properties = ['endpoint_id', 'application_id'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -65,7 +64,7 @@ class ApplicationsControllerTest extends TestCase
      */
     public function testBase(): void
     {
-        $this->AppsController->index();
+        $this->EndPermsController->index();
         $keys = [
             'resources',
             'meta',
@@ -78,11 +77,11 @@ class ApplicationsControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AppsController->viewBuilder()->getVars();
+        $viewVars = (array)$this->EndPermsController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
-        static::assertEquals('applications', $viewVars['resourceType']);
-        static::assertEquals(['name'], $viewVars['properties']);
+        static::assertEquals('endpoint_permissions', $viewVars['resourceType']);
+        static::assertEquals(['endpoint_id', 'application_id'], $viewVars['properties']);
     }
 }

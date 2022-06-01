@@ -34,7 +34,9 @@ class ProjectConfigurationComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Auth');
-        $this->ProjectConfiguration = $registry->load(ProjectConfigurationComponent::class);
+        /** @var \App\Controller\Component\ProjectConfigurationComponent $projectConfigurationComponent */
+        $projectConfigurationComponent = $registry->load(ProjectConfigurationComponent::class);
+        $this->ProjectConfiguration = $projectConfigurationComponent;
     }
 
     /**

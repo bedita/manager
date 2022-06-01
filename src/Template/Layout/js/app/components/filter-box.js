@@ -27,6 +27,7 @@ export default {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
+        TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
     },
 
     props: {
@@ -140,17 +141,46 @@ export default {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
         },
 
-        /**
-         * Returns the list of categories used to filter data
-         * converted by object to array.
-         * @returns {Array}
-         */
+        initHistoryEditor() {
+            this.queryFilter.filter['history_editor'] = Boolean(this.initFilter?.filter?.history_editor);
+
+            return Boolean(this.initFilter?.filter?.history_editor) || false;
+        },
+
         initCategories() {
-            return Object.values(this.initFilter?.filter?.categories || {});
+            const categories = [];
+            let filterCategories = this.initFilter?.filter?.categories || '';
+            if (filterCategories.length === 0) {
+                return categories;
+            }
+            filterCategories = filterCategories.split(',');
+            filterCategories.forEach(item => {
+                categories.push({name: item});
+            });
+
+            return categories;
+        },
+
+        initTags() {
+            const tags = [];
+            let filterTags = this.initFilter?.filter?.tags || '';
+            if (filterTags.length === 0) {
+                return tags;
+            }
+            filterTags = filterTags.split(',');
+            filterTags.forEach(item => {
+                tags.push({name: item, label: item});
+            });
+
+            return tags;
         },
 
         initFolder() {
-            return this.initFilter?.filter[this.positionFilterName];
+            if (!this.initFilter?.filter) {
+                return '';
+            }
+
+            return this.initFilter?.filter[this.positionFilterName] || '';
         },
 
         /**
@@ -214,7 +244,10 @@ export default {
          * @param {String} type Selected object type
          */
         selectedType(type) {
-            this.availableFilters = this.filtersByType[type] || [];
+            this.availableFilters = [];
+            if (this.filtersByType && this.filtersByType[type]) {
+                this.availableFilters = this.filtersByType[type];
+            };
             const query = this.getCleanQuery();
             // persist old compatible filter values
             query.q = this.queryFilter.q;
@@ -288,7 +321,7 @@ export default {
 
             Object.entries(filter).forEach(([key, filterValue]) => {
                 // do nothing for status or type filter, if value is set
-                if ((key === 'status' || key === 'type') && filterValue) {
+                if ((key === 'status' || key === 'type' || key === 'history_editor') && filterValue) {
                     return;
                 }
 
@@ -345,7 +378,11 @@ export default {
         },
 
         onCategoryChange(categories) {
-            this.queryFilter.filter.categories = categories?.map((cat) => cat.name);
+            this.queryFilter.filter.categories = categories?.map((cat) => cat.name).join(',');
+        },
+
+        onTagChange(tags) {
+            this.queryFilter.filter.tags = tags?.map((tag) => tag.id).join(',');
         },
 
         onFolderChange(folder) {

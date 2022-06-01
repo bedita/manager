@@ -417,7 +417,6 @@ export default {
             } else {
                 this.selectedObjects.push(object);
             }
-            console.debug(evt);
         },
 
         /**

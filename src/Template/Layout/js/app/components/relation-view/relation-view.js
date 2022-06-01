@@ -89,6 +89,8 @@ export default {
 
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
+
+            exportFormat: 'csv',        // default csv
         }
     },
 
@@ -107,6 +109,8 @@ export default {
          */
         showFilter() {
             return this.activeFilter.q ||
+                this.activeFilter?.filter?.status ||
+                this.activeFilter?.filter?.type ||
                 this.pagination.page_count > 1 ||
                 this.alreadyInView.length > this.pagination.page_size;
         },

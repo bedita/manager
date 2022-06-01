@@ -37,7 +37,7 @@ class ApplicationsTest extends TestCase
         Applications::$applications = $expected;
         $actual = Applications::list();
         static::assertEquals($expected, $actual);
-        Applications::$applications = null;
+        Applications::$applications = [];
 
         $response = [
             'data' => [
@@ -80,7 +80,7 @@ class ApplicationsTest extends TestCase
         $apiClient->method('get')
             ->willThrowException(new BEditaClientException());
         ApiClientProvider::setApiClient($apiClient);
-        Applications::$applications = null;
+        Applications::$applications = [];
         $actual = Applications::list();
         static::assertEquals([], $actual);
     }
@@ -110,7 +110,7 @@ class ApplicationsTest extends TestCase
             ->willReturn($response);
         ApiClientProvider::setApiClient($apiClient);
         $expected = 'dummy test';
-        Applications::$applications = null;
+        Applications::$applications = [];
         $actual = Applications::getName('3');
         static::assertEquals($expected, $actual);
     }

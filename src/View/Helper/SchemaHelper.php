@@ -73,7 +73,13 @@ class SchemaHelper extends Helper
         }
         $type = ControlType::fromSchema((array)$schema);
 
-        return Control::control((array)$schema, $type, $value);
+        return Control::control([
+            'objectType' => $objectType,
+            'property' => $name,
+            'value' => $value,
+            'schema' => (array)$schema,
+            'propertyType' => $type,
+        ]);
     }
 
     /**

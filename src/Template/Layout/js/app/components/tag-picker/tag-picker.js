@@ -1,4 +1,5 @@
 import { Treeselect, ASYNC_SEARCH } from '@riophae/vue-treeselect'
+import { t } from 'ttag';
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 const API_OPTIONS = {
@@ -18,7 +19,7 @@ export default {
         <div class="tag-picker">
             <label v-if="label"><: label :></label>
             <Treeselect
-                placeholder="Cerca tag esistenti"
+                placeholder="${t`Search existing tags`}"
                 :options="tagsOptions"
                 :async="true"
                 :clearable="false"
@@ -30,23 +31,27 @@ export default {
                 v-model="selectedTags"
                 @select="onAdd"
                 @deselect="onRemove"
+                @input="onChange"
             />
-            <div class="new-tag">
-                <label for="new-tag">Aggiungi un nuovo tag</label>
+            <div class="new-tag" v-show="!searchonly">
+                <label for="new-tag">${t`Add new tag`}</label>
                 <div class="input-container">
-                    <input type="text" :value="text" id="new-tag" @input="update($event.target.value)" />
-                    <button @click.prevent="addNewTag">Aggiungi</button>
+                    <input type="text" :form="form" :value="text" id="new-tag" @input="update($event.target.value)" />
+                    <button @click.prevent="addNewTag">${t`Add`}</button>
                 </div>
             </div>
-            <input type="hidden" name="tags" :value="modifiedTags" />
-            <input type="hidden" name="_types[tags]" value="json" />
+            <input type="hidden" :form="form" :id="id" name="tags" :value="modifiedTags" />
+            <input type="hidden" :form="form" name="_types[tags]" value="json" />
         </div>
     `,
 
     props: {
+        id: String,
         disabled: Boolean,
         label: String,
+        form: String,
         initialTags: Array,
+        searchonly: false,
     },
 
     data() {
@@ -64,6 +69,9 @@ export default {
     },
 
     methods: {
+        onChange() {
+            this.$emit('change', this.selectedTags);
+        },
         parseBeforeSave() {
             this.modifiedTags = JSON.stringify(this.selectedTags.map((tag) => ({ name : tag.id, label: tag.label })));
         },
