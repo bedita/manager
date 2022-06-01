@@ -89,7 +89,7 @@ class CloneComponent extends Component
             array_filter(
                 $relationships,
                 function ($relationship) {
-                    return !in_array($relationship, ['children', 'parents', 'translations']);
+                    return !in_array($relationship, ModulesComponent::FIXED_RELATIONSHIPS);
                 }
             )
         );
