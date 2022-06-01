@@ -33,13 +33,6 @@ use Cake\Utility\Hash;
 class AppController extends Controller
 {
     /**
-     * Object type currently used
-     *
-     * @var string
-     */
-    protected $objectType = null;
-
-    /**
      * BEdita4 API client
      *
      * @var \BEdita\SDK\BEditaClient

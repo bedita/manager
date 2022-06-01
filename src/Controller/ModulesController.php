@@ -34,6 +34,13 @@ use Psr\Log\LogLevel;
 class ModulesController extends AppController
 {
     /**
+     * Object type currently used
+     *
+     * @var string
+     */
+    protected $objectType = null;
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void

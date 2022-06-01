@@ -56,7 +56,7 @@ class CategoriesComponent extends Component
         $apiClient = ApiClientProvider::getApiClient();
         $query = [
             'fields' => 'name',
-            'page_size' => 1000,
+            'page_size' => 500, // BE4 API MAX_LIMIT
         ];
         if (!empty($objectType)) {
             $query['filter']['type'] = $objectType;
