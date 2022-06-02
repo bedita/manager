@@ -10,8 +10,12 @@ import { t } from 'ttag';
  */
 export default {
     components: {
+        CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
+        FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
     },
 
     /**
@@ -35,6 +39,15 @@ export default {
         return {
             allIds: [],
             selectedRows: [],
+            bulkField: null,
+            bulkValue: null,
+            bulkAction: null,
+            selectedIds: null,
+            /**
+             * Selected folder for bulk copy or move.
+             * Used to enable/disable confirmation button.
+             */
+            bulkFolder: null,
         };
     },
 
@@ -57,7 +70,6 @@ export default {
 
     watch: {
         selectedRows(val) {
-            console.log(val)
             if (!val.length) {
                 this.$refs.checkAllCB.checked = false;
                 this.$refs.checkAllCB.indeterminate = false;
@@ -96,12 +108,14 @@ export default {
         /**
          * Submit bulk actions form
          *
+         * @param {String} formId The form ID
          * @return {void}
          */
-        bulkActions() {
+        bulkActions(formId) {
             if (this.selectedRows.length < 1) {
                 return;
             }
+            document.querySelector(`form#${formId}`).submit();
         },
 
         /**
@@ -160,6 +174,14 @@ export default {
                     this.selectedRows.push(cb.value);
                 }
             }
-        }
+        },
+
+        onUpdatePageSize(event) {
+            window._vueInstance.$emit('filter-update-page-size', event);
+        },
+
+        onUpdateCurrentPage(event) {
+            window._vueInstance.$emit('filter-update-current-page', event);
+        },
     }
 }

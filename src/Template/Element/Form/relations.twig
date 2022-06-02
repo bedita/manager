@@ -16,7 +16,7 @@
                         isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
                         isLoading? 'is-loading-spinner' : ''
                     ]">
-                        <h2>{{ relationLabel }}</h2>
+                        <h2>{{ Layout.tr(relationLabel) }}</h2>
                         <div class="buttons" v-show="isOpen">
                             <button @click.prevent @click.stop="switchBlockView()" :data-active="!dataList" class="switch-view icon-th-large"></button>
                             <button @click.prevent @click.stop="switchListView()" :data-active="dataList" class="switch-view icon-th-list"></button>
@@ -26,13 +26,15 @@
                         </span>
                 </header>
                 <div v-show="isOpen" class="tab-container">
-                    {% element 'Form/relation' {
+                    {{ element('Form/relation', {
                         'relationName': relationName,
+                        'relationLabel': Layout.tr(relationLabel),
                         'relationSchema': relationsSchema[relationName],
                         'dataList': dataList,
+                        'readonly': relationsSchema[relationName].readonly,
                         'preCount': preCount,
                         'uploadableNum': uploadableNum,
-                    } %}
+                    }) }}
                 </div>
 
             </section>

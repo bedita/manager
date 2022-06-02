@@ -28,14 +28,14 @@ class ExportController extends AppController
      *
      * @var int
      */
-    const DEFAULT_EXPORT_LIMIT = 10000;
+    public const DEFAULT_EXPORT_LIMIT = 10000;
 
     /**
      * Default page size
      *
      * @var int
      */
-    const DEFAULT_PAGE_SIZE = 500;
+    public const DEFAULT_PAGE_SIZE = 500;
 
     /**
      * {@inheritDoc}
@@ -46,6 +46,7 @@ class ExportController extends AppController
         parent::initialize();
 
         $this->loadComponent('Export');
+        $this->Security->setConfig('unlockedActions', ['related']);
     }
 
     /**
@@ -61,14 +62,14 @@ class ExportController extends AppController
             'requiredParameters' => ['objectType'],
         ]);
 
-        $format = (string)$this->request->getData('format');
+        $format = (string)$this->getRequest()->getData('format');
         if (!$this->Export->checkFormat($format)) {
             $this->Flash->error(__('Format choosen is not available'));
 
             return $this->redirect($this->referer());
         }
 
-        $ids = $this->request->getData('ids');
+        $ids = (string)$this->getRequest()->getData('ids');
 
         // load data for objects by object type and ids
         $rows = $this->rows($data['objectType'], $ids);
@@ -78,7 +79,43 @@ class ExportController extends AppController
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
-        $response = $this->response->withStringBody(Hash::get($data, 'content'));
+        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
+        $response = $response->withType(Hash::get($data, 'contentType'));
+
+        return $response->withDownload($filename);
+    }
+
+    /**
+     * Export related data to format specified by user
+     *
+     * @param string $id The object ID
+     * @param string $relation The relation name
+     * @param string $format The file format
+     * @return \Cake\Http\Response|null
+     */
+    public function related(string $id, string $relation, string $format): ?Response
+    {
+        // check request (allowed methods and required parameters)
+        $this->checkRequest([
+            'allowedMethods' => ['get'],
+        ]);
+
+        if (!$this->Export->checkFormat($format)) {
+            $this->Flash->error(__('Format choosen is not available'));
+
+            return $this->redirect($this->referer());
+        }
+
+        // load related
+        $objectType = $this->getRequest()->getParam('object_type');
+        $rows = $this->rowsAllRelated($objectType, $id, $relation);
+
+        // create spreadsheet and return as download
+        $filename = sprintf('%s_%s_%s.%s', $objectType, $relation, date('Ymd-His'), $format);
+        $data = $this->Export->format($format, $rows, $filename);
+
+        // output
+        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
         $response = $response->withType(Hash::get($data, 'contentType'));
 
         return $response->withDownload($filename);
@@ -115,7 +152,7 @@ class ExportController extends AppController
      */
     protected function apiPath(): string
     {
-        return sprintf('/%s', $this->request->getData('objectType'));
+        return sprintf('/%s', (string)$this->getRequest()->getData('objectType'));
     }
 
     /**
@@ -161,6 +198,39 @@ class ExportController extends AppController
     }
 
     /**
+     * Load all related data for a given type and relation using limit and query filters.
+     *
+     * @param string $objectType Object type
+     * @param string $id The object ID
+     * @param string $relationName The relation name
+     * @return array
+     */
+    protected function rowsAllRelated(string $objectType, string $id, string $relationName): array
+    {
+        $data = $fields = [];
+        $url = sprintf('/%s/%s/%s', $objectType, $id, $relationName);
+        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+        $pageCount = $page = 1;
+        $total = 0;
+        $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
+        while ($total < $limit && $page <= $pageCount) {
+            $response = (array)$this->apiClient->get($url, $query + compact('page'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $total += (int)Hash::get($response, 'meta.pagination.page_items');
+
+            if ($page === 1) {
+                $fields = $this->getFieldNames($response);
+                $data = [$fields];
+            }
+
+            $this->fillDataFromResponse($data, $response, $fields);
+            $page++;
+        }
+
+        return $data;
+    }
+
+    /**
      * Prepare additional API query from POST data
      *
      * @return array
@@ -168,7 +238,7 @@ class ExportController extends AppController
     protected function prepareQuery(): array
     {
         $res = [];
-        $f = (array)$this->request->getData('filter');
+        $f = (array)$this->getRequest()->getData('filter');
         if (!empty($f)) {
             $filter = [];
             foreach ($f as $v) {
@@ -176,7 +246,7 @@ class ExportController extends AppController
             }
             $res = compact('filter');
         }
-        $q = (string)$this->request->getData('q');
+        $q = (string)$this->getRequest()->getData('q');
         if (!empty($q)) {
             $res += compact('q');
         }

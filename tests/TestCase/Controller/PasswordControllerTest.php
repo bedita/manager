@@ -16,7 +16,6 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\PasswordController;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -27,9 +26,19 @@ use Cake\Utility\Text;
  * {@see \App\Controller\PasswordController} Test Case
  *
  * @coversDefaultClass \App\Controller\PasswordController
+ * @uses \App\Controller\PasswordController
  */
 class PasswordControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
     /**
      * Test subject
      *
@@ -40,7 +49,7 @@ class PasswordControllerTest extends TestCase
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -69,7 +78,10 @@ class PasswordControllerTest extends TestCase
         } else {
             $this->client->method($method)->with($with[0], $with[1], $with[2])->willThrowException($exception);
         }
-        $this->Password->apiClient = $this->client;
+        // set $this->Password->apiClient
+        $property = new \ReflectionProperty(PasswordController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Password, $this->client);
     }
 
     /**
@@ -233,9 +245,6 @@ class PasswordControllerTest extends TestCase
     /**
      * Test `change` method, exception case
      *
-     * @param array $config The config for controller setup
-     * @param array $mock The parameters to mock api client
-     * @param Response|null $expected The expected result
      * @return void
      * @covers ::change()
      */

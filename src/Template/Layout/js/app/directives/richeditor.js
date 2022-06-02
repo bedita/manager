@@ -10,6 +10,7 @@ import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/hr';
+import '../plugins/tinymce/placeholders.js';
 
 const DEFAULT_TOOLBAR = [
     'styleselect',
@@ -25,6 +26,7 @@ const DEFAULT_TOOLBAR = [
     'bullist',
     'numlist',
     '|',
+    'placeholders',
     'link',
     'blockquote',
     'charmap',
@@ -58,16 +60,24 @@ export default {
                 });
             },
 
+            unbind() {
+                tinymce.remove();
+            },
+
             /**
              * dynamic load richtext-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */
-            async inserted(element, binding, vnode) {
+            async inserted(element, binding) {
                 let changing = false;
                 let items = JSON.parse(binding.expression || '');
                 if (!items) {
                     items = DEFAULT_TOOLBAR;
+                }
+
+                if (!binding.modifiers?.placeholders) {
+                    items = items.replace(/\bplaceholders\b/, '');
                 }
 
                 const { default: contentCSS } = await import('../../../richeditor.lazy.scss');
@@ -78,7 +88,7 @@ export default {
                     menubar: false,
                     branding: false,
                     max_height: 500,
-                    toolbar: DEFAULT_TOOLBAR,
+                    toolbar: items,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
@@ -92,8 +102,11 @@ export default {
                         'table',
                         'hr',
                         'code',
+                        'placeholders',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
+                    relative_urls: false,
+                    paste_block_drop: true,
                 });
 
                 element.editor = editor;
@@ -145,7 +158,7 @@ function format(html) {
 
         result += indent + '<' + element + '>\r\n';
 
-        if (element.match( /^<?\w[^>]*[^\/]$/ )) {
+        if (element.match( /^<?\w[^>]*[^/]$/ )) {
             indent += tab;
         }
     });
@@ -166,7 +179,7 @@ const getContent = (editor) => editor.getContent({ source_view: true });
 
 const open = async (editor) => {
     const editorContent = getContent(editor);
-    const dialog = editor.windowManager.open({
+    editor.windowManager.open({
         title: 'Source Code',
         size: 'large',
         body: {

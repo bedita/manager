@@ -12,10 +12,6 @@
  */
 namespace App\View;
 
-use Cake\Event\EventManager;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-
 /**
  * A view class that is used for AJAX responses.
  * Currently only switches the default layout and sets the response type -
@@ -23,7 +19,6 @@ use Cake\Http\ServerRequest;
  */
 class AjaxView extends AppView
 {
-
     /**
      * The name of the layout file to render the view inside of. The name
      * specified is the filename of the layout in /src/Template/Layout without
@@ -37,13 +32,12 @@ class AjaxView extends AppView
      * Initialization hook method.
      *
      * @return void
-     *
      * @codeCoverageIgnore
      */
     public function initialize(): void
     {
         parent::initialize();
 
-        $this->response = $this->response->withType('ajax');
+        $this->setResponse($this->getResponse()->withType('ajax'));
     }
 }

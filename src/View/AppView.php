@@ -19,12 +19,38 @@ use Cake\Utility\Hash;
 /**
  * Application View default class
  *
+ * @property \App\View\Helper\AdminHelper $Admin
+ * @property \App\View\Helper\CalendarHelper $Calendar
+ * @property \App\View\Helper\CategoriesHelper $Categories
+ * @property \App\View\Helper\EditorsHelper $Editors
+ * @property \App\View\Helper\LayoutHelper $Layout
+ * @property \App\View\Helper\ArrayHelper $Array
+ * @property \App\View\Helper\LinkHelper $Link
+ * @property \App\View\Helper\PropertyHelper $Property
+ * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\SchemaHelper $Schema
+ * @property \App\View\Helper\SystemHelper $System
+ * @property \BEdita\WebTools\View\Helper\ThumbHelper $Thumb
+ * @property \BEdita\I18n\View\Helper\I18nHelper $I18n
  */
 class AppView extends TwigView
 {
+    /**
+     * Constant for view file type 'element'
+     *
+     * @var string
+     */
+    public const TYPE_ELEMENT = 'Element';
 
     /**
-     * {@inheritDoc}
+     * Constant for view file type 'layout'
+     *
+     * @var string
+     */
+    public const TYPE_LAYOUT = 'Layout';
+
+    /**
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -38,6 +64,9 @@ class AppView extends TwigView
                 'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
+        $this->loadHelper('Admin');
+        $this->loadHelper('Calendar');
+        $this->loadHelper('Categories');
         $this->loadHelper('Editors');
         $this->loadHelper('Layout');
         $this->loadHelper('Array');
@@ -47,6 +76,7 @@ class AppView extends TwigView
         $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
         $this->loadHelper('Perms');
         $this->loadHelper('Schema');
+        $this->loadHelper('System');
         $this->loadHelper('Text');
         $this->loadHelper('BEdita/WebTools.Thumb');
         $this->loadHelper('Url');
@@ -60,7 +90,7 @@ class AppView extends TwigView
      *
      * If `Elements.{module_name}.{element_name}` exists in configuration a custom element is loaded
      */
-    protected function _getElementFileName($name, $pluginCheck = true)
+    protected function _getElementFileName($name, $pluginCheck = true): string
     {
         $module = (array)$this->get('currentModule', []);
         $custom = Configure::read(sprintf('Elements.%s', Hash::get($module, 'name', '')));

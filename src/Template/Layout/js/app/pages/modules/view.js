@@ -12,6 +12,7 @@ import Vue from 'vue';
 export default {
     components: {
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
+        TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
     },
@@ -44,47 +45,70 @@ export default {
             }
         },
 
-        async submitForm(event) {
+        submitForm(event) {
             event.preventDefault();
             event.stopPropagation();
-            const form = new FormData(event.target);
+
+            const form = event.target;
+            if (form.disabled) {
+                return;
+            }
+
+            const button = document.querySelector('button[form=form-main]');
+            button.classList.add('is-loading-spinner');
+            const formData = new FormData(event.target);
             const action = event.target.getAttribute('action');
-            const response = await fetch(action, {
+
+            form.disabled = true;
+
+            const ajaxCall = fetch(action, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                 },
-                body: form,
+                body: formData,
                 mode: 'same-origin',
                 credentials: 'same-origin',
                 redirect: 'manual',
-            });
+            }).then(async (response) => {
+                button.classList.remove('is-loading-spinner');
+                if (!response.ok) {
+                    // a redirect was performed; we assume it was to /login page
+                    if (response.status === 0 && response.type === 'opaqueredirect') {
+                        console.warn('session expired');
+                        this.renewSession();
+                        throw new Error('Unauthorized');
+                    }
 
-            if (response.ok) {
-                const json = await response.json();
-                if (json.error) {
+                    const error = await response.text();
+                    console.error(error);
+                    throw new Error(error);
+                }
+
+                let json;
+                try {
+                    json = await response.json();
+                } catch (e) {
+                    console.error('Malformed json response on save');
+                    window.location.reload();
+                }
+                if (json?.error) {
                     await this.showFlashMessages();
-
-                    return;
+                    BEDITA.error(json.error);
+                    throw new Error(json.error);
                 }
 
                 // clear form dirty state, to avoid alert message about unsaved changes before changing page
                 window._vueInstance.dataChanged.clear();
                 window.location = this.$helpers.buildViewUrlType(json.data[0].type, json.data[0].id);
+            });
 
-                return;
-            }
+            ajaxCall
+                .catch(() => {
+                    form.disabled = false;
+                });
 
-            // a redirect was performed; we assume it was to /login page
-            if (response.status === 0 && response.type === 'opaqueredirect') {
-                console.warn('session expired');
-                this.renewSession();
-
-                return;
-            }
-
-            const error = await response.text();
-            console.error(error);
+            return ajaxCall;
         },
 
         renewSession() {
@@ -160,7 +184,9 @@ export default {
             }
 
             return this.$helpers.autoTranslate(object.content, object.from, object.to)
-                .catch(r => {
+                .catch(error => {
+                    console.error(error);
+
                     throw new Error(`Unable to translate field ${object.field}`);
                 })
                 .then(r => {

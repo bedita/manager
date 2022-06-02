@@ -13,14 +13,23 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\LoginController;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\LoginController} Test Case
  *
  * @coversDefaultClass \App\Controller\LoginController
+ * @uses \App\Controller\LoginController
  */
 class LoginControllerTest extends TestCase
 {
@@ -47,6 +56,15 @@ class LoginControllerTest extends TestCase
     ];
 
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Setup controller to test with request config
      *
      * @param array $requestConfig
@@ -57,13 +75,70 @@ class LoginControllerTest extends TestCase
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->Login = new LoginController($request);
+
+        // Mock Authentication component and prepare for "real" login
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));
+        $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest());
+        $identity = new Identity($result->getData() ?: []);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('identity', $identity));
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
+    }
+
+    /**
+     * Test `initialize` method.
+     *
+     * @covers ::initialize()
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+
+        static::assertEquals(['login'], $this->Login->Authentication->getUnauthenticatedActions());
     }
 
     /**
      * Test `authRequest` method, no user timezone set
      *
      * @covers ::authRequest()
-     * @covers ::userTimezone()
      * @covers ::setupCurrentProject()
      * @return void
      */
@@ -85,7 +160,6 @@ class LoginControllerTest extends TestCase
      * Test `login` with HTTP HEAD method
      *
      * @coversNothing
-     *
      * @return void
      */
     public function testHeadLogin(): void
@@ -101,35 +175,9 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test `userTimezone` method
-     *
-     * @covers ::userTimezone()
-     *
-     * @return void
-     */
-    public function testLoginTimezone(): void
-    {
-        $this->setupController([
-            'post' => [
-                'username' => env('BEDITA_ADMIN_USR'),
-                'password' => env('BEDITA_ADMIN_PWD'),
-                'timezone_offset' => '7200 0',
-            ],
-        ]);
-
-        $response = $this->Login->login();
-        static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('/', $response->getHeaderLine('Location'));
-
-        $tz = $this->Login->Auth->user('timezone');
-        static::assertNotEquals('UTC', $tz);
-    }
-
-    /**
      * Test `login` fail method
      *
      * @covers ::authRequest()
-     *
      * @return void
      */
     public function testLoginFailed(): void
@@ -149,7 +197,6 @@ class LoginControllerTest extends TestCase
      * Test `login` method with GET
      *
      * @covers ::login()
-     *
      * @return void
      */
     public function testLoginForm(): void
@@ -168,7 +215,6 @@ class LoginControllerTest extends TestCase
      * Test `loadAvailableProjects` method with GET
      *
      * @covers ::loadAvailableProjects()
-     *
      * @return void
      */
     public function testLoadAvailableProjects(): void
@@ -183,7 +229,7 @@ class LoginControllerTest extends TestCase
 
         $response = $this->Login->login();
         static::assertNull($response);
-        $viewVars = $this->Login->viewVars;
+        $viewVars = $this->Login->viewBuilder()->getVars();
         static::assertArrayHasKey('projects', $viewVars);
         $expected = [
             [
@@ -198,7 +244,6 @@ class LoginControllerTest extends TestCase
      * Test `setupCurrentProject` method
      *
      * @covers ::setupCurrentProject()
-     *
      * @return void
      */
     public function testSetupCurrentProject(): void
@@ -213,14 +258,13 @@ class LoginControllerTest extends TestCase
 
         $response = $this->Login->login();
         static::assertEquals(302, $response->getStatusCode());
-        static::assertEquals('test', $this->Login->request->getSession()->read('_project'));
+        static::assertEquals('test', $this->Login->getRequest()->getSession()->read('_project'));
     }
 
     /**
      * Test `logout` method
      *
      * @covers ::logout()
-     *
      * @return void
      */
     public function testLogout(): void
@@ -234,15 +278,14 @@ class LoginControllerTest extends TestCase
         $response = $this->Login->logout();
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/login', $response->getHeaderLine('Location'));
-        static::assertNull($this->Login->request->getSession()->read('Auth'));
-        static::assertNull($this->Login->request->getSession()->read('_project'));
+        static::assertNull($this->Login->getRequest()->getSession()->read('Auth'));
+        static::assertNull($this->Login->getRequest()->getSession()->read('_project'));
     }
 
     /**
      * Test `handleFlashMessages` method
      *
      * @covers ::handleFlashMessages()
-     *
      * @return void
      */
     public function testHandleFlashMessages(): void
@@ -255,15 +298,15 @@ class LoginControllerTest extends TestCase
         ]);
 
         // case 1: remove message
-        $this->Login->request->getSession()->write('Flash', 'something');
+        $this->Login->getRequest()->getSession()->write('Flash', 'something');
         $this->Login->handleFlashMessages([]);
-        $message = $this->Login->request->getSession()->read('Flash');
+        $message = $this->Login->getRequest()->getSession()->read('Flash');
         static::assertEmpty($message);
 
         // case 2: do not remove message
-        $this->Login->request->getSession()->write('Flash', 'something');
+        $this->Login->getRequest()->getSession()->write('Flash', 'something');
         $this->Login->handleFlashMessages(['redirect' => 'dummy']);
-        $message = $this->Login->request->getSession()->read('Flash');
+        $message = $this->Login->getRequest()->getSession()->read('Flash');
         static::assertEquals('something', $message);
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Core\Result;
 
-use App\Core\Result\Result;
-
 /**
+ * {@inheritDoc}
+ *
  * Import result class
- * @extends App\Core\Result\Result
  */
 class ImportResult extends Result
 {
@@ -27,6 +26,7 @@ class ImportResult extends Result
      * @param string $info the info message
      * @param string $warn the warn message
      * @param string $error the error message
+     * @return void
      */
     public function __construct(
         $filename = '',
@@ -46,7 +46,7 @@ class ImportResult extends Result
      *
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->filename = $this->info = $this->warn = $this->error = '';
         $this->created = $this->updated = $this->errors = 0;

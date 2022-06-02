@@ -7,13 +7,12 @@
  * <relation-view> component used for ModulesPage -> View
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
-
+ * @property {String} relationLabel label of the relation
  * @requires
  *
  */
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
-import sleep from 'sleep-promise';
 
 export default {
     mixins: [
@@ -22,6 +21,10 @@ export default {
 
     props: {
         relationName: {
+            type: String,
+            required: true,
+        },
+        relationLabel: {
             type: String,
             required: true,
         },
@@ -85,11 +88,10 @@ export default {
          * @emits Event#count count objects event
          *
          * @param {Object} filter object containing filters
-         * @param {Boolean} force force recount of related objects
          *
          * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}, force = false) {
+        async loadRelatedObjects(filter = {}) {
             this.loading = true;
 
             return this.getPaginatedObjects(true, filter)

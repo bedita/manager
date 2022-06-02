@@ -28,7 +28,7 @@ class ResultTest extends TestCase
      *
      * @return array
      */
-    public function addMessageProvider()
+    public function addMessageProvider(): array
     {
         return [
             'info' => [
@@ -50,12 +50,11 @@ class ResultTest extends TestCase
      * @param mixed $expected Expected value
      * @param string $name Message name
      * @param string $msg Message string
-     *
      * @return void
      * @dataProvider addMessageProvider
      * @covers ::addMessage()
      */
-    public function testAddMessage($expected, string $name, string $msg)
+    public function testAddMessage($expected, string $name, string $msg): void
     {
         $result = new Result();
         $result->addMessage('info', 'info message');
@@ -69,7 +68,7 @@ class ResultTest extends TestCase
      *
      * @return array
      */
-    public function incrementProvider()
+    public function incrementProvider(): array
     {
         return [
             'errors' => [
@@ -88,12 +87,11 @@ class ResultTest extends TestCase
      *
      * @param mixed $expected Expected value
      * @param string $name Counter name
-     *
      * @return void
      * @dataProvider incrementProvider
      * @covers ::increment()
      */
-    public function testIncrement($expected, string $name)
+    public function testIncrement($expected, string $name): void
     {
         $result = new Result();
         $result->increment($name);

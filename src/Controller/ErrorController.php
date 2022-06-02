@@ -14,7 +14,7 @@
  */
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 
 /**
@@ -38,11 +38,11 @@ class ErrorController extends AppController
     /**
      * beforeFilter callback.
      *
-     * @param \Cake\Event\Event $event Event.
+     * @param \Cake\Event\EventInterface $event Event.
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
         return null;
     }
@@ -50,11 +50,11 @@ class ErrorController extends AppController
     /**
      * beforeRender callback.
      *
-     * @param \Cake\Event\Event $event Event.
+     * @param \Cake\Event\EventInterface $event Event.
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->viewBuilder()->setClassName('App\View\AppView');
         $this->viewBuilder()->setTemplatePath('Pages/Error');
@@ -65,11 +65,11 @@ class ErrorController extends AppController
     /**
      * afterFilter callback.
      *
-     * @param \Cake\Event\Event $event Event.
-     * @return \Cake\Http\Response|null|void
+     * @param \Cake\Event\EventInterface $event Event.
+     * @return void
      * @codeCoverageIgnore
      */
-    public function afterFilter(Event $event): void
+    public function afterFilter(EventInterface $event): void
     {
     }
 }

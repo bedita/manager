@@ -2,7 +2,7 @@
 
 {% set customElement = Layout.customElement(relationName) %}
 {% if customElement %}
-   {% element customElement %}
+   {{ element(customElement) }}
 {% else %}
 
 <property-view inline-template :tab-open="tabsOpen" tab-name="roles">
@@ -15,7 +15,7 @@
                 isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
                 isLoading? 'is-loading-spinner' : ''
             ]">
-                <h2>{{ __(relationName|humanize)|lower }}</h2>
+                <h2>{{ Layout.tr(relationName)|lower }}</h2>
                 <span class="tag is-smallest is-black mx-05" v-show="!isLoading">
                     <: totalObjects :>
                 </span>
@@ -26,6 +26,7 @@
             <relation-view
                 inline-template
                 relation-name={{ relationName }}
+                relation-label="{{ Layout.tr(relationName) }}"
 
                 @loading="onToggleLoading"
                 @count="onCount">
@@ -34,6 +35,7 @@
                     <roles-list-view
                         inline-template
                         relation-name={{ relationName }}
+                        relation-label="{{ Layout.tr(relationName) }}"
                         :related-objects="objects"
                         @remove-relations="setRemovedRelated">
 
@@ -50,7 +52,7 @@
                                     'name': 'relations[' ~ relationName ~ '][addRelated]',
                                     'v-model': 'relationsData'
                                 })|raw }}
-                                {{ Form.unlockField('relations.' ~ relationName ~ '.addRelated')}}
+                                {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
                             </div>
                         </div>
 
@@ -63,7 +65,7 @@
                             'name': 'relations[' ~ relationName ~ '][removeRelated]',
                             'v-model': 'removedRelationsData'
                         })|raw }}
-                        {{ Form.unlockField('relations.' ~ relationName ~ '.removeRelated')}}
+                        {% do Form.unlockField('relations.' ~ relationName ~ '.removeRelated') %}
                     </div>
                 </div>
 

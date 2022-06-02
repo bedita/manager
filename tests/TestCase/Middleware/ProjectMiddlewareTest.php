@@ -15,7 +15,8 @@ namespace App\Test\Middleware;
 use App\Application;
 use App\Middleware\ProjectMiddleware;
 use Cake\Core\Configure;
-use Cake\Http\Response;
+use Cake\Http\MiddlewareQueue;
+use Cake\Http\Runner;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
 
@@ -34,7 +35,7 @@ class ProjectMiddlewareTest extends TestCase
     protected $nextMiddleware;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -45,12 +46,12 @@ class ProjectMiddlewareTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->nextMiddleware = null;
+        unset($this->nextMiddleware);
     }
 
     /**
@@ -61,12 +62,20 @@ class ProjectMiddlewareTest extends TestCase
     public function invokeProvider(): array
     {
         return [
-            'test project' => [
+            'test session' => [
                 [
                     'name' => 'Test',
                 ],
                 [
                     '_project' => 'test',
+                ],
+            ],
+            'test request' => [
+                [
+                    'name' => 'Test',
+                ],
+                [
+                    'project' => 'test',
                 ],
             ],
             'no project' => [
@@ -83,22 +92,23 @@ class ProjectMiddlewareTest extends TestCase
      *
      * @param int $expected The HTTP status code expected
      * @param array $data Request session data
-     * @param array $server The server vars
      * @return void
-     *
      * @dataProvider invokeProvider
      * @covers ::__construct()
-     * @covers ::__invoke()
+     * @covers ::process()
      * @covers ::detectProject()
      */
     public function testInvoke($expected, $data): void
     {
         $request = ServerRequestFactory::fromGlobals();
         $request->getSession()->write($data);
-        $response = new Response();
+        foreach ($data as $key => $value) {
+            $request = $request->withData($key, $value);
+        }
         $app = new Application(CONFIG);
         $middleware = new ProjectMiddleware($app, TESTS . 'files' . DS . 'projects' . DS);
-        $response = $middleware($request, $response, $this->nextMiddleware);
+        $runner = new Runner();
+        $runner->run(new MiddlewareQueue([$middleware]), $request);
 
         $project = Configure::read('Project');
         static::assertEquals($expected, $project);

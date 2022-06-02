@@ -9,12 +9,12 @@
             <header @click.prevent="toggleVisibility()"
                 class="tab unselectable"
                 :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-                <h2>{{ __(group|humanize) }}</h2>
+                <h2>{{ Layout.tr(group) }}</h2>
             </header>
 
             <div v-show="isOpen" class="tab-container">
 
-                {% element 'Form/group_properties' {'properties' : props, 'group': group} %}
+                {{ element('Form/group_properties', {'properties' : props, 'group': group}) }}
 
             </div>
         </section>

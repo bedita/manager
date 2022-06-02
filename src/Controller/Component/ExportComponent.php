@@ -1,4 +1,15 @@
 <?php
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2022 Atlas Srl, Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
@@ -16,7 +27,7 @@ class ExportComponent extends Component
      *
      * @var array
      */
-    const ALLOWED_FORMATS = ['csv', 'ods', 'xlsx'];
+    public const ALLOWED_FORMATS = ['csv', 'ods', 'xlsx'];
 
     /**
      * Spreadsheet columns int/letter mapping.
@@ -121,7 +132,7 @@ class ExportComponent extends Component
     /**
      * Create spreadsheet file into memory and redirect output to download it as csv
      *
-     * @param Spreadsheet $spreadsheet The spreadsheet
+     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
      * @return array
      */
@@ -135,7 +146,7 @@ class ExportComponent extends Component
     /**
      * Create spreadsheet file into memory and redirect output to download it as ods
      *
-     * @param Spreadsheet $spreadsheet The spreadsheet
+     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
      * @return array
      */
@@ -149,7 +160,7 @@ class ExportComponent extends Component
     /**
      * Create spreadsheet file into memory and redirect output to download it as xlsx
      *
-     * @param Spreadsheet $spreadsheet The spreadsheet
+     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet The spreadsheet
      * @param string $filename The file name
      * @return array
      */
@@ -163,14 +174,14 @@ class ExportComponent extends Component
     /**
      * Create spreadsheet, write to a temporary file, set content and content type and return them.
      *
-     * @param Spreadsheet $spreadsheet The spreadsheet
+     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet The spreadsheet
      * @param string $extension The extension, can be 'Csv', 'Ods', 'Pdf', 'Xls', 'Xlsx'
      * @param array $options The options
      * @return array
      */
     protected function download(Spreadsheet $spreadsheet, string $extension, array $options): array
     {
-        $tmpfilename = tempnam('/tmp', Hash::get($options, 'filename'));
+        $tmpfilename = tempnam('/tmp', (string)Hash::get($options, 'filename'));
         $writer = IOFactory::createWriter($spreadsheet, $extension);
         $writer->save($tmpfilename);
         $content = file_get_contents($tmpfilename);

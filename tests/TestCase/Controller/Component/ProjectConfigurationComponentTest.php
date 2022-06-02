@@ -25,7 +25,7 @@ class ProjectConfigurationComponentTest extends TestCase
     public $ProjectConfiguration;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -34,11 +34,13 @@ class ProjectConfigurationComponentTest extends TestCase
         $controller = new Controller();
         $registry = $controller->components();
         $registry->load('Auth');
-        $this->ProjectConfiguration = $registry->load(ProjectConfigurationComponent::class);
+        /** @var \App\Controller\Component\ProjectConfigurationComponent $projectConfigurationComponent */
+        $projectConfigurationComponent = $registry->load(ProjectConfigurationComponent::class);
+        $this->ProjectConfiguration = $projectConfigurationComponent;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -79,10 +81,8 @@ class ProjectConfigurationComponentTest extends TestCase
      * @param array $expected Expected result.
      * @param array $config Response from `/config` endpoint.
      * @return void
-     *
      * @dataProvider readProvider()
      * @covers ::read()
-     * @covers ::cacheKey()
      * @covers ::fetchConfig()
      */
     public function testRead($expected, $config): void
@@ -127,7 +127,7 @@ class ProjectConfigurationComponentTest extends TestCase
     public function testReadError(): void
     {
         Configure::write('Project.config', null);
-        Cache::clear(false, ProjectConfigurationComponent::CACHE_CONFIG);
+        Cache::clear(ProjectConfigurationComponent::CACHE_CONFIG);
         // Setup mock API client.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])

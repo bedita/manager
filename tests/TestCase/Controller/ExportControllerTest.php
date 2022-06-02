@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\ExportController} Test Case
  *
  * @coversDefaultClass \App\Controller\ExportController
+ * @uses \App\Controller\ExportController
  */
 class ExportControllerTest extends TestCase
 {
@@ -78,9 +79,9 @@ class ExportControllerTest extends TestCase
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->Export = new ExportController(
             new ServerRequest([
@@ -93,9 +94,9 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         ApiClientProvider::setApiClient($this->apiClient);
     }
@@ -105,7 +106,6 @@ class ExportControllerTest extends TestCase
      *
      * @covers ::export()
      * @covers ::getFileName()
-     *
      * @return void
      */
     public function testExport(): void
@@ -136,7 +136,10 @@ class ExportControllerTest extends TestCase
                 ],
             ]);
         ApiClientProvider::setApiClient($apiClient);
-        $this->Export->apiClient = $apiClient;
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
 
         // expected csv.
         $fields = '"id","name","skills","category","prop"';
@@ -149,6 +152,64 @@ class ExportControllerTest extends TestCase
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
         static::assertEquals($expected, $content);
+
+        // check 'Content-Disposition' header containing filename
+        $download = $response->getHeader('Content-Disposition');
+        $download = (string)Hash::get($download, '0');
+        static::assertEquals('attachment; filename="users_', substr($download, 0, 28));
+        static::assertEquals('.csv"', substr($download, strlen($download) - 5));
+    }
+
+    /**
+     * Test `related`.
+     *
+     * @return void
+     * @covers ::related()
+     * @covers ::rowsAllRelated()
+     */
+    public function testRelated(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['object_type' => 'users'],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+
+        // mock api getObjects.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn([
+                'data' => [
+                    0 => $this->testdata['input']['gustavo'],
+                ],
+                'meta' => [
+                    'pagination' => [
+                        'page_items' => 1,
+                        'page_count' => 1,
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
+
+        // expected csv.
+        $fields = '"id","name","skills","category","prop"';
+        $row1 = '"999","gustavo","[""smart"",""rich"",""beautiful""]","developer","2"';
+        $expected = sprintf('%s%s%s%s', $fields, "\n", $row1, "\n");
+
+        // call export.
+        $response = $this->Export->related('999', 'seealso', 'csv');
+        $content = $response->getBody()->__toString();
+        static::assertInstanceOf('Cake\Http\Response', $response);
+        static::assertEquals($expected, $content);
+
         // check 'Content-Disposition' header containing filename
         $download = $response->getHeader('Content-Disposition');
         $download = (string)Hash::get($download, '0');
@@ -175,7 +236,30 @@ class ExportControllerTest extends TestCase
         // call export.
         $response = $this->Export->export();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = (array)$this->Export->request->getSession()->read('Flash.flash');
+        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
+    }
+
+    /**
+     * Test case of related of format not allowed FAIL METHOD
+     *
+     * @covers ::related()
+     * @return void
+     */
+    public function testRelatedFormatNotAllowed(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['objectType' => 'proms'],
+                'get' => ['id' => '655', 'relation' => 'dummy', 'format' => 'abcde'],
+            ])
+        );
+
+        // call export.
+        $response = $this->Export->related('655', 'proms', '');
+        static::assertEquals(302, $response->getStatusCode());
+        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
     }
 
@@ -265,7 +349,6 @@ class ExportControllerTest extends TestCase
      * @param array $response API response.
      * @param array $post Post data.
      * @return void
-     *
      * @covers ::rows()
      * @covers ::rowsAll()
      * @covers ::apiPath()
@@ -292,7 +375,10 @@ class ExportControllerTest extends TestCase
             );
         }
 
-        $this->Export->apiClient = $apiClient;
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
 
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rows');
@@ -351,8 +437,9 @@ class ExportControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('fillDataFromResponse');
         $method->setAccessible(true);
-        extract($input); // => $fields, $response
         $data = [];
+        $response = $input['response'];
+        $fields = $input['fields'];
         $method->invokeArgs($this->Export, [&$data, $response, $fields]);
         static::assertEquals($expected, $data);
     }
@@ -402,7 +489,7 @@ class ExportControllerTest extends TestCase
     /**
      * Test `getFieldNames` method.
      *
-     * @param string|array $input The input for the function.
+     * @param string|array $response The response.
      * @param string|array $expected The expected value.
      * @return void
      * @covers ::getFieldNames()
@@ -478,7 +565,8 @@ class ExportControllerTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rowFields');
         $method->setAccessible(true);
-        extract($input); // => $data, $field
+        $data = $input['data'];
+        $fields = $input['fields'];
         $row = $method->invokeArgs($this->Export, [&$data, $fields]);
         static::assertEquals($expected, $row);
     }

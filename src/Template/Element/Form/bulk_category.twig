@@ -1,0 +1,16 @@
+{% if schema.categories|length > 0 %}
+{{ Form.create(null, {
+    'id': 'bulk-categories',
+    'url': {'_name': 'modules:bulkCategories', 'object_type': objectType, '?': _view.request.getQuery()},
+})|raw }}
+    <div class="fieldset bulk-categories">
+        <category-picker label="{{ __('Categories') }}" :categories="{{ schema.categories|json_encode }}" :disabled="!selectedRows.length"></category-picker>
+        {% do Form.unlockField('categories') %}
+
+        <input type="hidden" name="ids" :value="selectedRows"/>
+        {% do Form.unlockField('ids') %}
+
+        <button class="button button-outlined" @click.prevent="bulkActions('bulk-categories')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
+    </div>
+{{ Form.end()|raw }}
+{% endif %}

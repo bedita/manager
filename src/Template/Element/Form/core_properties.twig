@@ -6,7 +6,7 @@
             <h2>{{ __('General') }}</h2>
         </header>
         <div v-show="isOpen" class="tab-container">
-            {% element 'Form/group_properties' {'properties' : properties.core, 'group': 'core'} %}
+            {{ element('Form/group_properties', {'properties' : properties.core, 'group': 'core'}) }}
         </div>
     </section>
 </property-view>

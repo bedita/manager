@@ -34,6 +34,7 @@
                 {% if object.relationships.translations %}
                 <relation-view inline-template
                     relation-name={{ resourceName }}
+                    relation-label="{{ Layout.tr(resourceName) }}"
                     config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
                     ref="relation"
 
@@ -49,7 +50,7 @@
                                     :key="related.id"
                                     :class="containsId(removedRelated, related.id)? 'removed' : ''">
 
-                                    {% element 'Form/related_item' { 'translation': true } %}
+                                    {{ element('Form/related_item', { 'translation': true }) }}
 
                                 </div>
                             </div>
@@ -62,7 +63,7 @@
                             'name': 'relations[' ~ resourceName ~ '][removeRelated]',
                             'v-model': 'removedRelationsData'
                         })|raw }}
-                        {{ Form.unlockField('relations.' ~ resourceName ~ '.removeRelated')}}
+                        {% do Form.unlockField('relations.' ~ resourceName ~ '.removeRelated') %}
 
                     </div>
                 </relation-view>

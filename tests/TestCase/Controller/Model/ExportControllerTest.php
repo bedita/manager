@@ -24,6 +24,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\ExportController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\ExportController
+ * @uses \App\Controller\Model\ExportController
  */
 class ExportControllerTest extends TestCase
 {
@@ -35,7 +36,14 @@ class ExportControllerTest extends TestCase
     public $Export;
 
     /**
-     * {@inheritDoc}
+     * Client API
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    public $apiClient;
+
+    /**
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -43,7 +51,7 @@ class ExportControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {

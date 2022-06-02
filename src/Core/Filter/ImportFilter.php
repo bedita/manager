@@ -13,7 +13,6 @@
 namespace App\Core\Filter;
 
 use App\Core\Result\ImportResult;
-use BEdita\SDK\BEditaApiClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Filesystem\File;
 use Cake\Log\LogTrait;
@@ -29,7 +28,7 @@ abstract class ImportFilter
     /**
      * BEdita Api client
      *
-     * @var \BEdita\SDK\BEditaApiClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $apiClient = null;
 

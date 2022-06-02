@@ -20,6 +20,7 @@ use Psr\Log\LogLevel;
 /**
  * Property Types Model Controller: list, add, edit, remove property types
  *
+ * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class PropertyTypesController extends ModelBaseController
 {
@@ -48,9 +49,9 @@ class PropertyTypesController extends ModelBaseController
      */
     public function save(): ?Response
     {
-        $payload = $this->request->getData();
+        $payload = $this->getRequest()->getData();
 
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $response = [];
 
         try {
@@ -73,18 +74,16 @@ class PropertyTypesController extends ModelBaseController
                 $response['removed'] = $this->removePropertyTypes($payload['removePropertyTypes']);
             }
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error->getMessage(), LogLevel::ERROR);
 
-            $this->set([
-                'error' => $error->getMessage(),
-                '_serialize' => ['error'],
-            ]);
+            $this->set('error', $error->getMessage());
+            $this->setSerialize(['error']);
 
             return null;
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', true);
+        $this->setSerialize([]);
 
         return null;
     }
@@ -163,5 +162,26 @@ class PropertyTypesController extends ModelBaseController
         }
 
         return $result;
+    }
+
+    /**
+     * Get resourceType
+     *
+     * @return string|null
+     */
+    public function getResourceType(): ?string
+    {
+        return $this->resourceType;
+    }
+
+    /**
+     * Set resourceType
+     *
+     * @param string|null $resourceType The resource type
+     * @return void
+     */
+    public function setResourceType(?string $resourceType): void
+    {
+        $this->resourceType = $resourceType;
     }
 }

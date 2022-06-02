@@ -8,12 +8,9 @@
  *
  * @prop {Array} labels
  * @prop {int} defaultActive index of the default active label in labels
- *
  */
 
 export default {
-    props: {
-    },
 
     data() {
         return {
@@ -21,11 +18,12 @@ export default {
         }
     },
 
-    mounted() {
-    },
-
     methods: {
         onFileChanged(e) {
+            this.fileName = '';
+            if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {
+                return;
+            }
             this.fileName = e.target.files[0].name;
         },
 

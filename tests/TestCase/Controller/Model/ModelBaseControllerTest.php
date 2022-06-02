@@ -14,43 +14,16 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ModelBaseController;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-
-class ModelController extends ModelBaseController
-{
-    /**
-     * Resource type currently used
-     *
-     * @var string
-     */
-    protected $resourceType = 'object_types';
-
-    /**
-     * Set resource type
-     *
-     * @param string $type Resource type
-     * @return void
-     */
-    public function setResourceType(string $type): void
-    {
-        $this->resourceType = $type;
-    }
-
-    /**
-     * Set single view
-     *
-     * @param bool $view Single view flag
-     * @return void
-     */
-    public function setSingleView(bool $view): void
-    {
-        $this->singleView = $view;
-    }
-}
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Model\ModelBaseController} Test Case
@@ -59,11 +32,6 @@ class ModelController extends ModelBaseController
  */
 class ModelBaseControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Test\TestCase\Controller\ModelController
-     */
     public $ModelController;
 
     /**
@@ -83,26 +51,67 @@ class ModelBaseControllerTest extends TestCase
     /**
      * API client
      *
-     * @var BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadRoutes();
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->ModelController = new ModelController($request);
+        $this->ModelController = new class ($request) extends ModelBaseController
+        {
+            protected $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
 
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
@@ -144,18 +153,19 @@ class ModelBaseControllerTest extends TestCase
      *
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
-     *
      * @covers ::beforeFilter()
      * @dataProvider beforeFilterProvider()
-     *
      * @return void
      */
     public function testBeforeFilter($expected, array $data): void
     {
+        // Mock Authentication component
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         if (isset($data['tokens'])) {
             $data['tokens'] = $this->client->getTokens();
         }
-        $this->ModelController->Auth->setUser($data);
+        $this->ModelController->Authentication->setIdentity(new Identity($data));
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -175,15 +185,14 @@ class ModelBaseControllerTest extends TestCase
      * Test `beforeRender` method
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRender(): void
     {
         $this->ModelController->dispatchEvent('Controller.beforeRender');
 
-        static::assertNotEmpty($this->ModelController->viewVars['resourceType']);
-        static::assertNotEmpty($this->ModelController->viewVars['moduleLink']);
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('resourceType'));
+        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('moduleLink'));
     }
 
     /**
@@ -192,7 +201,6 @@ class ModelBaseControllerTest extends TestCase
      * @covers ::index()
      * @covers ::initialize()
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testIndex(): void
@@ -200,7 +208,7 @@ class ModelBaseControllerTest extends TestCase
         $this->ModelController->index();
         $vars = ['resources', 'meta', 'links', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
     }
 
@@ -208,7 +216,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `index` failure method
      *
      * @covers ::index()
-     *
      * @return void
      */
     public function testIndexFail(): void
@@ -222,7 +229,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `view` method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testView(): void
@@ -230,7 +236,7 @@ class ModelBaseControllerTest extends TestCase
         $this->ModelController->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
     }
 
@@ -238,7 +244,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `view` failure method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testViewFail(): void
@@ -280,17 +285,15 @@ class ModelBaseControllerTest extends TestCase
      * @param string $expected Expected result
      * @param array $data Request data
      * @param bool $singleView Single view
-     *
      * @covers ::save()
      * @dataProvider saveProvider()
-     *
      * @return void
      */
     public function testSave(string $expected, array $data, bool $singleView): void
     {
         $this->ModelController->setSingleView($singleView);
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
 
@@ -303,7 +306,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `save` failure method
      *
      * @covers ::save()
-     *
      * @return void
      */
     public function testSaveFail(): void
@@ -312,11 +314,11 @@ class ModelBaseControllerTest extends TestCase
             'id' => 99999,
         ];
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 
@@ -324,7 +326,6 @@ class ModelBaseControllerTest extends TestCase
      * Test `remove` method
      *
      * @covers ::remove()
-     *
      * @return void
      */
     public function testRemove(): void
@@ -334,7 +335,7 @@ class ModelBaseControllerTest extends TestCase
             'singular' => 'foo',
         ];
         foreach ($data as $name => $value) {
-            $this->ModelController->request = $this->ModelController->request->withData($name, $value);
+            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
         }
         $result = $this->ModelController->save();
         static::assertInstanceOf(Response::class, $result);
@@ -347,14 +348,13 @@ class ModelBaseControllerTest extends TestCase
      * Test `remove` failure method
      *
      * @covers ::remove()
-     *
      * @return void
      */
     public function testRemoveFail(): void
     {
         $result = $this->ModelController->remove(99999);
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->request->getSession()->read('Flash.flash.0.message');
+        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 }

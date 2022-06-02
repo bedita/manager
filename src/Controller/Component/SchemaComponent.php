@@ -12,7 +12,7 @@
  */
 namespace App\Controller\Component;
 
-use App\Utility\CacheTrait;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -24,14 +24,12 @@ use Psr\Log\LogLevel;
 /**
  * Handles model schema of objects and resources.
  *
- * @property \Cake\Controller\Component\FlashComponent $Flash
+ * @property \App\Controller\Component\FlashComponent $Flash
  */
 class SchemaComponent extends Component
 {
-    use CacheTrait;
-
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public $components = ['Flash'];
 
@@ -40,10 +38,10 @@ class SchemaComponent extends Component
      *
      * @var string
      */
-    const CACHE_CONFIG = '_schema_types_';
+    public const CACHE_CONFIG = '_schema_types_';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'type' => null, // resource or object type name
@@ -57,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(string $type = null, string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null)
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -68,13 +66,13 @@ class SchemaComponent extends Component
         }
 
         $schema = $this->loadWithRevision($type, $revision);
-        if ($schema !== false) {
+        if (!empty($schema)) {
             return $schema;
         }
 
         try {
             $schema = Cache::remember(
-                $this->cacheKey($type),
+                CacheTools::cacheKey($type),
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
@@ -83,7 +81,7 @@ class SchemaComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return false;
         }
@@ -92,19 +90,35 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Get schemas by types and return them group by type
+     *
+     * @param array $types The types
+     * @return array
+     */
+    public function getSchemasByType(array $types): array
+    {
+        $schemas = [];
+        foreach ($types as $type) {
+            $schemas[$type] = $this->getSchema($type);
+        }
+
+        return $schemas;
+    }
+
+    /**
      * Load schema from cache with revision check.
      * If cached revision don't match cache is removed.
      *
      * @param string $type Type to get schema for. By default, configured type is used.
-     * @param string $revision Schema revision.
-     * @return array|bool Cached schema if revision match, otherwise false
+     * @param string|null $revision Schema revision.
+     * @return array|null Cached schema if revision match, null otherwise
      */
-    protected function loadWithRevision(string $type, string $revision = null)
+    protected function loadWithRevision(string $type, ?string $revision = null): ?array
     {
-        $key = $this->cacheKey($type);
+        $key = CacheTools::cacheKey($type);
         $schema = Cache::read($key, self::CACHE_CONFIG);
-        if ($schema === false) {
-            return false;
+        if (empty($schema)) {
+            return null;
         }
         $cacheRevision = empty($schema['revision']) ? null : $schema['revision'];
         if ($revision === null || $cacheRevision === $revision) {
@@ -113,7 +127,7 @@ class SchemaComponent extends Component
         // remove from cache if revision don't match
         Cache::delete($key, self::CACHE_CONFIG);
 
-        return false;
+        return null;
     }
 
     /**
@@ -202,8 +216,10 @@ class SchemaComponent extends Component
         return array_map(
             function ($item) {
                 return [
+                    'id' => Hash::get((array)$item, 'id'),
                     'name' => Hash::get((array)$item, 'attributes.name'),
                     'label' => Hash::get((array)$item, 'attributes.label'),
+                    'parent_id' => Hash::get((array)$item, 'attributes.parent_id'),
                 ];
             },
             (array)Hash::get((array)$response, 'data')
@@ -229,11 +245,11 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    public function getRelationsSchema()
+    public function getRelationsSchema(): array
     {
         try {
             $schema = (array)Cache::remember(
-                $this->cacheKey('relations'),
+                CacheTools::cacheKey('relations'),
                 function () {
                     return $this->fetchRelationData();
                 },
@@ -241,7 +257,7 @@ class SchemaComponent extends Component
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $schema = [];
         }
@@ -254,7 +270,7 @@ class SchemaComponent extends Component
      *
      * @return array Relations schema.
      */
-    protected function fetchRelationData()
+    protected function fetchRelationData(): array
     {
         $query = [
             'include' => 'left_object_types,right_object_types',
@@ -300,7 +316,7 @@ class SchemaComponent extends Component
         $res = [];
         foreach ($types as $type) {
             if (!empty($descendants[$type])) {
-                $res += $descendants[$type];
+                $res = array_merge($res, $descendants[$type]);
             } else {
                 $res[] = $type;
             }
@@ -332,14 +348,14 @@ class SchemaComponent extends Component
     {
         try {
             $features = (array)Cache::remember(
-                $this->cacheKey('types_features'),
+                CacheTools::cacheKey('types_features'),
                 function () {
                     return $this->fetchObjectTypesFeatures();
                 },
                 self::CACHE_CONFIG
             );
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }

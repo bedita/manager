@@ -1,0 +1,16 @@
+body.view-admin {
+    .filter-box-admin > .filters-container > .filter-container > span {
+        margin-left: 15px;
+    }
+    .has-background-module-admin {
+        background-color: white !important;
+    }
+    .active-action {
+        font-weight: bold;
+        color: white;
+    }
+}
+
+.content {
+    min-width: 400px;
+}

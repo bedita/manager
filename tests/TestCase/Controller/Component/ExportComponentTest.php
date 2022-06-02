@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ExportComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
 use Cake\Controller\ComponentRegistry;
-use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -22,11 +21,9 @@ class ExportComponentTest extends TestCase
     public $Export;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $registry = new ComponentRegistry();
@@ -34,11 +31,9 @@ class ExportComponentTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Export);
 
@@ -146,7 +141,7 @@ class ExportComponentTest extends TestCase
     /**
      * Test `column` method
      *
-     * @param integer $number The column number
+     * @param int $number The column number
      * @param string $expected The column string
      * @return void
      * @covers ::column()
@@ -155,7 +150,7 @@ class ExportComponentTest extends TestCase
     public function testColumn(int $number, string $expected): void
     {
         // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($this->Export, 'column', [$number]);
         static::assertEquals($expected, $actual);
     }

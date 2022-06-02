@@ -13,21 +13,39 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\AppController;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\AppController} Test Case
  *
  * @coversDefaultClass \App\Controller\AppController
+ * @uses \App\Controller\AppController
  */
 class AppControllerTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
 
     /**
      * Test subject
@@ -72,17 +90,58 @@ class AppControllerTest extends TestCase
         ];
         $this->setupController($config);
 
-        $user = $this->AppController->Auth->identify();
-        $this->AppController->Auth->setUser($user);
+        // Mock Authentication component
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
+        $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest());
+        $identity = new Identity($result->getData());
+        $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
+        $this->AppController->setRequest($request);
+        $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
+        $this->AppController->Authentication->setIdentity($user);
 
-        return $user;
+        return $user->getOriginalData();
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 
     /**
      * test `initialize` function
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void
@@ -92,7 +151,7 @@ class AppControllerTest extends TestCase
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
         static::assertNotEmpty($this->AppController->{'Security'});
-        static::assertNotEmpty($this->AppController->{'Auth'});
+        static::assertNotEmpty($this->AppController->{'Authentication'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
     }
@@ -101,16 +160,18 @@ class AppControllerTest extends TestCase
      * test `beforeFilter` not logged error
      *
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testBeforeFilterLoginError(): void
     {
         $this->setupController();
 
+        // Mock Authentication component
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
-        $flash = $this->AppController->request->getSession()->read('Flash');
+        $flash = $this->AppController->getRequest()->getSession()->read('Flash');
 
         $expected = __('Login required');
         $message = $flash['flash'][0]['message'];
@@ -122,7 +183,6 @@ class AppControllerTest extends TestCase
      * test 'beforeFilter' for correct apiClient token setup
      *
      * @covers ::beforeFilter()
-     *
      * @return void
      */
     public function testBeforeFilterCorrectTokens(): void
@@ -131,7 +191,9 @@ class AppControllerTest extends TestCase
 
         $this->setupControllerAndLogin();
 
-        $expectedtokens = $this->AppController->Auth->user('tokens');
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->AppController->Authentication->getIdentity();
+        $expectedtokens = $user->get('tokens');
 
         $event = $this->AppController->dispatchEvent('Controller.initialize');
 
@@ -159,7 +221,7 @@ class AppControllerTest extends TestCase
             ],
             'redirect to /' => [
                 ['environment' => ['REQUEST_METHOD' => 'GET'], 'params' => ['object_type' => 'documents']], // config
-                ['_name' => 'login', 'redirect' => '/'], // expected
+                ['_name' => 'login', '?' => ['redirect' => '/']], // expected
             ],
         ];
     }
@@ -169,7 +231,6 @@ class AppControllerTest extends TestCase
      *
      * @covers ::loginRedirectRoute()
      * @dataProvider loginRedirectRouteProvider()
-     *
      * @return void
      */
     public function testLoginRedirectRoute($config, $expected): void
@@ -186,30 +247,28 @@ class AppControllerTest extends TestCase
      * test `setupOutputTimezone`
      *
      * @covers ::setupOutputTimezone
-     *
      * @return void
      */
     public function testSetupOutputTimezone(): void
     {
         $this->setupController();
-        $expected = 'GMT';
 
-        // mock for AuthComponent
-        $mockedAuthComponent = $this->getMockBuilder('AuthComponent')
-            ->setMethods(['user'])
-            ->getMock();
-
-        // moch for user method
-        $mockedAuthComponent->method('user')
-            ->with('timezone')
-            ->willReturn($expected);
-
-        $this->AppController->Auth = $mockedAuthComponent;
-
+        $expected = Configure::read('I18n.timezone');
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->invokeMethod($this->AppController, 'setupOutputTimezone');
-
         $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
 
+        $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => null]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
+        static::assertEquals($expected, $configTimezone);
+
+        $expected = 'GMT';
+        $this->AppController->Authentication->setIdentity(new Identity(['timezone' => $expected]));
+        $this->invokeMethod($this->AppController, 'setupOutputTimezone');
+        $configTimezone = Configure::read('I18n.timezone');
         static::assertEquals($expected, $configTimezone);
     }
 
@@ -217,7 +276,6 @@ class AppControllerTest extends TestCase
      * Test `beforeRender` method for correct user object in Controller viewVars
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRender(): void
@@ -226,17 +284,17 @@ class AppControllerTest extends TestCase
 
         $event = $this->AppController->dispatchEvent('Controller.beforeRender');
 
-        static::assertArrayHasKey('user', $this->AppController->viewVars);
-        static::assertArrayHasKey('tokens', $this->AppController->viewVars['user']);
-        static::assertArrayHasKey('jwt', $this->AppController->viewVars['user']['tokens']);
-        static::assertArrayHasKey('renew', $this->AppController->viewVars['user']['tokens']);
+        static::assertArrayHasKey('user', $this->AppController->viewBuilder()->getVars());
+        $user = $this->AppController->viewBuilder()->getVar('user');
+        static::assertArrayHasKey('tokens', $user);
+        static::assertArrayHasKey('jwt', $user['tokens']);
+        static::assertArrayHasKey('renew', $user['tokens']);
     }
 
     /**
      * Test `beforeRender` method, when updating tokens in session
      *
      * @covers ::beforeRender()
-     *
      * @return void
      */
     public function testBeforeRenderUpdateTokens(): void
@@ -253,17 +311,21 @@ class AppControllerTest extends TestCase
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
 
-            // mocked getTokens method returns fake tokens
+        // mocked getTokens method returns fake tokens
         $apiClient->method('getTokens')
             ->willReturn($updatedToken);
 
-        $this->AppController->apiClient = $apiClient;
+        // set $this->AppController->apiClient
+        $property = new \ReflectionProperty(AppController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->AppController, $apiClient);
 
-        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->dispatchEvent('Controller.beforeRender');
 
         // assert user objects has been updated
-        static::assertArrayHasKey('user', $this->AppController->viewVars);
-        static::assertEquals($updatedToken, $this->AppController->viewVars['user']['tokens']);
+        $user = $this->AppController->viewBuilder()->getVar('user');
+        static::assertNotEmpty($user);
+        static::assertEquals($updatedToken, $user['tokens']);
     }
 
     /**
@@ -488,6 +550,41 @@ class AppControllerTest extends TestCase
                     '_changedParents' => true,
                 ],
             ],
+            'categories' => [
+                'documents',
+                [
+                    'id' => '2',
+                    'categories' => [
+                        ['name' => 'Blu'],
+                        ['name' => 'Red'],
+                        ['name' => 'Green'],
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'categories' => ['Blu', 'Red', 'Green'],
+                ],
+            ],
+            'types' => [
+                'documents',
+                [
+                    'id' => '3',
+                    'a' => ['a' => 1],
+                    'b' => ['b' => 2],
+                    'c' => 'c',
+                ],
+                [
+                    'id' => '3',
+                    'a' => '{"a": 1}',
+                    'b' => '{"b": 2}',
+                    'c' => 'c',
+                    '_types' => [
+                        'a' => 'json',
+                        'b' => 'json',
+                        'c' => 'other',
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -497,14 +594,12 @@ class AppControllerTest extends TestCase
      * @param string $objectType The object type
      * @param array $expected The expected request data
      * @param array $data The payload data
-     *
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
      * @dataProvider prepareRequestProvider()
-     *
      * @return void
      */
     public function testPrepareRequest($objectType, $expected, $data): void
@@ -545,6 +640,10 @@ class AppControllerTest extends TestCase
             'bool and string | unchanged' => [ true, '1', false ],
             'string and string | changed' => [ 'one', 'two', true ],
             'string and string | unchanged' => [ 'three', 'three', false ],
+            'int and string | changed' => [ 1, '2', true ],
+            'int and string | unchanged' => [ 1, '1', false ],
+            'string and int | changed' => [ '1', 2, true ],
+            'string and int | unchanged' => [ '1', 1, false ],
             'object and object | changed' => [ ['four'], ['five'], true ],
             'object and object | unchanged' => [ ['six'], ['six'], false ],
             'date and date | changed' => [ $d1, $d2, true ],
@@ -558,10 +657,8 @@ class AppControllerTest extends TestCase
      * @param mixed $val1 The first value
      * @param mixed $val2 The second value
      * @param bool $expected The expected result from function hasFieldChanged
-     *
      * @covers ::hasFieldChanged()
      * @dataProvider hasFieldChangedProvider()
-     *
      * @return void
      */
     public function testHasFieldChanged($val1, $val2, $expected): void
@@ -579,11 +676,6 @@ class AppControllerTest extends TestCase
     public function checkRequestProvider(): array
     {
         return [
-            'badRequest' => [
-                new BadRequestException('Empty request'),
-                [],
-                null,
-            ],
             'methodNotAllowed' => [
                 new MethodNotAllowedException(),
                 ['allowedMethods' => 'POST'],
@@ -622,16 +714,11 @@ class AppControllerTest extends TestCase
      *
      * @covers ::checkRequest()
      * @dataProvider checkRequestProvider()
-     *
      * @return void
      */
     public function testCheckRequest($expected, $params, $config): void
     {
         $this->setupController($config);
-
-        if ($config == null) {
-            $this->AppController->request = $config;
-        }
 
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
@@ -648,7 +735,6 @@ class AppControllerTest extends TestCase
      * @param object &$object Instantiated object that we will run method on.
      * @param string $methodName Method name to call
      * @param array  $parameters Array of parameters to pass into method.
-     *
      * @return mixed Method return.
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
@@ -665,7 +751,6 @@ class AppControllerTest extends TestCase
      *
      * @param object &$object Instantiated object that we will run method on.
      * @param string $propertyName Property name to access
-     *
      * @return mixed Method return.
      */
     public function accessProperty(&$object, $propertyName)
@@ -699,7 +784,7 @@ class AppControllerTest extends TestCase
                 'anything', // session value
                 null, // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
             'query parameters' => [ // expected write session filter and return null
                 [ // request config
@@ -717,6 +802,22 @@ class AppControllerTest extends TestCase
                 null, // expected http status code
                 null, // result type
             ],
+            'empty params' => [
+                [ // request config
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    '?' => [],
+                    'params' => [
+                        'object_type' => 'documents',
+                    ],
+                ],
+                'App.filter', // session key
+                null, // session value
+                null, // expected session value
+                null, // expected http status code
+                null, // result type
+            ],
             'data from session' => [ // expected read session filter and redirect
                 [ // request config
                     'environment' => [
@@ -730,7 +831,7 @@ class AppControllerTest extends TestCase
                 ['any' => 'thing'], // session value
                 ['any' => 'thing'], // expected session value
                 '302', // expected http status code
-                '\Cake\Http\Response', // result type
+                'Cake\Http\Response', // result type
             ],
         ];
     }
@@ -740,14 +841,12 @@ class AppControllerTest extends TestCase
      *
      * @covers ::applySessionFilter()
      * @dataProvider applySessionFilterProvider()
-     *
      * @param array $requestConfig
      * @param string $sessionKey
      * @param mixed|null $sessionValue
      * @param mixed|null $expectedSessionValue
      * @param string|null $expectedHttpStatusCode
      * @param string|null $expectedResultType
-     *
      * @return void
      */
     public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType): void
@@ -756,7 +855,7 @@ class AppControllerTest extends TestCase
         $this->setupController($requestConfig);
 
         // get session and write data on it
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $session->write($sessionKey, $sessionValue);
 
         // do controller call
@@ -770,7 +869,8 @@ class AppControllerTest extends TestCase
         if ($result == null) {
             static::assertNull($expectedResultType);
         } else {
-            static::assertTrue($result instanceof $expectedResultType);
+            static::assertNotNull($expectedResultType);
+            static::assertSame(get_class($result), $expectedResultType);
         }
         if ($expectedResultType === '\Cake\Http\Response') {
             static::assertEquals($result->getStatusCode(), $expectedHttpStatusCode);
@@ -863,10 +963,8 @@ class AppControllerTest extends TestCase
      * @param array $objects The objects to filter to set object nav
      * @param array $expectedObjectNav The object nav array expected
      * @param string $expectedObjectNavModule The object type string type expected
-     *
      * @covers ::setObjectNav()
      * @dataProvider setObjectNavProvider()
-     *
      * @return void
      */
     public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule): void
@@ -882,7 +980,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // verify session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         static::assertEquals($session->read('objectNav'), $expectedObjectNav);
         static::assertEquals($session->read('objectNavModule'), $expectedObjectNavModule);
     }
@@ -923,10 +1021,8 @@ class AppControllerTest extends TestCase
      *
      * @param string $moduleName The module name for the test
      * @param array $objects The objects to filter to set object nav
-     *
      * @covers ::getObjectNav()
      * @dataProvider getObjectNavProvider()
-     *
      * @return void
      */
     public function testGetObjectNav(string $moduleName, array $objects): void
@@ -942,7 +1038,7 @@ class AppControllerTest extends TestCase
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // get session data
-        $session = $this->AppController->request->getSession();
+        $session = $this->AppController->getRequest()->getSession();
         $objectNav = $session->read('objectNav');
 
         foreach ($objects as $object) {
@@ -957,5 +1053,34 @@ class AppControllerTest extends TestCase
 
         // verify objectNavModule
         static::assertEquals($session->read('objectNavModule'), $moduleName);
+    }
+
+    /**
+     * Test `getObjectNav`, when empty
+     *
+     * @return void
+     * @covers ::getObjectNav()
+     */
+    public function testGetObjectNavEmpty(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // set objectNav data to empty array
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('setObjectNav');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->AppController, [ [] ]);
+
+        // get session data
+        $session = $this->AppController->getRequest()->getSession();
+        $expected = $session->read('objectNav');
+
+        // do controller call
+        $method = $reflectionClass->getMethod('getObjectNav');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, [ '' ]);
+
+        static::assertSame($expected, $actual);
     }
 }

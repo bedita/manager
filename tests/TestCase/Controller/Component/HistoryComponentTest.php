@@ -54,7 +54,7 @@ class HistoryComponentTest extends TestCase
     private $documentId = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -62,8 +62,12 @@ class HistoryComponentTest extends TestCase
 
         $controller = new Controller();
         $registry = $controller->components();
-        $this->HistoryComponent = $registry->load(HistoryComponent::class);
-        $this->SchemaComponent = $registry->load(SchemaComponent::class);
+        /** @var \App\Controller\Component\HistoryComponent $historyComponent */
+        $historyComponent = $registry->load(HistoryComponent::class);
+        $this->HistoryComponent = $historyComponent;
+        /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+        $schemaComponent = $registry->load(SchemaComponent::class);
+        $this->SchemaComponent = $schemaComponent;
         $user = getenv('BEDITA_ADMIN_USR');
         $pass = getenv('BEDITA_ADMIN_PWD');
         $this->ApiClient = ApiClientProvider::getApiClient();
@@ -81,7 +85,7 @@ class HistoryComponentTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -132,7 +136,7 @@ class HistoryComponentTest extends TestCase
      */
     public function testLoad(array $object, string $expected): void
     {
-        $session = $this->HistoryComponent->getController()->request->getSession();
+        $session = $this->HistoryComponent->getController()->getRequest()->getSession();
         if ($expected != '') {
             $key = sprintf('history.%s.attributes', $this->documentId);
             $session->write($key, $expected);
@@ -161,7 +165,7 @@ class HistoryComponentTest extends TestCase
                     'historyId' => 1,
                     'keepUname' => false,
                 ],
-                '{"status":"","uname":"","title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+                '{"status":"","uname":"","title":"a new title","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":"","field":"a new value for field"}',
             ],
             'test document, keepUname true' => [
                 [
@@ -170,7 +174,7 @@ class HistoryComponentTest extends TestCase
                     'historyId' => 1,
                     'keepUname' => true,
                 ],
-                '{"status":"","uname":null,"title":"","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":""}',
+                '{"status":"","uname":null,"title":"a new title","description":"","body":"","extra":"","lang":"","publish_start":"","publish_end":"","field":"a new value for field"}',
             ],
         ];
     }
@@ -178,21 +182,40 @@ class HistoryComponentTest extends TestCase
     /**
      * Test `write` method
      *
-     * @covers ::write()
-     * @dataProvider writeProvider()
      * @param array $options The options for test
      * @param string $expected The expected serialized data
      * @return void
+     * @covers ::write()
+     * @dataProvider writeProvider()
      */
     public function testWrite(array $options, string $expected): void
     {
+        // mock api /history
+        $response = [
+            'data' => [
+                [
+                    'meta' => [
+                        'changed' => [
+                            'field' => 'a new value for field',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/history')
+            ->willReturn($response);
+        // set options
         $options += [
-            'ApiClient' => $this->ApiClient,
+            'ApiClient' => $apiClient,
             'Schema' => $this->SchemaComponent,
-            'Request' => $this->Request,
+            'Request' => $this->Request->withQueryParams(['title' => 'a new title']),
         ];
         $this->HistoryComponent->write($options);
-        $session = $this->HistoryComponent->getController()->request->getSession();
+        $session = $this->HistoryComponent->getController()->getRequest()->getSession();
         $actual = $session->read(sprintf('history.%s.attributes', $options['id']));
         static::assertEquals($expected, $actual);
     }
@@ -207,22 +230,19 @@ class HistoryComponentTest extends TestCase
         return [
             'a document history' => [
                 [
-                    $this->documentId,
-                    [
-                        'properties' => [
-                            'title' => [
-                                'oneOf' => [
-                                    ['type' => null],
-                                    ['type' => 'string'],
-                                ],
-                                '$id' => '/properties/title',
-                                'title' => 'Title',
+                    'properties' => [
+                        'title' => [
+                            'oneOf' => [
+                                ['type' => null],
+                                ['type' => 'string'],
                             ],
+                            '$id' => '/properties/title',
+                            'title' => 'Title',
                         ],
                     ],
                 ],
                 [
-                    'title' => 'Title: test history controller',
+                    'title' => '<div class="history-field"><label>Title</label>test history controller</div>',
                 ],
             ],
         ];
@@ -239,7 +259,7 @@ class HistoryComponentTest extends TestCase
      */
     public function testFetch(array $data, $expected): void
     {
-        $response = $this->HistoryComponent->fetch($data[0], $data[1]);
+        $response = $this->HistoryComponent->fetch($this->documentId, $data);
         $actual = $response['data'][0]['meta']['changed'];
         static::assertEquals($expected, $actual);
     }
@@ -292,8 +312,9 @@ class HistoryComponentTest extends TestCase
                         [
                             'meta' => [
                                 'changed' => [
-                                    'lang' => 'Lang: en',
+                                    'lang' => '<div class="history-field"><label>Lang</label>en</div>',
                                 ],
+                                'application_name' => '',
                             ],
                         ],
                     ],
@@ -314,57 +335,122 @@ class HistoryComponentTest extends TestCase
     public function testFormatResponseData(array $data, $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
         $actual = $data[0];
         static::assertEquals($expected, $actual);
     }
 
     /**
-     * Provider for `testFieldSchema` method
+     * Data provider for `testContent`.
      *
      * @return array
      */
-    public function fieldSchemaProvider(): array
+    public function contentDataProvider(): array
     {
         return [
-            'first level' => [
-                ['dummy', ['dummy' => ['dummy-expected']]],
-                ['dummy-expected'],
+            'empty content' => [
+                '',
+                [],
+                null,
+                '-',
             ],
             'title' => [
-                ['title', ['properties' => ['title' => ['title-expected']]]],
-                ['title-expected'],
+                'title',
+                [
+                    'properties' => [
+                        'title' => [
+                            'oneOf' => [
+                                ['type' => null],
+                                ['type' => 'string'],
+                            ],
+                            '$id' => '/properties/title',
+                            'title' => 'Title',
+                        ],
+                    ],
+                ],
+                'Dummy',
+                'Dummy',
             ],
-            'relations' => [
-                ['relationName', ['relations' => ['relationName' => ['relationName-expected']]]],
-                ['relationName-expected'],
-            ],
-            'associations' => [
-                ['associationName', ['associations' => ['associationName' => ['associationName-expected']]]],
-                ['associationName-expected'],
-            ],
-            'not existing field' => [
-                ['not-existing', ['dummy' => ['dummy-expected']]],
+            'date_ranges' => [
+                'date_ranges',
                 [],
+                [
+                    ['start_date' => '2020-10-14 12:45:00'], // start date only
+                    ['start_date' => '2020-10-14 14:15:22', 'end_date' => '2020-10-15 08:42:57'], // start + end date
+                    ['start_date' => '2020-10-14 14:15:22', 'end_date' => '2020-10-15 08:42:57', 'params' => ['all_day' => true]], // all day
+                ],
+                '<date-ranges-list inline-template><div class="index-date-ranges" :class="show-all"><div><div class="date-range"><div class="date-item">on<span class="date">14 Oct 2020&nbsp;12:45</span></div></div><div class="date-range"><div class="date-item">from<span class="date">14 Oct 2020&nbsp;14:15</span></div><div class="date-item">to&nbsp;<span class="date">15 Oct 2020&nbsp;08:42</span></div></div><div class="date-range"><div class="date-item">on<span class="date">14 Oct 2020</span></div></div></div></date-ranges-list>',
+            ],
+            'categories' => [
+                'categories',
+                [
+                    'categories' => [
+                        ['name' => 'red', 'label' => 'Red'],
+                        ['name' => 'green', 'label' => 'Green'],
+                        ['name' => 'blue', 'label' => 'Blue'],
+                    ],
+                ],
+                [
+                  ['name' => 'green'],
+                ],
+                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" value=""/><div class="checkbox"><label for="categories-red"><input type="checkbox" name="categories[]" value="red" id="categories-red">Red</label></div><div class="checkbox"><label for="categories-green" class="selected"><input type="checkbox" name="categories[]" value="green" checked="checked" id="categories-green">Green</label></div><div class="checkbox"><label for="categories-blue"><input type="checkbox" name="categories[]" value="blue" id="categories-blue">Blue</label></div></div></div>',
             ],
         ];
     }
 
     /**
-     * Test `fieldSchema` method
+     * Test `content`
      *
-     * @covers ::fieldSchema()
-     * @dataProvider fieldSchemaProvider()
-     * @param array $data The data for test
-     * @param mixed $expected The expected value
+     * @param string $field The field
+     * @param array $schema The schema
+     * @param mixed $value The value
+     * @param string $expected The expected content
      * @return void
+     * @covers ::content()
+     * @dataProvider contentDataProvider()
      */
-    public function testFieldSchema(array $data, $expected): void
+    public function testContent(string $field, array $schema, $value, string $expected): void
     {
-        // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
-        $actual = $test->invokeMethod($this->HistoryComponent, 'fieldSchema', [$data[0], $data[1]]);
-        static::assertEquals($expected, $actual);
+        $actual = $this->HistoryComponent->content($field, $schema, $value);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testLabel`.
+     *
+     * @return array
+     */
+    public function labelDataProvider(): array
+    {
+        return [
+            'empty label' => [
+                '',
+                '',
+            ],
+            'date ranges / calendar' => [
+                'date_ranges',
+                __('Calendar'),
+            ],
+            'title' => [
+                'title',
+                __('Title'),
+            ],
+        ];
+    }
+
+    /**
+     * Test `label`
+     *
+     * @param string $field The field
+     * @param string $expected The expected label
+     * @return void
+     * @covers ::label()
+     * @dataProvider labelDataProvider()
+     */
+    public function testLabel(string $field, string $expected): void
+    {
+        $actual = $this->HistoryComponent->label($field);
+        static::assertSame($expected, $actual);
     }
 }

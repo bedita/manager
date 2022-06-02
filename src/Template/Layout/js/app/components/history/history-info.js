@@ -7,16 +7,20 @@ export default {
         <section class="fieldset shrinks">
             <header class="mx-1 tab tab-static unselectable">
                 <h2>
-                    <span>${t`version by`}</span>
-                    <span class="has-font-weight-bold"><: authorName :></span>
+                    <span v-if="authorName">${t`version by`}</span>
+                    <span v-if="authorName" class="has-font-weight-bold"><: authorName :></span>
                     <span>${t`date`} <: formattedDate :></span>
                 </h2>
             </header>
-            <div class="px-1 shrinks">
-                <h4><: actionLabel :></h4>
-                <div class="is-flex-column">
-                    <div v-for="(value, key) in changed" v-html="value"></div>
-                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()">${`Restore`}</button>
+            <div class="object-form px-1 shrinks">
+                <h4 v-if="user_action == 'create'">${t`Created`}:</h4>
+                <h4 v-if="user_action == 'update'">${t`Updated`}:</h4>
+                <h4 v-if="user_action == 'trash'">${t`Trashed`}</h4>
+                <h4 v-if="user_action == 'restore'">${t`Restored`}</h4>
+                <div class="fieldset">
+                    <div v-for="(value, key) in changed" v-html="value" class="container" v-if="allowed(key)"></div>
+
+                    <button v-if="canSave" class="mt-2" @click.stop.prevent="restore()">${t`Restore`}</button>
                 </div>
             </div>
         </section>
@@ -48,7 +52,7 @@ export default {
          * @return {string}
          */
         authorName: function() {
-            if (!this.user) {
+            if (!this.user?.attributes) {
                 return;
             }
             const user = this.user.attributes;
@@ -58,21 +62,6 @@ export default {
                 user.username ||
                 '';
         },
-        /**
-         * Translate user action.
-         * Capitalize it before translation and then add colon.
-         * @param {string} action User action name
-         * @return {string}
-         */
-        actionLabel() {
-            const changeAction = this.user_action.replace(/^\w/, (c) => c.toUpperCase()) + 'd';
-            let label = t(changeAction);
-            if (this.user_action !== 'trash' && this.user_action !== 'restore') {
-                label += ':';
-            }
-
-            return label;
-        },
     },
 
     async created() {
@@ -80,8 +69,11 @@ export default {
     },
 
     methods: {
+        allowed(key) {
+            return (key !== 'model-type' && key !== '_csrfToken');
+        },
         restore() {
             PanelEvents.sendBack('history-info:restore', this.id);
-        }
+        },
     }
 }

@@ -1,9 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * History Controller
@@ -34,13 +32,13 @@ class HistoryController extends AppController
     public function info($id): void
     {
         $this->viewBuilder()->setClassName('Json');
-        $this->request->allowMethod('get');
-        $schema = (array)$this->Schema->getSchema($this->request->getParam('object_type'));
+        $this->getRequest()->allowMethod('get');
+        $schema = (array)$this->Schema->getSchema($this->getRequest()->getParam('object_type'));
         $response = $this->History->fetch($id, $schema);
         $data = $response['data'];
         $meta = $response['meta'];
         $this->set(compact('data', 'meta'));
-        $this->set('_serialize', ['data', 'meta']);
+        $this->setSerialize(['data', 'meta']);
     }
 
     /**
@@ -54,7 +52,7 @@ class HistoryController extends AppController
     {
         $this->setHistory($id, $historyId, false);
 
-        return $this->redirect(['_name' => 'modules:clone', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
+        return $this->redirect(['_name' => 'modules:clone', 'object_type' => $this->getRequest()->getParam('object_type')] + compact('id'));
     }
 
     /**
@@ -68,7 +66,7 @@ class HistoryController extends AppController
     {
         $this->setHistory($id, $historyId, true);
 
-        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->request->getParam('object_type')] + compact('id'));
+        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->getRequest()->getParam('object_type')] + compact('id'));
     }
 
     /**
@@ -81,10 +79,10 @@ class HistoryController extends AppController
      */
     protected function setHistory($id, $historyId, $keepUname): void
     {
-        $objectType = $this->request->getParam('object_type');
+        $objectType = $this->getRequest()->getParam('object_type');
         $options = compact('objectType', 'id', 'historyId', 'keepUname') + [
             'ApiClient' => $this->apiClient,
-            'Request' => $this->request,
+            'Request' => $this->getRequest(),
             'Schema' => $this->Schema,
         ];
         $this->History->write($options);

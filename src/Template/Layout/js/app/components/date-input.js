@@ -83,7 +83,7 @@ export default {
                 this.instance.clear();
             }
         },
-        setupDatepicker(date) {
+        setupDatepicker() {
             // set locale
             flatpickr.localize(LOCALES_AVAILABLE[LOCALE] || 'en');
             let element = this.el;
@@ -93,6 +93,7 @@ export default {
                 month: 'long',
                 day: 'numeric',
             };
+
             if (this.attrs.time) {
                 options.enableTime = true;
                 Object.assign(dateFormatOptions, {
@@ -100,22 +101,29 @@ export default {
                     minute: 'numeric',
                     second: 'numeric',
                 });
+            } else if (!this.attrs.daterange) {
+                options.dateFormat = 'Y-m-d';
             }
+
             options.formatDate = (dateObj, format) => {
-                // this value goes to the hidden input which will be saved, needs to be a correct ISO8601
+                // this value goes to the hidden input which will be saved,
+                // needs to be a correct ISO 8601 string if a datetime, or a string
+                // in "YYYY-MM-DD" format in case of simple date
+                if (!element.attributes.time && !element.attributes.daterange) {
+                    const date = new Date(dateObj.getTime());
+                    // force hours to 12 to avoid date change
+                    date.setHours(12);
+
+                    return flatpickr.formatDate(date, format);
+                }
+
                 if (format === 'Z') {
-                    // date? force hours to 12. datetime handles hours directly
-                    if (!element.attributes.time && !element.attributes.daterange) {
-                        const date = new Date(dateObj.getTime());
-                        date.setHours(12);
-
-                        return date.toISOString();
-                    }
-
                     return dateObj.toISOString();
                 }
+
                 return Intl.DateTimeFormat(LOCALE, dateFormatOptions).format(dateObj);
             };
+
             this.instance = flatpickr(element, options);
             element.dataset.originalValue = element.value;
         },

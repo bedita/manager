@@ -24,13 +24,14 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\TranslatorController} Test Case
  *
  * @coversDefaultClass \App\Controller\TranslatorController
+ * @uses \App\Controller\TranslatorController
  */
 class TranslatorControllerTest extends TestCase
 {
     /**
      * Test Translator controller
      *
-     * @var App\Test\TestCase\Controller\TranslatorController
+     * @var \App\Controller\TranslatorController
      */
     public $controller;
 
@@ -38,7 +39,6 @@ class TranslatorControllerTest extends TestCase
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslateMethodNotAllowedException(): void
@@ -58,7 +58,6 @@ class TranslatorControllerTest extends TestCase
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslateNoTranslatorEngine(): void
@@ -77,14 +76,13 @@ class TranslatorControllerTest extends TestCase
         );
         $this->controller->translate();
 
-        static::assertEquals('No translator engine is set in configuration', $this->controller->viewVars['error']);
+        static::assertEquals('No translator engine is set in configuration', $this->controller->viewBuilder()->getVar('error'));
     }
 
     /**
      * Test `translate` method
      *
      * @covers ::translate()
-     *
      * @return void
      */
     public function testTranslate(): void
@@ -110,9 +108,32 @@ class TranslatorControllerTest extends TestCase
             ])
         );
         $this->controller->translate();
-        $actual = $this->controller->viewVars['translation'];
+        $actual = $this->controller->viewBuilder()->getVar('translation');
         $translator = new DummyTranslator();
         $expected = json_decode($translator->translate($texts, 'en', 'it'));
         static::assertEquals($actual, $expected->translation);
+    }
+
+    /**
+     * test `initialize` function
+     *
+     * @return void
+     * @covers ::initialize()
+     */
+    public function testInitialize(): void
+    {
+        $this->controller = new TranslatorController(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'post' => [
+                    'text' => ['gustavo is a friend', 'gustavo is the best'],
+                    'from' => 'en',
+                    'to' => 'it',
+                ],
+            ])
+        );
+        static::assertNotEmpty($this->controller->{'Translator'});
     }
 }

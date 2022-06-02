@@ -5,6 +5,7 @@
  * <relations-add> component used for Panel
  *
  * @prop {String} relationName relation name
+ * @prop {String} relationLabel relation label
  * @prop {Array} alreadyInView array of objects already added
  * @prop {Object} relationTypes list of available object types
  * @prop {String} configPaginateSizes list of sizes for pagination
@@ -18,6 +19,7 @@ import { DragdropMixin } from 'app/mixins/dragdrop';
 import { error as showError } from 'app/components/dialog/dialog';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
+import { warning } from 'app/components/dialog/dialog';
 
 const createData = (type = '') => ({
     type,
@@ -37,6 +39,10 @@ export default {
 
     props: {
         relationName: {
+            type: String,
+            default: '',
+        },
+        relationLabel: {
             type: String,
             default: '',
         },
@@ -67,7 +73,7 @@ export default {
             file: null,
             url: null,
             showCreateObjectForm: false,
-            object: createData(),
+            object: createData('_choose'),
         };
     },
 
@@ -117,7 +123,7 @@ export default {
 
         relationName: {
             immediate: true,
-            handler(newVal, oldVal) {
+            handler(newVal) {
                 if (newVal) {
                     this.selectedObjects = [];
                     this.endpoint = `${this.method}/${newVal}`;
@@ -200,6 +206,26 @@ export default {
             PanelEvents.closePanel();
         },
 
+        resetForms() {
+            this.showCreateObjectForm = !this.showCreateObjectForm;
+            this.resetType();
+        },
+
+        formCheck() {
+            const fields = document.getElementById(`${this.object.type}-form-fields`).querySelectorAll('.required');
+            for (let i = 0; i < fields.length; i++) {
+                if (fields[i].dataset.name === 'status') {
+                    if (this.object.attributes.status == '') {
+                        return fields[i].dataset.name;
+                    }
+                } else if (fields[i].value == '') {
+                    return fields[i].dataset.name;
+                }
+            }
+
+            return true;
+        },
+
         /**
          * create new object
          *
@@ -212,19 +238,26 @@ export default {
                 // form element might be tempered
                 return;
             }
+            const required = this.formCheck();
+            if (required !== true) {
+                const msg = t`Missing required data "${required}". Retry`;
+                warning(msg);
+
+                return;
+            }
 
             this.saving = true;
             this.loading = true;
 
+            const type = this.object.type;
+
             // save object
             const baseUrl = window.location.origin;
-            const postUrl = `${baseUrl}/${this.object.type}/save`;
+            const postUrl = `${baseUrl}/${type}/save`;
 
-            const formData = new FormData();
-            formData.append('model-type', this.object.type);
-            for (let attr in this.object.attributes) {
-                formData.set(attr, this.object.attributes[attr]);
-            }
+            // set form data
+            const formData = new FormData(document.getElementById(`${type}-form`));
+            formData.set('status', this.object.attributes.status);
 
             if (this.file) {
                 formData.set('file', this.file);
@@ -232,6 +265,10 @@ export default {
 
             if (this.url) {
                 formData.set('url', this.url);
+            }
+
+            if (this.file || this.url) {
+                formData.append('model-type', type);
             }
 
             const options = {
@@ -253,7 +290,6 @@ export default {
                 // add newly added object to list / selected
                 this.objects = createdObjects.concat(this.objects);
                 this.selectedObjects = createdObjects.concat(this.selectedObjects);
-                this.resetForm(event);
             } catch (error) {
                 if (error.code === 20) {
                     throw error;
@@ -261,9 +297,9 @@ export default {
 
                 showError(t`Error while creating new object.`);
                 console.error(error);
-
-                this.resetForm(event);
             } finally {
+                this.resetForm(event, type);
+                this.resetType(type);
                 this.saving = false;
                 this.loading = false;
             }
@@ -317,12 +353,30 @@ export default {
          * clear form
          * @return {void}
          */
-        resetForm(event) {
+        resetForm(event, type) {
             event.preventDefault();
 
             this.file = null;
             this.url = null;
-            this.object = createData(this.relationTypes && this.relationTypes.right[0]);
+            let t = type ? type : this.relationTypes.right[0];
+            this.object = createData(this.relationTypes && t);
+            const fields = document.querySelectorAll('.fastCreateField');
+            for (let i = 0; i < fields.length; i++) {
+                fields[i].value = '';
+            }
+        },
+
+        resetType(type) {
+            if (type) {
+                this.object.type = type;
+
+                return;
+            }
+            if (this.relationTypes.right.length === 1) {
+                this.object.type = this.relationTypes.right[0];
+            } else {
+                this.object.type = '_choose';
+            }
         },
 
         /**

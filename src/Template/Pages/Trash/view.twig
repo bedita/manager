@@ -5,7 +5,7 @@
 
     <header>
         <h1>{{ object.attributes.title|default(__('New entry in') ~ ' ' ~ objectType) }}</h1>
-        <span class="has-background-module-{{ object.type }} tag has-font-weight-bold">{{ Layout.typeLabel(object.type)|capitalize }}</span>
+        <span class="has-background-module-{{ object.type }} tag has-font-weight-bold">{{ Layout.tr(object.type)|capitalize }}</span>
     </header>
 
     <div class="module-form">
@@ -15,27 +15,27 @@
         })|raw }}
 
             <div class="main-view-column">
-                {% element 'Form/core_properties' %}
-                {% element 'Form/custom_left' %}
+                {{ element('Form/core_properties') }}
+                {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {% element 'Form/calendar' %}
+                {{ element('Form/calendar') }}
 
-                {% element 'Form/categories' %}
+                {{ element('Form/categories') }}
 
-                {% element 'Form/media' %}
+                {{ element('Form/media') }}
 
-                {% element 'Form/map' %}
+                {{ element('Form/map') }}
 
-                {% element 'Form/other_properties' %}
+                {{ element('Form/other_properties') }}
             </div>
 
             <div class="side-view-column">
-                {% element 'Form/publish_properties' %}
+                {{ element('Form/publish_properties') }}
 
-                {% element 'Form/advanced_properties' %}
+                {{ element('Form/advanced_properties') }}
 
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
             </div>
 
         {{ Form.end()|raw }}

@@ -20,10 +20,10 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\ErrorController} Test Case
  *
  * @coversDefaultClass \App\Controller\ErrorController
+ * @uses \App\Controller\ErrorController
  */
 class ErrorControllerTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -45,7 +45,6 @@ class ErrorControllerTest extends TestCase
      * test `initialize` function
      *
      * @covers ::initialize()
-     *
      * @return void
      */
     public function testInitialize(): void

@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -20,7 +20,7 @@ use Cake\Utility\Hash;
 class DashboardController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -37,7 +37,7 @@ class DashboardController extends AppController
      */
     public function index(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->set('recentItems', $this->recentItems());
     }
 
@@ -48,7 +48,7 @@ class DashboardController extends AppController
      */
     public function messages(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $this->viewBuilder()->disableAutoLayout();
         $this->render('/Element/Dashboard/messages');
     }
@@ -60,7 +60,7 @@ class DashboardController extends AppController
      */
     protected function recentItems(): array
     {
-        $user = $this->Auth->user();
+        $user = $this->Authentication->getIdentity();
         if (empty($user)) {
             return [];
         }

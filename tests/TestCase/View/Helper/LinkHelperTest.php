@@ -19,6 +19,7 @@ use App\View\Helper\LinkHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\View\Helper\HtmlHelper;
 use Cake\View\View;
 
 /**
@@ -29,6 +30,25 @@ use Cake\View\View;
 class LinkHelperTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+        $this->createSampleBundle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        $this->removeSampleBundle();
+    }
+
+    /**
      * Test `baseUrl`
      *
      * @return void
@@ -38,12 +58,12 @@ class LinkHelperTest extends TestCase
     {
         $expected = 'http://localhost';
         $link = new LinkHelper(new View(null, null, null, []));
-        $link->webBaseUrl = 'http://localhost:80';
+        $link->setConfig('webBaseUrl', 'http://localhost:80');
         $actual = $link->baseUrl();
         static::assertEquals($expected, $actual);
 
         $expected = 'http://something';
-        $link->webBaseUrl = $expected;
+        $link->setConfig('webBaseUrl', $expected);
         $actual = $link->baseUrl();
         static::assertEquals($expected, $actual);
     }
@@ -79,16 +99,15 @@ class LinkHelperTest extends TestCase
      * @param string $apiUrl The api url
      * @param string $expected The url expected
      * @return void
-     *
      * @dataProvider fromAPIProvider()
      * @covers ::fromAPI()
      */
     public function testFromAPI($apiBaseUrl, $webBaseUrl, $apiUrl, $expected): void
     {
         $link = new LinkHelper(new View(null, null, null, []));
-        $link->apiBaseUrl = $apiBaseUrl;
-        $link->webBaseUrl = $webBaseUrl;
-        $result = $link->fromAPI($apiUrl);
+        $link->setConfig('apiBaseUrl', $apiBaseUrl);
+        $link->setConfig('webBaseUrl', $webBaseUrl);
+        $link->fromAPI($apiUrl);
         $this->expectOutputString($expected);
     }
 
@@ -254,7 +273,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [compact('page')]);
         $this->expectOutputString($expected);
         // call page method
@@ -297,7 +316,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [['page_size' => $pageSize]]);
         $this->expectOutputString($expected);
         // call page method
@@ -405,7 +424,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
+        $test = new AppControllerTest();
         $actual = $test->invokeMethod($link, 'replaceQueryParams', [$queryParams]);
         static::assertEquals($expected, $actual);
     }
@@ -445,7 +464,6 @@ class LinkHelperTest extends TestCase
         // load plugins from config for test
         $app = new Application(CONFIG);
         $app->bootstrap();
-        $debug = Configure::read('debug');
         $pluginsConfig = [
             'DebugKit' => ['debugOnly' => true],
         ];
@@ -457,6 +475,23 @@ class LinkHelperTest extends TestCase
         static::assertEquals('', $actual);
         $actual = $link->pluginAsset('DebugKit', 'js');
         static::assertEquals('', $actual);
+
+        // create plugin asset for test, remove folders and file afterwards
+        if (!is_dir(getcwd() . '/plugins')) {
+            mkdir(getcwd() . '/plugins');
+        }
+        mkdir(getcwd() . '/plugins/Dummy');
+        mkdir(getcwd() . '/plugins/Dummy/webroot');
+        mkdir(getcwd() . '/plugins/Dummy/webroot/js');
+        file_put_contents(getcwd() . '/plugins/Dummy/webroot/js/Dummy.plugin.js', '');
+        Configure::write('Plugins', ['Dummy' => ['debugOnly' => true]]);
+        $app->loadPluginsFromConfig();
+        $actual = $link->pluginAsset('Dummy', 'js');
+        static::assertEquals('<script src="/dummy/js/Dummy.plugin.js"></script>', $actual);
+        array_map('unlink', glob(getcwd() . '/plugins/Dummy/webroot/js/*.*'));
+        rmdir(getcwd() . '/plugins/Dummy/webroot/js');
+        rmdir(getcwd() . '/plugins/Dummy/webroot');
+        rmdir(getcwd() . '/plugins/Dummy');
     }
 
     /**
@@ -489,11 +524,6 @@ class LinkHelperTest extends TestCase
                 ['abcdefg'], // filter
                 '', // expected
             ],
-            // this test case works only locally, where there's a bundle
-            // 'existing js' => [
-            //     ['timezone'], // filter
-            //     sprintf('<script src="js/app.bundle.%s.js"></script>', $this->getBundle()), // expected
-            // ],
         ];
     }
 
@@ -513,6 +543,25 @@ class LinkHelperTest extends TestCase
         $link->jsBundle($filter);
         $actual = $this->getActualOutput();
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `jsBundle`, `cssBundle`
+     *
+     * @return void
+     * @covers ::jsBundle()
+     * @covers ::cssBundle()
+     */
+    public function testBundlesWithMockFindFiles(): void
+    {
+        $mock = $this->createPartialMock(LinkHelper::class, ['findFiles']);
+        $mock->method('findFiles')->willReturn(['app.bundle.js']);
+        $mock->Html = new HtmlHelper(new View(new ServerRequest(), null, null, []));
+        $mock->jsBundle(['timezone']);
+        $mock->method('findFiles')->willReturn(['app.css']);
+        $mock->cssBundle(['timezone']);
+        $actual = $this->getActualOutput();
+        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css"/>', $actual);
     }
 
     /**
@@ -553,6 +602,11 @@ class LinkHelperTest extends TestCase
         static::assertEquals($expected, $actual);
     }
 
+    /**
+     * Provider for testFindFiles
+     *
+     * @return array
+     */
     public function findFilesProvider(): array
     {
         return [
@@ -561,22 +615,21 @@ class LinkHelperTest extends TestCase
                 'hijlm',
                 '', // expected
             ],
-            // these test cases work only locally, where there's a bundle
-            // 'no filter' => [
-            //     [], // filter
-            //     'js',
-            //     'multi', // expected
-            // ],
-            // 'app.bundle js' => [
-            //     ['app.bundle'], // filter
-            //     'js',
-            //     sprintf('app.bundle.%s.js', $this->getBundle()), // expected
-            // ],
-            // 'app css' => [
-            //     ['app'], // filter
-            //     'css',
-            //     sprintf('app.%s.css', $this->getBundle()), // expected
-            // ],
+            'no filter' => [
+                [], // filter
+                'js',
+                'multi', // expected
+            ],
+            'app.bundle js' => [
+                ['app.bundle'], // filter
+                'js',
+                'app.bundle.abcde.js', // expected
+            ],
+            'app css' => [
+                ['app'], // filter
+                'css',
+                'app.css', // expected
+            ],
         ];
     }
 
@@ -590,9 +643,7 @@ class LinkHelperTest extends TestCase
     public function testFindFiles(array $filter, string $extension, string $expected): void
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
-        // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest(new ServerRequest());
-        $actual = $test->invokeMethod($link, 'findFiles', [$filter, $extension]);
+        $actual = $link->findFiles($filter, $extension);
         if (empty($expected)) {
             static::assertEmpty($actual);
 
@@ -656,5 +707,39 @@ class LinkHelperTest extends TestCase
         $link = new LinkHelper(new View($request, $response, $events, $data));
         $result = $link->objectNav($data);
         static::assertSame($expected, $result);
+    }
+
+    /**
+     * Create sample files
+     *
+     * @return void
+     */
+    private function createSampleBundle(): void
+    {
+        file_put_contents(getcwd() . '/webroot/css/app.css', '');
+        file_put_contents(getcwd() . '/webroot/js/app.bundle.abcde.js', '');
+        if (!is_dir(getcwd() . '/webroot/js/vendors')) {
+            mkdir(getcwd() . '/webroot/js/vendors');
+        }
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js', '');
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js', '');
+        file_put_contents(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js', '');
+    }
+
+    /**
+     * Remove sample files
+     *
+     * @return void
+     */
+    private function removeSampleBundle(): void
+    {
+        unlink(getcwd() . '/webroot/css/app.css');
+        unlink(getcwd() . '/webroot/js/app.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample1.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample2.bundle.abcde.js');
+        unlink(getcwd() . '/webroot/js/vendors/sample3.bundle.abcde.js');
+        if (scandir(getcwd() . '/webroot/js/vendors') === false) {
+            rmdir(getcwd() . '/webroot/js/vendors');
+        }
     }
 }

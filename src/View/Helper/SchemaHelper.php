@@ -73,7 +73,13 @@ class SchemaHelper extends Helper
         }
         $type = ControlType::fromSchema((array)$schema);
 
-        return Control::control((array)$schema, $type, $value);
+        return Control::control([
+            'objectType' => $objectType,
+            'property' => $name,
+            'value' => $value,
+            'schema' => (array)$schema,
+            'propertyType' => $type,
+        ]);
     }
 
     /**
@@ -165,7 +171,7 @@ class SchemaHelper extends Helper
      *   'date-time'
      *   'date'
      *
-     * @param mixed $schema The property schema
+     * @param array $schema The property schema
      * @return string
      */
     public static function typeFromSchema(array $schema): string
@@ -276,5 +282,17 @@ class SchemaHelper extends Helper
         // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
         return true;
+    }
+
+    /**
+     * Return unique right types from schema "relationsSchema".
+     *
+     * @return array
+     */
+    public function rightTypes(): array
+    {
+        $relationsSchema = (array)$this->_View->get('relationsSchema');
+
+        return \App\Utility\Schema::rightTypes($relationsSchema);
     }
 }

@@ -26,7 +26,7 @@ use Cake\View\View;
 class PropertyHelperTest extends TestCase
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -145,7 +145,6 @@ class PropertyHelperTest extends TestCase
      * @param array $schema The schema
      * @param string $expected The expected result
      * @return void
-     *
      * @dataProvider controlProvider()
      * @covers ::control()
      * @covers ::schema()
@@ -162,6 +161,42 @@ class PropertyHelperTest extends TestCase
         $view->set('objectType', 'dummies');
         $property = new PropertyHelper($view);
         $actual = $property->control($key, $value, $options);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `control` with parameter type, for "other" types schema controls
+     *
+     * @return void
+     * @covers ::control()
+     * @covers ::schema()
+     */
+    public function testControlOtherType(): void
+    {
+        $key = 'title';
+        $value = 'something';
+        $options = [];
+        $type = 'documents';
+        $schema = [];
+        $schemasByType = [
+            'documents' => [
+                'oneOf' => [
+                    ['type' => null],
+                    ['type' => 'string', 'contentMediaType' => 'text/html'],
+                ],
+                '$id' => '/properties/title',
+                'title' => 'Title',
+                'description' => null,
+            ],
+        ];
+        $expected = '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="something"/></div>';
+        $view = new View(null, null, null, []);
+        $schema = ['properties' => [$key => $schema]];
+        $view->set('schema', $schema);
+        $view->set('schemasByType', $schemasByType);
+        $view->set('objectType', 'dummies');
+        $property = new PropertyHelper($view);
+        $actual = $property->control($key, $value, $options, $type);
         static::assertEquals($expected, $actual);
     }
 
@@ -224,7 +259,6 @@ class PropertyHelperTest extends TestCase
      * @param string $property The property
      * @param string $expected The expected value
      * @return void
-     *
      * @dataProvider valueProvider()
      * @covers ::value()
      */
@@ -245,5 +279,38 @@ class PropertyHelperTest extends TestCase
     public static function dummy($value): array
     {
         return ['html' => sprintf('<dummy>%s</dummy>', $value)];
+    }
+
+    /**
+     * Test `fieldLabel`.
+     *
+     * @return void
+     * @covers ::fieldLabel()
+     */
+    public function testFieldLabel(): void
+    {
+        // no type
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->fieldLabel('dummy');
+        $expected = 'Dummy';
+        static::assertEquals($expected, $actual);
+
+        // type without config
+        $actual = $helper->fieldLabel('info', 'dummies');
+        $expected = 'Info';
+        static::assertEquals($expected, $actual);
+
+        // type with config
+        $expected = 'A B O U T';
+        Configure::write(
+            'Properties.dummies',
+            array_merge(
+                (array)\Cake\Core\Configure::read('Properties.dummies'),
+                ['labels' => ['fields' => ['about' => $expected]]]
+            )
+        );
+        $actual = $helper->fieldLabel('about', 'dummies');
+        static::assertEquals($expected, $actual);
     }
 }

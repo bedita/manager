@@ -17,6 +17,10 @@ export default {
             type: String,
             required: true,
         },
+        relationLabel: {
+            type: String,
+            required: true,
+        },
         viewVisibility: {
             type: Boolean,
             default: () => false,
@@ -203,7 +207,7 @@ export default {
          *
          * @return {String} string version of relations
          */
-        relationFormatterHelper(relations, objectType) {
+        relationFormatterHelper(relations) {
             let jsonString = '';
             try {
                 jsonString = JSON.stringify(relations);

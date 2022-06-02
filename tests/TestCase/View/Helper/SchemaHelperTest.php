@@ -27,7 +27,6 @@ use Cake\View\View;
  */
 class SchemaHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -36,7 +35,7 @@ class SchemaHelperTest extends TestCase
     public $Schema;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -67,7 +66,7 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -245,6 +244,7 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
                     'type' => 'select',
+                    'value' => 'good',
                 ],
                 // schema type
                 [
@@ -266,6 +266,7 @@ class SchemaHelperTest extends TestCase
                         ['value' => 'bad', 'text' => 'Bad'],
                     ],
                     'type' => 'select',
+                    'value' => 'good',
                 ],
                 // schema type
                 [
@@ -296,7 +297,7 @@ class SchemaHelperTest extends TestCase
                     'type' => 'boolean',
                 ],
                 'company',
-                true,
+                'true',
             ],
             'array multiple checkbox' => [
                 // expected result
@@ -365,7 +366,6 @@ class SchemaHelperTest extends TestCase
      * @param string $name The field name.
      * @param string|null $value The field value.
      * @return void
-     *
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
      */
@@ -380,10 +380,9 @@ class SchemaHelperTest extends TestCase
      * Test `lang` property
      *
      * @return void
-     *
      * @covers ::controlOptions()
      */
-    public function testLang()
+    public function testLang(): void
     {
         Configure::write('Project.config.I18n', null);
         $actual = $this->Schema->controlOptions('lang', null, []);
@@ -493,12 +492,11 @@ class SchemaHelperTest extends TestCase
      * @param array $properties The properties
      * @param array $expected Expected result
      * @return void
-     *
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
      * @covers ::translatableType()
      */
-    public function testTranslatableFields(array $properties, array $expected)
+    public function testTranslatableFields(array $properties, array $expected): void
     {
         $actual = $this->Schema->translatableFields($properties);
         static::assertSame($expected, $actual);
@@ -596,10 +594,10 @@ class SchemaHelperTest extends TestCase
     /**
      * Test `format` method
      *
-     * @param array $properties The properties
      * @param array $expected Expected result
+     * @param mixed $value The value
+     * @param array $schema The schema
      * @return void
-     *
      * @dataProvider formatProvider()
      * @covers ::format()
      * @covers ::formatByte()
@@ -608,7 +606,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::formatDateTime()
      * @covers ::typeFromSchema()
      */
-    public function testFormat($expected, $value, array $schema)
+    public function testFormat($expected, $value, array $schema): void
     {
         $actual = $this->Schema->format($value, $schema);
         static::assertSame($expected, $actual);
@@ -722,7 +720,6 @@ class SchemaHelperTest extends TestCase
      * @param array $schema The property schema
      * @param bool $expected Expected result
      * @return void
-     *
      * @dataProvider sortableProvider()
      * @covers ::sortable()
      */
@@ -735,6 +732,67 @@ class SchemaHelperTest extends TestCase
             ],
         ]);
         $actual = $this->Schema->sortable($field);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `rightTypes`
+     *
+     * @return array
+     */
+    public function rightTypesProvider(): array
+    {
+        return [
+            'empty relationsSchema' => [
+                [],
+                [],
+            ],
+            'some right types' => [
+                [
+                    'dummyRelation1' => [
+                        'left' => [
+                            'l1dummies',
+                        ],
+                        'right' => [
+                            'r1dummies',
+                            'r2dummies',
+                            'r3dummies',
+                        ],
+                    ],
+                    'dummyRelation2' => [
+                        'left' => [
+                            'l2dummies',
+                        ],
+                        'right' => [
+                            'r1dummies',
+                            'r4dummies',
+                            'r5dummies',
+                        ],
+                    ],
+                ],
+                [
+                    'r1dummies',
+                    'r2dummies',
+                    'r3dummies',
+                    'r4dummies',
+                    'r5dummies',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `rightTypes`
+     *
+     * @return void
+     * @dataProvider rightTypesProvider()
+     * @covers ::rightTypes()
+     */
+    public function testRightTypes($relationsSchema, $expected): void
+    {
+        $view = $this->Schema->getView();
+        $view->set('relationsSchema', $relationsSchema);
+        $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }
 }

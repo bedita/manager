@@ -398,6 +398,9 @@ return [
         'log' => [
             //'log_file' => LOGS . 'api.log',
         ],
+        // 'guzzleConfig' => [ // Optional custom configuration for underlying GuzzleHTTP client.
+        //     'timeout' => 3,
+        // ],
     ],
 
     /**
@@ -489,6 +492,7 @@ return [
      *
      *  - 'view' properties groups to present in object view, where groups are:
      *      + '_keep' special group of properties to keep and display even if not found in object
+     *      + '_hide' special group of properties to not display
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
@@ -504,10 +508,15 @@ return [
      *      + 'aside' relations to show on right aside column
      *      + '_element' associative array with custom view element to use for a relation, defined like
      *          '{relation_name}' => '{MyPlugin.template_path}'
+     *      + '_hidden' array of relations to hide, not viewable in view(s)
+     *      + '_readonly' array of readonly relations, to show in readonly mode in view(s)
      *
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
-     *
+     *  - 'fastCreate' fields for fast creation forms, by type
+     *  - 'labels' to customize labels of properties names and their options, it can have two keys `fields` and `options`
+     *   + 'fields' contains an associative array with property names as keys and labels as values
+     *   + 'options' contains an associative array with property names as keys and an array containing option items and the custom labels to use
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
     // 'Properties' => [
@@ -515,6 +524,9 @@ return [
         //     'view' => [
         //         '_keep' => [
         //             'some_field',
+        //         ],
+        //         '_hide' => [
+        //             'some_other_field',
         //         ],
         //         'core' => [
         //              'some_field',
@@ -546,6 +558,13 @@ return [
         //             // use custom element in `MyPlugin` for `fooed_by`
         //             'fooed_by' => 'MyPlugin.fooed_by',
         //         ],
+        //         '_hidden' => [
+        //             'download',
+        //             'downloadable_by',
+        //         ],
+        //         '_readonly' => [
+        //             'seealso',
+        //         ],
         //     ],
         //     'filter' => [
         //         'select_field',
@@ -554,6 +573,22 @@ return [
         //     'bulk' => [
         //         'status',
         //         'other_field',
+        //     ],
+        //     'fastCreate' => [
+        //         'required' => ['status', 'title'],
+        //         'all' => ['status', 'title', 'description'],
+        //     ],
+        //     'labels' => [
+        //         'fields' => [
+        //             'description' => 'summary',
+        //         ],
+        //         'options' => [
+        //             'status' => [
+        //                 'on' => 'published',
+        //                 'off' => 'archived',
+        //                 'draft' => 'in progress',
+        //             ],
+        //         ],
         //     ],
         // ],
     // ],
@@ -723,6 +758,7 @@ return [
     //             '|',
     //             'alignment',
     //             '|',
+    //             'placeholders',
     //             'specialCharacters',
     //             'link',
     //             'bulletedList',

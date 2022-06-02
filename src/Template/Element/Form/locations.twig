@@ -3,5 +3,6 @@
     api-key="{{ config('Location.google.key') }}"
     api-url="{{ config('Location.google.url') }}"
     relation-name="{{ relationName }}"
+    relation-label="{{ Layout.tr(relationName) }}"
 ></locations-view>
-{{ Form.unlockField('relations.' ~ relationName ~ '.replaceRelated')}}
+{% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}

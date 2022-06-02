@@ -3,7 +3,7 @@
 <panel-view :custom-footer="true" :custom-header="true">
     <div class="panel-slot" slot-scope="props">
         <relations-add v-if="props.action === 'relations-add'" v-bind="props.data" inline-template>
-            {% element 'Panel/relations_add' %}
+            {{ element('Panel/relations_add') }}
         </relations-add>
         <component v-else v-bind:is="props.action" v-bind="props.data"></component>
     </div>

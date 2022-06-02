@@ -12,10 +12,8 @@
  */
 namespace App\Controller;
 
-use App\Core\Exception\UploadException;
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
-use Cake\Http\Exception\InternalErrorException;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -23,6 +21,8 @@ use Psr\Log\LogLevel;
 /**
  * Modules controller: list, add, edit, remove objects
  *
+ * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
@@ -41,12 +41,14 @@ class ModulesController extends AppController
     protected $objectType = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
         parent::initialize();
 
+        $this->loadComponent('Categories');
+        $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Properties');
@@ -54,21 +56,20 @@ class ModulesController extends AppController
         $this->loadComponent('Query');
         $this->loadComponent('Thumbs');
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
-
-        if (!empty($this->request)) {
-            $this->objectType = $this->request->getParam('object_type');
+        if ($this->getRequest()->getParam('object_type')) {
+            $this->objectType = $this->getRequest()->getParam('object_type');
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-
         $this->Security->setConfig('unlockedActions', ['save']);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('objectType', $this->objectType);
 
@@ -82,7 +83,7 @@ class ModulesController extends AppController
      */
     public function index(): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         // handle filter and query parameters using session
         $result = $this->applySessionFilter();
@@ -93,10 +94,10 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             // remove session filter to avoid error repetition
-            $session = $this->request->getSession();
+            $session = $this->getRequest()->getSession();
             $session->delete(sprintf('%s.filter', $this->Modules->getConfig('currentModuleName')));
 
             return $this->redirect(['_name' => 'dashboard']);
@@ -136,14 +137,14 @@ class ModulesController extends AppController
      */
     public function view($id): ?Response
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
             $query = ['count' => 'all'];
             $response = $this->apiClient->getObject($id, $this->objectType, $query);
         } catch (BEditaClientException $e) {
             // Error! Back to index.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error(__('Error retrieving the requested content'), ['params' => $e]);
 
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
@@ -158,19 +159,40 @@ class ModulesController extends AppController
         // setup `currentAttributes` and recover failure data from session.
         $this->Modules->setupAttributes($object);
 
-        $included = (!empty($response['included'])) ? $response['included'] : [];
+        $included = !empty($response['included']) ? $response['included'] : [];
         $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
         $streams = Hash::get($typeIncluded, 'streams');
         $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
+        $computedRelations = array_reduce(
+            array_keys($object['relationships']),
+            function ($acc, $relName) use ($schema) {
+                $acc[$relName] = (array)Hash::get($schema, sprintf('relations.%s', $relName), []);
+
+                return $acc;
+            },
+            []
+        );
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
             $this->Schema->getRelationsSchema(),
-            $object['relationships'],
-            $this->Properties->relationsList($this->objectType)
+            $computedRelations,
+            $this->Properties->relationsList($this->objectType),
+            $this->Properties->hiddenRelationsList($this->objectType),
+            $this->Properties->readonlyRelationsList($this->objectType)
         );
+
+        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
+        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+
+        // set schemas for relations right types
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
+        $this->set('schemasByType', $schemasByType);
+
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
@@ -259,8 +281,9 @@ class ModulesController extends AppController
     public function save(): void
     {
         $this->viewBuilder()->setClassName('Json'); // force json response
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $requestData = $this->prepareRequest($this->objectType);
+        unset($requestData['_csrfToken']);
         // extract related objects data
         $relatedData = (array)Hash::get($requestData, '_api');
         unset($requestData['_api']);
@@ -278,7 +301,7 @@ class ModulesController extends AppController
             $this->Flash->error($error->getMessage(), ['params' => $error]);
 
             $this->set(['error' => $error->getAttributes()]);
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             // set session data to recover form
             $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
@@ -292,7 +315,7 @@ class ModulesController extends AppController
         $this->Thumbs->urls($response);
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -312,26 +335,22 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $response = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $response['data']['attributes'];
+            $source = $this->apiClient->getObject($id, $this->objectType);
+            $attributes = $source['data']['attributes'];
             $attributes['uname'] = '';
             unset($attributes['relationships']);
-            $attributes['title'] = $this->request->getQuery('title');
+            $attributes['title'] = $this->getRequest()->getQuery('title');
+            $attributes['status'] = 'draft';
+            $save = $this->apiClient->save($this->objectType, $attributes);
+            $destination = (string)Hash::get($save, 'data.id');
+            $this->Clone->relations($source, $destination);
+            $id = $destination;
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
-        $object = [
-            'type' => $this->objectType,
-            'attributes' => $attributes,
-        ];
-        $this->History->load($id, $object);
-        $this->set(compact('object', 'schema'));
-        $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
 
-        return null;
+        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
     }
 
     /**
@@ -341,23 +360,23 @@ class ModulesController extends AppController
      */
     public function delete(): ?Response
     {
-        $this->request->allowMethod(['post']);
+        $this->getRequest()->allowMethod(['post']);
         $ids = [];
-        if (!empty($this->request->getData('ids'))) {
-            if (is_string($this->request->getData('ids'))) {
-                $ids = explode(',', $this->request->getData('ids'));
+        if (!empty($this->getRequest()->getData('ids'))) {
+            if (is_string($this->getRequest()->getData('ids'))) {
+                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
             }
-        } else {
-            $ids = [$this->request->getData('id')];
+        } elseif (!empty($this->getRequest()->getData('id'))) {
+            $ids = [$this->getRequest()->getData('id')];
         }
         foreach ($ids as $id) {
             try {
                 $this->apiClient->deleteObject($id, $this->objectType);
             } catch (BEditaClientException $e) {
-                $this->log($e, LogLevel::ERROR);
+                $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
-                if (!empty($this->request->getData('id'))) {
-                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->request->getData('id')]);
+                if (!empty($this->getRequest()->getData('id'))) {
+                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
                 }
 
                 return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
@@ -382,21 +401,21 @@ class ModulesController extends AppController
     {
         if ($id === 'new') {
             $this->set('data', []);
-            $this->set('_serialize', ['data']);
+            $this->setSerialize(['data']);
 
             return;
         }
 
-        $this->request->allowMethod(['get']);
-        $query = $this->Query->prepare($this->request->getQueryParams());
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
+            $this->log($error->getMessage(), LogLevel::ERROR);
 
             $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             return;
         }
@@ -404,7 +423,7 @@ class ModulesController extends AppController
         $this->Thumbs->urls($response);
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -417,21 +436,21 @@ class ModulesController extends AppController
      */
     public function resources($id, string $type): void
     {
-        $this->request->allowMethod(['get']);
-        $query = $this->Query->prepare($this->request->getQueryParams());
+        $this->getRequest()->allowMethod(['get']);
+        $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
             $this->log($error, LogLevel::ERROR);
 
             $this->set(compact('error'));
-            $this->set('_serialize', ['error']);
+            $this->setSerialize(['error']);
 
             return;
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -444,27 +463,25 @@ class ModulesController extends AppController
      */
     public function relationships($id, string $relation): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
-            $query = $this->Query->prepare($this->request->getQueryParams());
+            $query = $this->Query->prepare($this->getRequest()->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
             $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
-            $this->log($ex, LogLevel::ERROR);
+            $this->log($ex->getMessage(), LogLevel::ERROR);
 
-            $this->set([
-                'error' => $ex->getMessage(),
-                '_serialize' => ['error'],
-            ]);
+            $this->set('error', $ex->getMessage());
+            $this->setSerialize(['error']);
 
             return;
         }
 
         $this->set((array)$response);
-        $this->set('_serialize', array_keys($response));
+        $this->setSerialize(array_keys($response));
     }
 
     /**
@@ -495,56 +512,9 @@ class ModulesController extends AppController
     }
 
     /**
-     * Bulk change actions for objects
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function bulkActions(): ?Response
-    {
-        $requestData = $this->request->getData();
-        $this->request->allowMethod(['post']);
-
-        if (!empty($requestData['ids'] && is_string($requestData['ids']))) {
-            $ids = $requestData['ids'];
-            $errors = [];
-
-            // extract valid attributes to change
-            $attributes = array_filter(
-                $requestData['attributes'],
-                function ($value) {
-                    return ($value !== null && $value !== '');
-                }
-            );
-
-            // export selected (filter by id)
-            $ids = explode(',', $ids);
-            foreach ($ids as $id) {
-                $data = array_merge($attributes, ['id' => $id]);
-                try {
-                    $this->apiClient->save($this->objectType, $data);
-                } catch (BEditaClientException $e) {
-                    $errors[] = [
-                        'id' => $id,
-                        'message' => $e->getAttributes(),
-                    ];
-                }
-            }
-
-            // if errors occured on any single save show error message
-            if (!empty($errors)) {
-                $this->log($errors, LogLevel::ERROR);
-                $this->Flash->error(__('Bulk Action failed on: '), ['params' => $errors]);
-            }
-        }
-
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->request->getQuery()]);
-    }
-
-    /**
      * get object properties and format them for index
      *
      * @param string $objectType objecte type name
-     *
      * @return array $schema
      */
     public function getSchemaForIndex($objectType): array
@@ -561,5 +531,26 @@ class ModulesController extends AppController
         }
 
         return $schema;
+    }
+
+    /**
+     * Get objectType
+     *
+     * @return string|null
+     */
+    public function getObjectType(): ?string
+    {
+        return $this->objectType;
+    }
+
+    /**
+     * Set objectType
+     *
+     * @param string|null $objectType The object type
+     * @return void
+     */
+    public function setObjectType(?string $objectType): void
+    {
+        $this->objectType = $objectType;
     }
 }

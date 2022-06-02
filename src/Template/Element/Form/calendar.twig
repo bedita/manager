@@ -2,59 +2,18 @@
 
 {% if in_array('DateRanges', schema.associations) %}
 <property-view inline-template :tab-open="tabsOpen" tab-name="calendar">
-<section class="fieldset">
-    <header @click.prevent="toggleVisibility()"
-        class="tab unselectable"
-        :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-        <h2>{{ __('Calendar') }}</h2>
-    </header>
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Calendar') }}</h2>
+        </header>
 
-    <div v-show="isOpen" class="tab-container">
-        <date-ranges-view inline-template ranges={{ object.attributes.date_ranges|json_encode }}>
-            <div>
-                <div class="date-ranges-list">
-                    <div class="date-ranges-item mb-1" v-for="(dateRange, index) in dateRanges" :key="`range-${index}`">
-                        <div>
-                            <span>{{ __('From') }}</span>
-                            <div>
-                                <input type="text" :id="`start_date_${index}`"
-                                    :name="`date_ranges[${index}][start_date]`"
-                                    v-model="dateRange.start_date"
-                                    @change="onDateChanged(dateRange, $event)"
-                                    v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <span>{{ __('To') }}</span>
-                            <div>
-                                <input type="text" :id="`end_date_${index}`"
-                                    :name="`date_ranges[${index}][end_date]`"
-                                    v-model="dateRange.end_date"
-                                    @change="onDateChanged(dateRange, $event)"
-                                    v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label :for="`all_day_${index}`" class="m-0 nowrap has-text-size-smaller">
-                                <input type="checkbox" :id="`all_day_${index}`"
-                                    :name="`date_ranges[${index}][params][all_day]`"
-                                    v-model="dateRange.params.all_day"
-                                    @change="onAllDayChanged(dateRange, $event)" />
-                                {{ __('All day') }}</label>
-                        </div>
-                        <div>
-                            <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">{{ __('Remove') }}</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button @click.prevent="add">{{ __('Add') }}</button>
-            </div>
-        </date-ranges-view>
-        {{ Form.unlockField('date_ranges')}}
-    </div>
-</section>
+        <div v-show="isOpen" class="tab-container">
+            <date-ranges-view ranges={{ object.attributes.date_ranges|json_encode }}>
+            </date-ranges-view>
+            {% do Form.unlockField('date_ranges') %}
+        </div>
+    </section>
 </property-view>
 {% endif %}

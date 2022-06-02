@@ -27,7 +27,9 @@
                     {% if object.type == 'images' %}
                         {# TODO process below #}
                         {% set thumb = Thumb.url(object.id, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
-                        {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
+                        {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
+                            <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
+                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
                             <p>{{ __('The thumbnail is not available') }}</p>
                             <p>
                                 <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
@@ -36,8 +38,6 @@
                             </p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
                             <p>{{ __('Thumbnail is not ready') }}</p>
-                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
-                            <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
                             <p>
                                 <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
@@ -60,15 +60,23 @@
                     {% set attributes = stream.attributes|merge(stream.meta) %}
                     <table>
                         <tbody>
-                            {% for akey, val in attributes %}
-                            {% if val %}
+                            {% for k, val in attributes %}
+                            {% if val and k != 'file_metadata' %}
                                 <tr>
-                                    <th class="nowrap">{{ akey }} :</th>
+                                    <th class="nowrap">{{ k|humanize }} :</th>
                                     <td>
-                                        {% if akey == 'url' %}
+                                        {% if k == 'url' %}
                                             <a href={{ val }} target="_blank">{{ val }}</a>
+                                        {% elseif in_array(k, ['created', 'modified']) %}
+                                            {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
+                                        {% elseif k == 'file_size' %}
+                                            {{ Schema.format(val, {'type': 'byte'}) }}
+                                        {% elseif k == 'duration' %}
+                                            {{ val|date('H:i:s', '+00:00 GMT') }}
+                                        {% elseif k == 'private_url' %}
+                                            {{ Schema.format(val, {'type': 'boolean'}) }}
                                         {% else %}
-                                            {% if val is iterable %}{{ val|json_encode() }}{% else %}{{ val }}{% endif %}
+                                            {{ val }}
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -76,12 +84,38 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
                 </div>
+
+                <div class="grid-span-full mt-1">
+
+                    {% if attributes.url %}
+                    <a href="{{ attributes.url }}" target="_blank"
+                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('View file') }}
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
+                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('Download file') }}
+                    </a>
+
+                </div>
+                {% if attributes.file_metadata %}
+                <div class="grid-span-full mt-1">
+                    <h3>{{ __('Metadata') }}</h3>
+                    <div>
+                        <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                    </div>
+                </div>
+                {% endif %}
 
                 <div class="grid-span-full mt-1">
                     <h3>{{ __('Change File') }}</h3>
                     <div>
                         {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
+                        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
                 </div>

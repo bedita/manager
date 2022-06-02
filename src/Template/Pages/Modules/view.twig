@@ -34,57 +34,59 @@
 
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
-                {% if object.id is empty and objectType in uploadable %}
-                    {% element 'Form/upload' %}
+                {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
+                    {{ element('Form/upload') }}
                 {% endif %}
 
-                {% element 'Form/core_properties' %}
+                {{ element('Form/core_properties') }}
 
-                {% element 'Form/custom_left' %}
+                {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {% element 'Form/calendar' %}
+                {{ element('Form/calendar') }}
 
-                {% element 'Form/categories' %}
+                {{ element('Form/categories') }}
 
-                {% element 'Form/media' %}
+                {{ element('Form/tags') }}
 
-                {% element 'Form/map' %}
+                {{ element('Form/media') }}
 
-                {% element 'Form/other_properties' %}
+                {{ element('Form/map') }}
+
+                {{ element('Form/other_properties') }}
             </div>
 
             <div class="side-view-column is-flex is-flex-column">
-                {% element 'Form/publish_properties' %}
+                {{ element('Form/publish_properties') }}
 
                 {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
-                    {% element 'Form/trees' %}
+                    {{ element('Form/trees') }}
                 {% endif %}
 
-                {% element 'Form/custom_right' %}
+                {{ element('Form/custom_right') }}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
                 {% if object.relationships.roles %}
-                    {% element 'Form/roles' %}
+                    {{ element('Form/roles') }}
                 {% endif %}
 
-                {% element 'Form/related_translations' {'resourceName': 'translations'} %}
+                {{ element('Form/related_translations', {'resourceName': 'translations'}) }}
 
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
 
-                {% element 'Form/advanced_properties' %}
+                {{ element('Form/advanced_properties') }}
 
-                {% element 'Form/resource_relations' %}
+                {{ element('Form/resource_relations') }}
 
                 {# aside relations view #}
-                {% element 'Form/relations' {'relations': objectRelations.aside} %}
+                {{ element('Form/relations', {'relations': objectRelations.aside}) }}
             </div>
 
             {# main relations view #}
-            {% element 'Form/relations' {'relations': objectRelations.main} %}
+            {{ element('Form/relations', {'relations': objectRelations.main}) }}
 
             {% if object.id %}
-                {% element 'Form/history' %}
+                {{ element('Form/history') }}
             {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}
@@ -149,14 +151,14 @@
             {% endif %}
 
             {# Append "new" button #}
-            {# {% if object.id and Perms.canCreate() %}
+            {% if object.id and Perms.canCreate() %}
                 {% do _view.append('module-buttons',
                     Html.link(__('Create new'),
                         {'_name': 'modules:create', 'object_type': objectType},
                         {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
                     )|raw
                 ) %}
-            {% endif %} #}
+            {% endif %}
 
         </div>
     </div>

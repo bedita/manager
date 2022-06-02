@@ -58,7 +58,7 @@
                     </div>
                 </section>
 
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
             </div>
 
         {{ Form.end()|raw }}
@@ -89,7 +89,7 @@
         <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.core %}
-                {% element 'Model/object_property' { 'prop': prop, 'type': 'core' }  %}
+                {{ element('Model/object_property', { 'prop': prop, 'type': 'core' }) }}
             {% else %}
                 <p>No Core properties</p>
             {% endfor %}
@@ -101,11 +101,11 @@
         <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.inherited %}
-                {% element 'Model/object_property' {
+                {{ element('Model/object_property', {
                     'prop': prop,
                     'type': 'inherited',
                     'noButtonsFor': ['id', 'status', 'uname'],
-                }  %}
+                }) }}
             {% else %}
                 <p>No inherited properties</p>
             {% endfor %}
@@ -117,14 +117,14 @@
         <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.custom %}
-                {% element 'Model/object_property' { 'prop': prop, 'type': 'custom' }  %}
+                {{ element('Model/object_property', { 'prop': prop, 'type': 'custom' }) }}
             {% else %}
                 <p>No custom properties</p>
             {% endfor %}
         </div>
     </section>
 
-    {% element 'Model/sidebar_links' %}
+    {{ element('Model/sidebar_links') }}
 
 </div>
 </modules-view>

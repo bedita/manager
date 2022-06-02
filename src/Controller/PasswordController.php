@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2020 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -12,12 +12,10 @@
  */
 namespace App\Controller;
 
-use App\Application;
 use BEdita\SDK\BEditaClientException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Routing\Router;
-use Cake\Utility\Hash;
 
 /**
  * Perform password reset and change.
@@ -31,22 +29,23 @@ class PasswordController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Auth->allow(['reset', 'change']);
+        $this->Authentication->allowUnauthenticated(['reset', 'change']);
     }
 
     /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function beforeFilter(Event $event): ?Response
+    public function beforeFilter(EventInterface $event): ?Response
     {
-        // if authenticated, redirect to dashboard
-        $tokens = $this->Auth->user('tokens');
-        if (!empty($tokens)) {
-            return $this->redirect('/dashboard');
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (empty($user->get('tokens'))) {
+            return null;
         }
 
-        return null;
+        // if authenticated, redirect to dashboard
+        return $this->redirect(['_name' => 'dashboard']);
     }
 
     /**
@@ -56,14 +55,14 @@ class PasswordController extends AppController
      */
     public function reset(): ?Response
     {
-        $this->request->allowMethod(['get', 'post']);
+        $this->getRequest()->allowMethod(['get', 'post']);
 
-        if ($this->request->is('get')) {
+        if ($this->getRequest()->is('get')) {
             return null;
         }
 
         $data = [
-            'contact' => $this->request->getData('email'),
+            'contact' => $this->getRequest()->getData('email'),
             'change_url' => Router::url(['_name' => 'password:change'], true),
         ];
         try {
@@ -90,17 +89,17 @@ class PasswordController extends AppController
      */
     public function change(): ?Response
     {
-        $this->request->allowMethod(['get', 'post']);
+        $this->getRequest()->allowMethod(['get', 'post']);
 
-        if ($this->request->is('get')) {
-            $this->set('uuid', $this->request->getQuery('uuid'));
+        if ($this->getRequest()->is('get')) {
+            $this->set('uuid', $this->getRequest()->getQuery('uuid'));
 
             return null;
         }
 
         $data = [
-            'uuid' => $this->request->getData('uuid'),
-            'password' => $this->request->getData('password'),
+            'uuid' => $this->getRequest()->getData('uuid'),
+            'password' => $this->getRequest()->getData('password'),
             'login' => true,
         ];
         try {

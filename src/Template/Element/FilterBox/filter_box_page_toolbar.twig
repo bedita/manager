@@ -1,13 +1,13 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 
 <nav class="pagination has-text-size-smallest">
-    <div class="count-items " v-if="pagination.count">
-        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: label() :></span>
+    <div class="count-items" v-if="pagination.count">
+        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: label :></span>
     </div>
 
     <div class="page-size" v-show="pagination.count > paginateSizes[0]">
         <span>{{ __('Size') }}</span>
-        <select class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
+        <select form="_pagination" class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
             <option v-for="size in paginateSizes"><: size :></option>
         </select>
     </div>
@@ -16,7 +16,7 @@
         <div v-if="isFullPaginationLayout">
             <button
                 v-for="i in pagination.page_count" :key="i"
-                v-bind:class="pagination.page == i? 'current-page' : 'button-outlined button-outlined-hover-module-{{currentModule.name }}'"
+                :class="pagination.page == i ? 'current-page' : 'button-outlined button-outlined-hover-module-{{currentModule.name }}'"
                 class="button is-width-auto has-text-size-smallest" @click.prevent="onChangePage(i)"><: i :>
             </button>
         </div>

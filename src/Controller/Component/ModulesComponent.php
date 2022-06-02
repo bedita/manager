@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -10,7 +10,6 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
@@ -28,12 +27,12 @@ use Psr\Log\LogLevel;
 /**
  * Component to load available modules.
  *
- * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
 {
-    protected const FIXED_RELATIONSHIPS = [
+    public const FIXED_RELATIONSHIPS = [
         'parent',
         'children',
         'parents',
@@ -43,12 +42,12 @@ class ModulesComponent extends Component
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public $components = ['Auth', 'Schema'];
+    public $components = ['Authentication', 'Schema'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'currentModuleName' => null,
@@ -69,14 +68,16 @@ class ModulesComponent extends Component
      */
     public function startup(): void
     {
-        if (empty($this->Auth->user('id'))) {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || !$user->get('id')) {
             $this->getController()->set(['modules' => [], 'project' => []]);
 
             return;
         }
 
         if ($this->getConfig('clearHomeCache')) {
-            Cache::delete(sprintf('home_%d', $this->Auth->user('id')));
+            Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
         $modules = $this->getModules();
@@ -102,8 +103,10 @@ class ModulesComponent extends Component
     protected function getMeta(): array
     {
         try {
+            /** @var \Authentication\Identity|null $user */
+            $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
-                sprintf('home_%d', $this->Auth->user('id')),
+                sprintf('home_%d', $user->get('id')),
                 function () {
                     return ApiClientProvider::getApiClient()->get('/home');
                 }
@@ -111,7 +114,7 @@ class ModulesComponent extends Component
         } catch (BEditaClientException $e) {
             // Something bad happened. Returning an empty array instead.
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
 
             return [];
         }
@@ -163,8 +166,13 @@ class ModulesComponent extends Component
         if (empty($accessControl)) {
             return;
         }
-        $user = $this->getController()->Auth->user();
-        $roles = (array)Hash::get($user, 'roles');
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (empty($user) || empty($user->getOriginalData())) {
+            return;
+        }
+
+        $roles = (array)$user->get('roles');
         $hidden = [];
         $readonly = [];
         foreach ($roles as $role) {
@@ -299,10 +307,13 @@ class ModulesComponent extends Component
             // has another stream? drop it
             $this->removeStream($requestData);
 
+            /** @var \Laminas\Diactoros\UploadedFile $file */
+            $file = $requestData['file'];
+
             // upload file
-            $filename = $requestData['file']['name'];
-            $filepath = $requestData['file']['tmp_name'];
-            $headers = ['Content-Type' => $requestData['file']['type']];
+            $filename = basename($file->getClientFileName());
+            $filepath = $file->getStream()->getMetadata('uri');
+            $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
             $response = $apiClient->upload($filename, $filepath, $headers);
 
@@ -317,21 +328,23 @@ class ModulesComponent extends Component
      * Remove a stream from a media, if any
      *
      * @param array $requestData The request data from form
-     * @return void
+     * @return bool
      */
-    public function removeStream(array $requestData): void
+    public function removeStream(array $requestData): bool
     {
         if (empty($requestData['id'])) {
-            return;
+            return false;
         }
 
         $apiClient = ApiClientProvider::getApiClient();
         $response = $apiClient->get(sprintf('/%s/%s/streams', $requestData['model-type'], $requestData['id']));
         if (empty($response['data'])) { // no streams for media
-            return;
+            return false;
         }
         $streamId = Hash::get($response, 'data.0.id');
         $apiClient->deleteObject($streamId, 'streams');
+
+        return true;
     }
 
     /**
@@ -375,28 +388,34 @@ class ModulesComponent extends Component
     /**
      * Check request data for upload and return true if upload is boht possible and needed
      *
-     *
      * @param array $requestData The request data
      * @return bool true if upload is possible and needed
      */
     public function checkRequestForUpload(array $requestData): bool
     {
+        /** @var \Laminas\Diactoros\UploadedFile $file */
+        $file = $requestData['file'];
+        $error = $file->getError();
         // check if change file is empty
-        if ($requestData['file']['error'] === UPLOAD_ERR_NO_FILE) {
+        if ($error === UPLOAD_ERR_NO_FILE) {
             return false;
         }
 
         // if upload error, throw exception
-        if ($requestData['file']['error'] !== UPLOAD_ERR_OK) {
-            throw new UploadException(null, $requestData['file']['error']);
+        if ($error !== UPLOAD_ERR_OK) {
+            throw new UploadException(null, $error);
         }
 
         // verify presence and value of 'name', 'tmp_name', 'type'
-        foreach (['name', 'tmp_name', 'type'] as $field) {
-            if (empty($requestData['file'][$field]) || !is_string($requestData['file'][$field])) {
-                throw new InternalErrorException(sprintf('Invalid form data: file.%s', $field));
-            }
+        $name = $file->getClientFileName();
+        if (empty($name)) {
+            throw new InternalErrorException('Invalid form data: file.name');
         }
+        $uri = $file->getStream()->getMetadata('uri');
+        if (empty($uri)) {
+            throw new InternalErrorException('Invalid form data: file.tmp_name');
+        }
+
         // verify 'model-type'
         if (empty($requestData['model-type']) || !is_string($requestData['model-type'])) {
             throw new InternalErrorException('Invalid form data: model-type');
@@ -418,7 +437,7 @@ class ModulesComponent extends Component
             return;
         }
         $key = sprintf('failedSave.%s.%s', $type, $data['id']);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         unset($data['id']); // remove 'id', avoid future merged with attributes
         $session->write($key, $data);
         $session->write(sprintf('%s__timestamp', $key), time());
@@ -450,7 +469,7 @@ class ModulesComponent extends Component
     protected function updateFromFailedSave(array &$object): void
     {
         // check session data for object id => use `failedSave.{type}.{id}` as key
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $key = sprintf(
             'failedSave.%s.%s',
             Hash::get($object, 'type'),
@@ -466,7 +485,7 @@ class ModulesComponent extends Component
         $timestamp = $session->read($timestampKey);
 
         // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if ($timestamp > strtotime("-5 minutes")) {
+        if ($timestamp > strtotime('-5 minutes')) {
             //  => merge with $object['attributes']
             $object['attributes'] = array_merge($object['attributes'], (array)$data);
         }
@@ -481,15 +500,17 @@ class ModulesComponent extends Component
      *
      * @param array $schema Relations schema.
      * @param array $relationships Object relationships.
-     * @param array $order order Ordered names inside 'main' and 'aside' keys.
+     * @param array $order Ordered names inside 'main' and 'aside' keys.
+     * @param array $hidden List of hidden relations.
+     * @param array $readonly List of readonly relations.
      * @return void
      */
-    public function setupRelationsMeta(array $schema, array $relationships, array $order = []): void
+    public function setupRelationsMeta(array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
         // relations between objects
-        $relationsSchema = $this->relationsSchema($schema, $relationships);
+        $relationsSchema = $this->relationsSchema($schema, $relationships, $hidden, $readonly);
         // relations between objects and resources
-        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), self::FIXED_RELATIONSHIPS);
+        $resourceRelations = array_diff(array_keys($relationships), array_keys($relationsSchema), $hidden, self::FIXED_RELATIONSHIPS);
         // set objectRelations array with name as key and label as value
         $relationNames = array_keys($relationsSchema);
 
@@ -512,16 +533,22 @@ class ModulesComponent extends Component
      *
      * @param array $schema The schema
      * @param array $relationships The relationships
+     * @param array $hidden Hidden relationships
+     * @param array $readonly Readonly relationships
      * @return array
      */
-    protected function relationsSchema(array $schema, array $relationships): array
+    protected function relationsSchema(array $schema, array $relationships, array $hidden = [], array $readonly = []): array
     {
         $types = $this->objectTypes(false);
         sort($types);
-        $relationsSchema = array_intersect_key($schema, $relationships);
-        foreach ($relationsSchema as &$relSchema) {
+        $relationsSchema = array_diff_key(array_intersect_key($schema, $relationships), array_flip($hidden));
+
+        foreach ($relationsSchema as $relName => &$relSchema) {
             if (in_array('objects', (array)Hash::get($relSchema, 'right'))) {
                 $relSchema['right'] = $types;
+            }
+            if (!empty($relationships[$relName]['readonly']) || in_array($relName, $readonly)) {
+                $relSchema['readonly'] = true;
             }
         }
 
@@ -664,7 +691,9 @@ class ModulesComponent extends Component
         }
         // children, not folders
         if (!empty($children)) {
-            ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', $children);
+            foreach ($children as $child) {
+                ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', [$child]);
+            }
         }
     }
 
@@ -675,7 +704,7 @@ class ModulesComponent extends Component
      * @param array $relatedIds Related objects as id/type pairs.
      * @return void
      */
-    protected function folderChildrenRelated(string $id, array $relatedIds)
+    protected function folderChildrenRelated(string $id, array $relatedIds): void
     {
         $notFolders = [];
         $apiClient = ApiClientProvider::getApiClient();
@@ -695,7 +724,9 @@ class ModulesComponent extends Component
         }
 
         if (!empty($notFolders)) {
-            $apiClient->addRelated($id, 'folders', 'children', $notFolders);
+            foreach ($notFolders as $notFolder) {
+                $apiClient->addRelated($id, 'folders', 'children', [$notFolder]);
+            }
         }
     }
 }

@@ -160,7 +160,6 @@ class ControlTypeTest extends TestCase
      * @param string $expected Expected result.
      * @param array|bool $schema Schema.
      * @return void
-     *
      * @dataProvider fromSchemaProvider()
      * @covers ::fromSchema()
      * @covers ::fromString()

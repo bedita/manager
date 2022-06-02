@@ -13,12 +13,18 @@
 namespace App\Test\TestCase;
 
 use App\Application;
+use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use Authentication\AuthenticationService;
+use Authentication\Authenticator\AuthenticatorInterface;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\Resolver\ResolverInterface;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Cake\Http\MiddlewareQueue;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
@@ -34,11 +40,10 @@ class ApplicationTest extends TestCase
      * Test `middleware` method
      *
      * @return void
-     *
-     * @covers ::middleware
-     * @covers ::csrfMiddleware
-     * @covers ::bootstrap
-     * @covers ::bootstrapcli
+     * @covers ::middleware()
+     * @covers ::csrfMiddleware()
+     * @covers ::bootstrap()
+     * @covers ::bootstrapCli()
      */
     public function testMiddleware(): void
     {
@@ -47,23 +52,47 @@ class ApplicationTest extends TestCase
 
         $middleware = new MiddlewareQueue();
         $middleware = $app->middleware($middleware);
+        $middleware->rewind();
 
-        static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
-        static::assertInstanceOf(ProjectMiddleware::class, $middleware->get(1));
-        static::assertInstanceOf(AssetMiddleware::class, $middleware->get(2));
-        static::assertInstanceOf(I18nMiddleware::class, $middleware->get(3));
-        static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(4));
-        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->get(5));
+        static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(ProjectMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(AssetMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(I18nMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(RoutingMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
+    }
+
+    /**
+     * Test `bootstrap` method
+     *
+     * @return void
+     * @covers ::bootstrap()
+     * @covers ::bootstrapCli()
+     */
+    public function testBootstrap(): void
+    {
+        $app = new Application(CONFIG);
+        $app->bootstrap();
+
+        static::assertTrue($app->getPlugins()->has('Bake'));
+        static::assertTrue($app->getPlugins()->has('IdeHelper'));
+        static::assertTrue($app->getPlugins()->has('BEdita/WebTools'));
+        static::assertTrue($app->getPlugins()->has('BEdita/I18n'));
+        static::assertTrue($app->getPlugins()->has('Authentication'));
     }
 
     /**
      * Test `loadPluginsFromConfig` method
      *
      * @return void
-     *
      * @covers ::loadPluginsFromConfig()
      */
-    public function testLoadPlugins()
+    public function testLoadPlugins(): void
     {
         $app = new Application(CONFIG);
         $app->bootstrap();
@@ -93,11 +122,13 @@ class ApplicationTest extends TestCase
      * Test `loadProjectConfig` method
      *
      * @return void
-     *
      * @covers ::loadProjectConfig()
      */
-    public function testLoadProjectConfig()
+    public function testLoadProjectConfig(): void
     {
+        Application::loadProjectConfig(null, '');
+        static::assertEmpty(Configure::read('Project'));
+
         $projectsPath = TESTS . 'files' . DS . 'projects' . DS;
         Configure::write('Project.name', null);
         Application::loadProjectConfig('none', $projectsPath);
@@ -105,5 +136,25 @@ class ApplicationTest extends TestCase
 
         Application::loadProjectConfig('test', $projectsPath);
         static::assertEquals('Test', Configure::read('Project.name'));
+    }
+
+    /**
+     * Test `getAuthenticationService` method.
+     *
+     * @return void
+     * @covers ::getAuthenticationService()
+     */
+    public function testGetAuthenticationService(): void
+    {
+        $app = new Application(CONFIG);
+        /** @var \Authentication\AuthenticationService $authService */
+        $authService = $app->getAuthenticationService(new ServerRequest());
+        /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
+        $identifier = $authService->identifiers()->get(ApiIdentifier::class);
+        static::assertInstanceOf(AuthenticationService::class, $authService);
+        static::assertInstanceOf(IdentifierInterface::class, $identifier);
+        static::assertInstanceOf(ResolverInterface::class, $identifier->getResolver());
+        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Session'));
+        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Form'));
     }
 }

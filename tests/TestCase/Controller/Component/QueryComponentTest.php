@@ -21,24 +21,22 @@ class QueryComponentTest extends TestCase
     public $Query;
 
     /**
-     * setUp method
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Query = $registry->load(QueryComponent::class);
+        /** @var \App\Controller\Component\QueryComponent $queryComponent */
+        $queryComponent = $registry->load(QueryComponent::class);
+        $this->Query = $queryComponent;
     }
 
     /**
-     * tearDown method
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Query);
 
@@ -96,20 +94,21 @@ class QueryComponentTest extends TestCase
             )
         );
         $registry = $controller->components();
-        $this->Query = $registry->load(QueryComponent::class);
+        /** @var \App\Controller\Component\QueryComponent $Query */
+        $Query = $registry->load(QueryComponent::class);
         foreach ($config as $key => $val) {
-            $this->Query->setConfig($key, $val);
+            $Query->setConfig($key, $val);
         }
-        $actual = $this->Query->index();
+        $actual = $Query->index();
         static::assertEquals($expected, $actual);
     }
 
     /**
      * Data provider for `testPrepare`
      *
-     * @return void
+     * @return array
      */
-    public function prepareProvider()
+    public function prepareProvider(): array
     {
         return [
             'simple' => [
@@ -155,7 +154,6 @@ class QueryComponentTest extends TestCase
      * Test `prepare` method.
      *
      * @return void
-     *
      * @dataProvider prepareProvider
      * @covers ::prepare()
      */

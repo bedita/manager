@@ -3,11 +3,11 @@
 
 <div class="module-header">
     <header>
-        <h1>{{ resourceType|humanize }}</h1>
+        <h1>{{ __(resourceType|humanize) }}</h1>
     </header>
 </div>
 
-{% element 'Modules/index_header' { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView} %}
+{{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView}) }}
 
 <div class="module-index">
     <div class="list-objects">
@@ -81,6 +81,6 @@
     </div>
     {# end list-objects #}
 
-    {% element 'Model/sidebar_links' %}
+    {{ element('Model/sidebar_links') }}
 
 </div> {# end module-index #}

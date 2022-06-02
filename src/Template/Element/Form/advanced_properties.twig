@@ -10,7 +10,7 @@
 
         <div v-show="isOpen" class="tab-container">
 
-            {% element 'Form/group_properties' {'properties' : properties.advanced, 'group': 'advanced'} %}
+            {{ element('Form/group_properties', {'properties' : properties.advanced, 'group': 'advanced'}) }}
 
         </div>
 

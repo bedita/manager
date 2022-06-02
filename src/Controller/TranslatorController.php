@@ -20,7 +20,7 @@ namespace App\Controller;
 class TranslatorController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -37,14 +37,14 @@ class TranslatorController extends AppController
     public function translate(): void
     {
         $this->viewBuilder()->setClassName('Json');
-        $this->request->allowMethod(['post']);
-        $text = $this->request->getData('text', '');
-        $texts = (is_array($text)) ? $text : [$text];
+        $this->getRequest()->allowMethod(['post']);
+        $text = $this->getRequest()->getData('text', '');
+        $texts = is_array($text) ? $text : [$text];
         try {
             $json = $this->Translator->translate(
                 $texts,
-                (string)$this->request->getData('from'),
-                (string)$this->request->getData('to')
+                (string)$this->getRequest()->getData('from'),
+                (string)$this->getRequest()->getData('to')
             );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);
@@ -52,6 +52,6 @@ class TranslatorController extends AppController
             $error = $e->getMessage();
             $this->set(compact('error'));
         }
-        $this->set('_serialize', ['translation', 'error']);
+        $this->setSerialize(['translation', 'error']);
     }
 }

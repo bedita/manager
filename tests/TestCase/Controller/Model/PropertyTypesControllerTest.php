@@ -24,6 +24,7 @@ use Cake\Utility\Hash;
  * {@see \App\Controller\Model\PropertyTypesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\PropertyTypesController
+ * @uses \App\Controller\Model\PropertyTypesController
  */
 class PropertyTypesControllerTest extends TestCase
 {
@@ -33,6 +34,13 @@ class PropertyTypesControllerTest extends TestCase
      * @var \App\Controller\Model\PropertyTypesController
      */
     public $ModelController;
+
+    /**
+     * Client API
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    public $client;
 
     /**
      * Test request config
@@ -171,9 +179,8 @@ class PropertyTypesControllerTest extends TestCase
      * Test `save` method
      *
      * @param array|\Exception $expectedResponse expected results from test
-     * @param boolean|null $data setup data for test
+     * @param bool|null $data setup data for test
      * @param string $action tested action
-     *
      * @dataProvider saveProvider()
      * @covers ::save()
      * @covers ::addPropertyTypes()
@@ -181,7 +188,7 @@ class PropertyTypesControllerTest extends TestCase
      * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSave($expectedResponse, $data, $action)
+    public function testSave($expectedResponse, $data, $action): void
     {
         $config = [
             'environment' => [
@@ -191,7 +198,7 @@ class PropertyTypesControllerTest extends TestCase
         ];
 
         $this->setupController($config);
-        $this->ModelController->resourceType = 'property_types';
+        $this->ModelController->setResourceType('property_types');
 
         if ($expectedResponse instanceof \Exception) {
             $this->expectException(get_class($expectedResponse));
@@ -201,7 +208,7 @@ class PropertyTypesControllerTest extends TestCase
 
         $this->ModelController->save();
 
-        $actualResponse = (array)Hash::get($this->ModelController->viewVars, $action);
+        $actualResponse = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), $action);
 
         if ($action == 'saved') {
             foreach ($actualResponse as &$element) {
@@ -211,11 +218,27 @@ class PropertyTypesControllerTest extends TestCase
         if (is_array($expectedResponse)) {
             $actualResponse = Hash::remove($actualResponse, '{n}.meta');
             if (!empty($expectedResponse['error'])) {
-                $actualResponse = Hash::get($this->ModelController->viewVars, 'error');
+                $actualResponse = Hash::get($this->ModelController->viewBuilder()->getVars(), 'error');
                 $expectedResponse = $expectedResponse['error'];
             }
         }
 
         static::assertEquals($expectedResponse, $actualResponse);
+    }
+
+    /**
+     * Test `getResourceType` and `setResourceType`.
+     *
+     * @return void
+     * @covers ::getResourceType()
+     * @covers ::setResourceType()
+     */
+    public function testGetSetResourceType(): void
+    {
+        $this->setupController();
+        $expected = 'dummies';
+        $this->ModelController->setResourceType($expected);
+        $actual = $this->ModelController->getResourceType();
+        static::assertSame($expected, $actual);
     }
 }

@@ -27,7 +27,7 @@
     .dialog {
         position: fixed;
         width: 600px;
-        z-index: 2;
+        z-index: 1002;
         min-height: 200px;
         top: 0;
         left: calc(50vw - 300px);
@@ -85,7 +85,7 @@
             }
         }
 
-        input {
+        input[type=text] {
             width: 100%;
             border: 1px solid $gray-600;
         }

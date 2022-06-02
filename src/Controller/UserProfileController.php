@@ -13,8 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -27,7 +26,7 @@ use Psr\Log\LogLevel;
 class UserProfileController extends AppController
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {
@@ -41,7 +40,7 @@ class UserProfileController extends AppController
      *
      * @codeCoverageIgnore
      */
-    public function beforeRender(Event $event): ?Response
+    public function beforeRender(EventInterface $event): ?Response
     {
         $this->set('moduleLink', ['_name' => 'user_profile:view']);
 
@@ -55,12 +54,12 @@ class UserProfileController extends AppController
      */
     public function view(): void
     {
-        $this->request->allowMethod(['get']);
+        $this->getRequest()->allowMethod(['get']);
 
         try {
             $response = $this->apiClient->get('/auth/user');
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
             $response = [];
         }
@@ -75,15 +74,17 @@ class UserProfileController extends AppController
 
     /**
      * Save user profile data
+     *
+     * @return void
      */
     public function save(): void
     {
-        $data = $this->request->getData();
+        $data = $this->getRequest()->getData();
         try {
             $this->apiClient->patch('/auth/user', json_encode($data));
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
-            $this->log($e, LogLevel::ERROR);
+            $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 

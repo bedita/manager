@@ -23,15 +23,32 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\ObjectTypesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\ObjectTypesController
+ * @uses \App\Controller\Model\ObjectTypesController
  */
 class ObjectTypesControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test subject
      *
-     * @var \App\Controller\ModelController
+     * @var \App\Controller\Model\ObjectTypesController
      */
     public $ModelController;
+
+    /**
+     * Client API
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    public $client;
 
     /**
      * Test request config
@@ -88,9 +105,9 @@ class ObjectTypesControllerTest extends TestCase
         $this->ModelController->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewVars[$var]);
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }
-        $objectTypeProperties = $this->ModelController->viewVars['objectTypeProperties'];
+        $objectTypeProperties = $this->ModelController->viewBuilder()->getVar('objectTypeProperties');
         static::assertNotEmpty($objectTypeProperties);
         static::assertArrayHasKey('inherited', $objectTypeProperties);
         static::assertArrayHasKey('core', $objectTypeProperties);
@@ -101,7 +118,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `view` failure method
      *
      * @covers ::view()
-     *
      * @return void
      */
     public function testViewFail(): void

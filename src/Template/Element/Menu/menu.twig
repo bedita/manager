@@ -3,31 +3,31 @@
 
         <nav role="menu">
             {# Core modules #}
-            {% for name, module in modules if name != 'trash' %}
-                {% set label = module.label|default(name)|humanize %}
-                {% set shortLabel = module.shortLabel|default(label[0:5]) %}
-                {% if label|length > 5 %}
-                    {% set label = shortLabel %}
-                {% endif %}
+            {% for name, module in modules %}
+                {% if name != 'trash' %}
+                    {% set label = Layout.tr(module.label|default(name)) %}
+                    {% set shortLabel = module.shortLabel|default(label[0:5]) %}
+                    {% if label|length > 5 %}
+                        {% set label = shortLabel %}
+                    {% endif %}
 
-                {% if module.route %}
-                    {% set url = Url.build(module.route) %}
-                {% else %}
-                    {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                    {% if module.route %}
+                        {% set url = Url.build(module.route) %}
+                    {% else %}
+                        {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
+                    {% endif %}
+                    <a href="{{ url }}" title="{{ __('Open module') }} {{ Layout.tr(name) }}"
+                        class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
+                        <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
+                        <span class="menu-item-label">{{ label }}</span>
+                        <span class="menu-item-short-label">{{ shortLabel }}</span>
+                    </a>
                 {% endif %}
-                <a href="{{ url }}" title="{{ __('Open module') }} {{ __(name|humanize) }}"
-                    class="menu-item {{ name == currentModule.name ? 'current' : '' }}">
-                    <span class="menu-item-color-bar has-background-module-{{ name }}" aria-hidden="true"></span>
-                    <span class="menu-item-label">{{ Layout.typeLabel(label) }}</span>
-                    <span class="menu-item-short-label">{{ Layout.typeLabel(shortLabel) }}</span>
-                </a>
             {% endfor %}
         </nav>
 
         <nav role="group" class="pt-05">
-            <a class="button icon icon-trash icon-only-icon has-text-module-{{ currentModule.name }}"
-                title="{{ currentModule.name|humanize ~ __(' in Trashcan') }}"
-                href="{{ Url.build('trash?filter[type][0]=' ~ currentModule.name) }}"><span class="is-sr-only">{{ __('Trash') }}</span></a>
+            {{ Layout.trashLink(currentModule.name|default(''))|raw }}
 
             <button role="search" class="icon icon-search icon-only-icon ml-05" title="{{ __('Search') }}"
                 v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>

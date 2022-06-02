@@ -3,7 +3,6 @@ return [
     /**
      * Default properties schema for internal resources.
      * Schema properties are described using JSON Schema.
-     *
      */
     'SchemaProperties' => [
 
@@ -224,5 +223,227 @@ return [
                 'enum' => [],
             ],
         ],
+
+        // model/tags
+        'tags' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Tag name',
+            ],
+            'label' => [
+                'type' => 'string',
+                '$id' => '/properties/label',
+                'title' => 'Label',
+                'description' => 'Tag label',
+            ],
+            'enabled' => [
+                'type' => 'boolean',
+                '$id' => '/properties/enabled',
+                'title' => 'Enabled',
+                'description' => '',
+                'default' => true,
+            ],
+        ],
+
+        // admin/applications
+        'applications' => [
+            'id' => [
+                'type' => 'integer',
+                '$id' => '/properties/id',
+                'title' => 'Id',
+                'description' => '',
+                'readOnly' => true,
+            ],
+            'api_key' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Api Key',
+                'description' => 'Application api key',
+            ],
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Application name',
+            ],
+            'description' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html',
+                    ],
+                ],
+                '$id' => '/properties/description',
+                'title' => 'Description',
+                'description' => 'Application description',
+            ],
+            'enabled' => [
+                'type' => 'boolean',
+                '$id' => '/properties/enabled',
+                'title' => 'Enabled',
+                'description' => '',
+                'default' => true,
+            ],
+        ],
+
+        // admin/async_jobs
+        'async_jobs' => [
+            'service' => [
+                'type' => 'string',
+                '$id' => '/properties/service',
+                'title' => 'Service',
+                'description' => 'Async job service',
+            ],
+            'scheduled_from' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                ],
+                '$id' => '/properties/scheduled_from',
+                'title' => 'Scheduled from',
+                'description' => 'Schedulation start date',
+            ],
+            'expires' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                ],
+                '$id' => '/properties/expires',
+                'title' => 'Expires',
+                'description' => 'Expiration date',
+            ],
+            'max_attempts' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'number',
+                        'format' => 'integer',
+                    ],
+                ],
+                '$id' => '/properties/max_attempts',
+                'title' => 'Max attempts',
+                'description' => 'Maximum number of attempts',
+            ],
+            'locked_until' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                ],
+                '$id' => '/properties/locked_until',
+                'title' => 'Locked until',
+                'description' => 'Lock end date',
+            ],
+        ],
+
+        // admin/config
+        'config' => [
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Config name',
+            ],
+            'context' => [
+                'type' => 'string',
+                '$id' => '/properties/context',
+                'title' => 'Context',
+                'description' => 'Config context',
+            ],
+            'content' => [
+                'type' => 'string',
+                '$id' => '/properties/content',
+                'title' => 'Content',
+                'description' => 'Config content',
+            ],
+            'application_id' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'number',
+                        'format' => 'integer',
+                    ],
+                ],
+                '$id' => '/properties/application_id',
+                'title' => 'Application id',
+                'description' => 'config application id',
+            ],
+        ],
+
+        // admin/endpoints
+        'endpoints' => [
+            'name' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Name',
+                'description' => 'Endpoint name',
+            ],
+            'description' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'string',
+                        'contentMediaType' => 'text/html',
+                    ],
+                ],
+                '$id' => '/properties/description',
+                'title' => 'Description',
+                'description' => 'Endpoint description',
+            ],
+            'enabled' => [
+                'type' => 'boolean',
+                '$id' => '/properties/enabled',
+                'title' => 'Enabled',
+                'description' => 'Endpoint enabled',
+                'default' => true,
+            ],
+            'object_type_id' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'number',
+                        'format' => 'integer',
+                    ],
+                ],
+                '$id' => '/properties/object_type_id',
+                'title' => 'Object type id',
+                'description' => 'Endpoint object type id',
+            ],
+        ],
+
     ],
 ];

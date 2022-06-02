@@ -15,21 +15,6 @@ namespace App\Test\TestCase;
 use App\Utility\OEmbed;
 use Cake\TestSuite\TestCase;
 
-class MyOEmbed extends OEmbed
-{
-    /**
-     * Mock JSON response
-     *
-     * @var array
-     */
-    public $json = [];
-
-    protected function fetchJson(string $oembedUrl): array
-    {
-        return $this->json;
-    }
-}
-
 /**
  * App\Utility\OEmbed Test Case
  *
@@ -37,7 +22,12 @@ class MyOEmbed extends OEmbed
  */
 class OEmbedTest extends TestCase
 {
-    public function readMetadataProvider()
+    /**
+     * Data provider for `testReadMetadata`
+     *
+     * @return array
+     */
+    public function readMetadataProvider(): array
     {
         return [
             'not found' => [
@@ -84,14 +74,20 @@ class OEmbedTest extends TestCase
      * Test `readMetadata` method
      *
      * @return void
-     *
      * @covers ::readMetadata()
      * @covers ::findProvider()
      * @dataProvider readMetadataProvider
      */
-    public function testReadMetadata(array $expected, string $url, array $oembedResponse)
+    public function testReadMetadata(array $expected, string $url, array $oembedResponse): void
     {
-        $oembed = new MyOEmbed();
+        $oembed = new class () extends OEmbed
+        {
+            public $json = [];
+            protected function fetchJson(string $oembedUrl): array
+            {
+                return $this->json;
+            }
+        };
         $oembed->json = $oembedResponse;
         $result = $oembed->readMetadata($url);
         static::assertEquals($expected, $result);

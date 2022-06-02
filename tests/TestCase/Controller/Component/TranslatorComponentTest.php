@@ -34,7 +34,7 @@ class TranslatorComponentTest extends TestCase
     public $Translator;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -48,18 +48,19 @@ class TranslatorComponentTest extends TestCase
      *
      * @return void
      */
-    protected function createComponent()
+    protected function createComponent(): void
     {
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Translator = $registry->load(TranslatorComponent::class);
+        /** @var \App\Controller\Component\TranslatorComponent $translatorComponent */
+        $translatorComponent = $registry->load(TranslatorComponent::class);
+        $this->Translator = $translatorComponent;
     }
 
     /**
      * Test `translate()` method.
      *
      * @return void
-     *
      * @covers ::translate()
      * @covers ::initialize()
      */
@@ -74,7 +75,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     *
      * @covers ::translate()
      * @covers ::initialize()
      */

@@ -1,7 +1,7 @@
 <?php
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -13,10 +13,8 @@
 namespace App\Controller;
 
 use App\Application;
-use BEdita\SDK\BEditaClientException;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
-use Psr\Log\LogLevel;
 
 /**
  * Perform basic login and logout operations.
@@ -26,12 +24,21 @@ class LoginController extends AppController
     use InstanceConfigTrait;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         // Projects configuration files base path
         'projectsPath' => CONFIG . 'projects' . DS,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
 
     /**
      * Display login page or perform login via API.
@@ -41,11 +48,11 @@ class LoginController extends AppController
     public function login(): ?Response
     {
         // Add `head` to avoid errors on http `HEAD /` calls since they are redirected to `HEAD /login`
-        $this->request->allowMethod(['get', 'head', 'post']);
+        $this->getRequest()->allowMethod(['get', 'head', 'post']);
 
-        if (!$this->request->is('post')) {
+        if (!$this->getRequest()->is('post')) {
             // Handle flash messages
-            $this->handleFlashMessages($this->request->getQueryParams());
+            $this->handleFlashMessages($this->getRequest()->getQueryParams());
             // Load available projects info
             $this->loadAvailableProjects();
 
@@ -66,27 +73,18 @@ class LoginController extends AppController
         $reason = __('Invalid username or password');
         // Load project config if `multi project` setup
         Application::loadProjectConfig(
-            (string)$this->request->getData('project'),
+            (string)$this->getRequest()->getData('project'),
             (string)$this->getConfig('projectsPath')
         );
-        try {
-            $user = $this->Auth->identify();
-        } catch (BEditaClientException $e) {
-            $this->log('Login failed - ' . $e->getMessage(), LogLevel::INFO);
-            $attributes = $e->getAttributes();
-            if (!empty($attributes['reason'])) {
-                $reason = $attributes['reason'];
-            }
-        }
-        if (!empty($user) && is_array($user)) {
-            // setup timezone from request
-            $user['timezone'] = $this->userTimezone();
-            // Successful login. Redirect.
-            $this->Auth->setUser($user);
+
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
             // Setup current project name.
             $this->setupCurrentProject();
+            // Redirect.
+            $target = $this->Authentication->getLoginRedirect() ?? ['_name' => 'dashboard'];
 
-            return $this->redirect($this->Auth->redirectUrl());
+            return $this->redirect($target);
         }
 
         // Failed login.
@@ -126,30 +124,11 @@ class LoginController extends AppController
      */
     protected function setupCurrentProject(): void
     {
-        $project = $this->request->getData('project');
+        $project = $this->getRequest()->getData('project');
         if (empty($project)) {
             return;
         }
-        $this->request->getSession()->write('_project', $project);
-    }
-
-    /**
-     * Retrieve user timezone from request data.
-     *
-     * @return string User timezone
-     */
-    protected function userTimezone(): string
-    {
-        // 'timezone_offset' must contain UTC offset in seconds
-        // plus Daylight Saving Time DST 0 or 1 like: '3600 1' or '7200 0'
-        $offset = $this->request->getData('timezone_offset');
-        if (empty($offset)) {
-            return 'UTC';
-        }
-        $data = explode(' ', (string)$offset);
-        $dst = empty($data[1]) ? 0 : 1;
-
-        return timezone_name_from_abbr('', intval($data[0]), $dst);
+        $this->getRequest()->getSession()->write('_project', $project);
     }
 
     /**
@@ -159,9 +138,9 @@ class LoginController extends AppController
      */
     public function logout(): ?Response
     {
-        $this->request->allowMethod(['get']);
-        $redirect = $this->redirect($this->Auth->logout());
-        $this->request->getSession()->destroy();
+        $this->getRequest()->allowMethod(['get']);
+        $redirect = $this->redirect($this->Authentication->logout());
+        $this->getRequest()->getSession()->destroy();
 
         return $redirect;
     }
@@ -177,7 +156,7 @@ class LoginController extends AppController
     {
         if (!isset($query['redirect'])) {
             // Remove flash messages
-            $this->request->getSession()->delete('Flash');
+            $this->getRequest()->getSession()->delete('Flash');
         }
     }
 }

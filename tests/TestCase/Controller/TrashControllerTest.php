@@ -14,10 +14,8 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TrashController;
-use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -25,20 +23,30 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\TrashController} Test Case
  *
  * @coversDefaultClass \App\Controller\TrashController
+ * @uses \App\Controller\TrashController
  */
 class TrashControllerTest extends TestCase
 {
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test controller
      *
-     * @var App\Controller\TrashController
+     * @var \App\Controller\TrashController
      */
     public $Trash;
 
     /**
      * Test api client
      *
-     * @var BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient
      */
     public $client;
 
@@ -126,7 +134,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestore(): void
@@ -148,7 +155,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method when unauthorized
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreUnauthorized(): void
@@ -165,7 +171,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method with multiple items
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreMulti(): void
@@ -181,7 +186,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method failure with multiple items
      *
      * @covers ::restore()
-     *
      * @return void
      */
     public function testRestoreMultiFailure(): void
@@ -192,7 +196,7 @@ class TrashControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/trash', $response->getHeaderLine('Location'));
 
-        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Trash->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $message);
     }
 
@@ -200,7 +204,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDelete(): void
@@ -227,7 +230,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method when unauthorized
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteUnauthorized(): void
@@ -246,7 +248,6 @@ class TrashControllerTest extends TestCase
      * Test `restore` method with multiple items
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteMulti(): void
@@ -264,7 +265,6 @@ class TrashControllerTest extends TestCase
      * Test `delete` method failure with multiple items
      *
      * @covers ::delete()
-     *
      * @return void
      */
     public function testDeleteMultiFailure(): void
@@ -275,7 +275,7 @@ class TrashControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/trash', $response->getHeaderLine('Location'));
 
-        $message = $this->Trash->request->getSession()->read('Flash.flash.0.message');
+        $message = $this->Trash->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $message);
     }
 
@@ -284,7 +284,6 @@ class TrashControllerTest extends TestCase
      *
      * @covers ::empty()
      * @covers ::listQuery()
-     *
      * @return void
      */
     public function testEmpty(): void
@@ -304,7 +303,6 @@ class TrashControllerTest extends TestCase
      *
      * @covers ::empty()
      * @covers ::listQuery()
-     *
      * @return void
      */
     public function testEmptyFilter(): void
@@ -320,7 +318,6 @@ class TrashControllerTest extends TestCase
      * Test `empty` method when unauthorized
      *
      * @covers ::empty()
-     *
      * @return void
      */
     public function testEmptyUnauthorized(): void

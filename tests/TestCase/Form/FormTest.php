@@ -32,12 +32,12 @@ class FormTest extends TestCase
     public function getMethodProvider(): array
     {
         return [
-            'name with chars to remove' => [
+            'name with chars to remove 1' => [
                 Options::class,
                 'old_password',
                 [Options::class, 'oldPassword'],
             ],
-            'name with chars to remove' => [
+            'name with chars to remove 2' => [
                 Options::class,
                 'confirm_password',
                 [Options::class, 'confirmPassword'],
@@ -66,7 +66,6 @@ class FormTest extends TestCase
      * Test `getMethod` method exception 'not callable'
      *
      * @return void
-     *
      * @covers ::getMethod
      */
     public function testGetMethodNotCallable(): void
@@ -76,5 +75,24 @@ class FormTest extends TestCase
         static::expectException(get_class($expected));
         static::expectExceptionMessage($expected->getMessage());
         Form::getMethod(Form::class, $methodName);
+    }
+
+    /**
+     * Data provider for `testLabel`.
+     *
+     * @return array
+     */
+    public function labelProvider(): array
+    {
+        return [
+            'empty' => [
+                '',
+                '',
+            ],
+            'dummy' => [
+                'dummy',
+                'Dummy',
+            ],
+        ];
     }
 }

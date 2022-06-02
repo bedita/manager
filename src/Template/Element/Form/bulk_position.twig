@@ -1,0 +1,37 @@
+{% if modules.folders %}
+{{ Form.create(null, {
+    'id': 'bulk-folder',
+    'url': {'_name': 'modules:bulkPosition', 'object_type': objectType, '?': _view.request.getQuery()},
+})|raw }}
+    <div class="fieldset bulk-folders">
+        <div>
+            <label for="bulk-copy">{{ __('Copy to') }}</label>
+            <input id="bulk-copy" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="copy"/>
+        </div>
+
+        <div>
+            <label for="bulk-move">{{ __('Move to') }}</label>
+            <input id="bulk-move" :disabled="!selectedRows.length" name="action" v-model="bulkAction" type="radio" value="move"/>
+        </div>
+        {% do Form.unlockField('action') %}
+
+        <folder-picker
+            label="{{ __('Folder') }}"
+            :disabled="!selectedRows.length || !bulkAction"
+            @change="bulkFolder = $event?.id"
+        ></folder-picker>
+        {% do Form.unlockField('folderSelected') %}
+
+        <input type="hidden" name="ids" :value="selectedRows"/>
+        {% do Form.unlockField('ids') %}
+
+        <button
+            class="button button-outlined"
+            @click.prevent="bulkActions('bulk-folder')"
+            :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
+        >
+            {{ __('Ok') }}
+        </button>
+    </div>
+{{ Form.end()|raw }}
+{% endif %}

@@ -22,6 +22,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\Model\RelationsController} Test Case
  *
  * @coversDefaultClass \App\Controller\Model\RelationsController
+ * @uses \App\Controller\Model\RelationsController
  */
 class RelationsControllerTest extends TestCase
 {
@@ -47,7 +48,7 @@ class RelationsControllerTest extends TestCase
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -66,11 +67,15 @@ class RelationsControllerTest extends TestCase
         ];
         $apiClient->method('get')
             ->willReturn($response);
-        $this->Relations->apiClient = $apiClient;
+
+        // set $this->Relations->apiClient
+        $property = new \ReflectionProperty(RelationsController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Relations, $apiClient);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -88,7 +93,7 @@ class RelationsControllerTest extends TestCase
     public function testIndex(): void
     {
         $this->Relations->index();
-        $actual = $this->Relations->viewVars['resources'];
+        $actual = $this->Relations->viewBuilder()->getVar('resources');
         static::assertTrue(is_array($actual));
     }
 
@@ -102,7 +107,7 @@ class RelationsControllerTest extends TestCase
     {
         $this->Relations->view(1);
         foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->viewVars[sprintf('%s_object_types', $side)];
+            $actual = $this->Relations->viewBuilder()->getVar(sprintf('%s_object_types', $side));
             static::assertTrue(is_array($actual));
         }
     }
@@ -116,7 +121,7 @@ class RelationsControllerTest extends TestCase
     public function testRelatedTypes(): void
     {
         foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->relatedTypes(1, $side);
+            $actual = $this->Relations->relatedTypes('1', $side);
             static::assertTrue(is_array($actual));
         }
     }

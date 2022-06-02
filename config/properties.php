@@ -192,12 +192,22 @@ return [
             'index' => [
                 'name',
                 'label',
+                'parent_id',
                 'object_type_name',
                 'enabled',
             ],
             'filter' => [
                 'enabled',
                 'type',
+            ],
+        ],
+
+        // model/tags
+        'tags' => [
+            'index' => [
+                'name',
+                'label',
+                'enabled',
             ],
         ],
     ],

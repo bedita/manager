@@ -27,11 +27,11 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 
     <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 
-    {% element 'custom_colors' %}
+    {{ element('custom_colors') }}
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
-    {% element 'json_meta_config' %}
+    {{ element('json_meta_config') }}
 </head>
 
 <body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}"
@@ -40,7 +40,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     <main class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
 
         <div class="layout-content">
-            {% element 'Modules/header' %}
+            {{ element('Modules/header') }}
             {{ _view.fetch('content')|raw }}
         </div>
 

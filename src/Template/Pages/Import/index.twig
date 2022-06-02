@@ -12,6 +12,7 @@
         'type': 'file',
         'url': {'_name': 'import:file'},
     })|raw }}
+        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
         <div class="columns">
             <div class="column">
                 <section class="fieldset">
@@ -40,7 +41,7 @@
                                 {% for optionName,optionData in datum.options %}
                                 <div>
                                     <label>{{ optionData.label }}</label>
-                                    {{ Form.unlockField(optionName) }}
+                                    {% do Form.unlockField(optionName) %}
                                     {% if optionData.dataType == 'boolean' %}
                                         {{ Form.control(optionName, {
                                             'type': 'checkbox',
@@ -107,6 +108,7 @@
             {{ Form.button(__('Import'), {
                 'class': 'submit',
                 'onclick': 'this.classList.add(\'is-loading-spinner\')',
+                'v-if': 'fileName',
             }) | raw }}
         </section>
 

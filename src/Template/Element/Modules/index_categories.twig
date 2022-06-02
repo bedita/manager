@@ -1,0 +1,64 @@
+<div class="categories-container">
+
+    {# list resources : rows #}
+    {% for parent_id, categories in categoriesTree %}
+
+    <div class="categories">
+        <h3>{{ parent_id == '_' ? __('Global') : resources[parent_id].attributes.label|default(resources[parent_id].attributes.name) }}</h3>
+
+        <div class="list-objects">
+            <nav class="table-header has-border-black">
+                <div>{{ __('Name') }}</div>
+                <div>{{ __('Label') }}</div>
+                <div>{{ __('Parent') }}</div>
+                <div>{{ __('Type') }}</div>
+                <div>{{ __('Enabled') }}</div>
+                <div>{{ __('Id') }}</div>
+                <div></div>
+                <div></div>
+            </nav>
+            {% for category_id in categories %}
+                {% set resource = resources[category_id] %}
+                {% set type = resource.attributes.object_type_name %}
+
+                <category
+                    :source="{{ resource.attributes|merge({'id': resource.id, 'type': type})|json_encode }}"
+                    :parents="{{ roots|json_encode }}"
+                    :names="{{ names[type]|json_encode }}">
+                </category>
+
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    {# Create new category #}
+    <div class="categories">
+        <h3>{{ __('Create a new category') }}</h3>
+        <div class="list-objects">
+            <nav class="table-header has-border-black">
+                <div>{{ __('Name') }}</div>
+                <div>{{ __('Label') }}</div>
+                <div>{{ __('Parent') }}</div>
+                <div>{{ __('Type') }}</div>
+                <div>{{ __('Enabled') }}</div>
+                <div></div>
+            </nav>
+            {% if object_types.0 %}
+                {% set source = {'type': object_types.0} %}
+                <category
+                    :source="{{ source|json_encode }}"
+                    :parents="{{ roots|json_encode }}"
+                    :names="{{ names[object_types.0]|json_encode }}">
+                </category>
+            {% else %}
+                {% set source = {'types': object_types|keys} %}
+                <category
+                    :source="{{ source|json_encode }}"
+                    :parents="{{ roots|json_encode }}"
+                    :allnames="{{ names|json_encode }}">
+                </category>
+            {% endif %}
+        </div>
+    </div>
+</div>

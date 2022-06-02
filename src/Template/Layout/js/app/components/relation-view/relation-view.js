@@ -7,6 +7,7 @@
  * <relation-view> component used for ModulesPage -> View
  *
  * @property {String} relationName name of the relation used by the PaginatiedContentMixin
+ * @property {String} relationLabel label of the relation
  * @property {Boolean} multipleChoice set view for multiple choice
  * @property {String} configPaginateSizes set pagination
  *
@@ -41,6 +42,10 @@ export default {
             type: String,
             required: true,
         },
+        relationLabel: {
+            type: String,
+            required: true,
+        },
         relationData: {
             type: Object,
             required: false,
@@ -60,6 +65,10 @@ export default {
         preCount: {
             type: Number,
             default: -1,
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
     },
 
@@ -81,7 +90,7 @@ export default {
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
 
-            positions: {},              // used in children relations
+            exportFormat: 'csv',        // default csv
         }
     },
 
@@ -100,9 +109,10 @@ export default {
          */
         showFilter() {
             return this.activeFilter.q ||
-                this.pagination.page > 1 ||
-                this.objects.length >= this.pagination.page_size ||
-                this.addedRelations.length >= this.pagination.page_size;
+                this.activeFilter?.filter?.status ||
+                this.activeFilter?.filter?.type ||
+                this.pagination.page_count > 1 ||
+                this.alreadyInView.length > this.pagination.page_size;
         },
     },
 
@@ -129,7 +139,7 @@ export default {
 
         // if preCount is '-1' => no object count from API, force load
         if (this.preCount === -1 || this.$parent.isOpen) {
-            await this.loadOnMounted();
+            await this.loadRelatedObjects();
         }
 
         // check if relation is related to media objects
@@ -255,15 +265,25 @@ export default {
         // common relations priorities
         updatePriorities(movedObject, newIndex) {
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
+            let priority = (oldIndex - newIndex > 0) ? this.objects[newIndex].meta.relation.priority : this.objects[oldIndex].meta.relation.priority;
+            const startIndex = Math.min(oldIndex, newIndex);
+            const endIndex = Math.max(oldIndex, newIndex);
 
             // moves the object in the objects array from the old index to the new index
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
-            this.objects = this.objects.map((object, index) => {
-                object.meta.relation.priority = index + 1;
-                this.modifyRelation(object);
-                return object;
-            });
+            // update priorities
+            for (let i = startIndex; i <= endIndex; i++) {
+                if (i === startIndex || this.objects[i].meta.relation.priority < priority || this.objects[i].meta.relation.priority >= this.objects[endIndex].meta.relation.priority) {
+                    this.objects[i].meta.relation.priority = priority;
+                    this.modifyRelation(this.objects[i]);
+                    priority++;
+
+                    continue;
+                }
+
+                priority = this.objects[i].meta.relation.priority;
+            }
         },
 
         // children position
@@ -434,16 +454,6 @@ export default {
         },
 
         /**
-         * load content if flag set to true
-         *
-         * @return {void}
-         */
-        async loadOnMounted() {
-            await this.loadRelatedObjects();
-            return Promise.resolve();
-        },
-
-        /**
          * call PaginatedContentMixin.getPaginatedObjects() method and handle loading
          *
          * @emits Event#count count objects event
@@ -476,8 +486,7 @@ export default {
         },
 
         /**
-         * reload all related objects
-         * UNUSED
+         * Reset the filter and reload all related objects.
          *
          * @return {Array} objs objects retrieved
          */
@@ -699,6 +708,17 @@ export default {
                 .then((objs) => {
                     this.loading = false;
                     return objs;
+                })
+                .then(() => {
+                    // restore previously modified priorities
+                    this.objects.forEach((object) => {
+                        const modifiedObject = this.modifiedRelations.find((modified) => modified.id === object.id);
+                        if (modifiedObject) {
+                            object.meta.relation.priority = modifiedObject.meta.relation.priority;
+                        }
+                    });
+                    // sort by restored priorities
+                    this.objects.sort((a, b) => a.meta.relation.priority - b.meta.relation.priority);
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok

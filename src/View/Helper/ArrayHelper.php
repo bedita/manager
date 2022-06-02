@@ -12,8 +12,6 @@
  */
 namespace App\View\Helper;
 
-use Cake\Core\Configure;
-use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -75,7 +73,6 @@ class ArrayHelper extends Helper
      *  Foo Matches any key with the exact same value.
      *
      * @see \Cake\Utility\Hash::extract
-     *
      * @param array $data The array
      * @param string $path The path expression
      * @return array The result array

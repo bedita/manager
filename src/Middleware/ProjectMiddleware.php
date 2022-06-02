@@ -15,6 +15,9 @@ namespace App\Middleware;
 use App\Application;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Project middleware.
@@ -22,12 +25,12 @@ use Psr\Http\Message\ResponseInterface;
  * Multi projects support (optional): detect current `_project` name in session and try to load matching config file from `config/projects` folder.
  * After that app plugins are loaded via configuration.
  */
-class ProjectMiddleware
+class ProjectMiddleware implements MiddlewareInterface
 {
     /**
      * Application instance
      *
-     * @var Application
+     * @var \App\Application
      */
     protected $Application;
 
@@ -41,10 +44,10 @@ class ProjectMiddleware
     /**
      * Constructor
      *
-     * @param Application $app The application instance.
-     * @param string $configPath Projects config path.
+     * @param \App\Application $app The application instance.
+     * @param string|null $configPath Projects config path.
      */
-    public function __construct(Application $app, string $configPath = null)
+    public function __construct(Application $app, ?string $configPath = null)
     {
         $this->Application = $app;
         if (!empty($configPath)) {
@@ -53,38 +56,37 @@ class ProjectMiddleware
     }
 
     /**
-     * Look for `_project` key in session, if found load configuration file.
-     * Then call `Application::loadPluginsFromConfig()` to load plugins
-     *
-     * @param \Cake\Http\ServerRequest $request The request.
-     * @param \Psr\Http\Message\ResponseInterface $response The response.
-     * @param callable $next Callback to invoke the next middleware.
-     *
-     * @return \Psr\Http\Message\ResponseInterface A response
+     * @inheritDoc
      */
-    public function __invoke(ServerRequest $request, ResponseInterface $response, $next): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /** @var \Cake\Http\ServerRequest $request */
         $project = $this->detectProject($request);
         Application::loadProjectConfig((string)$project, $this->projectsConfigPath);
         $this->Application->loadPluginsFromConfig();
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 
     /**
-     * Detect project in use from session, if any
-     * On empty session or missing project name `null` is returned
+     * Detect project in use from session or request, if any.
+     * On empty session or request, or missing project name, `null` is returned.
      *
-     * @param ServerRequest $request The request.
+     * @param \Cake\Http\ServerRequest $request The request.
      * @return string|null
      */
     protected function detectProject(ServerRequest $request): ?string
     {
         $session = $request->getSession();
-        if (empty($session) || !$session->check('_project')) {
-            return null;
+        if ($session->check('_project')) {
+            return (string)$session->read('_project');
         }
 
-        return (string)$session->read('_project');
+        $project = $request->getData('project');
+        if (!empty($project)) {
+            return $project;
+        }
+
+        return null;
     }
 }

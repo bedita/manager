@@ -19,12 +19,12 @@
         })|raw }}
 
             <div class="main-view-column">
-                {% element 'Form/core_properties' %}
-                {% element 'Model/relation' %}
+                {{ element('Form/core_properties') }}
+                {{ element('Model/relation') }}
             </div>
 
             <div class="side-view-column">
-                {% element 'Form/meta' %}
+                {{ element('Form/meta') }}
             </div>
 
         {{ Form.end()|raw }}
@@ -34,7 +34,7 @@
         {# {% do _view.append('module-buttons', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
     </div>
 
-    {% element 'Model/sidebar_links' %}
+    {{ element('Model/sidebar_links') }}
 
 </div>
 </modules-view>

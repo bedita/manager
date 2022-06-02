@@ -13,12 +13,12 @@
 
 namespace App\Core\Exception;
 
-use Cake\Core\Exception\Exception;
+use Cake\Core\Exception\CakeException;
 
 /**
  * Exception raised when uploading from form fails
  */
-class UploadException extends Exception
+class UploadException extends CakeException
 {
     /**
      * Array to map upload error codes with proper message string
@@ -37,6 +37,7 @@ class UploadException extends Exception
 
     /**
      * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function __construct(?string $message, int $code, $previous = null)
@@ -47,12 +48,12 @@ class UploadException extends Exception
 
     /**
      * Php code to message for exception
-     * @see http://php.net/manual/en/features.file-upload.errors.php for details
      *
+     * @see http://php.net/manual/en/features.file-upload.errors.php for details
      * @param int $code The php code
-     * @return string|null
+     * @return string
      */
-    private function codeToMessage(int $code): ?string
+    private function codeToMessage(int $code): string
     {
         if (in_array($code, array_keys($this->messagesMap))) {
             return __($this->messagesMap[$code], ini_get('upload_max_filesize'));

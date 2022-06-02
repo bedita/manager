@@ -10,6 +10,7 @@ use Cake\TestSuite\TestCase;
  * {@see \App\Controller\CourtesyPageController} Test Case
  *
  * @coversDefaultClass \App\Controller\CourtesyPageController
+ * @uses \App\Controller\CourtesyPageController
  */
 class CourtesyPageControllerTest extends TestCase
 {
@@ -31,7 +32,7 @@ class CourtesyPageControllerTest extends TestCase
         $request = new ServerRequest($config);
         $controller = new CourtesyPageController($request);
         $controller->index();
-        $actual = $controller->viewVars['message'];
+        $actual = $controller->viewBuilder()->getVar('message');
         static::assertEquals($expected, $actual);
     }
 }

@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -62,11 +63,13 @@ class PropertyHelper extends Helper
      * @param string $name The property name
      * @param mixed|null $value The property value
      * @param array $options The form element options, if any
+     * @param string|null $type The type, for others schemas
      * @return string
      */
-    public function control(string $name, $value, array $options = []): string
+    public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
-        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name));
+        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
+        $controlOptions['label'] = $this->fieldLabel($name, $type);
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
@@ -79,14 +82,40 @@ class PropertyHelper extends Helper
     }
 
     /**
+     * Return label for field by name and type.
+     * If there's a config for the field and type, return it.
+     * Return translation of name, otherwise.
+     *
+     * @param string $name The field name
+     * @param string|null $type The object type
+     * @return string
+     */
+    public function fieldLabel(string $name, ?string $type = null): string
+    {
+        $defaultLabel = Translate::get($name);
+        $t = empty($type) ? $this->getView()->get('objectType') : $type;
+        if (empty($t)) {
+            return $defaultLabel;
+        }
+        $key = sprintf('Properties.%s.labels.fields.%s', $t, $name);
+
+        return Configure::read($key, $defaultLabel);
+    }
+
+    /**
      * JSON Schema array of property name
      *
      * @param string $name The property name
+     * @param string|null $type The type, for others schemas
      * @return array
      */
-    public function schema(string $name): array
+    public function schema(string $name, ?string $type = null): array
     {
         $schema = (array)$this->_View->get('schema');
+        if (!empty($type)) {
+            $schemas = (array)$this->_View->get('schemasByType');
+            $schema = (array)Hash::get($schemas, $type);
+        }
         $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
         $default = array_filter([
             'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),

@@ -1,15 +1,32 @@
 <?php
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2022 Atlas Srl, Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
 namespace App\Controller\Component;
 
+use App\Utility\Applications;
+use App\View\Helper\CalendarHelper;
+use App\View\Helper\CategoriesHelper;
 use App\View\Helper\SchemaHelper;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
-use Cake\View\Helper\FormHelper;
 
 /**
  * History component
+ *
+ * @property \App\View\Helper\CalendarHelper $Calendar
+ * @property \App\View\Helper\CategoriesHelper $Categories
+ * @property \App\View\Helper\SchemaHelper $Schema
  */
 class HistoryComponent extends Component
 {
@@ -21,28 +38,15 @@ class HistoryComponent extends Component
     protected $key = 'history.%s.attributes';
 
     /**
-     * Form Helper
-     *
-     * @var \Cake\View\Helper\FormHelper
-     */
-    protected $FormHelper = null;
-
-    /**
-     * Schema Helper
-     *
-     * @var \App\View\Helper\SchemaHelper
-     */
-    protected $SchemaHelper = null;
-
-    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $view = new \Cake\View\View();
-        $this->SchemaHelper = new SchemaHelper($view);
-        $this->FormHelper = new FormHelper($view);
+        $this->Calendar = new CalendarHelper($view);
+        $this->Categories = new CategoriesHelper($view);
+        $this->Schema = new SchemaHelper($view);
 
         parent::initialize($config);
     }
@@ -61,7 +65,7 @@ class HistoryComponent extends Component
             return;
         }
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $data = (string)$session->read($key);
         if (empty($data)) {
             return;
@@ -133,12 +137,12 @@ class HistoryComponent extends Component
         // if keep uname, recover it from object
         if ($keepUname) {
             $response = $ApiClient->getObject($id, $objectType);
-            $attributes['uname'] = Hash::get($response, 'data.attributes.uname');
+            $attributes['uname'] = Hash::get((array)$response, 'data.attributes.uname');
         }
 
         // write attributes into session
         $key = sprintf($this->key, $id);
-        $session = $this->getController()->request->getSession();
+        $session = $this->getController()->getRequest()->getSession();
         $session->write($key, json_encode($attributes));
     }
 
@@ -172,35 +176,63 @@ class HistoryComponent extends Component
         }
         $data = Hash::get($response, 'data');
         foreach ($data as &$history) {
-            $changed = Hash::get($history, 'meta.changed');
+            $changed = (array)Hash::get($history, 'meta.changed');
             $formatted = [];
             foreach ($changed as $field => $value) {
-                $fieldSchema = $this->fieldSchema($field, $schema);
-                $formatted[$field] = sprintf('%s: %s', __(Inflector::humanize($field)), $this->SchemaHelper->format($value, $fieldSchema));
+                $label = $this->label($field);
+                $content = $this->content($field, $schema, $value);
+                $formatted[$field] = sprintf('<div class="history-field"><label>%s</label>%s</div>', $label, $content);
             }
             $history['meta']['changed'] = $formatted;
+            $applicationId = (string)Hash::get($history, 'meta.application_id');
+            $history['meta']['application_name'] = Applications::getName($applicationId);
         }
         $response['data'] = $data;
     }
 
     /**
-     * Schema by field
+     * Get label by field
      *
      * @param string $field The field
-     * @param array $schema The schema
-     * @return array
+     * @return string
      */
-    private function fieldSchema(string $field, array $schema): array
+    public function label(string $field): string
     {
-        if (array_key_exists($field, $schema)) {
-            return (array)$schema[$field];
-        }
-        foreach (['properties', 'relations', 'associations'] as $key) {
-            if (Hash::check($schema, sprintf('%s.%s', $key, $field))) {
-                return (array)Hash::get($schema, sprintf('%s.%s', $key, $field));
-            }
+        if ($field === 'date_ranges') {
+            return (string)__('Calendar');
         }
 
-        return [];
+        return (string)__(Inflector::humanize($field));
+    }
+
+    /**
+     * Get content by field, schema and value
+     *
+     * @param string $field The field
+     * @param array $schema The object schema
+     * @param mixed $value The value
+     * @return string
+     */
+    public function content(string $field, array $schema, $value): string
+    {
+        if ($field === 'date_ranges') {
+            return sprintf(
+                '<date-ranges-list inline-template><div class="index-date-ranges" :class="show-all"><div>%s</div></date-ranges-list>',
+                $this->Calendar->list($value)
+            );
+        }
+        if ($field === 'categories') {
+            $this->Categories->getView()->set('schema', $schema);
+
+            return $this->Categories->control('categories', $value);
+        }
+        $fieldSchema = (array)Hash::get($schema, sprintf('properties.%s', $field));
+
+        $content = $this->Schema->format($value, $fieldSchema);
+        if (empty($content)) {
+            return '-';
+        }
+
+        return $content;
     }
 }

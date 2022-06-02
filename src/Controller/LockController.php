@@ -53,8 +53,8 @@ class LockController extends AppController
      */
     protected function lock(bool $locked): bool
     {
-        $type = $this->request->getParam('object_type');
-        $id = $this->request->getParam('id');
+        $type = $this->getRequest()->getParam('object_type');
+        $id = $this->getRequest()->getParam('id');
         $meta = compact('locked');
         $data = compact('id', 'type', 'meta');
         $payload = json_encode(compact('data'));
@@ -65,7 +65,7 @@ class LockController extends AppController
                 ['Content-Type' => 'application/json']
             );
         } catch (BEditaClientException $ex) {
-            $this->log($ex, LogLevel::ERROR);
+            $this->log($ex->getMessage(), LogLevel::ERROR);
             $this->Flash->error(__('Error: %s', $ex->getMessage()));
 
             return false;

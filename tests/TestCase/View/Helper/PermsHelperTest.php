@@ -32,7 +32,7 @@ class PermsHelperTest extends TestCase
     public $Perms;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -92,7 +92,6 @@ class PermsHelperTest extends TestCase
      * @param string $method Helper method
      * @param array|string $arg The argument for function
      * @return void
-     *
      * @dataProvider isAllowedProvider()
      * @covers ::isAllowed()
      * @covers ::initialize()
