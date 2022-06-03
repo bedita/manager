@@ -30,9 +30,10 @@
             {# prev page #}
             <button v-if="pagination.page > 2" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page - 1)"><: pagination.page - 1:></button>
             {# current page #}
-            <button class="is-dark current-page has-text-size-smallest" @click.prevent="onChangePage(pagination.page)"><: pagination.page :></button>
+            <input v-show="pagination.page === 1" size="2" class="ml-05 mr-05" :value="pagination.page" @change="onChangePageNumber($event)" />
+            <input v-show="pagination.page > 1" size="2" class="ml-05" :value="pagination.page" @change="onChangePageNumber($event)" />
             {# next page #}
-            <button v-if="pagination.page < pagination.page_count-1" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
+            <button v-if="pagination.page < pagination.page_count-1" class="ml-05 {{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
             {# delimiter #}
             <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter"></span>
             {# last page #}

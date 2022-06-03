@@ -376,7 +376,20 @@ export default {
         onChangePage(index) {
             this.$emit("filter-update-current-page", index);
         },
+        onChangePageNumber(e) {
+            let val = e.target.value;
+            val = val.trim();
+            if (!val) {
+                return;
+            }
+            val = parseFloat(val);
+            if (!val || val > this.pagination.page_count) {
+                e.target.value = '';
 
+                return;
+            }
+            this.onChangePage(val);
+        },
         onCategoryChange(categories) {
             this.queryFilter.filter.categories = categories?.map((cat) => cat.name).join(',');
         },
