@@ -1,7 +1,7 @@
 <property-view inline-template :tab-open="tabsOpen" tab-name="history">
     <section class="history">
         <section class="fieldset">
-            <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen ? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen ? 'open has-background-module-{{ currentModule.name }} has-border-module-{{ currentModule.name }}' : ''">
                 <h2>{{ __('History') }}</h2>
                 <span class="tag is-smallest is-black mx-05" v-show="!isLoading && totalObjects">
                     <: totalObjects :>
