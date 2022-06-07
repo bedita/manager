@@ -86,9 +86,11 @@
                     <: relatedStreamProp(related, 'file_name') :>
                 </div> #}
 
+                {% if in_array('admin', user.roles) %}
                 <div v-if="relatedStream(related)" class="has-text-size-smallest">
                     <: relatedStreamProp(related, 'mime_type') :>
                 </div>
+                {% endif %}
 
                 <div v-if="relatedStream(related)" class="has-text-size-smallest">
                     <: relatedStreamProp(related, 'file_size', 'bytes') :>
