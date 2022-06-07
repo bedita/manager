@@ -376,7 +376,29 @@ export default {
         onChangePage(index) {
             this.$emit("filter-update-current-page", index);
         },
+        onChangePageNumber(e) {
+            let val = e.target.value;
+            val = val.trim();
+            if (!val) {
+                return;
+            }
+            val = parseFloat(val);
+            if (!val || val > this.pagination.page_count) {
+                e.target.value = '';
 
+                return;
+            }
+            this.onChangePage(val);
+        },
+        onPageKeydown(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.onChangePageNumber(e);
+
+                return false;
+            }
+        },
         onCategoryChange(categories) {
             this.queryFilter.filter.categories = categories?.map((cat) => cat.name).join(',');
         },
