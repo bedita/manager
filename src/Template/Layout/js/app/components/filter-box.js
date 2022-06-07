@@ -390,6 +390,15 @@ export default {
             }
             this.onChangePage(val);
         },
+        onPageKeydown(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.onChangePageNumber(e);
+
+                return false;
+            }
+        },
         onCategoryChange(categories) {
             this.queryFilter.filter.categories = categories?.map((cat) => cat.name).join(',');
         },
