@@ -144,6 +144,20 @@ return [
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
         ],
+
+        /**
+         * Thumbnails cache
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         * If you set 'className' => 'Null' core cache will be disabled.
+         */
+        '_thumbs_' => [
+            'className' => 'File',
+            'prefix' => 'thumbs_',
+            'path' => CACHE . 'thumbs/',
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_THUMBS_URL', null),
+        ],
     ],
 
     /**

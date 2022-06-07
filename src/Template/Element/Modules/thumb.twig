@@ -9,7 +9,7 @@
 {# Otherwise create/display thumb if type is an image #}
 {% elseif object.type ==  'images' %}
 
-    {% set thumb = Thumb.url(object.id, { 'options': { 'w': width } }) %}
+    {% set thumb = Thumb.getUrl(object, { 'options': { 'w': width } }) %}
 
     {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
         <div class="missing-image has-text-size-largest icon-question" title="{{ __('Thumb not available') }}"></div>
