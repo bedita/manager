@@ -800,19 +800,6 @@ export default {
         },
 
         /**
-         * Return true if title is not filename.
-         *
-         * @param {Object} related The object
-         * @returns
-         */
-        relatedTitleNotEqualsFilename(related) {
-            const title = related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-';
-            const filename = this.relatedStreamProp(related, 'file_name');
-
-            return (title !== filename);
-        },
-
-        /**
          * Retrieve related stream Download URL
          *
          * @param {Object} related The object
