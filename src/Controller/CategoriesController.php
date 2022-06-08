@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 /**
  * Categories Controller: list, save, delete categories
@@ -85,7 +86,7 @@ class CategoriesController extends AppController
         $response = $error = null;
         try {
             $data = (array)$this->getRequest()->getData();
-            $data['enabled'] = $data['enabled'] === 'true';
+            $data['enabled'] = (bool)Hash::get($data, 'enabled', null) === 'true';
             $response = $this->Categories->save($data);
         } catch (BEditaClientException $e) {
             $error = $e->getMessage();
