@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "bedita/i18n": "^3.3",
+        "bedita/i18n": "^4.1",
         "bedita/web-tools": "^3.9",
         "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "~4.4.0",
