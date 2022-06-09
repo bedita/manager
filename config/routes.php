@@ -252,17 +252,17 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/{object_type}/categories',
-        ['controller' => 'Modules', 'action' => 'listCategories'],
+        ['controller' => 'Categories', 'action' => 'index'],
         ['_name' => 'modules:categories:index']
     );
     $routes->connect(
         '/{object_type}/categories/save',
-        ['controller' => 'Modules', 'action' => 'saveCategory'],
+        ['controller' => 'Categories', 'action' => 'save'],
         ['_name' => 'modules:categories:save']
     );
     $routes->connect(
         '/{object_type}/categories/remove/{id}',
-        ['controller' => 'Modules', 'action' => 'removeCategory'],
+        ['controller' => 'Categories', 'action' => 'delete'],
         ['_name' => 'modules:categories:remove', 'pass' => ['id']]
     );
 

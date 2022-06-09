@@ -95,6 +95,18 @@ class CategoriesComponentTest extends TestCase
     }
 
     /**
+     * Test `names`
+     *
+     * @return void
+     * @covers ::names()
+     */
+    public function testNames(): void
+    {
+        $actual = $this->Categories->names('documents');
+        static::assertEmpty($actual);
+    }
+
+    /**
      * Test `map`
      *
      * @return void

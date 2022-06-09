@@ -143,7 +143,7 @@ class Control
     {
         $schema = (array)Hash::get($options, 'schema');
         $value = Hash::get($options, 'value');
-        $categories = $schema['categories'];
+        $categories = (array)Hash::get($schema, 'categories');
         $options = array_map(
             function ($category) {
                 return [

@@ -53,14 +53,19 @@ class CategoriesController extends ModelBaseController
     {
         $this->getRequest()->allowMethod(['get']);
 
-        $objectTypes = $this->Schema->objectTypesFeatures()['categorized'];
+        $otfeatures = $this->Schema->objectTypesFeatures();
+        $objectTypes = $otfeatures['categorized'];
         $objectTypes = array_combine($objectTypes, $objectTypes);
         $response = $this->Categories->index(null, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
         $roots = $this->Categories->getAvailableRoots($resources);
         $categoriesTree = $this->Categories->tree($resources);
+        $names = [];
+        foreach ($objectTypes as $objectType) {
+            $names[$objectType] = $this->Categories->names($objectType);
+        }
 
-        $this->set(compact('resources', 'roots', 'categoriesTree'));
+        $this->set(compact('resources', 'roots', 'categoriesTree', 'names'));
         $this->set('object_types', $objectTypes);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
