@@ -59,13 +59,17 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             $this->bootstrapCli();
         }
 
+        /*
+         * Only try to load DebugKit in development mode
+         * Debug Kit should not be installed on a production system
+         */
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
+        }
+
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
         $this->addPlugin('Authentication');
-        // Uncomment to activate 'DebugKit'.
-        // Please make sure composer "require-dev" packages have been installed
-        // and 'debug' configuration is `true`
-        //$this->addOptionalPlugin('DebugKit');
     }
 
     /**
