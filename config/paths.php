@@ -48,6 +48,10 @@ define('CONFIG', ROOT . DS . 'config' . DS);
 
 /**
  * File path to the webroot directory.
+ *
+ * To derive your webroot from your webserver change this to:
+ *
+ * `define('WWW_ROOT', rtrim($_SERVER['DOCUMENT_ROOT'], DS) . DS);`
  */
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
 
@@ -70,6 +74,11 @@ define('LOGS', ROOT . DS . 'logs' . DS);
  * Path to the cache files directory. It can be shared between hosts in a multi-server setup.
  */
 define('CACHE', TMP . 'cache' . DS);
+
+/**
+ * Path to the resources directory.
+ */
+define('RESOURCES', ROOT . DS . 'resources' . DS);
 
 /**
  * The absolute path to the "cake" directory, WITHOUT a trailing DS.
