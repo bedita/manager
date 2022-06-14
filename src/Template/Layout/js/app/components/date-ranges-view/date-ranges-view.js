@@ -19,7 +19,7 @@ export default {
                                 :name="getName(index, 'start_date')"
                                 v-model="dateRange.start_date"
                                 @change="onDateChanged(dateRange, $event)"
-                                v-datepicker="true" date="true" :time="dateRange.params.all_day" daterange="true"
+                                v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
                     </div>
@@ -30,7 +30,7 @@ export default {
                                 :name="getName(index, 'end_date')"
                                 v-model="dateRange.end_date"
                                 @change="onDateChanged(dateRange, $event)"
-                                v-datepicker="true" date="true" :time="dateRange.params.all_day" daterange="true"
+                                v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
                     </div>
