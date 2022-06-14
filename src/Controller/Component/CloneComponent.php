@@ -24,23 +24,6 @@ use Cake\Utility\Hash;
 class CloneComponent extends Component
 {
     /**
-     * BEdita Api client
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    protected $apiClient = null;
-
-    /**
-     * {@inheritDoc}
-     * {@codeCoverageIgnore}
-     */
-    public function initialize(array $config): void
-    {
-        $this->apiClient = ApiClientProvider::getApiClient();
-        parent::initialize($config);
-    }
-
-    /**
      * Get the value of query 'cloneRelations'.
      * Return true when cloneRelations is not false.
      *
@@ -108,12 +91,13 @@ class CloneComponent extends Component
      */
     public function relation(string $sourceId, string $type, string $relation, string $destinationId): bool
     {
-        $related = $this->apiClient->getRelated($sourceId, $type, $relation);
+        $apiClient = ApiClientProvider::getApiClient();
+        $related = $apiClient->getRelated($sourceId, $type, $relation);
         if (empty($related['data'])) {
             return false;
         }
         foreach ($related['data'] as $obj) {
-            $this->apiClient->addRelated($destinationId, $type, $relation, [
+            $apiClient->addRelated($destinationId, $type, $relation, [
                 [
                     'id' => (string)Hash::get($obj, 'id'),
                     'type' => (string)Hash::get($obj, 'type'),
