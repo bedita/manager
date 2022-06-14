@@ -34,10 +34,9 @@ class CloneComponent extends Component
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function initialize(array $config): void
+    public function startup(): void
     {
         $this->apiClient = ApiClientProvider::getApiClient();
-        parent::initialize($config);
     }
 
     /**
