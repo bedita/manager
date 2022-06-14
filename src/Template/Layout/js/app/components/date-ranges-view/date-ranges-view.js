@@ -37,6 +37,7 @@ export default {
                     <div>
                         <label class="m-0 nowrap has-text-size-smaller">
                             <input type="checkbox"
+                                :name="getNameAllDay(index)"
                                 v-model="dateRange.params.all_day"
                                 @change="onAllDayChanged(dateRange, $event)" />
                             ${t`All day`}
@@ -101,6 +102,9 @@ export default {
     methods: {
         getName(index, field) {
             return `date_ranges[${index}][${field}]`;
+        },
+        getNameAllDay(index) {
+            return `date_ranges[${index}][params][all_day]`;
         },
         isDaysInterval(range) {
             if (!range.start_date) {
