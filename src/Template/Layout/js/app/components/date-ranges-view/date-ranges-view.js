@@ -91,7 +91,7 @@ export default {
                     range.params = JSON.parse(range.params) || false;
                 }
                 range.params = range.params || { all_day: false, every_day: true, weekdays: {} };
-                range.params.every_day = Object.keys(range.params.weekdays).length === 0;
+                range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
             });
         }
         if (!this.dateRanges.length) {
