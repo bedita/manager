@@ -41,7 +41,9 @@
                     :show-advanced="false"
                     :relation-types="relationTypes"
                     :init-filter="activeFilter"
+                    {% if list %}
                     :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
+                    {% endif %}
                     objects-label="{{ __('objects') }}"
                     @filter-update-current-page="onUpdateCurrentPage"
                     @filter-update-page-size="onUpdatePageSize"

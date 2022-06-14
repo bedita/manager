@@ -220,7 +220,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
     $routes->connect(
         '/trash/empty',
-        ['controller' => 'Trash', 'action' => 'empty'],
+        ['controller' => 'Trash', 'action' => 'emptyTrash'],
         ['_name' => 'trash:empty']
     );
 

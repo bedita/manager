@@ -118,11 +118,14 @@
                 {% endfor %}
                 {% set list = list|merge({ (type): options }) %}
             {% endfor %}
+
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}
                 :pagination.sync="pagination"
                 :relation-types="relationTypes"
+                {% if list %}
                 :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
+                {% endif %}
                 objects-label="{{ __('objects') }}"
 
                 @filter-update-current-page="onUpdateCurrentPage"

@@ -207,7 +207,7 @@ class TrashController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function empty(): ?Response
+    public function emptyTrash(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
 
