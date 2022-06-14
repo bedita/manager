@@ -280,16 +280,16 @@ class TrashControllerTest extends TestCase
     }
 
     /**
-     * Test `empty` method
+     * Test `emptyTrash` method
      *
-     * @covers ::empty()
+     * @covers ::emptyTrash()
      * @covers ::listQuery()
      * @return void
      */
     public function testEmpty(): void
     {
         $this->setupControllerAndData(true, false);
-        $this->Trash->empty();
+        $this->Trash->emptyTrash();
         $response = $this->client->get('/trash');
         static::assertEquals(200, $this->client->getStatusCode());
         static::assertEquals('OK', $this->client->getStatusMessage());
@@ -299,31 +299,31 @@ class TrashControllerTest extends TestCase
     }
 
     /**
-     * Test `empty` method with query filter
+     * Test `emptyTrash` method with query filter
      *
-     * @covers ::empty()
+     * @covers ::emptyTrash()
      * @covers ::listQuery()
      * @return void
      */
     public function testEmptyFilter(): void
     {
         $this->setupControllerAndData(true, true);
-        $this->Trash->empty();
+        $this->Trash->emptyTrash();
         $response = $this->client->get('/trash');
         static::assertEquals(200, $this->client->getStatusCode());
         static::assertEmpty($response['data']);
     }
 
     /**
-     * Test `empty` method when unauthorized
+     * Test `emptyTrash` method when unauthorized
      *
-     * @covers ::empty()
+     * @covers ::emptyTrash()
      * @return void
      */
     public function testEmptyUnauthorized(): void
     {
         $this->setupControllerAndData(false);
-        $this->Trash->empty();
+        $this->Trash->emptyTrash();
         $response = $this->client->get('/trash');
         static::assertEquals(200, $this->client->getStatusCode());
         static::assertEquals('OK', $this->client->getStatusMessage());
