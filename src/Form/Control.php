@@ -300,7 +300,7 @@ class Control
             'type' => 'text',
             'v-email' => 'true',
             'class' => 'email',
-            'value' => json_encode(Hash::get($options, 'value')),
+            'value' => Hash::get($options, 'value'),
         ];
     }
 
@@ -316,7 +316,7 @@ class Control
             'type' => 'text',
             'v-uri' => 'true',
             'class' => 'uri',
-            'value' => json_encode(Hash::get($options, 'value')),
+            'value' => Hash::get($options, 'value'),
         ];
     }
 
