@@ -19,11 +19,11 @@ export default {
             this.el.value = '';
             this.isValid = true;
         }
-        const span = document.createElement('span');
-        span.title = t`Open Uri in new tab`;
-        span.classList.add('icon-website');
-        span.style = 'cursor: pointer;';
-        span.addEventListener('click', (ev) => {
+        const anchor = document.createElement('a');
+        anchor.innerHTML = t`Open Uri in new tab`;
+        anchor.classList.add('icon-link-ext');
+        anchor.style = 'cursor: pointer;';
+        anchor.addEventListener('click', (ev) => {
             ev.preventDefault()
             ev.stopPropagation();
             if (this.el.value.length < 10) {
@@ -31,6 +31,6 @@ export default {
             }
             window.open(this.el.value, '_blank').focus();
         });
-        this.el.parentElement.appendChild(span);
+        this.el.parentElement.appendChild(anchor);
     },
 };
