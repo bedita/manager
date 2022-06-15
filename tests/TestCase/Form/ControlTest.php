@@ -297,6 +297,8 @@ class ControlTest extends TestCase
      * @covers ::enum()
      * @covers ::categories()
      * @covers ::oneOptions()
+     * @covers ::email()
+     * @covers ::uri()
      */
     public function testControl(array $schema, string $type, $value, array $expected): void
     {
