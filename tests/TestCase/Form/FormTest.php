@@ -17,6 +17,7 @@ use App\Form\Control;
 use App\Form\Form;
 use App\Form\Options;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Form\Form} Test Case
@@ -34,27 +35,33 @@ class FormTest extends TestCase
     {
         return [
             'name with chars to remove 1' => [
-                Options::class,
-                'old_password',
-                null,
+                [
+                    'class' => Options::class,
+                    'methodName' => 'old_password',
+                ],
                 [Options::class, 'oldPassword'],
             ],
             'name with chars to remove 2' => [
-                Options::class,
-                'confirm_password',
-                null,
+                [
+                    'class' => Options::class,
+                    'methodName' => 'confirm_password',
+                ],
                 [Options::class, 'confirmPassword'],
             ],
             'format email' => [
-                Control::class,
-                'whatever',
-                'email',
+                [
+                    'class' => Control::class,
+                    'methodName' => 'whatever',
+                    'format' => 'email',
+                ],
                 [Control::class, 'email'],
             ],
             'format uri' => [
-                Control::class,
-                'whatever',
-                'uri',
+                [
+                    'class' => Control::class,
+                    'methodName' => 'whatever',
+                    'format' => 'uri',
+                ],
                 [Control::class, 'uri'],
             ],
         ];
@@ -63,16 +70,17 @@ class FormTest extends TestCase
     /**
      * Test `getMethod` method
      *
-     * @param string $class The class
-     * @param string $methodName The method name
-     * @param string|null $format The format
+     * @param array $options The options
      * @param array $expected The expected method array
      * @return void
      * @dataProvider getMethodProvider()
      * @covers ::getMethod
      */
-    public function testGetMethod(string $class, string $methodName, $format = '', array $expected): void
+    public function testGetMethod(array $options, array $expected): void
     {
+        $class = (string)Hash::get($options, 'class');
+        $methodName = (string)Hash::get($options, 'methodName');
+        $format = (string)Hash::get($options, 'format');
         if ($format) {
             $actual = Form::getMethod($class, $methodName, $format);
         } else {
