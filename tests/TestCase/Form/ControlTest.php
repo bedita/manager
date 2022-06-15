@@ -251,7 +251,7 @@ class ControlTest extends TestCase
                     'type' => 'text',
                     'v-email' => 'true',
                     'class' => 'email',
-                    'value' => '"gustavo@support.com"',
+                    'value' => 'gustavo@support.com',
                 ],
             ],
             'uri' => [
@@ -272,7 +272,7 @@ class ControlTest extends TestCase
                     'type' => 'text',
                     'v-uri' => 'true',
                     'class' => 'uri',
-                    'value' => '"www.gustavosupport.com"',
+                    'value' => 'www.gustavosupport.com',
                 ],
             ],
         ];
