@@ -29,7 +29,7 @@ class Form
      * @param string|null $format The format
      * @return array
      */
-    public static function getMethod(string $className, string $name, string $format = ''): array
+    public static function getMethod(string $className, string $name, $format = ''): array
     {
         $methodName = !empty($format) ? $format : Inflector::variable(str_replace('-', '_', $name));
         $method = [$className, $methodName];
