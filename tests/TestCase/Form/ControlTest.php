@@ -233,6 +233,48 @@ class ControlTest extends TestCase
                     'value' => ['animals', 'houses'],
                 ], // expected
             ],
+            'email' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'format' => 'email',
+                        ],
+                    ],
+                ],
+                'text',
+                'gustavo@support.com',
+                [
+                    'type' => 'text',
+                    'v-email' => 'true',
+                    'class' => 'email',
+                    'value' => '"gustavo@support.com"',
+                ],
+            ],
+            'uri' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'format' => 'uri',
+                        ],
+                    ],
+                ],
+                'text',
+                'www.gustavosupport.com',
+                [
+                    'type' => 'text',
+                    'v-uri' => 'true',
+                    'class' => 'uri',
+                    'value' => '"www.gustavosupport.com"',
+                ],
+            ],
         ];
     }
 

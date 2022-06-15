@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Form;
 
+use App\Form\Control;
 use App\Form\Form;
 use App\Form\Options;
 use Cake\TestSuite\TestCase;
@@ -35,12 +36,26 @@ class FormTest extends TestCase
             'name with chars to remove 1' => [
                 Options::class,
                 'old_password',
+                null,
                 [Options::class, 'oldPassword'],
             ],
             'name with chars to remove 2' => [
                 Options::class,
                 'confirm_password',
+                null,
                 [Options::class, 'confirmPassword'],
+            ],
+            'format email' => [
+                Control::class,
+                'whatever',
+                'email',
+                [Control::class, 'email'],
+            ],
+            'format uri' => [
+                Control::class,
+                'whatever',
+                'uri',
+                [Control::class, 'uri'],
             ],
         ];
     }
@@ -50,14 +65,19 @@ class FormTest extends TestCase
      *
      * @param string $class The class
      * @param string $methodName The method name
+     * @param string|null $format The format
      * @param array $expected The expected method array
      * @return void
      * @dataProvider getMethodProvider()
      * @covers ::getMethod
      */
-    public function testGetMethod(string $class, string $methodName, array $expected): void
+    public function testGetMethod(string $class, string $methodName, $format = '', array $expected): void
     {
-        $actual = Form::getMethod($class, $methodName);
+        if ($format) {
+            $actual = Form::getMethod($class, $methodName, $format);
+        } else {
+            $actual = Form::getMethod($class, $methodName);
+        }
 
         static::assertSame($expected, $actual);
     }
