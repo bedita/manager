@@ -322,9 +322,18 @@ class ControlTest extends TestCase
     public function formatProvider(): array
     {
         return [
-            'empty oneOf' => [
+            'empty schema' => [
                 [],
                 '',
+            ],
+            'no format oneOf' => [
+                [
+                    'oneOf' => [
+                        ['type' => null],
+                        ['type' => 'text'],
+                    ],
+                ],
+                'whatever',
             ],
             'email' => [
                 [
