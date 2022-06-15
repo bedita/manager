@@ -333,7 +333,7 @@ class ControlTest extends TestCase
                         ['type' => 'text'],
                     ],
                 ],
-                'whatever',
+                '',
             ],
             'email' => [
                 [
