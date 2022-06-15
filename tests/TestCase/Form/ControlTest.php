@@ -344,6 +344,15 @@ class ControlTest extends TestCase
                 ],
                 'uri',
             ],
+            'other' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'whatever'],
+                    ],
+                ],
+                '',
+            ],
         ];
     }
 
