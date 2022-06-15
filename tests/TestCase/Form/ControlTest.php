@@ -351,7 +351,7 @@ class ControlTest extends TestCase
                         ['format' => 'whatever'],
                     ],
                 ],
-                '',
+                'whatever',
             ],
         ];
     }
