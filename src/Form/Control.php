@@ -53,12 +53,12 @@ class Control
      * Get format from schema
      *
      * @param array $schema The schema
-     * @return string|null
+     * @return string
      */
-    public static function format(array $schema): ?string
+    public static function format(array $schema): string
     {
         if (empty($schema['oneOf'])) {
-            return null;
+            return '';
         }
         foreach ($schema['oneOf'] as $item) {
             if (array_key_exists('format', $item)) {
@@ -66,7 +66,7 @@ class Control
             }
         }
 
-        return null;
+        return '';
     }
 
     /**
