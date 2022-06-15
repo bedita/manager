@@ -20,7 +20,7 @@ export default {
             this.isValid = true;
         }
         const anchor = document.createElement('a');
-        anchor.innerHTML = t`Open Uri in new tab`;
+        anchor.innerHTML = t`Open Uri`;
         anchor.classList.add('icon-link-ext');
         anchor.style = 'cursor: pointer;';
         anchor.addEventListener('click', (ev) => {
