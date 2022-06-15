@@ -315,6 +315,55 @@ class ControlTest extends TestCase
     }
 
     /**
+     * Data provider for `testFormat` test case.
+     *
+     * @return array
+     */
+    public function formatProvider(): array
+    {
+        return [
+            'empty oneOf' => [
+                [],
+                '',
+            ],
+            'email' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'email'],
+                    ],
+                ],
+                'email',
+            ],
+            'uri' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'uri'],
+                    ],
+                ],
+                'uri',
+            ],
+        ];
+    }
+
+    /**
+     * Test `format` method
+     *
+     * @param array $schema Object schema array.
+     * @param string $expected The expected format.
+     * @return void
+     * @dataProvider formatProvider()
+     * @covers ::format()
+     */
+    public function testFormat(array $schema, string $expected): void
+    {
+        $actual = Control::format($schema);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Provider for testLabel
      *
      * @return array
