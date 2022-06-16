@@ -40,6 +40,13 @@ class ConfigComponent extends Component
     protected $configId;
 
     /**
+     * The application ID of BEdita Manager application
+     *
+     * @var int
+     */
+    protected $managerApplicationId;
+
+    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
@@ -74,6 +81,11 @@ class ConfigComponent extends Component
         return (array)Configure::read('Modules');
     }
 
+    /**
+     * Get modules configuration ID
+     *
+     * @return int|null
+     */
     public function modulesConfigId(): ?int
     {
         if (!empty($this->configId)) {
@@ -97,6 +109,39 @@ class ConfigComponent extends Component
         return null;
     }
 
+    /**
+     * Get BEdita MAnager application ID
+     *
+     * @return int
+     */
+    public function managerApplicationId(): int
+    {
+        if (!empty($this->managerApplicationId)) {
+            return $this->managerApplicationId;
+        }
+        try {
+            $response = (array)$this->apiClient->get('/admin/applications');
+            $data = (array)Hash::get($response, 'data');
+            foreach ($data as $item) {
+                if ($item['attributes']['name'] !== 'manager') {
+                    continue;
+                }
+                $this->managerApplicationId = intVal($item['id']);
+                break;
+            }
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        return $this->managerApplicationId;
+    }
+
+    /**
+     * Save Modules config
+     *
+     * @return void
+     */
     public function saveModules(array $modules): void
     {
         $this->configId = $this->modulesConfigId();
@@ -109,6 +154,7 @@ class ConfigComponent extends Component
                         'name' => 'Modules',
                         'context' => 'core',
                         'content' => json_encode($modules),
+                        'application_id' => $this->managerApplicationId(),
                     ],
                 ],
             ];
