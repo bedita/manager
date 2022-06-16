@@ -1,0 +1,28 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearence')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
+<div class="module-header">
+    <header>
+        <h1>{{ __('Modules') }}</h1>
+    </header>
+</div>
+
+<div class="module-index">
+    <div class="list-objects">
+        {{ Form.create(null, {
+            'id': 'form-appearence',
+            'url': {'_name': 'admin:save:appearence'},
+        })|raw }}
+
+            {{ Form.control('Modules', Schema.controlOptions('Modules', modules|escape('html_attr'), {'type': 'object'})|merge({'label': false}))|raw }}
+
+            {{ Form.button(__('Save'), {
+                'class': 'submit',
+                'onclick': 'this.classList.add(\'is-loading-spinner\')',
+            }) | raw }}
+
+        {{ Form.end()|raw }}
+    </div>
+</div>
