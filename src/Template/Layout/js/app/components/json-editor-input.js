@@ -38,9 +38,9 @@ export default {
                     },
                     onChange: function () {
                         try {
-                            const json = element.jsonEditor.get();
-                            element.value = JSON.stringify(json);
-                            console.info('valid json :)');
+                            let val = element.jsonEditor.get();
+                            val = JSON.parse(val.text);
+                            element.value = JSON.stringify(val);
 
                             let isChanged = element.value !== element.dataset.originalValue;
                             element.dispatchEvent(new CustomEvent('change', {
