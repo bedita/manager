@@ -75,7 +75,7 @@ class ConfigComponent extends Component
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return (array)Configure::read('Modules');
@@ -103,7 +103,7 @@ class ConfigComponent extends Component
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return null;
@@ -131,7 +131,7 @@ class ConfigComponent extends Component
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return $this->managerApplicationId;
@@ -166,7 +166,7 @@ class ConfigComponent extends Component
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
     }
 
@@ -185,7 +185,7 @@ class ConfigComponent extends Component
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return (array)Configure::read('Modules');
