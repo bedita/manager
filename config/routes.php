@@ -165,6 +165,12 @@ $routes->scope('/', function (RouteBuilder $routes) {
                 'save:' . $controller
             );
 
+            $routes->get(
+                "/$controller/new",
+                ['controller' => $name, 'action' => 'create'],
+                'create:' . $controller
+            );
+
             $routes->post(
                 "/$controller/remove/{id}",
                 ['controller' => $name, 'action' => 'remove'],

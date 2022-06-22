@@ -56,9 +56,12 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Restrict `model` module access to `admin` for now
      *
-     * {@inheritDoc}
+     * @param \Cake\Event\EventInterface $event An Event instance
+     * @return \Cake\Http\Response|null
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
@@ -134,13 +137,47 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
+     * Display new resource form.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function create(): ?Response
+    {
+        $this->viewBuilder()->setTemplate('view');
+
+        // Create stub resource with empty `attributes`.
+        $schema = $this->Schema->getSchema();
+        $attributes = array_fill_keys(
+            array_keys(
+                array_filter(
+                    $schema['properties'],
+                    function ($schema) {
+                        return empty($schema['readOnly']);
+                    }
+                )
+            ),
+            ''
+        );
+        $resource = [
+            'type' => $this->resourceType,
+            'attributes' => $attributes,
+        ];
+
+        $this->set(compact('resource', 'schema'));
+        $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
+
+        return null;
+    }
+
+    /**
      * Save resource.
      *
      * @return \Cake\Http\Response|null
      */
     public function save(): ?Response
     {
-        $data = $this->getRequest()->getData();
+        $data = $this->prepareRequest($this->resourceType);
+        unset($data['_csrfToken']);
         $id = Hash::get($data, 'id');
         unset($data['id']);
         $body = [

@@ -357,4 +357,19 @@ class ModelBaseControllerTest extends TestCase
         $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
+
+    /**
+     * Test `create` method
+     *
+     * @covers ::create()
+     * @return void
+     */
+    public function testCreate(): void
+    {
+        $this->ModelController->create();
+        $vars = ['resource', 'schema', 'properties'];
+        foreach ($vars as $var) {
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
+        }
+    }
 }
