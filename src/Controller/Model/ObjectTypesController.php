@@ -56,6 +56,8 @@ class ObjectTypesController extends ModelBaseController
 
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
     }
