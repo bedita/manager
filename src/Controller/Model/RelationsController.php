@@ -66,6 +66,10 @@ class RelationsController extends ModelBaseController
      */
     public function relatedTypes(string $id, string $side): array
     {
+        if (!is_numeric($id)) {
+            $resource = (array)$this->viewBuilder()->getVar('resource');
+            $id = Hash::get($resource, 'id');
+        }
         $endpoint = sprintf('/model/relations/%s/%s_object_types', $id, $side);
         $response = $this->apiClient->get($endpoint);
 
