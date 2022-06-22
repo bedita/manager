@@ -1,7 +1,15 @@
+    {% if resourceType == 'object_types' %}
+    {% do _view.append('module-buttons',
+        Html.link(__('Create new'),
+            {'_name': 'model:create:' ~ resourceType},
+            {'class': 'button button-primary'}
+        )|raw) %}
+    {% endif %}
+
     {% do _view.append('module-buttons',
         Html.link(__('Export'),
             {'_name': 'model:export'},
-            {'class': 'button button-outlined'}
+            {'class': 'button button-primary'}
         )
     ) %}
 

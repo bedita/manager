@@ -27,15 +27,14 @@
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class != 'json' %}
                                 {% if resource.meta.core_type %}
-                                    {% if key in ['name', 'singular', 'table', 'parent_name'] %}
+                                    {% if key in ['name', 'singular', 'table', 'is_abstract', 'parent_name'] %}
                                         {% set options = options|merge({
                                             'readonly' : true,
-                                            'disabled' : true,
                                         }) %}
                                      {% endif %}
                                 {% endif %}
 
-                                {{ Form.control(key, options)|raw }}
+                                {{ Property.control(key, value, options)|raw }}
 
                                 {% if key == 'parent_name' %}
                                     <a href="{{ Url.build({'_name': 'model:view:object_types', 'id': value}) }}" class="link-to-parent">› {{ __('view parent') }}</a>
@@ -52,7 +51,7 @@
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class == 'json' %}
-                                {{ Property.control(key, value)|raw }}
+                                {{ Property.control(key, value, options)|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -61,11 +60,15 @@
                 {{ element('Form/meta') }}
             </div>
 
+        {# Set `_jsonKeys` hidden input from config #}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+
         {{ Form.end()|raw }}
 
-        {# TODO: uncomment `save` and `delete` actions once controller part is available #}
-        {# {% do _view.append('commands', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
-        {# {% do _view.append('commands', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
+        {% do _view.append('module-buttons', Form.submit(__('Save'), {'form': 'form-main', 'class': 'button button-primary'})) %}
+        {% if not resource.meta.core_type %}
+        {% do _view.append('module-buttons', Form.postButton(__('Remove'), {'_name': 'model:remove:object_types', 'id': resource.id})) %}
+        {% endif %}
     </div>
 
 
