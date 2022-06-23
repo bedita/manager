@@ -58,6 +58,65 @@ class RelationsController extends ModelBaseController
     }
 
     /**
+     * Save resource.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        $data = (array)$this->request->getData();
+        $this->updateRelatedTypes($data, 'left');
+        $this->updateRelatedTypes($data, 'right');
+        $this->request = $this->request->withoutData('change_left')
+            ->withoutData('change_right')
+            ->withoutData('current_leftt')
+            ->withoutData('current_right');
+
+        return parent::save();
+    }
+
+    /**
+     * Update relation types on the `left` or `right` side of a relation
+     *
+     * @param array $data Request data
+     * @param string $side Relation side, `left` or `right`
+     * @return void
+     */
+    protected function updateRelatedTypes(array $data, string $side): void
+    {
+        $current = array_filter(explode(',', (string)Hash::get($data, sprintf('current_%s', $side))));
+        $change = array_filter(explode(',', (string)Hash::get($data, sprintf('change_%s', $side))));
+        sort($current);
+        sort($change);
+        if ($current == $change) {
+            return;
+        }
+        $id = Hash::get($data, 'id');
+        $endpoint = sprintf('/model/relations/%s/relationships/%s_object_types', $id, $side);
+        $data = $this->relatedItems($change);
+        $this->apiClient->patch($endpoint, json_encode(compact('data')));
+    }
+
+    /**
+     * Retrieve body item for API call
+     *
+     * @param array $types Object type names array
+     * @return array
+     */
+    protected function relatedItems(array $types): array
+    {
+        return array_map(
+            function ($item) {
+                $response = $this->apiClient->get(sprintf('/model/object_types/%s', trim($item)));
+                $id = Hash::get((array)$response, 'data.id');
+
+                return compact('id') + ['type' => 'object_types'];
+            },
+            $types
+        );
+    }
+
+    /**
      * Get related types by relation ID and side
      *
      * @param string $id The relation ID

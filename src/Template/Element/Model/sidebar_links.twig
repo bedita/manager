@@ -1,4 +1,4 @@
-    {% if resourceType == 'object_types' %}
+    {% if in_array(resourceType, ['object_types', 'relations']) %}
     {% do _view.append('module-buttons',
         Html.link(__('Create new'),
             {'_name': 'model:create:' ~ resourceType},

@@ -482,6 +482,7 @@ const _vueInstance = new Vue({
                     const hardDeleteActions = [
                         '/delete',
                         '/model/object_types/remove',
+                        '/model/relations/remove',
                         '/model/tags/remove',
                         '/model/categories/remove',
                     ];
