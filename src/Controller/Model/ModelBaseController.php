@@ -201,7 +201,7 @@ abstract class ModelBaseController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        if (!$this->singleView) {
+        if (!$this->singleView || empty($id)) {
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
         }
 
