@@ -43,6 +43,29 @@
                         {% endfor %}
                     </div>
                 </section>
+
+                <section class="fieldset">
+                    <div class="tab-container">
+                    <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
+                        <div class="input">
+                            <label for="prop_name">{{ __('Name') }}</label>
+                            <div>
+                                {{ Form.text('prop_name', {
+                                        'placeholder': 'property name',
+                                        'class': 'input',
+                                })|raw }}
+                            </div>
+                            <label for="prop_type">{{ __('Type') }}</label>
+                            <div>
+                                {{ Form.text('prop_type', {
+                                        'placeholder': 'property type',
+                                        'class': 'input',
+                                })|raw }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
 
             <div class="side-view-column">
@@ -94,7 +117,7 @@
             {% for prop in objectTypeProperties.core %}
                 {{ element('Model/object_property', { 'prop': prop, 'type': 'core' }) }}
             {% else %}
-                <p>No Core properties</p>
+                <p>{{ __('No core properties') }}</p>
             {% endfor %}
         </div>
     </section>
@@ -110,7 +133,7 @@
                     'noButtonsFor': ['id', 'status', 'uname'],
                 }) }}
             {% else %}
-                <p>No inherited properties</p>
+                <p>{{ __('No inherited properties') }}</p>
             {% endfor %}
         </div>
     </section>
@@ -122,7 +145,7 @@
             {% for prop in objectTypeProperties.custom %}
                 {{ element('Model/object_property', { 'prop': prop, 'type': 'custom' }) }}
             {% else %}
-                <p>No custom properties</p>
+                <p>{{ __('No custom properties') }}</p>
             {% endfor %}
         </div>
     </section>
