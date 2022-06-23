@@ -58,7 +58,7 @@ class RelationsController extends ModelBaseController
     }
 
     /**
-     * Save resource.
+     * Save relation.
      *
      * @return \Cake\Http\Response|null
      */
@@ -69,7 +69,7 @@ class RelationsController extends ModelBaseController
         $this->updateRelatedTypes($data, 'right');
         $this->request = $this->request->withoutData('change_left')
             ->withoutData('change_right')
-            ->withoutData('current_leftt')
+            ->withoutData('current_left')
             ->withoutData('current_right');
 
         return parent::save();
