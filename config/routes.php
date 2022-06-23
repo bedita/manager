@@ -154,6 +154,12 @@ $routes->scope('/', function (RouteBuilder $routes) {
             );
 
             $routes->get(
+                "/$controller/view/new",
+                ['controller' => $name, 'action' => 'create'],
+                'create:' . $controller
+            );
+
+            $routes->get(
                 "/$controller/view/{id}",
                 ['controller' => $name, 'action' => 'view'],
                 'view:' . $controller
@@ -163,12 +169,6 @@ $routes->scope('/', function (RouteBuilder $routes) {
                 "/$controller/save",
                 ['controller' => $name, 'action' => 'save'],
                 'save:' . $controller
-            );
-
-            $routes->get(
-                "/$controller/new",
-                ['controller' => $name, 'action' => 'create'],
-                'create:' . $controller
             );
 
             $routes->post(
