@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ObjectTypesController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -125,5 +126,55 @@ class ObjectTypesControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @covers ::save()
+     * @covers ::addCustomProperty()
+     * @return void
+     */
+    public function testSave(): void
+    {
+        $this->saveApiMock();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'prop_name' => 'my_prop',
+                'prop_type' => 'datetime',
+            ],
+            'params' => [
+                'resource_type' => 'object_types',
+            ],
+        ];
+        $controller = new ObjectTypesController(
+            new ServerRequest($config)
+        );
+        $controller->save();
+
+        $data = $controller->getRequest()->getData();
+        static::assertArrayNotHasKey('prop_name', $data);
+        static::assertArrayNotHasKey('prop_type', $data);
+    }
+
+    /**
+     * API client mock for save action
+     *
+     * @return void
+     */
+    protected function saveApiMock(): void
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('post')
+            ->withAnyParameters()
+            ->willReturn(['data' => ['id' => '1']]);
+
+        ApiClientProvider::setApiClient($apiClient);
     }
 }

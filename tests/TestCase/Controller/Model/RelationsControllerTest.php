@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\RelationsController;
 use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -53,7 +54,7 @@ class RelationsControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
+        $this->loadRoutes();
         $this->Relations = new RelationsController(
             new ServerRequest($this->defaultRequestConfig)
         );
@@ -124,5 +125,65 @@ class RelationsControllerTest extends TestCase
             $actual = $this->Relations->relatedTypes('1', $side);
             static::assertTrue(is_array($actual));
         }
+    }
+
+    /**
+     * Test `save` method
+     *
+     * @covers ::save()
+     * @covers ::updateRelatedTypes()
+     * @covers ::relatedItems()
+     * @return void
+     */
+    public function testSave(): void
+    {
+        $this->saveApiMock();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'change_left' => 'documents',
+                'current_left' => 'documents',
+                'change_right' => 'documents,events',
+                'current_right' => 'events',
+            ],
+            'params' => [
+                'resource_type' => 'relations',
+            ],
+        ];
+        $controller = new RelationsController(
+            new ServerRequest($config)
+        );
+        $controller->save();
+        $data = $controller->getRequest()->getData();
+
+        static::assertArrayNotHasKey('change_left', $data);
+        static::assertArrayNotHasKey('change_right', $data);
+        static::assertArrayNotHasKey('current_left', $data);
+        static::assertArrayNotHasKey('current_right', $data);
+    }
+
+    /**
+     * API client mock for save action
+     *
+     * @return void
+     */
+    protected function saveApiMock(): void
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn(['data' => ['id' => '1']]);
+        $apiClient->method('post')
+            ->withAnyParameters()
+            ->willReturn(['data' => ['id' => '1']]);
+        $apiClient->method('patch')
+            ->willReturn([]);
+
+        ApiClientProvider::setApiClient($apiClient);
     }
 }
