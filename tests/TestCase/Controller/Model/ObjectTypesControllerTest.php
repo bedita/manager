@@ -29,12 +29,28 @@ use Cake\TestSuite\TestCase;
 class ObjectTypesControllerTest extends TestCase
 {
     /**
+     * The original API client (not mocked).
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    protected $apiClient = null;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->apiClient = ApiClientProvider::getApiClient();
         $this->loadRoutes();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        ApiClientProvider::setApiClient($this->apiClient);
     }
 
     /**

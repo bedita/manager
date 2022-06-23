@@ -35,6 +35,13 @@ class RelationsControllerTest extends TestCase
     public $Relations;
 
     /**
+     * The original API client (not mocked).
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    protected $apiClient = null;
+
+    /**
      * Test request config
      *
      * @var array
@@ -55,6 +62,7 @@ class RelationsControllerTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
+        $this->apiClient = ApiClientProvider::getApiClient();
         $this->Relations = new RelationsController(
             new ServerRequest($this->defaultRequestConfig)
         );
@@ -81,7 +89,7 @@ class RelationsControllerTest extends TestCase
     public function tearDown(): void
     {
         unset($this->Relations);
-
+        ApiClientProvider::setApiClient($this->apiClient);
         parent::tearDown();
     }
 
