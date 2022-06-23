@@ -68,13 +68,31 @@ class ObjectTypesControllerTest extends TestCase
     public $client;
 
     /**
-     * Test request config
+     * Test default request config
      *
      * @var array
      */
     public $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
+        ],
+        'params' => [
+            'resource_type' => 'object_types',
+        ],
+    ];
+
+    /**
+     * Test `save` request config
+     *
+     * @var array
+     */
+    public $saveRequestConfig = [
+        'environment' => [
+            'REQUEST_METHOD' => 'POST',
+        ],
+        'post' => [
+            'prop_name' => 'my_prop',
+            'prop_type' => 'datetime',
         ],
         'params' => [
             'resource_type' => 'object_types',
@@ -154,21 +172,28 @@ class ObjectTypesControllerTest extends TestCase
     public function testSave(): void
     {
         $this->saveApiMock();
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'prop_name' => 'my_prop',
-                'prop_type' => 'datetime',
-            ],
-            'params' => [
-                'resource_type' => 'object_types',
-            ],
-        ];
         $controller = new ObjectTypesController(
-            new ServerRequest($config)
+            new ServerRequest($this->saveRequestConfig)
         );
+        $controller->save();
+
+        $data = $controller->getRequest()->getData();
+        static::assertArrayNotHasKey('prop_name', $data);
+        static::assertArrayNotHasKey('prop_type', $data);
+    }
+
+    /**
+     * Test `save` method with empty data
+     *
+     * @covers ::addCustomProperty()
+     * @return void
+     */
+    public function testSaveEmpty(): void
+    {
+        $this->saveApiMock();
+        $config = $this->saveRequestConfig;
+        $config['post'] = ['prop_name' => '', 'prop_type' => ''];
+        $controller = new ObjectTypesController(new ServerRequest($config));
         $controller->save();
 
         $data = $controller->getRequest()->getData();

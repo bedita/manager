@@ -129,8 +129,15 @@ class RelationsControllerTest extends TestCase
      */
     public function testRelatedTypes(): void
     {
+        // numeric items
         foreach (['left', 'right'] as $side) {
             $actual = $this->Relations->relatedTypes('1', $side);
+            static::assertTrue(is_array($actual));
+        }
+        $this->Relations->set('resource', ['id' => '1']);
+        // string items
+        foreach (['left', 'right'] as $side) {
+            $actual = $this->Relations->relatedTypes('documents', $side);
             static::assertTrue(is_array($actual));
         }
     }
