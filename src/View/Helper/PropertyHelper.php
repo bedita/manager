@@ -69,7 +69,7 @@ class PropertyHelper extends Helper
     public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
-        $controlOptions['label'] = Translate::get($name);
+        $controlOptions['label'] = $this->fieldLabel($name, $type);
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
@@ -79,6 +79,27 @@ class PropertyHelper extends Helper
         }
 
         return $this->Form->control($name, array_merge($controlOptions, $options));
+    }
+
+    /**
+     * Return label for field by name and type.
+     * If there's a config for the field and type, return it.
+     * Return translation of name, otherwise.
+     *
+     * @param string $name The field name
+     * @param string|null $type The object type
+     * @return string
+     */
+    public function fieldLabel(string $name, ?string $type = null): string
+    {
+        $defaultLabel = Translate::get($name);
+        $t = empty($type) ? $this->getView()->get('objectType') : $type;
+        if (empty($t)) {
+            return $defaultLabel;
+        }
+        $key = sprintf('Properties.%s.labels.fields.%s', $t, $name);
+
+        return Configure::read($key, $defaultLabel);
     }
 
     /**

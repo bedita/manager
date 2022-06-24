@@ -89,6 +89,8 @@ export default {
 
             relationsData: [],          // hidden field containing serialized json passed on form submit
             activeFilter: {},           // current active filter for objects list
+
+            exportFormat: 'csv',        // default csv
         }
     },
 
@@ -107,6 +109,8 @@ export default {
          */
         showFilter() {
             return this.activeFilter.q ||
+                this.activeFilter?.filter?.status ||
+                this.activeFilter?.filter?.type ||
                 this.pagination.page_count > 1 ||
                 this.alreadyInView.length > this.pagination.page_size;
         },
@@ -752,37 +756,63 @@ export default {
          * Return true when related object has streams data.
          *
          * @param {Object} related The object
-         * @returns
+         * @returns {Boolean} true if a stream object is available
          */
         relatedStream(related) {
             if (!related.relationships.streams || !related.relationships.streams.data || related.relationships.streams.data.length === 0) {
                 return false;
             }
 
-            return related.relationships.streams.data[0].attributes;
+            return true;
         },
 
         /**
-         * Get related object attribute.
+         * Get related stream property.
          *
          * @param {Object} related The object
-         * @param {String} attribute The attribute name
+         * @param {String} prop The prop name
          * @param {String} format The format required, if any
          * @returns {String}
          */
-        relatedAttribute(related, attribute, format) {
-            let val = '';
-            const stream = related.relationships.streams.data[0];
-            if (attribute in stream.attributes) {
-                val = stream.attributes[attribute];
-            } else if (attribute in stream.meta) {
-                val = stream.meta[attribute];
+        relatedStreamProp(related, prop, format) {
+            const stream = related?.relationships?.streams?.data[0] || {};
+            const attributes = stream?.attributes || {};
+            if (prop in attributes) {
+                return this.propFormat(attributes[prop], format);
             }
-            if (format === 'bytes') {
-                return this.bytes(val);
+            const meta = stream?.meta || {};
+            if (prop in meta) {
+                return this.propFormat(meta[prop], format);
             }
 
-            return val;
+            return '';
+        },
+
+        /**
+         * Format property value
+         *
+         * @param {String} value
+         * @param {String} format
+         * @returns {String}
+         */
+        propFormat(value, format) {
+            if (format === 'bytes') {
+                return this.bytes(value);
+            }
+
+            return value;
+        },
+
+        /**
+         * Retrieve related stream Download URL
+         *
+         * @param {Object} related The object
+         * @returns {String}
+         */
+        relatedStreamDownloadUrl(related) {
+            const id = related.relationships?.streams?.data[0]?.id;
+
+            return `${BEDITA.base}/download/${id}`;
         },
 
         /**

@@ -12,9 +12,9 @@
  */
 namespace App\Test\TestCase\Controller\Component;
 
+use App\Controller\AppController;
 use App\Controller\Component\FlashComponent;
 use BEdita\SDK\BEditaClientException;
-use Cake\Controller\Controller;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -43,9 +43,11 @@ class FlashComponentTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->controller = new Controller();
+        $this->controller = new AppController();
         $registry = $this->controller->components();
-        $this->Flash = $registry->load(FlashComponent::class);
+        /** @var \App\Controller\Component\FlashComponent $component */
+        $component = $registry->load(FlashComponent::class);
+        $this->Flash = $component;
 
         parent::setUp();
     }
@@ -79,9 +81,8 @@ class FlashComponentTest extends TestCase
         $expectedExceptionMessage = 'something went wrong';
         $this->Flash->set('debug', ['params' => new BEditaClientException($expectedExceptionMessage)]);
         $flash = $this->controller->getRequest()->getSession()->read('Flash');
-        $message = $flash['flash'][0]['message'];
         static::assertEquals($expected, $flash['flash'][0]['message']);
-        static::assertEquals($expected, $flash['flash'][1]['message']);
-        static::assertEquals($expectedExceptionMessage, $flash['flash'][1]['params']['title']);
+        static::assertEquals($expectedExceptionMessage, $flash['flash'][0]['params']['title']);
+        static::assertEquals(503, $flash['flash'][0]['params']['status']);
     }
 }

@@ -113,4 +113,27 @@ class TranslatorControllerTest extends TestCase
         $expected = json_decode($translator->translate($texts, 'en', 'it'));
         static::assertEquals($actual, $expected->translation);
     }
+
+    /**
+     * test `initialize` function
+     *
+     * @return void
+     * @covers ::initialize()
+     */
+    public function testInitialize(): void
+    {
+        $this->controller = new TranslatorController(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'post' => [
+                    'text' => ['gustavo is a friend', 'gustavo is the best'],
+                    'from' => 'en',
+                    'to' => 'it',
+                ],
+            ])
+        );
+        static::assertNotEmpty($this->controller->{'Translator'});
+    }
 }

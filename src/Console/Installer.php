@@ -97,7 +97,7 @@ class Installer
     public static function createDotEnvConfig($dir, $io): void
     {
         $appConfig = $dir . '/config/.env';
-        $defaultConfig = $dir . '/config/.env.default';
+        $defaultConfig = $dir . '/config/.env.example';
         if (!file_exists($appConfig)) {
             copy($defaultConfig, $appConfig);
             $io->write('Created `config/.env` file');

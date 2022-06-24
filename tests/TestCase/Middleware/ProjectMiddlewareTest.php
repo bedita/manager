@@ -51,7 +51,7 @@ class ProjectMiddlewareTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->nextMiddleware = null;
+        unset($this->nextMiddleware);
     }
 
     /**

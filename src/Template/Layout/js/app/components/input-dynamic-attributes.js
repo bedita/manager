@@ -8,9 +8,10 @@
  */
 
 export default {
-    name: "InputDynamicAttributes",
+    name: 'InputDynamicAttributes',
 
     props: {
+        form: String,
         value: {
             type: [String, Boolean],
         },
@@ -27,7 +28,7 @@ export default {
      * @returns {VNode} input element
      */
     render(createElement) {
-        const attrs = this.attrs;
+        const attrs = { ...(this.attrs || {}), form: this.form };
         const directivesName = Object.keys(attrs).filter(attr => attr.startsWith('v-'));
 
         // remove 'v-' text from vue directives
@@ -35,16 +36,16 @@ export default {
             const directiveName = name.split('v-').pop();
             return {
                 name: directiveName,
-            }
+            };
         });
 
         let domProps = { value: this.value };
-        let on = { input: e => { this.$emit("update:value", e.target.value); } };
+        let on = { input: e => { this.$emit('update:value', e.target.value); } };
 
         // if checkbox is to be rendered a different mapping is needed
         if (attrs.type === 'checkbox') {
             domProps = { checked: this.value === 'true' };
-            on = { input: e => { this.$emit("update:value", e.target.checked); } };
+            on = { input: e => { this.$emit('update:value', e.target.checked); } };
         }
 
         // create and return input element

@@ -39,7 +39,9 @@ class ThumbsComponentTest extends TestCase
         parent::setUp();
         $controller = new Controller();
         $registry = $controller->components();
-        $this->Thumbs = $registry->load(ThumbsComponent::class);
+        /** @var \App\Controller\Component\ThumbsComponent $thumbsComponent */
+        $thumbsComponent = $registry->load(ThumbsComponent::class);
+        $this->Thumbs = $thumbsComponent;
         $this->client = ApiClientProvider::getApiClient();
     }
 

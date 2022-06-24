@@ -26,12 +26,24 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
+                {% set list = {} %}
+                {% for type, filters in filtersByType %}
+                    {% set options = [] %}
+                    {% for f in filters %}
+                        {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
+                        {% set options = options|merge([o|merge({ 'name': f })]) %}
+                    {% endfor %}
+                    {% set list = list|merge({ (type): options }) %}
+                {% endfor %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
                     :show-advanced="false"
                     :relation-types="relationTypes"
                     :init-filter="activeFilter"
+                    {% if list %}
+                    :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
+                    {% endif %}
                     objects-label="{{ __('objects') }}"
                     @filter-update-current-page="onUpdateCurrentPage"
                     @filter-update-page-size="onUpdatePageSize"
@@ -107,6 +119,25 @@
 
         {# End relation custom or default view #}
         {% endif %}
+
+        <div class="mt-2" v-show="objects.length">
+            {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            {% set formats = config('Export.formats', {
+                'CSV': 'csv',
+                'Open Document': 'ods',
+                'MS Excel': 'xlsx'
+            }) %}
+
+            <select name="format-{{ relationName }}" v-model="exportFormat">
+            {% for label,format in formats %}
+                <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+            {% endfor %}
+            </select>
+
+            {% for label, format in formats %}
+               <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
+            {% endfor %}
+        </div>
 
         {% if not readonly %}
         {# hidden field - relations serialized json #}

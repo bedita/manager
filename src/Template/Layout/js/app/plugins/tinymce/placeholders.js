@@ -49,7 +49,7 @@ function loadPreview(editor, node, id) {
                         break;
                     default:
                         if (data.meta.media_url) {
-                            content = `<iframe src="${data.meta.media_url}"></iframe>`;
+                            content = `<iframe src="${data.meta.media_url}" sandbox=""></iframe>`;
                         } else {
                             content = `<div class="embed-card">
                                 <div class="title">${data.attributes.title || t('Untitled')}</div>
@@ -69,6 +69,9 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
         editor.parser.addAttributeFilter('data-placeholder', function(nodes) {
             nodes.forEach((node) => {
                 let comment = node.firstChild.value;
+                if (!comment) {
+                    return;
+                }
                 let match = comment.match(regex);
                 if (!match) {
                     return;

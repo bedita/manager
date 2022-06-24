@@ -95,6 +95,18 @@ class CategoriesComponentTest extends TestCase
     }
 
     /**
+     * Test `names`
+     *
+     * @return void
+     * @covers ::names()
+     */
+    public function testNames(): void
+    {
+        $actual = $this->Categories->names('documents');
+        static::assertEmpty($actual);
+    }
+
+    /**
      * Test `map`
      *
      * @return void
@@ -258,7 +270,7 @@ class CategoriesComponentTest extends TestCase
             ->willReturn($expected);
         ApiClientProvider::setApiClient($apiClient);
 
-        $actual = $this->Categories->delete(999, 'documents');
+        $actual = $this->Categories->delete('999', 'documents');
         static::assertEquals($expected, $actual);
         $cached = Cache::read($key, SchemaComponent::CACHE_CONFIG);
         static::assertEmpty($cached);

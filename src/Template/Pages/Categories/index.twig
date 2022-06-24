@@ -9,10 +9,7 @@
 {{ element('Modules/index_header') }}
 
 <div class="module-index">
-    {{ element('Modules/index_categories', {
-        'saveAction': { '_name': 'modules:categories:save', 'object_type': objectType },
-        'removeAction': { '_name': 'modules:categories:remove', 'object_type': objectType },
-    }) }}
+    {{ element('Modules/index_categories') }}
 
     {% do _view.append('module-buttons',
         Html.link(__('List'),

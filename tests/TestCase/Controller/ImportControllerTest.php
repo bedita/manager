@@ -44,7 +44,7 @@ class ImportControllerTest extends TestCase
     /**
      * Test file error
      *
-     * @var string
+     * @var int
      */
     protected $fileError = 0;
 
