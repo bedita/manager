@@ -99,7 +99,7 @@ class PropertyHelperTest extends TestCase
                     'description' => 'object status: on, draft, off',
                     'default' => 'draft',
                 ],
-                '<div class="input radio"><label>Status</label><input type="hidden" name="status" value=""/><label for="status-on"><input type="radio" name="status" value="on" id="status-on" class="test">On</label><label for="status-draft"><input type="radio" name="status" value="draft" id="status-draft" class="test">Draft</label><label for="status-off"><input type="radio" name="status" value="off" id="status-off" class="test">Off</label></div>',
+                '<div class="input radio"><label>Status</label><input type="hidden" name="status" id="status" value=""/><label for="status-on"><input type="radio" name="status" value="on" id="status-on" class="test">On</label><label for="status-draft"><input type="radio" name="status" value="draft" id="status-draft" class="test">Draft</label><label for="status-off"><input type="radio" name="status" value="off" id="status-off" class="test">Off</label></div>',
             ],
             'categories' => [
                 'categories',
@@ -112,7 +112,7 @@ class PropertyHelperTest extends TestCase
                     ['name' => 'cat-4', 'label' => 'category 4'],
                     ['name' => 'cat-5', 'label' => 'category 5'],
                 ],
-                '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" value=""/><div class="checkbox"><label for="categories-cat-1" class="selected"><input type="checkbox" name="categories[]" value="cat-1" checked="checked" id="categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="categories-cat-2"><input type="checkbox" name="categories[]" value="cat-2" id="categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="categories-cat-3" class="selected"><input type="checkbox" name="categories[]" value="cat-3" checked="checked" id="categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="categories-cat-4"><input type="checkbox" name="categories[]" value="cat-4" id="categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="categories-cat-5"><input type="checkbox" name="categories[]" value="cat-5" id="categories-cat-5" class="test">category 5</label></div></div>',
+                '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-cat-1" class="selected"><input type="checkbox" name="categories[]" value="cat-1" checked="checked" id="categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="categories-cat-2"><input type="checkbox" name="categories[]" value="cat-2" id="categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="categories-cat-3" class="selected"><input type="checkbox" name="categories[]" value="cat-3" checked="checked" id="categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="categories-cat-4"><input type="checkbox" name="categories[]" value="cat-4" id="categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="categories-cat-5"><input type="checkbox" name="categories[]" value="cat-5" id="categories-cat-5" class="test">category 5</label></div></div>',
             ],
             'object' => [
                 'an object',
@@ -279,5 +279,38 @@ class PropertyHelperTest extends TestCase
     public static function dummy($value): array
     {
         return ['html' => sprintf('<dummy>%s</dummy>', $value)];
+    }
+
+    /**
+     * Test `fieldLabel`.
+     *
+     * @return void
+     * @covers ::fieldLabel()
+     */
+    public function testFieldLabel(): void
+    {
+        // no type
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->fieldLabel('dummy');
+        $expected = 'Dummy';
+        static::assertEquals($expected, $actual);
+
+        // type without config
+        $actual = $helper->fieldLabel('info', 'dummies');
+        $expected = 'Info';
+        static::assertEquals($expected, $actual);
+
+        // type with config
+        $expected = 'A B O U T';
+        Configure::write(
+            'Properties.dummies',
+            array_merge(
+                (array)\Cake\Core\Configure::read('Properties.dummies'),
+                ['labels' => ['fields' => ['about' => $expected]]]
+            )
+        );
+        $actual = $helper->fieldLabel('about', 'dummies');
+        static::assertEquals($expected, $actual);
     }
 }

@@ -22,6 +22,7 @@ use Cake\View\Helper;
  *
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
+ * @property \App\View\Helper\PermsHelper $Perms
  * @property \App\View\Helper\SystemHelper $System
  */
 class LayoutHelper extends Helper
@@ -31,7 +32,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Link', 'System'];
+    public $helpers = ['Html', 'Link', 'Perms', 'System'];
 
     /**
      * Is Dashboard
@@ -140,6 +141,7 @@ class LayoutHelper extends Helper
             'Config' => 'has-background-black',
             'Endpoints' => 'has-background-black',
             'Roles' => 'has-background-black',
+            'EndpointPermissions' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
@@ -194,6 +196,7 @@ class LayoutHelper extends Helper
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
+            'canReadUsers' => $this->Perms->canRead('users'),
         ];
     }
 
@@ -218,5 +221,33 @@ class LayoutHelper extends Helper
         }
 
         return null;
+    }
+
+    /**
+     * Trash link by type.
+     *
+     * @param string|null $type The object type, if any.
+     * @return string
+     */
+    public function trashLink(?string $type): string
+    {
+        if (empty($type)) {
+            return '';
+        }
+
+        $modules = (array)$this->_View->get('modules');
+        if (!Hash::check($modules, sprintf('%s.hints.object_type', $type))) {
+            return '';
+        }
+
+        $classes = sprintf('button icon icon-trash icon-only-icon has-text-module-%s', $type);
+        $title = $this->tr($type) . __(' in Trashcan');
+        $filter = ['type' => [$type]];
+
+        return $this->Html->link(
+            sprintf('<span class="is-sr-only">%s</span>', __('Trash')),
+            ['_name' => 'trash:list', '?' => compact('filter')],
+            ['class' => $classes, 'title' => $title, 'escape' => false]
+        );
     }
 }

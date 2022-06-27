@@ -350,6 +350,7 @@ class LayoutHelperTest extends TestCase
             'locale' => \Cake\I18n\I18n::getLocale(),
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
+            'canReadUsers' => false,
         ];
         static::assertSame($expected, $conf);
     }
@@ -415,6 +416,37 @@ class LayoutHelperTest extends TestCase
     public function testGetCsrfToken(?string $expected, LayoutHelper $layout): void
     {
         $actual = $layout->getCsrfToken();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `trashLink`.
+     *
+     * @return void
+     * @covers ::trashLink()
+     */
+    public function testTrashLink(): void
+    {
+        $viewVars = [
+            'modules' => [
+                'dummies' => [
+                    'hints' => [
+                        'object_type' => true,
+                    ],
+                ],
+            ],
+        ];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+
+        foreach ([null, '', 'notExistingType'] as $input) {
+            $actual = $layout->trashLink($input);
+            static::assertSame('', $actual);
+        }
+
+        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-trash icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span></a>';
+        $actual = $layout->trashLink('dummies');
         static::assertSame($expected, $actual);
     }
 }

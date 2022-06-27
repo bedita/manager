@@ -60,6 +60,13 @@ abstract class AdministrationBaseController extends AppController
     protected $properties = [];
 
     /**
+     * Properties that are secrets
+     *
+     * @var array
+     */
+    protected $propertiesSecrets = [];
+
+    /**
      * Meta to show in index columns
      *
      * @var array
@@ -123,6 +130,7 @@ abstract class AdministrationBaseController extends AppController
         $this->set('links', (array)$response['links']);
         $this->set('resourceType', $this->resourceType);
         $this->set('properties', $this->properties);
+        $this->set('propertiesSecrets', $this->propertiesSecrets);
         $this->set('metaColumns', $this->meta);
         $this->set('filter', []);
         $this->set('schema', (array)$this->Schema->getSchema($this->resourceType));

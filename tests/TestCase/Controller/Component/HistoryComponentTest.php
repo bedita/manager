@@ -62,8 +62,12 @@ class HistoryComponentTest extends TestCase
 
         $controller = new Controller();
         $registry = $controller->components();
-        $this->HistoryComponent = $registry->load(HistoryComponent::class);
-        $this->SchemaComponent = $registry->load(SchemaComponent::class);
+        /** @var \App\Controller\Component\HistoryComponent $historyComponent */
+        $historyComponent = $registry->load(HistoryComponent::class);
+        $this->HistoryComponent = $historyComponent;
+        /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+        $schemaComponent = $registry->load(SchemaComponent::class);
+        $this->SchemaComponent = $schemaComponent;
         $user = getenv('BEDITA_ADMIN_USR');
         $pass = getenv('BEDITA_ADMIN_PWD');
         $this->ApiClient = ApiClientProvider::getApiClient();
@@ -390,7 +394,7 @@ class HistoryComponentTest extends TestCase
                 [
                   ['name' => 'green'],
                 ],
-                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" value=""/><div class="checkbox"><label for="categories-red"><input type="checkbox" name="categories[]" value="red" id="categories-red">Red</label></div><div class="checkbox"><label for="categories-green" class="selected"><input type="checkbox" name="categories[]" value="green" checked="checked" id="categories-green">Green</label></div><div class="checkbox"><label for="categories-blue"><input type="checkbox" name="categories[]" value="blue" id="categories-blue">Blue</label></div></div></div>',
+                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-red"><input type="checkbox" name="categories[]" value="red" id="categories-red">Red</label></div><div class="checkbox"><label for="categories-green" class="selected"><input type="checkbox" name="categories[]" value="green" checked="checked" id="categories-green">Green</label></div><div class="checkbox"><label for="categories-blue"><input type="checkbox" name="categories[]" value="blue" id="categories-blue">Blue</label></div></div></div>',
             ],
         ];
     }

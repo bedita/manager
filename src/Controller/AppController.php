@@ -73,10 +73,7 @@ class AppController extends Controller
         /** @var \Authentication\Identity|null $identity */
         $identity = $this->Authentication->getIdentity();
         if ($identity && $identity->get('tokens')) {
-            $tokens = $identity->get('tokens');
-            if ($tokens) {
-                $this->apiClient->setupTokens($tokens);
-            }
+            $this->apiClient->setupTokens($identity->get('tokens'));
         } elseif (!in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login'])) {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
@@ -110,7 +107,7 @@ class AppController extends Controller
         $this->log('[Blackhole] form token: ' . json_encode($token), 'debug');
         $this->log('[Blackhole] form fields: ' . json_encode(array_keys((array)$this->getRequest()->getData())), 'debug');
         $this->log('[Blackhole] form session id: ' . (string)$this->getRequest()->getData('_session_id'), 'debug');
-        $sessionId = $this->getRequest()->getSession() ? $this->getRequest()->getSession()->id() : null;
+        $sessionId = $this->getRequest()->getSession()->id();
         $this->log('[Blackhole] current session id: ' . $sessionId, 'debug');
 
         // Throw a generic bad request exception.
@@ -140,7 +137,7 @@ class AppController extends Controller
             return $route;
         }
 
-        return $route + compact('redirect');
+        return $route + ['?' => compact('redirect')];
     }
 
     /**
@@ -259,7 +256,7 @@ class AppController extends Controller
         $types = (array)Hash::get($data, '_types');
         if (!empty($types)) {
             foreach ($types as $field => $type) {
-                if ($type === 'json') {
+                if ($type === 'json' && is_string($data[$field])) {
                     $data[$field] = json_decode($data[$field], true);
                 }
             }

@@ -8,11 +8,13 @@ import 'Template/Layout/style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { confirm, prompt } from 'app/components/dialog/dialog';
+import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
+import email from 'app/directives/email';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
+import uri from 'app/directives/uri';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
@@ -27,6 +29,7 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
+        Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
@@ -49,6 +52,7 @@ const _vueInstance = new Vue({
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
+        Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
     },
 
     data() {
@@ -94,6 +98,8 @@ const _vueInstance = new Vue({
         Vue.use(jsoneditor);
         Vue.use(datepicker);
         Vue.use(richeditor);
+        Vue.use(email);
+        Vue.use(uri);
 
         // Register helpers
         Vue.use(viewHelper);
@@ -143,6 +149,12 @@ const _vueInstance = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
+            // register functions in BEDITA to make them reusable in plugins
+            BEDITA.confirm = confirm;
+            BEDITA.error = error;
+            BEDITA.info = info;
+            BEDITA.prompt = prompt;
+            BEDITA.warning = warning;
         });
     },
 
@@ -167,16 +179,18 @@ const _vueInstance = new Vue({
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-
-            prompt(msg, defaultTitle, (cloneTitle, dialog) => {
-                const query = `?title=${cloneTitle || defaultTitle}`;
+            const confirmCallback = (cloneTitle, cloneRelations, dialog) => {
+                const query = `?title=${cloneTitle || defaultTitle}&cloneRelations=${cloneRelations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
                 const newTab = window.open(url, '_blank');
                 newTab.focus();
                 dialog.hide(true);
-            });
+            };
+            const options = { checkLabel: t`Clone relations`, checkValue: false };
+
+            prompt(msg, defaultTitle, confirmCallback, document.body, options);
         },
 
         /**

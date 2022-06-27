@@ -7,7 +7,7 @@
 
     <div class="page-size" v-show="pagination.count > paginateSizes[0]">
         <span>{{ __('Size') }}</span>
-        <select class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
+        <select form="_pagination" class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
             <option v-for="size in paginateSizes"><: size :></option>
         </select>
     </div>
@@ -30,7 +30,7 @@
             {# prev page #}
             <button v-if="pagination.page > 2" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page - 1)"><: pagination.page - 1:></button>
             {# current page #}
-            <button class="is-dark current-page has-text-size-smallest" @click.prevent="onChangePage(pagination.page)"><: pagination.page :></button>
+            <input size="2" class="ml-05" :class="pagination.page === 1 ? 'mr-05' : 'ml-05'" :value="pagination.page" @change="onChangePageNumber($event)" @keydown="onPageKeydown($event)"/>
             {# next page #}
             <button v-if="pagination.page < pagination.page_count-1" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
             {# delimiter #}

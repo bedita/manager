@@ -85,7 +85,7 @@ class Options
      */
     public static function dateRanges($value): array
     {
-        return Control::datetime($value);
+        return Control::datetime(compact('value'));
     }
 
     /**
@@ -96,7 +96,7 @@ class Options
      */
     public static function startDate($value): array
     {
-        return Control::datetime($value);
+        return Control::datetime(compact('value'));
     }
 
     /**
@@ -107,7 +107,7 @@ class Options
      */
     public static function endDate($value): array
     {
-        return Control::datetime($value);
+        return Control::datetime(compact('value'));
     }
 
     /**

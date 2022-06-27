@@ -59,6 +59,14 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             $this->bootstrapCli();
         }
 
+        /*
+         * Only try to load DebugKit in development mode
+         * Debug Kit should not be installed on a production system
+         */
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
+        }
+
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
         $this->addPlugin('Authentication');
@@ -89,7 +97,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $plugins = (array)Configure::read('Plugins');
         foreach ($plugins as $plugin => $options) {
             $options = array_merge(static::PLUGIN_DEFAULTS, $options);
-            if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
+            if (!$options['debugOnly'] || Configure::read('debug')) {
                 $this->addPlugin($plugin, $options);
                 $this->plugins->get($plugin)->bootstrap($this);
             }

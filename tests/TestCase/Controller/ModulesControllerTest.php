@@ -341,12 +341,9 @@ class ModulesControllerTest extends BaseControllerTest
         $result = $this->controller->clone($id);
 
         // verify response status code and type
-        static::assertNull($result);
-        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
         static::assertEquals('text/html', $this->controller->getResponse()->getType());
-
-        // verify expected vars in view
-        $this->assertExpectedViewVars(['object', 'schema', 'properties']);
     }
 
     /**
@@ -918,94 +915,6 @@ class ModulesControllerTest extends BaseControllerTest
         foreach ($expected as $varName) {
             static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
-    }
-
-    /**
-     * Test `listCategories`.
-     *
-     * @return void
-     * @covers ::listCategories()
-     */
-    public function testListCategories(): void
-    {
-        // Setup controller for test
-        $this->setupController();
-
-        // do controller call
-        $result = $this->controller->listCategories();
-
-        // verify response status code and type
-        static::assertNull($result);
-        static::assertEquals(200, $this->controller->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->controller->getResponse()->getType());
-
-        // verify expected vars in view
-        $expected = ['resources', 'roots', 'categoriesTree', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
-        $this->assertExpectedViewVars($expected);
-    }
-
-    /**
-     * Test `saveCategory`.
-     *
-     * @return void
-     * @covers ::saveCategory()
-     */
-    public function testSaveCategory(): void
-    {
-        // Setup controller for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-
-        // exception, flash message
-        $result = $this->controller->saveCategory();
-
-        // verify response status code and type
-        static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->controller->getResponse()->getType());
-        $flash = $this->controller->getRequest()->getSession()->read('Flash');
-        $expected = '[400] Invalid data';
-        $actual = $flash['flash'][0]['message'];
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test `removeCategory`.
-     *
-     * @return void
-     * @covers ::removeCategory()
-     */
-    public function testRemoveCategory(): void
-    {
-        // Setup controller for test
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'get' => [],
-            'params' => [
-                'object_type' => 'documents',
-            ],
-        ]);
-
-        // exception, flash message
-        $result = $this->controller->removeCategory('999');
-
-        // verify response status code and type
-        static::assertNotNull($result);
-        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->controller->getResponse()->getType());
-        $flash = $this->controller->getRequest()->getSession()->read('Flash');
-        $expected = '[404] Not Found';
-        $actual = $flash['flash'][0]['message'];
-        static::assertEquals($expected, $actual);
     }
 
     /**

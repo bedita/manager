@@ -34,6 +34,9 @@ return [
      *      /webroot/.htaccess
      *   And uncomment the baseUrl key below.
      * - fullBaseUrl - A base URL to use for absolute links.
+     *   CakePHP generates required value based on `HTTP_HOST` environment variable.
+     *   However, you can define it manually to optimize performance or if you
+     *   are concerned about people manipulating the `Host` header.
      * - imageBaseUrl - Web path to the public images directory under webroot.
      * - cssBaseUrl - Web path to the public css directory under webroot.
      * - jsBaseUrl - Web path to the public js directory under webroot.
@@ -150,6 +153,20 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
+        ],
+
+        /**
+         * Thumbnails cache
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         * If you set 'className' => 'Null' core cache will be disabled.
+         */
+        '_thumbs_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'thumbs_',
+            'path' => CACHE . 'thumbs/',
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_THUMBS_URL', null),
         ],
 
         /*
@@ -287,7 +304,7 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
-        'cookie' => 'BE4-MANAGER',
+        'cookie' => 'BEDITA-MANAGER',
     ],
 
     /**

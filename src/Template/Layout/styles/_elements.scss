@@ -130,6 +130,11 @@ nav.pagination {
                 }
             }
 
+            input {
+                min-width: 2.5em;
+                text-align: center;
+            }
+
             .pages-delimiter {
                 &:after {
                     content: '…';

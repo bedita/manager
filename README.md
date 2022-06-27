@@ -3,6 +3,7 @@
 [![Github Actions PHP](https://github.com/bedita/manager/workflows/php/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Aphp)
 [![Github Actions Javascript](https://github.com/bedita/manager/workflows/javascript/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Ajavascript)
 [![codecov](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/manager)
+[![phpstan](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg)](https://phpstan.org)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
 [![Version](https://img.shields.io/packagist/v/bedita/manager.svg?label=stable)](https://packagist.org/packages/bedita/manager)
 [![License](https://img.shields.io/badge/License-LGPL_v3-orange.svg)](https://github.com/bedita/manager/blob/master/LICENSE.LGPL)
@@ -136,7 +137,7 @@ yarn run eslint src/Template/Layout/js/app/pages/admin/index.js
 
 ## Run unit tests
 
-To setup tests locally simply copy `tests/.env.default` to `tests/.env` and set env vars accordingly.
+To setup tests locally simply copy `tests/.env.example` to `tests/.env` and set env vars accordingly.
 To launch tests:
 
 ```bash
@@ -144,12 +145,12 @@ vendors/bin/phpunit [test folder or file, default '/tests']
 ```
 
 To run those tests you may want to use a Docker image as BEdita4 API endpoint.
-For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.6.1```
+For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.7.1```
 
 Then you may run the image with
 
 ```bash
-docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.6.1
+docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.7.1
 ```
 
 You can then set env vars accordingly like this:
