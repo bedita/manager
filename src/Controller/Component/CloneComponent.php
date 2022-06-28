@@ -107,7 +107,7 @@ class CloneComponent extends Component
      */
     public function relation(string $sourceId, string $type, string $relation, string $destinationId): bool
     {
-        $related = $this->apiClient->getRelated($sourceId, $type, $relation);
+        $related = $this->apiClient->getRelated($sourceId, $type, $relation, ['page_size' => 100]);
         if (empty($related['data'])) {
             return false;
         }
