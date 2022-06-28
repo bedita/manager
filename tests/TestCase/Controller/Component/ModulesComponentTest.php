@@ -266,6 +266,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
+        /** @var \App\Controller\ModulesController $controller */
         $controller = $this->Modules->getController();
         // mock GET /config.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -338,6 +339,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
+        /** @var \App\Controller\ModulesController $controller */
         $controller = $this->Modules->getController();
         // mock GET /config.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -518,12 +520,12 @@ class ModulesComponentTest extends TestCase
         // set $this->Modules->Config->apiClient
         $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
         $property->setAccessible(true);
-        /** @var \App\Controller\AppController $appController */
+        /** @var \App\Controller\ModulesController $appController */
         $appController = $this->Modules->getController();
         $property->setValue($appController->Config, $apiClient);
 
         // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $appController->setRequest($appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         Configure::write('Modules', $modules);
@@ -767,6 +769,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
+        /** @var \App\Controller\ModulesController $controller */
         $controller = $this->Modules->getController();
         // mock GET /config.
         $apiClient = $this->getMockBuilder(BEditaClient::class)

@@ -131,9 +131,9 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        /** @var \App\Controller\AppController $appController */
-        $appController = $this->getController();
-        $modules = $appController->Config->modules();
+        /** @var \App\Controller\ModulesController $controller */
+        $controller = $this->getController();
+        $modules = $controller->Config->modules();
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
