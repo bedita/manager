@@ -95,6 +95,48 @@ class ConfigComponentTest extends BaseControllerTest
     }
 
     /**
+     * Test modulesConfigId
+     *
+     * @return void
+     * @covers ::modulesConfigId()
+     */
+    public function testModulesConfigId(): void
+    {
+        $this->prepareConfig();
+
+        // configId not empty
+        $expected = 123456789;
+        // set $this->Config->configId
+        $property = new \ReflectionProperty(ConfigComponent::class, 'configId');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $expected);
+        $actual = $this->Config->modulesConfigId();
+        static::assertEquals($expected, $actual);
+
+        // configId empty
+        $property->setValue($this->Config, null);
+        $actual = $this->Config->modulesConfigId();
+        static::assertEquals(123, $actual);
+
+        // exception
+        $property->setValue($this->Config, null);
+        // mock GET /config.
+        $exception = new BEditaClientException('testModulesException');
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willThrowException($exception);
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $apiClient);
+        $actual = $this->Config->modulesConfigId();
+        static::assertNull($actual);
+    }
+
+    /**
      * Prepare config component for test
      *
      * @return void
