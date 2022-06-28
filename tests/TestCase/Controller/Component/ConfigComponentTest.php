@@ -137,6 +137,68 @@ class ConfigComponentTest extends BaseControllerTest
     }
 
     /**
+     * Test managerApplicationId
+     *
+     * @return void
+     * @covers ::managerApplicationId()
+     */
+    public function testManagerApplicationId(): void
+    {
+        $this->prepareConfig();
+
+        // managerApplicationId not empty
+        $expected = 123456789;
+        // set $this->Config->managerApplicationId
+        $property = new \ReflectionProperty(ConfigComponent::class, 'managerApplicationId');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $expected);
+        $actual = $this->Config->managerApplicationId();
+        static::assertEquals($expected, $actual);
+
+        // managerApplicationId empty
+        $property->setValue($this->Config, null);
+        // mock GET /config.
+        $exception = new BEditaClientException('testModulesException');
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/admin/applications')
+            ->willReturn([
+                'data' => [
+                    ['id' => 123, 'attributes' => ['name' => 'manager']],
+                    ['id' => 456, 'attributes' => ['name' => 'whatever']],
+                ],
+            ]);
+
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $apiClient);
+        $actual = $this->Config->managerApplicationId();
+        static::assertEquals(123, $actual);
+
+        // exception
+        $property = new \ReflectionProperty(ConfigComponent::class, 'managerApplicationId');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, 999);
+        // mock GET /config.
+        $exception = new BEditaClientException('testModulesException');
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/admin/applications')
+            ->willThrowException($exception);
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $apiClient);
+        $actual = $this->Config->managerApplicationId();
+        static::assertEquals(999, $actual);
+    }
+
+    /**
      * Prepare config component for test
      *
      * @return void
