@@ -14,12 +14,14 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\Utils\ModulesControllerSample;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -62,6 +64,17 @@ class ModulesControllerTest extends BaseControllerTest
         // Mock Authentication component
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
+        // mock GET /config.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([]);
+        // set $this->Modules->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->controller->Config, $apiClient);
         // force modules load
         $this->controller->Modules->startup();
         $this->setupApi();

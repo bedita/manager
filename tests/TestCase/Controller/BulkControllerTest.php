@@ -51,7 +51,7 @@ class BulkControllerTest extends BaseControllerTest
         // Mock Authentication component
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
-        // Setup mock API client.
+        // mock GET /config.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
