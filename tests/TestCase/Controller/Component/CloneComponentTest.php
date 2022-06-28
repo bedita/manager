@@ -127,6 +127,7 @@ class CloneComponentTest extends BaseControllerTest
         $doc2 = $response['data'];
         $destinationId = (string)$doc2['id'];
         // empty relation case: parents
+        $this->Clone->startup();
         $this->Clone->relation($sourceId, $type, 'parents', $destinationId);
 
         $expected = array_keys((array)Hash::extract($doc1, 'relationships'));

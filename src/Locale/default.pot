@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-06-01 12:38:20 \n"
+"POT-Creation-Date: 2022-06-15 09:39:56 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -971,132 +971,101 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:176
-#: src/Template/Layout/js/app/components/history/history.js:110
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:177
-#: src/Template/Layout/js/app/components/history/history.js:111
 msgid "copy"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:187
 msgid "Clone relations"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:473
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:485
 msgid "Do you really want to trash the object?"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:496
-#: src/Template/Layout/js/app/components/category/category.js:151
-#: src/Template/Layout/js/app/components/history/history.js:100
-#: src/Template/Layout/js/app/pages/admin/index.js:19
-#: src/Template/Layout/js/app/pages/model/index.js:261
-#: src/Template/Layout/js/app/pages/modules/index.js:158
-#: src/Template/Layout/js/app/pages/trash/index.js:43
 msgid "yes, proceed"
 msgstr ""
 
-#: src/Template/Layout/js/app/app.js:505
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/trash/index.js:42
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/modules/index.js:156
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/pages/model/index.js:261
 #, javascript-format
 msgid "Do you really want to trash these property types? ${ types }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:150
-#: src/Template/Layout/js/app/pages/admin/index.js:17
 msgid "Remove item. Are you sure?"
 msgstr ""
 
-#: src/Template/Layout/js/app/helpers/view.js:86
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
 "less than max file size (${ maxFileSizeMb } MB)"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/drop-upload.js:36
 msgid "stop"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/drop-upload.js:50
 msgid "done"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/drop-upload.js:53
 msgid "Cancelled"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:21
 msgid "Relation parameters"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:31
 msgid "In relation with"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:40
 msgid "Priority"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/edit-relation-params.js:58
 msgid "Cancel"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:194
+msgid "Mail to"
+msgstr ""
+
 msgid "Items"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/filter-box.js:350
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tree-view/tree-view.js:69
+msgid "Open Uri"
+msgstr ""
+
 msgid "edit"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tree-view/tree-view.js:82
 msgid "Menu"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:22
 msgid "Search existing tags"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/tag-picker/tag-picker.js:37
 msgid "Add new tag"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/secret/secret.js:31
 msgid "copied in the clipboard"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:243
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/relation-view/relations-add.js:298
 msgid "Error while creating new object."
 msgstr ""
 
@@ -1104,8 +1073,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:51
+#.
 msgid "Title"
 msgstr ""
 
@@ -1113,8 +1081,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:70
+#.
 msgid "Address"
 msgstr ""
 
@@ -1122,8 +1089,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
-#: src/Template/Layout/js/app/components/locations-view/location-view.js:95
+#.
 msgid "GET"
 msgstr ""
 
@@ -1134,40 +1100,32 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
-#: src/Template/Layout/js/app/components/locations-view/locations-view.js:30
+#.
 msgid "add new"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history-info.js:10
 msgid "version by"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history-info.js:12
 msgid "date"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history-info.js:18
 msgid "Trashed"
 msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
-#: src/Template/Layout/js/app/components/history/history.js:31
+#.
 msgid "No History data found"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:61
 #, javascript-format
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:64
 msgid "by ${ name }"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/history/history.js:99
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
@@ -1178,8 +1136,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:51
+#.
 msgid "Every day"
 msgstr ""
 
@@ -1188,8 +1145,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:58
+#.
 msgid "Sunday"
 msgstr ""
 
@@ -1198,8 +1154,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:59
+#.
 msgid "Monday"
 msgstr ""
 
@@ -1208,8 +1163,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:60
+#.
 msgid "Tuesday"
 msgstr ""
 
@@ -1218,8 +1172,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:61
+#.
 msgid "Wednesday"
 msgstr ""
 
@@ -1228,8 +1181,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:62
+#.
 msgid "Thursday"
 msgstr ""
 
@@ -1238,8 +1190,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:63
+#.
 msgid "Friday"
 msgstr ""
 
@@ -1248,27 +1199,21 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
-#: src/Template/Layout/js/app/components/date-ranges-view/date-ranges-view.js:64
+#.
 msgid "Saturday"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:38
 msgid "Modify"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:65
 msgid "Name already in use"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:103
 msgid "Error while creating new category"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:144
 msgid "Error while saving category"
 msgstr ""
 
-#: src/Template/Layout/js/app/components/category/category.js:159
 msgid "Error on deleting category"
 msgstr ""

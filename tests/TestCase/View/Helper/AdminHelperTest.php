@@ -48,13 +48,13 @@ class AdminHelperTest extends TestCase
                 'bool',
                 'flag',
                 null,
-                '<div class="input radio"><input type="hidden" name="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
+                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
             ],
             'bool value not null' => [
                 'bool',
                 'flag',
                 'something',
-                '<div class="input radio"><input type="hidden" name="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
+                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
             ],
             'json value null' => [
                 'json',

@@ -19,7 +19,7 @@ export default {
                                 :name="getName(index, 'start_date')"
                                 v-model="dateRange.start_date"
                                 @change="onDateChanged(dateRange, $event)"
-                                v-datepicker="true" date="true" :time="dateRange.params.all_day" daterange="true"
+                                v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
                     </div>
@@ -30,13 +30,14 @@ export default {
                                 :name="getName(index, 'end_date')"
                                 v-model="dateRange.end_date"
                                 @change="onDateChanged(dateRange, $event)"
-                                v-datepicker="true" date="true" :time="dateRange.params.all_day" daterange="true"
+                                v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
                     </div>
                     <div>
                         <label class="m-0 nowrap has-text-size-smaller">
                             <input type="checkbox"
+                                :name="getNameAllDay(index)"
                                 v-model="dateRange.params.all_day"
                                 @change="onAllDayChanged(dateRange, $event)" />
                             ${t`All day`}
@@ -45,6 +46,7 @@ export default {
                     <div>
                         <label class="m-0 nowrap has-text-size-smaller" v-if="isDaysInterval(dateRange)">
                             <input type="checkbox"
+                                :name="getNameEveryDay(index)"
                                 v-model="dateRange.params.every_day"
                                 @change="onEveryDayChanged(dateRange, $event)"
                                 checked="dateRange.params.every_day" />
@@ -90,7 +92,7 @@ export default {
                     range.params = JSON.parse(range.params) || false;
                 }
                 range.params = range.params || { all_day: false, every_day: true, weekdays: {} };
-                range.params.every_day = Object.keys(range.params.weekdays).length === 0;
+                range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
             });
         }
         if (!this.dateRanges.length) {
@@ -101,6 +103,12 @@ export default {
     methods: {
         getName(index, field) {
             return `date_ranges[${index}][${field}]`;
+        },
+        getNameAllDay(index) {
+            return `date_ranges[${index}][params][all_day]`;
+        },
+        getNameEveryDay(index) {
+            return `date_ranges[${index}][params][every_day]`;
         },
         isDaysInterval(range) {
             if (!range.start_date) {

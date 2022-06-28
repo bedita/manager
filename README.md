@@ -131,7 +131,7 @@ yarn run eslint src/Template/Layout/js/app/pages/admin/index.js
 
 ## Run unit tests
 
-To setup tests locally simply copy `tests/.env.default` to `tests/.env` and set env vars accordingly.
+To setup tests locally simply copy `tests/.env.example` to `tests/.env` and set env vars accordingly.
 To launch tests:
 
 ```bash
