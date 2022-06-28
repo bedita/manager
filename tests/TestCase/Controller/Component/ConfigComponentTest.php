@@ -26,6 +26,12 @@ class ConfigComponentTest extends BaseControllerTest
     protected $Config;
 
     /**
+     * The Flash component
+     *
+     * @var \App\Controller\Component\FlashComponent
+     */
+    protected $Flash;
+    /**
      * Controller for test
      *
      * @var \Cake\Controller\Controller
@@ -42,7 +48,10 @@ class ConfigComponentTest extends BaseControllerTest
     {
         $this->prepareConfig();
         $this->Config->startup();
-        static::assertInstanceOf(BEditaClient::class, $this->Config->apiClient);
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        static::assertInstanceOf(BEditaClient::class, $property->getValue($this->Config));
     }
 
     /**
