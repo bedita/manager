@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller\Admin;
 use App\Controller\Admin\AppearenceController;
 use App\Controller\Component\ConfigComponent;
 use BEdita\SDK\BEditaClient;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
