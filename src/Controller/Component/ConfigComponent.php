@@ -132,6 +132,8 @@ class ConfigComponent extends Component
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
+
+            $this->managerApplicationId = -1;
         }
 
         return $this->managerApplicationId;

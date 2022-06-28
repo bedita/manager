@@ -163,7 +163,7 @@ class ConfigComponentTest extends BaseControllerTest
         // exception
         $property = new \ReflectionProperty(ConfigComponent::class, 'managerApplicationId');
         $property->setAccessible(true);
-        $property->setValue($this->Config, 999);
+        $property->setValue($this->Config, null);
         // mock GET /admin/applications.
         $exception = new BEditaClientException('testModulesException');
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -177,7 +177,7 @@ class ConfigComponentTest extends BaseControllerTest
         $property->setAccessible(true);
         $property->setValue($this->Config, $apiClient);
         $actual = $this->Config->managerApplicationId();
-        static::assertEquals(999, $actual);
+        static::assertEquals(-1, $actual);
     }
 
     /**
@@ -250,6 +250,7 @@ class ConfigComponentTest extends BaseControllerTest
                         if ($param === '/config') {
                             return [
                                 'data' => [
+                                    ['id' => 1, 'attributes' => ['name' => 'Gustavo']],
                                     ['id' => 123, 'attributes' => ['name' => 'Modules', 'content' => '{}']],
                                     ['id' => 456, 'attributes' => ['name' => 'Whatever']],
                                 ],
@@ -257,7 +258,11 @@ class ConfigComponentTest extends BaseControllerTest
                         }
                         if ($param === '/admin/applications') {
                             return [
-                                'data' => [['id' => 123456789, 'attributes' => ['name' => 'manager']]],
+                                'data' => [
+                                    ['id' => 1, 'attributes' => ['name' => 'gustavo']],
+                                    ['id' => 123456789, 'attributes' => ['name' => 'manager']],
+                                    ['id' => 999999999, 'attributes' => ['name' => 'whatever']],
+                                ],
                             ];
                         }
                     }
