@@ -494,7 +494,9 @@ class ModulesComponentTest extends TestCase
         // set $this->Modules->Config->apiClient
         $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
         $property->setAccessible(true);
-        $property->setValue($this->Modules->getController()->Config, $apiClient);
+        /** @var \App\Controller\AppController $appController */
+        $appController = $this->Modules->getController();
+        $property->setValue($appController->Config, $apiClient);
 
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
