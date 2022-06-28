@@ -140,9 +140,9 @@ class ConfigComponent extends Component
     /**
      * Save Modules config
      *
-     * @return void
+     * @return bool
      */
-    public function saveModules(array $modules): void
+    public function saveModules(array $modules): bool
     {
         $this->configId = $this->modulesConfigId();
         $endpoint = '/admin/config';
@@ -167,27 +167,10 @@ class ConfigComponent extends Component
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
-        }
-    }
 
-    /**
-     * Get config from db by ID, if any.
-     * Get 'Modules' config [from config/app.php etc.] otherwise.
-     *
-     * @return array
-     */
-    protected function configById(int $id): array
-    {
-        try {
-            $response = $this->apiClient->get(sprintf('/config/%d', $id));
-            if ($response['data'][0]['attributes']['content']) {
-                return (array)json_decode((string)Hash::get($response, 'data.0.attributes.content'));
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
+            return false;
         }
 
-        return (array)Configure::read('Modules');
+        return true;
     }
 }

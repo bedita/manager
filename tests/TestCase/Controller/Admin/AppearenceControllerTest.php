@@ -96,7 +96,7 @@ class AppearenceControllerTest extends TestCase
                 ]
             )
         );
-        // mock GET /config.
+        // mock GET /config and /admin/applications.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
