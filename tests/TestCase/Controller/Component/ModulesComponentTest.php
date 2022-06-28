@@ -266,11 +266,22 @@ class ModulesComponentTest extends TestCase
      */
     public function testIsAbstract($expected, $data): void
     {
+        $controller = $this->Modules->getController();
+        // mock GET /config.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([]);
+        // set $this->Modules->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($controller->Config, $apiClient);
         // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
-
-        $this->Modules->getController()->dispatchEvent('Controller.startup');
+        $this->Modules->startup();
         $actual = $this->Modules->isAbstract($data);
 
         static::assertEquals($expected, $actual);
@@ -327,12 +338,25 @@ class ModulesComponentTest extends TestCase
      */
     public function testObjectTypes($expected, $data): void
     {
+        $controller = $this->Modules->getController();
+        // mock GET /config.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([]);
+        // set $this->Modules->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($controller->Config, $apiClient);
+
         // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         if (!empty($expected)) {
-            $this->Modules->getController()->dispatchEvent('Controller.startup');
+            $this->Modules->startup();
         }
         $actual = $this->Modules->objectTypes($data);
         sort($actual);
@@ -743,8 +767,21 @@ class ModulesComponentTest extends TestCase
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
+        $controller = $this->Modules->getController();
+        // mock GET /config.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([]);
+        // set $this->Modules->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($controller->Config, $apiClient);
+
         // Mock Authentication component
-        $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         Configure::write('Modules', $config);
 
@@ -760,14 +797,11 @@ class ModulesComponentTest extends TestCase
             ->getMock();
         $apiClient->method('get')
             ->willReturn(compact('meta'));
-
         ApiClientProvider::setApiClient($apiClient);
 
         $clearHomeCache = true;
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
-
-        $controller = $this->Modules->getController();
-        $controller->dispatchEvent('Controller.startup');
+        $this->Modules->startup();
 
         $viewVars = $controller->viewBuilder()->getVars();
         static::assertArrayHasKey('project', $viewVars);
