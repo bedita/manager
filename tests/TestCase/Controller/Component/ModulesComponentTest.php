@@ -14,6 +14,8 @@
 
 namespace App\Test\TestCase\Controller\Component;
 
+use App\Controller\AppController;
+use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
@@ -72,7 +74,7 @@ class ModulesComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new Controller();
+        $controller = new AppController();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
@@ -482,6 +484,18 @@ class ModulesComponentTest extends TestCase
      */
     public function testGetModules($expected, $meta, array $modules = []): void
     {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([]);
+        // set $this->Modules->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Modules->getController()->Config, $apiClient);
+
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
