@@ -10,7 +10,7 @@
 
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
-Official Backend Admin WebApp for [BEdita4 API](https://gihub.com/bedita/bedita).
+Official Backend Admin WebApp for [BEdita4 and BEdita5 API](https://gihub.com/bedita/bedita).
 
 ## Prerequisites
 
