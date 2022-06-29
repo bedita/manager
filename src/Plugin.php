@@ -23,7 +23,7 @@ use Cake\Core\Plugin as CakePlugin;
 class Plugin extends CakePlugin
 {
     /**
-     * Loaded BE4Web application plugins
+     * Loaded BEdita Manager application plugins
      * Auxiliary & internally loaded plugins like `DebugKit`, `Bake` and `TwigView` are exluded
      *
      * @return array
@@ -35,6 +35,7 @@ class Plugin extends CakePlugin
             'Bake',
             'DebugKit',
             'IdeHelper',
+            'Cake/Repl',
             'BEdita/WebTools',
             'BEdita/I18n',
             'Migrations',
