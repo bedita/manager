@@ -57,6 +57,12 @@ And then point your browser to `http://localhost:8765/`
 
 For any other use than a simple test we recommend to configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
 
+## Configuration
+
+You can further configure your BEdita Manager instance in `config/app_local.php` with environment and project specific settings.
+
+Have look at the main [Manager configuration wiki page](https://github.com/bedita/manager/wiki/Manager-App-Configuration) on how to customize your Manager instance.
+
 ## Docker
 
 ### Pull official image

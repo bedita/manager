@@ -40,7 +40,7 @@
         "dereuromark/cakephp-ide-helper": "~1.17.0",
         "phpstan/phpstan": "^1.5",
         "phpunit/phpunit": "^9",
-        "psy/psysh": "@stable"
+        "cakephp/repl": "^0.1"
     },
     "autoload": {
         "psr-4": {
@@ -61,7 +61,7 @@
             "@test",
             "@cs-check"
         ],
-        "analyse": "vendor/bin/phpstan analyse",
+        "stan": "vendor/bin/phpstan analyse",
         "cs-check": "vendor/bin/phpcs --extensions=php --colors -p ./src ./tests ./config",
         "cs-fix": "vendor/bin/phpcbf --extensions=php --colors ./src ./tests ./config",
         "test": "vendor/bin/phpunit --colors=always",
