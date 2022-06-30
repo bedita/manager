@@ -37,8 +37,8 @@ class RelationsController extends ModelBaseController
         parent::index();
         $resources = (array)$this->viewBuilder()->getVar('resources');
         foreach ($resources as &$resource) {
-            $resource['left_object_types'] = $this->relatedTypes($resource['id'], 'left');
-            $resource['right_object_types'] = $this->relatedTypes($resource['id'], 'right');
+            $resource['left_object_types'] = $this->relatedTypes($resource, 'left');
+            $resource['right_object_types'] = $this->relatedTypes($resource, 'right');
         }
         $this->set(compact('resources'));
 
@@ -48,11 +48,28 @@ class RelationsController extends ModelBaseController
     /**
      * @inheritDoc
      */
+    protected function indexQuery(): array
+    {
+        return  parent::indexQuery() + ['include' => 'left_object_types,right_object_types'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function viewQuery(): array
+    {
+        return  parent::viewQuery() + ['include' => 'left_object_types,right_object_types'];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function view($id): ?Response
     {
         parent::view($id);
-        $this->set('left_object_types', $this->relatedTypes($id, 'left'));
-        $this->set('right_object_types', $this->relatedTypes($id, 'right'));
+        $resource = (array)$this->viewBuilder()->getVar('resource');
+        $this->set('left_object_types', $this->relatedTypes($resource, 'left'));
+        $this->set('right_object_types', $this->relatedTypes($resource, 'right'));
 
         return null;
     }
@@ -117,21 +134,16 @@ class RelationsController extends ModelBaseController
     }
 
     /**
-     * Get related types by relation ID and side
+     * Get related types by relation resource and side
      *
-     * @param string $id The relation ID
+     * @param array $resource The resource data
      * @param string $side The side, can be 'left' or 'right'
      * @return array
      */
-    public function relatedTypes(string $id, string $side): array
+    protected function relatedTypes(array $resource, string $side): array
     {
-        if (!is_numeric($id)) {
-            $resource = (array)$this->viewBuilder()->getVar('resource');
-            $id = Hash::get($resource, 'id');
-        }
-        $endpoint = sprintf('/model/relations/%s/%s_object_types', $id, $side);
-        $response = $this->apiClient->get($endpoint);
+        $path = sprintf('relationships.%s_object_types.data.{n}.attributes.name', $side);
 
-        return (array)Hash::extract($response, 'data.{n}.attributes.name');
+        return (array)Hash::extract($resource, $path);
     }
 }

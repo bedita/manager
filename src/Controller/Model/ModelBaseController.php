@@ -23,6 +23,7 @@ use Cake\Utility\Hash;
  * Model base controller class
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatter $ApiFormatter
  */
 abstract class ModelBaseController extends AppController
 {
@@ -48,6 +49,7 @@ abstract class ModelBaseController extends AppController
         parent::initialize();
 
         $this->loadComponent('Properties');
+        $this->loadComponent('BEdita/WebTools.ApiFormatter');
 
         $this->Schema->setConfig([
             'type' => $this->resourceType,
@@ -87,12 +89,11 @@ abstract class ModelBaseController extends AppController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $query = $this->getRequest()->getQueryParams() + ['page_size' => 500];
 
         try {
             $response = $this->apiClient->get(
                 sprintf('/model/%s', $this->resourceType),
-                $query
+                $this->indexQuery()
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
@@ -101,6 +102,7 @@ abstract class ModelBaseController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
+        $response = $this->ApiFormatter->embedIncluded($response);
         $this->set('resources', (array)$response['data']);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
@@ -112,6 +114,16 @@ abstract class ModelBaseController extends AppController
     }
 
     /**
+     * Create query on `GET /model/{resource}` index call
+     *
+     * @return array
+     */
+    protected function indexQuery(): array
+    {
+        return  $this->request->getQueryParams() + ['page_size' => 500];
+    }
+
+    /**
      * View single resource.
      *
      * @param string|int $id Resource ID.
@@ -119,8 +131,9 @@ abstract class ModelBaseController extends AppController
      */
     public function view($id): ?Response
     {
+        $endpoint = sprintf('/model/%s/%s', $this->resourceType, $id);
         try {
-            $response = $this->apiClient->get(sprintf('/model/%s/%s', $this->resourceType, $id));
+            $response = $this->apiClient->get($endpoint, $this->viewQuery());
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -128,12 +141,24 @@ abstract class ModelBaseController extends AppController
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
         }
 
+        $response = $this->ApiFormatter->embedIncluded($response);
         $resource = (array)$response['data'];
         $this->set(compact('resource'));
         $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+     * Create query on `GET /model/{resource}/{id}` call
+     *
+     * @return array
+     * @codeCoverageIgnore
+     */
+    protected function viewQuery(): array
+    {
+        return  [];
     }
 
     /**
