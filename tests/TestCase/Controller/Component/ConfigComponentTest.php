@@ -172,5 +172,4 @@ class ConfigComponentTest extends BaseControllerTest
         $property->setAccessible(true);
         $property->setValue($this->Config, $apiClient);
     }
-
 }
