@@ -7,7 +7,6 @@ use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\FlashComponent;
 use App\Test\TestCase\Controller\BaseControllerTest;
 use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 
