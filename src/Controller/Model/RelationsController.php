@@ -50,7 +50,7 @@ class RelationsController extends ModelBaseController
      */
     protected function indexQuery(): array
     {
-        return  parent::indexQuery() + ['include' => 'left_object_types,right_object_types'];
+        return parent::indexQuery() + ['include' => 'left_object_types,right_object_types'];
     }
 
     /**
@@ -58,7 +58,7 @@ class RelationsController extends ModelBaseController
      */
     protected function viewQuery(): array
     {
-        return  parent::viewQuery() + ['include' => 'left_object_types,right_object_types'];
+        return parent::viewQuery() + ['include' => 'left_object_types,right_object_types'];
     }
 
     /**

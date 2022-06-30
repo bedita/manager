@@ -120,7 +120,7 @@ abstract class ModelBaseController extends AppController
      */
     protected function indexQuery(): array
     {
-        return  $this->request->getQueryParams() + ['page_size' => 500];
+        return $this->request->getQueryParams() + ['page_size' => 500];
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class ModelBaseController extends AppController
      */
     protected function viewQuery(): array
     {
-        return  [];
+        return [];
     }
 
     /**

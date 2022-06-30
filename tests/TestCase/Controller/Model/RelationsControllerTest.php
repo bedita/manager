@@ -73,7 +73,7 @@ class RelationsControllerTest extends TestCase
                         'id' => 1,
                         'type' => 'object_types',
                         'attributes' => [
-                            'name' => 'users'
+                            'name' => 'users',
                         ],
                     ],
                 ],
@@ -84,7 +84,7 @@ class RelationsControllerTest extends TestCase
                         'id' => 2,
                         'type' => 'object_types',
                         'attributes' => [
-                            'name' => 'documents'
+                            'name' => 'documents',
                         ],
                     ],
                 ],
