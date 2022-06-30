@@ -22,7 +22,10 @@
 
             <div class="main-view-column">
                 {{ element('Form/core_properties') }}
-                {{ element('Model/relation') }}
+                {# hide relation types on new relations for now #}
+                {% if resource.id %}
+                    {{ element('Model/relation_types') }}
+                {% endif %}
             </div>
 
             <div class="side-view-column">
