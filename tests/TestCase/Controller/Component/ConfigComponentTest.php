@@ -6,7 +6,10 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\FlashComponent;
 use App\Test\TestCase\Controller\BaseControllerTest;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 
@@ -30,12 +33,35 @@ class ConfigComponentTest extends BaseControllerTest
      * @var \App\Controller\Component\FlashComponent
      */
     protected $Flash;
+
     /**
      * Controller for test
      *
      * @var \Cake\Controller\Controller
      */
     protected $controller;
+
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        Cache::enable();
+        parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        unset($this->Config);
+        unset($this->Flash);
+        unset($this->controller);
+        Cache::disable();
+
+        parent::tearDown();
+    }
 
     /**
      * Test startup
@@ -54,7 +80,76 @@ class ConfigComponentTest extends BaseControllerTest
     }
 
     /**
-     * Test managerApplicationId
+     * Data provider for testRead.
+     *
+     * @return array
+     */
+    public function readProvider(): array
+    {
+        return [
+            'key not available' => [
+                'whatever-not-available',
+                false,
+            ],
+            'modules' => [
+                'Modules',
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `read`.
+     *
+     * @param string $key The config key
+     * @param bool $found Data found per config
+     * @return void
+     * @covers ::read()
+     * @covers ::fetchConfig()
+     * @dataProvider readProvider()
+     */
+    public function testRead(string $key, bool $found): void
+    {
+        $this->prepareConfig();
+        $actual = $this->Config->read($key);
+        if ($found) {
+            static::assertNotEmpty($actual);
+        } else {
+            static::assertEmpty($actual);
+        }
+    }
+
+    /**
+     * Test `read`, exception case.
+     *
+     * @return void
+     * @covers ::read()
+     * @covers ::fetchConfig()
+     */
+    public function testReadException(): void
+    {
+        $this->prepareConfig();
+        $expected = 'Something went wrong';
+        $expectedException = new BEditaClientException($expected);
+        // mock GET /config to throw BEditaClientException
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willThrowException($expectedException);
+
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $apiClient);
+        $this->Config->read('whatever');
+        $actual = $this->Config->getController()->getRequest()->getSession()->read('Flash.flash.0.message');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `managerApplicationId`.
      *
      * @return void
      * @covers ::managerApplicationId()
@@ -83,6 +178,47 @@ class ConfigComponentTest extends BaseControllerTest
     }
 
     /**
+     * Test `save`.
+     *
+     * @return void
+     * @covers ::save()
+     * @covers ::fetchConfig()
+     * @covers ::managerApplicationId()
+     */
+    public function testSave(): void
+    {
+        $this->prepareConfig();
+
+        // post
+        $key = 'Modules';
+        $data = $this->Config->read($key);
+        $this->Config->save($key, $data);
+        $actual = Cache::read(CacheTools::cacheKey(sprintf('config.%s', $key)));
+        static::assertEmpty($actual);
+
+        // patch
+        // mock GET /config
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/config')
+            ->willReturn([
+                'data' => [
+                    ['id' => 123, 'attributes' => ['name' => 'Modules', 'context' => 'app', 'content' => '{}', 'application_id' => 1]],
+                ],
+            ]);
+        // set $this->Config->apiClient
+        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Config, $apiClient);
+        $data = $this->Config->read($key);
+        $this->Config->save($key, $data);
+        $actual = Cache::read(CacheTools::cacheKey(sprintf('config.%s', $key)));
+        static::assertEmpty($actual);
+    }
+
+    /**
      * Prepare config component for test
      *
      * @return void
@@ -105,17 +241,6 @@ class ConfigComponentTest extends BaseControllerTest
         $this->Flash = $flashComponent;
         $this->controller->Flash = $this->Flash;
 
-        $this->setMock([]);
-    }
-
-    /**
-     * Set api mock
-     *
-     * @param array $options The options
-     * @return void
-     */
-    private function setMock(array $options): void
-    {
         // mock GET /config and /admin/applications.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -145,11 +270,6 @@ class ConfigComponentTest extends BaseControllerTest
                     }
                 )
             );
-        if (!empty($options['exception'])) {
-            $apiClient->method('patch')
-                ->with('/admin/config/123')
-                ->willThrowException($options['exception']);
-        }
 
         // set $this->Config->apiClient
         $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
