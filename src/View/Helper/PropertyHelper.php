@@ -138,6 +138,7 @@ class PropertyHelper extends Helper
     public function value(array $resource, string $property): string
     {
         $paths = array_filter([
+            $property,
             sprintf('attributes.%s', $property),
             sprintf('meta.%s', $property),
             (string)Hash::get(self::RELATED_PATHS, $property),
