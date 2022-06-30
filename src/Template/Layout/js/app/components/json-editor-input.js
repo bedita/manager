@@ -1,6 +1,4 @@
-import JSONEditor from 'jsoneditor/dist/jsoneditor-minimalist';
-
-import 'jsoneditor/dist/jsoneditor.min.css';
+import { JSONEditor } from 'svelte-jsoneditor/dist/jsoneditor.js';
 
 const options = {
     mode: 'code',
@@ -35,11 +33,14 @@ export default {
                 element.parentElement.insertBefore(container, element);
                 element.dataset.originalValue = element.value;
                 let editorOptions = Object.assign(options, {
+                    content: {
+                        json,
+                    },
                     onChange: function () {
                         try {
-                            const json = element.jsonEditor.get();
-                            element.value = JSON.stringify(json);
-                            console.info('valid json :)');
+                            let val = element.jsonEditor.get();
+                            val = JSON.parse(val.text);
+                            element.value = JSON.stringify(val);
 
                             let isChanged = element.value !== element.dataset.originalValue;
                             element.dispatchEvent(new CustomEvent('change', {
@@ -54,8 +55,7 @@ export default {
                         }
                     },
                 });
-                element.jsonEditor = new JSONEditor(container, editorOptions);
-                element.jsonEditor.set(json);
+                element.jsonEditor = new JSONEditor({target: container, props: editorOptions});
             }
         } catch (err) {
             console.error(err);
