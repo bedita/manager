@@ -56,6 +56,43 @@ class RelationsControllerTest extends TestCase
     ];
 
     /**
+     * Relation test data
+     *
+     * @var array
+     */
+    public $testRelation = [
+        'id' => 999,
+        'type' => 'relations',
+        'attributes' => [
+            'name' => 'dummy',
+        ],
+        'relationships' => [
+            'left_object_types' => [
+                'data' => [
+                    [
+                        'id' => 1,
+                        'type' => 'object_types',
+                        'attributes' => [
+                            'name' => 'users'
+                        ],
+                    ],
+                ],
+            ],
+            'right_object_types' => [
+                'data' => [
+                    [
+                        'id' => 2,
+                        'type' => 'object_types',
+                        'attributes' => [
+                            'name' => 'documents'
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -63,24 +100,6 @@ class RelationsControllerTest extends TestCase
         parent::setUp();
         $this->loadRoutes();
         $this->apiClient = ApiClientProvider::getApiClient();
-        $this->Relations = new RelationsController(
-            new ServerRequest($this->defaultRequestConfig)
-        );
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.com'])
-            ->getMock();
-        $response = [
-            'data' => [['id' => 999, 'attributes' => ['name' => 'dummy']]],
-            'meta' => [],
-            'links' => [],
-        ];
-        $apiClient->method('get')
-            ->willReturn($response);
-
-        // set $this->Relations->apiClient
-        $property = new \ReflectionProperty(RelationsController::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Relations, $apiClient);
     }
 
     /**
@@ -94,31 +113,86 @@ class RelationsControllerTest extends TestCase
     }
 
     /**
+     * API client mock for index action
+     *
+     * @return void
+     */
+    protected function indexApiMock(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $response = [
+            'data' => [
+                $this->testRelation,
+            ],
+            'meta' => [],
+            'links' => [],
+        ];
+        $apiClient->method('get')
+            ->willReturn($response);
+
+        ApiClientProvider::setApiClient($apiClient);
+    }
+
+    /**
      * Test `index` method
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      * @return void
      */
     public function testIndex(): void
     {
+        $this->indexApiMock();
+        $this->Relations = new RelationsController(new ServerRequest($this->defaultRequestConfig));
         $this->Relations->index();
-        $actual = $this->Relations->viewBuilder()->getVar('resources');
-        static::assertTrue(is_array($actual));
+
+        $resources = $this->Relations->viewBuilder()->getVar('resources');
+        static::assertTrue(is_array($resources));
+        static::assertNotEmpty($resources);
+        static::assertEquals($this->testRelation['id'], $resources[0]['id']);
     }
 
     /**
      * Test `view` method
      *
      * @covers ::view()
+     * @covers ::viewQuery()
      * @return void
      */
     public function testView(): void
     {
+        $this->viewApiMock();
+        $this->Relations = new RelationsController(new ServerRequest($this->defaultRequestConfig));
         $this->Relations->view(1);
-        foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->viewBuilder()->getVar(sprintf('%s_object_types', $side));
-            static::assertTrue(is_array($actual));
-        }
+
+        $resource = $this->Relations->viewBuilder()->getVar('resource');
+        static::assertTrue(is_array($resource));
+        static::assertNotEmpty($resource);
+        static::assertEquals($this->testRelation['id'], $resource['id']);
+    }
+
+    /**
+     * API client mock for view action
+     *
+     * @return void
+     */
+    protected function viewApiMock(): void
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $response = [
+            'data' => $this->testRelation,
+            'meta' => [],
+            'links' => [],
+        ];
+        $apiClient->method('get')
+            ->willReturn($response);
+
+        ApiClientProvider::setApiClient($apiClient);
     }
 
     /**
@@ -129,17 +203,15 @@ class RelationsControllerTest extends TestCase
      */
     public function testRelatedTypes(): void
     {
-        // numeric items
-        foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->relatedTypes('1', $side);
-            static::assertTrue(is_array($actual));
-        }
-        $this->Relations->set('resource', ['id' => '1']);
-        // string items
-        foreach (['left', 'right'] as $side) {
-            $actual = $this->Relations->relatedTypes('documents', $side);
-            static::assertTrue(is_array($actual));
-        }
+        $this->viewApiMock();
+        $this->Relations = new RelationsController(new ServerRequest($this->defaultRequestConfig));
+        $this->Relations->view(1);
+
+        $left = $this->Relations->viewBuilder()->getVar('left_object_types');
+        static::assertEquals(['users'], $left);
+
+        $right = $this->Relations->viewBuilder()->getVar('right_object_types');
+        static::assertEquals(['documents'], $right);
     }
 
     /**

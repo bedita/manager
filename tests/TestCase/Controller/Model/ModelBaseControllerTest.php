@@ -199,6 +199,7 @@ class ModelBaseControllerTest extends TestCase
      * Test `index` method
      *
      * @covers ::index()
+     * @covers ::indexQuery()
      * @covers ::initialize()
      * @covers ::beforeFilter()
      * @return void
