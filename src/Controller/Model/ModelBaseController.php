@@ -23,7 +23,7 @@ use Cake\Utility\Hash;
  * Model base controller class
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
- * @property \BEdita\WebTools\Controller\Component\ApiFormatter $ApiFormatter
+ * @property \BEdita\WebTools\Controller\Component\ApiFormatterComponent $ApiFormatter
  */
 abstract class ModelBaseController extends AppController
 {
