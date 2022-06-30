@@ -154,6 +154,12 @@ $routes->scope('/', function (RouteBuilder $routes) {
             );
 
             $routes->get(
+                "/$controller/view/new",
+                ['controller' => $name, 'action' => 'create'],
+                'create:' . $controller
+            );
+
+            $routes->get(
                 "/$controller/view/{id}",
                 ['controller' => $name, 'action' => 'view'],
                 'view:' . $controller

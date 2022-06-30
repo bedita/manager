@@ -481,12 +481,18 @@ const _vueInstance = new Vue({
                 if (!done) {
                     const hardDeleteActions = [
                         '/delete',
+                        '/model/object_types/remove',
+                        '/model/relations/remove',
                         '/model/tags/remove',
                         '/model/categories/remove',
                     ];
                     for (const action of hardDeleteActions) {
                         if (!done && form.action.includes(action)) {
-                            msg = t`Do you really want to trash the object?`;
+                            if (action === '/delete') {
+                                msg = t`Do you really want to trash the object?`;
+                            } else {
+                                msg = t`If you confirm, this resource will be gone forever. Are you sure?`;
+                            }
                             done = true;
                         }
                     }
