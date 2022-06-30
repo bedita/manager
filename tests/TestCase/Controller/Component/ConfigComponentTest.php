@@ -110,6 +110,9 @@ class ConfigComponentTest extends BaseControllerTest
      */
     public function testRead(string $key, bool $found): void
     {
+        if ($found) {
+            Cache::write(CacheTools::cacheKey(sprintf('config.%s', $key)), ['attributes' => ['content' => '{"documents":{"color":"#D95700"},"folders":{"color":"#6FB78B"}}']]);
+        }
         $this->prepareConfig();
         $actual = $this->Config->read($key);
         if ($found) {
