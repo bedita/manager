@@ -133,7 +133,7 @@ class ModulesComponent extends Component
     {
         /** @var \App\Controller\ModulesController $controller */
         $controller = $this->getController();
-        $modules = $controller->Config->modules();
+        $modules = $controller->Config->read('Modules');
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });

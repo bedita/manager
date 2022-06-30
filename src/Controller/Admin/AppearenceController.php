@@ -35,23 +35,13 @@ class AppearenceController extends AdministrationBaseController
     protected $readonly = false;
 
     /**
-     * @inheritDoc
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-
-        $this->loadComponent('Config');
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
     public function index(): ?Response
     {
-        $this->set('modules', $this->Config->modules());
+        $this->set('modules', $this->Config->read('Modules'));
 
         return null;
     }
@@ -65,9 +55,8 @@ class AppearenceController extends AdministrationBaseController
     {
         $this->getRequest()->allowMethod(['post']);
         $data = (array)$this->getRequest()->getData();
-        $modules = (array)Hash::get($data, 'Modules');
-        $modules = (string)$modules[0];
-        $this->Config->saveModules((array)json_decode($modules, true));
+        $modules = (string)Hash::get($data, 'Modules');
+        $this->Config->save('Modules', (array)json_decode($modules, true));
 
         return $this->redirect(['_name' => 'admin:list:appearence']);
     }

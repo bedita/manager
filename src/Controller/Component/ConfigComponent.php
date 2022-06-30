@@ -14,8 +14,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Component;
 
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
+use Cake\Collection\Collection;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -33,146 +36,113 @@ class ConfigComponent extends Component
     protected $apiClient = null;
 
     /**
-     * The config ID
-     *
-     * @var int
-     */
-    protected $configId;
-
-    /**
-     * The application ID of BEdita Manager application
-     *
-     * @var int
-     */
-    protected $managerApplicationId;
-
-    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
     public function startup(): void
     {
-        $this->apiClient = ApiClientProvider::getApiClient();
+        // API config may not be set in `login` for a multi-project setup
+        if (Configure::check('API.apiBaseUrl')) {
+            $this->apiClient = ApiClientProvider::getApiClient();
+        }
     }
 
     /**
-     * Get config from db whose name is 'Modules', if any.
-     * Get 'Modules' config [from config/app.php etc.] otherwise.
+     * Get a cached configuration key from API.
+     * Get standard config [from config/app.php etc.] if no configuration from API was found.
      *
+     * @param string $key Configuration key
      * @return array
      */
-    public function modules(): array
+    public function read(string $key): array
     {
         try {
-            $response = (array)$this->apiClient->get('/config');
-            $modules = (array)Hash::get($response, 'data');
-            foreach ($modules as $module) {
-                if ($module['attributes']['name'] === 'Modules') {
-                    $this->configId = intVal($module['id']);
-
-                    return (array)json_decode((string)Hash::get($module, 'attributes.content'), true);
+            $config = Cache::remember(
+                CacheTools::cacheKey(sprintf('config.%s', $key)),
+                function () use ($key) {
+                    return $this->fetchConfig($key);
                 }
-            }
+            );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        return (array)Configure::read('Modules');
+        if (!empty($config)) {
+            return (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
+        }
+
+        return (array)Configure::read($key);
     }
 
     /**
-     * Get modules configuration ID
+     * Fetch configuration from API
      *
-     * @return int|null
+     * @param string $key Configuration key
+     * @return array
      */
-    public function modulesConfigId(): ?int
+    protected function fetchConfig(string $key): array
     {
-        if (!empty($this->configId)) {
-            return $this->configId;
-        }
-        try {
-            $response = (array)$this->apiClient->get('/config');
-            $modules = (array)Hash::get($response, 'data');
-            foreach ($modules as $module) {
-                if ($module['attributes']['name'] === 'Modules') {
-                    $this->configId = intVal($module['id']);
+        $response = (array)$this->apiClient->get('/config');
+        $collection = new Collection((array)Hash::get($response, 'data'));
 
-                    return $this->configId;
-                }
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
-        }
+        return (array)$collection->reject(function ($item) use ($key) {
+            $attr = (array)Hash::get((array)$item, 'attributes');
 
-        return null;
+            return empty($attr['application_id']) ||
+                empty($attr['context']) || $attr['context'] !== 'app' ||
+                empty($attr['name']) || $attr['name'] !== $key;
+        })->first();
     }
 
     /**
-     * Get BEdita MAnager application ID
+     * Get BEdita Manager application ID
      *
      * @return int
      */
     public function managerApplicationId(): int
     {
-        if (!empty($this->managerApplicationId)) {
-            return $this->managerApplicationId;
-        }
-        try {
-            $response = (array)$this->apiClient->get('/admin/applications');
-            $data = (array)Hash::get($response, 'data');
-            foreach ($data as $item) {
-                if ($item['attributes']['name'] !== 'manager') {
-                    continue;
-                }
-                $this->managerApplicationId = intVal($item['id']);
-                break;
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
+        $name = (string)Configure::read('ManagerAppName', 'manager');
+        $filter = compact('name');
+        $response = (array)$this->apiClient->get('/admin/applications', compact('filter'));
 
-            $this->managerApplicationId = -1;
-        }
-
-        return $this->managerApplicationId;
+        return (int)Hash::get($response, 'data.0.id');
     }
 
     /**
-     * Save Modules config
+     * Save configuration to API
      *
-     * @return bool
+     * @param string $key Configuration key
+     * @param array $data Configuration data
+     * @return void
      */
-    public function saveModules(array $modules): bool
+    public function save(string $key, array $data): void
     {
-        $this->configId = $this->modulesConfigId();
-        $endpoint = '/admin/config';
-        try {
-            $body = [
-                'data' => [
-                    'type' => 'config',
-                    'attributes' => [
-                        'name' => 'Modules',
-                        'context' => 'core',
-                        'content' => json_encode($modules),
-                        'application_id' => $this->managerApplicationId(),
-                    ],
-                ],
-            ];
-            if (empty($this->configId)) {
-                $this->apiClient->post($endpoint, json_encode($body));
-            } else {
-                $body['data']['id'] = (string)$this->configId;
-                $this->apiClient->patch(sprintf('%s/%s', $endpoint, $this->configId), json_encode($body));
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return false;
+        $config = $this->fetchConfig($key);
+        $configId = Hash::get($config, 'id');
+        $managerAppId = Hash::get($config, 'attributes.application_id');
+        if (empty($managerAppId)) {
+            $managerAppId = $this->managerApplicationId();
         }
+        $endpoint = '/admin/config';
+        $body = [
+            'data' => [
+                'type' => 'config',
+                'attributes' => [
+                    'name' => $key,
+                    'context' => 'app',
+                    'content' => json_encode($data),
+                    'application_id' => $managerAppId,
+                ],
+            ],
+        ];
 
-        return true;
+        if (empty($configId)) {
+            $this->apiClient->post($endpoint, json_encode($body));
+        } else {
+            $body['data']['id'] = (string)$configId;
+            $this->apiClient->patch(sprintf('%s/%s', $endpoint, $configId), json_encode($body));
+        }
+        Cache::delete(CacheTools::cacheKey(sprintf('config.%s', $key)));
     }
 }
