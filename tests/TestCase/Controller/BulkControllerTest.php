@@ -2,12 +2,12 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\BulkController;
-use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\SchemaComponent;
+use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
-use BEdita\SDK\BEditaClient;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -35,6 +35,16 @@ class BulkControllerTest extends BaseControllerTest
     {
         parent::setUp();
         $this->loadRoutes();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
     }
 
     /**
@@ -51,17 +61,8 @@ class BulkControllerTest extends BaseControllerTest
         // Mock Authentication component
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
-        // mock GET /config.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->with('/config')
-            ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->controller->Config, $apiClient);
+        // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.Modules'), []);
 
         // force modules load
         $this->controller->Modules->startup();

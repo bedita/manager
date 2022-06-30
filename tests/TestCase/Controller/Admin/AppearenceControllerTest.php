@@ -3,7 +3,9 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearenceController;
 use App\Controller\Component\ConfigComponent;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -20,6 +22,24 @@ class AppearenceControllerTest extends TestCase
      * @var \App\Controller\Admin\AppearenceController
      */
     public $Appearence;
+
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
+    }
 
     /**
      * Test initialize
@@ -59,17 +79,8 @@ class AppearenceControllerTest extends TestCase
                 ]
             )
         );
-        // mock GET /config.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->with('/config')
-            ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Appearence->Config, $apiClient);
+        // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.Modules'), []);
         $this->Appearence->index();
         $viewVars = (array)$this->Appearence->viewBuilder()->getVars();
         static::assertNotEmpty($viewVars['modules']);
@@ -91,7 +102,7 @@ class AppearenceControllerTest extends TestCase
                         'REQUEST_METHOD' => 'POST',
                     ],
                     'post' => [
-                        'Modules' => ['{}'],
+                        'Modules' => '[]',
                     ],
                 ]
             )
