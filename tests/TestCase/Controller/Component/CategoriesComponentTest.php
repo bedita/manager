@@ -204,6 +204,7 @@ class CategoriesComponentTest extends TestCase
         $safeClient = ApiClientProvider::getApiClient();
 
         Cache::enable();
+        Cache::clearAll();
 
         // test invalidate schema too
         $key = CacheTools::cacheKey('documents');
