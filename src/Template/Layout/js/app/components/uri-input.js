@@ -43,6 +43,9 @@ export default {
         onChange(ev) {
             ev.preventDefault()
             ev.stopPropagation();
+            const span = document.getElementById(`valid_${this.el.id}`);
+            span.classList.remove('icon-check-1');
+            span.classList.remove('icon-error');
             this.el.value = this.el.value.trim();
             if (this.el.value.length === 0) {
                 return;
@@ -54,9 +57,6 @@ export default {
             if (!this.isValid) {
                 this.el.value = '';
             }
-            const span = document.getElementById(`valid_${this.el.id}`);
-            span.classList.remove('icon-check-1');
-            span.classList.remove('icon-error');
             span.classList.add(this.isValid ? 'icon-check-1' : 'icon-error');
             const message = this.isValid ? t`Uri is valid` : t`Uri is not valid`;
             span.innerHTML = message;
