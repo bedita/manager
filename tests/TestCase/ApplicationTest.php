@@ -15,6 +15,7 @@ namespace App\Test\TestCase;
 use App\Application;
 use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\Authenticator\AuthenticatorInterface;
 use Authentication\Identifier\IdentifierInterface;
@@ -57,6 +58,8 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(ProjectMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(StatusMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(AssetMiddleware::class, $middleware->current());
         $middleware->next();
