@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Model;
 
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
@@ -70,6 +71,7 @@ class RelationsController extends ModelBaseController
         $resource = (array)$this->viewBuilder()->getVar('resource');
         $this->set('left_object_types', $this->relatedTypes($resource, 'left'));
         $this->set('right_object_types', $this->relatedTypes($resource, 'right'));
+        $this->set('all_types', $this->allTypes());
 
         return null;
     }
@@ -145,5 +147,27 @@ class RelationsController extends ModelBaseController
         $path = sprintf('relationships.%s_object_types.data.{n}.attributes.name', $side);
 
         return (array)Hash::extract($resource, $path);
+    }
+
+    /**
+     * Get all types
+     *
+     * @return array
+     */
+    protected function allTypes(): array
+    {
+        try {
+            $response = $this->apiClient->get('/model/object_types', [
+                'page_size' => 100,
+                'filter' => ['enabled' => true],
+            ]);
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return [];
+        }
+
+        return (array)Hash::extract($response, 'data.{n}.attributes.name');
     }
 }

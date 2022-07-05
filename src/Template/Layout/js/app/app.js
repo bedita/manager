@@ -39,6 +39,7 @@ const _vueInstance = new Vue({
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),

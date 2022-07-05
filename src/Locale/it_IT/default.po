@@ -104,14 +104,8 @@ msgstr "Categorie"
 msgid "Change File"
 msgstr "Cambia File"
 
-msgid "Change left types"
-msgstr "Cambia tipi di sinistra"
-
 msgid "Change password"
 msgstr "Cambia password"
-
-msgid "Change right types"
-msgstr "Cambia tipi di destra"
 
 msgid "Children"
 msgstr "Contenuti"
