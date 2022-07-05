@@ -233,6 +233,48 @@ class ControlTest extends TestCase
                     'value' => ['animals', 'houses'],
                 ], // expected
             ],
+            'email' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'format' => 'email',
+                        ],
+                    ],
+                ],
+                'text',
+                'gustavo@support.com',
+                [
+                    'type' => 'text',
+                    'v-email' => 'true',
+                    'class' => 'email',
+                    'value' => 'gustavo@support.com',
+                ],
+            ],
+            'uri' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'format' => 'uri',
+                        ],
+                    ],
+                ],
+                'text',
+                'www.gustavosupport.com',
+                [
+                    'type' => 'text',
+                    'v-uri' => 'true',
+                    'class' => 'uri',
+                    'value' => 'www.gustavosupport.com',
+                ],
+            ],
         ];
     }
 
@@ -255,6 +297,8 @@ class ControlTest extends TestCase
      * @covers ::enum()
      * @covers ::categories()
      * @covers ::oneOptions()
+     * @covers ::email()
+     * @covers ::uri()
      */
     public function testControl(array $schema, string $type, $value, array $expected): void
     {
@@ -266,6 +310,73 @@ class ControlTest extends TestCase
             'propertyType' => $type,
         ];
         $actual = Control::control($options);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testFormat` test case.
+     *
+     * @return array
+     */
+    public function formatProvider(): array
+    {
+        return [
+            'empty schema' => [
+                [],
+                '',
+            ],
+            'no format oneOf' => [
+                [
+                    'oneOf' => [
+                        ['type' => null],
+                        ['type' => 'text'],
+                    ],
+                ],
+                '',
+            ],
+            'email' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'email'],
+                    ],
+                ],
+                'email',
+            ],
+            'uri' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'uri'],
+                    ],
+                ],
+                'uri',
+            ],
+            'other' => [
+                [
+                    'oneOf' => [
+                        [],
+                        ['format' => 'whatever'],
+                    ],
+                ],
+                'whatever',
+            ],
+        ];
+    }
+
+    /**
+     * Test `format` method
+     *
+     * @param array $schema Object schema array.
+     * @param string $expected The expected format.
+     * @return void
+     * @dataProvider formatProvider()
+     * @covers ::format()
+     */
+    public function testFormat(array $schema, string $expected): void
+    {
+        $actual = Control::format($schema);
 
         static::assertSame($expected, $actual);
     }

@@ -11,8 +11,10 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
+import email from 'app/directives/email';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
+import uri from 'app/directives/uri';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
@@ -96,6 +98,8 @@ const _vueInstance = new Vue({
         Vue.use(jsoneditor);
         Vue.use(datepicker);
         Vue.use(richeditor);
+        Vue.use(email);
+        Vue.use(uri);
 
         // Register helpers
         Vue.use(viewHelper);
@@ -477,12 +481,18 @@ const _vueInstance = new Vue({
                 if (!done) {
                     const hardDeleteActions = [
                         '/delete',
+                        '/model/object_types/remove',
+                        '/model/relations/remove',
                         '/model/tags/remove',
                         '/model/categories/remove',
                     ];
                     for (const action of hardDeleteActions) {
                         if (!done && form.action.includes(action)) {
-                            msg = t`Do you really want to trash the object?`;
+                            if (action === '/delete') {
+                                msg = t`Do you really want to trash the object?`;
+                            } else {
+                                msg = t`If you confirm, this resource will be gone forever. Are you sure?`;
+                            }
                             done = true;
                         }
                     }

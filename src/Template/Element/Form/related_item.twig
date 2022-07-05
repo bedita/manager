@@ -69,29 +69,37 @@
         </div>
 
         <header class="is-flex space-between mt-05">
-            <h1 class="title m-0 has-text-size-small">
-                {% if translation %}
-                    <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                        <: related.attributes.translated_fields.title :>
-                    </span>
-                {% else %}
-                    <: related.attributes.title || related.attributes.name || related.attributes.uname || '-' :>
+            <div>
+
+                <h1 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
+                    {% if translation %}
+                        <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                            <: related.attributes.translated_fields.title :>
+                        </span>
+                    {% else %}
+                        <: related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' :>
+                    {% endif %}
+                </h1>
+
+            {% if not add and not stage %}
+
+                {% if in_array('admin', user.roles) %}
+                <div v-if="relatedStream(related)" class="has-text-size-smallest">
+                    <: relatedStreamProp(related, 'mime_type') :>
+                </div>
                 {% endif %}
-            </h1>
 
-            {% if not add %}
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'file_name') :>
-            </span>
+                <div v-if="relatedStream(related)" class="has-text-size-smallest">
+                    <: relatedStreamProp(related, 'file_size', 'bytes') :>
+                </div>
 
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'mime_type') :>
-            </span>
-
-            <span v-if="relatedStream(related)" class="other m-0 has-text-size-small">
-                <: relatedAttribute(related, 'file_size', 'bytes') :>
-            </span>
+                <div v-if="relatedStream(related)" class="has-text-size-smaller">
+                    <a :href="relatedStreamProp(related, 'url')" target="_blank" class="icon-eye-1" title="{{ __('View file') }}"></a>
+                    <a :href="relatedStreamDownloadUrl(related)" class="icon-download-1" title="{{ __('Download file') }}"></a>
+                </div>
             {% endif %}
+
+            </div>
 
             {% if not translation %}
                 <span class="modified">
@@ -99,8 +107,6 @@
                 </span>
             {% endif %}
 
-            {# <span class="id has-text-size-smallest"><: related.id :></span>
-            <span class="uname has-text-size-smallest"><: related.attributes.uname :></span> #}
         </header>
     </div>
 

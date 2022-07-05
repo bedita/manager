@@ -10,7 +10,7 @@
 
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
-Official Backend Admin WebApp for [BEdita4 API](https://gihub.com/bedita/bedita).
+Official Backend Admin WebApp for [BEdita4 and BEdita5 API](https://gihub.com/bedita/bedita).
 
 ## Prerequisites
 
@@ -56,6 +56,12 @@ bin/cake server
 And then point your browser to `http://localhost:8765/`
 
 For any other use than a simple test we recommend to configure your preferred web server like Nginx/Apache and point to `webroot/` as vhost document root.
+
+## Configuration
+
+You can further configure your BEdita Manager instance in `config/app_local.php` with environment and project specific settings.
+
+Have look at the main [Manager configuration wiki page](https://github.com/bedita/manager/wiki/Manager-App-Configuration) on how to customize your Manager instance.
 
 ## Docker
 
@@ -131,7 +137,7 @@ yarn run eslint src/Template/Layout/js/app/pages/admin/index.js
 
 ## Run unit tests
 
-To setup tests locally simply copy `tests/.env.default` to `tests/.env` and set env vars accordingly.
+To setup tests locally simply copy `tests/.env.example` to `tests/.env` and set env vars accordingly.
 To launch tests:
 
 ```bash

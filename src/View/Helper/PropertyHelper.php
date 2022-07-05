@@ -49,7 +49,6 @@ class PropertyHelper extends Helper
      * @var array
      */
     public const SPECIAL_PROPS_TYPE = [
-        'associations' => 'associations',
         'categories' => 'categories',
         'relations' => 'relations',
         'file_size' => 'byte',

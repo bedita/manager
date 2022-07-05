@@ -13,25 +13,32 @@
     <div class="module-form">
 
         {{ Form.create({'defaults': resource.attributes, 'schema': {}}, {
-            'url': {'_name': 'model:save:object_types'},
+            'url': {'_name': 'model:save:relations'},
             'id': 'form-main',
             'check-changes': 'true',
         })|raw }}
 
+            {{ Form.hidden('id', {'value': resource.id})|raw }}
+
             <div class="main-view-column">
                 {{ element('Form/core_properties') }}
-                {{ element('Model/relation') }}
+                {# hide relation types on new relations for now #}
+                {% if resource.id %}
+                    {{ element('Model/relation_types') }}
+                {% endif %}
             </div>
 
             <div class="side-view-column">
                 {{ element('Form/meta') }}
             </div>
 
+        {# Set `_jsonKeys` hidden input from config #}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+
         {{ Form.end()|raw }}
 
-        {# TODO: uncomment `save` and `delete` actions once controller part is available #}
-        {# {% do _view.append('module-buttons', Form.submit(__('Save'), {'form': 'form-main'})) %} #}
-        {# {% do _view.append('module-buttons', Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resourceType}, {'data': {'id': resource.id}})) %} #}
+        {% do _view.append('module-buttons', Form.submit(__('Save'), {'form': 'form-main', 'class': 'button button-primary'})) %}
+        {% do _view.append('module-buttons', Form.postButton(__('Remove'), {'_name': 'model:remove:relations', 'id': resource.id})) %}
     </div>
 
     {{ element('Model/sidebar_links') }}

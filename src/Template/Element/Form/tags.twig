@@ -3,12 +3,12 @@
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()"
                 class="tab unselectable"
-                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                :class="isOpen? 'open has-background-module-{{ currentModule.name }} has-border-module-{{ currentModule.name }}' : ''">
                 <h2>{{ __('Tags') }}</h2>
             </header>
             <div v-show="isOpen" class="tab-container">
                 <div class="tags-container">
-                    <tag-picker id="tagPick" :initial-tags="{{ object.attributes.tags|json_encode }}"></tag-picker>
+                    <tag-picker id="tagPick" :initial-tags="{{ object.attributes.tags|default([])|json_encode }}"></tag-picker>
                 </div>
             </div>
         </section>

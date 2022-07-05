@@ -56,6 +56,8 @@ class ObjectTypesController extends ModelBaseController
 
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
+        $this->set('schema', $this->Schema->getSchema());
+        $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
     }
@@ -84,5 +86,42 @@ class ObjectTypesController extends ModelBaseController
         }
 
         return compact('inherited', 'core', 'custom');
+    }
+
+    /**
+     * Save object type.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        $this->addCustomProperty();
+        $this->request = $this->request->withoutData('prop_name')
+            ->withoutData('prop_type');
+
+        return parent::save();
+    }
+
+    /**
+     * Add custom property
+     *
+     * @return void
+     */
+    protected function addCustomProperty(): void
+    {
+        $name = $this->request->getData('prop_name');
+        $type = $this->request->getData('prop_type');
+        if (empty($name) || empty($type)) {
+            return;
+        }
+
+        $data = [
+            'type' => 'properties',
+            'attributes' => compact('name') + [
+                'property_type_name' => $type,
+                'object_type_name' => $this->request->getData('name'),
+            ],
+        ];
+        $this->apiClient->post('/model/properties', json_encode(compact('data')));
     }
 }

@@ -4,7 +4,7 @@
     <section class="fieldset">
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
-            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            :class="isOpen? 'open has-background-module-{{ currentModule.name }} has-border-module-{{ currentModule.name }}' : ''">
             <h2>{{ __('Media') }}</h2>
         </header>
 
@@ -26,7 +26,7 @@
                     {# thumb #}
                     {% if object.type == 'images' %}
                         {# TODO process below #}
-                        {% set thumb = Thumb.url(object.id, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
+                        {% set thumb = Thumb.getUrl(object, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
                         {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
                             <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}

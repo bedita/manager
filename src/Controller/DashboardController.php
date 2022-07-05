@@ -69,6 +69,6 @@ class DashboardController extends AppController
         $sort = '-modified';
         $response = $this->apiClient->getObjects('objects', compact('filter', 'limit', 'sort'));
 
-        return (array)Hash::extract($response, 'data.{n}');
+        return (array)Hash::extract((array)$response, 'data.{n}');
     }
 }
