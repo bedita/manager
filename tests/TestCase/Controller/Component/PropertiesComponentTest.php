@@ -12,7 +12,6 @@
  */
 namespace App\Test\TestCase\Controller\Component;
 
-use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\PropertiesComponent;
 use App\Controller\ModulesController;
 use App\Utility\CacheTools;
@@ -64,9 +63,6 @@ class PropertiesComponentTest extends TestCase
     {
         $controller = new ModulesController();
         $registry = $controller->components();
-        /** @var \App\Controller\Component\ConfigComponent $Config */
-        $Config = $registry->load(ConfigComponent::class);
-        $controller->Config = $Config;
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
         Cache::write(CacheTools::cacheKey('config.Properties'), []);

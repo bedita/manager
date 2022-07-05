@@ -25,6 +25,11 @@ use Cake\Utility\Hash;
 class PropertiesComponent extends Component
 {
     /**
+     * @inheritDoc
+     */
+    protected $components = ['Config'];
+
+    /**
      * Default properties groups
      *
      * @var array
@@ -95,9 +100,7 @@ class PropertiesComponent extends Component
 
             return;
         }
-        /** @var \App\Controller\ModulesController $controller */
-        $controller = $this->getController();
-        $properties = $controller->Config->read('Properties');
+        $this->Config->read('Properties');
         Configure::load('properties');
         $properties = empty($properties) ? (array)Configure::read('Properties') : $properties;
         $defaultProperties = (array)Configure::read('DefaultProperties');

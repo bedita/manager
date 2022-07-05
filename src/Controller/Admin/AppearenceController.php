@@ -71,14 +71,8 @@ class AppearenceController extends AdministrationBaseController
         $this->getRequest()->allowMethod(['post']);
         $data = (array)$this->getRequest()->getData();
         $propertyName = (string)Hash::get($data, 'property_name');
-        foreach ($this->properties as $property) {
-            if ($property !== $propertyName) {
-                continue;
-            }
-            $content = (string)Hash::get($data, Inflector::camelize($property));
-            $this->Config->save(Inflector::camelize($property), (array)json_decode($content, true));
-            break;
-        }
+        $content = (string)Hash::get($data, Inflector::camelize($propertyName));
+        $this->Config->save(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
         return $this->redirect(['_name' => 'admin:list:appearence']);
     }
