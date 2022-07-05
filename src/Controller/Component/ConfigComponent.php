@@ -69,7 +69,8 @@ class ConfigComponent extends Component
         }
 
         if (!empty($config)) {
-            return (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
+            $content = (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
+            Configure::write($key, $content);
         }
 
         return (array)Configure::read($key);

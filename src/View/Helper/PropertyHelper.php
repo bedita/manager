@@ -12,9 +12,7 @@
  */
 namespace App\View\Helper;
 
-use App\Utility\CacheTools;
 use App\Utility\Translate;
-use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -98,11 +96,9 @@ class PropertyHelper extends Helper
         if (empty($t)) {
             return $defaultLabel;
         }
-        $cacheKey = CacheTools::cacheKey('properties');
-        $properties = (array)Cache::read($cacheKey, 'default');
-        $key = sprintf('%s.labels.fields.%s', $t, $name);
+        $key = sprintf('Properties.%s.labels.fields.%s', $t, $name);
 
-        return (string)Hash::get($properties, $key, $defaultLabel);
+        return Configure::read($key, $defaultLabel);
     }
 
     /**

@@ -100,9 +100,8 @@ class PropertiesComponent extends Component
 
             return;
         }
-        /** @phpstan-ignore-next-line */
-        $this->Config->read('Properties');
         Configure::load('properties');
+        $properties = $this->Config->read('Properties');
         $properties = empty($properties) ? (array)Configure::read('Properties') : $properties;
         $defaultProperties = (array)Configure::read('DefaultProperties');
         $keys = array_unique(
