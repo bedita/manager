@@ -81,10 +81,12 @@ class AppearenceControllerTest extends TestCase
         );
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Properties'), []);
         $this->Appearence->index();
         $viewVars = (array)$this->Appearence->viewBuilder()->getVars();
-        static::assertNotEmpty($viewVars['modules']);
-        static::assertIsArray($viewVars['modules']);
+        static::assertNotEmpty($viewVars['configs']['modules']);
+        static::assertIsArray($viewVars['configs']['modules']);
+        static::assertIsArray($viewVars['configs']['properties']);
     }
 
     /**
@@ -102,7 +104,8 @@ class AppearenceControllerTest extends TestCase
                         'REQUEST_METHOD' => 'POST',
                     ],
                     'post' => [
-                        'Modules' => '[]',
+                        'Properties' => '[]',
+                        'property_name' => 'properties',
                     ],
                 ]
             )
