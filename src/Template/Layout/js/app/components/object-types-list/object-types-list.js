@@ -6,7 +6,8 @@ export default {
                 <: type :>
             </a>
         </div>
-        <input type="hidden" :name="name()" :value="value()" />
+        <input type="hidden" :name="name('current')" :value="valueCurrent()" />
+        <input type="hidden" :name="name('change')" :value="valueChange()" />
     </div>`,
 
     props: {
@@ -17,20 +18,30 @@ export default {
 
     data() {
         return {
+            current: [],
         };
+    },
+
+    mounted() {
+        this.$nextTick(() => {
+            this.current = this.selected;
+        });
     },
 
     methods: {
         className(t) {
             return `tag has-background-module-${t}`;
         },
-        name() {
-            return `current_${this.side}`;
+        name(prefix) {
+            return `${prefix}_${this.side}`;
         },
         ref(t) {
             return `/model/object_types/view/${t}`;
         },
-        value() {
+        valueCurrent() {
+            return this.current.join(',');
+        },
+        valueChange() {
             return this.selected.join(',');
         },
     },
