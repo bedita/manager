@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-01 14:12:22 \n"
+"POT-Creation-Date: 2022-07-05 12:35:26 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -59,6 +59,9 @@ msgstr "Un'estensione ha fermato il caricamento del file"
 msgid "Any"
 msgstr "Qualsiasi"
 
+msgid "Appearence"
+msgstr "Aspetto"
+
 msgid "Applications"
 msgstr "Applicazioni"
 
@@ -101,14 +104,8 @@ msgstr "Categorie"
 msgid "Change File"
 msgstr "Cambia File"
 
-msgid "Change left types"
-msgstr "Cambia tipi di sinistra"
-
 msgid "Change password"
 msgstr "Cambia password"
-
-msgid "Change right types"
-msgstr "Cambia tipi di destra"
 
 msgid "Children"
 msgstr "Contenuti"
@@ -427,6 +424,9 @@ msgstr "Modificato"
 
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
+
+msgid "Modules"
+msgstr "Moduli"
 
 msgid "More"
 msgstr "Altro"
@@ -1012,7 +1012,8 @@ msgid "Do you really want to trash the object?"
 msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
 
 msgid "If you confirm, this resource will be gone forever. Are you sure?"
-msgstr "Se confermi, questa risorsa verrà eliminata definitivamente. Vuoi continuare?"
+msgstr ""
+"Se confermi, questa risorsa verrà eliminata definitivamente. Vuoi continuare?"
 
 msgid "yes, proceed"
 msgstr "sì, prosegui"

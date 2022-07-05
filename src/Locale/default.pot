@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-01 14:12:22 \n"
+"POT-Creation-Date: 2022-07-05 12:35:26 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -56,6 +56,9 @@ msgstr ""
 msgid "Any"
 msgstr ""
 
+msgid "Appearence"
+msgstr ""
+
 msgid "Applications"
 msgstr ""
 
@@ -98,13 +101,7 @@ msgstr ""
 msgid "Change File"
 msgstr ""
 
-msgid "Change left types"
-msgstr ""
-
 msgid "Change password"
-msgstr ""
-
-msgid "Change right types"
 msgstr ""
 
 msgid "Children"
@@ -423,6 +420,9 @@ msgid "Modified"
 msgstr ""
 
 msgid "Module access not authorized"
+msgstr ""
+
+msgid "Modules"
 msgstr ""
 
 msgid "More"
