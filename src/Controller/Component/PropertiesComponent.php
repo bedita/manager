@@ -99,9 +99,7 @@ class PropertiesComponent extends Component
         $controller = $this->getController();
         $properties = $controller->Config->read('Properties');
         Configure::load('properties');
-        if (empty($properties)) {
-            $properties = (array)Configure::read('Properties');
-        }
+        $properties = empty($properties) ? (array)Configure::read('Properties') : $properties;
         $defaultProperties = (array)Configure::read('DefaultProperties');
         $keys = array_unique(
             array_merge(
