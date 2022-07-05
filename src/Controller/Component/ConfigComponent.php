@@ -145,6 +145,6 @@ class ConfigComponent extends Component
         }
         Cache::delete(CacheTools::cacheKey(sprintf('config.%s', $key)));
         // delete related cache keys, i.e. "properties", used in PropertiesComponent
-        Cache::delete(CacheTools::cacheKey(lcfirst($key))); //
+        Cache::delete(CacheTools::cacheKey(lcfirst($key)));
     }
 }

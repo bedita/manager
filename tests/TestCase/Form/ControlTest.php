@@ -16,7 +16,6 @@ namespace App\Test\TestCase\Form;
 use App\Form\Control;
 use App\Utility\CacheTools;
 use Cake\Cache\Cache;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**

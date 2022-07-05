@@ -17,7 +17,6 @@ use App\Controller\Component\PropertiesComponent;
 use App\Controller\ModulesController;
 use App\Utility\CacheTools;
 use Cake\Cache\Cache;
-use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 

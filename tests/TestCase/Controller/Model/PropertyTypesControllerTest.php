@@ -133,7 +133,7 @@ class PropertyTypesControllerTest extends TestCase
                             'params' => [
                                 'type' => 'object',
                             ],
-                       ],
+                        ],
                     ],
                 ],
                 [
