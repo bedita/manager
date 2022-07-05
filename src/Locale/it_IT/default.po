@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-05 12:35:26 \n"
+"POT-Creation-Date: 2022-07-04 13:44:11 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -142,6 +142,9 @@ msgstr "Redattori concorrenti"
 
 msgid "Config"
 msgstr "Configurazioni"
+
+msgid "Configuration key"
+msgstr "Chiave configurazione"
 
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
@@ -592,6 +595,9 @@ msgstr "Preferenze e Strumenti"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Properties"
+msgstr "Proprietà"
+
 msgid "Property Types"
 msgstr "Tipi di Proprietà"
 
@@ -666,6 +672,9 @@ msgstr "Partenza"
 
 msgid "Search"
 msgstr "Cerca"
+
+msgid "See Wiki for help"
+msgstr "Vedi pagina Wiki per informazioni"
 
 msgid "Select a project"
 msgstr "Seleziona un progetto"
