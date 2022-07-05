@@ -104,7 +104,8 @@ class AppearenceControllerTest extends TestCase
                         'REQUEST_METHOD' => 'POST',
                     ],
                     'post' => [
-                        'Modules' => '[]',
+                        'Properties' => '[]',
+                        'property_name' => 'properties',
                     ],
                 ]
             )
