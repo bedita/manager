@@ -95,9 +95,13 @@ class PropertiesComponent extends Component
 
             return;
         }
-
+        /** @var \App\Controller\ModulesController $controller */
+        $controller = $this->getController();
+        $properties = $controller->Config->read('Properties');
         Configure::load('properties');
-        $properties = (array)Configure::read('Properties');
+        if (empty($properties)) {
+            $properties = (array)Configure::read('Properties');
+        }
         $defaultProperties = (array)Configure::read('DefaultProperties');
         $keys = array_unique(
             array_merge(

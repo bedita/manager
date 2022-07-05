@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-01 14:12:22 \n"
+"POT-Creation-Date: 2022-07-04 13:44:11 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -54,6 +54,9 @@ msgid "An extension stopped the file upload"
 msgstr ""
 
 msgid "Any"
+msgstr ""
+
+msgid "Appearence"
 msgstr ""
 
 msgid "Applications"
@@ -141,6 +144,9 @@ msgid "Concurrent users"
 msgstr ""
 
 msgid "Config"
+msgstr ""
+
+msgid "Configuration key"
 msgstr ""
 
 msgid "Confirm new password"
@@ -425,6 +431,9 @@ msgstr ""
 msgid "Module access not authorized"
 msgstr ""
 
+msgid "Modules"
+msgstr ""
+
 msgid "More"
 msgstr ""
 
@@ -587,6 +596,9 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property Types"
 msgstr ""
 
@@ -660,6 +672,9 @@ msgid "Scheduled_from"
 msgstr ""
 
 msgid "Search"
+msgstr ""
+
+msgid "See Wiki for help"
 msgstr ""
 
 msgid "Select a project"

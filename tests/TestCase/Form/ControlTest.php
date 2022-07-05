@@ -14,6 +14,8 @@
 namespace App\Test\TestCase\Form;
 
 use App\Form\Control;
+use App\Utility\CacheTools;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
@@ -24,6 +26,24 @@ use Cake\TestSuite\TestCase;
  */
 class ControlTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        Cache::enable();
+        parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
+    }
+
     /**
      * Data provider for `testControl` test case.
      *
@@ -434,14 +454,12 @@ class ControlTest extends TestCase
      */
     public function testLabel(string $type, string $property, string $value, $customConfig, string $expected): void
     {
+        Cache::clear();
         if (!empty($customConfig)) {
-            Configure::write(
-                sprintf('Properties.%s', $type),
-                array_merge(
-                    (array)\Cake\Core\Configure::read(sprintf('Properties.%s', $type)),
-                    ['labels' => ['options' => [$property => $customConfig]]]
-                )
-            );
+            $cacheKey = CacheTools::cacheKey('properties');
+            $properties = (array)Cache::read($cacheKey, 'default');
+            $properties = array_merge($properties, [$type => ['labels' => ['options' => [$property => $customConfig]]]]);
+            Cache::write($cacheKey, $properties);
         }
         $actual = Control::label($type, $property, $value);
         static::assertSame($expected, $actual);

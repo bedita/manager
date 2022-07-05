@@ -13,6 +13,8 @@
 
 namespace App\Form;
 
+use App\Utility\CacheTools;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -332,11 +334,13 @@ class Control
      */
     public static function label(string $type, string $property, string $value): string
     {
-        $label = Configure::read(sprintf('Properties.%s.labels.options.%s', $type, $property));
+        $cacheKey = CacheTools::cacheKey('properties');
+        $properties = (array)Cache::read($cacheKey, 'default');
+        $label = Hash::get($properties, sprintf('%s.labels.options.%s', $type, $property));
         if (empty($label)) {
             return Inflector::humanize($value);
         }
-        $labelVal = (string)Configure::read(sprintf('Properties.%s.labels.options.%s.%s', $type, $property, $value));
+        $labelVal = (string)Hash::get($properties, sprintf('%s.labels.options.%s.%s', $type, $property, $value));
         if (empty($labelVal)) {
             return Inflector::humanize($value);
         }

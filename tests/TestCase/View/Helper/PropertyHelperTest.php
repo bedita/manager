@@ -13,7 +13,9 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Utility\CacheTools;
 use App\View\Helper\PropertyHelper;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
@@ -44,6 +46,17 @@ class PropertyHelperTest extends TestCase
                 ]
             )
         );
+        Cache::enable();
+        parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
     }
 
     /**
@@ -303,13 +316,10 @@ class PropertyHelperTest extends TestCase
 
         // type with config
         $expected = 'A B O U T';
-        Configure::write(
-            'Properties.dummies',
-            array_merge(
-                (array)\Cake\Core\Configure::read('Properties.dummies'),
-                ['labels' => ['fields' => ['about' => $expected]]]
-            )
-        );
+        $cacheKey = CacheTools::cacheKey('properties');
+        $properties = (array)Cache::read($cacheKey, 'default');
+        $properties = array_merge($properties, ['dummies' => ['labels' => ['fields' => ['about' => $expected]]]]);
+        Cache::write($cacheKey, $properties);
         $actual = $helper->fieldLabel('about', 'dummies');
         static::assertEquals($expected, $actual);
     }
