@@ -12,7 +12,7 @@
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
             :class="[
-                isOpen? 'open has-background-module-{{ currentModule.name }} has-border-module-{{ currentModule.name }}' : '',
+                isOpen? 'open has-border-module-{{ currentModule.name }}' : '',
                 isLoading? 'is-loading-spinner' : ''
             ]">
                 <h2>{{ Layout.tr(relationName)|lower }}</h2>
