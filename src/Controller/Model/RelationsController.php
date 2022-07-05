@@ -157,7 +157,10 @@ class RelationsController extends ModelBaseController
     protected function allTypes(): array
     {
         try {
-            $response = $this->apiClient->get('/model/object_types');
+            $response = $this->apiClient->get('/model/object_types', [
+                'page_size' => 100,
+                'filter' => ['enabled' => true],
+            ]);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
