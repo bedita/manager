@@ -1,7 +1,12 @@
-<section class="fieldset" id="publish-properties">
-    <div class="tab-container">
-
-        {{ element('Form/group_properties', {'properties' : properties.publish, 'group': 'publish'}) }}
-
-    </div>
-</section>
+<property-view inline-template :tab-open="tabsOpen" tab-name="publish-properties">
+    <section class="fieldset" id="publish-properties">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Publishing properties') }}</h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            {{ element('Form/group_properties', {'properties' : properties.publish, 'group': 'publish'}) }}
+        </div>
+    </section>
+</property-view>
