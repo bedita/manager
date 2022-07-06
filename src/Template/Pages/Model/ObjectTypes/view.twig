@@ -74,7 +74,7 @@
                         {% for key, value in properties.core %}
                             {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                             {% if options.class == 'json' %}
-                                {{ Property.control(key, value, options)|raw }}
+                                {{ Property.control(key, value, options|merge({'id': key}))|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -115,7 +115,13 @@
         <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.core %}
-                {{ element('Model/object_property', { 'prop': prop, 'type': 'core' }) }}
+                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
+                <object-property
+                    :prop="{{ prop|json_encode }}"
+                    :type="{{ 'core'|json_encode }}"
+                    :ishidden="{{ h|json_encode }}"
+                    :nobuttonsfor="{{ []|json_encode }}">
+                </object-property>
             {% else %}
                 <p>{{ __('No core properties') }}</p>
             {% endfor %}
@@ -127,11 +133,13 @@
         <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.inherited %}
-                {{ element('Model/object_property', {
-                    'prop': prop,
-                    'type': 'inherited',
-                    'noButtonsFor': ['id', 'status', 'uname'],
-                }) }}
+                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
+                <object-property
+                    :prop="{{ prop|json_encode }}"
+                    :type="{{ 'inherited'|json_encode }}"
+                    :ishidden="{{ h|json_encode }}"
+                    :nobuttonsfor="{{ ['id', 'status', 'uname']|json_encode }}">
+                </object-property>
             {% else %}
                 <p>{{ __('No inherited properties') }}</p>
             {% endfor %}
@@ -143,7 +151,13 @@
         <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
         <div class="properties-container">
             {% for prop in objectTypeProperties.custom %}
-                {{ element('Model/object_property', { 'prop': prop, 'type': 'custom' }) }}
+                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
+                <object-property
+                    :prop="{{ prop|json_encode }}"
+                    :type="{{ 'custom'|json_encode }}"
+                    :ishidden="{{ h|json_encode }}"
+                    :nobuttonsfor="{{ []|json_encode }}">
+                </object-property>
             {% else %}
                 <p>{{ __('No custom properties') }}</p>
             {% endfor %}

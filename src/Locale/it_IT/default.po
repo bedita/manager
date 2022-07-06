@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-04 13:44:11 \n"
+"POT-Creation-Date: 2022-07-06 09:12:24 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1113,6 +1113,18 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+msgid "Hidden"
+msgstr "Nascosto"
+
+msgid "Inherited from"
+msgstr "Ereditato da"
+
+msgid "Show"
+msgstr "Mostra"
+
+msgid "Hide"
+msgstr "Nascondi"
 
 #. *
 #.  * <location-view> component used for ModulesPage -> View
