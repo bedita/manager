@@ -15,7 +15,7 @@
             <div class="main-view-column">
                 <section class="fieldset">
                     <div class="tab-container">
-                         <div class="lang-header is-flex align-center">
+                        <div class="lang-header is-flex align-center">
                             {% set languageLabel = "#{__('Language')}" %}
                             {% set options = Schema.controlOptions('lang', null, [])|default({})|merge({
                                 'label': languageLabel,
@@ -44,7 +44,7 @@
                                         }
                                     }) %}
                                 {% endfor %}
-                                <button class="mb-1" @click.prevent="translateAll({{ data|json_encode }}, $event)">
+                                <button class="mt-1" @click.prevent="translateAll({{ data|json_encode }}, $event)">
                                     {{ __('Auto-translate all fields') }}
                                 </button>
                             {% endif %}
