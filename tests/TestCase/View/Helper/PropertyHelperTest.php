@@ -239,6 +239,14 @@ class PropertyHelperTest extends TestCase
                 'file_name', // property
                 'sample.txt', // expected
             ],
+            'object id' => [
+                [
+                    'id' => '123',
+                    'attributes' => [],
+                ], // object
+                'id', // property
+                '123', // expected
+            ],
             'not found' => [
                 [
                     'attributes' => [

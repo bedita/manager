@@ -13,9 +13,9 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\PropertiesComponent;
+use App\Controller\ModulesController;
 use App\Utility\CacheTools;
 use Cake\Cache\Cache;
-use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
@@ -61,8 +61,11 @@ class PropertiesComponentTest extends TestCase
      */
     protected function createComponent(): void
     {
-        $controller = new Controller();
+        $controller = new ModulesController();
         $registry = $controller->components();
+        // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Properties'), []);
         /** @var \App\Controller\Component\PropertiesComponent $Properties */
         $Properties = $registry->load(PropertiesComponent::class);
         $Properties->startup();
