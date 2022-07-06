@@ -135,6 +135,16 @@ body.view-module {
         gap: 12px;
         align-items: flex-end;
     }
+
+    .module-form {
+        margin-bottom: $gutter;
+    }
+
+    .buttons-cell {
+        > * {
+            vertical-align: bottom;
+        }
+    }
 }
 
 .pinked {
