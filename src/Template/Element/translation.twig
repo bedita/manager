@@ -73,6 +73,7 @@
                         {% endfor %}
                     </div>
                 </section>
+                {{ element('Form/meta', { 'object' : translation }) }}
             </div>
 
             <div class="side-view-column original">
@@ -92,13 +93,14 @@
                         </div>
                         {% for key in translatable %}
                             {{ Property.control(key, object.attributes[key], {'disabled': 'disabled'})|raw }}
-
                             {# spacer when auto translate is available #}
                             {% if config('Translator.class') %}
                                 <div class="field-align-aid"></div>
                             {% endif %}
                         {% endfor %}
                     </div>
+                </section>
+                {{ element('Form/meta', { 'object' : object }) }}
             </div>
 
             {# The ID of the resource translated #}
@@ -111,7 +113,6 @@
 
             {{ Form.end()|raw }}
 
-
             {# Append "Save" to sidebar #}
             {% do _view.append('module-buttons', Form.button( __('Save'),
                 {
@@ -122,15 +123,22 @@
 
             {% if translation.id %}
                 {# Append "Remove" to sidebar #}
-                {% do _view.append('module-buttons',
-                    Form.postButton(__('Remove'),
-                    {'_name': 'translations:delete', 'object_type': objectType},
-                    {'data': [{'id': translation.id, 'object_id': object.id, 'lang': translation.attributes.lang}]})) %}
+                {% do _view.append('module-buttons', Form.postButton(__('Remove'),
+                    {
+                        '_name': 'translations:delete',
+                        'object_type': objectType
+                    },
+                    {
+                        'data': [{
+                            'id': translation.id,
+                            'object_id': object.id,
+                            'lang': translation.attributes.lang
+                        }],
+                        'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name
+                    })
+                ) %}
             {% endif %}
 
-            {% set url = Url.build({'_name': 'translations:list'}, {'fullBase': true}) %}
-            {% set link = '<a href="' ~ url ~ '">' ~ __('Translations') ~ '</a>' %}
-            {% do _view.append('module-buttons', link) %}
             {{ Form.end()|raw }}
         </div>
 
