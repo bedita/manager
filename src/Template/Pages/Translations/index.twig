@@ -15,12 +15,11 @@
                 {% if objects %}
                     <nav class="table-header has-border-module-translations">
                         <div>{{ __('Translation') }}</div>
-                        <div>{{ __('Translated object') }}</div>
                         <div>{{ __('From') }}</div>
                         <div>{{ __('To') }}</div>
                         <div>{{ __('Status') }}</div>
                         <div>{{ __('Modified') }}</div>
-                        <div>{{ 'Id' }}</div>
+                        <div>{{ __('Translated object') }}</div>
                         <div></div>
                     </nav>
                 {% endif %}
@@ -37,16 +36,11 @@
                             'id': translated.id,
                             'object_type': translated.type,
                     }, {'fullBase': true}) %}
+
                     <div class="table-row object-status-{{ object.attributes.status }}">
                         <div class="narrow">
                             <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}>
-                                    {{ object.attributes.translated_fields.title }}
-                            </a>
-                        </div>
-                        <div class="narrow">
-                            <span class="tag has-background-module-{{ translated.type }}">{{ translated.type }}</span>
-                            <a {% if Perms.canRead(translated.type) %}href="{{ objectUrl }}"{% endif %}>
-                                    {{ translated.id }}
+                                    {{ object.attributes.translated_fields.title|default('no title') }}
                             </a>
                         </div>
                         <div class="narrow">
@@ -61,16 +55,18 @@
                         </div>
                         <div class="narrow">{{ __(object.attributes.status) }}</div>
                         <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
-                        <div class="narrow">{{ object.id }}</div>
+                        <div class="narrow">
+                            <span class="tag has-background-module-{{ translated.type }}">{{ translated.type }}</span>
+                        </div>
                         <div class="buttons-cell narrow">
+                                <a href="{{ url }}" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
+                                {{ __('Edit') }}</a>
                             {% if Perms.canRead(object.type) %}
-                                <a href="{{ url }}">
-                                    <button
-                                        title="{{ __('Edit') }} {{ object.attributes.title }}"
-                                        class="button button-text-white is-width-auto">{{ __('Edit') }}</button>
-                                </a>
+                                <a href="{{ objectUrl }}" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
+                                    {{ __('Original') }}</a>
                             {% endif %}
                         </div>
+
                     </div>
                 {% else %}
                     {{ __('No items found') }}
