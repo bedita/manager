@@ -129,4 +129,17 @@ body.view-module {
             }
         }
     }
+
+    .lang-header {
+        grid-column: span 3;
+        gap: 12px;
+        align-items: flex-end;
+    }
+}
+
+.pinked {
+
+    > * {
+        background-color: pink;
+    }
 }
