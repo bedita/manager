@@ -14,6 +14,7 @@ namespace App\Controller\Admin;
 
 use Cake\Http\Response;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Appearence Controller
@@ -35,13 +36,27 @@ class AppearenceController extends AdministrationBaseController
     protected $readonly = false;
 
     /**
+     * Properties to handle for config
+     *
+     * @var array
+     */
+    protected $properties = [
+        'modules',
+        'properties',
+    ];
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
     public function index(): ?Response
     {
-        $this->set('modules', $this->Config->read('Modules'));
+        $configs = [];
+        foreach ($this->properties as $property) {
+            $configs[$property] = $this->Config->read(Inflector::camelize($property));
+        }
+        $this->set('configs', $configs);
 
         return null;
     }
@@ -55,8 +70,9 @@ class AppearenceController extends AdministrationBaseController
     {
         $this->getRequest()->allowMethod(['post']);
         $data = (array)$this->getRequest()->getData();
-        $modules = (string)Hash::get($data, 'Modules');
-        $this->Config->save('Modules', (array)json_decode($modules, true));
+        $propertyName = (string)Hash::get($data, 'property_name');
+        $content = (string)Hash::get($data, Inflector::camelize($propertyName));
+        $this->Config->save(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
         return $this->redirect(['_name' => 'admin:list:appearence']);
     }

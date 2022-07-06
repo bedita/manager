@@ -21,9 +21,16 @@ use Cake\Utility\Hash;
 
 /**
  * Component to handle properties view in modules.
+ *
+ * @property \App\Controller\Component\ConfigComponent $Config
  */
 class PropertiesComponent extends Component
 {
+    /**
+     * @inheritDoc
+     */
+    protected $components = ['Config'];
+
     /**
      * Default properties groups
      *
@@ -95,9 +102,8 @@ class PropertiesComponent extends Component
 
             return;
         }
-
         Configure::load('properties');
-        $properties = (array)Configure::read('Properties');
+        $properties = $this->Config->read('Properties');
         $defaultProperties = (array)Configure::read('DefaultProperties');
         $keys = array_unique(
             array_merge(

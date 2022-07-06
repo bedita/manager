@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\RelationsController;
 use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -212,6 +213,44 @@ class RelationsControllerTest extends TestCase
 
         $right = $this->Relations->viewBuilder()->getVar('right_object_types');
         static::assertEquals(['documents'], $right);
+    }
+
+    /**
+     * Test `allTypes` method
+     *
+     * @covers ::allTypes()
+     * @return void
+     */
+    public function testAllTypes(): void
+    {
+        $this->viewApiMock();
+        $this->Relations = new RelationsController(new ServerRequest($this->defaultRequestConfig));
+        $this->Relations->view(1);
+        $actual = $this->Relations->viewBuilder()->getVar('all_types');
+        static::assertIsArray($actual);
+    }
+
+    /**
+     * Test `allTypes` method, exception case
+     *
+     * @covers ::allTypes()
+     * @return void
+     */
+    public function testAllTypesException(): void
+    {
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willThrowException(new BEditaClientException('test'));
+        ApiClientProvider::setApiClient($apiClient);
+        $this->Relations = new RelationsController(new ServerRequest($this->defaultRequestConfig));
+        $this->Relations->view(1);
+        $actual = $this->Relations->viewBuilder()->getVar('all_types');
+        static::assertIsArray($actual);
+        $flash = $this->Relations->getRequest()->getSession()->read('Flash.flash.0.message');
+        static::assertEquals('test', $flash);
     }
 
     /**
