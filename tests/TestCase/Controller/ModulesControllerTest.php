@@ -115,6 +115,9 @@ class ModulesControllerTest extends BaseControllerTest
      */
     public function testInitialize(): void
     {
+        // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.Project'), []);
+
         // Setup controller for test
         $this->setupController(); // it already calls initialize, internally
         static::assertEquals('documents', $this->controller->getObjectType());

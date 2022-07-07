@@ -41,7 +41,9 @@ class AppearenceController extends AdministrationBaseController
      * @var array
      */
     protected $properties = [
+        'alert_message',
         'modules',
+        'project',
         'properties',
     ];
 
