@@ -20,7 +20,7 @@ export default {
             </div>
             <div v-if="!(prop.attributes.name in nobuttonsfor)" class="column is-narrow">
                 <div class="buttons-container">
-                    <button v-if="type === 'custom'" class="button is-expanded">${t`Delete`}</button>
+                    <button v-if="type === 'custom'" @click.prevent="remove()" class="button is-expanded">${t`Delete`}</button>
                     <button v-if="hidden" @click.prevent="toggle(false)" class="button is-expanded">${t`Show`}</button>
                     <button v-if="!hidden" @click.prevent="toggle(true)" class="button is-expanded">${t`Hide`}</button>
                 </div>
@@ -88,6 +88,40 @@ export default {
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
                 document.getElementById('hidden').setAttribute('data-original-value', newVal);
+            }
+        },
+        remove() {
+            BEDITA.confirm(
+                t`If you confirm, this resource will be gone forever. Are you sure?`,
+                t`yes, proceed`,
+                () => {
+                    this.delete();
+                }
+            );
+        },
+        async delete() {
+            const prefix = t`Error on deleting property`;
+            try {
+                const options = {
+                    method: 'DELETE',
+                    credentials: 'same-origin',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-Token': BEDITA.csrfToken,
+                    },
+                };
+                const response = await fetch(`${BEDITA.base}/api/model/properties/${this.prop.id}`, options);
+                if (response.status === 200) {
+                    document.location.reload();
+
+                    return;
+                }
+                if (response.error) {
+                    BEDITA.showError(`${prefix}: ${response.error}`);
+                    this.handleError(response.error, prefix);
+                }
+            } catch (error) {
+                BEDITA.showError(`${prefix}: ${error}`);
             }
         },
     },
