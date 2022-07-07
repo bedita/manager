@@ -227,8 +227,8 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
-        $prjFromCfg = (array)$this->Config->read('Project');
-        $name = (string)Hash::get($prjFromCfg, 'name', (string)Configure::read('Project.name', Hash::get($meta, 'project.name')));
+        $project = (array)$this->Config->read('Project');
+        $name = (string)Hash::get($project, 'name', (string)Configure::read('Project.name', Hash::get($meta, 'project.name')));
         $version = Hash::get($meta, 'version', '');
 
         return compact('name', 'version');
