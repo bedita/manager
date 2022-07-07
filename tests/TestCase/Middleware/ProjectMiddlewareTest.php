@@ -15,10 +15,12 @@ namespace App\Test\Middleware;
 use App\Application;
 use App\Middleware\ProjectMiddleware;
 use Cake\Core\Configure;
-use Cake\Http\MiddlewareQueue;
-use Cake\Http\Runner;
+use Cake\Http\Response;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * {@see \App\Middleware\ProjectMiddleware} Test Case
@@ -100,6 +102,7 @@ class ProjectMiddlewareTest extends TestCase
      */
     public function testInvoke($expected, $data): void
     {
+        Configure::write('Project', null);
         $request = ServerRequestFactory::fromGlobals();
         $request->getSession()->write($data);
         foreach ($data as $key => $value) {
@@ -107,8 +110,13 @@ class ProjectMiddlewareTest extends TestCase
         }
         $app = new Application(CONFIG);
         $middleware = new ProjectMiddleware($app, TESTS . 'files' . DS . 'projects' . DS);
-        $runner = new Runner();
-        $runner->run(new MiddlewareQueue([$middleware]), $request);
+        $handler = new class () implements RequestHandlerInterface {
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                return new Response();
+            }
+        };
+        $middleware->process($request, $handler);
 
         $project = Configure::read('Project');
         static::assertEquals($expected, $project);

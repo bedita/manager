@@ -49,7 +49,6 @@ class PropertyHelper extends Helper
      * @var array
      */
     public const SPECIAL_PROPS_TYPE = [
-        'associations' => 'associations',
         'categories' => 'categories',
         'relations' => 'relations',
         'file_size' => 'byte',
@@ -138,6 +137,7 @@ class PropertyHelper extends Helper
     public function value(array $resource, string $property): string
     {
         $paths = array_filter([
+            $property,
             sprintf('attributes.%s', $property),
             sprintf('meta.%s', $property),
             (string)Hash::get(self::RELATED_PATHS, $property),

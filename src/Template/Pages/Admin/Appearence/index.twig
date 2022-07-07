@@ -1,0 +1,56 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearence')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
+{% set wikis = {
+    'modules': 'https://github.com/bedita/manager/wiki/Setup:-Modules-configuration',
+    'properties': 'https://github.com/bedita/manager/wiki/Setup:-Properties-display',
+} %}
+
+{#
+// i18n
+__('Modules')
+__('Properties')
+#}
+
+<admin-appearence inline-template>
+
+    <div class="module-index">
+
+        <div class="mt-2 mb-2">
+            <label for="configKey">
+                {{ __('Configuration key') }}
+            </label>
+            <select id="configKey" v-model="config">
+            {% for property in configs|keys %}
+                <option value="{{ property }}">{{ __(property|humanize) }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
+        {% for property,val in configs %}
+        <div v-show="config === {{ property|json_encode }}">
+            {{ Form.create(null, {
+                'id': 'form-appearence-' ~ property,
+                'class': 'columns',
+                'url': {'_name': 'admin:save:appearence'},
+            })|raw }}
+                <div class="column">
+                    {{ Form.control(property|camelize, Schema.controlOptions(property|camelize, val|escape('html_attr'), {'type': 'object'})|merge({'label': false}))|raw }}
+                    {{ Form.control('property_name', {'type': 'hidden', 'value': property})|raw }}
+                </div>
+                <div class="column">
+                    {{ Form.button(__('Save'), {
+                        'class': 'button button-primary button-primary-hover-module-admin',
+                        'onclick': 'this.classList.add(\'is-loading-spinner\')',
+                    }) | raw }}
+                    <a href="{{ wikis[property] }}" class="button button-outlined" target="_blank">{{ __('See Wiki for help') }}</a>
+                </div>
+            {{ Form.end()|raw }}
+        </div>
+        {% endfor %}
+
+    </div>
+
+</admin-appearence>

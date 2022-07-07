@@ -29,9 +29,10 @@ body.view-module, body.userprofiles-view {
     .tab {
         display: flex;
         align-items: center;
-        padding-bottom: $gutter * .5;
+        padding-left: $gutter * .5;
         padding-right: $gutter * .5;
         border-bottom: 1px solid $gray-100;
+        // background-color: $gray-800;
 
         &.is-loading-spinner {
             button {

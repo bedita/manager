@@ -134,11 +134,17 @@ export default {
             return (tabs.indexOf(this.tabName) >= 0);
         },
         readTabsOpen() {
-            let tabs = [];
             if (localStorage.getItem(STORAGE_TABS_KEY)) {
-                tabs = JSON.parse(localStorage.getItem(STORAGE_TABS_KEY));
+                return JSON.parse(localStorage.getItem(STORAGE_TABS_KEY));
             }
-            return tabs;
+            // if `isDefaultOpen` is true, on the first access, this tab is saved as open
+            // Note: there can be only one tab having `tabName` and `isDefaultOpen` set as true
+            if (this.isDefaultOpen) {
+                localStorage.setItem(STORAGE_TABS_KEY, JSON.stringify([this.tabName]));
+                return [this.tabName];
+            };
+
+            return [];
         },
         updateStorage() {
             if (!this.tabName) {

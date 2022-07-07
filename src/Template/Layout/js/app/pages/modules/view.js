@@ -15,6 +15,8 @@ export default {
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
+        ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
+        ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
     },
 
     props: {
@@ -34,7 +36,9 @@ export default {
 
     mounted() {
         window.addEventListener('keydown', this.toggleTabs);
-        this.$refs.formMain.addEventListener('submit', this.submitForm);
+        if (this.$refs.formMain) {
+            this.$refs.formMain.addEventListener('submit', this.submitForm);
+        }
     },
 
     methods: {

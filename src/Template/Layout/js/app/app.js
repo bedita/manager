@@ -11,8 +11,10 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
+import email from 'app/directives/email';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
+import uri from 'app/directives/uri';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
@@ -37,11 +39,14 @@ const _vueInstance = new Vue({
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
+        ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
+        AdminAppearence: () => import(/* webpackChunkName: "admin-appearence" */'app/pages/admin/appearence'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
@@ -96,6 +101,8 @@ const _vueInstance = new Vue({
         Vue.use(jsoneditor);
         Vue.use(datepicker);
         Vue.use(richeditor);
+        Vue.use(email);
+        Vue.use(uri);
 
         // Register helpers
         Vue.use(viewHelper);
@@ -477,12 +484,18 @@ const _vueInstance = new Vue({
                 if (!done) {
                     const hardDeleteActions = [
                         '/delete',
+                        '/model/object_types/remove',
+                        '/model/relations/remove',
                         '/model/tags/remove',
                         '/model/categories/remove',
                     ];
                     for (const action of hardDeleteActions) {
                         if (!done && form.action.includes(action)) {
-                            msg = t`Do you really want to trash the object?`;
+                            if (action === '/delete') {
+                                msg = t`Do you really want to trash the object?`;
+                            } else {
+                                msg = t`If you confirm, this resource will be gone forever. Are you sure?`;
+                            }
                             done = true;
                         }
                     }

@@ -38,11 +38,35 @@ class Control
     {
         $type = $options['propertyType'];
         $value = $options['value'];
+        $format = self::format((array)$options['schema']);
+        if ($type === 'text' && in_array($format, ['email', 'uri'])) {
+            return call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
+        }
         if (!in_array($type, self::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
 
         return call_user_func_array(Form::getMethod(self::class, $type), [$options]);
+    }
+
+    /**
+     * Get format from schema
+     *
+     * @param array $schema The schema
+     * @return string
+     */
+    public static function format(array $schema): string
+    {
+        if (empty($schema['oneOf'])) {
+            return '';
+        }
+        foreach ($schema['oneOf'] as $item) {
+            if (array_key_exists('format', $item)) {
+                return (string)$item['format'];
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -261,6 +285,38 @@ class Control
                 $schema['enum']
             ),
             'value' => $value,
+        ];
+    }
+
+    /**
+     * Control for email
+     *
+     * @param array $options The options
+     * @return array
+     */
+    public static function email(array $options): array
+    {
+        return [
+            'type' => 'text',
+            'v-email' => 'true',
+            'class' => 'email',
+            'value' => Hash::get($options, 'value'),
+        ];
+    }
+
+    /**
+     * Control for uri
+     *
+     * @param array $options The options
+     * @return array
+     */
+    public static function uri(array $options): array
+    {
+        return [
+            'type' => 'text',
+            'v-uri' => 'true',
+            'class' => 'uri',
+            'value' => Hash::get($options, 'value'),
         ];
     }
 

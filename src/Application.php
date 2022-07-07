@@ -14,6 +14,7 @@ namespace App;
 
 use App\Authentication\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
+use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
@@ -64,7 +65,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
          * Debug Kit should not be installed on a production system
          */
         if (Configure::read('debug')) {
-            $this->addPlugin('DebugKit');
+            $this->addOptionalPlugin('DebugKit');
         }
 
         $this->addPlugin('BEdita/WebTools');
@@ -81,6 +82,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
         $this->addOptionalPlugin('Bake');
         $this->addOptionalPlugin('IdeHelper');
+        $this->addOptionalPlugin('Cake/Repl');
         $this->loadPluginsFromConfig();
     }
 
@@ -116,6 +118,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Load current project configuration if `multiproject` instance
             // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
             ->add(new ProjectMiddleware($this))
+
+            // Provides a `GET /status` endpoint. This must be
+            ->add(new StatusMiddleware())
 
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([

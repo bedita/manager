@@ -1,0 +1,14 @@
+<div class="columns">
+    <div class="column mt-2">
+        <div class="mb-1"><label>{{__('Left types') }}</label></div>
+        <object-types-list :side="{{ 'left'|json_encode }}" :all="{{ all_types|default([])|json_encode }}" :selected="{{ left_object_types|default([])|json_encode }}"></object-types-list>
+        {% do Form.unlockField('current_left') %}
+        {% do Form.unlockField('change_left') %}
+    </div>
+    <div class="column mt-2">
+        <div class="mb-1"><label>{{__('Right types') }}</label></div>
+        <object-types-list :side="{{ 'right'|json_encode }}" :all="{{ all_types|default([])|json_encode }}" :selected="{{ right_object_types|default([])|json_encode }}"></object-types-list>
+        {% do Form.unlockField('current_right') %}
+        {% do Form.unlockField('change_right') %}
+    </div>
+</div>

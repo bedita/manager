@@ -88,7 +88,7 @@ return [
                 ],
                 '$id' => '/properties/hidden',
                 'title' => 'Hidden',
-                'description' => 'Object type entity associations',
+                'description' => 'Object type hidden properties',
             ],
         ],
 

@@ -17,9 +17,11 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\Utils\ModulesControllerSample;
+use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -39,6 +41,15 @@ class ModulesControllerTest extends BaseControllerTest
     {
         parent::setUp();
         $this->loadRoutes();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
     }
 
     /**
@@ -62,7 +73,8 @@ class ModulesControllerTest extends BaseControllerTest
         // Mock Authentication component
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
-        // force modules load
+        // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.Modules'), []);
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();

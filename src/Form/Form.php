@@ -26,11 +26,12 @@ class Form
      *
      * @param string $className The class name
      * @param string $name The method name
+     * @param string|null $format The format
      * @return array
      */
-    public static function getMethod(string $className, string $name): array
+    public static function getMethod(string $className, string $name, $format = ''): array
     {
-        $methodName = Inflector::variable(str_replace('-', '_', $name));
+        $methodName = !empty($format) ? $format : Inflector::variable(str_replace('-', '_', $name));
         $method = [$className, $methodName];
         if (is_callable($method)) {
             return $method;

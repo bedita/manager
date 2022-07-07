@@ -26,6 +26,7 @@ use Cake\Utility\Hash;
  * Base Application Controller.
  *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \App\Controller\Component\ConfigComponent $Config
  * @property \App\Controller\Component\FlashComponent $Flash
  * @property \App\Controller\Component\ModulesComponent $Modules
  * @property \App\Controller\Component\SchemaComponent $Schema
@@ -58,6 +59,7 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => '/login',
         ]);
+        $this->loadComponent('Config');
 
         $this->loadComponent('Modules', [
             'currentModuleName' => $this->name,

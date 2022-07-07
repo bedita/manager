@@ -129,10 +129,10 @@ class PropertyTypesControllerTest extends TestCase
                         'id' => '13',
                         'type' => 'property_types',
                         'attributes' => [
-                                'name' => 'enrico',
-                                'params' => [
-                                        'type' => 'object',
-                                ],
+                            'name' => 'enrico',
+                            'params' => [
+                                'type' => 'object',
+                            ],
                         ],
                     ],
                 ],
