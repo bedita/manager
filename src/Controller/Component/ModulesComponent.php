@@ -228,7 +228,7 @@ class ModulesComponent extends Component
     {
         $meta = $this->getMeta();
         $project = (array)$this->Config->read('Project');
-        $name = (string)Hash::get($project, 'name', (string)Configure::read('Project.name', Hash::get($meta, 'project.name')));
+        $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
         $version = Hash::get($meta, 'version', '');
 
         return compact('name', 'version');
