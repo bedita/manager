@@ -4,7 +4,9 @@
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 
 {% set wikis = {
+    'alert_message': 'https://github.com/bedita/manager/wiki/Setup:-Alert-Message',
     'modules': 'https://github.com/bedita/manager/wiki/Setup:-Modules-configuration',
+    'project': 'https://github.com/bedita/manager/wiki/Setup:-Project',
     'properties': 'https://github.com/bedita/manager/wiki/Setup:-Properties-display',
 } %}
 
@@ -23,7 +25,7 @@ __('Properties')
                 {{ __('Configuration key') }}
             </label>
             <select id="configKey" v-model="config">
-            {% for property in configs|keys %}
+            {% for property in configs|keys|sort %}
                 <option value="{{ property }}">{{ __(property|humanize) }}</option>
             {% endfor %}
             </select>

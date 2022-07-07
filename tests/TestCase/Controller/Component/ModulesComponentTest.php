@@ -19,6 +19,7 @@ use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
+use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use Authentication\Identity;
@@ -26,6 +27,7 @@ use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
@@ -77,6 +79,9 @@ class ModulesComponentTest extends TestCase
         $controller = new AppController();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
+        /** @var \App\Controller\Component\ConfigComponent $configComponent */
+        $configComponent = $registry->load(ConfigComponent::class);
+        $controller->Config = $configComponent;
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
         $modulesComponent = $registry->load(ModulesComponent::class);
         $this->Modules = $modulesComponent;
@@ -98,6 +103,7 @@ class ModulesComponentTest extends TestCase
             }
         };
         $controller->loadComponent('Authentication');
+        $controller->loadComponent('Config');
     }
 
     /**
@@ -106,7 +112,6 @@ class ModulesComponentTest extends TestCase
     public function tearDown(): void
     {
         unset($this->Modules);
-
         // reset client, force new client creation
         ApiClientProvider::setApiClient(null);
         parent::tearDown();
@@ -209,7 +214,6 @@ class ModulesComponentTest extends TestCase
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity([]));
 
-        Configure::write('Project', $config);
         if ($expected instanceof \Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
@@ -231,7 +235,12 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
 
+        // Mock GET /config using cache
+        Cache::enable();
+        Cache::write(CacheTools::cacheKey('config.Project'), ['attributes' => ['content' => json_encode($config)]]);
+        Cache::delete('home_0'); // otherwise mock is applied only on first round of test from data provider
         $actual = $this->Modules->getProject();
+        Cache::disable();
 
         static::assertEquals($expected, $actual);
     }

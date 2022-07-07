@@ -28,6 +28,7 @@ use Psr\Log\LogLevel;
  * Component to load available modules.
  *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \App\Controller\Component\ConfigComponent $Config
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
@@ -44,7 +45,7 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Authentication', 'Schema'];
+    public $components = ['Authentication', 'Config', 'Schema'];
 
     /**
      * @inheritDoc
@@ -131,9 +132,7 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        /** @var \App\Controller\ModulesController $controller */
-        $controller = $this->getController();
-        $modules = $controller->Config->read('Modules');
+        $modules = $this->Config->read('Modules');
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
@@ -228,13 +227,11 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
-        // Project name may be set via `config` and it takes precedence if set
-        $project = [
-            'name' => (string)Configure::read('Project.name', Hash::get($meta, 'project.name')),
-            'version' => Hash::get($meta, 'version', ''),
-        ];
+        $project = (array)$this->Config->read('Project');
+        $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
+        $version = Hash::get($meta, 'version', '');
 
-        return $project;
+        return compact('name', 'version');
     }
 
     /**
