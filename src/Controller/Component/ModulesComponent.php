@@ -228,8 +228,8 @@ class ModulesComponent extends Component
     {
         $meta = $this->getMeta();
         $prjFromCfg = (array)$this->Config->read('Project');
-        $name = !empty($prjFromCfg['name']) ? (string)$prjFromCfg['name'] : (string)Configure::read('Project.name', Hash::get($meta, 'project.name'));
-        $version = !empty($prjFromCfg['version']) ? (string)$prjFromCfg['version'] : Hash::get($meta, 'version', '');
+        $name = (string)Hash::get($prjFromCfg, 'name', (string)Configure::read('Project.name', Hash::get($meta, 'project.name')));
+        $version = Hash::get($meta, 'version', '');
 
         return compact('name', 'version');
     }

@@ -164,41 +164,34 @@ class ModulesComponentTest extends TestCase
                     'version' => 'v4.0.0-gustavo',
                 ],
             ],
-            'empty return default' => [
-                [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
-                ],
+            'empty' => [
                 [
                     'name' => '',
                     'version' => '',
                 ],
+                [],
             ],
             'client exception' => [
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'name' => '',
+                    'version' => '',
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
             'other exception' => [
-                [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
-                ],
+                new \RuntimeException('I am some other kind of exception', 999),
                 new \RuntimeException('I am some other kind of exception', 999),
             ],
             'config' => [
                 [
                     'name' => 'Gustavo',
-                    'version' => '4.1.x',
+                    'version' => '4.1.2',
                 ],
                 [
                     'version' => '4.1.2',
                 ],
                 [
                     'name' => 'Gustavo',
-                    'version' => '4.1.x',
                 ],
             ],
         ];
@@ -245,6 +238,7 @@ class ModulesComponentTest extends TestCase
         // Mock GET /config using cache
         Cache::enable();
         Cache::write(CacheTools::cacheKey('config.Project'), ['attributes' => ['content' => json_encode($config)]]);
+        Cache::delete('home_0'); // otherwise mock is applied only on first round of test from data provider
         $actual = $this->Modules->getProject();
         Cache::disable();
 
