@@ -92,7 +92,7 @@ export default {
         },
         remove() {
             BEDITA.confirm(
-                t`Remove item. Are you sure?`,
+                t`If you confirm, this resource will be gone forever. Are you sure?`,
                 t`yes, proceed`,
                 () => {
                     this.delete();
