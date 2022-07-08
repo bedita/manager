@@ -408,11 +408,20 @@ return [
      */
     // 'Maintenance' => [
     //     'message' => 'This page won\'t be available for some time. Try later',
-    // ]
+    // ],
 
     /**
      * The manager application name in the API (default is `manager`).
      * This is used in reading/writing manager configuration data.
      */
     // 'ManagerAppName' => 'my-manager-app',
+
+    /**
+     * Object types to add to core types, used in Data Modeling -> Object types.
+     */
+    // 'Model' => [
+    //     'objectTypesTables' => [
+    //         'MyPlugin.MyTable',
+    //     ],
+    // ],
 ];

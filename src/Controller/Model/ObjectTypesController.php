@@ -13,6 +13,7 @@
 namespace App\Controller\Model;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -24,6 +25,51 @@ use Psr\Log\LogLevel;
  */
 class ObjectTypesController extends ModelBaseController
 {
+    /**
+     * Core tables list.
+     *
+     * @var array
+     */
+    public const TABLES = [
+        'BEdita/Core.Annotations',
+        'BEdita/Core.Applications',
+        'BEdita/Core.AsyncJobs',
+        'BEdita/Core.AuthProviders',
+        'BEdita/Core.Categories',
+        'BEdita/Core.Config',
+        'BEdita/Core.DateRanges',
+        'BEdita/Core.EndpointPermissions',
+        'BEdita/Core.Endpoints',
+        'BEdita/Core.ExternalAuth',
+        'BEdita/Core.Folders',
+        'BEdita/Core.History',
+        'BEdita/Core.Links',
+        'BEdita/Core.Locations',
+        'BEdita/Core.Media',
+        'BEdita/Core.ObjectCategories',
+        'BEdita/Core.ObjectPermissions',
+        'BEdita/Core.ObjectProperties',
+        'BEdita/Core.ObjectRelations',
+        'BEdita/Core.ObjectsBase',
+        'BEdita/Core.Objects',
+        'BEdita/Core.ObjectTags',
+        'BEdita/Core.ObjectTypes',
+        'BEdita/Core.Profiles',
+        'BEdita/Core.Properties',
+        'BEdita/Core.PropertyTypes',
+        'BEdita/Core.Publications',
+        'BEdita/Core.Relations',
+        'BEdita/Core.RelationTypes',
+        'BEdita/Core.Roles',
+        'BEdita/Core.RolesUsers',
+        'BEdita/Core.StaticProperties',
+        'BEdita/Core.Streams',
+        'BEdita/Core.Tags',
+        'BEdita/Core.Translations',
+        'BEdita/Core.Trees',
+        'BEdita/Core.Users',
+        'BEdita/Core.UserTokens',
+    ];
     /**
      * Resource type currently used
      *
@@ -56,10 +102,56 @@ class ObjectTypesController extends ModelBaseController
 
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
-        $this->set('schema', $this->Schema->getSchema());
+        $schema = $this->Schema->getSchema();
+        $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables()];
+        $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => $this->abstractTypes()];
+        $this->set('schema', $schema);
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+     * Get available tables list
+     *
+     * @return array
+     */
+    protected function tables(): array
+    {
+        $tables = array_unique(
+            array_merge(
+                self::TABLES,
+                (array)Configure::read('Model.objectTypesTables')
+            )
+        );
+        sort($tables);
+
+        return $tables;
+    }
+
+    /**
+     * Get abstract types from api
+     *
+     * @return array
+     */
+    protected function abstractTypes(): array
+    {
+        $response = [];
+        try {
+            $response = $this->apiClient->get(
+                '/model/object_types',
+                ['filter' => ['is_abstract' => true]]
+            );
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return [];
+        }
+        $types = (array)Hash::extract($response, 'data.{n}.attributes.name');
+        sort($types);
+
+        return $types;
     }
 
     /**
