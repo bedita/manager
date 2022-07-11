@@ -201,6 +201,7 @@ class ObjectTypesControllerTest extends TestCase
                     'type' => 'string',
                     'enum' => [
                         '',
+                        'media',
                         'objects',
                     ],
                 ],
