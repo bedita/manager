@@ -74,14 +74,30 @@ class ObjectTypesController extends ModelBaseController
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
         $schema = $this->Schema->getSchema();
-        if ((bool)Hash::get($resource, 'meta.core_type') === false) {
-            $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables($resource)];
-            $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => [''] + $this->Schema->abstractTypes()];
-        }
-        $this->set('schema', $schema);
+        $this->set('schema', $this->updateSchema($schema, $resource));
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+     * Update schema using resource.
+     * If core type, skip.
+     * Otherwise, set table and parent_name.
+     *
+     * @param array $schema The schema
+     * @param array $resource The resource
+     * @return array
+     */
+    protected function updateSchema(array $schema, array $resource): array
+    {
+        if ((bool)Hash::get($resource, 'meta.core_type')) {
+            return $schema;
+        }
+        $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables($resource)];
+        $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => [''] + $this->Schema->abstractTypes()];
+
+        return $schema;
     }
 
     /**
