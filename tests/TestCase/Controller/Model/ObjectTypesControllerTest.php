@@ -15,7 +15,6 @@ namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\ObjectTypesController;
 use BEdita\SDK\BEditaClient;
-use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\Response;
@@ -247,49 +246,5 @@ class ObjectTypesControllerTest extends TestCase
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, []);
         static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Test `abstractTypes`
-     *
-     * @return void
-     * @covers ::abstractTypes()
-     */
-    public function testAbstractTypes(): void
-    {
-        $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->ModelController);
-        $method = $reflectionClass->getMethod('abstractTypes');
-        $method->setAccessible(true);
-        $actual = $method->invokeArgs($this->ModelController, []);
-        static::assertIsArray($actual);
-    }
-
-    /**
-     * Test `abstractTypes`, on exception
-     *
-     * @return void
-     * @covers ::abstractTypes()
-     */
-    public function testAbstractTypesException(): void
-    {
-        // Setup mock API client for exception.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->with('/model/object_types')
-            ->willThrowException(new BEditaClientException('test'));
-        ApiClientProvider::setApiClient($apiClient);
-        $this->ModelController = new ObjectTypesController(
-            new ServerRequest($this->defaultRequestConfig)
-        );
-        $reflectionClass = new \ReflectionClass($this->ModelController);
-        $method = $reflectionClass->getMethod('abstractTypes');
-        $method->setAccessible(true);
-        $actual = $method->invokeArgs($this->ModelController, []);
-        static::assertIsArray($actual);
-        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
-        static::assertEquals('test', $flash);
     }
 }

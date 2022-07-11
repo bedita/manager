@@ -22,6 +22,7 @@ use Psr\Log\LogLevel;
  * Object Types Model Controller: list, add, edit, remove object types
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ObjectTypesController extends ModelBaseController
 {
@@ -31,44 +32,14 @@ class ObjectTypesController extends ModelBaseController
      * @var array
      */
     public const TABLES = [
-        'BEdita/Core.Annotations',
-        'BEdita/Core.Applications',
-        'BEdita/Core.AsyncJobs',
-        'BEdita/Core.AuthProviders',
-        'BEdita/Core.Categories',
-        'BEdita/Core.Config',
-        'BEdita/Core.DateRanges',
-        'BEdita/Core.EndpointPermissions',
-        'BEdita/Core.Endpoints',
-        'BEdita/Core.ExternalAuth',
         'BEdita/Core.Folders',
-        'BEdita/Core.History',
         'BEdita/Core.Links',
         'BEdita/Core.Locations',
         'BEdita/Core.Media',
-        'BEdita/Core.ObjectCategories',
-        'BEdita/Core.ObjectPermissions',
-        'BEdita/Core.ObjectProperties',
-        'BEdita/Core.ObjectRelations',
-        'BEdita/Core.ObjectsBase',
         'BEdita/Core.Objects',
-        'BEdita/Core.ObjectTags',
-        'BEdita/Core.ObjectTypes',
         'BEdita/Core.Profiles',
-        'BEdita/Core.Properties',
-        'BEdita/Core.PropertyTypes',
         'BEdita/Core.Publications',
-        'BEdita/Core.Relations',
-        'BEdita/Core.RelationTypes',
-        'BEdita/Core.Roles',
-        'BEdita/Core.RolesUsers',
-        'BEdita/Core.StaticProperties',
-        'BEdita/Core.Streams',
-        'BEdita/Core.Tags',
-        'BEdita/Core.Translations',
-        'BEdita/Core.Trees',
-        'BEdita/Core.Users',
-        'BEdita/Core.UserTokens',
+        'BEdita/Core.Users'
     ];
     /**
      * Resource type currently used
@@ -103,8 +74,11 @@ class ObjectTypesController extends ModelBaseController
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
         $schema = $this->Schema->getSchema();
-        $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables()];
-        $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => $this->abstractTypes()];
+        if ((bool)Hash::get($resource, 'meta.core_type') === false)
+        {
+            $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables($resource)];
+            $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => [''] + $this->Schema->abstractTypes()];
+        }
         $this->set('schema', $schema);
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
@@ -116,7 +90,7 @@ class ObjectTypesController extends ModelBaseController
      *
      * @return array
      */
-    protected function tables(): array
+    protected function tables(array $resource): array
     {
         $tables = array_unique(
             array_merge(
@@ -124,34 +98,15 @@ class ObjectTypesController extends ModelBaseController
                 (array)Configure::read('Model.objectTypesTables')
             )
         );
+        $tables = array_unique(
+            array_merge(
+                $tables,
+                (array)Hash::get($resource, 'attributes.table')
+            )
+        );
         sort($tables);
 
         return $tables;
-    }
-
-    /**
-     * Get abstract types from api
-     *
-     * @return array
-     */
-    protected function abstractTypes(): array
-    {
-        $response = [];
-        try {
-            $response = $this->apiClient->get(
-                '/model/object_types',
-                ['filter' => ['is_abstract' => true]]
-            );
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            return [];
-        }
-        $types = (array)Hash::extract($response, 'data.{n}.attributes.name');
-        sort($types);
-
-        return $types;
     }
 
     /**

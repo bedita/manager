@@ -431,4 +431,18 @@ class SchemaComponent extends Component
         $superParent = (string)Hash::get($types, $parent . '.parent_name');
         $this->setDescendant($name, $superParent, $types, $descendants);
     }
+
+    /**
+     * Get abstract types
+     *
+     * @return array
+     */
+    public function abstractTypes(): array
+    {
+        $features = $this->objectTypesFeatures();
+        $types = array_keys($features['descendants']);
+        sort($types);
+
+        return $types;
+    }
 }
