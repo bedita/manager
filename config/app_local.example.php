@@ -417,7 +417,7 @@ return [
     // 'ManagerAppName' => 'my-manager-app',
 
     /**
-     * Object types to add to core types, used in Data Modeling -> Object types.
+     * Object types to add to core tables, used in Data Modeling -> Object types.
      */
     // 'Model' => [
     //     'objectTypesTables' => [
