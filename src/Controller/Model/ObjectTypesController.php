@@ -39,7 +39,7 @@ class ObjectTypesController extends ModelBaseController
         'BEdita/Core.Objects',
         'BEdita/Core.Profiles',
         'BEdita/Core.Publications',
-        'BEdita/Core.Users'
+        'BEdita/Core.Users',
     ];
     /**
      * Resource type currently used
@@ -74,8 +74,7 @@ class ObjectTypesController extends ModelBaseController
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
         $schema = $this->Schema->getSchema();
-        if ((bool)Hash::get($resource, 'meta.core_type') === false)
-        {
+        if ((bool)Hash::get($resource, 'meta.core_type') === false) {
             $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables($resource)];
             $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => [''] + $this->Schema->abstractTypes()];
         }
