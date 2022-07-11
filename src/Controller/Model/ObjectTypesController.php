@@ -94,8 +94,14 @@ class ObjectTypesController extends ModelBaseController
         if ((bool)Hash::get($resource, 'meta.core_type')) {
             return $schema;
         }
-        $schema['properties']['table'] = ['type' => 'string', 'enum' => $this->tables($resource)];
-        $schema['properties']['parent_name'] = ['type' => 'string', 'enum' => [''] + $this->Schema->abstractTypes()];
+        $schema['properties']['table'] = [
+            'type' => 'string',
+            'enum' => $this->tables($resource),
+        ];
+        $schema['properties']['parent_name'] = [
+            'type' => 'string',
+            'enum' => array_merge([''], $this->Schema->abstractTypes()),
+        ];
 
         return $schema;
     }
