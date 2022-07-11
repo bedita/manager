@@ -711,4 +711,16 @@ class SchemaComponentTest extends TestCase
         $result = $this->Schema->objectTypesFeatures();
         static::assertEmpty($result);
     }
+
+    /**
+     * Test `abstractTypes`
+     *
+     * @return void
+     * @covers ::abstractTypes()
+     */
+    public function testAbstractTypes(): void
+    {
+        $actual = $this->Schema->abstractTypes();
+        static::assertIsArray($actual);
+    }
 }

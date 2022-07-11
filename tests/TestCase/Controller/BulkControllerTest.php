@@ -62,7 +62,10 @@ class BulkControllerTest extends BaseControllerTest
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // Mock GET /config using cache
+        Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Properties'), []);
+        Cache::write(CacheTools::cacheKey('config.Project'), []);
 
         // force modules load
         $this->controller->Modules->startup();
