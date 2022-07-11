@@ -239,12 +239,13 @@ class ObjectTypesControllerTest extends TestCase
             )
         );
         $expected = array_unique(array_merge(ObjectTypesController::TABLES, $testTables));
+        $expected = array_unique(array_merge($expected, ['dummy']));
         sort($expected);
         $this->setupController();
         $reflectionClass = new \ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('tables');
         $method->setAccessible(true);
-        $actual = $method->invokeArgs($this->ModelController, []);
+        $actual = $method->invokeArgs($this->ModelController, [['attributes' => ['table' => 'dummy']]]);
         static::assertSame($expected, $actual);
     }
 }
