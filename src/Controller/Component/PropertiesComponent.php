@@ -18,6 +18,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Component to handle properties view in modules.
@@ -26,6 +27,23 @@ use Cake\Utility\Hash;
  */
 class PropertiesComponent extends Component
 {
+    /**
+     * Schema property types
+     */
+    public const CUSTOM_PROPERTY_TYPES = [
+        'boolean',
+        'date',
+        'datetime',
+        'email',
+        'integer',
+        'json',
+        'number',
+        'string',
+        'text',
+        'text_plain',
+        'url',
+    ];
+
     /**
      * @inheritDoc
      */
@@ -271,5 +289,23 @@ class PropertiesComponent extends Component
     public function readonlyRelationsList(string $type): array
     {
         return (array)$this->getConfig(sprintf('Properties.%s.relations._readonly', $type), []);
+    }
+
+    /**
+     * Types options for property Type select combo
+     *
+     * @return array
+     */
+    public function typesOptions(): array
+    {
+        $label = __('Type');
+        $type = 'select';
+        $options = ['' => ''];
+        foreach (self::CUSTOM_PROPERTY_TYPES as $value) {
+            $text = Inflector::humanize($value);
+            $options[] = compact('text', 'value');
+        }
+
+        return compact('label', 'type', 'options');
     }
 }

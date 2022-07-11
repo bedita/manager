@@ -46,23 +46,9 @@
 
                 <section class="fieldset">
                     <div class="tab-container">
-                    <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
-                        <div class="input">
-                            <label for="prop_name">{{ __('Name') }}</label>
-                            <div>
-                                {{ Form.text('prop_name', {
-                                        'placeholder': 'property name',
-                                        'class': 'input',
-                                })|raw }}
-                            </div>
-                            <label for="prop_type">{{ __('Type') }}</label>
-                            <div>
-                                {{ Form.text('prop_type', {
-                                        'placeholder': 'property type',
-                                        'class': 'input',
-                                })|raw }}
-                            </div>
-                        </div>
+                        <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
+                        {{ Property.control('prop_name', '', {'label': __('Name'), 'placeholder': 'property name'})|raw }}
+                        {{ Property.control('prop_type', '', propertyTypesOptions)|raw }}
                     </div>
                 </section>
 
