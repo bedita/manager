@@ -16,6 +16,7 @@ namespace App\Test\TestCase\Controller\Model;
 use App\Controller\Model\ObjectTypesController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -137,7 +138,7 @@ class ObjectTypesControllerTest extends TestCase
     public function testView(): void
     {
         $this->setupController();
-        $this->ModelController->view(1);
+        $this->ModelController->view(2);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
             static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
@@ -160,6 +161,54 @@ class ObjectTypesControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->view(0);
         static::assertTrue(($result instanceof Response));
+    }
+
+    /**
+     * Test `updateSchema`
+     *
+     * @return void
+     * @covers ::updateSchema()
+     */
+    public function testUpdateSchema(): void
+    {
+        $this->setupController();
+        $expected = $schema = ['whatever'];
+        $resource = ['meta' => ['core_type' => true]];
+        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $method = $reflectionClass->getMethod('updateSchema');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->ModelController, [$schema, $resource]);
+        static::assertSame($expected, $actual);
+
+        $resource = ['meta' => ['core_type' => false]];
+        $expected = [
+            'whatever',
+            'properties' => [
+                'table' => [
+                    'type' => 'string',
+                    'enum' => [
+                        'BEdita/Core.Folders',
+                        'BEdita/Core.Links',
+                        'BEdita/Core.Locations',
+                        'BEdita/Core.Media',
+                        'BEdita/Core.Objects',
+                        'BEdita/Core.Profiles',
+                        'BEdita/Core.Publications',
+                        'BEdita/Core.Users',
+                    ],
+                ],
+                'parent_name' => [
+                    'type' => 'string',
+                    'enum' => [
+                        '',
+                        'media',
+                        'objects',
+                    ],
+                ],
+            ],
+        ];
+        $actual = $method->invokeArgs($this->ModelController, [$schema, $resource]);
+        static::assertSame($expected, $actual);
     }
 
     /**
@@ -217,5 +266,34 @@ class ObjectTypesControllerTest extends TestCase
             ->willReturn(['data' => ['id' => '1']]);
 
         ApiClientProvider::setApiClient($apiClient);
+    }
+
+    /**
+     * Test `tables`
+     *
+     * @return void
+     * @covers ::tables()
+     */
+    public function testTables(): void
+    {
+        $testTables = ['Dummy.Cats', 'Dummy.Dogs', 'Dummy.Horses'];
+        Configure::write(
+            'Model',
+            array_merge(
+                (array)Configure::read('Model'),
+                [
+                    'objectTypesTables' => $testTables,
+                ],
+            )
+        );
+        $expected = array_unique(array_merge(ObjectTypesController::TABLES, $testTables));
+        $expected = array_unique(array_merge($expected, ['dummy']));
+        sort($expected);
+        $this->setupController();
+        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $method = $reflectionClass->getMethod('tables');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->ModelController, [['attributes' => ['table' => 'dummy']]]);
+        static::assertSame($expected, $actual);
     }
 }

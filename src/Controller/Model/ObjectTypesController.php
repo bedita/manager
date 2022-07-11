@@ -13,6 +13,7 @@
 namespace App\Controller\Model;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -21,9 +22,25 @@ use Psr\Log\LogLevel;
  * Object Types Model Controller: list, add, edit, remove object types
  *
  * @property \App\Controller\Component\PropertiesComponent $Properties
+ * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ObjectTypesController extends ModelBaseController
 {
+    /**
+     * Core tables list.
+     *
+     * @var array
+     */
+    public const TABLES = [
+        'BEdita/Core.Folders',
+        'BEdita/Core.Links',
+        'BEdita/Core.Locations',
+        'BEdita/Core.Media',
+        'BEdita/Core.Objects',
+        'BEdita/Core.Profiles',
+        'BEdita/Core.Publications',
+        'BEdita/Core.Users',
+    ];
     /**
      * Resource type currently used
      *
@@ -56,10 +73,61 @@ class ObjectTypesController extends ModelBaseController
 
         $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
         $this->set(compact('objectTypeProperties'));
-        $this->set('schema', $this->Schema->getSchema());
+        $schema = $this->Schema->getSchema();
+        $this->set('schema', $this->updateSchema($schema, $resource));
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
         return null;
+    }
+
+    /**
+     * Update schema using resource.
+     * If core type, skip.
+     * Otherwise, set table and parent_name.
+     *
+     * @param array $schema The schema
+     * @param array $resource The resource
+     * @return array
+     */
+    protected function updateSchema(array $schema, array $resource): array
+    {
+        if ((bool)Hash::get($resource, 'meta.core_type')) {
+            return $schema;
+        }
+        $schema['properties']['table'] = [
+            'type' => 'string',
+            'enum' => $this->tables($resource),
+        ];
+        $schema['properties']['parent_name'] = [
+            'type' => 'string',
+            'enum' => array_merge([''], $this->Schema->abstractTypes()),
+        ];
+
+        return $schema;
+    }
+
+    /**
+     * Get available tables list
+     *
+     * @return array
+     */
+    protected function tables(array $resource): array
+    {
+        $tables = array_unique(
+            array_merge(
+                self::TABLES,
+                (array)Configure::read('Model.objectTypesTables')
+            )
+        );
+        $tables = array_unique(
+            array_merge(
+                $tables,
+                (array)Hash::get($resource, 'attributes.table')
+            )
+        );
+        sort($tables);
+
+        return $tables;
     }
 
     /**
