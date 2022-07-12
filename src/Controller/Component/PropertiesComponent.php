@@ -14,10 +14,12 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Component to handle properties view in modules.
@@ -271,5 +273,53 @@ class PropertiesComponent extends Component
     public function readonlyRelationsList(string $type): array
     {
         return (array)$this->getConfig(sprintf('Properties.%s.relations._readonly', $type), []);
+    }
+
+    /**
+     * Types options for property Type select combo
+     *
+     * @return array
+     */
+    public function typesOptions(): array
+    {
+        $label = __('Type');
+        $type = 'select';
+        $options = ['' => ''];
+        $apiClient = ApiClientProvider::getApiClient();
+        $query = [
+            'page_size' => 100,
+            'sort' => 'id',
+        ];
+        $response = (array)$apiClient->get('/model/property_types', $query);
+        $types = (array)Hash::extract($response, 'data.{n}.attributes.name');
+        foreach ($types as $value) {
+            $text = Inflector::humanize($value);
+            $options[] = compact('text', 'value');
+        }
+
+        return compact('label', 'type', 'options');
+    }
+
+    /**
+     * Get associations options for select multiple as list of checkboxes
+     *
+     * @param array $value The value
+     * @return array
+     */
+    public function associationsOptions(array $value): array
+    {
+        $fields = [
+            'DateRanges',
+            'Streams',
+            'Categories',
+            'Tags',
+        ];
+        $fields = array_unique(array_merge($fields, $value));
+        foreach ($fields as $text) {
+            $value = $text;
+            $options[] = compact('text', 'value');
+        }
+
+        return $options;
     }
 }
