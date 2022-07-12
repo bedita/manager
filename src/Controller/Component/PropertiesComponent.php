@@ -14,6 +14,7 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
@@ -27,23 +28,6 @@ use Cake\Utility\Inflector;
  */
 class PropertiesComponent extends Component
 {
-    /**
-     * Schema property types
-     */
-    public const CUSTOM_PROPERTY_TYPES = [
-        'boolean',
-        'date',
-        'datetime',
-        'email',
-        'integer',
-        'json',
-        'number',
-        'string',
-        'text',
-        'text_plain',
-        'url',
-    ];
-
     /**
      * @inheritDoc
      */
@@ -301,7 +285,10 @@ class PropertiesComponent extends Component
         $label = __('Type');
         $type = 'select';
         $options = ['' => ''];
-        foreach (self::CUSTOM_PROPERTY_TYPES as $value) {
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = (array)$apiClient->get('/model/property_types', []);
+        $types = (array)Hash::extract($response, 'data.{n}.attributes.name');
+        foreach ($types as $value) {
             $text = Inflector::humanize($value);
             $options[] = compact('text', 'value');
         }
