@@ -58,9 +58,17 @@
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
-                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                            {% if options.class == 'json' %}
+                            {% if key == 'hidden' %}
+                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                                 {{ Property.control(key, value, options|merge({'id': key}))|raw }}
+                            {% elseif key == 'associations' %}
+                                {{ Form.control(key, {
+                                    'id': key,
+                                    'value': value,
+                                    'type': 'select',
+                                    'multiple': 'checkbox',
+                                    'options': associationsOptions
+                                })|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>

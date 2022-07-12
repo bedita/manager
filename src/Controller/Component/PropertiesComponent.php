@@ -308,4 +308,27 @@ class PropertiesComponent extends Component
 
         return compact('label', 'type', 'options');
     }
+
+    /**
+     * Get associations options for select multiple as list of checkboxes
+     *
+     * @param array $value
+     * @return array
+     */
+    public function associationsOptions(array $value): array
+    {
+        $fields = [
+            'DateRanges',
+            'Streams',
+            'Categories',
+            'Tags',
+        ];
+        $fields = array_unique(array_merge($fields, $value));
+        foreach ($fields as $text) {
+            $value = $text;
+            $options[] = compact('text', 'value');
+        }
+
+        return $options;
+    }
 }

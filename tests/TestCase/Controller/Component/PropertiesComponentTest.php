@@ -519,4 +519,24 @@ class PropertiesComponentTest extends TestCase
         static::assertEquals('Type', $actual['label']);
         static::assertEquals('select', $actual['type']);
     }
+
+    /**
+     * Test `associationsOptions`
+     *
+     * @return void
+     * @covers ::associationsOptions()
+     */
+    public function testAssociationsOptions(): void
+    {
+        $this->createComponent();
+        $expected = [
+            ['text' => 'DateRanges', 'value' => 'DateRanges'],
+            ['text' => 'Streams', 'value' => 'Streams'],
+            ['text' => 'Categories', 'value' => 'Categories'],
+            ['text' => 'Tags', 'value' => 'Tags'],
+            ['text' => 'Dummy', 'value' => 'Dummy'],
+        ];
+        $actual = $this->Properties->associationsOptions(['Dummy']);
+        static::assertEquals($expected, $actual);
+    }
 }
