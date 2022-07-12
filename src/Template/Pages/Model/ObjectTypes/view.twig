@@ -48,7 +48,7 @@
                     <div class="tab-container">
                         <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
                         {{ Property.control('prop_name', '', {'label': __('Name'), 'placeholder': 'property name'})|raw }}
-                        {{ Property.control('prop_type', '', propertyTypesOptions)|raw }}
+                        {{ Property.control('prop_type', '', propertyTypesOptions|default([]))|raw }}
                     </div>
                 </section>
 
