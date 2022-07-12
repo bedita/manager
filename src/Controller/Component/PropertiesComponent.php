@@ -286,7 +286,11 @@ class PropertiesComponent extends Component
         $type = 'select';
         $options = ['' => ''];
         $apiClient = ApiClientProvider::getApiClient();
-        $response = (array)$apiClient->get('/model/property_types', []);
+        $query = [
+            'page_size' => 100,
+            'sort' => 'id',
+        ];
+        $response = (array)$apiClient->get('/model/property_types', $query);
         $types = (array)Hash::extract($response, 'data.{n}.attributes.name');
         foreach ($types as $value) {
             $text = Inflector::humanize($value);
