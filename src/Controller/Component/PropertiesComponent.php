@@ -312,7 +312,7 @@ class PropertiesComponent extends Component
     /**
      * Get associations options for select multiple as list of checkboxes
      *
-     * @param array $value
+     * @param array $value The value
      * @return array
      */
     public function associationsOptions(array $value): array
