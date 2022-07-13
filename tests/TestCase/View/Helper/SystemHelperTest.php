@@ -93,5 +93,11 @@ class SystemHelperTest extends TestCase
         );
         $actual = $this->System->paginationSizeAvailable();
         static::assertSame($expected, $actual);
+
+        // empty config case
+        Cache::delete(CacheTools::cacheKey('config.Pagination'));
+        $expected = [10, 20, 50, 100];
+        $actual = $this->System->paginationSizeAvailable();
+        static::assertSame($expected, $actual);
     }
 }
