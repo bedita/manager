@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-06 09:12:24 \n"
+"POT-Creation-Date: 2022-07-13 10:27:15 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -34,6 +34,9 @@ msgstr "Amministrazione"
 
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "Alert Message"
+msgstr "Messaggio di Attenzione"
 
 msgid "Alert!"
 msgstr "Attenzione!"
@@ -320,8 +323,11 @@ msgstr "Futuro"
 msgid "Gender"
 msgstr "Genere"
 
+msgid "General"
+msgstr "Generale"
+
 msgid "Global"
-msgstr ""
+msgstr "Globale"
 
 msgid "History"
 msgstr "Cronologia modifiche"
@@ -539,6 +545,9 @@ msgstr "Solo i miei contenuti"
 msgid "Open"
 msgstr "Apri"
 
+msgid "Open File"
+msgstr "Apri File"
+
 msgid "Open image"
 msgstr "Apri immagine"
 
@@ -548,8 +557,17 @@ msgstr "Apri modulo"
 msgid "Options"
 msgstr "Opzioni"
 
+msgid "Original"
+msgstr "Originale"
+
+msgid "Original language"
+msgstr "Lingua Originale"
+
 msgid "Other"
 msgstr "Altro"
+
+msgid "Pagination"
+msgstr "Paginazione"
 
 msgid "Parent"
 msgstr "Genitore"
@@ -595,6 +613,9 @@ msgstr "Preferenze e Strumenti"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Project"
+msgstr "Progetto"
+
 msgid "Properties"
 msgstr "Proprietà"
 
@@ -618,6 +639,9 @@ msgstr "Data revoca pubblicazione"
 
 msgid "Publish Start"
 msgstr "Data inizio pubblicazione"
+
+msgid "Publishing properties"
+msgstr "Proprietà di pubblicazione"
 
 msgid "Relations"
 msgstr "Relazioni"
@@ -803,9 +827,6 @@ msgstr "Partita Iva"
 msgid "Videos"
 msgstr "Video"
 
-msgid "View"
-msgstr "Visualizza"
-
 msgid "View file"
 msgstr "Vedi file"
 
@@ -932,9 +953,6 @@ msgstr "oggetti a"
 msgid "on"
 msgstr "del"
 
-msgid "original"
-msgstr "originale"
-
 msgid "params"
 msgstr "parametri"
 
@@ -973,9 +991,6 @@ msgstr "titolo"
 
 msgid "to"
 msgstr "a"
-
-msgid "translation of"
-msgstr "traduzione di"
 
 msgid "type"
 msgstr "tipo"
@@ -1125,6 +1140,9 @@ msgstr "Mostra"
 
 msgid "Hide"
 msgstr "Nascondi"
+
+msgid "Error on deleting property"
+msgstr "Errore nella cancellazione della proprietà"
 
 #. *
 #.  * <location-view> component used for ModulesPage -> View
