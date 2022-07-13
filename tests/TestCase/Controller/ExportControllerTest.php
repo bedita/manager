@@ -14,8 +14,10 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ExportController;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
@@ -83,6 +85,7 @@ class ExportControllerTest extends TestCase
      */
     public function setUp(): void
     {
+        Cache::enable();
         $this->Export = new ExportController(
             new ServerRequest([
                 'environment' => [
@@ -91,6 +94,7 @@ class ExportControllerTest extends TestCase
             ])
         );
         $this->apiClient = ApiClientProvider::getApiClient();
+        parent::setUp();
     }
 
     /**
@@ -98,7 +102,9 @@ class ExportControllerTest extends TestCase
      */
     public function tearDown(): void
     {
+        Cache::disable();
         ApiClientProvider::setApiClient($this->apiClient);
+        parent::tearDown();
     }
 
     /**
@@ -605,6 +611,29 @@ class ExportControllerTest extends TestCase
         $method = $reflectionClass->getMethod('getValue');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [ $input ]);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `limit`.
+     *
+     * @return void
+     */
+    public function testLimit(): void
+    {
+        $expected = 123;
+        Cache::write(
+            CacheTools::cacheKey('config.Export'),
+            [
+                'attributes' => [
+                    'content' => json_encode(['limit' => $expected]),
+                ],
+            ],
+        );
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('limit');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
         static::assertEquals($expected, $actual);
     }
 }

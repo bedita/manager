@@ -42,6 +42,7 @@ class AppearenceController extends AdministrationBaseController
      */
     protected $properties = [
         'alert_message',
+        'export',
         'modules',
         'project',
         'properties',
