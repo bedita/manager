@@ -5,7 +5,7 @@
     relation-name="{{ relationName }}"
     relation-label="{{ Layout.tr(relationName) }}"
     :pre-count="{{ preCount }}"
-    config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+    config-paginate-sizes="{{ System.paginationSizeAvailable()|json_encode|escape('html_attr') }}"
     ref="relation"
     @loading="onToggleLoading"
     @count="onCount"

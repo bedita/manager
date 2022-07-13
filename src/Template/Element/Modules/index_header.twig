@@ -14,7 +14,7 @@
         :filter-list="{{ list|json_encode|escape('html_attr') }}"
         :filter-active="{{ filterActive|json_encode|escape('html_attr') }}"
 
-        config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+        config-paginate-sizes="{{ System.paginationSizeAvailable()|json_encode|escape('html_attr') }}"
         placeholder="{{ __('Search') }}"
         objects-label="{{ resourceType ? __(resourceType|humanize) : __(currentModule.name) }}"
         page-size="{{ meta.pagination.page_size }}"

@@ -44,6 +44,7 @@ class AppearenceController extends AdministrationBaseController
         'alert_message',
         'export',
         'modules',
+        'pagination',
         'project',
         'properties',
     ];

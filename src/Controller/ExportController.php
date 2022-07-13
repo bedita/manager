@@ -12,13 +12,13 @@
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
  * Export controller: upload and load using filters
  *
+ * @property \App\Controller\Component\ConfigComponent $Config
  * @property \App\Controller\Component\ExportComponent $Export
  */
 class ExportController extends AppController
@@ -45,6 +45,7 @@ class ExportController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Config');
         $this->loadComponent('Export');
         $this->Security->setConfig('unlockedActions', ['related']);
     }

@@ -83,6 +83,7 @@ class AppearenceControllerTest extends TestCase
         Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
         Cache::write(CacheTools::cacheKey('config.Export'), []);
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Pagination'), []);
         Cache::write(CacheTools::cacheKey('config.Project'), []);
         Cache::write(CacheTools::cacheKey('config.Properties'), []);
         $this->Appearence->index();
@@ -91,6 +92,7 @@ class AppearenceControllerTest extends TestCase
         static::assertIsArray($viewVars['configs']['alert_message']);
         static::assertIsArray($viewVars['configs']['export']);
         static::assertIsArray($viewVars['configs']['modules']);
+        static::assertIsArray($viewVars['configs']['pagination']);
         static::assertIsArray($viewVars['configs']['project']);
         static::assertIsArray($viewVars['configs']['properties']);
     }

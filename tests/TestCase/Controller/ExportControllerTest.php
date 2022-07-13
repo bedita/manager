@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\ConfigComponent;
 use App\Controller\ExportController;
 use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
@@ -93,6 +94,7 @@ class ExportControllerTest extends TestCase
                 ],
             ])
         );
+
         $this->apiClient = ApiClientProvider::getApiClient();
         parent::setUp();
     }
@@ -182,6 +184,10 @@ class ExportControllerTest extends TestCase
                 'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
             ])
         );
+        $registry = $this->Export->components();
+        /** @var \App\Controller\Component\ConfigComponent $configComponent */
+        $configComponent = $registry->load(ConfigComponent::class);
+        $this->Export->Config = $configComponent;
 
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -211,6 +217,7 @@ class ExportControllerTest extends TestCase
         $expected = sprintf('%s%s%s%s', $fields, "\n", $row1, "\n");
 
         // call export.
+        $this->setLimit(500);
         $response = $this->Export->related('999', 'seealso', 'csv');
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
@@ -363,6 +370,8 @@ class ExportControllerTest extends TestCase
      */
     public function testRows(array $expected, array $arguments, array $response, array $post = []): void
     {
+        $this->setLimit(500);
+
         // mock api get.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -621,19 +630,33 @@ class ExportControllerTest extends TestCase
      */
     public function testLimit(): void
     {
+        Cache::delete(CacheTools::cacheKey('config.Export'));
         $expected = 123;
-        Cache::write(
-            CacheTools::cacheKey('config.Export'),
-            [
-                'attributes' => [
-                    'content' => json_encode(['limit' => $expected]),
-                ],
-            ],
-        );
+        $this->setLimit($expected);
         $reflectionClass = new \ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('limit');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Set export limit in cache.
+     *
+     * @param int $limit The limit
+     * @return void
+     */
+    private function setLimit(int $limit): void
+    {
+        Cache::remember(
+            CacheTools::cacheKey('config.Export'),
+            function () use ($limit) {
+                return [
+                    'attributes' => [
+                        'content' => json_encode(compact('limit')),
+                    ],
+                ];
+            }
+        );
     }
 }

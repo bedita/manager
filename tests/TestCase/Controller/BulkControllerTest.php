@@ -65,6 +65,7 @@ class BulkControllerTest extends BaseControllerTest
         Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
         Cache::write(CacheTools::cacheKey('config.Export'), []);
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Pagination'), []);
         Cache::write(CacheTools::cacheKey('config.Properties'), []);
         Cache::write(CacheTools::cacheKey('config.Project'), []);
 

@@ -35,7 +35,7 @@
                 <relation-view inline-template
                     relation-name={{ resourceName }}
                     relation-label="{{ Layout.tr(resourceName) }}"
-                    config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode()|raw }}
+                    config-paginate-sizes={{ System.paginationSizeAvailable()|json_encode()|raw }}
                     ref="relation"
 
                     @loading="onToggleLoading"

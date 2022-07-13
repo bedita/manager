@@ -35,7 +35,7 @@
                     <filter-box-view
                         inline-template
                         :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
-                        config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+                        config-paginate-sizes="{{ System.paginationSizeAvailable()|json_encode|escape('html_attr') }}"
                         page-size="{{ meta.pagination.page_size }}"
                         @filter-update-page-size="onUpdatePageSize"
                         @filter-update-current-page="onUpdateCurrentPage"
