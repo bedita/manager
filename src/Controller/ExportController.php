@@ -12,13 +12,13 @@
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
  * Export controller: upload and load using filters
  *
+ * @property \App\Controller\Component\ConfigComponent $Config
  * @property \App\Controller\Component\ExportComponent $Export
  */
 class ExportController extends AppController
@@ -45,6 +45,7 @@ class ExportController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Config');
         $this->loadComponent('Export');
         $this->Security->setConfig('unlockedActions', ['related']);
     }
@@ -168,6 +169,18 @@ class ExportController extends AppController
     }
 
     /**
+     * Get export limit.
+     *
+     * @return int
+     */
+    protected function limit(): int
+    {
+        $export = $this->Config->read('Export');
+
+        return (int)Hash::get($export, 'limit', self::DEFAULT_EXPORT_LIMIT);
+    }
+
+    /**
      * Load all data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
@@ -176,10 +189,11 @@ class ExportController extends AppController
     protected function rowsAll(string $objectType): array
     {
         $data = $fields = [];
-        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+        $limit = $this->limit();
         $pageCount = $page = 1;
         $total = 0;
-        $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
+        $pageSize = $limit > self::DEFAULT_PAGE_SIZE ? self::DEFAULT_PAGE_SIZE : $limit;
+        $query = ['page_size' => $pageSize] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
             $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
@@ -209,7 +223,7 @@ class ExportController extends AppController
     {
         $data = $fields = [];
         $url = sprintf('/%s/%s/%s', $objectType, $id, $relationName);
-        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+        $limit = $this->limit();
         $pageCount = $page = 1;
         $total = 0;
         $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();

@@ -94,6 +94,10 @@ class ModulesComponent extends Component
         if (!empty($currentModule)) {
             $this->getController()->set(compact('currentModule'));
         }
+
+        // Read 'Pagination' and 'AlertMessage' from API/cache
+        $this->Config->read('Pagination');
+        $this->Config->read('AlertMessage');
     }
 
     /**

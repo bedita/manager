@@ -2,21 +2,27 @@
 
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearence')) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
-
+{% set configKey = _view.getRequest().getQuery('configKey')|default('alert_message') %}
 {% set wikis = {
     'alert_message': 'https://github.com/bedita/manager/wiki/Setup:-Alert-Message',
+    'export': 'https://github.com/bedita/manager/wiki/Setup:-Export',
     'modules': 'https://github.com/bedita/manager/wiki/Setup:-Modules-configuration',
+    'pagination': 'https://github.com/bedita/manager/wiki/Setup:-Pagination',
     'project': 'https://github.com/bedita/manager/wiki/Setup:-Project',
     'properties': 'https://github.com/bedita/manager/wiki/Setup:-Properties-display',
 } %}
 
 {#
 // i18n
+__('Alert Message')
+__('Export')
 __('Modules')
+__('Pagination')
+__('Project')
 __('Properties')
 #}
 
-<admin-appearence inline-template>
+<admin-appearence inline-template :configkey={{ configKey|json_encode }}>
 
     <div class="module-index">
 

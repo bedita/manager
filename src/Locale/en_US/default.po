@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-06 09:12:24 \n"
+"POT-Creation-Date: 2022-07-13 10:27:15 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -33,6 +33,9 @@ msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "Alert Message"
 msgstr ""
 
 msgid "Alert!"
@@ -320,6 +323,9 @@ msgstr ""
 msgid "Gender"
 msgstr ""
 
+msgid "General"
+msgstr ""
+
 msgid "Global"
 msgstr ""
 
@@ -539,6 +545,9 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
+msgid "Open File"
+msgstr ""
+
 msgid "Open image"
 msgstr ""
 
@@ -548,7 +557,16 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
+msgid "Original"
+msgstr ""
+
+msgid "Original language"
+msgstr ""
+
 msgid "Other"
+msgstr ""
+
+msgid "Pagination"
 msgstr ""
 
 msgid "Parent"
@@ -593,6 +611,9 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Project"
+msgstr ""
+
 msgid "Properties"
 msgstr ""
 
@@ -615,6 +636,9 @@ msgid "Publish End"
 msgstr ""
 
 msgid "Publish Start"
+msgstr ""
+
+msgid "Publishing properties"
 msgstr ""
 
 msgid "Relations"
@@ -800,9 +824,6 @@ msgstr ""
 msgid "Videos"
 msgstr ""
 
-msgid "View"
-msgstr ""
-
 msgid "View file"
 msgstr ""
 
@@ -929,9 +950,6 @@ msgstr ""
 msgid "on"
 msgstr ""
 
-msgid "original"
-msgstr ""
-
 msgid "params"
 msgstr ""
 
@@ -969,9 +987,6 @@ msgid "title"
 msgstr ""
 
 msgid "to"
-msgstr ""
-
-msgid "translation of"
 msgstr ""
 
 msgid "type"
@@ -1118,6 +1133,9 @@ msgid "Show"
 msgstr ""
 
 msgid "Hide"
+msgstr ""
+
+msgid "Error on deleting property"
 msgstr ""
 
 #. *
