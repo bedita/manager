@@ -95,8 +95,9 @@ class ModulesComponent extends Component
             $this->getController()->set(compact('currentModule'));
         }
 
-        // set pagination for templates in 'pagination' configuration
+        // Read 'Pagination' and 'AlertMessage' from API/cache
         $this->Config->read('Pagination');
+        $this->Config->read('AlertMessage');
     }
 
     /**
