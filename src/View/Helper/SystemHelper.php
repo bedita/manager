@@ -26,22 +26,4 @@ class SystemHelper extends Helper
 
         return min($postMaxSize, $uploadMaxFilesize) * 1024 * 1024;
     }
-
-    /**
-     * Get pagination size available from cache or config.
-     *
-     * @return array
-     */
-    public function paginationSizeAvailable(): array
-    {
-        $defaultConfig = (array)Configure::read('Pagination.sizeAvailable');
-        $config = Cache::read(CacheTools::cacheKey('config.Pagination'));
-        if (!empty($config)) {
-            $content = (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
-
-            return (array)Hash::get($content, 'sizeAvailable', $defaultConfig);
-        }
-
-        return $defaultConfig;
-    }
 }

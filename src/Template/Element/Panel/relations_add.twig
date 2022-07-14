@@ -120,7 +120,7 @@
             {% endfor %}
 
             <filter-box-view
-                config-paginate-sizes={{ System.paginationSizeAvailable()|json_encode|escape('html_attr') }}
+                config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}
                 :pagination.sync="pagination"
                 :relation-types="relationTypes"
                 {% if list %}

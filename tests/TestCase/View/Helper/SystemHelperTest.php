@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\View\Helper;
 
-use App\Utility\CacheTools;
 use App\View\Helper\SystemHelper;
-use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -44,7 +42,6 @@ class SystemHelperTest extends TestCase
         parent::setUp();
         $view = new View();
         $this->System = new SystemHelper($view);
-        Cache::enable();
     }
 
     /**
@@ -55,7 +52,6 @@ class SystemHelperTest extends TestCase
     public function tearDown(): void
     {
         unset($this->System);
-        Cache::disable();
         parent::tearDown();
     }
 
@@ -71,33 +67,6 @@ class SystemHelperTest extends TestCase
         $umf = intVal(substr(ini_get('upload_max_filesize'), 0, -1));
         $expected = min($pms, $umf) * 1024 * 1024;
         $actual = $this->System->getMaxFileSize();
-        static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Test `paginationSizeAvailable`.
-     *
-     * @return void
-     * @covers ::paginationSizeAvailable()
-     */
-    public function testPaginationSizeAvailable(): void
-    {
-        $expected = [5, 50, 100];
-        Cache::write(
-            CacheTools::cacheKey('config.Pagination'),
-            [
-                'attributes' => [
-                    'content' => json_encode(['sizeAvailable' => $expected]),
-                ],
-            ],
-        );
-        $actual = $this->System->paginationSizeAvailable();
-        static::assertSame($expected, $actual);
-
-        // empty config case
-        Cache::delete(CacheTools::cacheKey('config.Pagination'));
-        $expected = [10, 20, 50, 100];
-        $actual = $this->System->paginationSizeAvailable();
         static::assertSame($expected, $actual);
     }
 }

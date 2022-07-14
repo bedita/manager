@@ -94,6 +94,9 @@ class ModulesComponent extends Component
         if (!empty($currentModule)) {
             $this->getController()->set(compact('currentModule'));
         }
+
+        // set pagination for templates in 'pagination' configuration
+        $this->Config->read('Pagination');
     }
 
     /**
