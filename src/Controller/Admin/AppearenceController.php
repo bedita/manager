@@ -78,6 +78,6 @@ class AppearenceController extends AdministrationBaseController
         $content = (string)Hash::get($data, Inflector::camelize($propertyName));
         $this->Config->save(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
-        return $this->redirect(['_name' => 'admin:list:appearence']);
+        return $this->redirect(['_name' => 'admin:list:appearence', '?' => ['configKey' => $propertyName]]);
     }
 }
