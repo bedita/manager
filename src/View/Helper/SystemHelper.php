@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
-use App\Utility\CacheTools;
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
