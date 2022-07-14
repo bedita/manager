@@ -105,7 +105,7 @@ class PropertiesComponent extends Component
             return;
         }
         Configure::load('properties');
-        $properties = Configure::read('Properties');
+        $properties = (array)Configure::read('Properties');
         $defaultProperties = (array)Configure::read('DefaultProperties');
         $keys = array_unique(
             array_merge(
