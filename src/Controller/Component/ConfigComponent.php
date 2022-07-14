@@ -36,31 +36,38 @@ class ConfigComponent extends Component
     protected $apiClient = null;
 
     /**
-     * {@inheritDoc}
-     * {@codeCoverageIgnore}
+     * Cache config key
+     *
+     * @var string
+     */
+    public const CACHE_KEY = 'api_config';
+
+    /**
+     * @inheritDoc
      */
     public function startup(): void
     {
         // API config may not be set in `login` for a multi-project setup
-        if (Configure::check('API.apiBaseUrl')) {
-            $this->apiClient = ApiClientProvider::getApiClient();
+        if (!Configure::check('API.apiBaseUrl')) {
+            return;
         }
+        $this->apiClient = ApiClientProvider::getApiClient();
+        $this->read();
     }
 
     /**
-     * Get a cached configuration key from API.
+     * Get a cached configuration from API.
      * Get standard config [from config/app.php etc.] if no configuration from API was found.
      *
-     * @param string $key Configuration key
-     * @return array
+     * @return void
      */
-    public function read(string $key): array
+    protected function read(): void
     {
         try {
-            $config = Cache::remember(
-                CacheTools::cacheKey(sprintf('config.%s', $key)),
-                function () use ($key) {
-                    return $this->fetchConfig($key);
+            $configs = (array)Cache::remember(
+                CacheTools::cacheKey(static::CACHE_KEY),
+                function () {
+                    return $this->fetchConfig();
                 }
             );
         } catch (BEditaClientException $e) {
@@ -68,32 +75,44 @@ class ConfigComponent extends Component
             $this->getController()->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        if (!empty($config)) {
-            $content = (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
-            Configure::write($key, $content);
+        if (empty($configs)) {
+            return;
         }
 
-        return (array)Configure::read($key);
+        foreach ($configs as $config) {
+            $content = (array)json_decode((string)Hash::get($config, 'attributes.content'), true);
+            $key = (string)Hash::get($config, 'attributes.name');
+            Configure::write($key, $content);
+        }
     }
 
     /**
      * Fetch configuration from API
      *
-     * @param string $key Configuration key
+     * @param null|string $key Configuration key, all keys if null
      * @return array
      */
-    protected function fetchConfig(string $key): array
+    protected function fetchConfig(?string $key = null): array
     {
-        $response = (array)$this->apiClient->get('/config');
+        $response = (array)$this->apiClient->get('/config', ['page_size' => 100]);
         $collection = new Collection((array)Hash::get($response, 'data'));
 
         return (array)$collection->reject(function ($item) use ($key) {
             $attr = (array)Hash::get((array)$item, 'attributes');
-
-            return empty($attr['application_id']) ||
+            if (
+                empty($attr['application_id']) ||
                 empty($attr['context']) || $attr['context'] !== 'app' ||
-                empty($attr['name']) || $attr['name'] !== $key;
-        })->first();
+                empty($attr['name'])
+            ) {
+                return true;
+            }
+
+            if ($key === null) {
+                return false;
+            }
+
+            return $attr['name'] !== $key;
+        })->toArray();
     }
 
     /**
@@ -119,7 +138,8 @@ class ConfigComponent extends Component
      */
     public function save(string $key, array $data): void
     {
-        $config = $this->fetchConfig($key);
+        $items = array_values($this->fetchConfig($key));
+        $config = (array)Hash::get($items, '0');
         $configId = Hash::get($config, 'id');
         $managerAppId = Hash::get($config, 'attributes.application_id');
         if (empty($managerAppId)) {
@@ -144,8 +164,6 @@ class ConfigComponent extends Component
             $body['data']['id'] = (string)$configId;
             $this->apiClient->patch(sprintf('%s/%s', $endpoint, $configId), json_encode($body));
         }
-        Cache::delete(CacheTools::cacheKey(sprintf('config.%s', $key)));
-        // delete related cache keys, i.e. "properties", used in PropertiesComponent
-        Cache::delete(CacheTools::cacheKey(lcfirst($key)));
+        Cache::delete(CacheTools::cacheKey(static::CACHE_KEY));
     }
 }

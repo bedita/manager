@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Admin;
 
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -58,7 +59,7 @@ class AppearenceController extends AdministrationBaseController
     {
         $configs = [];
         foreach ($this->properties as $property) {
-            $configs[$property] = $this->Config->read(Inflector::camelize($property));
+            $configs[$property] = Configure::read(Inflector::camelize($property));
         }
         $this->set('configs', $configs);
 

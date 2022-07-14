@@ -94,10 +94,6 @@ class ModulesComponent extends Component
         if (!empty($currentModule)) {
             $this->getController()->set(compact('currentModule'));
         }
-
-        // Read 'Pagination' and 'AlertMessage' from API/cache
-        $this->Config->read('Pagination');
-        $this->Config->read('AlertMessage');
     }
 
     /**
@@ -136,7 +132,7 @@ class ModulesComponent extends Component
      */
     public function getModules(): array
     {
-        $modules = $this->Config->read('Modules');
+        $modules = (array)Configure::read('Modules');
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
@@ -231,7 +227,7 @@ class ModulesComponent extends Component
     public function getProject(): array
     {
         $meta = $this->getMeta();
-        $project = (array)$this->Config->read('Project');
+        $project = (array)Configure::read('Project');
         $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
         $version = Hash::get($meta, 'version', '');
 
