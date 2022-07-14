@@ -56,8 +56,8 @@ class ConfigComponent extends Component
     }
 
     /**
-     * Get a cached configuration from API.
-     * Get standard config [from config/app.php etc.] if no configuration from API was found.
+     * Read cached configuration items from API and update configuration
+     * using `Configure::write`.
      *
      * @return void
      */
