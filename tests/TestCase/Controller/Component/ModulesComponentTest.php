@@ -234,13 +234,9 @@ class ModulesComponentTest extends TestCase
                 ->willReturn(compact('meta'));
         }
         ApiClientProvider::setApiClient($apiClient);
-
-        // Mock GET /config using cache
-        Cache::enable();
-        Cache::write(CacheTools::cacheKey('config.Project'), ['attributes' => ['content' => json_encode($config)]]);
+        Configure::write('Project', $config);
         Cache::delete('home_0'); // otherwise mock is applied only on first round of test from data provider
         $actual = $this->Modules->getProject();
-        Cache::disable();
 
         static::assertEquals($expected, $actual);
     }

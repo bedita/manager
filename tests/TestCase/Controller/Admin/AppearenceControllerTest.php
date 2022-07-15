@@ -79,22 +79,16 @@ class AppearenceControllerTest extends TestCase
                 ]
             )
         );
-        // Mock GET /config using cache
-        Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
-        Cache::write(CacheTools::cacheKey('config.Export'), []);
-        Cache::write(CacheTools::cacheKey('config.Modules'), []);
-        Cache::write(CacheTools::cacheKey('config.Pagination'), []);
-        Cache::write(CacheTools::cacheKey('config.Project'), []);
-        Cache::write(CacheTools::cacheKey('config.Properties'), []);
         $this->Appearence->index();
         $viewVars = (array)$this->Appearence->viewBuilder()->getVars();
         static::assertNotEmpty($viewVars['configs']['modules']);
-        static::assertIsArray($viewVars['configs']['alert_message']);
-        static::assertIsArray($viewVars['configs']['export']);
-        static::assertIsArray($viewVars['configs']['modules']);
-        static::assertIsArray($viewVars['configs']['pagination']);
-        static::assertIsArray($viewVars['configs']['project']);
-        static::assertIsArray($viewVars['configs']['properties']);
+        static::assertNotEmpty($viewVars['configs']['pagination']);
+        static::assertArrayHasKey('alert_message', $viewVars['configs']);
+        static::assertArrayHasKey('export', $viewVars['configs']);
+        static::assertArrayHasKey('modules', $viewVars['configs']);
+        static::assertArrayHasKey('pagination', $viewVars['configs']);
+        static::assertArrayHasKey('project', $viewVars['configs']);
+        static::assertArrayHasKey('properties', $viewVars['configs']);
     }
 
     /**

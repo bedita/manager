@@ -19,6 +19,7 @@ use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
@@ -630,7 +631,6 @@ class ExportControllerTest extends TestCase
      */
     public function testLimit(): void
     {
-        Cache::delete(CacheTools::cacheKey('config.Export'));
         $expected = 123;
         $this->setLimit($expected);
         $reflectionClass = new \ReflectionClass($this->Export);
@@ -648,15 +648,6 @@ class ExportControllerTest extends TestCase
      */
     private function setLimit(int $limit): void
     {
-        Cache::remember(
-            CacheTools::cacheKey('config.Export'),
-            function () use ($limit) {
-                return [
-                    'attributes' => [
-                        'content' => json_encode(compact('limit')),
-                    ],
-                ];
-            }
-        );
+        Configure::write('Export.limit', $limit);
     }
 }
