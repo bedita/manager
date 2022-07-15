@@ -15,7 +15,6 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\Component\ConfigComponent;
 use App\Controller\ExportController;
-use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;

@@ -19,7 +19,6 @@ use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
-use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use Authentication\Identity;

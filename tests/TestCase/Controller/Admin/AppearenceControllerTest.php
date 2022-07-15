@@ -3,7 +3,6 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearenceController;
 use App\Controller\Component\ConfigComponent;
-use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
