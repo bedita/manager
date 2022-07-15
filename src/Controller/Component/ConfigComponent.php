@@ -163,5 +163,6 @@ class ConfigComponent extends Component
             $this->apiClient->patch(sprintf('%s/%s', $endpoint, $configId), json_encode($body));
         }
         Cache::delete(CacheTools::cacheKey(static::CACHE_KEY));
+        Cache::delete(CacheTools::cacheKey('properties'));
     }
 }
