@@ -13,7 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
 use App\Controller\AppController;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;

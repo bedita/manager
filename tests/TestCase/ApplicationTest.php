@@ -13,7 +13,7 @@
 namespace App\Test\TestCase;
 
 use App\Application;
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
@@ -152,7 +152,7 @@ class ApplicationTest extends TestCase
         $app = new Application(CONFIG);
         /** @var \Authentication\AuthenticationService $authService */
         $authService = $app->getAuthenticationService(new ServerRequest());
-        /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
+        /** @var \App\Identifier\ApiIdentifier $identifier */
         $identifier = $authService->identifiers()->get(ApiIdentifier::class);
         static::assertInstanceOf(AuthenticationService::class, $authService);
         static::assertInstanceOf(IdentifierInterface::class, $identifier);
