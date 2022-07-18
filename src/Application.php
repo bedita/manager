@@ -12,7 +12,8 @@
  */
 namespace App;
 
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
+use App\Middleware\OAuth2Middleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
@@ -140,7 +141,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add($this->csrfMiddleware())
 
             // Authentication middleware.
-            ->add(new AuthenticationMiddleware($this));
+            ->add(new AuthenticationMiddleware($this))
+
+            // Authentication middleware.
+            ->add(new OAuth2Middleware());
 
         return $middlewareQueue;
     }
@@ -205,14 +209,23 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 IdentifierInterface::CREDENTIAL_TOKEN => 'token',
             ],
         ]);
-        $service->loadAuthenticator('Authentication.Form', [
-            'loginUrl' => '/login',
-            'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
-                'timezone' => 'timezone_offset',
-            ],
-        ]);
+
+        $path = $request->getUri()->getPath();
+        if ($path === '/login') {
+            $service->loadAuthenticator('Authentication.Form', [
+                'loginUrl' => '/login',
+                'fields' => [
+                    IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                    IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                    'timezone' => 'timezone_offset',
+                ],
+            ]);
+        }
+
+        if (strpos($path, '/oauth2/login') === 0) {
+            $service->loadIdentifier('OAuth2');
+            $service->loadAuthenticator('OAuth2');
+        }
 
         return $service;
     }

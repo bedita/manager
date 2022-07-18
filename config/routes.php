@@ -79,6 +79,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Login', 'action' => 'logout'],
         ['_name' => 'logout']
     );
+    $routes->connect(
+        '/oauth2/login/{provider}',
+        ['controller' => 'Login', 'action' => 'login'],
+        ['_name' => 'login:oauth2']
+    );
 
     // Dashboard.
     $routes->connect(
