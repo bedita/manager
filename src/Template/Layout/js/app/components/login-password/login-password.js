@@ -17,7 +17,7 @@ export default {
             </div>
             <div class="control">
                 <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px;" :disabled="!this.password || this.password.length == 0">
-                    <span :class="{ 'icon-eye-off': showPassword, 'icon-eye-1': !showPassword }"></span>
+                    <span :class="{ 'icon-eye-off': show, 'icon-eye-1': !show }"></span>
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@ export default {
 
     data() {
         return {
-            showPassword: false,
+            show: false,
             password: null,
             type: 'password',
         };
@@ -34,8 +34,8 @@ export default {
 
     methods: {
         toggleShow() {
-            this.showPassword = !this.showPassword;
-            this.type = this.showPassword ? 'text' : 'password';
+            this.show = !this.show;
+            this.type = this.show ? 'text' : 'password';
         },
     }
 };
