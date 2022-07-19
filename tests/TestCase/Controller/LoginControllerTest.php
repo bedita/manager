@@ -13,8 +13,8 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Identifier\ApiIdentifier;
 use App\Controller\LoginController;
+use App\Identifier\ApiIdentifier;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identifier\IdentifierInterface;
