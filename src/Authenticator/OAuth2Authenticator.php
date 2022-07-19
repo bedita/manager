@@ -80,6 +80,7 @@ class OAuth2Authenticator extends AbstractAuthenticator
      * Perform Oauth2 connect action on Auth Provider.
      *
      * @param string $provider Provider name.
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request to get authentication information from.
      * @return array;
      * @throws \Cake\Http\Exception\BadRequestException
      */
@@ -120,6 +121,7 @@ class OAuth2Authenticator extends AbstractAuthenticator
      * Init external auth provider via configuration
      *
      * @param string $provider Provider name.
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request to get authentication information from.
      * @return void
      */
     protected function initProvider(string $provider, ServerRequestInterface $request): void
