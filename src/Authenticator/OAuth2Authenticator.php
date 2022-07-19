@@ -109,6 +109,7 @@ class OAuth2Authenticator extends AbstractAuthenticator
         }
 
         // Try to get an access token (using the authorization code grant)
+        /** @var \League\OAuth2\Client\Token\AccessToken $token */
         $token = $this->provider->getAccessToken('authorization_code', ['code' => $query['code']]);
         // We got an access token, let's now get the user's details
         $user = $this->provider->getResourceOwner($token)->toArray();
