@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\PermsHelper;
+use Authentication\Identity;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -128,10 +129,13 @@ class PermsHelperTest extends TestCase
      */
     public function testCanLock(): void
     {
-        $actual = $this->Perms->canLock();
-        $expected = false;
+        $this->Perms->getView()->set('user', new Identity([]));
+        $result = $this->Perms->canLock();
+        static::assertFalse($result);
 
-        static::assertEquals($expected, $actual);
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
+        $result = $this->Perms->canLock();
+        static::assertTrue($result);
     }
 
     /**
