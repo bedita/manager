@@ -48,11 +48,12 @@ class LoginController extends AppController
     public function login(): ?Response
     {
         // Add `head` to avoid errors on http `HEAD /` calls since they are redirected to `HEAD /login`
-        $this->getRequest()->allowMethod(['get', 'head', 'post']);
+        $this->request->allowMethod(['get', 'head', 'post']);
 
-        if (!$this->getRequest()->is('post')) {
+        $provider = $this->request->getParam('provider');
+        if (!$this->request->is('post') && empty($provider)) {
             // Handle flash messages
-            $this->handleFlashMessages($this->getRequest()->getQueryParams());
+            $this->handleFlashMessages($this->request->getQueryParams());
             // Load available projects info
             $this->loadAvailableProjects();
 
