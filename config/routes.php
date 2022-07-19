@@ -80,7 +80,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'logout']
     );
     $routes->connect(
-        '/oauth2/login/{provider}',
+        '/ext/login/{provider}',
         ['controller' => 'Login', 'action' => 'login'],
         ['_name' => 'login:oauth2']
     );

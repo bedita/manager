@@ -199,9 +199,16 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier(ApiIdentifier::class, [
-            'timezoneField' => 'timezone',
-        ]);
+        $path = $request->getUri()->getPath();
+        $query = $request->getQueryParams();
+        if (strpos($path, '/ext/login') === 0) {
+            $service->loadIdentifier('OAuth2');
+            $service->loadAuthenticator('OAuth2');
+
+            if (empty($query)) {
+                return $service;
+            }
+        }
 
         $service->loadAuthenticator('Authentication.Session', [
             'sessionKey' => 'BEditaManagerAuth',
@@ -210,7 +217,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ],
         ]);
 
-        $path = $request->getUri()->getPath();
+        $service->loadIdentifier(ApiIdentifier::class, [
+                'timezoneField' => 'timezone',
+        ]);
+
         if ($path === '/login') {
             $service->loadAuthenticator('Authentication.Form', [
                 'loginUrl' => '/login',
@@ -220,11 +230,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     'timezone' => 'timezone_offset',
                 ],
             ]);
-        }
-
-        if (strpos($path, '/oauth2/login') === 0) {
-            $service->loadIdentifier('OAuth2');
-            $service->loadAuthenticator('OAuth2');
         }
 
         return $service;
