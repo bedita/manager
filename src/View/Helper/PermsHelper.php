@@ -56,9 +56,10 @@ class PermsHelper extends Helper
      */
     public function canLock(): bool
     {
-        $roles = (array)Hash::get((array)$this->_View->get('user'), 'roles');
+        /** @var \Authentication\Identity $identity */
+        $identity = $this->_View->get('user');
 
-        return in_array('admin', $roles);
+        return in_array('admin', (array)$identity->get('roles'));
     }
 
     /**
