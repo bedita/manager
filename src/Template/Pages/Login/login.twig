@@ -64,6 +64,13 @@
 
         {{ Form.end()|raw }}
 
+        {% set providers = config('OAuth2Providers')|default([])|keys %}
+        {% for provider in providers %}
+        <br><br>
+        <a class="button" href="{{ Url.build({'_name': 'login:oauth2', 'provider': provider}) }}">
+            {{ __('Sign in with {0}', provider) }}
+        </a>
+        {% endfor %}
     </div>
     <footer>
         <div class="sidebar-footer">
