@@ -13,7 +13,6 @@
 namespace App;
 
 use App\Identifier\ApiIdentifier;
-use App\Middleware\OAuth2Middleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
@@ -22,6 +21,7 @@ use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
+use BEdita\WebTools\Middleware\OAuth2Middleware;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -202,8 +202,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $path = $request->getUri()->getPath();
         $query = $request->getQueryParams();
         if (strpos($path, '/ext/login') === 0) {
-            $service->loadIdentifier('OAuth2');
-            $service->loadAuthenticator('OAuth2');
+            $providers = (array)Configure::read('OAuth2Providers');
+            $service->loadIdentifier('BEdita/WebTools.OAuth2', compact('providers'));
+            $service->loadAuthenticator('BEdita/WebTools.OAuth2', compact('providers') + [
+                'redirect' => ['_name' => 'login:oauth2'],
+            ]);
 
             if (empty($query)) {
                 return $service;
