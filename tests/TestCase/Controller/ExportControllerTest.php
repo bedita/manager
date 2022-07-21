@@ -13,7 +13,6 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\Component\ConfigComponent;
 use App\Controller\ExportController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
@@ -184,10 +183,6 @@ class ExportControllerTest extends TestCase
                 'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
             ])
         );
-        $registry = $this->Export->components();
-        /** @var \App\Controller\Component\ConfigComponent $configComponent */
-        $configComponent = $registry->load(ConfigComponent::class);
-        $this->Export->Config = $configComponent;
 
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)

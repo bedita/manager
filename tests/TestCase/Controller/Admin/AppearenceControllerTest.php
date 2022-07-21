@@ -2,7 +2,6 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearenceController;
-use App\Controller\Component\ConfigComponent;
 use BEdita\SDK\BEditaClient;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
@@ -38,27 +37,6 @@ class AppearenceControllerTest extends TestCase
     {
         Cache::disable();
         parent::tearDown();
-    }
-
-    /**
-     * Test initialize
-     *
-     * @return void
-     * @covers ::initialize()
-     */
-    public function testInitialize(): void
-    {
-        $this->Appearence = new AppearenceController(
-            new ServerRequest(
-                [
-                    'environment' => [
-                        'REQUEST_METHOD' => 'GET',
-                    ],
-                ]
-            )
-        );
-        static::assertNotEmpty($this->Appearence->Config);
-        static::assertInstanceOf(ConfigComponent::class, $this->Appearence->Config);
     }
 
     /**
@@ -130,10 +108,6 @@ class AppearenceControllerTest extends TestCase
                     }
                 )
             );
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Appearence->Config, $apiClient);
         // expect exception on redirect to admin uri, because test does not access admin routes as unauthenticated
         $this->expectException('Cake\Routing\Exception\MissingRouteException');
         $this->Appearence->save();
