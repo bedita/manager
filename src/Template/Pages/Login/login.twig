@@ -42,11 +42,8 @@
             'label': __('Username'),
         })|raw }}
 
-        {{ Form.control('password', {
-            'required':'required',
-            'autocomplete': 'current-password',
-            'label': __('Password'),
-        })|raw }}
+        <login-password></login-password>
+        {% do Form.unlockField('password') %}
 
         {{ Form.control('timezone_offset', {
             'label': false,
