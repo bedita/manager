@@ -117,6 +117,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Load current project configuration if `multiproject` instance
             // Manager plugins will also be loaded here via `loadPluginsFromConfig()`
+            // API configuration for this project is also loaded.
             ->add(new ProjectMiddleware($this))
 
             // Provides a `GET /status` endpoint. This must be

@@ -59,7 +59,6 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => '/login',
         ]);
-        $this->loadComponent('Config');
 
         $this->loadComponent('Modules', [
             'currentModuleName' => $this->name,
@@ -76,7 +75,7 @@ class AppController extends Controller
         $identity = $this->Authentication->getIdentity();
         if ($identity && $identity->get('tokens')) {
             $this->apiClient->setupTokens($identity->get('tokens'));
-        } elseif (!in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login'])) {
+        } elseif (!in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login', '/logout'])) {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
