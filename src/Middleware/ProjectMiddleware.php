@@ -13,8 +13,6 @@
 namespace App\Middleware;
 
 use App\Application;
-use App\Utility\ApiConfigTrait;
-use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,8 +27,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class ProjectMiddleware implements MiddlewareInterface
 {
-    use ApiConfigTrait;
-
     /**
      * Application instance
      *
@@ -68,10 +64,6 @@ class ProjectMiddleware implements MiddlewareInterface
         $project = $this->detectProject($request);
         Application::loadProjectConfig((string)$project, $this->projectsConfigPath);
         $this->Application->loadPluginsFromConfig();
-
-        if (Configure::check('API.apiBaseUrl')) {
-            $this->readApiConfig();
-        }
 
         return $handler->handle($request);
     }
