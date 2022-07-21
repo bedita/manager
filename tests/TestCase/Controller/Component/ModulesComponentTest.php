@@ -102,7 +102,6 @@ class ModulesComponentTest extends TestCase
             }
         };
         $controller->loadComponent('Authentication');
-        $controller->loadComponent('Config');
     }
 
     /**
