@@ -33,8 +33,6 @@ class ConfigurationMiddlewareTest extends TestCase
     /**
      * Test `process` method.
      *
-     * @param int $expected The HTTP status code expected
-     * @param array $data Request session data
      * @return void
      * @covers ::process()
      */
