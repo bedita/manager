@@ -71,8 +71,8 @@ class ApiConfigTraitTest extends TestCase
     /**
      * Test `readApiConfig`.
      *
-     * @param string $key The config key
-     * @param bool $found Data found per config
+     * @param mixed $expected Expected result.
+     * @param array $content Test cache content.
      * @return void
      * @covers ::readApiConfig()
      * @covers ::fetchConfig()
