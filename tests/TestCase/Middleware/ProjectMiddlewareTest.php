@@ -30,33 +30,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class ProjectMiddlewareTest extends TestCase
 {
     /**
-     * Fake next middleware
-     *
-     * @var callable
-     */
-    protected $nextMiddleware;
-
-    /**
-     * @inheritDoc
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->nextMiddleware = function ($req, $res) {
-            return $res;
-        };
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        unset($this->nextMiddleware);
-    }
-
-    /**
      * Data provider for `testInvoke()`
      *
      * @return array
@@ -90,7 +63,7 @@ class ProjectMiddlewareTest extends TestCase
     }
 
     /**
-     * Test `__invoke` method.
+     * Test `process` method.
      *
      * @param int $expected The HTTP status code expected
      * @param array $data Request session data

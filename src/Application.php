@@ -13,6 +13,7 @@
 namespace App;
 
 use App\Authentication\Identifier\ApiIdentifier;
+use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
@@ -121,6 +122,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Provides a `GET /status` endpoint. This must be
             ->add(new StatusMiddleware())
+
+            // Load configuration from API for the current project.
+            ->add(new ConfigurationMiddleware())
 
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([

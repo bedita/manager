@@ -12,6 +12,8 @@
  */
 namespace App\Controller\Admin;
 
+use App\Utility\ApiConfigTrait;
+use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -23,6 +25,8 @@ use Cake\Utility\Inflector;
  */
 class AppearenceController extends AdministrationBaseController
 {
+    use ApiConfigTrait;
+
     /**
      * Resource type in use
      *
@@ -58,7 +62,7 @@ class AppearenceController extends AdministrationBaseController
     {
         $configs = [];
         foreach ($this->properties as $property) {
-            $configs[$property] = $this->Config->read(Inflector::camelize($property));
+            $configs[$property] = Configure::read(Inflector::camelize($property));
         }
         $this->set('configs', $configs);
 
@@ -76,7 +80,7 @@ class AppearenceController extends AdministrationBaseController
         $data = (array)$this->getRequest()->getData();
         $propertyName = (string)Hash::get($data, 'property_name');
         $content = (string)Hash::get($data, Inflector::camelize($propertyName));
-        $this->Config->save(Inflector::camelize($propertyName), (array)json_decode($content, true));
+        $this->saveApiConfig(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
         return $this->redirect(['_name' => 'admin:list:appearence', '?' => ['configKey' => $propertyName]]);
     }
