@@ -2,8 +2,6 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearenceController;
-use App\Controller\Component\ConfigComponent;
-use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClient;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
@@ -42,27 +40,6 @@ class AppearenceControllerTest extends TestCase
     }
 
     /**
-     * Test initialize
-     *
-     * @return void
-     * @covers ::initialize()
-     */
-    public function testInitialize(): void
-    {
-        $this->Appearence = new AppearenceController(
-            new ServerRequest(
-                [
-                    'environment' => [
-                        'REQUEST_METHOD' => 'GET',
-                    ],
-                ]
-            )
-        );
-        static::assertNotEmpty($this->Appearence->Config);
-        static::assertInstanceOf(ConfigComponent::class, $this->Appearence->Config);
-    }
-
-    /**
      * Test index
      *
      * @return void
@@ -79,22 +56,16 @@ class AppearenceControllerTest extends TestCase
                 ]
             )
         );
-        // Mock GET /config using cache
-        Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
-        Cache::write(CacheTools::cacheKey('config.Export'), []);
-        Cache::write(CacheTools::cacheKey('config.Modules'), []);
-        Cache::write(CacheTools::cacheKey('config.Pagination'), []);
-        Cache::write(CacheTools::cacheKey('config.Project'), []);
-        Cache::write(CacheTools::cacheKey('config.Properties'), []);
         $this->Appearence->index();
         $viewVars = (array)$this->Appearence->viewBuilder()->getVars();
         static::assertNotEmpty($viewVars['configs']['modules']);
-        static::assertIsArray($viewVars['configs']['alert_message']);
-        static::assertIsArray($viewVars['configs']['export']);
-        static::assertIsArray($viewVars['configs']['modules']);
-        static::assertIsArray($viewVars['configs']['pagination']);
-        static::assertIsArray($viewVars['configs']['project']);
-        static::assertIsArray($viewVars['configs']['properties']);
+        static::assertNotEmpty($viewVars['configs']['pagination']);
+        static::assertArrayHasKey('alert_message', $viewVars['configs']);
+        static::assertArrayHasKey('export', $viewVars['configs']);
+        static::assertArrayHasKey('modules', $viewVars['configs']);
+        static::assertArrayHasKey('pagination', $viewVars['configs']);
+        static::assertArrayHasKey('project', $viewVars['configs']);
+        static::assertArrayHasKey('properties', $viewVars['configs']);
     }
 
     /**
@@ -137,10 +108,6 @@ class AppearenceControllerTest extends TestCase
                     }
                 )
             );
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Appearence->Config, $apiClient);
         // expect exception on redirect to admin uri, because test does not access admin routes as unauthenticated
         $this->expectException('Cake\Routing\Exception\MissingRouteException');
         $this->Appearence->save();

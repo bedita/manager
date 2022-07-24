@@ -29,6 +29,7 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
+        LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
         Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
