@@ -409,7 +409,7 @@ return [
     'OAuth2Providers' => [
         'google' => [
             // OAuth2 class name
-            'class' => 'League\OAuth2\Client\Provider\Google',
+            'class' => '\League\OAuth2\Client\Provider\Google',
             // Provider class setup parameters - should be set in `app_local.php` to activate this provider
             // 'setup' => [
             //     'clientId' => '####',
