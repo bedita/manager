@@ -48,7 +48,7 @@ class AdminHelper extends Helper
         $this->options = [
             'text' => [
                 'label' => false,
-                'size' => 40,
+                'size' => 25,
             ],
             'bool' => [
                 'label' => false,
