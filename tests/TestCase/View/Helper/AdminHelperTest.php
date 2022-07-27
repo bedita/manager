@@ -36,13 +36,13 @@ class AdminHelperTest extends TestCase
                 'text',
                 'title',
                 null,
-                '<div class="input text"><input type="text" name="title" size="40" id="title"/></div>',
+                '<div class="input text"><input type="text" name="title" size="25" id="title"/></div>',
             ],
             'text value not null' => [
                 'text',
                 'title',
                 'something',
-                '<div class="input text"><input type="text" name="title" size="40" id="title" value="something"/></div>',
+                '<div class="input text"><input type="text" name="title" size="25" id="title" value="something"/></div>',
             ],
             'bool value null' => [
                 'bool',
@@ -84,7 +84,7 @@ class AdminHelperTest extends TestCase
                 'default',
                 'dummy',
                 'something',
-                '<div class="input text"><input type="text" name="dummy" size="40" id="dummy" value="something"/></div>',
+                '<div class="input text"><input type="text" name="dummy" size="25" id="dummy" value="something"/></div>',
             ],
         ];
     }
