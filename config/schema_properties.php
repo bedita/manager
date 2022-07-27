@@ -265,13 +265,13 @@ return [
             ],
             'api_key' => [
                 'type' => 'string',
-                '$id' => '/properties/name',
+                '$id' => '/properties/api_key',
                 'title' => 'Api Key / Client Id',
                 'description' => 'Application api key',
             ],
             'client_secret' => [
                 'type' => 'string',
-                '$id' => '/properties/name',
+                '$id' => '/properties/client_secret',
                 'title' => 'Client Secret',
                 'description' => 'Application client secret',
             ],
