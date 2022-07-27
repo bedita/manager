@@ -41,5 +41,5 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $propertiesSecrets = ['api_key'];
+    protected $propertiesSecrets = ['api_key', 'client_secret'];
 }

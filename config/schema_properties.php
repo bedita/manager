@@ -266,8 +266,14 @@ return [
             'api_key' => [
                 'type' => 'string',
                 '$id' => '/properties/name',
-                'title' => 'Api Key',
+                'title' => 'Api Key / Client Id',
                 'description' => 'Application api key',
+            ],
+            'client_secret' => [
+                'type' => 'string',
+                '$id' => '/properties/name',
+                'title' => 'Client Secret',
+                'description' => 'Application client secret',
             ],
             'name' => [
                 'type' => 'string',

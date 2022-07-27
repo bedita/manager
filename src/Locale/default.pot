@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-13 10:27:15 \n"
+"POT-Creation-Date: 2022-07-27 08:08:30 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -569,9 +569,6 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
-msgid "Password"
-msgstr ""
-
 msgid "Password Modified"
 msgstr ""
 
@@ -849,6 +846,9 @@ msgid "add"
 msgstr ""
 
 msgid "add objects"
+msgstr ""
+
+msgid "api_key"
 msgstr ""
 
 msgid "application id"
@@ -1133,6 +1133,9 @@ msgid "Hide"
 msgstr ""
 
 msgid "Error on deleting property"
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 #. *

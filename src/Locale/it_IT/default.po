@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-13 10:27:15 \n"
+"POT-Creation-Date: 2022-07-27 08:08:30 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -572,9 +572,6 @@ msgstr "Paginazione"
 msgid "Parent"
 msgstr "Genitore"
 
-msgid "Password"
-msgstr "Password"
-
 msgid "Password Modified"
 msgstr "Password modificata il"
 
@@ -856,6 +853,9 @@ msgstr "aggiungi"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
 
 msgid "application id"
 msgstr "id applicazione"
@@ -1143,6 +1143,9 @@ msgstr "Nascondi"
 
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
+
+msgid "Password"
+msgstr "Password"
 
 #. *
 #.  * <location-view> component used for ModulesPage -> View
