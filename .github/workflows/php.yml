@@ -14,4 +14,4 @@ on:
 
 jobs:
   call_workflow:
-    uses: bedita/bedita/.github/workflows/php-cs-stan-unit.yml@main
+    uses: didoda/bedita/.github/workflows/php-cs-stan-unit.yml@main
