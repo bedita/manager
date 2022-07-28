@@ -13,4 +13,5 @@ on:
       - 'composer.json'
 
 jobs:
-  uses: bedita/.github/workflows/php-cs-stan-unit.yml@main
+  call_workflow:
+    uses: bedita/.github/workflows/php-cs-stan-unit.yml@main
