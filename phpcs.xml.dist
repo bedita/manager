@@ -5,6 +5,7 @@
     <file>./tests</file>
 
     <arg name="colors" />
+    <arg value="n" />
     <arg value="p" />
     <arg name="extensions" value="php"/>
 
