@@ -62,8 +62,8 @@
             "@cs-check"
         ],
         "stan": "vendor/bin/phpstan analyse",
-        "cs-check": "vendor/bin/phpcs --extensions=php --colors -p ./src ./tests ./config",
-        "cs-fix": "vendor/bin/phpcbf --extensions=php --colors ./src ./tests ./config",
+        "cs-check": "vendor/bin/phpcs",
+        "cs-fix": "vendor/bin/phpcbf",
         "test": "vendor/bin/phpunit --colors=always",
         "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage"
     },
