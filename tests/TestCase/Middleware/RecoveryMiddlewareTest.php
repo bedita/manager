@@ -127,7 +127,7 @@ class RecoveryMiddlewareTest extends TestCase
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
         $result = $this->AppController->Authentication->getAuthenticationService()->authenticate($this->AppController->getRequest());
-        $identity = new Identity($result->getData());
+        $identity = new Identity((array)$result->getData());
         $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
         $this->AppController->setRequest($request);
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
