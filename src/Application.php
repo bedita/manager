@@ -148,7 +148,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new AuthenticationMiddleware($this))
 
             // Recovery middleware
-            ->add(new RecoveryMiddleware($this));
+            ->add(new RecoveryMiddleware());
 
         return $middlewareQueue;
     }
