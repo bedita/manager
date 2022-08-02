@@ -44,7 +44,7 @@ class RecoveryMiddleware implements MiddlewareInterface
 
         $service = $request->getAttribute('authentication');
         if (!$service instanceof AuthenticationServiceInterface) {
-           return $request;
+            return $request;
         }
 
         $user = $request->getAttribute('identity');
