@@ -112,7 +112,7 @@ class RecoveryMiddlewareTest extends TestCase
         $identity = new Identity((array)$result->getData());
         $request = $this->AppController->getRequest()->withAttribute('identity', $identity);
         $this->AppController->setRequest($request);
-        $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
+        $user = new Identity(['id' => 1, 'roles' => ['admin']]);
         $this->AppController->Authentication->setIdentity($user);
     }
 }
