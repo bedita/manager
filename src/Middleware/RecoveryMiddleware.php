@@ -53,7 +53,11 @@ class RecoveryMiddleware implements MiddlewareInterface
         }
 
         $service->clearIdentity($request, new Response());
+        /** @var \Cake\Http\ServerRequest $sr */
+        $sr = $request;
+        $ex = new \Authentication\Authenticator\UnauthenticatedException();
+        $sr->getFlash()->setExceptionMessage($ex);
 
-        throw new \Authentication\Authenticator\UnauthenticatedException();
+        throw $ex;
     }
 }
