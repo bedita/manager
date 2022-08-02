@@ -80,42 +80,24 @@ class RecoveryMiddlewareTest extends TestCase
     }
 
     /**
-     * Setup controller
-     *
-     * @param array $config configuration for controller setup
-     * @return void
-     */
-    protected function setupController($config = null): void
-    {
-        $request = null;
-        if ($config != null) {
-            $request = new ServerRequest($config);
-            if (!empty($config['?'])) {
-                $request = $request->withQueryParams($config['?']);
-            }
-        }
-        $this->AppController = new AppController($request);
-    }
-
-    /**
      * Setup controller and manually login user
      *
-     * @return array|null
+     * @return void
      */
-    protected function setupControllerAndLogin(): ?array
+    protected function setupControllerAndLogin(): void
     {
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'POST',
-            ],
-            'post' => [
-                'username' => env('BEDITA_ADMIN_USR'),
-                'password' => env('BEDITA_ADMIN_PWD'),
-            ],
-        ];
-        $this->setupController($config);
+        $this->AppController = new AppController(
+            new ServerRequest([
+                'environment' => [
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'post' => [
+                    'username' => env('BEDITA_ADMIN_USR'),
+                    'password' => env('BEDITA_ADMIN_PWD'),
+                ],
+            ])
+        );
 
-        // Mock Authentication component
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
         $service->loadIdentifier(ApiIdentifier::class);
@@ -132,7 +114,5 @@ class RecoveryMiddlewareTest extends TestCase
         $this->AppController->setRequest($request);
         $user = $this->AppController->Authentication->getIdentity() ?: new Identity([]);
         $this->AppController->Authentication->setIdentity($user);
-
-        return $user->getOriginalData();
     }
 }
