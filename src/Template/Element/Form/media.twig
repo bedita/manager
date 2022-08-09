@@ -48,6 +48,15 @@
                                 </a>
                             </figure>
                         {% endif %}
+                    {% elseif object.type == 'videos' %}
+                            <video controls width="100%">
+                                <source src="{{ stream.meta.url }}" type="{{ stream.attributes.mime_type }}">
+                                Sorry, your browser does not support embedded <code>video</code> element.
+                            </video>
+                    {% elseif object.type == 'audio' %}
+                        <audio controls src="{{ stream.meta.url }}">
+                                Sorry, your browser does not support the <code>audio</code> element.
+                        </audio>
                     {% endif %}
                 </div>
 
@@ -81,51 +90,53 @@
     </section>
 </property-view>
 
-<property-view inline-template :tab-open="tabsOpen" :is-default-open=false :tab-open-at-start=false>
-    <section class="fieldset">
-        <header @click.prevent="toggleVisibility()"
-            class="tab unselectable"
-            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __('Advanced Data') }}</h2>
-        </header>
-        <div v-show="isOpen" class="tab-container">
-            <div class="grid-span-full mt-1">
-                <table class="inside-bordered">
-                    <tbody>
-                        {% for k, val in attributes %}
-                            {% if val and k != 'file_metadata' %}
-                                <tr>
-                                    <th class="nowrap">{{ k|humanize }} :</th>
-                                    <td>
-                                        {% if k == 'url' %}
-                                            <a href={{ val }} target="_blank">{{ val }}</a>
-                                        {% elseif in_array(k, ['created', 'modified']) %}
-                                            {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
-                                        {% elseif k == 'file_size' %}
-                                            {{ Schema.format(val, {'type': 'byte'}) }}
-                                        {% elseif k == 'duration' %}
-                                            {{ val|date('H:i:s', '+00:00 GMT') }}
-                                        {% elseif k == 'private_url' %}
-                                            {{ Schema.format(val, {'type': 'boolean'}) }}
-                                        {% else %}
-                                            {{ val }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% if attributes.file_metadata %}
-                    <div class="grid-span-full mt-1">
-                        <h3>{{ __('Metadata') }}</h3>
-                        <div>
-                            <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+    {% if attributes %}
+    <property-view inline-template :tab-open="tabsOpen" :is-default-open=false :tab-open-at-start=false>
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Advanced Data') }}</h2>
+            </header>
+            <div v-show="isOpen" class="tab-container">
+                <div class="grid-span-full mt-1">
+                    <table class="inside-bordered">
+                        <tbody>
+                            {% for k, val in attributes %}
+                                {% if val and k != 'file_metadata' %}
+                                    <tr>
+                                        <th class="nowrap">{{ k|humanize }} :</th>
+                                        <td>
+                                            {% if k == 'url' %}
+                                                <a href={{ val }} target="_blank">{{ val }}</a>
+                                            {% elseif in_array(k, ['created', 'modified']) %}
+                                                {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
+                                            {% elseif k == 'file_size' %}
+                                                {{ Schema.format(val, {'type': 'byte'}) }}
+                                            {% elseif k == 'duration' %}
+                                                {{ val|date('H:i:s', '+00:00 GMT') }}
+                                            {% elseif k == 'private_url' %}
+                                                {{ Schema.format(val, {'type': 'boolean'}) }}
+                                            {% else %}
+                                                {{ val }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if attributes.file_metadata %}
+                        <div class="grid-span-full mt-1">
+                            <h3>{{ __('Metadata') }}</h3>
+                            <div>
+                                <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </section>
-</property-view>
+        </section>
+    </property-view>
+    {% endif %}
 {% endif %}
