@@ -1,15 +1,12 @@
 {% if streams or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
-
     <section class="fieldset">
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
             :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
             <h2>{{ __('Media') }}</h2>
         </header>
-
         <div v-show="isOpen" class="tab-container">
-
             {# Display embedded video if available #}
             {% if object.attributes.provider_extra.html %}
                 <div class="embedded-container"
@@ -54,13 +51,48 @@
                     {% endif %}
                 </div>
 
-                <div>
-                    {# Stream properties #}
-                    {# Display properties list without edit inputs, they're not changeable #}
-                    {% set attributes = stream.attributes|merge(stream.meta) %}
-                    <table>
-                        <tbody>
-                            {% for k, val in attributes %}
+                {# Stream properties #}
+                {# Display properties list without edit inputs, they're not changeable #}
+                {% set attributes = stream.attributes|merge(stream.meta) %}
+
+                <div class="mt-1 grid-span-full is-flex align-center">
+
+                    {% if attributes.url %}
+                    <a href="{{ attributes.url }}" target="_blank"
+                            class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('View file') }}
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
+                            class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                            {{ __('Download file') }}
+                    </a>
+
+                    <div class="mr-1 has-text-size-large">{{ __('Change File') }}:</div>
+                    <div>
+                        {{ Form.control('file', { 'type': 'file', 'label': false}) | raw }}
+                        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
+                        {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</property-view>
+
+<property-view inline-template :tab-open="tabsOpen" :is-default-open=false :tab-open-at-start=false>
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Advanced Data') }}</h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            <div class="grid-span-full mt-1">
+                <table class="inside-bordered">
+                    <tbody>
+                        {% for k, val in attributes %}
                             {% if val and k != 'file_metadata' %}
                                 <tr>
                                     <th class="nowrap">{{ k|humanize }} :</th>
@@ -81,48 +113,19 @@
                                     </td>
                                 </tr>
                             {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div class="grid-span-full mt-1">
-
-                    {% if attributes.url %}
-                    <a href="{{ attributes.url }}" target="_blank"
-                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                            {{ __('View file') }}
-                    </a>
-                    {% endif %}
-
-                    <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
-                            class="button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                            {{ __('Download file') }}
-                    </a>
-
-                </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 {% if attributes.file_metadata %}
-                <div class="grid-span-full mt-1">
-                    <h3>{{ __('Metadata') }}</h3>
-                    <div>
-                        <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                    <div class="grid-span-full mt-1">
+                        <h3>{{ __('Metadata') }}</h3>
+                        <div>
+                            <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                        </div>
                     </div>
-                </div>
                 {% endif %}
-
-                <div class="grid-span-full mt-1">
-                    <h3>{{ __('Change File') }}</h3>
-                    <div>
-                        {{ Form.control('file', { 'type': 'file', 'label': false }) | raw }}
-                        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
-                        {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
-                    </div>
-                </div>
-            {% endif %}
-
+            </div>
         </div>
     </section>
-
 </property-view>
 {% endif %}
