@@ -22,6 +22,8 @@ export default {
                                 v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
+                        <div v-if="check(dateRange, 'start')" class="mt-05 icon-ok-circled-1">${`Ok`}</div>
+                        <div v-if="!check(dateRange, 'start')" class="mt-05 icon-error">${t`Empty start date`}</div>
                     </div>
                     <div>
                         <span>${t`To`}</span>
@@ -33,8 +35,10 @@ export default {
                                 v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
+                        <div v-if="check(dateRange, 'end')" class="mt-05 icon-ok-circled-1">${`Ok`}</div>
+                        <div v-if="!check(dateRange, 'end')" class="mt-05 icon-error">${t`Empty end date`}</div>
                     </div>
-                    <div>
+                    <div class="mb-2">
                         <label class="m-0 nowrap has-text-size-smaller">
                             <input type="checkbox"
                                 :name="getNameAllDay(index)"
@@ -43,7 +47,7 @@ export default {
                             ${t`All day`}
                         </label>
                     </div>
-                    <div>
+                    <div class="mb-2">
                         <label class="m-0 nowrap has-text-size-smaller" v-if="isDaysInterval(dateRange)">
                             <input type="checkbox"
                                 :name="getNameEveryDay(index)"
@@ -53,7 +57,7 @@ export default {
                             ${t`Every day`}
                         </label>
                     </div>
-                    <div>
+                    <div class="mb-2">
                         <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2">${t`Remove`}</button>
                     </div>
                     <div v-if="dateRange.params.every_day === false" class="m-0 nowrap has-text-size-smaller weekdays">
@@ -66,6 +70,7 @@ export default {
                         <label><input type="checkbox" v-model="dateRange.params.weekdays.saturday" />${t`Saturday`}</label>
                         <input type="hidden" :name="getName(index, 'params')" :value="JSON.stringify(dateRange.params)" />
                     </div>
+                    <div v-if="msdiff(dateRange) < 0" class="icon-error">${t`Invalid date range`}</div>
                 </div>
             </div>
 
@@ -141,10 +146,20 @@ export default {
          * Handle date change.
          *
          * @param {Object} dateRange The date range object
-         * @param {string} value The date value.
+         * @param {Event} ev The event.
          * @returns {void}
          */
-        onDateChanged(dateRange, { target: { value } }) {
+        onDateChanged(dateRange, ev) {
+            const value = ev.target.value;
+            const dr = {};
+            if (ev.target.name.indexOf('start_date') > 0) {
+                dr.start_date = value;
+                dr.end_date = dateRange.end_date;
+            } else {
+                dr.start_date = dateRange.start_date;
+                dr.end_date = value;
+            }
+            this.validate(dr);
             if (!value || !dateRange.params.all_day) {
                 return;
             }
@@ -206,6 +221,60 @@ export default {
          */
         remove(index) {
             this.dateRanges.splice(index, 1);
+        },
+        /**
+         * Validate date range
+         *
+         * @param {Object} dateRange Date range object.
+         * @returns {void}
+         */
+        validate(dateRange) {
+            const button = document.querySelector('button[form=form-main]');
+            const valid = this.valid(dateRange);
+            button.disabled = valid ? false : 'disabled';
+        },
+        /**
+         * Check date range is valid
+         *
+         * @param {Object} dateRange Date range object.
+         * @returns {Boolean}
+         */
+        valid(dateRange) {
+            if (dateRange.start_date === '' || dateRange.end_date === '') {
+                return false;
+            }
+
+            return this.msdiff(dateRange) > 0;
+        },
+        /**
+         * Check date range by type ('start'|'end').
+         *
+         * @param {Object} dateRange The date range
+         * @param {String} type The type ('start'|'end')
+         * @returns {Boolean}
+         */
+        check(dateRange, type) {
+            if (type === 'start') {
+                return dateRange.start_date !== '';
+            }
+
+            return dateRange.end_date !== '';
+        },
+        /**
+         * Milliseconds diff between end_date and start_date in a dateRange.
+         * When negative, it means that start_date is after end_date.
+         *
+         * @param {Object} dateRange
+         * @returns {Integer}
+         */
+        msdiff(dateRange) {
+            if (dateRange.start_date === '' || dateRange.end_date === '') {
+                return 0;
+            }
+            const sd = moment(dateRange.start_date);
+            const ed = moment(dateRange.end_date);
+
+            return moment.duration(ed.diff(sd)).asMilliseconds();
         },
     },
 }
