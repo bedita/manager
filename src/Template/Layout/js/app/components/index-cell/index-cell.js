@@ -4,14 +4,15 @@ export default {
     name: 'index-cell',
 
     template: `
-    <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="showCopy = true" @mouseleave="showCopy = false">
+    <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="onMouseover()" @mouseleave="onMouseleave()">
         <: !msg ? truncated : '' :>
-        <span v-if="!msg && showCopy" class="is-width-auto icon-doc" @click.stop.prevent="copy()"></span>
+        <span v-if="showCopyIcon()" class="is-width-auto icon-doc" @click.stop.prevent="copy()"></span>
         <div v-if="msg" v-text="msg" style="color: gray"></div>
     </div>
     `,
 
     props: {
+        settings: {},
         prop: '',
         text: '',
         untitledlabel: '',
@@ -30,7 +31,6 @@ export default {
     },
 
     methods: {
-
         className() {
             return `${this.prop}-cell`;
         },
@@ -41,8 +41,30 @@ export default {
             setTimeout(() => this.reset(), 2000)
         },
 
+        onMouseover() {
+            if (this.settings?.copy2clipboard !== true) {
+                return;
+            }
+            this.showCopy = true;
+        },
+
+        onMouseleave() {
+            if (this.settings?.copy2clipboard !== true) {
+                return;
+            }
+            this.showCopy = false;
+        },
+
         reset() {
             this.msg = '';
+        },
+
+        showCopyIcon() {
+            if (this.settings?.copy2clipboard !== true) {
+                return false;
+            }
+
+            return !this.msg && this.showCopy;
         },
     },
 };
