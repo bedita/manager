@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-27 08:08:30 \n"
+"POT-Creation-Date: 2022-08-10 07:15:19 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -34,6 +34,9 @@ msgstr "Amministrazione"
 
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "Advanced Data"
+msgstr "Dati Avanzati"
 
 msgid "Alert Message"
 msgstr "Messaggio di Attenzione"
@@ -705,6 +708,12 @@ msgstr "Accedi"
 
 msgid "Size"
 msgstr "Dimensione"
+
+msgid "Sorry, your browser does not support embedded %s element"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded {0} element"
+msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
 
 msgid "State Name"
 msgstr "Provincia"

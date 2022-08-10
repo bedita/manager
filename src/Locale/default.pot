@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-27 08:08:30 \n"
+"POT-Creation-Date: 2022-08-10 07:15:19 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -30,6 +30,9 @@ msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "Advanced Data"
 msgstr ""
 
 msgid "Alert Message"
@@ -699,6 +702,12 @@ msgid "Sign in"
 msgstr ""
 
 msgid "Size"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded %s element"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded {0} element"
 msgstr ""
 
 msgid "State Name"

@@ -49,13 +49,13 @@
                             </figure>
                         {% endif %}
                     {% elseif object.type == 'videos' %}
-                            <video controls width="100%">
-                                <source src="{{ stream.meta.url }}" type="{{ stream.attributes.mime_type }}">
-                                Sorry, your browser does not support embedded <code>video</code> element.
-                            </video>
+                        <video controls width="100%">
+                            <source src="{{ stream.meta.url }}" type="{{ stream.attributes.mime_type }}">
+                            {{ __('Sorry, your browser does not support embedded {0} element', '<code>video</code>')|raw }}.
+                        </video>
                     {% elseif object.type == 'audio' %}
                         <audio controls src="{{ stream.meta.url }}">
-                                Sorry, your browser does not support the <code>audio</code> element.
+                            {{ __('Sorry, your browser does not support embedded {0} element', '<code>audio</code>')|raw }}.
                         </audio>
                     {% endif %}
                 </div>
