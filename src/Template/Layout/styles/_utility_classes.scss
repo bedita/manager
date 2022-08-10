@@ -215,3 +215,17 @@
 .order-7          { order: 7 !important; }
 .order-8          { order: 8 !important; }
 .order-bottom     { order: 100 !important; }
+
+
+table.inside-bordered {
+    border-collapse: collapse;
+
+    th, td {
+        border: 1px solid $gray-600;
+        padding: $gutter * 0.5;
+    }
+}
+
+.is-width-full {
+    width: 100% !important;
+}
