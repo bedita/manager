@@ -64,7 +64,7 @@ export default {
     },
 
     mounted() {
-        this.selectedTags = this.initialTags?.map((tag) => ({ id: tag.name, label: tag.label }));
+        this.selectedTags = this.initialTags?.map((tag) => ({ id: tag.name, originalLabel: tag.label, label: this.getFullLabel(tag) }));
         this.parseBeforeSave();
     },
 
@@ -73,12 +73,13 @@ export default {
             this.$emit('change', this.selectedTags);
         },
         parseBeforeSave() {
-            this.modifiedTags = JSON.stringify(this.selectedTags.map((tag) => ({ name : tag.id, label: tag.label })));
+            this.modifiedTags = JSON.stringify(this.selectedTags.map((tag) => ({ name : tag.id, label: tag.originalLabel })));
         },
         onAdd(tag) {
             this.selectedTags.push({
                 'id': tag.id,
-                'label': tag.label,
+                'originalLabel': tag.label,
+                'label': this.getFullLabel(tag),
             });
             this.parseBeforeSave();
         },
@@ -92,7 +93,7 @@ export default {
         },
         addNewTag() {
             for (const tag of this.selectedTags) {
-                if (this.text === tag.label) {
+                if (this.text === tag.originalLabel) {
                     this.text = '';
                     return;
                 }
@@ -100,6 +101,7 @@ export default {
             this.selectedTags.push({
                 'id': this.text,
                 'label': this.text,
+                'originalLabel': this.text
             });
             this.text = '';
             this.parseBeforeSave();
@@ -114,9 +116,13 @@ export default {
             const json = await res.json();
             const tags = [...(json.data || [])];
 
-            const tagsOptions = tags?.map((tag) => ({ id: tag.attributes.name, label: tag.attributes.label })) || [];
+            const tagsOptions = tags?.map((tag) => ({ id: tag.attributes.name, originalLabel: tag.attributes.label, label: this.getFullLabel(tag.attributes) })) || [];
 
             callback(null, tagsOptions);
+            this.parseBeforeSave();
+        },
+        getFullLabel(tag) {
+            return `${tag.label} [${tag.name}]`;
         },
     },
 }
