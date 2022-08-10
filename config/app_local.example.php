@@ -411,6 +411,11 @@ return [
     // ],
 
     /**
+     * Recovery mode. Only admin can access manager when Recovery is true.
+     */
+    // 'Recovery' => true,
+
+    /**
      * The manager application name in the API (default is `manager`).
      * This is used in reading/writing manager configuration data.
      */

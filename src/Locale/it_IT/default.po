@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-27 08:08:30 \n"
+"POT-Creation-Date: 2022-08-02 11:45:21 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -639,6 +639,9 @@ msgstr "Data inizio pubblicazione"
 
 msgid "Publishing properties"
 msgstr "Proprietà di pubblicazione"
+
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
 
 msgid "Relations"
 msgstr "Relazioni"

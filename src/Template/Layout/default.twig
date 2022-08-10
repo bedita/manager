@@ -38,8 +38,15 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% set bodyClass = bodyClass ~ ' view-module module-' ~ currentModule.name %}
 {% endif %}
 
+{% set alertMsg = '' %}
+{% if config('Recovery') %}
+    {% set alertMsg = __('Recovery Mode - Access restricted to admin users') %}
+{% elseif config('AlertMessage.text') %}
+    {% set alertMsg = config('AlertMessage.text') %}
+{% endif %}
+
 <body class="{{ bodyClass }}"
-    {% if config('AlertMessage.text') %}alert-message="{{ config('AlertMessage.text') }}"{% endif %}>
+    {% if alertMsg %}alert-message="{{ alertMsg }}"{% endif %}>
 
     <main
         v-cloak
