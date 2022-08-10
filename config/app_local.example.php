@@ -434,9 +434,9 @@ return [
      * UI settings.
      * index.copy => enable "onmouseover" of index general cells showing copy to clipboard button
      */
-    'UI' => [
-        'index' => [
-            'copy2clipboard' => true,
-        ],
-    ],
+    // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
+    //     ],
+    // ],
 ];
