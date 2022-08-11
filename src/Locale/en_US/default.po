@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-06 09:12:24 \n"
+"POT-Creation-Date: 2022-08-10 07:30:34 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -33,6 +33,12 @@ msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "Advanced Data"
+msgstr ""
+
+msgid "Alert Message"
 msgstr ""
 
 msgid "Alert!"
@@ -320,6 +326,9 @@ msgstr ""
 msgid "Gender"
 msgstr ""
 
+msgid "General"
+msgstr ""
+
 msgid "Global"
 msgstr ""
 
@@ -539,6 +548,9 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
+msgid "Open File"
+msgstr ""
+
 msgid "Open image"
 msgstr ""
 
@@ -548,13 +560,19 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
+msgid "Original"
+msgstr ""
+
+msgid "Original language"
+msgstr ""
+
 msgid "Other"
 msgstr ""
 
-msgid "Parent"
+msgid "Pagination"
 msgstr ""
 
-msgid "Password"
+msgid "Parent"
 msgstr ""
 
 msgid "Password Modified"
@@ -593,6 +611,9 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Project"
+msgstr ""
+
 msgid "Properties"
 msgstr ""
 
@@ -615,6 +636,12 @@ msgid "Publish End"
 msgstr ""
 
 msgid "Publish Start"
+msgstr ""
+
+msgid "Publishing properties"
+msgstr ""
+
+msgid "Recovery Mode - Access restricted to admin users"
 msgstr ""
 
 msgid "Relations"
@@ -681,6 +708,9 @@ msgid "Sign in"
 msgstr ""
 
 msgid "Size"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded {0} element"
 msgstr ""
 
 msgid "State Name"
@@ -800,9 +830,6 @@ msgstr ""
 msgid "Videos"
 msgstr ""
 
-msgid "View"
-msgstr ""
-
 msgid "View file"
 msgstr ""
 
@@ -832,6 +859,9 @@ msgstr ""
 
 msgid "add objects"
 msgstr ""
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
 
 msgid "application id"
 msgstr ""
@@ -929,9 +959,6 @@ msgstr ""
 msgid "on"
 msgstr ""
 
-msgid "original"
-msgstr ""
-
 msgid "params"
 msgstr ""
 
@@ -969,9 +996,6 @@ msgid "title"
 msgstr ""
 
 msgid "to"
-msgstr ""
-
-msgid "translation of"
 msgstr ""
 
 msgid "type"
@@ -1118,6 +1142,12 @@ msgid "Show"
 msgstr ""
 
 msgid "Hide"
+msgstr ""
+
+msgid "Error on deleting property"
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 #. *

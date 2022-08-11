@@ -15,11 +15,9 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\AppController;
-use App\Controller\Component\ConfigComponent;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
-use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use Authentication\Identity;
@@ -79,9 +77,6 @@ class ModulesComponentTest extends TestCase
         $controller = new AppController();
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
-        /** @var \App\Controller\Component\ConfigComponent $configComponent */
-        $configComponent = $registry->load(ConfigComponent::class);
-        $controller->Config = $configComponent;
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
         $modulesComponent = $registry->load(ModulesComponent::class);
         $this->Modules = $modulesComponent;
@@ -103,7 +98,6 @@ class ModulesComponentTest extends TestCase
             }
         };
         $controller->loadComponent('Authentication');
-        $controller->loadComponent('Config');
     }
 
     /**
@@ -234,13 +228,9 @@ class ModulesComponentTest extends TestCase
                 ->willReturn(compact('meta'));
         }
         ApiClientProvider::setApiClient($apiClient);
-
-        // Mock GET /config using cache
-        Cache::enable();
-        Cache::write(CacheTools::cacheKey('config.Project'), ['attributes' => ['content' => json_encode($config)]]);
+        Configure::write('Project', $config);
         Cache::delete('home_0'); // otherwise mock is applied only on first round of test from data provider
         $actual = $this->Modules->getProject();
-        Cache::disable();
 
         static::assertEquals($expected, $actual);
     }
@@ -284,10 +274,6 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('get')
             ->with('/config')
             ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($controller->Config, $apiClient);
         // Mock Authentication component
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
@@ -357,10 +343,6 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('get')
             ->with('/config')
             ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($controller->Config, $apiClient);
 
         // Mock Authentication component
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
@@ -526,13 +508,8 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('get')
             ->with('/config')
             ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
         /** @var \App\Controller\ModulesController $appController */
         $appController = $this->Modules->getController();
-        $property->setValue($appController->Config, $apiClient);
-
         // Mock Authentication component
         $appController->setRequest($appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
@@ -787,11 +764,6 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('get')
             ->with('/config')
             ->willReturn([]);
-        // set $this->Modules->Config->apiClient
-        $property = new \ReflectionProperty(ConfigComponent::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($controller->Config, $apiClient);
-
         // Mock Authentication component
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 

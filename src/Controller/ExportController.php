@@ -168,6 +168,16 @@ class ExportController extends AppController
     }
 
     /**
+     * Get export limit.
+     *
+     * @return int
+     */
+    protected function limit(): int
+    {
+        return (int)Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+    }
+
+    /**
      * Load all data for a given type using limit and query filters.
      *
      * @param string $objectType Object type
@@ -176,10 +186,11 @@ class ExportController extends AppController
     protected function rowsAll(string $objectType): array
     {
         $data = $fields = [];
-        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+        $limit = $this->limit();
         $pageCount = $page = 1;
         $total = 0;
-        $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();
+        $pageSize = $limit > self::DEFAULT_PAGE_SIZE ? self::DEFAULT_PAGE_SIZE : $limit;
+        $query = ['page_size' => $pageSize] + $this->prepareQuery();
         while ($total < $limit && $page <= $pageCount) {
             $response = (array)$this->apiClient->get($this->apiPath(), $query + compact('page'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
@@ -209,7 +220,7 @@ class ExportController extends AppController
     {
         $data = $fields = [];
         $url = sprintf('/%s/%s/%s', $objectType, $id, $relationName);
-        $limit = Configure::read('Export.limit', self::DEFAULT_EXPORT_LIMIT);
+        $limit = $this->limit();
         $pageCount = $page = 1;
         $total = 0;
         $query = ['page_size' => self::DEFAULT_PAGE_SIZE] + $this->prepareQuery();

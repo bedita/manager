@@ -503,4 +503,40 @@ class PropertiesComponentTest extends TestCase
             static::assertEquals($v, $result[$k]);
         }
     }
+
+    /**
+     * Test `typesOptions`.
+     *
+     * @return void
+     * @covers ::typesOptions()
+     */
+    public function testTypesOptions(): void
+    {
+        $this->createComponent();
+        $actual = $this->Properties->typesOptions();
+        static::assertIsArray($actual);
+        static::assertIsArray($actual['options']);
+        static::assertEquals('Type', $actual['label']);
+        static::assertEquals('select', $actual['type']);
+    }
+
+    /**
+     * Test `associationsOptions`
+     *
+     * @return void
+     * @covers ::associationsOptions()
+     */
+    public function testAssociationsOptions(): void
+    {
+        $this->createComponent();
+        $expected = [
+            ['text' => 'DateRanges', 'value' => 'DateRanges'],
+            ['text' => 'Streams', 'value' => 'Streams'],
+            ['text' => 'Categories', 'value' => 'Categories'],
+            ['text' => 'Tags', 'value' => 'Tags'],
+            ['text' => 'Dummy', 'value' => 'Dummy'],
+        ];
+        $actual = $this->Properties->associationsOptions(['Dummy']);
+        static::assertEquals($expected, $actual);
+    }
 }

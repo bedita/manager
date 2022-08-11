@@ -16,6 +16,8 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\ExportController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
@@ -83,6 +85,7 @@ class ExportControllerTest extends TestCase
      */
     public function setUp(): void
     {
+        Cache::enable();
         $this->Export = new ExportController(
             new ServerRequest([
                 'environment' => [
@@ -90,7 +93,9 @@ class ExportControllerTest extends TestCase
                 ],
             ])
         );
+
         $this->apiClient = ApiClientProvider::getApiClient();
+        parent::setUp();
     }
 
     /**
@@ -98,7 +103,9 @@ class ExportControllerTest extends TestCase
      */
     public function tearDown(): void
     {
+        Cache::disable();
         ApiClientProvider::setApiClient($this->apiClient);
+        parent::tearDown();
     }
 
     /**
@@ -205,6 +212,7 @@ class ExportControllerTest extends TestCase
         $expected = sprintf('%s%s%s%s', $fields, "\n", $row1, "\n");
 
         // call export.
+        $this->setLimit(500);
         $response = $this->Export->related('999', 'seealso', 'csv');
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
@@ -357,6 +365,8 @@ class ExportControllerTest extends TestCase
      */
     public function testRows(array $expected, array $arguments, array $response, array $post = []): void
     {
+        $this->setLimit(500);
+
         // mock api get.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -606,5 +616,32 @@ class ExportControllerTest extends TestCase
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [ $input ]);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `limit`.
+     *
+     * @return void
+     */
+    public function testLimit(): void
+    {
+        $expected = 123;
+        $this->setLimit($expected);
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('limit');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Set export limit in cache.
+     *
+     * @param int $limit The limit
+     * @return void
+     */
+    private function setLimit(int $limit): void
+    {
+        Configure::write('Export.limit', $limit);
     }
 }

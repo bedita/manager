@@ -76,6 +76,8 @@ class ObjectTypesController extends ModelBaseController
         $schema = $this->Schema->getSchema();
         $this->set('schema', $this->updateSchema($schema, $resource));
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
+        $this->set('propertyTypesOptions', $this->Properties->typesOptions());
+        $this->set('associationsOptions', $this->Properties->associationsOptions((array)Hash::get($resource, 'attributes.associations')));
 
         return null;
     }

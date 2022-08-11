@@ -1,7 +1,17 @@
 export default {
+    props: {
+        configkey: {
+            type: String,
+        },
+    },
     data() {
         return {
-            config: 'modules',
+            config: {
+                type: String,
+            },
         };
+    },
+    mounted() {
+        this.config = this.configkey || 'alert_message';
     },
 };

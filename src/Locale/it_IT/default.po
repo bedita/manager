@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-06 09:12:24 \n"
+"POT-Creation-Date: 2022-08-10 07:30:34 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -34,6 +34,12 @@ msgstr "Amministrazione"
 
 msgid "Advanced"
 msgstr "Avanzate"
+
+msgid "Advanced Data"
+msgstr "Dati Avanzati"
+
+msgid "Alert Message"
+msgstr "Messaggio di Attenzione"
 
 msgid "Alert!"
 msgstr "Attenzione!"
@@ -320,8 +326,11 @@ msgstr "Futuro"
 msgid "Gender"
 msgstr "Genere"
 
+msgid "General"
+msgstr "Generale"
+
 msgid "Global"
-msgstr ""
+msgstr "Globale"
 
 msgid "History"
 msgstr "Cronologia modifiche"
@@ -539,6 +548,9 @@ msgstr "Solo i miei contenuti"
 msgid "Open"
 msgstr "Apri"
 
+msgid "Open File"
+msgstr "Apri File"
+
 msgid "Open image"
 msgstr "Apri immagine"
 
@@ -548,14 +560,20 @@ msgstr "Apri modulo"
 msgid "Options"
 msgstr "Opzioni"
 
+msgid "Original"
+msgstr "Originale"
+
+msgid "Original language"
+msgstr "Lingua Originale"
+
 msgid "Other"
 msgstr "Altro"
 
+msgid "Pagination"
+msgstr "Paginazione"
+
 msgid "Parent"
 msgstr "Genitore"
-
-msgid "Password"
-msgstr "Password"
 
 msgid "Password Modified"
 msgstr "Password modificata il"
@@ -595,6 +613,9 @@ msgstr "Preferenze e Strumenti"
 msgid "Profiles"
 msgstr "Profili"
 
+msgid "Project"
+msgstr "Progetto"
+
 msgid "Properties"
 msgstr "Proprietà"
 
@@ -618,6 +639,12 @@ msgstr "Data revoca pubblicazione"
 
 msgid "Publish Start"
 msgstr "Data inizio pubblicazione"
+
+msgid "Publishing properties"
+msgstr "Proprietà di pubblicazione"
+
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
 
 msgid "Relations"
 msgstr "Relazioni"
@@ -684,6 +711,9 @@ msgstr "Accedi"
 
 msgid "Size"
 msgstr "Dimensione"
+
+msgid "Sorry, your browser does not support embedded {0} element"
+msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
 
 msgid "State Name"
 msgstr "Provincia"
@@ -803,9 +833,6 @@ msgstr "Partita Iva"
 msgid "Videos"
 msgstr "Video"
 
-msgid "View"
-msgstr "Visualizza"
-
 msgid "View file"
 msgstr "Vedi file"
 
@@ -835,6 +862,9 @@ msgstr "aggiungi"
 
 msgid "add objects"
 msgstr "aggiungi oggetti"
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
 
 msgid "application id"
 msgstr "id applicazione"
@@ -932,9 +962,6 @@ msgstr "oggetti a"
 msgid "on"
 msgstr "del"
 
-msgid "original"
-msgstr "originale"
-
 msgid "params"
 msgstr "parametri"
 
@@ -973,9 +1000,6 @@ msgstr "titolo"
 
 msgid "to"
 msgstr "a"
-
-msgid "translation of"
-msgstr "traduzione di"
 
 msgid "type"
 msgstr "tipo"
@@ -1126,11 +1150,17 @@ msgstr "Mostra"
 msgid "Hide"
 msgstr "Nascondi"
 
+msgid "Error on deleting property"
+msgstr "Errore nella cancellazione della proprietà"
+
+msgid "Password"
+msgstr "Password"
+
 #. *
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "Title"
 msgstr "Titolo"
 
@@ -1138,7 +1168,7 @@ msgstr "Titolo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "Address"
 msgstr "Indirizzo"
 
@@ -1146,7 +1176,7 @@ msgstr "Indirizzo"
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "GET"
 msgstr ""
 
@@ -1157,7 +1187,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "add new"
 msgstr "aggiungi nuovo"
 
@@ -1172,7 +1202,7 @@ msgstr "Rimosso"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
 
@@ -1195,7 +1225,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Every day"
 msgstr "Tutti i giorni"
 
@@ -1204,7 +1234,7 @@ msgstr "Tutti i giorni"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Sunday"
 msgstr "Domenica"
 
@@ -1213,7 +1243,7 @@ msgstr "Domenica"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Monday"
 msgstr "Lunedì"
 
@@ -1222,7 +1252,7 @@ msgstr "Lunedì"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Tuesday"
 msgstr "Martedì"
 
@@ -1231,7 +1261,7 @@ msgstr "Martedì"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Wednesday"
 msgstr "Mercoledì"
 
@@ -1240,7 +1270,7 @@ msgstr "Mercoledì"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Thursday"
 msgstr "Giovedì"
 
@@ -1249,7 +1279,7 @@ msgstr "Giovedì"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Friday"
 msgstr "Venerdì"
 
@@ -1258,7 +1288,7 @@ msgstr "Venerdì"
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Saturday"
 msgstr "Sabato"
 

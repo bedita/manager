@@ -63,7 +63,9 @@ class BulkControllerTest extends BaseControllerTest
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.AlertMessage'), []);
+        Cache::write(CacheTools::cacheKey('config.Export'), []);
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        Cache::write(CacheTools::cacheKey('config.Pagination'), []);
         Cache::write(CacheTools::cacheKey('config.Properties'), []);
         Cache::write(CacheTools::cacheKey('config.Project'), []);
 

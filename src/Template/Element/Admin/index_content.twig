@@ -1,5 +1,7 @@
 {{ element('Admin/sidebar') }}
 
+<!-- {{ __('api_key') }} -->
+
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __(resourceType|humanize)) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}

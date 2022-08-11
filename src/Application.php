@@ -13,7 +13,9 @@
 namespace App;
 
 use App\Authentication\Identifier\ApiIdentifier;
+use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
+use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
@@ -122,6 +124,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Provides a `GET /status` endpoint. This must be
             ->add(new StatusMiddleware())
 
+            // Load configuration from API for the current project.
+            ->add(new ConfigurationMiddleware())
+
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
@@ -140,7 +145,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add($this->csrfMiddleware())
 
             // Authentication middleware.
-            ->add(new AuthenticationMiddleware($this));
+            ->add(new AuthenticationMiddleware($this))
+
+            // Recovery middleware
+            ->add(new RecoveryMiddleware());
 
         return $middlewareQueue;
     }

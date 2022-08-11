@@ -46,23 +46,9 @@
 
                 <section class="fieldset">
                     <div class="tab-container">
-                    <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
-                        <div class="input">
-                            <label for="prop_name">{{ __('Name') }}</label>
-                            <div>
-                                {{ Form.text('prop_name', {
-                                        'placeholder': 'property name',
-                                        'class': 'input',
-                                })|raw }}
-                            </div>
-                            <label for="prop_type">{{ __('Type') }}</label>
-                            <div>
-                                {{ Form.text('prop_type', {
-                                        'placeholder': 'property type',
-                                        'class': 'input',
-                                })|raw }}
-                            </div>
-                        </div>
+                        <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
+                        {{ Property.control('prop_name', '', {'label': __('Name'), 'placeholder': 'property name'})|raw }}
+                        {{ Property.control('prop_type', '', propertyTypesOptions|default([]))|raw }}
                     </div>
                 </section>
 
@@ -72,9 +58,17 @@
                 <section class="fieldset">
                     <div class="tab-container">
                         {% for key, value in properties.core %}
-                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                            {% if options.class == 'json' %}
+                            {% if key == 'hidden' %}
+                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
                                 {{ Property.control(key, value, options|merge({'id': key}))|raw }}
+                            {% elseif key == 'associations' %}
+                                {{ Form.control(key, {
+                                    'id': key,
+                                    'value': value,
+                                    'type': 'select',
+                                    'multiple': 'checkbox',
+                                    'options': associationsOptions
+                                })|raw }}
                             {% endif %}
                         {% endfor %}
                     </div>

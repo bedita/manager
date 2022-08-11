@@ -49,7 +49,7 @@ class ApplicationsControllerTest extends TestCase
         {
             protected $resourceType = 'applications';
             protected $properties = ['name'];
-            protected $propertiesSecrets = ['api_key'];
+            protected $propertiesSecrets = ['api_key', 'client_secret'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

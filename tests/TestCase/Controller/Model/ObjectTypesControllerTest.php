@@ -139,7 +139,7 @@ class ObjectTypesControllerTest extends TestCase
     {
         $this->setupController();
         $this->ModelController->view(2);
-        $vars = ['resource', 'schema', 'properties'];
+        $vars = ['resource', 'schema', 'properties', 'propertyTypesOptions', 'associationsOptions'];
         foreach ($vars as $var) {
             static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }

@@ -59,7 +59,6 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => '/login',
         ]);
-        $this->loadComponent('Config');
 
         $this->loadComponent('Modules', [
             'currentModuleName' => $this->name,
