@@ -35,6 +35,9 @@ msgstr "Amministrazione"
 msgid "Advanced"
 msgstr "Avanzate"
 
+msgid "Advanced Data"
+msgstr "Dati Avanzati"
+
 msgid "Alert Message"
 msgstr "Messaggio di Attenzione"
 
@@ -640,6 +643,9 @@ msgstr "Data inizio pubblicazione"
 msgid "Publishing properties"
 msgstr "Proprietà di pubblicazione"
 
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
+
 msgid "Relations"
 msgstr "Relazioni"
 
@@ -705,6 +711,9 @@ msgstr "Accedi"
 
 msgid "Size"
 msgstr "Dimensione"
+
+msgid "Sorry, your browser does not support embedded {0} element"
+msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
 
 msgid "State Name"
 msgstr "Provincia"
@@ -1210,24 +1219,6 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Empty start date"
-msgstr "Data iniziale vuota"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Empty end date"
-msgstr "Data finale vuota"
 
 #. *
 #.  * Templates that uses this component (directly or indirectly):
