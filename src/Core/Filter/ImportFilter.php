@@ -14,7 +14,6 @@ namespace App\Core\Filter;
 
 use App\Core\Result\ImportResult;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Filesystem\File;
 use Cake\Log\LogTrait;
 use Cake\Utility\Hash;
 
@@ -96,8 +95,8 @@ abstract class ImportFilter
         }
 
         // upload file to import
-        $file = new File($filepath);
-        $headers = ['Content-Type' => $file->mime()];
+        $contentType = mime_content_type($filepath);
+        $headers = ['Content-Type' => $contentType];
         $result = $this->apiClient->upload($filename, $filepath, $headers);
 
         // create async_job
