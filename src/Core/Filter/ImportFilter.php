@@ -90,33 +90,30 @@ abstract class ImportFilter
      */
     protected function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
     {
-        if (empty(static::getServiceName())) {
+        $service = static::getServiceName();
+        if (empty($service)) {
             throw new \LogicException('Cannot create async job without service name defined.');
         }
 
         // upload file to import
-        $contentType = mime_content_type($filepath);
-        $headers = ['Content-Type' => $contentType];
-        $result = $this->apiClient->upload($filename, $filepath, $headers);
+        $headers = ['Content-Type' => mime_content_type($filepath)];
+        $stream = $this->apiClient->upload($filename, $filepath, $headers);
 
         // create async_job
-        $body = [
-            'data' => [
-                'type' => 'async_jobs',
-                'attributes' => [
-                    'service' => static::getServiceName(),
-                    'payload' => [
-                        'streamId' => Hash::get($result, 'data.id'),
-                        'filename' => $filename,
-                        'options' => (array)$options,
-                    ],
+        $data = [
+            'type' => 'async_jobs',
+            'attributes' => [
+                'service' => $service,
+                'payload' => [
+                    'streamId' => (string)Hash::get($stream, 'data.id'),
+                    'filename' => $filename,
+                    'options' => (array)$options,
                 ],
             ],
         ];
-
-        $asyncJob = $this->apiClient->post('/admin/async_jobs', json_encode($body));
-
-        $this->result->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', Hash::get($asyncJob, 'data.id'), $filename));
+        $asyncJob = $this->apiClient->post('/admin/async_jobs', json_encode(compact('data')), $headers);
+        $message = (string)__('Job {0} to import file "{1}" scheduled.', Hash::get($asyncJob, 'data.id'), $filename);
+        $this->result->addMessage('info', $message);
 
         return $this->result;
     }
