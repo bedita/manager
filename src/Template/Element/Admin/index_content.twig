@@ -6,13 +6,7 @@
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}
 
-<div class="module-header">
-    <header>
-        <h1>{{ __(title) }}</h1>
-    </header>
-</div>
-
-{{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }}
+{# {{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }} #}
 
 <admin-index inline-template>
 
@@ -34,7 +28,7 @@
                 {% endif %}
             </nav>
             {% if resources|length == 0 %}
-                <p>{{ __('Resources not available') }}</p>
+                <div class="mt-2 ml-2">{{ __('Resources not available') }}</div>
             {% endif %}
 
             {# form to create a new record #}
