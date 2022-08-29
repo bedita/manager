@@ -14,7 +14,7 @@ export default {
                 <div class="date-ranges-item mb-1" v-for="(dateRange, index) in dateRanges" style="grid-template-columns: 200px 200px 120px 120px 120px">
                     <div>
                         <span>${t`From`}</span>
-                        <div>
+                        <div :class="dateRangeClass(dateRange)">
                             <input type="text"
                                 :name="getName(index, 'start_date')"
                                 v-model="dateRange.start_date"
@@ -22,10 +22,8 @@ export default {
                                 v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
-                        <div v-if="check(dateRange, 'start')" class="mt-05 icon-ok-circled-1">${`Ok`}</div>
-                        <div v-if="!check(dateRange, 'start')" class="mt-05 icon-error">${t`Empty start date`}</div>
                     </div>
-                    <div>
+                    <div :class="dateRangeClass(dateRange)">
                         <span>${t`To`}</span>
                         <div>
                             <input type="text"
@@ -35,8 +33,6 @@ export default {
                                 v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
                             />
                         </div>
-                        <div v-if="check(dateRange, 'end')" class="mt-05 icon-ok-circled-1">${`Ok`}</div>
-                        <div v-if="!check(dateRange, 'end')" class="mt-05 icon-error">${t`Empty end date`}</div>
                     </div>
                     <div class="mb-2">
                         <label class="m-0 nowrap has-text-size-smaller">
@@ -247,20 +243,6 @@ export default {
             return this.msdiff(dateRange) > 0;
         },
         /**
-         * Check date range by type ('start'|'end').
-         *
-         * @param {Object} dateRange The date range
-         * @param {String} type The type ('start'|'end')
-         * @returns {Boolean}
-         */
-        check(dateRange, type) {
-            if (type === 'start') {
-                return dateRange.start_date !== '';
-            }
-
-            return dateRange.end_date !== '';
-        },
-        /**
          * Milliseconds diff between end_date and start_date in a dateRange.
          * When negative, it means that start_date is after end_date.
          *
@@ -275,6 +257,19 @@ export default {
             const ed = moment(dateRange.end_date);
 
             return moment.duration(ed.diff(sd)).asMilliseconds();
+        },
+        /**
+         * Return class for dateRange text field
+         *
+         * @param {Object} dateRange Date range object.
+         * @returns
+         */
+        dateRangeClass(dateRange) {
+            if (this.msdiff(dateRange) < 0) {
+                return 'invalid';
+            }
+
+            return '';
         },
     },
 }
