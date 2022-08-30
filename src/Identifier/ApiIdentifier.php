@@ -10,9 +10,9 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Authentication\Identifier;
+namespace App\Identifier;
 
-use App\Authentication\Identifier\Resolver\ApiResolver;
+use App\Identifier\Resolver\ApiResolver;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identifier\Resolver\ResolverAwareTrait;
 

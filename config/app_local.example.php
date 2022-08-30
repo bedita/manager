@@ -429,4 +429,16 @@ return [
     //         'MyPlugin.MyTable',
     //     ],
     // ],
+
+    /**
+     * External OAuth2 Providers setup
+     */
+    // 'OAuth2Providers.google.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
+    // 'OAuth2Providers.github.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
 ];
