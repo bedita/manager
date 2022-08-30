@@ -10,7 +10,7 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Authentication\Identifier\Resolver;
+namespace App\Identifier\Resolver;
 
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identifier\Resolver\ResolverInterface;

@@ -13,14 +13,14 @@
 
 namespace App\Test\TestCase\Authentication\Identifier\Resolver;
 
-use App\Authentication\Identifier\Resolver\ApiResolver;
+use App\Identifier\Resolver\ApiResolver;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Authentication\Identifier\Resolver\ApiResolver} Test Case
+ * {@see \App\Identifier\Resolver\ApiResolver} Test Case
  *
- * @coversDefaultClass \App\Authentication\Identifier\Resolver\ApiResolver
+ * @coversDefaultClass \App\Identifier\Resolver\ApiResolver
  */
 class ApiResolverTest extends TestCase
 {
