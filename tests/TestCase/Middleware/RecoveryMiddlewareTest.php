@@ -12,8 +12,8 @@
  */
 namespace App\Test\Middleware;
 
-use App\Authentication\Identifier\ApiIdentifier;
 use App\Controller\AppController;
+use App\Identifier\ApiIdentifier;
 use App\Middleware\RecoveryMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\Identifier\IdentifierInterface;
