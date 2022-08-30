@@ -431,6 +431,16 @@ return [
     // ],
 
     /**
+     * UI settings.
+     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
+     */
+    // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
+    //     ],
+    // ],
+
+    /**
      * External OAuth2 Providers setup
      */
     // 'OAuth2Providers.google.setup' => [
