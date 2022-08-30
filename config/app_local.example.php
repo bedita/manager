@@ -439,4 +439,16 @@ return [
     //         'copy2clipboard' => true,
     //     ],
     // ],
+
+    /**
+     * External OAuth2 Providers setup
+     */
+    // 'OAuth2Providers.google.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
+    // 'OAuth2Providers.github.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
 ];

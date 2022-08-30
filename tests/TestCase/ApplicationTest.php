@@ -13,7 +13,7 @@
 namespace App\Test\TestCase;
 
 use App\Application;
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
@@ -21,7 +21,9 @@ use Authentication\AuthenticationService;
 use Authentication\Authenticator\AuthenticatorInterface;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identifier\Resolver\ResolverInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
+use BEdita\WebTools\Middleware\OAuth2Middleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -71,6 +73,10 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(RoutingMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
     }
 
     /**
@@ -155,12 +161,49 @@ class ApplicationTest extends TestCase
         $app = new Application(CONFIG);
         /** @var \Authentication\AuthenticationService $authService */
         $authService = $app->getAuthenticationService(new ServerRequest());
-        /** @var \App\Authentication\Identifier\ApiIdentifier $identifier */
+        /** @var \App\Identifier\ApiIdentifier $identifier */
         $identifier = $authService->identifiers()->get(ApiIdentifier::class);
         static::assertInstanceOf(AuthenticationService::class, $authService);
         static::assertInstanceOf(IdentifierInterface::class, $identifier);
         static::assertInstanceOf(ResolverInterface::class, $identifier->getResolver());
         static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Session'));
+    }
+
+    /**
+     * Test `getAuthenticationService` method on login requests.
+     *
+     * @return void
+     * @covers ::getAuthenticationService()
+     */
+    public function testLoginGetAuthenticationService(): void
+    {
+        $app = new Application(CONFIG);
+        $request = new ServerRequest(['url' => '/login']);
+        /** @var \Authentication\AuthenticationService $authService */
+        $authService = $app->getAuthenticationService($request);
+
+        static::assertFalse($authService->authenticators()->has('BEdita/WebTools.OAuth2'));
+        static::assertTrue($authService->authenticators()->has('Form'));
         static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Form'));
+    }
+
+    /**
+     * Test `getAuthenticationService` method on login requests.
+     *
+     * @return void
+     * @covers ::getAuthenticationService()
+     */
+    public function testOAuth2GetAuthenticationService(): void
+    {
+        $app = new Application(CONFIG);
+        $request = new ServerRequest(['url' => '/ext/login/google']);
+        /** @var \Authentication\AuthenticationService $authService */
+        $authService = $app->getAuthenticationService($request);
+
+        static::assertFalse($authService->authenticators()->has('Form'));
+        static::assertTrue($authService->authenticators()->has('OAuth2'));
+        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('OAuth2'));
+        static::assertTrue($authService->identifiers()->has('OAuth2'));
+        static::assertInstanceOf(IdentifierInterface::class, $authService->identifiers()->get('OAuth2'));
     }
 }

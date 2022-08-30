@@ -402,4 +402,44 @@ return [
     'Export' => [
         'limit' => 10000,
     ],
+
+    /**
+     * External OAuth2 Providers configuration
+     */
+    'OAuth2Providers' => [
+        'google' => [
+            // OAuth2 class name
+            'class' => '\League\OAuth2\Client\Provider\Google',
+            // Provider class setup parameters - should be set in `app_local.php` to activate this provider
+            // 'setup' => [
+            //     'clientId' => '####',
+            //     'clientSecret' => '####',
+            // ],
+            // Provider authorization options
+            'options' => [
+                'scope' => ['https://www.googleapis.com/auth/userinfo.email'],
+            ],
+            // Map BEdita user fields with auth provider data path, using dot notation like 'user.id'
+            'map' => [
+                'provider_username' => 'email',
+            ],
+        ],
+        'github' => [
+            // OAuth2 class name
+            'class' => '\League\OAuth2\Client\Provider\Github',
+            // Provider class setup parameters - should be set in `app_local.php` to activate this provider
+            // 'setup' => [
+            //     'clientId' => '####',
+            //     'clientSecret' => '####',
+            // ],
+            // Provider authorization options
+            'options' => [
+                'scope' => ['read:user', 'user:email'],
+            ],
+            // Map BEdita user fields with auth provider data path, using dot notation like 'user.id'
+            'map' => [
+                'provider_username' => 'login',
+            ],
+        ],
+    ],
 ];
