@@ -1,6 +1,6 @@
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
     <div class="basic-filters">
-        {# search #}
+
         <div class="filter-container filter-search input">
             <input type="text"
                 form="_filters"
@@ -8,32 +8,33 @@
                 v-model.trim="queryFilter.q"
                 @keydown.enter.prevent="applyFilter"
             />
-        </div>
 
-        <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }}"
-            @click.prevent="applyFilter"
-            type="button"
-        >
-            {{ __('Search') }}
-        </button>
-
-        <button class="toggle-filters button button-outlined"
-            type="button"
-            @click="moreFilters = !moreFilters"
-            v-if="canShowAdvanced"
-        >
-            <span v-show="!moreFilters">{{ __('More filters') }}</span>
-            <span v-show="moreFilters">{{ __('Less filters') }}</span>
-        </button>
-
-        {# Checkbox my contents #}
-        <div class="filter-container checkbox" v-if="showAdvanced">
-            <label>
+            <label v-if="showAdvanced">
                 <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
-        <button class="button button-outlined" type="button" @click="resetFilter">{{ __('Reset filters') }}</button>
+        <div class="filter-buttons">
+            <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }} icon-search"
+                @click.prevent="applyFilter"
+                type="button"
+            >
+                {{ __('Search') }}
+            </button>
+
+            <button class="button button-outlined icon-cancel" type="button" @click="resetFilter">
+                {{ __('Reset filters') }}
+            </button>
+
+            <button class="toggle-filters button button-outlined"
+                type="button"
+                @click="moreFilters = !moreFilters"
+                v-if="canShowAdvanced"
+            >
+                <span v-show="!moreFilters" class="icon-plus">{{ __('More filters') }}</span>
+                <span v-show="moreFilters" class="icon-minus">{{ __('Less filters') }}</span>
+            </button>
+        </div>
     </div>
 
     <div class="more-filters" v-show="moreFilters">
@@ -168,7 +169,7 @@
 </div>
 
 <div v-if="filterActive">
-    <p class="is-expanded tag mt-1">
+    <p class="is-expanded tag icon-filter mt-1">
         {{ __('Data is filtered') }}
     </p>
 </div>
