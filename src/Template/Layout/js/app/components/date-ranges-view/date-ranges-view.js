@@ -237,7 +237,7 @@ export default {
          */
         valid(dateRange) {
             if (dateRange.start_date === '' || dateRange.end_date === '') {
-                return false;
+                return true;
             }
 
             return this.msdiff(dateRange) > 0;
