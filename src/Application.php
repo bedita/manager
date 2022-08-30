@@ -15,6 +15,7 @@ namespace App;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
+use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
@@ -148,7 +149,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new AuthenticationMiddleware($this))
 
             // Authentication middleware.
-            ->add(new OAuth2Middleware());
+            ->add(new OAuth2Middleware())
+
+            // Recovery middleware
+            ->add(new RecoveryMiddleware());
 
         return $middlewareQueue;
     }

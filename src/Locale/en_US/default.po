@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-07-13 10:27:15 \n"
+"POT-Creation-Date: 2022-08-10 07:30:34 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -33,6 +33,9 @@ msgid "Administration"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid "Advanced Data"
 msgstr ""
 
 msgid "Alert Message"
@@ -572,9 +575,6 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
-msgid "Password"
-msgstr ""
-
 msgid "Password Modified"
 msgstr ""
 
@@ -641,6 +641,9 @@ msgstr ""
 msgid "Publishing properties"
 msgstr ""
 
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr ""
+
 msgid "Relations"
 msgstr ""
 
@@ -705,6 +708,9 @@ msgid "Sign in"
 msgstr ""
 
 msgid "Size"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded {0} element"
 msgstr ""
 
 msgid "State Name"
@@ -853,6 +859,9 @@ msgstr ""
 
 msgid "add objects"
 msgstr ""
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
 
 msgid "application id"
 msgstr ""
@@ -1136,6 +1145,9 @@ msgid "Hide"
 msgstr ""
 
 msgid "Error on deleting property"
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 #. *
