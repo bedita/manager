@@ -5,8 +5,7 @@ on:
     types: [closed]
 jobs:
   call:
-    permissions:
-      contents: write
+    permissions: write-all
     uses: bedita/github-workflows/.github/workflows/release.yml@main
     with:
       main_branch: 'master'
