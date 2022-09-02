@@ -3,9 +3,10 @@ name: Release
 on:
   pull_request:
     types: [closed]
-
 jobs:
   call:
+    permissions:
+      contents: write
     uses: bedita/github-workflows/.github/workflows/release.yml@main
     with:
       main_branch: 'master'
