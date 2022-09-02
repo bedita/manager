@@ -9,4 +9,4 @@ jobs:
     uses: bedita/github-workflows/.github/workflows/release.yml@main
     with:
       main_branch: 'master'
-      dist_branches: '["master"]'
+      dist_branches: '["master","2.x"]'
