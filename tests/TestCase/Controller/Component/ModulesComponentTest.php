@@ -1538,7 +1538,7 @@ class ModulesComponentTest extends TestCase
                     [
                         'type' => 'documents',
                         'attributes' => [
-                            'title dummy one',
+                            'title' => 'dummy one',
                             'status' => 'on',
                             'something-empty' => '',
                             'something-not-empty' => 'not empty',
@@ -1547,7 +1547,7 @@ class ModulesComponentTest extends TestCase
                     [
                         'type' => 'documents',
                         'attributes' => [
-                            'title dummy two',
+                            'title' => 'dummy two',
                             'status' => 'on',
                             'something-empty' => '',
                             'something-not-empty' => 'not empty',
@@ -1558,7 +1558,7 @@ class ModulesComponentTest extends TestCase
                     [
                         'type' => 'documents',
                         'attributes' => [
-                            'title dummy one',
+                            'title' => 'dummy one',
                             'status' => 'on',
                             'something-empty' => '',
                             'something-not-empty' => 'not empty',
@@ -1567,7 +1567,7 @@ class ModulesComponentTest extends TestCase
                     [
                         'type' => 'documents',
                         'attributes' => [
-                            'title dummy two',
+                            'title' => 'dummy two',
                             'status' => 'on',
                             'something-empty' => '',
                             'something-not-empty' => 'not empty',
