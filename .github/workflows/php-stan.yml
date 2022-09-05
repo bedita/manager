@@ -4,12 +4,12 @@ on:
   pull_request:
     paths:
       - '**/*.php'
-      - '.github/workflows/php.yml'
+      - '.github/workflows/php-stan.yml'
       - 'composer.json'
   push:
     paths:
       - '**/*.php'
-      - '.github/workflows/php.yml'
+      - '.github/workflows/php-stan.yml'
       - 'composer.json'
 
 jobs:
