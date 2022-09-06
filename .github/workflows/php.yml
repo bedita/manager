@@ -1,15 +1,15 @@
-name: 'php-cs'
+name: 'php'
 
 on:
   pull_request:
     paths:
       - '**/*.php'
-      - '.github/workflows/php-cs.yml'
+      - '.github/workflows/php.yml'
       - 'composer.json'
   push:
     paths:
       - '**/*.php'
-      - '.github/workflows/php-cs.yml'
+      - '.github/workflows/php.yml'
       - 'composer.json'
 
 jobs:
