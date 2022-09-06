@@ -1,0 +1,14 @@
+name: Release
+
+on:
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  release-job:
+    uses: bedita/github-workflows/.github/workflows/release.yml@v1
+    with:
+      main_branch: 'master'
+      dist_branches: '["master"]'
+      version_ini_path: config/version.ini
+      version_ini_prefix: "[Manager]\nversion="
