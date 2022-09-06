@@ -24,6 +24,7 @@ const FLATPICKR_OPTIONS = {
     dateFormat: 'Z', // ISO8601
     animate: false,
     time_24hr: true,
+    enableSeconds: false,
 };
 // get loaded locale
 const LOCALE = BEDITA.locale.slice(0, 2);
@@ -99,7 +100,6 @@ export default {
                 Object.assign(dateFormatOptions, {
                     hour: 'numeric',
                     minute: 'numeric',
-                    second: 'numeric',
                 });
             } else if (!this.attrs.daterange) {
                 options.dateFormat = 'Y-m-d';
