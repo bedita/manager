@@ -5,7 +5,7 @@
 
 {% set buttonClasses = 'button button-text-white is-width-auto' %}
 
-<a {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
+<a data-id="{{ object.id }}" {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
     class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}">
 
         <div class="select-cell narrow" @click="selectRow">
@@ -24,9 +24,8 @@
                     {{ element('Modules/index_properties_date_ranges', { dateRanges: object.attributes[prop] }) }}
                 </div>
             {% else %}
-                <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                    {{ Property.value(object, prop)|striptags|truncate(100) }}
-                </div>
+                <index-cell :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}" :prop="{{ prop|json_encode }}" :text="{{ Property.value(object, prop)|striptags|json_encode }}">
+                </index-cell>
             {% endif %}
         {% endfor %}
 

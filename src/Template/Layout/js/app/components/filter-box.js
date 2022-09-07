@@ -320,8 +320,8 @@ export default {
             const filter = { ...this.queryFilter.filter };
 
             Object.entries(filter).forEach(([key, filterValue]) => {
-                // do nothing for status or type filter, if value is set
-                if ((key === 'status' || key === 'type' || key === 'history_editor') && filterValue) {
+                // do nothing allowed filters, if value is set
+                if (['status', 'type', 'ancestor', 'history_editor'].includes(key) && filterValue) {
                     return;
                 }
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-08-10 07:30:34 \n"
+"POT-Creation-Date: 2022-08-30 14:34:57 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -704,6 +704,9 @@ msgstr ""
 msgid "Sign in"
 msgstr ""
 
+msgid "Sign in with {0}"
+msgstr ""
+
 msgid "Size"
 msgstr ""
 
@@ -1279,6 +1282,15 @@ msgstr ""
 #.  * <date-ranges-view> component used for ModulesPage -> View
 #.  
 msgid "Saturday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.  
+msgid "Invalid date range"
 msgstr ""
 
 msgid "Modify"
