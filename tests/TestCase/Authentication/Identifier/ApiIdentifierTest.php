@@ -13,14 +13,14 @@
 
 namespace App\Test\TestCase\Authentication\Identifier;
 
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Authentication\Identifier\ApiIdentifier} Test Case
+ * {@see \App\Identifier\ApiIdentifier} Test Case
  *
- * @coversDefaultClass \App\Authentication\Identifier\ApiIdentifier
+ * @coversDefaultClass \App\Identifier\ApiIdentifier
  */
 class ApiIdentifierTest extends TestCase
 {

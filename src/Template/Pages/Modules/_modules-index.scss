@@ -31,6 +31,7 @@ body.view-module {
                         input[type="checkbox"] {
                             position: relative; top: 1px;
                             cursor: cell;
+                            left: 5px;
                         }
                     }
                 }
@@ -71,6 +72,10 @@ body.view-module {
                 }
             }
 
+            .selected {
+                background-color: $gray-800;
+            }
+
             // table rows
             .table-row {
                 &.object-status-off, &.object-status-draft {
@@ -78,7 +83,7 @@ body.view-module {
                 }
 
                 &:hover {
-                    background-color: $gray-800;
+                    background-color: $gray-700;
                 }
 
                 .select-cell:after {
@@ -152,6 +157,10 @@ body.view-module {
                         form {
                             display: inline-flex;
                             justify-content: flex-end;
+                        }
+
+                        button {
+                            height: $gutter * 2;
                         }
                     }
                 }

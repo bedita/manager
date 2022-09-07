@@ -12,7 +12,7 @@
  */
 namespace App;
 
-use App\Authentication\Identifier\ApiIdentifier;
+use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\RecoveryMiddleware;
@@ -23,6 +23,7 @@ use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
+use BEdita\WebTools\Middleware\OAuth2Middleware;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -147,6 +148,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Authentication middleware.
             ->add(new AuthenticationMiddleware($this))
 
+            // Authentication middleware.
+            ->add(new OAuth2Middleware())
+
             // Recovery middleware
             ->add(new RecoveryMiddleware());
 
@@ -203,9 +207,19 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier(ApiIdentifier::class, [
-            'timezoneField' => 'timezone',
-        ]);
+        $path = $request->getUri()->getPath();
+        $query = $request->getQueryParams();
+        if (strpos($path, '/ext/login') === 0) {
+            $providers = (array)Configure::read('OAuth2Providers');
+            $service->loadIdentifier('BEdita/WebTools.OAuth2', compact('providers'));
+            $service->loadAuthenticator('BEdita/WebTools.OAuth2', compact('providers') + [
+                'redirect' => ['_name' => 'login:oauth2'],
+            ]);
+
+            if (empty($query)) {
+                return $service;
+            }
+        }
 
         $service->loadAuthenticator('Authentication.Session', [
             'sessionKey' => 'BEditaManagerAuth',
@@ -213,14 +227,21 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 IdentifierInterface::CREDENTIAL_TOKEN => 'token',
             ],
         ]);
-        $service->loadAuthenticator('Authentication.Form', [
-            'loginUrl' => '/login',
-            'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
-                'timezone' => 'timezone_offset',
-            ],
+
+        $service->loadIdentifier(ApiIdentifier::class, [
+                'timezoneField' => 'timezone',
         ]);
+
+        if ($path === '/login') {
+            $service->loadAuthenticator('Authentication.Form', [
+                'loginUrl' => '/login',
+                'fields' => [
+                    IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                    IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                    'timezone' => 'timezone_offset',
+                ],
+            ]);
+        }
 
         return $service;
     }
