@@ -13,5 +13,24 @@ on:
       - 'composer.json'
 
 jobs:
-  call:
-    uses: bedita/github-workflows/.github/workflows/php-cs-stan-unit.yml@main
+  cs:
+    uses: bedita/github-workflows/.github/workflows/php-cs.yml@v1
+    with:
+      php_versions: '["7.4", "8.0", "8.1"]'
+
+  stan:
+    uses: bedita/github-workflows/.github/workflows/php-stan.yml@v1
+    with:
+      php_versions: '["7.4", "8.0", "8.1"]'
+
+  unit-4:
+    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
+    with:
+      php_versions: '["7.4","8.0","8.1"]'
+      bedita_version: '4.7.1'
+
+  unit-5:
+    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
+    with:
+      php_versions: '["7.4","8.0","8.1"]'
+      bedita_version: '5.0.2'
