@@ -9,6 +9,11 @@ body.view-admin {
         font-weight: bold;
         color: white;
     }
+    .table-row {
+        &.new-record > * {
+            padding-top: calc($gutter * 4) !important;
+        }
+    }
 }
 
 .module-links {

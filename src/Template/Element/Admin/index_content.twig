@@ -31,40 +31,8 @@
                 <div class="mt-2 ml-2">{{ __('Resources not available') }}</div>
             {% endif %}
 
-            {# form to create a new record #}
-            {% if not readonly %}
-                {{ Form.create(null, {
-                    'id': 'form-create',
-                    'url': {'_name': 'admin:save:' ~ resourceType},
-                    'class': 'table-row',
-                })|raw }}
-                    <div>{{ __('NEW') }}</div>
-                    {% for property,type in properties %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {{ Admin.control(type, property, null)|raw }}
-                        </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            ---
-                        </div>
-                    {% endfor %}
-                    {% for key in metaColumns %}
-                        <div class="narrow">-</div>
-                    {% endfor %}
-                    <div class="buttons-cell narrow">
-                        {{ Form.button( __('Create'), {
-                            'form': 'form-create',
-                            'title': __('Create' ~ ' ' ~ resourceType),
-                            'class': 'button button-text-white is-width-auto',
-                        })|raw }}
-                    </div>
-                {{ Form.end()|raw }}
-            {% endif %}
-
             {# list resources : rows #}
             {% for resource in resources %}
-
                 {{ Form.create(null, {
                     'id': 'form-' ~ resource.id,
                     'url': {'_name': 'admin:save:' ~ resourceType},
@@ -127,6 +95,36 @@
 
             {% endfor %}
 
+            {# form to create a NEW record #}
+            {% if not readonly %}
+                {{ Form.create(null, {
+                    'id': 'form-create',
+                    'url': {'_name': 'admin:save:' ~ resourceType},
+                    'class': 'table-row new-record mt-1',
+                })|raw }}
+                    <div>{{ __('NEW') }}</div>
+                    {% for property,type in properties %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {{ Admin.control(type, property, null)|raw }}
+                        </div>
+                    {% endfor %}
+                    {% for property in propertiesSecrets %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            ---
+                        </div>
+                    {% endfor %}
+                    {% for key in metaColumns %}
+                        <div class="narrow">-</div>
+                    {% endfor %}
+                    <div class="buttons-cell narrow">
+                        {{ Form.button( __('Create'), {
+                            'form': 'form-create',
+                            'title': __('Create' ~ ' ' ~ resourceType),
+                            'class': 'button button-text-white is-width-auto',
+                        })|raw }}
+                    </div>
+                {{ Form.end()|raw }}
+            {% endif %}
         </div>
 
     </div>
