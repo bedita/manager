@@ -36,7 +36,7 @@ trait ApiConfigTrait
     protected static $cacheKey = 'api_config';
 
     /**
-     * Allowed configuration keys read from API
+     * Allowed configuration keys from API
      *
      * @var array
      */
