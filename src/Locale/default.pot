@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-08-30 14:34:57 \n"
+"POT-Creation-Date: 2022-09-12 11:09:23 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -329,6 +329,9 @@ msgstr ""
 msgid "Global"
 msgstr ""
 
+msgid "Hidden"
+msgstr ""
+
 msgid "History"
 msgstr ""
 
@@ -638,6 +641,9 @@ msgstr ""
 msgid "Publishing properties"
 msgstr ""
 
+msgid "Read"
+msgstr ""
+
 msgid "Recovery Mode - Access restricted to admin users"
 msgstr ""
 
@@ -684,6 +690,9 @@ msgid "Right types"
 msgstr ""
 
 msgid "Roles"
+msgstr ""
+
+msgid "Roles Modules accesses"
 msgstr ""
 
 msgid "Save"
@@ -837,6 +846,9 @@ msgid "View original"
 msgstr ""
 
 msgid "Website"
+msgstr ""
+
+msgid "Write"
 msgstr ""
 
 msgid "Yes"
@@ -1130,9 +1142,6 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
-msgstr ""
-
-msgid "Hidden"
 msgstr ""
 
 msgid "Inherited from"
