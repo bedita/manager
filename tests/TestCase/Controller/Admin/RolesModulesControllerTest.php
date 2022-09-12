@@ -5,11 +5,9 @@ use App\Controller\Admin\RolesModulesController;
 use App\Utility\ApiConfigTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
-use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Inflector;
 
 /**
  * {@see \App\Controller\Admin\RolesModulesController} Test Case
