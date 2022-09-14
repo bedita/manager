@@ -25,11 +25,19 @@
         flex-wrap: wrap;
 
         > * {
-            margin-bottom: $gutter;
+            margin-top: $gutter;
         }
 
         > *:not(:last-child) {
             margin-right: $gutter;
+        }
+    }
+
+    .sorting {
+        display: flex;
+
+        .radio > label{
+            display: inline !important;
         }
     }
 

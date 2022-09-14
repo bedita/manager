@@ -65,6 +65,12 @@
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
             {% endif %}
 
+            {% if not translation %}
+            <span class="has-text-size-smallest">
+                <: new Date(related.meta.modified).toLocaleDateString() :>
+            </span>
+            {% endif %}
+
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
         </div>
 
@@ -100,12 +106,6 @@
             {% endif %}
 
             </div>
-
-            {% if not translation %}
-                <span class="modified">
-                    <: new Date(related.meta.modified).toLocaleDateString() :>
-                </span>
-            {% endif %}
 
         </header>
     </div>

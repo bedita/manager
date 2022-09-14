@@ -85,6 +85,7 @@ export default {
             selectedType: '',
             statusFilter: {},
             timer: null,
+            sort: '',
         };
     },
 
@@ -351,6 +352,9 @@ export default {
             }
 
             const filter = this.prepareFilters();
+            if (this.sort) {
+                this.queryFilter['sort'] = this.sort;
+            }
             this.$emit("filter-objects", { ...this.queryFilter, filter });
         },
 

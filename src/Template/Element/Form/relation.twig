@@ -51,7 +51,7 @@
                     @filter-reset="reloadObjects"
                     inline-template
                 >
-                    {{ element('FilterBox/filter_box') }}
+                    {{ element('FilterBox/filter_box', {'options': {'relationName': relationName, 'sortFilter': true}}) }}
                 </filter-box-view>
             </div>
 

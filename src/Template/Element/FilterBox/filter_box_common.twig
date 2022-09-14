@@ -14,27 +14,24 @@
             </label>
         </div>
 
-        <div class="filter-buttons">
-            <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }} icon-search"
-                @click.prevent="applyFilter"
-                type="button"
-            >
-                {{ __('Search') }}
-            </button>
+    </div>
 
-            <button class="button button-outlined icon-cancel" type="button" @click="resetFilter">
-                {{ __('Reset filters') }}
-            </button>
-
-            <button class="toggle-filters button button-outlined"
-                type="button"
-                @click="moreFilters = !moreFilters"
-                v-if="canShowAdvanced"
-            >
-                <span v-show="!moreFilters" class="icon-plus">{{ __('More filters') }}</span>
-                <span v-show="moreFilters" class="icon-minus">{{ __('Less filters') }}</span>
-            </button>
-        </div>
+    <div class="sorting">
+        {% if options.relationName and options.sortFilter %}
+            {% set key = 'sort[' ~ options.relationName ~ ']' %}
+            {% set radio = {
+                'type':'radio',
+                'options': [
+                    { 'value': '', 'text': __('Priority asc') },
+                    { 'value': '-modified', 'text': __('Newest on top') },
+                    { 'value': 'modified', 'text': __('Oldest on top') },
+                ],
+                'name': key,
+                'label': __('Sorting'),
+                'v-model': 'sort',
+            } %}
+            {{ Form.control(key, radio)|raw }}
+        {% endif %}
     </div>
 
     <div class="more-filters" v-show="moreFilters">
@@ -165,6 +162,28 @@
                 <input-dynamic-attributes form="_filters" :value.sync="queryFilter.filter[filter.name]" :attrs="filter"/>
             </span>
         </div>
+    </div>
+
+    <div class="filter-buttons">
+        <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }} icon-search"
+            @click.prevent="applyFilter"
+            type="button"
+        >
+            {{ __('Search') }}
+        </button>
+
+        <button class="button button-outlined icon-cancel" type="button" @click="resetFilter">
+            {{ __('Reset filters') }}
+        </button>
+
+        <button class="toggle-filters button button-outlined"
+            type="button"
+            @click="moreFilters = !moreFilters"
+            v-if="canShowAdvanced"
+        >
+            <span v-show="!moreFilters" class="icon-plus">{{ __('More filters') }}</span>
+            <span v-show="moreFilters" class="icon-minus">{{ __('Less filters') }}</span>
+        </button>
     </div>
 </div>
 
