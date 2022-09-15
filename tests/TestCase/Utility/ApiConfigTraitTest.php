@@ -218,6 +218,8 @@ class ApiConfigTraitTest extends TestCase
                                             'context' => 'app',
                                             'application_id' => 456,
                                         ],
+                                    ],
+                                    [
                                         'id' => 124,
                                         'attributes' => [
                                             'name' => 'Export',

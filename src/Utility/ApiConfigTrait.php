@@ -105,7 +105,7 @@ trait ApiConfigTrait
     {
         $attr = (array)Hash::get($config, 'attributes');
         if (
-            (isset($attr['application_id']) && $attr['application_id'] === null) ||
+            (isset($attr['application_id']) && $attr['application_id'] == null) ||
             (isset($attr['context']) && $attr['context'] !== 'app') ||
             !in_array((string)Hash::get($attr, 'name'), static::$configKeys)
         ) {
