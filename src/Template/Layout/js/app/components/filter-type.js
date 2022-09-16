@@ -46,7 +46,7 @@ export default {
     },
 
     methods: {
-        togglaAll() {
+        toggleAll() {
             if (this.selectedTypes.length) {
                 this.selectedTypes = [];
             }
