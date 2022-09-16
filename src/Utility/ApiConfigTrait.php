@@ -41,6 +41,7 @@ trait ApiConfigTrait
      * @var array
      */
     protected static $configKeys = [
+        'AccessControl',
         'AlertMessage',
         'Export',
         'Modules',
