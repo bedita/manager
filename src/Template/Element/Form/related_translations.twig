@@ -17,7 +17,8 @@
             <div v-show="isOpen" class="tab-container">
 
                 <div>
-                    {{ Property.control('lang', object.attributes.lang, { 'label': __('The main language is') })|raw }}
+                    {% set lang = object.id ? object.attributes.lang : config('Project.config.I18n.default') %}
+                    {{ Property.control('lang', lang, { 'label': __('The main language is') })|raw }}
 
                     {% if object.relationships.translations %}
                         {{ Html.link(__('Add translation'), {
