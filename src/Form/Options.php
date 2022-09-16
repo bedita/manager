@@ -69,7 +69,7 @@ class Options
         if (empty($languages)) {
             return compact('value') + ['type' => 'text'];
         }
-        $options = [];
+        $options[] = ['value' => '', 'text' => ''];
         foreach ($languages as $key => $description) {
             $options[] = ['value' => $key, 'text' => __($description)];
         }
