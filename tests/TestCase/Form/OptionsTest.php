@@ -55,6 +55,10 @@ class OptionsTest extends TestCase
                     'type' => 'select',
                     'options' => [
                         [
+                            'value' => '',
+                            'text' => '',
+                        ],
+                        [
                             'value' => 'en',
                             'text' => 'English',
                         ],
