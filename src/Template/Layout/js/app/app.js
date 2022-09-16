@@ -357,6 +357,13 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
+            if (filters?.filter?.type) {
+                delete filters.filter.type;
+            }
+            if (this.selectedTypes.length > 0) {
+                const typesFilter = {type: this.selectedTypes};
+                filters.filter = {...filters.filter, ...typesFilter};
+            }
             const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,
