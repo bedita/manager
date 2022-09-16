@@ -401,6 +401,10 @@ class SchemaHelperTest extends TestCase
         $expected = [
             'options' => [
                 [
+                    'value' => '',
+                    'text' => '',
+                ],
+                [
                     'value' => 'en',
                     'text' => 'English',
                 ],
