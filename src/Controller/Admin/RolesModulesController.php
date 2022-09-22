@@ -72,6 +72,7 @@ class RolesModulesController extends AdministrationBaseController
             ));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return null;

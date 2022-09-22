@@ -3,11 +3,14 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\RolesModulesController;
 use App\Utility\ApiConfigTrait;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Admin\RolesModulesController} Test Case
@@ -113,6 +116,36 @@ class RolesModulesControllerTest extends TestCase
         }
         static::assertEquals('roles', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
+    }
+
+    /**
+     * Test `index` exception
+     *
+     * @return void
+     * @covers ::index()
+     */
+    public function testIndexException(): void
+    {
+        // mock /admin/endpoint_permissions to raise exception
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')->will(
+            $this->returnCallback(
+                function ($param) {
+                    if ($param === '/roles') {
+                        return ['data' => [], 'meta' => [], 'links' => []];
+                    }
+                    if ($param === '/admin/endpoint_permissions') {
+                        throw new BEditaClientException('My test exception');
+                    }
+                }
+            )
+        );
+        $this->RlsController->apiClient = $apiClient;
+        $this->RlsController->index();
+        $flash = $this->RlsController->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('My test exception', Hash::get($flash, '0.message'));
     }
 
     /**
