@@ -72,6 +72,7 @@ class RolesModulesController extends AdministrationBaseController
                 if ($role['attributes']['name'] === 'admin') {
                     return false;
                 }
+
                 return empty($allowedRoles) || in_array($role['id'], $allowedRoles);
             });
             $this->set('resources', $resources);
