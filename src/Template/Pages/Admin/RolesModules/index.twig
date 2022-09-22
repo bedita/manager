@@ -30,15 +30,16 @@
             {% for resource in resources %}
                 {% set roleName = resource.attributes.name %}
 
+                {% if roleName != 'admin' %}
                 <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}">
 
                     <section class="fieldset">
                         <header @click.prevent="toggleVisibility()"
                             class="tab unselectable"
                             :class="isOpen? 'open has-border-module-admin' : ''">
-                            {{ roleName }}
-                            {{ resource.id|truncate(10) }}
-                            {{ resource.attributes.description }}
+                            {{ roleName|capitalize }}
+                            - #{{ resource.id|truncate(10) }}
+                            - {{ resource.attributes.description }}
                         </header>
 
                         <div v-show="isOpen" class="tab-container">
@@ -67,6 +68,7 @@
                     </section>
 
                 </property-view>
+                {% endif %}
 
             {% endfor %}
         </div>
