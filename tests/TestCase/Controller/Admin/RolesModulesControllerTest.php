@@ -152,4 +152,44 @@ class RolesModulesControllerTest extends TestCase
         $response = $this->RlsController->save();
         static::assertSame(Response::class, get_class($response));
     }
+
+    /**
+     * Test `allowedRoles`
+     *
+     * @return void
+     * @covers ::allowedRoles()
+     */
+    public function testAllowedRoles(): void
+    {
+        $reflection = new \ReflectionClass(get_class($this->RlsController));
+        $method = $reflection->getMethod('allowedRoles');
+        $method->setAccessible(true);
+
+        // empty endpoint permissions
+        $expected = [['id' => 2, 'attributes' => ['name' => 'manager']], ['id' => 3, 'attributes' => ['name' => 'guest']]];
+        $actual = $method->invokeArgs($this->RlsController, [
+            [
+                ['id' => 1, 'attributes' => ['name' => 'admin']],
+                ['id' => 2, 'attributes' => ['name' => 'manager']],
+                ['id' => 3, 'attributes' => ['name' => 'guest']],
+            ], // roles
+            [], // endpoint permissions
+        ]);
+        static::assertSame($expected, array_values($actual));
+
+        // non empty endpoint permission
+        $expected = [['id' => 2, 'attributes' => ['name' => 'manager']]];
+        $actual = $method->invokeArgs($this->RlsController, [
+            [
+                ['id' => 1, 'attributes' => ['name' => 'admin']],
+                ['id' => 2, 'attributes' => ['name' => 'manager']],
+                ['id' => 3, 'attributes' => ['name' => 'guest']],
+            ], // roles
+            [
+                ['id' => 11, 'attributes' => ['role_id' => 3, 'write' => false]], // guest blocked
+                ['id' => 12, 'attributes' => ['role_id' => 2, 'write' => true]], // manager allowed
+            ], // endpoint permissions
+        ]);
+        static::assertSame($expected, array_values($actual));
+    }
 }

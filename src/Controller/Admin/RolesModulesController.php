@@ -66,21 +66,40 @@ class RolesModulesController extends AdministrationBaseController
                     'endpoint_id' => $this->authEndpointId(),
                 ],
             ]);
-            $allowedRoles = (array)Hash::extract($endpointPermissions, 'data.{n}.attributes.role_id');
-            $resources = $this->viewBuilder()->getVar('resources');
-            $resources = array_filter($resources, function ($role) use ($allowedRoles) {
-                if ($role['attributes']['name'] === 'admin') {
-                    return false;
-                }
-
-                return empty($allowedRoles) || in_array($role['id'], $allowedRoles);
-            });
-            $this->set('resources', $resources);
+            $this->set('resources', $this->allowedRoles(
+                $this->viewBuilder()->getVar('resources'),
+                (array)Hash::extract($endpointPermissions, 'data')
+            ));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
         }
 
         return null;
+    }
+
+    /**
+     * Filter roles, return non admin allowed ones.
+     *
+     * @param array $roles The roles
+     * @param array $permissions The permissions
+     * @return array
+     */
+    protected function allowedRoles(array $roles, array $permissions): array
+    {
+        return array_filter($roles, function ($role) use ($permissions) {
+            if ($role['attributes']['name'] === 'admin') {
+                return false;
+            }
+            if (empty($permissions)) {
+                return true;
+            }
+            $roleId = (int)Hash::get($role, 'id');
+            $allowed = array_filter($permissions, function ($endpointPermission) use ($roleId) {
+                return Hash::get($endpointPermission, 'attributes.write') === true && Hash::get($endpointPermission, 'attributes.role_id') === $roleId;
+            });
+
+            return !empty($allowed);
+        });
     }
 
     /**
