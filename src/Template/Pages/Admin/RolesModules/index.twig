@@ -1,5 +1,5 @@
 {{ element('Admin/sidebar') }}
-
+<!-- {{ __('Roles Modules') }} -->
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __('Roles Modules accesses')) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}

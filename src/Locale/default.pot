@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-09-12 11:09:23 \n"
+"POT-Creation-Date: 2022-09-22 16:03:10 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -81,6 +81,9 @@ msgid "BEdita Web site"
 msgstr ""
 
 msgid "Back to login"
+msgstr ""
+
+msgid "Bad configuration key \"{0}\""
 msgstr ""
 
 msgid "Bad related data method"
@@ -690,6 +693,9 @@ msgid "Right types"
 msgstr ""
 
 msgid "Roles"
+msgstr ""
+
+msgid "Roles Modules"
 msgstr ""
 
 msgid "Roles Modules accesses"
