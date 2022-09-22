@@ -70,7 +70,7 @@ class RolesModulesController extends AdministrationBaseController
                     'endpoint_id' => $endpointId,
                 ],
             ]);
-            $allowedRoles = (array)Hash::extract($endpointPermissions, 'data.{n}.attributes.role_id', []);
+            $allowedRoles = (array)Hash::extract($endpointPermissions, 'data.{n}.attributes.role_id');
             $resources = $this->viewBuilder()->getVar('resources');
             $resources = array_filter($resources, function ($role) use ($allowedRoles) {
                 return $role['attributes']['name'] !== 'admin' && in_array($role['id'], $allowedRoles);
