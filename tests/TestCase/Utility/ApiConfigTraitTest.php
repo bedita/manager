@@ -153,6 +153,20 @@ class ApiConfigTraitTest extends TestCase
     }
 
     /**
+     * Test `authEndpointId`.
+     *
+     * @return void
+     * @covers ::authEndpointId()
+     */
+    public function testAuthEndpointId(): void
+    {
+        $this->prepareClient();
+
+        $actual = $this->authEndpointId();
+        static::assertEquals(123456789, $actual);
+    }
+
+    /**
      * Test `save`.
      *
      * @return void
@@ -241,6 +255,13 @@ class ApiConfigTraitTest extends TestCase
                             return [
                                 'data' => [
                                     ['id' => 456, 'attributes' => ['name' => 'manager']],
+                                ],
+                            ];
+                        }
+                        if ($param === '/admin/endpoints') {
+                            return [
+                                'data' => [
+                                    ['id' => 123456789, 'attributes' => ['name' => 'auth']],
                                 ],
                             ];
                         }
