@@ -38,7 +38,7 @@
                             :class="isOpen? 'open has-border-module-admin' : ''">
                             {{ roleName|capitalize }}
                             - #{{ resource.id|truncate(10) }}
-                            - {{ resource.attributes.description }}
+                            {% if resource.attributes.description %}- {{ resource.attributes.description }}{% endif %}
                         </header>
 
                         <div v-show="isOpen" class="tab-container">
