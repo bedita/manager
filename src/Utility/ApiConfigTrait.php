@@ -135,6 +135,18 @@ trait ApiConfigTrait
     }
 
     /**
+     * Get /auth endpoint ID
+     *
+     * @return int
+     */
+    public function authEndpointId(): int
+    {
+        $response = (array)ApiClientProvider::getApiClient()->get('/admin/endpoints', ['filter' => ['name' => 'auth']]);
+
+        return (int)Hash::get($response, 'data.0.id');
+    }
+
+    /**
      * Save configuration to API
      *
      * @param string $key Configuration key
