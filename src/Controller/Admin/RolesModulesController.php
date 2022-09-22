@@ -13,8 +13,10 @@
 namespace App\Controller\Admin;
 
 use App\Utility\ApiConfigTrait;
+use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
@@ -54,9 +56,31 @@ class RolesModulesController extends AdministrationBaseController
      */
     public function index(): ?Response
     {
+        parent::index();
         $this->set('access_control', (array)Configure::read(Inflector::camelize('access_control')));
+        // get roles that manager app has on auth endpoint
+        try {
+            $applications = $this->apiClient->get('/admin/applications', ['filter' => ['name' => 'manager']]);
+            $applicationId = (string)Hash::get($applications, 'data.0.id');
+            $endpoints = $this->apiClient->get('/admin/endpoints', ['filter' => ['name' => 'auth']]);
+            $endpointId = (string)Hash::get($endpoints, 'data.0.id');
+            $endpointPermissions = $this->apiClient->get('/admin/endpoint_permissions', [
+                'filter' => [
+                    'application_id' => $applicationId,
+                    'endpoint_id' => $endpointId,
+                ],
+            ]);
+            $allowedRoles = (array)Hash::extract($endpointPermissions, 'data.{n}.attributes.role_id', []);
+            $resources = $this->viewBuilder()->getVar('resources');
+            $resources = array_filter($resources, function($role) use ($allowedRoles) {
+                return $role['name'] !== 'admin' && in_array($role['id'], $allowedRoles);
+            });
+            $this->set('resources', $resources);
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+        }
 
-        return parent::index();
+        return null;
     }
 
     /**

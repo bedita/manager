@@ -30,7 +30,6 @@
             {% for resource in resources %}
                 {% set roleName = resource.attributes.name %}
 
-                {% if roleName != 'admin' %}
                 <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}">
 
                     <section class="fieldset">
@@ -68,7 +67,6 @@
                     </section>
 
                 </property-view>
-                {% endif %}
 
             {% endfor %}
         </div>
