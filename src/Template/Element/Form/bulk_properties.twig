@@ -14,7 +14,11 @@
                 'v-model': 'bulkValue',
                 ':disabled': '!selectedRows.length'
             }) %}
-            {% if label %}
+
+            {# use key as label if index is numeric (no actual label was specified) #}
+            {% if label matches '/^\\d+$/' %}
+                {% set options = options|merge({'label': __(key|humanize)}) %}
+            {% else %}
                 {% set options = options|merge({'label': __(label)}) %}
             {% endif %}
 
