@@ -201,7 +201,7 @@ class PropertyHelper extends Helper
      *
      * @param string $field The field name
      * @param string|null $fieldType The field type, if any
-     * @param array $fieldOptions
+     * @param array $fieldOptions The field options
      * @return void
      */
     public function prepareFieldOptions(string $field, ?string $fieldType, array &$fieldOptions): void
