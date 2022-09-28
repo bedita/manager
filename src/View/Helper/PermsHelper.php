@@ -130,4 +130,27 @@ class PermsHelper extends Helper
 
         return in_array($method, $allowed);
     }
+
+    /**
+     * Access string (can be 'read', 'write', 'hidden') per role and module.
+     *
+     * @param array $accessControl The access control array
+     * @param string $roleName The role name
+     * @param string $moduleName The module name
+     * @return string
+     */
+    public function access(array $accessControl, string $roleName, string $moduleName): string
+    {
+        $roleAccesses = Hash::get($accessControl, $roleName, []);
+        if (empty($roleAccesses)) {
+            return 'write';
+        }
+        $hiddenModules = Hash::get($roleAccesses, 'hidden', []);
+        if (in_array($moduleName, $hiddenModules)) {
+            return 'hidden';
+        }
+        $readonlyModules = Hash::get($roleAccesses, 'readonly', []);
+
+        return in_array($moduleName, $readonlyModules) ? 'read' : 'write';
+    }
 }
