@@ -380,23 +380,30 @@ $routes->scope('/', function (RouteBuilder $routes) {
     )
     ->setPass(['id']);
 
+    // Bulk actions
     $routes->connect(
         '/{object_type}/bulkAttribute',
         ['controller' => 'Bulk', 'action' => 'attribute'],
         ['_name' => 'modules:bulkAttribute']
-    );
+    )->setMethods(['post']);
 
     $routes->connect(
         '/{object_type}/bulkCategories',
         ['controller' => 'Bulk', 'action' => 'categories'],
         ['_name' => 'modules:bulkCategories']
-    );
+    )->setMethods(['post']);
 
     $routes->connect(
         '/{object_type}/bulkPosition',
         ['controller' => 'Bulk', 'action' => 'position'],
         ['_name' => 'modules:bulkPosition']
-    );
+    )->setMethods(['post']);
+
+    $routes->connect(
+        '/{object_type}/bulkCustom',
+        ['controller' => 'Bulk', 'action' => 'custom'],
+        ['_name' => 'modules:bulkCustom']
+    )->setMethods(['post']);
 
     // translator service
     $routes->connect(
