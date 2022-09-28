@@ -284,6 +284,9 @@ export default {
             try {
                 const response = await fetch(postUrl, options);
                 const responseJson = await response.json();
+                if (responseJson.error) {
+                    throw new Error(responseJson.error);
+                }
 
                 let createdObjects = (Array.isArray(responseJson.data) ? responseJson.data : [responseJson.data]) || [];
 
@@ -344,7 +347,7 @@ export default {
                 `from-relation-${this.relationName}`,
                 {
                     selected: this.selectedObjects.indexOf(related) !== -1,
-                    unselectable: this.isUnselectableObject(related.id),
+                    unselectable: this.isUnselectableObject(related?.id),
                 }
             ]
         },
