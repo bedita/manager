@@ -4,14 +4,6 @@
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}
 
-{# <div class="module-header">
-    <header>
-        <h1>{{ __('Roles Modules accesses') }}</h1>
-    </header>
-</div> #}
-
-{# {{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }} #}
-
 <admin-index inline-template>
 
     <div class="module-index">
