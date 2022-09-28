@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-08-30 14:34:57 \n"
+"POT-Creation-Date: 2022-09-22 16:03:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -85,6 +85,9 @@ msgstr "Sito BEdita"
 
 msgid "Back to login"
 msgstr "Torna al login"
+
+msgid "Bad configuration key \"{0}\""
+msgstr ""
 
 msgid "Bad related data method"
 msgstr "Dati di relazione non corretti"
@@ -331,6 +334,9 @@ msgstr "Generale"
 
 msgid "Global"
 msgstr "Globale"
+
+msgid "Hidden"
+msgstr "Nascosto"
 
 msgid "History"
 msgstr "Cronologia modifiche"
@@ -643,6 +649,9 @@ msgstr "Data inizio pubblicazione"
 msgid "Publishing properties"
 msgstr "Proprietà di pubblicazione"
 
+msgid "Read"
+msgstr "Lettura"
+
 msgid "Recovery Mode - Access restricted to admin users"
 msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
 
@@ -690,6 +699,12 @@ msgstr "Tipi di destra"
 
 msgid "Roles"
 msgstr "Ruoli"
+
+msgid "Roles Modules"
+msgstr "Ruoli e Moduli"
+
+msgid "Roles Modules accesses"
+msgstr "Accessi Ruoli Moduli"
 
 msgid "Save"
 msgstr "Salva"
@@ -844,6 +859,9 @@ msgstr "Vedi originale"
 
 msgid "Website"
 msgstr "Sito Web"
+
+msgid "Write"
+msgstr "Scrittura"
 
 msgid "Yes"
 msgstr "Sì"
@@ -1140,9 +1158,6 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
-
-msgid "Hidden"
-msgstr "Nascosto"
 
 msgid "Inherited from"
 msgstr "Ereditato da"

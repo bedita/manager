@@ -41,6 +41,7 @@ trait ApiConfigTrait
      * @var array
      */
     protected static $configKeys = [
+        'AccessControl',
         'AlertMessage',
         'Export',
         'Modules',
@@ -129,6 +130,18 @@ trait ApiConfigTrait
         $name = (string)Configure::read('ManagerAppName', 'manager');
         $filter = compact('name');
         $response = (array)ApiClientProvider::getApiClient()->get('/admin/applications', compact('filter'));
+
+        return (int)Hash::get($response, 'data.0.id');
+    }
+
+    /**
+     * Get /auth endpoint ID
+     *
+     * @return int
+     */
+    public function authEndpointId(): int
+    {
+        $response = (array)ApiClientProvider::getApiClient()->get('/admin/endpoints', ['filter' => ['name' => 'auth']]);
 
         return (int)Hash::get($response, 'data.0.id');
     }
