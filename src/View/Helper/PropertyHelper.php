@@ -208,7 +208,7 @@ class PropertyHelper extends Helper
     {
         $method = '';
         if (!empty($fieldType) && in_array($fieldType, Control::CONTROL_TYPES)) {
-            $methodInfo = (array)Form::getMethod(Control::class, $fieldType, []);
+            $methodInfo = (array)Form::getMethod(Control::class, $fieldType);
             $className = (string)Hash::get($methodInfo, 0);
             $method = (string)Hash::get($methodInfo, 1);
             $fieldOptions = array_merge($fieldOptions, $className::$method([]));
