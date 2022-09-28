@@ -142,6 +142,7 @@ class LayoutHelper extends Helper
             'Config' => 'has-background-black',
             'Endpoints' => 'has-background-black',
             'Roles' => 'has-background-black',
+            'RolesModules' => 'has-background-black',
             'EndpointPermissions' => 'has-background-black',
         ];
 

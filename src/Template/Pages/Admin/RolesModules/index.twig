@@ -1,0 +1,78 @@
+{{ element('Admin/sidebar') }}
+<!-- {{ __('Roles Modules') }} -->
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Roles Modules accesses')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+{% set allProperties = properties|keys|merge(propertiesSecrets) %}
+
+<admin-index inline-template>
+
+    <div class="module-index">
+        {{ Form.create(null, {
+            'id': 'form-roles-modules',
+            'url': {'_name': 'admin:save:roles_modules'},
+            'class': 'table-row',
+        })|raw }}
+
+        <div class="list-objects">
+
+            {% if resources|length == 0 %}
+                <p>{{ __('Resources not available') }}</p>
+            {% endif %}
+
+            {% for resource in resources %}
+                {% set roleName = resource.attributes.name %}
+
+                <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}">
+
+                    <section class="fieldset">
+                        <header @click.prevent="toggleVisibility()"
+                            class="tab unselectable grid row"
+                            :class="isOpen? 'open has-border-module-admin' : ''">
+                            <div>{{ roleName|upper }}</div>
+                            <div>{{ resource.attributes.description ? ' | ' : '' }}{{ resource.attributes.description|default()|raw }}</div>
+                            <div> | id: {{ resource.id }}</div>
+                        </header>
+
+                        <div v-show="isOpen" class="tab-container">
+                            <div class="role-modules-container mx-2">
+                                {% for moduleName, module in modules %}
+                                    {% set perm = Perms.access(access_control, roleName, moduleName) %}
+                                    <div class="mt-1 perm-{{ perm }}">
+                                    {% set key = roleName ~ '-' ~ moduleName %}
+                                    {% set radio = {
+                                        'type':'radio',
+                                        'options': [
+                                            { 'value': 'write', 'text': __('Write') },
+                                            { 'value': 'read', 'text': __('Read') },
+                                            { 'value': 'hidden', 'text': __('Hidden') },
+                                        ],
+                                        'name': 'roles[' ~ roleName ~ '][' ~ moduleName  ~ ']',
+                                        'value': perm,
+                                        'label': {
+                                            'text': '<label><span class="tag has-background-module-' ~ moduleName ~ '" style="min-width:140px">' ~ moduleName ~ '</span></label>',
+                                            'escape': false,
+                                        },
+                                    } %}
+                                    {{ Form.control(key, radio)|raw }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+
+                </property-view>
+
+            {% endfor %}
+        </div>
+
+        <div class="buttons-cell narrow mt-1">
+            {{ Form.button( __('Save'), {
+                'title': __('Save'),
+                'class': 'button is-width-auto',
+            })|raw }}
+        </div>
+
+        {{ Form.end()|raw }}
+    </div>
+
+</admin-index>
