@@ -72,7 +72,7 @@ class BulkController extends AppController
         $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->saveAttribute($requestData['attributes']);
-        $this->errors();
+        $this->showResult();
 
         return $this->modulesListRedirect();
     }
@@ -87,7 +87,7 @@ class BulkController extends AppController
         $requestData = $this->request->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->performCustomAction((string)Hash::get($requestData, 'custom_action'));
-        $this->errors();
+        $this->showResult();
 
         return $this->modulesListRedirect();
     }
@@ -142,7 +142,7 @@ class BulkController extends AppController
         $this->categories = (string)Hash::get($requestData, 'categories');
         $this->loadCategories();
         $this->saveCategories();
-        $this->errors();
+        $this->showResult();
 
         return $this->modulesListRedirect();
     }
@@ -163,7 +163,7 @@ class BulkController extends AppController
         } else { // move
             $this->moveToPosition($folder);
         }
-        $this->errors();
+        $this->showResult();
 
         return $this->modulesListRedirect();
     }
@@ -283,13 +283,15 @@ class BulkController extends AppController
     }
 
     /**
-     * Handle page errors.
+     * Display success or error messages.
      *
      * @return void
      */
-    protected function errors(): void
+    protected function showResult(): void
     {
         if (empty($this->errors)) {
+            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->ids)));
+
             return;
         }
         $this->log('Error: ' . json_encode($this->errors), LogLevel::ERROR);
