@@ -211,7 +211,9 @@ class PropertyHelper extends Helper
             $methodInfo = (array)Form::getMethod(Control::class, $fieldType);
             $className = (string)Hash::get($methodInfo, 0);
             $method = (string)Hash::get($methodInfo, 1);
+            $preserveClass = $fieldOptions['class'];
             $fieldOptions = array_merge($fieldOptions, $className::$method([]));
+            $fieldOptions['class'] .= ' ' . $preserveClass;
         }
         if ($field === 'status') {
             $fieldOptions['v-model'] = 'object.attributes.status';
