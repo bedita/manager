@@ -366,6 +366,9 @@ export default {
             const fields = document.querySelectorAll('.fastCreateField');
             for (let i = 0; i < fields.length; i++) {
                 fields[i].value = '';
+                if (fields[i].jsonEditor) {
+                    fields[i].jsonEditor.update({"text": ""});
+                }
             }
         },
 
