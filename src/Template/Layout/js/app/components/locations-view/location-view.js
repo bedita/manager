@@ -61,6 +61,7 @@ export default {
                             @input="onInputTitle"
                             @change="onChange"
                             :debounce-time="500"
+                            :disabled="!!id"
                         >
                         </autocomplete>
                     </label>
@@ -80,6 +81,7 @@ export default {
                             @input="onInputAddress"
                             @change="onChange"
                             :debounce-time="500"
+                            :disabled="!!id"
                         >
                         </autocomplete>
                     </label>
@@ -90,7 +92,7 @@ export default {
                     <label>
                         ${t`Long Lat Coordinates`}
                         <div class="is-flex">
-                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" />
+                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
                                 ${t`GET`}
                             </button>
@@ -100,24 +102,25 @@ export default {
                 <div class="is-flex-column">
                     <label>
                         Zoom
-                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20"/>
+                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20" :disabled="!!id" />
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         Pitch°
-                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60"/>
+                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60" :disabled="!!id" />
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         Bearing°
-                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180"/>
+                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180" :disabled="!!id" />
                     </label>
                 </div>
             </div>
             <div class="location-buttons">
-                <button @click.prevent="onRemove" class="icon-unlink remove">${t`remove`}</button>
+                <a v-if="id" class="button button-text-white icon-edit" :href="$helpers.buildViewUrl(id)" target="_blank">${t`edit`}</a>
+                <button @click.prevent="onRemove" class="button button-text-white icon-unlink remove">${t`remove`}</button>
             </div>
         </div>
     </div>`,
@@ -134,6 +137,7 @@ export default {
     data() {
         return {
             location: this.locationData,
+            id: this.locationData.id,
             title: this.locationData.attributes.title,
             address: this.locationData.attributes.address,
             coordinates: convertFromPoint(this.locationData.attributes.coords),
