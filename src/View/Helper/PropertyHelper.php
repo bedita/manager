@@ -169,6 +169,7 @@ class PropertyHelper extends Helper
         $required = (array)Hash::get($cfg, 'required', ['status', 'title']);
         $html = '';
         $jsonKeys = [];
+        $ff = [];
         foreach ($fields as $field => $fieldType) {
             $field = is_numeric($field) ? $fieldType : $field;
             $fieldClass = !in_array($field, $required) ? 'fastCreateField' : 'fastCreateField required';
@@ -188,7 +189,11 @@ class PropertyHelper extends Helper
             $this->prepareFieldOptions($field, $fieldType, $fieldOptions);
 
             $html .= $this->control($field, '', $fieldOptions, $type);
+            $ff[] = $field;
         }
+        $jsonKeys = array_unique(array_merge($jsonKeys, (array)Configure::read('_jsonKeys')));
+        $jsonKeys = array_intersect($jsonKeys, $ff);
+
         if (!empty($jsonKeys)) {
             $html .= $this->Form->control('_jsonKeys', ['type' => 'hidden', 'value' => implode(',', $jsonKeys)]);
         }
