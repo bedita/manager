@@ -42,6 +42,6 @@
 
             <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
         </div>
-    {{ Form.end()|raw }}
+        {{ Form.end()|raw }}
     {% endif %}
 {% endfor %}

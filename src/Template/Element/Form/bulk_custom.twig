@@ -23,6 +23,6 @@
             </label>
             <button id="custom-bulk-{{ key }}" class="button button-outlined" @click.prevent="bulkActions('{{ bulkFormId }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
         </div>
-    {{ Form.end()|raw }}
+        {{ Form.end()|raw }}
     {% endif %}
 {% endfor %}
