@@ -474,12 +474,94 @@ class BulkControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `custom` method with missing custom action
+     *
+     * @return void
+     * @covers ::custom()
+     * @covers ::modulesListRedirect()
+     */
+    public function testCustomMissing(): void
+    {
+        // Setup again for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '999',
+                'custom_action' => 'undefinedAction',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // do controller call
+        $result = $this->controller->custom();
+        static::assertEquals(302, $result->getStatusCode());
+        static::assertEquals(['/documents'], $result->getHeader('Location'));
+        // check not empty errors
+        static::assertNotEmpty($this->controller->getErrors());
+    }
+
+    /**
+     * Test `custom` method with custom action
+     *
+     * @return void
+     * @covers ::custom()
+     */
+    public function testCustomAction(): void
+    {
+        // Setup again for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '999',
+                'custom_action' => CustomBulkAction::class,
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+
+        // do controller call
+        $this->controller->custom();
+        static::assertEmpty($this->controller->getErrors());
+    }
+
+    /**
+     * Test `custom` method with bad custom action class
+     *
+     * @return void
+     * @covers ::custom()
+     */
+    public function testCustomWrong(): void
+    {
+        // Setup again for test
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'ids' => '999',
+                'custom_action' => '\App\Utility\Schema',
+            ],
+        ]);
+
+        // do controller call
+        $this->controller->custom();
+        static::assertEquals(['Custom action class \App\Utility\Schema is not valid'], $this->controller->getErrors());
+    }
+
+    /**
      * Test `errors` method
      *
      * @return void
-     * @covers ::errors()
+     * @covers ::showResult()
      */
-    public function testErrors(): void
+    public function testShowResult(): void
     {
         // Setup controller for test
         $this->setupController();
@@ -490,11 +572,13 @@ class BulkControllerTest extends BaseControllerTest
         $property->setAccessible(true);
         $property->setValue($this->controller, []);
         $reflectionClass = new \ReflectionClass($this->controller);
-        $method = $reflectionClass->getMethod('errors');
+        $method = $reflectionClass->getMethod('showResult');
         $method->setAccessible(true);
         $method->invokeArgs($this->controller, []);
         $message = $this->controller->getRequest()->getSession()->read('Flash');
-        static::assertEmpty($message);
+        static::assertEquals(1, count($message['flash']));
+        static::assertEquals('Bulk action performed on 0 objects', $message['flash'][0]['message']);
+        static::assertEquals('flash/success', $message['flash'][0]['element']);
 
         // not empty
         // set $this->controller->errors
@@ -503,6 +587,8 @@ class BulkControllerTest extends BaseControllerTest
         $property->setValue($this->controller, ['something bad happened']);
         $method->invokeArgs($this->controller, []);
         $message = $this->controller->getRequest()->getSession()->read('Flash');
-        static::assertNotEmpty($message);
+        static::assertEquals(1, count($message['flash']));
+        static::assertEquals('Bulk Action failed on: ', $message['flash'][0]['message']);
+        static::assertEquals('flash/error', $message['flash'][0]['element']);
     }
 }
