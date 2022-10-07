@@ -210,6 +210,7 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `view` method
      *
      * @covers ::view()
+     * @covers ::setupViewRelations()
      * @return void
      */
     public function testView(): void
@@ -299,6 +300,7 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `create` method
      *
      * @covers ::create()
+     * @covers ::setupViewRelations()
      * @return void
      */
     public function testCreate(): void

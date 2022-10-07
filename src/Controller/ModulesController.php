@@ -175,24 +175,7 @@ class ModulesController extends AppController
             },
             []
         );
-
-        // setup relations metadata
-        $this->Modules->setupRelationsMeta(
-            $this->Schema->getRelationsSchema(),
-            $computedRelations,
-            $this->Properties->relationsList($this->objectType),
-            $this->Properties->hiddenRelationsList($this->objectType),
-            $this->Properties->readonlyRelationsList($this->objectType)
-        );
-
-        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
-        $rightTypes = \App\Utility\Schema::rightTypes($rel);
-
-        // set schemas for relations right types
-        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
-        $this->set('schemasByType', $schemasByType);
-
-        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
+        $this->setupViewRelations($computedRelations);
 
         // set objectNav
         $objectNav = $this->getObjectNav((string)$id);
@@ -266,26 +249,7 @@ class ModulesController extends AppController
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
         $this->ProjectConfiguration->read();
 
-        // setup relations metadata
-        $relationships = (array)Hash::get($schema, 'relations');
-
-        // setup relations metadata
-        $this->Modules->setupRelationsMeta(
-            $this->Schema->getRelationsSchema(),
-            $relationships,
-            $this->Properties->relationsList($this->objectType),
-            $this->Properties->hiddenRelationsList($this->objectType),
-            $this->Properties->readonlyRelationsList($this->objectType)
-        );
-
-        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
-        $rightTypes = \App\Utility\Schema::rightTypes($rel);
-
-        // set schemas for relations right types
-        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
-        $this->set('schemasByType', $schemasByType);
-
-        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
+        $this->setupViewRelations((array)Hash::get($schema, 'relations'));
 
         return null;
     }
@@ -569,5 +533,30 @@ class ModulesController extends AppController
     public function setObjectType(?string $objectType): void
     {
         $this->objectType = $objectType;
+    }
+
+    /**
+     * Set schemasByType and filtersByType, considering relations and schemas.
+     *
+     * @param array $relations The relations
+     * @return void
+     */
+    private function setupViewRelations(array $relations): void
+    {
+        // setup relations metadata
+        $this->Modules->setupRelationsMeta(
+            $this->Schema->getRelationsSchema(),
+            $relations,
+            $this->Properties->relationsList($this->objectType),
+            $this->Properties->hiddenRelationsList($this->objectType),
+            $this->Properties->readonlyRelationsList($this->objectType)
+        );
+        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
+        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+
+        // set schemas for relations right types
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
+        $this->set('schemasByType', $schemasByType);
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
     }
 }
