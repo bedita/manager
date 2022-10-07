@@ -1,9 +1,11 @@
 {# bulkActions set in config Properties.<type>.bulk #}
 {% for label, key in bulkActions %}
-    {{ Form.create(null, {
-        'id': 'bulk-' ~ key,
-        'url': {'_name': 'modules:bulkAttribute', 'object_type': objectType, '?': _view.request.getQuery()},
-    })|raw }}
+
+    {% if schema.properties[key] is defined %}
+        {{ Form.create(null, {
+                'id': 'bulk-' ~ key,
+                'url': {'_name': 'modules:bulkAttribute', 'object_type': objectType, '?': _view.request.getQuery()},
+        })|raw }}
         <div class="fieldset" :disabled="!selectedRows.length">
             <input type="hidden" name="ids" v-bind:value="selectedRows">
             {% do Form.unlockField('ids') %}
@@ -44,5 +46,6 @@
 
             <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
         </div>
-    {{ Form.end()|raw }}
+        {{ Form.end()|raw }}
+    {% endif %}
 {% endfor %}
