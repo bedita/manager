@@ -268,7 +268,24 @@ class ModulesController extends AppController
 
         // setup relations metadata
         $relationships = (array)Hash::get($schema, 'relations');
-        $this->Modules->setupRelationsMeta($this->Schema->getRelationsSchema(), $relationships);
+
+        // setup relations metadata
+        $this->Modules->setupRelationsMeta(
+            $this->Schema->getRelationsSchema(),
+            $relationships,
+            $this->Properties->relationsList($this->objectType),
+            $this->Properties->hiddenRelationsList($this->objectType),
+            $this->Properties->readonlyRelationsList($this->objectType)
+        );
+
+        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
+        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+
+        // set schemas for relations right types
+        $schemasByType = $this->Schema->getSchemasByType($rightTypes);
+        $this->set('schemasByType', $schemasByType);
+
+        $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
 
         return null;
     }
