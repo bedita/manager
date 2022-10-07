@@ -478,6 +478,7 @@ class BulkControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::custom()
+     * @covers ::performCustomAction
      * @covers ::modulesListRedirect()
      */
     public function testCustomMissing(): void
@@ -509,6 +510,7 @@ class BulkControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::custom()
+     * @covers ::performCustomAction
      */
     public function testCustomAction(): void
     {
@@ -536,6 +538,7 @@ class BulkControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::custom()
+     * @covers ::performCustomAction
      */
     public function testCustomWrong(): void
     {
