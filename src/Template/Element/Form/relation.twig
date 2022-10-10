@@ -128,7 +128,7 @@
                 'MS Excel': 'xlsx'
             }) %}
 
-            <select name="format-{{ relationName }}" v-model="exportFormat">
+            <select v-model="exportFormat">
             {% for label,format in formats %}
                 <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
             {% endfor %}

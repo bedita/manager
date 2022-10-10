@@ -1,0 +1,28 @@
+{# bulkActions set in config Properties.<type>.bulk #}
+{% for label, key in bulkActions %}
+
+    {% if schema.properties[key] is not defined %}
+
+        {% set bulkFormId = 'bulk-' ~ key|dasherize|replace({'.': '-', '/': '-', '\\': '-'}) %}
+        {{ Form.create(null, {
+                'id': bulkFormId,
+                'url': {'_name': 'modules:bulkCustom', 'object_type': objectType, '?': _view.request.getQuery()},
+        })|raw }}
+        <div class="fieldset" :disabled="!selectedRows.length">
+            <input type="hidden" name="ids" v-bind:value="selectedRows">
+            <input type="hidden" name="custom_action" value="{{ key }}">
+            {% do Form.unlockField('ids') %}
+            {% do Form.unlockField('custom_action') %}
+
+            <label for="custom-bulk-{{ key }}">
+                {%- if label matches '/^\\d+$/' -%}
+                    {{ __(key|humanize) }}
+                {%- else -%}
+                    {{ __(label|humanize) }}
+                {%- endif -%}
+            </label>
+            <button id="custom-bulk-{{ key }}" class="button button-outlined" @click.prevent="bulkActions('{{ bulkFormId }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
+        </div>
+        {{ Form.end()|raw }}
+    {% endif %}
+{% endfor %}

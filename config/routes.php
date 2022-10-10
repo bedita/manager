@@ -100,7 +100,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
 
-        foreach (['appearence', 'applications', 'async_jobs', 'config', 'endpoints', 'roles', 'endpoint_permissions'] as $controller) {
+        foreach (['appearence', 'applications', 'async_jobs', 'config', 'endpoints', 'roles', 'roles_modules', 'endpoint_permissions'] as $controller) {
             // Routes connected here are prefixed with '/admin'
             $name = Inflector::camelize($controller);
             $routes->get(
@@ -380,23 +380,30 @@ $routes->scope('/', function (RouteBuilder $routes) {
     )
     ->setPass(['id']);
 
+    // Bulk actions
     $routes->connect(
         '/{object_type}/bulkAttribute',
         ['controller' => 'Bulk', 'action' => 'attribute'],
         ['_name' => 'modules:bulkAttribute']
-    );
+    )->setMethods(['post']);
 
     $routes->connect(
         '/{object_type}/bulkCategories',
         ['controller' => 'Bulk', 'action' => 'categories'],
         ['_name' => 'modules:bulkCategories']
-    );
+    )->setMethods(['post']);
 
     $routes->connect(
         '/{object_type}/bulkPosition',
         ['controller' => 'Bulk', 'action' => 'position'],
         ['_name' => 'modules:bulkPosition']
-    );
+    )->setMethods(['post']);
+
+    $routes->connect(
+        '/{object_type}/bulkCustom',
+        ['controller' => 'Bulk', 'action' => 'custom'],
+        ['_name' => 'modules:bulkCustom']
+    )->setMethods(['post']);
 
     // translator service
     $routes->connect(

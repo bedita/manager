@@ -12,6 +12,8 @@
  */
 namespace App\View\Helper;
 
+use App\Form\Control;
+use App\Form\Form;
 use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -151,5 +153,113 @@ class PropertyHelper extends Helper
         }
 
         return $this->Schema->format($value, $this->schema($property));
+    }
+
+    /**
+     * Return html for fast create form fields.
+     *
+     * @param string $type The object type
+     * @param string $prefix The prefix
+     * @return string The html for form fields
+     */
+    public function fastCreateFields(string $type, string $prefix): string
+    {
+        $cfg = (array)Configure::read(sprintf('Properties.%s.fastCreate', $type));
+        $fields = (array)Hash::get($cfg, 'all', ['status', 'title', 'description']);
+        $required = (array)Hash::get($cfg, 'required', ['status', 'title']);
+        $html = '';
+        $jsonKeys = [];
+        $ff = [];
+        foreach ($fields as $field => $fieldType) {
+            $field = is_numeric($field) ? $fieldType : $field;
+            $fieldClass = !in_array($field, $required) ? 'fastCreateField' : 'fastCreateField required';
+            $fieldOptions = [
+                'id' => sprintf('%s%s', $prefix, $field),
+                'class' => $fieldClass,
+                'data-name' => $field,
+                'key' => sprintf('%s-%s', $type, $field),
+            ];
+            if ($field === 'date_ranges') {
+                $html .= $this->dateRange($type, $fieldOptions);
+                continue;
+            }
+            if ($fieldType === 'json') {
+                $jsonKeys[] = $field;
+            }
+            $this->prepareFieldOptions($field, $fieldType, $fieldOptions);
+
+            $html .= $this->control($field, '', $fieldOptions, $type);
+            $ff[] = $field;
+        }
+        $jsonKeys = array_unique(array_merge($jsonKeys, (array)Configure::read('_jsonKeys')));
+        $jsonKeys = array_intersect($jsonKeys, $ff);
+
+        if (!empty($jsonKeys)) {
+            $html .= $this->Form->control('_jsonKeys', ['type' => 'hidden', 'value' => implode(',', $jsonKeys)]);
+        }
+
+        return $html;
+    }
+
+    /**
+     * Prepare field options for field.
+     *
+     * @param string $field The field name
+     * @param string|null $fieldType The field type, if any
+     * @param array $fieldOptions The field options
+     * @return void
+     */
+    public function prepareFieldOptions(string $field, ?string $fieldType, array &$fieldOptions): void
+    {
+        $method = '';
+        if (!empty($fieldType) && in_array($fieldType, Control::CONTROL_TYPES)) {
+            $methodInfo = (array)Form::getMethod(Control::class, $fieldType);
+            $className = (string)Hash::get($methodInfo, 0);
+            $method = (string)Hash::get($methodInfo, 1);
+            $preserveClass = Hash::get($fieldOptions, 'class', '');
+            $fieldOptions = array_merge($fieldOptions, $className::$method([]));
+            $fieldOptions['class'] .= ' ' . $preserveClass;
+            $fieldOptions['class'] = trim($fieldOptions['class']);
+        }
+        if ($field === 'status') {
+            $fieldOptions['v-model'] = 'object.attributes.status';
+        }
+    }
+
+    /**
+     * Return html for date range fields.
+     *
+     * @param string $type The object type
+     * @param array $options The options
+     * @return string The html for date range fields
+     */
+    public function dateRange(string $type, array $options): string
+    {
+        $optionsFrom = array_merge($options, [
+            'id' => 'start_date_0',
+            'name' => 'date_ranges[0][start_date]',
+            'v-datepicker' => 'true',
+            'date' => 'true',
+            'time' => 'true',
+            'daterange' => 'true',
+        ]);
+        $optionsTo = array_merge($options, [
+            'id' => 'end_date_0',
+            'name' => 'date_ranges[0][end_date]',
+            'v-datepicker' => 'true',
+            'date' => 'true',
+            'time' => 'true',
+            'daterange' => 'true',
+        ]);
+        $optionsAllDay = array_merge($options, [
+            'id' => 'all_day_0',
+            'name' => 'date_ranges[0][params][all_day]',
+            'type' => 'checkbox',
+        ]);
+        $from = $this->control(__('From'), '', $optionsFrom, $type);
+        $to = $this->control(__('To'), '', $optionsTo, $type);
+        $allDay = $this->control(__('All day'), '', $optionsAllDay, $type);
+
+        return sprintf('<div class="date-ranges-item mb-1"><div>%s%s%s</div></div>', $from, $to, $allDay);
     }
 }
