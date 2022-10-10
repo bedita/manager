@@ -46,34 +46,7 @@
                     <section class="fieldset mb-1">
                         <div class="container">
                             <fieldset id="{{ type }}-form-fields">
-                                {% set fields = config('Properties.' ~ type ~ '.fastCreate.all')|default(['status', 'title', 'description']) %}
-                                {% set required = config('Properties.' ~ type ~ '.fastCreate.required')|default(['status', 'title']) %}
-                                {% for field in fields %}
-                                    {% set fieldClass = field not in required ? 'fastCreateField' : 'fastCreateField required' %}
-                                    {% set fieldOptions = {
-                                        'id': prefix ~ field,
-                                        'class': fieldClass,
-                                        'data-name': field,
-                                        'key': type ~ '-' ~ field
-                                    } %}
-                                    {% if field == 'status' %}
-                                        {% set fieldOptions = fieldOptions|merge({'v-model': 'object.attributes.status'}) %}
-                                    {% endif %}
-                                    {% if field == 'date_ranges' %}
-                                        {% set fieldOptionsFrom = fieldOptions|merge({'id': 'start_date_0', 'name': 'date_ranges[0][start_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
-                                        {% set fieldOptionsTo = fieldOptions|merge({'id': 'end_date_0', 'name': 'date_ranges[0][end_date]', 'v-datepicker': 'true', 'date': 'true', 'time': 'true', 'daterange': 'true'}) %}
-                                        {% set fieldOptionsAllDay = fieldOptions|merge({'id': 'all_day_0', 'name': 'date_ranges[0][params][all_day]', 'type': 'checkbox'}) %}
-                                        <div class="date-ranges-item mb-1">
-                                            <div>
-                                                {{ Property.control(__('From'), '', fieldOptionsFrom, type)|raw }}
-                                                {{ Property.control(__('To'), '', fieldOptionsTo, type)|raw }}
-                                                {{ Property.control(__('All day'), '', fieldOptionsAllDay, type)|raw }}
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                       {{ Property.control(field, '', fieldOptions, type)|raw }}
-                                    {% endif %}
-                                {% endfor %}
+                                {{ Property.fastCreateFields(type, prefix)|raw }}
                             </fieldset>
 
                             <div class="input text" v-if="isMedia">

@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Form\Control;
 use App\View\Helper\PropertyHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -319,6 +320,63 @@ class PropertyHelperTest extends TestCase
             )
         );
         $actual = $helper->fieldLabel('about', 'dummies');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `fastCreateFields`.
+
+     * @return void
+     * @covers ::fastCreateFields()
+     */
+    public function testFastCreateFields(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        Configure::write('Properties.documents.fastCreate', [
+            'required' => ['status'],
+            'all' => ['status', 'title', 'description' => 'plaintext', 'body' => 'richtext', 'extra' => 'json', 'date_ranges'],
+        ]);
+        $actual = $helper->fastCreateFields('documents', 'fast_create_docs_');
+        $expected = '<div class="input radio"><label>Status</label><input type="hidden" name="status" id="fast_create_docs_status" value=""/><label for="fast_create_docs_status-on"><input type="radio" name="status" value="on" id="fast_create_docs_status-on" class="fastCreateField required" data-name="status" key="documents-status" v-model="object.attributes.status">On</label><label for="fast_create_docs_status-draft"><input type="radio" name="status" value="draft" id="fast_create_docs_status-draft" class="fastCreateField required" data-name="status" key="documents-status" v-model="object.attributes.status">Draft</label><label for="fast_create_docs_status-off"><input type="radio" name="status" value="off" id="fast_create_docs_status-off" class="fastCreateField required" data-name="status" key="documents-status" v-model="object.attributes.status">Off</label></div><div class="input title text"><label for="fast_create_docs_title">Title</label><input type="text" name="title" class="fastCreateField" id="fast_create_docs_title" data-name="title" key="documents-title" value=""/></div><div class="input textarea"><label for="fast_create_docs_description">Description</label><textarea name="description" id="fast_create_docs_description" class="fastCreateField fastCreateField" data-name="description" key="documents-description" rows="5"></textarea></div><div class="input textarea"><label for="fast_create_docs_body">Body</label><textarea name="body" id="fast_create_docs_body" class="fastCreateField fastCreateField" data-name="body" key="documents-body" v-richeditor="&quot;&quot;" rows="5"></textarea></div><div class="input textarea"><label for="fast_create_docs_extra">Extra</label><textarea name="extra" id="fast_create_docs_extra" class="json fastCreateField" data-name="extra" key="documents-extra" v-jsoneditor="true" rows="5">null</textarea></div><div class="date-ranges-item mb-1"><div><div class="input text"><label for="start_date_0">From</label><input type="text" name="date_ranges[0][start_date]" id="start_date_0" class="fastCreateField" data-name="date_ranges" key="documents-date_ranges" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input text"><label for="end_date_0">To</label><input type="text" name="date_ranges[0][end_date]" id="end_date_0" class="fastCreateField" data-name="date_ranges" key="documents-date_ranges" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input checkbox"><input type="hidden" name="date_ranges[0][params][all_day]" value="0"/><label for="all_day_0"><input type="checkbox" name="date_ranges[0][params][all_day]" value="" id="all_day_0" class="fastCreateField" data-name="date_ranges" key="documents-date_ranges" checked="checked">All Day</label></div></div></div><input type="hidden" name="_jsonKeys" id="jsonkeys" value="extra"/>';
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `prepareFieldOptions`.
+
+     * @return void
+     * @covers ::prepareFieldOptions()
+     */
+    public function testPrepareFieldOptions(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        // json
+        $actual = ['something' => true];
+        $helper->prepareFieldOptions('extra', 'json', $actual);
+        $expected = array_merge(['something' => true], Control::json([]));
+        static::assertEquals($expected, $actual);
+
+        // status
+        $actual = ['whatever' => true];
+        $helper->prepareFieldOptions('status', null, $actual);
+        $expected = ['v-model' => 'object.attributes.status', 'whatever' => true];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `dateRange`.
+
+     * @return void
+     * @covers ::dateRange()
+     */
+    public function testDateRange(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->dateRange('dummy', []);
+        $expected = '<div class="date-ranges-item mb-1"><div><div class="input text"><label for="start_date_0">From</label><input type="text" name="date_ranges[0][start_date]" id="start_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input text"><label for="end_date_0">To</label><input type="text" name="date_ranges[0][end_date]" id="end_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input checkbox"><input type="hidden" name="date_ranges[0][params][all_day]" value="0"/><label for="all_day_0"><input type="checkbox" name="date_ranges[0][params][all_day]" value="" id="all_day_0" checked="checked">All Day</label></div></div></div>';
         static::assertEquals($expected, $actual);
     }
 }
