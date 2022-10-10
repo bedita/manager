@@ -54,6 +54,11 @@
         #{$text-inputs}, textarea {
             width: 100%;
             background-color: $gray-200;
+
+            &:disabled {
+                opacity: 0.65;
+                cursor: not-allowed;
+            }
         }
 
         #{$text-inputs} {
