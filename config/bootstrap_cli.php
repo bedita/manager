@@ -41,8 +41,6 @@ if (Configure::check('Log.error')) {
 ConnectionManager::setConfig(['default' => [
     'className' => Connection::class,
     'driver' => Mysql::class,
-    'persistent' => false,
-    'timezone' => 'UTC',
 ]]);
 
 // override Error.exceptionRenderer to ConsoleExceptionRenderer
