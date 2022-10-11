@@ -67,5 +67,16 @@
         ) %}
         {% endif %}
 
+        {% if currentModule.sidebar.index %}
+        {% for item in currentModule.sidebar.index %}
+            {% do _view.append('module-buttons',
+                Html.link(__(item.label),
+                    item.url,
+                    {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                )|raw
+            ) %}
+        {% endfor %}
+        {% endif %}
+
     </div> {# end module-content #}
 </modules-index>
