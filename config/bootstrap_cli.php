@@ -14,6 +14,11 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 use Cake\Core\Configure;
+use Cake\Database\Connection;
+use Cake\Database\Driver\Mysql;
+use Cake\Datasource\ConnectionManager;
+use Cake\Error\ExceptionTrap;
+use Cake\Error\Renderer\ConsoleExceptionRenderer;
 
 /**
  * Additional bootstrapping and configuration for CLI environments should
@@ -31,3 +36,16 @@ if (Configure::check('Log.debug')) {
 if (Configure::check('Log.error')) {
     Configure::write('Log.error.file', 'cli-error');
 }
+
+// this is for using "bin/cake bake"
+ConnectionManager::setConfig(['default' => [
+    'className' => Connection::class,
+    'driver' => Mysql::class,
+    'persistent' => false,
+    'timezone' => 'UTC',
+]]);
+
+// override Error.exceptionRenderer to ConsoleExceptionRenderer
+$errorConfig = Configure::read('Error');
+$errorConfig['exceptionRenderer'] = ConsoleExceptionRenderer::class;
+(new ExceptionTrap($errorConfig))->register();
