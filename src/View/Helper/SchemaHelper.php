@@ -71,7 +71,15 @@ class SchemaHelper extends Helper
 
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
-        $type = ControlType::fromSchema((array)$schema);
+        $cfg = (array)Configure::read(sprintf('Properties.%s.view', $objectType));
+        foreach ($cfg as $part => $items) {
+            if (in_array($name, array_keys($items))) {
+                $typeFromConfig = $items[$name];
+
+                break;
+            }
+        }
+        $type = !empty($typeFromConfig) ? $typeFromConfig : ControlType::fromSchema((array)$schema);
 
         return Control::control([
             'objectType' => $objectType,
