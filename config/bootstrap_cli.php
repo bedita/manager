@@ -15,7 +15,7 @@
  */
 use Cake\Core\Configure;
 use Cake\Database\Connection;
-use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Sqlite;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ExceptionTrap;
 use Cake\Error\Renderer\ConsoleExceptionRenderer;
@@ -40,7 +40,7 @@ if (Configure::check('Log.error')) {
 // this is for using "bin/cake bake"
 ConnectionManager::setConfig(['default' => [
     'className' => Connection::class,
-    'driver' => Mysql::class,
+    'driver' => Sqlite::class,
 ]]);
 
 // override Error.exceptionRenderer to ConsoleExceptionRenderer
