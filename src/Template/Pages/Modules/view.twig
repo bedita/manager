@@ -174,7 +174,7 @@
                     {% do _view.append('module-buttons',
                         Html.link(__(item.label),
                             url,
-                            {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                            {'class': item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
                         )|raw
                     ) %}
                 {% endfor %}
