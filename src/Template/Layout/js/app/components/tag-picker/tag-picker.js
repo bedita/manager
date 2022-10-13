@@ -122,7 +122,7 @@ export default {
             this.parseBeforeSave();
         },
         getFullLabel(tag) {
-            return `${tag.label} [${tag.name}]`;
+            return `${tag.label}`;
         },
     },
 }
