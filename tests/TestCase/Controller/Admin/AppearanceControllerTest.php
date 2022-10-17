@@ -1,25 +1,25 @@
 <?php
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\AppearenceController;
+use App\Controller\Admin\AppearanceController;
 use BEdita\SDK\BEditaClient;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Controller\Admin\AppearenceController} Test Case
+ * {@see \App\Controller\Admin\AppearanceController} Test Case
  *
- * @coversDefaultClass \App\Controller\Admin\AppearenceController
+ * @coversDefaultClass \App\Controller\Admin\AppearanceController
  */
-class AppearenceControllerTest extends TestCase
+class AppearanceControllerTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Controller\Admin\AppearenceController
+     * @var \App\Controller\Admin\AppearanceController
      */
-    public $Appearence;
+    public $Appearance;
 
     /**
      * @inheritDoc
@@ -47,7 +47,7 @@ class AppearenceControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->Appearence = new AppearenceController(
+        $this->Appearance = new AppearanceController(
             new ServerRequest(
                 [
                     'environment' => [
@@ -56,8 +56,8 @@ class AppearenceControllerTest extends TestCase
                 ]
             )
         );
-        $this->Appearence->index();
-        $viewVars = (array)$this->Appearence->viewBuilder()->getVars();
+        $this->Appearance->index();
+        $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
         static::assertNotEmpty($viewVars['configs']['modules']);
         static::assertNotEmpty($viewVars['configs']['pagination']);
         static::assertArrayHasKey('alert_message', $viewVars['configs']);
@@ -76,7 +76,7 @@ class AppearenceControllerTest extends TestCase
      */
     public function testSave(): void
     {
-        $this->Appearence = new AppearenceController(
+        $this->Appearance = new AppearanceController(
             new ServerRequest(
                 [
                     'environment' => [
@@ -110,6 +110,6 @@ class AppearenceControllerTest extends TestCase
             );
         // expect exception on redirect to admin uri, because test does not access admin routes as unauthenticated
         $this->expectException('Cake\Routing\Exception\MissingRouteException');
-        $this->Appearence->save();
+        $this->Appearance->save();
     }
 }

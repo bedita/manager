@@ -65,7 +65,7 @@ msgstr "Un'estensione ha fermato il caricamento del file"
 msgid "Any"
 msgstr "Qualsiasi"
 
-msgid "Appearence"
+msgid "Appearance"
 msgstr "Aspetto"
 
 msgid "Applications"
