@@ -1,6 +1,6 @@
 {{ element('Admin/sidebar') }}
 
-{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearence')) %}
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearance')) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set configKey = _view.getRequest().getQuery('configKey')|default('alert_message') %}
 {% set wikis = {
@@ -22,7 +22,7 @@ __('Project')
 __('Properties')
 #}
 
-<admin-appearence inline-template :configkey={{ configKey|json_encode }}>
+<admin-appearance inline-template :configkey={{ configKey|json_encode }}>
 
     <div class="module-index">
 
@@ -40,9 +40,9 @@ __('Properties')
         {% for property,val in configs %}
         <div v-show="config === {{ property|json_encode }}">
             {{ Form.create(null, {
-                'id': 'form-appearence-' ~ property,
+                'id': 'form-appearance-' ~ property,
                 'class': 'columns',
-                'url': {'_name': 'admin:save:appearence'},
+                'url': {'_name': 'admin:save:appearance'},
             })|raw }}
                 <div class="column">
                     {{ Form.control(property|camelize, Schema.controlOptions(property|camelize, val|escape('html_attr'), {'type': 'object'})|merge({'label': false}))|raw }}
@@ -61,4 +61,4 @@ __('Properties')
 
     </div>
 
-</admin-appearence>
+</admin-appearance>
