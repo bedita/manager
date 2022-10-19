@@ -49,8 +49,7 @@ class PropertyTypesController extends ModelBaseController
      */
     public function save(): ?Response
     {
-        $body = $this->request->getBody()->getContents();
-        $payload = json_decode($body, true);
+        $payload = $this->request->getData();
         $this->viewBuilder()->setClassName('Json');
         $response = [];
 
