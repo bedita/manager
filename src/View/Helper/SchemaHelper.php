@@ -200,26 +200,22 @@ class SchemaHelper extends Helper
      * Provides list of translatable fields per schema properties
      *
      * @param array $properties The array of schema properties
+     * @param string $objectType The object type
      * @return array
      */
-    public function translatableFields(array $properties): array
+    public function translatableFields(array $properties, ?string $objectType = null): array
     {
         if (empty($properties)) {
             return [];
         }
 
-        $fields = [];
-        foreach ($properties as $name => $property) {
-            if ($this->translatableType($property)) {
-                $fields[] = $name;
-            }
-        }
+        $fields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
+        $properties = array_diff_key($properties, array_flip($fields));
+        $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
 
-        // put specific fields at the beginning of the fields array
-        foreach (array_reverse(static::DEFAULT_TRANSLATABLE) as $field) {
-            if (in_array($field, $fields)) {
-                unset($fields[array_search($field, $fields)]);
-                array_unshift($fields, $field);
+        foreach ($properties as $name => $property) {
+            if (in_array($name, $translatable) || $this->translatableType($property)) {
+                $fields[] = $name;
             }
         }
 

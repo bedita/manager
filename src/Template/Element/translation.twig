@@ -1,6 +1,6 @@
 {% do _view.assign('title', __('Translations')) %}
 {% do _view.assign('bodyViewClass', 'translation-module') %}
-{% set translatable = Schema.translatableFields(schema.properties|default([])) %}
+{% set translatable = Schema.translatableFields(schema.properties|default([]), objectType) %}
 
 <modules-view inline-template ref="moduleView">
     <div class="modules-view">
@@ -102,6 +102,9 @@
                 </section>
                 {{ element('Form/meta', { 'object' : object }) }}
             </div>
+
+            {# Set `_jsonKeys` hidden input from config #}
+            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
 
             {# The ID of the resource translated #}
             {{ Form.hidden('object_id', {'value': object.id})|raw }}
