@@ -219,7 +219,7 @@ class SchemaHelper extends Helper
             }
         }
 
-        return $fields;
+        return array_values($fields);
     }
 
     /**
