@@ -19,7 +19,7 @@
                             {% set languageLabel = "#{__('Language')}" %}
                             {% set options = Schema.controlOptions('lang', null, [])|default({})|merge({
                                 'label': languageLabel,
-                                'value': translation.attributes.lang,
+                                'value': translation.attributes.lang|default(newLang),
                             }) %}
                             {% if options.options %}
                                 {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}

@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use BEdita\I18n\Core\I18nTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
@@ -32,6 +33,8 @@ use Psr\Log\LogLevel;
  */
 class TranslationsController extends ModulesController
 {
+    use I18nTrait;
+
     /**
      * @inheritDoc
      */
@@ -69,6 +72,8 @@ class TranslationsController extends ModulesController
         $object = Hash::extract($response, 'data');
         $this->set('translation', []);
         $this->set('object', $object);
+        // Use first available language as default new language
+        $this->set('newLang', array_key_first($this->getLanguages()));
 
         return null;
     }
