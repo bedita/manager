@@ -232,7 +232,7 @@ class AppController extends Controller
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
                 $value = Hash::get($data, $key);
-                $data = Hash::insert($data, $key, json_decode($value, true));
+                $data = Hash::insert($data, $key, json_decode((string)$value, true));
             }
             unset($data['_jsonKeys']);
         }
