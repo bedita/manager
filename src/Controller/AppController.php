@@ -231,7 +231,8 @@ class AppController extends Controller
         if (!empty($data['_jsonKeys'])) {
             $keys = explode(',', $data['_jsonKeys']);
             foreach ($keys as $key) {
-                $data[$key] = json_decode($data[$key], true);
+                $value = Hash::get($data, $key);
+                $data = Hash::insert($data, $key, json_decode((string)$value, true));
             }
             unset($data['_jsonKeys']);
         }
