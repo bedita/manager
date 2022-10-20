@@ -200,14 +200,19 @@ class LinkHelper extends Helper
     public function here($options = []): string
     {
         $url = (string)$this->getConfig('webBaseUrl');
-        $here = $url . $this->getView()->getRequest()->getAttribute('here');
+        $here = sprintf(
+            '%s%s',
+            $url,
+            $this->getView()->getRequest()->getAttribute('here')
+        );
         $query = (array)$this->getConfig('query');
         if (empty($query) || !empty($options['no-query'])) {
             return $here;
         }
-
         if (isset($options['exclude'])) {
-            $this->setConfig(sprintf('query.%s', $options['exclude']), null);
+            $key = sprintf('query.%s', $options['exclude']);
+            $this->setConfig($key, null);
+            $query = (array)$this->getConfig('query');
         }
         $q = http_build_query($query);
         if (!empty($q)) {
