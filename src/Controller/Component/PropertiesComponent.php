@@ -157,13 +157,16 @@ class PropertiesComponent extends Component
         $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $attributes = array_diff_key($attributes, array_flip($hide));
-        $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
+        $defaults = array_merge(
+            $this->getConfig(sprintf('Properties.%s.view', $type), []),
+            $this->defaultGroups['view']
+        );
         unset($defaults['_keep']);
 
         foreach ($defaults as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $cfg = $this->getConfig($key, $items);
-            $list = array_keys($cfg);
+            $list = is_int(array_key_first($cfg)) ? $cfg : array_keys($cfg);
             $p = [];
             foreach ($list as $item) {
                 if (array_key_exists($item, $attributes)) {

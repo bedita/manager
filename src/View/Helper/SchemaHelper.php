@@ -72,13 +72,9 @@ class SchemaHelper extends Helper
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
         $cfg = (array)Configure::read(sprintf('Properties.%s.view', $objectType));
-        foreach ($cfg as $part => $items) {
-            if (in_array($name, array_keys($items))) {
-                $typeFromConfig = $items[$name];
-
-                break;
-            }
-        }
+        $typeFromCore = Hash::get($cfg, sprintf('core.%s', $name));
+        $typeFromMeta = Hash::get($cfg, sprintf('meta.%s', $name));
+        $typeFromConfig = $typeFromCore ?? $typeFromMeta;
         $type = !empty($typeFromConfig) ? $typeFromConfig : ControlType::fromSchema((array)$schema);
 
         return Control::control([
@@ -159,11 +155,7 @@ class SchemaHelper extends Helper
      */
     protected function formatDateTime($value): string
     {
-        if (empty($value)) {
-            return '';
-        }
-
-        return (string)$this->Time->format($value);
+        return $this->formatDate($value);
     }
 
     /**
@@ -197,11 +189,9 @@ class SchemaHelper extends Helper
             return 'string';
         }
         $format = Hash::get($schema, 'format');
-        if ($schema['type'] === 'string' && in_array($format, ['date', 'date-time'])) {
-            return $format;
-        }
+        $isStringDate = $schema['type'] === 'string' && in_array($format, ['date', 'date-time']);
 
-        return $schema['type'];
+        return $isStringDate ? $format : $schema['type'];
     }
 
     /**
@@ -284,12 +274,9 @@ class SchemaHelper extends Helper
         $type = self::typeFromSchema($schema);
 
         // not sortable: 'array', 'object'
-        if (in_array($type, ['array', 'object'])) {
-            return false;
-        }
         // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
-        return true;
+        return !in_array($type, ['array', 'object']);
     }
 
     /**
