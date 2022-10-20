@@ -188,13 +188,13 @@ class PropertiesComponent extends Component
      */
     protected function groupProperties(array $configProperties, array $attributes): array
     {
-        $keys = array_intersect($configProperties, array_keys($attributes));
-        $ggProperties = [];
-        foreach ($keys as $k) {
-            $ggProperties[$k] = $attributes[$k];
-        }
-
-        return $ggProperties;
+        return array_filter(
+            $attributes,
+            function ($key) use ($configProperties) {
+                return in_array($key, $configProperties);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
