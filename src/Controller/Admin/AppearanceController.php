@@ -19,11 +19,11 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
- * Appearence Controller
+ * Appearance Controller
  *
  * @property \App\Controller\Component\ConfigComponent $Config
  */
-class AppearenceController extends AdministrationBaseController
+class AppearanceController extends AdministrationBaseController
 {
     use ApiConfigTrait;
 
@@ -68,6 +68,6 @@ class AppearenceController extends AdministrationBaseController
         $content = (string)Hash::get($data, Inflector::camelize($propertyName));
         $this->saveApiConfig(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
-        return $this->redirect(['_name' => 'admin:list:appearence', '?' => ['configKey' => $propertyName]]);
+        return $this->redirect(['_name' => 'admin:list:appearance', '?' => ['configKey' => $propertyName]]);
     }
 }

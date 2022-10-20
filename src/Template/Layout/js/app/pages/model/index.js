@@ -8,7 +8,7 @@
  */
 
 import ModulesIndex from 'app/pages/modules/index';
-import { confirm } from 'app/components/dialog/dialog';
+import { confirm, error as showError} from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 export default {
@@ -20,10 +20,6 @@ export default {
 
     props: {
         resources: {},  // loaded resources from template
-        csrfToken: {
-            type: String,
-            required: true,
-        },   // csfrToken used for api call
     },
 
     /**
@@ -39,6 +35,7 @@ export default {
             newPropertyTypes: [],   // stage property_type objects TO ADD
             removePropertyTypes: [],    // stage property_type objects to REMOVE
             editPropertyTypes: [],  // stage property_type objects to EDIT
+            dialog: null,
         };
     },
 
@@ -180,85 +177,97 @@ export default {
          * @returns {void}
          */
         save() {
-            let performSave = () => {
-                let headers = new Headers({
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-Token': this.csrfToken,
-                });
-
-                let payload = {
-                    addPropertyTypes: [...this.newPropertyTypes],
-                    removePropertyTypes: [...this.removePropertyTypes],
-                    editPropertyTypes: [...this.editPropertyTypes],
-                }
-
-                const options = {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers,
-                    body: JSON.stringify( payload ),
-                };
-
-                const postUrl = `${BEDITA.base}/model/property_types/save`;
-
-                fetch(postUrl, options)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        const saved = json['saved'] || [];
-                        const removed = json['removed'] || [];
-                        const edited = json['edited'] || [];
-
-                        // store saved property types
-                        this.savedPropertyTypes.push(...saved);
-
-                        // store removed property types
-                        this.deletedPropertyTypes.push(...removed);
-
-                        edited.forEach((entry) => {
-                            // update propertyTypes list
-                            this.propertyTypes = this.propertyTypes.map((propertyType) => {
-                                if (propertyType.id === entry.id) {
-                                    return entry;
-                                }
-                                return propertyType;
-                            });
-
-                            this.savedPropertyTypes = this.savedPropertyTypes.map((propertyType) => {
-                                // update savedPropertyTypes list
-                                if (propertyType.id === entry.id) {
-                                    return entry;
-                                }
-                                return propertyType;
-                            });
-                        });
-
-                        // clean up wrong jsons an restore original value
-                        this.$children.forEach((component) => {
-                            try {
-                                JSON.parse(component.text);
-                            } catch (error) {
-                                // if new value is not valid, restore the previous one
-                                component.text = component.originalValue;
-                            }
-                        });
-
-                        // reset
-                        this.newPropertyTypes = [];
-                        this.removePropertyTypes = [];
-                        this.editPropertyTypes = [];
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-            };
 
             if (!this.removePropertyTypes.length) {
-                return performSave();
+                return this.performSave();
             }
 
             // some property type has been removed. ask for confirmation before proceeding.
             let types = this.removePropertyTypes.map((removed) => this.propertyTypes.find((type) => type.id == removed).attributes.name).join(', ');
-            confirm(t`Do you really want to trash these property types? ${types}`, t`yes, proceed`, performSave);
+            this.dialog = confirm(
+                t`Do you really want to remove these property types? ${types}`,
+                t`yes, proceed`,
+                () => this.performSave()
+            );
+        },
+
+        performSave() {
+            const headers = new Headers({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': BEDITA.csrfToken,
+            });
+
+            const payload = {
+                addPropertyTypes: [...this.newPropertyTypes],
+                removePropertyTypes: [...this.removePropertyTypes],
+                editPropertyTypes: [...this.editPropertyTypes],
+            }
+
+            const options = {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers,
+                body: JSON.stringify( payload ),
+            };
+
+            const postUrl = `${BEDITA.base}/model/property_types/save`;
+
+            fetch(postUrl, options)
+                .then((res) => res.json())
+                .then((json) => {
+                    const saved = json?.['saved'] || [];
+                    const removed = json?.['removed'] || [];
+                    const edited = json?.['edited'] || [];
+                    const err = json?.['error'] || null;
+                    if (err) {
+                        showError(err);
+                        return;
+                    }
+
+                    // store saved property types
+                    this.savedPropertyTypes.push(...saved);
+
+                    // store removed property types
+                    this.deletedPropertyTypes.push(...removed);
+
+                    edited.forEach((entry) => {
+                        // update propertyTypes list
+                        this.propertyTypes = this.propertyTypes.map((propertyType) => {
+                            if (propertyType.id === entry.id) {
+                                return entry;
+                            }
+                            return propertyType;
+                        });
+
+                        this.savedPropertyTypes = this.savedPropertyTypes.map((propertyType) => {
+                            // update savedPropertyTypes list
+                            if (propertyType.id === entry.id) {
+                                return entry;
+                            }
+                            return propertyType;
+                        });
+                    });
+
+                    // clean up wrong jsons an restore original value
+                    this.$children.forEach((component) => {
+                        try {
+                            JSON.parse(component.text);
+                        } catch (error) {
+                            // if new value is not valid, restore the previous one
+                            component.text = component.originalValue;
+                        }
+                    });
+
+                    // reset
+                    this.newPropertyTypes = [];
+                    this.removePropertyTypes = [];
+                    this.editPropertyTypes = [];
+                    this.dialog?.hide();
+                }).catch((err) => {
+                    console.log(err);
+                    this.dialog?.hide();
+                });
         },
 
         /**
