@@ -87,10 +87,10 @@ const ENVIRONMENT = {
 // Bundle Config Object
 const BUNDLE = {
     // source
-    jsRoot: 'src/Template/Layout/js',               // source .js
+    jsRoot: 'templates/Layout/js',               // source .js
     appPath: 'app',
     appName: 'app.js',
-    templateRoot: 'src/Template',                   // source .scss/ .twig
+    templateRoot: 'templates',                   // source .scss/ .twig
     localeDir: 'src/Locale',
     beditaPluginsRoot: 'plugins',
 

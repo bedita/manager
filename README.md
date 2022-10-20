@@ -132,7 +132,7 @@ yarn run bundle-report
 * Run ESlint via `yarn`, to check linting on js files
 
 ```bash
-yarn run eslint src/Template/Layout/js/app/pages/admin/index.js
+yarn run eslint templates/Layout/js/app/pages/admin/index.js
 ```
 
 ## Run unit tests
