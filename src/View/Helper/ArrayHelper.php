@@ -79,6 +79,6 @@ class ArrayHelper extends Helper
      */
     public function extract($data, $path): array
     {
-        return Hash::extract($data, $path);
+        return (array)Hash::extract($data, $path);
     }
 }

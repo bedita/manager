@@ -180,7 +180,7 @@ class Control
 
         $checked = [];
         if (!empty($value)) {
-            $names = Hash::extract($value, '{n}.name');
+            $names = (array)Hash::extract($value, '{n}.name');
             foreach ($categories as $category) {
                 if (in_array($category['name'], $names)) {
                     $checked[] = $category['name'];
