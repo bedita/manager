@@ -28,7 +28,6 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
-use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -153,12 +152,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new OAuth2Middleware())
 
             // Recovery middleware
-            ->add(new RecoveryMiddleware())
-
-            // Parse various types of encoded request bodies so that they are
-            // available as array through $request->getData()
-            // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
-            ->add(new BodyParserMiddleware());
+            ->add(new RecoveryMiddleware());
 
         return $middlewareQueue;
     }
