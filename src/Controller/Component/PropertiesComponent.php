@@ -167,7 +167,13 @@ class PropertiesComponent extends Component
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $cfg = $this->getConfig($key, $items);
             $configProperties = is_int(array_key_first($cfg)) ? $cfg : array_keys($cfg);
-            $properties[$group] = $this->groupProperties($configProperties, $attributes);
+            $properties[$group] = array_filter(
+                $attributes,
+                function ($cfgKey) use ($configProperties) {
+                    return in_array($cfgKey, $configProperties);
+                },
+                ARRAY_FILTER_USE_KEY
+            );
             if ($group !== 'other') {
                 $used = array_merge($used, $configProperties);
             }
@@ -177,24 +183,6 @@ class PropertiesComponent extends Component
         $properties['other'] += array_diff_key($attributes, array_flip($used));
 
         return $properties;
-    }
-
-    /**
-     * Get group properties matching with values from attributes
-     *
-     * @param array $configProperties The config properties
-     * @param array $attributes The attributes
-     * @return array
-     */
-    protected function groupProperties(array $configProperties, array $attributes): array
-    {
-        return array_filter(
-            $attributes,
-            function ($key) use ($configProperties) {
-                return in_array($key, $configProperties);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
     }
 
     /**
