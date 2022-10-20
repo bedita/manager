@@ -160,6 +160,25 @@
                 ) %}
             {% endif %}
 
+            {# Append custom sidebar actions #}
+            {% if currentModule.sidebar.view and object.id %}
+                {% for item in currentModule.sidebar.view %}
+                    {# if url is a named route merge with id information #}
+                    {% if item.url is iterable %}
+                        {% set url = item.url|merge({id: object.id}) %}
+                    {% else %}
+                        {# otherwise url is a string, append id in path #}
+                        {% set url = item.url ~ '/' ~ object.id %}
+                    {% endif %}
+
+                    {% do _view.append('module-buttons',
+                        Html.link(__(item.label),
+                            url,
+                            {'class': item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
+                        )|raw
+                    ) %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </modules-view>

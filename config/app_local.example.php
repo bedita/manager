@@ -90,6 +90,8 @@ return [
     /**
      * Modules configuration.
      *
+     * See https://github.com/bedita/manager/wiki/Setup:-Modules-configuration
+     *
      * Keys must be actual API endpoint names like `documents`, `users` or `folders`.
      * Modules order will follow key order of this configuration.
      * In case of core or plugin modules not directly served by ModulesController
@@ -108,6 +110,8 @@ return [
      *          (default is '-id'),
      *  'icon' - icon code, f.i. `icon-article`, have a look in
      *      `webroot/css/be-icons-codes.css` for a complete list of codes
+     *  'sidebar' - additional custom sidebar links added in modules index and single item view,
+     *     defined as associative array with 'index' and 'view' keys
      */
     // 'Modules' => [
     //     'objects' => [

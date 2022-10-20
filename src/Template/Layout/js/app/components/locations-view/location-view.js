@@ -195,38 +195,6 @@ export default {
         onRemove() {
             this.$parent.$emit('removed', this.index);
         },
-        /**
-         * Check if a location's `attrName` already appears between a list of locations.
-         * In that case append its `suffixAttr` as suffix to be more distinguishable.
-         * Do it for both
-         * @param {Object} location The location to process
-         * @param {array} locations The locations list
-         * @param {string} attrName The attribute name to search duplicates for
-         * @param {string} suffixAttr The attribute name to use as suffix
-         */
-        applySuffix(location, locations, attrName, suffixAttr) {
-            if (!location.attributes[suffixAttr] || !this.fetchedLocations) {
-                return;
-            }
-
-            let duplicateValueIdx = this.fetchedLocations.findIndex((rawLocation) =>
-                rawLocation.id != location.id &&
-                rawLocation.attributes[attrName].toLowerCase() === location.attributes[attrName].toLowerCase()
-            );
-            if (duplicateValueIdx == -1) {
-                return;
-            }
-
-            location.attributes[attrName] = stripHtml(`${location.attributes[attrName]} (${location.attributes[suffixAttr]})`);
-
-            const duplicateValue = this.fetchedLocations[duplicateValueIdx];
-            if (!duplicateValue.attributes[suffixAttr]) {
-                return;
-            }
-
-            // if `suffixAttr` is set, append the value also for the duplicate
-            locations[duplicateValueIdx].attributes[attrName] = stripHtml(`${duplicateValue.attributes[attrName]} (${duplicateValue.attributes[suffixAttr]})`);
-        },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=title`;
 
@@ -248,8 +216,6 @@ export default {
                         results = results.filter((location) => location.attributes.title && location.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
                         // store raw filtered data
                         this.fetchedLocations = results.slice();
-
-                        results.forEach((location) => this.applySuffix(location, results, 'title', 'address'));
 
                         resolve(results);
                     });
@@ -279,8 +245,6 @@ export default {
                         });
                         // store raw fetched data
                         this.fetchedLocations = results.slice();
-
-                        results.forEach((location) => this.applySuffix(location, results, 'address', 'title'));
 
                         resolve(results);
                     });
@@ -317,14 +281,14 @@ export default {
 
                 const geocoder = new window.google.maps.Geocoder();
                 geocoder.geocode({ address: this.address }, (results, status) => {
-                    if (status === "OK" && results.length) {
+                    if (status === 'OK' && results.length) {
                         const result = results[0];
 
                         // Longitude, Latitude format: see https://docs.mapbox.com/api/#coordinate-format
                         this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
                     } else {
                         this.coordinates = '';
-                        console.error("Error in geocoding address");
+                        console.error('Error in geocoding address');
                     }
                     this.onChange();
                 });

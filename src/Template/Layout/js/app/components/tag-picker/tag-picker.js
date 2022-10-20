@@ -64,7 +64,7 @@ export default {
     },
 
     mounted() {
-        this.selectedTags = this.initialTags?.map((tag) => ({ id: tag.name, originalLabel: tag.label, label: this.getFullLabel(tag) }));
+        this.selectedTags = this.initialTags?.map((tag) => ({ id: tag.name, originalLabel: tag.label, label: tag.label }));
         this.parseBeforeSave();
     },
 
@@ -79,7 +79,7 @@ export default {
             this.selectedTags.push({
                 'id': tag.id,
                 'originalLabel': tag.label,
-                'label': this.getFullLabel(tag),
+                'label': tag.label,
             });
             this.parseBeforeSave();
         },
@@ -116,13 +116,10 @@ export default {
             const json = await res.json();
             const tags = [...(json.data || [])];
 
-            const tagsOptions = tags?.map((tag) => ({ id: tag.attributes.name, originalLabel: tag.attributes.label, label: this.getFullLabel(tag.attributes) })) || [];
+            const tagsOptions = tags?.map((tag) => ({ id: tag.attributes.name, originalLabel: tag.attributes.label, label: `${tag.attributes.label}` })) || [];
 
             callback(null, tagsOptions);
             this.parseBeforeSave();
-        },
-        getFullLabel(tag) {
-            return `${tag.label} [${tag.name}]`;
         },
     },
 }
