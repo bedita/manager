@@ -482,6 +482,7 @@ class PropertiesComponentTest extends TestCase
      * @return void
      * @dataProvider viewGroupsProvider()
      * @covers ::viewGroups()
+     * @covers ::groupProperties()
      * @covers ::initialize()
      */
     public function testViewGroups($expected, $object, string $type, array $config = []): void

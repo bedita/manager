@@ -166,16 +166,10 @@ class PropertiesComponent extends Component
         foreach ($defaults as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
             $cfg = $this->getConfig($key, $items);
-            $list = is_int(array_key_first($cfg)) ? $cfg : array_keys($cfg);
-            $p = [];
-            foreach ($list as $item) {
-                if (array_key_exists($item, $attributes)) {
-                    $p[$item] = $attributes[$item];
-                }
-            }
-            $properties[$group] = $p;
+            $configProperties = is_int(array_key_first($cfg)) ? $cfg : array_keys($cfg);
+            $properties[$group] = $this->groupProperties($configProperties, $attributes);
             if ($group !== 'other') {
-                $used = array_merge($used, $list);
+                $used = array_merge($used, $configProperties);
             }
         }
         // add remaining properties to 'other' group
@@ -183,6 +177,24 @@ class PropertiesComponent extends Component
         $properties['other'] += array_diff_key($attributes, array_flip($used));
 
         return $properties;
+    }
+
+    /**
+     * Get group properties matching with values from attributes
+     *
+     * @param array $configProperties The config properties
+     * @param array $attributes The attributes
+     * @return array
+     */
+    protected function groupProperties(array $configProperties, array $attributes): array
+    {
+        $keys = array_intersect($configProperties, array_keys($attributes));
+        $ggProperties = [];
+        foreach ($keys as $k) {
+            $ggProperties[$k] = $attributes[$k];
+        }
+
+        return $ggProperties;
     }
 
     /**
