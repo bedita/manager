@@ -41,7 +41,8 @@
         "svelte-jsoneditor": "^0.3.60",
         "tinymce": "^5.10.0",
         "ttag": "^1.7.24",
-        "vue": "^2.5.16"
+        "vue": "^2.5.16",
+        "webpack-manifest-plugin": "^5.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.15.8",

@@ -46,6 +46,7 @@ class LinkHelper extends Helper
         'apiBaseUrl' => '',
         'webBaseUrl' => '',
         'query' => [],
+        'manifest' => [],
     ];
 
     /**
@@ -61,6 +62,7 @@ class LinkHelper extends Helper
             'apiBaseUrl' => Configure::read('API.apiBaseUrl'),
             'webBaseUrl' => Router::fullBaseUrl(),
             'query' => $this->getView()->getRequest()->getQueryParams(),
+            'manifest' => json_decode(file_get_contents(WWW_ROOT . 'manifest.json'), true),
         ];
         $this->setConfig(array_merge($default, $config));
     }
@@ -307,26 +309,19 @@ class LinkHelper extends Helper
      */
     public function findFiles(array $filter, string $type): array
     {
+        $ext = '.' . $type;
+        $len = strlen($ext);
+        $prefixLen = strlen(sprintf("/%s/", $type));
         $files = [];
-        $filesPath = WWW_ROOT . $type;
-        if (!file_exists($filesPath)) {
-            return [];
-        }
-
-        $dir = new Folder($filesPath);
-
-        $filesFound = $dir->find('.*\.' . $type);
-        if (!empty($filter)) {
-            foreach ($filter as $filterName) {
-                foreach ($filesFound as $fileName) {
-                    if (strpos($fileName, $filterName) !== false) {
-                        $files[] = sprintf('%s', $fileName);
-                    }
-                }
+        $manifest = (array)$this->getConfig('manifest');
+        foreach ($manifest as $k => $v) {
+            if (substr_compare($k, $ext, -$len) !== 0) {
+                continue;
             }
-        } else {
-            foreach ($filesFound as $fileName) {
-                $files[] = sprintf('%s', $fileName);
+            foreach ($filter as $filterName) {
+                if (strpos($k, $filterName) !== false) {
+                    $files[] = substr($v, $prefixLen);
+                }
             }
         }
 

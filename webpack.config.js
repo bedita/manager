@@ -12,6 +12,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // vue dependencies
@@ -57,6 +58,8 @@ let webpackPlugins = [
     new MomentLocalesPlugin({
         localesToKeep: locales.locales,
     }),
+
+    new WebpackManifestPlugin({}),
 ];
 
 // Development or report bundle Plugin
