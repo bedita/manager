@@ -49,9 +49,8 @@ class PropertyTypesController extends ModelBaseController
      */
     public function save(): ?Response
     {
-        $payload = $this->getRequest()->getData();
-
-        $this->getRequest()->allowMethod(['post']);
+        $payload = $this->request->getData();
+        $this->viewBuilder()->setClassName('Json');
         $response = [];
 
         try {
@@ -83,7 +82,7 @@ class PropertyTypesController extends ModelBaseController
         }
 
         $this->set((array)$response);
-        $this->setSerialize([]);
+        $this->setSerialize(array_keys($response));
 
         return null;
     }
