@@ -91,18 +91,18 @@ trait ApiConfigTrait
         $collection = new Collection((array)Hash::get($response, 'data'));
 
         return (array)$collection->reject(function ($item) use ($key) {
-            return !$this->isAppConfig($key, (array)$item);
+            return !$this->isAppConfig((array)$item, $key);
         })->toArray();
     }
 
     /**
      * Check if a configuration is a valid application configuration.
      *
-     * @param string|null $key Configuration key, if `null` consider any configuration key as valid
      * @param array $config Configuration data array from API.
+     * @param string|null $key Configuration key, if `null` consider any configuration key as valid
      * @return bool
      */
-    protected function isAppConfig(?string $key = null, array $config): bool
+    protected function isAppConfig(array $config, ?string $key = null): bool
     {
         $attr = (array)Hash::get($config, 'attributes');
         if (

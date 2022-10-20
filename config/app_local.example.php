@@ -188,6 +188,7 @@ return [
      *  - 'filter' filters to display
      *  - 'bulk' bulk actions list
      *  - 'fastCreate' fields for fast creation forms, by type
+     *  - 'translatable' fields to add to translatable fields, not included by default (e.g. JSON fields)
      *
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
@@ -249,6 +250,10 @@ return [
         //     'fastCreate' => [
         //         'required' => ['status', 'title'],
         //         'all' => ['status', 'title', 'description'],
+        //     ],
+        //     'translatable' => [
+        //         'some_field',
+        //         'another_field',
         //     ],
         // ],
     // ],

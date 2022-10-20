@@ -507,6 +507,26 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
+     * Test `translatableFields` method with `Properties` configuration
+     *
+     * @covers ::translatableFields()
+     */
+    public function testTranslatableFieldsConfiguration(): void
+    {
+        $properties = [
+            'field1' => [
+                'type' => 'object',
+            ],
+        ];
+        $actual = $this->Schema->translatableFields($properties);
+        static::assertEmpty($actual);
+
+        Configure::write('Properties.documents.translatable', ['field1']);
+        $actual = $this->Schema->translatableFields($properties, 'documents');
+        static::assertEquals(['field1'], $actual);
+    }
+
+    /**
      * Data provider for `testFormat` test case.
      *
      * @return array

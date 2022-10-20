@@ -73,11 +73,12 @@ class LinkHelper extends Helper
      */
     public function baseUrl(): string
     {
-        if (substr_compare($this->getConfig('webBaseUrl'), ':80', -strlen(':80')) === 0) {
-            return substr($this->getConfig('webBaseUrl'), 0, strpos($this->getConfig('webBaseUrl'), ':80'));
+        $url = (string)$this->getConfig('webBaseUrl');
+        if (substr_compare($url, ':80', -strlen(':80')) === 0) {
+            return substr($url, 0, strpos($url, ':80'));
         }
 
-        return $this->getConfig('webBaseUrl');
+        return $url;
     }
 
     /**
@@ -198,15 +199,22 @@ class LinkHelper extends Helper
      */
     public function here($options = []): string
     {
-        $here = $this->getConfig('webBaseUrl') . $this->getView()->getRequest()->getAttribute('here');
-        if (empty($this->getConfig('query')) || !empty($options['no-query'])) {
+        $url = (string)$this->getConfig('webBaseUrl');
+        $here = sprintf(
+            '%s%s',
+            $url,
+            $this->getView()->getRequest()->getAttribute('here')
+        );
+        $query = (array)$this->getConfig('query');
+        if (empty($query) || !empty($options['no-query'])) {
             return $here;
         }
-
         if (isset($options['exclude'])) {
-            $this->setConfig(sprintf('query.%s', $options['exclude']), null);
+            $key = sprintf('query.%s', $options['exclude']);
+            $this->setConfig($key, null);
+            $query = (array)$this->getConfig('query');
         }
-        $q = http_build_query($this->getConfig('query'));
+        $q = http_build_query($query);
         if (!empty($q)) {
             return $here . '?' . $q;
         }
@@ -223,7 +231,7 @@ class LinkHelper extends Helper
     private function replaceQueryParams(array $queryParams): string
     {
         $request = $this->getView()->getRequest();
-        $query = array_merge($this->getConfig('query'), $queryParams);
+        $query = array_merge((array)$this->getConfig('query'), $queryParams);
 
         return (string)$request->getUri()->withQuery(http_build_query($query));
     }
