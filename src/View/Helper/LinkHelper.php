@@ -14,10 +14,11 @@ namespace App\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 /**
  * Helper class to generate links or link tags
@@ -307,26 +308,33 @@ class LinkHelper extends Helper
      */
     public function findFiles(array $filter, string $type): array
     {
-        $files = [];
-        $filesPath = WWW_ROOT . $type;
-        if (!file_exists($filesPath)) {
+        if (!file_exists(WWW_ROOT . $type)) {
             return [];
         }
 
-        $dir = new Folder($filesPath);
-
-        $filesFound = $dir->find('.*\.' . $type);
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(WWW_ROOT));
+        $files = [];
+        $filesFound = $filesystem->listContents($type);
+        $ext = '.' . $type;
+        $len = strlen($ext);
         if (!empty($filter)) {
-            foreach ($filter as $filterName) {
-                foreach ($filesFound as $fileName) {
-                    if (strpos($fileName, $filterName) !== false) {
-                        $files[] = sprintf('%s', $fileName);
+            foreach ($filesFound as $item) {
+                /** @var \League\Flysystem\StorageAttributes $item */
+                $path = $item->path();
+                foreach ($filter as $filterName) {
+                    if (strpos($path, $filterName) !== false && substr_compare($path, $ext, -$len) === 0) {
+                        $files[] = substr($path, $len);
+                        continue;
                     }
                 }
             }
         } else {
-            foreach ($filesFound as $fileName) {
-                $files[] = sprintf('%s', $fileName);
+            foreach ($filesFound as $item) {
+                /** @var \League\Flysystem\StorageAttributes $item */
+                $path = $item->path();
+                if (substr_compare($path, $ext, -$len) === 0) {
+                    $files[] = substr($path, $len);
+                }
             }
         }
 

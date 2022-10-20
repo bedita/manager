@@ -96,7 +96,7 @@ abstract class ImportFilter
         }
 
         // upload file to import
-        $file = new File($filepath);
+        $file = new File($filepath); /* @phpstan-ignore-line */
         $headers = ['Content-Type' => $file->mime()];
         $result = $this->apiClient->upload($filename, $filepath, $headers);
 
