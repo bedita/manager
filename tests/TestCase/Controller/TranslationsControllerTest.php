@@ -142,7 +142,7 @@ class TranslationsControllerTest extends TestCase
         static::assertEquals('text/html', $this->controller->getResponse()->getType());
 
         // verify expected vars in view
-        $this->assertExpectedViewVars(['schema', 'object', 'translation']);
+        $this->assertExpectedViewVars(['schema', 'object', 'translation', 'newLang']);
 
         // on error
         $result = $this->controller->add(123456789);
@@ -302,6 +302,69 @@ class TranslationsControllerTest extends TestCase
         // verify response status code and type
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
+     * Test `save` method with JSON fields
+     *
+     * @covers ::save()
+     * @covers ::setupJsonKeys()
+     * @return void
+     */
+    public function testSaveJson(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // delete translation before starting test
+        $lang = 'it';
+        $objectId = $this->getTestId();
+        $id = $this->getTestTranslationId($objectId, 'documents', $lang);
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                [
+                    'id' => $id,
+                    'object_id' => $objectId,
+                ],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+        $this->controller->delete();
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'lang' => $lang,
+                'object_id' => $objectId,
+                'status' => 'draft',
+                'translated_fields' => [
+                    'title' => 'Titolo in italiano',
+                    'another_field' => '{"key":"value"}',
+                ],
+                '_jsonKeys' => 'another_field',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new TranslationsController($request);
+
+        // do controller call
+        $this->controller->save();
+
+        $response = $this->controller->getResponse();
+        static::assertEquals(302, $response->getStatusCode());
     }
 
     /**
