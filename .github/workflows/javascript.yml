@@ -42,4 +42,4 @@ jobs:
         run: 'yarn build'
 
       - name: 'Run ESLint'
-        run: 'yarn eslint templates/Layout/js/**/*.js'
+        run: 'yarn eslint resources/js/**/*.js'

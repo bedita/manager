@@ -78,7 +78,7 @@ if (index) {
 
 // Environment Config Object
 const ENVIRONMENT = {
-    mode: devMode ? JSON.stringify("development") : JSON.stringify("production"),
+    mode: devMode ? JSON.stringify('development') : JSON.stringify('production'),
     proxy: proxy,
     host: server_host,
     port: server_port,
@@ -87,15 +87,16 @@ const ENVIRONMENT = {
 // Bundle Config Object
 const BUNDLE = {
     // source
-    jsRoot: 'templates/Layout/js',               // source .js
+    resourcesRoot: 'resources',
+    jsRoot: 'resources/js',
     appPath: 'app',
     appName: 'app.js',
-    templateRoot: 'templates',                   // source .scss/ .twig
+    templateRoot: 'templates',
     localeDir: 'src/Locale',
     beditaPluginsRoot: 'plugins',
 
     // alternate folders
-    alternateJsRoots: ['templates/Layout/js', 'templates/layout/js', 'resources/js'],
+    alternateJsRoots: ['templates/Layout/js', 'templates/layout/js'],
     alternateTemplateRoots: ['templates/layout', 'templates'],
     alternateLocaleDirs: ['locales'],
 
@@ -164,7 +165,7 @@ for (const dir of entries) {
 }
 
 // auto aliases for vendors dependencies TO-DO
-const packageJson = require("./package.json");
+const packageJson = require('./package.json');
 const dependencies = packageJson.dependencies;
 
 if (devMode) {
