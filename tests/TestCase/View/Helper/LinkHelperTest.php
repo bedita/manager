@@ -618,12 +618,12 @@ class LinkHelperTest extends TestCase
             'no filter' => [
                 [], // filter
                 'js',
-                'multi', // expected
+                '', // expected
             ],
-            'app.bundle js' => [
-                ['app.bundle'], // filter
+            'manifest js' => [
+                ['manifest'], // filter
                 'js',
-                'app.bundle.abcde.js', // expected
+                'manifest.bundle.61b75d.js', // expected
             ],
             'app css' => [
                 ['app'], // filter
@@ -639,10 +639,12 @@ class LinkHelperTest extends TestCase
      * @return void
      * @dataProvider findFilesProvider()
      * @covers ::findFiles
+     * @covers ::initialize
      */
     public function testFindFiles(array $filter, string $extension, string $expected): void
     {
-        $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
+        $config = ['manifestPath' => TESTS . 'files' . DS . 'manifest.json'];
+        $link = new LinkHelper(new View(new ServerRequest(), null, null, []), $config);
         $actual = $link->findFiles($filter, $extension);
         if (empty($expected)) {
             static::assertEmpty($actual);
