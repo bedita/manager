@@ -92,12 +92,12 @@ const BUNDLE = {
     appPath: 'app',
     appName: 'app.js',
     templateRoot: 'templates',
-    localeDir: 'src/Locale',
+    localeDir: 'locales',
     beditaPluginsRoot: 'plugins',
 
     // alternate folders
-    alternateJsRoots: ['templates/Layout/js', 'templates/layout/js'],
-    alternateTemplateRoots: ['templates/layout', 'templates'],
+    alternateJsRoots: ['src/Template/Layout/js', 'templates/Layout/js', 'templates/layout/js'],
+    alternateTemplateRoots: ['src/Template', 'templates/layout', 'templates'],
     alternateLocaleDirs: ['locales'],
 
     // destination
