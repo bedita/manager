@@ -14,7 +14,6 @@ namespace App\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -41,11 +40,14 @@ class LinkHelper extends Helper
      *  - 'apiBaseUrl': API base URL
      *  - 'webBaseUrl': WebApp base URL
      *  - 'query': Request Query params
+     *  - 'manifestPath': Manifest file path
+     *  - 'manifest': Manifest content (array)
      */
     protected $_defaultConfig = [
         'apiBaseUrl' => '',
         'webBaseUrl' => '',
         'query' => [],
+        'manifestPath' => WWW_ROOT . 'manifest.json',
         'manifest' => [],
     ];
 
@@ -62,9 +64,12 @@ class LinkHelper extends Helper
             'apiBaseUrl' => Configure::read('API.apiBaseUrl'),
             'webBaseUrl' => Router::fullBaseUrl(),
             'query' => $this->getView()->getRequest()->getQueryParams(),
-            'manifest' => json_decode(file_get_contents(WWW_ROOT . 'manifest.json'), true),
         ];
         $this->setConfig(array_merge($default, $config));
+        if (empty($this->getConfig('manifest')) && file_exists($this->getConfig('manifestPath'))) {
+            $content = (string)file_get_contents($this->getConfig('manifestPath'));
+            $this->setConfig('manifest', json_decode($content, true));
+        }
     }
 
     /**
@@ -311,16 +316,18 @@ class LinkHelper extends Helper
     {
         $ext = '.' . $type;
         $len = strlen($ext);
-        $prefixLen = strlen(sprintf("/%s/", $type));
+        $prefixLen = strlen(sprintf('/%s/', $type));
         $files = [];
         $manifest = (array)$this->getConfig('manifest');
-        foreach ($manifest as $k => $v) {
-            if (substr_compare($k, $ext, -$len) !== 0) {
+        foreach ($manifest as $key => $value) {
+            // see if file name ends with extension
+            if (substr_compare($key, $ext, -$len) !== 0) {
                 continue;
             }
             foreach ($filter as $filterName) {
-                if (strpos($k, $filterName) !== false) {
-                    $files[] = substr($v, $prefixLen);
+                if (strpos($key, $filterName) !== false) {
+                    // add file without prefix
+                    $files[] = substr($value, $prefixLen);
                 }
             }
         }
