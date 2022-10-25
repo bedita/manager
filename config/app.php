@@ -61,7 +61,7 @@ return [
         'paths' => [
             'plugins' => [ROOT . DS . 'plugins' . DS],
             'templates' => [ROOT . DS . 'templates' . DS],
-            'locales' => [ROOT . 'locales' . DS],
+            'locales' => [ROOT . DS . 'locales' . DS],
         ],
     ],
 
