@@ -98,7 +98,7 @@ const BUNDLE = {
     // alternate folders
     alternateJsRoots: ['src/Template/Layout/js', 'templates/Layout/js', 'templates/layout/js'],
     alternateTemplateRoots: ['src/Template', 'templates/layout', 'templates'],
-    alternateLocaleDirs: ['locales'],
+    alternateLocaleDirs: ['locales', 'src/Locale'],
 
     // destination
     webroot: 'webroot',    // destination webroot
