@@ -251,6 +251,24 @@ class ObjectTypesControllerTest extends TestCase
     }
 
     /**
+     * Test `save` method with empty associations
+     *
+     * @covers ::save()
+     * @return void
+     */
+    public function testEmptyAssocSave(): void
+    {
+        $this->saveApiMock();
+        $config = $this->saveRequestConfig;
+        $config['post'] = ['associations' => ''];
+        $controller = new ObjectTypesController(new ServerRequest($config));
+        $controller->save();
+
+        $data = $controller->getRequest()->getData();
+        static::assertEquals(['associations' => null], $data);
+    }
+
+    /**
      * API client mock for save action
      *
      * @return void
