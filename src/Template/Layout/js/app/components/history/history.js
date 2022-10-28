@@ -151,33 +151,12 @@ export default {
 
         // only if history data found, elaborate it
         if (this.rawHistory.length) {
-
-            // fetch users involved in the object history
-            let usersId = this.rawHistory.map((change) => change.meta.user_id);
-            usersId = [...new Set(usersId)]; // remove duplicates
-
-            if (BEDITA.canReadUsers) {
-                const userRes = await fetch(`${baseUrl}api/users?filter[id]=${usersId.join(',')}`, options);
-                const userJson = await userRes.json();
-                const users = userJson.data;
-
-                // group changes by date
-                this.history = this.rawHistory.reduce((accumulator, item) => {
-                    item.meta.user = users.find((user) => user.id == item.meta.user_id);
-                    const createdDate = moment(item.meta.created).format('DD MMM YYYY');
-                    accumulator[createdDate] = accumulator[createdDate] || [];
-                    accumulator[createdDate].push(item);
-                    return accumulator;
-                }, {});
-            } else {
-                this.history = this.rawHistory.reduce((accumulator, item) => {
-                    item.meta.user = {};
-                    const createdDate = moment(item.meta.created).format('DD MMM YYYY');
-                    accumulator[createdDate] = accumulator[createdDate] || [];
-                    accumulator[createdDate].push(item);
-                    return accumulator;
-                }, {});
-            }
+            this.history = this.rawHistory.reduce((accumulator, item) => {
+                const createdDate = moment(item.meta.created).format('DD MMM YYYY');
+                accumulator[createdDate] = accumulator[createdDate] || [];
+                accumulator[createdDate].push(item);
+                return accumulator;
+            }, {});
 
             // sort changes by time in descending order
             Object.keys(this.history).forEach((date) => this.history[date].reverse());
