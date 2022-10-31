@@ -6,7 +6,7 @@ on:
 
 jobs:
   release_job:
-    uses: bedita/github-workflows/.github/workflows/release.yml@v1
+    uses: bedita/github-workflows/.github/workflows/release.yml@feat/major-output
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
