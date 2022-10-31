@@ -5,6 +5,7 @@ on:
     types: [closed]
 
 jobs:
+
   release_job:
     uses: bedita/github-workflows/.github/workflows/release.yml@feat/major-output
     with:
