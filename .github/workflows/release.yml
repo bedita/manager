@@ -6,7 +6,7 @@ on:
 
 jobs:
   release_job:
-    uses: bedita/github-workflows/.github/workflows/release.yml@feat/major-output
+    uses: bedita/github-workflows/.github/workflows/release.yml@v1
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
@@ -54,4 +54,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: "${{ github.repository }}:${{ needs.release_job.outputs.version }},${{ github.repository }}:${{ needs.release_job.outputs.major }}"
+          # tags: "${{ github.repository }}:${{ needs.release_job.outputs.version }},${{ github.repository }}:${{ needs.release_job.outputs.major }}"
+          tags: "${{ github.repository }}:${{ needs.release_job.outputs.version }}"
