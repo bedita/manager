@@ -17,6 +17,7 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {{ element('meta') }}
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
 
+    {{ Html.meta('icon', "favicon.png", { type:'image/png' } )|raw }}
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
