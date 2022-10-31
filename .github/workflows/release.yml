@@ -6,7 +6,7 @@ on:
 
 jobs:
   release_job:
-    uses: bedita/github-workflows/.github/workflows/release.yml@v1
+    uses: bedita/github-workflows/.github/workflows/release.yml@feat/major-output
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
@@ -42,6 +42,8 @@ jobs:
       - name: Set up Docker Buildx
         if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
         uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
         with:
