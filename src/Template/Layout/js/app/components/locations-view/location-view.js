@@ -61,6 +61,7 @@ export default {
                             @input="onInputTitle"
                             @change="onChange"
                             :debounce-time="500"
+                            :disabled="!!id"
                         >
                         </autocomplete>
                     </label>
@@ -80,6 +81,7 @@ export default {
                             @input="onInputAddress"
                             @change="onChange"
                             :debounce-time="500"
+                            :disabled="!!id"
                         >
                         </autocomplete>
                     </label>
@@ -90,7 +92,7 @@ export default {
                     <label>
                         ${t`Long Lat Coordinates`}
                         <div class="is-flex">
-                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" />
+                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
                             <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
                                 ${t`GET`}
                             </button>
@@ -100,24 +102,25 @@ export default {
                 <div class="is-flex-column">
                     <label>
                         Zoom
-                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20"/>
+                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20" :disabled="!!id" />
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         Pitch°
-                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60"/>
+                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60" :disabled="!!id" />
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         Bearing°
-                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180"/>
+                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180" :disabled="!!id" />
                     </label>
                 </div>
             </div>
             <div class="location-buttons">
-                <button @click.prevent="onRemove" class="icon-unlink remove">${t`remove`}</button>
+                <a v-if="id" class="button button-text-white icon-edit" :href="$helpers.buildViewUrl(id)" target="_blank">${t`edit`}</a>
+                <button @click.prevent="onRemove" class="button button-text-white icon-unlink remove">${t`remove`}</button>
             </div>
         </div>
     </div>`,
@@ -134,6 +137,7 @@ export default {
     data() {
         return {
             location: this.locationData,
+            id: this.locationData.id,
             title: this.locationData.attributes.title,
             address: this.locationData.attributes.address,
             coordinates: convertFromPoint(this.locationData.attributes.coords),
@@ -191,38 +195,6 @@ export default {
         onRemove() {
             this.$parent.$emit('removed', this.index);
         },
-        /**
-         * Check if a location's `attrName` already appears between a list of locations.
-         * In that case append its `suffixAttr` as suffix to be more distinguishable.
-         * Do it for both
-         * @param {Object} location The location to process
-         * @param {array} locations The locations list
-         * @param {string} attrName The attribute name to search duplicates for
-         * @param {string} suffixAttr The attribute name to use as suffix
-         */
-        applySuffix(location, locations, attrName, suffixAttr) {
-            if (!location.attributes[suffixAttr] || !this.fetchedLocations) {
-                return;
-            }
-
-            let duplicateValueIdx = this.fetchedLocations.findIndex((rawLocation) =>
-                rawLocation.id != location.id &&
-                rawLocation.attributes[attrName].toLowerCase() === location.attributes[attrName].toLowerCase()
-            );
-            if (duplicateValueIdx == -1) {
-                return;
-            }
-
-            location.attributes[attrName] = stripHtml(`${location.attributes[attrName]} (${location.attributes[suffixAttr]})`);
-
-            const duplicateValue = this.fetchedLocations[duplicateValueIdx];
-            if (!duplicateValue.attributes[suffixAttr]) {
-                return;
-            }
-
-            // if `suffixAttr` is set, append the value also for the duplicate
-            locations[duplicateValueIdx].attributes[attrName] = stripHtml(`${duplicateValue.attributes[attrName]} (${duplicateValue.attributes[suffixAttr]})`);
-        },
         searchTitle(input) {
             const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=title`;
 
@@ -244,8 +216,6 @@ export default {
                         results = results.filter((location) => location.attributes.title && location.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
                         // store raw filtered data
                         this.fetchedLocations = results.slice();
-
-                        results.forEach((location) => this.applySuffix(location, results, 'title', 'address'));
 
                         resolve(results);
                     });
@@ -275,8 +245,6 @@ export default {
                         });
                         // store raw fetched data
                         this.fetchedLocations = results.slice();
-
-                        results.forEach((location) => this.applySuffix(location, results, 'address', 'title'));
 
                         resolve(results);
                     });
@@ -313,14 +281,14 @@ export default {
 
                 const geocoder = new window.google.maps.Geocoder();
                 geocoder.geocode({ address: this.address }, (results, status) => {
-                    if (status === "OK" && results.length) {
+                    if (status === 'OK' && results.length) {
                         const result = results[0];
 
                         // Longitude, Latitude format: see https://docs.mapbox.com/api/#coordinate-format
                         this.coordinates = `${result.geometry.location.lng()}, ${result.geometry.location.lat()}`;
                     } else {
                         this.coordinates = '';
-                        console.error("Error in geocoding address");
+                        console.error('Error in geocoding address');
                     }
                     this.onChange();
                 });

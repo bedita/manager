@@ -136,12 +136,13 @@ class LayoutHelper extends Helper
             'Relations' => 'has-background-black',
             'PropertyTypes' => 'has-background-black',
             'Categories' => 'has-background-black',
-            'Appearence' => 'has-background-black',
+            'Appearance' => 'has-background-black',
             'Applications' => 'has-background-black',
             'AsyncJobs' => 'has-background-black',
             'Config' => 'has-background-black',
             'Endpoints' => 'has-background-black',
             'Roles' => 'has-background-black',
+            'RolesModules' => 'has-background-black',
             'EndpointPermissions' => 'has-background-black',
         ];
 

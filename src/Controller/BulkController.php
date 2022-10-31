@@ -12,7 +12,9 @@
  */
 namespace App\Controller;
 
+use App\Core\Bulk\CustomBulkActionInterface;
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\App;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
@@ -67,13 +69,65 @@ class BulkController extends AppController
      */
     public function attribute(): ?Response
     {
-        $this->getRequest()->allowMethod(['post']);
         $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->saveAttribute($requestData['attributes']);
-        $this->errors();
+        $this->showResult();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
+        return $this->modulesListRedirect();
+    }
+
+    /**
+     * Bulk custom action for selected ids.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function custom(): ?Response
+    {
+        $requestData = $this->request->getData();
+        $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
+        $this->performCustomAction((string)Hash::get($requestData, 'custom_action'));
+        $this->showResult();
+
+        return $this->modulesListRedirect();
+    }
+
+    /**
+     * Perform bulk action via custom class.
+     *
+     * @param string $bulkClass Custom action class name.
+     * @return void
+     */
+    protected function performCustomAction(string $bulkClass): void
+    {
+        $class = App::className($bulkClass);
+        if (empty($class)) {
+            $this->errors[] = __('Custom action class {0} not found', $bulkClass);
+
+            return;
+        }
+        $bulkAction = new $class();
+        if (!$bulkAction instanceof CustomBulkActionInterface) {
+            $this->errors[] = __('Custom action class {0} is not valid', $bulkClass);
+
+            return;
+        }
+
+        $this->errors = $bulkAction->bulkAction($this->ids, $this->objectType);
+    }
+
+    /**
+     * Redirect to modules index.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    protected function modulesListRedirect(): ?Response
+    {
+        return $this->redirect([
+            '_name' => 'modules:list',
+            'object_type' => $this->objectType,
+            '?' => $this->request->getQuery(),
+        ]);
     }
 
     /**
@@ -83,15 +137,14 @@ class BulkController extends AppController
      */
     public function categories(): ?Response
     {
-        $this->getRequest()->allowMethod(['post']);
         $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $this->categories = (string)Hash::get($requestData, 'categories');
         $this->loadCategories();
         $this->saveCategories();
-        $this->errors();
+        $this->showResult();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
+        return $this->modulesListRedirect();
     }
 
     /**
@@ -101,7 +154,6 @@ class BulkController extends AppController
      */
     public function position(): ?Response
     {
-        $this->getRequest()->allowMethod(['post']);
         $requestData = $this->getRequest()->getData();
         $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
         $folder = (string)Hash::get($requestData, 'folderSelected');
@@ -111,9 +163,9 @@ class BulkController extends AppController
         } else { // move
             $this->moveToPosition($folder);
         }
-        $this->errors();
+        $this->showResult();
 
-        return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType, '?' => $this->getRequest()->getQuery()]);
+        return $this->modulesListRedirect();
     }
 
     /**
@@ -231,13 +283,15 @@ class BulkController extends AppController
     }
 
     /**
-     * Handle page errors.
+     * Display success or error messages.
      *
      * @return void
      */
-    protected function errors(): void
+    protected function showResult(): void
     {
         if (empty($this->errors)) {
+            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->ids)));
+
             return;
         }
         $this->log('Error: ' . json_encode($this->errors), LogLevel::ERROR);

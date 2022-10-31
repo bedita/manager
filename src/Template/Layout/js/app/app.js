@@ -48,7 +48,7 @@ const _vueInstance = new Vue({
         ImportView: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
-        AdminAppearence: () => import(/* webpackChunkName: "admin-appearence" */'app/pages/admin/appearence'),
+        AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
@@ -357,6 +357,13 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
+            if (filters?.filter?.type) {
+                delete filters.filter.type;
+            }
+            if (this.selectedTypes.length > 0) {
+                const typesFilter = {type: this.selectedTypes};
+                filters.filter = {...filters.filter, ...typesFilter};
+            }
             const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,

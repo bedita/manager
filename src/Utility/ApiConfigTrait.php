@@ -19,6 +19,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Collection\Collection;
 use Cake\Core\Configure;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
 
@@ -33,6 +34,21 @@ trait ApiConfigTrait
      * @var string
      */
     protected static $cacheKey = 'api_config';
+
+    /**
+     * Allowed configuration keys from API
+     *
+     * @var array
+     */
+    protected static $configKeys = [
+        'AccessControl',
+        'AlertMessage',
+        'Export',
+        'Modules',
+        'Pagination',
+        'Project',
+        'Properties',
+    ];
 
     /**
      * Read cached configuration items from API and update configuration
@@ -75,24 +91,24 @@ trait ApiConfigTrait
         $collection = new Collection((array)Hash::get($response, 'data'));
 
         return (array)$collection->reject(function ($item) use ($key) {
-            return !$this->isAppConfig($key, (array)$item);
+            return !$this->isAppConfig((array)$item, $key);
         })->toArray();
     }
 
     /**
      * Check if a configuration is a valid application configuration.
      *
-     * @param string|null $key Configuration key, if `null` consider any configuration key as valid
      * @param array $config Configuration data array from API.
+     * @param string|null $key Configuration key, if `null` consider any configuration key as valid
      * @return bool
      */
-    protected function isAppConfig(?string $key = null, array $config): bool
+    protected function isAppConfig(array $config, ?string $key = null): bool
     {
         $attr = (array)Hash::get($config, 'attributes');
         if (
-            empty($attr['application_id']) ||
-            empty($attr['context']) || $attr['context'] !== 'app' ||
-            empty($attr['name'])
+            (isset($attr['application_id']) && $attr['application_id'] == null) ||
+            (isset($attr['context']) && $attr['context'] !== 'app') ||
+            !in_array((string)Hash::get($attr, 'name'), static::$configKeys)
         ) {
             return false;
         }
@@ -119,14 +135,30 @@ trait ApiConfigTrait
     }
 
     /**
+     * Get /auth endpoint ID
+     *
+     * @return int
+     */
+    public function authEndpointId(): int
+    {
+        $response = (array)ApiClientProvider::getApiClient()->get('/admin/endpoints', ['filter' => ['name' => 'auth']]);
+
+        return (int)Hash::get($response, 'data.0.id');
+    }
+
+    /**
      * Save configuration to API
      *
      * @param string $key Configuration key
      * @param array $data Configuration data
      * @return void
+     * @throws \Cake\Http\Exception\BadRequestException
      */
     public function saveApiConfig(string $key, array $data): void
     {
+        if (!in_array($key, static::$configKeys)) {
+            throw new BadRequestException(__('Bad configuration key "{0}"', $key));
+        }
         $items = array_values($this->fetchConfig($key));
         $config = (array)Hash::get($items, '0');
         $configId = Hash::get($config, 'id');

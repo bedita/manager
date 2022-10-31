@@ -206,6 +206,7 @@ ServerRequest::addDetector('tablet', function ($request) {
  * Array having `controller` as key and actions array as value.
  */
 Configure::write('CsrfExceptions', [
+    'Login' => ['login'],
     'PropertyTypes' => ['save'],
     'Modules' => ['save'],
     'Translator' => ['translate'],

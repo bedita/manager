@@ -19,11 +19,11 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
- * Appearence Controller
+ * Appearance Controller
  *
  * @property \App\Controller\Component\ConfigComponent $Config
  */
-class AppearenceController extends AdministrationBaseController
+class AppearanceController extends AdministrationBaseController
 {
     use ApiConfigTrait;
 
@@ -40,20 +40,6 @@ class AppearenceController extends AdministrationBaseController
     protected $readonly = false;
 
     /**
-     * Properties to handle for config
-     *
-     * @var array
-     */
-    protected $properties = [
-        'alert_message',
-        'export',
-        'modules',
-        'pagination',
-        'project',
-        'properties',
-    ];
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -61,8 +47,8 @@ class AppearenceController extends AdministrationBaseController
     public function index(): ?Response
     {
         $configs = [];
-        foreach ($this->properties as $property) {
-            $configs[$property] = Configure::read(Inflector::camelize($property));
+        foreach (static::$configKeys as $property) {
+            $configs[Inflector::underscore($property)] = Configure::read($property);
         }
         $this->set('configs', $configs);
 
@@ -82,6 +68,6 @@ class AppearenceController extends AdministrationBaseController
         $content = (string)Hash::get($data, Inflector::camelize($propertyName));
         $this->saveApiConfig(Inflector::camelize($propertyName), (array)json_decode($content, true));
 
-        return $this->redirect(['_name' => 'admin:list:appearence', '?' => ['configKey' => $propertyName]]);
+        return $this->redirect(['_name' => 'admin:list:appearance', '?' => ['configKey' => $propertyName]]);
     }
 }

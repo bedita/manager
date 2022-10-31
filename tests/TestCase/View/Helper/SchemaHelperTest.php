@@ -401,6 +401,10 @@ class SchemaHelperTest extends TestCase
         $expected = [
             'options' => [
                 [
+                    'value' => '',
+                    'text' => '',
+                ],
+                [
                     'value' => 'en',
                     'text' => 'English',
                 ],
@@ -500,6 +504,26 @@ class SchemaHelperTest extends TestCase
     {
         $actual = $this->Schema->translatableFields($properties);
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `translatableFields` method with `Properties` configuration
+     *
+     * @covers ::translatableFields()
+     */
+    public function testTranslatableFieldsConfiguration(): void
+    {
+        $properties = [
+            'field1' => [
+                'type' => 'object',
+            ],
+        ];
+        $actual = $this->Schema->translatableFields($properties);
+        static::assertEmpty($actual);
+
+        Configure::write('Properties.documents.translatable', ['field1']);
+        $actual = $this->Schema->translatableFields($properties, 'documents');
+        static::assertEquals(['field1'], $actual);
     }
 
     /**
