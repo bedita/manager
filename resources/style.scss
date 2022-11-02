@@ -25,39 +25,39 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
 @import './styles/richtexteditor';
 
 // elements
-@import '../Element/Form/form';
-@import '../Element/Form/calendar';
-@import '../Element/Form/locations';
-@import '../Element/Form/trees';
-@import '../Element/Form/publish_properties';
-@import '../Element/Form/relations';
-@import '../Element/Form/map';
-@import '../Element/Form/history';
-@import '../Element/Form/categories';
-@import '../Element/flash/flash';
-@import '../Element/Menu/colophon';
-@import '../Element/Menu/menu';
-@import '../Element/Menu/sidebar';
-@import '../Element/Modules/index_properties';
-@import '../Element/FilterBox/filter_box';
-@import '../Element/Panel/panel';
-@import '../Element/filter_type';
+@import '../templates/Element/Form/form';
+@import '../templates/Element/Form/calendar';
+@import '../templates/Element/Form/locations';
+@import '../templates/Element/Form/trees';
+@import '../templates/Element/Form/publish_properties';
+@import '../templates/Element/Form/relations';
+@import '../templates/Element/Form/map';
+@import '../templates/Element/Form/history';
+@import '../templates/Element/Form/categories';
+@import '../templates/Element/flash/flash';
+@import '../templates/Element/Menu/colophon';
+@import '../templates/Element/Menu/menu';
+@import '../templates/Element/Menu/sidebar';
+@import '../templates/Element/Modules/index_properties';
+@import '../templates/Element/FilterBox/filter_box';
+@import '../templates/Element/Panel/panel';
+@import '../templates/Element/filter_type';
 
 // components
 @import './js/app/components/dialog/dialog.scss';
 @import './js/app/components/ajax-login/ajax-login.scss';
 
 // Pages
-@import '../Pages/Error/error';
-@import '../Pages/Login/login';
-@import '../Pages/Dashboard/dashboard';
-@import '../Pages/Admin/admin';
-@import '../Pages/Import/import';
-@import '../Pages/Modules/modules-index';
-@import '../Pages/Modules/modules-view';
-@import '../Pages/Model/model-index';
-@import '../Pages/Model/model-view';
-@import '../Pages/Translations/index';
+@import '../templates/Pages/Error/error';
+@import '../templates/Pages/Login/login';
+@import '../templates/Pages/Dashboard/dashboard';
+@import '../templates/Pages/Admin/admin';
+@import '../templates/Pages/Import/import';
+@import '../templates/Pages/Modules/modules-index';
+@import '../templates/Pages/Modules/modules-view';
+@import '../templates/Pages/Model/model-index';
+@import '../templates/Pages/Model/model-view';
+@import '../templates/Pages/Translations/index';
 
 @import './styles/non-production';
 

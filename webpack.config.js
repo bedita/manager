@@ -12,6 +12,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // vue dependencies
@@ -57,6 +58,8 @@ let webpackPlugins = [
     new MomentLocalesPlugin({
         localesToKeep: locales.locales,
     }),
+
+    new WebpackManifestPlugin({}),
 ];
 
 // Development or report bundle Plugin
@@ -246,7 +249,7 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 include: [
-                    path.resolve(__dirname, `webroot/modules`),
+                    path.resolve(__dirname, 'webroot/modules'),
                 ],
                 loader: 'babel-loader',
                 options: {
@@ -277,6 +280,27 @@ module.exports = {
             {
                 test: /\.lazy\.(scss|css)$/,
                 include: [
+                    path.resolve(__dirname, BUNDLE.resourcesRoot),
+                ],
+
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: `${BUNDLE.cssDir}/[name].css`,
+                        },
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    },
+                ]
+            },
+            {
+                test: /\.lazy\.(scss|css)$/,
+                include: [
                     path.resolve(__dirname, BUNDLE.templateRoot),
                 ],
 
@@ -293,6 +317,32 @@ module.exports = {
                             sourceMap: devMode,
                         }
                     },
+                ]
+            },
+            {
+                test: /\.(scss|css)$/,
+                include: [
+                    path.resolve(__dirname, BUNDLE.resourcesRoot),
+                ],
+                exclude: [
+                    /\.lazy\.(scss|css)$/,
+                ],
+
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: devMode,
+                            url:false,
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: devMode,
+                        }
+                    }
                 ]
             },
             {
@@ -353,7 +403,7 @@ module.exports = {
         ],
     },
 
-    devtool: devMode ? "source-map" : false,
+    devtool: devMode ? 'source-map' : false,
 
     watch: devMode,
 

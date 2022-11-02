@@ -5,10 +5,56 @@ on:
     types: [closed]
 
 jobs:
-  release-job:
+
+  release_job:
     uses: bedita/github-workflows/.github/workflows/release.yml@v1
     with:
       main_branch: 'master'
-      dist_branches: '["master"]'
+      dist_branches: '["master", "3.x"]'
       version_ini_path: config/version.ini
       version_ini_prefix: "[Manager]\nversion="
+
+  docker_push:
+    runs-on: 'ubuntu-latest'
+    needs: release_job
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Debug output version
+        run: |
+          echo version var ${{ needs.release_job.outputs.version }}
+
+      - name: Print message if no semantic version was created
+        if: contains(needs.release_job.outputs.version, 'undefined')
+        run: |
+          echo Skip version file update and docker image creation
+
+      - name: Update version file
+        if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
+        run: |
+          echo -e "[Manager]\nversion = ${{ needs.release_job.outputs.version }}" > config/version.ini
+
+      - name: Set up QEMU
+        if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
+        with:
+          context: .
+          push: true
+          tags: "${{ github.repository }}:${{ needs.release_job.outputs.version }},${{ github.repository }}:${{ needs.release_job.outputs.major }}"

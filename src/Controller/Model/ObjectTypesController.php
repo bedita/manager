@@ -168,6 +168,9 @@ class ObjectTypesController extends ModelBaseController
         $this->addCustomProperty();
         $this->request = $this->request->withoutData('prop_name')
             ->withoutData('prop_type');
+        if ($this->request->getData('associations') === '') {
+            $this->request = $this->request->withData('associations', null);
+        }
 
         return parent::save();
     }
