@@ -287,6 +287,7 @@ class ModelBaseControllerTest extends TestCase
      * @param array $data Request data
      * @param bool $singleView Single view
      * @covers ::save()
+     * @covers ::doSave()
      * @dataProvider saveProvider()
      * @return void
      */
@@ -307,6 +308,7 @@ class ModelBaseControllerTest extends TestCase
      * Test `save` failure method
      *
      * @covers ::save()
+     * @covers ::doSave()
      * @return void
      */
     public function testSaveFail(): void

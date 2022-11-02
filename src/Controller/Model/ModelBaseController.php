@@ -201,26 +201,8 @@ abstract class ModelBaseController extends AppController
      */
     public function save(): ?Response
     {
-        $data = $this->prepareRequest($this->resourceType);
-        unset($data['_csrfToken']);
-        $id = Hash::get($data, 'id');
-        unset($data['id']);
-        $body = [
-            'data' => [
-                'type' => $this->resourceType,
-                'attributes' => $data,
-            ],
-        ];
-        $endpoint = sprintf('/model/%s', $this->resourceType);
-
         try {
-            if (empty($id)) {
-                $response = $this->apiClient->post($endpoint, json_encode($body));
-                $id = Hash::get($response, 'data.id');
-            } else {
-                $body['data']['id'] = $id;
-                $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
-            }
+            $id = $this->doSave();
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -235,6 +217,36 @@ abstract class ModelBaseController extends AppController
         $destination = !$this->singleView || empty($id) ? $modelList : $modelView;
 
         return $this->redirect($destination);
+    }
+
+    /**
+     * Perform save
+     *
+     * @return int
+     */
+    protected function doSave(): int
+    {
+        $data = $this->prepareRequest($this->resourceType);
+        unset($data['_csrfToken']);
+        $id = (int)Hash::get($data, 'id');
+        unset($data['id']);
+        $body = [
+            'data' => [
+                'type' => $this->resourceType,
+                'attributes' => $data,
+            ],
+        ];
+        $endpoint = sprintf('/model/%s', $this->resourceType);
+        if (empty($id)) {
+            $response = $this->apiClient->post($endpoint, json_encode($body));
+
+            return (int)Hash::get($response, 'data.id');
+        }
+
+        $body['data']['id'] = $id;
+        $this->apiClient->patch(sprintf('%s/%d', $endpoint, $id), json_encode($body));
+
+        return $id;
     }
 
     /**
