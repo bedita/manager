@@ -230,16 +230,11 @@ abstract class ModelBaseController extends AppController
             return $this->redirect($this->getRequest()->getData('redirTo'));
         }
 
-        if (!$this->singleView || empty($id)) {
-            return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
-        }
+        $modelList = ['_name' => 'model:list:' . $this->resourceType];
+        $modelView = ['_name' => 'model:view:' . $this->resourceType, 'id' => $id];
+        $destination = !$this->singleView || empty($id) ? $modelList : $modelView;
 
-        return $this->redirect(
-            [
-                '_name' => 'model:view:' . $this->resourceType,
-                'id' => $id,
-            ]
-        );
+        return $this->redirect($destination);
     }
 
     /**
