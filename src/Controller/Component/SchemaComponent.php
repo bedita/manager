@@ -172,6 +172,43 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Check if association is used by any object type
+     *
+     * @param string $association The association to check
+     * @return bool
+     */
+    public function associationInUse(string $association): bool
+    {
+        try {
+            $associations = (array)Cache::remember(
+                CacheTools::cacheKey(sprintf('associations-%s', $association)),
+                function () use ($association) {
+                    $response = ApiClientProvider::getApiClient()->get(
+                        '/model/object_types',
+                        ['fields' => 'associations']
+                    );
+                    $associations = (array)Hash::extract((array)$response, 'data.{n}.attributes.associations');
+
+                    return array_filter(
+                        $associations,
+                        function ($assoc) use ($association) {
+                            return is_array($assoc) && in_array($association, $assoc);
+                        }
+                    );
+                },
+                self::CACHE_CONFIG,
+            );
+        } catch (BEditaClientException $e) {
+            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $associations = [];
+        }
+
+        return !empty($associations);
+    }
+
+    /**
      * Fetch object type metadata
      *
      * @param string $type Object type.

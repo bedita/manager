@@ -1,19 +1,22 @@
 {% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
 {% do _view.assign('bodyViewClass', 'view-module view-model') %}
 
+{% set ids = Array.extract(resources, '{*}.id') %}
+{% set _csrfToken = _view.request.params['_csrfToken']|default('')|json_encode %}
+
+{{ element('Modules/index_header', { 'hideFilter': 1 }) }}
+
 <div class="module-header">
     <header>
         <h1>{{ title }}</h1>
     </header>
 </div>
 
-{{ element('Modules/index_header', {'hideFilter': 1}) }}
-
+<model-index inline-template ids='{{ ids|json_encode }}' resources='{{ resources|json_encode }}' :csrf-token='{{ _csrfToken }}'>
 <div class="module-index">
-    {{ element('Modules/index_tags', {
-        'saveAction': { '_name': 'model:save:tags' },
-        'removeAction': { '_name': 'model:remove:tags' }
-    }) }}
-
-    {{ element('Model/sidebar_links') }}
+    {{ element('Modules/index_tags', {'saveAction': { '_name': 'model:save:tags' }, 'removeAction': { '_name': 'model:remove:tags' }}) }}
+    {% if not hideSidebar %}
+        {{ element('Model/sidebar_links') }}
+    {% endif %}
 </div>
+</model-index>

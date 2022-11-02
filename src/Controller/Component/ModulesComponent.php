@@ -63,6 +63,17 @@ class ModulesComponent extends Component
     protected $modules = [];
 
     /**
+     * Other "logic" modules, non objects
+     *
+     * @var array
+     */
+    protected $otherModules = [
+        'tags' => [
+            'color' => '#6F12B7',
+        ],
+    ];
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
@@ -147,9 +158,13 @@ class ModulesComponent extends Component
         $this->modules = array_merge(
             $modules,
             array_diff_key($metaModules, $modules),
-            $pluginModules
+            $pluginModules,
+            $this->otherModules
         );
         $this->modulesByAccessControl();
+        if (!$this->Schema->associationInUse('Tags')) {
+            unset($this->modules['tags']);
+        }
 
         return $this->modules;
     }

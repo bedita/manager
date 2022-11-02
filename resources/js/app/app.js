@@ -33,6 +33,7 @@ const _vueInstance = new Vue({
         Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
+        TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),

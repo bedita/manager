@@ -16,6 +16,7 @@ export default {
 
     components: {
         AutosizeTextarea: () => import(/* webpackChunkName: "autosize-textarea" */'app/components/autosize-textarea'),
+        TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
     },
 
     props: {

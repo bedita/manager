@@ -191,7 +191,7 @@ abstract class ModelBaseController extends AppController
         $this->set(compact('resource', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
-        return null;
+        return $this->redirect($this->referer());
     }
 
     /**
@@ -224,6 +224,10 @@ abstract class ModelBaseController extends AppController
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        if ($this->getRequest()->getData('redirTo')) {
+            return $this->redirect($this->getRequest()->getData('redirTo'));
         }
 
         if (!$this->singleView || empty($id)) {
