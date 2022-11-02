@@ -223,13 +223,13 @@ abstract class ModelBaseController extends AppController
     /**
      * Perform save
      *
-     * @return int
+     * @return string
      */
-    protected function doSave(): int
+    protected function doSave(): string
     {
         $data = $this->prepareRequest($this->resourceType);
         unset($data['_csrfToken']);
-        $id = (int)Hash::get($data, 'id');
+        $id = Hash::get($data, 'id');
         unset($data['id']);
         $body = [
             'data' => [
@@ -241,7 +241,7 @@ abstract class ModelBaseController extends AppController
         if (empty($id)) {
             $response = $this->apiClient->post($endpoint, json_encode($body));
 
-            return (int)Hash::get($response, 'data.id');
+            return Hash::get($response, 'data.id');
         }
 
         $body['data']['id'] = $id;
