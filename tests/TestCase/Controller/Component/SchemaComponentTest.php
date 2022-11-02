@@ -724,4 +724,16 @@ class SchemaComponentTest extends TestCase
         $actual = $this->Schema->abstractTypes();
         static::assertIsArray($actual);
     }
+
+    /**
+     * Test `tagsInUse`
+     *
+     * @return void
+     * @covers ::tagsInUse()
+     */
+    public function testTagsInUse(): void
+    {
+        $actual = $this->Schema->tagsInUse();
+        static::assertFalse($actual);
+    }
 }
