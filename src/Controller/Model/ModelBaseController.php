@@ -201,6 +201,7 @@ abstract class ModelBaseController extends AppController
      */
     public function save(): ?Response
     {
+        $id = null;
         try {
             $id = $this->doSave();
         } catch (BEditaClientException $e) {
