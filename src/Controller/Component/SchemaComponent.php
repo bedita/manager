@@ -172,40 +172,16 @@ class SchemaComponent extends Component
     }
 
     /**
-     * Check if association is used by any object type
+     * Check if tags are in use
      *
-     * @param string $association The association to check
      * @return bool
      */
-    public function associationInUse(string $association): bool
+    public function tagsInUse(): bool
     {
-        try {
-            $associations = (array)Cache::remember(
-                CacheTools::cacheKey(sprintf('associations-%s', $association)),
-                function () use ($association) {
-                    $response = ApiClientProvider::getApiClient()->get(
-                        '/model/object_types',
-                        ['fields' => 'associations']
-                    );
-                    $associations = (array)Hash::extract((array)$response, 'data.{n}.attributes.associations');
+        $features = $this->objectTypesFeatures();
+        $tagged = (array)Hash::get($features, 'tagged');
 
-                    return array_filter(
-                        $associations,
-                        function ($assoc) use ($association) {
-                            return is_array($assoc) && in_array($association, $assoc);
-                        }
-                    );
-                },
-                self::CACHE_CONFIG,
-            );
-        } catch (BEditaClientException $e) {
-            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e->getMessage(), LogLevel::ERROR);
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-            $associations = [];
-        }
-
-        return !empty($associations);
+        return !empty($tagged);
     }
 
     /**
@@ -425,7 +401,7 @@ class SchemaComponent extends Component
         $descendants = array_filter(array_unique($descendants));
         $types = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes');
         $descendants = array_fill_keys($descendants, []);
-        $uploadable = $categorized = [];
+        $uploadable = $categorized = $tagged = [];
         foreach ($types as $name => $data) {
             $abstract = (bool)Hash::get($data, 'is_abstract');
             if ($abstract) {
@@ -441,12 +417,16 @@ class SchemaComponent extends Component
                 if (in_array('Categories', $assoc)) {
                     $categorized[] = $name;
                 }
+                if (in_array('Tags', $assoc)) {
+                    $tagged[] = $name;
+                }
             }
         }
         sort($categorized);
+        sort($tagged);
         sort($uploadable);
 
-        return compact('descendants', 'uploadable', 'categorized');
+        return compact('descendants', 'uploadable', 'categorized', 'tagged');
     }
 
     /**

@@ -162,7 +162,7 @@ class ModulesComponent extends Component
             $this->otherModules
         );
         $this->modulesByAccessControl();
-        if (!$this->Schema->associationInUse('Tags')) {
+        if (!$this->Schema->tagsInUse()) {
             unset($this->modules['tags']);
         }
 
