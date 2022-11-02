@@ -541,7 +541,7 @@ class ModulesComponentTest extends TestCase
 
                         return compact('meta');
                     }
-               ));
+                ));
         }
         ApiClientProvider::setApiClient($apiClient);
 
