@@ -63,7 +63,7 @@ yarn-error.log
 *.bundle.js.map
 bundle-report.*.html
 
-# bundle directories
+# bundle files
 /webroot/bundle-report
 /webroot/*.hot-update.*
 /webroot/vendors/async/*.hot-update.*
@@ -74,3 +74,4 @@ bundle-report.*.html
 /webroot/css/vendors/async
 /webroot/js/*.js
 /webroot/js/vendors
+/webroot/manifest.json

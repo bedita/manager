@@ -14,7 +14,6 @@ namespace App\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -41,11 +40,15 @@ class LinkHelper extends Helper
      *  - 'apiBaseUrl': API base URL
      *  - 'webBaseUrl': WebApp base URL
      *  - 'query': Request Query params
+     *  - 'manifestPath': Manifest file path
+     *  - 'manifest': Manifest content (array)
      */
     protected $_defaultConfig = [
         'apiBaseUrl' => '',
         'webBaseUrl' => '',
         'query' => [],
+        'manifestPath' => WWW_ROOT . 'manifest.json',
+        'manifest' => [],
     ];
 
     /**
@@ -63,6 +66,10 @@ class LinkHelper extends Helper
             'query' => $this->getView()->getRequest()->getQueryParams(),
         ];
         $this->setConfig(array_merge($default, $config));
+        if (empty($this->getConfig('manifest')) && file_exists($this->getConfig('manifestPath'))) {
+            $content = (string)file_get_contents($this->getConfig('manifestPath'));
+            $this->setConfig('manifest', json_decode($content, true));
+        }
     }
 
     /**
@@ -307,26 +314,21 @@ class LinkHelper extends Helper
      */
     public function findFiles(array $filter, string $type): array
     {
+        $ext = '.' . $type;
+        $len = strlen($ext);
+        $prefixLen = strlen(sprintf('/%s/', $type));
         $files = [];
-        $filesPath = WWW_ROOT . $type;
-        if (!file_exists($filesPath)) {
-            return [];
-        }
-
-        $dir = new Folder($filesPath);
-
-        $filesFound = $dir->find('.*\.' . $type);
-        if (!empty($filter)) {
-            foreach ($filter as $filterName) {
-                foreach ($filesFound as $fileName) {
-                    if (strpos($fileName, $filterName) !== false) {
-                        $files[] = sprintf('%s', $fileName);
-                    }
-                }
+        $manifest = (array)$this->getConfig('manifest');
+        foreach ($manifest as $key => $value) {
+            // see if file name ends with extension
+            if (substr_compare($key, $ext, -$len) !== 0) {
+                continue;
             }
-        } else {
-            foreach ($filesFound as $fileName) {
-                $files[] = sprintf('%s', $fileName);
+            foreach ($filter as $filterName) {
+                if (strpos($key, $filterName) !== false) {
+                    // add file without prefix
+                    $files[] = substr($value, $prefixLen);
+                }
             }
         }
 

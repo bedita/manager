@@ -1,0 +1,11 @@
+{
+  "app.css": "/css/app.css",
+  "app.js": "/js/app.bundle.a34d91.js",
+  "manifest.js": "/js/manifest.bundle.61b75d.js",
+  "menu.js": "/js/menu.bundle.8efe63.js",
+  "category.js": "/js/category.bundle.fb6024.js",
+  "index-cell.js": "/js/index-cell.bundle.62f0cc.js",
+  "vendors.css": "/css/vendors.css",
+  "vendors.js": "/js/vendors.bundle.a0cb2d.js",
+  "css/richeditor.lazy.scss": "/css/richeditor.lazy.css"
+}
