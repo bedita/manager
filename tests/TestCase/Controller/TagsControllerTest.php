@@ -9,9 +9,9 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\TagsController Test Case
+ * {@see \App\Controller\TagsController} Test Case
  *
- * @uses \App\Controller\TagsController
+ * @coversDefaultClass \App\Controller\TagsController
  */
 class TagsControllerTest extends TestCase
 {
@@ -20,7 +20,8 @@ class TagsControllerTest extends TestCase
      *
      * @var \App\Controller\TagsController
      */
-    public $Tags;
+    public $controller;
+
     /**
      * Client API
      *
@@ -66,7 +67,7 @@ class TagsControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->Tags = new TagsController($request);
+        $this->controller = new TagsController($request);
         $this->setupApi();
     }
 
@@ -75,14 +76,25 @@ class TagsControllerTest extends TestCase
      *
      * @return void
      * @covers ::index()
-     * @covers ::beforeRender()
      */
     public function testIndex(): void
     {
         $this->setupController();
-        $this->Tags->index();
-        static::assertTrue($this->Tags->viewBuilder()->getVar('hideSidebar'));
-        static::assertSame(['_name' => 'tags:index'], $this->Tags->viewBuilder()->getVar('moduleLink'));
-        static::assertSame(['_name' => 'tags:index'], $this->Tags->viewBuilder()->getVar('redirTo'));
+        $this->controller->index();
+        static::assertTrue($this->controller->viewBuilder()->getVar('hideSidebar'));
+        static::assertSame(['_name' => 'tags:index'], $this->controller->viewBuilder()->getVar('redirTo'));
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @return void
+     * @covers ::beforeRender()
+     */
+    public function testBeforeRender(): void
+    {
+        $this->setupController();
+        $this->controller->dispatchEvent('Controller.beforeRender');
+        static::assertSame(['_name' => 'tags:index'], $this->controller->viewBuilder()->getVar('moduleLink'));
     }
 }

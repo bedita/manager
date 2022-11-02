@@ -23,7 +23,7 @@ use Cake\TestSuite\TestCase;
  * @coversDefaultClass \App\Controller\Model\TagsController
  * @uses \App\Controller\Model\TagsController
  */
-class TagsControllerTest extends TestCase
+class ModelTagsControllerTest extends TestCase
 {
     /**
      * Test subject

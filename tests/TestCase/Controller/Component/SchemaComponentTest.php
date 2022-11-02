@@ -687,6 +687,7 @@ class SchemaComponentTest extends TestCase
             'categorized' => [
                 'images',
             ],
+            'tagged' => [],
         ];
         static::assertEquals($expected, $result);
     }
