@@ -63,6 +63,15 @@ class ModulesComponent extends Component
     protected $modules = [];
 
     /**
+     * Other "logic" modules, non objects
+     *
+     * @var array
+     */
+    protected $otherModules = [
+        'tags',
+    ];
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
@@ -136,7 +145,7 @@ class ModulesComponent extends Component
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
-        $metaModules = $this->modulesFromMeta();
+        $metaModules = $this->modulesFromMeta() + array_flip($this->otherModules);
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
@@ -150,6 +159,9 @@ class ModulesComponent extends Component
             $pluginModules
         );
         $this->modulesByAccessControl();
+        if (!$this->Schema->tagsInUse()) {
+            unset($this->modules['tags']);
+        }
 
         return $this->modules;
     }

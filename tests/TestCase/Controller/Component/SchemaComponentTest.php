@@ -579,7 +579,7 @@ class SchemaComponentTest extends TestCase
         $objectType = [
             'data' => [
                 'attributes' => [
-                    'associations' => ['Categories'],
+                    'associations' => ['Categories', 'Tags'],
                 ],
                 'meta' => [
                     'relations' => ['has_media'],
@@ -598,7 +598,7 @@ class SchemaComponentTest extends TestCase
         ApiClientProvider::setApiClient($apiClient);
 
         $result = $this->Schema->getSchema('documents');
-        static::assertEquals(['Categories'], $result['associations']);
+        static::assertEquals(['Categories', 'Tags'], $result['associations']);
         static::assertEquals(['has_media' => 0], $result['relations']);
     }
 
@@ -651,7 +651,7 @@ class SchemaComponentTest extends TestCase
                         'name' => 'images',
                         'is_abstract' => false,
                         'parent_name' => 'media',
-                        'associations' => ['Streams', 'Categories'],
+                        'associations' => ['Streams', 'Categories', 'Tags'],
                     ],
                 ],
             ],
@@ -685,6 +685,9 @@ class SchemaComponentTest extends TestCase
                 'images',
             ],
             'categorized' => [
+                'images',
+            ],
+            'tagged' => [
                 'images',
             ],
         ];
@@ -722,5 +725,17 @@ class SchemaComponentTest extends TestCase
     {
         $actual = $this->Schema->abstractTypes();
         static::assertIsArray($actual);
+    }
+
+    /**
+     * Test `tagsInUse`
+     *
+     * @return void
+     * @covers ::tagsInUse()
+     */
+    public function testTagsInUse(): void
+    {
+        $actual = $this->Schema->tagsInUse();
+        static::assertFalse($actual);
     }
 }

@@ -235,6 +235,13 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'trash:empty']
     );
 
+    // tags
+    $routes->connect(
+        '/tags',
+        ['controller' => 'Tags', 'action' => 'index'],
+        ['_name' => 'tags:index']
+    );
+
     // view resource by id / uname
     $routes->connect(
         '/view/{id}',
