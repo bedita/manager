@@ -13,8 +13,9 @@
 namespace App\Controller\Admin;
 
 use Cake\Cache\Cache;
-use Cake\Filesystem\Folder;
 use Cake\Http\Response;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 /**
  * Cache Controller
@@ -32,9 +33,8 @@ class CacheController extends AdministrationBaseController
         foreach ($prefixes as $prefix) {
             Cache::clear($prefix);
         }
-        $twigCachePath = CACHE . 'twigView';
-        $folder = new Folder($twigCachePath);
-        $folder->delete();
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(CACHE));
+        $filesystem->deleteDirectory('twig_view');
 
         return $this->redirect($this->referer());
     }
