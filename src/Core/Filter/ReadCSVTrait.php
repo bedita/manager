@@ -66,7 +66,7 @@ trait ReadCSVTrait
         // read data using keys
         foreach ($filecontent as $line) {
             $values = str_getcsv($line, $options['delimiter'], $options['enclosure'], $options['escape']);
-            if (empty($values) || ((count($values) != count($this->csvKeys)))) {
+            if (count($values) != count($this->csvKeys)) {
                 continue;
             }
             $this->csvData[] = array_combine($this->csvKeys, $values);
