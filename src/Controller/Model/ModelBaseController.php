@@ -191,7 +191,7 @@ abstract class ModelBaseController extends AppController
         $this->set(compact('resource', 'schema'));
         $this->set('properties', $this->Properties->viewGroups($resource, $this->resourceType));
 
-        return $this->redirect($this->referer());
+        return null;
     }
 
     /**
