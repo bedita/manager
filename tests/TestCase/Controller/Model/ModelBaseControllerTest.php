@@ -326,6 +326,26 @@ class ModelBaseControllerTest extends TestCase
     }
 
     /**
+     * Test `save` method, on redir
+     *
+     * @covers ::save()
+     * @covers ::doSave()
+     * @return void
+     */
+    public function testSaveRedir(): void
+    {
+        $redirTo = ['_name' => 'model:create:object_types'];
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('id', 1));
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('description', 'whatever'));
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('redirTo', $redirTo));
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+        $location = $result->getHeaderLine('Location');
+        $expected = '/new';
+        static::assertStringEndsWith($expected, $location);
+    }
+
+    /**
      * Test `remove` method
      *
      * @covers ::remove()
