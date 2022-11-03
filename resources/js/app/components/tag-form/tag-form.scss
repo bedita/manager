@@ -3,5 +3,9 @@
         .disabled {
             color: gray;
         }
+
+        input[type=checkbox]:disabled {
+            filter: invert(1) brightness(3);
+        }
     }
 }
