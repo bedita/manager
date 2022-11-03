@@ -68,9 +68,7 @@ class ModulesComponent extends Component
      * @var array
      */
     protected $otherModules = [
-        'tags' => [
-            'color' => '#6F12B7',
-        ],
+        'tags',
     ];
 
     /**
@@ -147,7 +145,7 @@ class ModulesComponent extends Component
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
-        $metaModules = $this->modulesFromMeta();
+        $metaModules = $this->modulesFromMeta() + array_flip($this->otherModules);
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
@@ -158,8 +156,7 @@ class ModulesComponent extends Component
         $this->modules = array_merge(
             $modules,
             array_diff_key($metaModules, $modules),
-            $pluginModules,
-            $this->otherModules
+            $pluginModules
         );
         $this->modulesByAccessControl();
         if (!$this->Schema->tagsInUse()) {

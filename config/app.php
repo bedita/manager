@@ -396,6 +396,9 @@ return [
         'profiles' => [
             'color' => '#093',
         ],
+        'tags' => [
+            'color' => '#6F12B7',
+        ],
     ],
 
     /**
