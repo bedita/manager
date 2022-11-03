@@ -116,6 +116,7 @@ export default {
                 this.dialog = BEDITA.showError(error);
             } finally {
                 event.target.classList.remove('is-loading-spinner');
+                this.editMode = false;
             }
         },
 
