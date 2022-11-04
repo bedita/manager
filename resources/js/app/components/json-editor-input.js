@@ -23,7 +23,7 @@ export default {
     async mounted() {
         try {
             const element = this.el;
-            const json = element.value === 'null' ? {} : JSON.parse(element.value);
+            const json = element.value === 'null' ? null : JSON.parse(element.value);
             element.style.display = 'none';
             const container = document.createElement('div');
             container.className = 'jsoneditor-container';
