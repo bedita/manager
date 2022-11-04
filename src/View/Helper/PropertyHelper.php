@@ -108,25 +108,27 @@ class PropertyHelper extends Helper
      *
      * @param string $name The property name
      * @param string|null $type The type, for others schemas
-     * @return array
+     * @return array|null
      */
-    public function schema(string $name, ?string $type = null): array
+    public function schema(string $name, ?string $type = null): ?array
     {
-        $schema = (array)$this->_View->get('schema');
+        if (Hash::get(self::SPECIAL_PROPS_TYPE, $name)) {
+            return ['type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name)];
+        }
+        $schema = $this->_View->get('schema');
         if (!empty($type)) {
             $schemas = (array)$this->_View->get('schemasByType');
-            $schema = (array)Hash::get($schemas, $type);
+            $schema = Hash::get($schemas, $type);
         }
-        $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
-        $default = array_filter([
-            'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
-            $name => Hash::get($schema, sprintf('%s', $name)),
-        ]);
-        if (in_array($name, self::SPECIAL_PROPS_TYPE)) {
-            return $default;
+        if ($schema === null) {
+            return null;
+        }
+        $path = sprintf('properties.%s', $name);
+        if (!isset($schema[$path])) {
+            return null;
         }
 
-        return !empty($res) ? $res : $default;
+        return (array)$schema[$path];
     }
 
     /**

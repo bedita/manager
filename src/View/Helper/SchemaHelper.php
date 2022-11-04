@@ -55,10 +55,10 @@ class SchemaHelper extends Helper
      *
      * @param string $name Property name.
      * @param mixed $value Property value.
-     * @param array $schema Object schema array.
+     * @param array|null $schema Object schema array.
      * @return array
      */
-    public function controlOptions(string $name, $value, $schema = []): array
+    public function controlOptions(string $name, $value, ?array $schema = []): array
     {
         $options = Options::customControl($name, $value);
         if (!empty($options)) {
@@ -71,13 +71,13 @@ class SchemaHelper extends Helper
 
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
-        $type = ControlType::fromSchema((array)$schema);
+        $type = ControlType::fromSchema($schema);
 
         return Control::control([
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
-            'schema' => (array)$schema,
+            'schema' => $schema,
             'propertyType' => $type,
         ]);
     }
