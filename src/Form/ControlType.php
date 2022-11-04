@@ -72,6 +72,9 @@ class ControlType
                 return ControlType::fromSchema($subSchema);
             }
         }
+        if ($schema === []) {
+            return 'json';
+        }
         if (empty($schemaType) || !in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
