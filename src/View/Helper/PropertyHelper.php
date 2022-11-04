@@ -123,12 +123,12 @@ class PropertyHelper extends Helper
         if ($schema === null) {
             return null;
         }
-        $path = sprintf('properties.%s', $name);
-        if (!isset($schema[$path])) {
+        $res = Hash::get($schema, sprintf('properties.%s', $name));
+        if ($res === null) {
             return null;
         }
 
-        return (array)$schema[$path];
+        return (array)$res;
     }
 
     /**
