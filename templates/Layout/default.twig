@@ -82,6 +82,13 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% if Layout.messages() %}
             {{ Flash.render()|raw }}
         {% endif %}
+
+        {% if user and in_array('admin', user.roles) %}
+            <bedita-check
+                :check="{{ System.checkBeditaApiVersion()|json_encode }}"
+                :message="{{ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode }}">
+            </bedita-check>
+        {% endif %}
     </main>
 
     {# {{ Html.script('manifest.bundle')|raw }} #}
