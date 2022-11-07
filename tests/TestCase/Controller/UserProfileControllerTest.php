@@ -138,10 +138,23 @@ class UserProfileControllerTest extends TestCase
      *
      * @return void
      * @covers ::save()
+     * @covers ::changePassword()
+     * @covers ::changeData()
      */
     public function testSave(): void
     {
-        $this->setupController();
+        $this->setupApi();
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'Gustavo',
+            ],
+        ]);
+        $this->UserProfileController = new class ($request) extends UserProfileController
+        {
+        };
 
         // mock api patch /auth/user
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -154,5 +167,47 @@ class UserProfileControllerTest extends TestCase
         $this->UserProfileController->save();
         $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('some error, whatever', (string)Hash::get($flash, '0.message'));
+
+        // save with password data, no other changes
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'password' => 'p4ssw0rd',
+                'old_password' => '__p4ssw0rd__',
+            ],
+        ]);
+        $this->UserProfileController = new class ($request) extends UserProfileController
+        {
+        };
+        $apiClient->method('patch')
+            ->with('/auth/user')
+            ->willThrowException(new BEditaClientException('some error, whatever'));
+        $this->UserProfileController->apiClient = $apiClient;
+        $this->UserProfileController->save();
+        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('some error, whatever', (string)Hash::get($flash, '0.message'));
+
+        // save with no data changed
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'Gustavo',
+                '_actualAttributes' => json_encode(['name' => 'Gustavo']),
+            ],
+        ]);
+        $this->UserProfileController = new class ($request) extends UserProfileController
+        {
+        };
+        $apiClient->method('patch')
+            ->with('/auth/user')
+            ->willThrowException(new BEditaClientException('some error, whatever'));
+        $this->UserProfileController->apiClient = $apiClient;
+        $this->UserProfileController->save();
+        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        static::assertEquals('User profile saved', (string)Hash::get($flash, '0.message'));
     }
 }
