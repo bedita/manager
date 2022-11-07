@@ -70,6 +70,7 @@ class UserProfileController extends AppController
         $this->set('schema', $schema);
         $this->set('object', $object);
         $this->set('properties', $this->Properties->viewGroups($object, 'user_profile'));
+        $this->set('currentAttributes', json_encode((array)Hash::get($object, 'attributes')));
     }
 
     /**
@@ -80,17 +81,10 @@ class UserProfileController extends AppController
     public function save(): void
     {
         $data = $this->getRequest()->getData();
+        $this->changedAttributes($data);
         try {
-            if (
-                empty(Hash::get($data, 'password')) &&
-                Hash::get($data, 'password') === Hash::get($data, 'old_password') &&
-                Hash::get($data, 'password') === Hash::get($data, 'confirm-password')
-            ) {
-                unset($data['password']);
-                unset($data['old_password']);
-                unset($data['confirm-password']);
-            }
-            $this->apiClient->patch('/auth/user', json_encode($data));
+            $this->changePassword($data);
+            $this->changeData($data);
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
@@ -98,5 +92,40 @@ class UserProfileController extends AppController
         }
 
         $this->redirect(['_name' => 'user_profile:view']);
+    }
+
+    /**
+     * Change password, if needed.
+     *
+     * @param array $data The data
+     * @return void
+     */
+    protected function changePassword(array &$data): void
+    {
+        $password = (string)Hash::get($data, 'password');
+        if (!empty($password)) {
+            $this->apiClient->patch('/auth/user', json_encode([
+                'password' => $password,
+                'old_password' => (string)Hash::get($data, 'old_password'),
+            ]));
+        }
+        unset($data['password']);
+        unset($data['old_password']);
+        unset($data['confirm-password']);
+    }
+
+    /**
+     * Change data, if changed
+     *
+     * @param array $data The data
+     * @return void
+     */
+    protected function changeData(array $data): void
+    {
+        // only id? skip
+        if (!empty($data['id']) && count($data) < 2) {
+            return;
+        }
+        $this->apiClient->patch('/auth/user', json_encode($data));
     }
 }
