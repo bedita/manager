@@ -84,10 +84,10 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% endif %}
 
         {% if user and in_array('admin', user.roles) %}
-            <bedita-check
+            <app-error
                 :check="{{ System.checkBeditaApiVersion()|json_encode }}"
                 :message="{{ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode }}">
-            </bedita-check>
+            </app-error>
         {% endif %}
     </main>
 

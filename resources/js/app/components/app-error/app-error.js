@@ -1,7 +1,7 @@
 import { error as showError } from 'app/components/dialog/dialog';
 
 export default {
-    name: 'bedita-check',
+    name: 'app-error',
 
     template: '<div></div>',
 
