@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2022-09-22 16:03:10 \n"
+"POT-Creation-Date: 2022-11-07 11:11:42 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -16,6 +16,9 @@ msgstr " nel Cestino"
 
 msgid "&"
 msgstr ""
+
+msgid "API version required: {0}"
+msgstr "Versione API richiesta: {0}"
 
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
@@ -97,6 +100,9 @@ msgstr "Data di nascita"
 
 msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
+
+msgid "Bulk action performed on {0} objects"
+msgstr "Operazione massiva applicata a {0} oggetti"
 
 msgid "Calendar"
 msgstr "Calendario"
@@ -187,6 +193,12 @@ msgstr "Creato"
 
 msgid "Current password"
 msgstr "Password corrente"
+
+msgid "Custom action class {0} is not valid"
+msgstr "Classe action personalizzata {0} non valida"
+
+msgid "Custom action class {0} not found"
+msgstr "Classe action personalizzata {0} non trovata"
 
 msgid "Custom properties"
 msgstr "Proprietà personalizzate"
@@ -1084,8 +1096,8 @@ msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
 #, javascript-format
-msgid "Do you really want to trash these property types? ${ types }"
-msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
+msgid "Do you really want to remove these property types? ${ types }"
+msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }""
 
 msgid "Remove item. Are you sure?"
 msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
@@ -1148,6 +1160,9 @@ msgstr "Cerca tag esistenti"
 
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
+
+msgid "Error on deleting tag"
+msgstr "Errore nella cancellazione tag"
 
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"

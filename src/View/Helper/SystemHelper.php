@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -21,5 +23,27 @@ class SystemHelper extends Helper
         $uploadMaxFilesize = intVal(substr(ini_get('upload_max_filesize'), 0, -1));
 
         return min($postMaxSize, $uploadMaxFilesize) * 1024 * 1024;
+    }
+
+    /**
+     * Return false when API version is less than required, true otherwise.
+     *
+     * @return bool
+     */
+    public function checkBeditaApiVersion(): bool
+    {
+        $project = (array)$this->getView()->get('project');
+        $apiVersion = Hash::get($project, 'version');
+        if (empty($apiVersion)) {
+            return true;
+        }
+        $requiredApiVersions = (array)Configure::read('BEditaAPI.versions');
+        foreach ($requiredApiVersions as $requiredApiVersion) {
+            if (version_compare($apiVersion, $requiredApiVersion) >= 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
