@@ -81,6 +81,7 @@ class UserProfileController extends AppController
     public function save(): void
     {
         $data = $this->getRequest()->getData();
+        unset($data['id']);
         $this->changedAttributes($data);
         try {
             $this->changePassword($data);
@@ -122,8 +123,7 @@ class UserProfileController extends AppController
      */
     protected function changeData(array $data): void
     {
-        // only id? skip
-        if (!empty($data['id']) && count($data) < 2) {
+        if (empty($data)) {
             return;
         }
         $this->apiClient->patch('/auth/user', json_encode($data));
