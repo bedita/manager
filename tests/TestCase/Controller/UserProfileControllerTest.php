@@ -154,6 +154,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
+            public $apiClient;
         };
 
         // mock api patch /auth/user
@@ -180,6 +181,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
+            public $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')
@@ -201,6 +203,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
+            public $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')
