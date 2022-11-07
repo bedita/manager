@@ -81,6 +81,15 @@ class UserProfileController extends AppController
     {
         $data = $this->getRequest()->getData();
         try {
+            if (
+                empty(Hash::get($data, 'password')) &&
+                Hash::get($data, 'password') === Hash::get($data, 'old_password') &&
+                Hash::get($data, 'password') === Hash::get($data, 'confirm-password')
+            ) {
+                unset($data['password']);
+                unset($data['old_password']);
+                unset($data['confirm-password']);
+            }
             $this->apiClient->patch('/auth/user', json_encode($data));
             $this->Flash->success(__('User profile saved'));
         } catch (BEditaClientException $e) {
