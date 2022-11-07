@@ -17,6 +17,7 @@
         })|raw }}
 
             {{ Form.hidden('id', {'value': object.id})|raw }}
+            {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
             <div class="main-view-column">
 
                 {% set jsonKeys = [] %}
