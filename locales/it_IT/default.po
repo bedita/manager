@@ -1097,7 +1097,7 @@ msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
 #, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
-msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }""
+msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
 msgid "Remove item. Are you sure?"
 msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
