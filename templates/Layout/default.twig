@@ -83,10 +83,8 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
             {{ Flash.render()|raw }}
         {% endif %}
 
-        {% if user and in_array('admin', user.roles) %}
-            <app-error
-                :check="{{ System.checkBeditaApiVersion()|json_encode }}"
-                :message="{{ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode }}">
+        {% if user and in_array('admin', user.roles) and System.checkBeditaApiVersion() != 1 %}
+            <app-error :message="{{ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode }}">
             </app-error>
         {% endif %}
     </main>

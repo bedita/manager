@@ -6,13 +6,10 @@ export default {
     template: '<div></div>',
 
     props: {
-        check: false,
         message: null,
     },
 
     async mounted() {
-        if (this.check != 1) {
-            showError(this.message);
-        }
+        showError(this.message);
     },
 };
