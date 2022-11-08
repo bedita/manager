@@ -35,4 +35,14 @@ class TagsController extends ModelTagsController
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * This to avoid extra perms check for "admin" role.
+     */
+    public function beforeFilter(EventInterface $event): ?Response
+    {
+        return null;
+    }
 }

@@ -68,7 +68,10 @@ class ModulesComponent extends Component
      * @var array
      */
     protected $otherModules = [
-        'tags',
+        'tags' => [
+            'name' => 'tags',
+            'hints' => ['allow' => ['GET', 'POST', 'PATCH', 'DELETE']],
+        ],
     ];
 
     /**
@@ -145,7 +148,7 @@ class ModulesComponent extends Component
         $pluginModules = array_filter($modules, function ($item) {
             return !empty($item['route']);
         });
-        $metaModules = $this->modulesFromMeta() + array_flip($this->otherModules);
+        $metaModules = $this->modulesFromMeta() + $this->otherModules;
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
