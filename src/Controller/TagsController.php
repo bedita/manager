@@ -40,6 +40,8 @@ class TagsController extends ModelTagsController
      * {@inheritDoc}
      *
      * This to avoid extra perms check for "admin" role.
+     *
+     * @codeCoverageIgnore
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
