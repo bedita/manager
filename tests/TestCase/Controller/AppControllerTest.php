@@ -648,6 +648,7 @@ class AppControllerTest extends TestCase
             'object and object | unchanged' => [ ['six'], ['six'], false ],
             'date and date | changed' => [ $d1, $d2, true ],
             'date and date | unchanged' => [ $d1, $d1, false ],
+            'bool and not boolean string | changed' => [ true, 'whatever', true ],
         ];
     }
 
