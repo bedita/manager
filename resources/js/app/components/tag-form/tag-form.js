@@ -16,7 +16,7 @@ export default {
             <div v-if="!editMode">
                 <: id :>
             </div>
-            <div v-if="!editMode">
+            <div v-if="canSave && !editMode">
                 <button @click.prevent="editMode = !editMode" class="button button-outlined icon-pencil">${t`Edit`}</button>
             </div>
 
@@ -42,6 +42,7 @@ export default {
     `,
 
     props: {
+        cansave: Boolean,
         obj: {},
     },
 
@@ -49,6 +50,7 @@ export default {
         return {
             dialog: null,
             editMode: false,
+            canSave: false,
             id: String,
             name: String,
             label: String,
@@ -63,7 +65,11 @@ export default {
         }
     },
 
-    mounted() {
+    async created() {
+        this.canSave = this.cansave;
+    },
+
+    async mounted() {
         this.resetData();
     },
 

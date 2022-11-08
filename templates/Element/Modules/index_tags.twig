@@ -1,3 +1,4 @@
+{% set canSave = Perms.canSave('tags') %}
 <div class="tags-container">
     <div class="tags">
         <div class="list-objects">
@@ -14,9 +15,10 @@
                 </nav>
                 {% for tag_id in tags %}
                     {% set resource = resources[tag_id] %}
-                    <tag-form :obj="{{ resource|json_encode }}"></tag-form>
+                    <tag-form :cansave="{{ canSave|json_encode }}" :obj="{{ resource|json_encode }}"></tag-form>
                 {% endfor %}
             {% endfor %}
+            {% if canSave %}
                 <h2 class="mt-2">{{ __('Create a new tag') }}</h2>
                 {{ Form.create(null, {'id': 'form-create', 'url': saveAction, 'class': 'table-row'})|raw }}
                     {% if redirTo %}
@@ -43,6 +45,7 @@
                         <button title="{{ __('Save') }} {{ resource.attributes.name }}" class="button button-primary icon-check-1">{{ __('Save') }}</button>
                     </div>
                 {{ Form.end()|raw }}
+            {% endif %}
         </div>
     </div>
 </div>
