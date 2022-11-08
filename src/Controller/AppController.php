@@ -367,7 +367,7 @@ class AppController extends Controller
             return false; // not changed
         }
         $booleanItems = ['0', '1', 'true', 'false', 0, 1];
-        if (is_bool($value1) && !is_bool($value2) && in_array($value2, $booleanItems)) { // i.e. true / "1"
+        if (is_bool($value1) && !is_bool($value2) && in_array($value2, $booleanItems, true)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
         }
         if (is_numeric($value1) && is_string($value2)) {
