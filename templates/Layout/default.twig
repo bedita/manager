@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <!--
 
-██████╗ ███████╗██████╗ ██╗████████╗ █████╗     ██╗  ██╗
-██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗    ██║  ██║
-██████╔╝█████╗  ██║  ██║██║   ██║   ███████║    ███████║
-██╔══██╗██╔══╝  ██║  ██║██║   ██║   ██╔══██║    ╚════██║
-██████╔╝███████╗██████╔╝██║   ██║   ██║  ██║         ██║
-╚═════╝ ╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝         ╚═╝
+██████╗░███████╗██████╗░██╗████████╗░█████╗░  ███╗░░░███╗░█████╗░███╗░░██╗░█████╗░░██████╗░███████╗██████╗░
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗  ████╗░████║██╔══██╗████╗░██║██╔══██╗██╔════╝░██╔════╝██╔══██╗
+██████╦╝█████╗░░██║░░██║██║░░░██║░░░███████║  ██╔████╔██║███████║██╔██╗██║███████║██║░░██╗░█████╗░░██████╔╝
+██╔══██╗██╔══╝░░██║░░██║██║░░░██║░░░██╔══██║  ██║╚██╔╝██║██╔══██║██║╚████║██╔══██║██║░░╚██╗██╔══╝░░██╔══██╗
+██████╦╝███████╗██████╔╝██║░░░██║░░░██║░░██║  ██║░╚═╝░██║██║░░██║██║░╚███║██║░░██║╚██████╔╝███████╗██║░░██║
+╚═════╝░╚══════╝╚═════╝░╚═╝░░░╚═╝░░░╚═╝░░╚═╝  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝░░╚═╝
 
-BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
+BEdita Manager
 -->
 
 <html lang="{{ config('I18n.lang', 'en')}}">
 <head>
     {{ Html.charset()|raw }}
-    {{ element('meta') }}
-    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita 4'}" }}</title>
+
+    {{ Html.meta('viewport', 'width=device-width, initial-scale=1.0')|raw }}
+    {{ Html.meta('description', 'BEdita Manager, official BEdita API admin tool')|raw }}
+    {{ Html.meta('generator', 'BEdita Manager v' ~ config('Manager.version'))|raw }}
+
+    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
 
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
 
-    {# vendors.css it's only generated when vendors css are imported statically, uncomment if you do so #}
-    {# {{ Html.css(['app.b59441'])|raw }} #}
     {{ Link.cssBundle([ 'app', 'vendors' ])|raw }}
 
     {{ element('custom_colors') }}
@@ -84,11 +86,6 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
         {% endif %}
     </main>
 
-    {# {{ Html.script('manifest.bundle')|raw }} #}
-
-    {# vendors.bundle it's only generated when vendors are imported statically, uncomment if you do so #}
-    {# {{ Html.script('vendors.bundle')|raw }} #}
-
     {% if _view.name != 'Login' %}
         {{ Link.pluginsBundle()|raw }}
     {% else %}
@@ -97,7 +94,5 @@ BEdita 4 ~ @ 2018 from ChannelWeb & Chialab with love
     {% endif %}
 
     {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
-
-    {# {{ Html.script('app.bundle')|raw }} #}
 </body>
 </html>

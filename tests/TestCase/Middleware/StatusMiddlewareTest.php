@@ -55,7 +55,7 @@ class StatusMiddlewareTest extends TestCase
         };
 
         return [
-            'not status endpoint' => [200, '<title>Login | BEdita 4</title>', '/login'],
+            'not status endpoint' => [200, '<title>Login | BEdita Manager</title>', '/login'],
             'method not allowed' => [405, 'Method Not Allowed', '/status', 'DELETE'],
             'liveliness probe' => [204, null, '/status', 'GET', $config(503)],
             'api status check (ok)' => [204, null, '/status?full=1', 'GET', $config(204)],
