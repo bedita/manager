@@ -16,11 +16,8 @@ BEdita Manager
     {{ Html.charset()|raw }}
 
     {{ Html.meta('viewport', 'width=device-width, initial-scale=1.0')|raw }}
-    {{ Html.meta('description', 'BEdita Manager')|raw }}
-    {{ Html.meta({
-        'rel': 'manifest',
-        'href': '/manifest.json'
-    })|raw }}
+    {{ Html.meta('description', 'BEdita Manager, official BEdita API admin tool')|raw }}
+    {{ Html.meta('generator', 'BEdita Manager v' ~ config('Manager.version'))|raw }}
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
 
