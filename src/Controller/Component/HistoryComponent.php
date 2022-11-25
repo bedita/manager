@@ -156,7 +156,7 @@ class HistoryComponent extends Component
     public function fetch($id, array $schema): array
     {
         $filter = ['resource_id' => $id];
-        $response = (array)ApiClientProvider::getApiClient()->get('/history', compact('filter') + ['page_size' => 100]);
+        $response = (array)ApiClientProvider::getApiClient()->get('/history?include=user', compact('filter') + ['page_size' => 100]);
         $this->formatResponseData($response, $schema);
 
         return $response;
@@ -175,6 +175,7 @@ class HistoryComponent extends Component
             return;
         }
         $data = Hash::get($response, 'data');
+        $included = Hash::combine(Hash::get($response, 'included', []), '{n}.id', '{n}');
         foreach ($data as &$history) {
             $changed = (array)Hash::get($history, 'meta.changed');
             $formatted = [];
@@ -184,6 +185,7 @@ class HistoryComponent extends Component
                 $formatted[$field] = sprintf('<div class="history-field"><label>%s</label>%s</div>', $label, $content);
             }
             $history['meta']['changed'] = $formatted;
+            $history['meta']['user'] = Hash::get($included, Hash::get($history, 'meta.user_id'));
             $applicationId = (string)Hash::get($history, 'meta.application_id');
             $history['meta']['application_name'] = Applications::getName($applicationId);
         }

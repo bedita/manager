@@ -511,7 +511,8 @@ class ModulesComponentTest extends TestCase
         /** @var \App\Controller\ModulesController $appController */
         $appController = $this->Modules->getController();
         // Mock Authentication component
-        $appController->setRequest($appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $request = $appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock());
+        $appController->setRequest($request);
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         Configure::write('Modules', $modules);
@@ -528,12 +529,19 @@ class ModulesComponentTest extends TestCase
             ->getMock();
         if ($meta instanceof \Exception) {
             $apiClient->method('get')
-                ->with('/home')
                 ->willThrowException($meta);
         } else {
             $apiClient->method('get')
-                ->with('/home')
-                ->willReturn(compact('meta'));
+                ->will($this->returnCallback(
+                    function ($param) use ($meta, $modules) {
+                        $args = func_get_args();
+                        if ($args[0] === '/model/object_types') {
+                            return $modules;
+                        }
+
+                        return compact('meta');
+                    }
+                ));
         }
         ApiClientProvider::setApiClient($apiClient);
 

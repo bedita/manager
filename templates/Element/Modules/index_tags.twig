@@ -1,0 +1,51 @@
+{% set canSave = Perms.canSave('tags') %}
+<div class="tags-container">
+    <div class="tags">
+        <div class="list-objects">
+            {% for parent_id, tags in tagsTree %}
+                {# list resources : table header #}
+                <nav class="table-header has-border-black">
+                    {% for prop in properties %}
+                        {% set label = prop %}
+                        {% if prop == 'enabled' %}{% set label = 'Status' %}{% endif %}
+                        <div class="{{ Link.sortClass(prop) }}"><a href="{{ Link.sortUrl(prop) }}">{{ __(label)|humanize }}</a></div>
+                    {% endfor %}
+                    <div class="narrow"><a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a></div>
+                    <div></div>
+                </nav>
+                {% for tag_id in tags %}
+                    {% set resource = resources[tag_id] %}
+                    <tag-form :cansave="{{ canSave|json_encode }}" :obj="{{ resource|json_encode }}"></tag-form>
+                {% endfor %}
+            {% endfor %}
+            {% if canSave %}
+                <h2 class="mt-2">{{ __('Create a new tag') }}</h2>
+                {{ Form.create(null, {'id': 'form-create', 'url': saveAction, 'class': 'table-row'})|raw }}
+                    {% if redirTo %}
+                        {{ Form.hidden('redirTo', {'value': Url.build(redirTo)})|raw }}
+                    {% endif %}
+                    {% for prop in properties %}
+                        <div class="{{ prop }}-cell">
+                            {% if prop == 'name' or prop == 'label' %}
+                                {{ Form.text(prop, {
+                                    'type': 'text',
+                                    'autocomplete': 'off',
+                                    'autocorrect': 'off',
+                                    'autocapitalize': 'off',
+                                    'placeholder': prop
+                                }) | raw }}
+                            {% elseif prop == 'enabled' %}
+                                {{ Form.checkbox(prop, {'checked': 1})|raw }}
+                                <label>{{ __('Enabled') }}</label>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="prop-id">-</div>
+                    <div class="buttons-cell narrow">
+                        <button title="{{ __('Save') }} {{ resource.attributes.name }}" class="button button-primary icon-check-1">{{ __('Save') }}</button>
+                    </div>
+                {{ Form.end()|raw }}
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+
+██████╗░███████╗██████╗░██╗████████╗░█████╗░  ███╗░░░███╗░█████╗░███╗░░██╗░█████╗░░██████╗░███████╗██████╗░
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗  ████╗░████║██╔══██╗████╗░██║██╔══██╗██╔════╝░██╔════╝██╔══██╗
+██████╦╝█████╗░░██║░░██║██║░░░██║░░░███████║  ██╔████╔██║███████║██╔██╗██║███████║██║░░██╗░█████╗░░██████╔╝
+██╔══██╗██╔══╝░░██║░░██║██║░░░██║░░░██╔══██║  ██║╚██╔╝██║██╔══██║██║╚████║██╔══██║██║░░╚██╗██╔══╝░░██╔══██╗
+██████╦╝███████╗██████╔╝██║░░░██║░░░██║░░██║  ██║░╚═╝░██║██║░░██║██║░╚███║██║░░██║╚██████╔╝███████╗██║░░██║
+╚═════╝░╚══════╝╚═════╝░╚═╝░░░╚═╝░░░╚═╝░░╚═╝  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝░░╚═╝
+
+BEdita Manager
+-->
+
+<html>
+<head>
+    {{ Html.charset()|raw }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{ Html.meta('favicon.ico', '/favicon.ico', {'type': 'icon'})|raw }}
+
+    {# fonts #}
+    {{ Html.css(['be-icons-font'])|raw }}
+    {{ Html.css(['be-icons-codes'])|raw }}
+
+    {{ Html.css(['vendors'])|raw }}
+    {{ Html.css(['style'])|raw }}
+
+    <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+
+    {{ element('custom_colors') }}
+
+    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
+
+    {{ element('json_meta_config') }}
+</head>
+
+<body class="{% if currentModule %}view-module module-{{ currentModule.name }}{% endif %} {{ _view.fetch('bodyViewClass') }}"
+    {% if config('AlertMessage.text') %}alert-message="{{ config('AlertMessage.text') }}"{% endif %}>
+
+    <main class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
+
+        <div class="layout-content">
+            {{ element('Modules/header') }}
+            {{ _view.fetch('content')|raw }}
+        </div>
+
+    </main>
+
+</body>
+</html>
