@@ -38,13 +38,13 @@ yarn build-plugins
 yarn build
 ```
 
-* Configure BEdita 4 API base URL and API KEY in `config/.env` like:
+* Configure BEdita API base URL and API KEY in `config/.env` like:
 
 ```bash
-# set BEDITA4 base URL
-export BEDITA_API="{bedita-4-url}"
-# set BEDITA4 API KEY (optional)
-export BEDITA_API_KEY="{bedita4-api-key}"
+# set BEDITA base URL
+export BEDITA_API="{bedita-url}"
+# set BEDITA API KEY (optional)
+export BEDITA_API_KEY="{bedita-api-key}"
 ```
 
 To test the webapp you can simply run builtin webserver from `manager` folder like this

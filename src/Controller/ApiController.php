@@ -19,7 +19,7 @@ use Cake\Http\Response;
 /**
  * ApiController class.
  *
- * It proxies requests to BEdita 4 API.
+ * It proxies requests to BEdita API.
  * The response will be the raw json response of the API itself.
  * Links of API host is masked with manager host.
  */
