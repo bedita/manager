@@ -186,7 +186,7 @@ export default {
                         document.querySelector(`td[name='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
 
-                    if (user.id == modifierId != undefined) {
+                    if (user.id == modifierId && userInfo!= undefined) {
                         document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
                 });
