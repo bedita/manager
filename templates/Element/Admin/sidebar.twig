@@ -9,4 +9,4 @@
     {% endif %}
 {% endfor %}
 
-{% do _view.append('module-links', '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-outlined">' ~ __('Clear cache') ~ '</a>') %}
+{% do _view.append('module-links', '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-primary button-primary-hover-module-admin is-width-auto">' ~ __('Clear cache') ~ '</a>') %}

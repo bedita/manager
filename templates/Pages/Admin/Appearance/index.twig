@@ -50,10 +50,10 @@ __('Properties')
                 </div>
                 <div class="column">
                     {{ Form.button(__('Save'), {
-                        'class': 'button button-primary button-primary-hover-module-admin',
+                        'class': 'icon-check-1 button button-primary button-primary-hover-module-admin is-width-auto',
                         'onclick': 'this.classList.add(\'is-loading-spinner\')',
                     }) | raw }}
-                    <a href="{{ wikis[property] }}" class="button button-outlined" target="_blank">{{ __('See Wiki for help') }}</a>
+                    <a href="{{ wikis[property] }}" class="icon-info-1 button button-outlined" target="_blank">{{ __('See Wiki for help') }}</a>
                 </div>
             {{ Form.end()|raw }}
         </div>
