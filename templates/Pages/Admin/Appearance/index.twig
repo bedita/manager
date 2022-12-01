@@ -1,0 +1,64 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Appearance')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+{% set configKey = _view.getRequest().getQuery('configKey')|default('alert_message') %}
+{% set wikis = {
+    'alert_message': 'https://github.com/bedita/manager/wiki/Setup:-Alert-Message',
+    'export': 'https://github.com/bedita/manager/wiki/Setup:-Export',
+    'modules': 'https://github.com/bedita/manager/wiki/Setup:-Modules-configuration',
+    'pagination': 'https://github.com/bedita/manager/wiki/Setup:-Pagination',
+    'project': 'https://github.com/bedita/manager/wiki/Setup:-Project',
+    'properties': 'https://github.com/bedita/manager/wiki/Setup:-Properties-display',
+} %}
+
+{#
+// i18n
+__('Alert Message')
+__('Export')
+__('Modules')
+__('Pagination')
+__('Project')
+__('Properties')
+#}
+
+<admin-appearance inline-template :configkey={{ configKey|json_encode }}>
+
+    <div class="module-index">
+
+        <div class="mt-2 mb-2">
+            <label for="configKey">
+                {{ __('Configuration key') }}
+            </label>
+            <select id="configKey" v-model="config">
+            {% for property in configs|keys|sort %}
+                <option value="{{ property }}">{{ __(property|humanize) }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
+        {% for property,val in configs %}
+        <div v-show="config === {{ property|json_encode }}">
+            {{ Form.create(null, {
+                'id': 'form-appearance-' ~ property,
+                'class': 'columns',
+                'url': {'_name': 'admin:save:appearance'},
+            })|raw }}
+                <div class="column">
+                    {{ Form.control(property|camelize, Schema.controlOptions(property|camelize, val|escape('html_attr'), {'type': 'object'})|merge({'label': false}))|raw }}
+                    {{ Form.control('property_name', {'type': 'hidden', 'value': property})|raw }}
+                </div>
+                <div class="column">
+                    {{ Form.button(__('Save'), {
+                        'class': 'icon-check-1 button button-primary button-primary-hover-module-admin is-width-auto',
+                        'onclick': 'this.classList.add(\'is-loading-spinner\')',
+                    }) | raw }}
+                    <a href="{{ wikis[property] }}" class="icon-info-1 button button-outlined" target="_blank">{{ __('See Wiki for help') }}</a>
+                </div>
+            {{ Form.end()|raw }}
+        </div>
+        {% endfor %}
+
+    </div>
+
+</admin-appearance>

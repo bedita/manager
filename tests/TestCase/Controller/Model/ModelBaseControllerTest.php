@@ -287,6 +287,7 @@ class ModelBaseControllerTest extends TestCase
      * @param array $data Request data
      * @param bool $singleView Single view
      * @covers ::save()
+     * @covers ::doSave()
      * @dataProvider saveProvider()
      * @return void
      */
@@ -307,6 +308,7 @@ class ModelBaseControllerTest extends TestCase
      * Test `save` failure method
      *
      * @covers ::save()
+     * @covers ::doSave()
      * @return void
      */
     public function testSaveFail(): void
@@ -321,6 +323,26 @@ class ModelBaseControllerTest extends TestCase
         static::assertInstanceOf(Response::class, $result);
         $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
+    }
+
+    /**
+     * Test `save` method, on redir
+     *
+     * @covers ::save()
+     * @covers ::doSave()
+     * @return void
+     */
+    public function testSaveRedir(): void
+    {
+        $redirTo = ['_name' => 'model:create:object_types'];
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('id', 1));
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('description', 'whatever'));
+        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('redirTo', $redirTo));
+        $result = $this->ModelController->save();
+        static::assertInstanceOf(Response::class, $result);
+        $location = $result->getHeaderLine('Location');
+        $expected = '/new';
+        static::assertStringEndsWith($expected, $location);
     }
 
     /**

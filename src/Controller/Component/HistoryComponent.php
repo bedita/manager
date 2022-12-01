@@ -185,7 +185,7 @@ class HistoryComponent extends Component
                 $formatted[$field] = sprintf('<div class="history-field"><label>%s</label>%s</div>', $label, $content);
             }
             $history['meta']['changed'] = $formatted;
-            $history['meta']['user'] = Hash::get($included, $history['meta']['user_id']);
+            $history['meta']['user'] = Hash::get($included, Hash::get($history, 'meta.user_id'));
             $applicationId = (string)Hash::get($history, 'meta.application_id');
             $history['meta']['application_name'] = Applications::getName($applicationId);
         }

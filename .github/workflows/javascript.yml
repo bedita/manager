@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
 
     steps:
       - name: 'Checkout current revision'
@@ -42,4 +42,4 @@ jobs:
         run: 'yarn build'
 
       - name: 'Run ESLint'
-        run: 'yarn eslint src/Template/Layout/js/**/*.js'
+        run: 'yarn eslint resources/js/**/*.js'

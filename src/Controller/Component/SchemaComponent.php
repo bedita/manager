@@ -172,6 +172,19 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Check if tags are in use
+     *
+     * @return bool
+     */
+    public function tagsInUse(): bool
+    {
+        $features = $this->objectTypesFeatures();
+        $tagged = (array)Hash::get($features, 'tagged');
+
+        return !empty($tagged);
+    }
+
+    /**
      * Fetch object type metadata
      *
      * @param string $type Object type.
@@ -388,7 +401,7 @@ class SchemaComponent extends Component
         $descendants = array_filter(array_unique($descendants));
         $types = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes');
         $descendants = array_fill_keys($descendants, []);
-        $uploadable = $categorized = [];
+        $uploadable = $categorized = $tagged = [];
         foreach ($types as $name => $data) {
             $abstract = (bool)Hash::get($data, 'is_abstract');
             if ($abstract) {
@@ -404,12 +417,16 @@ class SchemaComponent extends Component
                 if (in_array('Categories', $assoc)) {
                     $categorized[] = $name;
                 }
+                if (in_array('Tags', $assoc)) {
+                    $tagged[] = $name;
+                }
             }
         }
         sort($categorized);
+        sort($tagged);
         sort($uploadable);
 
-        return compact('descendants', 'uploadable', 'categorized');
+        return compact('descendants', 'uploadable', 'categorized', 'tagged');
     }
 
     /**

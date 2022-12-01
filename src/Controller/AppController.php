@@ -228,14 +228,7 @@ class AppController extends Controller
             unset($data['confirm-password']);
         }
 
-        if (!empty($data['_jsonKeys'])) {
-            $keys = explode(',', $data['_jsonKeys']);
-            foreach ($keys as $key) {
-                $value = Hash::get($data, $key);
-                $data = Hash::insert($data, $key, json_decode((string)$value, true));
-            }
-            unset($data['_jsonKeys']);
-        }
+        $this->decodeJsonAttributes($data);
 
         // remove date_ranges items having empty both start & end dates
         if (!empty($data['date_ranges'])) {
@@ -264,6 +257,31 @@ class AppController extends Controller
             }
             unset($data['_types']);
         }
+    }
+
+    /**
+     * Decodes JSON attributes.
+     *
+     * @param array $data Request data
+     * @return void
+     */
+    protected function decodeJsonAttributes(array &$data): void
+    {
+        if (empty($data['_jsonKeys'])) {
+            return;
+        }
+
+        $keys = explode(',', (string)$data['_jsonKeys']);
+        foreach ($keys as $key) {
+            $value = Hash::get($data, $key);
+            $decoded = json_decode((string)$value, true);
+            if ($decoded === []) {
+                // decode as empty object in case of empty array
+                $decoded = json_decode((string)$value);
+            }
+            $data = Hash::insert($data, $key, $decoded);
+        }
+        unset($data['_jsonKeys']);
     }
 
     /**
@@ -366,7 +384,8 @@ class AppController extends Controller
         if (($value1 === null || $value1 === '') && ($value2 === null || $value2 === '')) {
             return false; // not changed
         }
-        if (is_bool($value1) && !is_bool($value2)) { // i.e. true / "1"
+        $booleanItems = ['0', '1', 'true', 'false', 0, 1];
+        if (is_bool($value1) && !is_bool($value2) && in_array($value2, $booleanItems, true)) { // i.e. true / "1"
             return $value1 !== boolval($value2);
         }
         if (is_numeric($value1) && is_string($value2)) {

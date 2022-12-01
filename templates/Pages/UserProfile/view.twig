@@ -1,0 +1,76 @@
+{% do _view.assign('bodyViewClass', 'userprofiles-view') %}
+{% do _view.assign('title', 'User Profile') %}
+
+<div class="modules-view">
+
+    <div class="module-form">
+
+        {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+            'url': {'_name': 'user_profile:save', 'object_type': 'users'},
+            'id': 'form-main',
+        })|raw }}
+
+            {{ Form.hidden('id', {'value': object.id})|raw }}
+            {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
+            <div class="main-view-column">
+                {% set jsonKeys = [] %}
+                {% for group, attributes in properties %}
+                    {% if group != 'other' and group != 'password_change' and attributes %}
+                        <section class="fieldset">
+                            <header class="tab unselectable">
+                                {% if group|trim  %}
+                                    <h2>{{ __(group|humanize) }}</h2>
+                                {% else %}
+                                    <h2>{{ __('General') }}</h2>
+                                {% endif %}
+                            </header>
+                            <div class="tab-container">
+                                {% for key, value in attributes %}
+                                    {% set options = {} %}
+                                    {% if key == 'email' or key == 'username' %}
+                                        {% set options = options|merge({'readonly': 'true'}) %}
+                                    {% endif %}
+                                    {% if key != 'title' %}
+                                        {{ Property.control(key, value, options)|raw }}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="side-view-column">
+                {% for group, attributes in properties %}
+                    {% if group == 'password_change' and attributes %}
+                        <section class="fieldset">
+                            <header class="tab unselectable">
+                                <h2>{{ __('Change password') }}</h2>
+                            </header>
+
+                            <div class="tab-container">
+                                {% for key, value in attributes %}
+                                    {{ Property.control(key, value)|raw }}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if jsonKeys %}
+                {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': jsonKeys|join(',')})|raw }}
+            {% endif %}
+
+        {{ Form.end()|raw }}
+
+        {# append "save" to sidebar #}
+        {% do _view.append('module-buttons', Form.button( __('Save'),
+            {
+                'form': 'form-main',
+                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+            })
+        ) %}
+    </div>
+
+</div>

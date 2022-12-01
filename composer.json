@@ -22,15 +22,16 @@
     ],
     "require": {
         "php": ">=7.4",
-        "bedita/i18n": "^4.1.5",
+        "bedita/i18n": "^4.2.2",
         "bedita/web-tools": "^3.10.1",
         "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "~4.4.0",
         "cakephp/plugin-installer": "^1.3",
         "josegonzalez/dotenv": "^3.2",
-        "league/oauth2-google": "^4.0",
         "league/oauth2-github": "^3.0",
+        "league/oauth2-google": "^4.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "league/flysystem": "^2.5",
         "phpoffice/phpspreadsheet": "^1.22",
         "wikimedia/composer-merge-plugin": "^2.0.1"
     },
@@ -40,8 +41,10 @@
         "cakephp/console": "^4.4",
         "cakephp/debug_kit": "^4.7.1",
         "dereuromark/cakephp-ide-helper": "~1.17.0",
-        "phpstan/phpstan": "^1.5",
-        "phpunit/phpunit": "^9",
+        "phpstan/phpstan": "^1.8.2",
+        "phpstan/extension-installer": "^1.2",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpunit/phpunit": "^9.5",
         "cakephp/repl": "^0.1"
     },
     "autoload": {
@@ -75,7 +78,8 @@
         "allow-plugins": {
             "cakephp/plugin-installer": true,
             "wikimedia/composer-merge-plugin": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     },
     "extra": {

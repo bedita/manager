@@ -15,7 +15,7 @@
   </php>
   <!-- Add any additional test suites you want to run here -->
   <testsuites>
-    <testsuite name="BEdita 4 Manager">
+    <testsuite name="BEdita Manager">
       <directory>./tests/TestCase</directory>
     </testsuite>
     <!-- Add plugin test suites here. -->

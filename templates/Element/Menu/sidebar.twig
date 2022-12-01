@@ -1,0 +1,84 @@
+<div class="sidebar">
+
+    <div class="project-title">
+        <div class="module-box">
+            {{ Html.link( (project.name ?: 'BEdita Manager'), '/' ) | raw }}
+        </div>
+    </div>
+
+    {# module specific #}
+    {% if not Layout.isLogin() %}
+        <div class="sidebar-module-commands">
+
+        {% if not Layout.isDashboard() %}
+            {% set editors = Editors.list() %}
+            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ Layout.publishStatus(object | default({})) }}">
+                {{ Layout.moduleLink()|raw }}
+            </div>
+
+            {% if editors|length > 1 %}
+            <ul class="concurrent-editors">
+                <strong>{{ __('Alert!') }}</strong>
+                <span>{{ __('Concurrent users') }}:</span>
+                {% for editor in editors %}
+                    <li>{{ editor.name }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endif %}
+
+            <div class="module-buttons">
+                {{ _view.fetch('module-buttons')|raw }}
+                {% if currentModule.hints.multiple_types and types.right is iterable %}
+                    {{ element('filter_type') }}
+                {% endif %}
+            </div>
+
+            <div class="module-links">
+                {{ _view.fetch('module-links')|raw }}
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="sidebar-body">
+
+        {% if I18n.getLanguages|length > 1 %}
+            <div>
+                <p class="has-text-size-smaller">
+                {% for code, name in I18n.getLanguages() %}
+                    {% if code != I18n.getLang() %}
+                        <a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}">{{ name[:3] | upper }}</a>
+                    {% else %}
+                        <span class="has-font-weight-bold">{{ name[:3] | upper }}</span>
+                    {% endif %}
+                    {% if not loop.last %} | {% endif %}
+                {% endfor %}
+                </p>
+            </div>
+        {% endif %}
+
+        <div class="user">
+            <a title="go to {{ user.attributes.name }} profile" href="{{ Url.build({ '_name': 'user_profile:view' }) }}">
+                {%- if user.attributes.title %}
+                    {{ user.attributes.title }}
+                {% else %}
+                    {{ user.attributes.name }} {{ user.attributes.surname }}
+                {% endif -%}
+            </a>
+        </div>
+
+        <div>
+            <p>
+                <a href="{{ Url.build({'_name': 'logout'}) }}" class="button button-outlined">{{ __('Log out') }}</a>
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-footer">
+        <div class="sidebar-bedita-logo white">{# css logo #}</div>
+        {{ element('Menu/colophon') }}
+    </div>
+</div>

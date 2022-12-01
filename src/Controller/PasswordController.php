@@ -40,7 +40,7 @@ class PasswordController extends AppController
     {
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user->get('tokens'))) {
+        if (empty($user) || empty($user->get('tokens'))) {
             return null;
         }
 
