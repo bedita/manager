@@ -44,7 +44,13 @@ class PermsHelper extends Helper
     public function initialize(array $config): void
     {
         $modules = (array)$this->_View->get('modules');
-        $this->allowed = Hash::combine($modules, '{s}.name', '{s}.hints.allow');
+        // using foreach instead of Hash::combine
+        // to avoid RuntimeError "Hash::combine() needs an equal number of keys + values"
+        foreach ($modules as $name => $module) {
+            if (Hash::check($module, 'hints.allow')) {
+                $this->allowed[$name] = Hash::get($module, 'hints.allow');
+            }
+        }
         $currentModule = (array)$this->_View->get('currentModule');
         $this->current = (array)Hash::get($currentModule, 'hints.allow');
     }
