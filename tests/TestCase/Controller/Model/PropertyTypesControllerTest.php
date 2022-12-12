@@ -106,7 +106,7 @@ class PropertyTypesControllerTest extends TestCase
                         // 'id' => $nextId,
                         'type' => 'property_types',
                         'attributes' => [
-                                'name' => 'dummy_property_one',
+                                'name' => 'dummyone',
                                 'params' => [
                                         'type' => 'string',
                                 ],
@@ -116,7 +116,7 @@ class PropertyTypesControllerTest extends TestCase
                 [
                     'addPropertyTypes' => [
                         [
-                            'name' => 'dummy_property_one',
+                            'name' => 'dummyone',
                             'params' => json_encode([
                                 'type' => 'string',
                             ]),
@@ -131,7 +131,7 @@ class PropertyTypesControllerTest extends TestCase
                         'id' => $nextId,
                         'type' => 'property_types',
                         'attributes' => [
-                            'name' => 'dummy_property_two',
+                            'name' => 'dummytwo',
                             'params' => [
                                 'type' => 'object',
                             ],
@@ -143,7 +143,7 @@ class PropertyTypesControllerTest extends TestCase
                         [
                             'id' => $nextId,
                             'attributes' => [
-                                'name' => 'dummy_property_two',
+                                'name' => 'dummytwo',
                                 'params' => [
                                     'type' => 'object',
                                 ],
