@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-09-22 16:03:10 \n"
+"POT-Creation-Date: 2022-12-12 14:16:42 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -98,6 +98,9 @@ msgstr "Data di nascita"
 msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
 
+msgid "Bulk action performed on {0} objects"
+msgstr "Operazione massiva eseguita su {n} oggetti"
+
 msgid "Calendar"
 msgstr "Calendario"
 
@@ -187,6 +190,12 @@ msgstr "Creato"
 
 msgid "Current password"
 msgstr "Password corrente"
+
+msgid "Custom action class {0} is not valid"
+msgstr "Classe action personalizzata {0} non valida"
+
+msgid "Custom action class {0} not found"
+msgstr "Classe action personalizzata {0} non trovata"
 
 msgid "Custom properties"
 msgstr "Proprietà personalizzate"
@@ -440,6 +449,12 @@ msgstr "Url miniatura mancante"
 msgid "Modified"
 msgstr "Modificato"
 
+msgid "Modified ↑ Oldest on top"
+msgstr "Data di modifica ↑ Meno recenti in testa"
+
+msgid "Modified ↓ Newest on top"
+msgstr "Data di modifica ↓ Più recenti in testa"
+
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
@@ -613,6 +628,12 @@ msgstr ""
 msgid "Position"
 msgstr "Posizione"
 
+msgid "Position ↑"
+msgstr "Posizione ↑"
+
+msgid "Position ↓"
+msgstr "Posizione ↓"
+
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
 
@@ -775,6 +796,12 @@ msgstr "Miniatura non pronta: in lavorazione"
 
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
+
+msgid "Title ↑"
+msgstr "Titolo ↑"
+
+msgid "Title ↓"
+msgstr "Titolo ↓"
 
 msgid "To"
 msgstr "A"
@@ -1084,7 +1111,7 @@ msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
 #, javascript-format
-msgid "Do you really want to trash these property types? ${ types }"
+msgid "Do you really want to remove these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
 msgid "Remove item. Are you sure?"
@@ -1148,6 +1175,9 @@ msgstr "Cerca tag esistenti"
 
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
+
+msgid "Error on deleting tag"
+msgstr "Errore nell'eliminazione del tag"
 
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"

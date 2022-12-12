@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-09-22 16:03:10 \n"
+"POT-Creation-Date: 2022-12-12 14:16:42 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -98,6 +98,9 @@ msgstr ""
 msgid "Bulk Action failed on: "
 msgstr ""
 
+msgid "Bulk action performed on {0} objects"
+msgstr ""
+
 msgid "Calendar"
 msgstr ""
 
@@ -186,6 +189,12 @@ msgid "Created"
 msgstr ""
 
 msgid "Current password"
+msgstr ""
+
+msgid "Custom action class {0} is not valid"
+msgstr ""
+
+msgid "Custom action class {0} not found"
 msgstr ""
 
 msgid "Custom properties"
@@ -440,6 +449,12 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
+msgid "Modified ↑ Oldest on top"
+msgstr ""
+
+msgid "Modified ↓ Newest on top"
+msgstr ""
+
 msgid "Module access not authorized"
 msgstr ""
 
@@ -611,6 +626,12 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
+msgid "Position ↑"
+msgstr ""
+
+msgid "Position ↓"
+msgstr ""
+
 msgid "Preferences and Tools"
 msgstr ""
 
@@ -771,6 +792,12 @@ msgid "Thumb not ready: coming soon"
 msgstr ""
 
 msgid "Thumbnail is not ready"
+msgstr ""
+
+msgid "Title ↑"
+msgstr ""
+
+msgid "Title ↓"
 msgstr ""
 
 msgid "To"
@@ -1080,7 +1107,7 @@ msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
 #, javascript-format
-msgid "Do you really want to trash these property types? ${ types }"
+msgid "Do you really want to remove these property types? ${ types }"
 msgstr ""
 
 msgid "Remove item. Are you sure?"
@@ -1141,6 +1168,9 @@ msgid "Search existing tags"
 msgstr ""
 
 msgid "Add new tag"
+msgstr ""
+
+msgid "Error on deleting tag"
 msgstr ""
 
 msgid "copied in the clipboard"
