@@ -91,6 +91,8 @@ class PropertyTypesControllerTest extends TestCase
      */
     public function saveProvider(): array
     {
+        $nextId = $this->nextId();
+
         return [
             // test with empty object
             'emptyRequest' => [
@@ -101,7 +103,7 @@ class PropertyTypesControllerTest extends TestCase
             'addPropertyTypesRequest' => [
                 [
                     [
-                        // 'id' => '14',
+                        // 'id' => $nextId,
                         'type' => 'property_types',
                         'attributes' => [
                                 'name' => 'giovanni',
@@ -126,7 +128,7 @@ class PropertyTypesControllerTest extends TestCase
             'editPropertyTypesRequest' => [
                 [
                     [
-                        'id' => '14',
+                        'id' => $nextId,
                         'type' => 'property_types',
                         'attributes' => [
                             'name' => 'enrico',
@@ -139,7 +141,7 @@ class PropertyTypesControllerTest extends TestCase
                 [
                     'editPropertyTypes' => [
                         [
-                            'id' => '14',
+                            'id' => $nextId,
                             'attributes' => [
                                 'name' => 'enrico',
                                 'params' => [
@@ -152,10 +154,10 @@ class PropertyTypesControllerTest extends TestCase
                 'edited',
             ],
             'removePropertyTypesRequest' => [
-                [ '14' ],
+                [ $nextId ],
                 [
                     'removePropertyTypes' => [
-                        '14',
+                        $nextId,
                     ],
                 ],
                 'removed',
@@ -240,5 +242,19 @@ class PropertyTypesControllerTest extends TestCase
         $this->ModelController->setResourceType($expected);
         $actual = $this->ModelController->getResourceType();
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Next ID for test
+     *
+     * @return string
+     */
+    private function nextId(): string
+    {
+        $this->setupController();
+        $response = $this->client->get('/model/property_types');
+        $maxId = (int)Hash::get($response, 'data.%d.id', count($response['data']));
+
+        return $maxId + 1;
     }
 }
