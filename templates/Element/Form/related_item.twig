@@ -19,7 +19,7 @@
 
 
     {# PRIORITY (or position) #}
-    {% if common or (children and object.attributes.children_order in ['position', '-position']) %}
+    {% if common or (children and object.attributes.children_order in [null, 'position', '-position']) %}
         <div class="priority">
             {% if children %}
                 <span class="badge" v-html="position(related, index + 1)"></span>
@@ -143,9 +143,8 @@
     </div>
     {% endif %}
 
-
     {# CHILDREN position #}
-    {% if children and object.attributes.children_order in ['position', '-position'] %}
+    {% if children and object.attributes.children_order in [null, 'position', '-position'] %}
         <div class="children-position container-grid p-05">
             <dl>
                 <dt>{{ __('Move to position') }}:</dt>
