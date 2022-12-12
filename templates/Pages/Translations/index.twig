@@ -14,6 +14,9 @@
 
                 {% if objects %}
                     <nav class="table-header has-border-module-translations">
+                        <div class="select-cell narrow" @click="toggleAll">
+                            <input type="checkbox" ref="checkAllCB">
+                        </div>
                         <div>{{ __('Translation') }}</div>
                         <div>{{ __('From') }}</div>
                         <div>{{ __('To') }}</div>
@@ -37,7 +40,10 @@
                             'object_type': translated.type,
                     }, {'fullBase': true}) %}
 
-                    <div class="table-row object-status-{{ object.attributes.status }}">
+                    <a data-id="{{ object.id }}" class="table-row object-status-{{ object.attributes.status }}">
+                        <div class="select-cell narrow" @click="selectRow">
+                            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
+                        </div>
                         <div class="narrow">
                             <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}>
                                     {{ object.attributes.translated_fields.title|default('no title') }}
@@ -67,13 +73,24 @@
                             {% endif %}
                         </div>
 
-                    </div>
+                    </a>
                 {% else %}
                     {{ __('No items found') }}
                 {% endfor %}
 
             </div>
 
+        </div>
+
+        <div class="module-footer">
+            {# bulk actions #}
+            {% if objects %}
+            <div class="bulk-actions">
+                <div>
+                    {{ element('Form/bulk_export') }}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
     </div>
