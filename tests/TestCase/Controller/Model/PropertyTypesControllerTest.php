@@ -255,6 +255,6 @@ class PropertyTypesControllerTest extends TestCase
         $response = $this->client->get('/model/property_types');
         $maxId = (int)Hash::get($response, 'data.%d.id', count($response['data']));
 
-        return $maxId + 1;
+        return strval($maxId + 1);
     }
 }
