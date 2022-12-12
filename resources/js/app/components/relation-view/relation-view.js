@@ -753,6 +753,21 @@ export default {
         },
 
         /**
+         * Get position value
+         *
+         * @param {Object} related The related folder
+         * @param {String} defaultPosition The default position
+         * @returns
+         */
+        position(related, defaultPosition) {
+            if (related?.meta?.relation?.position) {
+                return related.meta.relation.position;
+            }
+
+            return defaultPosition;
+        },
+
+        /**
          * Return true when related object has streams data.
          *
          * @param {Object} related The object

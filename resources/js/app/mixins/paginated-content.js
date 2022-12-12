@@ -71,6 +71,7 @@ export const PaginatedContentMixin = {
                 }
 
                 options.signal = this.requestController.signal;
+                const isChildren = requestUrl.indexOf('/related/children') > 0;
 
                 let currentRequest = fetch(requestUrl, options)
                     .then((response) => response.json())
@@ -80,6 +81,20 @@ export const PaginatedContentMixin = {
                         let objects = [];
                         if (json && 'data' in json) {
                             objects = (Array.isArray(json.data) ? json.data : [json.data]) || [];
+                        }
+                        if (isChildren) {
+                            let order = 'position';
+                            if (document.getElementById('children-order')) {
+                                order = document.getElementById('children-order').value;
+                            }
+                            if (order.indexOf('position') >= 0) {
+                                const ascending = order === 'position';
+                                let i = order === 'position' ? 1 : json.meta.pagination.count;
+                                for (let obj of objects) {
+                                    obj.meta.relation.position = i;
+                                    i = ascending ? i+1 : i-1;
+                                }
+                            }
                         }
 
                         // if requestQueue is empty it means that this request is the last of the queue

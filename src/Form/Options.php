@@ -35,6 +35,7 @@ class Options
         'status',
         'title',
         'coords',
+        'children_order',
     ];
 
     /**
@@ -222,6 +223,30 @@ class Options
             'class' => 'coordinates',
             'templates' => [
                 'inputContainer' => sprintf('<div class="input coordinates {{type}}{{required}}">%s%s</div>', $label, $coordinatesView),
+            ],
+        ];
+    }
+
+    /**
+     * Children order
+     *
+     * @param mixed|null $value The field value.
+     * @return array
+     */
+    public static function childrenOrder($value): array
+    {
+        return compact('value') + [
+            'type' => 'select',
+            'options' => [
+                ['value' => 'position', 'text' => __('Position ↑')],
+                ['value' => '-position', 'text' => __('Position ↓')],
+                ['value' => 'title', 'text' => __('Title ↑')],
+                ['value' => '-title', 'text' => __('Title ↓')],
+                ['value' => 'modified', 'text' => __('Modified ↑ Oldest on top')],
+                ['value' => '-modified', 'text' => __('Modified ↓ Newest on top')],
+            ],
+            'templateVars' => [
+                'containerClass' => 'childrenOrder',
             ],
         ];
     }
