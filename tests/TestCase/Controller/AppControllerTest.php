@@ -585,6 +585,20 @@ class AppControllerTest extends TestCase
                     ],
                 ],
             ],
+            'empty json' => [
+                'documents',
+                [
+                    'json_prop' => new \stdClass(),
+                    'json_prop2' => [
+                        'gin' => 'vodka',
+                    ],
+                ],
+                [
+                    '_jsonKeys' => 'json_prop,json_prop2',
+                    'json_prop' => '{ }',
+                    'json_prop2' => '{"gin":"vodka"}',
+                ],
+            ],
         ];
     }
 
@@ -596,6 +610,7 @@ class AppControllerTest extends TestCase
      * @param array $data The payload data
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
+     * @covers ::decodeJsonAttributes()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
@@ -648,6 +663,7 @@ class AppControllerTest extends TestCase
             'object and object | unchanged' => [ ['six'], ['six'], false ],
             'date and date | changed' => [ $d1, $d2, true ],
             'date and date | unchanged' => [ $d1, $d1, false ],
+            'bool and not boolean string | changed' => [ true, 'whatever', true ],
         ];
     }
 

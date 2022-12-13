@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=8.1
 FROM chialab/php:${PHP_VERSION}-apache
 
 # Install Wait-for-it and configure PHP
@@ -10,7 +10,7 @@ RUN curl -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for
 COPY . /var/www/html
 
 # Set APP_NAME to avoid .env load
-ENV APP_NAME BE4-MANAGER
+ENV APP_NAME BE-MANAGER
 ARG DEBUG
 ENV DEBUG ${DEBUG:-false}
 
@@ -26,9 +26,9 @@ RUN if [ ! "$DEBUG" = "true" ]; then export COMPOSER_ARGS='--no-dev'; fi \
 USER root:root
 
 # Install node and yarn
-ENV NODE_VERSION=12.6.0
+ENV NODE_VERSION=18.12.0
 RUN apt install -y curl
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
 ENV NVM_DIR=/root/.nvm
 RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}

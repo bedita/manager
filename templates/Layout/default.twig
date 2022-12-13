@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+
+██████╗░███████╗██████╗░██╗████████╗░█████╗░  ███╗░░░███╗░█████╗░███╗░░██╗░█████╗░░██████╗░███████╗██████╗░
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗  ████╗░████║██╔══██╗████╗░██║██╔══██╗██╔════╝░██╔════╝██╔══██╗
+██████╦╝█████╗░░██║░░██║██║░░░██║░░░███████║  ██╔████╔██║███████║██╔██╗██║███████║██║░░██╗░█████╗░░██████╔╝
+██╔══██╗██╔══╝░░██║░░██║██║░░░██║░░░██╔══██║  ██║╚██╔╝██║██╔══██║██║╚████║██╔══██║██║░░╚██╗██╔══╝░░██╔══██╗
+██████╦╝███████╗██████╔╝██║░░░██║░░░██║░░██║  ██║░╚═╝░██║██║░░██║██║░╚███║██║░░██║╚██████╔╝███████╗██║░░██║
+╚═════╝░╚══════╝╚═════╝░╚═╝░░░╚═╝░░░╚═╝░░╚═╝  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝░░╚═╝
+
+BEdita Manager
+-->
+
+<html lang="{{ config('I18n.lang', 'en')}}">
+<head>
+    {{ Html.charset()|raw }}
+
+    {{ Html.meta('viewport', 'width=device-width, initial-scale=1.0')|raw }}
+    {{ Html.meta('description', 'BEdita Manager, official BEdita API admin tool')|raw }}
+    {{ Html.meta('generator', 'BEdita Manager v' ~ config('Manager.version'))|raw }}
+
+    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
+
+    {# fonts #}
+    {{ Html.css(['be-icons-font'])|raw }}
+    {{ Html.css(['be-icons-codes'])|raw }}
+
+    {{ Link.cssBundle([ 'app', 'vendors' ])|raw }}
+
+    {{ element('custom_colors') }}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap" rel="stylesheet">
+
+    {{ element('json_meta_config') }}
+</head>
+
+{% set bodyClass = _view.fetch('bodyViewClass') %}
+{% if currentModule %}
+    {% set bodyClass = bodyClass ~ ' view-module module-' ~ currentModule.name %}
+{% endif %}
+
+{% set alertMsg = '' %}
+{% if config('Recovery') %}
+    {% set alertMsg = __('Recovery Mode - Access restricted to admin users') %}
+{% elseif config('AlertMessage.text') %}
+    {% set alertMsg = config('AlertMessage.text') %}
+{% endif %}
+
+<body class="{{ bodyClass }}"
+    {% if alertMsg %}alert-message="{{ alertMsg }}"{% endif %}>
+
+    <main
+        v-cloak
+        class="layout">
+
+        {% if not Layout.isLogin() and user %}
+        <aside class="layout-sidebar">
+            {{ element('Menu/sidebar') }}
+        </aside>
+        {% endif %}
+
+        {% if not Layout.isLogin() and not Layout.isDashboard() and user %}
+            <header class="layout-header">
+                {{ element('Menu/menu') }}
+            </header>
+        {% endif %}
+
+        <div class="layout-content">
+            {{ _view.fetch('content')|raw }}
+        </div>
+
+        {% if not Layout.isLogin() and user %}
+        <div class="layout-footer">
+            {{ element('Menu/colophon') }}
+        </div>
+        {% endif %}
+
+        {% if not Layout.isLogin() and not Layout.isDashboard() and user %}
+            {{ element('Panel/panel') }}
+        {% endif %}
+
+        {# flash messages #}
+        {% if Layout.messages() %}
+            {{ Flash.render()|raw }}
+        {% endif %}
+    </main>
+
+    {% if _view.name != 'Login' %}
+        {{ Link.pluginsBundle()|raw }}
+    {% else %}
+        {# timezone-offset used in controller and TWIG #}
+        {{ Html.script('libs/timezone')|raw }}
+    {% endif %}
+
+    {{ Link.jsBundle([ 'manifest', 'vendors', 'app' ])|raw }}
+</body>
+</html>

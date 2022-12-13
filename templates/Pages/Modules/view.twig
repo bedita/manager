@@ -1,0 +1,184 @@
+{% do _view.assign('title', currentModule.name|humanize) %}
+
+<modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
+    <div class="modules-view">
+        <header>
+            {% if object.id %}
+                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
+                {% for obj in included %}
+                    {% if obj.type == 'streams' %}
+                        <a class="button button-outlined icon-forward mx-1" href="{{ obj.meta.url }}" target="_blank">{{ __('Open File') }}</a>
+                    {% endif %}
+                {% endfor %}</h1>
+            {% else %}
+                <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
+            {% endif %}
+        </header>
+
+        <div class="module-form">
+            {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
+                'type': 'file',
+                'url': {'_name': 'modules:save', 'object_type': objectType},
+                'id': 'form-main',
+                'check-changes': 'true',
+                'ref': 'formMain',
+            })|raw }}
+
+            {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+            {% if (currentAttributes) and (_view.getRequest().getParam('action') != 'clone') %}
+                {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
+            {% endif %}
+
+            {# Init `_jsonKeys` data #}
+            {{ write_config('_jsonKeys', []) }}
+
+            <div class="main-view-column is-flex is-flex-column">
+                {# Upload available only for new media objects #}
+                {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
+                    {{ element('Form/upload') }}
+                {% endif %}
+
+                {{ element('Form/core_properties') }}
+
+                {{ element('Form/custom_left') }}
+
+                {# calendar using `date_ranges` #}
+                {{ element('Form/calendar') }}
+
+                {{ element('Form/categories') }}
+
+                {{ element('Form/tags') }}
+
+                {{ element('Form/media') }}
+
+                {{ element('Form/map') }}
+
+                {{ element('Form/other_properties') }}
+            </div>
+
+            <div class="side-view-column is-flex is-flex-column">
+                {{ element('Form/publish_properties') }}
+
+                {% if modules.folders and _view.getRequest().getParam('action') != 'clone' %}
+                    {{ element('Form/trees') }}
+                {% endif %}
+
+                {{ element('Form/custom_right') }}
+
+                {# if `roles` in relationships (`users` only) display custom roles element #}
+                {% if object.relationships.roles %}
+                    {{ element('Form/roles') }}
+                {% endif %}
+
+                {{ element('Form/related_translations', {'resourceName': 'translations'}) }}
+
+                {{ element('Form/meta') }}
+
+                {{ element('Form/advanced_properties') }}
+
+                {{ element('Form/resource_relations') }}
+
+                {# aside relations view #}
+                {{ element('Form/relations', {'relations': objectRelations.aside, 'mainObject': object}) }}
+            </div>
+
+            {# main relations view #}
+            {{ element('Form/relations', {'relations': objectRelations.main, 'mainObject': object}) }}
+
+            {% if object.id %}
+                {{ element('Form/history') }}
+            {% endif %}
+
+            {# Set `_jsonKeys` hidden input from config #}
+            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+
+            {# Temp hidden to check session id #}
+            {{ Form.hidden('_session_id', {'value': _view.getRequest().getSession().id()})|raw }}
+
+            {{ Form.end()|raw }}
+
+            {# append buttons to sidebar #}
+            {# Append "Save" #}
+            {% if Perms.canSave() %}
+                {% do _view.append('module-buttons', Form.button( __('Save'),
+                    {
+                        'form': 'form-main',
+                        'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                    })
+                ) %}
+            {% endif %}
+
+            {# Append "Clone" #}
+            {% if object.id and Perms.canCreate() %}
+                {% do _view.append('module-buttons', Html.link(
+                    __('Clone'),
+                    {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
+                    {'@click.prevent': 'clone', 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                )) %}
+            {% endif %}
+
+            {# Append "Lock/Unlock" #}
+            {% if object.id and Perms.canLock() %}
+                {% if object.meta.locked %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Unlock'),
+                        {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                {% else %}
+                    {% do _view.append('module-buttons', Html.link(
+                        __('Lock'),
+                        {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )) %}
+                {% endif %}
+            {% endif %}
+
+            {# Append "Trash (move to)" #}
+            {% if object.id and Perms.canDelete(object) %}
+                {% do _view.append('module-buttons',
+                    Form.postButton(
+                        __('Trash-verb'),
+                        {'_name': 'modules:delete', 'object_type': objectType},
+                        {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    )
+                ) %}
+            {% endif %}
+
+            {# Append "Prev" and "Next" #}
+            {% if object.id and objectNav %}
+                {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
+            {% endif %}
+
+            {# Append "new" button #}
+            {% if object.id and Perms.canCreate() %}
+                {% do _view.append('module-buttons',
+                    Html.link(__('Create new'),
+                        {'_name': 'modules:create', 'object_type': objectType},
+                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                    )|raw
+                ) %}
+            {% endif %}
+
+            {# Append custom sidebar actions #}
+            {% if currentModule.sidebar.view and object.id %}
+                {% for item in currentModule.sidebar.view %}
+                    {# if url is a named route merge with id information #}
+                    {% if item.url is iterable %}
+                        {% set url = item.url|merge({id: object.id}) %}
+                    {% else %}
+                        {# otherwise url is a string, append id in path #}
+                        {% set url = item.url ~ '/' ~ object.id %}
+                    {% endif %}
+
+                    {% do _view.append('module-buttons',
+                        Html.link(__(item.label),
+                            url,
+                            {'class': item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
+                        )|raw
+                    ) %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</modules-view>

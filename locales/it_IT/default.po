@@ -1,0 +1,1371 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BEdita Manager \n"
+"POT-Creation-Date: 2022-12-13 13:24:25 \n"
+"PO-Revision-Date:  \n"
+"Last-Translator:  \n"
+"Language-Team: BEdita I18N & I10N Team \n"
+"Language:  \n"
+"MIME-Version: 1.0 \n"
+"Content-Type: text/plain; charset=UTF-8 \n"
+"Content-Transfer-Encoding: 8bit \n"
+"Plural-Forms: nplurals=2; plural=(n != 1); \n"
+
+msgid " in Trashcan"
+msgstr " nel Cestino"
+
+msgid "&"
+msgstr ""
+
+msgid "Actions on selected items"
+msgstr "Azioni sugli oggetti selezionati"
+
+msgid "Add"
+msgstr "Aggiungi"
+
+msgid "Add custom property"
+msgstr "Aggiungi proprietà custom"
+
+msgid "Add translation"
+msgstr "Aggiungi traduzione"
+
+msgid "Administration"
+msgstr "Amministrazione"
+
+msgid "Advanced"
+msgstr "Avanzate"
+
+msgid "Advanced Data"
+msgstr "Dati Avanzati"
+
+msgid "Alert Message"
+msgstr "Messaggio di Attenzione"
+
+msgid "Alert!"
+msgstr "Attenzione!"
+
+msgid "All"
+msgstr "Tutti"
+
+msgid "All Types"
+msgstr "Tutti i tipi"
+
+msgid "All day"
+msgstr "Tutto il giorno"
+
+msgid "All media"
+msgstr "Tutti i media"
+
+msgid "All objects"
+msgstr "Tutti gli oggetti"
+
+msgid "An extension stopped the file upload"
+msgstr "Un'estensione ha fermato il caricamento del file"
+
+msgid "Any"
+msgstr "Qualsiasi"
+
+msgid "Appearance"
+msgstr "Aspetto"
+
+msgid "Applications"
+msgstr "Applicazioni"
+
+msgid "Async Jobs"
+msgstr "Processi asincroni"
+
+msgid "Auto-translate"
+msgstr "Traduci automaticamente"
+
+msgid "Auto-translate all fields"
+msgstr "Traduci automaticamente tutti i campi"
+
+msgid "BEdita Web site"
+msgstr "Sito BEdita"
+
+msgid "Back to login"
+msgstr "Torna al login"
+
+msgid "Bad configuration key \"{0}\""
+msgstr ""
+
+msgid "Bad related data method"
+msgstr "Dati di relazione non corretti"
+
+msgid "Birthdate"
+msgstr "Data di nascita"
+
+msgid "Bulk Action failed on: "
+msgstr "Operazione massiva non riuscita:"
+
+msgid "Bulk action performed on {0} objects"
+msgstr "Operazione massiva eseguita su {n} oggetti"
+
+msgid "Calendar"
+msgstr "Calendario"
+
+msgid "Cannot create abstract objects or objects without schema"
+msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr "Impossibile produrre una miniatura per questo file"
+
+msgid "Categories"
+msgstr "Categorie"
+
+msgid "Change File"
+msgstr "Cambia File"
+
+msgid "Change password"
+msgstr "Cambia password"
+
+msgid "Children"
+msgstr "Contenuti"
+
+msgid "Children order"
+msgstr "Ordinamento contenuti"
+
+msgid "Choose a type"
+msgstr "Selezionare un tipo"
+
+msgid "City"
+msgstr "Città"
+
+msgid "Clear cache"
+msgstr "Pulisci cache"
+
+msgid "Click or drop new files here"
+msgstr "Clicca o trascina qui i nuovi file"
+
+msgid "Clone"
+msgstr "Clona"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "Company"
+msgstr "Azienda"
+
+msgid "Company Kind"
+msgstr "Tipo di Azienda"
+
+msgid "Company Name"
+msgstr "Nome Azienda"
+
+msgid "Concurrent users"
+msgstr "Redattori concorrenti"
+
+msgid "Config"
+msgstr "Configurazioni"
+
+msgid "Configuration key"
+msgstr "Chiave configurazione"
+
+msgid "Confirm new password"
+msgstr "Conferma nuova password"
+
+msgid "Copy to"
+msgstr "Copia in"
+
+msgid "Core Type"
+msgstr "Tipo di sistema"
+
+msgid "Core properties"
+msgstr "Proprietà principali"
+
+msgid "Country"
+msgstr "Paese"
+
+msgid "Create"
+msgstr "Crea"
+
+msgid "Create a new category"
+msgstr "Crea nuova categoria"
+
+msgid "Create a new tag"
+msgstr "Crea nuovo tag"
+
+msgid "Create new"
+msgstr "Crea nuovo"
+
+msgid "Created"
+msgstr "Creato"
+
+msgid "Current password"
+msgstr "Password corrente"
+
+msgid "Custom action class {0} is not valid"
+msgstr "Classe action personalizzata {0} non valida"
+
+msgid "Custom action class {0} not found"
+msgstr "Classe action personalizzata {0} non trovata"
+
+msgid "Custom properties"
+msgstr "Proprietà personalizzate"
+
+msgid "Dashboard"
+msgstr "Scrivania"
+
+msgid "Data Import"
+msgstr "Importazione dati"
+
+msgid "Data is filtered"
+msgstr "Filtri attivi"
+
+msgid "Data modeling"
+msgstr "Modellazione"
+
+msgid "Deathdate"
+msgstr "Data di morte"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Descendants"
+msgstr "Discendenti"
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Details"
+msgstr "Dettagli"
+
+msgid "Direct access by id or unique name"
+msgstr "Link diretto per ID o nome univoco"
+
+msgid "Discard"
+msgstr "Scarta"
+
+msgid "Documents"
+msgstr "Documenti"
+
+msgid "Download file"
+msgstr "Scarica file"
+
+msgid "Draft"
+msgstr "Bozza"
+
+msgid "Edit"
+msgstr "Modifica"
+
+msgid "Edit params"
+msgstr "Modifica parametri"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Embed online content"
+msgstr "Incorpora contenuti online"
+
+msgid "Empty request data"
+msgstr "Nessuno dato in request"
+
+msgid "Empty translation \"id\""
+msgstr "Identificatore traduzione vuoto (\"id\")"
+
+msgid "Empty translation \"object_id\""
+msgstr "Identificatore oggetto tradotto vuoto (\"object_id\") "
+
+msgid "Empty-verb"
+msgstr "Svuota"
+
+msgid "Enabled"
+msgstr "Abilitato"
+
+msgid "Endpoints"
+msgstr "Endpoint"
+
+msgid "Error "
+msgstr "Errore "
+
+msgid "Error retrieving the requested content"
+msgstr "Errore nel caricamento del contenuto richiesto"
+
+msgid "Error: %s"
+msgstr "Errore: %s"
+
+msgid "Events"
+msgstr "Eventi"
+
+msgid "Expired"
+msgstr "Scaduto"
+
+msgid "Export"
+msgstr "Esporta"
+
+msgid "Export All"
+msgstr "Esporta Tutti"
+
+msgid "Export Filtered"
+msgstr "Esporta Filtrati"
+
+msgid "Failed to write file to disk"
+msgstr "Scrittura file su disco fallita"
+
+msgid "File"
+msgstr ""
+
+msgid "File is too big, form MAX_FILE_SIZE exceeded"
+msgstr "File troppo grande, dimensione massima form superata (MAX_FILE_SIZE)"
+
+msgid "File is too big, max allowed size is {0}"
+msgstr "File troppo grande, dimensione massima consentita {0}"
+
+msgid "File only partially uploaded"
+msgstr "File caricato solo parzialmente"
+
+msgid "File type"
+msgstr "Tipo di file"
+
+msgid "Files"
+msgstr "File"
+
+msgid "Folder"
+msgstr "Cartella"
+
+msgid "Folders"
+msgstr "Cartelle"
+
+msgid "Forgot your password?"
+msgstr "Hai dimenticato la password?"
+
+msgid "Format choosen is not available"
+msgstr "Il formato selezionato non è disponibile"
+
+msgid "From"
+msgstr "Da"
+
+msgid "Future"
+msgstr "Futuro"
+
+msgid "Gender"
+msgstr "Genere"
+
+msgid "General"
+msgstr "Generale"
+
+msgid "Global"
+msgstr "Globale"
+
+msgid "Hidden"
+msgstr "Nascosto"
+
+msgid "History"
+msgstr "Cronologia modifiche"
+
+msgid "Id"
+msgstr ""
+
+msgid "Image not acceptable for thumb"
+msgstr "Immagine non valida per miniatura"
+
+msgid "Images"
+msgstr "Immagini"
+
+msgid "Import"
+msgstr "Importa da file"
+
+msgid "Import error"
+msgstr "Errore in importazione"
+
+msgid "Import filter not selected"
+msgstr "Filtro di importazione non selezionato"
+
+msgid "Import warn"
+msgstr "Avviso in importazione"
+
+msgid "Inherited properties"
+msgstr "Proprietà ereditate"
+
+msgid "Invalid username or password"
+msgstr "Username o password non validi"
+
+msgid "Inverse Name"
+msgstr "Nome Inversa"
+
+msgid "Is Abstract"
+msgstr "Astratto"
+
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
+
+msgid "Jobs"
+msgstr "Processi"
+
+msgid "Label"
+msgstr "Etichetta"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Language and translations"
+msgstr "Lingua e traduzioni"
+
+msgid "Left types"
+msgstr "Tipi di sinistra"
+
+msgid "Less filters"
+msgstr "Meno filtri"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Locations"
+msgstr "Posizioni"
+
+msgid "Lock"
+msgstr "Blocca"
+
+msgid "Locked_until"
+msgstr "Termine blocco"
+
+msgid "Log out"
+msgstr "Esci"
+
+msgid "Login"
+msgstr "Accedi"
+
+msgid "Login required"
+msgstr "È richiesto il login"
+
+msgid "Long Lat Coordinates"
+msgstr "Coordinate Long Lat"
+
+msgid "Map"
+msgstr "Mappa"
+
+msgid "Max_attempts"
+msgstr "Tentativi massimi"
+
+msgid "Media"
+msgstr ""
+
+msgid "Metadata"
+msgstr "Metadati"
+
+msgid "Missing import file"
+msgstr "File di importazione mancante"
+
+msgid "Missing thumb url"
+msgstr "Url miniatura mancante"
+
+msgid "Modified"
+msgstr "Modificato"
+
+msgid "Modified ↑ Oldest on top"
+msgstr "Data di modifica ↑ Meno recenti in testa"
+
+msgid "Modified ↓ Newest on top"
+msgstr "Data di modifica ↓ Più recenti in testa"
+
+msgid "Module access not authorized"
+msgstr "Accesso al modulo non autorizzato"
+
+msgid "Modules"
+msgstr "Moduli"
+
+msgid "More"
+msgstr "Altro"
+
+msgid "More filters"
+msgstr "Più filtri"
+
+msgid "Move to"
+msgstr "Sposta in"
+
+msgid "Move to position"
+msgstr "Sposta alla posizione"
+
+msgid "Move to trash"
+msgstr "Sposta nel cestino"
+
+msgid "NEW"
+msgstr "NUOVO"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "National Id Number"
+msgstr "Numero Id. Nazionale"
+
+msgid "New entry in"
+msgstr "Nuova voce in"
+
+msgid "New object in"
+msgstr "Nuovo oggetto in"
+
+msgid "New password"
+msgstr "Nuova password"
+
+msgid "News"
+msgstr "Notizie"
+
+msgid "No"
+msgstr "No"
+
+msgid "No application"
+msgstr "Nessuna applicazione"
+
+msgid "No core properties"
+msgstr "Nessuna proprietà di base"
+
+msgid "No custom properties"
+msgstr "Nessuna proprietà personalizzata"
+
+msgid "No inherited properties"
+msgstr "Nessuna proprietà ereditata"
+
+msgid "No items found"
+msgstr "Nessun elemento trovato"
+
+msgid "No options for this file type"
+msgstr "Nessuna opzione per questo tipo di file"
+
+msgid "Number of created objects"
+msgstr "Numero di oggetti creati"
+
+msgid "Number of created resources"
+msgstr "Numero di risorse create"
+
+msgid "Number of errors"
+msgstr "Numero di errori"
+
+msgid "Number of updated objects"
+msgstr "Numero di oggetti aggiornati"
+
+msgid "Number of updated resources"
+msgstr "Numero di risorse aggiornate"
+
+msgid "Object Types"
+msgstr "Tipi di Oggetto"
+
+msgid "Object saved"
+msgstr "Oggetto salvato"
+
+msgid "Object types"
+msgstr "Tipi di oggetto"
+
+msgid "Object(s) deleted"
+msgstr "Oggetto(i) rimosso(i)"
+
+msgid "Object(s) deleted from trash"
+msgstr "Oggetto(i) rimosso(i) dal cestino"
+
+msgid "ObjectTypes"
+msgstr "Tipi di Oggetto"
+
+msgid "Objects"
+msgstr "Oggetti"
+
+msgid "Off"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Only my contents"
+msgstr "Solo i miei contenuti"
+
+msgid "Open"
+msgstr "Apri"
+
+msgid "Open File"
+msgstr "Apri File"
+
+msgid "Open image"
+msgstr "Apri immagine"
+
+msgid "Open module"
+msgstr "Apri modulo"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Original"
+msgstr "Originale"
+
+msgid "Original language"
+msgstr "Lingua Originale"
+
+msgid "Other"
+msgstr "Altro"
+
+msgid "Pagination"
+msgstr "Paginazione"
+
+msgid "Parent"
+msgstr "Genitore"
+
+msgid "Password Modified"
+msgstr "Password modificata il"
+
+msgid "Password reset"
+msgstr "Reimposta password"
+
+msgid "Password reset request sent"
+msgstr "Richiesta di reimpostazione password inviata"
+
+msgid "Permanently delete"
+msgstr "Elimina definitivamente"
+
+msgid "Person Title"
+msgstr "Titolo Persona"
+
+msgid "Phone"
+msgstr "Telefono"
+
+msgid "Pick"
+msgstr "Scegli"
+
+msgid "Please check your mailbox and follow the instructions"
+msgstr "Controlla la tua casella di posta e segui le istruzioni"
+
+msgid "Please provide a Mapbox access token in app configuration"
+msgstr ""
+"Per visualizzare la mappa è necessario inserire un token di accesso a Mapbox "
+"in configurazione"
+
+msgid "Position"
+msgstr "Posizione"
+
+msgid "Position ↑"
+msgstr "Posizione ↑"
+
+msgid "Position ↓"
+msgstr "Posizione ↓"
+
+msgid "Preferences and Tools"
+msgstr "Preferenze e Strumenti"
+
+msgid "Profiles"
+msgstr "Profili"
+
+msgid "Project"
+msgstr "Progetto"
+
+msgid "Properties"
+msgstr "Proprietà"
+
+msgid "Property Types"
+msgstr "Tipi di Proprietà"
+
+msgid "Property types"
+msgstr "Tipi di proprietà"
+
+msgid "PropertyTypes"
+msgstr "Tipi di Proprietà"
+
+msgid "Pseudonym"
+msgstr "Pseudonimo"
+
+msgid "Publications"
+msgstr "Pubblicazioni"
+
+msgid "Publish End"
+msgstr "Data revoca pubblicazione"
+
+msgid "Publish Start"
+msgstr "Data inizio pubblicazione"
+
+msgid "Publishing properties"
+msgstr "Proprietà di pubblicazione"
+
+msgid "Read"
+msgstr "Lettura"
+
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
+
+msgid "Relations"
+msgstr "Relazioni"
+
+msgid "Remote URL"
+msgstr "Indirizzo remoto"
+
+msgid "Remove"
+msgstr "Rimuovi"
+
+msgid "Request password"
+msgstr "Reimposta password"
+
+msgid "Reset filters"
+msgstr "Reset filtri"
+
+msgid "Resource \"%s\" not available. Error: %s"
+msgstr "Risorsa \"%s\" non disponibile. Error: %s"
+
+msgid "Resource \"%s\" not found"
+msgstr "Risorsa \"%s\" non trovata"
+
+msgid "Resources not available"
+msgstr "Risorse non disponibili"
+
+msgid "Restore"
+msgstr "Ripristina"
+
+msgid "Restored"
+msgstr "Recuperato"
+
+msgid "Result"
+msgstr "Risultato"
+
+msgid "Return to Dashboard"
+msgstr "Torna alla Scrivania"
+
+msgid "Retype password"
+msgstr "Ridigita password"
+
+msgid "Right types"
+msgstr "Tipi di destra"
+
+msgid "Roles"
+msgstr "Ruoli"
+
+msgid "Roles Modules"
+msgstr "Ruoli e Moduli"
+
+msgid "Roles Modules accesses"
+msgstr "Accessi Ruoli Moduli"
+
+msgid "Save"
+msgstr "Salva"
+
+msgid "Save object to apply order change"
+msgstr "Salva per applicare cambiamenti di ordinamento"
+
+msgid "Scheduled_from"
+msgstr "Partenza"
+
+msgid "Search"
+msgstr "Cerca"
+
+msgid "See Wiki for help"
+msgstr "Vedi pagina Wiki per informazioni"
+
+msgid "Select a project"
+msgstr "Seleziona un progetto"
+
+msgid "Sign in"
+msgstr "Accedi"
+
+msgid "Sign in with {0}"
+msgstr "Accedi con {0}"
+
+msgid "Size"
+msgstr "Dimensione"
+
+msgid "Sorry, your browser does not support embedded {0} element"
+msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
+
+msgid "State Name"
+msgstr "Provincia"
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Street Address"
+msgstr "Indirizzo"
+
+msgid "Submit your email address and follow the instructions sent by email."
+msgstr ""
+"Invia il tuo indirizzo e-mail e segui le istruzioni inviate tramite e-mail."
+
+msgid "Subtitle"
+msgstr "Sottotitolo"
+
+msgid "Surname"
+msgstr "Cognome"
+
+msgid "System users"
+msgstr "Utenti di sistema"
+
+msgid "Tags"
+msgstr "Tag"
+
+msgid "Temporary folder missing"
+msgstr "Cartella temporanea mancante"
+
+msgid "The main language is"
+msgstr "La lingua principale è"
+
+msgid "The thumbnail is not available"
+msgstr "La miniatura non è disponibile"
+
+msgid "Thumb not available"
+msgstr "Miniatura non disponibile"
+
+msgid "Thumb not ready: coming soon"
+msgstr "Miniatura non pronta: in lavorazione"
+
+msgid "Thumbnail is not ready"
+msgstr "La miniatura non è pronta"
+
+msgid "Title ↑"
+msgstr "Titolo ↑"
+
+msgid "Title ↓"
+msgstr "Titolo ↓"
+
+msgid "To"
+msgstr "A"
+
+msgid "Translated object"
+msgstr "Oggetto tradotto"
+
+msgid "Translation"
+msgstr "Traduzione"
+
+msgid "Translation(s) deleted"
+msgstr "Traduzione(i) rimossa(e)"
+
+msgid "Translations"
+msgstr "Traduzioni"
+
+msgid "Trash"
+msgstr "Cestino"
+
+msgid "Trash can"
+msgstr "Cestino"
+
+msgid "Trash-verb"
+msgstr "Cestina"
+
+msgid "Trashcan"
+msgstr "Cestino"
+
+msgid "Trashd"
+msgstr "Cancellato"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Uname"
+msgstr "Nome univoco"
+
+msgid "Unknown upload error"
+msgstr "Errore sconosciuto durante caricamento"
+
+msgid "Unlock"
+msgstr "Sblocca"
+
+msgid "Untitled"
+msgstr "Senza titolo"
+
+msgid "Updated"
+msgstr "Aggiornato"
+
+msgid "Upload"
+msgstr "Caricare"
+
+msgid "Upload local file"
+msgstr "Carica file locale"
+
+msgid "Url"
+msgstr ""
+
+msgid "User Profile"
+msgstr "Profilo Utente"
+
+msgid "User profile saved"
+msgstr "Profilo utente salvato"
+
+msgid "Username"
+msgstr "Nome utente"
+
+msgid "Users"
+msgstr "Utenti"
+
+msgid "Vat Number"
+msgstr "Partita Iva"
+
+msgid "Videos"
+msgstr "Video"
+
+msgid "View file"
+msgstr "Vedi file"
+
+msgid "View original"
+msgstr "Vedi originale"
+
+msgid "Website"
+msgstr "Sito Web"
+
+msgid "Write"
+msgstr "Scrittura"
+
+msgid "Yes"
+msgstr "Sì"
+
+msgid "You are not authorized to access that location."
+msgstr "Non sei autorizzato ad accedere a quest'area."
+
+msgid "You have requested a password change, please provide a new password"
+msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
+
+msgid "Your recent items"
+msgstr "I tuoi elementi più recenti"
+
+msgid "Zipcode"
+msgstr "Cap"
+
+msgid "add"
+msgstr "aggiungi"
+
+msgid "add objects"
+msgstr "aggiungi oggetti"
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
+
+msgid "application id"
+msgstr "id applicazione"
+
+msgid "application_id"
+msgstr "id applicazione"
+
+msgid "cancel"
+msgstr "annulla"
+
+msgid "code"
+msgstr "codice"
+
+msgid "completed"
+msgstr "completato"
+
+msgid "completed on"
+msgstr "completato il"
+
+msgid "confirm password"
+msgstr "conferma password"
+
+msgid "content"
+msgstr "contenuto"
+
+msgid "context"
+msgstr "contesto"
+
+msgid "create"
+msgstr "crea"
+
+msgid "create new for"
+msgstr "crea nuovo per"
+
+msgid "created"
+msgstr "creato"
+
+msgid "current password"
+msgstr "password corrente"
+
+msgid "description"
+msgstr "descrizione"
+
+msgid "elements to"
+msgstr "elementi a"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "empty"
+msgstr "vuoto"
+
+msgid "enabled"
+msgstr "abilitato"
+
+msgid "expires"
+msgstr "scade"
+
+msgid "file name"
+msgstr "nome del file"
+
+msgid "from"
+msgstr "da"
+
+msgid "id"
+msgstr ""
+
+msgid "label"
+msgstr "etichetta"
+
+msgid "locked_until"
+msgstr "bloccato fino a"
+
+msgid "max_attempts"
+msgstr "massimo numero tentativi"
+
+msgid "modified"
+msgstr "modificato"
+
+msgid "name"
+msgstr "nome"
+
+msgid "new password"
+msgstr "nuova password"
+
+msgid "object_types"
+msgstr "tipi di oggetto"
+
+msgid "objects"
+msgstr "oggetti"
+
+msgid "objects to"
+msgstr "oggetti a"
+
+msgid "on"
+msgstr "del"
+
+msgid "params"
+msgstr "parametri"
+
+msgid "parent"
+msgstr "genitore"
+
+msgid "phone"
+msgstr "telefono"
+
+msgid "remove"
+msgstr "rimuovi"
+
+msgid "reset"
+msgstr ""
+
+msgid "scheduled from"
+msgstr "programmato da"
+
+msgid "scheduled_from"
+msgstr "programmato da"
+
+msgid "service"
+msgstr "servizio"
+
+msgid "service name"
+msgstr "nome del servizio"
+
+msgid "status"
+msgstr "stato"
+
+msgid "surname"
+msgstr "cognome"
+
+msgid "title"
+msgstr "titolo"
+
+msgid "to"
+msgstr "a"
+
+msgid "type"
+msgstr "tipo"
+
+msgid "uname"
+msgstr "nome univoco"
+
+msgid "undo"
+msgstr "annulla"
+
+msgid "undo remove"
+msgstr "annulla rimozione"
+
+msgid "untitled"
+msgstr "senza titolo"
+
+msgid "username"
+msgstr "nome utente"
+
+msgid "users"
+msgstr "utenti"
+
+msgid "view parent"
+msgstr "visualizza genitore"
+
+msgid "warning"
+msgstr "attenzione"
+
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
+
+msgid "copy"
+msgstr "copia"
+
+msgid "Clone relations"
+msgstr ""
+
+msgid "If you confirm, this data will be gone forever. Are you sure?"
+msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
+
+msgid "Do you really want to trash the object?"
+msgstr "Vuoi davvero spostare l'oggetto nel cestino?"
+
+msgid "If you confirm, this resource will be gone forever. Are you sure?"
+msgstr ""
+"Se confermi, questa risorsa verrà eliminata definitivamente. Vuoi continuare?"
+
+msgid "yes, proceed"
+msgstr "sì, prosegui"
+
+msgid "There are unsaved changes, are you sure you want to leave page?"
+msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
+
+#, javascript-format
+msgid "Do you confirm the deletion of ${ number } item from the trash?"
+msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
+
+#, javascript-format
+msgid "Moving ${ number } item(s) to trash. Are you sure?"
+msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
+
+#, javascript-format
+msgid "Do you really want to remove these property types? ${ types }"
+msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
+
+msgid "Remove item. Are you sure?"
+msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
+
+#, javascript-format
+msgid ""
+"File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
+"less than max file size (${ maxFileSizeMb } MB)"
+msgstr ""
+"File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un "
+"file che non superi la dimensione massima (${ maxFileSizeMb } MB)"
+
+msgid "stop"
+msgstr "interrompi"
+
+msgid "done"
+msgstr "fatto"
+
+msgid "Cancelled"
+msgstr "Annullato"
+
+msgid "Relation parameters"
+msgstr "Parametri della relazione"
+
+msgid "In relation with"
+msgstr "In relazione con"
+
+msgid "Priority"
+msgstr "Priorità"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Mail to"
+msgstr "Invia mail a"
+
+msgid "Items"
+msgstr "Elementi"
+
+msgid "Search text too short. Minimum length is 3. Retry"
+msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
+
+msgid "Open Uri"
+msgstr "Apri indirizzo"
+
+msgid "Uri is valid"
+msgstr "Indirizzo valido"
+
+msgid "Uri is not valid"
+msgstr "Indirizzo non valido"
+
+msgid "edit"
+msgstr "modifica"
+
+msgid "Menu"
+msgstr "Menù"
+
+msgid "Search existing tags"
+msgstr "Cerca tag esistenti"
+
+msgid "Add new tag"
+msgstr "Aggiungi un nuovo tag"
+
+msgid "Error on deleting tag"
+msgstr "Errore nell'eliminazione del tag"
+
+msgid "copied in the clipboard"
+msgstr "copiato negli appunti"
+
+#, javascript-format
+msgid "Missing required data \"${ required }\". Retry"
+msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
+
+msgid "Error while creating new object."
+msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+msgid "Inherited from"
+msgstr "Ereditato da"
+
+msgid "Show"
+msgstr "Mostra"
+
+msgid "Hide"
+msgstr "Nascondi"
+
+msgid "Error on deleting property"
+msgstr "Errore nella cancellazione della proprietà"
+
+msgid "Password"
+msgstr "Password"
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "Title"
+msgstr "Titolo"
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "Address"
+msgstr "Indirizzo"
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "GET"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  ...
+#.  *
+#.  * <locations-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "add new"
+msgstr "aggiungi nuovo"
+
+msgid "version by"
+msgstr "versione di"
+
+msgid "date"
+msgstr "data"
+
+msgid "Trashed"
+msgstr "Rimosso"
+
+#. *
+#.  * Component to fetch and display changes' history.
+#.
+msgid "No History data found"
+msgstr "Nessun dato di Cronologia"
+
+#, javascript-format
+msgid "by ${ name } via ${ application }"
+msgstr "modificato da ${ name } con applicazione ${ application }"
+
+msgid "by ${ name }"
+msgstr "modificato da ${ name }"
+
+msgid ""
+"Restored data will replace current data (you can still check the data before "
+"saving). Are you sure?"
+msgstr ""
+"I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
+"prima di salvare). Vuoi procedere?"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Every day"
+msgstr "Tutti i giorni"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Sunday"
+msgstr "Domenica"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Monday"
+msgstr "Lunedì"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Tuesday"
+msgstr "Martedì"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Wednesday"
+msgstr "Mercoledì"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Thursday"
+msgstr "Giovedì"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Friday"
+msgstr "Venerdì"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Saturday"
+msgstr "Sabato"
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Invalid date range"
+msgstr "Intervallo date non valido"
+
+msgid "Modify"
+msgstr "Modifica"
+
+msgid "Name already in use"
+msgstr "Nome già in uso"
+
+msgid "Error while creating new category"
+msgstr "Errore durante la creazione della nuova categoria"
+
+msgid "Error while saving category"
+msgstr "Errore durante il salvataggio della categoria"
+
+msgid "Error on deleting category"
+msgstr "Errore durante l'eliminazione della categoria"

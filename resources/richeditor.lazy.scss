@@ -1,0 +1,88 @@
+/*
+██████╗░███████╗██████╗░██╗████████╗░█████╗░  ███╗░░░███╗░█████╗░███╗░░██╗░█████╗░░██████╗░███████╗██████╗░
+██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗  ████╗░████║██╔══██╗████╗░██║██╔══██╗██╔════╝░██╔════╝██╔══██╗
+██████╦╝█████╗░░██║░░██║██║░░░██║░░░███████║  ██╔████╔██║███████║██╔██╗██║███████║██║░░██╗░█████╗░░██████╔╝
+██╔══██╗██╔══╝░░██║░░██║██║░░░██║░░░██╔══██║  ██║╚██╔╝██║██╔══██║██║╚████║██╔══██║██║░░╚██╗██╔══╝░░██╔══██╗
+██████╦╝███████╗██████╔╝██║░░░██║░░░██║░░██║  ██║░╚═╝░██║██║░░██║██║░╚███║██║░░██║╚██████╔╝███████╗██║░░██║
+╚═════╝░╚══════╝╚═════╝░╚═╝░░░╚═╝░░░╚═╝░░╚═╝  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝░░╚═╝
+
+BEdita Manager
+*/
+@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
+@import './styles/mixins';
+
+// general
+@import './styles/base';
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap");
+
+body {
+    padding: 1em !important;
+    color: unset;
+    background: unset;
+    font-family: $font-family-monospace;
+    font-size: $font-size-base;
+    font-weight: $font-weight-base;
+}
+
+.mce-offscreen-selection {
+    position: absolute;
+    left: -9999999999999px;
+}
+
+p {
+    margin-bottom:.5rem;
+}
+
+blockquote {
+    padding-left:1rem;
+    margin-left:0;
+    border-left: 4px solid $gray-700;
+}
+
+a {
+    color: blue;
+}
+
+a:link, a:hover, a:active, a:visited {
+    text-decoration: underline;
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+   margin-top:1rem;
+   margin-bottom:.5rem;
+}
+
+[data-placeholder] {
+    &[data-mce-selected] {
+        outline: solid 2px $info;
+    }
+}
+
+span[data-placeholder] {
+    display: inline-flex;
+    align-self: center;
+    margin: 0.5em;
+    padding: 0.25em;
+    border: solid 1px currentColor;
+
+    img {
+        width: 3em;
+        height: 3em;
+        object-fit: cover;
+        object-position: center;
+        -webkit-user-drag: none;
+    }
+}
+
+div[data-placeholder] {
+    display: flex;
+    margin: 0.5em 0;
+    padding: 0.25em;
+    border: solid 1px currentColor;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}

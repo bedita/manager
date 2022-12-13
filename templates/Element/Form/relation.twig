@@ -1,0 +1,181 @@
+<relation-view inline-template
+    :relation-data="{{ relationSchema|json_encode|escape('html_attr') }}"
+    :data-list="dataList"
+    :readonly={{ readonly ? 'true' : 'false' }}
+    relation-name="{{ relationName }}"
+    relation-label="{{ Layout.tr(relationName) }}"
+    :pre-count="{{ preCount }}"
+    config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+    ref="relation"
+    @loading="onToggleLoading"
+    @count="onCount"
+>
+    <div class="relation-view">
+        {# Lookup in properties configuration if a custom element for this relation is set
+        in `Properties.{moduleName}.relations._element.{relationName}`.
+        Then load custom element or use default relation view #}
+        {% set customElement = Layout.customElement(relationName) %}
+        {% if customElement %}
+            {{ element(customElement, {
+                'relationName': relationName,
+                'relationLabel': Layout.tr(relationName),
+                'relationSchema': relationsSchema,
+            }) }}
+        {% else %}
+
+        <div class="related-list-container">
+            {# FilterBoxView #}
+            <div class="mb-1" v-show="showFilter">
+                {% set list = {} %}
+                {% for type, filters in filtersByType %}
+                    {% set options = [] %}
+                    {% for f in filters %}
+                        {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
+                        {% set options = options|merge([o|merge({ 'name': f })]) %}
+                    {% endfor %}
+                    {% set list = list|merge({ (type): options }) %}
+                {% endfor %}
+                <filter-box-view
+                    :config-paginate-sizes="configPaginateSizes"
+                    :pagination.sync="pagination"
+                    :show-advanced="false"
+                    :relation-types="relationTypes"
+                    :init-filter="activeFilter"
+                    {% if list %}
+                    :filters-by-type="{{ list|json_encode|escape('html_attr') }}"
+                    {% endif %}
+                    objects-label="{{ __('objects') }}"
+                    @filter-update-current-page="onUpdateCurrentPage"
+                    @filter-update-page-size="onUpdatePageSize"
+                    @filter-objects="onFilterObjects"
+                    @filter-reset="reloadObjects"
+                    inline-template
+                >
+                    {{ element('FilterBox/filter_box', {'options': {'relationName': relationName, 'sortFilter': true}}) }}
+                </filter-box-view>
+            </div>
+
+            {% if relationName == 'children' %}
+            <div class="related-objects ml-1 mb-1">
+                <div class="columns">
+                    {{ Property.control(
+                        'children_order',
+                        mainObject.attributes.children_order|default('position'),
+                        {
+                            'label': __('Children order'),
+                            'class': 'icon-info-1',
+                        }
+                    )|raw }}
+                    <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
+            {# RELATED OBJECTS #}
+            <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
+                <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
+                    <div
+                        class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                        v-for="(related, index) in objects"
+                        :key="related.id"
+                        :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                        {%- if dragAndDrop %}
+                        draggable
+                        :drag-data="JSON.stringify(related)"
+                        {%- endif %}
+                        >
+
+                        {% if relationName == 'children' %}
+                            {{ element('Form/related_item', { 'children': true }) }}
+                        {% else %}
+                            {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
+                        {% endif %}
+                    </div>
+
+                    {% if not readonly %}
+                    {# STAGED OBJECTS (new relations) #}
+                    <div v-if="addedRelations.length"
+                        class="related-item-column column added is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
+                        v-for="related in addedRelations"
+                        :key="related.id">
+
+                        {{ element('Form/related_item', { 'stage': true }) }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        {% if Perms.canSave() and not readonly %}
+        <div class="mt-5">
+            {# DROP FILES #}
+            {% if uploadableNum %}
+                {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
+
+                <drop-upload
+                    placeholder="{{ __('Click or drop new files here') }}"
+                    @new-relations="appendRelations"
+                    ></drop-upload>
+            {% endif %}
+
+            <div>
+                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-cancel"
+                    @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+
+                <button v-else
+                    class="icon-hdd"
+                    @click.prevent.stop="addRelatedObjects({
+                        object: {{object|json_encode}},
+                        relationName: relationName,
+                        relationLabel: relationLabel,
+                        alreadyInView: alreadyInView,
+                        relationTypes: relationTypes,
+                    })">{{ __('add objects') }}</button>
+            </div>
+        </div>
+        {% endif %} {# Perms #}
+
+        {# End relation custom or default view #}
+        {% endif %}
+
+        <div class="mt-2" v-show="objects.length">
+            {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            {% set formats = config('Export.formats', {
+                'CSV': 'csv',
+                'Open Document': 'ods',
+                'MS Excel': 'xlsx'
+            }) %}
+
+            <select v-model="exportFormat">
+            {% for label,format in formats %}
+                <option value="{{ format }}" {% if format == defaultFormat %}selected="selected"{% endif %}>{{ label }}</option>
+            {% endfor %}
+            </select>
+
+            {% for label, format in formats %}
+               <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
+            {% endfor %}
+        </div>
+
+        {% if not readonly %}
+        {# hidden field - relations serialized json #}
+        {{ Form.control(relationName ~ 'removeRelated', {
+            'type': 'hidden',
+            'name': 'relations[' ~ relationName ~ '][removeRelated]',
+            'v-model': 'removedRelationsData'
+        })|raw }}
+        {% do Form.unlockField('relations.' ~ relationName ~ '.removeRelated') %}
+
+        {# Relations serialized json form element #}
+        {{ Form.control(relationName ~ 'addRelated', {
+            'type': 'hidden',
+            'name': 'relations[' ~ relationName ~ '][addRelated]',
+            'v-model': 'addedRelationsData'
+        })|raw }}
+        {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
+        {% endif %}
+
+    </div>
+</relation-view>

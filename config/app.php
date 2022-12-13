@@ -60,8 +60,8 @@ return [
         'jsBaseUrl' => 'js/',
         'paths' => [
             'plugins' => [ROOT . DS . 'plugins' . DS],
-            'templates' => [APP . 'Template' . DS],
-            'locales' => [APP . 'Locale' . DS],
+            'templates' => [ROOT . DS . 'templates' . DS],
+            'locales' => [ROOT . DS . 'locales' . DS],
         ],
     ],
 
@@ -395,6 +395,9 @@ return [
         ],
         'profiles' => [
             'color' => '#093',
+        ],
+        'tags' => [
+            'color' => '#6F12B7',
         ],
     ],
 

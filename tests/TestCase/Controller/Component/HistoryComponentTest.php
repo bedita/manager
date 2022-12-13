@@ -315,6 +315,7 @@ class HistoryComponentTest extends TestCase
                                     'lang' => '<div class="history-field"><label>Lang</label>en</div>',
                                 ],
                                 'application_name' => '',
+                                'user' => null,
                             ],
                         ],
                     ],

@@ -196,6 +196,25 @@ class OptionsTest extends TestCase
                     'type' => 'readonly',
                 ],
             ],
+            'children_order' => [
+                'children_order',
+                '-title',
+                [
+                    'type' => 'select',
+                    'options' => [
+                        ['value' => 'position', 'text' => __('Position ↑')],
+                        ['value' => '-position', 'text' => __('Position ↓')],
+                        ['value' => 'title', 'text' => __('Title ↑')],
+                        ['value' => '-title', 'text' => __('Title ↓')],
+                        ['value' => 'modified', 'text' => __('Modified ↑ Oldest on top')],
+                        ['value' => '-modified', 'text' => __('Modified ↓ Newest on top')],
+                    ],
+                    'templateVars' => [
+                        'containerClass' => 'childrenOrder',
+                    ],
+                    'value' => '-title',
+                ],
+            ],
         ];
     }
 
@@ -219,6 +238,7 @@ class OptionsTest extends TestCase
      * @covers ::confirmPassword
      * @covers ::title
      * @covers ::coords
+     * @covers ::childrenOrder
      */
     public function testCustomControl(string $name, $value, array $expected, array $config = []): void
     {

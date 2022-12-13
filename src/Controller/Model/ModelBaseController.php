@@ -201,6 +201,32 @@ abstract class ModelBaseController extends AppController
      */
     public function save(): ?Response
     {
+        $id = null;
+        try {
+            $id = $this->doSave();
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+
+        if ($this->getRequest()->getData('redirTo')) {
+            return $this->redirect($this->getRequest()->getData('redirTo'));
+        }
+
+        $modelList = ['_name' => 'model:list:' . $this->resourceType];
+        $modelView = ['_name' => 'model:view:' . $this->resourceType, 'id' => $id];
+        $destination = !$this->singleView || empty($id) ? $modelList : $modelView;
+
+        return $this->redirect($destination);
+    }
+
+    /**
+     * Perform save
+     *
+     * @return string
+     */
+    protected function doSave(): string
+    {
         $data = $this->prepareRequest($this->resourceType);
         unset($data['_csrfToken']);
         $id = Hash::get($data, 'id');
@@ -212,30 +238,16 @@ abstract class ModelBaseController extends AppController
             ],
         ];
         $endpoint = sprintf('/model/%s', $this->resourceType);
+        if (empty($id)) {
+            $response = $this->apiClient->post($endpoint, json_encode($body));
 
-        try {
-            if (empty($id)) {
-                $response = $this->apiClient->post($endpoint, json_encode($body));
-                $id = Hash::get($response, 'data.id');
-            } else {
-                $body['data']['id'] = $id;
-                $this->apiClient->patch(sprintf('%s/%s', $endpoint, $id), json_encode($body));
-            }
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            return Hash::get($response, 'data.id');
         }
 
-        if (!$this->singleView || empty($id)) {
-            return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
-        }
+        $body['data']['id'] = $id;
+        $this->apiClient->patch(sprintf('%s/%d', $endpoint, $id), json_encode($body));
 
-        return $this->redirect(
-            [
-                '_name' => 'model:view:' . $this->resourceType,
-                'id' => $id,
-            ]
-        );
+        return $id;
     }
 
     /**

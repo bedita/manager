@@ -1,0 +1,1363 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BEdita Manager \n"
+"POT-Creation-Date: 2022-12-13 13:24:25 \n"
+"PO-Revision-Date:  \n"
+"Last-Translator:  \n"
+"Language-Team: BEdita I18N & I10N Team \n"
+"Language:  \n"
+"MIME-Version: 1.0 \n"
+"Content-Type: text/plain; charset=UTF-8 \n"
+"Content-Transfer-Encoding: 8bit \n"
+"Plural-Forms: nplurals=2; plural=(n != 1); \n"
+
+msgid " in Trashcan"
+msgstr ""
+
+msgid "&"
+msgstr ""
+
+msgid "Actions on selected items"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add custom property"
+msgstr ""
+
+msgid "Add translation"
+msgstr ""
+
+msgid "Administration"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Advanced Data"
+msgstr ""
+
+msgid "Alert Message"
+msgstr ""
+
+msgid "Alert!"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All Types"
+msgstr ""
+
+msgid "All day"
+msgstr ""
+
+msgid "All media"
+msgstr ""
+
+msgid "All objects"
+msgstr ""
+
+msgid "An extension stopped the file upload"
+msgstr ""
+
+msgid "Any"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Async Jobs"
+msgstr ""
+
+msgid "Auto-translate"
+msgstr ""
+
+msgid "Auto-translate all fields"
+msgstr ""
+
+msgid "BEdita Web site"
+msgstr ""
+
+msgid "Back to login"
+msgstr ""
+
+msgid "Bad configuration key \"{0}\""
+msgstr ""
+
+msgid "Bad related data method"
+msgstr ""
+
+msgid "Birthdate"
+msgstr ""
+
+msgid "Bulk Action failed on: "
+msgstr ""
+
+msgid "Bulk action performed on {0} objects"
+msgstr ""
+
+msgid "Calendar"
+msgstr ""
+
+msgid "Cannot create abstract objects or objects without schema"
+msgstr ""
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "Categories"
+msgstr ""
+
+msgid "Change File"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Children"
+msgstr ""
+
+msgid "Children order"
+msgstr ""
+
+msgid "Choose a type"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Clear cache"
+msgstr ""
+
+msgid "Click or drop new files here"
+msgstr ""
+
+msgid "Clone"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "Company Kind"
+msgstr ""
+
+msgid "Company Name"
+msgstr ""
+
+msgid "Concurrent users"
+msgstr ""
+
+msgid "Config"
+msgstr ""
+
+msgid "Configuration key"
+msgstr ""
+
+msgid "Confirm new password"
+msgstr ""
+
+msgid "Copy to"
+msgstr ""
+
+msgid "Core Type"
+msgstr ""
+
+msgid "Core properties"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Create a new category"
+msgstr ""
+
+msgid "Create a new tag"
+msgstr ""
+
+msgid "Create new"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "Custom action class {0} is not valid"
+msgstr ""
+
+msgid "Custom action class {0} not found"
+msgstr ""
+
+msgid "Custom properties"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Data Import"
+msgstr ""
+
+msgid "Data is filtered"
+msgstr ""
+
+msgid "Data modeling"
+msgstr ""
+
+msgid "Deathdate"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Descendants"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Direct access by id or unique name"
+msgstr ""
+
+msgid "Discard"
+msgstr ""
+
+msgid "Documents"
+msgstr ""
+
+msgid "Download file"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit params"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Embed online content"
+msgstr ""
+
+msgid "Empty request data"
+msgstr ""
+
+msgid "Empty translation \"id\""
+msgstr ""
+
+msgid "Empty translation \"object_id\""
+msgstr ""
+
+msgid "Empty-verb"
+msgstr "Empty"
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Endpoints"
+msgstr ""
+
+msgid "Error "
+msgstr ""
+
+msgid "Error retrieving the requested content"
+msgstr ""
+
+msgid "Error: %s"
+msgstr ""
+
+msgid "Events"
+msgstr ""
+
+msgid "Expired"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Export All"
+msgstr ""
+
+msgid "Export Filtered"
+msgstr ""
+
+msgid "Failed to write file to disk"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "File is too big, form MAX_FILE_SIZE exceeded"
+msgstr ""
+
+msgid "File is too big, max allowed size is {0}"
+msgstr ""
+
+msgid "File only partially uploaded"
+msgstr ""
+
+msgid "File type"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "Folders"
+msgstr ""
+
+msgid "Forgot your password?"
+msgstr ""
+
+msgid "Format choosen is not available"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Future"
+msgstr ""
+
+msgid "Gender"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Global"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "Image not acceptable for thumb"
+msgstr ""
+
+msgid "Images"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import error"
+msgstr ""
+
+msgid "Import filter not selected"
+msgstr ""
+
+msgid "Import warn"
+msgstr ""
+
+msgid "Inherited properties"
+msgstr ""
+
+msgid "Invalid username or password"
+msgstr ""
+
+msgid "Inverse Name"
+msgstr ""
+
+msgid "Is Abstract"
+msgstr ""
+
+msgid "Job {0} to import file \"{1}\" scheduled."
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Language and translations"
+msgstr ""
+
+msgid "Left types"
+msgstr ""
+
+msgid "Less filters"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "Lock"
+msgstr ""
+
+msgid "Locked_until"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Login required"
+msgstr ""
+
+msgid "Long Lat Coordinates"
+msgstr ""
+
+msgid "Map"
+msgstr ""
+
+msgid "Max_attempts"
+msgstr ""
+
+msgid "Media"
+msgstr ""
+
+msgid "Metadata"
+msgstr ""
+
+msgid "Missing import file"
+msgstr ""
+
+msgid "Missing thumb url"
+msgstr ""
+
+msgid "Modified"
+msgstr ""
+
+msgid "Modified ↑ Oldest on top"
+msgstr ""
+
+msgid "Modified ↓ Newest on top"
+msgstr ""
+
+msgid "Module access not authorized"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "More"
+msgstr ""
+
+msgid "More filters"
+msgstr ""
+
+msgid "Move to"
+msgstr ""
+
+msgid "Move to position"
+msgstr ""
+
+msgid "Move to trash"
+msgstr ""
+
+msgid "NEW"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "National Id Number"
+msgstr ""
+
+msgid "New entry in"
+msgstr ""
+
+msgid "New object in"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "News"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No application"
+msgstr ""
+
+msgid "No core properties"
+msgstr ""
+
+msgid "No custom properties"
+msgstr ""
+
+msgid "No inherited properties"
+msgstr ""
+
+msgid "No items found"
+msgstr ""
+
+msgid "No options for this file type"
+msgstr ""
+
+msgid "Number of created objects"
+msgstr ""
+
+msgid "Number of created resources"
+msgstr ""
+
+msgid "Number of errors"
+msgstr ""
+
+msgid "Number of updated objects"
+msgstr ""
+
+msgid "Number of updated resources"
+msgstr ""
+
+msgid "Object Types"
+msgstr ""
+
+msgid "Object saved"
+msgstr ""
+
+msgid "Object types"
+msgstr ""
+
+msgid "Object(s) deleted"
+msgstr ""
+
+msgid "Object(s) deleted from trash"
+msgstr ""
+
+msgid "ObjectTypes"
+msgstr ""
+
+msgid "Objects"
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Only my contents"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Open File"
+msgstr ""
+
+msgid "Open image"
+msgstr ""
+
+msgid "Open module"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Original"
+msgstr ""
+
+msgid "Original language"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Pagination"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "Password Modified"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
+msgid "Password reset request sent"
+msgstr ""
+
+msgid "Permanently delete"
+msgstr ""
+
+msgid "Person Title"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Pick"
+msgstr ""
+
+msgid "Please check your mailbox and follow the instructions"
+msgstr ""
+
+msgid "Please provide a Mapbox access token in app configuration"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Position ↑"
+msgstr ""
+
+msgid "Position ↓"
+msgstr ""
+
+msgid "Preferences and Tools"
+msgstr ""
+
+msgid "Profiles"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Property Types"
+msgstr ""
+
+msgid "Property types"
+msgstr ""
+
+msgid "PropertyTypes"
+msgstr ""
+
+msgid "Pseudonym"
+msgstr ""
+
+msgid "Publications"
+msgstr ""
+
+msgid "Publish End"
+msgstr ""
+
+msgid "Publish Start"
+msgstr ""
+
+msgid "Publishing properties"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
+msgid "Recovery Mode - Access restricted to admin users"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Remote URL"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Request password"
+msgstr ""
+
+msgid "Reset filters"
+msgstr ""
+
+msgid "Resource \"%s\" not available. Error: %s"
+msgstr ""
+
+msgid "Resource \"%s\" not found"
+msgstr ""
+
+msgid "Resources not available"
+msgstr ""
+
+msgid "Restore"
+msgstr ""
+
+msgid "Restored"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Return to Dashboard"
+msgstr ""
+
+msgid "Retype password"
+msgstr ""
+
+msgid "Right types"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "Roles Modules"
+msgstr ""
+
+msgid "Roles Modules accesses"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save object to apply order change"
+msgstr ""
+
+msgid "Scheduled_from"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "See Wiki for help"
+msgstr ""
+
+msgid "Select a project"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Sign in with {0}"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Sorry, your browser does not support embedded {0} element"
+msgstr ""
+
+msgid "State Name"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Street Address"
+msgstr ""
+
+msgid "Submit your email address and follow the instructions sent by email."
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Surname"
+msgstr ""
+
+msgid "System users"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Temporary folder missing"
+msgstr ""
+
+msgid "The main language is"
+msgstr ""
+
+msgid "The thumbnail is not available"
+msgstr ""
+
+msgid "Thumb not available"
+msgstr ""
+
+msgid "Thumb not ready: coming soon"
+msgstr ""
+
+msgid "Thumbnail is not ready"
+msgstr ""
+
+msgid "Title ↑"
+msgstr ""
+
+msgid "Title ↓"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Translated object"
+msgstr ""
+
+msgid "Translation"
+msgstr ""
+
+msgid "Translation(s) deleted"
+msgstr ""
+
+msgid "Translations"
+msgstr ""
+
+msgid "Trash"
+msgstr ""
+
+msgid "Trash can"
+msgstr ""
+
+msgid "Trash-verb"
+msgstr "Trash"
+
+msgid "Trashcan"
+msgstr ""
+
+msgid "Trashd"
+msgstr "Trashed"
+
+msgid "Type"
+msgstr ""
+
+msgid "Uname"
+msgstr ""
+
+msgid "Unknown upload error"
+msgstr ""
+
+msgid "Unlock"
+msgstr ""
+
+msgid "Untitled"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Upload local file"
+msgstr ""
+
+msgid "Url"
+msgstr ""
+
+msgid "User Profile"
+msgstr ""
+
+msgid "User profile saved"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Vat Number"
+msgstr ""
+
+msgid "Videos"
+msgstr ""
+
+msgid "View file"
+msgstr ""
+
+msgid "View original"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "Write"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "You are not authorized to access that location."
+msgstr ""
+
+msgid "You have requested a password change, please provide a new password"
+msgstr ""
+
+msgid "Your recent items"
+msgstr ""
+
+msgid "Zipcode"
+msgstr ""
+
+msgid "add"
+msgstr ""
+
+msgid "add objects"
+msgstr ""
+
+msgid "api_key"
+msgstr "Api Key / Client ID"
+
+msgid "application id"
+msgstr ""
+
+msgid "application_id"
+msgstr ""
+
+msgid "cancel"
+msgstr ""
+
+msgid "code"
+msgstr ""
+
+msgid "completed"
+msgstr ""
+
+msgid "completed on"
+msgstr ""
+
+msgid "confirm password"
+msgstr ""
+
+msgid "content"
+msgstr ""
+
+msgid "context"
+msgstr ""
+
+msgid "create"
+msgstr ""
+
+msgid "create new for"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "current password"
+msgstr ""
+
+msgid "description"
+msgstr ""
+
+msgid "elements to"
+msgstr ""
+
+msgid "email"
+msgstr ""
+
+msgid "empty"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "expires"
+msgstr ""
+
+msgid "file name"
+msgstr ""
+
+msgid "from"
+msgstr ""
+
+msgid "id"
+msgstr ""
+
+msgid "label"
+msgstr ""
+
+msgid "locked_until"
+msgstr ""
+
+msgid "max_attempts"
+msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "new password"
+msgstr ""
+
+msgid "object_types"
+msgstr ""
+
+msgid "objects"
+msgstr ""
+
+msgid "objects to"
+msgstr ""
+
+msgid "on"
+msgstr ""
+
+msgid "params"
+msgstr ""
+
+msgid "parent"
+msgstr ""
+
+msgid "phone"
+msgstr ""
+
+msgid "remove"
+msgstr ""
+
+msgid "reset"
+msgstr ""
+
+msgid "scheduled from"
+msgstr ""
+
+msgid "scheduled_from"
+msgstr ""
+
+msgid "service"
+msgstr ""
+
+msgid "service name"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "surname"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "uname"
+msgstr ""
+
+msgid "undo"
+msgstr ""
+
+msgid "undo remove"
+msgstr ""
+
+msgid "untitled"
+msgstr ""
+
+msgid "username"
+msgstr ""
+
+msgid "users"
+msgstr ""
+
+msgid "view parent"
+msgstr ""
+
+msgid "warning"
+msgstr ""
+
+#, javascript-format
+msgid "Please insert a new title on \"${ title }\" clone"
+msgstr ""
+
+msgid "copy"
+msgstr ""
+
+msgid "Clone relations"
+msgstr ""
+
+msgid "If you confirm, this data will be gone forever. Are you sure?"
+msgstr ""
+
+msgid "Do you really want to trash the object?"
+msgstr ""
+
+msgid "If you confirm, this resource will be gone forever. Are you sure?"
+msgstr ""
+
+msgid "yes, proceed"
+msgstr ""
+
+msgid "There are unsaved changes, are you sure you want to leave page?"
+msgstr ""
+
+#, javascript-format
+msgid "Do you confirm the deletion of ${ number } item from the trash?"
+msgstr ""
+
+#, javascript-format
+msgid "Moving ${ number } item(s) to trash. Are you sure?"
+msgstr ""
+
+#, javascript-format
+msgid "Do you really want to remove these property types? ${ types }"
+msgstr ""
+
+msgid "Remove item. Are you sure?"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
+"less than max file size (${ maxFileSizeMb } MB)"
+msgstr ""
+
+msgid "stop"
+msgstr ""
+
+msgid "done"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid "Relation parameters"
+msgstr ""
+
+msgid "In relation with"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Mail to"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
+msgid "Search text too short. Minimum length is 3. Retry"
+msgstr ""
+
+msgid "Open Uri"
+msgstr ""
+
+msgid "Uri is valid"
+msgstr ""
+
+msgid "Uri is not valid"
+msgstr ""
+
+msgid "edit"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Search existing tags"
+msgstr ""
+
+msgid "Add new tag"
+msgstr ""
+
+msgid "Error on deleting tag"
+msgstr ""
+
+msgid "copied in the clipboard"
+msgstr ""
+
+#, javascript-format
+msgid "Missing required data \"${ required }\". Retry"
+msgstr ""
+
+msgid "Error while creating new object."
+msgstr ""
+
+msgid "Inherited from"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Error on deleting property"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "Title"
+msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "Address"
+msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "GET"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  ...
+#.  *
+#.  * <locations-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "add new"
+msgstr ""
+
+msgid "version by"
+msgstr ""
+
+msgid "date"
+msgstr ""
+
+msgid "Trashed"
+msgstr ""
+
+#. *
+#.  * Component to fetch and display changes' history.
+#.
+msgid "No History data found"
+msgstr ""
+
+#, javascript-format
+msgid "by ${ name } via ${ application }"
+msgstr ""
+
+msgid "by ${ name }"
+msgstr ""
+
+msgid ""
+"Restored data will replace current data (you can still check the data before "
+"saving). Are you sure?"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Every day"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Sunday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Monday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Tuesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Wednesday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Thursday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Friday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Saturday"
+msgstr ""
+
+#. *
+#.  * Templates that uses this component (directly or indirectly):
+#.  *  Template/Elements/calendar.twig
+#.  *
+#.  * <date-ranges-view> component used for ModulesPage -> View
+#.
+msgid "Invalid date range"
+msgstr ""
+
+msgid "Modify"
+msgstr ""
+
+msgid "Name already in use"
+msgstr ""
+
+msgid "Error while creating new category"
+msgstr ""
+
+msgid "Error while saving category"
+msgstr ""
+
+msgid "Error on deleting category"
+msgstr ""
