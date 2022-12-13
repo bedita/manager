@@ -5343,9 +5343,9 @@ tfunk@^4.0.0:
     dlv "^1.1.3"
 
 tinymce@^5.10.0:
-  version "5.10.5"
-  resolved "https://registry.npmjs.org/tinymce/-/tinymce-5.10.5.tgz#02aef6a67e915f1559e51fa8fb007270d9666778"
-  integrity sha512-nFKtLhmoRtExBxUfv06JlkbQWux5D+d115vxSRAqUmccZdrtpFvOIYwZmikvulLdM9pfEpvO0B+RQ2qFV/+R7w==
+  version "5.10.7"
+  resolved "https://registry.npmjs.org/tinymce/-/tinymce-5.10.7.tgz#d89d446f1962f2a1df6b2b70018ce475ec7ffb80"
+  integrity sha512-9UUjaO0R7FxcFo0oxnd1lMs7H+D0Eh+dDVo5hKbVe1a+VB0nit97vOqlinj+YwgoBDt6/DSCUoWqAYlLI8BLYA==
 
 tinyqueue@^2.0.3:
   version "2.0.3"
