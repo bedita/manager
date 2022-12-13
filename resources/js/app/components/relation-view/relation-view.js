@@ -288,15 +288,29 @@ export default {
 
         // children position
         updatePositions(movedObject, newIndex) {
+            let ascending = true;
+            let order = 'position';
+            if (document.getElementById('children-order')) {
+                order = document.getElementById('children-order').value;
+            }
+            if (order.indexOf('position') >= 0) {
+                ascending = order === 'position';
+            }
             const oldIndex = this.objects.findIndex((object) => movedObject.id === object.id);
 
             // moves the object in the objects array from the old index to the new index
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
             this.objects = this.objects.map((object, index) => {
-                object.meta.relation.position = index + 1;
-                object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                if (ascending) {
+                    object.meta.relation.position = index + 1;
+                    object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                } else {
+                    object.meta.relation.position = this.pagination.count - index;
+                    object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                }
                 this.modifyRelation(object);
+
                 return object;
             });
         },
