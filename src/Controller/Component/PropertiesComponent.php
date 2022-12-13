@@ -88,6 +88,7 @@ class PropertiesComponent extends Component
         'date_ranges',
         'tags',
         'lang',
+        'children_order',
     ];
 
     /**

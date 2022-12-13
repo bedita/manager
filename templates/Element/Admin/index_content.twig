@@ -62,7 +62,7 @@
                         {{ Form.button( __('Create'), {
                             'form': 'form-create',
                             'title': __('Create' ~ ' ' ~ resourceType),
-                            'class': 'button button-text-white is-width-auto',
+                            'class': 'icon-plus-1 button button-primary button-primary-hover-module-admin is-width-auto',
                         })|raw }}
                     </div>
                 {{ Form.end()|raw }}
@@ -101,13 +101,13 @@
                             {{ Form.button( __('Save'), {
                                 'form': 'form-' ~ resource.id,
                                 'title': __('Save') ~ ' ' ~ resource.attributes.name,
-                                'class': 'button button-text-white is-width-auto',
+                                'class': 'icon-check-1 button button-primary button-primary-hover-module-admin is-width-auto',
                             })|raw }}
 
                             {{ Form.button( __('Remove'), {
                                 'form': 'form-remove-' ~ resource.id,
                                 'title': __('Remove') ~ ' ' ~ resource.attributes.name,
-                                'class': 'button button-text-white is-width-auto',
+                                'class': 'icon-cancel-1 button button-primary button-primary-hover-module-admin is-width-auto',
                                 '@click.prevent': 'remove',
                             })|raw }}
                         </div>
@@ -116,7 +116,7 @@
                             {{ Form.button( __('Remove'), {
                                 'form': 'form-remove-' ~ resource.id,
                                 'title': __('Remove') ~ ' ' ~ resource.attributes.name,
-                                'class': 'button button-text-white is-width-auto',
+                                'class': 'icon-cancel-1 button button-primary button-primary-hover-module-admin is-width-auto',
                                 '@click.prevent': 'remove',
                             })|raw }}
                         </div>
