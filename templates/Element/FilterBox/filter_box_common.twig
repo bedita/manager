@@ -17,7 +17,7 @@
     </div>
 
     <div class="sorting">
-        {% if options.relationName and options.sortFilter %}
+        {% if options.relationName and options.sortFilter and options.relationName != 'children' %}
             {% set key = 'sort[' ~ options.relationName ~ ']' %}
             {% set radio = {
                 'type':'radio',
