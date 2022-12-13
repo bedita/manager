@@ -55,16 +55,36 @@
                 </filter-box-view>
             </div>
 
+            {% if relationName == 'children' %}
+            <div class="related-objects ml-1 mb-1">
+                <div class="columns">
+                    {{ Property.control(
+                        'children_order',
+                        mainObject.attributes.children_order|default('position'),
+                        {
+                            'label': __('Children order'),
+                            'class': 'icon-info-1',
+                        }
+                    )|raw }}
+                    <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
-                <div :data-list="dataList" class="columns" droppable sortable>
+                <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
                         class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
                         v-for="(related, index) in objects"
                         :key="related.id"
                         :class="containsId(removedRelated, related.id)? 'removed' : ''"
+                        {%- if dragAndDrop %}
                         draggable
-                        :drag-data="JSON.stringify(related)">
+                        :drag-data="JSON.stringify(related)"
+                        {%- endif %}
+                        >
 
                         {% if relationName == 'children' %}
                             {{ element('Form/related_item', { 'children': true }) }}
