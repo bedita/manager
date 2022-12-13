@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-12-12 14:16:42 \n"
+"POT-Creation-Date: 2022-12-13 13:24:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -120,6 +120,9 @@ msgid "Change password"
 msgstr ""
 
 msgid "Children"
+msgstr ""
+
+msgid "Children order"
 msgstr ""
 
 msgid "Choose a type"
@@ -726,6 +729,9 @@ msgid "Roles Modules accesses"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Save object to apply order change"
 msgstr ""
 
 msgid "Scheduled_from"

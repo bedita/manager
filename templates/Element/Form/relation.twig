@@ -55,6 +55,22 @@
                 </filter-box-view>
             </div>
 
+            {% if relationName == 'children' %}
+            <div class="related-objects ml-1 mb-1">
+                <div class="columns">
+                    {{ Property.control(
+                        'children_order',
+                        mainObject.attributes.children_order|default('position'),
+                        {
+                            'label': __('Children order'),
+                            'class': 'icon-info-1',
+                        }
+                    )|raw }}
+                    <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
+                </div>
+            </div>
+            {% endif %}
+
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
