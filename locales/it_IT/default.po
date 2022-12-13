@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-09-22 16:03:10 \n"
+"POT-Creation-Date: 2022-12-13 13:24:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -102,7 +102,7 @@ msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
 
 msgid "Bulk action performed on {0} objects"
-msgstr "Operazione massiva applicata a {0} oggetti"
+msgstr "Operazione massiva eseguita su {n} oggetti"
 
 msgid "Calendar"
 msgstr "Calendario"
@@ -124,6 +124,9 @@ msgstr "Cambia password"
 
 msgid "Children"
 msgstr "Contenuti"
+
+msgid "Children order"
+msgstr "Ordinamento contenuti"
 
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
@@ -452,6 +455,12 @@ msgstr "Url miniatura mancante"
 msgid "Modified"
 msgstr "Modificato"
 
+msgid "Modified ↑ Oldest on top"
+msgstr "Data di modifica ↑ Meno recenti in testa"
+
+msgid "Modified ↓ Newest on top"
+msgstr "Data di modifica ↓ Più recenti in testa"
+
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
@@ -625,6 +634,12 @@ msgstr ""
 msgid "Position"
 msgstr "Posizione"
 
+msgid "Position ↑"
+msgstr "Posizione ↑"
+
+msgid "Position ↓"
+msgstr "Posizione ↓"
+
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
 
@@ -721,6 +736,9 @@ msgstr "Accessi Ruoli Moduli"
 msgid "Save"
 msgstr "Salva"
 
+msgid "Save object to apply order change"
+msgstr "Salva per applicare cambiamenti di ordinamento"
+
 msgid "Scheduled_from"
 msgstr "Partenza"
 
@@ -787,6 +805,12 @@ msgstr "Miniatura non pronta: in lavorazione"
 
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
+
+msgid "Title ↑"
+msgstr "Titolo ↑"
+
+msgid "Title ↓"
+msgstr "Titolo ↓"
 
 msgid "To"
 msgstr "A"
@@ -1162,7 +1186,7 @@ msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
 
 msgid "Error on deleting tag"
-msgstr "Errore nella cancellazione tag"
+msgstr "Errore nell'eliminazione del tag"
 
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"

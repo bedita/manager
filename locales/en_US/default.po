@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-09-22 16:03:10 \n"
+"POT-Creation-Date: 2022-12-13 13:24:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -123,6 +123,9 @@ msgid "Change password"
 msgstr ""
 
 msgid "Children"
+msgstr ""
+
+msgid "Children order"
 msgstr ""
 
 msgid "Choose a type"
@@ -452,6 +455,12 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
+msgid "Modified ↑ Oldest on top"
+msgstr ""
+
+msgid "Modified ↓ Newest on top"
+msgstr ""
+
 msgid "Module access not authorized"
 msgstr ""
 
@@ -623,6 +632,12 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
+msgid "Position ↑"
+msgstr ""
+
+msgid "Position ↓"
+msgstr ""
+
 msgid "Preferences and Tools"
 msgstr ""
 
@@ -719,6 +734,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Save object to apply order change"
+msgstr ""
+
 msgid "Scheduled_from"
 msgstr ""
 
@@ -783,6 +801,12 @@ msgid "Thumb not ready: coming soon"
 msgstr ""
 
 msgid "Thumbnail is not ready"
+msgstr ""
+
+msgid "Title ↑"
+msgstr ""
+
+msgid "Title ↓"
 msgstr ""
 
 msgid "To"
