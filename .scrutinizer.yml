@@ -6,10 +6,16 @@ filter:
   dependency_paths:
     - 'vendor/*'
 
-# new PHP Analysis
 build:
+  environment:
+    node: v18
   nodes:
     analysis:
+      environment:
+        php:
+          version: 8.1
+          pecl_extensions:
+            - zip
       tests:
         override:
           - php-scrutinizer-run
