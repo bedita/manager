@@ -59,7 +59,7 @@
                                 {{ languages[object.attributes.lang] }}
                             {% endif %}
                         </div>
-                        <div class="narrow">{{ __(object.attributes.status) }}</div>
+                        <div class="narrow">{{ object.attributes.status }}</div>
                         <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
                         <div class="narrow">
                             <span class="tag has-background-module-{{ translated.type }}">{{ translated.type }}</span>
