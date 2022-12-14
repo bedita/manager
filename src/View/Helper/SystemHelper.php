@@ -39,7 +39,9 @@ class SystemHelper extends Helper
         }
         $requiredApiVersions = (array)Configure::read('BEditaAPI.versions');
         foreach ($requiredApiVersions as $requiredApiVersion) {
-            if (version_compare($apiVersion, $requiredApiVersion) >= 0) {
+            $apiMajor = substr($apiVersion, 0, strpos($apiVersion, '.'));
+            $requiredApiMajor = substr($requiredApiVersion, 0, strpos($requiredApiVersion, '.'));
+            if ($apiMajor === $requiredApiMajor && version_compare($apiVersion, $requiredApiVersion) >= 0) {
                 return true;
             }
         }
