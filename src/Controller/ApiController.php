@@ -9,7 +9,6 @@
  * (at your option) any later version.
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
- * dummy change
  */
 namespace App\Controller;
 
