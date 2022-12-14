@@ -204,5 +204,9 @@ export default {
         onUpdateCurrentPage(event) {
             window._vueInstance.$emit('filter-update-current-page', event);
         },
+
+        goto(url) {
+            window.location.href = url;
+        },
     }
 }

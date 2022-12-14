@@ -14,6 +14,9 @@
 
                 {% if objects %}
                     <nav class="table-header has-border-module-translations">
+                        <div class="select-cell narrow" @click="toggleAll">
+                            <input type="checkbox" ref="checkAllCB">
+                        </div>
                         <div>{{ __('Translation') }}</div>
                         <div>{{ __('From') }}</div>
                         <div>{{ __('To') }}</div>
@@ -37,11 +40,14 @@
                             'object_type': translated.type,
                     }, {'fullBase': true}) %}
 
-                    <div class="table-row object-status-{{ object.attributes.status }}">
+                    <a data-id="{{ object.id }}"
+                        class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}"
+                        {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}>
+                        <div class="select-cell narrow" @click="selectRow">
+                            <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
+                        </div>
                         <div class="narrow">
-                            <a {% if Perms.canRead(object.type) %}href="{{ url }}"{% endif %}>
-                                    {{ object.attributes.translated_fields.title|default('no title') }}
-                            </a>
+                            {{ object.attributes.translated_fields.title|default('no title') }}
                         </div>
                         <div class="narrow">
                             {% if translated.attributes.lang %}
@@ -53,27 +59,37 @@
                                 {{ languages[object.attributes.lang] }}
                             {% endif %}
                         </div>
-                        <div class="narrow">{{ __(object.attributes.status) }}</div>
+                        <div class="narrow">{{ object.attributes.status }}</div>
                         <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
                         <div class="narrow">
                             <span class="tag has-background-module-{{ translated.type }}">{{ translated.type }}</span>
                         </div>
                         <div class="buttons-cell narrow">
-                                <a href="{{ url }}" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
-                                {{ __('Edit') }}</a>
+                                <button @click.prevent="goto('{{ url }}')" title="{{ __('Edit') }} {{ object.attributes.title }}" class="icon-link-ext button button-text-white is-width-auto">
+                                {{ __('Edit') }}</button>
                             {% if Perms.canRead(object.type) %}
-                                <a href="{{ objectUrl }}" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
-                                    {{ __('Original') }}</a>
+                                <button @click.prevent="goto('{{ objectUrl }}')" title="{{ __('Edit') }} {{ object.attributes.title }}" class="icon-link-ext button button-text-white is-width-auto">
+                                    {{ __('Original') }}</button>
                             {% endif %}
                         </div>
-
-                    </div>
+                    </a>
                 {% else %}
                     {{ __('No items found') }}
                 {% endfor %}
 
             </div>
 
+        </div>
+
+        <div class="module-footer">
+            {# bulk actions #}
+            {% if objects %}
+            <div class="bulk-actions">
+                <div>
+                    {{ element('Form/bulk_export') }}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
     </div>
