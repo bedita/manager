@@ -27,10 +27,10 @@ jobs:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
     with:
       php_versions: '["7.4","8.0","8.1"]'
-      bedita_version: '4.9.0'
+      bedita_version: '4'
 
   unit-5:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
     with:
       php_versions: '["7.4","8.0","8.1"]'
-      bedita_version: '5.2.0'
+      bedita_version: '5'
