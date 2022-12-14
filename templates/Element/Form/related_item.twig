@@ -7,7 +7,10 @@
     • children    (translations.twig)
 #}
 
-{% set positionInUse = children and object.attributes.children_order in [null, 'position', '-position'] %}
+{% set positionInUse = children %}
+{% if 'children_order' in object.attributes|keys %}
+    {% set positionInUse = children and object.attributes.children_order in [null, 'position', '-position'] %}
+{% endif %}
 
 <article class="box"
     {%- if add %}
