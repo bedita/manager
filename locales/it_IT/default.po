@@ -17,6 +17,9 @@ msgstr " nel Cestino"
 msgid "&"
 msgstr ""
 
+msgid "API version required: {0}"
+msgstr "Versione API richiesta: {0}"
+
 msgid "Actions on selected items"
 msgstr "Azioni sugli oggetti selezionati"
 

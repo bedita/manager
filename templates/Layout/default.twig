@@ -47,6 +47,10 @@ BEdita Manager
     {% set alertMsg = config('AlertMessage.text') %}
 {% endif %}
 
+{% if user and in_array('admin', user.roles) and System.checkBeditaApiVersion() != 1 %}
+    {% set alertMsg = alertMsg ~ ' ' ~ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode %}
+{% endif %}
+
 <body class="{{ bodyClass }}"
     {% if alertMsg %}alert-message="{{ alertMsg }}"{% endif %}>
 

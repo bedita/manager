@@ -17,6 +17,9 @@ msgstr ""
 msgid "&"
 msgstr ""
 
+msgid "API version required: {0}"
+msgstr ""
+
 msgid "Actions on selected items"
 msgstr ""
 
