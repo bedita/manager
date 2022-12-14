@@ -7,7 +7,6 @@ filter:
     - 'vendor/*'
 
 build:
-  image: default-jammy
   environment:
     node: v18
   nodes:
