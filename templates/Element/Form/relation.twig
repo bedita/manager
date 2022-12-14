@@ -56,19 +56,24 @@
             </div>
 
             {% if relationName == 'children' %}
-            <div class="related-objects ml-1 mb-1">
-                <div class="columns">
-                    {{ Property.control(
-                        'children_order',
-                        mainObject.attributes.children_order|default('position'),
-                        {
-                            'label': __('Children order'),
-                            'class': 'icon-info-1',
-                        }
-                    )|raw }}
-                    <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
-                </div>
-            </div>
+                {% if 'children_order' in mainObject.attributes|keys %}
+                    <div class="related-objects ml-1 mb-1">
+                        <div class="columns">
+                            {{ Property.control(
+                                'children_order',
+                                mainObject.attributes.children_order|default('position'),
+                                {
+                                    'label': __('Children order'),
+                                    'class': 'icon-info-1',
+                                    'id': 'children-order',
+                                }
+                            )|raw }}
+                            <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
+                        </div>
+                    </div>
+                {% else %}
+                    {{ Form.hidden('children_order', {'id': 'children-order'})|raw }}
+                {% endif %}
             {% endif %}
 
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
