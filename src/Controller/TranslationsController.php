@@ -46,6 +46,17 @@ class TranslationsController extends ModulesController
     }
 
     /**
+     * @inheritDoc
+     */
+    public function index(): ?Response
+    {
+        parent::index();
+        $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
+
+        return null;
+    }
+
+    /**
      * Display data to add a translation.
      *
      * @param string|int $id Object ID.
