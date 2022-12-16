@@ -58,7 +58,7 @@ export default {
             label: String,
             type: String,
             parent: String,
-            enabled: null,
+            enabled: true,
             selectTypes: false,
             types: Array,
             namesInUse: Array,
@@ -78,7 +78,7 @@ export default {
         } else {
             this.namesInUse = this.names || [];
         }
-        this.enabled = this.source?.enabled || false;
+        this.enabled = this.source?.enabled === undefined ? true :  this.source.enabled;
         this.parent = this.source?.parent_id || '';
     },
 
@@ -91,7 +91,7 @@ export default {
                 id: this.id,
                 name: this.name,
                 label: this.label,
-                enabled: this.enabled || false,
+                enabled: this.enabled,
                 type: this.type,
                 parent_id: this.parent || null
             };
