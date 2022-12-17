@@ -201,6 +201,7 @@ abstract class ModelBaseController extends AppController
      */
     public function save(): ?Response
     {
+        $this->Schema->clearCache();
         $id = null;
         try {
             $id = $this->doSave();
@@ -258,6 +259,7 @@ abstract class ModelBaseController extends AppController
      */
     public function remove(string $id): ?Response
     {
+        $this->Schema->clearCache();
         try {
             $this->apiClient->delete(sprintf('/model/%s/%s', $this->resourceType, $id));
         } catch (BEditaClientException $e) {
