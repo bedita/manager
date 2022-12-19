@@ -7,6 +7,11 @@
     • children    (translations.twig)
 #}
 
+{% set positionInUse = children %}
+{% if 'children_order' in object.attributes|keys %}
+    {% set positionInUse = children and object.attributes.children_order in [null, 'position', '-position'] %}
+{% endif %}
+
 <article class="box"
     {%- if add %}
         :class="selectClasses(related)"
@@ -19,10 +24,10 @@
 
 
     {# PRIORITY (or position) #}
-    {% if common or children %}
+    {% if common or positionInUse %}
         <div class="priority">
             {% if children %}
-                <span class="badge" v-html="index + 1"><: related.meta.relation.priority :></span>
+                <span class="badge" v-html="position(related, index + 1)"></span>
             {% else %}
                 <span class="badge"><: related.meta.relation.priority :></span>
             {% endif %}
@@ -143,9 +148,8 @@
     </div>
     {% endif %}
 
-
     {# CHILDREN position #}
-    {% if children %}
+    {% if positionInUse %}
         <div class="children-position container-grid p-05">
             <dl>
                 <dt>{{ __('Move to position') }}:</dt>

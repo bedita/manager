@@ -514,12 +514,14 @@ class SchemaComponentTest extends TestCase
                 'label' => 'Category 1',
                 'id' => '1',
                 'parent_id' => null,
+                'enabled' => null,
             ],
             [
                 'name' => 'cat-2',
                 'label' => 'Category 2',
                 'id' => '2',
                 'parent_id' => null,
+                'enabled' => null,
             ],
         ];
         static::assertEquals($expected, $result['categories']);

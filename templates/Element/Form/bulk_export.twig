@@ -1,4 +1,4 @@
-{% if not currentModule.hints.multiple_types %}
+{% if not currentModule.hints.multiple_types or currentModule.name == 'translations' %}
     {{ Form.create(null, {
         'id': 'form-export',
         'url': {'_name': 'export:export', 'object_type': objectType}

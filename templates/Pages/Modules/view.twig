@@ -79,11 +79,11 @@
                 {{ element('Form/resource_relations') }}
 
                 {# aside relations view #}
-                {{ element('Form/relations', {'relations': objectRelations.aside}) }}
+                {{ element('Form/relations', {'relations': objectRelations.aside, 'mainObject': object}) }}
             </div>
 
             {# main relations view #}
-            {{ element('Form/relations', {'relations': objectRelations.main}) }}
+            {{ element('Form/relations', {'relations': objectRelations.main, 'mainObject': object}) }}
 
             {% if object.id %}
                 {{ element('Form/history') }}

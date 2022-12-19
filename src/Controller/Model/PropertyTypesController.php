@@ -54,6 +54,7 @@ class PropertyTypesController extends ModelBaseController
 
         $this->getRequest()->allowMethod(['post']);
         $response = [];
+        $this->Schema->clearCache();
 
         try {
             if (empty($payload)) {
