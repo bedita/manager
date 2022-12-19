@@ -112,7 +112,7 @@ class CategoriesHelper extends Helper
             return $controlOptions;
         }
         foreach ($node['children'] as $key => $child) {
-            if ($child['enabled']) {
+            if ((bool)Hash::get($child, 'enabled', true)) {
                 $controlOptions['options'][$key] = ['value' => $child['name'], 'text' => $child['label'] = $child['label'] ?: $child['name']];
             }
         }
