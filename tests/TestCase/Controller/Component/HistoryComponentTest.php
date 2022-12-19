@@ -387,9 +387,9 @@ class HistoryComponentTest extends TestCase
                 'categories',
                 [
                     'categories' => [
-                        ['name' => 'red', 'label' => 'Red'],
-                        ['name' => 'green', 'label' => 'Green'],
-                        ['name' => 'blue', 'label' => 'Blue'],
+                        ['name' => 'red', 'label' => 'Red', 'enabled' => true],
+                        ['name' => 'green', 'label' => 'Green', 'enabled' => true],
+                        ['name' => 'blue', 'label' => 'Blue', 'enabled' => true],
                     ],
                 ],
                 [
