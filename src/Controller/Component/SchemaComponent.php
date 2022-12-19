@@ -233,6 +233,7 @@ class SchemaComponent extends Component
                     'name' => Hash::get((array)$item, 'attributes.name'),
                     'label' => Hash::get((array)$item, 'attributes.label'),
                     'parent_id' => Hash::get((array)$item, 'attributes.parent_id'),
+                    'enabled' => Hash::get((array)$item, 'attributes.enabled'),
                 ];
             },
             (array)Hash::get((array)$response, 'data')

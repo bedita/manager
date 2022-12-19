@@ -167,7 +167,12 @@ class Control
     {
         $schema = (array)Hash::get($options, 'schema');
         $value = Hash::get($options, 'value');
-        $categories = (array)Hash::get($schema, 'categories');
+        $categories = array_values(array_filter(
+            (array)Hash::get($schema, 'categories'),
+            function ($category) {
+                return (bool)Hash::get($category, 'enabled');
+            }
+        ));
         $options = array_map(
             function ($category) {
                 return [
