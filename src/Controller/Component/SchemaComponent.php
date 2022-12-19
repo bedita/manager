@@ -462,4 +462,15 @@ class SchemaComponent extends Component
 
         return $types;
     }
+
+    /**
+     * Clear schema cache
+     *
+     * @return void
+     * @codeCoverageIgnore
+     */
+    public function clearCache(): void
+    {
+        Cache::clear(static::CACHE_CONFIG);
+    }
 }
