@@ -60,11 +60,11 @@ class CategoriesHelperTest extends TestCase
             'is not tree' => [
                 [
                     'categories' => [
-                        ['id' => 1, 'name' => 'dummy1', 'label' => 'Dummy 1', 'parent_id' => null],
-                        ['id' => 2, 'name' => 'dummy2', 'label' => 'Dummy 2', 'parent_id' => null],
-                        ['id' => 3, 'name' => 'dummy3', 'label' => 'Dummy 3', 'parent_id' => null],
-                        ['id' => 4, 'name' => 'dummy4', 'label' => 'Dummy 4', 'parent_id' => null],
-                        ['id' => 5, 'name' => 'dummy5', 'label' => 'Dummy 5', 'parent_id' => null],
+                        ['id' => 1, 'name' => 'dummy1', 'label' => 'Dummy 1', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 2, 'name' => 'dummy2', 'label' => 'Dummy 2', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 3, 'name' => 'dummy3', 'label' => 'Dummy 3', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 4, 'name' => 'dummy4', 'label' => 'Dummy 4', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 5, 'name' => 'dummy5', 'label' => 'Dummy 5', 'parent_id' => null, 'enabled' => true],
                     ],
                 ],
                 'categories',
@@ -125,11 +125,11 @@ class CategoriesHelperTest extends TestCase
             'multiple nodes' => [
                 [
                     'categories' => [
-                        ['id' => 1, 'name' => 'dummy1', 'label' => 'Dummy 1', 'parent_id' => null],
-                        ['id' => 2, 'name' => 'dummy2', 'label' => 'Dummy 2', 'parent_id' => null],
-                        ['id' => 3, 'name' => 'dummy3', 'label' => 'Dummy 3', 'parent_id' => 2],
-                        ['id' => 4, 'name' => 'dummy4', 'label' => 'Dummy 4', 'parent_id' => 2],
-                        ['id' => 5, 'name' => 'dummy5', 'label' => 'Dummy 5', 'parent_id' => 2],
+                        ['id' => 1, 'name' => 'dummy1', 'label' => 'Dummy 1', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 2, 'name' => 'dummy2', 'label' => 'Dummy 2', 'parent_id' => null, 'enabled' => true],
+                        ['id' => 3, 'name' => 'dummy3', 'label' => 'Dummy 3', 'parent_id' => 2, 'enabled' => true],
+                        ['id' => 4, 'name' => 'dummy4', 'label' => 'Dummy 4', 'parent_id' => 2, 'enabled' => true],
+                        ['id' => 5, 'name' => 'dummy5', 'label' => 'Dummy 5', 'parent_id' => 2, 'enabled' => false],
                     ],
                 ],
                 'categories',
@@ -138,7 +138,7 @@ class CategoriesHelperTest extends TestCase
                     ['name' => 'dummy3', 'label' => 'Dummy 3'],
                 ],
                 [],
-                '<div class="categories"><h3>Global</h3><div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-dummy1" class="selected"><input type="checkbox" name="categories[]" value="dummy1" checked="checked" id="categories-dummy1">Dummy 1</label></div></div></div><div class="categories"><h3>Dummy 2</h3><div class="input select"><label for="categories">Categories</label><div class="checkbox"><label for="categories-dummy3" class="selected"><input type="checkbox" name="categories[]" value="dummy3" checked="checked" id="categories-dummy3">Dummy 3</label></div><div class="checkbox"><label for="categories-dummy4"><input type="checkbox" name="categories[]" value="dummy4" id="categories-dummy4">Dummy 4</label></div><div class="checkbox"><label for="categories-dummy5"><input type="checkbox" name="categories[]" value="dummy5" id="categories-dummy5">Dummy 5</label></div></div></div>',
+                '<div class="categories"><h3>Global</h3><div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-dummy1" class="selected"><input type="checkbox" name="categories[]" value="dummy1" checked="checked" id="categories-dummy1">Dummy 1</label></div></div></div><div class="categories"><h3>Dummy 2</h3><div class="input select"><label for="categories">Categories</label><div class="checkbox"><label for="categories-dummy3" class="selected"><input type="checkbox" name="categories[]" value="dummy3" checked="checked" id="categories-dummy3">Dummy 3</label></div><div class="checkbox"><label for="categories-dummy4"><input type="checkbox" name="categories[]" value="dummy4" id="categories-dummy4">Dummy 4</label></div></div></div>',
             ],
         ];
     }
@@ -267,9 +267,9 @@ class CategoriesHelperTest extends TestCase
                     'name' => 'dummy1',
                     'label' => 'Dummy 1',
                     'children' => [
-                        ['name' => 'son1', 'label' => 'Son 1'],
-                        ['name' => 'son2', 'label' => 'Son 2'],
-                        ['name' => 'son3', 'label' => 'Son 3'],
+                        ['name' => 'son1', 'label' => 'Son 1', 'enabled' => true],
+                        ['name' => 'son2', 'label' => 'Son 2', 'enabled' => true],
+                        ['name' => 'son3', 'label' => 'Son 3', 'enabled' => false],
                     ],
                 ],
                 [['name' => 'dummy1', 'label' => 'Dummy 1'], ['name' => 'dummy2', 'label' => 'Dummy 2']],
@@ -283,7 +283,6 @@ class CategoriesHelperTest extends TestCase
                     'options' => [
                         ['value' => 'son1', 'text' => 'Son 1'],
                         ['value' => 'son2', 'text' => 'Son 2'],
-                        ['value' => 'son3', 'text' => 'Son 3'],
                     ],
                 ],
             ],
