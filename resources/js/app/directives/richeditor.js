@@ -11,6 +11,9 @@ import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/hr';
 import '../plugins/tinymce/placeholders.js';
+import { tinymcePlugin } from '@chialab/typos';
+
+tinymcePlugin(tinymce);
 
 const DEFAULT_TOOLBAR = [
     'styleselect',
@@ -36,6 +39,7 @@ const DEFAULT_TOOLBAR = [
     'undo',
     'redo',
     '|',
+    'fixQuotes',
     'code',
 ].join(' ');
 
@@ -103,6 +107,7 @@ export default {
                         'hr',
                         'code',
                         'placeholders',
+                        'typos',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
                     relative_urls: false,
