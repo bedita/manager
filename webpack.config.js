@@ -132,6 +132,7 @@ module.exports = {
                 const preserve =  [
                     '.htaccess',
                     'favicon.ico',
+                    'favicon.png',
                     'index.php',
                     'robots.txt',
                     'be-icons-codes.css',

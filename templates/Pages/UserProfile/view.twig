@@ -3,12 +3,6 @@
 
 <div class="modules-view">
 
-    {% if object.attributes.username %}
-    <header>
-        <h1>{{ object.attributes.username }}</h1>
-    </header>
-    {% endif %}
-
     <div class="module-form">
 
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
@@ -19,24 +13,26 @@
             {{ Form.hidden('id', {'value': object.id})|raw }}
             {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
             <div class="main-view-column">
-
                 {% set jsonKeys = [] %}
                 {% for group, attributes in properties %}
                     {% if group != 'other' and group != 'password_change' and attributes %}
                         <section class="fieldset">
-                            {% if group|trim  %}
-                                <header>
-                                    <h2 class="m-0">{{ __(group|humanize) }}</h2>
-                                </header>
-                            {% endif %}
-
+                            <header class="tab unselectable">
+                                {% if group|trim  %}
+                                    <h2>{{ __(group|humanize) }}</h2>
+                                {% else %}
+                                    <h2>{{ __('General') }}</h2>
+                                {% endif %}
+                            </header>
                             <div class="tab-container">
                                 {% for key, value in attributes %}
                                     {% set options = {} %}
                                     {% if key == 'email' or key == 'username' %}
                                         {% set options = options|merge({'readonly': 'true'}) %}
                                     {% endif %}
-                                    {{ Property.control(key, value, options)|raw }}
+                                    {% if key != 'title' %}
+                                        {{ Property.control(key, value, options)|raw }}
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         </section>
@@ -48,8 +44,8 @@
                 {% for group, attributes in properties %}
                     {% if group == 'password_change' and attributes %}
                         <section class="fieldset">
-                            <header class="mt-25">
-                                <h3 class="is-uppercase">{{ __('Change password') }}</h3>
+                            <header class="tab unselectable">
+                                <h2>{{ __('Change password') }}</h2>
                             </header>
 
                             <div class="tab-container">

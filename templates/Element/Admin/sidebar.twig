@@ -1,5 +1,5 @@
 {# Append urls to sidebar #}
-{% set actions = ['appearance', 'applications', 'endpoints', 'config', 'async_jobs', 'roles', 'roles_modules', 'endpoint_permissions'] %}
+{% set actions = ['appearance', 'applications', 'endpoints', 'endpoint_permissions', 'roles', 'roles_modules', 'config', 'async_jobs'] %}
 {% set controllerAction = _view.request.getparam('controller')|default('') %}
 {% for action in actions %}
     {% if action == controllerAction|underscore %}

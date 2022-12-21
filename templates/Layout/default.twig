@@ -21,6 +21,7 @@ BEdita Manager
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
 
+    {{ Html.meta('icon', "favicon.png", { type:'image/png' } )|raw }}
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
