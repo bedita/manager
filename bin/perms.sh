@@ -1,4 +1,4 @@
-\#!/usr/bin/env sh
+#!/usr/bin/env sh
 
 ################################################################################
 # Shell script to update permissions on a BE4 webapp
@@ -21,4 +21,7 @@ echo "setfacl -R -d -m u:${HTTPDUSER}:rwx tmp"
 setfacl -R -d -m u:${HTTPDUSER}:rwx tmp
 
 echo "setfacl -R -m u:${HTTPDUSER}:rwx logs"
+setfacl -R -m u:${HTTPDUSER}:rwx logs
+
+echo "setfacl -R -d -m u:${HTTPDUSER}:rwx logs"
 setfacl -R -d -m u:${HTTPDUSER}:rwx logs
