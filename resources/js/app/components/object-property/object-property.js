@@ -20,9 +20,9 @@ export default {
             </div>
             <div v-if="!(prop.attributes.name in nobuttonsfor)" class="column is-narrow">
                 <div class="buttons-container">
-                    <button v-if="type === 'custom'" @click.prevent="remove()" class="button is-expanded">${t`Delete`}</button>
-                    <button v-if="hidden" @click.prevent="toggle(false)" class="button is-expanded">${t`Show`}</button>
-                    <button v-if="!hidden" @click.prevent="toggle(true)" class="button is-expanded">${t`Hide`}</button>
+                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">${t`Delete`}</button>
+                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">${t`Show`}</button>
+                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">${t`Hide`}</button>
                 </div>
             </div>
         </div>

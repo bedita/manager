@@ -3,8 +3,6 @@
     {% set routeName = 'trash:view' %}
 {% endif %}
 
-{% set buttonClasses = 'button button-text-white is-width-auto' %}
-
 <a data-id="{{ object.id }}" {% if Perms.canRead(object.type) %}href="{{ Url.build({'_name': routeName, 'object_type': object.type, 'id': object.id}) }}"{% endif %}
     class="table-row object-status-{{ object.attributes.status }} {{ Layout.publishStatus(object | default({})) }}">
 
@@ -53,7 +51,7 @@
                     {
                         'data': {'ids': object.id, 'query': q},
                         'title': __('Restore') ~ ' ' ~ object.attributes.title|escape,
-                        'class': buttonClasses,
+                        'class': 'icon-up-2 button button-text-white is-width-auto',
                     }
                 )|raw }}
             {% endif %}
@@ -63,7 +61,7 @@
                     {'_name': 'trash:delete'},
                     {
                         'data': {'ids': object.id, 'query': q},
-                        'class': buttonClasses,
+                        'class': 'icon-cancel button button-text-white is-width-auto',
                         'title': __('Permanently delete') ~ ' ' ~ object.attributes.title|escape,
                         'onclick': confirm,
                     }
@@ -75,7 +73,7 @@
             {% if Perms.canRead(object.type) %}
             <button
                 title="{{ __('Edit') }} {{ object.attributes.title }}"
-                class="{{ buttonClasses }}">{{ __('Edit') }}</button>
+                class="icon-link-ext button button-text-white is-width-auto">{{ __('Edit') }}</button>
             {% endif %}
 
             {% if Perms.canDelete(object) %}
@@ -84,7 +82,7 @@
                     {
                         'data': {'id': object.id},
                         'title': __('Move to trash') ~ ' ' ~ object.attributes.title|escape,
-                        'class': buttonClasses,
+                        'class': 'icon-trash button button-text-white is-width-auto',
                     }
                 )|raw}}
             {% endif %}

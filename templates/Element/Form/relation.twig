@@ -160,7 +160,7 @@
             </select>
 
             {% for label, format in formats %}
-               <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
+               <a v-if="exportFormat === '{{ format }}'" class="icon-export button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
             {% endfor %}
         </div>
 

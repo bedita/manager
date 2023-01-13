@@ -29,16 +29,16 @@ export default {
                 <input type="checkbox" name="enabled" v-model="enabled" checked="!!enabled" />
             </div>
             <div v-show="!id" class="buttons-cell narrow">
-                <button :disabled="name === '' || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
+                <button :disabled="name === '' || nameInUse() || type === ''" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
             </div>
             <div v-show="id">
                 <: id :>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button :disabled="name === '' || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
+                <button :disabled="name === '' || unchanged() || nameInUse()" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
+                <button class="icon-cancel button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
             </div>
         </form>
     `,
