@@ -44,7 +44,7 @@
                         {% else %}
                             <figure class="thumb">
                                 <a href={{ stream.meta.url }} title="{{ __('Open image') }}" target="_blank">
-                                    <img src={{ thumb }} />
+                                    <img :src=previewImage("{{ thumb }}") alt="" />
                                 </a>
                             </figure>
                         {% endif %}
@@ -68,19 +68,19 @@
 
                     {% if attributes.url %}
                     <a href="{{ attributes.url }}" target="_blank"
-                            class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                            {{ __('View file') }}
+                        class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                        {{ __('View file') }}
                     </a>
                     {% endif %}
 
                     <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
-                            class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                            {{ __('Download file') }}
+                        class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                        {{ __('Download file') }}
                     </a>
 
                     <div class="mr-1 has-text-size-large">{{ __('Change File') }}:</div>
                     <div>
-                        {{ Form.control('file', { 'type': 'file', 'label': false}) | raw }}
+                        {{ Form.control('file', { 'type': 'file', 'label': false, '@change': 'onFileChange($event, "' ~ object.type  ~ '")' }) | raw }}
                         {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>

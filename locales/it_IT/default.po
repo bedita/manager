@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-12-13 13:24:25 \n"
+"POT-Creation-Date: 2023-01-20 07:34:09 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -127,6 +127,9 @@ msgstr "Contenuti"
 
 msgid "Children order"
 msgstr "Ordinamento contenuti"
+
+msgid "Choose a file"
+msgstr "Scegli un file"
 
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
@@ -1163,6 +1166,12 @@ msgstr "Elementi"
 
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
+
+msgid "File type not accepted"
+msgstr "Tipo di file non consentito"
+
+msgid "Accepted types"
+msgstr "Tipi consentiti"
 
 msgid "Open Uri"
 msgstr "Apri indirizzo"

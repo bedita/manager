@@ -3,14 +3,19 @@
         <label class="file-label">
             {{ Form.file('file', {
                 'class': 'file-input',
-                'v-on:change': 'onFileChanged',
+                'v-on:change': 'onFileChanged($event, "' ~ object.type ~ '")',
             }) | raw }}
-            <span class="file-cta icon-upload file-label">Choose a file</span>
+            <span class="file-cta icon-upload file-label">{{ __('Choose a file') }}</span>
             <span class="file-name" v-cloak>
-                <span v-bind:title="fileName" data-empty-label="{{ __('empty') }}"><: fileName :></span>
+                <span v-bind:title="file?.name" data-empty-label="{{ __('empty') }}"><: file?.name :></span>
             </span>
+            {% if object.type == 'images' %}
+            <figure class="thumb" v-if="file?.name">
+                <img :src=previewImage() alt="" />
+            </figure>
+            {% endif %}
 
-            <a class="file-reset-button" v-on:click.prevent.stop="resetFile" v-show="fileName"></a>
+            <a class="file-reset-button" v-on:click.prevent.stop="resetFile" v-show="file?.name"></a>
         </label>
     </div>
 </form-file-upload>

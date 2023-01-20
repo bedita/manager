@@ -13,6 +13,8 @@
  *
  */
 
+import { t } from 'ttag';
+
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
     credentials: 'same-origin',
@@ -70,11 +72,26 @@ export default {
 
     data() {
         return {
+            file: null,
             isOpen: this.isDefaultOpen,
             isLoading: false,
             totalObjects: 0,
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
+            /** accepted mime types by object type for file upload */
+            mimes: {
+                images: [
+                    'image/apng',
+                    'image/bmp',
+                    'image/jp2',
+                    'image/jpeg',
+                    'image/jpg',
+                    'image/gif',
+                    'image/png',
+                    'image/svg+xml',
+                    'image/webp',
+                ],
+            },
         }
     },
 
@@ -194,6 +211,23 @@ export default {
 
             this.isLoading = false;
             this.userInfoLoaded = true;
-        }
+        },
+        previewImage(thumb) {
+            if (this.file?.name) {
+                return window.URL.createObjectURL(this.file);
+            }
+
+            return thumb;
+        },
+        async onFileChange(e, type) {
+            const files = e.target.files || e.dataTransfer.files;
+            if (this.mimes?.[type] && !this.mimes[type].includes(files[0].type)) {
+                const msg = t`File type not accepted` + `: "${files[0].type}". ` + t`Accepted types` + `: "${this.mimes[type].join('", "')}".`;
+                BEDITA.warning(msg);
+
+                return;
+            }
+            this.file = files[0];
+        },
     }
 }
