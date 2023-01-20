@@ -87,7 +87,7 @@
                                 'disabled' : true,
                             }) %}
                             {{ Form.control('lang', options)|raw }}
-                            <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
+                            <a class="icon-link-ext button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
                                 {{ __('Edit') }}
                             </a>
                         </div>
@@ -120,7 +120,8 @@
             {% do _view.append('module-buttons', Form.button( __('Save'),
                 {
                     'form': 'form-translate',
-                    'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                    'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
+                    'onclick': 'this.classList.add(\'is-loading-spinner\')',
                 })
             ) %}
 
@@ -137,7 +138,7 @@
                             'object_id': object.id,
                             'lang': translation.attributes.lang
                         }],
-                        'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name
+                        'class': 'icon-cancel button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto',
                     })
                 ) %}
             {% endif %}
