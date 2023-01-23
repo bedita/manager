@@ -117,11 +117,21 @@ export default {
             this.$el.classList.remove('dragover');
         },
 
+        titleFromFileName(filename) {
+            let title = filename;
+            title = title.replaceAll('-', ' ');
+            title = title.replaceAll('_', ' ');
+            title = title.substring(0, title.lastIndexOf('.')) || title;
+
+            return title.trim();
+        },
+
         // return promise
         upload(file) {
             const objectType = this.getObjectType(file);
             const formData = new FormData();
-            formData.append('title', file.name);
+            const title = this.titleFromFileName(file.name);
+            formData.append('title', title);
             formData.append('status', 'on');
             formData.append('file', file);
             formData.append('model-type', objectType);
