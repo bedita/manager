@@ -117,6 +117,17 @@ export default {
 
                 return true;
             },
+
+            titleFromFileName(filename) {
+                let title = filename;
+                title = title.replaceAll('-', ' ');
+                title = title.replaceAll('_', ' ');
+                if (title.lastIndexOf('.') > 0) {
+                    title = title.substring(0, title.lastIndexOf('.')) || title;
+                }
+
+                return title.trim();
+            },
         }
     }
 };

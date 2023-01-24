@@ -486,7 +486,7 @@ export default {
             }
             const titleId = `_fast_create_${type}_title`;
             if (document.getElementById(titleId) && document.getElementById(titleId).value === '') {
-                document.getElementById(titleId).value = this.titleFromFileName(this.file.name);
+                document.getElementById(titleId).value = this.$helpers.titleFromFileName(this.file.name);
             }
         },
 
@@ -496,17 +496,6 @@ export default {
             }
 
             return null;
-        },
-
-        titleFromFileName(filename) {
-            let title = filename;
-            title = title.replaceAll('-', ' ');
-            title = title.replaceAll('_', ' ');
-            if (title.lastIndexOf('.') > 0) {
-                title = title.substring(0, title.lastIndexOf('.')) || title;
-            }
-
-            return title.trim();
         },
     },
 };
