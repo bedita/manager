@@ -121,7 +121,9 @@ export default {
             let title = filename;
             title = title.replaceAll('-', ' ');
             title = title.replaceAll('_', ' ');
-            title = title.substring(0, title.lastIndexOf('.')) || title;
+            if (title.lastIndexOf('.') > 0) {
+                title = title.substring(0, title.lastIndexOf('.')) || title;
+            }
 
             return title.trim();
         },
@@ -130,8 +132,7 @@ export default {
         upload(file) {
             const objectType = this.getObjectType(file);
             const formData = new FormData();
-            const title = this.titleFromFileName(file.name);
-            formData.append('title', title);
+            formData.append('title', this.titleFromFileName(file?.name || ''));
             formData.append('status', 'on');
             formData.append('file', file);
             formData.append('model-type', objectType);
