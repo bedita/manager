@@ -545,6 +545,98 @@ class SchemaHelperTest extends TestCase
                     'dummy',
                 ],
             ],
+            'properties sort 1' => [
+                [
+                    'title' => ['type' => 'string'],
+                    'description' => ['type' => 'string'],
+                    'body' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 1' => [
+                [
+                    'description' => ['type' => 'string'],
+                    'title' => ['type' => 'string'],
+                    'body' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 2' => [
+                [
+                    'body' => ['type' => 'string'],
+                    'title' => ['type' => 'string'],
+                    'description' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 3' => [
+                [
+                    'body' => ['type' => 'string'],
+                    'description' => ['type' => 'string'],
+                    'title' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 4' => [
+                [
+                    'description' => ['type' => 'string'],
+                    'title' => ['type' => 'string'],
+                    'body' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 5' => [
+                [
+                    'description' => ['type' => 'string'],
+                    'body' => ['type' => 'string'],
+                    'title' => ['type' => 'string'],
+                ],
+                [
+                    'title',
+                    'description',
+                    'body',
+                ],
+            ],
+            'properties sort 6' => [
+                [
+                    'something' => ['type' => 'string'],
+                    'body' => ['type' => 'string'],
+                ],
+                [
+                    'body',
+                    'something',
+                ],
+            ],
+            'properties sort 7' => [
+                [
+                    'body' => ['type' => 'string'],
+                    'something' => ['type' => 'string'],
+                ],
+                [
+                    'body',
+                    'something',
+                ],
+            ],
         ];
     }
 
