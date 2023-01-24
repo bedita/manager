@@ -449,12 +449,71 @@ class SchemaHelperTest extends TestCase
             ],
             'not translatable' => [
                 [
-                    'field1' => [
+                    'field_boolean' => [
+                        'type' => 'boolean',
+                    ],
+                    'field_date' => [
+                        'type' => 'string',
+                        'format' => 'date',
+                    ],
+                    'field_datetime' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                    'field_integer' => [
+                        'type' => 'integer',
+                    ],
+                    'field_number' => [
+                        'type' => 'integer',
+                    ],
+                    'id' => [
+                        'type' => 'integer',
+                    ],
+                    'uname' => [
                         'type' => 'string',
                     ],
-                    'field2' => [
+                    'status' => [
                         'type' => 'string',
-                        'contentMediaType' => 'text/css',
+                    ],
+                    'lang' => [
+                        'type' => 'string',
+                    ],
+                    'locked' => [
+                        'type' => 'boolean',
+                    ],
+                    'published' => [
+                        'type' => 'boolean',
+                    ],
+                    'created' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                    'modified' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                    'created_by' => [
+                        'type' => 'integer',
+                    ],
+                    'modified_by' => [
+                        'type' => 'integer',
+                    ],
+                    'publish_start' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                    'publish_end' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                    ],
+                    'categories' => [
+                        'type' => 'array',
+                    ],
+                    'tags' => [
+                        'type' => 'array',
+                    ],
+                    'extra' => [
+                        'type' => 'object',
                     ],
                 ],
                 [],
@@ -468,7 +527,6 @@ class SchemaHelperTest extends TestCase
                             ],
                             [
                                 'type' => 'string',
-                                'contentMediaType' => 'text/plain',
                             ],
                         ],
                     ],
@@ -498,7 +556,6 @@ class SchemaHelperTest extends TestCase
      * @return void
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
-     * @covers ::translatableType()
      */
     public function testTranslatableFields(array $properties, array $expected): void
     {
@@ -519,11 +576,11 @@ class SchemaHelperTest extends TestCase
             ],
         ];
         $actual = $this->Schema->translatableFields($properties);
-        static::assertEmpty($actual);
+        static::assertNotEmpty($actual);
 
-        Configure::write('Properties.documents.translatable', ['field1']);
+        Configure::write('Properties.documents.translatable', ['field2']);
         $actual = $this->Schema->translatableFields($properties, 'documents');
-        static::assertEquals(['field1'], $actual);
+        static::assertEquals(['field1', 'field2'], $actual);
     }
 
     /**

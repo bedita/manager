@@ -37,18 +37,27 @@ class SchemaHelper extends Helper
     public $helpers = ['Time'];
 
     /**
-     * Default translatable fields to be prepended in translations
+     * Untranslatable fields
      *
      * @var array
      */
-    public const DEFAULT_TRANSLATABLE = ['title', 'description', 'body'];
-
-    /**
-     * Translatable media types
-     *
-     * @var array
-     */
-    public const TRANSLATABLE_MEDIATYPES = ['text/html', 'text/plain'];
+    public const UNTRANSLATABLE = [
+        'id',
+        'uname',
+        'status',
+        'lang',
+        'locked',
+        'published',
+        'created',
+        'modified',
+        'created_by',
+        'modified_by',
+        'publish_start',
+        'publish_end',
+        'categories',
+        'tags',
+        'extra',
+    ];
 
     /**
      * Get control options for a property schema.
@@ -159,6 +168,27 @@ class SchemaHelper extends Helper
     }
 
     /**
+     * Infer format from property schema in JSON-SCHEMA format.
+     *
+     * @param array $schema The property schema
+     * @return string
+     */
+    public static function formatFromSchema(array $schema): string
+    {
+        if (!empty($schema['oneOf'])) {
+            foreach ($schema['oneOf'] as $subSchema) {
+                if (!empty($subSchema['format']) && $subSchema['format'] === 'null') {
+                    continue;
+                }
+
+                return static::formatFromSchema($subSchema);
+            }
+        }
+
+        return (string)Hash::get($schema, 'format');
+    }
+
+    /**
      * Infer type from property schema in JSON-SCHEMA format
      * Possible return values:
      *
@@ -205,49 +235,50 @@ class SchemaHelper extends Helper
      */
     public function translatableFields(array $properties, ?string $objectType = null): array
     {
-        if (empty($properties)) {
-            return [];
-        }
-
-        $fields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
-        $properties = array_diff_key($properties, array_flip($fields));
-        $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
-
-        foreach ($properties as $name => $property) {
-            if (in_array($name, $translatable) || $this->translatableType($property)) {
-                $fields[] = $name;
+        $fields = array_diff(
+            array_keys($properties),
+            self::UNTRANSLATABLE
+        );
+        array_walk(
+            $properties,
+            function (&$schema, $field, $accepted) {
+                $schema['translatable'] = in_array($field, $accepted)
+                    && in_array(self::typeFromSchema($schema), ['object', 'string']);
+            },
+            array_values($fields)
+        );
+        $properties = array_filter($properties, function ($property) {
+            return $property['translatable'] === true;
+        });
+        $translatable = array_keys($properties);
+        $translatable = array_merge(
+            (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType)),
+            $translatable
+        );
+        usort($translatable, function ($item1, $item2) {
+            if ($item1 === 'title') {
+                return -1;
             }
-        }
+            if ($item2 === 'title') {
+                return 1;
+            }
+            if ($item1 === 'description') {
+                return -1;
+            }
+            if ($item2 === 'description') {
+                return 1;
+            }
+            if ($item1 === 'body') {
+                return -1;
+            }
+            if ($item2 === 'body') {
+                return 1;
+            }
 
-        return array_values($fields);
-    }
+            return $item1 > $item2;
+        });
 
-    /**
-     * Helper recursive method to check if a property is translatable checking its JSON SCHEMA
-     *
-     * @param array $schema Property schema
-     * @return bool
-     */
-    protected function translatableType(array $schema): bool
-    {
-        if (!empty($schema['oneOf'])) {
-            return array_reduce(
-                (array)$schema['oneOf'],
-                function ($carry, $item) {
-                    if ($carry) {
-                        return true;
-                    }
-
-                    return $this->translatableType((array)$item);
-                }
-            );
-        }
-        // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'
-        $type = (string)Hash::get($schema, 'type');
-        $contentMediaType = Hash::get($schema, 'contentMediaType');
-
-        return $type === 'string' &&
-            in_array($contentMediaType, static::TRANSLATABLE_MEDIATYPES);
+        return $translatable;
     }
 
     /**
