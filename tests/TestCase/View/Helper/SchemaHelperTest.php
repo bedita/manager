@@ -545,7 +545,7 @@ class SchemaHelperTest extends TestCase
                     'dummy',
                 ],
             ],
-            'properties sort 1' => [
+            'properties sort 0' => [
                 [
                     'title' => ['type' => 'string'],
                     'description' => ['type' => 'string'],
