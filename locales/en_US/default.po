@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-01-20 07:34:09 \n"
+"POT-Creation-Date: 2023-01-24 17:18:03 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -189,9 +189,6 @@ msgid "Create a new category"
 msgstr ""
 
 msgid "Create a new tag"
-msgstr ""
-
-msgid "Create new"
 msgstr ""
 
 msgid "Created"
@@ -1131,6 +1128,12 @@ msgid ""
 "less than max file size (${ maxFileSizeMb } MB)"
 msgstr ""
 
+msgid "File type not accepted"
+msgstr ""
+
+msgid "Accepted types"
+msgstr ""
+
 msgid "stop"
 msgstr ""
 
@@ -1159,12 +1162,6 @@ msgid "Items"
 msgstr ""
 
 msgid "Search text too short. Minimum length is 3. Retry"
-msgstr ""
-
-msgid "File type not accepted"
-msgstr ""
-
-msgid "Accepted types"
 msgstr ""
 
 msgid "Open Uri"

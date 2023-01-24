@@ -17,30 +17,13 @@ export default {
     data() {
         return {
             file: null,
-            /** accepted mime types by object type for file upload */
-            mimes: {
-                images: [
-                    'image/apng',
-                    'image/bmp',
-                    'image/jp2',
-                    'image/jpeg',
-                    'image/jpg',
-                    'image/gif',
-                    'image/png',
-                    'image/svg+xml',
-                    'image/webp',
-                ],
-            },
         }
     },
 
     methods: {
         onFileChanged(e, type) {
             this.file = null;
-            if (this.mimes?.[type] && !this.mimes[type].includes(e.target.files[0].type)) {
-                const msg = t`File type not accepted` + `: "${e.target.files[0].type}". ` + t`Accepted types` + `: "${this.mimes[type].join('", "')}".`;
-                BEDITA.warning(msg);
-
+            if (this.$helpers.checkMimeForUpload(e.target.files[0], type) === false) {
                 return;
             }
             if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {

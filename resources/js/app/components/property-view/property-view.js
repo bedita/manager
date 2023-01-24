@@ -78,20 +78,6 @@ export default {
             totalObjects: 0,
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
-            /** accepted mime types by object type for file upload */
-            mimes: {
-                images: [
-                    'image/apng',
-                    'image/bmp',
-                    'image/jp2',
-                    'image/jpeg',
-                    'image/jpg',
-                    'image/gif',
-                    'image/png',
-                    'image/svg+xml',
-                    'image/webp',
-                ],
-            },
         }
     },
 
@@ -221,10 +207,7 @@ export default {
         },
         async onFileChange(e, type) {
             const files = e.target.files || e.dataTransfer.files;
-            if (this.mimes?.[type] && !this.mimes[type].includes(files[0].type)) {
-                const msg = t`File type not accepted` + `: "${files[0].type}". ` + t`Accepted types` + `: "${this.mimes[type].join('", "')}".`;
-                BEDITA.warning(msg);
-
+            if (this.$helpers.checkMimeForUpload(files[0], type) === false) {
                 return;
             }
             this.file = files[0];

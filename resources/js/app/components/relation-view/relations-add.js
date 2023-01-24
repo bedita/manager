@@ -467,8 +467,15 @@ export default {
          * set file, object type and placeholder
          *
          * @param {Event} event input file change event
+         * @param {String} type The object type
          */
-        processFile(event) {
+        processFile(event, type) {
+            if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
+                return;
+            }
+            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
+                return false;
+            }
             this.file = event.target.files[0];
             if (!this.file) {
                 return false;
@@ -477,6 +484,29 @@ export default {
             if (!this.object.attributes.title) {
                 this.object.attributes.title = this.file.name;
             }
+            const titleId = `_fast_create_${type}_title`;
+            if (document.getElementById(titleId) && document.getElementById(titleId).value === '') {
+                document.getElementById(titleId).value = this.titleFromFileName(this.file.name);
+            }
+        },
+
+        previewImage() {
+            if (this.file?.name) {
+                return window.URL.createObjectURL(this.file);
+            }
+
+            return null;
+        },
+
+        titleFromFileName(filename) {
+            let title = filename;
+            title = title.replaceAll('-', ' ');
+            title = title.replaceAll('_', ' ');
+            if (title.lastIndexOf('.') > 0) {
+                title = title.substring(0, title.lastIndexOf('.')) || title;
+            }
+
+            return title.trim();
         },
     },
 };
