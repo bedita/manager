@@ -230,10 +230,10 @@ class SchemaHelper extends Helper
             return $property['translatable'] === true;
         });
         $translatable = array_keys($properties);
-        $translatable = array_merge(
+        $translatable = array_unique(array_merge(
             (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType)),
             $translatable
-        );
+        ));
         usort($translatable, function ($item1, $item2) {
             if ($item1 === 'title') {
                 return -1;
