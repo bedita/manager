@@ -56,10 +56,24 @@ export default {
 
         previewImage() {
             if (this.file?.name) {
+                if (document.getElementById('title') && document.getElementById('title').value === '') {
+                    document.getElementById('title').value = this.titleFromFileName(this.file.name);
+                }
                 return window.URL.createObjectURL(this.file);
             }
 
             return null;
+        },
+
+        titleFromFileName(filename) {
+            let title = filename;
+            title = title.replaceAll('-', ' ');
+            title = title.replaceAll('_', ' ');
+            if (title.lastIndexOf('.') > 0) {
+                title = title.substring(0, title.lastIndexOf('.')) || title;
+            }
+
+            return title.trim();
         },
     }
 }

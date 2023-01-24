@@ -3,15 +3,15 @@
         <label class="file-label">
             {{ Form.file('file', {
                 'class': 'file-input',
-                'v-on:change': 'onFileChanged($event, "' ~ object.type ~ '")',
+                'v-on:change': 'onFileChanged($event, "' ~ object.type ~ '")'
             }) | raw }}
-            <span class="file-cta icon-upload file-label">{{ __('Choose a file') }}</span>
-            <span class="file-name" v-cloak>
+            <span class="file-cta icon-upload file-label" v-show="!file?.name">{{ __('Choose a file') }}</span>
+            <span class="file-name" v-cloak v-show="!file?.name">
                 <span v-bind:title="file?.name" data-empty-label="{{ __('empty') }}"><: file?.name :></span>
             </span>
             {% if object.type == 'images' %}
             <figure class="thumb" v-if="file?.name">
-                <img :src=previewImage() alt="" />
+                <img :src=previewImage() alt="" style="max-width: 100%;" />
             </figure>
             {% endif %}
 
