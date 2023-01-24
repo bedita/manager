@@ -168,27 +168,6 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Infer format from property schema in JSON-SCHEMA format.
-     *
-     * @param array $schema The property schema
-     * @return string
-     */
-    public static function formatFromSchema(array $schema): string
-    {
-        if (!empty($schema['oneOf'])) {
-            foreach ($schema['oneOf'] as $subSchema) {
-                if (!empty($subSchema['format']) && $subSchema['format'] === 'null') {
-                    continue;
-                }
-
-                return static::formatFromSchema($subSchema);
-            }
-        }
-
-        return (string)Hash::get($schema, 'format');
-    }
-
-    /**
      * Infer type from property schema in JSON-SCHEMA format
      * Possible return values:
      *
