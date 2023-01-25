@@ -485,17 +485,11 @@ export default {
                 this.object.attributes.title = this.file.name;
             }
             const titleId = `_fast_create_${type}_title`;
-            if (document.getElementById(titleId) && document.getElementById(titleId).value === '') {
-                document.getElementById(titleId).value = this.$helpers.titleFromFileName(this.file.name);
-            }
+            this.$helpers.setTitleFromFileName(titleId, this.file.name);
         },
 
         previewImage() {
-            if (this.file?.name) {
-                return window.URL.createObjectURL(this.file);
-            }
-
-            return null;
+            return this.$helpers.updatePreviewImage(this.file);
         },
     },
 };

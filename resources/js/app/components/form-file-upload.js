@@ -38,14 +38,7 @@ export default {
         },
 
         previewImage() {
-            if (this.file?.name) {
-                if (document.getElementById('title') && document.getElementById('title').value === '') {
-                    document.getElementById('title').value = this.$helpers.titleFromFileName(this.file.name);
-                }
-                return window.URL.createObjectURL(this.file);
-            }
-
-            return null;
+            return this.$helpers.updatePreviewImage(this.file, 'title');
         },
     }
 }

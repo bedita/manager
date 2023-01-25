@@ -199,15 +199,14 @@ export default {
             this.userInfoLoaded = true;
         },
         previewImage(thumb) {
-            if (this.file?.name) {
-                return window.URL.createObjectURL(this.file);
-            }
-
-            return thumb;
+            return this.$helpers.updatePreviewImage(this.file, 'title', thumb);
         },
         async onFileChange(e, type) {
             const files = e.target.files || e.dataTransfer.files;
             if (this.$helpers.checkMimeForUpload(files[0], type) === false) {
+                return;
+            }
+            if (this.$helpers.checkMaxFileSize(files[0]) === false) {
                 return;
             }
             this.file = files[0];

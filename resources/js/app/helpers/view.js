@@ -128,6 +128,26 @@ export default {
 
                 return title.trim();
             },
+
+            setTitleFromFileName(titleId, fileName) {
+                const elem = document.getElementById(titleId);
+                if (!elem || elem.value !== '') {
+                    return;
+                }
+                elem.value = this.titleFromFileName(fileName);
+            },
+
+            updatePreviewImage(file, titleId, thumb) {
+                if (file?.name) {
+                    if (titleId) {
+                        this.setTitleFromFileName(titleId, file.name);
+                    }
+
+                    return window.URL.createObjectURL(file);
+                }
+
+                return thumb || null;
+            },
         }
     }
 };
