@@ -5586,6 +5586,11 @@ vue@^2.5.16:
     "@vue/compiler-sfc" "2.7.14"
     csstype "^3.1.0"
 
+vuejs-title@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.npmjs.org/vuejs-title/-/vuejs-title-1.0.16.tgz#6eef2656e8c85e5ac7b07c112e08e474cc67505c"
+  integrity sha512-HQTsbutGyW1QiEKDL5lPH0ryKS2szpv0dQaoR/6LnW4IKfKHcloe3vkvvLjxehbP7ldjh6vJX40odgCzeJNwJg==
+
 w3c-keyname@^2.2.4:
   version "2.2.6"
   resolved "https://registry.npmjs.org/w3c-keyname/-/w3c-keyname-2.2.6.tgz#8412046116bc16c5d73d4e612053ea10a189c85f"

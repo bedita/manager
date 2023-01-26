@@ -25,8 +25,21 @@ export const Dialog = Vue.extend({
                     <label for="_check"><: checkLabel :></label>
                 </div>
                 <div class="actions mt-2">
-                    <button class="button-outlined-white confirm mr-1" v-if="confirmMessage" @click="confirmCallback(inputValue, checkValue, $root)"><: confirmMessage :></button>
-                    <button class="button-secondary cancel" @click="hide()" v-if="cancelMessage"><: cancelMessage :></button>
+                    <button
+                        class="button-outlined-white confirm mr-1"
+                        :class="{'is-loading-spinner': loading }"
+                        :disabled="loading === true"
+                        @click="prepareCallback() && confirmCallback(inputValue, checkValue, $root)"
+                        v-if="confirmMessage">
+                        <: confirmMessage :>
+                    </button>
+                    <button
+                        class="button-secondary cancel"
+                        :disabled="loading === true"
+                        @click="hide()"
+                        v-if="cancelMessage">
+                        <: cancelMessage :>
+                    </button>
                 </div>
             </div>
         </transition>
@@ -45,7 +58,8 @@ export const Dialog = Vue.extend({
             cancelMessage: t`cancel`,
             inputValue: '',
             checkValue: '',
-            checkLabel: ''
+            checkLabel: '',
+            loading: false
         };
     },
     methods: {
@@ -99,35 +113,45 @@ export const Dialog = Vue.extend({
             this.confirmCallback = confirmCallback;
             this.show(message, '', root);
         },
+        prepareCallback() {
+            this.loading = true
+
+            return true;
+        },
     },
 });
 
 export const warning = (message, root) => {
-    let dialog = new Dialog();
+    const dialog = new Dialog();
     dialog.warning(message, root);
+
     return dialog;
 };
 
 export const error = (message, root) => {
-    let dialog = new Dialog();
+    const dialog = new Dialog();
     dialog.error(message, root);
+
     return dialog;
 };
 
 export const info = (message, root) => {
-    let dialog = new Dialog();
+    const dialog = new Dialog();
     dialog.info(message, root);
+
     return dialog;
 };
 
 export const confirm = (message, confirmMessage, confirmCallback, type, root) => {
-    let dialog = new Dialog();
+    const dialog = new Dialog();
     dialog.confirm(message, confirmMessage, confirmCallback, type, root);
+
     return dialog;
 };
 
 export const prompt = (message, defaultValue, confirmCallback, root, options) => {
-    let dialog = new Dialog();
+    const dialog = new Dialog();
     dialog.prompt(message, defaultValue, confirmCallback, root, options);
+
     return dialog;
 };

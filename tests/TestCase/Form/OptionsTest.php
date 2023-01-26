@@ -206,8 +206,12 @@ class OptionsTest extends TestCase
                         ['value' => '-position', 'text' => __('Position ↓')],
                         ['value' => 'title', 'text' => __('Title ↑')],
                         ['value' => '-title', 'text' => __('Title ↓')],
+                        ['value' => 'created', 'text' => __('Created ↑ Oldest on top')],
+                        ['value' => '-created', 'text' => __('Created ↓ Newest on top')],
                         ['value' => 'modified', 'text' => __('Modified ↑ Oldest on top')],
                         ['value' => '-modified', 'text' => __('Modified ↓ Newest on top')],
+                        ['value' => 'publish_start', 'text' => __('Publish date ↑ Oldest on top')],
+                        ['value' => '-publish_start', 'text' => __('Publish date ↓ Newest on top')],
                     ],
                     'templateVars' => [
                         'containerClass' => 'childrenOrder',

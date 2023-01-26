@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-01-24 17:18:03 \n"
+"POT-Creation-Date: 2023-01-26 10:48:28 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -193,6 +193,12 @@ msgstr "Crea nuovo tag"
 
 msgid "Created"
 msgstr "Creato"
+
+msgid "Created ↑ Oldest on top"
+msgstr "Creazione ↑ Meno recenti in testa"
+
+msgid "Created ↓ Newest on top"
+msgstr "Creazione ↓ Più recenti in testa"
 
 msgid "Current password"
 msgstr "Password corrente"
@@ -672,6 +678,12 @@ msgstr "Data revoca pubblicazione"
 
 msgid "Publish Start"
 msgstr "Data inizio pubblicazione"
+
+msgid "Publish date ↑ Oldest on top"
+msgstr "Pubblicazione ↑ Meno recenti in testa"
+
+msgid "Publish date ↓ Newest on top"
+msgstr "Pubblicazione ↓ Più recenti in testa"
 
 msgid "Publishing properties"
 msgstr "Proprietà di pubblicazione"
@@ -1198,6 +1210,16 @@ msgid "copied in the clipboard"
 msgstr "copiato negli appunti"
 
 #, javascript-format
+msgid "Created on ${ created }."
+msgstr "Creato il ${ created }."
+
+msgid "Modified on ${ modified }."
+msgstr "Modificato il ${ modified }."
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr "Pubblicato il ${ published }."
+
 msgid "Missing required data \"${ required }\". Retry"
 msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
