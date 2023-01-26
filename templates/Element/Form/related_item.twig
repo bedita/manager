@@ -68,6 +68,8 @@
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+
+                <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
 
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
@@ -78,11 +80,13 @@
 
                 <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
-                        <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                            <: related.attributes.translated_fields.title :>
+                        <span :title="related.attributes.translated_fields.title" v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                            <: truncate(related.attributes.translated_fields.title, 50) :>
                         </span>
                     {% else %}
-                        <: related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' :>
+                        <span :title="related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-'">
+                            <: truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50) :>
+                        </span>
                     {% endif %}
                 </h3>
 
@@ -105,12 +109,6 @@
             {% endif %}
 
             </div>
-
-            {% if not translation %}
-                <span class="modified">
-                    <: new Date(related.meta.modified).toLocaleDateString() :>
-                </span>
-            {% endif %}
 
         </header>
     </div>

@@ -23,6 +23,8 @@ import merge from 'deepmerge';
 import { t } from 'ttag';
 import { buildSearchParams } from '../libs/urlUtils.js';
 
+import vTitle from 'vuejs-title';
+
 const _vueInstance = new Vue({
     el: 'main',
 
@@ -111,6 +113,8 @@ const _vueInstance = new Vue({
         Vue.use(viewHelper);
         Vue.use(autoTranslation);
         Vue.use(Autocomplete);
+
+        Vue.use(vTitle);
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
