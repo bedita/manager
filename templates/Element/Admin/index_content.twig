@@ -6,13 +6,7 @@
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}
 
-<div class="module-header">
-    <header>
-        <h1>{{ __(title) }}</h1>
-    </header>
-</div>
-
-{{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }}
+{# {{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }} #}
 
 <admin-index inline-template>
 
@@ -34,43 +28,11 @@
                 {% endif %}
             </nav>
             {% if resources|length == 0 %}
-                <p>{{ __('Resources not available') }}</p>
-            {% endif %}
-
-            {# form to create a new record #}
-            {% if not readonly %}
-                {{ Form.create(null, {
-                    'id': 'form-create',
-                    'url': {'_name': 'admin:save:' ~ resourceType},
-                    'class': 'table-row',
-                })|raw }}
-                    <div>{{ __('NEW') }}</div>
-                    {% for property,type in properties %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {{ Admin.control(type, property, null)|raw }}
-                        </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            ---
-                        </div>
-                    {% endfor %}
-                    {% for key in metaColumns %}
-                        <div class="narrow">-</div>
-                    {% endfor %}
-                    <div class="buttons-cell narrow">
-                        {{ Form.button( __('Create'), {
-                            'form': 'form-create',
-                            'title': __('Create' ~ ' ' ~ resourceType),
-                            'class': 'icon-plus-1 button button-primary button-primary-hover-module-admin is-width-auto',
-                        })|raw }}
-                    </div>
-                {{ Form.end()|raw }}
+                <div class="mt-2 ml-2">{{ __('Resources not available') }}</div>
             {% endif %}
 
             {# list resources : rows #}
             {% for resource in resources %}
-
                 {{ Form.create(null, {
                     'id': 'form-' ~ resource.id,
                     'url': {'_name': 'admin:save:' ~ resourceType},
@@ -133,6 +95,36 @@
 
             {% endfor %}
 
+            {# form to create a NEW record #}
+            {% if not readonly %}
+                {{ Form.create(null, {
+                    'id': 'form-create',
+                    'url': {'_name': 'admin:save:' ~ resourceType},
+                    'class': 'table-row new-record mt-1',
+                })|raw }}
+                    <div>{{ __('NEW') }}</div>
+                    {% for property,type in properties %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {{ Admin.control(type, property, null)|raw }}
+                        </div>
+                    {% endfor %}
+                    {% for property in propertiesSecrets %}
+                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            ---
+                        </div>
+                    {% endfor %}
+                    {% for key in metaColumns %}
+                        <div class="narrow">-</div>
+                    {% endfor %}
+                    <div class="buttons-cell narrow">
+                        {{ Form.button( __('Create'), {
+                            'form': 'form-create',
+                            'title': __('Create' ~ ' ' ~ resourceType),
+                            'class': 'icon-check-1 button button-primary button-primary-hover-module-admin is-width-auto',
+                        })|raw }}
+                    </div>
+                {{ Form.end()|raw }}
+            {% endif %}
         </div>
 
     </div>

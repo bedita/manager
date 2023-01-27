@@ -103,7 +103,7 @@
                 {% do _view.append('module-buttons', Form.button( __('Save'),
                     {
                         'form': 'form-main',
-                        'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                        'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
                     })
                 ) %}
             {% endif %}
@@ -113,7 +113,7 @@
                 {% do _view.append('module-buttons', Html.link(
                     __('Clone'),
                     {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
-                    {'@click.prevent': 'clone', 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                    {'@click.prevent': 'clone', 'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                 )) %}
             {% endif %}
 
@@ -123,13 +123,13 @@
                     {% do _view.append('module-buttons', Html.link(
                         __('Unlock'),
                         {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
-                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                        {'class': 'icon-lock-open button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                     )) %}
                 {% else %}
                     {% do _view.append('module-buttons', Html.link(
                         __('Lock'),
                         {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
-                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                        {'class': 'icon-lock button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                     )) %}
                 {% endif %}
             {% endif %}
@@ -140,7 +140,7 @@
                     Form.postButton(
                         __('Trash-verb'),
                         {'_name': 'modules:delete', 'object_type': objectType},
-                        {'data': {'id': object.id}, 'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name }
+                        {'data': {'id': object.id}, 'class': 'icon-trash button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                     )
                 ) %}
             {% endif %}
@@ -153,9 +153,9 @@
             {# Append "new" button #}
             {% if object.id and Perms.canCreate() %}
                 {% do _view.append('module-buttons',
-                    Html.link(__('Create new'),
+                    Html.link(__('Create'),
                         {'_name': 'modules:create', 'object_type': objectType},
-                        {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                        {'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name}
                     )|raw
                 ) %}
             {% endif %}

@@ -51,9 +51,9 @@
         {# commands to append in side bar (commands menu) #}
         {% if Perms.canCreate() %}
             {% do _view.append('module-buttons',
-                Html.link(__('Create new'),
+                Html.link(__('Create'),
                     {'_name': 'modules:create', 'object_type': objectType},
-                    {'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name}
+                    {'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name}
                 )|raw
             ) %}
         {% endif %}
@@ -62,7 +62,7 @@
         {% do _view.append('module-buttons',
             Html.link(__('Categories'),
                 {'_name': 'modules:categories:index', 'object_type': objectType},
-                {'class': 'button button-outlined button-outlined-hover-module-' ~ currentModule.name}
+                {'class': 'icon-check-1 button button-outlined button-outlined-hover-module-' ~ currentModule.name}
             )|raw
         ) %}
         {% endif %}
@@ -72,7 +72,7 @@
             {% do _view.append('module-buttons',
                 Html.link(__(item.label),
                     item.url,
-                    {'class': item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
+                    {'class': item.class|default('icon-check-1 button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
                 )|raw
             ) %}
         {% endfor %}

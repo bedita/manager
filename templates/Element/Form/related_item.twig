@@ -68,6 +68,8 @@
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+
+                <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
 
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
@@ -76,15 +78,17 @@
         <header class="is-flex space-between mt-05">
             <div>
 
-                <h1 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
+                <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
-                        <span v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                            <: related.attributes.translated_fields.title :>
+                        <span :title="related.attributes.translated_fields.title" v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                            <: truncate(related.attributes.translated_fields.title, 50) :>
                         </span>
                     {% else %}
-                        <: related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' :>
+                        <span :title="related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-'">
+                            <: truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50) :>
+                        </span>
                     {% endif %}
-                </h1>
+                </h3>
 
             {% if not add and not stage %}
 
@@ -105,12 +109,6 @@
             {% endif %}
 
             </div>
-
-            {% if not translation %}
-                <span class="modified">
-                    <: new Date(related.meta.modified).toLocaleDateString() :>
-                </span>
-            {% endif %}
 
         </header>
     </div>
@@ -166,25 +164,25 @@
     {% if Perms.canSave() %}
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
+            <a class="icon-link-ext button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Edit') }}</a>
             {% if not readonly %}
-            <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
+            <a class="icon-link-cancel button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">{{ __('Remove') }}</a>
             {% endif %}
 
         {% elseif add %}
             <button class="is-small has-font-weight-bold mr-1"
                 v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
                 :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
-            <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
+            <a class="icon-link-ext button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">{{ __('Open') }}</a>
 
         {% elseif translation %}
             {% set baseUrl= Url.build({ '_name': 'translations:edit', 'object_type': object.type, 'id': object.id, 'lang': ''}, {'fullBase': true}) %}
-            <a class="button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">{{ __('Open') }}</a>
-            <a class="button button-text is-small" @click.prevent="relationToggle(related)"
+            <a class="icon-link-ext button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">{{ __('Open') }}</a>
+            <a class="icon-cancel button button-text is-small" @click.prevent="relationToggle(related)"
                 v-html="containsId(removedRelated, related.id)? '{{__('undo remove') }}' : '{{ __('remove') }}'"></a>
 
         {% else %}
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">{{ __('Edit') }}</a>
+            <a class="icon-link-ext button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">{{ __('Edit') }}</a>
             {% if not readonly %}
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" :class="containsId(removedRelated, related.id) ? 'icon-cw-2' : 'icon-unlink'"
                 v-html="containsId(removedRelated, related.id) ? '{{__('undo') }}' : '{{ __('remove') }}'">

@@ -66,9 +66,9 @@
                                     'label': __('Children order'),
                                     'class': 'icon-info-1',
                                     'id': 'children-order',
+                                    'v-title': '`' ~ __('Save object to apply order change') ~ '`',
                                 }
                             )|raw }}
-                            <span class="icon-info-1" title="{{ __('Save object to apply order change') }}"></span>
                         </div>
                     </div>
                 {% else %}
@@ -160,7 +160,7 @@
             </select>
 
             {% for label, format in formats %}
-               <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
+               <a v-if="exportFormat === '{{ format }}'" class="icon-export button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
             {% endfor %}
         </div>
 

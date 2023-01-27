@@ -42,7 +42,7 @@
                     {% endfor %}
                     <div class="prop-id">-</div>
                     <div class="buttons-cell narrow">
-                        <button title="{{ __('Save') }} {{ resource.attributes.name }}" class="button button-primary icon-check-1">{{ __('Save') }}</button>
+                        <button title="{{ __('Save') }} {{ resource.attributes.name }}" class="icon-check-1 button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">{{ __('Save') }}</button>
                     </div>
                 {{ Form.end()|raw }}
             {% endif %}

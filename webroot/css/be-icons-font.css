@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'be-icons';
-    src: url('../font/be-icons.eot?22965250');
-    src: url('../font/be-icons.eot?22965250#iefix') format('embedded-opentype'),
-         url('../font/be-icons.svg?22965250#be-icons') format('svg');
+    src: url('../fonts/be-icons.eot?22965250');
+    src: url('../fonts/be-icons.eot?22965250#iefix') format('embedded-opentype'),
+         url('../fonts/be-icons.svg?22965250#be-icons') format('svg');
     font-weight: normal;
     font-style: normal;
   }
@@ -17,7 +17,7 @@
   @media screen and (-webkit-min-device-pixel-ratio:0) {
     @font-face {
       font-family: 'be-icons';
-      src: url('../font/be-icons.svg?22965250#be-icons') format('svg');
+      src: url('../fonts/be-icons.svg?22965250#be-icons') format('svg');
     }
   }
   */

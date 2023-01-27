@@ -37,14 +37,14 @@
                     })|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
-                        <button @click.prevent="restoreItem" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
+                        <button @click.prevent="restoreItem" class="icon-up-2 button button-primary is-width-auto" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}
                 {% if (objects) and Perms.canDelete({type: objectType}) %}
                     {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
-                        <button @click.prevent="deleteItem" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
+                        <button @click.prevent="deleteItem" class="icon-cancel button button-primary is-width-auto" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
                     {{ Form.end()|raw }}
                 {% endif %}
             </div>
@@ -55,7 +55,7 @@
         {% do _view.append('module-buttons',
             Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
                 'data': {'query': q},
-                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name
+                'class': 'icon-cancel button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'
             })|raw
         )%}
     </div>

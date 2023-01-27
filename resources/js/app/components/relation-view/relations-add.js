@@ -478,5 +478,20 @@ export default {
                 this.object.attributes.title = this.file.name;
             }
         },
+
+        datesInfo(obj) {
+            const created = new Date(obj.meta.created).toLocaleDateString() + ' ' + new Date(obj.meta.created).toLocaleTimeString();
+            const modified = new Date(obj.meta.modified).toLocaleDateString() + ' ' + new Date(obj.meta.modified).toLocaleTimeString();
+            if (!obj?.attributes?.publish_start) {
+                return t`Created on ${created}.` + ' ' + t`Modified on ${modified}.`;
+            }
+            const published = new Date(obj.meta.publish_start).toLocaleDateString() + ' ' + new Date(obj.attributes.publish_start).toLocaleTimeString();
+
+            return t`Created on ${created}.` + ' ' + t`Modified on ${modified}.` + ' ' + t`Publish start on ${published}.`;
+        },
+
+        truncate(str, len) {
+            return this.$helpers.truncate(str, len);
+        },
     },
 };

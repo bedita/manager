@@ -84,12 +84,19 @@ class RelationsController extends ModelBaseController
     public function save(): ?Response
     {
         $data = (array)$this->request->getData();
+
+        // remove 'definitions' from JSON-SCHEMA relation 'params' attribute to avoid validation errors
+        $params = (array)json_decode((string)Hash::get($data, 'params'), true);
+        unset($params['definitions']);
+        $params = empty($params) ? null : json_encode($params);
+
         $this->updateRelatedTypes($data, 'left');
         $this->updateRelatedTypes($data, 'right');
         $this->request = $this->request->withoutData('change_left')
             ->withoutData('change_right')
             ->withoutData('current_left')
-            ->withoutData('current_right');
+            ->withoutData('current_right')
+            ->withData('params', $params);
 
         return parent::save();
     }
