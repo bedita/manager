@@ -5,7 +5,7 @@ export default {
     template: `
         <form class="table-row">
             <div class="name-cell">
-                <input type="text" name="name" autocomplete="off" autocorrect="off" autocapitalize="off" v-model="name" />
+                <input type="text" name="name" autocomplete="off" autocorrect="off" autocapitalize="off" @change="onChangeName($event)" v-model="name" />
                 <div v-if="nameInUse()" v-text="errorAlreadyInUse"></div>
             </div>
             <div class="label-cell">
@@ -83,9 +83,19 @@ export default {
     },
 
     methods: {
+
+        onChangeName(event) {
+            let name = event?.target?.value || '';
+            if (!name) {
+                return;
+            }
+            this.name = this.$helpers.slugify(name);
+        },
+
         updateType() {
             this.namesInUse = this.allnames[this.type] || [];
         },
+
         unchanged() {
             const cat = {
                 id: this.id,

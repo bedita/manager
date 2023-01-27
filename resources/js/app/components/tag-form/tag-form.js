@@ -21,7 +21,7 @@ export default {
             </div>
 
             <div v-if="editMode">
-                <input type="text" v-model="name" />
+                <input type="text" v-model="name" @change="onChangeName($event)" />
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
@@ -34,16 +34,18 @@ export default {
                 <: id :>
             </div>
             <div v-if="editMode">
-                <button @click.prevent="cancel" class="button button-outlined icon-backward-circled">${t`Cancel`}</button>
+                <button @click.prevent="cancel" class="button button-outlined icon-backward-circled" v-if="obj?.id">${t`Cancel`}</button>
                 <button @click.prevent="save" class="button button-primary icon-check-1">${t`Save`}</button>
-                <button @click.prevent="remove" class="button button-outlined icon-trash">${t`Remove`}</button>
+                <button @click.prevent="remove" class="button button-outlined icon-trash" v-if="obj?.id">${t`Remove`}</button>
             </div>
         </form>
     `,
 
     props: {
         cansave: Boolean,
+        editmode: Boolean,
         obj: {},
+        redir: String,
     },
 
     data() {
@@ -74,9 +76,18 @@ export default {
     },
 
     methods: {
+
         cancel() {
             this.editMode = !this.editMode;
             this.resetData();
+        },
+
+        onChangeName(event) {
+            let name = event?.target?.value || '';
+            if (!name) {
+                return;
+            }
+            this.name = this.$helpers.slugify(name);
         },
 
         resetData() {
@@ -84,6 +95,7 @@ export default {
             this.name = this.obj?.attributes?.name || '';
             this.label = this.obj?.attributes?.label || '';
             this.enabled = this.obj?.attributes?.enabled || '';
+            this.editMode = this.editmode || false;
         },
 
         async save(event) {
@@ -96,23 +108,36 @@ export default {
                 });
                 const payload = {
                     data: {
-                        id: this.obj.id,
                         type: 'tags',
                         attributes: {
                             name: this.name,
                             label: this.label,
-                            enabled: this.enabled
+                            enabled: this.enabled || false
                         }
                     }
                 };
+                if (this.obj?.id) {
+                    payload.data.id = this.obj.id;
+                }
                 const options = {
-                    method: 'PATCH',
                     credentials: 'same-origin',
                     headers,
-                    body: JSON.stringify(payload),
                 };
-                const response = await fetch(`${BEDITA.base}/api/model/tags/${this.obj.id}`, options);
+                let response = {};
+                if (this.obj?.id) {
+                    payload.data.id = this.obj.id;
+                    options.body = JSON.stringify(payload);
+                    options.method = 'PATCH'
+                    response = await fetch(`${BEDITA.base}/api/model/tags/${this.obj.id}`, options);
+                } else {
+                    options.body = JSON.stringify(payload);
+                    options.method = 'POST'
+                    response = await fetch(`${BEDITA.base}/api/model/tags`, options);
+                }
                 if (response.status === 200) {
+                    if (this.redir) {
+                        window.location = this.redir;
+                    }
                     return;
                 }
                 if (response.error) {

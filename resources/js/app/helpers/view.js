@@ -92,6 +92,14 @@ export default {
                 return true;
             },
 
+            slugify(str) {
+                if (!str) {
+                    return str;
+                }
+
+                return str.toLowerCase().replaceAll(' ', '-');
+            },
+
             truncate(str, len) {
                 if (str.length <= len) {
                     return str;
