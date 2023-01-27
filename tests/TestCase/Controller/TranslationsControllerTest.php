@@ -623,4 +623,20 @@ class TranslationsControllerTest extends TestCase
             static::assertArrayHasKey($varName, $this->controller->viewBuilder()->getVars());
         }
     }
+
+    /**
+     * Test `index` method
+     *
+     * @return void
+     * @covers ::index()
+     */
+    public function testIndex(): void
+    {
+        $request = new ServerRequest($this->defaultRequestConfig);
+        $this->controller = new TranslationsController($request);
+        $this->controller->index();
+        $types = $this->controller->viewBuilder()->getVar('types');
+        static::assertIsArray($types);
+        static::assertNotEmpty($types);
+    }
 }

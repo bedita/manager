@@ -90,7 +90,16 @@ export default {
                 }
 
                 return true;
-            }
+            },
+
+            truncate(str, len) {
+                if (str.length <= len) {
+                    return str;
+                }
+                const ellipsis = '[...]';
+
+                return str.substring(0, len - ellipsis.length) + ellipsis;
+            },
         }
     }
 };

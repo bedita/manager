@@ -21,6 +21,7 @@ BEdita Manager
 
     <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
 
+    {{ Html.meta('icon', "favicon.png", { type:'image/png' } )|raw }}
     {# fonts #}
     {{ Html.css(['be-icons-font'])|raw }}
     {{ Html.css(['be-icons-codes'])|raw }}
@@ -45,6 +46,10 @@ BEdita Manager
     {% set alertMsg = __('Recovery Mode - Access restricted to admin users') %}
 {% elseif config('AlertMessage.text') %}
     {% set alertMsg = config('AlertMessage.text') %}
+{% endif %}
+
+{% if user and in_array('admin', user.roles) and System.checkBeditaApiVersion() != 1 %}
+    {% set alertMsg = alertMsg ~ ' ' ~ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode %}
 {% endif %}
 
 <body class="{{ bodyClass }}"

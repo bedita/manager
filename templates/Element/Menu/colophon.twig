@@ -1,9 +1,18 @@
+{% set apiCheck = System.checkBeditaApiVersion() %}
+{% set apiClass = apiCheck == 1 ? 'icon-check ok' : 'icon-cancel error' %}
+{% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
+{% set warn = __('API version required: {0}', config('BEditaAPI.versions')|join(' | ')) %}
+
 <div class="menu-colophon">
-    <span>BEdita<br>API {{ project.version }} - Manager {{ config('Manager.version') }}</span>
-
-    <span>©{{ 'now'|date('Y') }}
-    {% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
-    {{ authors|shuffle|toList(__('&'))|raw }}</span>
-
+    <span class="icon-check">
+        {{ Html.link('Manager', 'https://github.com/bedita/manager', {'target': '_blank'})|raw }} {{ config('Manager.version') }}
+    </span>
+    {% if project.version %}
+    <span class="{{ apiClass }}">
+        {{ Html.link('API', 'https://github.com/bedita/bedita', {'target': '_blank'})|raw }} {{ project.version }}
+        <i class="icon-info-1" title="{{ warn }}"></i>
+    </span>
+    {% endif %}
+    <span>©{{ 'now'|date('Y') }} {{ authors|shuffle|toList(__('&'))|raw }}</span>
     <span>LGPL {{ Html.link('www.bedita.com', 'https://www.bedita.com', {'title': __('BEdita Web site'), 'target': '_blank'})|raw }}</span>
 </div>

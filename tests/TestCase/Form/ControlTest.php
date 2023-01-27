@@ -214,24 +214,26 @@ class ControlTest extends TestCase
             ],
             'categories' => [
                 [
-                    'categories' => [
-                        ['name' => 'animals', 'label' => 'Animals'],
-                        ['name' => 'furnitures', 'label' => 'Furnitures'],
-                        ['name' => 'houses', 'label' => 'Houses'],
+                    'categories' => [ // schema
+                        ['name' => 'animals', 'label' => 'Animals', 'enabled' => true],
+                        ['name' => 'furnitures', 'label' => 'Furnitures', 'enabled' => false],
+                        ['name' => 'houses', 'label' => 'Houses', 'enabled' => true],
                     ],
-                ], // schema
+                ],
                 'categories', // type
-                [['name' => 'animals'], ['name' => 'houses']], // value
                 [
-                    'type' => 'select',
+                    ['name' => 'animals'], // value
+                    ['name' => 'houses'],
+                ],
+                [
+                    'type' => 'select', // expected
                     'options' => [
                         ['value' => 'animals', 'text' => 'Animals'],
-                        ['value' => 'furnitures', 'text' => 'Furnitures'],
                         ['value' => 'houses', 'text' => 'Houses'],
                     ],
                     'multiple' => 'checkbox',
                     'value' => ['animals', 'houses'],
-                ], // expected
+                ],
             ],
             'email' => [
                 [

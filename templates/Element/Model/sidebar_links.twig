@@ -1,15 +1,15 @@
     {% if in_array(resourceType, ['object_types', 'relations']) %}
     {% do _view.append('module-buttons',
-        Html.link(__('Create new'),
+        Html.link(__('Create'),
             {'_name': 'model:create:' ~ resourceType},
-            {'class': 'button button-outlined'}
+            {'class': 'icon-link-ext button button-primary button-primary-hover-module-model'}
         )|raw) %}
     {% endif %}
 
     {% do _view.append('module-buttons',
         Html.link(__('Export'),
             {'_name': 'model:export'},
-            {'class': 'button button-outlined'}
+            {'class': 'icon-export button button-outlined'}
         )
     ) %}
 

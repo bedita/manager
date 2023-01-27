@@ -23,6 +23,7 @@
         "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
     },
     "dependencies": {
+        "@chialab/typos": "^0.1.1",
         "@riophae/vue-treeselect": "^0.4.0",
         "@trevoreyre/autocomplete-vue": "^2.2.0",
         "abortcontroller-polyfill": "^1.7.1",
@@ -42,6 +43,7 @@
         "tinymce": "^5.10.7",
         "ttag": "^1.7.24",
         "vue": "^2.5.16",
+        "vuejs-title": "^1.0.16",
         "webpack-manifest-plugin": "^5.0.0"
     },
     "devDependencies": {

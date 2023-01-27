@@ -26,7 +26,7 @@
         {% do Form.unlockField('ids') %}
 
         <button
-            class="button button-outlined"
+            class="icon-ok button button-outlined"
             @click.prevent="bulkActions('bulk-folder')"
             :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
         >

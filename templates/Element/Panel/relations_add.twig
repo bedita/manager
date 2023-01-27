@@ -121,7 +121,7 @@
         </div>
 
         <footer class="p-1">
-            <button class="has-background-info has-text-white"
+            <button class="icon-ok has-background-info has-text-white"
                 :disabled="!selectedObjects.length"
                 @click.prevent="addRelationsToObject({
                     relationName: relationName,
@@ -133,7 +133,7 @@
                 {{ __('objects to') }} <: relationName | humanize :>
             </button>
 
-            <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('Close') }}</button>
+            <button class="icon-cancel mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">{{ __('Close') }}</button>
         </footer>
     </section>
 </div>

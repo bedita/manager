@@ -119,7 +119,7 @@
 
             <div class="index-entry">
                 <div v-if="formIsModified">
-                    <button @click.prevent.stop="save">{{ __('Save') }}</button>
+                    <button @click.prevent.stop="save" class="icon-check-1 button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">{{ __('Save') }}</button>
                 </div>
             </div>
             </form>

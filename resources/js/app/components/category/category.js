@@ -29,16 +29,16 @@ export default {
                 <input type="checkbox" name="enabled" v-model="enabled" checked="!!enabled" />
             </div>
             <div v-show="!id" class="buttons-cell narrow">
-                <button :disabled="name === '' || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
+                <button :disabled="name === '' || nameInUse() || type === ''" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
             </div>
             <div v-show="id">
                 <: id :>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button :disabled="name === '' || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
+                <button :disabled="name === '' || unchanged() || nameInUse()" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
+                <button class="icon-cancel button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
             </div>
         </form>
     `,
@@ -58,7 +58,7 @@ export default {
             label: String,
             type: String,
             parent: String,
-            enabled: null,
+            enabled: true,
             selectTypes: false,
             types: Array,
             namesInUse: Array,
@@ -78,7 +78,7 @@ export default {
         } else {
             this.namesInUse = this.names || [];
         }
-        this.enabled = this.source?.enabled || false;
+        this.enabled = this.source?.enabled === undefined ? true :  this.source.enabled;
         this.parent = this.source?.parent_id || '';
     },
 
@@ -91,7 +91,7 @@ export default {
                 id: this.id,
                 name: this.name,
                 label: this.label,
-                enabled: this.enabled || false,
+                enabled: this.enabled,
                 type: this.type,
                 parent_id: this.parent || null
             };
