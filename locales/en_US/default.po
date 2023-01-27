@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2022-12-13 13:24:25 \n"
+"POT-Creation-Date: 2023-01-26 10:48:28 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -188,10 +188,13 @@ msgstr ""
 msgid "Create a new tag"
 msgstr ""
 
-msgid "Create new"
+msgid "Created"
 msgstr ""
 
-msgid "Created"
+msgid "Created ↑ Oldest on top"
+msgstr ""
+
+msgid "Created ↓ Newest on top"
 msgstr ""
 
 msgid "Current password"
@@ -669,6 +672,12 @@ msgid "Publish End"
 msgstr ""
 
 msgid "Publish Start"
+msgstr ""
+
+msgid "Publish date ↑ Oldest on top"
+msgstr ""
+
+msgid "Publish date ↓ Newest on top"
 msgstr ""
 
 msgid "Publishing properties"
@@ -1186,6 +1195,16 @@ msgid "copied in the clipboard"
 msgstr ""
 
 #, javascript-format
+msgid "Created on ${ created }."
+msgstr ""
+
+msgid "Modified on ${ modified }."
+msgstr ""
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr ""
+
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
@@ -1211,7 +1230,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "Title"
 msgstr ""
 
@@ -1219,7 +1238,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "Address"
 msgstr ""
 
@@ -1227,7 +1246,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "GET"
 msgstr ""
 
@@ -1238,7 +1257,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.
+#.  
 msgid "add new"
 msgstr ""
 
@@ -1253,7 +1272,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 msgid "No History data found"
 msgstr ""
 
@@ -1274,7 +1293,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Every day"
 msgstr ""
 
@@ -1283,7 +1302,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Sunday"
 msgstr ""
 
@@ -1292,7 +1311,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Monday"
 msgstr ""
 
@@ -1301,7 +1320,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Tuesday"
 msgstr ""
 
@@ -1310,7 +1329,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Wednesday"
 msgstr ""
 
@@ -1319,7 +1338,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Thursday"
 msgstr ""
 
@@ -1328,7 +1347,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Friday"
 msgstr ""
 
@@ -1337,7 +1356,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Saturday"
 msgstr ""
 
@@ -1346,7 +1365,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+#.  
 msgid "Invalid date range"
 msgstr ""
 
