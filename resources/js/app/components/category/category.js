@@ -85,7 +85,7 @@ export default {
     methods: {
 
         onChangeName(event) {
-            let name = event?.target?.value || '';
+            const name = event?.target?.value || '';
             if (!name) {
                 return;
             }
