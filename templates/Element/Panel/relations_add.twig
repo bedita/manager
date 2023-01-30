@@ -76,7 +76,7 @@
                         </div>
                     </section>
                     <button @click="createObject" type="button">{{ __('create') }}</button>
-                    <button @click="resetForm">{{ __('reset') }}</button>
+                    <button @click="resetForm($event, object?.type)">{{ __('reset') }}</button>
                 {{ Form.end()|raw }}
             {% endfor %}
         </div>

@@ -352,24 +352,15 @@ export default {
             ]
         },
 
-        /**
-         * clear form
-         * @return {void}
-         */
         resetForm(event, type) {
             event.preventDefault();
-
+            if (this.$refs[`${type}-form`]) {
+                this.$refs[`${type}-form`].reset();
+            }
             this.file = null;
             this.url = null;
-            let t = type ? type : this.relationTypes.right[0];
+            const t = type || this.relationTypes.right[0];
             this.object = createData(this.relationTypes && t);
-            const fields = document.querySelectorAll('.fastCreateField');
-            for (let field of fields) {
-                field.value = '';
-                if (field.jsonEditor) {
-                    field.jsonEditor.update({'text': ''});
-                }
-            }
         },
 
         resetType(type) {
