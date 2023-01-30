@@ -92,6 +92,58 @@ export default {
                 return true;
             },
 
+            acceptMimeTypes(type) {
+                if (!BEDITA.uploadMimeTypes?.[type]) {
+                    return '';
+                }
+
+                return BEDITA.uploadMimeTypes?.[type].join(',');
+            },
+
+            checkMimeForUpload(file, objectType) {
+                /** accepted mime types by object type for file upload */
+                const mimes = BEDITA.uploadMimeTypes;
+                if (mimes?.[objectType] && !mimes[objectType].includes(file.type)) {
+                    const msg = t`File type not accepted` + `: "${file.type}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
+                    BEDITA.warning(msg);
+
+                    return false;
+                }
+
+                return true;
+            },
+
+            titleFromFileName(filename) {
+                let title = filename;
+                title = title.replaceAll('-', ' ');
+                title = title.replaceAll('_', ' ');
+                if (title.lastIndexOf('.') > 0) {
+                    title = title.substring(0, title.lastIndexOf('.')) || title;
+                }
+
+                return title.trim();
+            },
+
+            setTitleFromFileName(titleId, fileName) {
+                const elem = document.getElementById(titleId);
+                if (!elem || elem.value !== '') {
+                    return;
+                }
+                elem.value = this.titleFromFileName(fileName);
+            },
+
+            updatePreviewImage(file, titleId, thumb) {
+                if (file?.name) {
+                    if (titleId) {
+                        this.setTitleFromFileName(titleId, file.name);
+                    }
+
+                    return window.URL.createObjectURL(file);
+                }
+
+                return thumb || null;
+            },
+
             truncate(str, len) {
                 if (str.length <= len) {
                     return str;

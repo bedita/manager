@@ -352,24 +352,15 @@ export default {
             ]
         },
 
-        /**
-         * clear form
-         * @return {void}
-         */
         resetForm(event, type) {
             event.preventDefault();
-
+            if (this.$refs[`${type}-form`]) {
+                this.$refs[`${type}-form`].reset();
+            }
             this.file = null;
             this.url = null;
-            let t = type ? type : this.relationTypes.right[0];
+            const t = type || this.relationTypes.right[0];
             this.object = createData(this.relationTypes && t);
-            const fields = document.querySelectorAll('.fastCreateField');
-            for (let i = 0; i < fields.length; i++) {
-                fields[i].value = '';
-                if (fields[i].jsonEditor) {
-                    fields[i].jsonEditor.update({"text": ""});
-                }
-            }
         },
 
         resetType(type) {
@@ -463,12 +454,32 @@ export default {
             return response;
         },
 
+        onChangeType() {
+            this.file = null;
+            for (let t of this.relationTypes?.right || []) {
+                if (this.$refs[`${t}-form`]) {
+                    this.$refs[`${t}-form`].reset();
+                }
+            }
+        },
+
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
         /**
          * set file, object type and placeholder
          *
          * @param {Event} event input file change event
+         * @param {String} type The object type
          */
-        processFile(event) {
+        processFile(event, type) {
+            if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
+                return;
+            }
+            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
+                return false;
+            }
             this.file = event.target.files[0];
             if (!this.file) {
                 return false;
@@ -477,6 +488,12 @@ export default {
             if (!this.object.attributes.title) {
                 this.object.attributes.title = this.file.name;
             }
+            const titleId = `_fast_create_${type}_title`;
+            this.$helpers.setTitleFromFileName(titleId, this.file.name);
+        },
+
+        previewImage() {
+            return this.$helpers.updatePreviewImage(this.file);
         },
 
         datesInfo(obj) {

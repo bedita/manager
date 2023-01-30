@@ -14,22 +14,33 @@ export default {
 
     data() {
         return {
-            fileName: '',
+            file: null,
         }
     },
 
     methods: {
-        onFileChanged(e) {
-            this.fileName = '';
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
+        onFileChange(e, type) {
+            this.file = null;
+            if (this.$helpers.checkMimeForUpload(e.target.files[0], type) === false) {
+                return;
+            }
             if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {
                 return;
             }
-            this.fileName = e.target.files[0].name;
+            this.file = e.target.files[0];
         },
 
         resetFile(e) {
             e.target.parentNode.querySelector('input.file-input').value = '';
-            this.fileName = '';
-        }
+            this.file = null;
+        },
+
+        previewImage() {
+            return this.$helpers.updatePreviewImage(this.file, 'title');
+        },
     }
 }
