@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-01-26 17:58:40 \n"
+"POT-Creation-Date: 2023-01-30 10:57:43 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -855,6 +855,9 @@ msgid "Type"
 msgstr ""
 
 msgid "Uname"
+msgstr ""
+
+msgid "Undo Change File"
 msgstr ""
 
 msgid "Unknown upload error"

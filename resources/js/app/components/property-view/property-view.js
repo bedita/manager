@@ -78,11 +78,11 @@ export default {
             totalObjects: 0,
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
+            fileChanged: false,
         }
     },
 
     async mounted() {
-
         if (this.tabOpenAtStart !== null) {
             this.isOpen = this.tabOpenAtStart;
             return;
@@ -91,7 +91,6 @@ export default {
         if (this.preCount >= 0) {
             this.totalObjects = this.preCount;
         }
-
         // load user info in meta fields (created_by and modified_by )
         if (this.tabName === 'meta' && this.isOpen) {
             await this.loadInfoUsers();
@@ -201,6 +200,9 @@ export default {
         previewImage(thumb) {
             return this.$helpers.updatePreviewImage(this.file, 'title', thumb);
         },
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
         async onFileChange(e, type) {
             const files = e.target.files || e.dataTransfer.files;
             if (this.$helpers.checkMimeForUpload(files[0], type) === false) {
@@ -210,6 +212,15 @@ export default {
                 return;
             }
             this.file = files[0];
+            this.fileChanged = true;
+        },
+        resetFile(thumb) {
+            document.getElementById('fileUpload').value = '';
+            if (thumb && document.getElementById('imageThumb')) {
+                document.getElementById('imageThumb').src = thumb;
+                this.file = null;
+                this.fileChanged = false;
+            }
         },
     }
 }
