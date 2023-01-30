@@ -13,6 +13,25 @@ use Cake\View\Helper;
 class SystemHelper extends Helper
 {
     /**
+     * Accepted mime types for upload
+     *
+     * @var array
+     */
+    protected $defaultUploadMimeTypes = [
+        'images' => [
+            'image/apng',
+            'image/bmp',
+            'image/jp2',
+            'image/jpeg',
+            'image/jpg',
+            'image/gif',
+            'image/png',
+            'image/svg+xml',
+            'image/webp',
+        ],
+    ];
+
+    /**
      * Get the minimum value between post_max_size and upload_max_filesize.
      *
      * @return int
@@ -47,5 +66,15 @@ class SystemHelper extends Helper
         }
 
         return false;
+    }
+
+    /**
+     * Upload mime types
+     *
+     * @return array
+     */
+    public function uploadMimeTypes(): array
+    {
+        return (array)Configure::read('uploadMimeTypes', $this->defaultUploadMimeTypes);
     }
 }
