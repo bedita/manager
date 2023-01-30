@@ -15,6 +15,7 @@
                 <select id="related_object_type"
                     name="related_object_type"
                     class="{{ selectBaseClasses }}"
+                    @change="onChangeType"
                     v-if="relationTypes"
                     v-model="object.type">
                     <option value="_choose">{{ __('Choose a type') }}</option>
@@ -29,6 +30,7 @@
                     'class': 'object-form fast-create',
                     ':disable': 'saving',
                     'id': type ~ '-form',
+                    'ref': type ~ '-form',
                     'v-if': "object.type == '" ~ type ~ "'"
                 })|raw }}
                     {{ Form.control('upload_behavior', {

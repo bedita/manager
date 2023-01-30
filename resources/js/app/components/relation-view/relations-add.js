@@ -364,10 +364,10 @@ export default {
             let t = type ? type : this.relationTypes.right[0];
             this.object = createData(this.relationTypes && t);
             const fields = document.querySelectorAll('.fastCreateField');
-            for (let i = 0; i < fields.length; i++) {
-                fields[i].value = '';
-                if (fields[i].jsonEditor) {
-                    fields[i].jsonEditor.update({"text": ""});
+            for (let field of fields) {
+                field.value = '';
+                if (field.jsonEditor) {
+                    field.jsonEditor.update({'text': ''});
                 }
             }
         },
@@ -461,6 +461,15 @@ export default {
             this.loading = false;
 
             return response;
+        },
+
+        onChangeType() {
+            this.file = null;
+            for (let t of this.relationTypes?.right || []) {
+                if (this.$refs[`${t}-form`]) {
+                    this.$refs[`${t}-form`].reset();
+                }
+            }
         },
 
         /**
