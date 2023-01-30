@@ -97,4 +97,21 @@ class SystemHelperTest extends TestCase
         $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
     }
+
+    /**
+     * Test `uploadMimeTypes`
+     *
+     * @return void
+     * @covers ::uploadMimeTypes()
+     */
+    public function testUploadMimeTypes(): void
+    {
+        // empty config, defaultUploadMimeTypes
+        $reflectionClass = new \ReflectionClass($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadMimeTypes');
+        $property->setAccessible(true);
+        $expected = $property->getValue($this->System);
+        $actual = $this->System->uploadMimeTypes();
+        static::assertSame($expected, $actual);
+    }
 }

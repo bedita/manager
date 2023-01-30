@@ -94,20 +94,7 @@ export default {
 
             checkMimeForUpload(file, objectType) {
                 /** accepted mime types by object type for file upload */
-                const mimes = {
-                    images: [
-                        'image/apng',
-                        'image/bmp',
-                        'image/jp2',
-                        'image/jpeg',
-                        'image/jpg',
-                        'image/gif',
-                        'image/png',
-                        'image/svg+xml',
-                        'image/webp',
-                    ],
-                };
-
+                const mimes = BEDITA.uploadMimeTypes;
                 if (mimes?.[objectType] && !mimes[objectType].includes(file.type)) {
                     const msg = t`File type not accepted` + `: "${file.type}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
                     BEDITA.warning(msg);
