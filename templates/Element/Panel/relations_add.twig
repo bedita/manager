@@ -53,7 +53,7 @@
 
                             <div class="input text" v-if="isMedia">
                                 <label for="{{ prefix }}file">{{ __('File') }}</label>
-                                <input type="file" name="file" v-on:change="processFile($event, object?.type)" id="{{ prefix }}file" class="drop-file" />
+                                <input type="file" name="file" :accept="fileAcceptMimeTypes(object?.type)" v-on:change="processFile($event, object?.type)" id="{{ prefix }}file" class="drop-file" />
 
                                 <figure class="thumb" v-if="object?.type === 'images' && file?.name">
                                     <img :src=previewImage() alt="" style="max-width: 100%;" />

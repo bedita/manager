@@ -463,6 +463,10 @@ export default {
             }
         },
 
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
         /**
          * set file, object type and placeholder
          *

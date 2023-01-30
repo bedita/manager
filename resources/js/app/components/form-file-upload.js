@@ -10,8 +10,6 @@
  * @prop {int} defaultActive index of the default active label in labels
  */
 
-import { t } from 'ttag';
-
 export default {
 
     data() {
@@ -21,7 +19,11 @@ export default {
     },
 
     methods: {
-        onFileChanged(e, type) {
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
+        onFileChange(e, type) {
             this.file = null;
             if (this.$helpers.checkMimeForUpload(e.target.files[0], type) === false) {
                 return;

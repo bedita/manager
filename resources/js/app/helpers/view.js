@@ -92,6 +92,14 @@ export default {
                 return true;
             },
 
+            acceptMimeTypes(type) {
+                if (!BEDITA.uploadMimeTypes?.[type]) {
+                    return '';
+                }
+
+                return BEDITA.uploadMimeTypes?.[type].join(',');
+            },
+
             checkMimeForUpload(file, objectType) {
                 /** accepted mime types by object type for file upload */
                 const mimes = BEDITA.uploadMimeTypes;

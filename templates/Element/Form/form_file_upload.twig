@@ -2,8 +2,9 @@
     <div class="file has-name">
         <label class="file-label">
             {{ Form.file('file', {
+                ':accept': 'fileAcceptMimeTypes("' ~ object.type ~ '")',
                 'class': 'file-input',
-                'v-on:change': 'onFileChanged($event, "' ~ object.type ~ '")'
+                'v-on:change': 'onFileChange($event, "' ~ object.type ~ '")'
             }) | raw }}
             <span class="file-cta icon-upload file-label" v-show="!file?.name">{{ __('Choose a file') }}</span>
             <span class="file-name" v-cloak v-show="!file?.name">
