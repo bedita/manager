@@ -117,7 +117,7 @@ export default {
         },
 
         async save(event) {
-            if (!this.obj?.id) { {
+            if (!this.obj?.id) {
                 const inUse = await this.nameInUse();
                 if (inUse) {
                     const tagName = this.name;
