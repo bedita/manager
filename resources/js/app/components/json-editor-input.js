@@ -1,4 +1,4 @@
-import { JSONEditor } from 'svelte-jsoneditor/dist/jsoneditor.js';
+import { JSONEditor } from 'vanilla-jsoneditor';
 
 const options = {
     mode: 'code',
@@ -8,7 +8,7 @@ const options = {
 };
 
 export default {
-    template: /* template */`
+    template: `
     <div>
         <slot></slot>
     </div>
