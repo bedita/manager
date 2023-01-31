@@ -59,6 +59,7 @@ export default {
             label: String,
             enabled: Boolean,
             formClass: 'table-row disabled',
+            originalObj: Object,
         };
     },
 
@@ -73,6 +74,7 @@ export default {
     },
 
     async mounted() {
+        this.originalObj = this.obj || {};
         this.resetData();
     },
 
@@ -92,10 +94,10 @@ export default {
         },
 
         resetData() {
-            this.id = this.obj?.id || '';
-            this.name = this.obj?.attributes?.name || '';
-            this.label = this.obj?.attributes?.label || '';
-            this.enabled = this.obj?.attributes?.enabled || '';
+            this.id = this.originalObj?.id || '';
+            this.name = this.originalObj?.attributes?.name || '';
+            this.label = this.originalObj?.attributes?.label || '';
+            this.enabled = this.originalObj?.attributes?.enabled || '';
             this.editMode = this.editmode || false;
         },
 
@@ -117,15 +119,12 @@ export default {
         },
 
         async save(event) {
-            if (!this.obj?.id) {
+            if (!this.obj?.id || (this.obj?.id && this.name != this.originalObj?.attributes?.name)) {
                 const inUse = await this.nameInUse();
                 if (inUse) {
                     const tagName = this.name;
                     this.dialog = showInfo(t`Tag ${tagName} already exists`);
-                    this.editMode = true;
-                    this.name = '';
-                    this.label = '';
-                    this.enabled = null;
+                    this.resetData();
 
                     return;
                 }
