@@ -117,16 +117,18 @@ export default {
         },
 
         async save(event) {
-            const inUse = await this.nameInUse();
-            if (inUse) {
-                const tagName = this.name;
-                this.dialog = showInfo(t`Tag ${tagName} already exists`);
-                this.editMode = true;
-                this.name = '';
-                this.label = '';
-                this.enabled = null;
+            if (!this.obj?.id) { {
+                const inUse = await this.nameInUse();
+                if (inUse) {
+                    const tagName = this.name;
+                    this.dialog = showInfo(t`Tag ${tagName} already exists`);
+                    this.editMode = true;
+                    this.name = '';
+                    this.label = '';
+                    this.enabled = null;
 
-                return;
+                    return;
+                }
             }
             try {
                 event.target.classList.add('is-loading-spinner');
