@@ -110,7 +110,11 @@ class SystemHelperTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultUploadAccepted');
         $property->setAccessible(true);
-        $expected = $property->getValue($this->System);
+        $accepted = $property->getValue($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadForbidden');
+        $property->setAccessible(true);
+        $forbidden = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }
