@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-01-30 10:57:43 \n"
+"POT-Creation-Date: 2023-02-01 15:49:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1141,6 +1141,18 @@ msgstr ""
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
 "less than max file size (${ maxFileSizeMb } MB)"
+msgstr ""
+
+msgid "File type forbidden"
+msgstr ""
+
+msgid "Forbidden types"
+msgstr ""
+
+msgid "File extension forbidden"
+msgstr ""
+
+msgid "Forbidden extensions"
 msgstr ""
 
 msgid "File type not accepted"
