@@ -22,7 +22,7 @@ export default {
             </div>
 
             <div v-if="editMode">
-                <input type="text" v-model="name" @change="onChangeName($event)" />
+                <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
@@ -90,7 +90,7 @@ export default {
             if (!name) {
                 return;
             }
-            this.name = this.$helpers.slugify(name);
+            this.name = this.$helpers.slugify(name, 50);
         },
 
         resetData() {

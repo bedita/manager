@@ -92,12 +92,36 @@ export default {
                 return true;
             },
 
-            slugify(str) {
+            slugify(str, len) {
                 if (!str) {
                     return str;
                 }
 
-                return str.toLowerCase().replaceAll(' ', '-');
+                let slug = str.trim().replace(/[^0-9a-z]/gi, '-');
+                slug = this.removeDuplicates(slug, '-');
+
+
+                return slug.substring(0, len);
+            },
+
+            removeDuplicates(text, char) {
+                let curr = '';
+                let prev = '';
+                let ret = text;
+                for (let i = 0; i < text.length; i++) {
+                    curr = ret.charAt(i);
+                    if (curr === char && curr === prev) {
+                        if (i > ret.length) {
+                            return ret;
+                        }
+                        ret = ret.slice(0, i) + ret.slice(i+1)
+                        i--;
+                    } else {
+                        prev = curr;
+                    }
+                }
+
+                return ret;
             },
 
             acceptMimeTypes(type) {
