@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-01-30 10:57:43 \n"
+"POT-Creation-Date: 2023-01-31 07:03:41 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1195,6 +1195,13 @@ msgid "Search existing tags"
 msgstr ""
 
 msgid "Add new tag"
+msgstr ""
+
+#, javascript-format
+msgid "Tag ${ tagName } already exists"
+msgstr ""
+
+msgid "Error while saving tag"
 msgstr ""
 
 msgid "Error on deleting tag"
