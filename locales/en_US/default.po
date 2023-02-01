@@ -1212,6 +1212,13 @@ msgstr ""
 msgid "Add new tag"
 msgstr ""
 
+#, javascript-format
+msgid "Tag ${ tagName } already exists"
+msgstr ""
+
+msgid "Error while saving tag"
+msgstr ""
+
 msgid "Error on deleting tag"
 msgstr ""
 

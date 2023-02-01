@@ -1209,6 +1209,13 @@ msgstr ""
 msgid "Add new tag"
 msgstr ""
 
+#, javascript-format
+msgid "Tag ${ tagName } already exists"
+msgstr ""
+
+msgid "Error while saving tag"
+msgstr ""
+
 msgid "Error on deleting tag"
 msgstr ""
 
@@ -1251,7 +1258,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 msgid "Title"
 msgstr ""
 
@@ -1259,7 +1266,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 msgid "Address"
 msgstr ""
 
@@ -1267,7 +1274,7 @@ msgstr ""
 #.  * <location-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 msgid "GET"
 msgstr ""
 
@@ -1278,7 +1285,7 @@ msgstr ""
 #.  * <locations-view> component used for ModulesPage -> View
 #.  *
 #.  * Handle Locations and reverse geocoding from addresses
-#.  
+#.
 msgid "add new"
 msgstr ""
 
@@ -1293,7 +1300,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr ""
 
@@ -1314,7 +1321,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Every day"
 msgstr ""
 
@@ -1323,7 +1330,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Sunday"
 msgstr ""
 
@@ -1332,7 +1339,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Monday"
 msgstr ""
 
@@ -1341,7 +1348,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Tuesday"
 msgstr ""
 
@@ -1350,7 +1357,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Wednesday"
 msgstr ""
 
@@ -1359,7 +1366,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Thursday"
 msgstr ""
 
@@ -1368,7 +1375,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Friday"
 msgstr ""
 
@@ -1377,7 +1384,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Saturday"
 msgstr ""
 
@@ -1386,7 +1393,7 @@ msgstr ""
 #.  *  Template/Elements/calendar.twig
 #.  *
 #.  * <date-ranges-view> component used for ModulesPage -> View
-#.  
+#.
 msgid "Invalid date range"
 msgstr ""
 

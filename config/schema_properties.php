@@ -181,7 +181,7 @@ return [
                         'type' => 'object',
                     ],
                 ],
-                '$id' => '/properties/hidden',
+                '$id' => '/properties/params',
                 'title' => 'Params',
                 'description' => 'Property params, JSON Schema format',
             ],
