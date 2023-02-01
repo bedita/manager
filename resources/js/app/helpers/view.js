@@ -97,7 +97,7 @@ export default {
                     return str;
                 }
 
-                let slug = str.trim().replace(/[^0-9a-z]/gi, '-');
+                let slug = str.trim().toLowerCase().replace(/[^0-9a-z]/gi, '-');
                 slug = this.removeDuplicates(slug, '-');
 
 
