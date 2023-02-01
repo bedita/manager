@@ -52,6 +52,7 @@ class SystemHelper extends Helper
         ],
         'extensions' => [
             'cgi',
+            'exe',
             'js',
             'perl',
             'php',
