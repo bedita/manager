@@ -93,18 +93,39 @@ export default {
             },
 
             acceptMimeTypes(type) {
-                if (!BEDITA.uploadMimeTypes?.[type]) {
+                if (!BEDITA.uploadConfig?.accepted?.[type]) {
                     return '';
                 }
 
-                return BEDITA.uploadMimeTypes?.[type].join(',');
+                return BEDITA.uploadConfig?.accepted?.[type].join(',');
             },
 
             checkMimeForUpload(file, objectType) {
-                /** accepted mime types by object type for file upload */
-                const mimes = BEDITA.uploadMimeTypes;
-                if (mimes?.[objectType] && !mimes[objectType].includes(file.type)) {
-                    const msg = t`File type not accepted` + `: "${file.type}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
+                const fileType = file?.type || '';
+
+                /** forbidden mime types check */
+                const forbidden = BEDITA.uploadConfig?.forbidden?.mimetypes || [];
+                if (forbidden.includes(fileType)) {
+                    const msg = t`File type forbidden` + `: "${fileType}". ` + t`Forbidden types` + `: "${forbidden.join('", "')}".`;
+                    BEDITA.warning(msg);
+
+                    return false;
+                }
+
+                /** forbidden extensions check */
+                const extensions = BEDITA.uploadConfig?.forbidden?.extensions || [];
+                const fileExtension = fileType.replace(/(.*)\//g, '');
+                if (extensions.includes(fileExtension)) {
+                    const msg = t`File extension forbidden` + `: "${fileExtension}". ` + t`Forbidden extensions` + `: "${extensions.join('", "')}".`;
+                    BEDITA.warning(msg);
+
+                    return false;
+                }
+
+                /** accepted mime types check */
+                const mimes = BEDITA.uploadConfig?.accepted;
+                if (mimes?.[objectType] && !mimes[objectType].includes(fileType)) {
+                    const msg = t`File type not accepted` + `: "${fileType}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
                     BEDITA.warning(msg);
 
                     return false;

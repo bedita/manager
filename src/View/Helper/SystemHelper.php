@@ -17,44 +17,47 @@ class SystemHelper extends Helper
      *
      * @var array
      */
-    protected $defaultUploadMimeTypes = [
+    protected $defaultUploadAccepted = [
         'audio' => [
             'audio/*',
         ],
         'images' => [
             'image/*',
         ],
-        'files' => [
-            'application/x-abiword',
-            'application/vnd.amazon.ebook',
-            'application/x-bzip',
-            'application/x-bzip2',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/epub+zip',
-            'application/gzip',
-            'application/json',
-            'application/ld+json',
-            'application/vnd.oasis.opendocument.presentation',
-            'application/vnd.oasis.opendocument.spreadsheet',
-            'application/vnd.oasis.opendocument.text',
-            'application/pdf',
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'application/vnd.rar',
-            'application/rtf',
-            'application/x-tar',
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/xml',
-            'application/vnd.mozilla.xul+xml',
-            'application/zip',
-            'application/x-7z-compressed',
-            'text/*',
-        ],
         'videos' => [
             'application/x-mpegURL',
             'video/*',
+        ],
+    ];
+
+    /**
+     * Not accepted mime types and extesions for upload
+     *
+     * @var array
+     */
+    protected $defaultUploadForbidden = [
+        'mimetypes' => [
+            'application/javascript',
+            'application/x-cgi',
+            'application/x-perl',
+            'application/x-php',
+            'application/x-ruby',
+            'application/x-shellscript',
+            'text/javascript',
+            'text/x-perl',
+            'text/x-php',
+            'text/x-python',
+            'text/x-ruby',
+            'text/x-shellscript',
+        ],
+        'extensions' => [
+            'cgi',
+            'js',
+            'perl',
+            'php',
+            'py',
+            'rb',
+            'sh',
         ],
     ];
 
@@ -96,12 +99,15 @@ class SystemHelper extends Helper
     }
 
     /**
-     * Upload mime types
+     * Upload config
      *
      * @return array
      */
-    public function uploadMimeTypes(): array
+    public function uploadConfig(): array
     {
-        return (array)Configure::read('uploadMimeTypes', $this->defaultUploadMimeTypes);
+        $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
+        $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
+
+        return compact('accepted', 'forbidden');
     }
 }

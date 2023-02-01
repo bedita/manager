@@ -14,6 +14,10 @@
             <figure class="thumb" v-if="file?.name">
                 <img :src=previewImage() alt="" style="max-width: 100%;" />
             </figure>
+            {% elseif not object.id %}
+            <span class="file-name" v-if="file?.name">
+                <: file?.name :>
+            </span>
             {% endif %}
 
             <a class="file-reset-button" v-on:click.prevent.stop="resetFile" v-show="file?.name"></a>

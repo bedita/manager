@@ -99,19 +99,19 @@ class SystemHelperTest extends TestCase
     }
 
     /**
-     * Test `uploadMimeTypes`
+     * Test `uploadConfig`
      *
      * @return void
-     * @covers ::uploadMimeTypes()
+     * @covers ::uploadConfig()
      */
-    public function testUploadMimeTypes(): void
+    public function testUploadConfig(): void
     {
-        // empty config, defaultUploadMimeTypes
+        // empty config, defaultUploadAccepted
         $reflectionClass = new \ReflectionClass($this->System);
-        $property = $reflectionClass->getProperty('defaultUploadMimeTypes');
+        $property = $reflectionClass->getProperty('defaultUploadAccepted');
         $property->setAccessible(true);
         $expected = $property->getValue($this->System);
-        $actual = $this->System->uploadMimeTypes();
+        $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }
 }
