@@ -156,7 +156,7 @@ export default {
 
                 /** accepted mime types check */
                 const mimes = BEDITA.uploadConfig?.accepted;
-                if (mimes?.[objectType] && !mimes[objectType].includes(fileType)) {
+                if (mimes?.[objectType] && !this.checkAcceptedMime(mimes[objectType], fileType)) {
                     const msg = t`File type not accepted` + `: "${fileType}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
                     BEDITA.warning(msg);
 
@@ -164,6 +164,22 @@ export default {
                 }
 
                 return true;
+            },
+
+            checkAcceptedMime(whitelist, mime) {
+                if (whitelist.includes(mime)) {
+                    return true;
+                }
+                const type = mime.substring(0, mime.lastIndexOf('/'));
+                for (let acceptedMime of whitelist || []) {
+                    if (acceptedMime.endsWith('/*')) {
+                        const acceptedType = acceptedMime.substring(0, acceptedMime.lastIndexOf('/'));
+                        if (type === acceptedType) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             },
 
             titleFromFileName(filename) {
