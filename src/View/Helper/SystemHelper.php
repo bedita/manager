@@ -17,17 +17,48 @@ class SystemHelper extends Helper
      *
      * @var array
      */
-    protected $defaultUploadMimeTypes = [
+    protected $defaultUploadAccepted = [
+        'audio' => [
+            'audio/*',
+        ],
         'images' => [
-            'image/apng',
-            'image/bmp',
-            'image/jp2',
-            'image/jpeg',
-            'image/jpg',
-            'image/gif',
-            'image/png',
-            'image/svg+xml',
-            'image/webp',
+            'image/*',
+        ],
+        'videos' => [
+            'application/x-mpegURL',
+            'video/*',
+        ],
+    ];
+
+    /**
+     * Not accepted mime types and extesions for upload
+     *
+     * @var array
+     */
+    protected $defaultUploadForbidden = [
+        'mimetypes' => [
+            'application/javascript',
+            'application/x-cgi',
+            'application/x-perl',
+            'application/x-php',
+            'application/x-ruby',
+            'application/x-shellscript',
+            'text/javascript',
+            'text/x-perl',
+            'text/x-php',
+            'text/x-python',
+            'text/x-ruby',
+            'text/x-shellscript',
+        ],
+        'extensions' => [
+            'cgi',
+            'exe',
+            'js',
+            'perl',
+            'php',
+            'py',
+            'rb',
+            'sh',
         ],
     ];
 
@@ -69,12 +100,15 @@ class SystemHelper extends Helper
     }
 
     /**
-     * Upload mime types
+     * Upload config
      *
      * @return array
      */
-    public function uploadMimeTypes(): array
+    public function uploadConfig(): array
     {
-        return (array)Configure::read('uploadMimeTypes', $this->defaultUploadMimeTypes);
+        $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
+        $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
+
+        return compact('accepted', 'forbidden');
     }
 }

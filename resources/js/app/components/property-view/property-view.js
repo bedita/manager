@@ -216,10 +216,10 @@ export default {
         },
         resetFile(thumb) {
             document.getElementById('fileUpload').value = '';
+            this.file = null;
+            this.fileChanged = false;
             if (thumb && document.getElementById('imageThumb')) {
                 document.getElementById('imageThumb').src = thumb;
-                this.file = null;
-                this.fileChanged = false;
             }
         },
     }

@@ -32,6 +32,7 @@ export default {
                 return;
             }
             this.file = e.target.files[0];
+            this.$helpers.setTitleFromFileName('title', this.file.name);
         },
 
         resetFile(e) {
