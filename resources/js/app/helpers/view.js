@@ -146,7 +146,7 @@ export default {
 
                 /** forbidden extensions check */
                 const extensions = BEDITA.uploadConfig?.forbidden?.extensions || [];
-                const fileExtension = fileType.replace(/(.*)\//g, '');
+                const fileExtension = file.name.split('.').pop();
                 if (extensions.includes(fileExtension)) {
                     const msg = t`File extension forbidden` + `: "${fileExtension}". ` + t`Forbidden extensions` + `: "${extensions.join('", "')}".`;
                     BEDITA.warning(msg);
