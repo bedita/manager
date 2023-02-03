@@ -27,15 +27,15 @@
             {% endif %}
         {% endif %}
 
-            <div class="module-buttons">
-                {{ _view.fetch('module-buttons')|raw }}
+            <div class="app-module-buttons">
+                {{ _view.fetch('app-module-buttons')|raw }}
                 {% if currentModule.hints.multiple_types and types.right is iterable %}
                     {{ element('filter_type') }}
                 {% endif %}
             </div>
 
-            <div class="module-anchors">
-                {{ _view.fetch('module-anchors')|raw }}
+            <div class="app-module-links">
+                {{ _view.fetch('app-module-links')|raw }}
             </div>
         </div>
     {% endif %}

@@ -117,7 +117,7 @@
             {{ Form.end()|raw }}
 
             {# Append "Save" to sidebar #}
-            {% do _view.append('module-buttons', Form.button( __('Save'),
+            {% do _view.append('app-module-buttons', Form.button( __('Save'),
                 {
                     'form': 'form-translate',
                     'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
@@ -127,7 +127,7 @@
 
             {% if translation.id %}
                 {# Append "Remove" to sidebar #}
-                {% do _view.append('module-buttons', Form.postButton(__('Remove'),
+                {% do _view.append('app-module-buttons', Form.postButton(__('Remove'),
                     {
                         '_name': 'translations:delete',
                         'object_type': objectType

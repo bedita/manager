@@ -140,7 +140,7 @@ ul.concurrent-editors {
 
         > *:not(:empty) { margin-bottom: $gutter; }
 
-        .module-buttons, .module-anchors {
+        .app-module-buttons, .app-module-links {
             display: flex;
             flex-direction: column;
             > *:not(:last-child) { margin-bottom: $gutter; }

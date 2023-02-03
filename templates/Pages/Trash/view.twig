@@ -41,8 +41,8 @@
         {{ Form.end()|raw }}
 
         {# Append "Delete" and "Restore" to commands in commands menu. #}
-        {% do _view.append('module-buttons', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
-        {% do _view.append('module-buttons', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}
+        {% do _view.append('app-module-buttons', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
+        {% do _view.append('app-module-buttons', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}
     </div>
 
 </div>
