@@ -14,9 +14,9 @@
     ) %}
 
     {# append links to sidebar #}
-    {% do _view.append('module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Categories'), {'_name': 'model:list:categories'}, { 'class': 'icon-check' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Tags'), {'_name': 'model:list:tags'}, { 'class': 'icon-check' })|raw) %}
+    {% do _view.append('module-anchors', Html.link(__('Object types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
+    {% do _view.append('module-anchors', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
+    {% do _view.append('module-anchors', Html.link(__('Property types'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
+    {% do _view.append('module-anchors', Html.link(__('Categories'), {'_name': 'model:list:categories'}, { 'class': 'icon-check' })|raw) %}
+    {% do _view.append('module-anchors', Html.link(__('Tags'), {'_name': 'model:list:tags'}, { 'class': 'icon-check' })|raw) %}
 

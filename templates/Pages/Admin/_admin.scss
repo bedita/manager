@@ -16,7 +16,7 @@ body.view-admin {
     }
 }
 
-.module-links {
+.module-anchors {
     a:not(.button), span {
         border-bottom: 1px solid $gray-600;
         padding: calc($gutter * 0.5);
