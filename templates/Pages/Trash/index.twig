@@ -52,7 +52,7 @@
         {% endif %}
 
         {# Append "Empty" button in commands menu. #}
-        {% do _view.append('module-buttons',
+        {% do _view.append('app-module-buttons',
             Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
                 'data': {'query': q},
                 'class': 'icon-cancel button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'

@@ -1,4 +1,4 @@
-.module-box a {
+.app-module-box a {
     position: relative;
     display: flex;
     height: $dashboard-item-height;
@@ -25,7 +25,7 @@
     }
 }
 
-.module-box {
+.app-module-box {
 
     a {
         position: relative;
@@ -52,7 +52,7 @@
     }
 }
 
-.module-box-concurrent-editors a {
+.app-module-box-concurrent-editors a {
     position: relative;
     display: flex;
     height: $dashboard-item-height;
@@ -98,7 +98,7 @@ ul.concurrent-editors {
         height: 0;
         padding-bottom: $dashboard-items-ratio;
     }
-    .module-box a {
+    .app-module-box a {
         background-color: $gray-strange;
         font: $font-weight-normal $font-size-lg $font-family-serif;
     }
@@ -140,7 +140,7 @@ ul.concurrent-editors {
 
         > *:not(:empty) { margin-bottom: $gutter; }
 
-        .module-buttons, .module-links {
+        .app-module-buttons, .app-module-links {
             display: flex;
             flex-direction: column;
             > *:not(:last-child) { margin-bottom: $gutter; }

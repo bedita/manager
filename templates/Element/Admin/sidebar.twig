@@ -3,10 +3,10 @@
 {% set controllerAction = _view.request.getparam('controller')|default('') %}
 {% for action in actions %}
     {% if action == controllerAction|underscore %}
-        {% do _view.append('module-links', '<span class="active-action">' ~ __(action|underscore|humanize) ~ '</span>') %}
+        {% do _view.append('app-module-links', '<span class="active-action">' ~ __(action|underscore|humanize) ~ '</span>') %}
     {% else %}
-        {% do _view.append('module-links', Html.link(__(action|underscore|humanize), {'_name': 'admin:list:' ~ action}, {})|raw) %}
+        {% do _view.append('app-module-links', Html.link(__(action|underscore|humanize), {'_name': 'admin:list:' ~ action}, {})|raw) %}
     {% endif %}
 {% endfor %}
 
-{% do _view.append('module-links', '<a style="width: 170px;" href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="icon-cancel button button-primary button-primary-hover-module-admin is-width-auto">' ~ __('Clear cache') ~ '</a>') %}
+{% do _view.append('app-module-links', '<a style="width: 170px;" href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="icon-cancel button button-primary button-primary-hover-module-admin is-width-auto">' ~ __('Clear cache') ~ '</a>') %}
