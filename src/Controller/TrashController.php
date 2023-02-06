@@ -75,8 +75,14 @@ class TrashController extends AppController
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
         $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
-
         $this->set('properties', $this->Properties->indexList('trash'));
+        $this->set('schema', ['properties' => [
+            'title' => ['type' => 'string'],
+            'type' => ['type' => 'string'],
+            'status' => ['type' => 'string'],
+            'modified' => ['type' => 'date-time'],
+            'id' => ['type' => 'integer'],
+        ]]);
 
         return null;
     }
