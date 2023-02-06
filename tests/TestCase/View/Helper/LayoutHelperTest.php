@@ -441,7 +441,7 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
 
-        foreach ([null, '', 'notExistingType'] as $input) {
+        foreach ([null, '', 'notExistingType', 'trash'] as $input) {
             $actual = $layout->trashLink($input);
             static::assertSame('', $actual);
         }
