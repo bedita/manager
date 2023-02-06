@@ -235,7 +235,7 @@ class LayoutHelper extends Helper
      */
     public function trashLink(?string $type): string
     {
-        if (empty($type)) {
+        if (empty($type) || $type === 'trash') {
             return '';
         }
 
