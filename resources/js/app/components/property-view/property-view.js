@@ -13,8 +13,6 @@
  *
  */
 
-import { t } from 'ttag';
-
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
     credentials: 'same-origin',

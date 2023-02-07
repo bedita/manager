@@ -60,6 +60,15 @@ let webpackPlugins = [
     }),
 
     new WebpackManifestPlugin({}),
+
+    new VueLoaderPlugin(),
+
+    new ESLintPlugin({
+        extensions: ['js'],
+        emitError: true,
+        emitWarning: true,
+        outputReport: true
+    }),
 ];
 
 // Development or report bundle Plugin
@@ -109,15 +118,6 @@ if (devMode) {
 }
 
 module.exports = {
-    plugins: [
-        new VueLoaderPlugin(),
-        new ESLintPlugin({
-            extensions: ['js'],
-            emitError: true,
-            emitWarning: true,
-            outputReport: true
-        })
-    ],
 
     entry: {
         app: [appEntry],
