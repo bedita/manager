@@ -404,10 +404,9 @@ export default {
          * Add/remove elements to selectedObjects list
          *
          * @param {Object} object The object
-         * @param {Event} evt The event
          * @return {void}
          */
-        toggle(object, evt) {
+        toggle(object) {
             let position = this.selectedObjects.indexOf(object);
             if (position != -1) {
                 this.selectedObjects.splice(position, 1);
