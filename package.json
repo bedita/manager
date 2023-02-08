@@ -31,7 +31,7 @@
         "axios": "^1.2.6",
         "codemirror": "^5.63.3",
         "deepmerge": "^4.2.2",
-        "dotenv-webpack": "^7.0.3",
+        "dotenv-webpack": "^8.0.1",
         "eslint": "^8.33.0",
         "eslint-webpack-plugin": "^4.0.0",
         "flatpickr": "^4.6.9",
