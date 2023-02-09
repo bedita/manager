@@ -110,10 +110,12 @@ class Control
         $schema = (array)Hash::get($options, 'schema');
         $value = Hash::get($options, 'value');
         $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
+        $readonly = Hash::check($options, 'readonly') ? 1 : 0;
 
         return [
             'type' => 'textarea',
             $key => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
+            'readonly' => $readonly,
             'value' => $value,
         ];
     }

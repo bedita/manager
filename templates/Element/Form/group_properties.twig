@@ -1,18 +1,16 @@
-
-    {% set customElement = Layout.customElement(group, 'group') %}
-    {% if customElement %}
-        {{ element(customElement, {'properties' : properties}) }}
-    {% else %}
-
-        {% for key, value in properties %}
-            {% if object.meta.locked and key == 'uname' %}
-                {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
-            {% elseif object.meta.locked and key == 'status' %}
-                {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
-                <input type="hidden" name="status" id="status" value="{{ value }}" />
-            {% else %}
-                {{ Property.control(key, value)|raw }}
-            {% endif %}
-        {% endfor %}
-
-    {% endif %}
+{% set customElement = Layout.customElement(group, 'group') %}
+{% if customElement %}
+    {{ element(customElement, {'properties' : properties}) }}
+{% else %}
+    {% set readonlyAttributes = object.type ? config('Properties.' ~ object.type ~ '.view._readonly') : null %}
+    {% for key, value in properties %}
+        {% if key in readonlyAttributes or (object.meta.locked and key == 'uname') %}
+            {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
+        {% elseif object.meta.locked and key == 'status' %}
+            {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
+            <input type="hidden" name="status" id="status" value="{{ value }}" />
+        {% else %}
+            {{ Property.control(key, value)|raw }}
+        {% endif %}
+    {% endfor %}
+{% endif %}

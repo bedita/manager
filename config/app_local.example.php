@@ -167,6 +167,7 @@ return [
      *  - 'view' properties groups to present in object view, where groups are:
      *      + '_keep' special group of properties to keep and display even if not found in object
      *      + '_hide' special group of properties to not display
+     *      + '_readonly' special group of properties to display as readonly
      *      + 'core' always open on the top
      *      + 'publish' publishing related
      *      + 'advanced' for power users
@@ -200,6 +201,9 @@ return [
         //         ],
         //         '_hide' => [
         //             'some_other_field',
+        //         ],
+        //         '_readonly' => [
+        //              'some_field_force_readonly',
         //         ],
         //         'core' => [
         //              'some_field',

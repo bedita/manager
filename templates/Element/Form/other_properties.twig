@@ -1,7 +1,7 @@
 {# Remaining properties groups: 'other' and custom groups not in 'core', '_keep', 'publish', 'advanced' #}
 {% set otherProperties = Array.removeKeys(properties, ['core', '_keep', 'publish', 'advanced']) %}
 {% for group, props in otherProperties %}
-    {% if props %}
+    {% if props and group != '_readonly' %}
 
     <property-view inline-template :tab-open="tabsOpen" tab-name="{{ group }}">
 
