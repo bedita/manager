@@ -71,27 +71,19 @@ class SchemaHelper extends Helper
 
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
-        $cfg = (array)Configure::read(sprintf('Properties.%s.view', $objectType));
-        $typeFromCore = Hash::get($cfg, sprintf('core.%s', $name));
-        $typeFromMeta = Hash::get($cfg, sprintf('meta.%s', $name));
-        $typeFromConfig = !empty($typeFromCore) ? $typeFromCore : $typeFromMeta;
-        $label = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'label') : null;
-        $readonly = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'readonly') : 0;
-        $typeFromConfig = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'type') : $typeFromConfig;
-        $type = !empty($typeFromConfig) ? $typeFromConfig : ControlType::fromSchema((array)$schema);
-        $opts = [
+        $type = ControlType::fromSchema((array)$schema);
+        $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
+        $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
+
+        return Control::control([
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
             'schema' => (array)$schema,
-            'propertyType' => $type,
-            'readonly' => $readonly,
-        ];
-        if (!empty($label)) {
-            $opts['label'] = $label;
-        }
-
-        return Control::control($opts);
+            'propertyType' => Hash::get($ctrlOptions, 'type', $type),
+            'label' => Hash::get($ctrlOptions, 'label'),
+            'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+        ]);
     }
 
     /**

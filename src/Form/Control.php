@@ -37,21 +37,19 @@ class Control
     public static function control(array $options): array
     {
         $type = $options['propertyType'];
-        $value = $options['value'];
         $format = self::format((array)$options['schema']);
+        $commonOpts = array_intersect_key($options, array_flip(['label', 'readonly', 'value']));
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
-            $result = array_merge(self::commonOptions($options), $result);
 
-            return $result;
+            return array_merge($commonOpts, $result);
         }
         if (!in_array($type, self::CONTROL_TYPES)) {
-            return compact('type', 'value');
+            return compact('type') + ['value' => $options['value']];
         }
         $result = call_user_func_array(Form::getMethod(self::class, $type), [$options]);
-        $result = array_merge(self::commonOptions($options), $result);
 
-        return $result;
+        return array_merge($commonOpts, $result);
     }
 
     /**
@@ -101,24 +99,6 @@ class Control
         return [
             'type' => 'textarea',
         ];
-    }
-
-    /**
-     * Options common in every input field
-     *
-     * @param array $options Options
-     * @return array
-     */
-    public static function commonOptions(array $options): array
-    {
-        $opts = [];
-        foreach (['label', 'readonly', 'value'] as $key) {
-            if (array_key_exists($key, $options)) {
-                $opts[$key] = Hash::get($options, $key);
-            }
-        }
-
-        return $opts;
     }
 
     /**

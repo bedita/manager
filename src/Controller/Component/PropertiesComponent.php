@@ -166,17 +166,16 @@ class PropertiesComponent extends Component
 
         foreach ($defaults as $group => $items) {
             $key = sprintf('Properties.%s.view.%s', $type, $group);
-            $cfg = $this->getConfig($key, $items);
-            $configProperties = is_int(array_key_first($cfg)) ? $cfg : array_keys($cfg);
-            $properties[$group] = array_filter(
-                $attributes,
-                function ($cfgKey) use ($configProperties) {
-                    return in_array($cfgKey, $configProperties);
-                },
-                ARRAY_FILTER_USE_KEY
-            );
+            $list = $this->getConfig($key, $items);
+            $p = [];
+            foreach ($list as $item) {
+                if (array_key_exists($item, $attributes)) {
+                    $p[$item] = $attributes[$item];
+                }
+            }
+            $properties[$group] = $p;
             if ($group !== 'other') {
-                $used = array_merge($used, $configProperties);
+                $used = array_merge($used, $list);
             }
         }
         // add remaining properties to 'other' group
