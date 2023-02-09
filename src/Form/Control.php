@@ -49,7 +49,7 @@ class Control
             return compact('type', 'value');
         }
         $result = call_user_func_array(Form::getMethod(self::class, $type), [$options]);
-        $result = array_merge($result, self::commonOptions($options));
+        $result = array_merge(self::commonOptions($options), $result);
 
         return $result;
     }
@@ -111,11 +111,14 @@ class Control
      */
     public static function commonOptions(array $options): array
     {
-        $label = Hash::get($options, 'label');
-        $readonly = Hash::check($options, 'readonly') ? 1 : 0;
-        $value = Hash::get($options, 'value');
+        $opts = [];
+        foreach (['label', 'readonly', 'value'] as $key) {
+            if (array_key_exists($key, $options)) {
+                $opts[$key] = Hash::get($options, $key);
+            }
+        }
 
-        return compact('label', 'readonly', 'value');
+        return $opts;
     }
 
     /**
