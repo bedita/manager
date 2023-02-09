@@ -58,6 +58,7 @@ class ControlTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => $value,
                 ],
             ],
