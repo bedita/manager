@@ -70,7 +70,7 @@ class PropertyHelper extends Helper
     public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
-        $controlOptions['label'] = $this->fieldLabel($name, $type);
+        $controlOptions['label'] = $controlOptions['label'] ?? $this->fieldLabel($name, $type);
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));

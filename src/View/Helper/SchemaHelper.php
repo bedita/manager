@@ -74,19 +74,24 @@ class SchemaHelper extends Helper
         $cfg = (array)Configure::read(sprintf('Properties.%s.view', $objectType));
         $typeFromCore = Hash::get($cfg, sprintf('core.%s', $name));
         $typeFromMeta = Hash::get($cfg, sprintf('meta.%s', $name));
-        $typeFromConfig = $typeFromCore ?? $typeFromMeta;
-        $typeFromConfig = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'type') : $typeFromConfig;
+        $typeFromConfig = !empty($typeFromCore) ? $typeFromCore : $typeFromMeta;
+        $label = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'label') : null;
         $readonly = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'readonly') : 0;
+        $typeFromConfig = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'type') : $typeFromConfig;
         $type = !empty($typeFromConfig) ? $typeFromConfig : ControlType::fromSchema((array)$schema);
-
-        return Control::control([
+        $opts = [
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
             'schema' => (array)$schema,
             'propertyType' => $type,
             'readonly' => $readonly,
-        ]);
+        ];
+        if (!empty($label)) {
+            $opts['label'] = $label;
+        }
+
+        return Control::control($opts);
     }
 
     /**

@@ -40,13 +40,18 @@ class Control
         $value = $options['value'];
         $format = self::format((array)$options['schema']);
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
-            return call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
+            $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
+            $result = array_merge($result, self::commonOptions($options));
+
+            return $result;
         }
         if (!in_array($type, self::CONTROL_TYPES)) {
             return compact('type', 'value');
         }
+        $result = call_user_func_array(Form::getMethod(self::class, $type), [$options]);
+        $result = array_merge($result, self::commonOptions($options));
 
-        return call_user_func_array(Form::getMethod(self::class, $type), [$options]);
+        return $result;
     }
 
     /**
@@ -95,8 +100,22 @@ class Control
     {
         return [
             'type' => 'textarea',
-            'value' => Hash::get($options, 'value'),
         ];
+    }
+
+    /**
+     * Options common in every input field
+     *
+     * @param array $options Options
+     * @return array
+     */
+    public static function commonOptions(array $options): array
+    {
+        $label = Hash::get($options, 'label');
+        $readonly = Hash::check($options, 'readonly') ? 1 : 0;
+        $value = Hash::get($options, 'value');
+
+        return compact('label', 'readonly', 'value');
     }
 
     /**
@@ -108,15 +127,11 @@ class Control
     public static function richtext(array $options): array
     {
         $schema = (array)Hash::get($options, 'schema');
-        $value = Hash::get($options, 'value');
         $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
-        $readonly = Hash::check($options, 'readonly') ? 1 : 0;
 
         return [
             'type' => 'textarea',
             $key => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
-            'readonly' => $readonly,
-            'value' => $value,
         ];
     }
 
@@ -133,7 +148,6 @@ class Control
             'v-datepicker' => 'true',
             'date' => 'true',
             'time' => 'true',
-            'value' => Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -152,7 +166,6 @@ class Control
             'type' => 'text',
             'v-datepicker' => 'true',
             'date' => 'true',
-            'value' => Hash::get($options, 'value'),
             'templates' => [
                 'inputContainer' => '<div class="input datepicker {{type}}{{required}}">{{content}}</div>',
             ],
@@ -307,7 +320,6 @@ class Control
             'type' => 'text',
             'v-email' => 'true',
             'class' => 'email',
-            'value' => Hash::get($options, 'value'),
         ];
     }
 
@@ -323,7 +335,6 @@ class Control
             'type' => 'text',
             'v-uri' => 'true',
             'class' => 'uri',
-            'value' => Hash::get($options, 'value'),
         ];
     }
 
