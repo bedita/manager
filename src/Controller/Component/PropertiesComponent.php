@@ -171,7 +171,7 @@ class PropertiesComponent extends Component
                 }
             }
             $properties[$group] = $p;
-            if ($group !== 'other' && $group !== '_readonly') {
+            if (!in_array($group, ['other', '_readonly'])) {
                 $used = array_merge($used, $list);
             }
         }
