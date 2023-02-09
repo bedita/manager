@@ -41,7 +41,7 @@ class Control
         $format = self::format((array)$options['schema']);
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
-            $result = array_merge($result, self::commonOptions($options));
+            $result = array_merge(self::commonOptions($options), $result);
 
             return $result;
         }
