@@ -191,6 +191,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => 'test',
                 ],
                 // schema type
@@ -206,6 +207,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => 'test',
                 ],
                 // schema type

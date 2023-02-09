@@ -75,6 +75,8 @@ class SchemaHelper extends Helper
         $typeFromCore = Hash::get($cfg, sprintf('core.%s', $name));
         $typeFromMeta = Hash::get($cfg, sprintf('meta.%s', $name));
         $typeFromConfig = $typeFromCore ?? $typeFromMeta;
+        $typeFromConfig = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'type') : $typeFromConfig;
+        $readonly = is_array($typeFromConfig) ? Hash::get($typeFromConfig, 'readonly') : 0;
         $type = !empty($typeFromConfig) ? $typeFromConfig : ControlType::fromSchema((array)$schema);
 
         return Control::control([
@@ -83,6 +85,7 @@ class SchemaHelper extends Helper
             'value' => $value,
             'schema' => (array)$schema,
             'propertyType' => $type,
+            'readonly' => $readonly,
         ]);
     }
 
