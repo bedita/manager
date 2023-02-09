@@ -20,31 +20,8 @@
             {% endfor %}
             {% if canSave %}
                 <h2 class="mt-2">{{ __('Create a new tag') }}</h2>
-                {{ Form.create(null, {'id': 'form-create', 'url': saveAction, 'class': 'table-row'})|raw }}
-                    {% if redirTo %}
-                        {{ Form.hidden('redirTo', {'value': Url.build(redirTo)})|raw }}
-                    {% endif %}
-                    {% for prop in properties %}
-                        <div class="{{ prop }}-cell">
-                            {% if prop == 'name' or prop == 'label' %}
-                                {{ Form.text(prop, {
-                                    'type': 'text',
-                                    'autocomplete': 'off',
-                                    'autocorrect': 'off',
-                                    'autocapitalize': 'off',
-                                    'placeholder': prop
-                                }) | raw }}
-                            {% elseif prop == 'enabled' %}
-                                {{ Form.checkbox(prop, {'checked': 1})|raw }}
-                                <label>{{ __('Enabled') }}</label>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    <div class="prop-id">-</div>
-                    <div class="buttons-cell narrow">
-                        <button title="{{ __('Save') }} {{ resource.attributes.name }}" class="icon-check-1 button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">{{ __('Save') }}</button>
-                    </div>
-                {{ Form.end()|raw }}
+                {% set resource = {} %}
+                <tag-form :cansave="{{ canSave|json_encode }}" :editmode="true" :obj="{{ resource|json_encode }}" :redir="{{ Url.build(redirTo)|json_encode }}"></tag-form>
             {% endif %}
         </div>
     </div>

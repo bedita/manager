@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-01-26 10:48:28 \n"
+"POT-Creation-Date: 2023-02-01 15:49:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -127,6 +127,9 @@ msgstr "Contenuti"
 
 msgid "Children order"
 msgstr "Ordinamento contenuti"
+
+msgid "Choose a file"
+msgstr "Scegli un file"
 
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
@@ -857,6 +860,9 @@ msgstr "Tipo"
 msgid "Uname"
 msgstr "Nome univoco"
 
+msgid "Undo Change File"
+msgstr "Annulla Cambio File"
+
 msgid "Unknown upload error"
 msgstr "Errore sconosciuto durante caricamento"
 
@@ -1143,6 +1149,24 @@ msgstr ""
 "File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un "
 "file che non superi la dimensione massima (${ maxFileSizeMb } MB)"
 
+msgid "File type forbidden"
+msgstr "Tipo file non consentito"
+
+msgid "Forbidden types"
+msgstr "Tipi file non consentiti"
+
+msgid "File extension forbidden"
+msgstr "Estensione file non consentita"
+
+msgid "Forbidden extensions"
+msgstr "Estensioni file non consentite"
+
+msgid "File type not accepted"
+msgstr "Tipo di file non consentito"
+
+msgid "Accepted types"
+msgstr "Tipi consentiti"
+
 msgid "stop"
 msgstr "interrompi"
 
@@ -1193,6 +1217,13 @@ msgstr "Cerca tag esistenti"
 
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
+
+#, javascript-format
+msgid "Tag ${ tagName } already exists"
+msgstr "Tag ${ tagName } esiste già"
+
+msgid "Error while saving tag"
+msgstr "Errore nel salvataggio del tag"
 
 msgid "Error on deleting tag"
 msgstr "Errore nell'eliminazione del tag"

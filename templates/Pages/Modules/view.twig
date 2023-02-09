@@ -100,7 +100,7 @@
             {# append buttons to sidebar #}
             {# Append "Save" #}
             {% if Perms.canSave() %}
-                {% do _view.append('module-buttons', Form.button( __('Save'),
+                {% do _view.append('app-module-buttons', Form.button( __('Save'),
                     {
                         'form': 'form-main',
                         'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
@@ -110,7 +110,7 @@
 
             {# Append "Clone" #}
             {% if object.id and Perms.canCreate() %}
-                {% do _view.append('module-buttons', Html.link(
+                {% do _view.append('app-module-buttons', Html.link(
                     __('Clone'),
                     {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
                     {'@click.prevent': 'clone', 'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name }
@@ -120,13 +120,13 @@
             {# Append "Lock/Unlock" #}
             {% if object.id and Perms.canLock() %}
                 {% if object.meta.locked %}
-                    {% do _view.append('module-buttons', Html.link(
+                    {% do _view.append('app-module-buttons', Html.link(
                         __('Unlock'),
                         {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
                         {'class': 'icon-lock-open button button-outlined button-outlined-hover-module-' ~ currentModule.name }
                     )) %}
                 {% else %}
-                    {% do _view.append('module-buttons', Html.link(
+                    {% do _view.append('app-module-buttons', Html.link(
                         __('Lock'),
                         {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
                         {'class': 'icon-lock button button-outlined button-outlined-hover-module-' ~ currentModule.name }
@@ -136,7 +136,7 @@
 
             {# Append "Trash (move to)" #}
             {% if object.id and Perms.canDelete(object) %}
-                {% do _view.append('module-buttons',
+                {% do _view.append('app-module-buttons',
                     Form.postButton(
                         __('Trash-verb'),
                         {'_name': 'modules:delete', 'object_type': objectType},
@@ -147,12 +147,12 @@
 
             {# Append "Prev" and "Next" #}
             {% if object.id and objectNav %}
-                {% do _view.append('module-buttons', Link.objectNav(objectNav)) %}
+                {% do _view.append('app-module-buttons', Link.objectNav(objectNav)) %}
             {% endif %}
 
             {# Append "new" button #}
             {% if object.id and Perms.canCreate() %}
-                {% do _view.append('module-buttons',
+                {% do _view.append('app-module-buttons',
                     Html.link(__('Create'),
                         {'_name': 'modules:create', 'object_type': objectType},
                         {'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name}
@@ -171,7 +171,7 @@
                         {% set url = item.url ~ '/' ~ object.id %}
                     {% endif %}
 
-                    {% do _view.append('module-buttons',
+                    {% do _view.append('app-module-buttons',
                         Html.link(__(item.label),
                             url,
                             {'class': item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name)}

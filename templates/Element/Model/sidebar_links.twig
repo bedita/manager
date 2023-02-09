@@ -1,12 +1,12 @@
     {% if in_array(resourceType, ['object_types', 'relations']) %}
-    {% do _view.append('module-buttons',
+    {% do _view.append('app-module-buttons',
         Html.link(__('Create'),
             {'_name': 'model:create:' ~ resourceType},
             {'class': 'icon-link-ext button button-primary button-primary-hover-module-model'}
         )|raw) %}
     {% endif %}
 
-    {% do _view.append('module-buttons',
+    {% do _view.append('app-module-buttons',
         Html.link(__('Export'),
             {'_name': 'model:export'},
             {'class': 'icon-export button button-outlined'}
@@ -14,9 +14,9 @@
     ) %}
 
     {# append links to sidebar #}
-    {% do _view.append('module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Categories'), {'_name': 'model:list:categories'}, { 'class': 'icon-check' })|raw) %}
-    {% do _view.append('module-links', Html.link(__('Tags'), {'_name': 'model:list:tags'}, { 'class': 'icon-check' })|raw) %}
+    {% do _view.append('app-module-links', Html.link(__('Object types'), {'_name': 'model:list:object_types'}, { 'class': 'icon-th-2' })|raw) %}
+    {% do _view.append('app-module-links', Html.link(__('Relations'), {'_name': 'model:list:relations'}, { 'class': 'icon-resize-full' })|raw) %}
+    {% do _view.append('app-module-links', Html.link(__('Property types'), {'_name': 'model:list:property_types'}, { 'class': 'icon-tasks' })|raw) %}
+    {% do _view.append('app-module-links', Html.link(__('Categories'), {'_name': 'model:list:categories'}, { 'class': 'icon-check' })|raw) %}
+    {% do _view.append('app-module-links', Html.link(__('Tags'), {'_name': 'model:list:tags'}, { 'class': 'icon-check' })|raw) %}
 

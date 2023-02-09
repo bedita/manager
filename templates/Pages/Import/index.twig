@@ -86,13 +86,13 @@
 
         <section class="fieldset">
             {# Append "Upload" to commands in commands menu. Must stay here, before the form end. #}
-            {# {% do _view.append('module-buttons', Form.submit(__('Upload'), {'form': 'form-import'})) %} #}
+            {# {% do _view.append('app-module-buttons', Form.submit(__('Upload'), {'form': 'form-import'})) %} #}
             <div class="file has-name">
                 <label class="file-label">
                     {{ Form.file('file', {
                         'class': 'file-input',
                         'accept': 'text/xml,text/csv',
-                        'v-on:change': 'onFileChanged',
+                        'v-on:change': 'onFileChange',
                     }) | raw }}
                     <span class="file-cta icon-upload">
                         <span class="file-label">Choose a file</span>

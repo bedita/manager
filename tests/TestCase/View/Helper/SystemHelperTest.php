@@ -97,4 +97,25 @@ class SystemHelperTest extends TestCase
         $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
     }
+
+    /**
+     * Test `uploadConfig`
+     *
+     * @return void
+     * @covers ::uploadConfig()
+     */
+    public function testUploadConfig(): void
+    {
+        // empty config, defaultUploadAccepted
+        $reflectionClass = new \ReflectionClass($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadAccepted');
+        $property->setAccessible(true);
+        $accepted = $property->getValue($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadForbidden');
+        $property->setAccessible(true);
+        $forbidden = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden');
+        $actual = $this->System->uploadConfig();
+        static::assertSame($expected, $actual);
+    }
 }

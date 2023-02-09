@@ -1,7 +1,7 @@
 <div class="sidebar">
 
     <div class="project-title">
-        <div class="module-box">
+        <div class="app-module-box">
             {{ Html.link( (project.name ?: 'BEdita Manager'), '/' ) | raw }}
         </div>
     </div>
@@ -12,7 +12,7 @@
 
         {% if not Layout.isDashboard() %}
             {% set editors = Editors.list() %}
-            <div class="module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ Layout.publishStatus(object | default({})) }}">
+            <div class="app-module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ Layout.publishStatus(object | default({})) }}">
                 {{ Layout.moduleLink()|raw }}
             </div>
 
@@ -27,15 +27,15 @@
             {% endif %}
         {% endif %}
 
-            <div class="module-buttons">
-                {{ _view.fetch('module-buttons')|raw }}
+            <div class="app-module-buttons">
+                {{ _view.fetch('app-module-buttons')|raw }}
                 {% if currentModule.hints.multiple_types and types.right is iterable %}
                     {{ element('filter_type') }}
                 {% endif %}
             </div>
 
-            <div class="module-links">
-                {{ _view.fetch('module-links')|raw }}
+            <div class="app-module-links">
+                {{ _view.fetch('app-module-links')|raw }}
             </div>
         </div>
     {% endif %}

@@ -145,12 +145,12 @@ vendors/bin/phpunit [test folder or file, default '/tests']
 ```
 
 To run those tests you may want to use a Docker image as BEdita4 API endpoint.
-For instance if you can pull a Docker image via ```docker pull bedita/bedita:4.7.1```
+For instance if you can pull a Docker image via ```docker pull bedita/bedita:4``` or ```docker pull bedita/bedita:5```
 
 Then you may run the image with
 
 ```bash
-docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:4.7.1
+docker run -p 8090:80 --env BEDITA_ADMIN_USR=bedita --env BEDITA_ADMIN_PWD=bedita bedita/bedita:5
 ```
 
 You can then set env vars accordingly like this:

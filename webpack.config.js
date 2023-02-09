@@ -6,7 +6,6 @@ require('./webpack.config.environment');
 
 // webpack dependencies
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
@@ -14,9 +13,6 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-
-// vue dependencies
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // config
 let jsRoot = BUNDLE.jsRoot;
@@ -60,18 +56,15 @@ let webpackPlugins = [
     }),
 
     new WebpackManifestPlugin({}),
+
+    new ESLintPlugin({
+        extensions: ['js'],
+        emitError: true,
+        emitWarning: true,
+        outputReport: true
+    }),
 ];
 
-// Development or report bundle Plugin
-if (devMode || forceReport) {
-    webpackPlugins.push(
-        new BundleAnalyzerPlugin({
-            openAnalyzer: false,
-            analyzerMode: 'static',
-            reportFilename: `bundle-report/bundle-report.${ENVIRONMENT.mode}.html`,
-        })
-    );
-}
 
 // Development Plugins
 if (devMode) {
@@ -109,15 +102,6 @@ if (devMode) {
 }
 
 module.exports = {
-    plugins: [
-        new VueLoaderPlugin(),
-        new ESLintPlugin({
-            extensions: ['js'],
-            emitError: true,
-            emitWarning: true,
-            outputReport: true
-        })
-    ],
 
     entry: {
         app: [appEntry],
@@ -241,10 +225,6 @@ module.exports = {
 
     module: {
         rules: [
-            {
-                test: /\.vue$/,
-                use: 'vue-loader'
-            },
             // if dev mode don't use babel
             devMode ? {} : {
                 test: /\.js$/,
