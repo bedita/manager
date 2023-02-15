@@ -24,7 +24,6 @@ export default {
         const element = this.el;
         let json = null;
         try {
-
             if (element?.value !== 'null' && element?.value.length  > 0) {
                 json = JSON.parse(element.value);
             }
