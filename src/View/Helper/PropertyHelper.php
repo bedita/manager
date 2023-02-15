@@ -98,7 +98,7 @@ class PropertyHelper extends Helper
         if (empty($t)) {
             return $defaultLabel;
         }
-        $key = sprintf('Properties.%s.labels.fields.%s', $t, $name);
+        $key = sprintf('Properties.%s.options.%s.label', $t, $name);
 
         return Configure::read($key, $defaultLabel);
     }

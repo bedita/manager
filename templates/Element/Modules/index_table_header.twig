@@ -8,9 +8,9 @@
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
             {% if Schema.sortable(prop) %}
-                <a href="{{ Link.sortUrl(prop) }}">{{ Layout.tr(prop) }}</a>
+                <a href="{{ Link.sortUrl(prop) }}">{{ Property.fieldLabel(prop) }}</a>
             {% else %}
-                {{ Layout.tr(prop) }}
+                {{ Property.fieldLabel(prop) }}
             {% endif %}
         </div>
     {% endfor %}
