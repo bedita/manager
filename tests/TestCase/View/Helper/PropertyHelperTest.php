@@ -316,7 +316,7 @@ class PropertyHelperTest extends TestCase
             'Properties.dummies',
             array_merge(
                 (array)\Cake\Core\Configure::read('Properties.dummies'),
-                ['labels' => ['fields' => ['about' => $expected]]]
+                ['options' => ['about' => ['label' => $expected]]]
             )
         );
         $actual = $helper->fieldLabel('about', 'dummies');

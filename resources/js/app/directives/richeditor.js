@@ -112,6 +112,7 @@ export default {
                     autoresize_bottom_margin: 50,
                     relative_urls: false,
                     paste_block_drop: true,
+                    readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                 });
 
                 element.editor = editor;
