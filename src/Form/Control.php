@@ -45,7 +45,9 @@ class Control
             return array_merge($controlOptions, $result);
         }
         if (!in_array($type, self::CONTROL_TYPES)) {
-            return compact('type') + ['value' => $options['value']];
+            $result = compact('type') + ['value' => $options['value']];
+
+            return array_merge($controlOptions, $result);
         }
         $result = call_user_func_array(Form::getMethod(self::class, $type), [$options]);
 
