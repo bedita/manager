@@ -62,7 +62,16 @@ class SchemaHelper extends Helper
     {
         $options = Options::customControl($name, $value);
         if (!empty($options)) {
-            return $options;
+            $objectType = (string)$this->_View->get('objectType');
+            $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
+            $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
+            $result = empty($ctrlOptions) ? $options : array_merge($options, [
+                'label' => Hash::get($ctrlOptions, 'label'),
+                'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+                'disabled' => Hash::get($ctrlOptions, 'readonly', false),
+            ]);
+
+            return $result;
         }
         // verify if there's an handler by $type.$name
         $objectType = (string)$this->_View->get('objectType');
@@ -83,6 +92,7 @@ class SchemaHelper extends Helper
             'propertyType' => Hash::get($ctrlOptions, 'type', $type),
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+            'disabled' => Hash::get($ctrlOptions, 'readonly', false),
         ]);
     }
 
