@@ -8,7 +8,7 @@ const API_OPTIONS = {
         'accept': 'application/json',
     }
 };
-const QUERY_MIN_LENGTH = 4;
+const QUERY_MIN_LENGTH = 3;
 
 export default {
     components: {

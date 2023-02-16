@@ -221,6 +221,10 @@ export default {
 
                 return str.substring(0, len - ellipsis.length) + ellipsis;
             },
+
+            minLength(len) {
+                return t`At least ${len} characters`;
+            },
         }
     }
 };

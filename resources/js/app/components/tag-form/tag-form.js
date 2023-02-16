@@ -23,9 +23,11 @@ export default {
 
             <div v-if="editMode">
                 <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
+                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
+                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
             </div>
             <div v-if="editMode">
                 <input type="checkbox" v-model="enabled" />
@@ -36,7 +38,7 @@ export default {
             </div>
             <div v-if="editMode">
                 <button @click.prevent="cancel" class="button button-outlined icon-backward-circled" v-if="obj?.id">${t`Cancel`}</button>
-                <button @click.prevent="save" class="button button-primary icon-check-1" :disabled="name === '' || label === ''">${t`Save`}</button>
+                <button @click.prevent="save" class="button button-primary icon-check-1" :disabled="name.length < 3 || label.length < 3">${t`Save`}</button>
                 <button @click.prevent="remove" class="button button-outlined icon-trash" v-if="obj?.id">${t`Remove`}</button>
             </div>
         </form>
