@@ -5,6 +5,7 @@ import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Folder as IconFolder } from '@carbon/icons-vue/es/folder/32.js';
 import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
 import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
+import { Logout as IconLogout } from '@carbon/icons-vue/es/logout/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Tools as IconTools } from '@carbon/icons-vue/es/tools/32.js';
 import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
@@ -79,6 +80,7 @@ const _vueInstance = new Vue({
         IconFolder: () => import(/* webpackChunkName: "icon-folder" */'@carbon/icons-vue/es/folder/32.js'),
         IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
+        IconLogout: () => import(/* webpackChunkName: "icon-logout" */'@carbon/icons-vue/es/logout/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconTools: () => import(/* webpackChunkName: "icon-tools" */'@carbon/icons-vue/es/tools/32.js'),
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
@@ -147,6 +149,7 @@ const _vueInstance = new Vue({
                 IconFolder,
                 IconGrid,
                 IconLogin,
+                IconLogout,
                 IconSearch,
                 IconTools,
                 IconTrashCan,
