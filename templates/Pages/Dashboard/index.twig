@@ -14,7 +14,7 @@
                         <span>{{ Layout.tr(module.label|default(name)) }}</span>
                         {% if module.hints.multiple_types and not module.class %}<icon-grid />{% endif %}
                         {% if name == 'publications' %}<icon-wikis />{% endif %}
-                        {% if name == 'folders' %}<icon-folder />{% endif %}
+                        {% if name == 'folders' %}<icon-tree-view />{% endif %}
                     </a>
                 {% endif %}
             {% endfor %}
