@@ -1,4 +1,6 @@
 import { t } from 'ttag';
+import ViewFilled from '@carbon/icons-vue/es/view--filled/16.js';
+import ViewOffFilled from '@carbon/icons-vue/es/view--off--filled/16.js';
 
 export default {
     template: `
@@ -18,12 +20,18 @@ export default {
             </div>
             <div>
                 <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px;" :disabled="!this.password || this.password.length == 0">
-                    <span :class="{ 'icon-eye-off': show, 'icon-eye-1': !show }"></span>
+                    <ViewFilled v-if="show"/>
+                    <ViewOffFilled v-if="!show"/>
                 </button>
             </div>
         </div>
     </div>
     `,
+
+    components: {
+        ViewFilled,
+        ViewOffFilled,
+    },
 
     data() {
         return {

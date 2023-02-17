@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import { CarbonIconsVue } from '@carbon/icons-vue';
+import Login from '@carbon/icons-vue/es/login/16.js';
 
 import 'libs/filters';
 import 'config/config';
@@ -31,6 +33,7 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
+        Login: () => import(/* webpackChunkName: "login" */'@carbon/icons-vue/es/login/16.js'),
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
         Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
@@ -115,6 +118,12 @@ const _vueInstance = new Vue({
         Vue.use(Autocomplete);
 
         Vue.use(vTitle);
+
+        Vue.use(CarbonIconsVue, {
+            components: {
+                Login,
+            },
+        });
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();

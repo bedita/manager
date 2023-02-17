@@ -51,7 +51,10 @@
             'style': 'display: none'
         })|raw }}
 
-        {{ Form.button(__('Sign in'), {'type': 'submit', 'class': 'icon-login button button-primary mt-2'})|raw }}
+        <button type="submit" class="button button-primary mt-2">
+            {{ __('Sign in') }}
+            <Login />
+        </button>
 
         <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
 
