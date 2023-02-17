@@ -446,7 +446,7 @@ class LayoutHelperTest extends TestCase
             static::assertSame('', $actual);
         }
 
-        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-trash icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span></a>';
+        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><icon-trash-can></icon-trash-can></a>';
         $actual = $layout->trashLink('dummies');
         static::assertSame($expected, $actual);
     }
