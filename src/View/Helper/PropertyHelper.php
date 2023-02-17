@@ -71,6 +71,10 @@ class PropertyHelper extends Helper
     {
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
         $controlOptions['label'] = $this->fieldLabel($name, $type);
+        $readonly = Hash::get($controlOptions, 'readonly');
+        if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
+            unset($controlOptions['v-datepicker']);
+        }
         if (Hash::get($controlOptions, 'class') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));

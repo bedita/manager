@@ -134,6 +134,26 @@ class PropertyHelperTest extends TestCase
                 ],
                 '<dummy>something</dummy>',
             ],
+            'date readonly' => [
+                'expires',
+                null,
+                ['readonly' => true],
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'string',
+                            'format' => 'date-time',
+                        ],
+                    ],
+                    '$id' => '/properties/expires',
+                    'title' => 'Expires',
+                    'description' => 'Expiration date',
+                ],
+                '<div class="input datepicker text"><label for="expires">Expires</label><input type="text" name="expires" readonly="readonly" disabled="disabled" date="true" time="true" id="expires"/></div>',
+            ],
         ];
     }
 
@@ -152,6 +172,10 @@ class PropertyHelperTest extends TestCase
      */
     public function testControl(string $key, $value, array $options = [], array $schema = [], string $expected = ''): void
     {
+        if (array_key_exists('readonly', $options)) {
+            unset($options['readonly']);
+            Configure::write(sprintf('Properties.dummies.options.%s.readonly', $key), true);
+        }
         $view = new View(null, null, null, []);
         if ($key === 'categories') {
             $schema = ['categories' => $schema];
