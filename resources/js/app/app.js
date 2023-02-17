@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { CarbonIconsVue } from '@carbon/icons-vue';
+import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Db2Database as IconDb } from '@carbon/icons-vue/es/db2--database/32.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Folder as IconFolder } from '@carbon/icons-vue/es/folder/32.js';
@@ -75,6 +76,7 @@ const _vueInstance = new Vue({
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
+        IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDb: () => import(/* webpackChunkName: "icon-db" */'@carbon/icons-vue/es/db2--database/32.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
         IconFolder: () => import(/* webpackChunkName: "icon-folder" */'@carbon/icons-vue/es/folder/32.js'),
@@ -144,6 +146,7 @@ const _vueInstance = new Vue({
 
         Vue.use(CarbonIconsVue, {
             components: {
+                IconCube,
                 IconDb,
                 IconDownload,
                 IconFolder,

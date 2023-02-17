@@ -244,12 +244,12 @@ class LayoutHelper extends Helper
             return '';
         }
 
-        $classes = sprintf('button icon icon-trash icon-only-icon has-text-module-%s', $type);
+        $classes = sprintf('button icon icon-only-icon has-text-module-%s', $type);
         $title = $this->tr($type) . __(' in Trashcan');
         $filter = ['type' => [$type]];
 
         return $this->Html->link(
-            sprintf('<span class="is-sr-only">%s</span>', __('Trash')),
+            sprintf('<span class="is-sr-only">%s</span><icon-trash-can></icon-trash-can>', __('Trash')),
             ['_name' => 'trash:list', '?' => compact('filter')],
             ['class' => $classes, 'title' => $title, 'escape' => false]
         );

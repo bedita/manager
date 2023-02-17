@@ -29,11 +29,17 @@
         <nav role="group" class="pt-05">
             {{ Layout.trashLink(currentModule.name|default(''))|raw }}
 
-            <button role="search" class="icon icon-search icon-only-icon ml-05" title="{{ __('Search') }}"
-                v-on:click.prevent="togglePopup('search')"><span class="is-sr-only">{{ __('Search') }}</span></button>
+            <button role="search" class="button icon icon-only-icon ml-05" title="{{ __('Search') }}"
+                v-on:click.prevent="togglePopup('search')">
+                <span class="is-sr-only">{{ __('Search') }}</span>
+                <icon-search></icon-search>
+            </button>
 
-            <button class="icon icon-cube icon-only-icon ml-05" title="{{ __('Direct access by id or unique name') }}"
-                v-on:click.prevent="togglePopup('id')"><span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span></button>
+            <button class="button icon icon-only-icon ml-05" title="{{ __('Direct access by id or unique name') }}"
+                v-on:click.prevent="togglePopup('id')">
+                <span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span>
+                <icon-cube></icon-cube>
+            </button>
 
             <div class="popup" v-show="this.popUpAction">
                 <input type="text" ref="searchInput" v-model="searchString" v-on:keydown.stop="captureKeys" :placeholder="popUpAction">

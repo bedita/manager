@@ -7,6 +7,11 @@
  */
 
 export default {
+    components: {
+        IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
+        IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/20.js'),
+        IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/20.js'),
+    },
     data() {
         return {
             popUpAction: '',
@@ -28,12 +33,12 @@ export default {
         captureKeys(e) {
             let key = e.which || e.keyCode || 0;
             switch (key) {
-            case 13:
-                this.go();
-                break;
-            case 27:
-                this.popUpAction = '';
-                break;
+                case 13:
+                    this.go();
+                    break;
+                case 27:
+                    this.popUpAction = '';
+                    break;
             }
         },
 
