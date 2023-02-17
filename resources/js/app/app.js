@@ -1,17 +1,17 @@
 import Vue from 'vue';
 import { CarbonIconsVue } from '@carbon/icons-vue';
+import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
-import { Db2Database as IconDb } from '@carbon/icons-vue/es/db2--database/32.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Folder as IconFolder } from '@carbon/icons-vue/es/folder/32.js';
 import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
 import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
 import { Logout as IconLogout } from '@carbon/icons-vue/es/logout/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
-import { Tools as IconTools } from '@carbon/icons-vue/es/tools/32.js';
+import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
 import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
-import { User as IconUser } from '@carbon/icons-vue/es/user/32.js';
-import { UserMultiple as IconUserMultiple } from '@carbon/icons-vue/es/user--multiple/32.js';
+import { UserAdmin as IconUserAdmin } from '@carbon/icons-vue/es/user--admin/32.js';
+import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profile/32.js';
 import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
 
 import 'libs/filters';
@@ -76,18 +76,18 @@ const _vueInstance = new Vue({
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
+        IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
-        IconDb: () => import(/* webpackChunkName: "icon-db" */'@carbon/icons-vue/es/db2--database/32.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
         IconFolder: () => import(/* webpackChunkName: "icon-folder" */'@carbon/icons-vue/es/folder/32.js'),
         IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
         IconLogout: () => import(/* webpackChunkName: "icon-logout" */'@carbon/icons-vue/es/logout/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
-        IconTools: () => import(/* webpackChunkName: "icon-tools" */'@carbon/icons-vue/es/tools/32.js'),
+        IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
-        IconUser: () => import(/* webpackChunkName: "icon-user" */'@carbon/icons-vue/es/user/32.js'),
-        IconUserMultiple: () => import(/* webpackChunkName: "icon-user-multiple" */'@carbon/icons-vue/es/user--multiple/32.js'),
+        IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
+        IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
         IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
@@ -146,18 +146,18 @@ const _vueInstance = new Vue({
 
         Vue.use(CarbonIconsVue, {
             components: {
+                IconConcept,
                 IconCube,
-                IconDb,
                 IconDownload,
                 IconFolder,
                 IconGrid,
                 IconLogin,
                 IconLogout,
                 IconSearch,
-                IconTools,
+                IconSettings,
                 IconTrashCan,
-                IconUser,
-                IconUserMultiple,
+                IconUserAdmin,
+                IconUserProfile,
                 IconWikis,
             },
         });
