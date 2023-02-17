@@ -417,6 +417,9 @@ class SchemaHelperTest extends TestCase
             ],
             'type' => 'select',
             'value' => null,
+            'label' => null,
+            'readonly' => false,
+            'disabled' => false,
         ];
         static::assertSame($expected, $actual);
     }
