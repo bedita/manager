@@ -1,6 +1,16 @@
 import Vue from 'vue';
 import { CarbonIconsVue } from '@carbon/icons-vue';
-import Login from '@carbon/icons-vue/es/login/16.js';
+import { Db2Database as IconDb } from '@carbon/icons-vue/es/db2--database/32.js';
+import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
+import { Folder as IconFolder } from '@carbon/icons-vue/es/folder/32.js';
+import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
+import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
+import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
+import { Tools as IconTools } from '@carbon/icons-vue/es/tools/32.js';
+import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
+import { User as IconUser } from '@carbon/icons-vue/es/user/32.js';
+import { UserMultiple as IconUserMultiple } from '@carbon/icons-vue/es/user--multiple/32.js';
+import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
 
 import 'libs/filters';
 import 'config/config';
@@ -33,7 +43,6 @@ const _vueInstance = new Vue({
     components: {
         PanelView,
         Autocomplete,
-        Login: () => import(/* webpackChunkName: "login" */'@carbon/icons-vue/es/login/16.js'),
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
         Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
@@ -64,6 +73,18 @@ const _vueInstance = new Vue({
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+        // icons
+        IconDb: () => import(/* webpackChunkName: "icon-db" */'@carbon/icons-vue/es/db2--database/32.js'),
+        IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
+        IconFolder: () => import(/* webpackChunkName: "icon-folder" */'@carbon/icons-vue/es/folder/32.js'),
+        IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
+        IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
+        IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
+        IconTools: () => import(/* webpackChunkName: "icon-tools" */'@carbon/icons-vue/es/tools/32.js'),
+        IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
+        IconUser: () => import(/* webpackChunkName: "icon-user" */'@carbon/icons-vue/es/user/32.js'),
+        IconUserMultiple: () => import(/* webpackChunkName: "icon-user-multiple" */'@carbon/icons-vue/es/user--multiple/32.js'),
+        IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/20.js'),
     },
 
     data() {
@@ -121,7 +142,17 @@ const _vueInstance = new Vue({
 
         Vue.use(CarbonIconsVue, {
             components: {
-                Login,
+                IconDb,
+                IconDownload,
+                IconFolder,
+                IconGrid,
+                IconLogin,
+                IconSearch,
+                IconTools,
+                IconTrashCan,
+                IconUser,
+                IconUserMultiple,
+                IconWikis,
             },
         });
 
