@@ -12,13 +12,17 @@ import { FilterReset as IconFilterReset} from '@carbon/icons-vue/es/filter--rese
 import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
 import { Launch as IconLaunch } from '@carbon/icons-vue/es/launch/16.js';
 import { List as IconList } from '@carbon/icons-vue/es/list/16.js';
+import { Locked as IconLocked } from '@carbon/icons-vue/es/locked/16.js';
 import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
 import { Logout as IconLogout } from '@carbon/icons-vue/es/logout/16.js';
+import { Replicate as IconReplicate } from '@carbon/icons-vue/es/replicate/16.js';
+import { Save as IconSave } from '@carbon/icons-vue/es/save/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
 import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
 import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
+import { Unlocked as IconUnlocked } from '@carbon/icons-vue/es/unlocked/16.js';
 import { UserAdmin as IconUserAdmin } from '@carbon/icons-vue/es/user--admin/32.js';
 import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profile/32.js';
 import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
@@ -95,13 +99,17 @@ const _vueInstance = new Vue({
         IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
         IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconList: () => import(/* webpackChunkName: "icon-list" */'@carbon/icons-vue/es/list/16.js'),
+        IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
         IconLogout: () => import(/* webpackChunkName: "icon-logout" */'@carbon/icons-vue/es/logout/16.js'),
+        IconReplicate: () => import(/* webpackChunkName: "icon-replicate" */'@carbon/icons-vue/es/replicate/16.js'),
+        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
+        IconUnlocked: () => import(/* webpackChunkName: "icon-unlocked" */'@carbon/icons-vue/es/unlocked/16.js'),
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
         IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
@@ -172,13 +180,17 @@ const _vueInstance = new Vue({
                 IconGrid,
                 IconLaunch,
                 IconList,
+                IconLocked,
                 IconLogin,
                 IconLogout,
+                IconReplicate,
+                IconSave,
                 IconSearch,
                 IconSettings,
                 IconTrashCan,
                 IconTrashCan16,
                 IconTreeView,
+                IconUnlocked,
                 IconUserAdmin,
                 IconUserProfile,
                 IconWikis,

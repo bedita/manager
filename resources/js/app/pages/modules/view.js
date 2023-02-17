@@ -17,6 +17,12 @@ export default {
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
+        // icons
+        IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
+        IconReplicate: () => import(/* webpackChunkName: "icon-replicate" */'@carbon/icons-vue/es/replicate/16.js'),
+        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
+        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        IconUnlocked: () => import(/* webpackChunkName: "icon-unlocked" */'@carbon/icons-vue/es/unlocked/16.js'),
     },
 
     props: {

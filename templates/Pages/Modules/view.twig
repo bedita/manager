@@ -100,43 +100,43 @@
             {# append buttons to sidebar #}
             {# Append "Save" #}
             {% if Perms.canSave() %}
-                {% do _view.append('app-module-buttons', Form.button( __('Save'),
-                    {
-                        'form': 'form-main',
-                        'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    })
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<button class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" form="form-main"><icon-save></icon-save><span class="ml-05">' ~ __('Save') ~ '</span></button>',
                 ) %}
             {% endif %}
 
             {# Append "Clone" #}
             {% if object.id and Perms.canCreate() %}
-                {% do _view.append('app-module-buttons', Html.link(
-                    __('Clone'),
-                    {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
-                    {'@click.prevent': 'clone', 'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                )) %}
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<a @click.prevent="clone" href="' ~ Url.build({'_name': 'modules:clone', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-replicate></icon-replicate><span class="ml-05">' ~ __('Clone') ~ '</span></a>',
+                ) %}
             {% endif %}
 
             {# Append "Lock/Unlock" #}
             {% if object.id and Perms.canLock() %}
                 {% if object.meta.locked %}
-                    {% do _view.append('app-module-buttons', Html.link(
-                        __('Unlock'),
-                        {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
-                        {'class': 'icon-lock-open button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                    )) %}
+                    {% do _view.append(
+                        'app-module-buttons',
+                        '<a href="' ~ Url.build({'_name': 'lock:remove', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-unlocked></icon-unlocked><span class="ml-05">' ~ __('Unlock') ~ '</span></a>',
+                    ) %}
                 {% else %}
-                    {% do _view.append('app-module-buttons', Html.link(
-                        __('Lock'),
-                        {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
-                        {'class': 'icon-lock button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                    )) %}
+                    {% do _view.append(
+                        'app-module-buttons',
+                        '<a href="' ~ Url.build({'_name': 'lock:add', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-locked></icon-locked><span class="ml-05">' ~ __('Lock') ~ '</span></a>',
+                    ) %}
                 {% endif %}
             {% endif %}
 
             {# Append "Trash (move to)" #}
             {% if object.id and Perms.canDelete(object) %}
-                {% do _view.append('app-module-buttons',
+                {# {% do _view.append(
+                    'app-module-buttons',
+                    '<button class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Trash-verb') ~ '</span></button>',
+                ) %} #}
+                {% do _view.append(
+                    'app-module-buttons',
                     Form.postButton(
                         __('Trash-verb'),
                         {'_name': 'modules:delete', 'object_type': objectType},
