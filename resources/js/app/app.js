@@ -84,7 +84,7 @@ const _vueInstance = new Vue({
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconUser: () => import(/* webpackChunkName: "icon-user" */'@carbon/icons-vue/es/user/32.js'),
         IconUserMultiple: () => import(/* webpackChunkName: "icon-user-multiple" */'@carbon/icons-vue/es/user--multiple/32.js'),
-        IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/20.js'),
+        IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
     data() {
