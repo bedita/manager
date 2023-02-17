@@ -118,7 +118,7 @@ ul.concurrent-editors {
     // > *:not(:last-child) { margin-bottom: $gutter;}
 
     button, .button {
-        width: $dashboard-item-width * .5;
+        width: $dashboard-item-width * .8;
     }
 
     &-bedita-logo {

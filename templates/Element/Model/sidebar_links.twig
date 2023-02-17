@@ -1,9 +1,8 @@
     {% if in_array(resourceType, ['object_types', 'relations']) %}
-    {% do _view.append('app-module-buttons',
-        Html.link(__('Create'),
-            {'_name': 'model:create:' ~ resourceType},
-            {'class': 'icon-link-ext button button-primary button-primary-hover-module-model'}
-        )|raw) %}
+        {% do _view.append(
+            'app-module-buttons',
+            '<a href="' ~ Url.build({'_name': 'model:create:' ~ resourceType}) ~ '" class="button button-primary button-primary-hover-module-model">' ~ __('Create') ~ '</a>'
+        ) %}
     {% endif %}
 
     {% do _view.append('app-module-buttons',

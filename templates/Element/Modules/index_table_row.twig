@@ -71,20 +71,20 @@
         {% else %}
 
             {% if Perms.canRead(object.type) %}
-            <button
-                title="{{ __('Edit') }} {{ object.attributes.title }}"
-                class="icon-link-ext button button-text-white is-width-auto">{{ __('Edit') }}</button>
+                <button title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
+                    <icon-launch></icon-launch>
+                    <span class="ml-05">{{ __('Edit') }}</span>
+                </button>
             {% endif %}
 
             {% if Perms.canDelete(object) %}
-                {{ Form.postButton(__('Trash-verb'),
-                    {'_name': 'modules:delete', 'object_type': object.type},
-                    {
-                        'data': {'id': object.id},
-                        'title': __('Move to trash') ~ ' ' ~ object.attributes.title|escape,
-                        'class': 'icon-trash button button-text-white is-width-auto',
-                    }
-                )|raw}}
+                {{ Form.create(null, {'url': {'_name': 'modules:delete', 'object_type': object.type}})|raw }}
+                    {{ Form.hidden('id', {'value': object.id})|raw }}
+                    <button title="{{ __('Move to trash') ~ ' ' ~ object.attributes.title|escape }}" class="button button-text-white is-width-auto">
+                        <icon-trash-can-16></icon-trash-can-16>
+                        <span class="ml-05">{{ __('Trash-verb') }}</span>
+                    </button>
+                {{ Form.end()|raw }}
             {% endif %}
 
         {% endif %}
