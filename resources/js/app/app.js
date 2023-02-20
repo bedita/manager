@@ -32,9 +32,11 @@ import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
 import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
 import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
+import { Undo as IconUndo } from '@carbon/icons-vue/es/undo/16.js';
 import { Unlocked as IconUnlocked } from '@carbon/icons-vue/es/unlocked/16.js';
 import { UserAdmin as IconUserAdmin } from '@carbon/icons-vue/es/user--admin/32.js';
 import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profile/32.js';
+import { View as IconView } from '@carbon/icons-vue/es/view/16.js';
 import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
 
 import 'libs/filters';
@@ -130,9 +132,11 @@ const _vueInstance = new Vue({
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
+        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
         IconUnlocked: () => import(/* webpackChunkName: "icon-unlocked" */'@carbon/icons-vue/es/unlocked/16.js'),
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
+        IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
         IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
@@ -221,9 +225,11 @@ const _vueInstance = new Vue({
                 IconTrashCan,
                 IconTrashCan16,
                 IconTreeView,
+                IconUndo,
                 IconUnlocked,
                 IconUserAdmin,
                 IconUserProfile,
+                IconView,
                 IconWikis,
             },
         });

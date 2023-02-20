@@ -9,4 +9,7 @@
     {% endif %}
 {% endfor %}
 
-{% do _view.append('app-module-links', '<a style="width: 170px;" href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="icon-cancel button button-primary button-primary-hover-module-admin is-width-auto">' ~ __('Clear cache') ~ '</a>') %}
+{% do _view.append(
+    'app-module-links',
+    '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-primary button-primary-hover-module-admin is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Clear cache') ~ '</span></a>'
+) %}

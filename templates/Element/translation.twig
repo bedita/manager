@@ -87,8 +87,9 @@
                                 'disabled' : true,
                             }) %}
                             {{ Form.control('lang', options)|raw }}
-                            <a class="icon-link-ext button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
-                                {{ __('Edit') }}
+                            <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
+                                <icon-launch></icon-launch>
+                                <span class="ml-05">{{ __('Edit') }}</span>
                             </a>
                         </div>
                         {% for key in translatable %}
@@ -117,17 +118,13 @@
             {{ Form.end()|raw }}
 
             {# Append "Save" to sidebar #}
-            {% do _view.append('app-module-buttons', Form.button( __('Save'),
-                {
-                    'form': 'form-translate',
-                    'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    'onclick': 'this.classList.add(\'is-loading-spinner\')',
-                })
+            {% do _view.append('app-module-buttons',
+                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><icon-save></icon-save><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
 
             {% if translation.id %}
                 {# Append "Remove" to sidebar #}
-                {% do _view.append('app-module-buttons', Form.postButton(__('Remove'),
+                {% do _view.append('app-module-buttons',Form.postButton(__('Remove'),
                     {
                         '_name': 'translations:delete',
                         'object_type': objectType
