@@ -130,14 +130,16 @@
                     @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
 
                 <button v-else
-                    class="icon-hdd"
                     @click.prevent.stop="addRelatedObjects({
                         object: {{object|json_encode}},
                         relationName: relationName,
                         relationLabel: relationLabel,
                         alreadyInView: alreadyInView,
                         relationTypes: relationTypes,
-                    })">{{ __('add objects') }}</button>
+                    })">
+                        <icon-add></icon-add>
+                        <span class="ml-05">{{ __('add objects') }}</span>
+                    </button>
             </div>
         </div>
         {% endif %} {# Perms #}

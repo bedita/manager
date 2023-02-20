@@ -33,6 +33,9 @@ export default {
         History: () => import(/* webpackChunkName: "history" */'app/components/history/history'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
+        // icons
+        IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
+        IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
     },
 
     props: {

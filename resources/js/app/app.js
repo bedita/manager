@@ -12,8 +12,10 @@ import { Filter as IconFilter } from '@carbon/icons-vue/es/filter/16.js';
 import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/16.js';
 import { FilterReset as IconFilterReset} from '@carbon/icons-vue/es/filter--reset/16.js';
 import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
+import { Grid as IconGrid16 } from '@carbon/icons-vue/es/grid/16.js';
 import { Launch as IconLaunch } from '@carbon/icons-vue/es/launch/16.js';
 import { List as IconList } from '@carbon/icons-vue/es/list/16.js';
+import { ListBulleted as IconListBulleted16 } from '@carbon/icons-vue/es/list--bulleted/16.js';
 import { Locked as IconLocked } from '@carbon/icons-vue/es/locked/16.js';
 import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
 import { Logout as IconLogout } from '@carbon/icons-vue/es/logout/16.js';
@@ -102,8 +104,10 @@ const _vueInstance = new Vue({
         IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
         IconFilterReset: () => import(/* webpackChunkName: "icon-filter-reset" */'@carbon/icons-vue/es/filter--reset/16.js'),
         IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
+        IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
         IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconList: () => import(/* webpackChunkName: "icon-list" */'@carbon/icons-vue/es/list/16.js'),
+        IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
         IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
         IconLogout: () => import(/* webpackChunkName: "icon-logout" */'@carbon/icons-vue/es/logout/16.js'),
@@ -185,8 +189,10 @@ const _vueInstance = new Vue({
                 IconFilterEdit,
                 IconFilterReset,
                 IconGrid,
+                IconGrid16,
                 IconLaunch,
                 IconList,
+                IconListBulleted16,
                 IconLocked,
                 IconLogin,
                 IconLogout,

@@ -36,6 +36,10 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
+        // icons
+        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
+        IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
     },
 
     props: {
