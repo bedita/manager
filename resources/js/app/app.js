@@ -7,6 +7,7 @@ import { ChartRelationship as IconChartRelationship } from '@carbon/icons-vue/es
 import { Checkmark as IconCheckmark } from '@carbon/icons-vue/es/checkmark/16.js';
 import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--left/20.js';
 import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--right/20.js';
+import { Close as IconClose } from '@carbon/icons-vue/es/close/16.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
@@ -108,6 +109,7 @@ const _vueInstance = new Vue({
         IconCheckmark: () => import(/* webpackChunkName: "icon-checkmark" */'@carbon/icons-vue/es/checkmark/16.js'),
         IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
         IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
+        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
@@ -202,6 +204,7 @@ const _vueInstance = new Vue({
                 IconCheckmark,
                 IconChevronLeft,
                 IconChevronRight,
+                IconClose,
                 IconConcept,
                 IconCube,
                 IconDownload,

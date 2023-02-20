@@ -28,6 +28,11 @@ import Vue from 'vue';
  * Event bus to communicate from/to PanelView
  */
 export const PanelEvents = new Vue({
+    components: {
+        // icons
+        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
+    },
     methods: {
         /**
          * set listener for events and if "from" is set, it extract its _uid and use it to match the evant signature

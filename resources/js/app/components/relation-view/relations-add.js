@@ -35,6 +35,9 @@ export default {
 
     components: {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
+        // icons
+        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
     },
 
     props: {

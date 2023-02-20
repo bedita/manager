@@ -126,8 +126,10 @@
             {% endif %}
 
             <div>
-                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-cancel"
-                    @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+                <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
+                    <icon-close></icon-close>
+                    <span class="ml-05">{{ __('cancel') }}</span>
+                </button>
 
                 <button v-else
                     @click.prevent.stop="addRelatedObjects({

@@ -21,6 +21,7 @@ export default {
         // icons
         IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
         IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
+        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/16.js'),
         IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
