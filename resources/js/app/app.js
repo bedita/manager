@@ -3,6 +3,7 @@ import Vue from 'vue';
 /* icons */
 import { CarbonIconsVue } from '@carbon/icons-vue';
 import { Add as IconAdd } from '@carbon/icons-vue/es/add/16.js';
+import { Categories as IconCategories } from '@carbon/icons-vue/es/categories/16.js';
 import { ChartRelationship as IconChartRelationship } from '@carbon/icons-vue/es/chart--relationship/16.js';
 import { Checkmark as IconCheckmark } from '@carbon/icons-vue/es/checkmark/16.js';
 import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--left/20.js';
@@ -40,6 +41,8 @@ import { Unlocked as IconUnlocked } from '@carbon/icons-vue/es/unlocked/16.js';
 import { UserAdmin as IconUserAdmin } from '@carbon/icons-vue/es/user--admin/32.js';
 import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profile/32.js';
 import { View as IconView } from '@carbon/icons-vue/es/view/16.js';
+import { ViewFilled as IconViewFilled } from '@carbon/icons-vue/es/view--filled/16.js';
+import { ViewOffFilled as IconViewOffFilled } from '@carbon/icons-vue/es/view--off--filled/16.js';
 import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
 
 import 'libs/filters';
@@ -106,6 +109,7 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
         IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconCategories: () => import(/* webpackChunkName: "icon-categories" */'@carbon/icons-vue/es/categories/16.js'),
         IconChartRelationship: () => import(/* webpackChunkName: "icon-chart-relationship" */'@carbon/icons-vue/es/chart--relationship/16.js'),
         IconCheckmark: () => import(/* webpackChunkName: "icon-checkmark" */'@carbon/icons-vue/es/checkmark/16.js'),
         IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
@@ -143,6 +147,8 @@ const _vueInstance = new Vue({
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
         IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
+        IconViewFilled: () => import(/* webpackChunkName: "icon-view-filled" */'@carbon/icons-vue/es/view--filled/16.js'),
+        IconViewOffFilled: () => import(/* webpackChunkName: "icon-view-off-filled" */'@carbon/icons-vue/es/view--off--filled/16.js'),
         IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
@@ -202,6 +208,7 @@ const _vueInstance = new Vue({
         Vue.use(CarbonIconsVue, {
             components: {
                 IconAdd,
+                IconCategories,
                 IconChartRelationship,
                 IconCheckmark,
                 IconChevronLeft,
@@ -239,6 +246,8 @@ const _vueInstance = new Vue({
                 IconUserAdmin,
                 IconUserProfile,
                 IconView,
+                IconViewFilled,
+                IconViewOffFilled,
                 IconWikis,
             },
         });

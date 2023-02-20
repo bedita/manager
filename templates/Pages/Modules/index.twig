@@ -59,7 +59,7 @@
         {% if schema.properties.categories %}
             {% do _view.append(
                 'app-module-buttons',
-                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><icon-launch></icon-launch><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
+                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><icon-categories></icon-categories><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
             ) %}
         {% endif %}
 
