@@ -17,6 +17,11 @@ export default {
     components: {
         AutosizeTextarea: () => import(/* webpackChunkName: "autosize-textarea" */'app/components/autosize-textarea'),
         TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
+        // icons
+        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
+        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
+        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
     },
 
     props: {

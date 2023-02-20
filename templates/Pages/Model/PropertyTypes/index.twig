@@ -33,7 +33,7 @@
 
                     {% set propIndex = loop.index0 %}
                     <div class="first-cell">{{ resource.id }}
-                        <i v-if="containsId(editPropertyTypes, {{ resource.id }})" class="icon-pencil"></i>
+                        <icon-edit v-if="containsId(editPropertyTypes, {{ resource.id }})"></icon-edit>
                     </div>
 
                     {% for prop in properties %}
@@ -64,8 +64,12 @@
                     {% endfor %}
 
                     <div class="action-cell">
-                        <button class="center-icon icon-trash inverted remove-action" @click.prevent="removePropertyType({{resource.id}})"></button>
-                        <button class="center-icon icon-ccw inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})"></button>
+                        <button class="center-icon inverted remove-action" @click.prevent="removePropertyType({{resource.id}})">
+                            <icon-trash-can-16></icon-trash-can-16>
+                        </button>
+                        <button class="center-icon inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})">
+                            <icon-undo></icon-undo>
+                        </button>
                     </div>
                 </div>
             {% else %}
@@ -79,7 +83,7 @@
 
                 <div class="first-cell">
                     <: propertyType.id :>
-                    <i v-if="containsId(editPropertyTypes, propertyType.id)" class="icon-pencil"></i>
+                    <icon-edit v-if="containsId(editPropertyTypes, propertyType.id)"></icon-edit>
                 </div>
                 <div class="primary">
                     <input type="text" name="" placeholder="name"
@@ -95,8 +99,12 @@
                     </autosize-textarea>
                 </div>
                 <div class="action-cell">
-                    <button class="center-icon icon-trash inverted remove-action" @click="removePropertyType(propertyType.id)"></button>
-                    <button class="center-icon icon-ccw inverted undo-remove-action" @click="undoRemovePropertyType(propertyType.id)"></button>
+                    <button class="center-icon inverted remove-action" @click="removePropertyType(propertyType.id)">
+                        <icon-trash-can-16></icon-trash-can-16>
+                    </button>
+                    <button class="center-icon inverted undo-remove-action" @click="undoRemovePropertyType(propertyType.id)">
+                        <icon-undo></icon-undo>
+                    </button>
                 </div>
             </div>
 
@@ -119,7 +127,10 @@
 
             <div class="index-entry">
                 <div v-if="formIsModified">
-                    <button @click.prevent.stop="save" class="icon-check-1 button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">{{ __('Save') }}</button>
+                    <button @click.prevent.stop="save" class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">
+                        <icon-save></icon-save>
+                        <span class="ml-05">{{ __('Save') }}</span>
+                    </button>
                 </div>
             </div>
             </form>
