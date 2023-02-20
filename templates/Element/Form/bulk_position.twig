@@ -26,11 +26,12 @@
         {% do Form.unlockField('ids') %}
 
         <button
-            class="icon-ok button button-outlined"
+            class="button button-outlined"
             @click.prevent="bulkActions('bulk-folder')"
             :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
         >
-            {{ __('Ok') }}
+            <icon-checkmark></icon-checkmark>
+            <span class="ml-05">{{ __('Ok') }}</span>
         </button>
     </div>
 {{ Form.end()|raw }}

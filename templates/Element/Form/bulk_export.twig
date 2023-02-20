@@ -23,7 +23,10 @@
             {% do Form.unlockField('ids') %}
             {{ Form.hidden('objectType', {'value': objectType})|raw }}
 
-            <button class="icon-export button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">{{ __('Export') }}</button>
+            <button class="button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">
+                <icon-export></icon-export>
+                <span class="ml-05">{{ __('Export') }}</span>
+            </button>
 
             {# Export all or filtered #}
             {% if _view.request.getQuery('filter') %}
@@ -36,7 +39,10 @@
                 {% set exportLabel = __('Export Filtered') %}
             {% endif %}
 
-            <button class="icon-export button button-outlined" @click.prevent="exportAll">{{ exportLabel }}</button>
+            <button class="button button-outlined" @click.prevent="exportAll">
+                <icon-export></icon-export>
+                <span class="ml-05">{{ exportLabel }}</span>
+            </button>
         </div>
     {{ Form.end()|raw }}
 {% endif %}

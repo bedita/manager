@@ -3,11 +3,13 @@ import Vue from 'vue';
 /* icons */
 import { CarbonIconsVue } from '@carbon/icons-vue';
 import { Add as IconAdd } from '@carbon/icons-vue/es/add/16.js';
+import { Checkmark as IconCheckmark } from '@carbon/icons-vue/es/checkmark/16.js';
 import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--left/20.js';
 import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--right/20.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
+import { Export as IconExport } from '@carbon/icons-vue/es/export/16.js';
 import { Filter as IconFilter } from '@carbon/icons-vue/es/filter/16.js';
 import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/16.js';
 import { FilterReset as IconFilterReset} from '@carbon/icons-vue/es/filter--reset/16.js';
@@ -95,11 +97,13 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
         IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconCheckmark: () => import(/* webpackChunkName: "icon-checkmark" */'@carbon/icons-vue/es/checkmark/16.js'),
         IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
         IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
+        IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
         IconFilter: () => import(/* webpackChunkName: "icon-filter" */'@carbon/icons-vue/es/filter/16.js'),
         IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
         IconFilterReset: () => import(/* webpackChunkName: "icon-filter-reset" */'@carbon/icons-vue/es/filter--reset/16.js'),
@@ -180,11 +184,13 @@ const _vueInstance = new Vue({
         Vue.use(CarbonIconsVue, {
             components: {
                 IconAdd,
+                IconCheckmark,
                 IconChevronLeft,
                 IconChevronRight,
                 IconConcept,
                 IconCube,
                 IconDownload,
+                IconExport,
                 IconFilter,
                 IconFilterEdit,
                 IconFilterReset,
