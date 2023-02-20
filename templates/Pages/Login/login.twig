@@ -53,7 +53,7 @@
 
         <button type="submit" class="button button-primary mt-2">
             {{ __('Sign in') }}
-            <icon-login />
+            <icon-login></icon-login>
         </button>
 
         <p class="help">{{ Html.link(__('Forgot your password?'), {'_name': 'password:reset'})|raw }}</p>
@@ -67,10 +67,11 @@
         {% set providers = config('OAuth2Providers')|default([])|keys %}
         {% for provider in providers %}
         {% if config('OAuth2Providers.' ~ provider  ~ '.setup.clientId') %}
-        <br><br>
-        <a class="icon-login button button-primary" href="{{ Url.build({'_name': 'login:oauth2', 'provider': provider}) }}">
-            {{ __('Sign in with {0}', provider) }}
-        </a>
+            <br><br>
+            <a class="button button-primary" href="{{ Url.build({'_name': 'login:oauth2', 'provider': provider}) }}">
+                {{ __('Sign in with {0}', provider) }}
+                <icon-login></icon-login>
+            </a>
         {% endif %}
         {% endfor %}
     </div>
