@@ -3,12 +3,14 @@ import Vue from 'vue';
 /* icons */
 import { CarbonIconsVue } from '@carbon/icons-vue';
 import { Add as IconAdd } from '@carbon/icons-vue/es/add/16.js';
+import { ChartRelationship as IconChartRelationship } from '@carbon/icons-vue/es/chart--relationship/16.js';
 import { Checkmark as IconCheckmark } from '@carbon/icons-vue/es/checkmark/16.js';
 import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--left/20.js';
 import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--right/20.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
+import { Edit as IconEdit } from '@carbon/icons-vue/es/edit/16.js';
 import { Export as IconExport } from '@carbon/icons-vue/es/export/16.js';
 import { Filter as IconFilter } from '@carbon/icons-vue/es/filter/16.js';
 import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/16.js';
@@ -25,6 +27,8 @@ import { Replicate as IconReplicate } from '@carbon/icons-vue/es/replicate/16.js
 import { Save as IconSave } from '@carbon/icons-vue/es/save/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
+import { Switcher as IconSwitcher } from '@carbon/icons-vue/es/switcher/16.js';
+import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
 import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
 import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
@@ -97,12 +101,14 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
         IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconChartRelationship: () => import(/* webpackChunkName: "icon-chart-relationship" */'@carbon/icons-vue/es/chart--relationship/16.js'),
         IconCheckmark: () => import(/* webpackChunkName: "icon-checkmark" */'@carbon/icons-vue/es/checkmark/16.js'),
         IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
         IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
+        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
         IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
         IconFilter: () => import(/* webpackChunkName: "icon-filter" */'@carbon/icons-vue/es/filter/16.js'),
         IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
@@ -119,6 +125,8 @@ const _vueInstance = new Vue({
         IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
+        IconSwitcher: () => import(/* webpackChunkName: "icon-switcher" */'@carbon/icons-vue/es/switcher/16.js'),
+        IconTag: () => import(/* webpackChunkName: "icon-tag" */'@carbon/icons-vue/es/tag/16.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
         IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
@@ -184,12 +192,14 @@ const _vueInstance = new Vue({
         Vue.use(CarbonIconsVue, {
             components: {
                 IconAdd,
+                IconChartRelationship,
                 IconCheckmark,
                 IconChevronLeft,
                 IconChevronRight,
                 IconConcept,
                 IconCube,
                 IconDownload,
+                IconEdit,
                 IconExport,
                 IconFilter,
                 IconFilterEdit,
@@ -206,6 +216,8 @@ const _vueInstance = new Vue({
                 IconSave,
                 IconSearch,
                 IconSettings,
+                IconSwitcher,
+                IconTag,
                 IconTrashCan,
                 IconTrashCan16,
                 IconTreeView,
