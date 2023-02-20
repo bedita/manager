@@ -3,6 +3,8 @@ import Vue from 'vue';
 /* icons */
 import { CarbonIconsVue } from '@carbon/icons-vue';
 import { Add as IconAdd } from '@carbon/icons-vue/es/add/16.js';
+import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--left/20.js';
+import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--right/20.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
@@ -71,6 +73,7 @@ const _vueInstance = new Vue({
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        ObjectNav: () => import(/* webpackChunkName: "object-nav" */'app/components/object-nav/object-nav'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
@@ -90,6 +93,8 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         // icons
         IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
+        IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
@@ -171,6 +176,8 @@ const _vueInstance = new Vue({
         Vue.use(CarbonIconsVue, {
             components: {
                 IconAdd,
+                IconChevronLeft,
+                IconChevronRight,
                 IconConcept,
                 IconCube,
                 IconDownload,

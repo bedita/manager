@@ -658,60 +658,6 @@ class LinkHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testObjectNav` test case.
-     *
-     * @return array
-     */
-    public function objectNavProvider(): array
-    {
-        return [
-            'empty' => [
-                [], // $data
-                '<div class="listobjnav">‹›<div>0 / 0</div></div>', // $expected
-            ],
-            'only next' => [
-                [
-                    'next' => 2,
-                    'index' => 1,
-                    'total' => 10,
-                ], // $data
-                '<div class="listobjnav">‹<a href="/view/2">›</a><div>1 / 10</div></div>', // $expected
-            ],
-            'only prev' => [
-                [
-                    'prev' => 9,
-                    'index' => 10,
-                    'total' => 10,
-                ], // $data
-                '<div class="listobjnav"><a href="/view/9">‹</a>›<div>10 / 10</div></div>', // $expected
-            ],
-            'full' => [
-                [
-                    'prev' => 4,
-                    'next' => 6,
-                    'index' => 5,
-                    'total' => 10,
-                ], // $data
-                '<div class="listobjnav"><a href="/view/4">‹</a><a href="/view/6">›</a><div>5 / 10</div></div>', // $expected
-            ],
-        ];
-    }
-
-    /**
-     * Test `objectNav`
-     *
-     * @dataProvider objectNavProvider()
-     * @covers ::objectNav()
-     */
-    public function testObjectNav($data, $expected): void
-    {
-        $request = $response = $events = null;
-        $link = new LinkHelper(new View($request, $response, $events, $data));
-        $result = $link->objectNav($data);
-        static::assertSame($expected, $result);
-    }
-
-    /**
      * Create sample files
      *
      * @return void
