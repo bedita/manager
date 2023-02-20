@@ -41,7 +41,10 @@ export default {
         IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
         IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
         IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
+        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
+        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
+        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
     },
 
     props: {
@@ -754,7 +757,10 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return !!relations.find((rel) => rel.id === id);
+            if (!relations || !id) {
+                return false;
+            }
+            return !!relations?.find((rel) => rel.id === id);
         },
 
         /**
