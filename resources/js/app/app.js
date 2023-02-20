@@ -11,6 +11,7 @@ import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Edit as IconEdit } from '@carbon/icons-vue/es/edit/16.js';
+import { Error as IconError } from '@carbon/icons-vue/es/error/16.js';
 import { Export as IconExport } from '@carbon/icons-vue/es/export/16.js';
 import { Filter as IconFilter } from '@carbon/icons-vue/es/filter/16.js';
 import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/16.js';
@@ -111,6 +112,7 @@ const _vueInstance = new Vue({
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
         IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
+        IconError: () => import(/* webpackChunkName: "icon-error" */'@carbon/icons-vue/es/error/16.js'),
         IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
         IconFilter: () => import(/* webpackChunkName: "icon-filter" */'@carbon/icons-vue/es/filter/16.js'),
         IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
@@ -204,6 +206,7 @@ const _vueInstance = new Vue({
                 IconCube,
                 IconDownload,
                 IconEdit,
+                IconError,
                 IconExport,
                 IconFilter,
                 IconFilterEdit,
