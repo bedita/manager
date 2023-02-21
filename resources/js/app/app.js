@@ -34,6 +34,7 @@ import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
 import { Switcher as IconSwitcher } from '@carbon/icons-vue/es/switcher/16.js';
 import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
+import { TrashCan as IconTrashCan20 } from '@carbon/icons-vue/es/trash-can/20.js';
 import { TrashCan as IconTrashCan32 } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
 import { Undo as IconUndo } from '@carbon/icons-vue/es/undo/16.js';
@@ -141,6 +142,7 @@ const _vueInstance = new Vue({
         IconSwitcher: () => import(/* webpackChunkName: "icon-switcher" */'@carbon/icons-vue/es/switcher/16.js'),
         IconTag: () => import(/* webpackChunkName: "icon-tag" */'@carbon/icons-vue/es/tag/16.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        IconTrashCan20: () => import(/* webpackChunkName: "icon-trash-can-20" */'@carbon/icons-vue/es/trash-can/20.js'),
         IconTrashCan32: () => import(/* webpackChunkName: "icon-trash-can-32" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
         IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
@@ -241,6 +243,7 @@ const _vueInstance = new Vue({
                 IconSwitcher,
                 IconTag,
                 IconTrashCan16,
+                IconTrashCan20,
                 IconTrashCan32,
                 IconTreeView,
                 IconUndo,
