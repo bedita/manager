@@ -426,9 +426,7 @@ class TranslationsControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                ['object_id' => 1234567789],
-            ],
+            'post' => ['object_id' => 1234567789],
             'params' => [
                 'object_type' => 'documents',
             ],
@@ -448,9 +446,7 @@ class TranslationsControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                ['id' => 1234567789],
-            ],
+            'post' => ['id' => 1234567789],
             'params' => [
                 'object_type' => 'documents',
             ],
@@ -470,9 +466,7 @@ class TranslationsControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => [
-                ['id' => 1234567789, 'object_id' => 9999999999],
-            ],
+            'post' => ['id' => 1234567789, 'object_id' => 9999999999],
             'params' => [
                 'object_type' => 'documents',
             ],
