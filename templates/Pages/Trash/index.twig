@@ -38,7 +38,7 @@
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
                         <button @click.prevent="restoreItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
-                            <icon-launch></icon-launch>
+                            <icon-redo></icon-redo>
                             <span class="ml-05">{{ __('Restore') }}</span>
                         </button>
                     {{ Form.end()|raw }}

@@ -12,9 +12,9 @@
                     {% set url = module.route ? Url.build(module.route) : Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
                     <a href="{{ url }}" class="{{ class }}">
                         <span>{{ Layout.tr(module.label|default(name)) }}</span>
-                        {% if module.hints.multiple_types and not module.class %}<icon-grid />{% endif %}
-                        {% if name == 'publications' %}<icon-wikis />{% endif %}
-                        {% if name == 'folders' %}<icon-tree-view />{% endif %}
+                        {% if module.hints.multiple_types and not module.class %}<icon-grid-32></icon-grid-32>{% endif %}
+                        {% if name == 'publications' %}<icon-wikis></icon-wikis>{% endif %}
+                        {% if name == 'folders' %}<icon-tree-view></icon-tree-view>{% endif %}
                     </a>
                 {% endif %}
             {% endfor %}
@@ -32,7 +32,7 @@
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
                         {{ __('Trash can') }}
-                        <icon-trash-can></icon-trash-can>
+                        <icon-trash-can-32></icon-trash-can-32>
                     </a>
                 {% endif %}
 

@@ -18,22 +18,23 @@ import { Export as IconExport } from '@carbon/icons-vue/es/export/16.js';
 import { Filter as IconFilter } from '@carbon/icons-vue/es/filter/16.js';
 import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/16.js';
 import { FilterReset as IconFilterReset} from '@carbon/icons-vue/es/filter--reset/16.js';
-import { Grid as IconGrid } from '@carbon/icons-vue/es/grid/32.js';
 import { Grid as IconGrid16 } from '@carbon/icons-vue/es/grid/16.js';
+import { Grid as IconGrid32 } from '@carbon/icons-vue/es/grid/32.js';
 import { Launch as IconLaunch } from '@carbon/icons-vue/es/launch/16.js';
 import { List as IconList } from '@carbon/icons-vue/es/list/16.js';
 import { ListBulleted as IconListBulleted16 } from '@carbon/icons-vue/es/list--bulleted/16.js';
 import { Locked as IconLocked } from '@carbon/icons-vue/es/locked/16.js';
 import { Login as IconLogin } from '@carbon/icons-vue/es/login/16.js';
 import { Logout as IconLogout } from '@carbon/icons-vue/es/logout/16.js';
+import { Redo as IconRedo } from '@carbon/icons-vue/es/redo/16.js';
 import { Replicate as IconReplicate } from '@carbon/icons-vue/es/replicate/16.js';
 import { Save as IconSave } from '@carbon/icons-vue/es/save/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
 import { Switcher as IconSwitcher } from '@carbon/icons-vue/es/switcher/16.js';
 import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
-import { TrashCan as IconTrashCan } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
+import { TrashCan as IconTrashCan32 } from '@carbon/icons-vue/es/trash-can/32.js';
 import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
 import { Undo as IconUndo } from '@carbon/icons-vue/es/undo/16.js';
 import { Unlink as IconUnlink } from '@carbon/icons-vue/es/unlink/16.js';
@@ -124,14 +125,15 @@ const _vueInstance = new Vue({
         IconFilter: () => import(/* webpackChunkName: "icon-filter" */'@carbon/icons-vue/es/filter/16.js'),
         IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
         IconFilterReset: () => import(/* webpackChunkName: "icon-filter-reset" */'@carbon/icons-vue/es/filter--reset/16.js'),
-        IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
         IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
+        IconGrid32: () => import(/* webpackChunkName: "icon-grid-32" */'@carbon/icons-vue/es/grid/32.js'),
         IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconList: () => import(/* webpackChunkName: "icon-list" */'@carbon/icons-vue/es/list/16.js'),
         IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
         IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
         IconLogout: () => import(/* webpackChunkName: "icon-logout" */'@carbon/icons-vue/es/logout/16.js'),
+        IconRedo: () => import(/* webpackChunkName: "icon-redo" */'@carbon/icons-vue/es/redo/16.js'),
         IconReplicate: () => import(/* webpackChunkName: "icon-replicate" */'@carbon/icons-vue/es/replicate/16.js'),
         IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
@@ -139,7 +141,7 @@ const _vueInstance = new Vue({
         IconSwitcher: () => import(/* webpackChunkName: "icon-switcher" */'@carbon/icons-vue/es/switcher/16.js'),
         IconTag: () => import(/* webpackChunkName: "icon-tag" */'@carbon/icons-vue/es/tag/16.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
+        IconTrashCan32: () => import(/* webpackChunkName: "icon-trash-can-32" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
         IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
         IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
@@ -223,22 +225,23 @@ const _vueInstance = new Vue({
                 IconFilter,
                 IconFilterEdit,
                 IconFilterReset,
-                IconGrid,
                 IconGrid16,
+                IconGrid32,
                 IconLaunch,
                 IconList,
                 IconListBulleted16,
                 IconLocked,
                 IconLogin,
                 IconLogout,
+                IconRedo,
                 IconReplicate,
                 IconSave,
                 IconSearch,
                 IconSettings,
                 IconSwitcher,
                 IconTag,
-                IconTrashCan,
                 IconTrashCan16,
+                IconTrashCan32,
                 IconTreeView,
                 IconUndo,
                 IconUnlink,

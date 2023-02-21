@@ -11,11 +11,11 @@ export default {
     components: {
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
-        IconGrid: () => import(/* webpackChunkName: "icon-grid" */'@carbon/icons-vue/es/grid/32.js'),
+        IconGrid32: () => import(/* webpackChunkName: "icon-grid-32" */'@carbon/icons-vue/es/grid/32.js'),
         IconLogin: () => import(/* webpackChunkName: "icon-login" */'@carbon/icons-vue/es/login/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
-        IconTrashCan: () => import(/* webpackChunkName: "icon-trash-can" */'@carbon/icons-vue/es/trash-can/32.js'),
+        IconTrashCan32: () => import(/* webpackChunkName: "icon-trash-can-32" */'@carbon/icons-vue/es/trash-can/32.js'),
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
