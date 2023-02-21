@@ -123,20 +123,15 @@
             ) %}
 
             {% if translation.id %}
+                {{ Form.create(null, {'id': 'form-delete-translation', 'url': Url.build({'_name': 'translations:delete', 'object_type': objectType})})|raw }}
+                    {{ Form.hidden('id', {'value': translation.id})|raw }}
+                    {{ Form.hidden('object_id', {'value': object.id})|raw }}
+                    {{ Form.hidden('lang', {'value': translation.attributes.lang})|raw }}
+                {{ Form.end()|raw }}
                 {# Append "Remove" to sidebar #}
-                {% do _view.append('app-module-buttons',Form.postButton(__('Remove'),
-                    {
-                        '_name': 'translations:delete',
-                        'object_type': objectType
-                    },
-                    {
-                        'data': [{
-                            'id': translation.id,
-                            'object_id': object.id,
-                            'lang': translation.attributes.lang
-                        }],
-                        'class': 'icon-cancel button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    })
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
                 ) %}
             {% endif %}
 
