@@ -41,8 +41,17 @@
         {{ Form.end()|raw }}
 
         {# Append "Delete" and "Restore" to commands in commands menu. #}
-        {% do _view.append('app-module-buttons', Form.postButton(__('Restore'), {'_name': 'trash:restore'}, {'data': {'id': object.id}})) %}
-        {% do _view.append('app-module-buttons', Form.postButton(__('Delete'), {'_name': 'trash:delete'}, {'data': {'id': object.id}})) %}
+        {{ Form.create(null, {'id': 'form-restore-object', 'url': Url.build({'_name': 'trash:restore'})})|raw }}
+            {{ Form.hidden('id', {'value': object.id})|raw }}
+        {{ Form.end()|raw }}
+        {{ Form.create(null, {'id': 'form-delete-object', 'url': Url.build({'_name': 'trash:delete'})})|raw }}
+            {{ Form.hidden('id', {'value': object.id})|raw }}
+        {{ Form.end()|raw }}
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-restore-object" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><icon-redo></icon-redo><span class="ml-05">' ~ __('Restore') ~ '</span></button>'
+            ~ '<button form="form-delete-object" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Delete') ~ '</span></button>'
+        ) %}
     </div>
 
 </div>
