@@ -89,13 +89,13 @@
             }
         )) %}
         {% if not resource.meta.core_type %}
-            {% do _view.append('app-module-buttons', Form.postButton(__('Remove'),
-                {
-                    '_name': 'model:remove:object_types',
-                    'id': resource.id,
-                    'class': 'icon-cancel button button-outlined button-outlined-hover-module-model is-width-auto'
-                }
-            )) %}
+            {{ Form.create(null, {'id': 'form-delete-object-type', 'url': Url.build({'_name': 'model:remove:object_types', 'id': resource.id,})})|raw }}
+            {{ Form.end()|raw }}
+            {# Append "Remove" to sidebar #}
+            {% do _view.append(
+                'app-module-buttons',
+                '<button form="form-delete-object-type" class="button button-outlined button-outlined-hover-module-model is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+            ) %}
         {% endif %}
     </div>
 
