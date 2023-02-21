@@ -34,24 +34,15 @@
 
         {# Set `_jsonKeys` hidden input from config #}
         {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
-
         {{ Form.end()|raw }}
 
-        {% do _view.append('app-module-buttons', Form.button(__('Save'),
-            {
-                'form': 'form-main',
-                'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'
-            }
-        )) %}
-        {% do _view.append('app-module-buttons', Form.postButton(__('Remove'),
-            {
-                '_name': 'model:remove:relations',
-                'id': resource.id,
-            },
-            {
-                'class': 'icon-cancel button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'
-            }
-        )) %}
+        {{ Form.create(null, {'id': 'form-delete-relation', 'url': Url.build({'_name': 'model:remove:relations', 'id': resource.id,})})|raw }}
+        {{ Form.end()|raw }}
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-save></icon-save><span class="ml-05">' ~ __('Save') ~ '</span></button>'
+            ~ '<button form="form-delete-relation" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+        ) %}
     </div>
 
     {{ element('Model/sidebar_links') }}

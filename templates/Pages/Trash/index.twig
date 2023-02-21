@@ -58,11 +58,13 @@
         {% endif %}
 
         {# Append "Empty" button in commands menu. #}
-        {% do _view.append('app-module-buttons',
-            Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
-                'data': {'query': q},
-                'class': 'button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'
-            })|raw
-        )%}
+        {{ Form.create(null, {'id': 'form-empty-trash', 'url': Url.build({'_name': 'trash:empty'})})|raw }}
+            {{ Form.hidden('query', {'value': q})|raw }}
+        {{ Form.end()|raw }}
+        {# Append "Remove" to sidebar #}
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
+        ) %}
     </div>
 </trash-index>
