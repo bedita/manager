@@ -204,10 +204,8 @@ class TranslationsControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                [
-                    'id' => $id,
-                    'object_id' => $objectId,
-                ],
+                'id' => $id,
+                'object_id' => $objectId,
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -325,10 +323,8 @@ class TranslationsControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                [
-                    'id' => $id,
-                    'object_id' => $objectId,
-                ],
+                'id' => $id,
+                'object_id' => $objectId,
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -385,10 +381,8 @@ class TranslationsControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                [
-                    'id' => $this->getTestTranslationId($objectId, 'documents', 'it'),
-                    'object_id' => $objectId,
-                ],
+                'id' => $this->getTestTranslationId($objectId, 'documents', 'it'),
+                'object_id' => $objectId,
             ],
             'params' => [
                 'object_type' => 'documents',
