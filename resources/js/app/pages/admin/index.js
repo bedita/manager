@@ -12,6 +12,10 @@ export default {
     components: {
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+        // icons
+        IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
+        IconViewFilled: () => import(/* webpackChunkName: "icon-view-filled" */'@carbon/icons-vue/es/view--filled/16.js'),
+        IconViewOffFilled: () => import(/* webpackChunkName: "icon-view-off-filled" */'@carbon/icons-vue/es/view--off--filled/16.js'),
     },
     data() {
         return {
