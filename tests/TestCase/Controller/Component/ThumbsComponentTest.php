@@ -163,7 +163,7 @@ class ThumbsComponentTest extends TestCase
         $registry = $controller->components();
         $registry->load(QueryComponent::class);
         $registry->load(ThumbsComponent::class);
-        $this->Thumbs->urls($data, $errors);
+        $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
     }
 
@@ -268,7 +268,7 @@ class ThumbsComponentTest extends TestCase
         $registry = $controller->components();
         $registry->load(QueryComponent::class);
         $registry->load(ThumbsComponent::class);
-        $this->Thumbs->urls($data, $errors);
+        $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
     }
 }
