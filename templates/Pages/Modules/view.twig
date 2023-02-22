@@ -7,7 +7,10 @@
                 <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
                 {% for obj in included %}
                     {% if obj.type == 'streams' %}
-                        <a class="button button-outlined icon-forward mx-1" href="{{ obj.meta.url }}" target="_blank">{{ __('Open File') }}</a>
+                        <a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
+                            <icon-launch></icon-launch>
+                            <span class="ml-05">{{ __('Open File') }}</span>
+                        </a>
                     {% endif %}
                 {% endfor %}</h1>
             {% else %}

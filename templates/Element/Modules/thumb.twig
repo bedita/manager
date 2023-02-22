@@ -12,13 +12,21 @@
     {% set thumb = Thumb.getUrl(object, { 'options': { 'w': width } }) %}
 
     {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
-        <div class="missing-image has-text-size-largest icon-question" title="{{ __('Thumb not available') }}"></div>
+        <div class="missing-image has-text-size-largest" title="{{ __('Thumb not available') }}">
+            <icon-help></icon-help>
+        </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
-        <div class="missing-image has-text-size-largest icon-hourglass-o" title="{{ __('Thumb not ready: coming soon') }}"></div>
+        <div class="missing-image has-text-size-largest" title="{{ __('Thumb not ready: coming soon') }}">
+            <icon-hourglass></icon-hourglass>
+        </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
-        <div class="missing-image has-text-size-largest icon-question" title="{{ __('Image not acceptable for thumb') }}"></div>
+        <div class="missing-image has-text-size-largest" title="{{ __('Image not acceptable for thumb') }}">
+            <icon-help></icon-help>
+        </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
-        <div class="missing-image has-text-size-largest icon-question" title="{{ __('Missing thumb url') }}"></div>
+        <div class="missing-image has-text-size-largest" title="{{ __('Missing thumb url') }}">
+            <icon-help></icon-help>
+        </div>
     {% else %}
         <img src={{ thumb }} />
     {% endif %}
