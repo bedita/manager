@@ -43,9 +43,10 @@ class ThumbsComponent extends Component
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
      *
      * @param array|null $response Related objects response.
+     * @param array|null $errors Array to store possible error messages from API.
      * @return void
      */
-    public function urls(?array &$response): void
+    public function urls(?array &$response, ?array &$errors): void
     {
         if (empty($response) || empty($response['data'])) {
             return;
@@ -76,11 +77,14 @@ class ThumbsComponent extends Component
             }
 
             // extract url of the matching objectid's thumb
-            $thumbnail = Hash::get($thumbs, $object['id']);
+            $thumbnail = Hash::get($thumbs, sprintf('%d.url', $object['id']));
             if ($thumbnail !== null) {
                 $object['meta']['thumb_url'] = $thumbnail;
             }
         }
+
+        // Extract possible errors in creation of thumbnail(s)
+        $errors = (array)Hash::extract($thumbs, '{*}[acceptable=false].message');
     }
 
     /**
@@ -100,7 +104,7 @@ class ThumbsComponent extends Component
             $apiClient = ApiClientProvider::getApiClient();
             $res = (array)$apiClient->get($url, $query);
 
-            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
+            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}');
         } catch (BEditaClientException $e) {
             $this->getController()->log($e, 'error');
 
