@@ -69,6 +69,7 @@ import { TreeView as IconTreeView } from '@carbon/icons-vue/es/tree-view/32.js';
 import { Undo as IconUndo } from '@carbon/icons-vue/es/undo/16.js';
 import { Unlink as IconUnlink } from '@carbon/icons-vue/es/unlink/16.js';
 import { Unlocked as IconUnlocked } from '@carbon/icons-vue/es/unlocked/16.js';
+import { Upload as IconUpload } from '@carbon/icons-vue/es/upload/16.js';
 import { UserAdmin as IconUserAdmin } from '@carbon/icons-vue/es/user--admin/32.js';
 import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profile/32.js';
 import { View as IconView } from '@carbon/icons-vue/es/view/16.js';
@@ -157,6 +158,7 @@ const _vueInstance = new Vue({
         IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
         IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
         IconUnlocked: () => import(/* webpackChunkName: "icon-unlocked" */'@carbon/icons-vue/es/unlocked/16.js'),
+        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
         IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
@@ -264,6 +266,7 @@ const _vueInstance = new Vue({
                 IconUndo,
                 IconUnlink,
                 IconUnlocked,
+                IconUpload,
                 IconUserAdmin,
                 IconUserProfile,
                 IconView,

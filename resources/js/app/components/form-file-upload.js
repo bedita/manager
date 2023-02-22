@@ -12,6 +12,11 @@
 
 export default {
 
+    components: {
+        // icons
+        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
+    },
+
     data() {
         return {
             file: null,

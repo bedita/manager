@@ -2,10 +2,16 @@
  * Templates that uses this component (directly or indirectly):
  *  Template/Import/index.twig
  *
- * <modules-view> component used for ModulesPage -> View
+ * <import-view> component
  */
 
 export default {
+
+    components: {
+        // icons
+        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
+    },
+
     props: {
         jobs: {
             type: Array,

@@ -14,6 +14,8 @@
 export default {
     components: {
         FormFileUpload: () => import(/* webpackChunkName: "form-file-upload" */'app/components/form-file-upload'),
+        // icons
+        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
     },
 
     props: {
