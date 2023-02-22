@@ -47,6 +47,7 @@ import { FilterEdit as IconFilterEdit } from '@carbon/icons-vue/es/filter--edit/
 import { FilterReset as IconFilterReset} from '@carbon/icons-vue/es/filter--reset/16.js';
 import { Grid as IconGrid16 } from '@carbon/icons-vue/es/grid/16.js';
 import { Grid as IconGrid32 } from '@carbon/icons-vue/es/grid/32.js';
+import { Information as IconInformation } from '@carbon/icons-vue/es/information/16.js';
 import { Launch as IconLaunch } from '@carbon/icons-vue/es/launch/16.js';
 import { List as IconList } from '@carbon/icons-vue/es/list/16.js';
 import { ListBulleted as IconListBulleted16 } from '@carbon/icons-vue/es/list--bulleted/16.js';
@@ -134,6 +135,7 @@ const _vueInstance = new Vue({
         IconFilterReset: () => import(/* webpackChunkName: "icon-filter-reset" */'@carbon/icons-vue/es/filter--reset/16.js'),
         IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
         IconGrid32: () => import(/* webpackChunkName: "icon-grid-32" */'@carbon/icons-vue/es/grid/32.js'),
+        IconInformation: () => import(/* webpackChunkName: "icon-information" */'@carbon/icons-vue/es/information/16.js'),
         IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
         IconList: () => import(/* webpackChunkName: "icon-list" */'@carbon/icons-vue/es/list/16.js'),
         IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
@@ -240,6 +242,7 @@ const _vueInstance = new Vue({
                 IconFilterReset,
                 IconGrid16,
                 IconGrid32,
+                IconInformation,
                 IconLaunch,
                 IconList,
                 IconListBulleted16,

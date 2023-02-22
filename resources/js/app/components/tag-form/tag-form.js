@@ -18,16 +18,19 @@ export default {
                 <: id :>
             </div>
             <div v-if="canSave && !editMode">
-                <button @click.prevent="editMode = !editMode" class="button button-outlined icon-pencil">${t`Edit`}</button>
+                <button @click.prevent="editMode = !editMode" class="button button-outlined">
+                    <icon-edit></icon-edit>
+                    <span class="ml-05">${t`Edit`}</span>
+                </button>
             </div>
 
             <div v-if="editMode">
                 <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
             </div>
             <div v-if="editMode">
                 <input type="checkbox" v-model="enabled" />
@@ -37,12 +40,30 @@ export default {
                 <: id :>
             </div>
             <div v-if="editMode">
-                <button @click.prevent="cancel" class="button button-outlined icon-backward-circled" v-if="obj?.id">${t`Cancel`}</button>
-                <button @click.prevent="save" class="button button-primary icon-check-1" :disabled="name.length < 3 || label.length < 3">${t`Save`}</button>
-                <button @click.prevent="remove" class="button button-outlined icon-trash" v-if="obj?.id">${t`Remove`}</button>
+                <button @click.prevent="cancel" class="button button-outlined" v-if="obj?.id">
+                    <icon-undo></icon-undo>
+                    <span class="ml-05">${t`Cancel`}</span>
+                </button>
+                <button @click.prevent="save" class="button button-primary" :disabled="name.length < 3 || label.length < 3">
+                    <icon-save></icon-save>
+                    <span class="ml-05">${t`Save`}</span>
+                </button>
+                <button @click.prevent="remove" class="button button-outlined" v-if="obj?.id">
+                    <icon-trash-can-16></icon-trash-can-16>
+                    <span class="ml-05">${t`Remove`}</span>
+                </button>
             </div>
         </form>
     `,
+
+    components: {
+        // icons
+        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
+        IconInformation: () => import(/* webpackChunkName: "icon-information" */'@carbon/icons-vue/es/information/16.js'),
+        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
+        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
+    },
 
     props: {
         cansave: Boolean,
