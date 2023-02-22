@@ -156,15 +156,76 @@ class ThumbsComponentTest extends TestCase
                 ->setConstructorArgs(['https://media.example.com'])
                 ->getMock();
             $apiClient->method('get')
-                ->with('/media/thumbs?ids=43%2C45&options%5Bw%5D=400')
+                ->with('/media/thumbs?ids=43%2C45&preset=default')
                 ->willReturn($mockResponse);
             ApiClientProvider::setApiClient($apiClient);
         }
         $registry = $controller->components();
         $registry->load(QueryComponent::class);
         $registry->load(ThumbsComponent::class);
-        $this->Thumbs->urls($data);
+        $this->Thumbs->urls($data, $errors);
         static::assertEquals($expected, $data);
+    }
+
+    /**
+     * Test `urls` method, with errors from thumbnail generation API.
+     *
+     * @return void
+     * @covers ::urls()
+     * @covers ::getThumbs()
+     */
+    public function testUrlsThumbErrors(): void
+    {
+        $data = [
+            'data' => [
+                [
+                    'id' => '45',
+                    'type' => 'images',
+                    'meta' => [],
+                ],
+            ],
+        ];
+        $expected = [
+            'data' => [
+                [
+                    'id' => '45',
+                    'type' => 'images',
+                    'meta' =>
+                        [
+                            'thumb_url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
+                        ],
+                ],
+            ],
+        ];
+        $expectedErrors = ['Corrupted file'];
+        $mockApiResponse = [
+            'meta' => [
+                'thumbnails' => [
+                    [
+                        'url' => 'https://media.example.com/be4-media-test/test-thumbs/thumb2.png',
+                        'acceptable' => false,
+                        'message' => 'Corrupted file',
+                        'id' => 45,
+                    ],
+                ],
+            ],
+        ];
+
+        $controller = new Controller(new ServerRequest([]));
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/media/thumbs?ids=45&preset=default')
+            ->willReturn($mockApiResponse);
+        ApiClientProvider::setApiClient($apiClient);
+
+        $registry = $controller->components();
+        $registry->load(QueryComponent::class);
+        $registry->load(ThumbsComponent::class);
+        $this->Thumbs->urls($data, $errors);
+        static::assertEquals($expected, $data);
+        static::assertEquals($expectedErrors, $errors);
     }
 
     /**
@@ -206,7 +267,7 @@ class ThumbsComponentTest extends TestCase
         $registry = $controller->components();
         $registry->load(QueryComponent::class);
         $registry->load(ThumbsComponent::class);
-        $this->Thumbs->urls($data);
+        $this->Thumbs->urls($data, $errors);
         static::assertEquals($expected, $data);
     }
 }
