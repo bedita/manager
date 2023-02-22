@@ -6,12 +6,12 @@ export default {
         <form class="table-row">
             <div class="name-cell">
                 <input type="text" name="name" autocomplete="off" autocorrect="off" autocapitalize="off" size="50" maxlength="50" @change="onChangeName($event)" v-model="name" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
                 <div v-if="nameInUse()" v-text="errorAlreadyInUse"></div>
             </div>
             <div class="label-cell">
                 <input type="text" name="label" autocomplete="off" autocorrect="off" autocapitalize="off" v-model="label" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
             </div>
             <div class="parent_id-cell">
                 <select v-model="parent">
@@ -31,19 +31,37 @@ export default {
                 <input type="checkbox" name="enabled" v-model="enabled" checked="!!enabled" />
             </div>
             <div v-show="!id" class="buttons-cell narrow">
-                <button :disabled="name.length < 3 || label.length < 3 || nameInUse() || type === ''" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onCreate()">${t`Create`}</button>
+                <button :disabled="name.length < 3 || label.length < 3 || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">
+                    <icon-save></icon-save>
+                    <span class="ml-05">${t`Create`}</span>
+                </button>
             </div>
             <div v-show="id">
                 <: id :>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button :disabled="name.length < 3 || label.length < 3 || unchanged() || nameInUse()" class="icon-check-1 button button-text-white is-width-auto" @click.stop.prevent="onModify()">${t`Modify`}</button>
+                <button :disabled="name.length < 3 || label.length < 3 || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">
+                    <icon-save></icon-save>
+                    <span class="ml-05">${t`Modify`}</span>
+                </button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
-                <button class="icon-cancel button button-text-white is-width-auto" @click.stop.prevent="onDelete()">${t`Delete`}</button>
+                <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">
+                    <icon-trash-can-16></icon-trash-can-16>
+                    <span class="ml-05">${t`Delete`}</span>
+                </button>
             </div>
         </form>
     `,
+
+    components: {
+        // icons
+        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
+        IconInformation: () => import(/* webpackChunkName: "icon-information" */'@carbon/icons-vue/es/information/16.js'),
+        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
+        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
+    },
 
     props: {
         source: Object,
