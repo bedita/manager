@@ -294,10 +294,7 @@ class ModulesController extends AppController
             $response['data'] = [ $response['data'] ];
         }
 
-        $this->Thumbs->urls($response, $errors);
-        if (!empty($errors)) {
-            $this->Flash->warning(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
-        }
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
@@ -405,10 +402,7 @@ class ModulesController extends AppController
             return;
         }
 
-        $this->Thumbs->urls($response, $errors);
-        if (!empty($errors)) {
-            $this->Flash->warning(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
-        }
+        $this->Thumbs->urls($response);
 
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
@@ -458,10 +452,7 @@ class ModulesController extends AppController
             $query = $this->Query->prepare($this->getRequest()->getQueryParams());
             $response = $this->apiClient->get($available, $query);
 
-            $this->Thumbs->urls($response, $errors);
-            if (!empty($errors)) {
-                $this->Flash->warning(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
-            }
+            $this->Thumbs->urls($response);
         } catch (BEditaClientException $ex) {
             $this->log($ex->getMessage(), LogLevel::ERROR);
 

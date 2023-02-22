@@ -37,7 +37,7 @@ class ThumbsComponent extends Component
      *
      * @var array
      */
-    protected $components = ['Query'];
+    protected $components = ['Flash', 'Query'];
 
     /**
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
@@ -85,6 +85,10 @@ class ThumbsComponent extends Component
 
         // Extract possible errors in creation of thumbnail(s)
         $errors = (array)Hash::extract($thumbs, '{*}[acceptable=false].message');
+
+        if (!empty($errors)) {
+            $this->Flash->warning(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
+        }
     }
 
     /**
