@@ -219,13 +219,14 @@ class ThumbsComponentTest extends TestCase
             ->with('/media/thumbs?ids=45&preset=default')
             ->willReturn($mockApiResponse);
         ApiClientProvider::setApiClient($apiClient);
-
         $registry = $controller->components();
-        $registry->load(QueryComponent::class);
-        $registry->load(ThumbsComponent::class);
-        $this->Thumbs->urls($data, $errors);
+        /** @var \App\Controller\Component\ThumbsComponent $thumbsComponent */
+        $thumbsComponent = $registry->load(ThumbsComponent::class);
+        $this->Thumbs = $thumbsComponent;
+        $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
-        static::assertEquals($expectedErrors, $errors);
+        $actual = $this->Thumbs->getController()->getRequest()->getSession()->read('Flash.flash.0.params.0');
+        static::assertEquals($expectedErrors[0], $actual);
     }
 
     /**
