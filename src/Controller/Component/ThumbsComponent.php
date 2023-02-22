@@ -25,6 +25,14 @@ use Cake\Utility\Hash;
 class ThumbsComponent extends Component
 {
     /**
+     * @inheritDoc
+     */
+    protected $_defaultConfig = [
+        'queryParams' => ['preset' => 'default'],
+        'objectTypes' => ['images', 'videos'],
+    ];
+
+    /**
      * Components
      *
      * @var array
@@ -44,7 +52,8 @@ class ThumbsComponent extends Component
         }
 
         // extract ids of objects
-        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
+        $types = $this->getConfig('objectTypes', []);
+        $ids = (array)Hash::extract($response, sprintf('data.{n}[type=/%s/].id', join('|', $types)));
         if (empty($ids)) {
             return;
         }
@@ -87,8 +96,7 @@ class ThumbsComponent extends Component
             $query = $this->Query->prepare($params);
             $url = sprintf('/media/thumbs?%s', http_build_query([
                 'ids' => implode(',', $ids),
-                'options' => ['w' => 400],
-            ]));
+            ] + $this->getConfig('queryParams', [])));
             $apiClient = ApiClientProvider::getApiClient();
             $res = (array)$apiClient->get($url, $query);
 

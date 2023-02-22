@@ -460,4 +460,14 @@ return [
     //     'clientId' => '####',
     //     'clientSecret' => '####',
     // ],
+
+    /**
+     * Configuration for thumbnails component.
+     */
+    // 'Thumbs' => [
+    //     // Query parameters used for calling API to generate the thumbnail
+    //     'queryParams' => ['preset' => 'default'],
+    //     // Object types for which to call API to generate the thumbnails
+    //     'objectTypes' => ['images', 'videos'],
+    // ],
 ];
