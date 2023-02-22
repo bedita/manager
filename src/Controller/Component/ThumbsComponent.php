@@ -49,7 +49,6 @@ class ThumbsComponent extends Component
      */
     public function urls(?array &$response, ?array &$errors): void
     {
-        Flash
         if (empty($response) || empty($response['data'])) {
             return;
         }
