@@ -13,7 +13,7 @@
                     <a href="{{ url }}" class="{{ class }}">
                         <span>{{ Layout.tr(module.label|default(name)) }}</span>
                         {% if module.hints.multiple_types and not module.class %}<icon-grid-32></icon-grid-32>{% endif %}
-                        {% if name == 'publications' %}<icon-wikis></icon-wikis>{% endif %}
+                        {% if name == 'publications' %}<icon-wikis-32></icon-wikis-32>{% endif %}
                         {% if name == 'folders' %}<icon-tree-view></icon-tree-view>{% endif %}
                     </a>
                 {% endif %}

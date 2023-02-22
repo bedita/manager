@@ -19,7 +19,7 @@ export default {
         IconTreeView: () => import(/* webpackChunkName: "icon-tree-view" */'@carbon/icons-vue/es/tree-view/32.js'),
         IconUserAdmin: () => import(/* webpackChunkName: "icon-user-admin" */'@carbon/icons-vue/es/user--admin/32.js'),
         IconUserProfile: () => import(/* webpackChunkName: "icon-user-profile" */'@carbon/icons-vue/es/user--profile/32.js'),
-        IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
+        IconWikis32: () => import(/* webpackChunkName: "icon-wikis-32" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
     props: {

@@ -93,8 +93,9 @@ export default {
                         ${t`Long Lat Coordinates`}
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
-                            <button class="get-coordinates icon-globe" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                ${t`GET`}
+                            <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
+                                <icon-wikis-16></icon-wikis-16>
+                                <span class="ml-05">${t`GET`}</span>
                             </button>
                         </div>
                     </label>
@@ -119,11 +120,24 @@ export default {
                 </div>
             </div>
             <div class="location-buttons">
-                <a v-if="id" class="button button-text-white icon-edit" :href="$helpers.buildViewUrl(id)" target="_blank">${t`edit`}</a>
-                <button @click.prevent="onRemove" class="button button-text-white icon-unlink remove">${t`remove`}</button>
+                <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
+                    <icon-launch></icon-launch>
+                    <span class="ml-05">${t`edit`}</span>
+                </a>
+                <button @click.prevent="onRemove" class="button button-text-white remove">
+                    <icon-unlink></icon-unlink>
+                    <span class="ml-05">${t`remove`}</span>
+                </button>
             </div>
         </div>
     </div>`,
+
+    components: {
+        // icons
+        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
+        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
+        IconWikis16: () => import(/* webpackChunkName: "icon-wikis-16" */'@carbon/icons-vue/es/wikis/16.js'),
+    },
 
     props: {
         index: Number,

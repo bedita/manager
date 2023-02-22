@@ -72,7 +72,8 @@ import { UserProfile as IconUserProfile } from '@carbon/icons-vue/es/user--profi
 import { View as IconView } from '@carbon/icons-vue/es/view/16.js';
 import { ViewFilled as IconViewFilled } from '@carbon/icons-vue/es/view--filled/16.js';
 import { ViewOffFilled as IconViewOffFilled } from '@carbon/icons-vue/es/view--off--filled/16.js';
-import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
+import { Wikis as IconWikis16 } from '@carbon/icons-vue/es/wikis/16.js';
+import { Wikis as IconWikis32 } from '@carbon/icons-vue/es/wikis/32.js';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -157,7 +158,8 @@ const _vueInstance = new Vue({
         IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
         IconViewFilled: () => import(/* webpackChunkName: "icon-view-filled" */'@carbon/icons-vue/es/view--filled/16.js'),
         IconViewOffFilled: () => import(/* webpackChunkName: "icon-view-off-filled" */'@carbon/icons-vue/es/view--off--filled/16.js'),
-        IconWikis: () => import(/* webpackChunkName: "icon-wikis" */'@carbon/icons-vue/es/wikis/32.js'),
+        IconWikis16: () => import(/* webpackChunkName: "icon-wikis-16" */'@carbon/icons-vue/es/wikis/16.js'),
+        IconWikis32: () => import(/* webpackChunkName: "icon-wikis-32" */'@carbon/icons-vue/es/wikis/32.js'),
     },
 
     data() {
@@ -261,7 +263,8 @@ const _vueInstance = new Vue({
                 IconView,
                 IconViewFilled,
                 IconViewOffFilled,
-                IconWikis,
+                IconWikis16,
+                IconWikis32,
             },
         });
 
