@@ -35,6 +35,7 @@ import { ChevronLeft as IconChevronLeft } from '@carbon/icons-vue/es/chevron--le
 import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--right/20.js';
 import { Close as IconClose } from '@carbon/icons-vue/es/close/16.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
+import { Copy as IconCopy } from '@carbon/icons-vue/es/close/16.js';
 import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Edit as IconEdit } from '@carbon/icons-vue/es/edit/16.js';
@@ -119,6 +120,7 @@ const _vueInstance = new Vue({
         IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
         IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
+        IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
         IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
         IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
@@ -222,6 +224,7 @@ const _vueInstance = new Vue({
                 IconChevronRight,
                 IconClose,
                 IconConcept,
+                IconCopy,
                 IconCube,
                 IconDownload,
                 IconEdit,

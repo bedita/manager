@@ -6,10 +6,15 @@ export default {
     template: `
     <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="onMouseover()" @mouseleave="onMouseleave()">
         <: !msg ? truncated : '' :>
-        <span v-if="showCopyIcon()" class="is-width-auto icon-doc" @click.stop.prevent="copy()"></span>
+        <icon-copy v-if="showCopyIcon()" @click.stop.prevent="copy()"></icon-copy>
         <div v-if="msg" v-text="msg" style="color: gray"></div>
     </div>
     `,
+
+    components: {
+        // icons
+        IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
+    },
 
     props: {
         settings: {},
