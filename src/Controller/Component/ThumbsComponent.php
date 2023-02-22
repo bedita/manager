@@ -44,10 +44,9 @@ class ThumbsComponent extends Component
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
      *
      * @param array|null $response Related objects response.
-     * @param array|null $errors Array to store possible error messages from API.
      * @return void
      */
-    public function urls(?array &$response, ?array &$errors): void
+    public function urls(?array &$response): void
     {
         if (empty($response) || empty($response['data'])) {
             return;
