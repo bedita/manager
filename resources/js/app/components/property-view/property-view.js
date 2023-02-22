@@ -33,6 +33,7 @@ export default {
         History: () => import(/* webpackChunkName: "history" */'app/components/history/history'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
+        KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/key-value-list/key-value-list'),
     },
 
     props: {

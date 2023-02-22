@@ -61,6 +61,7 @@ const _vueInstance = new Vue({
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+        KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/key-value-list/key-value-list'),
     },
 
     data() {
