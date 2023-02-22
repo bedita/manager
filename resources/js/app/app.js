@@ -36,7 +36,8 @@ import { ChevronRight as IconChevronRight } from '@carbon/icons-vue/es/chevron--
 import { Close as IconClose } from '@carbon/icons-vue/es/close/16.js';
 import { Concept as IconConcept } from '@carbon/icons-vue/es/concept/32.js';
 import { Copy as IconCopy } from '@carbon/icons-vue/es/copy/16.js';
-import { Cube as IconCube } from '@carbon/icons-vue/es/db2--database/20.js';
+import { Cube as IconCube16 } from '@carbon/icons-vue/es/cube/16.js';
+import { Cube as IconCube20 } from '@carbon/icons-vue/es/cube/20.js';
 import { Document as IconDocument } from '@carbon/icons-vue/es/document/16.js';
 import { Download as IconDownload } from '@carbon/icons-vue/es/download/32.js';
 import { Edit as IconEdit } from '@carbon/icons-vue/es/edit/16.js';
@@ -128,7 +129,8 @@ const _vueInstance = new Vue({
         IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
         IconConcept: () => import(/* webpackChunkName: "icon-concept" */'@carbon/icons-vue/es/concept/32.js'),
         IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
-        IconCube: () => import(/* webpackChunkName: "icon-cube" */'@carbon/icons-vue/es/cube/20.js'),
+        IconCube16: () => import(/* webpackChunkName: "icon-cube-16" */'@carbon/icons-vue/es/cube/16.js'),
+        IconCube20: () => import(/* webpackChunkName: "icon-cube-20" */'@carbon/icons-vue/es/cube/20.js'),
         IconDocument: () => import(/* webpackChunkName: "icon-document" */'@carbon/icons-vue/es/document/16.js'),
         IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/32.js'),
         IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
@@ -239,7 +241,8 @@ const _vueInstance = new Vue({
                 IconClose,
                 IconConcept,
                 IconCopy,
-                IconCube,
+                IconCube16,
+                IconCube20,
                 IconDocument,
                 IconDownload,
                 IconEdit,
