@@ -5,9 +5,13 @@
  * <date-ranges-list> component used for ModulesPage -> Index
  */
 export default {
-    /**
-     * @inheritDoc
-     */
+
+    components: {
+        // icons
+        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
+        IconSubtract: () => import(/* webpackChunkName: "icon-subtract" */'@carbon/icons-vue/es/subtract/16.js'),
+    },
+
     data() {
         return {
             showAll: false,

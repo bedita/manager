@@ -62,6 +62,7 @@ import { Save as IconSave } from '@carbon/icons-vue/es/save/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
 import { Stop as IconStop } from '@carbon/icons-vue/es/stop/16.js';
+import { Subtract as IconSubtract } from '@carbon/icons-vue/es/subtract/16.js';
 import { Switcher as IconSwitcher } from '@carbon/icons-vue/es/switcher/16.js';
 import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
@@ -153,6 +154,7 @@ const _vueInstance = new Vue({
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
         IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
+        IconSubtract: () => import(/* webpackChunkName: "icon-subtract" */'@carbon/icons-vue/es/subtract/16.js'),
         IconSwitcher: () => import(/* webpackChunkName: "icon-switcher" */'@carbon/icons-vue/es/switcher/16.js'),
         IconTag: () => import(/* webpackChunkName: "icon-tag" */'@carbon/icons-vue/es/tag/16.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
@@ -263,6 +265,7 @@ const _vueInstance = new Vue({
                 IconSearch,
                 IconSettings,
                 IconStop,
+                IconSubtract,
                 IconSwitcher,
                 IconTag,
                 IconTrashCan16,

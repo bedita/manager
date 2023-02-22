@@ -5,7 +5,12 @@
         </div>
 
         {% if dateRanges|length > 1 %}
-            <button class="show-toggle icon icon-only-icon" :class="showAll ? 'icon-minus' : 'icon-plus'" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll">
+            <button class="show-toggle icon icon-only-icon" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll" v-if="showAll">
+                <icon-subtract></icon-subtract>
+                <span class="is-sr-only">{{ __('More') }}</span>
+            </button>
+            <button class="show-toggle icon icon-only-icon" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll" v-else>
+                <icon-add></icon-add>
                 <span class="is-sr-only">{{ __('More') }}</span>
             </button>
         {% endif %}
