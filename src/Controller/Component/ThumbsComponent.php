@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
 /**
  * Handles thumbs.
  *
+ * @property-read \App\Controller\Component\FlashComponent $Flash
  * @property-read \App\Controller\Component\QueryComponent $Query
  */
 class ThumbsComponent extends Component
@@ -48,6 +49,7 @@ class ThumbsComponent extends Component
      */
     public function urls(?array &$response, ?array &$errors): void
     {
+        Flash
         if (empty($response) || empty($response['data'])) {
             return;
         }
