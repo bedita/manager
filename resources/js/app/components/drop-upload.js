@@ -31,13 +31,15 @@ export default {
                     <div class="upload-item-header" :class="{'is-loading-spinner': info.pending }">
                         <span class="name" :class="info.cancelled? 'has-text-gray-500' : ''"><: info.file.name :></span>
 
-                        <button v-show="!info.error && !info.cancelled && !info.done && !info.pending"
-                            class="button-outlined icon-stop"
-                            @click.stop.prevent="abortUpload(info.file)">${t`stop`}</button>
+                        <button v-show="!info.error && !info.cancelled && !info.done && !info.pending" class="button-outlined" @click.stop.prevent="abortUpload(info.file)">
+                            <icon-stop></icon-stop>
+                            <span class="ml-05">${t`stop`}</span>
+                        </button>
 
-                        <button v-show="(info.error || info.cancelled) && !info.done"
-                            class="button-outlined icon-cancel"
-                            @click.stop.prevent="removeProgressItem(info.file)">${t`remove`}</button>
+                        <button v-show="(info.error || info.cancelled) && !info.done" class="button-outlined" @click.stop.prevent="removeProgressItem(info.file)">
+                            <icon-trash-can-16></icon-trash-can-16>
+                            <span class="ml-05">${t`remove`}</span>
+                        </button>
 
                         <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
                     </div>
@@ -56,6 +58,12 @@ export default {
             </div>
         </div>
     `,
+
+    components: {
+        // icons
+        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
+        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+    },
 
     props: {
         placeholder: {

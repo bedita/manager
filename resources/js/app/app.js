@@ -1,5 +1,30 @@
 import Vue from 'vue';
 
+import 'libs/filters';
+import 'config/config';
+
+import '../../style.scss';
+
+import { BELoader } from 'libs/bedita';
+
+import { PanelView, PanelEvents } from 'app/components/panel-view';
+import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
+
+import datepicker from 'app/directives/datepicker';
+import email from 'app/directives/email';
+import jsoneditor from 'app/directives/jsoneditor';
+import richeditor from 'app/directives/richeditor';
+import uri from 'app/directives/uri';
+import viewHelper from 'app/helpers/view';
+import autoTranslation from 'app/helpers/api-translation';
+import Autocomplete from '@trevoreyre/autocomplete-vue';
+
+import merge from 'deepmerge';
+import { t } from 'ttag';
+import { buildSearchParams } from '../libs/urlUtils.js';
+
+import vTitle from 'vuejs-title';
+
 /* icons */
 import { CarbonIconsVue } from '@carbon/icons-vue';
 import { Add as IconAdd } from '@carbon/icons-vue/es/add/16.js';
@@ -31,6 +56,7 @@ import { Replicate as IconReplicate } from '@carbon/icons-vue/es/replicate/16.js
 import { Save as IconSave } from '@carbon/icons-vue/es/save/16.js';
 import { Search as IconSearch } from '@carbon/icons-vue/es/search/16.js';
 import { Settings as IconSettings } from '@carbon/icons-vue/es/settings/32.js';
+import { Stop as IconStop } from '@carbon/icons-vue/es/stop/16.js';
 import { Switcher as IconSwitcher } from '@carbon/icons-vue/es/switcher/16.js';
 import { Tag as IconTag } from '@carbon/icons-vue/es/tag/16.js';
 import { TrashCan as IconTrashCan16 } from '@carbon/icons-vue/es/trash-can/16.js';
@@ -46,31 +72,6 @@ import { View as IconView } from '@carbon/icons-vue/es/view/16.js';
 import { ViewFilled as IconViewFilled } from '@carbon/icons-vue/es/view--filled/16.js';
 import { ViewOffFilled as IconViewOffFilled } from '@carbon/icons-vue/es/view--off--filled/16.js';
 import { Wikis as IconWikis } from '@carbon/icons-vue/es/wikis/32.js';
-
-import 'libs/filters';
-import 'config/config';
-
-import '../../style.scss';
-
-import { BELoader } from 'libs/bedita';
-
-import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
-
-import datepicker from 'app/directives/datepicker';
-import email from 'app/directives/email';
-import jsoneditor from 'app/directives/jsoneditor';
-import richeditor from 'app/directives/richeditor';
-import uri from 'app/directives/uri';
-import viewHelper from 'app/helpers/view';
-import autoTranslation from 'app/helpers/api-translation';
-import Autocomplete from '@trevoreyre/autocomplete-vue';
-
-import merge from 'deepmerge';
-import { t } from 'ttag';
-import { buildSearchParams } from '../libs/urlUtils.js';
-
-import vTitle from 'vuejs-title';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -139,6 +140,7 @@ const _vueInstance = new Vue({
         IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
         IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
         IconSettings: () => import(/* webpackChunkName: "icon-settings" */'@carbon/icons-vue/es/settings/32.js'),
+        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
         IconSwitcher: () => import(/* webpackChunkName: "icon-switcher" */'@carbon/icons-vue/es/switcher/16.js'),
         IconTag: () => import(/* webpackChunkName: "icon-tag" */'@carbon/icons-vue/es/tag/16.js'),
         IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
@@ -209,6 +211,7 @@ const _vueInstance = new Vue({
 
         Vue.use(vTitle);
 
+        // icons
         Vue.use(CarbonIconsVue, {
             components: {
                 IconAdd,
@@ -240,6 +243,7 @@ const _vueInstance = new Vue({
                 IconSave,
                 IconSearch,
                 IconSettings,
+                IconStop,
                 IconSwitcher,
                 IconTag,
                 IconTrashCan16,
