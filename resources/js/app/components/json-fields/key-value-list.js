@@ -5,8 +5,8 @@ import { t } from 'ttag';
  */
 export default {
     template: `
-        <div class="input title text">
-            <label :for="name"><: label :></label>
+        <div class="input textarea text">
+            <label :for="name"><: label|humanize :></label>
             <div :id="name">
                 <div class="key-value-item mb-1" v-for="(item, index) in items">
                     <div>
