@@ -24,7 +24,7 @@
                     {# thumb #}
                     {% if object.type == 'images' %}
                         {# TODO process below #}
-                        {% set thumb = Thumb.getUrl(object, { 'options': { 'w': 960, 'fit': 'max' } } ) %}
+                        {% set thumb = Thumb.getUrl(object) %}
                         {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
                             <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}

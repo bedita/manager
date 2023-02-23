@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use BEdita\SDK\BEditaClientException;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -54,7 +55,7 @@ class ModulesController extends AppController
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Query');
-        $this->loadComponent('Thumbs');
+        $this->loadComponent('Thumbs', Configure::read('Thumbs', []));
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
         if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
