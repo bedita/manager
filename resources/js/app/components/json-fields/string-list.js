@@ -1,7 +1,7 @@
 import { t } from 'ttag';
 
 /**
- * <key-value-list> component to handle simple JSON objects with key/values
+ * <string-list> component to handle simple JSON array of strings
  */
 export default {
     template: `
@@ -10,21 +10,13 @@ export default {
             <div :id="name">
                 <div class="key-value-item mb-1" v-for="(item, index) in items">
                     <div>
-                        <div>
-                            <input type="text" v-model="item.key" @change="onChanged()" :readonly="readonly"/>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
-                        </div>
+                        <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
                     </div>
                     <div class="mb-2" v-if="!readonly">
                         <button @click.prevent="remove(index)">${t`Remove`}</button>
                     </div>
                 </div>
             </div>
-
             <button @click.prevent="add" v-if="!readonly">${t`Add`}</button>
 
             <input type="hidden" :name="name" v-model="result" />
@@ -46,36 +38,31 @@ export default {
     },
 
     created() {
-        console.log(this.value);
-        let t = this.value;
+        this.result = this.value;
         if (!this.value) {
-            t = null;
+            this.result = null;
         }
-        const v = JSON.parse(t);
-        if (v) {
-            const keys = Object.keys(v);
-            keys.forEach((k) => {
-                this.items.push({
-                    key: k,
-                    value: v?.[k] || '',
-                })
-            });
-        }
+        const v = JSON.parse(this.result) || [];
+        v.forEach((k) => {
+            this.items.push({
+                value: k,
+            })
+        });
+
         if (!this.items.length) {
             this.add();
         }
-        this.onChanged();
     },
 
     methods: {
-
+        /**
+         * Update input hidden form value.
+         *
+         * @returns {void}
+         */
         onChanged() {
-            let obj = {};
-            this.items.forEach((item) => {
-                obj[item.key] = item?.value || null;
-            })
-            this.result = JSON.stringify(obj);
-            console.log(this.result);
+            const data = this.items.map((i) => i?.value || null).filter((v) => v !== null);
+            this.result = JSON.stringify(data);
         },
 
         /**
@@ -84,10 +71,7 @@ export default {
          * @returns {void}
          */
         add() {
-            this.items.push({
-                key: '',
-                value: '',
-            });
+            this.items.push({value: ''});
         },
 
         /**
