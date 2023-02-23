@@ -166,17 +166,14 @@ class PropertiesComponent extends Component
             $list = $this->getConfig($key, $items);
             $p = [];
             foreach ($list as $item) {
-                if (array_key_exists($item, $attributes)) {
+                if (array_key_exists($item, $attributes) && !in_array($item, $used)) {
                     $p[$item] = $attributes[$item];
+                    $used[] = $item;
                 }
             }
             $properties[$group] = $p;
-            if ($group !== 'other') {
-                $used = array_merge($used, $list);
-            }
         }
         // add remaining properties to 'other' group
-        $properties['other'] = array_diff_key($properties['other'], array_flip($used));
         $properties['other'] += array_diff_key($attributes, array_flip($used));
 
         return $properties;
