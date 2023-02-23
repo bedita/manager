@@ -34,12 +34,13 @@ class CustomComponentControl implements CustomHandlerInterface
             $value = htmlspecialchars($this->jsonValue($value));
         }
         $html = sprintf(
-            '<%s label="%s" name="%s" value="%s" :readonly=%s />',
+            '<%s label="%s" name="%s" value="%s" :readonly=%s></%s>',
             $tag,
             $label,
             $name,
             $value,
             $readonly ? 'true' : 'false',
+            $tag,
         );
 
         return compact('type', 'html');
