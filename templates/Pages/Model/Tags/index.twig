@@ -14,7 +14,7 @@
 
 <model-index inline-template ids='{{ ids|json_encode }}' resources='{{ resources|json_encode }}' :csrf-token='{{ _csrfToken }}'>
 <div class="module-index">
-    {{ element('Modules/index_tags', {'saveAction': { '_name': 'model:save:tags' }, 'removeAction': { '_name': 'model:remove:tags' }}) }}
+    {{ element('Modules/index_tags') }}
     {% if not hideSidebar %}
         {{ element('Model/sidebar_links') }}
     {% endif %}

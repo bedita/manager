@@ -65,7 +65,7 @@
         {{ Form.end()|raw }}
 
         {# append "save" to sidebar #}
-        {% do _view.append('module-buttons', Form.button( __('Save'),
+        {% do _view.append('app-module-buttons', Form.button( __('Save'),
             {
                 'form': 'form-main',
                 'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',

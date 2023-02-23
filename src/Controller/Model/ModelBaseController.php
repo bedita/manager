@@ -181,7 +181,7 @@ abstract class ModelBaseController extends AppController
                     }
                 )
             ),
-            ''
+            null
         );
         $resource = [
             'type' => $this->resourceType,

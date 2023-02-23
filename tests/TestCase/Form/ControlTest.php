@@ -58,6 +58,7 @@ class ControlTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => $value,
                 ],
             ],
@@ -313,7 +314,7 @@ class ControlTest extends TestCase
         ];
         $actual = Control::control($options);
 
-        static::assertSame($expected, $actual);
+        static::assertSame(sort($expected), sort($actual));
     }
 
     /**

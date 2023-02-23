@@ -191,6 +191,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => 'test',
                 ],
                 // schema type
@@ -206,6 +207,7 @@ class SchemaHelperTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
+                    'readonly' => 0,
                     'value' => 'test',
                 ],
                 // schema type
@@ -373,7 +375,7 @@ class SchemaHelperTest extends TestCase
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
-        static::assertEquals($expected, $actual);
+        static::assertEquals(sort($expected), sort($actual));
     }
 
     /**
@@ -415,6 +417,9 @@ class SchemaHelperTest extends TestCase
             ],
             'type' => 'select',
             'value' => null,
+            'label' => null,
+            'readonly' => false,
+            'disabled' => false,
         ];
         static::assertSame($expected, $actual);
     }

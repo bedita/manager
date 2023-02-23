@@ -61,11 +61,18 @@ class SchemaHelper extends Helper
     public function controlOptions(string $name, $value, $schema = []): array
     {
         $options = Options::customControl($name, $value);
+        $objectType = (string)$this->_View->get('objectType');
+        $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
+        $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
+
         if (!empty($options)) {
-            return $options;
+            return array_merge($options, [
+                'label' => Hash::get($ctrlOptions, 'label'),
+                'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+                'disabled' => Hash::get($ctrlOptions, 'readonly', false),
+            ]);
         }
         // verify if there's an handler by $type.$name
-        $objectType = (string)$this->_View->get('objectType');
         if (!empty(Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name)))) {
             $handler = Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name));
 
@@ -78,7 +85,10 @@ class SchemaHelper extends Helper
             'property' => $name,
             'value' => $value,
             'schema' => (array)$schema,
-            'propertyType' => $type,
+            'propertyType' => Hash::get($ctrlOptions, 'type', $type),
+            'label' => Hash::get($ctrlOptions, 'label'),
+            'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+            'disabled' => Hash::get($ctrlOptions, 'readonly', false),
         ]);
     }
 
@@ -151,11 +161,7 @@ class SchemaHelper extends Helper
      */
     protected function formatDateTime($value): string
     {
-        if (empty($value)) {
-            return '';
-        }
-
-        return (string)$this->Time->format($value);
+        return $this->formatDate($value);
     }
 
     /**
@@ -189,11 +195,9 @@ class SchemaHelper extends Helper
             return 'string';
         }
         $format = Hash::get($schema, 'format');
-        if ($schema['type'] === 'string' && in_array($format, ['date', 'date-time'])) {
-            return $format;
-        }
+        $isStringDate = $schema['type'] === 'string' && in_array($format, ['date', 'date-time']);
 
-        return $schema['type'];
+        return $isStringDate ? $format : $schema['type'];
     }
 
     /**
@@ -272,12 +276,9 @@ class SchemaHelper extends Helper
         $type = self::typeFromSchema($schema);
 
         // not sortable: 'array', 'object'
-        if (in_array($type, ['array', 'object'])) {
-            return false;
-        }
         // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
-        return true;
+        return !in_array($type, ['array', 'object']);
     }
 
     /**

@@ -20,16 +20,25 @@ use Cake\Utility\Hash;
 /**
  * Handles thumbs.
  *
+ * @property-read \App\Controller\Component\FlashComponent $Flash
  * @property-read \App\Controller\Component\QueryComponent $Query
  */
 class ThumbsComponent extends Component
 {
     /**
+     * @inheritDoc
+     */
+    protected $_defaultConfig = [
+        'queryParams' => ['preset' => 'default'],
+        'objectTypes' => ['images', 'videos'],
+    ];
+
+    /**
      * Components
      *
      * @var array
      */
-    protected $components = ['Query'];
+    protected $components = ['Flash', 'Query'];
 
     /**
      * Retrieve thumbnails URL of related objects in `meta.url` if present.
@@ -44,7 +53,8 @@ class ThumbsComponent extends Component
         }
 
         // extract ids of objects
-        $ids = (array)Hash::extract($response, 'data.{n}[type=/images|videos/].id');
+        $types = $this->getConfig('objectTypes', []);
+        $ids = (array)Hash::extract($response, sprintf('data.{n}[type=/%s/].id', join('|', $types)));
         if (empty($ids)) {
             return;
         }
@@ -67,10 +77,17 @@ class ThumbsComponent extends Component
             }
 
             // extract url of the matching objectid's thumb
-            $thumbnail = Hash::get($thumbs, $object['id']);
+            $thumbnail = Hash::get($thumbs, sprintf('%d.url', $object['id']));
             if ($thumbnail !== null) {
                 $object['meta']['thumb_url'] = $thumbnail;
             }
+        }
+
+        // Extract possible errors in creation of thumbnail(s)
+        $errors = (array)Hash::extract($thumbs, '{*}[acceptable=false].message');
+
+        if (!empty($errors)) {
+            $this->Flash->warning(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
         }
     }
 
@@ -87,12 +104,11 @@ class ThumbsComponent extends Component
             $query = $this->Query->prepare($params);
             $url = sprintf('/media/thumbs?%s', http_build_query([
                 'ids' => implode(',', $ids),
-                'options' => ['w' => 400],
-            ]));
+            ] + $this->getConfig('queryParams', [])));
             $apiClient = ApiClientProvider::getApiClient();
             $res = (array)$apiClient->get($url, $query);
 
-            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}.url');
+            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}');
         } catch (BEditaClientException $e) {
             $this->getController()->log($e, 'error');
 

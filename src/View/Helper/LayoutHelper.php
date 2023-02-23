@@ -200,6 +200,7 @@ class LayoutHelper extends Helper
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),
+            'uploadConfig' => $this->System->uploadConfig(),
         ];
     }
 
@@ -234,7 +235,7 @@ class LayoutHelper extends Helper
      */
     public function trashLink(?string $type): string
     {
-        if (empty($type)) {
+        if (empty($type) || $type === 'trash') {
             return '';
         }
 

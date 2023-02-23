@@ -1,4 +1,4 @@
-import { JSONEditor } from 'svelte-jsoneditor/dist/jsoneditor.js';
+import { JSONEditor } from 'vanilla-jsoneditor';
 
 const options = {
     mode: 'code',
@@ -8,7 +8,7 @@ const options = {
 };
 
 export default {
-    template: /* template */`
+    template: `
     <div>
         <slot></slot>
     </div>
@@ -21,18 +21,27 @@ export default {
     },
 
     async mounted() {
+        const element = this.el;
+        let json = null;
         try {
-            const element = this.el;
-            const json = element.value === 'null' ? null : JSON.parse(element.value);
+            if (element?.value !== 'null' && element?.value.length  > 0) {
+                json = JSON.parse(element.value);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+        try {
             element.style.display = 'none';
             const container = document.createElement('div');
             container.className = 'jsoneditor-container';
             element.parentElement.insertBefore(container, element);
-            element.dataset.originalValue = element.value;
+            element.dataset.originalValue = element?.value;
             const editorOptions = Object.assign(options, {
                 content: {
                     json,
                 },
+                readOnly: element.getAttribute('readonly') === 'readonly' ? true : false,
                 onChange: function () {
                     try {
                         const val = element.jsonEditor.get();

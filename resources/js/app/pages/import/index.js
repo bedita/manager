@@ -43,7 +43,7 @@ export default {
     },
 
     methods: {
-        onFileChanged(e) {
+        onFileChange(e) {
             this.fileName = '';
             if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {
                 return;
