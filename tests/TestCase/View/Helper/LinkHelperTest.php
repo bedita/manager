@@ -495,24 +495,6 @@ class LinkHelperTest extends TestCase
     }
 
     /**
-     * Get webroot/js/app.bundle.<number>.js file and return <number>
-     *
-     * @return string
-     */
-    private function getBundle(): string
-    {
-        $files = preg_grep('~^app.bundle.*\.js$~', scandir(WWW_ROOT . 'js' . DS));
-        foreach ($files as $filename) {
-            $filename = basename($filename, '.js');
-            $bundle = substr($filename, strlen('app.bundle.'));
-
-            return $bundle;
-        }
-
-        return '';
-    }
-
-    /**
      * Data provider for `testJsBundle` test case.
      *
      * @return array
@@ -576,11 +558,6 @@ class LinkHelperTest extends TestCase
                 ['abcdefg'], // filter
                 '', // expected
             ],
-            // this test case works only locally, where there's a bundle
-            // 'existing css' => [
-            //     ['app'], // filter
-            //     sprintf('<link rel="stylesheet" href="css/app.%s.css"/>', $this->getBundle()), // expected
-            // ],
         ];
     }
 

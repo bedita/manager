@@ -38,14 +38,16 @@ class Control
     {
         $type = $options['propertyType'];
         $format = self::format((array)$options['schema']);
-        $controlOptions = array_intersect_key($options, array_flip(['label', 'readonly', 'value']));
+        $controlOptions = array_intersect_key($options, array_flip(['label', 'disabled', 'readonly', 'value']));
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
 
             return array_merge($controlOptions, $result);
         }
         if (!in_array($type, self::CONTROL_TYPES)) {
-            return compact('type') + ['value' => $options['value']];
+            $result = compact('type') + ['value' => $options['value']];
+
+            return array_merge($controlOptions, $result);
         }
         $result = call_user_func_array(Form::getMethod(self::class, $type), [$options]);
 

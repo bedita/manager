@@ -61,19 +61,24 @@ class SchemaHelper extends Helper
     public function controlOptions(string $name, $value, $schema = []): array
     {
         $options = Options::customControl($name, $value);
+        $objectType = (string)$this->_View->get('objectType');
+        $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
+        $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
+
         if (!empty($options)) {
-            return $options;
+            return array_merge($options, [
+                'label' => Hash::get($ctrlOptions, 'label'),
+                'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+                'disabled' => Hash::get($ctrlOptions, 'readonly', false),
+            ]);
         }
         // verify if there's an handler by $type.$name
-        $objectType = (string)$this->_View->get('objectType');
         if (!empty(Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name)))) {
             $handler = Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name));
 
             return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
         }
         $type = ControlType::fromSchema((array)$schema);
-        $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
-        $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
 
         return Control::control([
             'objectType' => $objectType,
@@ -83,6 +88,7 @@ class SchemaHelper extends Helper
             'propertyType' => Hash::get($ctrlOptions, 'type', $type),
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
+            'disabled' => Hash::get($ctrlOptions, 'readonly', false),
         ]);
     }
 

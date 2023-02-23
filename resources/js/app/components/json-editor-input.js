@@ -41,6 +41,7 @@ export default {
                 content: {
                     json,
                 },
+                readOnly: element.getAttribute('readonly') === 'readonly' ? true : false,
                 onChange: function () {
                     try {
                         const val = element.jsonEditor.get();
