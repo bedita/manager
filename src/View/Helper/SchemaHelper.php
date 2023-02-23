@@ -72,19 +72,21 @@ class SchemaHelper extends Helper
                 'disabled' => Hash::get($ctrlOptions, 'readonly', false),
             ]);
         }
+        if (empty($ctrlOptions['type'])) {
+            $ctrlOptions['type'] = ControlType::fromSchema((array)$schema);
+        }
         // verify if there's a custom renderer for $type and $name
         $custom = $this->customControl($name, $value, $ctrlOptions);
         if (!empty($custom)) {
             return $custom;
         }
-        $type = ControlType::fromSchema((array)$schema);
 
         return Control::control([
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
             'schema' => (array)$schema,
-            'propertyType' => Hash::get($ctrlOptions, 'type', $type),
+            'propertyType' => (string)$ctrlOptions['type'],
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
             'disabled' => Hash::get($ctrlOptions, 'readonly', false),

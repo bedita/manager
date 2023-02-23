@@ -16,7 +16,7 @@ namespace App\Form;
 use Cake\Utility\Hash;
 
 /**
- * Return a custom component to handle input for a JSON field
+ * Return a custom component to handle input for a property
  */
 class CustomComponentControl implements CustomHandlerInterface
 {
@@ -29,19 +29,20 @@ class CustomComponentControl implements CustomHandlerInterface
         $tag = Hash::get($options, 'tag', 'key-value-list');
         $label = (string)Hash::get($options, 'label', $name);
         $readonly = (bool)Hash::get($options, 'readonly', false);
-        $json = htmlspecialchars($this->jsonValue($value));
+        $type = (string)Hash::get($options, 'type');
+        if ($type === 'json' || is_array($value) || is_object($value)) {
+            $value = htmlspecialchars($this->jsonValue($value));
+        }
+        $html = sprintf(
+            '<%s label="%s" name="%s" value="%s" :readonly=%s />',
+            $tag,
+            $label,
+            $name,
+            $value,
+            $readonly ? 'true' : 'false',
+        );
 
-        return [
-            'class' => 'json',
-            'html' => sprintf(
-                '<%s label="%s" name="%s" value="%s" :readonly=%s />',
-                $tag,
-                $label,
-                $name,
-                $json,
-                $readonly ? 'true' : 'false',
-            ),
-        ];
+        return compact('type', 'html');
     }
 
     /**

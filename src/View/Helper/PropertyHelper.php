@@ -75,7 +75,7 @@ class PropertyHelper extends Helper
         if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
             unset($controlOptions['v-datepicker']);
         }
-        if (Hash::get($controlOptions, 'class') === 'json') {
+        if (Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
         }
