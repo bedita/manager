@@ -75,7 +75,7 @@ class SchemaHelper extends Helper
         if (empty($ctrlOptions['type'])) {
             $ctrlOptions['type'] = ControlType::fromSchema((array)$schema);
         }
-        // verify if there's a custom renderer for $type and $name
+        // verify if there's a custom control handler for $type and $name
         $custom = $this->customControl($name, $value, $ctrlOptions);
         if (!empty($custom)) {
             return $custom;
