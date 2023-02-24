@@ -31,20 +31,17 @@ class PropertyHelperTest extends TestCase
      */
     public function setUp(): void
     {
-        Configure::write(
-            'Control.handlers',
-            array_merge(
-                (array)\Cake\Core\Configure::read('Control.handlers'),
-                [
-                    'dummies' => [ // an object type
-                        'descr' => [ // a field
-                            'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
-                            'method' => 'dummy',
-                        ],
-                    ],
-                ]
-            )
-        );
+        // set custom control handlers
+        $propsConf = (array)Configure::read('Properties');
+        $propsConf['dummies'] = [
+            'options' => [
+                'descr' => [
+                    'handler' => 'App\Form\CustomComponentControl',
+                    'tag' => 'dummy',
+                ],
+            ],
+        ];
+        Configure::write('Properties', $propsConf);
     }
 
     /**
@@ -132,7 +129,7 @@ class PropertyHelperTest extends TestCase
                 [
                     'name' => 'descr',
                 ],
-                '<dummy>something</dummy>',
+                '<dummy label="descr" name="descr" value="something" :readonly=false></dummy>',
             ],
             'date readonly' => [
                 'expires',

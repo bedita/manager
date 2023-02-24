@@ -53,8 +53,8 @@ class SchemaHelperTest extends TestCase
         $view->set('objectType', 'dummies');
         $this->Schema = new SchemaHelper($view);
         // set custom control handlers
-        $control = (array)Configure::read('Properties');
-        $control['dummies'] = [
+        $propsConf = (array)Configure::read('Properties');
+        $propsConf['dummies'] = [
             'options' => [
                 'descr' => [
                     'handler' => 'App\Form\CustomComponentControl',
@@ -62,7 +62,7 @@ class SchemaHelperTest extends TestCase
                 ],
             ],
         ];
-        Configure::write('Control', $control);
+        Configure::write('Properties', $propsConf);
     }
 
     /**
