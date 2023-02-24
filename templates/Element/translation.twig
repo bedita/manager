@@ -12,6 +12,7 @@
                 'id': 'form-translate',
             })|raw }}
 
+            <property-view inline-template :is-default-open=true>
             <div class="main-view-column">
                 <section class="fieldset">
                     <div class="tab-container">
@@ -54,7 +55,7 @@
                         {% for key in translatable %}
                             {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
                             {% set options = options|merge({'ref': key}) %}
-                            {{ Form.control('translated_fields.' ~ key, options)|raw }}
+                            {{ Property.control(key, translation.attributes.translated_fields[key], options)|raw }}
 
                             {# automatic translate button #}
                             {% if config('Translator.class') %}
@@ -75,7 +76,22 @@
                 </section>
                 {{ element('Form/meta', { 'object' : translation }) }}
             </div>
+            </property-view>
 
+            {# Set `_jsonKeys` hidden input from config #}
+            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+
+            {# The ID of the resource translated #}
+            {{ Form.hidden('object_id', {'value': object.id})|raw }}
+
+            {# The translation ID #}
+            {% if translation.id %}
+                {{ Form.hidden('id', {'value': translation.id})|raw }}
+            {% endif %}
+
+            {{ Form.end()|raw }}
+
+            <property-view inline-template :is-default-open=true>
             <div class="side-view-column original">
                 <section class="fieldset">
                     <div class="tab-container">
@@ -102,19 +118,7 @@
                 </section>
                 {{ element('Form/meta', { 'object' : object }) }}
             </div>
-
-            {# Set `_jsonKeys` hidden input from config #}
-            {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
-
-            {# The ID of the resource translated #}
-            {{ Form.hidden('object_id', {'value': object.id})|raw }}
-
-            {# The translation ID #}
-            {% if translation.id %}
-                {{ Form.hidden('id', {'value': translation.id})|raw }}
-            {% endif %}
-
-            {{ Form.end()|raw }}
+            </property-view>
 
             {# Append "Save" to sidebar #}
             {% do _view.append('app-module-buttons', Form.button( __('Save'),
@@ -143,7 +147,6 @@
                 ) %}
             {% endif %}
 
-            {{ Form.end()|raw }}
         </div>
 
     </div>

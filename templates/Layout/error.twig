@@ -40,7 +40,6 @@ BEdita Manager
     <main class="layout" v-show="vueLoaded" v-bind:class="panelIsOpen? 'panel-is-open' : ''">
 
         <div class="layout-content">
-            {{ element('Modules/header') }}
             {{ _view.fetch('content')|raw }}
         </div>
 
