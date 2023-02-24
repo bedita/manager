@@ -52,13 +52,13 @@ class SchemaHelperTest extends TestCase
         $view = new View($request, null, null, []);
         $view->set('objectType', 'dummies');
         $this->Schema = new SchemaHelper($view);
-        // set control handlers
-        $control = (array)Configure::read('Control');
-        $control['handlers'] = [
-            'dummies' => [ // an object type
-                'descr' => [ // a field
-                    'class' => 'App\Test\TestCase\View\Helper\PropertyHelperTest',
-                    'method' => 'dummy',
+        // set custom control handlers
+        $control = (array)Configure::read('Properties');
+        $control['dummies'] = [
+            'options' => [
+                'descr' => [
+                    'handler' => 'App\Form\CustomComponentControl',
+                    'tag' => 'dummy',
                 ],
             ],
         ];
@@ -348,7 +348,8 @@ class SchemaHelperTest extends TestCase
             'custom handler' => [
                 // expected result
                 [
-                    'html' => '<dummy>something</dummy>',
+                    'type' => 'string',
+                    'html' => '<dummy label="descr" name="descr" value="something" :readonly=false ></dummy>',
                 ],
                 // schema type
                 [
@@ -370,6 +371,7 @@ class SchemaHelperTest extends TestCase
      * @return void
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
+     * @covers ::customControl()
      */
     public function testControlOptions(array $expected, array $schema, string $name, ?string $value): void
     {
