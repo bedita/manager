@@ -188,10 +188,10 @@ class SchemaComponentTest extends TestCase
                 ],
                 [
                     'documents' => [
-                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'translatable', 'associations', 'relations', 'revision',
                     ],
                     'users' => [
-                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'translatable', 'associations', 'relations', 'revision',
                     ],
                 ],
             ],
@@ -211,9 +211,9 @@ class SchemaComponentTest extends TestCase
         if (empty($expected)) {
             static::assertEquals($expected, $schemasByType);
         } else {
-            foreach ($expected as $type => $keys) {
+            foreach ($expected as $type => $expected) {
                 $actual = array_keys($schemasByType[$type]);
-                static::assertEquals($actual, $keys);
+                static::assertEquals($expected, $actual);
             }
         }
     }
