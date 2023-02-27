@@ -57,7 +57,7 @@ class ErrorController extends AppController
     public function beforeRender(EventInterface $event): ?Response
     {
         $this->viewBuilder()->setClassName('App\View\AppView');
-        $this->viewBuilder()->setTemplatePath('Pages/Error');
+        $this->viewBuilder()->setTemplatePath('Error');
 
         return null;
     }
