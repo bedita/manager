@@ -14,23 +14,23 @@ on:
 
 jobs:
   cs:
-    uses: didoda/github-workflows/.github/workflows/php-cs.yml@VDEBUG
+    uses: didoda/github-workflows/.github/workflows/php-cs.yml@v2
     with:
       php_versions: '["7.4", "8.0", "8.1"]'
 
   stan:
-    uses: didoda/github-workflows/.github/workflows/php-stan.yml@VDEBUG
+    uses: didoda/github-workflows/.github/workflows/php-stan.yml@v2
     with:
       php_versions: '["7.4", "8.0", "8.1"]'
 
   unit-4:
-    uses: didoda/github-workflows/.github/workflows/php-unit.yml@VDEBUG
+    uses: didoda/github-workflows/.github/workflows/php-unit.yml@v2
     with:
       php_versions: '["7.4","8.0","8.1"]'
       bedita_version: '4'
 
   unit-5:
-    uses: didoda/github-workflows/.github/workflows/php-unit.yml@VDEBUG
+    uses: didoda/github-workflows/.github/workflows/php-unit.yml@v2
     with:
       php_versions: '["7.4","8.0","8.1"]'
       bedita_version: '5'
