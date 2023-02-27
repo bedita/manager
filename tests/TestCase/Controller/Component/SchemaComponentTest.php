@@ -188,7 +188,7 @@ class SchemaComponentTest extends TestCase
                 ],
                 [
                     'documents' => [
-                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
+                        'definitions', '$id', '$schema', 'type', 'properties', 'required', 'translatable', 'associations', 'relations', 'revision',
                     ],
                     'users' => [
                         'definitions', '$id', '$schema', 'type', 'properties', 'required', 'associations', 'relations', 'revision',
