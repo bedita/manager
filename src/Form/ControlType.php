@@ -62,7 +62,7 @@ class ControlType
         if (empty($schema)) {
             return 'json';
         }
-        $schemaType = Hash::get($schema, 'type', null);
+        $schemaType = (string)Hash::get($schema, 'type');
         if ($schemaType === 'categories') {
             return $schemaType;
         }
