@@ -14,7 +14,7 @@ Official Backend Admin WebApp for [BEdita4 and BEdita5 API](https://gihub.com/be
 
 ## Prerequisites
 
-* [PHP](https://www.php.net/) 7.4, 8.0 and 8.1
+* [PHP](https://www.php.net/) 7.4, 8.0, 8.1 and 8.2 supported
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 * [Node](https://nodejs.org) 14 or 16
 * [Yarn](https://yarnpkg.com) >= 1.15
