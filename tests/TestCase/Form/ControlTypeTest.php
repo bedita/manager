@@ -107,10 +107,15 @@ class ControlTypeTest extends TestCase
                     'const' => 13,
                 ],
             ],
-            'json' => [
+            'json object' => [
                 'json',
                 [
                     'type' => 'object',
+                ],
+            ],
+            'json' => [
+                'json',
+                [
                 ],
             ],
             'unknown' => [
