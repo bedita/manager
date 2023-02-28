@@ -133,7 +133,7 @@ class PropertyHelper extends Helper
             return null;
         }
 
-        return $res;
+        return (array)$res;
     }
 
     /**
