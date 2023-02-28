@@ -119,6 +119,8 @@ const _vueInstance = new Vue({
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+        KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
+        StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
         // icons
         IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
         IconCategories: () => import(/* webpackChunkName: "icon-categories" */'@carbon/icons-vue/es/categories/16.js'),
