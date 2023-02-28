@@ -64,7 +64,7 @@ class PropertyHelper extends Helper
      * @param string $name The property name
      * @param mixed|null $value The property value
      * @param array $options The form element options, if any
-     * @param string|null $type The object type, for others schemas
+     * @param string|null $type The object or resource type, for others schemas
      * @return string
      */
     public function control(string $name, $value, array $options = [], ?string $type = null): string

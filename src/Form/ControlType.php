@@ -51,7 +51,7 @@ class ControlType
      *   'richtext'
      *   'text'
      *
-     * @param array $schema The property schema
+     * @param array|null $schema The property schema
      * @return string
      */
     public static function fromSchema(?array $schema): string

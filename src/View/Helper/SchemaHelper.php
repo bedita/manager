@@ -55,7 +55,7 @@ class SchemaHelper extends Helper
      *
      * @param string $name Property name.
      * @param mixed $value Property value.
-     * @param array|null $schema Object schema array.
+     * @param array|null $schema Property schema.
      * @return array
      */
     public function controlOptions(string $name, $value, ?array $schema = null): array
