@@ -59,7 +59,7 @@ class ControlType
         if (!is_array($schema)) {
             return 'text';
         }
-        if ($schema === []) {
+        if (empty($schema)) {
             return 'json';
         }
         $schemaType = Hash::get($schema, 'type', null);
