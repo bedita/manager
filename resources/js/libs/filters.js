@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { humanizeString } from '../app/helpers/text-helper.js';
 
 /**
  * Converts a snake case string to title case.
@@ -8,9 +9,7 @@ import Vue from 'vue';
  * @return {String}
  */
 Vue.filter('humanize', function(str) {
-    return str.split('_').map(function(item) {
-        return item.charAt(0).toUpperCase() + item.substring(1);
-    }).join(' ');
+    return humanizeString(str);
 });
 
 /**

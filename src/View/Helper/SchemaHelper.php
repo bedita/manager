@@ -72,24 +72,45 @@ class SchemaHelper extends Helper
                 'disabled' => Hash::get($ctrlOptions, 'readonly', false),
             ]);
         }
-        // verify if there's an handler by $type.$name
-        if (!empty(Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name)))) {
-            $handler = Configure::read(sprintf('Control.handlers.%s.%s', $objectType, $name));
-
-            return call_user_func_array([$handler['class'], $handler['method']], [$value, $schema]);
+        if (empty($ctrlOptions['type'])) {
+            $ctrlOptions['type'] = ControlType::fromSchema((array)$schema);
         }
-        $type = ControlType::fromSchema((array)$schema);
+        // verify if there's a custom control handler for $type and $name
+        $custom = $this->customControl($name, $value, $ctrlOptions);
+        if (!empty($custom)) {
+            return $custom;
+        }
 
         return Control::control([
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
             'schema' => (array)$schema,
-            'propertyType' => Hash::get($ctrlOptions, 'type', $type),
+            'propertyType' => (string)$ctrlOptions['type'],
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
             'disabled' => Hash::get($ctrlOptions, 'readonly', false),
         ]);
+    }
+
+    /**
+     * Return custom control array if a custom handler has been defined or null otherwise.
+     *
+     * @param string $name Property name
+     * @param mixed $value Property value.
+     * @param array $options Control options.
+     * @return array|null
+     */
+    protected function customControl($name, $value, array $options): ?array
+    {
+        $handlerClass = Hash::get($options, 'handler');
+        if (empty($handlerClass)) {
+            return null;
+        }
+        /** @var \App\Form\CustomHandlerInterface $handler */
+        $handler = new $handlerClass();
+
+        return $handler->control($name, $value, $options);
     }
 
     /**
