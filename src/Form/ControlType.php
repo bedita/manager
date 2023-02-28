@@ -51,15 +51,18 @@ class ControlType
      *   'richtext'
      *   'text'
      *
-     * @param mixed $schema The property schema
+     * @param array|null $schema The property schema
      * @return string
      */
-    public static function fromSchema($schema): string
+    public static function fromSchema(?array $schema): string
     {
-        if (!is_array($schema)) {
+        if ($schema === null) {
             return 'text';
         }
-        $schemaType = Hash::get($schema, 'type', null);
+        if (empty($schema)) {
+            return 'json';
+        }
+        $schemaType = (string)Hash::get($schema, 'type');
         if ($schemaType === 'categories') {
             return $schemaType;
         }
@@ -72,7 +75,7 @@ class ControlType
                 return ControlType::fromSchema($subSchema);
             }
         }
-        if (empty($schemaType) || !in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
+        if (!in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
         $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schemaType)));
