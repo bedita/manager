@@ -99,7 +99,7 @@ class ControlTypeTest extends TestCase
             ],
             'not an array' => [
                 'text',
-                false,
+                null,
             ],
             'no type' => [
                 'text',
@@ -163,7 +163,7 @@ class ControlTypeTest extends TestCase
      * Test `fromSchema()` method.
      *
      * @param string $expected Expected result.
-     * @param array|bool $schema Schema.
+     * @param array|null $schema Schema.
      * @return void
      * @dataProvider fromSchemaProvider()
      * @covers ::fromSchema()
