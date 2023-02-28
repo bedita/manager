@@ -271,7 +271,7 @@ class AppController extends Controller
             return;
         }
 
-        $keys = explode(',', (string)$data['_jsonKeys']);
+        $keys = array_unique(explode(',', (string)$data['_jsonKeys']));
         foreach ($keys as $key) {
             $value = Hash::get($data, $key);
             $decoded = json_decode((string)$value, true);

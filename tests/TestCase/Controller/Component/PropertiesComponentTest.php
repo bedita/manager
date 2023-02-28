@@ -351,6 +351,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'description' => null,
                         'title' => 'A',
+                        'extra' => [],
                     ],
                     'publish' => [
                         'uname' => 'test',
@@ -367,6 +368,7 @@ class PropertiesComponentTest extends TestCase
                         'description' => null,
                         'status' => 'on',
                         'uname' => 'test',
+                        'extra' => [],
                     ],
                 ],
                 'gifts',
@@ -374,6 +376,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'description',
                         'title',
+                        'extra',
                     ],
                     'publish' => [
                         'uname',
