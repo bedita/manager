@@ -36,7 +36,7 @@ return [
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html',
+                        'contentMediaType' => 'text/plain',
                     ],
                 ],
                 '$id' => '/properties/description',
@@ -165,7 +165,7 @@ return [
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html',
+                        'contentMediaType' => 'text/plain',
                     ],
                 ],
                 '$id' => '/properties/description',
@@ -288,7 +288,7 @@ return [
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html',
+                        'contentMediaType' => 'text/plain',
                     ],
                 ],
                 '$id' => '/properties/description',
@@ -421,7 +421,7 @@ return [
                     ],
                     [
                         'type' => 'string',
-                        'contentMediaType' => 'text/html',
+                        'contentMediaType' => 'text/plain',
                     ],
                 ],
                 '$id' => '/properties/description',
