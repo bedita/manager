@@ -1,12 +1,6 @@
-import { t } from 'ttag';
-
-/**
- * <key-value-list> component to handle simple JSON objects with key/values
- */
-export default {
-    template: `
-        <div class="input textarea text">
-            <label :for="name"><: label|humanize :></label>
+<template>
+    <div class="input textarea text">
+        <label :for="name">{{ label|humanize }}</label>
             <div :id="name">
                 <div class="key-value-item mb-1" v-for="(item, index) in items">
                     <div>
@@ -20,17 +14,23 @@ export default {
                         </div>
                     </div>
                     <div class="mb-2" v-if="!readonly">
-                        <button @click.prevent="remove(index)">${t`Remove`}</button>
+                        <button @click.prevent="remove(index)">{{  t('Remove') }}</button>
                     </div>
                 </div>
             </div>
 
-            <button @click.prevent="add" v-if="!readonly">${t`Add`}</button>
+            <button @click.prevent="add" v-if="!readonly">{{  t('Add') }}</button>
 
             <input type="hidden" :name="name" v-model="result" />
         </div>
-    `,
+</template>
 
+<script>
+
+/**
+ * <key-value-list> component to handle simple JSON objects with key/values
+ */
+export default {
     props: {
         value: String,
         name: String,
@@ -102,3 +102,4 @@ export default {
         },
     },
 }
+</script>

@@ -1,28 +1,28 @@
-import { t } from 'ttag';
+<template>
+    <div class="input textarea text">
+        <label :for="name">{{ label|humanize }}</label>
+        <div :id="name">
+            <div class="key-value-item mb-1" v-for="(item, index) in items">
+                <div>
+                    <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
+                </div>
+                <div class="mb-2" v-if="!readonly">
+                    <button @click.prevent="remove(index)">{{  t('Remove') }}</button>
+                </div>
+            </div>
+        </div>
+        <button @click.prevent="add" v-if="!readonly">{{  t('Add') }}</button>
+
+        <input type="hidden" :name="name" v-model="result" />
+    </div>
+</template>
+
+<script>
 
 /**
  * <string-list> component to handle simple JSON array of strings
  */
 export default {
-    template: `
-        <div class="input textarea text">
-            <label :for="name"><: label|humanize :></label>
-            <div :id="name">
-                <div class="key-value-item mb-1" v-for="(item, index) in items">
-                    <div>
-                        <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
-                    </div>
-                    <div class="mb-2" v-if="!readonly">
-                        <button @click.prevent="remove(index)">${t`Remove`}</button>
-                    </div>
-                </div>
-            </div>
-            <button @click.prevent="add" v-if="!readonly">${t`Add`}</button>
-
-            <input type="hidden" :name="name" v-model="result" />
-        </div>
-    `,
-
     props: {
         value: String,
         name: String,
@@ -86,3 +86,5 @@ export default {
         },
     },
 }
+</script>
+
