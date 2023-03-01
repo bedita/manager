@@ -19,6 +19,7 @@
         })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
+            {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
 
             <div class="main-view-column">
                 <section class="fieldset">
