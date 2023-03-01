@@ -13,6 +13,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 // config
 let jsRoot = BUNDLE.jsRoot;
@@ -63,6 +64,8 @@ let webpackPlugins = [
         emitWarning: true,
         outputReport: true
     }),
+
+    new VueLoaderPlugin(),
 ];
 
 
@@ -257,6 +260,15 @@ module.exports = {
                     { loader: 'json-loader' },
                     { loader: './webpack-gettext-loader' },
                 ]
+            },
+            {
+                include: [
+                    path.resolve(__dirname, BUNDLE.resourcesRoot),
+                ],
+                test: /\.vue$/,
+                use: [
+                    { loader: 'vue-loader' },
+                ],
             },
             {
                 test: /\.lazy\.(scss|css)$/,
