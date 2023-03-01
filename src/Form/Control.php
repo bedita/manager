@@ -220,6 +220,7 @@ class Control
             return [
                 'type' => 'checkbox',
                 'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+                'value' => '1',
             ];
         }
 
@@ -238,6 +239,7 @@ class Control
         return [
             'type' => 'checkbox',
             'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            'value' => '1',
         ];
     }
 

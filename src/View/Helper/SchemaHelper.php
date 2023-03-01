@@ -55,10 +55,10 @@ class SchemaHelper extends Helper
      *
      * @param string $name Property name.
      * @param mixed $value Property value.
-     * @param array $schema Object schema array.
+     * @param array|null $schema Property schema.
      * @return array
      */
-    public function controlOptions(string $name, $value, $schema = []): array
+    public function controlOptions(string $name, $value, ?array $schema = null): array
     {
         $options = Options::customControl($name, $value);
         $objectType = (string)$this->_View->get('objectType');
@@ -73,7 +73,7 @@ class SchemaHelper extends Helper
             ]);
         }
         if (empty($ctrlOptions['type'])) {
-            $ctrlOptions['type'] = ControlType::fromSchema((array)$schema);
+            $ctrlOptions['type'] = ControlType::fromSchema($schema);
         }
         // verify if there's a custom control handler for $type and $name
         $custom = $this->customControl($name, $value, $ctrlOptions);
