@@ -1,6 +1,6 @@
 {% set level = level|default('info') %}
 
-<flash-message inline-template {% if level == 'error' %} :is-blocking="true" {% endif %}>
+<flash-message inline-template {% if level == 'error' %} :is-blocking="true" {% endif %} :options="{{ config('Flash')|json_encode }}" level="{{ level }}" message="{{ message }}">
 <div id="flashMessagesContainer" ref="flashMessagesContainer" :class="isVisible? 'on' : ''">
 
     {% if level == 'error' and _view.name != 'Login' %}

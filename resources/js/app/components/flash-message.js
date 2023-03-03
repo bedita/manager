@@ -5,6 +5,7 @@
  * <flash-message> component
  *
  */
+import { error as showError } from 'app/components/dialog/dialog';
 
 export default {
     props: {
@@ -15,6 +16,18 @@ export default {
         isBlocking: {
             type: Boolean,
             default: false,
+        },
+        level: {
+            type: String,
+            default: '',
+        },
+        message: {
+            type: String,
+            default: '',
+        },
+        options: {
+            type: Object,
+            default: {}
         },
         waitPanelAnimation: {
             type: Number,
@@ -30,6 +43,10 @@ export default {
     },
 
     mounted() {
+        if (this.options?.modal) {
+            this.isVisible = false;
+            showError(this.message);
+        }
         this.$nextTick(() => {
             if (!this.isBlocking) {
                 setTimeout(() => {
