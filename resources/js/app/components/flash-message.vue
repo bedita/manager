@@ -23,22 +23,11 @@
 </template>
 
 <script>
-/**
- * Templates that uses this component (directly or indirectly):
- *  Template/Element/flash/flash.twig
- *
- * <flash-message> component
- *
- */
 import { t } from 'ttag';
 import { error, warning, info, success } from 'app/components/dialog/dialog';
 
 export default {
     props: {
-        timeout: {
-            type: Number,
-            default: 4,
-        },
         level: {
             type: String,
             default: '',
@@ -55,13 +44,17 @@ export default {
             type: Object,
             default: () => ({}),
         },
-        viewName: {
-            type: String,
-            default: '',
+        timeout: {
+            type: Number,
+            default: 4,
         },
         userRoles: {
             type: Array,
             default: () => ([]),
+        },
+        viewName: {
+            type: String,
+            default: '',
         },
         waitPanelAnimation: {
             type: Number,
@@ -77,10 +70,9 @@ export default {
     },
 
     mounted() {
-        console.log('>>> params', this.params);
         if (this.isModal) {
             this.isVisible = false;
-            this.modalCtr(this.message);
+            this.modalCtr(this.fullMessage());
         }
         this.$nextTick(() => {
             if (this.level !== 'error' && !this.isModal) {
@@ -119,7 +111,7 @@ export default {
 
             return Object.entries(this.params)
                 .map(([key, value]) => `${key}: ${value}`)
-                .join('<br>');
+                .join('<br/>');
         },
 
         iconClass() {
@@ -156,6 +148,14 @@ export default {
     },
 
     methods: {
+        fullMessage() {
+            if (this.params && this.isAdmin) {
+                return this.message + ' ' + Object.entries(this.params).map(([key, value]) => `${key}: ${value}`).join(' | ');
+            }
+
+            return this.message;
+        },
+
         hide() {
             this.isVisible = !this.isVisible;
             setTimeout(() => {

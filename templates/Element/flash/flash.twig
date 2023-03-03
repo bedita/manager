@@ -1,3 +1,8 @@
-{% set level = level|default('info') %}
-
-<flash-message :options="{{ config('Flash')|json_encode }}" level="{{ level }}" message="{{ message }}" :params="{{ params|json_encode }}" view-name="{{ _view.name }}" :user-roles="{{ user.roles|json_encode }}"></flash-message>
+<flash-message
+    level="{{ level|default('info') }}"
+    message="{{ message }}"
+    view-name="{{ _view.name }}"
+    :options="{{ config('Flash')|json_encode }}"
+    :params="{{ params|json_encode }}"
+    :user-roles="{{ user.roles|json_encode }}">
+</flash-message>
