@@ -225,7 +225,7 @@ class ThumbsComponentTest extends TestCase
         $this->Thumbs = $thumbsComponent;
         $this->Thumbs->urls($data);
         static::assertEquals($expected, $data);
-        $actual = $this->Thumbs->getController()->getRequest()->getSession()->read('Flash.flash.0.params.0');
+        $actual = $this->Thumbs->getController()->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals($expectedErrors[0], $actual);
     }
 
