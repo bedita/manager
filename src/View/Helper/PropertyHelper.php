@@ -121,7 +121,7 @@ class PropertyHelper extends Helper
             $schemas = (array)$this->_View->get('schemasByType');
             $schema = (array)Hash::get($schemas, $objectType);
         }
-        if (in_array($name, self::SPECIAL_PROPS_TYPE)) {
+        if (Hash::check(self::SPECIAL_PROPS_TYPE, $name)) {
             return array_filter([
                 'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
                 $name => Hash::get($schema, sprintf('%s', $name)),
