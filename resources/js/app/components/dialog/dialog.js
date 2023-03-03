@@ -55,7 +55,7 @@ export const Dialog = Vue.extend({
             message: '',
             confirmMessage: 'ok',
             confirmCallback: this.hide,
-            cancelMessage: t`cancel`,
+            cancelMessage: false,
             inputValue: '',
             checkValue: '',
             checkLabel: '',
@@ -98,10 +98,16 @@ export const Dialog = Vue.extend({
             this.icon = 'icon-info-1';
             this.show(message, '', root);
         },
+        success(message, root = document.body) {
+            this.dialogType = 'success';
+            this.icon = 'icon-ok-circled-1';
+            this.show(message, '', root);
+        },
         confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
             this.dialogType = type;
             this.confirmMessage = confirmMessage;
             this.confirmCallback = confirmCallback;
+            this.cancelMessage = t`cancel`;
             this.show(message, this.dialogType, root);
         },
         prompt(message, defaultValue, confirmCallback, root = document.body, options = {}) {
@@ -111,6 +117,7 @@ export const Dialog = Vue.extend({
             this.checkValue = options?.checkValue || '';
             this.checkLabel = options?.checkLabel || '';
             this.confirmCallback = confirmCallback;
+            this.cancelMessage = t`cancel`;
             this.show(message, '', root);
         },
         prepareCallback() {
@@ -138,6 +145,13 @@ export const error = (message, root) => {
 export const info = (message, root) => {
     const dialog = new Dialog();
     dialog.info(message, root);
+
+    return dialog;
+};
+
+export const success = (message, root) => {
+    const dialog = new Dialog();
+    dialog.success(message, root);
 
     return dialog;
 };

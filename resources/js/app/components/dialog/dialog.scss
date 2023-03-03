@@ -75,6 +75,14 @@
             }
         }
 
+        &.success {
+            border-color: $success;
+
+            .icon-ok-circled-1 {
+                color: $success;
+            }
+        }
+
         header {
             .icon-cancel-1 {
                 cursor: pointer;
