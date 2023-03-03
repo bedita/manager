@@ -234,6 +234,12 @@ class PropertyHelperTest extends TestCase
                     ],
                 ],
             ],
+            'file_size' => [
+                [
+                    'type' => 'byte',
+                ],
+                'file_size',
+            ],
         ];
     }
 
