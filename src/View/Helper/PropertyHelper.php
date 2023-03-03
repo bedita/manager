@@ -121,19 +121,15 @@ class PropertyHelper extends Helper
             $schemas = (array)$this->_View->get('schemasByType');
             $schema = (array)Hash::get($schemas, $objectType);
         }
-        $res = Hash::get($schema, sprintf('properties.%s', $name));
-        if ($res === null) {
-            if (Hash::check(self::SPECIAL_PROPS_TYPE, $name)) {
-                return array_filter([
-                    'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
-                    $name => Hash::get($schema, sprintf('%s', $name)),
-                ]);
-            }
-
-            return null;
+        if (Hash::check(self::SPECIAL_PROPS_TYPE, $name)) {
+            return array_filter([
+                'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
+                $name => Hash::get($schema, sprintf('%s', $name)),
+            ]);
         }
+        $res = Hash::get($schema, sprintf('properties.%s', $name));
 
-        return (array)$res;
+        return $res === null ? null : (array)$res;
     }
 
     /**
