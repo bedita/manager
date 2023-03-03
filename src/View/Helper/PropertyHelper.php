@@ -111,29 +111,26 @@ class PropertyHelper extends Helper
      * JSON Schema array of property name
      *
      * @param string $name The property name
-     * @param string|null $objectType The object or resource type to use as schema
-     * @return array|null
+     * @param string|null $type The type, for others schemas
+     * @return array
      */
-    public function schema(string $name, ?string $objectType = null): ?array
+    public function schema(string $name, ?string $type = null): array
     {
         $schema = (array)$this->_View->get('schema');
-        if (!empty($objectType)) {
+        if (!empty($type)) {
             $schemas = (array)$this->_View->get('schemasByType');
-            $schema = (array)Hash::get($schemas, $objectType);
+            $schema = (array)Hash::get($schemas, $type);
         }
-        $res = Hash::get($schema, sprintf('properties.%s', $name));
-        if ($res === null) {
-            if (Hash::check(self::SPECIAL_PROPS_TYPE, $name)) {
-                return array_filter([
-                    'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
-                    $name => Hash::get($schema, sprintf('%s', $name)),
-                ]);
-            }
-
-            return null;
+        $res = (array)Hash::get($schema, sprintf('properties.%s', $name));
+        $default = array_filter([
+            'type' => Hash::get(self::SPECIAL_PROPS_TYPE, $name),
+            $name => Hash::get($schema, sprintf('%s', $name)),
+        ]);
+        if (in_array($name, self::SPECIAL_PROPS_TYPE)) {
+            return $default;
         }
 
-        return (array)$res;
+        return !empty($res) ? $res : $default;
     }
 
     /**
