@@ -84,7 +84,7 @@ class AdminHelperTest extends TestCase
                 'default',
                 'dummy',
                 'something',
-                '<div class="input text"><input type="text" name="dummy" size="25" id="dummy" value="something"/></div>',
+                '<div class="input textarea"><textarea name="dummy" v-jsoneditor="true" class="json" size="25" id="dummy" rows="5">&quot;something&quot;</textarea></div>',
             ],
         ];
     }
