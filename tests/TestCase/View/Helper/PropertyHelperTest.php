@@ -187,6 +187,76 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testSchema` test case.
+     *
+     * @return array
+     */
+    public function schemaProvider(): array
+    {
+        return [
+            'string' => [
+                [
+                    'type' => 'string',
+                ],
+                'title',
+                [
+                    'properties' => [
+                        'title' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            'null' => [
+                null,
+                'title',
+            ],
+            'empty' => [
+                [],
+                'some',
+                [
+                    'properties' => [
+                        'some' => [],
+                    ],
+                ],
+            ],
+            'categories' => [
+                [
+                    'type' => 'categories',
+                    'categories' => [
+                        'a' => 'A',
+                        'b' => 'B',
+                    ],
+                ],
+                'categories',
+                [
+                    'categories' => [
+                        'a' => 'A',
+                        'b' => 'B',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `schema` method
+     *
+     * @param array|null $expected The expected result
+     * @param string $name Property name
+     * @param array|null $schema Object schema
+     * @return void
+     * @dataProvider schemaProvider()
+     * @covers ::schema()
+     */
+    public function testSchema(?array $expected, string $name, ?array $schema = null): void
+    {
+        $view = new View(null, null, null, []);
+        $view->set('schema', $schema);
+        $property = new PropertyHelper($view);
+        $actual = $property->schema($name);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `control` with parameter type, for "other" types schema controls
      *
      * @return void
