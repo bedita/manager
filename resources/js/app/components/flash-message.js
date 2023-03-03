@@ -5,7 +5,7 @@
  * <flash-message> component
  *
  */
-import { error as showError } from 'app/components/dialog/dialog';
+import { error, warning, info, success } from 'app/components/dialog/dialog';
 
 export default {
     props: {
@@ -27,7 +27,15 @@ export default {
         },
         options: {
             type: Object,
-            default: {}
+            default: () => ({})
+        },
+        params: {
+            type: Object,
+            default: () => ({}),
+        },
+        viewName: {
+            type: String,
+            default: '',
         },
         waitPanelAnimation: {
             type: Number,
@@ -43,17 +51,37 @@ export default {
     },
 
     mounted() {
-        if (this.options?.modal) {
+        if (this.isModal) {
             this.isVisible = false;
-            showError(this.message);
+            this.modalCtr(this.message);
         }
         this.$nextTick(() => {
-            if (!this.isBlocking) {
+            if (!this.isBlocking && !this.isModal) {
                 setTimeout(() => {
                     this.hide();
                 }, this.timeout * 1000);
             }
         });
+    },
+
+    computed: {
+        isModal() {
+            return this.options?.modal || false;
+        },
+
+        modalCtr() {
+            switch (this.level) {
+                case 'success':
+                    return success;
+                case 'error':
+                    return error;
+                case 'warning':
+                    return warning;
+                case 'info':
+                default:
+                    return info;
+            }
+        }
     },
 
     methods: {
