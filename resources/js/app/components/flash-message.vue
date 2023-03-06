@@ -15,7 +15,7 @@
                 {{ dumpLabel }}<i class="icon-down-dir"></i>
             </a>
             <div v-if="shouldShowDump && isAdmin" class="dump" v-show="isDumpVisible">
-                <code v-html="dumpMessage"></code>
+                <pre>{{ dumpMessage }}</pre>
             </div>
             <p v-if="shouldShowDump && !isAdmin">{{ dumpLabel }}</p>
         </div>
@@ -109,9 +109,11 @@ export default {
                 return '';
             }
 
+            const isScalar = (value) => value === null || typeof value !== 'object';
+
             return Object.entries(this.params)
-                .map(([key, value]) => `${key}: ${value}`)
-                .join('<br/>');
+                .map(([key, value]) => `${key}: ${isScalar(value) ? value : JSON.stringify(value, null, 4)}`)
+                .join('\n');
         },
 
         iconClass() {

@@ -19,8 +19,8 @@ export const Dialog = Vue.extend({
                     <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
-                <input class="mt-1" type="text" v-if="dialogType == 'prompt'" v-model.lazy="inputValue" />
-                <div class="mt-1" v-if="dialogType == 'prompt'" v-show="checkLabel">
+                <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
+                <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
                     <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
                     <label for="_check"><: checkLabel :></label>
                 </div>
