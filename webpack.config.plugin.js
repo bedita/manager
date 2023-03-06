@@ -6,7 +6,19 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 // auto load installed plugins
-const pluginsFound = readDirs(BUNDLE.beditaPluginsRoot);
+const { readdir } = require('fs')
+
+let pluginsFound = [];
+let noPlugins = true;
+readdir(BUNDLE.beditaPluginsRoot, function(err, files) {
+    noPlugins = !err && files.length > 0;
+});
+
+if (noPlugins) {
+    console.log('No plugins to build');
+} else {
+    pluginsFound = readDirs(BUNDLE.beditaPluginsRoot);
+}
 
 let entries = {};
 let aliases = {};
