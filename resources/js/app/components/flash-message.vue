@@ -72,7 +72,7 @@ export default {
     mounted() {
         if (this.isModal) {
             this.isVisible = false;
-            this.modalCtr(this.fullMessage());
+            this.modalCtr(this.message, document.body, this.dumpMessage);
         }
         this.$nextTick(() => {
             if (this.level !== 'error' && !this.isModal) {

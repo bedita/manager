@@ -19,6 +19,10 @@ export const Dialog = Vue.extend({
                     <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
+                <a v-if="!!dumpMessage" v-show="!showDump" @click="showDump = true">
+                    <: t('details') :><i class="icon-down-dir">
+                </a>
+                <pre v-if="!!dumpMessage" v-show="showDump"><: dumpMessage :></pre>
                 <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
                 <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
                     <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
@@ -53,6 +57,8 @@ export const Dialog = Vue.extend({
             headerText: '',
             icon: 'icon-attention-circled',
             message: '',
+            dumpMessage: false,
+            showDump: false,
             confirmMessage: 'ok',
             confirmCallback: this.hide,
             cancelMessage: false,
@@ -89,8 +95,9 @@ export const Dialog = Vue.extend({
             this.dialogType = 'warning';
             this.show(message, this.dialogType, root);
         },
-        error(message, root = document.body) {
+        error(message, root = document.body, dumpMessage = false) {
             this.dialogType = 'error';
+            this.dumpMessage = dumpMessage;
             this.show(message, this.dialogType, root);
         },
         info(message, root = document.body) {
@@ -135,9 +142,9 @@ export const warning = (message, root) => {
     return dialog;
 };
 
-export const error = (message, root) => {
+export const error = (message, root, dumpMessage = false) => {
     const dialog = new Dialog();
-    dialog.error(message, root);
+    dialog.error(message, root, dumpMessage);
 
     return dialog;
 };
