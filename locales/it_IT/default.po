@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-02-16 07:59:18 \n"
+"POT-Creation-Date: 2023-03-06 16:09:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -809,6 +809,9 @@ msgstr "La lingua principale è"
 msgid "The thumbnail is not available"
 msgstr "La miniatura non è disponibile"
 
+msgid "There where errors creating the thumbnail(s)"
+msgstr "È avvenuto un errore nella creazione delle miniature"
+
 msgid "Thumb not available"
 msgstr "Miniatura non disponibile"
 
@@ -946,9 +949,6 @@ msgstr "id applicazione"
 
 msgid "cancel"
 msgstr "annulla"
-
-msgid "code"
-msgstr "codice"
 
 msgid "completed"
 msgstr "completato"
@@ -1200,6 +1200,12 @@ msgstr "Elementi"
 
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
+
+msgid "code"
+msgstr "codice"
+
+msgid "details"
+msgstr "dettagli"
 
 msgid "Open Uri"
 msgstr "Apri indirizzo"
