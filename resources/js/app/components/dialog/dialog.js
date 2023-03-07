@@ -102,12 +102,12 @@ export const Dialog = Vue.extend({
         info(message, root = document.body) {
             this.dialogType = 'info';
             this.icon = 'icon-info-1';
-            this.show(message, '', root);
+            this.show(message, this.dialogType, root);
         },
         success(message, root = document.body) {
             this.dialogType = 'success';
             this.icon = 'icon-ok-circled-1';
-            this.show(message, '', root);
+            this.show(message, this.dialogType, root);
         },
         confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
             this.dialogType = type;
