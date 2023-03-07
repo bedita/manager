@@ -19,10 +19,10 @@ export const Dialog = Vue.extend({
                     <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
-                <a v-if="!!dumpMessage" v-show="!showDump" @click="showDump = true">
-                    <: t('details') :><i class="icon-down-dir">
-                </a>
-                <pre v-if="!!dumpMessage" v-show="showDump"><: dumpMessage :></pre>
+                <details>
+                    <summary><: t('details') :></summary>
+                    <pre v-if="!!dumpMessage" class="dump"><: dumpMessage :></pre>
+                </details>
                 <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
                 <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
                     <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
@@ -58,7 +58,6 @@ export const Dialog = Vue.extend({
             icon: 'icon-attention-circled',
             message: '',
             dumpMessage: false,
-            showDump: false,
             confirmMessage: 'ok',
             confirmCallback: this.hide,
             cancelMessage: false,

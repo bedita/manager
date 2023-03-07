@@ -11,12 +11,10 @@
                 {{ message }}
             </h2>
 
-            <a v-if="shouldShowDump && isAdmin" @click="isDumpVisible = true" v-show="!isDumpVisible">
-                {{ dumpLabel }}<i class="icon-down-dir"></i>
-            </a>
-            <div v-if="shouldShowDump && isAdmin" class="dump" v-show="isDumpVisible">
-                <pre>{{ dumpMessage }}</pre>
-            </div>
+            <details v-if="shouldShowDump && isAdmin && !!dumpMessage">
+                <summary>{{ dumpLabel }}</summary>
+                <pre class="dump">{{ dumpMessage }}</pre>
+            </details>
             <p v-if="shouldShowDump && !isAdmin">{{ dumpLabel }}</p>
         </div>
     </div>
