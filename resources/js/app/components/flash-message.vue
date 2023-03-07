@@ -11,7 +11,7 @@
                 {{ message }}
             </h2>
 
-            <details v-if="shouldShowDump && isAdmin && !!dumpMessage">
+            <details v-if="shouldShowDump && isAdmin">
                 <summary>{{ dumpLabel }}</summary>
                 <pre class="dump">{{ dumpMessage }}</pre>
             </details>
@@ -87,7 +87,7 @@ export default {
         },
 
         shouldShowDump() {
-            return this.viewName !== 'login' && this.level === 'error';
+            return this.viewName !== 'login' && this.level === 'error' && !!this.dumpMessage;
         },
 
         dumpLabel() {
