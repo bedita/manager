@@ -11,8 +11,13 @@ const dotenv = require('dotenv').config({path: __dirname + '/config/.env'});
 const { readdirSync, statSync, existsSync } = require('fs')
 const { join } = require('path')
 
-const readDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
 const fileExists = p => existsSync(p);
+const readDirs = (p) => {
+    if (!fileExists(p)) {
+        return [];
+    }
+    return readdirSync(p).filter(f => statSync(join(p, f)).isDirectory());
+}
 
 // Environment: default development
 // from Node env

@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/bedita/manager#README",
     "scripts": {
-        "build": "webpack --mode production",
+        "build": "webpack --mode production && webpack --config ./webpack.config.plugin.js --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development --hot",
         "dev": "webpack --mode development --hot",
