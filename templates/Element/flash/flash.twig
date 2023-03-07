@@ -3,6 +3,6 @@
     message="{{ message }}"
     view-name="{{ _view.name }}"
     :options="{{ config('Flash')|json_encode }}"
-    :params="{{ params|json_encode }}"
-    :user-roles="{{ user.roles|json_encode }}">
+    :params="{{ params|default({})|json_encode }}"
+    :user-roles="{{ user.roles|default([])|json_encode }}">
 </flash-message>
