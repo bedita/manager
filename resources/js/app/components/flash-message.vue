@@ -1,13 +1,13 @@
 <template>
     <div id="flashMessagesContainer" ref="flashMessagesContainer" :class="isVisible ? 'on' : ''">
 
-        <div class="background-mask" v-if="level === 'error' && viewName !== 'login'" v-show="isVisible" v-on:click.self="hide"></div>
+        <div class="background-mask" v-if="level === 'error' && viewName.toLowerCase() !== 'login'" v-show="isVisible" v-on:click.self="hide"></div>
 
         <div :class="['message', level, (params?.class || '').trim()]">
-            <i class="icon-cancel-1 has-text-size-larger" v-if="viewName !== 'login'" @click="hide"></i>
+            <i class="icon-cancel-1 has-text-size-larger" v-if="viewName.toLowerCase() !== 'login'" @click="hide"></i>
 
             <h2>
-                <i v-if="viewName !== 'login'" :class="iconClass"></i>
+                <i v-if="viewName.toLowerCase() !== 'login'" :class="iconClass"></i>
                 {{ message }}
             </h2>
 
@@ -87,7 +87,7 @@ export default {
         },
 
         shouldShowDump() {
-            return this.viewName !== 'login' && this.level === 'error' && !!this.dumpMessage;
+            return this.viewName.toLowerCase() !== 'login' && this.level === 'error' && !!this.dumpMessage;
         },
 
         dumpLabel() {
@@ -129,7 +129,7 @@ export default {
         },
 
         isModal() {
-            return this.options?.modal || false;
+            return (this.viewName.toLowerCase() !== 'login' && this.options?.modal) || false;
         },
 
         modalCtr() {
