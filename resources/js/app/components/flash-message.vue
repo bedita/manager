@@ -4,10 +4,17 @@
         <div class="background-mask" v-if="level === 'error' && viewName.toLowerCase() !== 'login'" v-show="isVisible" v-on:click.self="hide"></div>
 
         <div :class="['message', level, (params?.class || '').trim()]">
-            <i class="icon-cancel-1 has-text-size-larger" v-if="viewName.toLowerCase() !== 'login'" @click="hide"></i>
+            <label v-if="viewName.toLowerCase() !== 'login'" @click="hide">
+                <Icon icon="carbon:close-outline"></Icon>
+            </label>
 
             <h2>
-                <i v-if="viewName.toLowerCase() !== 'login'" :class="iconClass"></i>
+                <i v-if="viewName.toLowerCase() !== 'login'">
+                    <Icon icon="carbon:checkmark" color="green" v-if="level === 'success'"></Icon>
+                    <Icon icon="carbon:information" color="blue" v-if="level === 'info'"></Icon>
+                    <Icon icon="carbon:warning" color="orange" v-if="level === 'warning'"></Icon>
+                    <Icon icon="carbon:misuse" color="red" v-if="level === 'error'"></Icon>
+                </i>
                 {{ message }}
             </h2>
 
@@ -21,10 +28,15 @@
 </template>
 
 <script>
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { error, warning, info, success } from 'app/components/dialog/dialog';
 
 export default {
+    components: {
+        Icon,
+    },
+
     props: {
         level: {
             type: String,
@@ -112,20 +124,6 @@ export default {
             return Object.entries(this.params)
                 .map(([key, value]) => `${key}: ${isScalar(value) ? value : JSON.stringify(value, null, 4)}`)
                 .join('\n');
-        },
-
-        iconClass() {
-            switch (this.level) {
-                case 'success':
-                    return 'icon-ok-circled-1';
-                case 'error':
-                    return 'icon-attention-circled';
-                case 'warning':
-                    return 'icon-dot-circled';
-                case 'info':
-                default:
-                    return 'icon-info-1';
-            }
         },
 
         isModal() {

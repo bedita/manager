@@ -51,18 +51,10 @@
 
         &.warning {
             border-color: $warning;
-
-            .icon-attention-circled {
-                color: $warning;
-            }
         }
 
         &.error {
             border-color: $error;
-
-            .icon-attention-circled {
-                color: $error;
-            }
         }
 
         &.prompt,
